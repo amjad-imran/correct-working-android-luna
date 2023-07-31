@@ -272,11 +272,12 @@ class SetupProfileViewModel
             } else WeightUnitSystem.METRIC
         }
 
-        //calculate 12 years later date
-        val date = calculateDefaultDateMonthYear()
-        dobDate = date.first
-        dobMonth = date.second
-        dobYear = date.third
+
+//        //calculate 12 years later date
+//        val date = calculateDefaultDateMonthYear()
+//        dobDate = date.first
+//        dobMonth = date.second
+//        dobYear = date.third
 
     }
 
