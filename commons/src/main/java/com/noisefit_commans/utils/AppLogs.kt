@@ -26,7 +26,7 @@ private const val LogsTxtFile = "logs.txt"
 object AppLogs {
     private var filePrinter: Printer? = null
     private val TAG = "AppLogs"
-    const val FILE_PROVIDER = "com.noisefit.fileprovidernew"
+    const val FILE_PROVIDER = "com.noisefit.luna.fileprovider"
 
     private val scope = CoroutineScope(Dispatchers.IO)
     private val backgroundDispatcher = newFixedThreadPoolContext(1, "File Write-App")
