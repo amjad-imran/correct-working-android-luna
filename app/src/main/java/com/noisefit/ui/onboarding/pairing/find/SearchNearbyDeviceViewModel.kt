@@ -142,7 +142,8 @@ constructor(
 
     fun fetchDeviceList() {
         val dType: String = if (device == Device.RING) {
-            "ring"
+//            "ring"
+            "watch"
         } else
             "watch"
         /*if (!getDevices().value.isNullOrEmpty()) {

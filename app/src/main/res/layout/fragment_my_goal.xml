@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
+<!--    <data>-->
 
-        <variable
-            name="features"
-            type="com.noisefit_commans.data.model.DeviceFeatures" />
-    </data>
+<!--        <variable-->
+<!--            name="features"-->
+<!--            type="com.noisefit_commans.data.model.DeviceFeatures" />-->
+<!--    </data>-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -64,7 +64,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:setFeatureVisibility="@{features.stepsData}"
                 app:showArrow="false"
                 app:text="@string/text_calories" />
             <include
@@ -93,7 +92,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/include1"
-                app:setFeatureVisibility="@{features.stepsData}"
                 app:showArrow="false"
                 app:text="@string/text_distance" />
             <include
@@ -122,7 +120,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/include2"
-                app:setFeatureVisibility="@{features.stepsData}"
                 app:showArrow="false"
                 app:text="Steps" />
             <include
@@ -150,8 +147,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/include3"
-                app:setFeatureVisibility="@{features.stepsData}"
-                app:showArrow="false"
+               app:showArrow="false"
                 app:text="@string/text_duration" />
 
 

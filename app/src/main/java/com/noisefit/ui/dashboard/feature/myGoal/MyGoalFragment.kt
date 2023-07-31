@@ -37,7 +37,7 @@ class MyGoalFragment :
                 navigateUpSafe()
                 return
             }
-            binding.features = viewModel.ringDataStore.getDeviceFeatures()
+//            binding.features = viewModel.ringDataStore.getDeviceFeatures()
 
         } else {
             val connectedDevice = viewModel.localDataStore.getConnectedDevice()
@@ -46,7 +46,7 @@ class MyGoalFragment :
                 navigateUpSafe()
                 return
             }
-            binding.features = viewModel.localDataStore.getDeviceFeatures()
+//            binding.features = viewModel.localDataStore.getDeviceFeatures()
         }
 
 
