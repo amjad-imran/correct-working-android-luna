@@ -10,9 +10,9 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.BuddiesUserNew
-import com.noisefit.databinding.FragmentContactBinding
+import com.noisefit.luna.databinding.FragmentContactBinding
 import com.noisefit.ui.common.*
 import com.noisefit.ui.friends.request.received.FRIEND_STATUS_ADD_STRING
 import com.noisefit.ui.friends.request.received.FRIEND_STATUS_REMOVE_STRING

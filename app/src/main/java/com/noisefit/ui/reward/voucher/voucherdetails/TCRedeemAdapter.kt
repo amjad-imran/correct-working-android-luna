@@ -3,7 +3,7 @@ package com.noisefit.ui.reward.voucher.voucherdetails
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.ItemHtRedeemAdapterBinding
+import com.noisefit.luna.databinding.ItemHtRedeemAdapterBinding
 
 class TCRedeemAdapter : RecyclerView.Adapter<TCRedeemAdapter.ViewHolder>() {
     private var resultList = ArrayList<String>()

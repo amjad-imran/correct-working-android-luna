@@ -16,13 +16,13 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.response.WatchFaceDownloadResponse
 import com.noisefit_commans.data.response.WatchFaceZip
-import com.noisefit.databinding.FragmentWatchFaceListingBinding
+import com.noisefit.luna.databinding.FragmentWatchFaceListingBinding
 import com.noisefit.receiver.service.FeedbackSubmitService
 import com.noisefit.receiver.service.ProblemType
 import com.noisefit_commans.ui.BaseFragment

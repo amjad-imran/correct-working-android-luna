@@ -12,9 +12,9 @@ import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
-import com.noisefit.databinding.ActivityHistoryCalendarBinding
-import com.noisefit.databinding.CalendarDayBinding
-import com.noisefit.databinding.CalendarHeaderBinding
+import com.noisefit.luna.databinding.ActivityHistoryCalendarBinding
+import com.noisefit.luna.databinding.CalendarDayBinding
+import com.noisefit.luna.databinding.CalendarHeaderBinding
 import com.noisefit.ui.common.BaseActivity
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.databinding.DefaultLoaderBinding

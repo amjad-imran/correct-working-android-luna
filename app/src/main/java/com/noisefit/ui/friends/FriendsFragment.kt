@@ -6,8 +6,8 @@ import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.noisefit.R
-import com.noisefit.databinding.FragmentFriendsBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentFriendsBinding
 import com.noisefit.ui.feeds.FEEDS_TERMS_KEY
 import com.noisefit.ui.friends.compete.FriendSharedViewModel
 import com.noisefit_commans.ui.*

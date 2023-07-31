@@ -13,9 +13,9 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.history.StressHistory
-import com.noisefit.databinding.FragmentStressDetailsBinding
+import com.noisefit.luna.databinding.FragmentStressDetailsBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
 import com.noisefit_commans.ui.gone

@@ -1,7 +1,7 @@
 package com.oreo.data.repository.implementation
 
 import com.google.gson.Gson
-import com.noisefit.BuildConfig
+import com.noisefit.luna.BuildConfig
 import com.noisefit.data.dataConverter.OfflineDataMapper
 import com.noisefit.data.dataConverter.OnlineDataMapper
 import com.noisefit.data.local.db.CacheResult

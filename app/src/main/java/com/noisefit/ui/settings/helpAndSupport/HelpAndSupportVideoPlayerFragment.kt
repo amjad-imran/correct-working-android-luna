@@ -9,8 +9,8 @@ import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.video.VideoSize
-import com.noisefit.R
-import com.noisefit.databinding.FragmentHelpAndSupportVideoPlayerBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentHelpAndSupportVideoPlayerBinding
 import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEYS
 import com.noisefit_commans.data.response.VideoData
 import com.noisefit_commans.ui.BaseFragment

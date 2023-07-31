@@ -3,8 +3,8 @@ package com.noisefit.ui.watchface
 import android.os.Bundle
 import android.view.View
 import androidx.navigation.fragment.findNavController
-import com.noisefit.R
-import com.noisefit.databinding.LayoutWatchfaceDeeplinkBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.LayoutWatchfaceDeeplinkBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.showShortToast

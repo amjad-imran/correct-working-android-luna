@@ -23,11 +23,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.coroutineScope
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
-import com.noisefit.databinding.ActivityCameraShutterBinding
+import com.noisefit.luna.databinding.ActivityCameraShutterBinding
 import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit.session.SessionManager
 import com.noisefit.ui.common.BaseActivity

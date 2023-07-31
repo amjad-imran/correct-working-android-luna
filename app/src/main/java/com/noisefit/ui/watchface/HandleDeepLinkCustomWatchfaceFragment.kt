@@ -5,9 +5,9 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import androidx.navigation.fragment.findNavController
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
-import com.noisefit.databinding.LayoutWatchfaceDeeplinkBinding
+import com.noisefit.luna.databinding.LayoutWatchfaceDeeplinkBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.showShortToast

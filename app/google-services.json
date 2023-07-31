@@ -128,6 +128,78 @@
     },
     {
       "client_info": {
+        "mobilesdk_app_id": "1:692776363643:android:40c9b57caf0b1d99cc64de",
+        "android_client_info": {
+          "package_name": "com.noisefit.luna"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "692776363643-ekmmtuuqdjs94hg9rs243rsnjfn08j5r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqpPkqIlKRjEceF-oUy3zH4xD6dl4ISZQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "692776363643-ekmmtuuqdjs94hg9rs243rsnjfn08j5r.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "692776363643-0dj4l6djt942t61pospkfhl560l9iq99.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.noisefit"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:692776363643:android:1db4365cdee5a558cc64de",
+        "android_client_info": {
+          "package_name": "com.noisefit.luna.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "692776363643-ekmmtuuqdjs94hg9rs243rsnjfn08j5r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqpPkqIlKRjEceF-oUy3zH4xD6dl4ISZQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "692776363643-ekmmtuuqdjs94hg9rs243rsnjfn08j5r.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "692776363643-0dj4l6djt942t61pospkfhl560l9iq99.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.noisefit"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:692776363643:android:74b85efa2954df20cc64de",
         "android_client_info": {
           "package_name": "com.noisefit.new.dev"

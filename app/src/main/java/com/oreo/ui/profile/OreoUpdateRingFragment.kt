@@ -4,8 +4,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import com.noisefit.R
-import com.noisefit.databinding.FragmentOreoUpdateRingBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentOreoUpdateRingBinding
 import com.noisefit.ui.myDevice.manage.CheckForUpdatesViewModel
 import com.noisefit.ui.myDevice.manage.WatchUpdateBottomDialogFragment
 import com.noisefit.watch.SDKWatchType

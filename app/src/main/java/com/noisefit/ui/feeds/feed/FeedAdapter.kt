@@ -16,13 +16,13 @@ import com.google.android.exoplayer2.DefaultRenderersFactory
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.model.FeedOverView
 import com.noisefit.data.model.MentionUser
 import com.noisefit.data.model.timeline.ReactionData
 import com.noisefit.data.model.timeline.TimelineData
-import com.noisefit.databinding.ItemAdsListBinding
-import com.noisefit.databinding.LayoutOriginalPostBinding
+import com.noisefit.luna.databinding.ItemAdsListBinding
+import com.noisefit.luna.databinding.LayoutOriginalPostBinding
 import com.noisefit.ui.common.*
 import com.noisefit.ui.profile.UserType
 import com.noisefit.util.*

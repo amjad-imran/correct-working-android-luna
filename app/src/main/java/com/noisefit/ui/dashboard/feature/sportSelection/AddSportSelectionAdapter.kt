@@ -7,7 +7,7 @@ import android.widget.CompoundButton
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.RowAddSportBinding
+import com.noisefit.luna.databinding.RowAddSportBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.noisefit.util.ImageUtil

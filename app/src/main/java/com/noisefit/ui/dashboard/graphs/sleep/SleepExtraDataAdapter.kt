@@ -4,9 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.SleepExtraData
-import com.noisefit.databinding.ItemSleepDataLayoutBinding
+import com.noisefit.luna.databinding.ItemSleepDataLayoutBinding
 import com.noisefit_commans.data.enums.SleepExtraType
 
 class SleepExtraDataAdapter : RecyclerView.Adapter<SleepExtraDataAdapter.ViewHolder>() {

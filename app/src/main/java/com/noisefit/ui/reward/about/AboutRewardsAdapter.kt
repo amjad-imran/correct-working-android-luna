@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit_commans.data.model.RewardAboutSubCategoryList
-import com.noisefit.databinding.ItemAboutRewardListBinding
+import com.noisefit.luna.databinding.ItemAboutRewardListBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible

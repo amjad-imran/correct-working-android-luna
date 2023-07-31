@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit_commans.data.response.WorldClockNetwork
-import com.noisefit.databinding.RowTimeZoneBinding
+import com.noisefit.luna.databinding.RowTimeZoneBinding
 
 class TimeZoneAdapter(val listener: TimeZoneListAction) :
     RecyclerView.Adapter<TimeZoneAdapter.ViewHolder>() {

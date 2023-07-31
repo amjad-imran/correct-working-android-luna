@@ -13,8 +13,8 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
-import com.noisefit.R
-import com.noisefit.databinding.FragmentOreoActivityBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentOreoActivityBinding
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.BaseFragment

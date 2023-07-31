@@ -3,9 +3,9 @@ package com.noisefit.ui.reward.deals
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.CouponList
-import com.noisefit.databinding.ItemAllDealsBinding
+import com.noisefit.luna.databinding.ItemAllDealsBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible

@@ -8,7 +8,7 @@ import android.net.Uri
 import android.provider.ContactsContract
 import android.text.TextUtils
 import com.google.gson.JsonObject
-import com.noisefit.BuildConfig
+import com.noisefit.luna.BuildConfig
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit_commans.data.model.Feedback
 import com.noisefit_commans.data.model.NotificationApp

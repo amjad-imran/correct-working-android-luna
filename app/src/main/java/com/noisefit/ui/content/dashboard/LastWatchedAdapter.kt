@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.data.model.LastWatchedList
-import com.noisefit.databinding.ItemLastWatchedBinding
+import com.noisefit.luna.databinding.ItemLastWatchedBinding
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage

@@ -6,8 +6,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.noisefit.R
-import com.noisefit.databinding.BottomSheetWorkoutPickerBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.BottomSheetWorkoutPickerBinding
 import com.noisefit_commans.data.response.ChallengeModel
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import com.noisefit_commans.ui.gone

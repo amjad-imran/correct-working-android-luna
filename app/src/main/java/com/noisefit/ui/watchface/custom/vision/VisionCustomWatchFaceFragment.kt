@@ -14,12 +14,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.gson.JsonObject
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit.data.local.AppStaticData
 import com.noisefit.data.repository.abstraction.RewardsRepository
-import com.noisefit.databinding.FragmentVisionCustomWatchFaceBinding
+import com.noisefit.luna.databinding.FragmentVisionCustomWatchFaceBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.showShortToast

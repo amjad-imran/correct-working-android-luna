@@ -7,8 +7,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.progressindicator.LinearProgressIndicator
-import com.noisefit.R
-import com.noisefit.databinding.ItemPredictWinBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.ItemPredictWinBinding
 import com.noisefit.ui.common.*
 import com.noisefit_commans.data.response.LiveMatch
 import com.noisefit_commans.ui.gone

@@ -4,9 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.EndGame
-import com.noisefit.databinding.ItemEndgameLayoutBinding
+import com.noisefit.luna.databinding.ItemEndgameLayoutBinding
 import com.noisefit_commans.ui.loadImage
 
 

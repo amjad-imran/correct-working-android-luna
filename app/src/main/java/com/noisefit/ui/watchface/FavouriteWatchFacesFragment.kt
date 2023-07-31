@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import com.noisefit.R
-import com.noisefit.databinding.FragmentFavouriteWatchFacesBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentFavouriteWatchFacesBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible

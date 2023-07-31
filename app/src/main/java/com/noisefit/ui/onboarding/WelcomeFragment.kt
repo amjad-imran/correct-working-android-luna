@@ -4,8 +4,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import com.noisefit.R
-import com.noisefit.databinding.FragmentWelcomeBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentWelcomeBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.InsiderAppEvents

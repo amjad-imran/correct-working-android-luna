@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import com.noisefit.R
-import com.noisefit.databinding.FragmentIdleReminderBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentIdleReminderBinding
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit_commans.interfaces.QueryAction

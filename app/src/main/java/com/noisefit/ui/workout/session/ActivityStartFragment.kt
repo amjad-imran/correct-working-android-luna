@@ -11,8 +11,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.noisefit.R
-import com.noisefit.databinding.FragmentActivityStartBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentActivityStartBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone

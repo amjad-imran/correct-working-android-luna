@@ -2,8 +2,8 @@ package com.noisefit.ui
 
 import android.os.Bundle
 import android.view.View
-import com.noisefit.R
-import com.noisefit.databinding.FragmentTestBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentTestBinding
 import com.noisefit_commans.ui.BaseFragment
 
 

@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import com.noisefit.R
-import com.noisefit.databinding.FragmentHandwashReminderBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentHandwashReminderBinding
 import com.noisefit.ui.common.*
 import com.noisefit.ui.dashboard.feature.idle.FrequencyIn
 import com.noisefit_commans.utils.InsiderAppEvents

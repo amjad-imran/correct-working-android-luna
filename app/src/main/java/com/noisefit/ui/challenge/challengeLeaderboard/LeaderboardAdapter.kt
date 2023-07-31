@@ -6,9 +6,9 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.response.Leadership
-import com.noisefit.databinding.RowAllLeaderBinding
+import com.noisefit.luna.databinding.RowAllLeaderBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.noisefit.ui.friends.request.received.FRIEND_STATUS_ADD

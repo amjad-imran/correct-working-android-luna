@@ -6,7 +6,7 @@ import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.data.remote.StateData
-import com.noisefit.databinding.ItemSearchStateListBinding
+import com.noisefit.luna.databinding.ItemSearchStateListBinding
 
 
 class SearchStateAdapter(

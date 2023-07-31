@@ -7,7 +7,7 @@ import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.noisefit.data.remote.CityData
-import com.noisefit.databinding.ItemSearchStateListBinding
+import com.noisefit.luna.databinding.ItemSearchStateListBinding
 import com.noisefit_commans.utils.LOGS
 
 

@@ -4,7 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import com.noisefit.databinding.FragmentDeeplinkWebViewBinding
+import com.noisefit.luna.databinding.FragmentDeeplinkWebViewBinding
 import com.noisefit_commans.ui.BaseFragment
 
 

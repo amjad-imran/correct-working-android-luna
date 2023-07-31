@@ -9,8 +9,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
-import com.noisefit.R
-import com.noisefit.databinding.FragmentGoogleFitBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentGoogleFitBinding
 import com.noisefit.session.SessionManager
 import com.noisefit.ui.common.*
 import com.noisefit.ui.web.WebViewActivity

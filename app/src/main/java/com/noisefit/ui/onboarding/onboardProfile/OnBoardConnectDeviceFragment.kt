@@ -3,8 +3,8 @@ package com.noisefit.ui.onboarding.onboardProfile
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import com.noisefit.R
-import com.noisefit.databinding.FragmentOnBoardConnectDeviceBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentOnBoardConnectDeviceBinding
 import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.ui.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint

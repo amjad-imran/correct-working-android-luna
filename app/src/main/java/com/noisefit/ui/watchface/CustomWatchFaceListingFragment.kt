@@ -3,9 +3,9 @@ package com.noisefit.ui.watchface
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.local.AppStaticData
-import com.noisefit.databinding.FragmentCustomWatchFaceListingBinding
+import com.noisefit.luna.databinding.FragmentCustomWatchFaceListingBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit.ui.watchface.adapter.CustomWatchFaceActions

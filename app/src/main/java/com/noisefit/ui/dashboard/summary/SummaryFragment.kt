@@ -28,10 +28,10 @@ import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
 import com.hookedonplay.decoviewlib.events.DecoEvent
 import com.noisefit.BottomNavOption
-import com.noisefit.BuildConfig
+import com.noisefit.luna.BuildConfig
 import com.noisefit.MainViewModel
-import com.noisefit.R
-import com.noisefit.databinding.FragmentSummaryBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentSummaryBinding
 import com.noisefit.receiver.workManager.HealthOverviewDataType
 import com.noisefit.ui.common.*
 import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY

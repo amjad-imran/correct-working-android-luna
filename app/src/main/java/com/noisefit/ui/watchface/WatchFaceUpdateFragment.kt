@@ -8,11 +8,11 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.noisefit.BuildConfig
-import com.noisefit.R
+import com.noisefit.luna.BuildConfig
+import com.noisefit.luna.R
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
-import com.noisefit.databinding.FragmentWatchFaceUpdateBinding
+import com.noisefit.luna.databinding.FragmentWatchFaceUpdateBinding
 import com.noisefit.receiver.service.FeedbackSubmitService
 import com.noisefit.receiver.service.ProblemType
 import com.noisefit.session.SessionManager

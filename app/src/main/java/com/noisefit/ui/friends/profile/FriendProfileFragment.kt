@@ -17,12 +17,12 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.tabs.TabLayout
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.CommonFriends
 import com.noisefit_commans.data.model.Emoji
 import com.noisefit_commans.data.model.FriendProfile
 import com.noisefit_commans.data.model.ReactionsWrapper
-import com.noisefit.databinding.FragmentFriendProfileBinding
+import com.noisefit.luna.databinding.FragmentFriendProfileBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY
 import com.noisefit_commans.ui.gone

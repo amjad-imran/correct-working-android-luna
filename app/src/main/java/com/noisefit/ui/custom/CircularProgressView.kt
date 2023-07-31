@@ -9,7 +9,7 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.utils.LOGS
 
 class CircularProgressView(

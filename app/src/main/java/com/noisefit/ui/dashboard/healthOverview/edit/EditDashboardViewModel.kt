@@ -1,6 +1,6 @@
 package com.noisefit.ui.dashboard.healthOverview.edit
 
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.DeviceFeatures
 import com.noisefit_commans.data.model.EditHealthOverView
 import com.noisefit_commans.data.model.HealthOverViewList

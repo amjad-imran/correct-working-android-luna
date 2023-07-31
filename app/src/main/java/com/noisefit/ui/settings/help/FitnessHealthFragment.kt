@@ -1,8 +1,8 @@
 package com.noisefit.ui.settings.help
 
 import androidx.fragment.app.viewModels
-import com.noisefit.R
-import com.noisefit.databinding.FragmentFitnessHealthBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentFitnessHealthBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.InsiderAppEvents
 import dagger.hilt.android.AndroidEntryPoint

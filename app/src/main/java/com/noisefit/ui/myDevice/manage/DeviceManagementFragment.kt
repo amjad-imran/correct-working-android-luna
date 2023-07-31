@@ -6,8 +6,8 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import com.noisefit.R
-import com.noisefit.databinding.FragmentDeviceManagementBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentDeviceManagementBinding
 import com.noisefit.session.SessionManager
 import com.noisefit.ui.common.*
 import com.noisefit.ui.myDevice.MyDeviceViewModel

@@ -16,8 +16,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.airbnb.lottie.LottieDrawable
-import com.noisefit.R
-import com.noisefit.databinding.FragmentPairingBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentPairingBinding
 import com.noisefit.receiver.service.ConnectionService
 import com.noisefit.receiver.service.FeedbackSubmitService
 import com.noisefit.receiver.service.ProblemType

@@ -2,8 +2,8 @@ package com.noisefit.ui.dashboard.feature.music
 
 import android.os.Bundle
 import android.view.View
-import com.noisefit.R
-import com.noisefit.databinding.FragmentMusicControlBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentMusicControlBinding
 import com.noisefit.session.SessionManager
 import com.noisefit.ui.common.*
 import com.noisefit.util.ApplicationUtils

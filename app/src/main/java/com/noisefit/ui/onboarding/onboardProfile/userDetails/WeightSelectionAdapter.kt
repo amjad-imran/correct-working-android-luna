@@ -4,7 +4,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.RowScrollValueSelectorBinding
+import com.noisefit.luna.databinding.RowScrollValueSelectorBinding
 import com.noisefit_commans.models.WeightUnitSystem
 
 class WeightSelectionAdapter : RecyclerView.Adapter<WeightSelectionAdapter.ViewHolder>() {

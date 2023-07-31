@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.RewardsRepository
 import com.noisefit_commans.data.enums.CustomWatchFaceViewState

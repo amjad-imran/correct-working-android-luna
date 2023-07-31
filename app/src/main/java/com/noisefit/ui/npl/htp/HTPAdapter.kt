@@ -3,7 +3,7 @@ package com.noisefit.ui.npl.htp
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.ItemHowToPlayBinding
+import com.noisefit.luna.databinding.ItemHowToPlayBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 

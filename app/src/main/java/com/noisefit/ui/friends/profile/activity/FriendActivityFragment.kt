@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit_commans.data.model.ProfileActivitiesData
 import com.noisefit_commans.data.model.history.StepsHistoryData
 import com.noisefit_commans.data.model.history.StepsHistoryResponse
-import com.noisefit.databinding.FragmentFriendActivityBinding
+import com.noisefit.luna.databinding.FragmentFriendActivityBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit.ui.dashboard.graphs.steps.GraphInterval
 import com.noisefit.ui.dashboard.graphs.steps.StepsGraphViewModel

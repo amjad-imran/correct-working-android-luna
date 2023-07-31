@@ -5,8 +5,8 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import com.noisefit.R
-import com.noisefit.databinding.FragmentOSleepScoreDetailsBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentOSleepScoreDetailsBinding
 import com.noisefit.oreo.util.graph.OLineChartUtils
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.clearDrawables

@@ -5,8 +5,8 @@ import android.media.AudioManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import com.noisefit.R
-import com.noisefit.databinding.FragmentShowcaseVideoBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentShowcaseVideoBinding
 import com.noisefit_commans.ui.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 

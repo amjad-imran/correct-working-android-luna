@@ -1,6 +1,6 @@
 package com.noisefit.data.remote
 
-import com.noisefit.BuildConfig
+import com.noisefit.luna.BuildConfig
 import com.noisefit_commans.utils.LOGS
 import okhttp3.Headers
 import okhttp3.Request

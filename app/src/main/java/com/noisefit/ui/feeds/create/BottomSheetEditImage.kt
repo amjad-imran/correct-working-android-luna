@@ -6,7 +6,7 @@ import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.navArgs
-import com.noisefit.databinding.BottomSheetEditImageBinding
+import com.noisefit.luna.databinding.BottomSheetEditImageBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 
 /**

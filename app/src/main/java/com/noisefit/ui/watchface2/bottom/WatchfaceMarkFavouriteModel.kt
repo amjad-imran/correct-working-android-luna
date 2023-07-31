@@ -3,7 +3,7 @@ package com.noisefit.ui.watchface2.bottom
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit.data.remote.base.Resource

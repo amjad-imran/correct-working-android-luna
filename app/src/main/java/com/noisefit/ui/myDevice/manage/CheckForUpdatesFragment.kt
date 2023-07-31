@@ -6,8 +6,8 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
-import com.noisefit.R
-import com.noisefit.databinding.FragmentCheckForUpdatesBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentCheckForUpdatesBinding
 import com.noisefit.ui.common.*
 import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit.watch.SDKWatchType

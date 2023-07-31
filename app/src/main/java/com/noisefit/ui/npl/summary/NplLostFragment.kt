@@ -2,9 +2,9 @@ package com.noisefit.ui.npl.summary
 
 import android.os.Bundle
 import android.view.View
-import com.noisefit.R
-import com.noisefit.databinding.FragmentNplLostBinding
-import com.noisefit.databinding.FragmentPredictionBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentNplLostBinding
+import com.noisefit.luna.databinding.FragmentPredictionBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.InsiderAppEvents
 

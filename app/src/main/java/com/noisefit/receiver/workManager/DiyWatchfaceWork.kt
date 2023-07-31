@@ -17,7 +17,7 @@ import androidx.work.impl.utils.futures.SettableFuture
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.repository.abstraction.DownloadRepository
 import com.noisefit.data.repository.implementation.Download
 import com.noisefit.session.SessionManager

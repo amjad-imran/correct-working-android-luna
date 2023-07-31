@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.noisefit_commans.data.model.ShopProduct
-import com.noisefit.databinding.RowSearchProductBinding
+import com.noisefit.luna.databinding.RowSearchProductBinding
 import com.noisefit_commans.ui.getCircleProgressDrawable
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible

@@ -12,9 +12,9 @@ import androidx.fragment.app.viewModels
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.history.StepsHistoryData
-import com.noisefit.databinding.FragmentStepsGraphBinding
+import com.noisefit.luna.databinding.FragmentStepsGraphBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible

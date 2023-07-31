@@ -3,11 +3,11 @@ package com.noisefit.ui.content.dashboard
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.model.LastWatchedList
 import com.noisefit.data.model.SubCategoriesList
 import com.noisefit.data.model.VideosList
-import com.noisefit.databinding.FragmentDashboardWorkoutBinding
+import com.noisefit.luna.databinding.FragmentDashboardWorkoutBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible

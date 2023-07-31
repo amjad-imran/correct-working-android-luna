@@ -8,7 +8,7 @@ import androidx.core.os.bundleOf
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.noisefit.databinding.BottomSheetCompetitionRuleAcceptBinding
+import com.noisefit.luna.databinding.BottomSheetCompetitionRuleAcceptBinding
 import com.noisefit_commans.ui.BaseBottomSheet
 import dagger.hilt.android.AndroidEntryPoint
 

@@ -5,8 +5,8 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.noisefit.MainActivity
-import com.noisefit.R
-import com.noisefit.databinding.FragmentOnBoardCaloriesBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentOnBoardCaloriesBinding
 import com.noisefit.oreo.OreoMainActivity
 import com.noisefit.ui.onboarding.onboardProfile.GuestProfileSetupActivity
 import com.noisefit.ui.onboarding.onboardProfile.SetupProfileViewModel

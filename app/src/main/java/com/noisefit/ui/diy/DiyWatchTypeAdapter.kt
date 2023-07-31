@@ -3,9 +3,9 @@ package com.noisefit.ui.diy
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.model.DiyCustomWatchType
-import com.noisefit.databinding.ItemDiyWfTypeBinding
+import com.noisefit.luna.databinding.ItemDiyWfTypeBinding
 import com.noisefit_commans.ui.visible
 import com.noisefit.watch.WatchForm
 import com.noisefit_commans.ui.loadImage

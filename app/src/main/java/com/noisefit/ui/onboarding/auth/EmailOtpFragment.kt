@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
-import com.noisefit.R
-import com.noisefit.databinding.FragmentEmailOtpBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentEmailOtpBinding
 import com.noisefit.ui.common.*
 import com.noisefit.ui.onboarding.onboardProfile.ProfileSetupActivity
 import com.noisefit.ui.onboarding.pairing.DeviceSetupActivity

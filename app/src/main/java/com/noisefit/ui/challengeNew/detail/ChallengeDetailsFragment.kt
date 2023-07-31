@@ -16,11 +16,11 @@ import androidx.core.text.color
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.challenge.ChallengeIds
 import com.noisefit_commans.data.response.ChallengeHistory
 import com.noisefit_commans.data.response.ChallengeModel
-import com.noisefit.databinding.FragmentChallengeDetails2Binding
+import com.noisefit.luna.databinding.FragmentChallengeDetails2Binding
 import com.noisefit.ui.challenge.challengeDetail.LEAVE_COMMENT
 import com.noisefit.ui.common.*
 import com.noisefit.util.ApplicationUtils

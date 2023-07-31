@@ -6,10 +6,10 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.remote.response.Watchface2
 import com.noisefit_commans.models.WatchFace
-import com.noisefit.databinding.RowWatchFaceBinding
+import com.noisefit.luna.databinding.RowWatchFaceBinding
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import com.varunest.sparkbutton.SparkEventListener

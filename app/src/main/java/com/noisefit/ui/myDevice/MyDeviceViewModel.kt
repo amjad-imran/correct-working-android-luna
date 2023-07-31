@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
 import com.noisefit.NoiseFitApplicationMain
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.DeviceRepository
 import com.noisefit.data.repository.abstraction.UserRepository

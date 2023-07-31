@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
-import com.noisefit.R
-import com.noisefit.databinding.BottomSheetAlertTextBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.BottomSheetAlertTextBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import com.noisefit_commans.ui.gone
 import dagger.hilt.android.AndroidEntryPoint

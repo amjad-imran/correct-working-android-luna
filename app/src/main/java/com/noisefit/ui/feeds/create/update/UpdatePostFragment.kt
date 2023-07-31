@@ -10,8 +10,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.noisefit.R
-import com.noisefit.databinding.FragmentUpdatePostBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentUpdatePostBinding
 import com.noisefit.ui.common.*
 import com.noisefit.ui.custom.MentionTextWatcher
 import com.noisefit.ui.feeds.create.BottomSheetUploadPost

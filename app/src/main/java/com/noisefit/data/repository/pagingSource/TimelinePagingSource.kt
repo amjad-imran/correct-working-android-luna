@@ -4,7 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.bumptech.glide.load.HttpException
 import com.google.gson.JsonObject
-import com.noisefit.BuildConfig
+import com.noisefit.luna.BuildConfig
 import com.noisefit.data.model.timeline.FriendTimeline
 import com.noisefit.data.model.timeline.TimelineData
 import com.noisefit.data.remote.abstraction.NetworkService

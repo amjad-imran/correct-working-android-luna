@@ -10,8 +10,8 @@ import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.noisefit.R
-import com.noisefit.databinding.BottomSheetProfileOptionsBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.BottomSheetProfileOptionsBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible

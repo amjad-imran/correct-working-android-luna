@@ -5,7 +5,7 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.tabs.TabLayoutMediator
-import com.noisefit.databinding.FragmentFriendsFriendBinding
+import com.noisefit.luna.databinding.FragmentFriendsFriendBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 

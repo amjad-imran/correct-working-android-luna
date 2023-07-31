@@ -15,9 +15,9 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.local.AppStaticData
-import com.noisefit.databinding.FragmentProfileEditBinding
+import com.noisefit.luna.databinding.FragmentProfileEditBinding
 import com.noisefit.ui.common.bottomSheet.DATE_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
 import com.noisefit.ui.friends.location.SAVE_LOCATION_REQUEST_KEY

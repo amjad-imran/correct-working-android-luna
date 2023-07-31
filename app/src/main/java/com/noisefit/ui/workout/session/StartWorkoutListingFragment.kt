@@ -6,8 +6,8 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.noisefit.R
-import com.noisefit.databinding.FragmentStartWorkoutListingBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentStartWorkoutListingBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit.ui.workout.ActivityOptionsViewModel

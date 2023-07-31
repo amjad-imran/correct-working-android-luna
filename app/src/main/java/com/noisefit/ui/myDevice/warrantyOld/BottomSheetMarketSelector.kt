@@ -9,7 +9,7 @@ import androidx.fragment.app.setFragmentResult
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.noisefit.databinding.BottomSheetMarketSelectorBinding
+import com.noisefit.luna.databinding.BottomSheetMarketSelectorBinding
 import com.noisefit_commans.ui.BaseBottomSheet
 import com.noisefit.ui.myDevice.warranty.WarrantyMarketAction
 import com.noisefit.ui.myDevice.warranty.WarrantyMarketAdapter

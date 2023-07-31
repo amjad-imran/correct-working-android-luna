@@ -1,7 +1,7 @@
 package com.noisefit.data.repository.implementation
 
 import com.google.gson.JsonObject
-import com.noisefit.BuildConfig
+import com.noisefit.luna.BuildConfig
 import com.noisefit.data.model.ContentListData
 import com.noisefit.data.model.SubCategoriesList
 import com.noisefit.data.model.VideosList

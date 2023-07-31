@@ -6,9 +6,9 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.response.HelpAndSupportResponse
-import com.noisefit.databinding.ItemHelpSupportListBinding
+import com.noisefit.luna.databinding.ItemHelpSupportListBinding
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.tryCatch
 

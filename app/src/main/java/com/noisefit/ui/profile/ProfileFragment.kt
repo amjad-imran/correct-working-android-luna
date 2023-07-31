@@ -6,8 +6,8 @@ import android.view.View
 import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import com.noisefit.R
-import com.noisefit.databinding.FragmentProfileBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentProfileBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible

@@ -10,9 +10,9 @@ import android.view.View
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.VoucherDetailsData
-import com.noisefit.databinding.FragmentVoucherDetailBinding
+import com.noisefit.luna.databinding.FragmentVoucherDetailBinding
 import com.noisefit.session.SessionManager
 import com.noisefit.ui.common.*
 import com.noisefit.ui.reward.voucher.VOUCHER_SOLD_KEY

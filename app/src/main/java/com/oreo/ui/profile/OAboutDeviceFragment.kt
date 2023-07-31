@@ -5,8 +5,8 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.noisefit.R
-import com.noisefit.databinding.FragmentOAboutDeviceBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentOAboutDeviceBinding
 import com.noisefit.ui.myDevice.manage.CheckForUpdatesViewModel
 import com.noisefit_commans.common.copyToClipBoard
 import com.noisefit_commans.common.decodeHex

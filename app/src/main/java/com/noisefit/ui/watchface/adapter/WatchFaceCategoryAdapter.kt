@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.data.remote.response.CatWiseWatchFacesItem
-import com.noisefit.databinding.RowWatchFaceCategoryBinding
+import com.noisefit.luna.databinding.RowWatchFaceCategoryBinding
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible

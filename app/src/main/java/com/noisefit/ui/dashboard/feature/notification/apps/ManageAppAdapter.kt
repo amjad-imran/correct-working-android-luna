@@ -8,7 +8,7 @@ import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit_commans.data.model.NotificationApp
-import com.noisefit.databinding.LayoutManageAppItemsBinding
+import com.noisefit.luna.databinding.LayoutManageAppItemsBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible

@@ -6,8 +6,8 @@ import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
-import com.noisefit.R
-import com.noisefit.databinding.FragmentAddAlarmBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentAddAlarmBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.models.AlarmAction

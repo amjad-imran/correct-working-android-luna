@@ -3,9 +3,9 @@ package com.noisefit.ui.feeds.create.styles.workout
 import android.os.Bundle
 import android.view.View
 import com.google.gson.Gson
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.dataConverter.DataUnitConverter
-import com.noisefit.databinding.FragmentWorkoutCyclingStyle1Binding
+import com.noisefit.luna.databinding.FragmentWorkoutCyclingStyle1Binding
 import com.noisefit.util.ImageUtil
 import com.noisefit.watch.SDKWatchType
 import com.noisefit.watch.WatchesSDK

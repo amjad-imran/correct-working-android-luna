@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.noisefit_commans.data.model.ShopProduct
-import com.noisefit.databinding.RowBestSellingProductBinding
+import com.noisefit.luna.databinding.RowBestSellingProductBinding
 import com.noisefit_commans.ui.getCircleProgressDrawable
 
 class BestSellingProductAdapter(val listener: ProductAction) : RecyclerView.Adapter<BestSellingProductAdapter.ViewHolder>() {

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.noisefit_commans.data.model.ShopBanner
-import com.noisefit.databinding.ViewImageSliderBinding
+import com.noisefit.luna.databinding.ViewImageSliderBinding
 
 
 class BannerSliderAdapter(val listener: BannerAction) :

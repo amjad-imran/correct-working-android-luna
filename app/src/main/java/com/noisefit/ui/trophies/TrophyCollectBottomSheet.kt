@@ -7,9 +7,9 @@ import android.widget.FrameLayout
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.trophies.DailyItem
-import com.noisefit.databinding.BottomSheetTrophyCollectBinding
+import com.noisefit.luna.databinding.BottomSheetTrophyCollectBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseBottomSheet
 import com.noisefit_commans.models.Units

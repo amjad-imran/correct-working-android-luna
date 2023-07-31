@@ -20,12 +20,12 @@ import com.google.android.gms.location.*
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit.data.local.AppStaticData
-import com.noisefit.databinding.FragmentWeatherBinding
+import com.noisefit.luna.databinding.FragmentWeatherBinding
 import com.noisefit.ui.common.*
 import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
 import com.noisefit.util.ApplicationUtils

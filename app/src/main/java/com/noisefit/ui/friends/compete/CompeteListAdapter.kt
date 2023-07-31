@@ -6,11 +6,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.airbnb.lottie.LottieDrawable
 import com.hookedonplay.decoviewlib.events.DecoEvent
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.response.Competitions
-import com.noisefit.databinding.ItemCompeteListBinding
-import com.noisefit.databinding.LayoutAddCompetitorBinding
-import com.noisefit.databinding.LayoutWinnerBinding
+import com.noisefit.luna.databinding.ItemCompeteListBinding
+import com.noisefit.luna.databinding.LayoutAddCompetitorBinding
+import com.noisefit.luna.databinding.LayoutWinnerBinding
 import com.noisefit.ui.common.calculatePercentage
 import com.noisefit_commans.ui.loadCircleImage
 import com.noisefit_commans.ui.numberFormatter

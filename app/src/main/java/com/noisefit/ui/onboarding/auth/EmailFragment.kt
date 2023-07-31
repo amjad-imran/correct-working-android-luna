@@ -6,8 +6,8 @@ import android.text.TextWatcher
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
-import com.noisefit.R
-import com.noisefit.databinding.FragmentEmailBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentEmailBinding
 import com.noisefit.ui.common.*
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.utils.StringUtils.isValidEmail

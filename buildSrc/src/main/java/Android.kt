@@ -1,7 +1,7 @@
 
 
 object Android {
-    const val appId = "com.noisefit"
+    const val appId = "com.noisefit.luna"
     const val compileSdk = 32
     const val ndk = "23.1.7779620"
     const val minSdk = 23

@@ -5,8 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.navigation.findNavController
 import com.airbnb.lottie.LottieDrawable
-import com.noisefit.R
-import com.noisefit.databinding.ActivityOnBoardBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.ActivityOnBoardBinding
 import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit.ui.common.BaseActivity
 import com.noisefit_commans.ui.playAnimation

@@ -3,10 +3,10 @@ package com.noisefit.ui.dashboard.feature.healthMonitor.heartRate
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
-import com.noisefit.databinding.FragmentOnlyHeartRateBinding
+import com.noisefit.luna.databinding.FragmentOnlyHeartRateBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast

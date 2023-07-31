@@ -15,9 +15,9 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.imageview.ShapeableImageView
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.remote.response.DiyMyCreation
-import com.noisefit.databinding.BottomSheetMyCreationDetailsBinding
+import com.noisefit.luna.databinding.BottomSheetMyCreationDetailsBinding
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import com.noisefit_commans.ui.gone

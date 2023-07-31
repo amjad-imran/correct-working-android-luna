@@ -4,7 +4,7 @@ import android.graphics.Color
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.local.AppStaticData
 import com.noisefit_commans.data.model.WatchFaceWidgets
 import com.noisefit.data.remote.base.Resource

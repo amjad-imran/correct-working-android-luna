@@ -4,10 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.StressType
 import com.noisefit_commans.data.model.StressZoneAnalysis
-import com.noisefit.databinding.ItemStressStageLayoutBinding
+import com.noisefit.luna.databinding.ItemStressStageLayoutBinding
 
 class StressZoneAnalysisAdapter : RecyclerView.Adapter<StressZoneAnalysisAdapter.ViewHolder>() {
 

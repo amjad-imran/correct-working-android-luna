@@ -4,9 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.response.Requests
-import com.noisefit.databinding.RowCprReceivedBinding
+import com.noisefit.luna.databinding.RowCprReceivedBinding
 
 class PFRReceivedAdapter(val listener: OnItemClickListener) :
     RecyclerView.Adapter<PFRReceivedAdapter.ViewHolder>() {

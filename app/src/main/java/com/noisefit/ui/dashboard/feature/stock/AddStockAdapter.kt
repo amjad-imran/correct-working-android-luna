@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit_commans.data.response.stock.StockNetwork
-import com.noisefit.databinding.RowAddStockBinding
+import com.noisefit.luna.databinding.RowAddStockBinding
 
 class AddStockAdapter(val listener: AddStockListAction) :
     RecyclerView.Adapter<AddStockAdapter.ViewHolder>() {

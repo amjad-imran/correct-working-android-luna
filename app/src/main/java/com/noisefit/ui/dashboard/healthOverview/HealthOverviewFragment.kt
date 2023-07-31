@@ -5,10 +5,10 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hookedonplay.decoviewlib.events.DecoEvent
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.HealthOverview
 import com.noisefit_commans.data.model.HealthOverviewData
-import com.noisefit.databinding.FragmentHealthOverviewBinding
+import com.noisefit.luna.databinding.FragmentHealthOverviewBinding
 import com.noisefit_commans.ui.BaseFragment
 
 import com.noisefit_commans.ui.visible

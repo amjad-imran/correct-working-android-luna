@@ -10,8 +10,8 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.noisefit.R
-import com.noisefit.databinding.FragmentAddSportSelectionBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentAddSportSelectionBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast

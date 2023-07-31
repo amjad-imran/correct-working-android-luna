@@ -5,8 +5,8 @@ import android.graphics.Color
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.noisefit.R
-import com.noisefit.databinding.RowWatchFaceCustomBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.RowWatchFaceCustomBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.models.CustomWatchFace

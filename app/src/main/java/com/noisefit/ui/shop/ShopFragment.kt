@@ -10,11 +10,11 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.MainActivity
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.ShopBanner
 import com.noisefit_commans.data.model.ShopCategory
 import com.noisefit_commans.data.model.ShopProduct
-import com.noisefit.databinding.FragmentShopBinding
+import com.noisefit.luna.databinding.FragmentShopBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.getDeeplinkPathArg
 import com.noisefit_commans.ui.gone

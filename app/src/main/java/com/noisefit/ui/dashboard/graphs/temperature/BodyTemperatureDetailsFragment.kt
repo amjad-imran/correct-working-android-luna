@@ -11,9 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.history.BodyTempHistory
-import com.noisefit.databinding.FragmentBodyTemperatureDetailsBinding
+import com.noisefit.luna.databinding.FragmentBodyTemperatureDetailsBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
 import com.noisefit_commans.ui.gone

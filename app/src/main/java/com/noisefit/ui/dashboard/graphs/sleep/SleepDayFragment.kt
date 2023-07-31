@@ -11,8 +11,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.github.mikephil.charting.charts.CandleStickChart
 import com.github.mikephil.charting.charts.LineChart
-import com.noisefit.R
-import com.noisefit.databinding.FragmentSleepDayBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentSleepDayBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible

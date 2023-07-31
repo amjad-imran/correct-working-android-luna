@@ -14,10 +14,10 @@ import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieDrawable
 import com.noisefit.BottomNavOption
 import com.noisefit.MainViewModel
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.response.ChallengeModel
 import com.noisefit_commans.data.response.Rewards
-import com.noisefit.databinding.FragmentChallengeEndedBinding
+import com.noisefit.luna.databinding.FragmentChallengeEndedBinding
 import com.noisefit.ui.common.*
 import com.noisefit.ui.feeds.create.CREATE_POST_KEY
 import com.noisefit.ui.feeds.create.PostContent

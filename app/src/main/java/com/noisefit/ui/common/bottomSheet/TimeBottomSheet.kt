@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.DatePicker
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
-import com.noisefit.databinding.FragmentTimeBottomSheetBinding
+import com.noisefit.luna.databinding.FragmentTimeBottomSheetBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import dagger.hilt.android.AndroidEntryPoint
 

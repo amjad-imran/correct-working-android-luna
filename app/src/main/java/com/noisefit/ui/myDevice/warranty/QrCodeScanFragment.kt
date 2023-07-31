@@ -9,7 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import com.budiyev.android.codescanner.*
-import com.noisefit.databinding.FragmentQrCodeScanBinding
+import com.noisefit.luna.databinding.FragmentQrCodeScanBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
 import com.noisefit_commans.ui.showShortToast

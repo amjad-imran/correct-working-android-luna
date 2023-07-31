@@ -3,7 +3,7 @@ package com.noisefit.ui.friends
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
-import com.noisefit.databinding.DurationBottomSheetBinding
+import com.noisefit.luna.databinding.DurationBottomSheetBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import com.noisefit.ui.common.bottomSheet.ValueSelectorAdapter
 import com.noisefit.ui.common.bottomSheet.ValueSelectorBottomSheetArgs

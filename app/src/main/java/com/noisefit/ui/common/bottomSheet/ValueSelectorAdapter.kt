@@ -3,7 +3,7 @@ package com.noisefit.ui.common.bottomSheet
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.RowScrollValueSelectorBinding
+import com.noisefit.luna.databinding.RowScrollValueSelectorBinding
 
 
 class ValueSelectorAdapter : RecyclerView.Adapter<ValueSelectorAdapter.ViewHolder>() {

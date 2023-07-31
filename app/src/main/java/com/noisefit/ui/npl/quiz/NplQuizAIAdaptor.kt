@@ -3,8 +3,8 @@ package com.noisefit.ui.npl.quiz
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.R
-import com.noisefit.databinding.ItemQuizAnswerIndicatorBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.ItemQuizAnswerIndicatorBinding
 
 class NplQuizAIAdaptor : RecyclerView.Adapter<NplQuizAIAdaptor.ViewHolder>() {
     private var mDataSet = ArrayList<Int>()

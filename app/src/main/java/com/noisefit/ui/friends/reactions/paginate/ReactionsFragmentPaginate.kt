@@ -7,7 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavDeepLinkRequest
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.FragmentReactionsBinding
+import com.noisefit.luna.databinding.FragmentReactionsBinding
 import com.noisefit.ui.common.*
 import com.noisefit_commans.data.model.UserFriendData
 import com.noisefit_commans.ui.BaseFragment

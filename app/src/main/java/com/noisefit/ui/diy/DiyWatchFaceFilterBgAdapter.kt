@@ -19,9 +19,9 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.imageview.ShapeableImageView
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.model.DiyCustomWatchFaceBg
-import com.noisefit.databinding.LayoutDiySubImageListBinding
+import com.noisefit.luna.databinding.LayoutDiySubImageListBinding
 import com.noisefit_commans.ui.loadCircleWCacheWithProgress
 import com.noisefit_commans.ui.visible
 import com.noisefit.watch.WatchForm

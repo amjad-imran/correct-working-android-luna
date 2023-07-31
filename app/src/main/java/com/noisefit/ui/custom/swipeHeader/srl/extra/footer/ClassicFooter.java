@@ -33,7 +33,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import androidx.annotation.StringRes;
 
-import com.noisefit.R;
+import com.noisefit.luna.R;
 import com.noisefit.ui.custom.swipeHeader.srl.extra.AbsClassicRefreshView;
 import com.noisefit.ui.custom.swipeHeader.srl.extra.ClassicConfig;
 

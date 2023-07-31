@@ -3,9 +3,9 @@ package com.noisefit.ui.feeds.create
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.model.MentionUser
-import com.noisefit.databinding.RowUserSuggestionBinding
+import com.noisefit.luna.databinding.RowUserSuggestionBinding
 import com.noisefit_commans.ui.loadImage
 
 

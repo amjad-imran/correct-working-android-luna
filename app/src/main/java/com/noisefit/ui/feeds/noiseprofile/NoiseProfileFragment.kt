@@ -13,12 +13,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.model.MentionUser
 import com.noisefit.data.model.NoiseProfileData
 import com.noisefit.data.model.timeline.TimelineData
-import com.noisefit.databinding.FragmentNoiseProfileBinding
-import com.noisefit.databinding.LayoutPostPopUpEmojiBinding
+import com.noisefit.luna.databinding.FragmentNoiseProfileBinding
+import com.noisefit.luna.databinding.LayoutPostPopUpEmojiBinding
 import com.noisefit.ui.common.*
 import com.noisefit.ui.friends.profile.timeline.OnTimelineInteractionListener
 import com.noisefit.ui.friends.profile.timeline.TimelineAdapterWithoutPl

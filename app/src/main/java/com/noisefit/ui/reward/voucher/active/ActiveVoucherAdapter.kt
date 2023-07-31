@@ -3,9 +3,9 @@ package com.noisefit.ui.reward.voucher.active
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.VoucherList
-import com.noisefit.databinding.ItemActiveVoucherBinding
+import com.noisefit.luna.databinding.ItemActiveVoucherBinding
 import com.noisefit_commans.ui.loadImage
 
 class ActiveVoucherAdapter(val listener: OnRedeemClickListener) :

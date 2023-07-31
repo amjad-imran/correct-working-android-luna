@@ -8,10 +8,10 @@ import android.os.Handler
 import android.os.Looper
 import androidx.activity.viewModels
 import com.noisefit.MainActivity
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.local.AppStaticData
 import com.noisefit_commans.data.model.User
-import com.noisefit.databinding.ActivityDeviceSetupBinding
+import com.noisefit.luna.databinding.ActivityDeviceSetupBinding
 import com.noisefit.oreo.OreoMainActivity
 import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit.session.SessionManager

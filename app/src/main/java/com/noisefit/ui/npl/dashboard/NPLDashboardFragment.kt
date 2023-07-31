@@ -19,11 +19,11 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.MainViewModel
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.model.Faces
 import com.noisefit.data.model.ScoreCardData
 import com.noisefit.data.model.WatchFaces
-import com.noisefit.databinding.FragmentNPLDashboardBinding
+import com.noisefit.luna.databinding.FragmentNPLDashboardBinding
 import com.noisefit.ui.common.*
 import com.noisefit.ui.web.WebViewActivity
 import com.noisefit.util.ApplicationUtils

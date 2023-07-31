@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.data.model.VideosList
-import com.noisefit.databinding.ItemWorkoutSubcategoryBinding
+import com.noisefit.luna.databinding.ItemWorkoutSubcategoryBinding
 import com.noisefit.ui.common.*
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.gone

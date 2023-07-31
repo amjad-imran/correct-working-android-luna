@@ -29,13 +29,13 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import com.huawei.hms.hmsscankit.RemoteView
 import com.huawei.hms.ml.scan.HmsScan
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit.data.repository.abstraction.IBluetoothScan
-import com.noisefit.databinding.DialogUnsupportedDeviceBinding
-import com.noisefit.databinding.FragmentQrScanBinding
+import com.noisefit.luna.databinding.DialogUnsupportedDeviceBinding
+import com.noisefit.luna.databinding.FragmentQrScanBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast

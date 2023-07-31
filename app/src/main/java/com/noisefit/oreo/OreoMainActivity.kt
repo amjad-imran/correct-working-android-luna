@@ -8,8 +8,8 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.noisefit.BottomNavOption
 import com.noisefit.MainViewModel
-import com.noisefit.R
-import com.noisefit.databinding.ActivityOreoMainBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.ActivityOreoMainBinding
 import com.noisefit.ui.APP_CONTINUE
 import com.noisefit.ui.APP_EXIT
 import com.noisefit.ui.APP_UPDATE
@@ -44,7 +44,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        navController = findNavController(com.noisefit.R.id.o_nav_host_fragment)
+        navController = findNavController(com.noisefit.luna.R.id.o_nav_host_fragment)
         binding.navView.itemIconTintList = null
         binding.navView.setOnItemReselectedListener {
             return@setOnItemReselectedListener
@@ -105,7 +105,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         //setSelected()
         lastDestination?.let {
             if (it.id == R.id.navigation_oreo_home) {
-                binding.navView.selectedItemId = com.noisefit.R.id.navigation_summary
+                binding.navView.selectedItemId = com.noisefit.luna.R.id.navigation_summary
             }
         }
     }
@@ -239,7 +239,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     if (it.currentDestination?.id == R.id.navigation_oreo_home) {
                         finish()
                     } else {
-                        binding.navView.selectedItemId = com.noisefit.R.id.navigation_oreo_home
+                        binding.navView.selectedItemId = com.noisefit.luna.R.id.navigation_oreo_home
                         navController?.popBackStack(R.id.navigation_oreo_home, true)
                         navController?.navigate(R.id.navigation_oreo_home)
                     }

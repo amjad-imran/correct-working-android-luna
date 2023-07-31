@@ -14,12 +14,12 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.remote.NetworkErrors.NETWORK_ERROR
 import com.noisefit.data.remote.NetworkErrors.NETWORK_ERROR_TIMEOUT
 import com.noisefit.data.remote.NetworkErrors.NETWORK_ERROR_UNKNOWN
 import com.noisefit_commans.databinding.DefaultLoaderBinding
-import com.noisefit.databinding.LayoutCustomWatchConnectedAlertBinding
+import com.noisefit.luna.databinding.LayoutCustomWatchConnectedAlertBinding
 import com.noisefit_commans.data.*
 import com.noisefit_commans.databinding.LayoutCustomAlertBinding
 import com.noisefit_commans.ui.*

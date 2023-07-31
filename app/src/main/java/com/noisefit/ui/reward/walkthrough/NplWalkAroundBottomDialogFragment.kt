@@ -8,8 +8,8 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayoutMediator
-import com.noisefit.R
-import com.noisefit.databinding.FragmentFriendsWalkAroundBottomDialogBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentFriendsWalkAroundBottomDialogBinding
 import com.noisefit.session.SessionManager
 import com.noisefit.ui.walkAround.friends.FriendsWalkAroundSliderAdapter
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface

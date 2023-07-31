@@ -17,15 +17,15 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.lottie.LottieDrawable
 import com.hookedonplay.decoviewlib.events.DecoEvent
-import com.noisefit.R
+import com.noisefit.luna.R
 
 import com.noisefit.data.local.AppStaticData
 import com.noisefit_commans.data.model.Emoji
 import com.noisefit_commans.data.model.FriendProgress
 import com.noisefit_commans.data.model.ReactionsWrapper
-import com.noisefit.databinding.FragmentFriendsListBinding
-import com.noisefit.databinding.LayoutPopUpEmojiBinding
-import com.noisefit.databinding.LayoutReactionPopUpEmojiBinding
+import com.noisefit.luna.databinding.FragmentFriendsListBinding
+import com.noisefit.luna.databinding.LayoutPopUpEmojiBinding
+import com.noisefit.luna.databinding.LayoutReactionPopUpEmojiBinding
 import com.noisefit.ui.common.*
 import com.noisefit.ui.dashboard.summary.RING_ANIMATION
 import com.noisefit.ui.friends.compete.FriendSharedViewModel

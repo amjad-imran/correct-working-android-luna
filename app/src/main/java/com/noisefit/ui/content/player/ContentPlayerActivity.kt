@@ -14,10 +14,10 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.gson.JsonObject
 import com.hookedonplay.decoviewlib.events.DecoEvent
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.ContentRepository
-import com.noisefit.databinding.ActivityContentPlayerBinding
+import com.noisefit.luna.databinding.ActivityContentPlayerBinding
 import com.noisefit.ui.common.BaseActivity
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible

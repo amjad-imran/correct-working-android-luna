@@ -5,9 +5,9 @@ import android.view.View
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.google.android.material.slider.Slider
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.local.AppStaticData
-import com.noisefit.databinding.FragmentDeviceSettingBinding
+import com.noisefit.luna.databinding.FragmentDeviceSettingBinding
 import com.noisefit.ui.common.*
 import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
 import com.noisefit_commans.utils.InsiderAppEvents

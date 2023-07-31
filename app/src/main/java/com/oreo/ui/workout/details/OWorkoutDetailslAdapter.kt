@@ -3,8 +3,8 @@ package com.oreo.ui.workout.details
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.RowActivityDetailBinding
-import com.noisefit.databinding.RowOwdItemBinding
+import com.noisefit.luna.databinding.RowActivityDetailBinding
+import com.noisefit.luna.databinding.RowOwdItemBinding
 import com.noisefit.ui.workout.adapter.ActivityDetailAdapter
 import com.noisefit_commans.data.model.DetailData
 import com.oreo.data.model.OWDActivityData

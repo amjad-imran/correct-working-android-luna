@@ -13,8 +13,8 @@ import com.github.mikephil.charting.charts.CandleStickChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
-import com.noisefit.R
-import com.noisefit.databinding.FragmentSleepGraphBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentSleepGraphBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible

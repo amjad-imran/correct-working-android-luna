@@ -10,8 +10,8 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.noisefit.R
-import com.noisefit.databinding.FragmentHelpAndSupportDetailsBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentHelpAndSupportDetailsBinding
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.response.HelpAndSupportDetailResponse
 import com.noisefit_commans.interfaces.connection.ConnectState

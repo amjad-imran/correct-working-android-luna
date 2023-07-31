@@ -19,8 +19,8 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.noisefit.R
-import com.noisefit.databinding.FragmentActivityCyclingBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentActivityCyclingBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible

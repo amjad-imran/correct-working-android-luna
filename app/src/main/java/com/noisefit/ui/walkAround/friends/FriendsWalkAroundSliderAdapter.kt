@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit_commans.data.model.FriendsWalkAround
-import com.noisefit.databinding.ViewFriendWalkaroundSliderBinding
+import com.noisefit.luna.databinding.ViewFriendWalkaroundSliderBinding
 import com.noisefit_commans.ui.loadImage
 
 

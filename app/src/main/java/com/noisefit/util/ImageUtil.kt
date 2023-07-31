@@ -8,7 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_ryeex_sdk.dataConversion.RyeexConst
 import java.io.*
 import javax.inject.Inject

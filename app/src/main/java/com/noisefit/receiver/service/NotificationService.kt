@@ -7,7 +7,7 @@ import android.os.Bundle
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.noisefit.BuildConfig
+import com.noisefit.luna.BuildConfig
 import com.noisefit.data.local.AppStaticData
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource

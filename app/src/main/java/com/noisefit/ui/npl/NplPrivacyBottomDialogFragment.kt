@@ -7,9 +7,9 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
-import com.noisefit.R
-import com.noisefit.databinding.FragmentNplPrivacyBottomDialogListDialogBinding
-import com.noisefit.databinding.FragmentPrivacyBottomDialogListDialogBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentNplPrivacyBottomDialogListDialogBinding
+import com.noisefit.luna.databinding.FragmentPrivacyBottomDialogListDialogBinding
 import com.noisefit.ui.friends.location.search.CLOSED_SEARCH_STATE_KEY
 import com.noisefit.ui.web.WebViewActivity
 import com.noisefit_commans.ui.BaseBottomSheet

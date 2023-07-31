@@ -13,9 +13,9 @@ import androidx.core.os.HandlerCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.trophies.DailyItem
-import com.noisefit.databinding.DialogTrophyCollectBinding
+import com.noisefit.luna.databinding.DialogTrophyCollectBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible

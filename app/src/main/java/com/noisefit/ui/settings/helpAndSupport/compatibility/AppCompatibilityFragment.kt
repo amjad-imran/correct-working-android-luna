@@ -3,9 +3,9 @@ package com.noisefit.ui.settings.helpAndSupport.compatibility
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.AppCompatibility
-import com.noisefit.databinding.FragmentAppCompatibilityBinding
+import com.noisefit.luna.databinding.FragmentAppCompatibilityBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.share.ShareUtil
 import dagger.hilt.android.AndroidEntryPoint

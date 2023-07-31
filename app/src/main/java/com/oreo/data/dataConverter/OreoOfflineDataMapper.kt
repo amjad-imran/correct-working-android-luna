@@ -3,7 +3,7 @@ package com.oreo.data.dataConverter
 import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.data.Entry
 import com.google.gson.Gson
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.local.db.implementation.StressDataImpl
 import com.noisefit.ui.common.calculatePercentage

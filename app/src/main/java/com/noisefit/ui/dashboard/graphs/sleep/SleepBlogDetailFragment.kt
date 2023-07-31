@@ -5,7 +5,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.noisefit_commans.data.response.SleepBlogCategories
-import com.noisefit.databinding.FragmentSleepBlogDetailBinding
+import com.noisefit.luna.databinding.FragmentSleepBlogDetailBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseFragment

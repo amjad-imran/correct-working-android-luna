@@ -3,8 +3,8 @@ package com.noisefit.ui.dashboard.feature.experimental
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import com.noisefit.R
-import com.noisefit.databinding.FragmentSmartNotificationBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentSmartNotificationBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.loadImage
 import dagger.hilt.android.AndroidEntryPoint

@@ -1,7 +1,7 @@
 package com.noisefit.ui.dashboard.feature.findmydevice
 
 import androidx.lifecycle.MutableLiveData
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit.watch.SDKWatchType

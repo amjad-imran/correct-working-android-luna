@@ -2,8 +2,8 @@ package com.noisefit.ui.dashboard.feature.rapid
 
 import android.os.Bundle
 import android.view.View
-import com.noisefit.R
-import com.noisefit.databinding.FragmentRapidEyeMomentBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentRapidEyeMomentBinding
 import com.noisefit.session.SessionManager
 import com.noisefit.ui.common.*
 import com.noisefit_commans.utils.InsiderAppEvents

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit_commans.data.model.CustomGrid
-import com.noisefit.databinding.RowGridOptionBinding
+import com.noisefit.luna.databinding.RowGridOptionBinding
 
 class GridOptionsAdapter(val listener: GridOptionSelectAction) : RecyclerView.Adapter<GridOptionsAdapter.ViewHolder>() {
 

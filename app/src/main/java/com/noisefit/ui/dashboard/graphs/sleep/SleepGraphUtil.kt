@@ -17,7 +17,7 @@ import com.github.mikephil.charting.interfaces.datasets.ICandleDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.interfaces.datasets.IScatterDataSet
 import com.github.mikephil.charting.utils.Utils
-import com.noisefit.R
+import com.noisefit.luna.R
 
 object SleepGraphUtil {
 

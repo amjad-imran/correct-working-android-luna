@@ -8,8 +8,8 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.tabs.TabLayout
-import com.noisefit.R
-import com.noisefit.databinding.FragmentOsleepParentDetailsBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentOsleepParentDetailsBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible

@@ -8,7 +8,7 @@ import android.widget.CompoundButton
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.LayoutContactItemBinding
+import com.noisefit.luna.databinding.LayoutContactItemBinding
 import com.noisefit_commans.models.Contact
 
 

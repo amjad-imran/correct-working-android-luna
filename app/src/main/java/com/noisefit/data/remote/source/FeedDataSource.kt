@@ -3,7 +3,7 @@ package com.noisefit.data.remote.source
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.bumptech.glide.load.HttpException
-import com.noisefit.BuildConfig
+import com.noisefit.luna.BuildConfig
 import com.noisefit.data.model.timeline.TimelineData
 import com.noisefit.data.remote.abstraction.NetworkService
 import java.io.IOException

@@ -7,7 +7,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.data.response.ChallengeModel
-import com.noisefit.databinding.RowFriendChallengeBinding
+import com.noisefit.luna.databinding.RowFriendChallengeBinding
 
 class FriendOngoingChallengeAdapter :
     RecyclerView.Adapter<FriendOngoingChallengeAdapter.ViewHolder>() {

@@ -4,7 +4,7 @@ import android.net.Uri
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
-import com.noisefit.BuildConfig
+import com.noisefit.luna.BuildConfig
 import com.noisefit.data.local.db.CacheErrors
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.local.db.OfflineResult

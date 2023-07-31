@@ -8,8 +8,8 @@ import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import com.airbnb.lottie.LottieDrawable
-import com.noisefit.R
-import com.noisefit.databinding.ActivityFindMyPhoneBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.ActivityFindMyPhoneBinding
 import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit.session.SessionManager
 import com.noisefit.ui.common.BaseActivity

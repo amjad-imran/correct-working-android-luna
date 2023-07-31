@@ -33,14 +33,15 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.play.core.review.ReviewManagerFactory
+import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
 
 import com.noisefit_commans.data.model.BatteryNotificationType
-import com.noisefit.databinding.ActivityMainBinding
+import com.noisefit.luna.databinding.ActivityMainBinding
 
-import com.noisefit.databinding.DialogForceOtaBinding
+import com.noisefit.luna.databinding.DialogForceOtaBinding
 import com.noisefit.ui.APP_CONTINUE
 import com.noisefit.ui.APP_EXIT
 import com.noisefit.ui.APP_UPDATE

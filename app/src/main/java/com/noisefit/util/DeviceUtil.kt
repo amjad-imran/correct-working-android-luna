@@ -1,6 +1,6 @@
 package com.noisefit.util
 
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.utils.share.ShareUtil
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.DeviceType

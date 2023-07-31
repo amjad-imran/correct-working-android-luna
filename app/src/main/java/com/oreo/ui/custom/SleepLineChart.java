@@ -13,7 +13,7 @@ import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.noisefit.R;
+import com.noisefit.luna.R;
 import com.noisefit_commans.utils.LOGS;
 import com.oreo.data.model.ChartModel;
 import com.oreo.data.model.SleepChartModel;

@@ -25,13 +25,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.model.MentionUser
 import com.noisefit.data.model.timeline.CommentData
 import com.noisefit.data.model.timeline.ReactionData
 import com.noisefit.data.model.timeline.TimelineData
-import com.noisefit.databinding.FragmentPostDetailsBinding
-import com.noisefit.databinding.LayoutPostPopUpEmojiBinding
+import com.noisefit.luna.databinding.FragmentPostDetailsBinding
+import com.noisefit.luna.databinding.LayoutPostPopUpEmojiBinding
 import com.noisefit.ui.common.*
 import com.noisefit.ui.feeds.bottomSheet.DELETE_PC_REQUEST_KEY
 import com.noisefit.ui.feeds.bottomSheet.EDIT_PC_REQUEST_KEY

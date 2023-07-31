@@ -9,7 +9,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
-import com.noisefit.BuildConfig
+import com.noisefit.luna.BuildConfig
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.local.db.abstraction.FeedsDataSource
 import com.noisefit.data.local.db.database.FeedsType
