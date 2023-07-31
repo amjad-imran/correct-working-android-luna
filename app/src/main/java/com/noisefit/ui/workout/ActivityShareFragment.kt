@@ -141,9 +141,7 @@ class ActivityShareFragment :
             )
             tvDistance.text = "$distance"
             val activityName = it.type ?: it.activityType
-            imageView8.setImageResource(
-                com.noisefit.util.ImageUtil().getImageFromActivity(activityName)
-            )
+
 
             setAveragePace(it)
             setAverageSpeed(it)

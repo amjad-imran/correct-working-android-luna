@@ -180,11 +180,7 @@ class RoundUpEntryFragment :
                     showAnimation(R.raw.anim_roundup_workout_found)
 
                     binding.lytSummaryContent.lytWorkoutImage.root.alpha = 0f
-                    binding.lytSummaryContent.lytWorkoutImage.ivWorkout.setImageResource(
-                        ImageUtil().getImageFromActivity(
-                            viewModel.response?.workout?.totalValue ?: ""
-                        )
-                    )
+
                     binding.lytSummaryContent.lytWorkoutImage.root.visible()
 
                     binding.lytSummaryContent.lytWorkoutImage.root.animate().apply {

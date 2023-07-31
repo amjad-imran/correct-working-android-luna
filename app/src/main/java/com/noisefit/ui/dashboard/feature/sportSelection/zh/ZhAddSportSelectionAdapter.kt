@@ -26,7 +26,6 @@ class ZhAddSportSelectionAdapter(
         fun bind(widget: Widget, position: Int) {
             binding.tvName.text = widget.name.replace("_", " ")
                 .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
-            binding.imageView8.setImageResource(ImageUtil().getImageFromActivity(widget.name))
 
             binding.checkbox.setOnClickListener { view ->
                 val isChecked = (view as CompoundButton).isChecked

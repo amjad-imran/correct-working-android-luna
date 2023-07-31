@@ -27,7 +27,6 @@ import com.noisefit_commans.models.SportsModeRequest
 import com.noisefit_commans.utils.DistanceUtil
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.LocationClientClass
-import com.noisefit_nav_plus.handler.NavPlusQueryDeviceUnitsHandler
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 import javax.inject.Inject
@@ -59,7 +58,7 @@ class ActivityStartFragment :
     }
 
     private fun enableLocation() {
-        if (!viewModel.enableGps(viewModel.mode?.name)) {
+       /* if (!viewModel.enableGps(viewModel.mode?.name)) {
             return
         }
 
@@ -74,7 +73,7 @@ class ActivityStartFragment :
                     locationReceiver,
                     IntentFilter(NavPlusQueryDeviceUnitsHandler.LOCATION_BROADCAST_RECEIVER)
                 )
-        }
+        }*/
     }
 
     private fun disableLocation() {
@@ -93,7 +92,7 @@ class ActivityStartFragment :
     private var locationReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
 
-            val locationArrayList =
+          /*  val locationArrayList =
                 intent.getParcelableArrayListExtra<LocationDataModel>(NavPlusQueryDeviceUnitsHandler.LAT_LONG)
 
             if (locationArrayList.isNullOrEmpty()) {
@@ -114,7 +113,7 @@ class ActivityStartFragment :
                         it
                     )
                 )
-            }
+            }*/
         }
     }
 
@@ -124,7 +123,6 @@ class ActivityStartFragment :
             viewModel.mode = ActivityStartFragmentArgs.fromBundle(it).mode
             binding.toolbar.tvTitle.text =
                 viewModel.mode?.name?.replace("_", " ")?.uppercase() ?: ""
-            binding.ivActivityType.setImageResource(ImageUtil().getImageFromActivity(viewModel.mode?.name))
         }
         binding.bStart.visible()
         binding.ongoingLayout.gone()

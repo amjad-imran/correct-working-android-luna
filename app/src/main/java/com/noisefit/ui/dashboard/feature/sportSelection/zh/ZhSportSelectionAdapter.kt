@@ -38,7 +38,6 @@ class ZhSportSelectionAdapter(private val action: SportSelectionListener) :
             binding.tvName.text = widget.name.replace("_", " ")
                 .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
 
-            binding.imageView8.setImageResource(ImageUtil().getImageFromActivity(widget.name))
             if (mEditMode) {
                 binding.ivRemove.visible()
                 if (widget.sortable) {

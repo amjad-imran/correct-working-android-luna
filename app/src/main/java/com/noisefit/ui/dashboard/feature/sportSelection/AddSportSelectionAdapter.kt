@@ -25,7 +25,6 @@ class AddSportSelectionAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(sportsMode: SportsModeList.SportsMode, position: Int) {
             binding.tvName.text = sportsMode.name?.replace("_", " ")
-            binding.imageView8.setImageResource(ImageUtil().getImageFromActivity(sportsMode.name))
             binding.checkbox.setOnClickListener { view ->
                 val isChecked = (view as CompoundButton).isChecked
                 contactInteractionListener.onSportClick(

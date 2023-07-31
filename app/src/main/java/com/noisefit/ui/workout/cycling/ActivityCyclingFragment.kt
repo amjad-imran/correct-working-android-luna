@@ -87,7 +87,6 @@ class ActivityCyclingFragment :
 
 
         val activityName = activity.type ?: activity.activityType
-        binding.ivActivityType.setImageResource(ImageUtil().getImageFromActivity(activityName))
 
         if (viewModel.generateDetailsData(activity, viewModel.unit).isNotEmpty()) {
             adapter.setDataSet(viewModel.generateDetailsData(activity, viewModel.unit))

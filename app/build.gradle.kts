@@ -313,13 +313,7 @@ dependencies {
 //    implementation(project(Modules.oreo))
     implementation(project(Modules.mpChartLib))
     implementation(project(Modules.customProgress))
-    implementation(project(Modules.noisefit_ryeex_sdk))
     implementation(WatchDog.watchDog)
-    implementation(project(Modules.noisefit_colorfit2))
-    implementation(project(Modules.noisefit_colorfit_pro))
-    implementation(project(Modules.noisefit_evolve2))
-    implementation(project(Modules.noisefit_hybrid))
-    implementation(project(Modules.noisefit_nav_plus))
     implementation(project(Modules.noisefit_zh_sdk))
 
     implementation(AndroidX.lifecycleProcess)

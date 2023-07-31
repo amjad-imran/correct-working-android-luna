@@ -379,30 +379,12 @@ object AppModule {
     @Singleton
     @Provides
     fun provideApplicationHandler(
-        @Named("NFHybridApplicationHandler")
-        nfhApplicationHandler: BaseInitializeInterface,
-        @Named("ColorFit2ApplicationHandler")
-        cf2ApplicationHandler: BaseInitializeInterface,
-        @Named("NavPlusApplicationHandler")
-        navPlusApplicationHandler: BaseInitializeInterface,
         @Named("ZhApplicationHandler")
         zhApplicationHandler: BaseInitializeInterface,
-        @Named("ProApplicationHandler")
-        proApplicationHandler: BaseInitializeInterface,
-        @Named("evolveApplicationHandler")
-        evolveApplicationHandler: BaseInitializeInterface,
-        @Named("ryeexApplicationHandler")
-        ryeexApplicationHandler: BaseInitializeInterface,
         watchesSdk: WatchesSDK
     ): ApplicationHandler {
         return ApplicationHandler(
-            nfhApplicationHandler,
-            cf2ApplicationHandler,
-            navPlusApplicationHandler,
             zhApplicationHandler,
-            proApplicationHandler,
-            evolveApplicationHandler,
-            ryeexApplicationHandler,
             watchesSdk
         )
     }
@@ -410,30 +392,12 @@ object AppModule {
     @Singleton
     @Provides
     fun provideConnectionHandler(
-        @Named("NFHConnectionDataActions")
-        nfhConnection: ConnectionDataActions,
-        @Named("ColorFit2ConnectionDataActions")
-        colorFit2Connection: ConnectionDataActions,
-        @Named("NavPlusConnectionDataActions")
-        navPlusConnection: ConnectionDataActions,
         @Named("ZhConnectionDataActions")
         zhConnection: ConnectionDataActions,
-        @Named("ProConnectionDataActions")
-        proConnectHandler: ConnectionDataActions,
-        @Named("evolveConnectionDataActions")
-        evolve2ConnectHandler: ConnectionDataActions,
-        @Named("ryeexConnectionDataActions")
-        ryeexConnectHandler: ConnectionDataActions,
         watchesSdk: WatchesSDK
     ): ConnectionHandler {
         return ConnectionHandler(
-            nfhConnection,
-            colorFit2Connection,
-            navPlusConnection,
             zhConnection,
-            proConnectHandler,
-            evolve2ConnectHandler,
-            ryeexConnectHandler,
             watchesSdk
         )
     }
@@ -441,30 +405,12 @@ object AppModule {
     @Singleton
     @Provides
     fun provideQueryHandler(
-        @Named("NFHQueryDeviceDataActions")
-        nfhQueryAction: QueryDeviceDataActions,
-        @Named("CF2QueryDeviceDataActions")
-        cf2QueryAction: QueryDeviceDataActions,
-        @Named("NavPlusQueryDeviceDataActions")
-        navPlusQueryAction: QueryDeviceDataActions,
         @Named("ZhQueryDeviceDataActions")
         zhQueryAction: QueryDeviceDataActions,
-        @Named("ProQueryDeviceDataActions")
-        proQueryAction: QueryDeviceDataActions,
-        @Named("EvolveQueryDeviceDataActions")
-        evolveQueryAction: QueryDeviceDataActions,
-        @Named("RyeexQueryDeviceDataActions")
-        ryeexQueryAction: QueryDeviceDataActions,
         watchesSdk: WatchesSDK
     ): DeviceQueryHandler {
         return DeviceQueryHandler(
-            nfhQueryAction,
-            cf2QueryAction,
-            navPlusQueryAction,
             zhQueryAction,
-            proQueryAction,
-            evolveQueryAction,
-            ryeexQueryAction,
             watchesSdk
         )
     }
@@ -472,30 +418,12 @@ object AppModule {
     @Singleton
     @Provides
     fun provideUpdateDeviceHandler(
-        @Named("NFHUpdateDevice")
-        nfhUpdateDeviceAction: UpdateDeviceDataActions,
-        @Named("Cf2UpdateDevice")
-        cf2UpdateDeviceAction: UpdateDeviceDataActions,
-        @Named("NavPlusUpdateDevice")
-        navPlusUpdateDeviceAction: UpdateDeviceDataActions,
         @Named("ZhUpdateDevice")
         zhUpdateDeviceAction: UpdateDeviceDataActions,
-        @Named("ProUpdateDevice")
-        proUpdateDeviceAction: UpdateDeviceDataActions,
-        @Named("EvolveUpdateDevice")
-        evolveUpdateDeviceAction: UpdateDeviceDataActions,
-        @Named("RyeexUpdateDevice")
-        ryeexUpdateDeviceAction: UpdateDeviceDataActions,
         watchesSdk: WatchesSDK
     ): UpdateDeviceHandler {
         return UpdateDeviceHandler(
-            nfhUpdateDeviceAction,
-            cf2UpdateDeviceAction,
-            navPlusUpdateDeviceAction,
             zhUpdateDeviceAction,
-            proUpdateDeviceAction,
-            evolveUpdateDeviceAction,
-            ryeexUpdateDeviceAction,
             watchesSdk
         )
     }
@@ -503,30 +431,12 @@ object AppModule {
     @Singleton
     @Provides
     fun provideUserActivityHandler(
-        @Named("NFHUserActivityDataActions")
-        nfhUserActivityDataActions: UserActivityDataActions,
-        @Named("NavPlusUserActivityDataActions")
-        navPlusUserActivityDataActions: UserActivityDataActions,
         @Named("ZhUserActivityDataActions")
         zhUserActivityDataActions: UserActivityDataActions,
-        @Named("CF2UserActivityDataActions")
-        cf2UserActivityDataActions: UserActivityDataActions,
-        @Named("ProActivityDataActions")
-        proUserActivityHandler: UserActivityDataActions,
-        @Named("EvolveUserActivityDataActions")
-        evolveUserActivityHandler: UserActivityDataActions,
-        @Named("RyeexUserActivityDataActions")
-        ryeexUserActivityHandler: UserActivityDataActions,
         watchesSdk: WatchesSDK
     ): UserActivityHandler {
         return UserActivityHandler(
-            nfhUserActivityDataActions,
-            navPlusUserActivityDataActions,
             zhUserActivityDataActions,
-            cf2UserActivityDataActions,
-            proUserActivityHandler,
-            evolveUserActivityHandler,
-            ryeexUserActivityHandler,
             watchesSdk
         )
     }

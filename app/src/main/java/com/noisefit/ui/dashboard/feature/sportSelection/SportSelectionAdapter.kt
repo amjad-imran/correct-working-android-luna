@@ -31,7 +31,6 @@ class SportSelectionAdapter(private val action: SportSelectionListener) :
         fun bind(sport: SportsModeList.SportsMode) {
             binding.tvName.text = sport.name?.replace("_", " ")
 
-            binding.imageView8.setImageResource(ImageUtil().getImageFromActivity(sport.name))
             if (mEditMode) {
                 if (sport.remove) {
                     binding.ivRemove.visible()

@@ -42,7 +42,6 @@ class RecentWorkoutsAdapter : RecyclerView.Adapter<RecentWorkoutsAdapter.ViewHol
                 binding.divider.root.visible()
             }
             val activityName = sportsModeResponse.type ?: sportsModeResponse.activityType
-            binding.imageView8.setImageResource(ImageUtil().getImageFromActivity(activityName))
 
             binding.container.setOnClickListener {
                 if (hasData) {

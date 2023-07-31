@@ -63,7 +63,6 @@ class RecentWorkoutListingAdapter(
                     activity.getFormattedActivityName()
 
                 val activityName = activity.type ?: activity.activityType
-                view.findViewById<ImageView>(R.id.imageView8).setImageResource(ImageUtil().getImageFromActivity(activityName))
 
                 if (activity.distance != null && activity.distance!! > 0) {
 

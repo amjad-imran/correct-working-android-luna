@@ -27,29 +27,7 @@ constructor(
 
     init {
         val watchType = watches.getWatchType(sessionManager.connectedDevice.value)
-        allSportModeList =
-            when (sessionManager.connectedDevice.value?.deviceType) {
-                DeviceType.COLORFIT_PRO_2.deviceType -> {
-                    AppConstants.sportsModeListPro2
-                }
-                DeviceType.COLORFIT_PRO_2_OXY.deviceType -> {
-                    AppConstants.sportsModeListOxy
-                }
-                else -> {
-                    if (watchType == SDKWatchType.SDK_RYEEX) {
-                        RyeexConst.sportsModeListColorFit
-                    } else {
-                        AppConstants.sportsModeList
-                    }
 
-                }
-            }
-
-        maxCount = if (watchType == SDKWatchType.SDK_RYEEX) {
-               10
-            } else {
-                allSportModeList.size
-            }
 
 
     }

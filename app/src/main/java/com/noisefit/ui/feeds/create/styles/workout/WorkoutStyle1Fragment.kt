@@ -62,7 +62,6 @@ class WorkoutStyle1Fragment :
 
 
             val activityName = it.type ?: it.activityType
-            binding.imageView8.setImageResource(ImageUtil().getImageFromActivity(activityName))
 
 
         }

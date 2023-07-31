@@ -70,7 +70,6 @@ class WorkoutCyclingStyle1Fragment :
             )
             binding.tvDistance.text = "$distance"
             val activityName = it.type ?: it.activityType
-            binding.imageView8.setImageResource(ImageUtil().getImageFromActivity(activityName))
 
             setAveragePace(it)
             setAverageSpeed(it)
