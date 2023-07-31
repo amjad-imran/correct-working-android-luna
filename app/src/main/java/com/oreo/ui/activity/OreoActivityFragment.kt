@@ -37,6 +37,8 @@ import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Arrays
+
 
 @AndroidEntryPoint
 class OreoActivityFragment :
@@ -278,146 +280,195 @@ class OreoActivityFragment :
 
     }
 
+
+    private fun baseInterval(startTime: String?, endTime: String?): HashMap<Int, String> {
+        val hm = HashMap<Int, String>()
+        if (startTime == null && endTime == null) {
+            for (i in 0..287 step 47) {
+                hm[i] = getHour(i)
+            }
+            return hm
+        }
+        var endTimeFormat = endTime
+        if(endTimeFormat== "24:00:00"){
+            endTimeFormat = "23:60:00"
+        }
+        val array = intArrayOf(0, 4, 8, 12, 16, 20, 24)
+        val startTimeFull = startTime!!.split(":")
+        val startHr = startTimeFull[0].toInt()
+        val startMin = startTimeFull[1].toInt()
+        var startOffset = 0
+        var nearestStart = usingBinarySearch(startHr, array)
+        println("nearestStart $nearestStart")
+        if (startHr < nearestStart) {
+            val offsetMinAdjust = (60 - startMin) / 5
+            val offsetHrAdjust = ((nearestStart - 1) - startHr) * 12
+            startOffset = offsetHrAdjust + offsetMinAdjust
+            println("nearestStart $offsetMinAdjust $offsetHrAdjust")
+        } else {
+            nearestStart += 4;
+            val offsetMinAdjust = (60 - startMin) / 5
+            val offsetHrAdjust = ((nearestStart - 1) - startHr) * 12
+            startOffset = offsetHrAdjust + offsetMinAdjust
+            println("nearestStart $offsetMinAdjust $offsetHrAdjust")
+        }
+
+
+        val endTimeFull = endTimeFormat!!.split(":")
+        val endHr = endTimeFull[0].toInt()
+        val endMin = endTimeFull[1].toInt()
+        var endOffset = 0
+        var nearestEnd = usingBinarySearch(endHr, array)
+
+        val offsetEndMinAdjust = (endMin) / 5
+        if (nearestEnd == endHr) {
+            endOffset = offsetEndMinAdjust
+            println("offsetEndHrAdjust  $offsetEndMinAdjust")
+        } else if (nearestEnd > endHr) {
+            nearestEnd -= 4;
+
+            val offsetEndHrAdjust = (endHr - nearestEnd) * 12
+            endOffset = offsetEndMinAdjust + offsetEndHrAdjust
+
+        } else {
+            val offsetEndHrAdjust = ((endHr) - nearestEnd) * 12
+            endOffset = offsetEndMinAdjust + offsetEndHrAdjust
+
+        }
+        println("endOffset $endOffset")
+
+        val totalItems = (endHr * 12) + (endMin / 5)
+        val firstBottomText = startOffset
+        val lastBottomText = totalItems - endOffset - (startHr * 12)
+        println("totalItems $totalItems firstBottomText $firstBottomText lastBottomText $lastBottomText")
+
+        println("startHr $startTime $endTimeFormat")
+        for (i in firstBottomText until lastBottomText step 48) {
+            println("startHr $i $nearestStart")
+            nearestStart += 4
+            hm[i] = nearestStart.toString()
+        }
+
+        return hm
+    }
+
+
+    private fun usingBinarySearch(value: Int, a: IntArray): Int {
+        if (value <= a[0]) {
+            return a[0]
+        }
+        if (value >= a[a.size - 1]) {
+            return a[a.size - 1]
+        }
+        val result = Arrays.binarySearch(a, value)
+        if (result >= 0) {
+            return a[result]
+        }
+        val insertionPoint = -result - 1
+        return if (a[insertionPoint] - value < value - a[insertionPoint - 1]) a[insertionPoint] else a[insertionPoint - 1]
+    }
+
+
     private fun handleMovementViews(it: OreoActivityModel) {
 
 
         val candleChartModelList: MutableList<CandleChartModel> =
             java.util.ArrayList<CandleChartModel>()
 
-//        for (i in 0..287) {
-//
-//            val chartModel = CandleChartModel()
-//            chartModel.bottomLineText = getHour(i)
-//            LOGS.d("dsadssadhjjksadhjkdsahkLOW ${chartModel.bottomLineText}")
-//            chartModel.index = (i.toString())
-//            if (i % 5 == 0) {
-//                LOGS.d("dsadssadhjjksadhjkdsahk LOW ${binding.lytDailyMovement.candleChart.getMax()}")
-//                chartModel.setLength((binding.lytDailyMovement.candleChart.getMax() * 0.2).toInt())
-//                chartModel.setColor(Color.parseColor("#4cffd230"))
-//                chartModel.setType(CandleChartModel.Type.LOW)
-//            } else if (i % 4 == 0) {
-//                LOGS.d("dsadssadhjjksadhjkdsahk MEDIUM ${binding.lytDailyMovement.candleChart.getMax() * 0.3}")
-//                chartModel.setLength((binding.lytDailyMovement.candleChart.getMax() * 0.3).toInt())
-//                chartModel.setColor(Color.parseColor("#ffd230"))
-//                chartModel.setType(CandleChartModel.Type.MEDIUM)
-//            } else if (i % 3 == 0) {
-//                LOGS.d("dsadssadhjjksadhjkdsahk HIGH ${binding.lytDailyMovement.candleChart.getMax() * 0.4}")
-//                chartModel.setLength((binding.lytDailyMovement.candleChart.getMax() * 0.4).toInt())
-//                chartModel.setColor(Color.parseColor("#ffffff"))
-//                chartModel.setMarkText("2")
-//                chartModel.setType(CandleChartModel.Type.HIGH)
-//            } else {
-//                LOGS.d("dsadssadhjjksadhjkdsahk INACTIVE ${binding.lytDailyMovement.candleChart.getMax() * 0.1}")
-//                chartModel.setLength((binding.lytDailyMovement.candleChart.getMax() * 0.1).toInt())
-//                chartModel.setColor(Color.parseColor("#4c4c4c"))
-//                chartModel.setType(CandleChartModel.Type.INACTIVE)
-//            }
-//            //            chartModel.setLength((int) (candleChart.getMax() * 0.4));
-//            candleChartModelList.add(chartModel)
-//        }
-
 
         val defaultInterval = 5
         binding.lytDailyMovement.lytDMHigh.tvTitle.text = getString(R.string.text_high_movement)
         var highProgress = 1
-        var highRemark = ""
+        val highRemark: String
         var medProgress = 1
         var medRemark = ""
         var lowProgress = 1
         var lowRemark = ""
         var inactiveProgress = 1
         var inactiveRemark = ""
+        var highMovValue = 0
+        var medMovValue: Int = 0
+        var lowMovValue: Int = 0
+        var inactiveMovValue: Int = 0
+        val movementList = it.daytimeMovement?.movement
 
-        if (it.daytimeMovement?.movement != null) {
-            var highMovValue: Int = 0
-            var medMovValue: Int = 0
-            var lowMovValue: Int = 0
-            var inactiveMovValue: Int = 0
-            val movementList = it.daytimeMovement.movement
+        baseInterval(it.daytimeMovement?.startTime, it.daytimeMovement?.endTime)
+        if (movementList?.isNotEmpty() == true) {
+            movementList.forEachIndexed { index, data ->
 
+                val chartModel = CandleChartModel()
 
-            //"startTime": "2023-07-25 07:34:00",
-            //"endTime": "2023-07-25 23:59:59",
-//            LOGS.d("dsadssadhjjksadhjkdsahk  ${movementList.size}")
-//            val startDate = DateFormats.getDateFromTimeStamp(it.daytimeMovement.startTime)
-//            val endDate = DateFormats.getDateFromTimeStamp(it.daytimeMovement.endTime)
-//
-//            val day1Minutes =
-//                DateFormats.getDayElapsedMinutesFromTimeStamp(startTimeStamp)
-//            val day2Minutes = DateFormats.getDayElapsedMinutesFromTimeStamp(endTimeStamp)
-//
-//            val day1MinutesCeil = 5 * (floor(abs(day1Minutes.toDouble() / 5)))
-//            val day2MinutesCeil = 5 * (ceil(abs(day2Minutes.toDouble() / 5)))
+                chartModel.bottomLineText = getHour(index)
+                when (data) {
+                    1 -> {
+                        lowMovValue++
+                        chartModel.length =
+                            (binding.lytDailyMovement.candleChart.max * 0.4).toInt()
+                        chartModel.color = Color.parseColor("#4cffd230")
+                        chartModel.type = CandleChartModel.Type.LOW
 
-            if (movementList.isNotEmpty()) {
-                movementList.forEachIndexed { index, data ->
-
-                    val chartModel = CandleChartModel()
-
-                    chartModel.bottomLineText = getHour(index)
-                    when (data) {
-                        1 -> {
-                            lowMovValue++
-                            chartModel.length =
-                                (binding.lytDailyMovement.candleChart.max * 0.4).toInt()
-                            chartModel.color = Color.parseColor("#4cffd230")
-                            chartModel.type = CandleChartModel.Type.LOW
-
-                        }
-
-                        2 -> {
-                            medMovValue++
-                            chartModel.length =
-                                (binding.lytDailyMovement.candleChart.max * 0.6).toInt()
-                            chartModel.color = Color.parseColor("#ffd230")
-                            chartModel.type = CandleChartModel.Type.MEDIUM
-                        }
-
-                        3, 4 -> {
-                            highMovValue++
-                            chartModel.length =
-                                (binding.lytDailyMovement.candleChart.max * 0.8).toInt()
-                            chartModel.color = Color.parseColor("#ffffff")
-
-                            chartModel.type = CandleChartModel.Type.HIGH
-                        }
-
-                        else -> {
-                            chartModel.length =
-                                (binding.lytDailyMovement.candleChart.max * 0.2).toInt()
-                            chartModel.color = Color.parseColor("#4c4c4c")
-                            chartModel.type = CandleChartModel.Type.INACTIVE
-                            inactiveMovValue++
-                        }
-                    }
-                    chartModel.value = data
-                    candleChartModelList.add(chartModel)
-                }
-
-                candleChartModelList.forEach {
-                    if (it.bottomLineText.isNotEmpty()) {
-                        LOGS.d("dsadssadhjjksadhjkdsahk  ${it.bottomLineText}")
                     }
 
+                    2 -> {
+                        medMovValue++
+                        chartModel.length =
+                            (binding.lytDailyMovement.candleChart.max * 0.6).toInt()
+                        chartModel.color = Color.parseColor("#ffd230")
+                        chartModel.type = CandleChartModel.Type.MEDIUM
+                    }
+
+                    3, 4 -> {
+                        highMovValue++
+                        chartModel.length =
+                            (binding.lytDailyMovement.candleChart.max * 0.8).toInt()
+                        chartModel.color = Color.parseColor("#ffffff")
+
+                        chartModel.type = CandleChartModel.Type.HIGH
+                    }
+
+                    else -> {
+                        chartModel.length =
+                            (binding.lytDailyMovement.candleChart.max * 0.2).toInt()
+                        chartModel.color = Color.parseColor("#4c4c4c")
+                        chartModel.type = CandleChartModel.Type.INACTIVE
+                        inactiveMovValue++
+                    }
                 }
-
-
-                highProgress = returnMovementProgress(highMovValue * defaultInterval).first
-                highRemark = returnMovementProgress(highMovValue * defaultInterval).second
-
-                medProgress = returnMovementProgress(medMovValue * defaultInterval).first
-                medRemark = returnMovementProgress(medMovValue * defaultInterval).second
-
-                lowProgress = returnMovementProgress(lowMovValue * defaultInterval).first
-                lowRemark = returnMovementProgress(lowMovValue * defaultInterval).second
-
-                inactiveProgress = returnMovementProgress(inactiveMovValue * defaultInterval).first
-                inactiveRemark = returnMovementProgress(inactiveMovValue * defaultInterval).second
-
-                binding.lytDailyMovement.candleChart.updateData(candleChartModelList)
+                chartModel.value = data
+                candleChartModelList.add(chartModel)
             }
+
+
+
+            binding.lytDailyMovement.candleChart.updateData(candleChartModelList)
+        } else {
+            for (index in 0..287) {
+                val chartModel = CandleChartModel()
+                inactiveMovValue++
+                chartModel.bottomLineText = getHour(index)
+                chartModel.length =
+                    (binding.lytDailyMovement.candleChart.max * 0.2).toInt()
+                chartModel.color = Color.parseColor("#4c4c4c")
+                chartModel.type = CandleChartModel.Type.INACTIVE
+                chartModel.value = 0
+                candleChartModelList.add(chartModel)
+            }
+
+            binding.lytDailyMovement.candleChart.updateData(candleChartModelList)
         }
 
+
+        highProgress = returnMovementProgress(highMovValue * defaultInterval).first
+        highRemark = returnMovementProgress(highMovValue * defaultInterval).second
+
+        medProgress = returnMovementProgress(medMovValue * defaultInterval).first
+        medRemark = returnMovementProgress(medMovValue * defaultInterval).second
+
+        lowProgress = returnMovementProgress(lowMovValue * defaultInterval).first
+        lowRemark = returnMovementProgress(lowMovValue * defaultInterval).second
+
+        inactiveProgress = returnMovementProgress(inactiveMovValue * defaultInterval).first
+        inactiveRemark = returnMovementProgress(inactiveMovValue * defaultInterval).second
 
         binding.lytDailyMovement.lytDMHigh.pbSteps.progress = highProgress
         binding.lytDailyMovement.lytDMHigh.tvRemark.text = highRemark

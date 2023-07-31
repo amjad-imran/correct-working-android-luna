@@ -52,16 +52,16 @@ class SetupProfileFragment :
     }
 
     private fun setOnBoardVideo() {
-        binding.videoOnboard.apply {
-            setVideoURI(
-                Uri.parse(
-                    "android.resource://" + requireContext().packageName + "/" +
-                            R.raw.video_profile
-                )
-            )
-            setOnPreparedListener { mp -> mp.isLooping = true }
-            start()
-        }
+//        binding.videoOnboard.apply {
+//            setVideoURI(
+//                Uri.parse(
+//                    "android.resource://" + requireContext().packageName + "/" +
+//                            R.raw.video_profile
+//                )
+//            )
+//            setOnPreparedListener { mp -> mp.isLooping = true }
+//            start()
+//        }
     }
 
     override fun initListener() {

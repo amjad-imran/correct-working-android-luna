@@ -19,7 +19,6 @@ import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
-import com.noisefit_commans.utils.LOGS.d
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.SleepChartModel
@@ -126,7 +125,7 @@ class OreoReadinessFragment :
             if (value == 255) {
                 value = 0
             }
-            LOGS.d("updateDataminValue $value")
+
             chartModel.value = value
             chartModel.index = ""
             chartList.add(chartModel)
@@ -216,11 +215,13 @@ class OreoReadinessFragment :
         sleepChart.endTime = endTime ?: ""
         sleepChart.list = chartList
 
+        LOGS.d("sdasdaasdadsdas ${ sleepChart.list.size}")
         binding.lytTemperature.lineChart.updateGraphColor(
             Color.parseColor("#ff7525"),
             Color.parseColor("#4cff7525"),
             Color.parseColor("#00ff7525")
         )
+
 
         binding.lytTemperature.lineChart.updateDataWithMax(sleepChart, 5, true, false)
 
@@ -488,19 +489,15 @@ class OreoReadinessFragment :
         binding.lytTemperature.tvSubtitle2.gone()
         binding.lytTemperature.divider1.root.invisible()
 
-        if (it.temperatureBreakUp != null) {
-            if (it.temperatureBreakUp.isNotEmpty()) {
-                val avgHrvValue = it.temperatureBreakUp.averageWithoutZeroFloat()
-                binding.lytTemperature.lytSubtitleValue1.tvValue.text = avgHrvValue.toString()
-                binding.lytTemperature.lytSubtitleValue1.tvUnit.visible()
-                binding.lytTemperature.lytSubtitleValue1.tvUnit.text = "°F"
-                //todo will change startTime, endTime
-                showTemperatureGraph(it.temperatureBreakUp, it.date, it.date)
 
-            } else {
-                binding.lytTemperature.lineChart.gone()
-                temperatureGraphDefaultView()
-            }
+        if (!it.temperatureBreakUp.isNullOrEmpty()) {
+            val avgHrvValue = it.temperatureBreakUp.averageWithoutZeroFloat()
+            binding.lytTemperature.lytSubtitleValue1.tvValue.text = avgHrvValue.toString()
+            binding.lytTemperature.lytSubtitleValue1.tvUnit.visible()
+            binding.lytTemperature.lytSubtitleValue1.tvUnit.text = "°F"
+            //todo will change startTime, endTime
+            showTemperatureGraph(it.temperatureBreakUp, it.date, it.date)
+
         } else {
             binding.lytTemperature.lineChart.gone()
             temperatureGraphDefaultView()

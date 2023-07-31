@@ -339,13 +339,21 @@ public class SleepLineChart extends View {
     private void drawBottom(Canvas canvas) {
         canvas.drawRect(0, mHeight - bottomWith, mWith, mHeight, bgBottomPaint);
         if (showXAxis) {
-            String xText = "";//sleepModel.getEndTime();
+            String endTime = "";
+            if(sleepModel!=null && sleepModel.getEndTime() != null){
+                endTime = sleepModel.getEndTime();
+            }
+            String xText = endTime;
             xTextPaint.getTextBounds(xText, 0, xText.length(), xTextBounds);
             xTextPaint.setColor(Color.parseColor("#ffffff"));
             canvas.drawText(xText, mWith - rightWith - xTextBounds.width() - dip2px(5), mHeight - bottomWith / 4, xTextPaint);
 
+            String startTime = "";
+            if(sleepModel!=null && sleepModel.getStartTime() != null){
+                startTime = sleepModel.getStartTime();
+            }
 
-            xText = "";// sleepModel.getStartTime();
+            xText = startTime;
             xTextPaint.getTextBounds(xText, 0, xText.length(), xTextBounds);
             canvas.drawText(xText, leftWith + dip2px(5), mHeight - bottomWith / 4, xTextPaint);
         }
