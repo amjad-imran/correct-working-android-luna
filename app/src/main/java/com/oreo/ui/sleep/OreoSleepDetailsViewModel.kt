@@ -307,10 +307,37 @@ class OreoSleepDetailsViewModel @Inject constructor(
                     backgroundRes = background
                 )
             )
-        } else {
+        }
+        else {
             result.add(
                 Contributors(
                     title = "Efficiency",
+                    leftText = "",
+                    leftTextColor = R.color.white,
+                    barColor = R.color.oreo_sleep_bar_color,
+                    barPercent = 1,
+                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                )
+            )
+        }
+        if (dayData.restFullness != null) {
+            val (textColor, barColor, background) = getContributorsColors(dayData.restFullness!!.status)
+
+            result.add(
+                Contributors(
+                    title = "Restfulness",
+                    leftText = "${dayData.restFullness?.valPrcnt}%",
+                    leftTextColor = textColor,
+                    barColor = barColor,
+                    barPercent = dayData.restFullness?.valPrcnt ?: 0,
+                    backgroundRes = background
+                )
+            )
+        }
+        else {
+            result.add(
+                Contributors(
+                    title = "Restfulness",
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_sleep_bar_color,

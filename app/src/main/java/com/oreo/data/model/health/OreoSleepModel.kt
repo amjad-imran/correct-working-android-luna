@@ -9,6 +9,7 @@ data class OreoSleepModel(
     var totalSleep: CommonDataModel? = null,
     var timeInBed: CommonDataModel? = null,
     var sleepEfficiency: CommonDataModel? = null,
+    var restFullness: CommonDataModel? = null,
     var restingHr: CommonDataModel? = null,
     var remSleep: CommonDataModel? = null,
     var lightSleep: CommonDataModel? = null,
