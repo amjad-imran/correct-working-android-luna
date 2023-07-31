@@ -1,8 +1,11 @@
 package com.oreo.ui.readiness
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -11,6 +14,7 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoReadinessBinding
+import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit_commans.common.averageWithoutZero
 import com.noisefit_commans.common.averageWithoutZeroFloat
 import com.noisefit_commans.ui.BaseFragment
@@ -236,13 +240,36 @@ class OreoReadinessFragment :
 
 
     }
+    var resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
 
+                val selectedDate = data?.getStringExtra("selected_date")
+                LOGS.d("Selected Date  :${selectedDate}")
+                mViewModel.getReadinessDetailsData(selectedDate)
+                if (selectedDate != null) {
+                    mViewModel.updateSelectedDate(selectedDate)
+                }
+
+            }
+        }
     override fun initListener() {
         binding.lytToolbar.tvTitle.text = getString(R.string.text_readiness)
         binding.lytToolbar.view1.visible()
         binding.lytToolbar.ivAddFriend.visible()
         binding.lytToolbar.ivAddFriend.setImageResource(R.drawable.ic_calenders)
         binding.lytToolbar.backBtn.invisible()
+
+        binding.lytToolbar.view1.setOnClickListener {
+            resultLauncher.launch(
+                HistoryCalendarActivity.getStartIntent(
+                    requireContext(),
+                    mSharedViewModel.selectedDate,
+                    "ring"
+                )
+            )
+        }
 
         binding.lytRScoreData.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
