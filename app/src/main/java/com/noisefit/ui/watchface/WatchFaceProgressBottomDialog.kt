@@ -4,8 +4,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import com.bumptech.glide.Glide
-import com.noisefit.R
-import com.noisefit.databinding.BottomSheetWatchFaceProgressBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.BottomSheetWatchFaceProgressBinding
 import com.noisefit.watch.WatchForm
 import com.noisefit.watch.WatchesSDK
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent

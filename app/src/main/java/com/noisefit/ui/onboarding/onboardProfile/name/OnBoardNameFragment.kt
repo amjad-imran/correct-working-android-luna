@@ -5,8 +5,8 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
-import com.noisefit.R
-import com.noisefit.databinding.FragmentOnBoardNameBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentOnBoardNameBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.afterTextChanged
 import com.noisefit_commans.ui.disable

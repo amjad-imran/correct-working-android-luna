@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.data.model.Faces
-import com.noisefit.databinding.NplWatchfaceItemBinding
+import com.noisefit.luna.databinding.NplWatchfaceItemBinding
 import com.noisefit_commans.models.WatchFace
 import com.noisefit_commans.ui.loadImage
 

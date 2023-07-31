@@ -2,8 +2,8 @@ package com.noisefit.ui.dashboard.feature.qrPayment.bottomsheets
 
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
-import com.noisefit.R
-import com.noisefit.databinding.BottomSheetQrInfoBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.BottomSheetQrInfoBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import dagger.hilt.android.AndroidEntryPoint
 

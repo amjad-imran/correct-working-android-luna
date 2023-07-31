@@ -17,12 +17,12 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.model.CustomDaFitIcons
 import com.noisefit_commans.data.model.WatchFaceWidgets
-import com.noisefit.databinding.FragmentDaFitCustomWatchFaceBinding
+import com.noisefit.luna.databinding.FragmentDaFitCustomWatchFaceBinding
 import com.noisefit.ui.common.*
 import com.noisefit.ui.custom.ColorSeekBar
 import com.noisefit.ui.watchface.REQUEST_LAUNCH_IMAGE_CAPTURE

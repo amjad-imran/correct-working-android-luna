@@ -6,8 +6,8 @@ import android.os.Looper
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.airbnb.lottie.LottieDrawable
-import com.noisefit.R
-import com.noisefit.databinding.FragmentFindMyDeviceBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentFindMyDeviceBinding
 import com.noisefit.session.SessionManager
 import com.noisefit.ui.common.*
 import com.noisefit_commans.utils.InsiderAppEvents

@@ -7,8 +7,8 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.R
-import com.noisefit.databinding.FragmentOActivityListBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentOActivityListBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.oreo.data.model.OActivityListModal
 import dagger.hilt.android.AndroidEntryPoint

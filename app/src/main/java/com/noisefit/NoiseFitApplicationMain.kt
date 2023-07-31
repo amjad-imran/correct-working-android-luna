@@ -10,6 +10,7 @@ import androidx.work.Configuration
 //import com.clevertap.android.sdk.ActivityLifecycleCallback
 import com.github.anrwatchdog.ANRWatchDog
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.noisefit.luna.BuildConfig
 import com.noisefit.ui.SplashActivity
 import com.noisefit.watch.ApplicationHandler
 import com.noisefit_commans.NoisefitApplication

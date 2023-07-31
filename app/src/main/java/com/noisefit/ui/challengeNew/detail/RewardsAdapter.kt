@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit_commans.data.response.Rewards
-import com.noisefit.databinding.RowChallengesRewardBinding
+import com.noisefit.luna.databinding.RowChallengesRewardBinding
 import com.noisefit_commans.ui.loadImage
 
 class RewardsAdapter : RecyclerView.Adapter<RewardsAdapter.ViewHolder>() {

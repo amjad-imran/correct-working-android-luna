@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
-import com.noisefit.R
-import com.noisefit.databinding.FragmentNplCollectBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentNplCollectBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.response.LiveMatch
 import com.noisefit_commans.ui.BaseFragment

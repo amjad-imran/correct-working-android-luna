@@ -8,7 +8,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.noisefit.databinding.BottomSheetDeleteAccountBinding
+import com.noisefit.luna.databinding.BottomSheetDeleteAccountBinding
 import com.noisefit_commans.ui.BaseBottomSheet
 import dagger.hilt.android.AndroidEntryPoint
 

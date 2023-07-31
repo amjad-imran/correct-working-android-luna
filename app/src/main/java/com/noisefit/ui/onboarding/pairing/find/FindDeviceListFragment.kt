@@ -31,10 +31,10 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.noisefit.MainActivity
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.repository.abstraction.IBluetoothScan
-import com.noisefit.databinding.DialogUnsupportedDeviceBinding
-import com.noisefit.databinding.FragmentFindDeviceListBinding
+import com.noisefit.luna.databinding.DialogUnsupportedDeviceBinding
+import com.noisefit.luna.databinding.FragmentFindDeviceListBinding
 import com.noisefit.oreo.OreoMainActivity
 import com.noisefit.ui.onboarding.onboardProfile.ProfileSetupActivity
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity

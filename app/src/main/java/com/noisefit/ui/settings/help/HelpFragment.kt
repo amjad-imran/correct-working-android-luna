@@ -1,7 +1,7 @@
 package com.noisefit.ui.settings.help
 
-import com.noisefit.R
-import com.noisefit.databinding.FragmentHelpBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentHelpBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseFragment
 

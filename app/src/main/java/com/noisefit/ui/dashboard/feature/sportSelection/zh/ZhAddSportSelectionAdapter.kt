@@ -7,7 +7,7 @@ import android.widget.CompoundButton
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.RowAddSportBinding
+import com.noisefit.luna.databinding.RowAddSportBinding
 import com.noisefit.util.ImageUtil
 import com.noisefit_commans.models.Widget
 import java.util.*
@@ -26,7 +26,6 @@ class ZhAddSportSelectionAdapter(
         fun bind(widget: Widget, position: Int) {
             binding.tvName.text = widget.name.replace("_", " ")
                 .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
-            binding.imageView8.setImageResource(ImageUtil().getImageFromActivity(widget.name))
 
             binding.checkbox.setOnClickListener { view ->
                 val isChecked = (view as CompoundButton).isChecked

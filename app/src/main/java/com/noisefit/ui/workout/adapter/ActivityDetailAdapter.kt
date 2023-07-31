@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit_commans.data.model.DetailData
-import com.noisefit.databinding.RowActivityDetailBinding
+import com.noisefit.luna.databinding.RowActivityDetailBinding
 
 class ActivityDetailAdapter : RecyclerView.Adapter<ActivityDetailAdapter.ViewHolder>() {
 

@@ -3,7 +3,7 @@ package com.noisefit.ui.common.bottomSheet
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
-import com.noisefit.databinding.FragmentPromotionalBottomSheetBinding
+import com.noisefit.luna.databinding.FragmentPromotionalBottomSheetBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import dagger.hilt.android.AndroidEntryPoint

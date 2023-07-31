@@ -5,7 +5,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit_commans.data.model.FitnessHealthModel
-import com.noisefit.databinding.FragmentFitnessHealthDetailsBinding
+import com.noisefit.luna.databinding.FragmentFitnessHealthDetailsBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit.ui.web.WebViewActivity
 import dagger.hilt.android.AndroidEntryPoint

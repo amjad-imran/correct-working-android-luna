@@ -4,11 +4,11 @@ import android.Manifest
 import android.content.pm.PackageManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
-import com.noisefit.databinding.FragmentSmsAlertBinding
+import com.noisefit.luna.databinding.FragmentSmsAlertBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.loadImage

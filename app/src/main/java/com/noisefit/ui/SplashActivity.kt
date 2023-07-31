@@ -18,13 +18,13 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.work.WorkManager
 import com.airbnb.lottie.LottieDrawable
-import com.noisefit.BuildConfig
+import com.noisefit.luna.BuildConfig
 import com.noisefit.MainActivity
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
-import com.noisefit.databinding.ActivitySplashBinding
+import com.noisefit.luna.databinding.ActivitySplashBinding
 import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit.oreo.OreoMainActivity
 import com.noisefit.ui.common.BaseActivity

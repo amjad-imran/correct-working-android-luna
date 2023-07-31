@@ -3,7 +3,7 @@ package com.noisefit.ui.feeds.create
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
-import com.noisefit.databinding.BottomSheetUploadPostBinding
+import com.noisefit.luna.databinding.BottomSheetUploadPostBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import dagger.hilt.android.AndroidEntryPoint

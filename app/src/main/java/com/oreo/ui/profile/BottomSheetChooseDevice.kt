@@ -6,8 +6,8 @@ import androidx.core.os.bundleOf
 import androidx.core.text.color
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
-import com.noisefit.R
-import com.noisefit.databinding.BottomSheetChooseDeviceBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.BottomSheetChooseDeviceBinding
 import com.noisefit.ui.common.CONFIRM_DIALOG_REQUEST_KEY
 import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface

@@ -5,7 +5,7 @@ import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.RowOtherInfoBinding
+import com.noisefit.luna.databinding.RowOtherInfoBinding
 import com.noisefit_commans.ui.html
 
 

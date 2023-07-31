@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.ViewDescriptionSliderBinding
+import com.noisefit.luna.databinding.ViewDescriptionSliderBinding
 import com.oreo.data.model.Contributors
 
 class DescriptionSliderAdaptor : RecyclerView.Adapter<DescriptionSliderAdaptor.ViewHolder>() {

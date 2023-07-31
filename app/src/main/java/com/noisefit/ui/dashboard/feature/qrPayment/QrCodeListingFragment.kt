@@ -14,11 +14,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.huawei.hms.hmsscankit.ScanUtil
 import com.huawei.hms.ml.scan.HmsScanAnalyzerOptions
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit.data.local.AppStaticData
-import com.noisefit.databinding.FragmentWorldClockBinding
+import com.noisefit.luna.databinding.FragmentWorldClockBinding
 import com.noisefit.ui.common.*
 import com.noisefit.ui.common.utils.ItemMoveCallbackListener
 import com.noisefit.ui.dashboard.feature.qrPayment.bottomsheets.*

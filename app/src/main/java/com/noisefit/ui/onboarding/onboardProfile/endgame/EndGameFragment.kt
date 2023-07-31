@@ -5,9 +5,9 @@ import android.util.TypedValue
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.chip.Chip
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.Interest
-import com.noisefit.databinding.FragmentEndGameBinding
+import com.noisefit.luna.databinding.FragmentEndGameBinding
 import com.noisefit.ui.onboarding.onboardProfile.SetupProfileViewModel
 import com.noisefit_commans.ui.*
 import dagger.hilt.android.AndroidEntryPoint

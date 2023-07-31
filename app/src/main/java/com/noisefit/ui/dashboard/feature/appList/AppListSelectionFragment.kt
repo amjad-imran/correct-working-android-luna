@@ -10,9 +10,9 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.R
-import com.noisefit.databinding.FragmentAppListSelectionBinding
-import com.noisefit.databinding.FragmentWidgetSelectionBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentAppListSelectionBinding
+import com.noisefit.luna.databinding.FragmentWidgetSelectionBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast

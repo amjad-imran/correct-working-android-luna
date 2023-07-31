@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.noisefit.R
-import com.noisefit.databinding.FragmentWatchFaceCategoryListingBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentWatchFaceCategoryListingBinding
 import com.noisefit.ui.challenge.challengeLeaderboard.MyBuddiesTabAdapter
 import com.noisefit.ui.challenge.challengeLeaderboard.TabActions
 import com.noisefit_commans.ui.BaseFragment

@@ -9,8 +9,8 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.noisefit.R
-import com.noisefit.databinding.ViewImageSliderBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.ViewImageSliderBinding
 
 
 class NplBannerSliderAdapter(val listener: NplBannerAction) :

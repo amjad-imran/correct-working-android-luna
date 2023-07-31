@@ -4,8 +4,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import com.noisefit.MainActivity
-import com.noisefit.R
-import com.noisefit.databinding.FragmentSetupProfileBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentSetupProfileBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit.ui.onboarding.pairing.DeviceSetupActivity

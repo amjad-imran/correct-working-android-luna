@@ -29,7 +29,7 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import androidx.annotation.StringRes;
 
-import com.noisefit.R;
+import com.noisefit.luna.R;
 import com.noisefit.ui.custom.swipeHeader.srl.extra.AbsClassicRefreshView;
 import com.noisefit.ui.custom.swipeHeader.srl.extra.ClassicConfig;
 

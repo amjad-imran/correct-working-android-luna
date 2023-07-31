@@ -3,8 +3,8 @@ package com.noisefit.ui.dashboard.feature.wristsense
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.setFragmentResultListener
-import com.noisefit.R
-import com.noisefit.databinding.FragmentWristSenseBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentWristSenseBinding
 import com.noisefit.session.SessionManager
 import com.noisefit.ui.common.*
 import com.noisefit.ui.common.bottomSheet.TIME_REQUEST_KEY

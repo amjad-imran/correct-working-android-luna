@@ -20,9 +20,9 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.dataConverter.DataUnitConverter
-import com.noisefit.databinding.FragmentActivityShareBinding
+import com.noisefit.luna.databinding.FragmentActivityShareBinding
 import com.noisefit.session.SessionManager
 import com.noisefit.ui.common.*
 import com.noisefit.ui.profile.BottomSheetImagePicker
@@ -141,9 +141,7 @@ class ActivityShareFragment :
             )
             tvDistance.text = "$distance"
             val activityName = it.type ?: it.activityType
-            imageView8.setImageResource(
-                com.noisefit.util.ImageUtil().getImageFromActivity(activityName)
-            )
+
 
             setAveragePace(it)
             setAverageSpeed(it)

@@ -5,8 +5,8 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
-import com.noisefit.R
-import com.noisefit.databinding.FragmentPrivacyBottomDialogListDialogBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentPrivacyBottomDialogListDialogBinding
 import com.noisefit_commans.ui.BaseBottomSheet
 import com.noisefit_commans.ui.disable
 import com.noisefit_commans.ui.enable

@@ -2,8 +2,8 @@ package com.noisefit.ui.myDevice.manage
 
 import android.os.Bundle
 import android.view.View
-import com.noisefit.R
-import com.noisefit.databinding.BottomSheetWatchUpdateBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.BottomSheetWatchUpdateBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import com.noisefit_commans.ui.getColor
 import dagger.hilt.android.AndroidEntryPoint

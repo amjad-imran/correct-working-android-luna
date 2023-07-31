@@ -17,7 +17,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.data.response.stock.StockNetwork
-import com.noisefit.databinding.BottomSheetAddStockBinding
+import com.noisefit.luna.databinding.BottomSheetAddStockBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 

@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.tabs.TabLayoutMediator
-import com.noisefit.R
-import com.noisefit.databinding.FragmentMyVoucherBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentMyVoucherBinding
 import com.noisefit_commans.ui.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 

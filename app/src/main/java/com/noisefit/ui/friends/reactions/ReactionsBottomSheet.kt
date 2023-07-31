@@ -6,10 +6,10 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.Emoji
 import com.noisefit_commans.data.model.ReactionsWrapper
-import com.noisefit.databinding.LayoutReactionsBottomSheetBinding
+import com.noisefit.luna.databinding.LayoutReactionsBottomSheetBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import dagger.hilt.android.AndroidEntryPoint
 

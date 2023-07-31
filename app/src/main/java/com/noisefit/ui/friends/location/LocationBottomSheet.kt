@@ -9,8 +9,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.noisefit.R
-import com.noisefit.databinding.FragmentLocationBottomSheetBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentLocationBottomSheetBinding
 import com.noisefit.ui.friends.location.search.SearchStateType
 import com.noisefit_commans.ui.*
 import dagger.hilt.android.AndroidEntryPoint

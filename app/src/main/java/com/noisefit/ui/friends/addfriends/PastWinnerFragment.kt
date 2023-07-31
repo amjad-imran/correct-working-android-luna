@@ -7,9 +7,9 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.BuddiesUserNew
-import com.noisefit.databinding.FragmentPastWinnerBinding
+import com.noisefit.luna.databinding.FragmentPastWinnerBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast

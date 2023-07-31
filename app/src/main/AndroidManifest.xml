@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.noisefit">
+    package="com.noisefit.luna">
 
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
@@ -50,23 +50,22 @@
 
     <!--<uses-feature android:name="android.software.companion_device_setup"/>-->
     <application
-        android:name=".NoiseFitApplicationMain"
+        android:name="com.noisefit.NoiseFitApplicationMain"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NoiseFit"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
         <activity
-            android:name=".ui.onboarding.onboardProfile.GuestProfileSetupActivity"
+            android:name="com.noisefit.ui.onboarding.onboardProfile.GuestProfileSetupActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ui.onboarding.pairing.PairDeviceActivity"
+            android:name="com.noisefit.ui.onboarding.pairing.PairDeviceActivity"
             android:exported="true"
             android:screenOrientation="portrait">
 
@@ -80,7 +79,7 @@
                             -->
         </activity>
         <activity
-            android:name=".ui.SplashActivity"
+            android:name="com.noisefit.ui.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
@@ -104,19 +103,19 @@
             android:exported="false"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".ui.onboarding.OnBoardActivity"
+            android:name="com.noisefit.ui.onboarding.OnBoardActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".ui.profile.ProfilePicActivity"
+            android:name="com.noisefit.ui.profile.ProfilePicActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.noisefit.MainActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
@@ -124,24 +123,24 @@
             <nav-graph android:value="@navigation/navigation_app" />
         </activity>
         <activity
-            android:name=".ui.onboarding.pairing.DeviceSetupActivity"
+            android:name="com.noisefit.ui.onboarding.pairing.DeviceSetupActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.onboarding.onboardProfile.ProfileSetupActivity"
+            android:name="com.noisefit.ui.onboarding.onboardProfile.ProfileSetupActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.web.WebViewActivity"
+            android:name="com.noisefit.ui.web.WebViewActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.myDevice.camera.CameraShutterActivity"
+            android:name="com.noisefit.ui.myDevice.camera.CameraShutterActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.dashboard.graphs.HistoryCalendarActivity"
+            android:name="com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.media.VideoPlayerActivity"
+            android:name="com.noisefit.ui.media.VideoPlayerActivity"
             android:screenOrientation="portrait" />
 
         <service
@@ -156,7 +155,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".receiver.broadcastReceiver.OtpBroadcastReceiver"
+            android:name="com.noisefit.receiver.broadcastReceiver.OtpBroadcastReceiver"
             android:exported="true"
             android:permission="com.google.android.gms.auth.api.phone.permission.SEND">
             <intent-filter>
@@ -165,16 +164,16 @@
         </receiver>
 
         <service
-            android:name=".receiver.service.StockUpdateService"
+            android:name="com.noisefit.receiver.service.StockUpdateService"
             android:exported="false"
             android:stopWithTask="false" />
 
         <service
-            android:name=".receiver.service.FeedbackSubmitService"
+            android:name="com.noisefit.receiver.service.FeedbackSubmitService"
             android:exported="false"
             android:stopWithTask="false" />
         <service
-            android:name=".receiver.service.ConnectionService"
+            android:name="com.noisefit.receiver.service.ConnectionService"
             android:enabled="true"
             android:exported="false"
             android:stopWithTask="false" />
@@ -230,7 +229,7 @@
             android:value="ca-app-pub-3940256099942544~3347511713" />
 
         <service
-            android:name=".receiver.service.NotificationService"
+            android:name="com.noisefit.receiver.service.NotificationService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -247,7 +246,7 @@
         </service>
 
         <receiver
-            android:name=".receiver.broadcastReceiver.CallAndMessageReceiver"
+            android:name="com.noisefit.receiver.broadcastReceiver.CallAndMessageReceiver"
             android:exported="true"
             android:permission="android.permission.BROADCAST_SMS">
             <intent-filter>
@@ -268,14 +267,14 @@
                 tools:node="remove" />
         </provider>
         <provider
-            android:name=".util.exception.UncaughtExceptionHandlerContentProvider"
+            android:name="com.noisefit.util.exception.UncaughtExceptionHandlerContentProvider"
             android:authorities="${applicationId}"
             android:exported="false"
             android:grantUriPermissions="false"
             android:initOrder="101" />
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.noisefit.fileprovidernew"
+            android:authorities="com.noisefit.luna.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -285,7 +284,7 @@
 
 
         <provider
-            android:name=".util.exception.UncaughtExceptionHandlerContentProvider"
+            android:name="com.noisefit.util.exception.UncaughtExceptionHandlerContentProvider"
             android:authorities="${applicationId}"
             android:exported="false"
             android:grantUriPermissions="false"
@@ -299,12 +298,12 @@
             android:showOnLockScreen="true" />
 
         <receiver
-            android:name=".receiver.broadcastReceiver.StopFindMyPhoneBroadcast"
+            android:name="com.noisefit.receiver.broadcastReceiver.StopFindMyPhoneBroadcast"
             android:enabled="true"
             android:exported="true" />
 
         <receiver
-            android:name=".receiver.broadcastReceiver.AlarmReceiver"
+            android:name="com.noisefit.receiver.broadcastReceiver.AlarmReceiver"
             android:enabled="true"
             android:exported="true" />
 
@@ -314,7 +313,7 @@
             android:label="@string/title_activity_scrolling"
             android:theme="@style/Theme.NoiseFit.NoActionBar" />
         <receiver
-            android:name=".receiver.broadcastReceiver.ConnectionStartReceiver"
+            android:name="com.noisefit.receiver.broadcastReceiver.ConnectionStartReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

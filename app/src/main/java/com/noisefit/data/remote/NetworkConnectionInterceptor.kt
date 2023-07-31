@@ -7,8 +7,8 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import com.noisefit.BuildConfig
-import com.noisefit.R
+import com.noisefit.luna.BuildConfig
+import com.noisefit.luna.R
 import com.noisefit.data.local.db.abstraction.FeedsDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType

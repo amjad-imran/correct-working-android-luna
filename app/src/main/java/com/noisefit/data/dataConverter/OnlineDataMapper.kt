@@ -1,6 +1,6 @@
 package com.noisefit.data.dataConverter
 
-import com.noisefit.BuildConfig
+import com.noisefit.luna.BuildConfig
 import com.noisefit.data.local.db.implementation.HeartRateDataImpl
 import com.noisefit.data.local.db.implementation.StressDataImpl
 import com.noisefit_commans.data.model.*

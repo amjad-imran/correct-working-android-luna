@@ -13,7 +13,7 @@ import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.noisefit.R;
+import com.noisefit.luna.R;
 import com.noisefit_commans.utils.LOGS;
 import com.oreo.data.model.ChartModel;
 import com.oreo.data.model.SleepChartModel;
@@ -80,7 +80,7 @@ public class SleepLineChart extends View {
     private SleepChartModel sleepModel;
     private List<ChartModel> list = new ArrayList<>();
     private boolean showXAxis = true;
-    private int interval = 0;
+
     //    private int xMax;
 //    private int xMin;
     private int avgValue;
@@ -213,7 +213,7 @@ public class SleepLineChart extends View {
         maxValue = 0;
         minValue = 0;
         Collections.reverse(list);
-        interval = (int) (list.size() / 4f);
+
         ChartModel item;
         int sum = 0;
         int count = 0;
@@ -261,7 +261,7 @@ public class SleepLineChart extends View {
         list.addAll(sleepModel.getList());
 
         Collections.reverse(list);
-        interval = (int) (list.size() / 4f);
+
         ChartModel item;
         int sum = 0;
         int count = 0;
@@ -340,22 +340,22 @@ public class SleepLineChart extends View {
         canvas.drawRect(0, mHeight - bottomWith, mWith, mHeight, bgBottomPaint);
         if (showXAxis) {
             String endTime = "";
-            if(sleepModel!=null && sleepModel.getEndTime() != null){
-                endTime = sleepModel.getEndTime();
-            }
-            String xText = endTime;
-            xTextPaint.getTextBounds(xText, 0, xText.length(), xTextBounds);
-            xTextPaint.setColor(Color.parseColor("#ffffff"));
-            canvas.drawText(xText, mWith - rightWith - xTextBounds.width() - dip2px(5), mHeight - bottomWith / 4, xTextPaint);
-
-            String startTime = "";
-            if(sleepModel!=null && sleepModel.getStartTime() != null){
-                startTime = sleepModel.getStartTime();
-            }
-
-            xText = startTime;
-            xTextPaint.getTextBounds(xText, 0, xText.length(), xTextBounds);
-            canvas.drawText(xText, leftWith + dip2px(5), mHeight - bottomWith / 4, xTextPaint);
+//            if(sleepModel!=null && sleepModel.getEndTime() != null){
+//                endTime = sleepModel.getEndTime();
+//            }
+//            String xText = endTime;
+//            xTextPaint.getTextBounds(xText, 0, xText.length(), xTextBounds);
+//            xTextPaint.setColor(Color.parseColor("#ffffff"));
+//            canvas.drawText(xText, mWith - rightWith - xTextBounds.width() - dip2px(5), mHeight - bottomWith / 4, xTextPaint);
+//
+//            String startTime = "";
+//            if(sleepModel!=null && sleepModel.getStartTime() != null){
+//                startTime = sleepModel.getStartTime();
+//            }
+//
+//            xText = startTime;
+//            xTextPaint.getTextBounds(xText, 0, xText.length(), xTextBounds);
+//            canvas.drawText(xText, leftWith + dip2px(5), mHeight - bottomWith / 4, xTextPaint);
         }
     }
 
@@ -413,13 +413,24 @@ public class SleepLineChart extends View {
                 }
             }
 
-//            Log.d("TAG", "interval=" + interval);
-            if (interval != 0) {
-                if (showXAxis && i % interval == 0 && i > 0 && i < 4 * interval) {
+            if (showXAxis) {
+                if (list.get(i) != null && list.get(i).getIndex() != null && !list.get(i).getIndex().isEmpty()) {
                     String xText = list.get(i).getIndex();
                     xTextPaint.getTextBounds(xText, 0, xText.length(), xTextBounds);
-                    xTextPaint.setColor(xTextColor & 0x80ffffff);
-                    canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 4, xTextPaint);
+                    if (i == 0) {
+                        xTextPaint.setColor(Color.parseColor("#ffffff"));
+                        canvas.drawText(xText, x - xTextBounds.width() , mHeight - bottomWith / 4, xTextPaint);
+//                        canvas.drawText(xText, x + dip2px(5), mHeight - bottomWith / 4, xTextPaint);
+                    } else if (i == list.size() - 1) {
+                        xTextPaint.setColor(Color.parseColor("#ffffff"));
+                        canvas.drawText(xText, x , mHeight - bottomWith / 4, xTextPaint);
+                    } else {
+                        xTextPaint.setColor(xTextColor & 0x80ffffff);
+                        canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 4, xTextPaint);
+                    }
+
+
+//                    canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 4, xTextPaint);
                 }
             }
 

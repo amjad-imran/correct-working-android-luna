@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
-import com.noisefit.databinding.FragmentSpo2MeasurementBinding
+import com.noisefit.luna.databinding.FragmentSpo2MeasurementBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone

@@ -7,9 +7,9 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.local.AppStaticData
-import com.noisefit.databinding.FragmentEditHandWashBinding
+import com.noisefit.luna.databinding.FragmentEditHandWashBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit.ui.common.bottomSheet.TIME_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY

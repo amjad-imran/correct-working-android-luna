@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.R
-import com.noisefit.databinding.ItemSleepStageLayoutBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.ItemSleepStageLayoutBinding
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.model.SleepStageAnalysis
 import com.noisefit_commans.models.SleepType

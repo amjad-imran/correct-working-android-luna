@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hookedonplay.decoviewlib.events.DecoEvent
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.Emoji
 import com.noisefit_commans.data.model.FriendProgress
-import com.noisefit.databinding.ItemFriendListBinding
+import com.noisefit.luna.databinding.ItemFriendListBinding
 import com.noisefit.ui.common.calculatePercentage
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible

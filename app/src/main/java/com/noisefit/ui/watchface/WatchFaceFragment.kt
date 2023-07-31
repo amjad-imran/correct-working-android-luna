@@ -15,8 +15,8 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.noisefit.R
-import com.noisefit.databinding.FragmentWatchFaceBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentWatchFaceBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast

@@ -3,7 +3,7 @@ package com.noisefit.ui.workout.session
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.RowActivityOptionBinding
+import com.noisefit.luna.databinding.RowActivityOptionBinding
 import com.noisefit_commans.models.SportsModeList
 
 

@@ -14,10 +14,10 @@ import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthScrollListener
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarview.utils.yearMonth
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.response.StreakDetailsResponse
-import com.noisefit.databinding.CalendarDayStreakBinding
-import com.noisefit.databinding.FragmentStepStreakBinding
+import com.noisefit.luna.databinding.CalendarDayStreakBinding
+import com.noisefit.luna.databinding.FragmentStepStreakBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible

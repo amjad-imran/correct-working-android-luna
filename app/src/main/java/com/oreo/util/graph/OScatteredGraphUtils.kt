@@ -10,7 +10,7 @@ import com.github.mikephil.charting.data.ScatterData
 import com.github.mikephil.charting.data.ScatterDataSet
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IScatterDataSet
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.NoisefitApplication
 import com.noisefit_commans.ui.getColor
 

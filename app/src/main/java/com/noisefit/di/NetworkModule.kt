@@ -1,7 +1,7 @@
 package com.noisefit.di
 
 import android.content.Context
-import com.noisefit.BuildConfig
+import com.noisefit.luna.BuildConfig
 import com.noisefit.data.local.db.abstraction.FeedsDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.remote.NetworkConnectionInterceptor

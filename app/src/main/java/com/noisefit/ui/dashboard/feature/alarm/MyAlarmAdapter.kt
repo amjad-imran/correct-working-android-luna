@@ -3,7 +3,7 @@ package com.noisefit.ui.dashboard.feature.alarm
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.RowAlarmToggleBinding
+import com.noisefit.luna.databinding.RowAlarmToggleBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.noisefit.util.ApplicationUtils

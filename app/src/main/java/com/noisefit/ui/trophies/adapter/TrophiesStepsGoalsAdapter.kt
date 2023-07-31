@@ -3,9 +3,9 @@ package com.noisefit.ui.trophies.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.trophies.StreaksItem
-import com.noisefit.databinding.RowTrophyStepsGoalBinding
+import com.noisefit.luna.databinding.RowTrophyStepsGoalBinding
 import com.noisefit.ui.trophies.TrophiesType
 
 class TrophiesStepsGoalsAdapter :

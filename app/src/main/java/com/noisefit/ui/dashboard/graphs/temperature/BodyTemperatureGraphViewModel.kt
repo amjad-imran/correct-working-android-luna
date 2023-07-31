@@ -2,7 +2,7 @@ package com.noisefit.ui.dashboard.graphs.temperature
 
 import com.github.mikephil.charting.data.BarEntry
 import com.noisefit.NoiseFitApplicationMain
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit_commans.data.model.MarkerEntry
 import com.noisefit_commans.data.model.history.BodyTempHistory

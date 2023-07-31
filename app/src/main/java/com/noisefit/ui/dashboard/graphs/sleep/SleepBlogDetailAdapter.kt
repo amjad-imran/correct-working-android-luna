@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.noisefit_commans.data.response.SleepBlogSubCategories
-import com.noisefit.databinding.RowSleepBlogDetailBinding
+import com.noisefit.luna.databinding.RowSleepBlogDetailBinding
 
 
 class SleepBlogDetailAdapter :

@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import com.noisefit.R
-import com.noisefit.databinding.FragmentOWorkoutDetailsBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentOWorkoutDetailsBinding
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone

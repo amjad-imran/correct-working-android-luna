@@ -7,7 +7,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.ArrayRes
-import com.noisefit.R
+import com.noisefit.luna.R
 
 class ColorSeekBar(context: Context, attributeSet: AttributeSet): View(context, attributeSet){
 

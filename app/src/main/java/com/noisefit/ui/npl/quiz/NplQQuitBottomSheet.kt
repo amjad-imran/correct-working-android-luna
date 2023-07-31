@@ -7,7 +7,7 @@ import android.widget.FrameLayout
 import androidx.core.os.bundleOf
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.noisefit.databinding.BottomSheetQuitQuizBinding
+import com.noisefit.luna.databinding.BottomSheetQuitQuizBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseBottomSheet
 import com.noisefit_commans.utils.InsiderAppEvents

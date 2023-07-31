@@ -6,10 +6,10 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
-import com.noisefit.databinding.FragmentSportSelectionBinding
+import com.noisefit.luna.databinding.FragmentSportSelectionBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast

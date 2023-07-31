@@ -5,7 +5,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.noisefit.data.model.VideosList
-import com.noisefit.databinding.FragmentWContentDetailsBinding
+import com.noisefit.luna.databinding.FragmentWContentDetailsBinding
 import com.noisefit.ui.common.*
 import com.noisefit.ui.content.player.ContentPlayerActivity
 import com.noisefit.util.ApplicationUtils

@@ -28,9 +28,9 @@ import androidx.core.util.Preconditions.checkArgument
 import androidx.work.*
 import com.google.gson.Gson
 import com.hookedonplay.decoviewlib.charts.SeriesItem
-import com.noisefit.BuildConfig
+import com.noisefit.luna.BuildConfig
 import com.noisefit.NoiseFitApplicationMain
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.remote.response.Watchface2
 import com.noisefit.receiver.broadcastReceiver.SportsNotificationReceiver
 import com.noisefit.receiver.service.NotificationAlertService

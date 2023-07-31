@@ -12,12 +12,12 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.response.Daily
 import com.noisefit_commans.data.response.Monthly
 import com.noisefit_commans.data.response.Weekly
 import com.noisefit_commans.data.model.history.StepsHistoryData
-import com.noisefit.databinding.FragmentStepsDetailsBinding
+import com.noisefit.luna.databinding.FragmentStepsDetailsBinding
 import com.noisefit.ui.common.*
 import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity

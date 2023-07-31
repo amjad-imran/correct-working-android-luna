@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit_commans.data.model.HeartRateZoneData
-import com.noisefit.databinding.RowHeartRateZoneBinding
+import com.noisefit.luna.databinding.RowHeartRateZoneBinding
 
 class ActivityDetailsHeartZoneAdapter :
     RecyclerView.Adapter<ActivityDetailsHeartZoneAdapter.ViewHolder>() {

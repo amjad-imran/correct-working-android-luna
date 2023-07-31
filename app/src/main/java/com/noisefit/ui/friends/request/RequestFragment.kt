@@ -6,8 +6,8 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.noisefit.R
-import com.noisefit.databinding.FragmentRequestBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentRequestBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.InsiderAppEvents
 import dagger.hilt.android.AndroidEntryPoint

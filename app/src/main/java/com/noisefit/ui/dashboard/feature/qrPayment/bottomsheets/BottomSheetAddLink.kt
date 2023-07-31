@@ -5,8 +5,8 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
-import com.noisefit.R
-import com.noisefit.databinding.BottomSheetUploadLinkBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.BottomSheetUploadLinkBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import com.noisefit_commans.ui.showShortToast
 import dagger.hilt.android.AndroidEntryPoint

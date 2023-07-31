@@ -8,7 +8,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.noisefit_commans.data.model.ShopProduct
-import com.noisefit.databinding.FragmentShopSearchBinding
+import com.noisefit.luna.databinding.FragmentShopSearchBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible

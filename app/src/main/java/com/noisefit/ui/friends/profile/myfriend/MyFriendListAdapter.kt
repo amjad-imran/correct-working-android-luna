@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.model.FriendsFriendListData
-import com.noisefit.databinding.ItemMyFriendListBinding
+import com.noisefit.luna.databinding.ItemMyFriendListBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible

@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.OreoItemSleepContributorBinding
+import com.noisefit.luna.databinding.OreoItemSleepContributorBinding
 import com.oreo.data.model.Contributors
 
 class OreoSleepContributorAdapter(val mListener: ContributorItemClickListener) :

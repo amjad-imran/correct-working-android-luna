@@ -6,12 +6,12 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
-import com.noisefit.R
+import com.noisefit.luna.R
 
 import com.noisefit_commans.data.response.ChallengeModel
-import com.noisefit.databinding.RowAwaitedChallengeBinding
-import com.noisefit.databinding.RowJoinedChallengeBinding
-import com.noisefit.databinding.RowNewChallengeBinding
+import com.noisefit.luna.databinding.RowAwaitedChallengeBinding
+import com.noisefit.luna.databinding.RowJoinedChallengeBinding
+import com.noisefit.luna.databinding.RowNewChallengeBinding
 import com.noisefit.ui.common.*
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.models.Units

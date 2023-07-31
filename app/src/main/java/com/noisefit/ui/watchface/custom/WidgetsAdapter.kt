@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit_commans.data.model.WatchFaceWidgets
-import com.noisefit.databinding.RowWidgetBinding
+import com.noisefit.luna.databinding.RowWidgetBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 

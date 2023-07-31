@@ -12,7 +12,7 @@ import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ICandleDataSet
 import com.noisefit.NoiseFitApplicationMain
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.ui.dashboard.graphs.steps.GraphInterval
 
 object SleepChartUtils {

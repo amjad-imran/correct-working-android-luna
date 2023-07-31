@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import com.noisefit.R
-import com.noisefit.databinding.FragmentActiveVoucherBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentActiveVoucherBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone

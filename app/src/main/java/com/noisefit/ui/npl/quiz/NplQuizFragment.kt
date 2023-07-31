@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
-import com.noisefit.R
-import com.noisefit.databinding.FragmentNplQuizBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentNplQuizBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast

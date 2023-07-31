@@ -3,9 +3,9 @@ package com.noisefit.ui.dashboard.summary
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.DashNotification
-import com.noisefit.databinding.RowDashAlertsBinding
+import com.noisefit.luna.databinding.RowDashAlertsBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 

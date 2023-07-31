@@ -3,7 +3,7 @@ package com.noisefit.ui.content.details
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.ItemNeedForWorkoutBinding
+import com.noisefit.luna.databinding.ItemNeedForWorkoutBinding
 
 class WContentNeedAdapter :
     RecyclerView.Adapter<WContentNeedAdapter.ViewHolder>() {

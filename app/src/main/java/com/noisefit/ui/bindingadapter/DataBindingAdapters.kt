@@ -5,7 +5,7 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputLayout
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import android.view.ViewGroup.MarginLayoutParams

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.noisefit_commans.models.CustomWatchFace
-import com.noisefit.databinding.RowWatchFaceCustomBinding
+import com.noisefit.luna.databinding.RowWatchFaceCustomBinding
 
 class CustomWatchFaceAdapter(private val listener: CustomWatchFaceActions) :
     RecyclerView.Adapter<CustomWatchFaceAdapter.ViewHolder>() {

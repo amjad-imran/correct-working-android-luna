@@ -9,7 +9,7 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.noisefit.data.remote.response.Watchface2
-import com.noisefit.databinding.RowRandomWatchfaceBinding
+import com.noisefit.luna.databinding.RowRandomWatchfaceBinding
 import com.noisefit_commans.models.WatchFace
 
 @Deprecated("product changed requirement")

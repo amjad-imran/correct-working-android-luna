@@ -6,8 +6,8 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.tasks.Task
-import com.noisefit.R
-import com.noisefit.databinding.FragmentOtpVerifyBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentOtpVerifyBinding
 import com.noisefit.receiver.broadcastReceiver.OTPReceiveListener
 import com.noisefit.receiver.broadcastReceiver.OtpBroadcastReceiver
 import com.noisefit.ui.common.*

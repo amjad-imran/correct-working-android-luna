@@ -15,8 +15,8 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.noisefit.R
-import com.noisefit.databinding.DialogTrophyCollectBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.DialogTrophyCollectBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast

@@ -7,7 +7,7 @@ import android.widget.CompoundButton
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.RowAddSportBinding
+import com.noisefit.luna.databinding.RowAddSportBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.noisefit.util.ImageUtil
@@ -25,7 +25,6 @@ class AddSportSelectionAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(sportsMode: SportsModeList.SportsMode, position: Int) {
             binding.tvName.text = sportsMode.name?.replace("_", " ")
-            binding.imageView8.setImageResource(ImageUtil().getImageFromActivity(sportsMode.name))
             binding.checkbox.setOnClickListener { view ->
                 val isChecked = (view as CompoundButton).isChecked
                 contactInteractionListener.onSportClick(

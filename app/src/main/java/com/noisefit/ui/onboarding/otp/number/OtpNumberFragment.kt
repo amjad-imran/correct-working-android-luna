@@ -13,8 +13,8 @@ import com.google.android.gms.auth.api.credentials.Credential
 import com.google.android.gms.auth.api.credentials.Credentials
 import com.google.android.gms.auth.api.credentials.CredentialsOptions
 import com.google.android.gms.auth.api.credentials.HintRequest
-import com.noisefit.R
-import com.noisefit.databinding.FragmentOtpNumberBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentOtpNumberBinding
 import com.noisefit.ui.onboarding.auth.AuthViewModel
 import com.noisefit.ui.onboarding.otp.OtpViewModel
 import com.noisefit_commans.ui.BaseFragment

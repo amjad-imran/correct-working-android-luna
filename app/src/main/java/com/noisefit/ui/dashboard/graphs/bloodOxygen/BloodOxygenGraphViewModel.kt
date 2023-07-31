@@ -2,7 +2,7 @@ package com.noisefit.ui.dashboard.graphs.bloodOxygen
 
 import com.github.mikephil.charting.data.BarEntry
 import com.noisefit.NoiseFitApplicationMain
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.MarkerEntry
 import com.noisefit_commans.data.model.history.BoHistory
 import com.noisefit_commans.ui.BaseViewModel

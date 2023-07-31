@@ -5,9 +5,9 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.MainActivity
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.response.Country
-import com.noisefit.databinding.FragmentOtpCountryBinding
+import com.noisefit.luna.databinding.FragmentOtpCountryBinding
 import com.noisefit.ui.common.*
 import com.noisefit.ui.onboarding.auth.AuthViewModel
 import com.noisefit.ui.onboarding.otp.OtpViewModel

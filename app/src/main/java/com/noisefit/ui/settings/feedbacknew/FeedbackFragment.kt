@@ -8,8 +8,8 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.google.android.material.chip.Chip
-import com.noisefit.R
-import com.noisefit.databinding.FragmentFeedback2Binding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentFeedback2Binding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible

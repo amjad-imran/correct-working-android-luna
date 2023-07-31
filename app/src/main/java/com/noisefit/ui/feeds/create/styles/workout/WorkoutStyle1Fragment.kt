@@ -3,7 +3,7 @@ package com.noisefit.ui.feeds.create.styles.workout
 import android.os.Bundle
 import android.view.View
 import com.noisefit.data.dataConverter.DataUnitConverter
-import com.noisefit.databinding.FragmentWorkoutStyle1Binding
+import com.noisefit.luna.databinding.FragmentWorkoutStyle1Binding
 import com.noisefit.util.ImageUtil
 import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.models.Units
@@ -62,7 +62,6 @@ class WorkoutStyle1Fragment :
 
 
             val activityName = it.type ?: it.activityType
-            binding.imageView8.setImageResource(ImageUtil().getImageFromActivity(activityName))
 
 
         }

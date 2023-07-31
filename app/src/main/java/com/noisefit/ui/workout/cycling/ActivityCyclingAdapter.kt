@@ -3,7 +3,7 @@ package com.noisefit.ui.workout.cycling
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.RowCyclingDetailsItemBinding
+import com.noisefit.luna.databinding.RowCyclingDetailsItemBinding
 import com.noisefit_commans.data.model.DetailData
 
 

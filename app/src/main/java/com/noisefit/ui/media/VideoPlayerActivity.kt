@@ -14,11 +14,11 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.gson.JsonObject
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.NoiseHealthVideo
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UserRepository
-import com.noisefit.databinding.ActivityVideoPlayerBinding
+import com.noisefit.luna.databinding.ActivityVideoPlayerBinding
 import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit.session.SessionManager
 import com.noisefit.ui.common.BaseActivity

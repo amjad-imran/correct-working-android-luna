@@ -11,9 +11,9 @@ import androidx.fragment.app.viewModels
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.history.BoHistory
-import com.noisefit.databinding.FragmentBloodOxygenGraphBinding
+import com.noisefit.luna.databinding.FragmentBloodOxygenGraphBinding
 import com.noisefit.ui.common.*
 import com.noisefit.ui.dashboard.graphs.steps.GraphInterval
 import com.noisefit.util.graph.StepsChartUtils

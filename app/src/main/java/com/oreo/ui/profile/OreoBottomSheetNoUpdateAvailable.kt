@@ -7,7 +7,7 @@ import android.widget.FrameLayout
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.noisefit.databinding.BottomSheetOreoNoUpdateBinding
+import com.noisefit.luna.databinding.BottomSheetOreoNoUpdateBinding
 import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 

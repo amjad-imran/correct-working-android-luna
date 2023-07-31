@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.RowHorizontalLineChartBinding
+import com.noisefit.luna.databinding.RowHorizontalLineChartBinding
 import com.noisefit_commans.utils.LOGS
 
 

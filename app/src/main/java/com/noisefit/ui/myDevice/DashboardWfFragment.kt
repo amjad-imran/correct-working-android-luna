@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import com.noisefit.data.remote.response.Watchface2
-import com.noisefit.databinding.FragmentWfDashboardBinding
+import com.noisefit.luna.databinding.FragmentWfDashboardBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.loadImageCacheWithProgress
 import dagger.hilt.android.AndroidEntryPoint

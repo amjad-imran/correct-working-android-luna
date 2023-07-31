@@ -5,9 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.FitnessHealthModel
-import com.noisefit.databinding.RowFitnessHealthDetailsItemsBinding
+import com.noisefit.luna.databinding.RowFitnessHealthDetailsItemsBinding
 
 class HealthItemDetailsAdapter(val activity: FragmentActivity, val listener: HyperlinkAction) :
     RecyclerView.Adapter<HealthItemDetailsAdapter.ViewHolder>() {

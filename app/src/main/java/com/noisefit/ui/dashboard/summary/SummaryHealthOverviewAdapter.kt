@@ -5,9 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.HealthOverview
-import com.noisefit.databinding.*
+import com.noisefit.luna.databinding.*
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.noisefit.util.ApplicationUtils

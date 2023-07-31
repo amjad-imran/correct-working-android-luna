@@ -9,9 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.response.VersionCheckResponse
-import com.noisefit.databinding.FragmentAppVersionDialogBinding
+import com.noisefit.luna.databinding.FragmentAppVersionDialogBinding
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
 import dagger.hilt.android.AndroidEntryPoint

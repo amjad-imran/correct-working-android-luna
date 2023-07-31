@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit_commans.data.response.HelpAndSupportQuestion
-import com.noisefit.databinding.ItemHSListBinding
+import com.noisefit.luna.databinding.ItemHSListBinding
 
 class HelpAndSupportListAdapter(val listener: HelpAndSupportInteractionListener) :
     RecyclerView.Adapter<HelpAndSupportListAdapter.ViewHolder>() {

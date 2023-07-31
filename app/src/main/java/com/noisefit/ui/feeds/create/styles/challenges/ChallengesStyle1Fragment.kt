@@ -2,7 +2,7 @@ package com.noisefit.ui.feeds.create.styles.challenges
 
 import android.os.Bundle
 import android.view.View
-import com.noisefit.databinding.FragmentChallengesStyle1Binding
+import com.noisefit.luna.databinding.FragmentChallengesStyle1Binding
 import com.noisefit_commans.data.response.ChallengeModel
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.models.Units

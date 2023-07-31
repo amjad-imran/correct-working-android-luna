@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.R
-import com.noisefit.databinding.ItemBannerWinBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.ItemBannerWinBinding
 import com.noisefit_commans.data.response.LiveMatch
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadCircleImage

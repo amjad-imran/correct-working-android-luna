@@ -4,9 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.model.PostBackground
-import com.noisefit.databinding.RowPostImageSelectionBinding
+import com.noisefit.luna.databinding.RowPostImageSelectionBinding
 import com.noisefit_commans.ui.loadImage
 
 

@@ -3,7 +3,7 @@ package com.oreo.ui.activity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.OreoItemWorkoutActivityBinding
+import com.noisefit.luna.databinding.OreoItemWorkoutActivityBinding
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import com.oreo.data.model.OActivityListModal

@@ -2,8 +2,8 @@ package com.noisefit.ui.myDevice.camera
 
 import android.os.Bundle
 import android.view.View
-import com.noisefit.R
-import com.noisefit.databinding.FragmentCameraSwitchBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentCameraSwitchBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone

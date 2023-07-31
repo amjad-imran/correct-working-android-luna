@@ -38,7 +38,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 
-import com.noisefit.R;
+import com.noisefit.luna.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

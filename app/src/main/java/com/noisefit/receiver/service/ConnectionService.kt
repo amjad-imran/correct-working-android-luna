@@ -22,7 +22,7 @@ import android.os.Message
 import android.os.SystemClock
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleService
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.local.db.DataBase

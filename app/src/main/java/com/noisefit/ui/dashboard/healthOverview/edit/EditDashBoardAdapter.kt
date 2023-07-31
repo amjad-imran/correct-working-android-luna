@@ -6,7 +6,7 @@ import android.widget.CheckBox
 import android.widget.CompoundButton
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit_commans.data.model.HealthOverViewList
-import com.noisefit.databinding.ItemEditDashboardBinding
+import com.noisefit.luna.databinding.ItemEditDashboardBinding
 import com.noisefit_commans.ui.loadImage
 
 class EditDashBoardAdapter(

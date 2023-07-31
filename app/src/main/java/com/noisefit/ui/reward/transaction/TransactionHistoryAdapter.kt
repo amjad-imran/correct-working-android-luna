@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.noisefit_commans.data.model.TransactionHistory
-import com.noisefit.databinding.ItemTransactionHistoryBinding
+import com.noisefit.luna.databinding.ItemTransactionHistoryBinding
 import com.noisefit_commans.utils.AppConstants
 import com.noisefit_commans.utils.DateFormats
 

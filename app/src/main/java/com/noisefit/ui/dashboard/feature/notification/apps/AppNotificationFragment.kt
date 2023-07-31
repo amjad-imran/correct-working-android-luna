@@ -8,9 +8,9 @@ import android.widget.CheckBox
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.NotificationApp
-import com.noisefit.databinding.FragmentAppNotificationBinding
+import com.noisefit.luna.databinding.FragmentAppNotificationBinding
 import com.noisefit.receiver.service.NotificationAlertService
 import com.noisefit.ui.common.*
 import com.noisefit.util.ApplicationUtils

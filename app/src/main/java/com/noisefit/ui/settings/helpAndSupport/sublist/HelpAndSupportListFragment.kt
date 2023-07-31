@@ -5,7 +5,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit_commans.data.response.HelpAndSupportQuestion
-import com.noisefit.databinding.FragmentHelpAndSupportListBinding
+import com.noisefit.luna.databinding.FragmentHelpAndSupportListBinding
 import com.noisefit.ui.settings.helpAndSupport.HelpAndSupportViewModel
 import com.noisefit_commans.common.MarginItemDecoration
 import com.noisefit_commans.ui.BaseFragment

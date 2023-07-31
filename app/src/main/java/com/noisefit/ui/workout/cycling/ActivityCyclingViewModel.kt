@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.data.Entry
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UserRepository

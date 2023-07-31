@@ -1,7 +1,7 @@
 package com.noisefit.data.repository.implementation
 
 import com.google.gson.JsonObject
-import com.noisefit.BuildConfig
+import com.noisefit.luna.BuildConfig
 import com.noisefit.data.model.*
 import com.noisefit.data.remote.abstraction.NetworkService
 import com.noisefit.data.remote.base.Resource

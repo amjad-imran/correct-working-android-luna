@@ -12,9 +12,9 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.noisefit.R
-import com.noisefit.databinding.FragmentAddAppListSelectionBinding
-import com.noisefit.databinding.FragmentWidgetSortingBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentAddAppListSelectionBinding
+import com.noisefit.luna.databinding.FragmentWidgetSortingBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast

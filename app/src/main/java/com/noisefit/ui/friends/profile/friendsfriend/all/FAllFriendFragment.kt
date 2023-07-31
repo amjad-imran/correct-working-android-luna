@@ -6,9 +6,9 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.model.FriendsFriendListData
-import com.noisefit.databinding.FragmentFAllFriendBinding
+import com.noisefit.luna.databinding.FragmentFAllFriendBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible

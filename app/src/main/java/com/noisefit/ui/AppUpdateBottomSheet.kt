@@ -7,8 +7,8 @@ import android.widget.FrameLayout
 import androidx.core.os.bundleOf
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.noisefit.R
-import com.noisefit.databinding.LayoutAppUpdateBottomsheetBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.LayoutAppUpdateBottomsheetBinding
 import com.noisefit_commans.data.response.VersionCheckResponse
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import com.noisefit_commans.ui.gone

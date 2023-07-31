@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.os.bundleOf
-import com.noisefit.R
-import com.noisefit.databinding.FragmentNplPrivacyBottomDialogListDialogBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentNplPrivacyBottomDialogListDialogBinding
 import com.noisefit_commans.ui.BaseBottomSheet
 import com.noisefit.ui.web.WebViewActivity
 import com.noisefit_commans.ui.makeLinks

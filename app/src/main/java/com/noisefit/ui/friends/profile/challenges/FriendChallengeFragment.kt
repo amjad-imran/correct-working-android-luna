@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.lottie.LottieDrawable
 import com.noisefit.BottomNavOption
 import com.noisefit.MainViewModel
-import com.noisefit.R
-import com.noisefit.databinding.FragmentFriendChallengeBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentFriendChallengeBinding
 import com.noisefit.ui.common.*
 import com.noisefit.ui.friends.profile.FriendProfileSharedViewModel
 import com.noisefit_commans.ui.*

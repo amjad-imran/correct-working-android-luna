@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.hookedonplay.decoviewlib.events.DecoEvent
-import com.noisefit.R
-import com.noisefit.databinding.FragmentRingStyle2Binding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentRingStyle2Binding
 import com.noisefit.ui.dashboard.summary.RING_ANIMATION
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.model.HealthOverviewData

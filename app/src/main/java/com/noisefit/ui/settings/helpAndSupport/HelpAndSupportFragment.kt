@@ -5,9 +5,9 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.response.HelpAndSupportResponse
-import com.noisefit.databinding.FragmentHelpAndSupportBinding
+import com.noisefit.luna.databinding.FragmentHelpAndSupportBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.common.MarginSideItemDecoration
 import com.noisefit_commans.utils.InsiderAppEvents

@@ -13,8 +13,8 @@ import androidx.core.os.HandlerCompat
 import androidx.fragment.app.*
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2.SCROLL_STATE_IDLE
-import com.noisefit.R
-import com.noisefit.databinding.FragmentRoundUpLandingBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentRoundUpLandingBinding
 import com.noisefit.ui.common.*
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.utils.share.ShareUtil

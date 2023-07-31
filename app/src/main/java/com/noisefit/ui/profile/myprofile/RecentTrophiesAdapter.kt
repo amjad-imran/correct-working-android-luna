@@ -3,9 +3,9 @@ package com.noisefit.ui.profile.myprofile
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.trophies.TrophyBadge
-import com.noisefit.databinding.RowRecentTrophiesBinding
+import com.noisefit.luna.databinding.RowRecentTrophiesBinding
 import com.noisefit_commans.utils.prettyCount
 import com.noisefit_commans.models.Units
 import com.noisefit_commans.utils.DateFormats

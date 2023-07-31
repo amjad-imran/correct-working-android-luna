@@ -3,8 +3,8 @@ package com.noisefit.ui.dashboard.feature.experimental
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import com.noisefit.R
-import com.noisefit.databinding.FragmentExperimentalFeaturesBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentExperimentalFeaturesBinding
 import com.noisefit_commans.ui.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 

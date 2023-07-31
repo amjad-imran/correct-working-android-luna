@@ -10,8 +10,8 @@ import androidx.core.text.inSpans
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import com.noisefit.MainViewModel
-import com.noisefit.R
-import com.noisefit.databinding.FragmentPredictionBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentPredictionBinding
 import com.noisefit.session.SessionManager
 import com.noisefit.ui.common.*
 import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY

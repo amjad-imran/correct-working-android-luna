@@ -3,9 +3,9 @@ package com.noisefit.ui.reward.voucher.expired
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.VoucherList
-import com.noisefit.databinding.ItemExpireVouchersBinding
+import com.noisefit.luna.databinding.ItemExpireVouchersBinding
 import com.noisefit_commans.ui.loadImage
 
 class ExpiredVoucherAdapter : RecyclerView.Adapter<ExpiredVoucherAdapter.ViewHolder>() {

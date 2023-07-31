@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import androidx.fragment.app.viewModels
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.remote.response.Watchface2
-import com.noisefit.databinding.BottomSheetUpdateWatchfaceBinding
+import com.noisefit.luna.databinding.BottomSheetUpdateWatchfaceBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible

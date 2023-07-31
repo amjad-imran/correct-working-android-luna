@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.response.Requests
-import com.noisefit.databinding.RowCprReceivedBinding
+import com.noisefit.luna.databinding.RowCprReceivedBinding
 import com.noisefit_commans.ui.gone
 
 class CPRSentAdapter(val listener: OnItemClickListener) : RecyclerView.Adapter<CPRSentAdapter.ViewHolder>() {

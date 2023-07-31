@@ -19,12 +19,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.model.DiyBackground
 import com.noisefit.data.model.DiyCustomWatchType
 import com.noisefit.data.model.DiyWatchFaceModal
 import com.noisefit.data.remote.response.DiyMyCreation
-import com.noisefit.databinding.FragmentDiyWatchFaceBinding
+import com.noisefit.luna.databinding.FragmentDiyWatchFaceBinding
 import com.noisefit.receiver.workManager.DiyWatchFaceTransferStates
 import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY
 import com.noisefit_commans.ui.visible

@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.airbnb.lottie.LottieDrawable
-import com.noisefit.R
-import com.noisefit.databinding.ActivityGuestProfileSetupBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.ActivityGuestProfileSetupBinding
 import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit.ui.common.BaseActivity
 import com.noisefit_commans.ui.playAnimation

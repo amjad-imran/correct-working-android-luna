@@ -10,11 +10,11 @@ import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.ui.displayToast
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
-import com.noisefit.databinding.ActivityWebViewBinding
+import com.noisefit.luna.databinding.ActivityWebViewBinding
 import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit.ui.common.*
 import com.noisefit.util.ApplicationUtils

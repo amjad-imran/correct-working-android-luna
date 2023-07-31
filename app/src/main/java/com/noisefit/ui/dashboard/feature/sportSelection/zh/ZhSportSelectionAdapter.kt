@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.RowSportSelectionBinding
+import com.noisefit.luna.databinding.RowSportSelectionBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit.ui.common.utils.ItemMoveCallbackListener
 import com.noisefit_commans.ui.visible
@@ -38,7 +38,6 @@ class ZhSportSelectionAdapter(private val action: SportSelectionListener) :
             binding.tvName.text = widget.name.replace("_", " ")
                 .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
 
-            binding.imageView8.setImageResource(ImageUtil().getImageFromActivity(widget.name))
             if (mEditMode) {
                 binding.ivRemove.visible()
                 if (widget.sortable) {

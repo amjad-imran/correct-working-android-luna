@@ -3,8 +3,8 @@ package com.noisefit.ui.dashboard
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import android.view.View
-import com.noisefit.R
-import com.noisefit.databinding.FragmentLogsDisplayBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentLogsDisplayBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast

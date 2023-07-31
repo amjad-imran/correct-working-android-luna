@@ -5,7 +5,7 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.noisefit.databinding.FragmentTestDataBinding
+import com.noisefit.luna.databinding.FragmentTestDataBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.tryCatch
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository

@@ -3,9 +3,9 @@ package com.noisefit.ui.content.dashboard
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.model.SubCategoriesList
-import com.noisefit.databinding.ItemWcCategoryBinding
+import com.noisefit.luna.databinding.ItemWcCategoryBinding
 
 class WSubCategoryAdapter(val listener: OnCategoryItemClickListener) :
     RecyclerView.Adapter<WSubCategoryAdapter.ViewHolder>() {

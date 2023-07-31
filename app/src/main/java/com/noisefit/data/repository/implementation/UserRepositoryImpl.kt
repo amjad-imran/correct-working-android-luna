@@ -2,7 +2,7 @@ package com.noisefit.data.repository.implementation
 
 import android.net.Uri
 import com.google.gson.JsonObject
-import com.noisefit.BuildConfig
+import com.noisefit.luna.BuildConfig
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.dataConverter.OfflineDataMapper
 import com.noisefit.data.googleFit.GoogleFitDataObservers

@@ -3,7 +3,7 @@ package com.noisefit.ui.dashboard.summary
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.ItemRecentActivityLayoutBinding
+import com.noisefit.luna.databinding.ItemRecentActivityLayoutBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.noisefit.util.ImageUtil
@@ -42,7 +42,6 @@ class RecentWorkoutsAdapter : RecyclerView.Adapter<RecentWorkoutsAdapter.ViewHol
                 binding.divider.root.visible()
             }
             val activityName = sportsModeResponse.type ?: sportsModeResponse.activityType
-            binding.imageView8.setImageResource(ImageUtil().getImageFromActivity(activityName))
 
             binding.container.setOnClickListener {
                 if (hasData) {

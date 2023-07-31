@@ -5,8 +5,8 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.activityViewModels
-import com.noisefit.R
-import com.noisefit.databinding.FragmentOnBoardHeightBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentOnBoardHeightBinding
 import com.noisefit.ui.onboarding.onboardProfile.SetupProfileViewModel
 import com.noisefit_commans.models.HeightUnitSystem
 import com.noisefit_commans.ui.BaseFragment

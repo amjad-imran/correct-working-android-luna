@@ -13,8 +13,9 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
-import com.noisefit.R
-import com.noisefit.databinding.FragmentOreoActivityBinding
+import com.google.gson.Gson
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentOreoActivityBinding
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.BaseFragment
@@ -36,6 +37,7 @@ import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
+import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Arrays
 
@@ -241,132 +243,6 @@ class OreoActivityFragment :
 
     }
 
-    private fun getHour(index: Int): String {
-
-        return when (index) {
-            0 -> {
-                "12 am"
-            }
-
-            47 -> {
-                "4 am"
-            }
-
-            95 -> {
-                "8 am"
-            }
-
-            143 -> {
-                "12 pm"
-            }
-
-            191 -> {
-                "4 pm"
-            }
-
-            239 -> {
-                "8 pm"
-            }
-
-            287 -> {
-                "12 am     "
-            }
-
-            else -> {
-                ""
-            }
-
-        }
-
-    }
-
-
-    private fun baseInterval(startTime: String?, endTime: String?): HashMap<Int, String> {
-        val hm = HashMap<Int, String>()
-        if (startTime == null && endTime == null) {
-            for (i in 0..287 step 47) {
-                hm[i] = getHour(i)
-            }
-            return hm
-        }
-        var endTimeFormat = endTime
-        if(endTimeFormat== "24:00:00"){
-            endTimeFormat = "23:60:00"
-        }
-        val array = intArrayOf(0, 4, 8, 12, 16, 20, 24)
-        val startTimeFull = startTime!!.split(":")
-        val startHr = startTimeFull[0].toInt()
-        val startMin = startTimeFull[1].toInt()
-        var startOffset = 0
-        var nearestStart = usingBinarySearch(startHr, array)
-        println("nearestStart $nearestStart")
-        if (startHr < nearestStart) {
-            val offsetMinAdjust = (60 - startMin) / 5
-            val offsetHrAdjust = ((nearestStart - 1) - startHr) * 12
-            startOffset = offsetHrAdjust + offsetMinAdjust
-            println("nearestStart $offsetMinAdjust $offsetHrAdjust")
-        } else {
-            nearestStart += 4;
-            val offsetMinAdjust = (60 - startMin) / 5
-            val offsetHrAdjust = ((nearestStart - 1) - startHr) * 12
-            startOffset = offsetHrAdjust + offsetMinAdjust
-            println("nearestStart $offsetMinAdjust $offsetHrAdjust")
-        }
-
-
-        val endTimeFull = endTimeFormat!!.split(":")
-        val endHr = endTimeFull[0].toInt()
-        val endMin = endTimeFull[1].toInt()
-        var endOffset = 0
-        var nearestEnd = usingBinarySearch(endHr, array)
-
-        val offsetEndMinAdjust = (endMin) / 5
-        if (nearestEnd == endHr) {
-            endOffset = offsetEndMinAdjust
-            println("offsetEndHrAdjust  $offsetEndMinAdjust")
-        } else if (nearestEnd > endHr) {
-            nearestEnd -= 4;
-
-            val offsetEndHrAdjust = (endHr - nearestEnd) * 12
-            endOffset = offsetEndMinAdjust + offsetEndHrAdjust
-
-        } else {
-            val offsetEndHrAdjust = ((endHr) - nearestEnd) * 12
-            endOffset = offsetEndMinAdjust + offsetEndHrAdjust
-
-        }
-        println("endOffset $endOffset")
-
-        val totalItems = (endHr * 12) + (endMin / 5)
-        val firstBottomText = startOffset
-        val lastBottomText = totalItems - endOffset - (startHr * 12)
-        println("totalItems $totalItems firstBottomText $firstBottomText lastBottomText $lastBottomText")
-
-        println("startHr $startTime $endTimeFormat")
-        for (i in firstBottomText until lastBottomText step 48) {
-            println("startHr $i $nearestStart")
-            nearestStart += 4
-            hm[i] = nearestStart.toString()
-        }
-
-        return hm
-    }
-
-
-    private fun usingBinarySearch(value: Int, a: IntArray): Int {
-        if (value <= a[0]) {
-            return a[0]
-        }
-        if (value >= a[a.size - 1]) {
-            return a[a.size - 1]
-        }
-        val result = Arrays.binarySearch(a, value)
-        if (result >= 0) {
-            return a[result]
-        }
-        val insertionPoint = -result - 1
-        return if (a[insertionPoint] - value < value - a[insertionPoint - 1]) a[insertionPoint] else a[insertionPoint - 1]
-    }
 
 
     private fun handleMovementViews(it: OreoActivityModel) {
@@ -392,13 +268,17 @@ class OreoActivityFragment :
         var inactiveMovValue: Int = 0
         val movementList = it.daytimeMovement?.movement
 
-        baseInterval(it.daytimeMovement?.startTime, it.daytimeMovement?.endTime)
+        val baseHrList = UtilClass.graphBaseInterval(it.daytimeMovement?.startTime, it.daytimeMovement?.endTime,movementList?.size?: 288)
+
+     //   LOGS.d("asdsdadsasad ${Gson().toJson(baseHrList)}")
+
         if (movementList?.isNotEmpty() == true) {
             movementList.forEachIndexed { index, data ->
 
                 val chartModel = CandleChartModel()
 
-                chartModel.bottomLineText = getHour(index)
+                chartModel.bottomLineText = baseHrList[index]
+
                 when (data) {
                     1 -> {
                         lowMovValue++
@@ -445,7 +325,7 @@ class OreoActivityFragment :
             for (index in 0..287) {
                 val chartModel = CandleChartModel()
                 inactiveMovValue++
-                chartModel.bottomLineText = getHour(index)
+                chartModel.bottomLineText = baseHrList[index]
                 chartModel.length =
                     (binding.lytDailyMovement.candleChart.max * 0.2).toInt()
                 chartModel.color = Color.parseColor("#4c4c4c")

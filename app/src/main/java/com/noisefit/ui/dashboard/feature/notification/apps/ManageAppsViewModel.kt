@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit.NoiseFitApplicationMain
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.local.AppStaticData
 import com.noisefit_commans.data.model.NotificationApp
 import com.noisefit.data.repository.abstraction.DeviceRepository

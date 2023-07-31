@@ -2,8 +2,8 @@ package com.noisefit.ui.profile
 
 import android.os.Bundle
 import com.bumptech.glide.Glide
-import com.noisefit.R
-import com.noisefit.databinding.ActivityProfilePicBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.ActivityProfilePicBinding
 import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit.ui.common.BaseActivity
 import com.noisefit_commans.utils.LOGS

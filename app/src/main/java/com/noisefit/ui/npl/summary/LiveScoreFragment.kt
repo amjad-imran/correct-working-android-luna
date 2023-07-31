@@ -5,8 +5,8 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
 import com.noisefit.MainViewModel
-import com.noisefit.R
-import com.noisefit.databinding.FragmentLiveScoreBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentLiveScoreBinding
 import com.noisefit.session.SessionManager
 import com.noisefit.ui.common.*
 import com.noisefit.ui.dashboard.summary.SummaryFragmentDirections

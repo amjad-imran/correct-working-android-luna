@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import com.noisefit.R
-import com.noisefit.databinding.FragmentSleepReminderBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentSleepReminderBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit.ui.common.bottomSheet.TIME_REQUEST_KEY
 import com.noisefit_commans.ui.gone

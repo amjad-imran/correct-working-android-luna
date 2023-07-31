@@ -18,10 +18,10 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.CustomGrid
 import com.noisefit_commans.data.model.WatchFaceWidgets
-import com.noisefit.databinding.FragmentNfhCustomWatchFaceBinding
+import com.noisefit.luna.databinding.FragmentNfhCustomWatchFaceBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.showShortToast

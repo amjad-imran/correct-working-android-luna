@@ -7,8 +7,8 @@ import androidx.core.text.bold
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.noisefit.MainActivity
-import com.noisefit.R
-import com.noisefit.databinding.FragmentOreoMyDeviceBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentOreoMyDeviceBinding
 import com.noisefit.oreo.OreoMainActivity
 import com.noisefit.ui.SplashActivity
 import com.noisefit.ui.myDevice.MyDeviceAction

@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.noisefit.R
-import com.noisefit.databinding.RowWorkoutImageBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.RowWorkoutImageBinding
 import com.noisefit.ui.dashboard.summary.DashboardBannerAction
 
 class ActivityShareImageAdapter() :

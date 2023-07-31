@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.data.model.ReportAbuseData
-import com.noisefit.databinding.ItemReportAbuseListBinding
+import com.noisefit.luna.databinding.ItemReportAbuseListBinding
 
 
 class ReportPCAdapter(val listener: OnRepostAbuseItemClickListener) :

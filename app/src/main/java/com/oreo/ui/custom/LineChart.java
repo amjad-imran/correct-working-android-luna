@@ -15,7 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.google.gson.Gson;
-import com.noisefit.R;
+import com.noisefit.luna.R;
 import com.noisefit_commans.utils.LOGS;
 import com.oreo.data.model.ChartModel;
 

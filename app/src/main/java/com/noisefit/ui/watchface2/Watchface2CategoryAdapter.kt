@@ -6,12 +6,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.model.WatchFace2CategoryModal
 import com.noisefit.data.remote.response.Watchface2
-import com.noisefit.databinding.LayoutHavingAnIssueBinding
-import com.noisefit.databinding.LayoutMainCategoryListBinding
-import com.noisefit.databinding.LayoutMainCreateYourOwnBinding
+import com.noisefit.luna.databinding.LayoutHavingAnIssueBinding
+import com.noisefit.luna.databinding.LayoutMainCategoryListBinding
+import com.noisefit.luna.databinding.LayoutMainCreateYourOwnBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadCircleCacheWithProgress
 import com.noisefit_commans.ui.loadImageCacheWithProgress

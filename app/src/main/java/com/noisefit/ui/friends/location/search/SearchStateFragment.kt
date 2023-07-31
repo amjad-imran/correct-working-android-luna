@@ -8,10 +8,10 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.remote.CityData
 import com.noisefit.data.remote.StateData
-import com.noisefit.databinding.FragmentSearchStateBinding
+import com.noisefit.luna.databinding.FragmentSearchStateBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast

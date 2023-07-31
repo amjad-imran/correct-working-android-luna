@@ -19,8 +19,8 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.noisefit.R
-import com.noisefit.databinding.FragmentActivityDetailsBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentActivityDetailsBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.ui.BaseFragment
@@ -93,7 +93,6 @@ class ActivityDetailsFragment :
         binding.tvDayTime.text = DateFormats.formatActivityTime4(activity.time)
 
         val activityName = activity.type ?: activity.activityType
-        binding.ivActivityType.setImageResource(ImageUtil().getImageFromActivity(activityName))
 
         if (viewModel.generateDetailsData(activity, viewModel.unit).isNotEmpty()) {
             adapter.setDataSet(viewModel.generateDetailsData(activity, viewModel.unit))

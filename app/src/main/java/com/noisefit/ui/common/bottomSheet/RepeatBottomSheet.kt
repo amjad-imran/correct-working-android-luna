@@ -5,8 +5,8 @@ import android.view.View
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
-import com.noisefit.R
-import com.noisefit.databinding.FragmentRepeatBottomSheetBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentRepeatBottomSheetBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import dagger.hilt.android.AndroidEntryPoint
 

@@ -1,0 +1,32 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.noisefit_cf2" >
+4
+5    <uses-sdk android:minSdkVersion="23" />
+5-->/home/deepak/Documents/noise/bitbucket/noisefit-android-luna/noisefit_colorfit2/src/main/AndroidManifest.xml
+6
+7    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+7-->/home/deepak/Documents/noise/bitbucket/noisefit-android-luna/noisefit_colorfit2/src/main/AndroidManifest.xml:5:5-74
+7-->/home/deepak/Documents/noise/bitbucket/noisefit-android-luna/noisefit_colorfit2/src/main/AndroidManifest.xml:5:22-71
+8
+9    <application>
+9-->/home/deepak/Documents/noise/bitbucket/noisefit-android-luna/noisefit_colorfit2/src/main/AndroidManifest.xml:6:5-16:19
+10        <service
+10-->/home/deepak/Documents/noise/bitbucket/noisefit-android-luna/noisefit_colorfit2/src/main/AndroidManifest.xml:7:9-10:40
+11            android:name="com.ido.ble.dfu.DFUService"
+11-->/home/deepak/Documents/noise/bitbucket/noisefit-android-luna/noisefit_colorfit2/src/main/AndroidManifest.xml:8:13-54
+12            android:enabled="true"
+12-->/home/deepak/Documents/noise/bitbucket/noisefit-android-luna/noisefit_colorfit2/src/main/AndroidManifest.xml:9:13-35
+13            android:exported="false" />
+13-->/home/deepak/Documents/noise/bitbucket/noisefit-android-luna/noisefit_colorfit2/src/main/AndroidManifest.xml:10:13-37
+14        <service
+14-->/home/deepak/Documents/noise/bitbucket/noisefit-android-luna/noisefit_colorfit2/src/main/AndroidManifest.xml:11:9-14:40
+15            android:name="com.realsil.sdk.dfu.DfuService"
+15-->/home/deepak/Documents/noise/bitbucket/noisefit-android-luna/noisefit_colorfit2/src/main/AndroidManifest.xml:12:13-58
+16            android:enabled="true"
+16-->/home/deepak/Documents/noise/bitbucket/noisefit-android-luna/noisefit_colorfit2/src/main/AndroidManifest.xml:13:13-35
+17            android:exported="false" />
+17-->/home/deepak/Documents/noise/bitbucket/noisefit-android-luna/noisefit_colorfit2/src/main/AndroidManifest.xml:14:13-37
+18    </application>
+19
+20</manifest>

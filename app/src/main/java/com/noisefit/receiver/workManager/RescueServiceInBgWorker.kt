@@ -16,8 +16,8 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import androidx.work.impl.utils.futures.SettableFuture
 import com.google.common.util.concurrent.ListenableFuture
-import com.noisefit.BuildConfig
-import com.noisefit.R
+import com.noisefit.luna.BuildConfig
+import com.noisefit.luna.R
 import com.noisefit.data.local.AppStaticData
 import com.noisefit.receiver.service.ConnectionService
 import com.noisefit.session.SessionManager

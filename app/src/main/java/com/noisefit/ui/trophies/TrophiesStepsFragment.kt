@@ -5,7 +5,7 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.noisefit_commans.data.model.trophies.DailyItem
-import com.noisefit.databinding.FragmentTrophiesStepsBinding
+import com.noisefit.luna.databinding.FragmentTrophiesStepsBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit.ui.trophies.adapter.*
 import dagger.hilt.android.AndroidEntryPoint

@@ -3,7 +3,7 @@ package com.noisefit.ui.myDevice.warranty
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.RowMarketPlaceBinding
+import com.noisefit.luna.databinding.RowMarketPlaceBinding
 
 class WarrantyMarketAdapter(val listener: WarrantyMarketAction) :
     RecyclerView.Adapter<WarrantyMarketAdapter.ViewHolder>() {

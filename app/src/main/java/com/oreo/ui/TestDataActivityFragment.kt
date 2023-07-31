@@ -8,8 +8,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.RowTestStepsDataBinding
-import com.noisefit.databinding.TestOreoStepsBinding
+import com.noisefit.luna.databinding.RowTestStepsDataBinding
+import com.noisefit.luna.databinding.TestOreoStepsBinding
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.data.model.OreoStepsData

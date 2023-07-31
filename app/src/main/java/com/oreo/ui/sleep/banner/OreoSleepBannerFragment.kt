@@ -2,7 +2,7 @@ package com.oreo.ui.sleep.banner
 
 import android.os.Bundle
 import android.view.View
-import com.noisefit.databinding.FragmentOreoSleepBannerBinding
+import com.noisefit.luna.databinding.FragmentOreoSleepBannerBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.oreo.data.model.health.Nudges
 import dagger.hilt.android.AndroidEntryPoint

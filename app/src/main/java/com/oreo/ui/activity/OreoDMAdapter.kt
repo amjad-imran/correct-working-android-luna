@@ -3,8 +3,8 @@ package com.oreo.ui.activity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.R
-import com.noisefit.databinding.OLayoutDmgraphItemBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.OLayoutDmgraphItemBinding
 
 class OreoDMAdapter : RecyclerView.Adapter<OreoDMAdapter.ViewHolder>() {
     private var mDataSet = ArrayList<Int>()

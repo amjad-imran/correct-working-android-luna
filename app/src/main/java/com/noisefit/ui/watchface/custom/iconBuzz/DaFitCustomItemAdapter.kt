@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit_commans.data.model.CustomDaFitIcons
-import com.noisefit.databinding.ItemDaFitCustomLayoutBinding
+import com.noisefit.luna.databinding.ItemDaFitCustomLayoutBinding
 
 
 class DaFitCustomItemAdapter(val listener: DaFitCustomItemInteractionListener) :

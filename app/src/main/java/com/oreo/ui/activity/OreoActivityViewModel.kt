@@ -3,7 +3,7 @@ package com.oreo.ui.activity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.averageWithoutZero

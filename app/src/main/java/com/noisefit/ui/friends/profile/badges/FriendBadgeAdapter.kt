@@ -3,9 +3,9 @@ package com.noisefit.ui.friends.profile.badges
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.FriendBadge
-import com.noisefit.databinding.RowFriendsBadgesBinding
+import com.noisefit.luna.databinding.RowFriendsBadgesBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit.ui.trophies.TrophiesType
 import com.noisefit_commans.models.Units

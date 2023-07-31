@@ -8,7 +8,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.noisefit.databinding.BottomSheetRateNowBinding
+import com.noisefit.luna.databinding.BottomSheetRateNowBinding
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseBottomSheet
 import dagger.hilt.android.AndroidEntryPoint

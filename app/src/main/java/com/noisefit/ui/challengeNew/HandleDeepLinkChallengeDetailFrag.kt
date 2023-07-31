@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.noisefit_commans.data.model.challenge.ChallengeIds
-import com.noisefit.databinding.LayoutWatchfaceDeeplinkBinding
+import com.noisefit.luna.databinding.LayoutWatchfaceDeeplinkBinding
 import com.noisefit.ui.challengeNew.detail.ChallengeDetailsViewModel
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.getDeeplinkPathArg

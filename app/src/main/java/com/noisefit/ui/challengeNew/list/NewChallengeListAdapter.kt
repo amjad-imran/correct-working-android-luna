@@ -5,10 +5,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.noisefit.R
+import com.noisefit.luna.R
 
 import com.noisefit_commans.data.response.ChallengeModel
-import com.noisefit.databinding.RowNewChallengeBinding
+import com.noisefit.luna.databinding.RowNewChallengeBinding
 import com.noisefit.ui.common.*
 import com.noisefit_commans.ui.*
 import java.util.*

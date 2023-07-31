@@ -20,11 +20,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit.data.local.AppStaticData
-import com.noisefit.databinding.FragmentRyeexCustomiseWatchFaceBinding
+import com.noisefit.luna.databinding.FragmentRyeexCustomiseWatchFaceBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone

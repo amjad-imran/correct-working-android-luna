@@ -7,7 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.receiver.broadcastReceiver.StopFindMyPhoneBroadcast
 import com.noisefit.ui.SplashActivity
 

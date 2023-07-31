@@ -2,7 +2,7 @@ package com.oreo.ui.activity
 
 import android.os.Bundle
 import android.view.View
-import com.noisefit.databinding.FragmentOreoActivityBannerBinding
+import com.noisefit.luna.databinding.FragmentOreoActivityBannerBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.oreo.data.model.health.Nudges
 import dagger.hilt.android.AndroidEntryPoint

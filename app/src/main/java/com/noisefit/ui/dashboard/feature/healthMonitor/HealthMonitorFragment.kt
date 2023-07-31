@@ -2,8 +2,8 @@ package com.noisefit.ui.dashboard.feature.healthMonitor
 
 import android.os.Bundle
 import android.view.View
-import com.noisefit.R
-import com.noisefit.databinding.FragmentHealthMonitorBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentHealthMonitorBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseFragment

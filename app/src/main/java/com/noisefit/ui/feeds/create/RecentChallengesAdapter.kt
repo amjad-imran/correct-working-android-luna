@@ -3,8 +3,8 @@ package com.noisefit.ui.feeds.create
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.R
-import com.noisefit.databinding.RowRecentChallengeBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.RowRecentChallengeBinding
 import com.noisefit_commans.data.response.ChallengeModel
 import com.noisefit_commans.ui.loadImage
 

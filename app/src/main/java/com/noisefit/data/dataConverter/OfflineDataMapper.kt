@@ -3,7 +3,7 @@ package com.noisefit.data.dataConverter
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.Entry
 import com.noisefit.NoiseFitApplicationMain
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.local.db.implementation.HeartRateDataImpl
 import com.noisefit.data.local.db.implementation.StressDataImpl
 import com.noisefit_commans.data.model.CountCardData

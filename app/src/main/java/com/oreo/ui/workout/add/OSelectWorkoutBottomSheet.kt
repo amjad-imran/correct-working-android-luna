@@ -10,7 +10,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.noisefit.databinding.FragmentOSelectWorkoutBottomSheetBinding
+import com.noisefit.luna.databinding.FragmentOSelectWorkoutBottomSheetBinding
 import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.AlertTextBottomSheetArgs
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent

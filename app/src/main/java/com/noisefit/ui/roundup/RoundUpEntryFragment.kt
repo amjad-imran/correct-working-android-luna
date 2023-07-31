@@ -13,9 +13,9 @@ import androidx.fragment.app.viewModels
 import com.airbnb.lottie.LottieDrawable
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.RoundUpResponse
-import com.noisefit.databinding.FragmentRoundUpEntryBinding
+import com.noisefit.luna.databinding.FragmentRoundUpEntryBinding
 import com.noisefit.session.SessionManager
 import com.noisefit.ui.common.*
 import com.noisefit.util.ImageUtil
@@ -180,11 +180,7 @@ class RoundUpEntryFragment :
                     showAnimation(R.raw.anim_roundup_workout_found)
 
                     binding.lytSummaryContent.lytWorkoutImage.root.alpha = 0f
-                    binding.lytSummaryContent.lytWorkoutImage.ivWorkout.setImageResource(
-                        ImageUtil().getImageFromActivity(
-                            viewModel.response?.workout?.totalValue ?: ""
-                        )
-                    )
+
                     binding.lytSummaryContent.lytWorkoutImage.root.visible()
 
                     binding.lytSummaryContent.lytWorkoutImage.root.animate().apply {

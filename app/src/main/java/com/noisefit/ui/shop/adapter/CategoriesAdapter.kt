@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.noisefit_commans.data.model.ShopCategory
-import com.noisefit.databinding.RowProductCategoryBinding
+import com.noisefit.luna.databinding.RowProductCategoryBinding
 import com.noisefit_commans.ui.getCircleProgressDrawable
 
 class CategoriesAdapter(val listener: CategoryAction) :

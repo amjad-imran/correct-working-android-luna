@@ -18,10 +18,10 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
-import com.noisefit.databinding.FragmentFeedbackBinding
+import com.noisefit.luna.databinding.FragmentFeedbackBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible

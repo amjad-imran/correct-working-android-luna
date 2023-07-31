@@ -8,8 +8,8 @@ import android.content.Context.NOTIFICATION_SERVICE
 import android.graphics.BitmapFactory
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.noisefit.BuildConfig
-import com.noisefit.R
+import com.noisefit.luna.BuildConfig
+import com.noisefit.luna.R
 import com.noisefit.data.local.AppStaticData
 import com.noisefit.util.notif.NotificationEventsClass.APP_UPDATE_NOTIFICATION_KEY
 import com.noisefit.util.notif.NotificationEventsClass.FIND_PHONE_NOTIFICATION_KEY

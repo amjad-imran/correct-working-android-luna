@@ -5,7 +5,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.RowWorldClockBinding
+import com.noisefit.luna.databinding.RowWorldClockBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit.ui.common.utils.ItemMoveCallbackListener
 import com.noisefit_commans.ui.visible

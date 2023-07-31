@@ -12,8 +12,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.noisefit.R
-import com.noisefit.databinding.FragmentJoinNoisefitBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentJoinNoisefitBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible

@@ -11,7 +11,7 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.github.mikephil.charting.utils.Utils
 import com.noisefit.NoiseFitApplicationMain
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.MarkerEntry
 import com.noisefit_commans.data.model.StressType
 import com.noisefit.ui.dashboard.graphs.steps.GraphInterval

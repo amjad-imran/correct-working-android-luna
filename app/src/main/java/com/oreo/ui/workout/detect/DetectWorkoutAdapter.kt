@@ -3,7 +3,7 @@ package com.oreo.ui.workout.detect
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.OreoItemDetectWorkoutListBinding
+import com.noisefit.luna.databinding.OreoItemDetectWorkoutListBinding
 
 
 class DetectWorkoutAdapter(val detectWorkoutListener: DetectWorkoutListener) :

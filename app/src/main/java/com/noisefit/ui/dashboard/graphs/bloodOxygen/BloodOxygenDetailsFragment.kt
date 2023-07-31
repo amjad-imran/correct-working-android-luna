@@ -13,9 +13,9 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.history.BoHistory
-import com.noisefit.databinding.FragmentBloodOxygenDetailsBinding
+import com.noisefit.luna.databinding.FragmentBloodOxygenDetailsBinding
 import com.noisefit.ui.common.*
 import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity

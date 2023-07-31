@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.LayoutSelectWorkoutItemBinding
+import com.noisefit.luna.databinding.LayoutSelectWorkoutItemBinding
 import com.oreo.data.model.OWorkoutListModal
 
 class OSelectWorkoutAdapter(val oSelectWorkoutInteraction: OSelectWorkoutInteraction) :

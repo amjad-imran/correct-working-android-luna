@@ -10,7 +10,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.noisefit.data.local.AppStaticData
 import com.noisefit_commans.data.model.WatchFaceWidgets
-import com.noisefit.databinding.BottomSheetWidgetSelectionBinding
+import com.noisefit.luna.databinding.BottomSheetWidgetSelectionBinding
 import com.noisefit_commans.data.enums.GridType
 import com.noisefit_commans.ui.BaseBottomSheet
 

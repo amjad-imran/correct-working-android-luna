@@ -6,9 +6,9 @@ import android.view.View
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.trophies.TrophyBadge
-import com.noisefit.databinding.FragmentMyProfileBinding
+import com.noisefit.luna.databinding.FragmentMyProfileBinding
 import com.noisefit.ui.common.*
 import com.noisefit.ui.onboarding.OnBoardActivity
 import com.noisefit.ui.onboarding.onboardProfile.GuestProfileSetupActivity

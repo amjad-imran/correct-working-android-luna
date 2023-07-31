@@ -33,9 +33,9 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.model.PostBackground
-import com.noisefit.databinding.FragmentCreatePostBinding
+import com.noisefit.luna.databinding.FragmentCreatePostBinding
 import com.noisefit.ui.common.PostEditText
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast

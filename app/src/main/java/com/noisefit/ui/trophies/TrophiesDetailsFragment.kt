@@ -9,9 +9,9 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.core.os.HandlerCompat
 import androidx.fragment.app.activityViewModels
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.trophies.DailyItem
-import com.noisefit.databinding.FragmentTrophiesDetailsBinding
+import com.noisefit.luna.databinding.FragmentTrophiesDetailsBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone

@@ -3,7 +3,7 @@ package com.noisefit.ui.dashboard.feature.sportSelection
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.RowSportSelectionBinding
+import com.noisefit.luna.databinding.RowSportSelectionBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.noisefit.util.ImageUtil
@@ -31,7 +31,6 @@ class SportSelectionAdapter(private val action: SportSelectionListener) :
         fun bind(sport: SportsModeList.SportsMode) {
             binding.tvName.text = sport.name?.replace("_", " ")
 
-            binding.imageView8.setImageResource(ImageUtil().getImageFromActivity(sport.name))
             if (mEditMode) {
                 if (sport.remove) {
                     binding.ivRemove.visible()

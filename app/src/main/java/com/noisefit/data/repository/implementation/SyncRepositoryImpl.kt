@@ -1,8 +1,8 @@
 package com.noisefit.data.repository.implementation
 
 import com.google.gson.Gson
-import com.noisefit.BuildConfig.BASE_URL
-import com.noisefit.BuildConfig.BASE_URL_NEW
+import com.noisefit.luna.BuildConfig.BASE_URL
+import com.noisefit.luna.BuildConfig.BASE_URL_NEW
 import com.noisefit.data.dataConverter.OfflineDataMapper
 import com.noisefit.data.dataConverter.OnlineDataMapper
 import com.noisefit.data.local.db.CacheResult

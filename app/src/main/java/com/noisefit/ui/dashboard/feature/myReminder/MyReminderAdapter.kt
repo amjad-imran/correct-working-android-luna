@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.ItemMyReminderBinding
+import com.noisefit.luna.databinding.ItemMyReminderBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible

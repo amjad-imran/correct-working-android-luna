@@ -20,10 +20,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 
-import com.noisefit.databinding.FragmentAddContactListBinding
+import com.noisefit.luna.databinding.FragmentAddContactListBinding
 import com.noisefit.ui.common.*
 import com.noisefit.ui.web.WebViewActivity
 import com.noisefit_commans.databinding.LayoutCustomAlertBinding

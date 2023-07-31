@@ -5,8 +5,8 @@ import android.view.View
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.noisefit.R
-import com.noisefit.databinding.FragmentDetectWorkoutListBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentDetectWorkoutListBinding
 import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY
 import com.noisefit_commans.ui.BaseFragment
 import com.oreo.ui.activity.OreoDMAdapter

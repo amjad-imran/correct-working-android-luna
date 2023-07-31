@@ -4,9 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit.data.model.PredictionHistoryData
-import com.noisefit.databinding.ItemPredictionHistoryBinding
+import com.noisefit.luna.databinding.ItemPredictionHistoryBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible

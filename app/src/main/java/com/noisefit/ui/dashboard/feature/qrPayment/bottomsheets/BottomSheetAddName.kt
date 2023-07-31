@@ -15,8 +15,8 @@ import com.huawei.hms.hmsscankit.ScanUtil
 import com.huawei.hms.hmsscankit.WriterException
 import com.huawei.hms.ml.scan.HmsBuildBitmapOption
 import com.huawei.hms.ml.scan.HmsScan
-import com.noisefit.R
-import com.noisefit.databinding.BottomSheetQrAddNameBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.BottomSheetQrAddNameBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.models.UPIQRCode

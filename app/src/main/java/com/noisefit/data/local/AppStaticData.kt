@@ -2,8 +2,8 @@ package com.noisefit.data.local
 
 import android.graphics.Color
 import com.google.gson.Gson
-import com.noisefit.BuildConfig
-import com.noisefit.R
+import com.noisefit.luna.BuildConfig
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.CustomDaFitIcons
 import com.noisefit_commans.data.model.DistanceKmMiMapper
 import com.noisefit_commans.data.model.NotificationApp

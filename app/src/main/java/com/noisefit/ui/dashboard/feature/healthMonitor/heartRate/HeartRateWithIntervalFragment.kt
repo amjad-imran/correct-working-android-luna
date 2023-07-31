@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import com.noisefit.R
-import com.noisefit.databinding.FragmentAutoSpo2Binding
-import com.noisefit.databinding.FragmentHeartRateWithIntervalBinding
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentAutoSpo2Binding
+import com.noisefit.luna.databinding.FragmentHeartRateWithIntervalBinding
 import com.noisefit.ui.common.*
 import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
 import com.noisefit.ui.dashboard.feature.spo2.AutoSpo2FragmentDirections

@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.databinding.RowQrListBinding
+import com.noisefit.luna.databinding.RowQrListBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit.ui.common.utils.ItemMoveCallbackListener
 import com.noisefit_commans.ui.visible

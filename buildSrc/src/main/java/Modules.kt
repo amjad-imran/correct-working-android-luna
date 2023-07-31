@@ -7,15 +7,8 @@ object Modules {
     const val customProgress=":customprogress"
 
 
-    const val noisefit_nav_plus = ":noisefit_nav_plus"
-    const val noisefit_colorfit2 = ":noisefit_colorfit2"
-    const val noisefit_colorfit_pro = ":noisefit_colorfit_pro"
-    const val noisefit_evolve2 = ":noisefit_evolve2"
     const val noisefit_zh_sdk = ":noisefit_zh_sdk"
-    const val noisefit_hybrid = ":noisefit_hybrid"
-    const val noisefit_ryeex_sdk = ":noisefit_ryeex_sdk"
 
-    const val noisefit_libraries = ":noisefit_libraries"
     const val noisefit_libraries_zh = ":noisefit_libraries_zh"
 
 

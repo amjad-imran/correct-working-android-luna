@@ -10,10 +10,10 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.noisefit.BuildConfig
-import com.noisefit.R
+import com.noisefit.luna.BuildConfig
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.NotificationApp
-import com.noisefit.databinding.FragmentManageAppsBinding
+import com.noisefit.luna.databinding.FragmentManageAppsBinding
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType

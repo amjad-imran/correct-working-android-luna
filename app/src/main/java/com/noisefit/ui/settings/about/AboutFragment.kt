@@ -1,9 +1,9 @@
 package com.noisefit.ui.settings.about
 
 import android.annotation.SuppressLint
-import com.noisefit.BuildConfig
-import com.noisefit.R
-import com.noisefit.databinding.FragmentAboutBinding
+import com.noisefit.luna.BuildConfig
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentAboutBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit.ui.web.WebViewActivity
 import com.noisefit_commans.utils.AppConstants

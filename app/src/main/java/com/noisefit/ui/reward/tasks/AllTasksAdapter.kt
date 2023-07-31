@@ -4,9 +4,9 @@ import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.R
+import com.noisefit.luna.R
 import com.noisefit_commans.data.model.TaskList
-import com.noisefit.databinding.ItemAlltaskBinding
+import com.noisefit.luna.databinding.ItemAlltaskBinding
 import com.noisefit_commans.models.TaskEnums
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.utils.AppConstants
