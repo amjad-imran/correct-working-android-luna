@@ -1,0 +1,34 @@
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/view11"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="36dp"
+            android:layout_height="20dp"
+            android:background="@drawable/back_modal_new_black" />
+
+        <TextView
+            style="@style/Tinny"
+            android:id="@+id/tvTime"
+            app:layout_constraintBottom_toBottomOf="@id/view11"
+            app:layout_constraintEnd_toEndOf="@id/view11"
+            app:layout_constraintStart_toStartOf="@id/view11"
+            app:layout_constraintTop_toTopOf="@id/view11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="center"
+            tools:text="23:11"
+            android:textColor="@color/white" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

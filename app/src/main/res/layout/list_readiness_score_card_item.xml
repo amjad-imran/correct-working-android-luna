@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/ModalStyleReadiness"
+    android:layout_width="match_parent"
+    android:layout_marginTop="24dp"
+    android:layout_height="wrap_content">
+
+
+
+    <TextView
+        android:id="@+id/textView"
+        style="@style/H5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dimen_16dp"
+        android:layout_marginTop="@dimen/dimen_16dp"
+        android:singleLine="true"
+        android:text="@string/text_readiness_score_o"
+        app:layout_constraintEnd_toStartOf="@+id/imageView14"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvEmpty"
+        style="@style/H2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_8dp"
+        android:text="--"
+        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <TextView
+        android:id="@+id/tvAvgThisWeek"
+        style="@style/Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_4dp"
+        android:layout_marginBottom="@dimen/dimen_16dp"
+        android:text="Avg this week"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tvEmpty"
+        app:layout_constraintTop_toBottomOf="@+id/tvEmpty" />
+
+    <ImageView
+        android:id="@+id/imageView14"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="@dimen/dimen_16dp"
+        android:adjustViewBounds="true"
+        android:alpha="0.5"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_arrow_right_duotone"
+        app:layout_constraintBottom_toBottomOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView" />
+
+    <com.oreo.ui.custom.LineChart
+        android:id="@+id/lineChart"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_80dp"
+        android:layout_margin="@dimen/dimen_16dp"
+        android:visibility="gone"
+        app:bgBottomColor="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:bgColor="@android:color/transparent"
+        app:bgLeftColor="@android:color/transparent"
+        app:bgRightColor="@android:color/transparent"
+        app:bgTopColor="@android:color/transparent"
+        app:bottomWith="5dp"
+        app:canScroll="false"
+        app:centerLineColor="#80ffffff"
+        app:centerLineWidth="5dp"
+        app:chartLineColor="#ff7525"
+        app:chartLineWidth="3dp"
+        app:fillColorEnd="#00ff7525"
+        app:fillColorStart="#80ff7525"
+        app:gridColor="#80FFFFFF"
+        app:hCount="6"
+        app:innerCircleColor="#ffffff"
+        app:innerCircleRadius="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:leftWith="0dp"
+        app:rightWith="10dp"
+        app:scaleColor="#ff000000"
+
+        app:scaleLenth="4dp"
+        app:scaleNodeColor="#FFFFFF"
+        app:scaleNodeRadius="6dp"
+        app:showExtremeLine="false"
+        app:showGrid="true"
+        app:showSelectedIndicator="false"
+        app:showXAxis="false"
+        app:startFromRight="true"
+        app:topWith="0dp"
+        app:vCount="2"
+        app:xLineColor="#80FFFFFF"
+        app:xMax="100"
+        app:xMin="0"
+        app:xTextColor="#FFFFFF"
+        app:xTextSize="16sp" />
+
+
+    <TextView
+        android:id="@+id/tvSleepScore"
+        style="@style/H2"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_16dp"
+        app:layout_constraintStart_toStartOf="@+id/lineChart"
+        app:layout_constraintTop_toBottomOf="@+id/lineChart" />
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/tvDaysAvg"
+        style="@style/Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_4dp"
+        android:layout_marginBottom="@dimen/dimen_16dp"
+        android:text="7 day avg"
+        android:textColor="@color/white_50"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tvSleepScore"
+        app:layout_constraintTop_toBottomOf="@+id/tvSleepScore" />
+
+
+    <ImageView
+        android:visibility="gone"
+        android:id="@+id/sleepTrendImv"
+        android:layout_width="@dimen/dimen_20dp"
+        android:layout_height="@dimen/dimen_20dp"
+        android:layout_marginEnd="@dimen/dimen_4dp"
+        android:src="@drawable/ic_trend_up"
+        app:layout_constraintBottom_toBottomOf="@+id/sleepTrendValue"
+        app:layout_constraintEnd_toStartOf="@+id/sleepTrendValue"
+        app:layout_constraintTop_toTopOf="@+id/sleepTrendValue" />
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/sleepTrendValue"
+        style="@style/Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dimen_4dp"
+        android:textColor="@color/steps_arc"
+        app:layout_constraintBottom_toBottomOf="@+id/tvSleepFromLast"
+        app:layout_constraintEnd_toStartOf="@+id/tvSleepFromLast"
+        app:layout_constraintTop_toTopOf="@+id/tvSleepFromLast" />
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/tvSleepFromLast"
+        style="@style/Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dimen_16dp"
+        android:text="@string/text_from_last_week"
+        android:textColor="@color/white_48"
+        app:layout_constraintBottom_toBottomOf="@+id/tvDaysAvg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvDaysAvg" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

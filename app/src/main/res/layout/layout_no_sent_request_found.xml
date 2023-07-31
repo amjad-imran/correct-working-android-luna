@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageViewNoChallenge"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:padding="6dp"
+            android:src="@drawable/ic_friends_navigation"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.4"
+            android:contentDescription="@string/text_no_upcoming_challenges_title" />
+
+        <TextView
+            android:id="@+id/textViewTitle"
+            style="@style/H5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/side_margin"
+            android:text="@string/text_no_request_sent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageViewNoChallenge" />
+
+        <TextView
+            android:id="@+id/textViewMsg"
+            style="@style/Small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:paddingStart="72dp"
+            android:paddingEnd="72dp"
+            android:textColor="@color/white_80"
+            android:lineSpacingExtra="6sp"
+            android:text="@string/text_click_on_add_friend"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textViewTitle"
+            />
+
+
+        <RelativeLayout
+            android:id="@+id/lytJoin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:gravity="center"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewMsg"
+            app:layout_constraintVertical_bias="0.63"
+            >
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/vJoin"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:scaleType="fitXY"
+                app:lottie_autoPlay="true"
+                app:lottie_repeatCount="1" />
+
+            <TextView
+                android:id="@+id/bJoinChallenge"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:text="@string/text_add_friends"
+                android:textAllCaps="false"
+                app:backgroundTint="@null"
+                style="@style/PrimaryButtonStyle" />
+        </RelativeLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

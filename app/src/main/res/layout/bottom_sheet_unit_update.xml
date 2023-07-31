@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_12dp"
+            android:layout_marginTop="@dimen/dimen_12dp"
+            android:layout_marginEnd="@dimen/dimen_12dp"
+            android:layout_marginBottom="@dimen/dimen_12dp"
+            android:paddingBottom="@dimen/dimen_24dp">
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider"
+                android:layout_width="@dimen/dimen_80dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="@dimen/dimen_4dp"
+                android:background="#29000000"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvNameLabel"
+                style="@style/H4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_24dp"
+                android:text="@string/unit"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+            <View
+                android:id="@+id/backView"
+                style="@style/ModalStyleDialog"
+                android:layout_width="0dp"
+                android:layout_height="268dp"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginTop="@dimen/dimen_24dp"
+                android:layout_marginEnd="@dimen/side_margin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvNameLabel" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvHeight"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/recycler_height_spinner"
+                android:background="@android:color/transparent"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:layout_constraintBottom_toBottomOf="@+id/backView"
+                app:layout_constraintEnd_toEndOf="@+id/backView"
+                app:layout_constraintStart_toStartOf="@+id/backView"
+                app:layout_constraintTop_toTopOf="@+id/backView"
+                tools:listitem="@layout/row_scroll_value_selector" />
+
+            <include
+                android:id="@+id/include5"
+                layout="@layout/layout_divider_modal_color"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginEnd="@dimen/side_margin"
+                app:layout_constraintBottom_toTopOf="@+id/include4"
+                app:layout_constraintEnd_toEndOf="@+id/backView"
+                app:layout_constraintStart_toStartOf="@+id/backView"
+                app:layout_constraintTop_toBottomOf="@+id/backView"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+
+            <include
+                android:id="@+id/include4"
+                layout="@layout/layout_divider_modal_color"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginTop="56dp"
+                android:layout_marginEnd="@dimen/side_margin"
+                app:layout_constraintBottom_toTopOf="@+id/backView"
+                app:layout_constraintEnd_toEndOf="@+id/backView"
+                app:layout_constraintStart_toStartOf="@+id/backView"
+                app:layout_constraintTop_toBottomOf="@+id/include5" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCancel"
+                style="@style/SecondaryButtonStyle"
+                android:layout_width="0dp"
+                android:enabled="true"
+                android:text="@string/text_cancel"
+                android:textAllCaps="false"
+                app:backgroundTint="@null"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginTop="@dimen/dimen_40dp"
+                app:layout_constraintEnd_toStartOf="@+id/btnSave"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintTop_toBottomOf="@+id/rvHeight"
+                app:layout_constraintStart_toStartOf="parent"
+            />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSave"
+                style="@style/PrimaryButtonStyle"
+                android:layout_width="0dp"
+                android:enabled="true"
+                android:text="@string/text_save"
+                android:textAllCaps="false"
+                app:layout_constraintTop_toBottomOf="@+id/rvHeight"
+                app:backgroundTint="@null"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginTop="@dimen/dimen_40dp"
+                android:layout_marginEnd="@dimen/side_margin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/btnCancel"
+             />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+</layout>

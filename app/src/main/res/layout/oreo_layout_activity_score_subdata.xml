@@ -1,0 +1,80 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/lytScore"
+            layout="@layout/oreo_layout_activity_score"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/lytSec1"
+            layout="@layout/oreo_layout_sleep_score_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/lytSec2"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lytScore" />
+
+        <include
+            android:id="@+id/lytSec2"
+            layout="@layout/oreo_layout_sleep_score_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/lytSec1"
+            app:layout_constraintTop_toBottomOf="@+id/lytScore" />
+
+        <include
+            android:id="@+id/lytSec3"
+            layout="@layout/oreo_layout_sleep_score_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/lytSec4"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lytSec2" />
+
+        <include
+            android:id="@+id/lytSec4"
+            layout="@layout/oreo_layout_sleep_score_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toEndOf="@+id/lytSec3"
+            app:layout_constraintTop_toBottomOf="@id/lytSec2" />
+<!--        <View-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="112dp"-->
+<!--            android:layout_marginTop="32dp"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/lytSec4"-->
+<!--            android:id="@+id/viewBanner"/>-->
+
+        <include
+            android:id="@+id/lytAScoreBanner"
+            layout="@layout/oreo_layout_score_banner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lytSec4" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

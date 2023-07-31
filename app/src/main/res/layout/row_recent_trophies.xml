@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:id="@+id/parentContainer"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:id="@+id/ivTrophyImage"
+            android:layout_width="wrap_content"
+            android:layout_height="90dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_step_streaks_dimmed" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvType"
+            style="@style/Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_4dp"
+            android:padding="@dimen/dimen_4dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/ivTrophyImage"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/ivTrophyImage"
+            tools:text="Type" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvDaysAgo"
+            style="@style/Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_marginBottom="@dimen/dimen_4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/tvType"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="@id/tvType"
+            app:layout_constraintTop_toBottomOf="@id/tvType"
+            tools:text="7 days ago" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

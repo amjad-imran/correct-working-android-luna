@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.dashboard.feature.stock.StocksFragment">
+
+
+        <include
+            android:id="@+id/lytToolbarWithDetails"
+            layout="@layout/layout_toolbar_with_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <include
+            android:id="@+id/lytFeatureTile"
+            layout="@layout/row_feature_status_tile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lytToolbarWithDetails" />
+
+        <TextView
+            android:id="@+id/tvStartTimeText"
+            style="@style/H5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_24dp"
+            android:layout_marginTop="@dimen/dimen_16dp"
+            android:text="@string/text_start_time"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lytFeatureTile"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tvStartTimeData"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dimen_24dp"
+            android:text="@string/text__"
+            android:textColor="@color/text_accent_color"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/tvStartTimeText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvStartTimeText"
+            tools:text="10:00pm"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tvEndTimeText"
+            style="@style/H5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_24dp"
+            android:layout_marginTop="@dimen/dimen_16dp"
+            android:text="@string/text_end_time"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvStartTimeText"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tvEndTimeData"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dimen_24dp"
+            android:text="@string/text__"
+            android:textColor="@color/text_accent_color"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/tvEndTimeText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvEndTimeText"
+            tools:text="10:00pm"
+            tools:visibility="visible" />
+
+
+        <include
+            android:id="@+id/progressBar"
+            layout="@layout/default_loader"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

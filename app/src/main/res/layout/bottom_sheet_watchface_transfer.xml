@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:background="@drawable/top_rounded_10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/dimen_24dp">
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider"
+                android:layout_width="@dimen/dimen_80dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="@dimen/dimen_4dp"
+                android:background="#29000000"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/ivWatchImage"
+                android:layout_width="50dp"
+                android:layout_height="58dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="32dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+            <TextView
+                android:id="@+id/tvWFTitle"
+                style="@style/Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:fontFamily="@font/gilroy_medium"
+                android:textColor="#ccffffff"
+                app:layout_constraintBottom_toTopOf="@+id/tvPercent"
+                app:layout_constraintStart_toEndOf="@+id/ivWatchImage"
+                app:layout_constraintTop_toTopOf="@+id/ivWatchImage"
+                app:layout_constraintVertical_chainStyle="spread_inside"
+                tools:text="Watch face name" />
+
+            <TextView
+                android:id="@+id/tvPercent"
+                style="@style/Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:fontFamily="@font/gilroy_medium"
+                android:textColor="#ca99ff"
+                app:layout_constraintBottom_toTopOf="@+id/layoutProgress"
+                app:layout_constraintStart_toEndOf="@+id/ivWatchImage"
+                app:layout_constraintTop_toBottomOf="@+id/tvWFTitle"
+                tools:text="54%" />
+
+            <include
+                android:id="@+id/layoutProgress"
+                layout="@layout/layout_goals_progress"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/ivWatchImage"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ivWatchImage"
+                app:layout_constraintTop_toBottomOf="@+id/tvPercent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+</layout>

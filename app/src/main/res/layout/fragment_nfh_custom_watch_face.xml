@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.noisefit_commans.data.enums.CustomWatchFaceViewState" />
+
+        <variable
+            name="viewModel"
+            type="com.noisefit.ui.watchface.custom.NfhCustomWatchFaceViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.watchface.custom.NfhCustomWatchFaceFragment">
+
+        <RelativeLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+            <ImageButton
+                android:id="@+id/bBack"
+                style="@style/ToolbarBackButton"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/side_margin"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/text_back_button" />
+
+            <TextView
+                android:id="@+id/tvToolbarText"
+                style="@style/H4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/dimen_8dp"
+                android:layout_toEndOf="@id/bBack"
+                android:text="@string/text_customise_watchface"
+                android:textAllCaps="true" />
+
+            <TextView
+                android:id="@+id/bSave"
+                style="@style/H5"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:gravity="center"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/text_save" />
+        </RelativeLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/stepsSliderTabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@android:color/transparent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tabBackground="@drawable/image_tab_selector"
+                    app:tabGravity="center"
+                    app:tabIndicatorHeight="0dp" />
+
+                <TextView
+                    android:id="@+id/textView45"
+                    style="@style/H6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/text_customisation"
+                    android:textColor="@color/very_light_pink"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/stepsSliderTabs" />
+
+
+                <FrameLayout
+                    android:id="@+id/flBackground"
+                    android:layout_width="270dp"
+                    android:layout_height="270dp"
+                    android:layout_marginTop="24dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView45">
+
+                    <ImageView
+                        android:id="@+id/ivBackground"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/black" />
+
+                    <ImageView
+                        android:id="@+id/ivMain"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </FrameLayout>
+
+                <ImageView
+                    android:id="@+id/ivColorPicker"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/ic_color_pallet"
+                    android:visibility="@{viewModel.viewState == CustomWatchFaceViewState.WALLPAPER ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintEnd_toStartOf="@+id/ivWallpaper"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/flBackground" />
+
+
+                <TextView
+                    style="@style/H6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:alpha="0.7"
+                    android:text="Color"
+                    android:textColor="@color/very_light_pink"
+                    android:visibility="@{viewModel.viewState == CustomWatchFaceViewState.WALLPAPER ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintEnd_toEndOf="@+id/ivColorPicker"
+                    app:layout_constraintStart_toStartOf="@+id/ivColorPicker"
+                    app:layout_constraintTop_toBottomOf="@+id/ivColorPicker" />
+
+                <TextView
+                    style="@style/H6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:alpha="0.7"
+                    android:text="Wallpaper"
+                    android:textColor="@color/very_light_pink"
+                    android:visibility="@{viewModel.viewState == CustomWatchFaceViewState.WALLPAPER ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintEnd_toEndOf="@+id/ivWallpaper"
+                    app:layout_constraintStart_toStartOf="@+id/ivWallpaper"
+                    app:layout_constraintTop_toBottomOf="@+id/ivWallpaper" />
+
+                <ImageView
+                    android:id="@+id/ivWallpaper"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_wall"
+                    android:visibility="@{viewModel.viewState == CustomWatchFaceViewState.WALLPAPER ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="@+id/ivColorPicker"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/ivColorPicker"
+                    app:layout_constraintTop_toTopOf="@+id/ivColorPicker" />
+
+                <TextView
+                    android:id="@+id/textView46"
+                    style="@style/Small"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:alpha="0.7"
+                    android:gravity="center"
+                    android:text="@string/text_click_complications_below"
+                    android:textColor="@color/very_light_pink"
+                    android:visibility="@{viewModel.viewState == CustomWatchFaceViewState.GRID ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintEnd_toEndOf="@+id/flBackground"
+                    app:layout_constraintStart_toStartOf="@+id/flBackground"
+                    app:layout_constraintTop_toBottomOf="@+id/flBackground" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvGridOptions"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="24dp"
+                    android:visibility="@{viewModel.viewState == CustomWatchFaceViewState.GRID ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView46" />
+
+                <TextView
+                    android:id="@+id/bReset"
+                    style="@style/H6"
+                    android:layout_width="60dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/back_reset_button"
+                    android:gravity="center"
+                    android:text="@string/text_reset"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/black"
+                    android:visibility="@{viewModel.viewState == CustomWatchFaceViewState.GRID ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rvGridOptions" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:padding="@dimen/dimen_16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0">
+
+            <com.google.android.material.button.MaterialButton
+                style="@style/SecondaryButtonStyle"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:onClick="@{viewModel::onBackClicked}"
+                android:text="@string/text_back"
+                android:visibility="@{viewModel.viewState == CustomWatchFaceViewState.WALLPAPER ? View.INVISIBLE : View.VISIBLE}"
+                app:backgroundTint="@null" />
+
+            <com.google.android.material.button.MaterialButton
+                style="@style/PrimaryButtonStyle"
+                android:layout_width="0dp"
+                android:layout_marginStart="24dp"
+                android:layout_weight="1"
+                android:onClick="@{viewModel::onNextClicked}"
+                android:text="@string/text_next"
+                android:visibility="@{viewModel.viewState == CustomWatchFaceViewState.WALLPAPER ? View.VISIBLE : View.INVISIBLE}"
+                app:backgroundTint="@null" />
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

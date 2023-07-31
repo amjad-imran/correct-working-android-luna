@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.watchface.WatchFaceFragment">
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/nestedScrollVIew"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvRecent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvNewlyAdded"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/containerCustomWatchFace"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginBottom="16dp"
+                        android:visibility="gone"
+                        tools:visibility="visible">
+
+                        <ImageView
+                            android:id="@+id/ivWatchFace"
+                            android:layout_width="128dp"
+                            android:layout_height="148dp"
+                            android:layout_marginStart="@dimen/side_margin"
+                            android:layout_marginBottom="24dp"
+                            android:src="@drawable/rectangle_create_your_own_"
+                            app:layout_constraintBottom_toTopOf="@+id/view5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tvWatchFaceName"
+                            style="@style/H4"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/side_margin"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginEnd="@dimen/side_margin"
+                            android:text="@string/text_custom_watchface"
+                            android:textColor="@android:color/white"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/ivWatchFace"
+                            app:layout_constraintTop_toTopOf="@+id/ivWatchFace"
+                            app:layout_constraintVertical_chainStyle="packed" />
+
+
+                        <TextView
+                            android:id="@+id/tvAbout"
+                            style="@style/Small"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_marginStart="@dimen/side_margin"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="@dimen/side_margin"
+                            android:layout_marginBottom="16dp"
+                            android:alpha="0.6"
+                            android:lineSpacingExtra="2sp"
+                            android:text="@string/text_design_own_watchface"
+                            app:layout_constraintBottom_toTopOf="@+id/bContinue"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/ivWatchFace"
+                            app:layout_constraintTop_toBottomOf="@+id/tvWatchFaceName" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/bContinue"
+                            style="@style/PrimaryButtonStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:layout_marginStart="@dimen/side_margin"
+                            android:paddingStart="20dp"
+                            android:paddingTop="0dp"
+                            android:paddingEnd="20dp"
+                            android:textSize="12sp"
+                            android:paddingBottom="0dp"
+                            android:text="@string/text_lets_go"
+                            app:backgroundTint="@null"
+                            app:layout_constraintBottom_toBottomOf="@+id/ivWatchFace"
+                            app:layout_constraintStart_toEndOf="@+id/ivWatchFace" />
+
+
+                        <include
+                            android:id="@+id/view5"
+                            layout="@layout/layout_divider"
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvTopDownloaded"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvCatList"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+            </androidx.core.widget.NestedScrollView>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+        <include
+            android:id="@+id/progressBar"
+            layout="@layout/default_loader"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

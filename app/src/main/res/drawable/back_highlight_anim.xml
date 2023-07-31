@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<transition android:id="@+id/selected"
+    android:oneshot="true"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/back_modal_new"/>
+    <item android:drawable="@drawable/back_modal_10_highlighted"/>
+
+</transition>

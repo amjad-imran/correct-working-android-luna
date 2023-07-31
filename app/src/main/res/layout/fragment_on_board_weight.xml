@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <ImageButton
+            android:id="@+id/backBtn"
+            style="@style/ToolbarBackButton"
+            android:layout_margin="@dimen/side_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/lytOnBoardProgress"
+            layout="@layout/layout_onboard_progress"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            app:layout_constraintBottom_toBottomOf="@+id/backBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/backBtn" />
+
+        <TextView
+            android:id="@+id/textView"
+            style="@style/H2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="@dimen/dimen_96dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:text="@string/text_how_much_do_you_weigh"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/backView"
+            style="@style/ModalStyleNew"
+            android:layout_width="match_parent"
+            android:layout_height="268dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:layout_marginTop="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnMetric" />
+
+
+        <TextView
+            android:id="@+id/btnMetric"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/rounded_corner"
+            android:padding="@dimen/dimen_16dp"
+            android:layout_marginEnd="@dimen/dimen_8dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:text="@string/text_metric_kg"
+            android:gravity="center"
+            app:layout_constraintEnd_toStartOf="@+id/btnImperial"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <TextView
+            android:id="@+id/btnImperial"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_8dp"
+            android:layout_marginTop="32dp"
+            android:padding="@dimen/dimen_16dp"
+            android:text="@string/text_imperial_lbs"
+            android:layout_marginEnd="@dimen/side_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="center"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btnMetric"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <include
+            android:id="@+id/include5"
+            layout="@layout/layout_divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            app:layout_constraintBottom_toTopOf="@+id/include4"
+            app:layout_constraintEnd_toEndOf="@+id/backView"
+            app:layout_constraintStart_toStartOf="@+id/backView"
+            app:layout_constraintTop_toBottomOf="@+id/backView"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+
+        <include
+            android:id="@+id/include4"
+            layout="@layout/layout_divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="56dp"
+            android:layout_marginEnd="24dp"
+            app:layout_constraintBottom_toTopOf="@+id/backView"
+            app:layout_constraintEnd_toEndOf="@+id/backView"
+            app:layout_constraintStart_toStartOf="@+id/backView"
+            app:layout_constraintTop_toBottomOf="@+id/include5" />
+
+        <com.noisefit_commans.utils.WheelPicker
+            android:id="@+id/wheelPicker"
+            style="@style/H4"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:textColor="@color/white_80"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/backView"
+            app:layout_constraintEnd_toEndOf="@+id/backView"
+            app:layout_constraintStart_toStartOf="@+id/backView"
+            app:layout_constraintTop_toTopOf="@+id/backView"
+            app:wheel_atmospheric="true"
+            app:wheel_drawableSize="18dp"
+            app:wheel_item_height="44dp" />
+
+
+        <Button
+            android:id="@+id/btnContinue"
+            style="@style/PrimaryButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:layout_marginBottom="@dimen/bottom_margin"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:text="@string/text_continue"
+            app:backgroundTint="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+<!--    <com.google.android.material.card.MaterialCardView-->
+<!--        android:id="@+id/materialCardView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="80dp"-->
+<!--        android:layout_marginStart="@dimen/side_margin"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:layout_marginEnd="@dimen/side_margin"-->
+<!--        app:cardBackgroundColor="@color/modal_color"-->
+<!--        app:cardCornerRadius="24dp"-->
+<!--        app:cardElevation="0dp">-->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            style="@style/ModalStyleNew"
+            android:layout_height="80dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/side_margin">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/ivFriendProfile"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="@dimen/side_margin"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView"
+                app:srcCompat="@drawable/ic_default_profile_image"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tvFriendName"
+                style="@style/H6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                app:layout_constraintEnd_toStartOf="@+id/tvDecline"
+                app:layout_constraintStart_toEndOf="@id/ivFriendProfile"
+                app:layout_constraintTop_toTopOf="@id/ivFriendProfile"
+                tools:text="Ayush Tiwari" />
+
+            <TextView
+                android:id="@+id/tvInterestName"
+                style="@style/Small"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:lineSpacingExtra="4sp"
+                android:singleLine="true"
+                android:textColor="@color/white_48"
+                app:layout_constraintBottom_toBottomOf="@id/ivFriendProfile"
+                app:layout_constraintEnd_toStartOf="@+id/tvDecline"
+                app:layout_constraintStart_toEndOf="@id/ivFriendProfile"
+                app:layout_constraintTop_toBottomOf="@+id/tvFriendName"
+                tools:text="7 day step competition" />
+
+            <TextView
+                android:id="@+id/tvDecline"
+                style="@style/H6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginEnd="@dimen/side_margin"
+                android:paddingTop="10dp"
+                android:textSize="12sp"
+                android:paddingBottom="10dp"
+                android:text="@string/text_decline"
+                android:textColor="@color/white_64"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tvAccept"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvAccept"
+                style="@style/H6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/side_margin"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="@string/text_accept"
+                android:textSize="12sp"
+                android:textColor="@color/accent_color_purple"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+<!--    </com.google.android.material.card.MaterialCardView>-->
+</layout>

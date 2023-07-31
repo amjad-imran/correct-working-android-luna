@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/vMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/back_modal_new">
+
+        <ImageView
+            android:id="@+id/ivCrown"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/image_medal_gold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivUserImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="@+id/ivCrown"
+            app:layout_constraintEnd_toEndOf="@+id/ivCrown"
+            app:layout_constraintStart_toStartOf="@+id/ivCrown"
+            app:layout_constraintTop_toTopOf="@+id/ivCrown"
+            app:layout_constraintVertical_bias="0.85"
+            app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView"
+            tools:srcCompat="@tools:sample/avatars" />
+
+
+        <TextView
+            android:id="@+id/tvName"
+            style="@style/H5"
+            android:layout_width="0dp"
+            android:layout_marginEnd="@dimen/dimen_8dp"
+            android:gravity="start"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:layout_marginStart="@dimen/dimen_12dp"
+            app:layout_constraintBottom_toTopOf="@+id/tvSteps"
+            app:layout_constraintStart_toEndOf="@+id/ivUserImage"
+            app:layout_constraintTop_toTopOf="@+id/ivUserImage"
+            app:layout_constraintEnd_toStartOf="@id/view1"
+            app:layout_constraintVertical_chainStyle="spread_inside"
+            tools:text="You" />
+
+        <TextView
+            android:id="@+id/tvSteps"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="2dp"
+            android:gravity="center"
+            android:lineSpacingExtra="24sp"
+            android:textColor="@color/very_light_pink"
+            app:drawableStartCompat="@drawable/ic_steps"
+            app:layout_constraintBottom_toBottomOf="@+id/ivUserImage"
+            app:layout_constraintStart_toStartOf="@+id/tvName"
+            app:layout_constraintTop_toBottomOf="@+id/tvName"
+            tools:text="12000" />
+
+        <TextView
+            android:id="@+id/tvTrophies"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:drawablePadding="2dp"
+            android:gravity="center"
+            android:lineSpacingExtra="24sp"
+            android:textColor="@color/very_light_pink"
+            app:drawableStartCompat="@drawable/ic_trophy_small"
+            app:layout_constraintBottom_toBottomOf="@+id/tvSteps"
+            app:layout_constraintStart_toEndOf="@+id/tvSteps"
+            app:layout_constraintTop_toTopOf="@+id/tvSteps"
+            tools:text="10" />
+
+        <ImageView
+            android:id="@+id/view1"
+            android:layout_width="@dimen/dimen_48dp"
+            android:layout_height="@dimen/dimen_48dp"
+            android:layout_marginTop="@dimen/dimen_16dp"
+            android:layout_marginEnd="@dimen/dimen_16dp"
+            android:padding="@dimen/dimen_8dp"
+            android:src="@drawable/nudge_circle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/bNudge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@null"
+            android:padding="@dimen/dimen_4dp"
+            android:src="@drawable/ic_touch_app"
+            app:layout_constraintBottom_toBottomOf="@id/view1"
+            app:layout_constraintStart_toStartOf="@id/view1"
+            app:layout_constraintEnd_toEndOf="@id/view1"
+            app:layout_constraintTop_toTopOf="@id/view1" />
+
+        <include
+            android:id="@+id/include17"
+            layout="@layout/layout_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="@dimen/dimen_20dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivCrown" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvUserData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="@dimen/dimen_16dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:layout_marginBottom="@dimen/dimen_16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:listitem="@layout/row_user_data"
+            app:layout_constraintTop_toBottomOf="@+id/include17" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

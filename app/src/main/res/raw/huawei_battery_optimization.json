@@ -1,0 +1,44 @@
+{
+  "title": "Choosing no background restriction ensures there will be no delay in notifications, connectivity loss and proper functioning of watch features including, Camera shutter and Find device.",
+  "data": [
+    {
+      "type": "text",
+      "text": "1. Open the system settings of the phone.",
+      "image": null,
+      "bold": false
+    },
+    {
+      "type": "text",
+      "text": "2. Search for \"Battery optimisation\" in the search box.",
+      "image": null,
+      "bold": false
+    },
+    {
+      "type": "text",
+      "text": "3. Click into Battery Optimisation and select \"All apps\" as the filter in the upper left corner.",
+      "image": null,
+      "bold": false
+    },
+    {
+      "type": "text",
+      "text": "4. Find NoiseFit, select Don't allow and click OK.",
+      "image": null,
+      "bold": false
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/Huawei/battery-optimizations/1.jpeg"
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/Huawei/battery-optimizations/2.jpg"
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/Huawei/battery-optimizations/3.jpg"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "title": "If you are unable to sync your data, then Force Stop the NoiseFit app.",
+  "data": [
+    {
+      "type": "text",
+      "text": "Go to settings > Apps & notifications > App info > NoiseFit > Force Stop \n",
+      "image": null,
+      "bold": true
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/ForceStop/image1.png"
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/ForceStop/image2.png"
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/ForceStop/image3.png"
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/ForceStop/image4.png"
+    },
+
+    {
+      "type": "text",
+      "text": "Now open the NoiseFit app and check your watch for connectivity in the watch.\n\nNote: Wait for 1 min to establish the connection.\n\n",
+      "image": ""
+    }
+
+  ]
+}

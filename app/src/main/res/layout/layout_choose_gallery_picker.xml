@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        style="@style/H5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/side_margin"
+        android:text="@string/text_choose_background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ivGalleryBack"
+        android:background="@drawable/back_modal_new_round"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="@dimen/side_margin"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+        app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+
+
+    <ImageView
+        android:id="@+id/ivCamera"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:src="@drawable/ic_gallery"
+        app:layout_constraintBottom_toBottomOf="@+id/ivGalleryBack"
+        app:layout_constraintEnd_toEndOf="@+id/ivGalleryBack"
+        app:layout_constraintStart_toStartOf="@+id/ivGalleryBack"
+        app:layout_constraintTop_toTopOf="@+id/ivGalleryBack" />
+
+    <TextView
+        android:id="@+id/textView22"
+        style="@style/Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/text_gallery"
+        android:textColor="@color/very_light_pink"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/ivGalleryBack"
+        app:layout_constraintStart_toStartOf="@+id/ivGalleryBack"
+        app:layout_constraintTop_toBottomOf="@+id/ivGalleryBack" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

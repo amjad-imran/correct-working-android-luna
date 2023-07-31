@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/btnHavingAnIssue"
+    style="@style/H6"
+    android:layout_width="match_parent"
+    android:layout_height="82dp"
+    android:gravity="center_horizontal|center_vertical"
+    android:text="@string/text_having_any_issues_with_watch_face"
+    android:textColor="@color/text_color_purple"
+    android:visibility="visible" />

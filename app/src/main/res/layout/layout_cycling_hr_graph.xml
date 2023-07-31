@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutParent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tvHeartTitle"
+        style="@style/H4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/side_margin"
+        android:layout_marginTop="@dimen/dimen_32dp"
+        android:layout_marginEnd="@dimen/side_margin"
+        android:text="@string/heart_rate"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <View
+        android:id="@+id/v1"
+        android:layout_width="@dimen/dimen_2dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="@dimen/dimen_24dp"
+        android:background="#19ffffff"
+        app:layout_constraintEnd_toStartOf="@+id/v2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHeartTitle" />
+
+    <View
+        android:id="@+id/v2"
+        android:layout_width="@dimen/dimen_2dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="@dimen/dimen_24dp"
+        android:background="#19ffffff"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/v1"
+        app:layout_constraintTop_toBottomOf="@+id/tvHeartTitle" />
+
+
+    <TextView
+        android:id="@+id/tvAvg"
+        style="@style/H6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_avg"
+        android:textColor="@color/white_80"
+        app:layout_constraintStart_toStartOf="@+id/tvHeartTitle"
+        app:layout_constraintTop_toTopOf="@+id/v1" />
+
+    <TextView
+        android:id="@+id/tvAvgValue"
+        style="@style/H3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_8dp"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="@+id/tvAvg"
+        app:layout_constraintTop_toBottomOf="@+id/tvAvg"
+        tools:text="67" />
+
+    <TextView
+        android:id="@+id/tvAvgUnit"
+        style="@style/H6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dimen_4dp"
+        android:layout_marginTop="@dimen/dimen_16dp"
+        android:layout_marginBottom="2dp"
+        android:text="@string/text_bpm_small"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/tvAvgValue"
+        app:layout_constraintStart_toEndOf="@+id/tvAvgValue" />
+
+    <TextView
+        android:id="@+id/tvMin"
+        style="@style/H6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dimen_16dp"
+        android:text="Min"
+        android:textColor="@color/white_80"
+        app:layout_constraintStart_toEndOf="@+id/v1"
+        app:layout_constraintTop_toTopOf="@+id/v1" />
+
+    <TextView
+        android:id="@+id/tvMinValue"
+        style="@style/H3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_8dp"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="@+id/tvMin"
+        app:layout_constraintTop_toBottomOf="@+id/tvMin"
+        tools:text="67" />
+
+    <TextView
+        android:id="@+id/tvMinUnit"
+        style="@style/H6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dimen_4dp"
+        android:layout_marginTop="@dimen/dimen_16dp"
+        android:layout_marginBottom="2dp"
+        android:text="@string/text_bpm_small"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/tvMinValue"
+        app:layout_constraintStart_toEndOf="@+id/tvMinValue" />
+
+    <TextView
+        android:id="@+id/tvMax"
+        style="@style/H6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dimen_16dp"
+        android:text="Max"
+        android:textColor="@color/white_80"
+        app:layout_constraintStart_toEndOf="@+id/v2"
+        app:layout_constraintTop_toTopOf="@+id/v1" />
+
+    <TextView
+        android:id="@+id/tvMaxValue"
+        style="@style/H3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_8dp"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="@+id/tvMax"
+        app:layout_constraintTop_toBottomOf="@+id/tvMax"
+        tools:text="67" />
+
+    <TextView
+        android:id="@+id/tvMaxUnit"
+        style="@style/H6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dimen_4dp"
+        android:layout_marginTop="@dimen/dimen_16dp"
+        android:layout_marginBottom="2dp"
+        android:text="@string/text_bpm_small"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/tvMaxValue"
+        app:layout_constraintStart_toEndOf="@+id/tvMaxValue" />
+
+    <com.github.mikephil.charting.charts.CombinedChart
+        android:id="@+id/lineChart"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginStart="@dimen/dimen_16dp"
+        android:layout_marginTop="@dimen/dimen_32dp"
+        android:layout_marginEnd="@dimen/dimen_16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvAvgValue" />
+
+
+    <TextView
+        android:id="@+id/tvHrStartTime"
+        style="@style/Tinny"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_12dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/lineChart"
+        app:layout_constraintTop_toBottomOf="@id/lineChart"
+        tools:text="11:53 am" />
+
+    <TextView
+        android:id="@+id/tvHrEndTime"
+        style="@style/Tinny"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_12dp"
+        android:layout_marginEnd="@dimen/side_margin"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/lineChart"
+        app:layout_constraintTop_toBottomOf="@id/lineChart"
+        tools:text="11:53 am" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

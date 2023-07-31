@@ -1,0 +1,70 @@
+package com.noisefit_commans.interfaces
+
+import com.noisefit_commans.models.ColorFitDevice
+
+sealed class QueryAction {
+
+    object QueryFirmwareVersion : QueryAction()
+    class QueryFirmwareUpgrade() : QueryAction()
+    class QueryFirmwareUpgradeNew(colorFitDevice: ColorFitDevice) : QueryAction()
+    object QueryBatteryPower : QueryAction()
+    object ResetTrigger : QueryAction()
+    object GetUserInfo : QueryAction()
+    object GetAlarms : QueryAction()
+    object GetHeartRateInterval : QueryAction()
+    object GetSedentaryData : QueryAction()
+    class UpdateVolume(val current: Int, val maxVolume: Int) : QueryAction()
+    object GetDoNotDisturbData : QueryAction()
+    object GetFindPhoneSwitch : QueryAction()
+    class GetWatchFaces() : QueryAction()
+    object GetUserGoals : QueryAction()
+    object GetWristLiftGesture : QueryAction()
+    object GetLanguage : QueryAction()
+    object GetWeatherSwitchStatus : QueryAction()
+    object GetDeviceUnits : QueryAction()
+    object GetBodyTempUnit : QueryAction()
+    object GetMusicControlSettings : QueryAction()
+    object GetBrightnessLevelSettings : QueryAction()
+    object GetCameraSwitchSettings : QueryAction()
+    object GetMenstrualSettings : QueryAction()
+    object SyncDeviceUnits : QueryAction()
+    object GetAutoSleep : QueryAction()
+    object GetAgpsState : QueryAction()
+
+    object GetCustomReplies : QueryAction()
+    object GetWatchFaceLayout : QueryAction()
+
+    object GetScreenAwakeInterval : QueryAction()
+
+    object GetVibrationIntensity : QueryAction()
+
+    object GetApplicationList : QueryAction()
+    object GetWidgetSortList : QueryAction()
+    object GetHandWashData : QueryAction()
+    object GetHeartRateAlert : QueryAction()
+    object GetReminders : QueryAction()
+    object GetActivityRecogniseSettings : QueryAction()
+    object GetDrinkWaterSettings : QueryAction()
+    object GetMealReminderSettings : QueryAction()
+    object GetMedicineReminderSettings : QueryAction()
+    object GetStressSettings : QueryAction()
+    object GetSpo2Settings : QueryAction()
+    object GetWalkReminderData : QueryAction()
+    object GetSportWidgetSortList : QueryAction()
+    object GetSportModeInfo : QueryAction()
+    object GetFirmwareLogs : QueryAction()
+    class MusicEventChanged(event: String) : QueryAction()
+
+    object GetWatchPassword : QueryAction()
+    object GetUPIQRCode : QueryAction()
+    object GetWorldClock : QueryAction()
+    object GetStockList : QueryAction()
+    class SendSongName(var status: Int, var title: String?, var sec: Int = 0) : QueryAction()
+    object GetQuickBleCallingSwitch : QueryAction()
+
+    object GetSleepReminder : QueryAction()
+    object GetContactList : QueryAction()
+    object GetSOSContactList : QueryAction()
+    object GetBluetoothCallStatus : QueryAction()
+    object GetQuickEyeMovementSwitch : QueryAction()
+}

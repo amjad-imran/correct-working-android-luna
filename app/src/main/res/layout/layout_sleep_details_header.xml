@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tvDate"
+        style="@style/Small"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Wednesday, 30 Mar 2022" />
+
+    <TextView
+        android:id="@+id/tvSleepHour"
+        style="@style/H3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="@+id/tvDate"
+        app:layout_constraintTop_toBottomOf="@+id/tvDate"
+        tools:text="8" />
+
+    <TextView
+        android:id="@+id/textHour"
+        style="@style/Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="@dimen/dimen_2dp"
+        android:text="hrs"
+        android:textColor="@color/very_light_pink"
+        app:layout_constraintBottom_toBottomOf="@+id/tvSleepHour"
+        app:layout_constraintStart_toEndOf="@+id/tvSleepHour" />
+
+    <TextView
+        android:id="@+id/tvSleepMinute"
+        style="@style/H3"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvSleepHour"
+        app:layout_constraintStart_toEndOf="@+id/textHour"
+        tools:text="32" />
+
+    <TextView
+        style="@style/Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="@dimen/dimen_2dp"
+        android:text="@string/text_mins"
+        android:textColor="@color/very_light_pink"
+        app:layout_constraintBottom_toBottomOf="@+id/tvSleepMinute"
+        app:layout_constraintStart_toEndOf="@+id/tvSleepMinute" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <TextView
+        android:id="@+id/tvData2"
+        style="@style/Small"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Average Bedtime"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvSleepHour2"
+        style="@style/H3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/tvData2"
+        tools:text="0" />
+
+    <TextView
+        android:id="@+id/textHour2"
+        style="@style/Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="@dimen/dimen_2dp"
+        android:textColor="@color/very_light_pink"
+        app:layout_constraintBottom_toBottomOf="@+id/tvSleepHour2"
+        app:layout_constraintStart_toEndOf="@+id/tvSleepHour2"
+        tools:text="AM/PM" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

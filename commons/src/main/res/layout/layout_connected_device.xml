@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutDevice"
+        android:layout_width="match_parent"
+        android:background="@drawable/back_modal_new_red"
+        android:layout_height="96dp">
+
+        <ImageView
+            android:id="@+id/imgWatch"
+            android:layout_width="72dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvBatteryPercentage"
+            style="@style/H6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginTop="4dp"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imgWatch"
+            app:layout_constraintTop_toTopOf="@+id/imgWatch"
+            tools:text="ColorFit Pro 3 Assist" />
+
+
+        <TextView
+            android:id="@+id/tvStatus"
+            style="@style/H6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/tvLastSync"
+            app:layout_constraintEnd_toStartOf="@+id/progressBarConnecting"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/imgWatch"
+            app:layout_constraintTop_toBottomOf="@+id/tvBatteryPercentage"
+            tools:text="ColorFit Pro 3 Assist " />
+
+        <ProgressBar
+            android:id="@+id/progressBarConnecting"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="6dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/tvStatus"
+            app:layout_constraintEnd_toStartOf="@+id/ivSettingsArrow"
+            app:layout_constraintHorizontal_bias="0.5"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toEndOf="@+id/tvStatus"
+            app:layout_constraintTop_toTopOf="@+id/tvStatus"
+            tools:visibility="visible" />
+
+
+        <TextView
+            android:id="@+id/tvLastSync"
+            style="@style/Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="12dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imgWatch"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imgWatch"
+            tools:text="Synced : 30 mins ago" />
+
+        <ImageView
+            android:id="@+id/ivSettingsArrow"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_arrow_right_duotone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

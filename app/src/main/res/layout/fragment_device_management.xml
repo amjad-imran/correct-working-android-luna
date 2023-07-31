@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="features"
+            type="com.noisefit_commans.data.model.DeviceFeatures" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.myDevice.manage.DeviceManagementFragment">
+
+        <include
+            android:id="@+id/lytToolbar"
+            layout="@layout/layout_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imgWatch"
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:layout_marginTop="32dp"
+            android:src="@drawable/watch_default"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lytToolbar" />
+
+
+        <TextView
+            android:id="@+id/tvWatchName"
+            style="@style/H4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imgWatch"
+            tools:text="ColorFit Pro 3 Assist" />
+
+        <TextView
+            android:id="@+id/tvFirmwareVersion"
+            style="@style/H6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:gravity="center"
+            android:textColor="@color/very_light_pink"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvWatchName"
+            tools:text="V 2.1.0" />
+
+        <TextView
+            android:id="@+id/tvWatchMacAddress"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:gravity="center"
+            android:textColor="@color/very_light_pink"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvFirmwareVersion"
+            tools:text="V 2.1.0" />
+
+        <ImageButton
+            android:id="@+id/btnCopyMac"
+            android:layout_width="wrap_content"
+            android:padding="@dimen/dimen_8dp"
+            android:background="@android:color/transparent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_copy_mac"
+            app:layout_constraintBottom_toBottomOf="@+id/tvWatchMacAddress"
+            app:layout_constraintStart_toEndOf="@+id/tvWatchMacAddress"
+            app:layout_constraintTop_toTopOf="@+id/tvWatchMacAddress" />
+
+        <include
+            android:id="@+id/include12"
+            layout="@layout/layout_divider_modal_color"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:visibility="gone"
+            android:layout_marginTop="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvWatchMacAddress" />
+
+        <com.noisefit_commans.ui.custom.AboutRow
+            android:id="@+id/tvCheckForUpdates"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:hideLeftIcon="true"
+            app:hideTopLine="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include12"
+            app:textAbout="@string/text_check_for_update" />
+
+        <com.noisefit_commans.ui.custom.AboutRow
+            android:id="@+id/tvWarrantyRegistration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:hideLeftIcon="true"
+            app:hideTopLine="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvCheckForUpdates"
+            app:textAbout="@string/text_warranty_registration" />
+
+        <com.noisefit_commans.ui.custom.AboutRow
+            android:id="@+id/tvFactoryReset"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:hideLeftIcon="true"
+            app:hideTopLine="true"
+            app:setFeatureVisibility="@{features.factoryReset}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvWarrantyRegistration"
+            app:textAbout="@string/text_factory_reset" />
+
+        <com.noisefit_commans.ui.custom.AboutRow
+            android:id="@+id/tvRestartWatch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:hideLeftIcon="true"
+            app:hideTopLine="true"
+            app:setFeatureVisibility="@{features.deviceRestart}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvFactoryReset"
+            app:textAbout="@string/text_device_restart" />
+
+        <TextView
+            android:id="@+id/tvUnPairDevice"
+            style="@style/H5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginBottom="24dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:text="@string/text_unpair_device"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <include
+            android:id="@+id/progressBar"
+            layout="@layout/default_loader"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

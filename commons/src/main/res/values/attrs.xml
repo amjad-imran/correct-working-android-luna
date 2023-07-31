@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="RoundedBarChart">
+        <attr name="radius" format="dimension" />
+    </declare-styleable>
+    <declare-styleable name="SemiCircleArcProgressBar">
+        <attr name="progressPlaceHolderColor" format="color"/>
+        <attr name="progressBarStartColor" format="color"/>
+        <attr name="progressBarEndColor" format="color"/>
+        <attr name="progressPlaceHolderWidth" format="integer"/>
+        <attr name="progressBarWidth" format="integer"/>
+        <attr name="percent" format="integer"/>
+    </declare-styleable>
+    <declare-styleable name="OTPView">
+        <!-- Defines the next view to give focus to when the text is filled.-->
+        <attr name="nextView" format="reference" />
+        <!-- Defines the previous view to give focus to when backButton is pressed.-->
+        <attr name="prevView" format="reference" />
+    </declare-styleable>
+
+    <style name="ReactionTabLayoutTextView" parent="android:Widget.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <declare-styleable name="SegmentedProgressBar">
+        <attr name="totalSegments" format="integer" />
+        <attr name="timePerSegment" format="integer" />
+        <attr name="segmentMargins" format="dimension" />
+        <attr name="segmentCornerRadius" format="dimension" />
+        <attr name="segmentStrokeWidth" format="dimension" />
+        <attr name="segmentBackgroundColor" format="color" />
+        <attr name="segmentSelectedBackgroundColor" format="color" />
+        <attr name="segmentStrokeColor" format="color" />
+        <attr name="segmentSelectedStrokeColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="WheelPicker">
+        <attr name="wheel_selected_item_position" format="integer" />
+        <attr name="android:textSize" />
+        <attr name="android:textColor" />
+        <attr name="wheel_same_width" format="boolean" />
+        <attr name="wheel_maximum_width_text" format="string" />
+        <attr name="wheel_maximum_width_text_position" format="integer" />
+        <attr name="wheel_item_height" format="dimension" />
+        <attr name="wheel_drawableSize" format="dimension" />
+        <attr name="android:drawablePadding" />
+        <attr name="wheel_atmospheric" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="CustomViewSettings">
+        <attr name="text" format="string" />
+        <attr name="value" format="string" />
+        <attr name="textDefaultColor" format="integer" />
+        <attr name="image" format="reference" />
+        <attr name="status" format="string" />
+        <attr name="showArrow" format="boolean" />
+        <attr name="hideLeftIcon" format="boolean" />
+        <attr name="hideTopLine" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="CustomViewAbout">
+        <attr name="textAbout" format="string" />
+        <attr name="valueAbout" format="string" />
+        <attr name="textDefaultColorAbout" format="integer" />
+        <attr name="imageAbout" format="reference" />
+        <attr name="showArrowAbout" format="boolean" />
+        <attr name="showBadge" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="CustomFeatureRow">
+        <attr name="featureTitle" format="string" />
+        <attr name="featureDesc" format="string" />
+        <attr name="featureIsEnabled" format="boolean" />
+        <attr name="featureHideLine" format="boolean" />
+    </declare-styleable>
+
+</resources>

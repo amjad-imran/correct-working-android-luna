@@ -1,0 +1,91 @@
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageButton
+            android:id="@+id/backBtn"
+            style="@style/ToolbarBackButton"
+            android:layout_margin="@dimen/side_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/textView8"
+            style="@style/H4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_add_friends"
+            app:layout_constraintBottom_toBottomOf="@+id/backBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/backBtn" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/icHistoryCalendar"
+            android:background="@drawable/back_modal_new_round"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_margin="@dimen/side_margin"
+            android:layout_marginStart="16dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+
+        <ImageView
+            android:id="@+id/ivFriendRequest"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_group_duotone"
+            app:layout_constraintBottom_toBottomOf="@+id/icHistoryCalendar"
+            app:layout_constraintEnd_toEndOf="@+id/icHistoryCalendar"
+            app:layout_constraintStart_toStartOf="@+id/icHistoryCalendar"
+            app:layout_constraintTop_toTopOf="@+id/icHistoryCalendar"
+            tools:ignore="ContentDescription" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivDot"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:background="#c394ff"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@id/icHistoryCalendar"
+            app:layout_constraintTop_toTopOf="@id/icHistoryCalendar"
+            app:shapeAppearance="@style/ShapeAppearance.Material3.SmallComponent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTabs"
+            android:layout_width="match_parent"
+            android:layout_marginTop="30dp"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:paddingStart="@dimen/side_margin"
+            android:paddingEnd="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/backBtn" />
+        <include
+            android:id="@+id/divider1"
+            layout="@layout/layout_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rvTabs" />
+
+
+        <FrameLayout
+            android:id="@+id/flFragment"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/dimen_8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider1"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

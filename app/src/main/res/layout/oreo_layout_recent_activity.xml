@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        style="@style/ModalStyleReadiness"
+        android:layout_marginTop="24dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textView66"
+            style="@style/H5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/text_workouts"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ImageView
+            android:id="@+id/ivViewAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dimen_8dp"
+            android:padding="@dimen/dimen_8dp"
+            android:src="@drawable/ic_arrow_right_duotone"
+            app:layout_constraintBottom_toBottomOf="@id/textView66"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/textView66"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/H6"
+            android:id="@+id/tvEmptyMsg"
+            app:layout_constraintTop_toBottomOf="@id/textView66"
+            android:layout_marginTop="12dp"
+            android:textColor="@color/white_64"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:text="@string/text_you_haven_t_added_any_workouts_for_today"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvWorkouts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/viewAddWorkout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvEmptyMsg"
+            tools:itemCount="3"
+            tools:listitem="@layout/oreo_item_workout_activity" />
+
+        <View
+            android:id="@+id/viewAddWorkout"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="@dimen/side_margin"
+            android:layout_marginBottom="@dimen/dimen_8dp"
+            android:background="@drawable/back_modal_new_round"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rvWorkouts" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/viewAddWorkout"
+            app:layout_constraintEnd_toEndOf="@id/viewAddWorkout"
+            app:layout_constraintTop_toTopOf="@id/viewAddWorkout"
+            android:gravity="center"
+            android:text="@string/text_add_a_workout"
+            style="@style/H6"
+            android:id="@+id/tvAddWorkout"
+            android:drawablePadding="12dp"
+            app:layout_constraintBottom_toBottomOf="@id/viewAddWorkout"
+            app:drawableStartCompat="@drawable/ic_add" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

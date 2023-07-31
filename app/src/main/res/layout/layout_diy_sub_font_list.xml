@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="104dp"
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/vBackSelector"
+            android:layout_width="@dimen/dimen_96dp"
+            android:layout_height="120dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/bgImv"
+            app:layout_constraintEnd_toEndOf="@+id/bgImv"
+            app:layout_constraintStart_toStartOf="@+id/bgImv"
+            app:layout_constraintTop_toTopOf="@+id/bgImv" />
+
+        <View
+            android:id="@+id/vCircleBackSelector"
+            android:layout_width="@dimen/dimen_96dp"
+            android:layout_height="@dimen/dimen_96dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/bgImv"
+            app:layout_constraintEnd_toEndOf="@+id/bgImv"
+            app:layout_constraintStart_toStartOf="@+id/bgImv"
+            app:layout_constraintTop_toTopOf="@+id/bgImv" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/bgImv"
+            android:layout_width="@dimen/dimen_96dp"
+            android:layout_height="120dp"
+            android:adjustViewBounds="true"
+            android:padding="@dimen/dimen_2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/bgLayerImv"
+            android:layout_width="@dimen/dimen_96dp"
+            android:layout_height="120dp"
+            android:adjustViewBounds="true"
+            android:padding="@dimen/dimen_2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            style="@style/Small"
+            android:layout_width="@dimen/dimen_96dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_8dp"
+            android:gravity="center"
+            android:lineSpacingExtra="4sp"
+            android:maxLines="2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/bgImv"
+            app:layout_constraintStart_toStartOf="@+id/bgImv"
+            app:layout_constraintTop_toBottomOf="@+id/bgImv"
+            tools:text="waveksdajkldsj saldkj ljads jds hkhkj" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

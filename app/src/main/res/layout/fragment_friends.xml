@@ -1,0 +1,111 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:background="@color/black"
+        android:layout_height="match_parent">
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivUserImage"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:scaleType="centerCrop"
+            android:layout_margin="@dimen/side_margin"
+            tools:src="@drawable/bg_dummy_placeholder"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+
+        <TextView
+            style="@style/H4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            app:layout_constraintBottom_toBottomOf="@id/ivUserImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/ivUserImage"
+            android:text="@string/text_friends" />
+
+        <ImageView
+            android:id="@+id/ivAddedFriendCount"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:background="@drawable/back_modal_new_round"
+            android:padding="6dp"
+            android:src="@drawable/ic_group_duotone"
+            app:layout_constraintBottom_toBottomOf="@id/ivAddFriend"
+            app:layout_constraintEnd_toStartOf="@+id/ivAddFriend"
+            app:layout_constraintTop_toTopOf="@id/ivAddFriend" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivDot"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:background="#c394ff"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@id/ivAddedFriendCount"
+            app:layout_constraintTop_toTopOf="@id/ivAddedFriendCount"
+            app:shapeAppearance="@style/ShapeAppearance.Material3.SmallComponent" />
+
+
+        <View
+            android:id="@+id/view1"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_margin="@dimen/side_margin"
+            android:background="@drawable/back_modal_new_round"
+            android:scaleType="centerCrop"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+
+        <ImageView
+            android:id="@+id/ivAddFriend"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_add_new"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/view1"
+            app:layout_constraintEnd_toEndOf="@+id/view1"
+            app:layout_constraintStart_toStartOf="@+id/view1"
+            app:layout_constraintTop_toTopOf="@+id/view1"
+            tools:ignore="ContentDescription" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            style="@style/MyTabLayoutStyle"
+            android:background="@android:color/transparent"
+            app:layout_constraintTop_toBottomOf="@id/ivUserImage"/>
+
+        <include
+            android:id="@+id/divider1"
+            layout="@layout/layout_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tabLayout" />
+
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vpFriends"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/dimen_8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider1" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

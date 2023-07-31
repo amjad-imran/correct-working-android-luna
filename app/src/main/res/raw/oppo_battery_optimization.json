@@ -1,0 +1,41 @@
+{
+  "title": "Choosing no background restriction ensures there will be no delay in notifications, connectivity loss and proper functioning of watch features including, Camera shutter and Find device.",
+  "data": [
+    {
+      "type": "text",
+      "text": "Settings > Battery > App battery management > NoiseFit app > Allow background activity > Allow",
+      "image": null,
+      "bold": true
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/OPPOBatteryOptimization/image1.png"
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/OPPOBatteryOptimization/image2.png"
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/OPPOBatteryOptimization/image3.png"
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/OPPOBatteryOptimization/image4.png"
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/OPPOBatteryOptimization/image6.png"
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/OPPOBatteryOptimization/image5.png"
+    }
+  ]
+}

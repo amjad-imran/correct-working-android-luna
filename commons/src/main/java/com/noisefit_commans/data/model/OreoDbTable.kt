@@ -1,0 +1,174 @@
+package com.noisefit_commans.data.model
+
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Index
+import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
+import com.noisefit_commans.models.ColorfitData
+
+
+@Entity(
+    tableName = "stress_data", indices = [Index(value = ["date"], unique = true)]
+)
+data class OreoStressDataBreakup(
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    @ColumnInfo(name = "is_synced") var isSynced: Boolean = false,
+    @ColumnInfo(name = "is_google_fit_sync") var isGoogleFitSynced: Boolean = false,
+    @ColumnInfo(name = "break_up") @SerializedName("break_up") var breakUp: String? = null,
+    @SerializedName("date") var date: String? = null
+) : ColorfitData()
+
+
+@Entity(
+    tableName = "body_temperature", indices = [Index(value = ["date"], unique = true)]
+)
+data class OreoBodyTemperatureBreakup(
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    @ColumnInfo(name = "is_synced") var isSynced: Boolean = false,
+    @ColumnInfo(name = "is_google_fit_sync") var isGoogleFitSynced: Boolean = false,
+    @ColumnInfo(name = "break_up") @SerializedName("break_up") var breakUp: String? = null,
+    @SerializedName("date") var date: String? = null
+) : ColorfitData()
+
+@Entity(
+    tableName = "blood_oxygen", indices = [Index(value = ["date"], unique = true)]
+)
+data class OreoBloodOxygenBreakup(
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    @ColumnInfo(name = "is_synced") var isSynced: Boolean = false,
+    @ColumnInfo(name = "is_google_fit_sync") var isGoogleFitSynced: Boolean = false,
+    @ColumnInfo(name = "break_up") @SerializedName("break_up") var breakUp: String? = null,
+    @SerializedName("date") var date: String? = null
+) : ColorfitData()
+
+
+@Entity(
+    tableName = "day_time_movement", indices = [Index(value = ["date"], unique = true)]
+)
+data class DayTimeMovementBreakup(
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    @ColumnInfo(name = "is_synced") var isSynced: Boolean = false,
+    @ColumnInfo(name = "is_google_fit_sync") var isGoogleFitSynced: Boolean = false,
+    @ColumnInfo(name = "break_up") @SerializedName("break_up") var breakUp: String? = null,
+    @SerializedName("date") var date: String? = null
+) : ColorfitData()
+
+@Entity(tableName = "blood_pressure")
+data class OreoBloodPressureData(
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    @ColumnInfo(name = "is_synced") var isSynced: Boolean = false,
+    @SerializedName("systolic_blood_pressure") var systolicBloodPressure: Int = 0,
+    @SerializedName("diastolic_blood_pressure") var diastolicBloodPressure: Int = 0
+) : ColorfitData()
+
+@Entity(
+    tableName = "heart_rate", indices = [Index(value = ["date"], unique = true)]
+)
+data class OreoHeartRate(
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    @ColumnInfo(name = "is_synced") var isSynced: Boolean = false,
+    @ColumnInfo(name = "is_google_fit_sync") var isGoogleFitSynced: Boolean = false,
+    @ColumnInfo(name = "break_up") @SerializedName("break_up") var breakUp: String? = null,
+    @SerializedName("date") var date: String? = null
+) : ColorfitData()
+
+
+@Entity(
+    tableName = "respiratory", indices = [Index(value = ["date"], unique = true)]
+)
+data class OreoRespiratoryData(
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    @ColumnInfo(name = "is_synced") var isSynced: Boolean = false,
+    @ColumnInfo(name = "is_google_fit_sync") var isGoogleFitSynced: Boolean = false,
+    @ColumnInfo(name = "break_up") @SerializedName("break_up") var breakUp: String? = null,
+    @SerializedName("date") var date: String? = null
+) : ColorfitData()
+
+@Entity(
+    tableName = "sleep_data", indices = [Index(value = ["startTime", "endTime"], unique = true)]
+)
+data class OreoSleepData(
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    @ColumnInfo(name = "is_synced") var isSynced: Boolean = false,
+    @ColumnInfo(name = "is_google_fit_sync") var isGoogleFitSynced: Boolean = false,
+    @SerializedName("start_time") var startTime: String? = null,
+    @SerializedName("end_time") var endTime: String? = null,
+    @SerializedName("start_date") var startDate: String? = null,
+    @SerializedName("end_date") var endDate: String? = null,
+    @SerializedName("available_sleep_types") var availableSleepTypes: String? = "",
+    @SerializedName("date") var date: String? = null,
+    @SerializedName("total_duration") var total: Int = 0,
+    @SerializedName("time_in_bed") var timeInBedTime: Int = 0,
+    @SerializedName("sleep_latency") var sleepLatency: Int = 0,
+    @SerializedName("sleep_efficiency") var sleepEfficiency: Int = 0,
+    @SerializedName("total_deep") var deep: Int = 0,
+    @SerializedName("total_light") var light: Int = 0,
+    @SerializedName("total_sober") var sober: Int = 0,
+    @SerializedName("total_awake") var awake: Int = 0,
+    @SerializedName("rem_count") var remCount: Int = 0,
+    @SerializedName("breath_quality") var breathQuality: Int = 0,
+    @SerializedName("sleep_score") var sleepScore: Int = 0,
+    @SerializedName("start_timestamp") var startTimeStamp: Long? = null,
+    @SerializedName("end_timestamp") var endTimeStamp: Long? = null,
+    @ColumnInfo(name = "readiness_score") @SerializedName("readiness_score") var readinessScore: Int? = 0,
+    @ColumnInfo(name = "sync_date") @SerializedName("timeStamp") var timeStamp: Long? = null,
+    @ColumnInfo(name = "sleep_array") @SerializedName("sleep_array") var sleepArray: ArrayList<OreoSleepDataBreakup>? = null,
+    @ColumnInfo(name = "night_time_movement") @SerializedName("night_time_movement") var nightTimeMovement: ArrayList<OreoSleepMovementDataBreakup>? = null
+) : ColorfitData() {
+
+    class OreoSleepDataBreakup(
+        @SerializedName("start_time") var startTime: String? = null,
+        @SerializedName("end_time") var endTime: String? = null,
+        @SerializedName("hour_of_the_day") var hourOfTheDay: Int? = null,
+        @SerializedName("sleep_type") var sleepType: String,
+        @SerializedName("date") var date: String? = null,
+        @SerializedName("start_date") var startDate: String? = null,
+        @SerializedName("end_date") var endDate: String? = null,
+        @SerializedName("duration") var duration: Int = 0
+    )
+
+    class OreoSleepMovementDataBreakup(
+        @SerializedName("start_time") var startTime: String? = null,
+        @SerializedName("end_time") var endTime: String? = null,
+        @SerializedName("movement_type") var movementType: String,
+        @SerializedName("duration") var duration: Int = 0
+    )
+}
+
+@Entity(tableName = "google_fit")
+data class OreoGoogleFitData(
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    @ColumnInfo(name = "is_synced") var isSynced: Boolean = false,
+    @ColumnInfo(name = "steps") @SerializedName("steps") var steps: Int = 0,
+    @ColumnInfo(name = "date") @SerializedName("date") var date: String = "",
+    @ColumnInfo(name = "steps_last_sync") @SerializedName("steps_last_sync") var stepsLastSync: Long = 0L,
+)
+
+@Entity(tableName = "steps_data")
+data class OreoStepsData(
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    @ColumnInfo(name = "is_synced") var isSynced: Boolean = false,
+    @ColumnInfo(name = "reset_data") var resetData: Boolean = false,
+    @ColumnInfo(name = "total_steps") @SerializedName("total_steps") var totalSteps: Int = 0,
+    @ColumnInfo(name = "active_calories") @SerializedName("active_calories") var activeCalories: Int? = null,
+    @ColumnInfo(name = "total_calories") @SerializedName("total_calories") var totalCalories: Int = 0,
+    @ColumnInfo(name = "total_distance") @SerializedName("total_distance") var totalDistance: Int = 0,
+    @ColumnInfo(name = "total_active_time") @SerializedName("total_active_time") var totalActiveTime: Int = 0,
+    @ColumnInfo(name = "date") @SerializedName("date") var date: String? = null,
+    @ColumnInfo(name = "sync_date") @SerializedName("timeStamp") var timeStamp: Long? = null,
+    @ColumnInfo(name = "hour_of_the_day") @SerializedName("hour_of_the_day") var hourOfTheDay: Int? = 0
+) : ColorfitData() {
+
+    @ColumnInfo(name = "step_array")
+    var stepArray: ArrayList<OreoStepDataBreakup>? = null
+
+    class OreoStepDataBreakup(
+        @SerializedName("steps") var steps: Int = 0,
+        @SerializedName("active_calories") var activeCalories: Int = 0,
+        @SerializedName("calories") var calories: Int = 0,
+        @SerializedName("distance") var distance: Int = 0,
+        @SerializedName("active_time") var activeTime: Int = 0,
+        @SerializedName("hour_of_the_day") var hourOfTheDay: Int? = null
+    ) : ColorfitData()
+}

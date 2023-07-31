@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/ModalStyleReadiness"
+    android:layout_marginTop="24dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/textView"
+        style="@style/H5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dimen_16dp"
+        android:layout_marginTop="@dimen/dimen_16dp"
+        android:text="@string/text_heart_rate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView14"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="@dimen/dimen_16dp"
+        android:adjustViewBounds="true"
+        android:alpha="0.5"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_arrow_right_duotone"
+        app:layout_constraintBottom_toBottomOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView" />
+
+
+    <com.github.mikephil.charting.charts.CombinedChart
+        android:id="@+id/candleChart"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_margin="@dimen/dimen_16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+<!--    <com.github.mikephil.charting.charts.LineChart-->
+<!--        android:id="@+id/lineChart"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="120dp"-->
+<!--        android:layout_margin="@dimen/dimen_16dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/textView" />-->
+
+
+    <ImageView
+        android:id="@+id/imvHrMeasure"
+        android:layout_width="@dimen/dimen_32dp"
+        android:layout_height="@dimen/dimen_32dp"
+        android:layout_marginStart="@dimen/dimen_16dp"
+        android:layout_marginTop="@dimen/dimen_24dp"
+        android:layout_marginBottom="22dp"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_black_heart_with_circle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/candleChart" />
+
+    <TextView
+        android:id="@+id/tvLastMeasure"
+        style="@style/Tinny"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white_64"
+        android:layout_marginStart="@dimen/dimen_8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imvHrMeasure"
+        app:layout_constraintStart_toEndOf="@+id/imvHrMeasure"
+        tools:text="Last measured now" />
+
+    <TextView
+        android:id="@+id/tvHeartValue"
+        style="@style/H4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dimen_8dp"
+        tools:text="132"
+        app:layout_constraintStart_toEndOf="@+id/imvHrMeasure"
+        app:layout_constraintTop_toTopOf="@+id/imvHrMeasure" />
+
+    <TextView
+        android:id="@+id/tvHeartUnit"
+        style="@style/Tinny"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginBottom="@dimen/dimen_2dp"
+        android:text="@string/text_bpm_small"
+        app:layout_constraintBottom_toBottomOf="@+id/tvHeartValue"
+        app:layout_constraintStart_toEndOf="@+id/tvHeartValue" />
+
+    <TextView
+        android:id="@+id/tvEmptyConnect"
+        style="@style/Tinny"
+        android:visibility="gone"
+        android:layout_width="0dp"
+        android:textColor="@color/white_80"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dimen_8dp"
+        android:layout_marginEnd="@dimen/dimen_8dp"
+        android:text="@string/text_connect_your_device_to_measure"
+        app:layout_constraintBottom_toBottomOf="@+id/imvHrMeasure"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imvHrMeasure"
+        app:layout_constraintTop_toTopOf="@+id/imvHrMeasure" />
+</androidx.constraintlayout.widget.ConstraintLayout>

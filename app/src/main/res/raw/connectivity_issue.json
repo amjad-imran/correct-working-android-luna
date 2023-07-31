@@ -1,0 +1,55 @@
+{
+  "title": "",
+  "data": [
+    {
+      "type": "text",
+      "text": "If you are facing connectivity issues, getting “Trying to Connect“ on my device screen.\n",
+      "image": null,
+      "bold": true
+    },
+
+    {
+      "type": "text",
+      "text": "1. Force Stop the NoiseFit app. \n\nGo to settings > Apps & notifications > App info > NoiseFit app > Force Stop.\n",
+      "image": null,
+      "bold": false
+    },
+    {
+      "type": "text",
+      "text": "2. Turn ‘off’ and then ‘on’ your smartphone’s Bluetooth.\n",
+      "image": null,
+      "bold": false
+    },
+    {
+      "type": "text",
+      "text": "3. Make sure to give location permission to NoiseFit app. \n\nNote: You’ll have to provide location access manually if not provided earlier.\n",
+      "image": null,
+      "bold": false
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/ForceStop/image1.png",
+      "bold": false
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/ForceStop/image2.png",
+      "bold": false
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/ForceStop/image3.png",
+      "bold": false
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/ForceStop/image4.png",
+      "bold": false
+    }
+  ]
+}
+

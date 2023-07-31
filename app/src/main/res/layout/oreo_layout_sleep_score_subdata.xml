@@ -1,0 +1,76 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include
+            android:id="@+id/lytSleepAvg"
+            layout="@layout/oreo_layout_activity_score"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/lytTotalSleep"
+            layout="@layout/oreo_layout_sleep_score_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/lytTimeInBed"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lytSleepAvg" />
+
+        <include
+            android:id="@+id/lytTimeInBed"
+            layout="@layout/oreo_layout_sleep_score_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toEndOf="@+id/lytTotalSleep"
+            app:layout_constraintTop_toBottomOf="@+id/lytSleepAvg" />
+
+        <include
+            android:id="@+id/lytSleepEfficiency"
+            layout="@layout/oreo_layout_sleep_score_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/lytRestHr"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lytTotalSleep" />
+
+        <include
+            android:id="@+id/lytRestHr"
+            layout="@layout/oreo_layout_sleep_score_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/lytSleepEfficiency"
+            app:layout_constraintTop_toBottomOf="@id/lytTimeInBed" />
+
+
+        <include
+            android:id="@+id/lytSleepScoreBanner"
+            layout="@layout/oreo_layout_score_banner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lytSleepEfficiency" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

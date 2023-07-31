@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.onboarding.otp.OtpCountryFragment">
+
+        <TextView
+            android:id="@+id/textView"
+            style="@style/H2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="@dimen/_60sdp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:gravity="center"
+            android:text="@string/text_pairing"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tvPairStatus"
+            style="@style/H6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:gravity="center"
+            android:text="@string/text_keep_your_watch_near_your_phone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/textView"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <!--<include
+            android:id="@+id/layoutWatch"
+            layout="@layout/layout_pair_watch"
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            app:layout_constraintBottom_toBottomOf="@+id/btnPairingIssue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.43" />-->
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/vBackWatch"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/layoutWatch"
+            app:layout_constraintEnd_toEndOf="@+id/layoutWatch"
+            app:layout_constraintStart_toStartOf="@+id/layoutWatch"
+            app:layout_constraintTop_toTopOf="@+id/layoutWatch"
+            app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/layoutWatch"
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true" />
+
+        <ImageView
+            android:id="@+id/ivWatchImage"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            app:layout_constraintBottom_toBottomOf="@+id/layoutWatch"
+            app:layout_constraintEnd_toEndOf="@+id/layoutWatch"
+            app:layout_constraintStart_toStartOf="@+id/layoutWatch"
+            app:layout_constraintTop_toTopOf="@+id/layoutWatch"
+            tools:src="@drawable/watch_default" />
+
+
+        <TextView
+            android:id="@+id/tvWatchName"
+            style="@style/H3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_24sdp"
+            android:text="@string/text_colorfit_ultra_2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutWatch" />
+
+        <TextView
+            android:id="@+id/tvWatchMac"
+            style="@style/Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:text="@string/text_colorfit_ultra_2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvWatchName" />
+
+        <ImageButton
+            android:id="@+id/btnCopyMac"
+            android:layout_width="wrap_content"
+            android:padding="@dimen/dimen_8dp"
+            android:background="@android:color/transparent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_copy_mac"
+            app:layout_constraintBottom_toBottomOf="@+id/tvWatchMac"
+            app:layout_constraintStart_toEndOf="@+id/tvWatchMac"
+            app:layout_constraintTop_toTopOf="@+id/tvWatchMac" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnStopPairing"
+            style="@style/SecondaryButtonStyle"
+            android:layout_height="30dp"
+            android:layout_marginBottom="@dimen/dimen_32dp"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:text="@string/text_stop_pairing"
+            android:textAllCaps="false"
+            app:backgroundTint="@null"
+            app:layout_constraintBottom_toTopOf="@+id/btnPairingIssue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvWatchMac" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnStart"
+            style="@style/PrimaryButtonStyle"
+            android:layout_marginBottom="@dimen/_24sdp"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:text="@string/text_get_started"
+            android:textAllCaps="false"
+            android:visibility="gone"
+            app:backgroundTint="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvWatchMac" />
+
+        <TextView
+            android:id="@+id/btnPairingIssue"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_12sdp"
+            android:text="@string/text_unable_to_pair_your_device"
+            android:textColor="@color/md_theme_light_text_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

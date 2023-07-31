@@ -1,0 +1,171 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/back_npl_quiz">
+
+        <ImageView
+            android:id="@+id/ivSuperOver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:src="@drawable/ic_super_over_dash_"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/btnStartQuiz"
+            style="@style/PrimaryButtonStyleHighlight1"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:gravity="center"
+            android:text="@string/text_start_quiz"
+            android:textAllCaps="false"
+            android:visibility="gone"
+            app:backgroundTint="@null"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivSuperOver" />
+
+        <TextView
+            android:id="@+id/btnElapseTime"
+            style="@style/H6"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:background="@drawable/back_quiz_lapse"
+            android:gravity="center"
+            android:textAllCaps="false"
+            app:backgroundTint="@null"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnStartQuiz" />
+
+        <View
+            android:id="@+id/divider1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="#19ffffff"
+            app:layout_constraintBottom_toTopOf="@+id/tvEarnedCoin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnElapseTime" />
+
+
+        <TextView
+            android:id="@+id/tvParticipants"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="4dp"
+            android:drawablePadding="4dp"
+            android:gravity="center"
+            android:textSize="12sp"
+            app:drawableStartCompat="@drawable/ic_pred_people"
+            app:layout_constraintEnd_toStartOf="@id/tvMsg"
+            app:layout_constraintTop_toBottomOf="@id/divider1"
+            tools:text="999999" />
+
+        <View
+            android:id="@+id/dummySpace"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvParticipants" />
+
+        <TextView
+            android:id="@+id/tvMsg"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_participants_won_total"
+            android:textColor="@color/white_64"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvParticipants"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvParticipants" />
+
+
+        <TextView
+            android:id="@+id/tvEarnedCoin"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:drawablePadding="4dp"
+            android:gravity="center"
+            android:textSize="12sp"
+            app:drawableEndCompat="@drawable/ic_coins_20"
+            app:layout_constraintStart_toEndOf="@id/tvMsg"
+            app:layout_constraintTop_toTopOf="@id/tvParticipants"
+            app:layout_constraintVertical_bias="0.555"
+            tools:text="9999999" />
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:layout_marginBottom="8dp"
+            android:background="#19ffffff"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dummySpace" />
+
+
+        <TextView
+            android:id="@+id/tvPowered"
+            style="@style/Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/text_powered_by"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:textColor="@color/white_64"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ivPowered"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider2" />
+
+        <ImageView
+            android:id="@+id/ivPowered"
+            android:layout_width="wrap_content"
+            android:layout_height="10dp"
+            android:layout_marginStart="4dp"
+            android:adjustViewBounds="true"
+            android:visibility="gone"
+            tools:src="@drawable/ic_fancode"
+            tools:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/tvPowered"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tvPowered"
+            app:layout_constraintTop_toTopOf="@id/tvPowered"
+            tools:ignore="ContentDescription" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

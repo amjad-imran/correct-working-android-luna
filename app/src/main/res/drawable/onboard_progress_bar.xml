@@ -1,0 +1,43 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Define the background properties like color etc -->
+    <item android:id="@android:id/background">
+        <clip>
+            <shape>
+                <corners
+                    android:bottomLeftRadius="@dimen/dimen_32dp"
+                    android:bottomRightRadius="@dimen/dimen_32dp"
+                    android:topLeftRadius="@dimen/dimen_32dp"
+                    android:topRightRadius="@dimen/dimen_32dp" />
+                <solid android:color="@color/modal_color" />
+            </shape>
+        </clip>
+    </item>
+
+    <item android:id="@android:id/secondaryProgress">
+        <clip>
+            <shape>
+                <corners
+                    android:bottomLeftRadius="@dimen/dimen_32dp"
+                    android:bottomRightRadius="@dimen/dimen_32dp"
+                    android:topLeftRadius="@dimen/dimen_32dp"
+                    android:topRightRadius="@dimen/dimen_32dp" />
+                <solid android:color="@color/modal_color" />
+            </shape>
+        </clip>
+    </item>
+    <!-- Define the progress properties like start color, end color etc -->
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape>
+                <corners
+                    android:bottomLeftRadius="@dimen/dimen_32dp"
+                    android:bottomRightRadius="@dimen/dimen_32dp"
+                    android:topLeftRadius="@dimen/dimen_32dp"
+                    android:topRightRadius="@dimen/dimen_32dp" />
+                <solid android:color="@color/white" />
+            </shape>
+        </clip>
+    </item>
+
+</layer-list>

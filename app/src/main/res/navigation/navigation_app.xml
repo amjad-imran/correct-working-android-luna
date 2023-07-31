@@ -1,0 +1,2648 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_app"
+    app:startDestination="@id/summaryFragment">
+
+    <fragment
+        android:id="@+id/summaryFragment"
+        android:name="com.noisefit.ui.dashboard.summary.SummaryFragment"
+        android:label="SummaryFragment">
+
+        <action
+            android:id="@+id/action_summaryFragment_frag_to_promotionalBottomSheet"
+            app:destination="@id/promotionalBottomSheet" />
+        <action
+            android:id="@+id/action_summaryFragment_frag_to_stepStreakFragment"
+            app:destination="@id/stepsDetailsFragment" />
+        <action
+            android:id="@+id/action_summaryFragment_to_stepsDetailsFragment"
+            app:destination="@id/stepsDetailsFragment" />
+        <action
+            android:id="@+id/action_navigation_activity_to_activityDetailsFragment"
+            app:destination="@id/activityDetailsFragment" />
+
+        <action
+            android:id="@+id/action_navigation_activity_to_activityCyclingFragment"
+            app:destination="@id/activityCyclingFragment" />
+        <action
+            android:id="@+id/action_navigation_activity_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_navigation_activity_to_settingFragment"
+            app:destination="@id/settingFragment" />
+
+        <action
+            android:id="@+id/action_navigation_activity_to_alertTextBottomSheet"
+            app:destination="@id/alertTextBottomSheet" />
+        <action
+            android:id="@+id/action_summaryFragment_to_helpAndSupportListFragment"
+            app:destination="@id/helpAndSupportListFragment" />
+        <action
+            android:id="@+id/action_summaryFragment_to_helpAndSupportFragment"
+            app:destination="@id/helpAndSupportFragment" />
+        <action
+            android:id="@+id/action_summaryFragment_to_createPostFragment"
+            app:destination="@id/createPostFragment" />
+        <action
+            android:id="@+id/action_summaryFragment_to_nplDashboardFragment"
+            app:destination="@id/nplDashboardFragment" />
+        <action
+            android:id="@+id/action_summaryFragment_to_nplPrivacyBottomDialogFragment"
+            app:destination="@id/nplPrivacyBottomDialogFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.noisefit.ui.settings.setting.SettingFragment"
+        android:label="SettingFragment">
+
+        <action
+            android:id="@+id/action_settingFragment_to_valueSelectorBottomSheet"
+            app:destination="@id/valueSelectorBottomSheet" />
+
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/settingDeviceFragment"
+        android:name="com.noisefit.ui.settings.setting.device.DeviceSettingFragment"
+        android:label="SettingDeviceFragment">
+
+        <action
+            android:id="@+id/action_settingDeviceFragment_to_valueSelectorBottomSheet"
+            app:destination="@id/valueSelectorBottomSheet" />
+
+        <action
+            android:id="@+id/action_settingDeviceFragment_to_passwordBottomSheet"
+            app:destination="@id/passwordBottomSheet" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/helpFragment"
+        android:name="com.noisefit.ui.settings.help.HelpFragment"
+        android:label="HelpFragment" />
+    <fragment
+        android:id="@+id/fitnessHealthFragment"
+        android:name="com.noisefit.ui.settings.help.FitnessHealthFragment"
+        android:label="FitnessHealthFragment">
+        <action
+            android:id="@+id/action_navigation_activity_to_fitness_health_details_fragment"
+            app:destination="@+id/fitnessHealthDetailsFragment">
+            <argument
+                android:name="title"
+                app:argType="string" />
+            <argument
+                android:name="itemData"
+                app:argType="com.noisefit_commans.data.model.FitnessHealthModel[]"
+                app:nullable="true" />
+
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/fitnessHealthDetailsFragment"
+        android:name="com.noisefit.ui.settings.help.FitnessHealthDetailsFragment"
+        android:label="FitnessHealthDetailsFragment">
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="itemData"
+            app:argType="com.noisefit_commans.data.model.FitnessHealthModel[]"
+            app:nullable="true" />
+
+
+    </fragment>
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.noisefit.ui.settings.about.AboutFragment"
+        android:label="AboutFragment" />
+
+
+    <fragment
+        android:id="@+id/stepsDetailsFragment"
+        android:name="com.noisefit.ui.dashboard.graphs.steps.StepsDetailsFragment"
+        android:label="StepsDetailsFragment">
+
+        <deepLink
+            android:id="@+id/deepLink9"
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/StepsScreen" />
+        <deepLink
+            android:id="@+id/deepLink8"
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/DistanceScreen" />
+        <deepLink
+            android:id="@+id/deepLink81"
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/CaloriesScreen" />
+        <argument
+            android:name="type"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_stepsDetailsFragment_to_fitnessHealthDetailsFragment"
+            app:destination="@id/fitnessHealthDetailsFragment" />
+        <action
+            android:id="@+id/action_stepsDetailsFragment_to_valueSelectorBottomSheet"
+            app:destination="@id/valueSelectorBottomSheet" />
+    </fragment>
+    <fragment
+        android:id="@+id/healthOverviewFragment"
+        android:name="com.noisefit.ui.dashboard.healthOverview.HealthOverviewFragment"
+        android:label="HealthOverviewFragment">
+        <action
+            android:id="@+id/action_healthOverviewFragment_to_stepsDetailsFragment"
+            app:destination="@id/stepsDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/heartRateDetailsFragment"
+        android:name="com.noisefit.ui.dashboard.graphs.hr.HeartRateDetailsFragment"
+        android:label="HeartRateDetailsFragment">
+        <deepLink
+            android:id="@+id/deepLink10"
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/HeartRateScreen" />
+        <action
+            android:id="@+id/action_heartRateDetailsFragment_to_fitnessHealthDetailsFragment"
+            app:destination="@id/fitnessHealthDetailsFragment" />
+        <action
+            android:id="@+id/action_heartRateDetailsFragment_to_valueSelectorBottomSheet"
+            app:destination="@id/valueSelectorBottomSheet" />
+    </fragment>
+    <fragment
+        android:id="@+id/sleepDetailsFragment"
+        android:name="com.noisefit.ui.dashboard.graphs.sleep.SleepDetailsFragment"
+        android:label="SleepDetailsFragment">
+        <deepLink
+            android:id="@+id/deepLink7"
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/SleepScreen" />
+        <action
+            android:id="@+id/action_sleepDetailsFragment_to_sleepBlogDetailFragment"
+            app:destination="@id/sleepBlogDetailFragment" />
+        <action
+            android:id="@+id/action_sleepDetailsFragment_to_fitnessHealthDetailsFragment"
+            app:destination="@id/fitnessHealthDetailsFragment" />
+        <action
+            android:id="@+id/action_sleepDetailsFragment_to_valueSelectorBottomSheet"
+            app:destination="@id/valueSelectorBottomSheet" />
+    </fragment>
+    <fragment
+        android:id="@+id/stressDetailsFragment"
+        android:name="com.noisefit.ui.dashboard.graphs.stress.StressDetailsFragment"
+        android:label="StressDetailsFragment">
+        <deepLink
+            android:id="@+id/deepLink11"
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/StressScreen" />
+        <action
+            android:id="@+id/action_stressDetailsFragment_to_fitnessHealthDetailsFragment"
+            app:destination="@id/fitnessHealthDetailsFragment" />
+        <action
+            android:id="@+id/action_stressDetailsFragment_to_valueSelectorBottomSheet"
+            app:destination="@id/valueSelectorBottomSheet" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_activity"
+        android:name="com.noisefit.ui.workout.ActivityFragment"
+        android:label="@string/text_activity">
+        <action
+            android:id="@+id/action_navigation_activity_to_activityDetailsFragment"
+            app:destination="@id/activityDetailsFragment" />
+
+        <action
+            android:id="@+id/action_navigation_activity_to_activityCyclingFragment"
+            app:destination="@id/activityCyclingFragment" />
+
+        <deepLink
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/ActivityHistory" />
+    </fragment>
+    <fragment
+        android:id="@+id/feedbackFragment"
+        android:name="com.noisefit.ui.settings.feedback.FeedbackFragment"
+        android:label="FeedbackFragment">
+        <action
+            android:id="@+id/action_navigation_feedbackFragment_to_bottomSheetImagePicker"
+            app:destination="@id/bottomSheetImagePicker" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_activity_feedback"
+        android:name="com.noisefit.ui.settings.feedbacknew.FeedbackFragment"
+        android:label="FeedbackFragment">
+        <action
+            android:id="@+id/action_navigation_feedbackFragment_to_bottomSheetImagePicker"
+            app:destination="@id/bottomSheetImagePicker" />
+        <deepLink
+            android:id="@+id/deepLink12"
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/FeedbackScreen" />
+
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/activityDetailsFragment"
+        android:name="com.noisefit.ui.workout.ActivityDetailsFragment"
+        android:label="ActivityDetailsFragment">
+        <action
+            android:id="@+id/action_navigation_activity_to_activityFeedbackFragment"
+            app:destination="@id/navigation_activity_feedback" />
+
+        <argument
+            android:name="activity"
+            app:argType="com.noisefit_commans.models.SportsModeResponse" />
+        <action
+            android:id="@+id/action_activityDetailsFragment_to_activityShareFragment"
+            app:destination="@id/activityShareFragment" />
+        <action
+            android:id="@+id/action_activityDetailsFragment_to_createPostFragment"
+            app:destination="@id/createPostFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_shop"
+        android:name="com.noisefit.ui.shop.ShopFragment"
+        android:label="@string/text_shop">
+        <action
+            android:id="@+id/action_navigation_shop_to_shopCategoryDataListingFragment"
+            app:destination="@id/shopCategoryDataListingFragment" />
+        <deepLink
+            android:id="@+id/deepLink3"
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/ShopScreen" />
+    </fragment>
+    <fragment
+        android:id="@+id/shopCategoryDataListingFragment"
+        android:name="com.noisefit.ui.shop.ShopCategoryDataListingFragment"
+        android:label="ShopCategoryDataListingFragment">
+        <argument
+            android:name="shopCategory"
+            app:argType="com.noisefit_commans.data.model.ShopCategory" />
+        <action
+            android:id="@+id/action_shopCategoryDataListingFragment_to_bottomSheetShopProductSort"
+            app:destination="@id/bottomSheetShopProductSort" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/bottomSheetShopProductSort"
+        android:name="com.noisefit.ui.shop.BottomSheetShopProductSort"
+        android:label="BottomSheetShopProductSort">
+        <argument
+            android:name="selectedSort"
+            app:argType="com.noisefit.ui.shop.SortModes" />
+    </dialog>
+    <dialog
+        android:id="@+id/bottomSheetQrInfo"
+        android:name="com.noisefit.ui.dashboard.feature.qrPayment.bottomsheets.BottomSheetQrInfo"
+        android:label="BottomSheetQrInfo" />
+
+
+    <dialog
+        android:id="@+id/bottomSheetUploadQrVia"
+        android:name="com.noisefit.ui.dashboard.feature.qrPayment.bottomsheets.BottomSheetUploadQrVia"
+        android:label="BottomSheetUploadQrVia" />
+    <dialog
+        android:id="@+id/bottomSheetAddLink"
+        android:name="com.noisefit.ui.dashboard.feature.qrPayment.bottomsheets.BottomSheetAddLink"
+        android:label="BottomSheetAddLink" />
+    <dialog
+        android:id="@+id/bottomSheetAddName"
+        android:name="com.noisefit.ui.dashboard.feature.qrPayment.bottomsheets.BottomSheetAddName"
+        android:label="BottomSheetAddName">
+        <argument
+            android:name="qrCode"
+            app:argType="com.noisefit_commans.models.UPIQRCode" />
+    </dialog>
+
+
+    <dialog
+        android:id="@+id/bottomSheetInterestSelector"
+        android:name="com.noisefit.ui.friends.profile.BottomSheetInterest"
+        android:label="bottomSheetInterestSelector">
+        <argument
+            android:name="shouldUpdate"
+            android:defaultValue="true"
+            app:argType="boolean" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/bottomSheetReactions"
+        android:name="com.noisefit.ui.friends.reactions.ReactionsBottomSheet"
+        android:label="BottomSheetReactions">
+
+        <argument
+            android:name="userFriendReactions"
+            app:argType="com.noisefit_commans.data.model.ReactionsWrapper[]" />
+
+    </dialog>
+
+    <dialog
+        android:id="@+id/bottomSheetReactionsPaginate"
+        android:name="com.noisefit.ui.friends.reactions.paginate.ReactionsBottomSheetPaginate"
+        android:label="BottomSheetReactions">
+        <argument
+            android:name="postId"
+            app:argType="long" />
+
+    </dialog>
+    <fragment
+        android:id="@+id/shopSearchFragment"
+        android:name="com.noisefit.ui.shop.ShopSearchFragment"
+        android:label="ShopSearchFragment" />
+    <fragment
+        android:id="@+id/navigation_device"
+        android:name="com.noisefit.ui.myDevice.MyDeviceFragment"
+        android:label="MyDeviceFragment">
+        <deepLink
+            android:id="@+id/deepLink4"
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/Settings" />
+        <action
+            android:id="@+id/action_navigation_device_frag_to_unpairBottomDialogFragment"
+            app:destination="@id/unpairBottomDialogFragment" />
+        <action
+            android:id="@+id/action_navigation_device_to_watchFaceUpdateFragment"
+            app:destination="@id/watchFaceUpdateFragment" />
+        <action
+            android:id="@+id/action_navigation_device_to_wristSenseFragment"
+            app:destination="@id/wristSenseFragment" />
+        <action
+            android:id="@+id/action_navigation_device_to_trophiesFragment"
+            app:destination="@id/trophiesFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.noisefit.ui.profile.ProfileFragment"
+        android:label="fragment_profile">
+        <action
+            android:id="@+id/action_profileFragment_to_profileEditFragment"
+            app:destination="@id/profileEditFragment" />
+        <action
+            android:id="@+id/action_profileEditFragment_to_logoutBottomSheet"
+            app:destination="@id/logoutBottomSheet" />
+        <action
+            android:id="@+id/action_profileEditFragment_to_accountDeleteBottomSheet"
+            app:destination="@id/accountDeleteBottomSheet" />
+    </fragment>
+    <dialog
+        android:id="@+id/logoutBottomSheet"
+        android:name="com.noisefit.ui.profile.LogoutBottomSheet"
+        android:label="LogoutBottomSheet" />
+    <dialog
+        android:id="@+id/accountDeleteBottomSheet"
+        android:name="com.noisefit.ui.profile.DeleteAccountBottomSheet"
+        android:label="ProfileEditFragment" />
+
+    <dialog
+        android:id="@+id/nameUpdateBottomSheet"
+        android:name="com.noisefit.ui.profile.NameUpdateBottomSheet"
+        android:label="ProfileEditFragment">
+
+        <argument
+            android:name="name"
+            app:argType="string"
+            app:nullable="true" />
+    </dialog>
+    <dialog
+        android:id="@+id/endGameUpdateBottomSheet"
+        android:name="com.noisefit.ui.profile.EndGameUpdateBottomSheet"
+        android:label="ProfileEditFragment">
+
+        <argument
+            android:name="endGame"
+            app:argType="integer" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/bottomSheetImagePicker"
+        android:name="com.noisefit.ui.profile.BottomSheetImagePicker"
+        android:label="ProfileEditFragment" />
+
+
+    <fragment
+        android:id="@+id/sleepBlogDetailFragment"
+        android:name="com.noisefit.ui.dashboard.graphs.sleep.SleepBlogDetailFragment"
+        android:label="SleepBlogDetailFragment">
+        <argument
+            android:name="blogData"
+            app:argType="com.noisefit_commans.data.response.SleepBlogCategories" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/bloodOxygenDetailsFragment"
+        android:name="com.noisefit.ui.dashboard.graphs.bloodOxygen.BloodOxygenDetailsFragment"
+        android:label="BloodOxygenDetailsFragment">
+        <deepLink
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/Spo2Screen" />
+        <action
+            android:id="@+id/action_bloodOxygenDetailsFragment_to_fitnessHealthDetailsFragment"
+            app:destination="@id/fitnessHealthDetailsFragment" />
+        <action
+            android:id="@+id/action_bloodOxygenDetailsFragment_to_valueSelectorBottomSheet"
+            app:destination="@id/valueSelectorBottomSheet" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/unpairBottomDialogFragment"
+        android:name="com.noisefit.ui.myDevice.UnpairBottomDialogFragment"
+        android:label="UnpairBottomDialogFragment" />
+
+    <dialog
+        android:id="@+id/addContactListFragment"
+        android:name="com.noisefit.ui.dashboard.feature.contact.AddContactListFragment"
+        android:label="AddContactListFragment">
+
+        <argument
+            android:name="contactList"
+            app:argType="com.noisefit_commans.models.Contact[]"
+            app:nullable="true" />
+        <argument
+            android:name="maxCount"
+            app:argType="integer" />
+    </dialog>
+    <fragment
+        android:id="@+id/contactListFragment"
+        android:name="com.noisefit.ui.dashboard.feature.contact.ContactListFragment"
+        android:label="ContactListFragment">
+        <action
+            android:id="@+id/action_contactListFragment_to_addContactListFragment"
+            app:destination="@id/addContactListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/stocksFragment"
+        android:name="com.noisefit.ui.dashboard.feature.stock.StocksFragment"
+        android:label="StocksFragment">
+        <action
+            android:id="@+id/action_stocksFragment_to_addStockFragment"
+            app:destination="@id/addStockFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/addStockFragment"
+        android:name="com.noisefit.ui.dashboard.feature.stock.AddStockBottomSheet"
+        android:label="AddStockFragment" />
+    <fragment
+        android:id="@+id/worldClockFragment"
+        android:name="com.noisefit.ui.dashboard.feature.worldclock.WorldClockFragment"
+        android:label="WorldClockFragment">
+        <action
+            android:id="@+id/action_worldClockFragment_to_worldClockBottomSheet"
+            app:destination="@id/worldClockBottomSheet" />
+    </fragment>
+    <dialog
+        android:id="@+id/worldClockBottomSheet"
+        android:name="com.noisefit.ui.dashboard.feature.worldclock.WorldClockBottomSheet"
+        android:label="WorldClockBottomSheet" />
+    <fragment
+        android:id="@+id/quickReplyFragment"
+        android:name="com.noisefit.ui.dashboard.feature.quickreply.QuickReplyFragment"
+        android:label="QuickReplyFragment">
+        <action
+            android:id="@+id/action_quickReplyFragment_to_quickReplyEditBottomSheet"
+            app:destination="@id/quickReplyEditBottomSheet" />
+    </fragment>
+    <fragment
+        android:id="@+id/weatherFragment"
+        android:name="com.noisefit.ui.dashboard.feature.weather.WeatherFragment"
+        android:label="WeatherFragment">
+
+        <action
+            android:id="@+id/action_weatherFragment_to_valueSelectorBottomSheet"
+            app:destination="@id/valueSelectorBottomSheet" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/valueSelectorBottomSheet"
+        android:name="com.noisefit.ui.common.bottomSheet.ValueSelectorBottomSheet"
+        android:label="ValueSelectorBottomSheet">
+        <argument
+            android:name="selectedValue"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="selectionList"
+            app:argType="string[]" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </dialog>
+    <dialog
+        android:id="@+id/hsLanguageValueSelectorBottomSheet"
+        android:name="com.noisefit.ui.common.bottomSheet.HSLanguageSelectorBottomSheet"
+        android:label="HSLanguageSelectorBottomSheet">
+        <argument
+            android:name="selectedValue"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="selectionList"
+            app:argType="string[]" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </dialog>
+    <dialog
+        android:id="@+id/durationSelectorBottomSheet"
+        android:name="com.noisefit.ui.friends.DurationSelectorBottomSheet"
+        android:label="DurationSelectorBottomSheet">
+        <argument
+            android:name="selectedValue"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="selectionList"
+            app:argType="string[]" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </dialog>
+    <fragment
+        android:id="@+id/findMyDeviceFragment"
+        android:name="com.noisefit.ui.dashboard.feature.findmydevice.FindMyDeviceFragment"
+        android:label="FindMyDeviceFragment" />
+    <fragment
+        android:id="@+id/googleFitFragment"
+        android:name="com.noisefit.ui.dashboard.feature.googlefit.GoogleFitFragment"
+        android:label="GoogleFitFragment" />
+    <dialog
+        android:id="@+id/quickReplyEditBottomSheet"
+        android:name="com.noisefit.ui.dashboard.feature.quickreply.QuickReplyEditBottomSheet"
+        android:label="QuickReplyEditFragment">
+        <argument
+            android:name="reply"
+            app:argType="com.noisefit_commans.models.CustomReplyData$CustomReply"
+            app:nullable="true" />
+    </dialog>
+    <fragment
+        android:id="@+id/appNotificationFragment"
+        android:name="com.noisefit.ui.dashboard.feature.notification.apps.AppNotificationFragment"
+        android:label="AppNotificationFragment">
+
+        <action
+            android:id="@+id/action_appNotificationFragment_to_smartNotificationFragment"
+            app:destination="@id/smartNotificationFragment" />
+        <action
+            android:id="@+id/action_appNotificationFragment_to_manageAppsFragment"
+            app:destination="@id/manageAppsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/manageAppsFragment"
+        android:name="com.noisefit.ui.dashboard.feature.notification.apps.ManageAppsFragment"
+        android:label="ManageAppsFragment">
+
+        <argument
+            android:name="selectedNotificationList"
+            app:argType="com.noisefit_commans.data.model.NotificationApp[]" />
+    </fragment>
+    <fragment
+        android:id="@+id/callAlertFragment"
+        android:name="com.noisefit.ui.dashboard.feature.notification.CallAlertFragment"
+        android:label="CallAlertFragment" />
+    <fragment
+        android:id="@+id/smsAlertFragment"
+        android:name="com.noisefit.ui.dashboard.feature.notification.SmsAlertFragment"
+        android:label="SmsAlertFragment" />
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.noisefit.ui.dashboard.feature.notification.NotificationFragment"
+        android:label="NotificationFragment" />
+    <fragment
+        android:id="@+id/deviceManagementFragment"
+        android:name="com.noisefit.ui.myDevice.manage.DeviceManagementFragment"
+        android:label="DeviceManagementFragment">
+        <action
+            android:id="@+id/action_deviceManagementFragment_to_unpairBottomDialogFragment"
+            app:destination="@id/unpairBottomDialogFragment" />
+        <action
+            android:id="@+id/action_deviceManagementFragment_to_confirmBottomDialogFragment"
+            app:destination="@id/confirmBottomDialogFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/checkForUpdatesFragment"
+        android:name="com.noisefit.ui.myDevice.manage.CheckForUpdatesFragment"
+        android:label="CheckForUpdatesFragment">
+        <deepLink
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/OtaUpdate" />
+        <argument
+            android:name="startUpdate"
+            android:defaultValue="false"
+            app:argType="boolean" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/confirmBottomDialogFragment"
+        android:name="com.noisefit.ui.common.ConfirmBottomDialogFragment"
+        android:label="ConfirmBottomDialogFragment">
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="message"
+            app:argType="string" />
+    </dialog>
+
+    <fragment
+        android:id="@+id/warrantyFragment"
+        android:name="com.noisefit.ui.myDevice.warranty.WarrantyFragment"
+        android:label="WarrantyFragment">
+        <action
+            android:id="@+id/action_warrantyFragment_to_qrCodeScanFragment"
+            app:destination="@id/qrCodeScanFragment" />
+        <action
+            android:id="@+id/action_warrantyFragment_to_valueSelectorBottomSheet"
+            app:destination="@id/valueSelectorBottomSheet" />
+    </fragment>
+    <fragment
+        android:id="@+id/qrCodeScanFragment"
+        android:name="com.noisefit.ui.myDevice.warranty.QrCodeScanFragment"
+        android:label="QrCodeScanFragment" />
+    <fragment
+        android:id="@+id/idleReminderFragment"
+        android:name="com.noisefit.ui.dashboard.feature.idle.IdleReminderFragment"
+        android:label="IdleReminderFragment">
+        <action
+            android:id="@+id/action_idleReminderFragment_to_editIdleFragment"
+            app:destination="@id/editIdleFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/healthMonitorFragment"
+        android:name="com.noisefit.ui.dashboard.feature.healthMonitor.HealthMonitorFragment"
+        android:label="HealthMonitorFragment" />
+    <fragment
+        android:id="@+id/stressSettingsFragment"
+        android:name="com.noisefit.ui.dashboard.feature.healthMonitor.stress.StressSettingsFragment"
+        android:label="StressSettingsFragment" />
+    <fragment
+        android:id="@+id/drinkReminderFragment"
+        android:name="com.noisefit.ui.dashboard.feature.drink.DrinkReminderFragment"
+        android:label="DrinkReminderFragment">
+        <action
+            android:id="@+id/action_drinkReminderFragment_to_editDrinkFragment"
+            app:destination="@id/editDrinkFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/heartRateSettingsFragment"
+        android:name="com.noisefit.ui.dashboard.feature.healthMonitor.heartRate.HeartRateSettingsFragment"
+        android:label="HeartRateSettingsFragment">
+        <action
+            android:id="@+id/action_heartRateSettingsFragment_to_editHeartRateSettingsFragment"
+            app:destination="@id/editHeartRateSettingsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/myReminderFragment"
+        android:name="com.noisefit.ui.dashboard.feature.myReminder.MyReminderFragment"
+        android:label="MyReminderFragment">
+        <action
+            android:id="@+id/action_myReminderFragment_to_addReminderFragment"
+            app:destination="@id/addReminderFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/addReminderFragment"
+        android:name="com.noisefit.ui.dashboard.feature.myReminder.AddReminderFragment"
+        android:label="AddReminderFragment">
+        <argument
+            android:name="reminder"
+            app:argType="com.noisefit_commans.models.ReminderList$Reminder"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_addReminderFragment_to_valueSelectorBottomSheet"
+            app:destination="@id/valueSelectorBottomSheet" />
+        <argument
+            android:name="reminderList"
+            app:argType="com.noisefit_commans.models.Reminder[]"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_addReminderFragment_to_dateBottomSheet"
+            app:destination="@id/dateBottomSheet" />
+        <action
+            android:id="@+id/action_addReminderFragment_to_timeBottomSheet"
+            app:destination="@id/timeBottomSheet" />
+
+        <action
+            android:id="@+id/action_addReminderFragment_to_repeatBottomSheet"
+            app:destination="@id/repeatBottomSheet" />
+    </fragment>
+    <dialog
+        android:id="@+id/dateBottomSheet"
+        android:name="com.noisefit.ui.common.bottomSheet.DateBottomSheet"
+        android:label="DateBottomSheet">
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="date"
+            app:argType="integer" />
+        <argument
+            android:name="month"
+            app:argType="integer" />
+        <argument
+            android:name="year"
+            app:argType="integer" />
+        <argument
+            android:name="dobDialog"
+            app:argType="boolean" />
+    </dialog>
+    <dialog
+        android:id="@+id/timeBottomSheet"
+        android:name="com.noisefit.ui.common.bottomSheet.TimeBottomSheet"
+        android:label="TimeBottomSheet">
+        <argument
+            android:name="hour"
+            app:argType="integer" />
+        <argument
+            android:name="minute"
+            app:argType="integer" />
+        <argument
+            android:name="unitPosition"
+            app:argType="integer" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </dialog>
+    <fragment
+        android:id="@+id/handWashReminderFragment"
+        android:name="com.noisefit.ui.dashboard.feature.hand.HandWashReminderFragment"
+        android:label="HandWashReminderFragment">
+        <action
+            android:id="@+id/action_handWashReminderFragment_to_editHandWashFragment"
+            app:destination="@id/editHandWashFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/myAlarmFragment"
+        android:name="com.noisefit.ui.dashboard.feature.alarm.MyAlarmFragment"
+        android:label="MyAlarmFragment">
+
+        <action
+            android:id="@+id/action_alarmsFragment_to_bottomSheetCreateAlarm"
+            app:destination="@id/addAlarmBottomSheet" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/addAlarmBottomSheet"
+        android:name="com.noisefit.ui.dashboard.feature.alarm.AddAlarmBottomSheet"
+        android:label="AddAlarmBottomSheet">
+        <argument
+            android:name="alarm"
+            app:argType="com.noisefit_commans.models.AlarmsList$Alarm"
+            app:nullable="true" />
+    </dialog>
+    <fragment
+        android:id="@+id/editIdleFragment"
+        android:name="com.noisefit.ui.dashboard.feature.idle.EditIdleFragment"
+        android:label="EditIdleFragment">
+        <action
+            android:id="@+id/action_editIdleFragment_to_timeBottomSheet"
+            app:destination="@id/timeBottomSheet" />
+        <action
+            android:id="@+id/action_editIdleFragment_to_valueSelectorBottomSheet"
+            app:destination="@id/valueSelectorBottomSheet" />
+        <argument
+            android:name="reminder"
+            app:argType="com.noisefit_commans.models.SedentaryData" />
+        <action
+            android:id="@+id/action_editIdleFragment_to_repeatBottomSheet"
+            app:destination="@id/repeatBottomSheet" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/editDrinkFragment"
+        android:name="com.noisefit.ui.dashboard.feature.drink.EditDrinkFragment"
+        android:label="EditDrinkFragment">
+        <action
+            android:id="@+id/action_editDrinkFragment_to_timeBottomSheet"
+            app:destination="@id/timeBottomSheet" />
+        <action
+            android:id="@+id/action_editDrinkFragment_to_valueSelectorBottomSheet"
+            app:destination="@id/valueSelectorBottomSheet" />
+        <argument
+            android:name="reminder"
+            app:argType="com.noisefit_commans.models.SedentaryData" />
+        <action
+            android:id="@+id/action_editDrinkFragment_to_repeatBottomSheet"
+            app:destination="@id/repeatBottomSheet" />
+    </fragment>
+    <dialog
+        android:id="@+id/repeatBottomSheet"
+        android:name="com.noisefit.ui.common.bottomSheet.RepeatBottomSheet"
+        android:label="RepeatBottomSheet">
+        <argument
+            android:name="repeat"
+            app:argType="boolean[]" />
+    </dialog>
+
+    <fragment
+        android:id="@+id/editHandWashFragment"
+        android:name="com.noisefit.ui.dashboard.feature.hand.EditHandWashFragment"
+        android:label="EditHandWashFragment">
+        <action
+            android:id="@+id/action_editHandWashFragment_to_timeBottomSheet"
+            app:destination="@id/timeBottomSheet" />
+        <action
+            android:id="@+id/action_editHandWashFragment_to_valueSelectorBottomSheet"
+            app:destination="@id/valueSelectorBottomSheet" />
+
+        <action
+            android:id="@+id/action_editHandWashFragment_to_repeatBottomSheet"
+            app:destination="@id/repeatBottomSheet" />
+        <argument
+            android:name="handwash"
+            app:argType="com.noisefit_commans.models.HandWashing" />
+    </fragment>
+    <include app:graph="@navigation/navigation_profile_edit" />
+
+    <dialog
+        android:id="@+id/deleteAccountBottomSheet"
+        android:name="com.noisefit.ui.profile.DeleteAccountBottomSheet"
+        android:label="DeleteAccountBottomSheet" />
+
+    <fragment
+        android:id="@+id/navigation_watchface"
+        android:name="com.noisefit.ui.watchface.WatchFaceFragment"
+        android:label="@string/text_watchfaces">
+
+        <action
+            android:id="@+id/action_WatchFaceFragment_to_bottomSheetImagePicker"
+            app:destination="@id/bottomSheetImagePicker" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/watchFaceCategoryFragment"
+        android:name="com.noisefit.ui.watchface.WatchFaceCategoryFragment"
+        android:label="WatchFaceCategoryFragment">
+        <argument
+            android:name="categoryId"
+            app:argType="integer" />
+        <argument
+            android:name="categoryName"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_watchFaceCategoryFragment_to_watchFaceUpdateFragment"
+            app:destination="@id/watchFaceUpdateFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/watchFaceUpdateFragment"
+        android:name="com.noisefit.ui.watchface.WatchFaceUpdateFragment"
+        android:label="WatchFaceUpdateFragment">
+        <argument
+            android:name="watchFaceId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/watchFaceListingFragment"
+        android:name="com.noisefit.ui.watchface.mode2.WatchFaceListingFragment"
+        android:label="WatchFaceListingFragment">
+        <action
+            android:id="@+id/action_watchFaceListingFragment_to_bottomSheetImagePicker"
+            app:destination="@id/bottomSheetImagePicker" />
+    </fragment>
+    <fragment
+        android:id="@+id/activityShareFragment"
+        android:name="com.noisefit.ui.workout.ActivityShareFragment"
+        android:label="ActivityShareFragment">
+        <argument
+            android:name="activity"
+            app:argType="com.noisefit_commans.models.SportsModeResponse" />
+        <action
+            android:id="@+id/action_activityShareFragment_to_bottomSheetImagePicker"
+            app:destination="@id/bottomSheetImagePicker" />
+    </fragment>
+    <fragment
+        android:id="@+id/customiseWatchfaceFragment"
+        android:name="com.noisefit.ui.watchface.CustomiseWatchfaceFragment"
+        android:label="fragment_customise_watchface" />
+    <dialog
+        android:id="@+id/bottomSheetWidgetSelection"
+        android:name="com.noisefit.ui.watchface.custom.BottomSheetWidgetSelection"
+        android:label="BottomSheetWidgetSelection">
+        <argument
+            android:name="gridType"
+            app:argType="com.noisefit_commans.data.enums.GridType" />
+        <argument
+            android:name="selectedColor"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="selectedWidget"
+            app:argType="com.noisefit_commans.data.model.WatchFaceWidgets"
+            app:nullable="true" />
+    </dialog>
+    <fragment
+        android:id="@+id/nfhCustomWatchFaceFragment"
+        android:name="com.noisefit.ui.watchface.custom.NfhCustomWatchFaceFragment"
+        android:label="NfhCustomWatchFaceFragment">
+        <action
+            android:id="@+id/action_nfhCustomWatchFaceFragment_to_bottomSheetImagePicker"
+            app:destination="@id/bottomSheetImagePicker" />
+        <action
+            android:id="@+id/action_nfhCustomWatchFaceFragment_to_bottomSheetWidgetSelection"
+            app:destination="@id/bottomSheetWidgetSelection" />
+    </fragment>
+    <dialog
+        android:id="@+id/bottomWidgetSelection"
+        android:name="com.noisefit.ui.watchface.custom.iconBuzz.BottomWidgetSelection"
+        android:label="BottomWidgetSelection">
+        <argument
+            android:name="gridType"
+            app:argType="com.noisefit_commans.data.enums.GridType" />
+        <argument
+            android:name="widget"
+            app:argType="com.noisefit_commans.data.model.WatchFaceWidgets" />
+        <argument
+            android:name="itemId"
+            app:argType="integer" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </dialog>
+    <fragment
+        android:id="@+id/daFitCustomWatchFaceFragment"
+        android:name="com.noisefit.ui.watchface.custom.iconBuzz.DaFitCustomWatchFaceFragment"
+        android:label="DaFitCustomWatchFaceFragment">
+        <action
+            android:id="@+id/action_daFitCustomWatchFaceFragment_to_bottomWidgetSelection"
+            app:destination="@id/bottomWidgetSelection" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/visionCustomWatchFaceFragment"
+        android:name="com.noisefit.ui.watchface.custom.vision.VisionCustomWatchFaceFragment"
+        android:label="VisionCustomWatchFaceFragment">
+        <action
+            android:id="@+id/action_visionCustomWatchFaceFragment_to_bottomSheetImagePicker"
+            app:destination="@id/bottomSheetImagePicker" />
+
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/myProfileFragment"
+        android:name="com.noisefit.ui.profile.myprofile.MyProfileFragment"
+        android:label="MyProfileFragment">
+        <action
+            android:id="@+id/action_myProfileFragment_to_trophiesFragment"
+            app:destination="@id/trophiesFragment" />
+        <action
+            android:id="@+id/action_myProfileFragment_to_logoutBottomSheet"
+            app:destination="@id/logoutBottomSheet" />
+        <action
+            android:id="@+id/action_myProfileFragment_to_accountDeleteBottomSheet"
+            app:destination="@id/accountDeleteBottomSheet" />
+        <action
+            android:id="@+id/action_myProfileFragment_to_helpAndSupportFragment"
+            app:destination="@id/helpAndSupportFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/roundUpLandingFragment"
+        android:name="com.noisefit.ui.roundup.RoundUpLandingFragment"
+        android:label="RoundUpLandingFragment">
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="https://noisefit.page.link/YearlySummary" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/realHeartRateSettingFragment"
+        android:name="com.noisefit.ui.dashboard.feature.healthMonitor.heartRate.RealHeartRateSettingFragment"
+        android:label="RealHeartRateSettingFragment" />
+    <fragment
+        android:id="@+id/alertHeartRateFragment"
+        android:name="com.noisefit.ui.dashboard.feature.healthMonitor.heartRate.AlertHeartRateFragment"
+        android:label="AlertHeartRateFragment">
+        <action
+            android:id="@+id/action_heartRateSettingsFragment_to_valueSelectorBottomSheet"
+            app:destination="@id/valueSelectorBottomSheet" />
+    </fragment>
+    <fragment
+        android:id="@+id/onlyHeartRateFragment"
+        android:name="com.noisefit.ui.dashboard.feature.healthMonitor.heartRate.OnlyHeartRateFragment"
+        android:label="OnlyHeartRateFragment" />
+
+    <fragment
+        android:id="@+id/editHeartRateSettingsFragment"
+        android:name="com.noisefit.ui.dashboard.feature.healthMonitor.heartRate.EditHeartRateSettingsFragment"
+        android:label="EditHeartRateSettingsFragment">
+        <action
+            android:id="@+id/action_editHeartRateSettingsFragment_to_valueSelectorBottomSheet"
+            app:destination="@id/valueSelectorBottomSheet" />
+
+        <action
+            android:id="@+id/action_editHeartRateSettingsFragment_to_timeBottomSheet"
+            app:destination="@id/timeBottomSheet" />
+        <argument
+            android:name="heartRateInterval"
+            app:argType="com.noisefit_commans.models.HeartRateInterval" />
+        <argument
+            android:name="heartRateAlert"
+            app:argType="com.noisefit_commans.models.HeartRateAlert" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/challengetrophyCollectDialog"
+        android:name="com.noisefit.ui.challenge.challengeDetail.ChallengeTrophyCollectDialog"
+        android:label="ChallengeTrophyCollectDialog">
+        <argument
+            android:name="trophyTitle"
+            app:argType="string" />
+        <argument
+            android:name="trophyUrl"
+            app:argType="string" />
+        <argument
+            android:name="activityId"
+            app:argType="integer" />
+        <argument
+            android:name="isTrophyCollected"
+            android:defaultValue="false"
+            app:argType="boolean" />
+    </dialog>
+    <fragment
+        android:id="@+id/challengeLeaderboardFragment"
+        android:name="com.noisefit.ui.challenge.challengeLeaderboard.ChallengeLeaderboardFragment"
+        android:label="fragment_challenge_leaderboard">
+        <argument
+            android:name="ids"
+            app:argType="com.noisefit_commans.data.model.challenge.ChallengeIds" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/challengeGiveUpDialog"
+        android:name="com.noisefit.ui.challenge.challengeDetail.ChallengeGiveUpDialog"
+        android:label="ChallengeGiveUp">
+        <argument
+            android:name="eventName"
+            app:argType="string" />
+    </dialog>
+
+    <fragment
+        android:id="@+id/cameraSwitchFragment"
+        android:name="com.noisefit.ui.myDevice.camera.CameraSwitchFragment"
+        android:label="fragment_camera_switch" />
+
+    <fragment
+        android:id="@+id/sportsRecognitionFragment"
+        android:name="com.noisefit.ui.myDevice.sportrecognition.SportsRecognitionFragment"
+        android:label="SportsRecognitionFragment" />
+
+    <fragment
+        android:id="@+id/walkReminderFragment"
+        android:name="com.noisefit.ui.dashboard.feature.walkReminder.WalkReminderFragment"
+        android:label="WalkReminderFragment">
+
+
+        <action
+            android:id="@+id/action_walkReminderFragment_to_editWalkReminderFragment"
+            app:destination="@id/editWalkReminderFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/editWalkReminderFragment"
+        android:name="com.noisefit.ui.dashboard.feature.walkReminder.EditWalkReminderFragment"
+        android:label="EditWalkReminderFragment">
+
+        <action
+            android:id="@+id/action_editWalkReminderFragment_to_repeatBottomSheet"
+            app:destination="@id/repeatBottomSheet" />
+        <action
+            android:id="@+id/action_editWalkReminderFragment_to_valueSelectorBottomSheet"
+            app:destination="@id/valueSelectorBottomSheet" />
+
+        <action
+            android:id="@+id/action_editWalkReminderFragment_to_timeBottomSheet"
+            app:destination="@id/timeBottomSheet" />
+        <argument
+            android:name="walkReminder"
+            app:argType="com.noisefit_commans.models.WalkReminderData" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/editMealReminderFragment"
+        android:name="com.noisefit.ui.dashboard.feature.healthMonitor.meal.EditMealReminderFragment"
+        android:label="EditMealReminderFragment">
+
+        <action
+            android:id="@+id/action_editWalkReminderFragment_to_valueSelectorBottomSheet"
+            app:destination="@id/valueSelectorBottomSheet" />
+
+        <action
+            android:id="@+id/action_editWalkReminderFragment_to_timeBottomSheet"
+            app:destination="@id/timeBottomSheet" />
+        <argument
+            android:name="reminder"
+            app:argType="com.noisefit_commans.models.SedentaryData" />
+    </fragment>
+    <fragment
+        android:id="@+id/mealReminderFragment"
+        android:name="com.noisefit.ui.dashboard.feature.healthMonitor.meal.MealReminderFragment"
+        android:label="MealReminderFragment">
+        <action
+            android:id="@+id/action_mealReminderFragment_to_editMealReminderFragment"
+            app:destination="@id/editMealReminderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editMedicineReminderFragment"
+        android:name="com.noisefit.ui.dashboard.feature.healthMonitor.medicine.EditMedicineReminderFragment"
+        android:label="EditMedicineReminderFragment">
+        <action
+            android:id="@+id/action_editMedicineReminderFragment_to_valueSelectorBottomSheet"
+            app:destination="@id/valueSelectorBottomSheet" />
+
+        <action
+            android:id="@+id/action_editMedicineReminderFragment_to_timeBottomSheet"
+            app:destination="@id/timeBottomSheet" />
+        <argument
+            android:name="reminder"
+            app:argType="com.noisefit_commans.models.SedentaryData" />
+    </fragment>
+    <fragment
+        android:id="@+id/medicineReminderFragment"
+        android:name="com.noisefit.ui.dashboard.feature.healthMonitor.medicine.MedicineReminderFragment"
+        android:label="MedicineReminderFragment">
+        <action
+            android:id="@+id/action_medicineReminderFragment_to_editMealReminderFragment"
+            app:destination="@id/editMedicineReminderFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/addSportSelectionFragment"
+        android:name="com.noisefit.ui.dashboard.feature.sportSelection.AddSportSelectionFragment"
+        android:label="AddSportSelectionFragment">
+        <argument
+            android:name="sportList"
+            app:argType="com.noisefit_commans.models.SportsModeList$SportsMode[]" />
+    </fragment>
+    <fragment
+        android:id="@+id/sportSelectionFragment"
+        android:name="com.noisefit.ui.dashboard.feature.sportSelection.SportSelectionFragment"
+        android:label="SportSelectionFragment">
+        <action
+            android:id="@+id/action_sportSelectionFragment_to_addSportSelectionFragment"
+            app:destination="@id/addSportSelectionFragment" />
+
+
+    </fragment>
+    <fragment
+        android:id="@+id/bodyTemperatureDetailsFragment"
+        android:name="com.noisefit.ui.dashboard.graphs.temperature.BodyTemperatureDetailsFragment"
+        android:label="BodyTemperatureDetailsFragment">
+        <action
+            android:id="@+id/action_bodyTemperatureDetailsFragment_to_fitnessHealthDetailsFragment"
+            app:destination="@id/fitnessHealthDetailsFragment" />
+        <action
+            android:id="@+id/action_stepsDetailsFragment_to_valueSelectorBottomSheet"
+            app:destination="@id/valueSelectorBottomSheet" />
+    </fragment>
+    <fragment
+        android:id="@+id/bodyTemperatureGraphFragment"
+        android:name="com.noisefit.ui.dashboard.graphs.temperature.BodyTemperatureGraphFragment"
+        android:label="BodyTemperatureGraphFragment" />
+    <fragment
+        android:id="@+id/femaleHealthFragment"
+        android:name="com.noisefit.ui.dashboard.feature.female.FemaleHealthFragment"
+        android:label="FemaleHealthFragment">
+        <action
+            android:id="@+id/action_femaleHealthFragment_to_timeBottomSheet"
+            app:destination="@id/timeBottomSheet" />
+        <action
+            android:id="@+id/action_femaleHealthFragment_to_dateBottomSheet"
+            app:destination="@id/dateBottomSheet" />
+        <action
+            android:id="@+id/action_femaleHealthFragment_to_valueSelectorBottomSheet"
+            app:destination="@id/valueSelectorBottomSheet" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/handleDeepLinkWatchfaceFragment"
+        android:name="com.noisefit.ui.watchface.HandleDeepLinkWatchfaceFragment"
+        android:label="HandleDeepLinkWatchfaceFragment">
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="https://noisefit.page.link/WatchFaceScreen" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/handleDeepLinkWatchfaceFragmentNew"
+        android:name="com.noisefit.ui.watchface.HandleDeepLinkWatchfaceFragmentNew"
+        android:label="handleDeepLinkWatchfaceFragmentNew">
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="https://noisefit.page.link/WatchfaceNew" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/handleDeepLinkCustomWatchfaceFragment"
+        android:name="com.noisefit.ui.watchface.HandleDeepLinkCustomWatchfaceFragment"
+        android:label="HandleDeepLinkCustomWatchfaceFragment">
+        <deepLink
+            android:id="@+id/deepLinkCustomWf"
+            app:uri="https://noisefit.page.link/CustomWf" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/handleDeeplinkHelpAndSupport"
+        android:name="com.noisefit.ui.settings.helpAndSupport.HandleDeeplinkHelpAndSupport"
+        android:label="handleDeeplinkHelpAndSupport">
+        <deepLink
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/HelpAndSupportDetail" />
+        <action
+            android:id="@+id/action_handleDeeplinkHelpAndSupport_to_helpAndSupportDetailsFragment"
+            app:destination="@id/helpAndSupportDetailsFragment"
+            app:popUpTo="@id/handleDeeplinkHelpAndSupport"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/handleDeeplinkVoucherDetails"
+        android:name="com.noisefit.ui.reward.voucher.voucherdetails.HandleDeeplinkVoucherDetails"
+        android:label="HandleDeeplinkVoucherDetails">
+        <deepLink
+            android:id="@+id/deepLinkVoucherDetails"
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/voucherDetails" />
+        <action
+            android:id="@+id/action_handleDeeplinkVoucherDetails_to_voucherDetailsFragment"
+            app:destination="@id/voucherDetailsFragment"
+            app:popUpTo="@id/handleDeeplinkVoucherDetails"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/handleDeepLinkChallengeDetailsFragment"
+        android:name="com.noisefit.ui.challengeNew.HandleDeepLinkChallengeDetailFrag"
+        android:label="HandleDeepLinkChallengeDetailFrag">
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="https://noisefit.page.link/ChallengeDetails" />
+
+        <deepLink app:uri="https://noisefit.page.link/Leaderboard" />
+
+        <action
+            android:id="@+id/action_handleDeepLinkChallengeDetailsFragment_to_challengeDetailsFragment"
+            app:destination="@id/challengeDetailsFragment"
+            app:popUpTo="@id/handleDeepLinkChallengeDetailsFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_handleDeepLinkChallengeDetailsFragment_to_challengeEndedFragment"
+            app:destination="@id/challengeEndedFragment"
+            app:popUpTo="@id/handleDeepLinkChallengeDetailsFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_handleDeepLinkChallengeDetailsFragment_to_challengeLeaderboardFragment"
+            app:destination="@id/challengeLeaderboardFragment"
+            app:popUpTo="@id/handleDeepLinkChallengeDetailsFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/trophiesFragment"
+        android:name="com.noisefit.ui.trophies.TrophiesFragment"
+        android:label="TrophiesFragment">
+
+        <action
+            android:id="@+id/action_trophiesFragment_to_trophyDetailsFragment"
+            app:destination="@id/trophyDetailsFragment" />
+        <argument
+            android:name="userMobile"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="selectedDefault"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <deepLink
+            android:id="@+id/deepLink2"
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/Trophies" />
+    </fragment>
+    <fragment
+        android:id="@+id/trophyDetailsFragment"
+        android:name="com.noisefit.ui.trophies.TrophiesDetailsFragment"
+        android:label="TrophiesDetailsFragment">
+        <argument
+            android:name="trophyData"
+            app:argType="com.noisefit_commans.data.model.trophies.DailyItem" />
+        <argument
+            android:name="type"
+            app:argType="com.noisefit.ui.trophies.TrophiesType" />
+
+    </fragment>
+
+    <dialog
+        android:id="@+id/trophyCollectBottomSheet"
+        android:name="com.noisefit.ui.trophies.TrophyCollectBottomSheet"
+        android:label="TrophyCollectBottomSheet">
+        <argument
+            android:name="trophyData"
+            app:argType="com.noisefit_commans.data.model.trophies.DailyItem" />
+        <argument
+            android:name="type"
+            android:defaultValue="STEPS"
+            app:argType="com.noisefit.ui.trophies.TrophiesType" />
+    </dialog>
+    <fragment
+        android:id="@+id/myGoalFragment"
+        android:name="com.noisefit.ui.dashboard.feature.myGoal.MyGoalFragment"
+        android:label="MyGoalFragment">
+        <deepLink
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/MyGoals" />
+<!--        <action-->
+<!--            android:id="@+id/action_myGoalFragment_to_valueSelectorBottomSheet"-->
+<!--            app:destination="@id/valueSelectorBottomSheet" />-->
+    </fragment>
+
+    <dialog
+        android:id="@+id/passwordBottomSheet"
+        android:name="com.noisefit.ui.settings.setting.device.PasswordBottomSheet"
+        android:label="PasswordBottomSheet">
+        <argument
+            android:name="password"
+            app:argType="string" />
+    </dialog>
+
+
+    <fragment
+        android:id="@+id/startWorkoutListingFragment"
+        android:name="com.noisefit.ui.workout.session.StartWorkoutListingFragment"
+        android:label="StartWorkoutListingFragment">
+        <action
+            android:id="@+id/action_startWorkoutListingFragment_to_navigation_activity_start"
+            app:destination="@id/navigation_activity_start" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/navigation_activity_start"
+        android:name="com.noisefit.ui.workout.session.ActivityStartFragment"
+        android:label="@string/start_session">
+        <argument
+            android:name="mode"
+            app:argType="com.noisefit_commans.models.SportsModeList$SportsMode" />
+    </fragment>
+    <fragment
+        android:id="@+id/musicControlFragment"
+        android:name="com.noisefit.ui.dashboard.feature.music.MusicControlFragment"
+        android:label="MusicControlFragment" />
+    <fragment
+        android:id="@+id/spo2MeasurementFragment"
+        android:name="com.noisefit.ui.dashboard.feature.spo2.Spo2MeasurementFragment"
+        android:label="Spo2MeasurementFragment" />
+
+    <fragment
+        android:id="@+id/editDashboardFragment"
+        android:name="com.noisefit.ui.dashboard.healthOverview.edit.EditDashboardFragment"
+        android:label="EditDashboardFragment" />
+    <fragment
+        android:id="@+id/findPhoneFragment"
+        android:name="com.noisefit.ui.dashboard.feature.findPhone.FindPhoneFragment"
+        android:label="FindPhoneFragment" />
+    <fragment
+        android:id="@+id/wristSenseFragment"
+        android:name="com.noisefit.ui.dashboard.feature.wristsense.WristSenseFragment"
+        android:label="WristSenseFragment">
+        <action
+            android:id="@+id/action_wristSenseFragment_to_timeBottomSheet"
+            app:destination="@id/timeBottomSheet" />
+        <argument
+            android:name="mode"
+            app:argType="com.noisefit.ui.dashboard.feature.wristsense.WristMode" />
+    </fragment>
+    <fragment
+        android:id="@+id/zhSportSelectionFragment"
+        android:name="com.noisefit.ui.dashboard.feature.sportSelection.zh.ZhSportSelectionFragment"
+        android:label="ZhSportSelectionFragment">
+        <action
+            android:id="@+id/action_zhSportSelectionFragment_to_zhAddSportSelectionFragment"
+            app:destination="@id/zhAddSportSelectionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/zhAddSportSelectionFragment"
+        android:name="com.noisefit.ui.dashboard.feature.sportSelection.zh.ZhAddSportSelectionFragment"
+        android:label="ZhAddSportSelectionFragment">
+        <argument
+            android:name="widgetList"
+            app:argType="com.noisefit_commans.models.Widget[]" />
+    </fragment>
+    <fragment
+        android:id="@+id/testFragment"
+        android:name="com.noisefit.ui.TestFragment"
+        android:label="TestFragment" />
+    <dialog
+        android:id="@+id/promotionalBottomSheet"
+        android:name="com.noisefit.ui.common.bottomSheet.PromotionalBottomSheet"
+        android:label="PromotionalBottomSheet" />
+    <fragment
+        android:id="@+id/rapidEyeMomentFragment"
+        android:name="com.noisefit.ui.dashboard.feature.rapid.RapidEyeMomentFragment"
+        android:label="RapidEyeMomentFragment" />
+    <dialog
+        android:id="@+id/alertTextBottomSheet"
+        android:name="com.noisefit.ui.common.bottomSheet.AlertTextBottomSheet"
+        android:label="AlertTextBottomSheet">
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="description"
+            app:argType="string" />
+
+        <argument
+            android:name="acceptText"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="declineText"
+            app:argType="string"
+            app:nullable="true" />
+    </dialog>
+    <fragment
+        android:id="@+id/watchFaceCategoryListingFragment"
+        android:name="com.noisefit.ui.watchfacenew.WatchFaceCategoryListingFragment"
+        android:label="WatchFaceCategoryListingFragment">
+        <action
+            android:id="@+id/action_navigation_watchface_to_watchFaceUpdateFragment"
+            app:destination="@id/watchFaceUpdateFragment" />
+        <action
+            android:id="@+id/action_navigation_watchface_to_bottomSheetImagePicker"
+            app:destination="@id/bottomSheetImagePicker" />
+        <action
+            android:id="@+id/action_watchFaceCategoryListingFragment_to_watchFaceCategoryFragment"
+            app:destination="@id/watchFaceCategoryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/favouriteWatchFacesFragment"
+        android:name="com.noisefit.ui.watchface.FavouriteWatchFacesFragment"
+        android:label="FavouriteWatchFacesFragment" />
+    <fragment
+        android:id="@+id/watchFaceCategoriesFragment"
+        android:name="com.noisefit.ui.watchfacenew.WatchFaceCategoriesFragment"
+        android:label="WatchFaceCategoriesFragment">
+        <action
+            android:id="@+id/action_watchFaceCategoriesFragment_to_watchFaceCategoryFragment"
+            app:destination="@id/watchFaceCategoryFragment" />
+        <action
+            android:id="@+id/action_watchFaceCategoriesFragment_to_watchFaceUpdateFragment"
+            app:destination="@id/watchFaceUpdateFragment" />
+    </fragment>
+
+    <!-- old warranty, to Be removed-->
+
+    <dialog
+        android:id="@+id/bottomSheetMarketSelector"
+        android:name="com.noisefit.ui.myDevice.warrantyOld.BottomSheetMarketSelector"
+        android:label="BottomSheetMarketSelector">
+        <argument
+            android:name="marketPlaces"
+            app:argType="string[]" />
+        <argument
+            android:name="selectedValue"
+            app:argType="string" />
+    </dialog>
+
+    <fragment
+        android:id="@+id/warrantyFragmentOld"
+        android:name="com.noisefit.ui.myDevice.warrantyOld.WarrantyFragmentOld"
+        android:label="WarrantyFragment">
+        <action
+            android:id="@+id/action_warrantyFragment_to_bottomSheetMarketSelector"
+            app:destination="@id/bottomSheetMarketSelector" />
+        <action
+            android:id="@+id/action_warrantyFragment_to_qrCodeScanFragment"
+            app:destination="@id/qrCodeScanFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_friends"
+        android:name="com.noisefit.ui.friends.FriendsFragment"
+        android:label="FriendsFragment">
+
+        <deepLink
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/FriendsFeed" />
+        <deepLink
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/FriendsActivity" />
+        <deepLink
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/FriendsCompetition" />
+        <deepLink
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/Reaction" />
+        <action
+            android:id="@+id/action_navigation_friends_frag_to_bottomSheetReactions"
+            app:destination="@id/bottomSheetReactions" />
+        <action
+            android:id="@+id/action_navigation_friends_frag_to_friendsWalkAroundBottomDialogFragment"
+            app:destination="@id/friendsWalkAroundBottomDialogFragment" />
+        <action
+            android:id="@+id/action_navigation_friendsFragment_to_requestFragment"
+            app:destination="@id/requestFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/requestFragment"
+            app:popUpToInclusive="true" />
+
+
+        <action
+            android:id="@+id/action_navigation_friendsFragment_to_addFriendsFragment"
+            app:destination="@id/addFriendsFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/requestFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_navigation_friendsFragment_to_durationBottomSheet"
+            app:destination="@id/durationSelectorBottomSheet" />
+        <action
+            android:id="@+id/action_navigation_friends_to_friendProfileFragment"
+            app:destination="@id/friendProfileFragment" />
+
+        <action
+            android:id="@+id/action_feed_to_postCommentFragment"
+            app:destination="@id/postCommentFragment" />
+        <action
+            android:id="@+id/action_navigation_friends_to_reportPCBottomSheet"
+            app:destination="@id/reportPCBottomSheet" />
+        <action
+            android:id="@+id/action_navigation_friends_to_editPCBottomSheet"
+            app:destination="@id/editPCBottomSheet" />
+        <action
+            android:id="@+id/action_navigation_friends_to_deletePCBottomSheet"
+            app:destination="@id/deletePCBottomSheet" />
+        <action
+            android:id="@+id/action_navigation_friends_to_updatePostFragment"
+            app:destination="@id/updatePostFragment" />
+        <action
+            android:id="@+id/action_navigation_friends_to_postCommentFragment"
+            app:destination="@id/postCommentFragment" />
+        <action
+            android:id="@+id/action_navigation_friends_to_postDetailsFragment"
+            app:destination="@id/postDetailsFragment" />
+        <action
+            android:id="@+id/action_navigation_friends_to_createPostFragment"
+            app:destination="@id/createPostFragment" />
+        <action
+            android:id="@+id/action_navigation_friends_to_feedsPrivacyBottomDialogFragment"
+            app:destination="@id/feedsPrivacyBottomDialogFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/competeFriendListFragment"
+        android:name="com.noisefit.ui.friends.compete.withFriends.CompeteFriendListFragment"
+        android:label="CompeteFriendListFragment">
+        <deepLink
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/CompeteWithFriend" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/competeRequestListFragment"
+        android:name="com.noisefit.ui.friends.request.CompeteRequestListFragment"
+        android:label="CompeteRequestListFragment">
+        <action
+            android:id="@+id/action_navigation_competeRequestListFragment_to_competeRuleAcceptBottomSheet"
+            app:destination="@id/acceptRuleCompetitionBottomSheet" />
+    </fragment>
+    <fragment
+        android:id="@+id/addFriendsFragment"
+        android:name="com.noisefit.ui.friends.addfriends.AddFriendsFragment"
+        android:label="AddFriendsFragment">
+
+        <deepLink
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/AddFriendScreen" />
+        <deepLink
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/AddFriendNear" />
+        <deepLink
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/AddFriendWinner" />
+        <deepLink
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/AddFriendInterest" />
+        <deepLink
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/AddFriendContacts" />
+        <action
+            android:id="@+id/action_addFriendsFragment_to_locationBottomSheet"
+            app:destination="@id/locationBottomSheet" />
+        <action
+            android:id="@+id/action_addFriendsFragment_to_friendProfileFragment"
+            app:destination="@id/friendProfileFragment" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/requestFragment"
+        android:name="com.noisefit.ui.friends.request.RequestFragment"
+        android:label="RequestFragment">
+        <deepLink
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/FriendRequests" />
+        <action
+            android:id="@+id/action_requestFragment_to_acceptRuleCompetitionBottomSheet"
+            app:destination="@id/acceptRuleCompetitionBottomSheet" />
+        <action
+            android:id="@+id/action_requestFragment_to_friendProfileFragment"
+            app:destination="@id/friendProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/requestReceivedFragment"
+        android:name="com.noisefit.ui.friends.request.received.RequestReceivedFragment"
+        android:label="RequestReceivedFragment">
+        <action
+            android:id="@+id/action_navigation_requestReceivedFragment_to_competeRuleAcceptBottomSheet"
+            app:destination="@id/acceptRuleCompetitionBottomSheet" />
+
+    </fragment>
+    <dialog
+        android:id="@+id/acceptRuleCompetitionBottomSheet"
+        android:name="com.noisefit.ui.friends.request.CompetitionRuleAcceptBottomSheet"
+        android:label="CompeteRequestListFragment">
+        <argument
+            android:name="request"
+            app:argType="com.noisefit_commans.data.response.Requests" />
+    </dialog>
+
+    <fragment
+        android:id="@+id/navigation_challenge"
+        android:name="com.noisefit.ui.challengeNew.list.ChallengeListingFragment"
+        android:label="ChallengeListingFragment">
+        <deepLink
+            android:id="@+id/deepLink6"
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/ActivityChallengeScreen" />
+
+        <deepLink
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/CompletedChallenges" />
+
+        <action
+            android:id="@+id/action_navigation_challenge_to_challengeDetailsFragment"
+            app:destination="@id/challengeDetailsFragment" />
+        <action
+            android:id="@+id/action_navigation_challenge_to_challengeEndedFragment"
+            app:destination="@id/challengeEndedFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/challengeDetailsFragment"
+        android:name="com.noisefit.ui.challengeNew.detail.ChallengeDetailsFragment"
+        android:label="ChallengeDetailsFragment">
+        <argument
+            android:name="challengeId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_challengeDetailsFragment_to_challengeLeaderboardFragment"
+            app:destination="@id/challengeLeaderboardFragment" />
+        <action
+            android:id="@+id/action_challengeDetailsFragment_to_challengeGiveUpDialog"
+            app:destination="@id/challengeGiveUpDialog" />
+    </fragment>
+    <fragment
+        android:id="@+id/challengeEndedFragment"
+        android:name="com.noisefit.ui.challengeNew.detail.ChallengeEndedFragment"
+        android:label="ChallengeEndedFragment">
+        <argument
+            android:name="challengeId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_challengeEndedFragment_to_createPostFragment"
+            app:destination="@id/createPostFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/widgetSelectionFragment"
+        android:name="com.noisefit.ui.dashboard.feature.widget.WidgetSelectionFragment"
+        android:label="WidgetSelectionFragment">
+        <action
+            android:id="@+id/action_widgetSelectionFragment_to_addWidgetSelectionFragment"
+            app:destination="@id/addWidgetSelectionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addWidgetSelectionFragment"
+        android:name="com.noisefit.ui.dashboard.feature.widget.add.AddWidgetSelectionFragment"
+        android:label="fragment_widget_sorting"
+        tools:layout="@layout/fragment_widget_sorting">
+        <argument
+            android:name="widgetList"
+            app:argType="com.noisefit_commans.models.Widget[]" />
+    </fragment>
+    <fragment
+        android:id="@+id/experimentalFeaturesFragment"
+        android:name="com.noisefit.ui.dashboard.feature.experimental.ExperimentalFeaturesFragment"
+        android:label="fragment_experimental_features"
+        tools:layout="@layout/fragment_experimental_features" />
+
+    <fragment
+        android:id="@+id/smartNotificationFragment"
+        android:name="com.noisefit.ui.dashboard.feature.experimental.SmartNotificationFragment"
+        android:label="fragment_smart_notifications"
+        tools:layout="@layout/fragment_smart_notification" />
+    <fragment
+        android:id="@+id/helpAndSupportFragment"
+        android:name="com.noisefit.ui.settings.helpAndSupport.HelpAndSupportFragment"
+        android:label="HelpAndSupportFragment">
+        <deepLink
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/HelpAndSupport" />
+        <action
+            android:id="@+id/action_navigation_help_and_support_to_support_list_fragment"
+            app:destination="@+id/helpAndSupportListFragment" />
+        <argument
+            android:name="highlightTopic"
+            android:defaultValue="NONE"
+            app:argType="com.noisefit.ui.settings.helpAndSupport.HelpAndSupportType" />
+    </fragment>
+    <fragment
+        android:id="@+id/helpAndSupportVideoPlayerFragment"
+        android:name="com.noisefit.ui.settings.helpAndSupport.HelpAndSupportVideoPlayerFragment"
+        android:label="HelpAndSupportVideoPlayerFragment">
+        <argument
+            android:name="videoListData"
+            app:argType="com.noisefit_commans.data.response.VideoData[]"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_hsVideoPlayerFragment_to_hsLanguageValueSelectorBottomSheet"
+            app:destination="@id/hsLanguageValueSelectorBottomSheet" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/helpAndSupportListFragment"
+        android:name="com.noisefit.ui.settings.helpAndSupport.sublist.HelpAndSupportListFragment"
+        android:label="HelpAndSupportListFragment">
+        <argument
+            android:name="helpSupportItem"
+            app:argType="com.noisefit_commans.data.response.HelpAndSupportResponse"
+            app:nullable="true" />
+        <argument
+            android:name="type"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_navigation_help_and_support_list_to_details_fragment"
+            app:destination="@+id/helpAndSupportDetailsFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/helpAndSupportDetailsFragment"
+        android:name="com.noisefit.ui.settings.helpAndSupport.details.HelpAndSupportDetailsFragment"
+        android:label="HelpAndSupportDetailsFragment">
+        <argument
+            android:name="questionId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_hsDetailsFragment_to_hsLanguageValueSelectorBottomSheet"
+            app:destination="@id/hsLanguageValueSelectorBottomSheet" />
+        <action
+            android:id="@+id/action_hsDetailsFragment_to_hsVideoPlayerFragment"
+            app:destination="@id/helpAndSupportVideoPlayerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/appCompatibilityFragment"
+        android:name="com.noisefit.ui.settings.helpAndSupport.compatibility.AppCompatibilityFragment"
+        android:label="AppCompatibilityFragment" />
+    <fragment
+        android:id="@+id/friendProfileFragment"
+        android:name="com.noisefit.ui.friends.profile.FriendProfileFragment"
+        android:label="FriendProfileFragment">
+
+        <action
+            android:id="@+id/action_friendProfileFragment_frag_to_bottomSheetReactions"
+            app:destination="@id/bottomSheetReactions" />
+        <deepLink
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/FriendsProfile" />
+        <argument
+            android:name="friendId"
+            android:defaultValue="-1"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_friendProfileFragment_to_alertTextBottomSheet"
+            app:destination="@id/alertTextBottomSheet" />
+        <action
+            android:id="@+id/action_friendProfileFragment_to_locationBottomSheet"
+            app:destination="@id/locationBottomSheet" />
+        <action
+            android:id="@+id/action_friendProfileFragment_to_bottomSheetInterestSelector"
+            app:destination="@id/bottomSheetInterestSelector" />
+        <action
+            android:id="@+id/action_friendProfileFragment_to_commonFriendFragment"
+            app:destination="@id/commonFriendFragment" />
+        <action
+            android:id="@+id/action_friendProfileFragment_to_myFriendListFragment"
+            app:destination="@id/myFriendList" />
+        <action
+            android:id="@+id/action_friendProfileFragment_to_bottomProfileOptions"
+            app:destination="@id/bottomSheetProfileOption" />
+        <action
+            android:id="@+id/action_friendProfileFragment_to_profileEditFragment"
+            app:destination="@id/profileEditFragment" />
+
+        <action
+            android:id="@+id/action_friendProfileFragment_to_postCommentFragment"
+            app:destination="@id/postCommentFragment" />
+
+        <action
+            android:id="@+id/action_friendProfileFragment_to_reportPCBottomSheet"
+            app:destination="@id/reportPCBottomSheet" />
+
+        <action
+            android:id="@+id/action_friendProfileFragment_to_editPCBottomSheet"
+            app:destination="@id/editPCBottomSheet" />
+
+        <action
+            android:id="@+id/action_friendProfileFragment_to_deletePCBottomSheet"
+            app:destination="@id/deletePCBottomSheet" />
+        <action
+            android:id="@+id/action_friendProfileFragment_to_updatePostFragment"
+            app:destination="@id/updatePostFragment" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/friendsWalkAroundBottomDialogFragment"
+        android:name="com.noisefit.ui.walkAround.friends.FriendsWalkAroundBottomDialogFragment"
+        android:label="FriendsWalkAroundBottomDialogFragment" />
+
+    <dialog
+        android:id="@+id/coinsWalkAroundBottomDialogFragment"
+        android:name="com.noisefit.ui.reward.walkthrough.CoinsWalkAroundBottomDialogFragment"
+        android:label="CoinsWalkAroundBottomDialogFragment" />
+
+    <dialog
+        android:id="@+id/rateNowBottomSheet"
+        android:name="com.noisefit.ui.settings.feedbacknew.RateNowBottomSheet"
+        android:label="RateNowBottomSheet">
+        <argument
+            android:name="cameFrom"
+            app:argType="string" />
+
+    </dialog>
+    <fragment
+        android:id="@+id/searchStateFragment"
+        android:name="com.noisefit.ui.friends.location.search.SearchStateFragment"
+        android:label="SearchStateFragment">
+        <argument
+            android:name="type"
+            app:argType="com.noisefit.ui.friends.location.search.SearchStateType" />
+
+        <argument
+            android:name="id"
+            android:defaultValue="-1"
+            app:argType="integer" />
+
+        <argument
+            android:name="data"
+            app:argType="string"
+            app:nullable="true" />
+
+    </fragment>
+
+    <dialog
+        android:id="@+id/locationBottomSheet"
+        android:name="com.noisefit.ui.friends.location.LocationBottomSheet"
+        android:label="LocationBottomSheet">
+        <argument
+            android:name="shouldUpdate"
+            android:defaultValue="true"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_locationBottomSheet_to_searchStateFragment"
+            app:destination="@+id/searchStateFragment" />
+    </dialog>
+    <fragment
+        android:id="@+id/nearMeFragment"
+        android:name="com.noisefit.ui.friends.addfriends.NearMeFragment"
+        android:label="NearMeFragment">
+
+        <action
+            android:id="@+id/action_nearMeFragment_to_locationBottomSheet"
+            app:destination="@id/locationBottomSheet" />
+    </fragment>
+    <fragment
+        android:id="@+id/qrPaymentFragment"
+        android:name="com.noisefit.ui.dashboard.feature.qrPayment.QrPaymentFragment"
+        android:label="QrPaymentFragment" />
+    <fragment
+        android:id="@+id/qrCodeListingFragment"
+        android:name="com.noisefit.ui.dashboard.feature.qrPayment.QrCodeListingFragment"
+        android:label="qrCodeListingFragment">
+        <action
+            android:id="@+id/action_qrCodeListingFragment_to_bottomSheetUploadQrVia"
+            app:destination="@id/bottomSheetUploadQrVia" />
+        <action
+            android:id="@+id/action_qrCodeListingFragment_to_bottomSheetAddLink"
+            app:destination="@id/bottomSheetAddLink" />
+        <action
+            android:id="@+id/action_qrCodeListingFragment_to_bottomSheetAddName"
+            app:destination="@id/bottomSheetAddName" />
+        <action
+            android:id="@+id/action_qrCodeListingFragment_to_bottomSheetEditQr"
+            app:destination="@id/bottomSheetEditQr" />
+    </fragment>
+    <fragment
+        android:id="@+id/showcaseVideoFragment"
+        android:name="com.noisefit.ui.dashboard.summary.ShowcaseVideoFragment"
+        android:label="ShowcaseVideoFragment" />
+    <fragment
+        android:id="@+id/deeplinkWebViewFragment"
+        android:name="com.noisefit.ui.web.DeeplinkWebViewFragment"
+        android:label="DeeplinkWebViewFragment">
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="https://noisefit.page.link/WebLink" />
+    </fragment>
+    <fragment
+        android:id="@+id/commonFriendFragment"
+        android:name="com.noisefit.ui.friends.CommonFriendFragment"
+        android:label="fragment_common_friend">
+        <argument
+            android:name="friendId"
+            android:defaultValue="-1"
+            app:argType="integer" />
+    </fragment>
+    <dialog
+        android:id="@+id/bottomSheetEditQr"
+        android:name="com.noisefit.ui.dashboard.feature.qrPayment.bottomsheets.BottomSheetEditQr"
+        android:label="BottomSheetEditQr">
+        <argument
+            android:name="qrCode"
+            app:argType="com.noisefit_commans.models.UPIQRCode" />
+    </dialog>
+    <fragment
+        android:id="@+id/autoSpo2Fragment"
+        android:name="com.noisefit.ui.dashboard.feature.spo2.AutoSpo2Fragment"
+        android:label="AutoSpo2Fragment">
+        <action
+            android:id="@+id/action_autoSpo2Fragment_to_valueSelectorBottomSheet"
+            app:destination="@id/valueSelectorBottomSheet" />
+    </fragment>
+    <fragment
+        android:id="@+id/heartRateWithIntervalFragment"
+        android:name="com.noisefit.ui.dashboard.feature.healthMonitor.heartRate.HeartRateWithIntervalFragment"
+        android:label="HeartRateWithIntervalFragment">
+        <action
+            android:id="@+id/action_heartRateWithIntervalFragment_to_valueSelectorBottomSheet"
+            app:destination="@id/valueSelectorBottomSheet" />
+    </fragment>
+    <fragment
+        android:id="@+id/addAppListSelectionFragment"
+        android:name="com.noisefit.ui.dashboard.feature.appList.add.AddAppListSelectionFragment"
+        android:label="AddAppListSelectionFragment">
+        <argument
+            android:name="widgetList"
+            app:argType="com.noisefit_commans.models.Widget[]" />
+    </fragment>
+    <fragment
+        android:id="@+id/appListSelectionFragment"
+        android:name="com.noisefit.ui.dashboard.feature.appList.AppListSelectionFragment"
+        android:label="AppListSelectionFragment">
+        <action
+            android:id="@+id/action_appListSelectionFragment_to_addAppListSelectionFragment"
+            app:destination="@id/addAppListSelectionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ryeexCustomiseWatchFaceFragment"
+        android:name="com.noisefit.ui.watchface.custom.ryeex.RyeexCustomiseWatchFaceFragment"
+        android:label="RyeexCustomiseWatchFaceFragment" />
+    <fragment
+        android:id="@+id/transHistoryFragment"
+        android:name="com.noisefit.ui.reward.transaction.TransactionHistoryFragment"
+        android:label="TransactionHistory">
+        <deepLink
+            android:id="@+id/deepLinkTransHistory"
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/RewardHistory" />
+    </fragment>
+    <fragment
+        android:id="@+id/allTasksFragment"
+        android:name="com.noisefit.ui.reward.tasks.AllTasksFragment"
+        android:label="AllTasks" />
+    <fragment
+        android:id="@+id/allDealsFragment"
+        android:name="com.noisefit.ui.reward.deals.AllDealsFragment"
+        android:label="AllDeals">
+        <deepLink
+            android:id="@+id/deepLinkAllDeals"
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/Vouchers" />
+        <action
+            android:id="@+id/action_allDealsFragment_to_myVoucherFragment"
+            app:destination="@id/myVoucherFragment" />
+        <action
+            android:id="@+id/action_allDealsFragment_to_myVoucherDetailsFragment"
+            app:destination="@id/voucherDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/myVoucherFragment"
+        android:name="com.noisefit.ui.reward.voucher.MyVoucherFragment"
+        android:label="MyVoucherFragment">
+        <deepLink
+            android:id="@+id/deepLinkRewardVoucher"
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/rewardVoucher" />
+        <action
+            android:id="@+id/action_myVoucherFragment_to_myVoucherDetailsFragment"
+            app:destination="@id/voucherDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/coinFragment"
+        android:name="com.noisefit.ui.reward.coin.CoinFragment"
+        android:label="Noise Coins">
+        <deepLink
+            android:id="@+id/deepLinkCoinDash"
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/CoinDash" />
+        <action
+            android:id="@+id/action_coinFragment_to_transactionHistoryFragment"
+            app:destination="@id/transHistoryFragment" />
+        <action
+            android:id="@+id/action_coinFragment_to_transactionTaskFragment"
+            app:destination="@id/allTasksFragment" />
+        <action
+            android:id="@+id/action_coinFragment_to_allDealsFragment"
+            app:destination="@id/allDealsFragment" />
+        <action
+            android:id="@+id/action_coinFragment_to_myVoucherFragment"
+            app:destination="@id/myVoucherFragment" />
+        <action
+            android:id="@+id/action_coinFragment_to_coinsWalkAroundBottomDialogFragment"
+            app:destination="@id/coinsWalkAroundBottomDialogFragment" />
+        <action
+            android:id="@+id/action_coinFragment_to_myVoucherDetailsFragment"
+            app:destination="@id/voucherDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/stepStreakFragment"
+        android:name="com.noisefit.ui.reward.streak.StepStreakFragment"
+        android:label="StepStreakFragment">
+        <deepLink
+            android:id="@+id/deepLinkStreakDash"
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/StreakDash" />
+        <action
+            android:id="@+id/action_stepStreakFragment_to_coinsWalkAroundBottomDialogFragment"
+            app:destination="@id/coinsWalkAroundBottomDialogFragment" />
+        <action
+            android:id="@+id/action_stepStreakFragment_to_bottomSheetStreakInfo"
+            app:destination="@id/bottomSheetStreakInfo" />
+    </fragment>
+    <fragment
+        android:id="@+id/aboutRewardsFragment"
+        android:name="com.noisefit.ui.reward.about.AboutRewardsFragment"
+        android:label="AboutRewardsFragment" />
+    <fragment
+        android:id="@+id/voucherDetailsFragment"
+        android:name="com.noisefit.ui.reward.voucher.voucherdetails.VoucherDetailFragment"
+        android:label="VoucherDetailsFragment">
+        <argument
+            android:name="id"
+            app:argType="integer" />
+        <argument
+            android:name="comeFrom"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_voucherDetails_to_voucherSoldBottomSheet"
+            app:destination="@id/voucherSoldBottomSheet" />
+    </fragment>
+    <dialog
+        android:id="@+id/voucherSoldBottomSheet"
+        android:name="com.noisefit.ui.reward.voucher.VoucherSoldOutBottomSheet"
+        android:label="VoucherSoldOut">
+
+        <argument
+            android:name="title"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="message"
+            app:argType="string"
+            app:nullable="true" />
+    </dialog>
+    <dialog
+        android:id="@+id/bottomSheetStreakInfo"
+        android:name="com.noisefit.ui.reward.walkthrough.BottomSheetStreakInfo"
+        android:label="BottomSheetStreakInfo">
+        <argument
+            android:name="currentMultipler"
+            app:argType="string" />
+        <argument android:name="nextMultipler" />
+    </dialog>
+    <fragment
+        android:id="@+id/aboutStreaksFragment"
+        android:name="com.noisefit.ui.reward.about.AboutStreaksFragment"
+        android:label="AboutStreaksFragment" />
+    <dialog
+        android:id="@+id/singleActionBottomSheet"
+        android:name="com.noisefit.ui.common.bottomSheet.SingleActionBottomSheet"
+        android:label="SingleActionBottomSheet">
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument android:name="description" />
+    </dialog>
+    <fragment
+        android:id="@+id/dashboardWorkoutFragment"
+        android:name="com.noisefit.ui.content.dashboard.DashboardWorkoutFragment"
+        android:label="DashboardWorkoutFragment" />
+    <fragment
+        android:id="@+id/wContentDetailsFragment"
+        android:name="com.noisefit.ui.content.details.WContentDetailsFragment"
+        android:label="WContentDetailsFragment">
+
+        <argument
+            android:name="id"
+            app:argType="integer" />
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/myFriendList"
+        android:name="com.noisefit.ui.friends.profile.myfriend.MyFriendListFragment"
+        android:label="MyFriendList" />
+    <fragment
+        android:id="@+id/friendBadgeFragment"
+        android:name="com.noisefit.ui.friends.profile.badges.FriendBadgeFragment"
+        android:label="FragmentBadgeFragment" />
+    <fragment
+        android:id="@+id/friendsFriendFragment"
+        android:name="com.noisefit.ui.friends.profile.friendsfriend.FriendsFriendFragment"
+        android:label="FriendsFriendFragment">
+
+        <argument
+            android:name="friendId"
+            app:argType="integer" />
+        <argument
+            android:name="name"
+            app:argType="string"
+            app:nullable="true" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/createPostFragment"
+        android:name="com.noisefit.ui.feeds.create.CreatePostFragment"
+        android:label="CreatePostFragment">
+
+        <deepLink
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/CreatePost" />
+
+        <action
+            android:id="@+id/action_createPostFragment_to_bottomSheetImagePicker"
+            app:destination="@id/bottomSheetImagePicker" />
+        <action
+            android:id="@+id/action_createPostFragment_to_bottomSheetEditImage"
+            app:destination="@id/bottomSheetEditImage" />
+        <action
+            android:id="@+id/action_createPostFragment_to_bottomSheetWorkoutPicker"
+            app:destination="@id/bottomSheetWorkoutPicker" />
+        <action
+            android:id="@+id/action_createPostFragment_to_bottomSheetChallengePicker"
+            app:destination="@id/bottomSheetChallengePicker" />
+        <argument
+            android:name="shareContent"
+            android:defaultValue="UPLOAD"
+            app:argType="com.noisefit.ui.feeds.create.PostContent" />
+        <argument
+            android:name="workout"
+            android:defaultValue="@null"
+            app:argType="com.noisefit_commans.models.SportsModeResponse"
+            app:nullable="true" />
+        <argument
+            android:name="challenge"
+            android:defaultValue="@null"
+            app:argType="com.noisefit_commans.data.response.ChallengeModel"
+            app:nullable="true" />
+    </fragment>
+    <dialog
+        android:id="@+id/bottomSheetEditImage"
+        android:name="com.noisefit.ui.feeds.create.BottomSheetEditImage"
+        android:label="BottomSheetEditImage">
+        <argument
+            android:name="imageUri"
+            app:argType="string" />
+    </dialog>
+
+    <fragment
+        android:id="@+id/feedFragment"
+        android:name="com.noisefit.ui.feeds.feed.FeedFragment"
+        android:label="FeedFragment">
+        <action
+            android:id="@+id/action_feedFragment_to_editPCBottomSheet"
+            app:destination="@id/editPCBottomSheet" />
+        <action
+            android:id="@+id/action_feedFragment_to_reportPCBottomSheet"
+            app:destination="@id/reportPCBottomSheet" />
+    </fragment>
+    <fragment
+        android:id="@+id/postCommentFragment"
+        android:name="com.noisefit.ui.feeds.comment.PostCommentFragment"
+        android:label="PostCommentFragment">
+        <argument
+            android:name="id"
+            app:argType="long" />
+        <argument
+            android:name="content"
+            app:argType="string" />
+        <argument
+            android:name="taggedUsers"
+            app:argType="com.noisefit.data.model.MentionUser[]"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_postCommentFragment_to_reportPCBottomSheet"
+            app:destination="@id/reportPCBottomSheet" />
+
+        <action
+            android:id="@+id/action_postCommentFragment_to_editPCBottomSheet"
+            app:destination="@id/editPCBottomSheet" />
+
+
+        <action
+            android:id="@+id/action_postCommentFragment_to_deletePCBottomSheet"
+            app:destination="@id/deletePCBottomSheet" />
+
+    </fragment>
+
+    <dialog
+        android:id="@+id/bottomSheetProfileOption"
+        android:name="com.noisefit.ui.friends.profile.BottomSheetProfileOptions"
+        android:label="ProfileOptions">
+        <argument
+            android:name="isMyProfile"
+            app:argType="boolean" />
+        <argument
+            android:name="canCompute"
+            app:argType="boolean" />
+
+
+    </dialog>
+    <dialog
+        android:id="@+id/deletePCBottomSheet"
+        android:name="com.noisefit.ui.feeds.bottomSheet.DeletePCBottomSheet"
+        android:label="DeletePCBottomSheet">
+        <argument
+            android:name="postId"
+            app:argType="long" />
+        <argument
+            android:name="commentId"
+            app:argType="long" />
+    </dialog>
+    <dialog
+        android:id="@+id/editPCBottomSheet"
+        android:name="com.noisefit.ui.feeds.bottomSheet.EditPCBottomSheet"
+        android:label="EditPCBottomSheet">
+        <argument
+            android:name="postId"
+            app:argType="long" />
+        <argument
+            android:name="commentId"
+            app:argType="long" />
+    </dialog>
+    <dialog
+        android:id="@+id/reportPCBottomSheet"
+        android:name="com.noisefit.ui.feeds.bottomSheet.ReportPCBottomSheet"
+        android:label="ReportPCBottomSheet">
+
+        <argument
+            android:name="postId"
+            app:argType="long" />
+        <argument
+            android:name="commentId"
+            app:argType="long" />
+        <argument
+            android:name="comeFrom"
+            app:argType="string" />
+
+    </dialog>
+    <dialog
+        android:id="@+id/bottomSheetWorkoutPicker"
+        android:name="com.noisefit.ui.feeds.create.BottomSheetWorkoutPicker"
+        android:label="BottomSheetWorkoutPicker" />
+    <dialog
+        android:id="@+id/bottomSheetChallengePicker"
+        android:name="com.noisefit.ui.feeds.create.BottomSheetChallengePicker"
+        android:label="BottomSheetChallengePicker" />
+    <fragment
+        android:id="@+id/updatePostFragment"
+        android:name="com.noisefit.ui.feeds.create.update.UpdatePostFragment"
+        android:label="UpdatePostFragment">
+        <argument
+            android:name="timelineData"
+            app:argType="com.noisefit.data.model.timeline.TimelineData" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/noiseProfile"
+        android:name="com.noisefit.ui.feeds.noiseprofile.NoiseProfileFragment"
+        android:label="NoiseProfile">
+        <action
+            android:id="@+id/action_noiseProfileFragment_to_postCommentFragment"
+            app:destination="@id/postCommentFragment" />
+
+        <action
+            android:id="@+id/action_noiseProfileFragment_to_bottomSheetReactions"
+            app:destination="@id/bottomSheetReactions" />
+
+
+        <action
+            android:id="@+id/action_noiseProfileFragment_to_reportPCBottomSheet"
+            app:destination="@id/reportPCBottomSheet" />
+
+        <action
+            android:id="@+id/action_noiseProfileFragment_to_editPCBottomSheet"
+            app:destination="@id/editPCBottomSheet" />
+        <action
+            android:id="@+id/action_noiseProfileFragment_to_deletePCBottomSheet"
+            app:destination="@id/deletePCBottomSheet" />
+
+        <action
+            android:id="@+id/action_noiseProfileFragment_to_updatePostFragment"
+            app:destination="@id/updatePostFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/postDetailsFragment"
+        android:name="com.noisefit.ui.feeds.postdetails.PostDetailsFragment"
+        android:label="PostDetailsFragment">
+        <argument
+            android:name="id"
+            app:argType="long" />
+        <action
+            android:id="@+id/post_details_frag_to_bottomSheetReactions"
+            app:destination="@id/bottomSheetReactions" />
+        <action
+            android:id="@+id/post_details_frag_to_reportPCBottomSheet"
+            app:destination="@id/reportPCBottomSheet" />
+        <action
+            android:id="@+id/post_details_frag_to_editPCBottomSheet"
+            app:destination="@id/editPCBottomSheet" />
+        <action
+            android:id="@+id/post_details_frag_to_deletePCBottomSheet"
+            app:destination="@id/deletePCBottomSheet" />
+        <action
+            android:id="@+id/post_details_frag_to_updatePostFragment"
+            app:destination="@id/updatePostFragment" />
+        <argument
+            android:name="showKeyboard"
+            android:defaultValue="false"
+            app:argType="boolean" />
+
+
+    </fragment>
+    <fragment
+        android:id="@+id/predictionHistoryFragment"
+        android:name="com.noisefit.ui.npl.history.PredictionHistoryFragment"
+        android:label="PredictionHistoryFragment">
+        <deepLink
+            android:id="@+id/deepLinkNplHistory"
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/NplHistory" />
+    </fragment>
+    <fragment
+        android:id="@+id/nplWinsFragment"
+        android:name="com.noisefit.ui.npl.wins.NPLWinListFragment"
+        android:label="NPLWinsFragment">
+        <deepLink
+            android:id="@+id/deepLinkNplClaim"
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/NplClaim" />
+    </fragment>
+    <fragment
+        android:id="@+id/nplDashboardFragment"
+        android:name="com.noisefit.ui.npl.dashboard.NPLDashboardFragment"
+        android:label="NPLDashboardFragment">
+        <action
+            android:id="@+id/action_nplDashboardFragment_to_nplWalkAroundBottomDialogFragment"
+            app:destination="@id/nplWalkAroundBottomDialogFragment" />
+        <deepLink
+            android:id="@+id/deepLinkNpl"
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/NplDash" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/howToPlayFragment"
+        android:name="com.noisefit.ui.npl.htp.HowToPlayFragment"
+        android:label="HowToPlayFragment">
+        <deepLink
+            android:id="@+id/deepLinkNplHtp"
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/NplHtp" />
+    </fragment>
+
+
+    <dialog
+        android:id="@+id/nplWalkAroundBottomDialogFragment"
+        android:name="com.noisefit.ui.reward.walkthrough.NplWalkAroundBottomDialogFragment"
+        android:label="NPLWalkAroundBottomDialogFragment" />
+    <dialog
+        android:id="@+id/nplPrivacyBottomDialogFragment"
+        android:name="com.noisefit.ui.npl.NplPrivacyBottomDialogFragment"
+        android:label="NplPrivacyBottomDialogFragment" />
+    <dialog
+        android:id="@+id/feedsPrivacyBottomDialogFragment"
+        android:name="com.noisefit.ui.feeds.FeedsPrivacyBottomDialogFragment"
+        android:label="feedsPrivacyBottomDialogFragment" />
+    <fragment
+        android:id="@+id/nplQuizFragment"
+        android:name="com.noisefit.ui.npl.quiz.NplQuizFragment"
+        android:label="NplQuizFragment">
+        <action
+            android:id="@+id/action_nplQuizFragment_to_nplQQuitBottomSheet"
+            app:destination="@id/nplQQuitBottomSheet" />
+
+    </fragment>
+    <dialog
+        android:id="@+id/nplQQuitBottomSheet"
+        android:name="com.noisefit.ui.npl.quiz.NplQQuitBottomSheet"
+        android:label="NplQQuizBottomSheet" />
+    <fragment
+        android:id="@+id/diyWatchFaceFragment"
+        android:name="com.noisefit.ui.diy.DiyWatchFaceFragment"
+        android:label="DiyWatchFaceFragment">
+        <action
+            android:id="@+id/action_diyWatchFaceFragment_to_bottomSheetImagePicker"
+            app:destination="@id/bottomSheetImagePicker" />
+
+        <action
+            android:id="@+id/action_diyWatchFaceFragment_to_alertTextBottomSheet"
+            app:destination="@id/alertTextBottomSheet" />
+        <action
+            android:id="@+id/action_diyWatchFaceFragment_to_diyWalkAroundBottomDialog"
+            app:destination="@id/diyWalkAroundBottomDialog" />
+        <argument
+            android:name="wfData"
+            android:defaultValue="@null"
+            app:argType="com.noisefit.data.remote.response.DiyMyCreation"
+            app:nullable="true" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/activityCyclingFragment"
+        android:name="com.noisefit.ui.workout.cycling.ActivityCyclingFragment"
+        android:label="ActivityCyclingFragment">
+        <action
+            android:id="@+id/action_navigation_activity_to_activityFeedbackFragment"
+            app:destination="@id/navigation_activity_feedback" />
+
+        <argument
+            android:name="activity"
+            app:argType="com.noisefit_commans.models.SportsModeResponse" />
+        <action
+            android:id="@+id/action_activityCyclingFragment_to_activityShareFragment"
+            app:destination="@id/activityShareFragment" />
+        <action
+            android:id="@+id/action_activityCyclingFragment_to_createPostFragment"
+            app:destination="@id/createPostFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/SOSFragment"
+        android:name="com.noisefit.ui.dashboard.feature.sos.SOSFragment"
+        android:label="SOSFragment">
+        <action
+            android:id="@+id/action_sosFragment_to_addContactListFragment"
+            app:destination="@id/addContactListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/watchface2CategoryFragment"
+        android:name="com.noisefit.ui.watchface2.Watchface2CategoryFragment"
+        android:label="Watchface2CategoryFragment">
+
+        <action
+            android:id="@+id/action_watchface2CategoryFragment_to_watchface2SubListFragment"
+            app:destination="@id/watchface2SubListFragment" />
+        <argument
+            android:name="watchFace"
+            app:argType="com.noisefit.data.remote.response.Watchface2"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_watchface2CategoryFragment_to_uploadWatchfaceBottomSheet"
+            app:destination="@id/uploadWatchfaceBottomSheet" />
+
+        <action
+            android:id="@+id/action_watchface2CategoryFragment_to_helpAndSupportListFragment"
+            app:destination="@id/helpAndSupportListFragment" />
+
+    </fragment>
+    <dialog
+        android:id="@+id/watchface2DetailsBottomSheet"
+        android:name="com.noisefit.ui.watchface2.bottom.Watchface2DetailsBottomSheet"
+        android:label="Watchface2DetailsBottomSheet">
+
+
+        <argument
+            android:name="wfData"
+            app:argType="com.noisefit.data.remote.response.Watchface2" />
+    </dialog>
+    <dialog
+        android:id="@+id/uploadWatchfaceBottomSheet"
+        android:name="com.noisefit.ui.watchface2.bottom.UploadWatchfaceBottomSheet"
+        android:label="uploadWatchfaceBottomSheet">
+
+        <argument
+            android:name="watchFace"
+            app:argType="com.noisefit.data.remote.response.Watchface2" />
+        <argument
+            android:name="fromFav"
+            app:argType="boolean" />
+    </dialog>
+    <dialog
+        android:id="@+id/watchfaceRateBottomSheet"
+        android:name="com.noisefit.ui.watchface2.bottom.WatchfaceRateBottomSheet"
+        android:label="WatchfaceRateBottomSheet">
+        <argument
+            android:name="watchFace"
+            app:argType="com.noisefit.data.remote.response.Watchface2" />
+    </dialog>
+    <fragment
+        android:id="@+id/watchface2SubListFragment"
+        android:name="com.noisefit.ui.watchface2.sub.Watchface2SubListFragment"
+        android:label="Watchface2SubListFragment">
+        <argument
+            android:name="type"
+            app:argType="com.noisefit.ui.watchface2.sub.WF2SubListFrom" />
+        <argument
+            android:name="categoryId"
+            android:defaultValue="-1"
+            app:argType="integer" />
+
+        <action
+            android:id="@+id/action_watchface2SubListFragment_to_uploadWatchfaceBottomSheet"
+            app:destination="@id/uploadWatchfaceBottomSheet" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/bottomSheetNoiseMaker"
+        android:name="com.noisefit.ui.npl.dashboard.BottomSheetNplNoisemaker"
+        android:label="BottomSheetNplNoiseMaker" />
+    <dialog
+        android:id="@+id/diyWalkAroundBottomDialog"
+        android:name="com.noisefit.ui.walkAround.friends.DiyWalkAroundBottomDialog"
+        android:label="DiyWalkAroundBottomDialog" />
+    <dialog
+        android:id="@+id/appUpdateBottomSheet"
+        android:name="com.noisefit.ui.AppUpdateBottomSheet"
+        android:label="AppUpdateBottomSheet">
+        <argument
+            android:name="versonResponse"
+            app:argType="com.noisefit_commans.data.response.VersionCheckResponse" />
+    </dialog>
+    <fragment
+        android:id="@+id/myCreationWfFragment"
+        android:name="com.noisefit.ui.watchface2.myCreation.MyCreationWfFragment"
+        android:label="MyCreationWfFragment">
+
+        <action
+            android:id="@+id/action_myCreationWfFragment_to_myDiyCreationDetailBottomSheet"
+            app:destination="@id/myDiyCreationDetailBottomSheet" />
+
+        <action
+            android:id="@+id/action_myCreationWfFragment_to_diyWatchFaceFragment"
+            app:destination="@id/diyWatchFaceFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/myDiyCreationDetailBottomSheet"
+        android:name="com.noisefit.ui.watchface2.bottom.MyDiyCreationDetailBottomSheet"
+        android:label="MyDiyCreationDetailBottomSheet">
+        <argument
+            android:name="wfData"
+            app:argType="com.noisefit.data.remote.response.DiyMyCreation" />
+    </dialog>
+    <fragment
+        android:id="@+id/sleepReminderFragment"
+        android:name="com.noisefit.ui.dashboard.feature.healthMonitor.sleepReminder.SleepReminderFragment"
+        android:label="SleepReminderFragment">
+        <action
+            android:id="@+id/action_sleepReminderFragment_to_timeBottomSheet"
+            app:destination="@id/timeBottomSheet" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/oreoSleepDetailsFragment"
+        android:name="com.oreo.ui.sleep.OreoSleepDetailFragment"
+        android:label="OreoSleepDetailsFragment" />
+    <fragment
+        android:id="@+id/oreoActivityFragment"
+        android:name="com.oreo.ui.activity.OreoActivityFragment"
+        android:label="OreoActivityFragment" />
+    <dialog
+        android:id="@+id/bottomSheetChooseDevice"
+        android:name="com.oreo.ui.profile.BottomSheetChooseDevice"
+        android:label="BottomSheetChooseDevice" />
+    <fragment
+        android:id="@+id/logsDisplayFragment"
+        android:name="com.noisefit.ui.dashboard.LogsDisplayFragment"
+        android:label="LogsDisplayFragment" />
+
+
+</navigation>

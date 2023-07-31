@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            style="@style/H5"
+            android:layout_width="0dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_24dp"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Firmware update" />
+
+        <TextView
+            android:id="@+id/tvOtherDesc"
+            style="@style/H6"
+            android:textColorLink="@color/text_accent_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:layout_marginTop="@dimen/dimen_24dp"
+            android:lineSpacingExtra="6dp"
+            android:textAlignment="textStart"
+            android:textColor="@color/white_80"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+            tools:text="- Forget the watch bluetooth name from phone’s bluetooth settings, Restart the watch, and try again." />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvOtherDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:visibility="gone"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvOtherDesc" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv"
+            android:layout_width="0dp"
+            android:layout_height="422dp"
+            android:layout_marginTop="@dimen/dimen_24dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rvOtherDesc"
+            tools:itemCount="1"
+            tools:listitem="@layout/item_h_s_image_list" />
+
+        <ImageView
+            android:id="@+id/arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_8dp"
+            android:src="@drawable/ic_arrow_right_accent_color"
+            app:layout_constraintBottom_toBottomOf="@+id/btnAction"
+            app:layout_constraintStart_toEndOf="@+id/btnAction"
+            app:layout_constraintTop_toTopOf="@+id/btnAction" />
+
+        <TextView
+            android:id="@+id/btnAction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/H5"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:text="@string/text_go_to_settings"
+            android:layout_marginStart="@dimen/side_margin"
+            android:textAllCaps="false"
+            android:textColor="@color/text_accent_color"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rv" />
+        <include
+            android:id="@+id/include4"
+            layout="@layout/layout_line_separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnAction"
+            tools:visibility="visible" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

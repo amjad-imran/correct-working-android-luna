@@ -1,0 +1,36 @@
+{
+  "title": "Choosing no background restriction ensures there will be no delay in notifications, connectivity loss and proper functioning of watch features including, Camera shutter and Find device.",
+  "data": [
+    {
+      "type": "text",
+      "text": "Settings > Apps > Manage apps > Select NoiseFit app > Battery Saver > Choose No Restrictions",
+      "image": null,
+      "bold": true
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/XIAOMIBatteryOptimization/image2.jpeg"
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/XIAOMIBatteryOptimization/image3.jpeg"
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/XIAOMIBatteryOptimization/image4.jpeg"
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/XIAOMIBatteryOptimization/image5.jpeg"
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/XIAOMIBatteryOptimization/image1.jpeg"
+    }
+  ]
+}

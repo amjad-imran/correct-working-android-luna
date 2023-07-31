@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/lytImageSlider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageViewCircle1"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:padding="1dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/evolve_demo_bg"
+            app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView"
+            app:strokeColor="@android:color/white"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageViewCircle2"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="-6dp"
+            android:padding="1dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/evolve_demo_bg"
+            app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView"
+            app:strokeColor="@android:color/white"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageViewCircle3"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="-6dp"
+            android:padding="1dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/evolve_demo_bg"
+            app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView"
+            app:strokeColor="@android:color/white"
+            app:strokeWidth="1dp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvParticipantValue"
+        style="@style/H6"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:maxLines="3"
+        android:textColor="@color/very_light_pink"
+        app:layout_constraintBottom_toBottomOf="@id/lytImageSlider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/lytImageSlider"
+        app:layout_constraintTop_toTopOf="@+id/lytImageSlider"
+        tools:text="Common friend" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

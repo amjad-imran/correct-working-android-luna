@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation_profile_edit"
+    app:startDestination="@id/profileEditFragment">
+
+    <fragment
+        android:id="@+id/profileEditFragment"
+        android:name="com.noisefit.ui.profile.ProfileEditFragment"
+        android:label="ProfileEditFragment">
+
+        <action
+            android:id="@+id/action_profileEditFragment_to_locationBottomSheet"
+            app:destination="@id/locationBottomSheet" />
+        <action
+            android:id="@+id/action_profileEditFragment_to_dateBottomSheet"
+            app:destination="@id/dateBottomSheet" />
+        <action
+            android:id="@+id/action_profileEditFragment_to_valueSelectorBottomSheet"
+            app:destination="@id/valueSelectorBottomSheet" />
+
+        <action
+            android:id="@+id/action_profileEditFragment_to_nameUpdateBottomSheet"
+            app:destination="@id/nameUpdateBottomSheet" />
+
+
+        <action
+            android:id="@+id/action_profileEditFragment_to_BottomSheetImagePicker"
+            app:destination="@id/bottomSheetImagePicker" />
+        <action
+            android:id="@+id/action_profileEditFragment_to_bottomSheetInterestSelector"
+            app:destination="@id/bottomSheetInterestSelector" />
+
+    </fragment>
+
+    <dialog
+        android:id="@+id/locationBottomSheet"
+        android:name="com.noisefit.ui.friends.location.LocationBottomSheet"
+        android:label="LocationBottomSheet">
+        <argument
+            android:name="shouldUpdate"
+            android:defaultValue="true"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_locationBottomSheet_to_searchStateFragment"
+            app:destination="@+id/searchStateFragment" />
+    </dialog>
+
+    <fragment
+        android:id="@+id/searchStateFragment"
+        android:name="com.noisefit.ui.friends.location.search.SearchStateFragment"
+        android:label="SearchStateFragment">
+        <argument
+            android:name="type"
+            app:argType="com.noisefit.ui.friends.location.search.SearchStateType" />
+
+        <argument
+            android:name="id"
+            android:defaultValue="-1"
+            app:argType="integer" />
+
+        <argument
+            android:name="data"
+            app:argType="string"
+            app:nullable="true" />
+
+    </fragment>
+
+    <dialog
+        android:id="@+id/dateBottomSheet"
+        android:name="com.noisefit.ui.common.bottomSheet.DateBottomSheet"
+        android:label="DateBottomSheet">
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="date"
+            app:argType="integer" />
+        <argument
+            android:name="month"
+            app:argType="integer" />
+        <argument
+            android:name="year"
+            app:argType="integer" />
+        <argument
+            android:name="dobDialog"
+            app:argType="boolean" />
+    </dialog>
+    <dialog
+        android:id="@+id/valueSelectorBottomSheet"
+        android:name="com.noisefit.ui.common.bottomSheet.ValueSelectorBottomSheet"
+        android:label="ValueSelectorBottomSheet">
+        <argument
+            android:name="selectedValue"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="selectionList"
+            app:argType="string[]" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </dialog>
+    <dialog
+        android:id="@+id/nameUpdateBottomSheet"
+        android:name="com.noisefit.ui.profile.NameUpdateBottomSheet"
+        android:label="ProfileEditFragment">
+
+        <argument
+            android:name="name"
+            app:argType="string"
+            app:nullable="true" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/bottomSheetImagePicker"
+        android:name="com.noisefit.ui.profile.BottomSheetImagePicker"
+        android:label="ProfileEditFragment" />
+
+    <dialog
+        android:id="@+id/bottomSheetInterestSelector"
+        android:name="com.noisefit.ui.friends.profile.BottomSheetInterest"
+        android:label="bottomSheetInterestSelector">
+        <argument
+            android:name="shouldUpdate"
+            android:defaultValue="true"
+            app:argType="boolean" />
+    </dialog>
+</navigation>

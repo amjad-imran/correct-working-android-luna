@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="32dp"
+        android:layout_height="120dp">
+
+        <com.oreo.ui.custom.GradientLineView
+            android:id="@+id/vLine"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivPoint"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:background="#eedeff"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.87"
+            app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

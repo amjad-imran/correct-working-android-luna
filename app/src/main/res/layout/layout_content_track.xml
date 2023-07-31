@@ -1,0 +1,80 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/back_modal_track">
+
+        <ImageView
+            android:id="@+id/ivTimer"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/ic_heart_rate"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tvTime"
+            style="@style/Tinny"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/ivTimer"
+            app:layout_constraintStart_toEndOf="@id/ivTimer"
+            app:layout_constraintTop_toTopOf="@id/ivTimer"
+            tools:text="12:11" />
+
+        <ImageView
+            android:id="@+id/ivHr"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/ic_heart_rate"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivTimer"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            style="@style/Tinny"
+            android:id="@+id/tvHrValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/ivHr"
+            app:layout_constraintStart_toEndOf="@id/ivHr"
+            app:layout_constraintTop_toTopOf="@id/ivHr"
+            tools:text="121" />
+
+        <ImageView
+            android:id="@+id/ivCalories"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/ic_heart_rate"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivHr"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            style="@style/Tinny"
+            android:id="@+id/tvCalorieValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/ivCalories"
+            app:layout_constraintStart_toEndOf="@id/ivCalories"
+            app:layout_constraintTop_toTopOf="@id/ivCalories"
+            tools:text="111" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

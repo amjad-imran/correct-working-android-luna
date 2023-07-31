@@ -1,0 +1,179 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:lineChart="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvLabel1"
+            style="@style/H6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:textColor="@color/lightest_gray"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Wednesday, 23 April" />
+
+        <TextView
+            android:id="@+id/tvLabel2"
+            style="@style/H6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:textColor="@color/lightest_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tvLabel1"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Wednesday, 23 April" />
+
+        <include
+            android:id="@+id/lytLabelValue1"
+            layout="@layout/oreo_layout_view_with_bpm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvLabel1" />
+        <include
+            android:id="@+id/lytLabelValue11"
+            layout="@layout/oreo_layout_top_hour_mn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="4dp"
+            android:visibility="gone"
+            android:layout_marginEnd="@dimen/side_margin"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lytLabelValue1" />
+
+        <include
+            android:id="@+id/lytLabelValue2"
+            layout="@layout/oreo_layout_view_with_bpm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/lytLabelValue11"
+            app:layout_constraintTop_toBottomOf="@id/tvLabel1"
+            tools:text="84" />
+
+<!--        <com.github.mikephil.charting.charts.LineChart-->
+<!--            android:id="@+id/scoreChart"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="181dp"-->
+<!--            android:layout_marginTop="21dp"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/lytLabelValue1" />-->
+
+        <com.oreo.ui.custom.LineChart
+            android:id="@+id/rvTopGraph"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lytLabelValue11"
+            lineChart:bgBottomColor="@android:color/transparent"
+            lineChart:bgColor="@android:color/transparent"
+            lineChart:bgLeftColor="@android:color/transparent"
+            lineChart:bgRightColor="@android:color/transparent"
+            lineChart:bgTopColor="@android:color/transparent"
+            lineChart:bottomWith="30dp"
+            lineChart:centerLineColor="@color/white_80"
+            lineChart:centerLineWidth="3dp"
+            lineChart:chartLineColor="#ffda55"
+            lineChart:chartLineWidth="4dp"
+            lineChart:fillColorEnd="#00ffd230"
+            lineChart:fillColorStart="#80d6a700"
+            lineChart:gridColor="@color/white_12"
+            lineChart:hCount="11"
+            lineChart:showAvgValue="true"
+            lineChart:innerCircleColor="#ffffff"
+            lineChart:innerCircleRadius="4dp"
+            lineChart:leftWith="0dp"
+            lineChart:outCircleColor="#ffeeb2"
+            lineChart:outCircleRadius="1dp"
+
+            lineChart:scaleColor="#ff000000"
+            lineChart:scaleLenth="4dp"
+            lineChart:scaleNodeColor="#FFFFFF"
+            lineChart:scaleNodeRadius="6dp"
+            lineChart:showGrid="true"
+            lineChart:topWith="4dp"
+            lineChart:rightWith="30dp"
+            lineChart:vCount="2"
+            lineChart:xLineColor="#80FFFFFF"
+            lineChart:xMax="130"
+            lineChart:xMin="0"
+            lineChart:xTextColor="#FFFFFF"
+            lineChart:xTextSize="12sp"
+            lineChart:showSelectedIndicator="false"
+            lineChart:yLineColor="#00FFFFFF"
+            lineChart:yTextSize="12sp" />
+
+
+        <com.oreo.ui.custom.BarChart
+            android:id="@+id/rvTopBarGraph"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rvTopGraph"
+            lineChart:bgBottomColor="@android:color/transparent"
+            lineChart:rightWith="30dp"
+            lineChart:bgColor="@android:color/transparent"
+            lineChart:bgLeftColor="@android:color/transparent"
+            lineChart:bgRightColor="@android:color/transparent"
+            lineChart:bgTopColor="@android:color/transparent"
+            lineChart:bottomWith="30dp"
+            lineChart:centerLineColor="@color/white_80"
+            lineChart:centerLineWidth="3dp"
+            lineChart:chartLineColor="#ffffff"
+            lineChart:chartLineWidth="4dp"
+            lineChart:gridColor="@color/white_12"
+            lineChart:hCount="11"
+            android:visibility="gone"
+            lineChart:innerCircleColor="#ffffff"
+            lineChart:innerCircleRadius="4dp"
+            lineChart:leftWith="0dp"
+            lineChart:outCircleColor="#ffeeb2"
+            lineChart:outCircleRadius="1dp"
+
+            lineChart:scaleColor="#ff000000"
+            lineChart:scaleLenth="4dp"
+            lineChart:showAvgValue="true"
+            lineChart:lineNormalColor="#7B63A7"
+            lineChart:lineSelectColor="#B18DF2"
+            lineChart:scaleNodeColor="#FFFFFF"
+            lineChart:scaleNodeRadius="6dp"
+            lineChart:showGrid="true"
+            lineChart:topWith="40dp"
+            lineChart:vCount="2"
+            lineChart:xLineColor="#80FFFFFF"
+            lineChart:xMax="130"
+            lineChart:xMin="0"
+            lineChart:xTextColor="#FFFFFF"
+            lineChart:xTextSize="12sp"
+            lineChart:showSelectedIndicator="false"
+            lineChart:yLineColor="#00FFFFFF"
+            lineChart:yTextSize="12sp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

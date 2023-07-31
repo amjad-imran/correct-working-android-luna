@@ -1,0 +1,122 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivProfile"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="16dp"
+            android:transitionName="profilePic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView"
+            tools:src="@drawable/ic_noiselogo_black_background" />
+
+        <View
+            android:id="@+id/viewCommunity"
+            android:layout_width="56dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/tvCommunityCount"
+            app:layout_constraintStart_toStartOf="@+id/tvCommunityTitle"
+            app:layout_constraintTop_toTopOf="@id/tvCommunityTitle" />
+
+        <TextView
+            android:id="@+id/tvCommunityTitle"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:text="@string/text_our_community"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/tvCommunityCount"
+            app:layout_constraintStart_toEndOf="@+id/ivProfile"
+            app:layout_constraintTop_toTopOf="@+id/ivProfile"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/tvCommunityCount"
+            style="@style/H5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/accent_color_purple"
+            app:layout_constraintBottom_toBottomOf="@+id/ivProfile"
+            app:layout_constraintStart_toStartOf="@+id/tvCommunityTitle"
+            app:layout_constraintTop_toBottomOf="@+id/tvCommunityTitle"
+            tools:text="20K" />
+
+        <View
+            android:id="@+id/viewPosts"
+            android:layout_width="56dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/tvPostsCount"
+            app:layout_constraintStart_toEndOf="@+id/viewCommunity"
+            app:layout_constraintStart_toStartOf="@+id/tvPostTitle"
+            app:layout_constraintTop_toTopOf="@id/tvPostTitle" />
+
+        <TextView
+            android:id="@+id/tvPostTitle"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:text="@string/text_posts"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvCommunityTitle"
+            app:layout_constraintStart_toEndOf="@+id/tvCommunityTitle"
+            app:layout_constraintTop_toTopOf="@+id/tvCommunityTitle" />
+
+        <TextView
+            android:id="@+id/tvPostsCount"
+            style="@style/H5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/accent_color_purple"
+            app:layout_constraintStart_toStartOf="@+id/tvPostTitle"
+            app:layout_constraintTop_toBottomOf="@+id/tvPostTitle"
+            tools:text="5" />
+
+        <TextView
+            android:id="@+id/textView11"
+            style="@style/H5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="@string/text_noise"
+            app:layout_constraintStart_toStartOf="@+id/ivProfile"
+            app:layout_constraintTop_toBottomOf="@+id/ivProfile" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_verified"
+            app:layout_constraintBottom_toBottomOf="@id/textView11"
+            app:layout_constraintStart_toEndOf="@id/textView11"
+            app:layout_constraintTop_toTopOf="@id/textView11" />
+
+        <TextView
+            android:id="@+id/tvDescription"
+            style="@style/H6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:drawablePadding="8dp"
+            android:textColor="@color/white_80"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView11"
+            tools:text="A fitness related / motivational caption that is 2 lines and not more." />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

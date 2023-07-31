@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.onboarding.otp.OtpCountryFragment">
+
+
+        <ImageButton
+            android:id="@+id/backBtn"
+            style="@style/ToolbarBackButton"
+            android:layout_margin="@dimen/side_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/lytOnBoardProgress"
+            layout="@layout/layout_onboard_progress"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            app:layout_constraintBottom_toBottomOf="@+id/backBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/backBtn" />
+
+        <TextView
+            android:id="@+id/textView"
+            style="@style/H2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="@dimen/dimen_96dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:text="@string/text_how_tall_are_you"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/backView"
+            style="@style/ModalStyleNew"
+            android:layout_width="0dp"
+            android:layout_height="268dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnMetric" />
+
+        <com.noisefit_commans.utils.WheelPicker
+            android:id="@+id/wheelPicker"
+            style="@style/H4"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:textColor="@color/white_80"
+            app:layout_constraintBottom_toBottomOf="@+id/backView"
+            app:layout_constraintEnd_toEndOf="@+id/backView"
+            app:layout_constraintStart_toStartOf="@+id/backView"
+            app:layout_constraintTop_toTopOf="@+id/backView"
+            app:wheel_atmospheric="true"
+            app:wheel_drawableSize="18dp"
+            app:wheel_item_height="44dp" />
+
+
+        <TextView
+            android:id="@+id/btnMetric"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/rounded_corner"
+            android:gravity="center"
+            android:padding="@dimen/dimen_16dp"
+            android:text="@string/text_metric_cm"
+            app:layout_constraintEnd_toStartOf="@+id/btnImperial"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <TextView
+            android:id="@+id/btnImperial"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:background="@drawable/rounded_corner"
+            android:gravity="center"
+            android:padding="@dimen/dimen_16dp"
+            android:text="@string/imperial_in"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btnMetric"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <include
+            android:id="@+id/include5"
+            layout="@layout/layout_divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
+            app:layout_constraintBottom_toTopOf="@+id/include4"
+            app:layout_constraintEnd_toEndOf="@+id/backView"
+            app:layout_constraintStart_toStartOf="@+id/backView"
+            app:layout_constraintTop_toBottomOf="@+id/backView"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+
+        <include
+            android:id="@+id/include4"
+            layout="@layout/layout_divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="56dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            app:layout_constraintBottom_toTopOf="@+id/backView"
+            app:layout_constraintEnd_toEndOf="@+id/backView"
+            app:layout_constraintStart_toStartOf="@+id/backView"
+            app:layout_constraintTop_toBottomOf="@+id/include5" />
+
+
+        <!--        <TextView-->
+        <!--            android:id="@+id/tvSubHeading"-->
+        <!--            style="@style/h6"-->
+        <!--            android:layout_width="0dp"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="@dimen/dimen_24dp"-->
+        <!--            android:layout_marginEnd="@dimen/side_margin"-->
+        <!--            android:text="@string/text_we_just_need_it_to_understand_your_body_type"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="@+id/textView"-->
+        <!--            app:layout_constraintTop_toBottomOf="@+id/textView" />-->
+
+        <Button
+            android:id="@+id/btnContinue"
+            style="@style/PrimaryButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:layout_marginBottom="@dimen/bottom_margin"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:text="@string/text_continue"
+            app:backgroundTint="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

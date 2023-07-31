@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/list"
+            style="@style/ModalStyleDialog"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dimen_12dp"
+            android:layout_marginTop="@dimen/dimen_12dp"
+            android:layout_marginEnd="@dimen/dimen_12dp"
+            android:layout_marginBottom="@dimen/dimen_12dp">
+
+            <View
+                android:id="@+id/view1"
+                android:layout_width="@dimen/dimen_40dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="4dp"
+                android:alpha="0.5"
+                android:background="@drawable/back_bottom_sheet_drag"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/searchBox"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginStart="@dimen/dimen_16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="@dimen/side_margin"
+                android:background="@drawable/back_modal_dialog"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view1" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etSearch"
+                style="@style/EditTextStyleSearch"
+                android:layout_width="0dp"
+                android:background="@android:color/transparent"
+                android:drawableEnd="@drawable/ic_search"
+                android:drawablePadding="16dp"
+                android:hint="@string/text_search_here"
+                android:inputType="textCapWords"
+                android:textColorHint="@color/white_64"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@id/searchBox"
+                app:layout_constraintEnd_toEndOf="@+id/searchBox"
+                app:layout_constraintStart_toStartOf="@+id/searchBox"
+                app:layout_constraintTop_toTopOf="@+id/searchBox" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvSelectWorkout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="@dimen/side_margin"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/searchBox"
+                tools:listitem="@layout/layout_select_workout_item" />
+
+            <include
+                android:id="@+id/progressBar"
+                layout="@layout/default_loader"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+</layout>

@@ -1,0 +1,24 @@
+apply {
+    from("$rootDir/android-library-build.gradle")
+}
+
+
+
+dependencies {
+
+    implementation project(":noisefit_libraries_zh")
+
+
+    //def timber = "4.7.1"
+
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+
+
+    implementation 'com.google.protobuf:protobuf-java:3.20.1'
+    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
+
+    implementation (project(Modules.commons))
+//    implementation project(path: ':commons')
+
+
+}

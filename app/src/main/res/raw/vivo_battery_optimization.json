@@ -1,0 +1,36 @@
+{
+  "title": "Choosing no background restriction ensures there will be no delay in notifications, connectivity loss and proper functioning of watch features including, Camera shutter and Find device.",
+  "data": [
+    {
+      "type": "text",
+      "text": "Settings > Battery > Battery power consumption management >  NoiseFit app > Choose Don’t restrict background power consumption",
+      "image": null,
+      "bold": true
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/VIVOBatteryOptimization/image1.JPEG"
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/VIVOBatteryOptimization/image2.JPEG"
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/VIVOBatteryOptimization/image3.JPEG"
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/VIVOBatteryOptimization/image4.JPEG"
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/VIVOBatteryOptimization/image5.JPEG"
+    }
+  ]
+}

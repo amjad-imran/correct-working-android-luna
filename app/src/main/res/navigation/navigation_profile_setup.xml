@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation_profile_setup"
+    app:startDestination="@id/onBoardNameFragment1">
+
+    <fragment
+        android:id="@+id/onBoardDobFragment"
+        android:name="com.noisefit.ui.onboarding.onboardProfile.userDetails.OnBoardDobFragment"
+        android:label="OnBoardDobFragment" />
+    <fragment
+        android:id="@+id/onBoardHeightFragment"
+        android:name="com.noisefit.ui.onboarding.onboardProfile.userDetails.OnBoardHeightFragment"
+        android:label="OnBoardHeightFragment" />
+    <fragment
+        android:id="@+id/onBoardStepsGoalFragment"
+        android:name="com.noisefit.ui.onboarding.onboardProfile.goals.OnBoardStepsGoalFragment"
+        android:label="OnBoardStepsGoalFragment" />
+    <fragment
+        android:id="@+id/onBoardGenderFragment"
+        android:name="com.noisefit.ui.onboarding.onboardProfile.userDetails.OnBoardGenderFragment"
+        android:label="OnBoardGenderFragment" />
+    <fragment
+        android:id="@+id/onBoardNameFragment1"
+        android:name="com.noisefit.ui.onboarding.onboardProfile.name.OnBoardNameFragment"
+        android:label="OnBoardNameFragment"/>
+    <fragment
+        android:id="@+id/onBoardCaloriesFragment"
+        android:name="com.noisefit.ui.onboarding.onboardProfile.calories.OnBoardCaloriesFragment"
+        android:label="OnBoardCaloriesFragment"/>
+
+    <fragment
+        android:id="@+id/onBoardWeightFragment"
+        android:name="com.noisefit.ui.onboarding.onboardProfile.userDetails.OnBoardWeightFragment"
+        android:label="OnBoardWeightFragment" />
+    <fragment
+        android:id="@+id/endGameFragment"
+        android:name="com.noisefit.ui.onboarding.onboardProfile.endgame.EndGameFragment"
+        android:label="EndGameFragment" />
+
+
+</navigation>

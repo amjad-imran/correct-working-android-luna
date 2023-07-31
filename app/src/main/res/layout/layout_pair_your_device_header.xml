@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:id="@+id/layoutContainer"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btnPairDevice"
+            style="@style/PrimaryButtonStyleHighlight1"
+            android:layout_width="match_parent"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:text="@string/text_pair_your_device"
+            app:backgroundTint="@null"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvMsg"
+            style="@style/Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="6sp"
+            android:layout_marginTop="16dp"
+            tools:text="@string/text_don_t_have_a_noisefit_device_yet_check_out_our_latest_collection_by_clicking_on_the"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/btnPairDevice"
+            app:layout_constraintStart_toStartOf="@+id/btnPairDevice"
+            app:layout_constraintTop_toBottomOf="@+id/btnPairDevice"
+            app:layout_constraintVertical_bias="0.0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

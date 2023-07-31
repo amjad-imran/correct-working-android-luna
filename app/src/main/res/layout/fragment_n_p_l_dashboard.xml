@@ -1,0 +1,437 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageView38"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_npl_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/lytToolbar"
+            layout="@layout/layout_toolbar_lottie_2_icons"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/divider1"
+            layout="@layout/layout_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lytToolbar" />
+
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/contentView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider1"
+            tools:visibility="visible">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <include
+                    android:id="@+id/lytQuiz"
+                    layout="@layout/layout_npl_dash_quiz"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <include
+                    android:id="@+id/divider333"
+                    layout="@layout/layout_divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="32dp"
+                    app:layout_constraintTop_toBottomOf="@id/lytQuiz" />
+
+<!--                <include-->
+<!--                    android:id="@+id/lytOngMatch"-->
+<!--                    layout="@layout/layout_dash_ongoing_match"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="@dimen/side_margin"-->
+<!--                    android:layout_marginTop="32dp"-->
+<!--                    android:layout_marginEnd="@dimen/side_margin"-->
+<!--                    android:visibility="gone"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/divider444"-->
+<!--                    tools:visibility="gone" />-->
+
+<!--                <include-->
+<!--                    android:id="@+id/divider33"-->
+<!--                    layout="@layout/layout_divider"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="1dp"-->
+<!--                    android:layout_marginTop="32dp"-->
+<!--                    android:visibility="gone"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/lytOngMatch"-->
+<!--                    tools:visibility="gone" />-->
+
+                <include
+                    android:id="@+id/lytWinClaims"
+                    layout="@layout/layout_dash_claim_wins"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/side_margin"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="@dimen/side_margin"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/divider333"
+                    tools:visibility="gone" />
+
+                <include
+                    android:id="@+id/divider22"
+                    layout="@layout/layout_divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="32dp"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/lytWinClaims" />
+
+<!--                <include-->
+<!--                    android:id="@+id/lytPredictWinner"-->
+<!--                    layout="@layout/layout_dash_predict_winner"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="@dimen/side_margin"-->
+<!--                    android:layout_marginTop="32dp"-->
+<!--                    android:layout_marginEnd="@dimen/side_margin"-->
+<!--                    android:visibility="gone"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/divider22"-->
+<!--                    tools:visibility="gone" />-->
+
+<!--                <include-->
+<!--                    android:id="@+id/divider222"-->
+<!--                    layout="@layout/layout_divider"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="1dp"-->
+<!--                    android:layout_marginTop="32dp"-->
+<!--                    android:visibility="gone"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/lytPredictWinner"-->
+<!--                    tools:visibility="gone" />-->
+
+
+<!--                <include-->
+<!--                    android:id="@+id/lytXWins"-->
+<!--                    layout="@layout/layout_dashboard_xwins"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="@dimen/side_margin"-->
+<!--                    android:layout_marginTop="32dp"-->
+<!--                    android:layout_marginEnd="@dimen/side_margin"-->
+<!--                    android:visibility="gone"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/divider333" />-->
+
+<!--                <include-->
+<!--                    android:id="@+id/divider3"-->
+<!--                    layout="@layout/layout_divider"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="1dp"-->
+<!--                    android:layout_marginTop="32dp"-->
+<!--                    android:visibility="gone"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/lytXWins" />-->
+
+
+                <include
+                    android:id="@+id/lytNplStates"
+                    layout="@layout/layout_image_slider_npl_updated"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/side_margin"
+                    android:layout_marginTop="32dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/divider22" />
+
+                <include
+                    android:id="@+id/dividerNplSt"
+                    layout="@layout/layout_divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="32dp"
+                    app:layout_constraintTop_toBottomOf="@id/lytNplStates" />
+
+                <include
+                    android:id="@+id/lytNplWatchface"
+                    layout="@layout/layout_npl_dash_watchfaces"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/side_margin"
+                    android:layout_marginTop="32dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/dividerNplSt" />
+                <include
+                    android:id="@+id/dividerNplWf"
+                    layout="@layout/layout_divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="32dp"
+                    app:layout_constraintTop_toBottomOf="@id/lytNplWatchface" />
+
+
+                <include
+                    android:id="@+id/lytHallOfFame"
+                    layout="@layout/layout_image_slider_npl_updated"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/side_margin"
+                    android:layout_marginTop="32dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/dividerNplWf" />
+
+                <include
+                    android:id="@+id/dividerHoF"
+                    layout="@layout/layout_divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="32dp"
+                    app:layout_constraintTop_toBottomOf="@id/lytHallOfFame" />
+
+                <TextView
+                    android:id="@+id/tvScoreTitle"
+                    style="@style/H4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/side_margin"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="@dimen/side_margin"
+                    android:text="@string/text_your_score_card_history"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/dividerHoF" />
+
+                <include
+                    android:id="@+id/lytScoreCard"
+                    layout="@layout/layout_dash_score_card_updated"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/side_margin"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="@dimen/side_margin"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvScoreTitle" />
+
+                <include
+                    android:id="@+id/divider444"
+                    layout="@layout/layout_divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="32dp"
+                    android:visibility="visible"
+                    app:layout_constraintTop_toBottomOf="@id/lytScoreCard"
+                    tools:visibility="visible" />
+
+                <include
+                    android:id="@+id/lytLuckyDraw"
+                    layout="@layout/layout_npl_dash_lucky_draw"
+                    android:layout_width="match_parent"
+                    android:layout_marginStart="@dimen/side_margin"
+                    android:layout_marginEnd="@dimen/side_margin"
+                    android:layout_marginTop="24dp"
+                    android:visibility="gone"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider444" />
+
+                <include
+                    android:id="@+id/dividerLD"
+                    layout="@layout/layout_divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:visibility="gone"
+                    android:layout_marginTop="32dp"
+                    app:layout_constraintTop_toBottomOf="@id/lytLuckyDraw" />
+
+                <TextView
+                    android:id="@+id/tvPredictionHistory"
+                    style="@style/Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="66dp"
+                    android:layout_marginStart="@dimen/side_margin"
+                    android:gravity="center_vertical"
+                    android:text="@string/text_prh_title"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/dividerLD" />
+
+                <ImageView
+                    android:id="@+id/ivPRHMore"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:padding="16dp"
+                    android:src="@drawable/ic_arrow_right_duotone"
+                    app:layout_constraintBottom_toBottomOf="@id/tvPredictionHistory"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tvPredictionHistory"
+                    tools:ignore="ContentDescription" />
+
+<!--                <include-->
+<!--                    android:id="@+id/divider5"-->
+<!--                    layout="@layout/layout_divider"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="1dp"-->
+<!--                    android:visibility="gone"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/tvPredictionHistory" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/tvHTPlay"-->
+<!--                    style="@style/Body"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="66dp"-->
+<!--                    android:layout_marginStart="@dimen/side_margin"-->
+<!--                    android:gravity="center_vertical"-->
+<!--                    android:text="@string/text_how_to_play"-->
+<!--                    android:visibility="gone"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/divider5" />-->
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/ivHTMore"-->
+<!--                    android:layout_width="56dp"-->
+<!--                    android:layout_height="56dp"-->
+<!--                    android:padding="16dp"-->
+<!--                    android:visibility="gone"-->
+<!--                    android:src="@drawable/ic_arrow_right_duotone"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@id/tvHTPlay"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/tvHTPlay"-->
+<!--                    tools:ignore="ContentDescription" />-->
+
+                <include
+                    android:id="@+id/divider6"
+                    layout="@layout/layout_divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:visibility="visible"
+                    app:layout_constraintTop_toBottomOf="@id/tvPredictionHistory" />
+
+                <TextView
+                    android:id="@+id/tvTC"
+                    style="@style/Body"
+                    android:layout_width="match_parent"
+                    android:layout_height="66dp"
+                    android:layout_marginStart="@dimen/side_margin"
+                    android:gravity="center_vertical"
+                    android:text="@string/text_npl_terms_conditions"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/divider6" />
+
+                <ImageView
+                    android:id="@+id/ivTCMore"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:padding="16dp"
+                    android:src="@drawable/ic_arrow_right_duotone"
+                    app:layout_constraintBottom_toBottomOf="@id/tvTC"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tvTC"
+                    tools:ignore="ContentDescription" />
+
+                <include
+                    android:id="@+id/divider7"
+                    layout="@layout/layout_divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    app:layout_constraintTop_toBottomOf="@id/tvTC" />
+
+                <TextView
+                    android:id="@+id/tvRaiseComplain"
+                    style="@style/Body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginBottom="36dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:text="@string/text_any_query_raise_a_complaint"
+                    android:textColor="@color/accent_color_purple"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider7" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <nl.dionsegijn.konfetti.xml.KonfettiView
+            android:id="@+id/konfettiViewLeft"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <nl.dionsegijn.konfetti.xml.KonfettiView
+            android:id="@+id/konfettiViewRight"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/vTouchBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/vAnimCollect"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <include
+            android:id="@+id/progressBar"
+            layout="@layout/default_loader"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/contentView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/divider1" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

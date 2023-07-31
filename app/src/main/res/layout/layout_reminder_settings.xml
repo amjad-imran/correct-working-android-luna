@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/view8"
+            style="@style/ModalStyleNew"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/tvEdit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvFreqText"
+            style="@style/H6"
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_freqency"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvFreqData"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dimen_4dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:text="@string/text__"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/tvFreqText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvFreqText"
+            tools:text="2hr" />
+
+
+        <TextView
+            android:id="@+id/tvDurationText"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_16dp"
+            android:text="@string/text_duration"
+            android:layout_marginStart="@dimen/side_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvFreqText" />
+
+        <TextView
+            android:id="@+id/tvDurationData"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dimen_4dp"
+            android:text="@string/text__"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/tvDurationText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvDurationText"
+            tools:text="20 secs" />
+
+        <TextView
+            android:id="@+id/tvStartTimeText"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_16dp"
+            android:text="@string/text_start_time"
+            android:layout_marginStart="@dimen/side_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvDurationText" />
+
+        <TextView
+            android:id="@+id/tvStartTimeData"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dimen_4dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:text="@string/text__"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/tvStartTimeText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvStartTimeText"
+            tools:text="10:00pm" />
+
+        <TextView
+            android:id="@+id/tvEndTimeText"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_16dp"
+            android:text="@string/text_end_time"
+            android:layout_marginStart="@dimen/side_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvStartTimeText" />
+
+        <TextView
+            android:id="@+id/tvEndTimeData"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dimen_4dp"
+            android:text="@string/text__"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/tvEndTimeText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvEndTimeText"
+            tools:text="10:00pm" />
+
+        <TextView
+            android:id="@+id/tvRepeatText"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_16dp"
+            android:text="@string/text_repeat"
+            android:layout_marginStart="@dimen/side_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvEndTimeText" />
+
+        <TextView
+            android:id="@+id/tvRepeatData"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dimen_4dp"
+            android:text="@string/text__"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/tvRepeatText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvRepeatText"
+            tools:text="Everyday" />
+
+        <TextView
+            android:id="@+id/tvEdit"
+            style="@style/H5"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dimen_48dp"
+            android:layout_marginTop="24dp"
+            android:enabled="false"
+            android:gravity="center"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:paddingStart="@dimen/dimen_16dp"
+            android:paddingEnd="@dimen/dimen_20dp"
+            android:text="@string/text_edit"
+            android:textColor="@color/text_accent_color"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvRepeatText"
+            tools:visibility="visible" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

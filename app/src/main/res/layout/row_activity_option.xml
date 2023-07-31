@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/parentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/back_modal_new">
+
+
+        <View
+            android:id="@+id/viewActivityback"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/circle_app_color"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivActivityType"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_steps_gradient"
+            app:layout_constraintBottom_toBottomOf="@+id/viewActivityback"
+            app:layout_constraintEnd_toEndOf="@+id/viewActivityback"
+            app:layout_constraintStart_toStartOf="@+id/viewActivityback"
+            app:layout_constraintTop_toTopOf="@+id/viewActivityback" />
+
+
+        <TextView
+            android:id="@+id/tvActivityName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textColor="@color/text_color_workout_item_label"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/tvLastSession"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/viewActivityback"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="RUNNING" />
+
+
+        <TextView
+            android:id="@+id/tvLastSession"
+            style="@style/Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tvActivityName"
+            app:layout_constraintTop_toBottomOf="@+id/tvActivityName"
+            tools:text="456" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

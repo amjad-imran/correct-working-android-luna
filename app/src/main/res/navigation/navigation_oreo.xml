@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation_oreo"
+    app:startDestination="@id/navigation_oreo_home">
+
+
+    <fragment
+        android:id="@+id/navigation_oreo_home"
+        android:name="com.oreo.ui.home.summary.OSummaryFragment"
+        android:label="fragment_summary_o">
+        <action
+            android:id="@+id/action_home_to_alertTextBottomSheet"
+            app:destination="@id/alertTextBottomSheet" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_oreo_readiness"
+        android:name="com.oreo.ui.readiness.OreoReadinessFragment"
+        android:label="ReadinessFragment" >
+        <action
+            android:id="@+id/action_navigation_readiness_details_frag_to_descriptionPopUpBottomDialogFragment"
+            app:destination="@id/descriptionPopUpBottomDialogFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_oreo_workouts"
+        android:name="com.oreo.ui.activity.OreoActivityFragment"
+        android:label="OreoActivityFragment" >
+        <action
+            android:id="@+id/action_navigation_activity_details_frag_to_descriptionPopUpBottomDialogFragment"
+            app:destination="@id/descriptionPopUpBottomDialogFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_oreo_sleep"
+        android:name="com.oreo.ui.sleep.OreoSleepDetailFragment"
+        android:label="OreoSleepDetailFragment">
+        <action
+            android:id="@+id/action_navigation_sleep_details_frag_to_descriptionPopUpBottomDialogFragment"
+            app:destination="@id/descriptionPopUpBottomDialogFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_oreo_my_device"
+        android:name="com.oreo.ui.device.OreoMyDeviceFragment"
+        android:label="OreoMyDeviceFragment" />
+    <fragment
+        android:id="@+id/OMyProfileFragment"
+        android:name="com.oreo.ui.profile.OMyProfileFragment"
+        android:label="OMyProfileFragment" />
+    <fragment
+        android:id="@+id/OAboutDeviceFragment"
+        android:name="com.oreo.ui.profile.OAboutDeviceFragment"
+        android:label="OAboutDeviceFragment" />
+    <dialog
+        android:id="@+id/logoutBottomSheet2"
+        android:name="com.noisefit.ui.profile.LogoutBottomSheet"
+        android:label="LogoutBottomSheet" />
+    <dialog
+        android:id="@+id/deleteAccountBottomSheet"
+        android:name="com.noisefit.ui.profile.DeleteAccountBottomSheet"
+        android:label="DeleteAccountBottomSheet" />
+
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.noisefit.ui.settings.about.AboutFragment"
+        android:label="AboutFragment" />
+
+    <dialog
+        android:id="@+id/oreoBottomSheetNoUpdateAvailable"
+        android:name="com.oreo.ui.profile.OreoBottomSheetNoUpdateAvailable"
+        android:label="oreoBottomSheetNoUpdateAvailable" />
+
+
+    <fragment
+        android:id="@+id/profileFragmentOreo"
+        android:name="com.noisefit.ui.profile.ProfileFragment"
+        android:label="fragment_profile">
+        <action
+            android:id="@+id/action_profileFragment_to_profileEditFragment"
+            app:destination="@id/profileEditFragment" />
+        <action
+            android:id="@+id/action_profileEditFragment_to_logoutBottomSheet"
+            app:destination="@id/logoutBottomSheet" />
+        <action
+            android:id="@+id/action_profileEditFragment_to_accountDeleteBottomSheet"
+            app:destination="@id/accountDeleteBottomSheet" />
+    </fragment>
+    <fragment
+        android:id="@+id/rateUsOreo"
+        android:name="com.noisefit.ui.settings.feedbacknew.FeedbackFragment"
+        android:label="RateUs" />
+    <fragment
+        android:id="@+id/googleFitFragmentOreo"
+        android:name="com.noisefit.ui.dashboard.feature.googlefit.GoogleFitFragment"
+        android:label="GoogleFitFragment" />
+    <fragment
+        android:id="@+id/warrantyFragmentOreo"
+        android:name="com.noisefit.ui.myDevice.warranty.WarrantyFragment"
+        android:label="WarrantyFragment" />
+
+    <fragment
+        android:id="@+id/sleepDetailsParentOreo"
+        android:name="com.oreo.ui.sleep.OSleepDetailsParentFragment"
+        android:label="SleepScoreDetails" >
+        <argument android:name="viewType"
+            app:argType="string"/>
+    </fragment>
+    <fragment
+        android:id="@+id/myGoalFragment"
+        android:name="com.noisefit.ui.dashboard.feature.myGoal.MyGoalFragment"
+        android:label="MyGoalFragment">
+        <deepLink
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/MyGoals" />
+        <!--<action
+            android:id="@+id/action_myGoalFragment_to_valueSelectorBottomSheet"
+            app:destination="@id/valueSelectorBottomSheet" />-->
+    </fragment>
+    <fragment
+        android:id="@+id/helpAndSupportListFragment"
+        android:name="com.noisefit.ui.settings.helpAndSupport.sublist.HelpAndSupportListFragment"
+        android:label="HelpAndSupportListFragment">
+        <argument
+            android:name="helpSupportItem"
+            app:argType="com.noisefit_commans.data.response.HelpAndSupportResponse"
+            app:nullable="true" />
+        <argument
+            android:name="type"
+            app:argType="string"
+            app:nullable="true" />
+<!--        <action-->
+<!--            android:id="@+id/action_navigation_help_and_support_list_to_details_fragment"-->
+<!--            app:destination="@+id/helpAndSupportDetailsFragment" />-->
+
+    </fragment>
+    <fragment
+        android:id="@+id/helpAndSupportFragment"
+        android:name="com.noisefit.ui.settings.helpAndSupport.HelpAndSupportFragment"
+        android:label="HelpAndSupportFragment">
+        <deepLink
+            android:autoVerify="true"
+            app:uri="https://noisefit.page.link/HelpAndSupport" />
+        <!-- <action
+             android:id="@+id/action_navigation_help_and_support_to_support_list_fragment"
+             app:destination="@+id/helpAndSupportListFragment" />-->
+        <argument
+            android:name="highlightTopic"
+            android:defaultValue="NONE"
+            app:argType="com.noisefit.ui.settings.helpAndSupport.HelpAndSupportType" />
+
+    </fragment>
+    <dialog
+        android:id="@+id/bottomSheetChooseDevice"
+        android:name="com.oreo.ui.profile.BottomSheetChooseDevice"
+        android:label="BottomSheetChooseDevice" />
+    <include app:graph="@navigation/navigation_profile_edit" />
+
+    <dialog
+        android:id="@+id/unpairBottomDialogFragment"
+        android:name="com.noisefit.ui.myDevice.UnpairBottomDialogFragment"
+        android:label="UnpairBottomDialogFragment" />
+    <dialog
+        android:id="@+id/descriptionPopUpBottomDialogFragment"
+        android:name="com.oreo.ui.sleep.description.DescriptionBottomDialogFragment"
+        android:label="DescriptionBottomDialogFragment">
+        <argument
+            android:name="position"
+            app:argType="integer" />
+        <argument
+            android:name="contributorsList"
+            app:argType="com.oreo.data.model.Contributors[]"
+            app:nullable="true" />
+
+        <argument android:name="contriType"
+            app:argType="string"/>
+    </dialog>
+
+    <fragment
+        android:id="@+id/logsDisplayFragment"
+        android:name="com.noisefit.ui.dashboard.LogsDisplayFragment"
+        android:label="LogsDisplayFragment" />
+    <fragment
+        android:id="@+id/testDataFragment"
+        android:name="com.oreo.ui.TestDataFragment"
+        android:label="testDataFragment" />
+
+    <fragment
+        android:id="@+id/testDataListFragment"
+        android:name="com.oreo.ui.TestDataListFragment"
+        android:label="testDataFragment">
+        <argument
+            android:name="data"
+            app:argType="com.oreo.ui.TestUserData" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/testDataActivityFragment"
+        android:name="com.oreo.ui.TestDataActivityFragment"
+        android:label="TestDataActivityFragment">
+        <argument
+            android:name="data"
+            app:argType="com.oreo.ui.TestUserData" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/addWorkoutFragment"
+        android:name="com.oreo.ui.workout.add.OAddWorkoutFragment"
+        android:label="AddWorkoutFragment">
+        <action
+            android:id="@+id/action_navigation_add_workout_frag_to_selectWorkoutFragment"
+            app:destination="@id/selectWorkoutBottomSheet" />
+
+        <action
+            android:id="@+id/action_addWorkoutFragment_to_valueSelectorBottomSheet"
+            app:destination="@id/valueSelectorBottomSheet" />
+
+        <action
+            android:id="@+id/action_addWorkoutFragment_to_timeBottomSheet"
+            app:destination="@id/timeBottomSheet" />
+
+    </fragment>
+
+    <dialog
+        android:id="@+id/selectWorkoutBottomSheet"
+        android:name="com.oreo.ui.workout.add.OSelectWorkoutBottomSheet"
+        android:label="SelectWorkoutBottomSheet">
+        <argument
+            android:name="workoutList"
+            app:argType="com.oreo.data.model.OWorkoutListModal[]" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/valueSelectorBottomSheet"
+        android:name="com.noisefit.ui.common.bottomSheet.ValueSelectorBottomSheet"
+        android:label="ValueSelectorBottomSheet">
+        <argument
+            android:name="selectedValue"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="selectionList"
+            app:argType="string[]" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/timeBottomSheet"
+        android:name="com.noisefit.ui.common.bottomSheet.TimeBottomSheet"
+        android:label="TimeBottomSheet">
+        <argument
+            android:name="hour"
+            app:argType="integer" />
+        <argument
+            android:name="minute"
+            app:argType="integer" />
+        <argument
+            android:name="unitPosition"
+            app:argType="integer" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/alertTextBottomSheet"
+        android:name="com.noisefit.ui.common.bottomSheet.AlertTextBottomSheet"
+        android:label="AlertTextBottomSheet">
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="description"
+            app:argType="string" />
+
+        <argument
+            android:name="acceptText"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="declineText"
+            app:argType="string"
+            app:nullable="true" />
+    </dialog>
+    <fragment
+        android:id="@+id/detectWorkoutListFragment"
+        android:name="com.oreo.ui.workout.detect.DetectWorkoutListFragment"
+        android:label="DetectWorkoutListFragment">
+
+        <action
+            android:id="@+id/action_detectWorkoutListFragment_to_alertTextBottomSheet"
+            app:destination="@id/alertTextBottomSheet" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/oActivityListFragment"
+        android:name="com.oreo.ui.activity.all.OActivityListFragment"
+        android:label="OActivityListFragment" />
+    <fragment
+        android:id="@+id/oreoUpdateRingFragment"
+        android:name="com.oreo.ui.profile.OreoUpdateRingFragment"
+        android:label="OreoUpdateRingFragment" />
+    <fragment
+        android:id="@+id/oWorkoutDetailsFragment"
+        android:name="com.oreo.ui.workout.details.OWorkoutDetailsFragment"
+        android:label="OWorkoutDetailsFragment">
+        <argument
+            android:name="workoutName"
+            app:argType="string" />
+        <argument
+            android:name="workoutId"
+            app:argType="string" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/appUpdateBottomSheet"
+        android:name="com.noisefit.ui.AppUpdateBottomSheet"
+        android:label="AppUpdateBottomSheet">
+        <argument
+            android:name="versonResponse"
+            app:argType="com.noisefit_commans.data.response.VersionCheckResponse" />
+    </dialog>
+    <dialog
+        android:id="@+id/rateNowBottomSheet"
+        android:name="com.noisefit.ui.settings.feedbacknew.RateNowBottomSheet"
+        android:label="RateNowBottomSheet">
+        <argument
+            android:name="cameFrom"
+            app:argType="string" />
+
+    </dialog>
+</navigation>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            style="@style/ModalStyleDialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_12dp"
+            android:layout_marginTop="@dimen/dimen_12dp"
+            android:layout_marginEnd="@dimen/dimen_12dp"
+            android:layout_marginBottom="@dimen/dimen_12dp"
+            android:paddingBottom="@dimen/dimen_24dp">
+
+            <View
+                android:layout_width="80dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="4dp"
+                android:alpha="0.5"
+                android:background="@drawable/back_bottom_sheet_drag"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/textView33"
+                style="@style/H4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/side_margin"
+                android:gravity="center"
+                android:text="@string/text_choose_from"
+                android:textColor="@android:color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <ImageView
+                android:id="@+id/ivCamera"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_camera_shutter"
+                app:layout_constraintBottom_toBottomOf="@+id/ivCameraBack"
+                app:layout_constraintEnd_toEndOf="@+id/ivCameraBack"
+                app:layout_constraintStart_toStartOf="@+id/ivCameraBack"
+                app:layout_constraintTop_toTopOf="@+id/ivCameraBack" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/ivCameraBack"
+                android:background="@drawable/back_modal_new_round"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginTop="@dimen/dimen_32dp"
+                android:layout_marginBottom="@dimen/dimen_32dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ivGalleryBack"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView33"
+                app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+
+            <TextView
+                android:id="@+id/textView22"
+                style="@style/Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/text_camera"
+                android:textColor="@color/very_light_pink"
+                app:layout_constraintEnd_toEndOf="@+id/ivCameraBack"
+                app:layout_constraintStart_toStartOf="@+id/ivCameraBack"
+                app:layout_constraintTop_toBottomOf="@+id/ivCameraBack" />
+
+            <ImageView
+                android:id="@+id/ivGallery"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_gallery"
+                app:layout_constraintBottom_toBottomOf="@+id/ivGalleryBack"
+                app:layout_constraintEnd_toEndOf="@+id/ivGalleryBack"
+                app:layout_constraintStart_toStartOf="@+id/ivGalleryBack"
+                app:layout_constraintTop_toTopOf="@+id/ivGalleryBack" />
+
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/ivGalleryBack"
+                android:background="@drawable/back_modal_new_round"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="@dimen/dimen_32dp"
+                app:layout_constraintBottom_toBottomOf="@+id/ivCameraBack"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/ivCameraBack"
+                app:layout_constraintTop_toTopOf="@+id/ivCameraBack"
+                app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+
+            <TextView
+                style="@style/Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/text_gallery"
+                android:textColor="@color/very_light_pink"
+                app:layout_constraintEnd_toEndOf="@+id/ivGalleryBack"
+                app:layout_constraintStart_toStartOf="@+id/ivGalleryBack"
+                app:layout_constraintTop_toBottomOf="@+id/ivGalleryBack" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+</layout>

@@ -1,0 +1,55 @@
+{
+  "title": "",
+  "data" : [
+    {
+      "type": "text",
+      "text": "1. If you are unable to pair with your smartphone, then make sure your smartphone's location is turned on.\n",
+      "image": null
+    },
+    {
+      "type": "text",
+      "text": "2. Clear app's cache. \nGo to Settings > Apps & notifications >See all apps> App info > NoiseFit app > Storage & Cache > Clear cache.\n",
+      "image": null
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/ClearCache/image1.png"
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/ClearCache/image2.png"
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/ClearCache/image3.png"
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/ClearCache/image4.png"
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/ClearCache/image5.png"
+    },
+    {
+      "type": "text",
+      "text": "3. Turn ‘off’ and then ‘on’ your smartphone’s Bluetooth.\n",
+      "image": null
+    },
+    {
+      "type": "text",
+      "text": "4. Reset your smartwatch.\n",
+      "image": null
+    },
+    {
+      "type": "text",
+      "text": "5. Now follow the pairing steps.\n",
+      "image": null
+    }
+  ]
+}

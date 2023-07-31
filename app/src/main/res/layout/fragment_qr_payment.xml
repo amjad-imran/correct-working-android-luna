@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.watchface.CustomiseWatchfaceFragment">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/layout_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <!--        <com.google.android.material.button.MaterialButton-->
+        <!--            android:id="@+id/bUpdate"-->
+        <!--            style="@style/PrimaryButtonStyle"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_marginBottom="24dp"-->
+        <!--            android:paddingStart="30dp"-->
+        <!--            android:paddingEnd="30dp"-->
+        <!--            android:text="@string/text_update_qr_payment"-->
+        <!--            android:textAllCaps="true"-->
+        <!--            app:backgroundTint="@null"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent" />-->
+
+
+        <ImageView
+            android:id="@+id/ivBackgroundLayer"
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:layout_marginTop="24dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/ic_watchface_noisefit"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSelectImage"
+            style="@style/PrimaryButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/dimen_16dp"
+            android:text="@string/text_select_picture"
+            app:backgroundTint="@null"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivBackgroundLayer" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnReset"
+            style="@style/SecondaryButtonStyle"
+            android:layout_width="0dp"
+            android:layout_marginTop="@dimen/dimen_16dp"
+            android:text="@string/text_reset"
+            app:backgroundTint="@null"
+            app:layout_constraintEnd_toEndOf="@+id/btnSelectImage"
+            app:layout_constraintStart_toStartOf="@+id/btnSelectImage"
+            app:layout_constraintTop_toBottomOf="@+id/btnSelectImage" />
+
+        <TextView
+            style="@style/H5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_24dp"
+            android:layout_marginTop="@dimen/dimen_32dp"
+            android:layout_marginEnd="@dimen/dimen_24dp"
+            android:gravity="center"
+            android:lineSpacingExtra="6sp"
+            android:text="@string/text_please_download_your_payment_receiving_qr_code_from_your_app_gpay_phonepe_paytm_bharatpe_more_and_select_the_qr_code_using_button_above_to_add_it_to_your_watch"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnReset" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bUpdate"
+            style="@style/PrimaryButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+            android:text="@string/text_update_qr_payment"
+            android:textAllCaps="false"
+            app:backgroundTint="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <include
+            android:id="@+id/progressBar"
+            layout="@layout/default_loader"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

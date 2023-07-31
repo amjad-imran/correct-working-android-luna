@@ -1,0 +1,75 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvProblemDescriptionLabel"
+            style="@style/H5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:text="@string/any_other_suggestion"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvOptional"
+            style="@style/Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_4dp"
+            android:layout_marginBottom="@dimen/dimen_2dp"
+            android:text="@string/text_optional"
+            app:layout_constraintBottom_toBottomOf="@+id/tvProblemDescriptionLabel"
+            app:layout_constraintStart_toEndOf="@+id/tvProblemDescriptionLabel" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/issueInputLayout"
+            style="@style/ModalStyleNew"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="@dimen/dimen_16dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:hint="@string/text_write_your_suggestions_here"
+            android:padding="@dimen/dimen_8dp"
+            app:hintTextColor="@color/white_60"
+            android:textColorHint="@color/white_60"
+            app:helperTextTextColor="@color/white_60"
+            app:boxBackgroundMode="none"
+            app:counterEnabled="true"
+            app:counterMaxLength="250"
+            app:errorEnabled="true"
+            app:hintEnabled="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvProblemDescriptionLabel">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/appSuggestionEtv"
+                style="@style/H6"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:gravity="top|start"
+
+                android:includeFontPadding="true"
+                android:inputType="textMultiLine"
+                android:lines="8"
+                android:maxLength="250"
+                android:maxLines="8"
+                android:minLines="8"
+                android:padding="@dimen/dimen_4dp"
+
+                android:scrollbars="vertical"
+                android:textColor="@android:color/white"
+
+                android:textCursorDrawable="@null" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

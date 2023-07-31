@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_36sp">36sp</dimen>
+    <dimen name="text_28sp">28sp</dimen>
+    <dimen name="text_24sp">24sp</dimen>
+    <dimen name="text_20sp">20sp</dimen>
+    <dimen name="text_18sp">18sp</dimen>
+    <dimen name="text_16sp">16sp</dimen>
+    <dimen name="text_14sp">14sp</dimen>
+    <dimen name="text_12sp">12sp</dimen>
+    <dimen name="text_10sp">10sp</dimen>
+
+    <dimen name="dimen_2dp">2dp</dimen>
+    <dimen name="dimen_12dp">12dp</dimen>
+    <dimen name="dimen_40dp">40dp</dimen>
+    <dimen name="dimen_18dp">18dp</dimen>
+    <dimen name="dimen_8dp">8dp</dimen>
+    <dimen name="dimen_4dp">4dp</dimen>
+    <dimen name="dimen_16dp">16dp</dimen>
+    <dimen name="dimen_24dp">24dp</dimen>
+    <dimen name="dimen_32dp">32dp</dimen>
+    <dimen name="dimen_48dp">48dp</dimen>
+    <dimen name="dimen_56dp">56dp</dimen>
+    <dimen name="dimen_96dp">96dp</dimen>
+    <dimen name="dimen_180dp">180dp</dimen>
+
+    <dimen name="button_h_padding">24dp</dimen>
+
+
+    <dimen name="side_margin">16dp</dimen>
+    <dimen name="side_margin_neg">-16dp</dimen>
+    <dimen name="bottom_margin">36dp</dimen>
+    <dimen name="top_margin_below_heading">40dp</dimen>
+
+    <dimen name="edit_text_height">56dp</dimen>
+    <dimen name="dimen_168dp">168dp</dimen>
+    <dimen name="dimen_260dp">260dp</dimen>
+    <dimen name="dimen_240dp">240dp</dimen>
+    <dimen name="list_item_spacing">16dp</dimen>
+    <dimen name="list_item_spacing_half">8dp</dimen>
+    <dimen name="dimen_80dp">80dp</dimen>
+    <dimen name="dimen_20dp">20dp</dimen>
+
+
+    <dimen name="recycler_height_spinner">240dp</dimen>
+    <dimen name="dimen_28dp">28dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="dimen_30dp">30dp</dimen>
+</resources>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/back_modal_new"
+        android:layout_marginEnd="@dimen/side_margin"
+        android:layout_marginTop="16dp">
+
+
+        <ImageView
+            android:id="@+id/ivTrophyImage"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_steps_milestones_dimmed"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/ivNotification"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:background="@drawable/back_trophy_notification"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/ivTrophyImage"
+            app:layout_constraintTop_toTopOf="@+id/ivTrophyImage"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tvGoalShort"
+            style="@style/Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.6"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/ivTrophyImage"
+            app:layout_constraintEnd_toEndOf="@+id/ivTrophyImage"
+            app:layout_constraintStart_toStartOf="@+id/ivTrophyImage"
+            app:layout_constraintTop_toTopOf="@+id/ivTrophyImage"
+            app:layout_constraintVertical_bias="0.06999999"
+            tools:text="5K" />
+
+        <TextView
+            android:id="@+id/tvGoalData"
+            style="@style/Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_8dp"
+            android:textColor="@android:color/white"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/ivTrophyImage"
+            app:layout_constraintStart_toStartOf="@+id/ivTrophyImage"
+            app:layout_constraintTop_toBottomOf="@+id/ivTrophyImage"
+            tools:text="5000 Steps" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

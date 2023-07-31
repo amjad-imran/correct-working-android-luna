@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation_onboard"
+    app:startDestination="@id/welcomeFragment">
+    <fragment
+        android:id="@+id/welcomeFragment"
+        android:name="com.noisefit.ui.onboarding.WelcomeFragment"
+        android:label="WelcomeFragment">
+        <action
+            android:id="@+id/action_welcomeFragment_to_joinNoisefitFragment"
+            app:destination="@id/joinNoisefitFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/otpCountryFragment"
+        android:name="com.noisefit.ui.onboarding.otp.country.OtpCountryFragment"
+        android:label="OtpCountryFragment">
+        <argument
+            android:name="countryList"
+            app:argType="com.noisefit_commans.data.response.Country[]" />
+    </fragment>
+    <fragment
+        android:id="@+id/otpNumberFragment"
+        android:name="com.noisefit.ui.onboarding.otp.number.OtpNumberFragment"
+        android:label="OtpNumberFragment" />
+    <fragment
+        android:id="@+id/otpVerifyFragment"
+        android:name="com.noisefit.ui.onboarding.otp.verify.OtpVerifyFragment"
+        android:label="OtpVerifyFragment" />
+    <fragment
+        android:id="@+id/joinNoisefitFragment"
+        android:name="com.noisefit.ui.onboarding.auth.JoinNoisefitFragment"
+        android:label="JoinNoisefitFragment">
+        <action
+            android:id="@+id/action_joinNoisefitFragment_to_emailFragment"
+            app:destination="@id/emailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/emailFragment"
+        android:name="com.noisefit.ui.onboarding.auth.EmailFragment"
+        android:label="EmailFragment">
+        <argument
+            android:name="mode"
+            app:argType="com.noisefit.ui.onboarding.auth.EmailMode" />
+        <action
+            android:id="@+id/action_emailFragment_to_emailOtpFragment"
+            app:destination="@id/emailOtpFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/emailOtpFragment"
+        android:name="com.noisefit.ui.onboarding.auth.EmailOtpFragment"
+        android:label="EmailOtpFragment">
+        <argument
+            android:name="mode"
+            app:argType="com.noisefit.ui.onboarding.auth.EmailMode" />
+        <argument
+            android:name="usePassword"
+            app:argType="boolean" />
+    </fragment>
+    <fragment
+        android:id="@+id/deviceConnectFragment"
+        android:name="com.noisefit.ui.onboarding.onboardProfile.OnBoardConnectDeviceFragment"
+        android:label="DeviceConnectFragment" />
+    <dialog
+        android:id="@+id/existingUserBottomSheet"
+        android:name="com.noisefit.ui.onboarding.otp.number.ExistingUserCnfBottomSheet"
+        android:label="ExistingUserBottomsheet">
+        <argument
+            android:name="imageUrl"
+            app:argType="string" />
+        <argument
+            android:name="email"
+            app:argType="string" />
+        <argument
+            android:name="mobileNumber"
+            app:argType="string" />
+    </dialog>
+
+
+</navigation>

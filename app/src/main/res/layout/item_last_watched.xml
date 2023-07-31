@@ -1,0 +1,129 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="160dp"
+        android:layout_height="152dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="14dp"
+        app:cardBackgroundColor="#0affffff"
+        app:cardCornerRadius="10dp"
+        app:strokeColor="#19ffffff"
+        app:strokeWidth="1dp">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/ivBanner"
+                android:layout_width="158dp"
+                android:layout_height="96dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/bg_dummy_placeholder"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <include
+                layout="@layout/layout_video_played_progress"
+                android:layout_width="match_parent"
+                android:id="@+id/lytProgress"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@id/ivBanner"
+                app:layout_constraintEnd_toEndOf="@id/ivBanner"
+                app:layout_constraintStart_toStartOf="@id/ivBanner" />
+
+            <View
+                android:id="@+id/view1"
+                android:layout_width="36dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/back_modal_new_black"
+                app:layout_constraintEnd_toEndOf="@id/ivBanner"
+                app:layout_constraintTop_toTopOf="@id/ivBanner" />
+
+            <TextView
+                style="@style/Tinny"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:id="@+id/tvDuration"
+                android:gravity="center"
+                tools:text="23:11"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@id/view1"
+                app:layout_constraintEnd_toEndOf="@id/view1"
+                app:layout_constraintStart_toStartOf="@id/view1"
+                app:layout_constraintTop_toTopOf="@id/view1" />
+
+            <TextView
+                android:id="@+id/tvTitle"
+                style="@style/Small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="16dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:singleLine="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ivBanner"
+                tools:text="High Intensity Workout" />
+
+            <TextView
+                android:id="@+id/tvTag1"
+                style="@style/Tinny"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                tools:text="Legs"
+                android:textColor="@color/white_48"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imageView1"
+                android:layout_width="4dp"
+                android:layout_height="4dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="#aa5bff"
+                android:visibility="gone"
+                tools:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@id/tvTag1"
+                app:layout_constraintStart_toEndOf="@id/tvTag1"
+                app:layout_constraintTop_toTopOf="@id/tvTag1"
+                app:shapeAppearance="@style/ShapeAppearance.Material3.SmallComponent" />
+
+            <TextView
+                android:id="@+id/tvTag2"
+                style="@style/Tinny"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="@dimen/side_margin"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:layout_marginBottom="12dp"
+                tools:text="Conditioning"
+                android:textColor="@color/white_48"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imageView1"
+                app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

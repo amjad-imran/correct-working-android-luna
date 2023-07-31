@@ -1,0 +1,190 @@
+package com.noisefit.ui.walkAround.friends
+
+import android.app.Dialog
+import android.os.Bundle
+import android.view.View
+import android.widget.FrameLayout
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.tabs.TabLayoutMediator
+import com.noisefit.R
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit.databinding.FragmentDiyWalkAroundBottomDialogBinding
+import com.noisefit_commans.data.model.FriendsWalkAround
+import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+
+@AndroidEntryPoint
+class DiyWalkAroundBottomDialog :
+    BaseBottomSheetWithTransparent<FragmentDiyWalkAroundBottomDialogBinding>(
+        FragmentDiyWalkAroundBottomDialogBinding::inflate
+    ) {
+
+    private val friendsWalkAroundSliderAdapter by lazy {
+        FriendsWalkAroundSliderAdapter()
+    }
+
+    private var listCount = 0
+
+    @Inject
+    lateinit var localDataStore: DataStoredInterface
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setViewpager()
+    }
+
+
+    private fun getItem(i: Int): Int {
+        return binding.vpImageSlider.currentItem + i
+    }
+
+    private fun setViewpager() {
+        binding.vpImageSlider.apply {
+            clipToPadding = false
+            clipChildren = false
+            offscreenPageLimit = 3
+            adapter = friendsWalkAroundSliderAdapter
+
+        }
+        TabLayoutMediator(
+            binding.tabLayout,
+            binding.vpImageSlider
+        ) { _, _ -> }.attach()
+
+        val walkAroundList = getWalkAroundDataList()
+        listCount = walkAroundList.size
+
+        friendsWalkAroundSliderAdapter.setDataSet(walkAroundList)
+
+        binding.vpImageSlider.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+
+            }
+
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                LOGS.d("onPageScrolled $position")
+                if (position == 0) {
+                    binding.btnPrevious.invisible()
+                } else {
+                    binding.btnPrevious.visible()
+                }
+
+                if (position == listCount - 1) {
+                    binding.btnNext.text = getString(R.string.text_done)
+                    binding.btnSkip.gone()
+                    binding.arrow.gone()
+                } else {
+                    binding.btnNext.text = getString(R.string.text_next)
+                    binding.btnSkip.visible()
+                    binding.arrow.visible()
+                }
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+                super.onPageScrollStateChanged(state)
+            }
+        })
+    }
+
+
+    override fun initListener() {
+        binding.btnSkip.setOnClickListener {
+            setWalkAround()
+        }
+
+        binding.arrow.setOnClickListener {
+            setWalkAround()
+        }
+        binding.btnNext.setOnClickListener {
+            if (binding.btnNext.text.equals(getString(R.string.text_done))) {
+                setWalkAround()
+                return@setOnClickListener
+            }
+            binding.vpImageSlider.setCurrentItem(getItem(+1), true)
+        }
+
+        binding.btnPrevious.setOnClickListener {
+            binding.vpImageSlider.setCurrentItem(getItem(-1), true)
+        }
+    }
+
+    override fun subscribeObservers() {
+
+    }
+
+
+    private fun setWalkAround() {
+        dismiss()
+        localDataStore.setDiyWalkAround(true)
+    }
+
+    private fun getWalkAroundDataList(): List<FriendsWalkAround> {
+        val friendList = ArrayList<FriendsWalkAround>()
+        friendList.add(
+            FriendsWalkAround(
+                "OOTDs on point",
+                "Create the perfect watch face and\n" +
+                        "elevate your outfits",
+                R.drawable.bg_diy_walk_1
+            )
+        )
+        friendList.add(
+            FriendsWalkAround(
+                "Make it awesome",
+                "Mix it up with fun fonts and\n" +
+                        "placement styles",
+                R.drawable.bg_cwf_walk_2
+            )
+        )
+        friendList.add(
+            FriendsWalkAround(
+                "Flaunt your favourites",
+                "Be it your pet or a vacation picture,\n" +
+                        "put it on your watch",
+                R.drawable.bg_cwf_walk_3
+            )
+        )
+        friendList.add(
+            FriendsWalkAround(
+                "Style your dial",
+                "Let your watch face\n" +
+                        "reflect your vibe",
+                R.drawable.bg_cwf_walk_4
+            )
+        )
+        return friendList
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val bottomSheetDialog =
+            super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        bottomSheetDialog.setOnShowListener { dia ->
+            val dialog = dia as BottomSheetDialog
+            val bottomSheet =
+                dialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+            BottomSheetBehavior.from<FrameLayout?>(bottomSheet!!).apply {
+                state = BottomSheetBehavior.STATE_EXPANDED
+                skipCollapsed = true
+                isHideable = true
+                isDraggable = true
+                isCancelable = false
+            }
+            bottomSheet.setBackgroundResource(android.R.color.transparent)
+        }
+        return bottomSheetDialog
+    }
+}

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.onboarding.otp.OtpCountryFragment">
+
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollMain"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageButton
+                    android:id="@+id/backBtn"
+                    style="@style/ToolbarBackButton"
+                    android:layout_margin="@dimen/side_margin"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    style="@style/H2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/side_margin"
+                    android:layout_marginTop="@dimen/dimen_96dp"
+                    android:layout_marginEnd="@dimen/side_margin"
+                    android:text="@string/text_looking_for_your_device"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <TextView
+                    android:id="@+id/textView2"
+                    style="@style/H6"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_24dp"
+                    android:layout_marginEnd="@dimen/side_margin"
+                    android:lineSpacingExtra="6sp"
+                    tools:text="@string/text_just_make_sure_your_watch_and_the_phone_s_bluetooth_connection_are_on"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/textView"
+                    app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/vBackWatch"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@color/modal_color"
+                    app:layout_constraintBottom_toBottomOf="@+id/lScanning"
+                    app:layout_constraintEnd_toEndOf="@+id/lScanning"
+                    app:layout_constraintStart_toStartOf="@+id/lScanning"
+                    app:layout_constraintTop_toTopOf="@+id/lScanning"
+                    app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/lScanning"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:layout_marginTop="@dimen/dimen_24dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView2"
+                    app:lottie_autoPlay="true"
+                    app:lottie_repeatCount="1" />
+
+
+                <TextView
+                    android:id="@+id/tvDevicesFound"
+                    style="@style/H5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/side_margin"
+                    app:layout_constraintBottom_toBottomOf="@+id/bScan"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/bScan"
+                    tools:text="4 devices found" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/bScan"
+                    style="@style/PrimaryButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="@dimen/side_margin"
+                    android:drawableEnd="@drawable/ic_qr_scan"
+                    android:paddingStart="@dimen/dimen_24dp"
+                    android:paddingEnd="@dimen/dimen_24dp"
+                    android:text="@string/text_scan"
+                    android:textAllCaps="false"
+                    android:textSize="12sp"
+                    app:backgroundTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lScanning" />
+
+                <View
+                    android:id="@+id/view9"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/back_modal_new"
+                    app:layout_constraintBottom_toBottomOf="@+id/icCardView"
+                    app:layout_constraintEnd_toEndOf="@+id/icCardView"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="@+id/icCardView"
+                    app:layout_constraintTop_toTopOf="@+id/icCardView" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/icCardView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/side_margin"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="@dimen/side_margin"
+                    android:layout_marginBottom="40dp"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    app:cardCornerRadius="26dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintBottom_toTopOf="@+id/bPairLater"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/bScan"
+                    app:layout_constraintVertical_bias="0.0">
+
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvDevices"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                        app:layout_constraintBottom_toTopOf="@+id/bPairLater"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/bScan"
+                        app:layout_constraintVertical_bias="0.0"
+                        tools:itemCount="2"
+                        tools:listitem="@layout/row_scan_watch" />
+                </androidx.cardview.widget.CardView>
+
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/bPairLater"
+                    style="@style/SecondaryButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
+                    android:text="@string/text_pair_later"
+                    android:textAllCaps="false"
+                    android:textSize="12sp"
+                    app:backgroundTint="@null"
+                    app:layout_constraintBottom_toTopOf="@+id/tvTroubleShoot"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvTroubleShoot"
+                    style="@style/H6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_marginBottom="16dp"
+                    android:gravity="center"
+                    android:text="@string/text_unable_to_search_or_pair_your_device"
+                    android:textColor="#6AC5FF"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <include
+            android:id="@+id/progressBar"
+            layout="@layout/default_loader"
+            android:visibility="gone" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

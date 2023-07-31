@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <ImageView
+        android:id="@+id/imageView31"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="@dimen/side_margin"
+        android:src="@drawable/ic_streak"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/tvCurrentDay"
+        style="@style/H6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView31"
+        app:layout_constraintStart_toEndOf="@+id/imageView31"
+        app:layout_constraintTop_toTopOf="@+id/imageView31"
+        tools:text="2" />
+
+    <TextView
+        android:id="@+id/tvCurrentStreakDays"
+        style="@style/H6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:textColor="@color/white_48"
+        app:layout_constraintBottom_toBottomOf="@+id/tvCurrentDay"
+        app:layout_constraintStart_toEndOf="@+id/tvCurrentDay"
+        app:layout_constraintTop_toTopOf="@+id/tvCurrentDay"
+        tools:text="of 7 days" />
+
+
+    <View
+        android:id="@+id/vBack"
+        android:layout_width="0dp"
+        android:layout_height="16dp"
+        android:layout_marginHorizontal="@dimen/side_margin"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/back_progress_16"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView31" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/pbSteps"
+        android:layout_width="0dp"
+        android:layout_height="4dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="60dp"
+        app:indicatorColor="#51bf76"
+        app:layout_constraintBottom_toBottomOf="@+id/vBack"
+        app:layout_constraintEnd_toEndOf="@+id/vBack"
+        app:layout_constraintStart_toStartOf="@+id/vBack"
+        app:layout_constraintTop_toTopOf="@+id/vBack"
+        app:trackColor="@color/progress_track_color"
+        app:trackCornerRadius="2dp"
+        app:trackThickness="4dp" />
+
+    <ImageView
+        android:id="@+id/shapeableImageView4"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginEnd="48dp"
+        android:background="@drawable/back_streak_level"
+        app:layout_constraintBottom_toBottomOf="@+id/vBack"
+        app:layout_constraintEnd_toEndOf="@+id/vBack"
+        app:layout_constraintTop_toTopOf="@+id/vBack" />
+
+    <TextView
+        android:id="@+id/tvLevelCodeFirst"
+        style="@style/Small"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:gravity="center"
+        android:fontFamily="@font/gilroy_bold"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/shapeableImageView4"
+        app:layout_constraintEnd_toEndOf="@+id/shapeableImageView4"
+        app:layout_constraintStart_toStartOf="@+id/shapeableImageView4"
+        app:layout_constraintTop_toTopOf="@+id/shapeableImageView4"
+        tools:text="L2" />
+
+    <ImageView
+        android:id="@+id/shapeableImageView3"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:background="@drawable/back_streak_level"
+        app:layout_constraintBottom_toBottomOf="@+id/vBack"
+        app:layout_constraintEnd_toEndOf="@+id/vBack"
+        app:layout_constraintTop_toTopOf="@+id/vBack" />
+
+    <TextView
+        android:id="@+id/tvLevelCode"
+        style="@style/Small"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:gravity="center"
+        android:fontFamily="@font/gilroy_bold"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/shapeableImageView3"
+        app:layout_constraintEnd_toEndOf="@+id/vBack"
+        app:layout_constraintStart_toStartOf="@+id/shapeableImageView3"
+        app:layout_constraintTop_toTopOf="@+id/shapeableImageView3"
+        tools:text="L2" />
+
+
+    <TextView
+        android:id="@+id/textView64"
+        style="@style/Tinny"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/side_margin"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="18dp"
+        android:text="@string/text_current"
+        android:textColor="@color/white_80"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toTopOf="@+id/vDividerRed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/vBack" />
+
+    <ImageView
+        android:id="@+id/imageView32"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginStart="4dp"
+        android:src="@drawable/ic_bitcoin_completed"
+        app:layout_constraintBottom_toBottomOf="@+id/textView64"
+        app:layout_constraintStart_toEndOf="@+id/textView64"
+        app:layout_constraintTop_toTopOf="@+id/textView64" />
+
+    <TextView
+        android:id="@+id/tvCurrentMultiplier"
+        style="@style/Tinny"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:textColor="@color/white_80"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView32"
+        app:layout_constraintStart_toEndOf="@+id/imageView32"
+        app:layout_constraintTop_toTopOf="@+id/imageView32"
+        tools:text="1x" />
+
+
+    <TextView
+        android:id="@+id/tvCoinMultiplier1"
+        style="@style/Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white_80"
+        app:layout_constraintBottom_toBottomOf="@+id/view20"
+        android:fontFamily="@font/gilroy_medium"
+        app:layout_constraintEnd_toEndOf="@+id/view20"
+        app:layout_constraintStart_toStartOf="@+id/view20"
+        app:layout_constraintTop_toTopOf="@+id/view20"
+        tools:text="1.5" />
+
+    <TextView
+        android:id="@+id/tvCoinMultiplier2"
+        style="@style/Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white_80"
+        android:fontFamily="@font/gilroy_medium"
+        app:layout_constraintBottom_toBottomOf="@+id/view21"
+        app:layout_constraintEnd_toEndOf="@+id/view21"
+        app:layout_constraintStart_toStartOf="@+id/view21"
+        app:layout_constraintTop_toTopOf="@+id/view21"
+        tools:text="1.5" />
+
+    <View
+        android:id="@+id/view21"
+        android:layout_width="28dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/back_white_12_4"
+        app:layout_constraintEnd_toEndOf="@+id/shapeableImageView3"
+        app:layout_constraintStart_toStartOf="@+id/shapeableImageView3"
+        app:layout_constraintTop_toBottomOf="@+id/shapeableImageView3" />
+
+    <View
+        android:id="@+id/view20"
+        android:layout_width="28dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/back_white_12_4"
+        app:layout_constraintEnd_toEndOf="@+id/shapeableImageView4"
+        app:layout_constraintStart_toStartOf="@+id/shapeableImageView4"
+        app:layout_constraintTop_toBottomOf="@+id/shapeableImageView4" />
+
+
+    <View
+        android:id="@+id/vDividerRed"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="8dp"
+        android:background="#4cef5470"
+        app:layout_constraintBottom_toTopOf="@+id/tvMessage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tvMessage"
+        style="@style/Tinny"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Watch out! Less than 3 hours to save your streak." />
+</androidx.constraintlayout.widget.ConstraintLayout>

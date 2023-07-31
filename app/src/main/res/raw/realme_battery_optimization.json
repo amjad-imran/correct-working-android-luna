@@ -1,0 +1,21 @@
+{
+  "title": "Choosing no background restriction ensures there will be no delay in notifications, connectivity loss and proper functioning of watch features including, Camera shutter and Find device.",
+  "data": [
+    {
+      "type": "text",
+      "text": "Settings > Battery > Battery Optimization > NoiseFit app > Choose Don’t Optimize\n",
+      "image": null,
+      "bold": true
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/Realme/battery1.jpg"
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/Realme/battery2.jpg"
+    }
+  ]
+}

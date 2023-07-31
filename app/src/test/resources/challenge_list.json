@@ -1,0 +1,121 @@
+{
+  "success": true,
+  "data": {
+    "new": [{
+      "challenge_id": 13,
+      "image_url": "https://noise-images.s3.ap-south-1.amazonaws.com/Activity-Challanges/35/list/banner_image_list.webp",
+      "title": "Noise distance challenge Test-2",
+      "goal": 2,
+      "type": "distance",
+      "start_date": "2022-10-31 18:30:00",
+      "end_date": "2022-12-21 18:29:59",
+      "status": "ongoing",
+      "display_images": ["https://noise-images.s3.amazonaws.com/mobileApp/staging/users/252784/252784-image-1665729791610.png", "https://noise-images.s3.amazonaws.com/mobileApp/staging/users/254025/254025-image-1665049980879.jpeg", "https://lh3.googleusercontent.com/a/ALm5wu1-cvRYAtpOT2JEhUVj3j1LKBZNfyEOy5qoQp2q=s200"],
+      "participants": 7
+    }, {
+      "challenge_id": 17,
+      "image_url": "https://watch-faces.s3.amazonaws.com/development/audio/1607428056493-group_26.jpg",
+      "title": "noise step challenge for noisemaker`s",
+      "goal": 50,
+      "type": "step",
+      "start_date": "2022-11-01 18:30:00",
+      "end_date": "2022-11-05 18:29:59",
+      "status": "upcoming",
+      "display_images": ["https://noise-images.s3.amazonaws.com/mobileApp/staging/users/252784/252784-image-1665729791610.png"],
+      "participants": 1
+    }, {
+      "challenge_id": 18,
+      "image_url": "https://watch-faces.s3.amazonaws.com/development/audio/1609219534485-banner_image.png",
+      "title": "noise distance challenge for noisemaker`s",
+      "goal": 2,
+      "type": "distance",
+      "start_date": "2022-11-01 18:30:00",
+      "end_date": "2022-11-05 18:29:59",
+      "status": "upcoming",
+      "display_images": ["https://noise-images.s3.amazonaws.com/mobileApp/staging/users/252784/252784-image-1665729791610.png", "https://noise-images.s3.amazonaws.com/mobileApp/staging/users/253617/253617-image-1638445641285.jpg"],
+      "participants": 2
+    }, {
+      "challenge_id": 19,
+      "image_url": "https://watch-faces.s3.amazonaws.com/development/audio/1609219534485-banner_image.png",
+      "title": "noise calories challenge for noisemaker`s",
+      "goal": 22,
+      "type": "calories",
+      "start_date": "2022-11-01 18:30:00",
+      "end_date": "2022-11-05 18:29:59",
+      "status": "upcoming",
+      "display_images": [],
+      "participants": 0
+    }],
+    "joined": [{
+      "challenge_id": 8,
+      "image_url": "https://images.gonoise.com/Activity-Challanges/46/detail/banner_detail_image.jpg",
+      "title": "noise calories challenge8",
+      "goal": 20,
+      "type": "calories",
+      "start_date": "2022-10-29 18:30:00",
+      "end_date": "2022-11-21 18:29:59",
+      "status": "ongoing",
+      "user_rank": null,
+      "progress": 0
+    }, {
+      "challenge_id": 15,
+      "image_url": "https://noise-images.s3.ap-south-1.amazonaws.com/Activity-Challanges/13/list/13_banner_list.png",
+      "title": "noise testing for noisemaker`s",
+      "goal": 50,
+      "type": "step",
+      "start_date": "2022-10-30 18:30:00",
+      "end_date": "2022-12-01 06:15:36",
+      "status": "ongoing",
+      "user_rank": 3,
+      "progress": 0
+    }, {
+      "challenge_id": 14,
+      "image_url": "https://noise-images.s3.ap-south-1.amazonaws.com/Activity-Challanges/13/list/13_banner_list.png",
+      "title": "Noise calorie challenge Test-3",
+      "goal": 20,
+      "type": "calories",
+      "start_date": "2022-10-31 18:30:00",
+      "end_date": "2022-12-21 18:29:59",
+      "status": "ongoing",
+      "user_rank": 5,
+      "progress": 0
+    }, {
+      "challenge_id": 6,
+      "image_url": "https://watch-faces.s3.amazonaws.com/development/audio/1607428056493-group_26.jpg",
+      "title": "noise Distance challenge6",
+      "goal": 5,
+      "type": "distance",
+      "start_date": "2022-11-01 18:30:00",
+      "end_date": "2022-12-12 18:29:59",
+      "status": "upcoming",
+      "user_rank": 1,
+      "display_images": ["https://gonoise-user-images.s3.amazonaws.com/k9p56lj9_profile_picture", "https://gonoise-user-images.s3.amazonaws.com/krqa4k96_profile_picture", "https://noise-images.s3.amazonaws.com/mobileApp/staging/users/253072/253072-image-1664467548174.jpeg"],
+      "participants": 10
+    }, {
+      "challenge_id": 3,
+      "image_url": "https://noise-images.s3.ap-south-1.amazonaws.com/Activity-Challanges/6/detail/6_banner_detail_image.png",
+      "title": "noise step challenge3",
+      "goal": 300,
+      "type": "step",
+      "start_date": "2022-11-10 18:30:00",
+      "end_date": "2022-12-21 18:29:59",
+      "status": "upcoming",
+      "user_rank": 1,
+      "display_images": ["https://noise-images.s3.amazonaws.com/mobileApp/staging/users/252784/252784-image-1665729791610.png", "https://gonoise-user-images.s3.amazonaws.com/krqa4k96_profile_picture", "https://noise-images.s3.amazonaws.com/mobileApp/staging/users/253072/253072-image-1664467548174.jpeg"],
+      " participants ": 13
+    }, {
+      "challenge_id ": 9,
+      "image_url ": "https: //noise-images.s3.amazonaws.com/Activity-Challanges/8/list/8_banner_image_list.png",
+      "title": "noise calories challenge9",
+      "goal": 20,
+      "type": "calories",
+      "start_date": "2022-11-10 18:30:00",
+      "end_date": "2022-12-21 18:29:59",
+      "status": "upcoming",
+      "user_rank": 1,
+      "display_images": ["https://gonoise-user-images.s3.amazonaws.com/krqa4k96_profile_picture", "https://noise-images.s3.amazonaws.com/mobileApp/staging/users/253072/253072-image-1664467548174.jpeg", "https://noise-images.s3.amazonaws.com/mobileApp/staging/users/254025/254025-image-1665049980879.jpeg"],
+      "participants": 9
+    }],
+    "currentTime": "2022-11-01 06:34:45"
+  }
+}

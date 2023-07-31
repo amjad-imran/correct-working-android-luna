@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="features"
+            type="com.noisefit_commans.data.model.DeviceFeatures" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.dashboard.feature.stock.StocksFragment">
+
+
+        <include
+            android:id="@+id/lytToolbar"
+            layout="@layout/layout_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lytToolbar">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <com.noisefit_commans.ui.custom.SettingsRow
+                    android:id="@+id/llHeartRate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    app:hideTopLine="false"
+                    app:image="@drawable/ic_heart_rate"
+                    app:setFeatureVisibility="@{features.autoHeartMeasure}"
+                    app:text="@string/heart_rate" />
+
+                <com.noisefit_commans.ui.custom.SettingsRow
+                    android:id="@+id/llRapidEye"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    app:image="@drawable/ic_rapid_eye_movment"
+                    app:setFeatureVisibility="@{features.quickEyeMovement}"
+                    app:text="@string/text_rapid_eye_movement" />
+                <com.noisefit_commans.ui.custom.SettingsRow
+                    android:id="@+id/llSleepReminder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    app:image="@drawable/ic_rapid_eye_movment"
+                    app:setFeatureVisibility="@{features.sleepReminder}"
+                    app:text="@string/text_sleep_reminder" />
+                <com.noisefit_commans.ui.custom.SettingsRow
+                    android:id="@+id/llStress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    app:hideTopLine="false"
+                    app:image="@drawable/ic_stress"
+                    app:setFeatureVisibility="@{features.autoStress}"
+                    app:text="@string/text_stress" />
+
+                <com.noisefit_commans.ui.custom.SettingsRow
+                    android:id="@+id/llCycleTracker"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:hideTopLine="false"
+                    app:image="@drawable/ic_female_health"
+                    app:setFeatureVisibility="@{features.menstrualData}"
+                    app:text="@string/text_cycle_tracking" />
+
+                <com.noisefit_commans.ui.custom.SettingsRow
+                    android:id="@+id/llSpo2Measurement"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    app:hideTopLine="false"
+                    app:image="@drawable/ic_sp_o_2"
+                    app:setFeatureVisibility="@{features.spo2}"
+                    app:text="@string/text_spo2_measurement" />
+
+                <com.noisefit_commans.ui.custom.SettingsRow
+                    android:id="@+id/llSpo2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    app:hideTopLine="false"
+                    app:image="@drawable/ic_sp_o_2"
+                    app:setFeatureVisibility="@{features.autoSpo2}"
+                    app:text="@string/text_spo2" />
+
+                <com.noisefit_commans.ui.custom.SettingsRow
+                    android:id="@+id/llDrink"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    app:hideTopLine="false"
+                    app:image="@drawable/ic_drink_water"
+                    app:setFeatureVisibility="@{features.drinkWater}"
+                    app:text="@string/text_drink_water" />
+
+                <com.noisefit_commans.ui.custom.SettingsRow
+                    android:id="@+id/llHandWash"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    app:hideTopLine="false"
+                    app:image="@drawable/ic_hand_wash_dp"
+                    app:setFeatureVisibility="@{features.handWash}"
+                    app:text="@string/text_hand_wash" />
+
+                <com.noisefit_commans.ui.custom.SettingsRow
+                    android:id="@+id/llIdleAlert"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    app:hideTopLine="false"
+                    app:image="@drawable/ic_idle_alert"
+                    app:setFeatureVisibility="@{features.sedentary}"
+                    app:text="@string/text_idle_alert" />
+
+                <com.noisefit_commans.ui.custom.SettingsRow
+                    android:id="@+id/llWalkReminder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    app:hideTopLine="false"
+                    app:image="@drawable/ic_idle_alert"
+                    app:setFeatureVisibility="@{features.walkReminder}"
+                    app:text="@string/text_walk_reminder" />
+
+
+                <com.noisefit_commans.ui.custom.SettingsRow
+                    android:id="@+id/llMeal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    app:hideTopLine="false"
+                    app:image="@drawable/ic_meal_reminder"
+                    app:setFeatureVisibility="@{features.mealReminder}"
+                    app:text="@string/text_meal_reminder" />
+
+                <com.noisefit_commans.ui.custom.SettingsRow
+                    android:id="@+id/llMedicine"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    app:hideTopLine="false"
+                    app:image="@drawable/ic_medicine"
+                    app:setFeatureVisibility="@{features.medicineReminder}"
+                    app:text="@string/text_medicine_reminder" />
+
+
+            </LinearLayout>
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

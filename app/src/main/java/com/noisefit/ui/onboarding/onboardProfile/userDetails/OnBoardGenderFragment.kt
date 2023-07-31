@@ -1,0 +1,125 @@
+package com.noisefit.ui.onboarding.onboardProfile.userDetails
+
+import android.os.Bundle
+import android.view.View
+import androidx.fragment.app.activityViewModels
+import com.noisefit.R
+import com.noisefit.databinding.FragmentOnBoardGenderBinding
+import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.disable
+import com.noisefit_commans.ui.enable
+import com.noisefit.ui.onboarding.onboardProfile.SetupProfileViewModel
+import com.noisefit_commans.utils.InsiderAppEvents
+import com.noisefit_commans.models.Gender
+import dagger.hilt.android.AndroidEntryPoint
+
+@AndroidEntryPoint
+class OnBoardGenderFragment :
+    BaseFragment<FragmentOnBoardGenderBinding>(FragmentOnBoardGenderBinding::inflate) {
+
+    private val viewModel: SetupProfileViewModel by activityViewModels()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.LAND_ON_ENTER_GENDER_PAGE_VISIT)
+        binding.lytOnBoardProgress.apply {
+            pgBr.progress = 48
+            tvCount.text = getString(R.string.text_4)
+        }
+
+
+        if (viewModel.gender.value == null) {
+            val localGender = viewModel.getLocalUserGender()
+            if (localGender.equals("male", true)) {
+                viewModel.setGender(Gender.MALE)
+            } else if (localGender.equals("female", true)) {
+                viewModel.setGender(Gender.FEMALE)
+            } else if (localGender.equals("other", true)) {
+                viewModel.setGender(Gender.OTHER)
+            } else if (localGender.equals("noToSay", true)) {
+                viewModel.setGender(Gender.NotToSay)
+            }
+        }
+    }
+
+    override fun initListener() {
+        binding.backBtn.setOnClickListener {
+            navigateUpSafe()
+        }
+        binding.btnContinue.setOnClickListener {
+            viewModel.saveUserInfoLocally()
+            viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.CONTINUE_ENTER_GENDER_CLICK)
+            navigate(R.id.onBoardHeightFragment)
+        }
+
+
+        binding.radioGender.tvMan.setOnClickListener {
+            viewModel.setGender(Gender.MALE)
+        }
+        binding.radioGender.tvWoman.setOnClickListener {
+            viewModel.setGender(Gender.FEMALE)
+        }
+        binding.radioGender.tvOther.setOnClickListener {
+            viewModel.setGender(Gender.OTHER)
+        }
+        binding.radioGender.tvPreferNoToSay.setOnClickListener {
+            viewModel.setGender(Gender.NotToSay)
+        }
+    }
+
+    override fun subscribeObservers() {
+
+        viewModel.gender.observe(this) {
+            if (it == null) {
+                binding.btnContinue.disable()
+            } else {
+                binding.btnContinue.enable()
+
+                when (it) {
+                    Gender.MALE -> setSelectedGender(0)
+                    Gender.FEMALE -> setSelectedGender(1)
+                    Gender.OTHER -> setSelectedGender(2)
+                    Gender.NotToSay -> setSelectedGender(3)
+                }
+
+            }
+        }
+    }
+
+    /**
+     * 0->Man
+     * 1->Woman
+     * 2->Other
+     */
+    private fun setSelectedGender(selectedGender: Int) {
+        when (selectedGender) {
+            0 -> {
+                binding.radioGender.ivMan.isChecked = true
+                binding.radioGender.ivWoman.isChecked = false
+                binding.radioGender.ivOther.isChecked = false
+                binding.radioGender.ivPreferNoToSay.isChecked = false
+            }
+            1 -> {
+                binding.radioGender.ivMan.isChecked = false
+                binding.radioGender.ivWoman.isChecked = true
+                binding.radioGender.ivOther.isChecked = false
+                binding.radioGender.ivPreferNoToSay.isChecked = false
+            }
+            2 -> {
+                binding.radioGender.ivMan.isChecked = false
+                binding.radioGender.ivWoman.isChecked = false
+                binding.radioGender.ivOther.isChecked = true
+                binding.radioGender.ivPreferNoToSay.isChecked = false
+            }
+            3 -> {
+                binding.radioGender.ivMan.isChecked = false
+                binding.radioGender.ivWoman.isChecked = false
+                binding.radioGender.ivOther.isChecked = false
+                binding.radioGender.ivPreferNoToSay.isChecked = true
+            }
+        }
+    }
+}
+
+

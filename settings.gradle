@@ -1,0 +1,35 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://developer.huawei.com/repo/'}
+        maven {url "https://mobilesdk.useinsider.com/android"}
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+        maven {url "https://developer.huawei.com/repo/"}
+        maven {url "https://mobilesdk.useinsider.com/android"}
+    }
+}
+rootProject.name = "NoiseFit"
+include ':app'
+include ':commons'
+include ':noisefit_nav_plus'
+include ':noisefit_hybrid'
+include ':noisefit_colorfit2'
+include ':noisefit_colorfit_pro'
+include ':noisefit_evolve2'
+include ':noisefit_libraries_zh'
+include ':noisefit_libraries'
+include ':MPChartLib'
+include(":noisefit_zh_sdk")
+include ':customprogress'
+include ':noisefit_ryeex_sdk'

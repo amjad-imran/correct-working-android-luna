@@ -1,0 +1,1247 @@
+[
+  {
+    "date": "2023-06-30",
+    "readiness_score": {
+      "value": 87,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHr": {
+      "value": 12,
+      "unit": "bpm"
+    },
+    "totalSleep": {
+      "value": 400,
+      "valPrcnt": 1,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "sleepBalance": {
+      "valPrcnt": 100,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "recoveryIndex": {
+      "value": 150,
+      "valPrcnt": 4,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "activity_score": {
+      "value": 87,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "activityBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHrBalance": {
+      "value": 3,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "hrvBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrv": {
+      "value": 63,
+      "unit": "ms"
+    },
+    "hrvBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "respiration": {
+      "value": 79,
+      "unit": ""
+    },
+    "temperature": {
+      "value": 93,
+      "unit": "°C"
+    },
+    "temperatureBreakUp": [
+      67,
+      45,
+      78,
+      90,
+      91,
+      92,
+      93
+    ]
+  },
+  {
+    "date": "2023-06-29",
+    "readiness_score": {
+      "value": 89,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHr": {
+      "value": 12,
+      "unit": "bpm"
+    },
+    "totalSleep": {
+      "value": 400,
+      "valPrcnt": 1,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "sleepBalance": {
+      "valPrcnt": 0,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "recoveryIndex": {
+      "value": 150,
+      "valPrcnt": 4,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "activity_score": {
+      "value": 87,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "activityBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHrBalance": {
+      "value": 4,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "hrvBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrv": {
+      "value": 63,
+      "unit": "ms"
+    },
+    "hrvBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "respiration": {
+      "value": 79,
+      "unit": ""
+    },
+    "temperature": {
+      "value": 93,
+      "unit": "°C"
+    },
+    "temperatureBreakUp": [
+      67,
+      45,
+      78,
+      90,
+      91,
+      92,
+      93
+    ]
+  },
+  {
+    "date": "2023-06-28",
+    "readiness_score": {
+      "value": 89,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHr": {
+      "value": 12,
+      "unit": "bpm"
+    },
+    "totalSleep": {
+      "value": 400,
+      "valPrcnt": 1,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "sleepBalance": {
+      "valPrcnt": 0,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "recoveryIndex": {
+      "value": 150,
+      "valPrcnt": 4,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "activity_score": {
+      "value": 87,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "activityBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHrBalance": {
+      "value": 4,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "hrvBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrv": {
+      "value": 63,
+      "unit": "ms"
+    },
+    "hrvBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "respiration": {
+      "value": 79,
+      "unit": ""
+    },
+    "temperature": {
+      "value": 93,
+      "unit": "°C"
+    },
+    "temperatureBreakUp": [
+      67,
+      45,
+      78,
+      90,
+      91,
+      92,
+      93
+    ]
+  },
+  {
+    "date": "2023-06-27",
+    "readiness_score": {
+      "value": 89,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHr": {
+      "value": 12,
+      "unit": "bpm"
+    },
+    "totalSleep": {
+      "value": 400,
+      "valPrcnt": 1,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "sleepBalance": {
+      "valPrcnt": 0,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "recoveryIndex": {
+      "value": 150,
+      "valPrcnt": 4,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "activity_score": {
+      "value": 87,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "activityBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHrBalance": {
+      "value": 4,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "hrvBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrv": {
+      "value": 63,
+      "unit": "ms"
+    },
+    "hrvBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "respiration": {
+      "value": 79,
+      "unit": ""
+    },
+    "temperature": {
+      "value": 93,
+      "unit": "°C"
+    },
+    "temperatureBreakUp": [
+      67,
+      45,
+      78,
+      90,
+      91,
+      92,
+      93
+    ]
+  },
+  {
+    "date": "2023-06-26",
+    "readiness_score": {
+      "value": 89,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHr": {
+      "value": 12,
+      "unit": "bpm"
+    },
+    "totalSleep": {
+      "value": 400,
+      "valPrcnt": 1,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "sleepBalance": {
+      "valPrcnt": 0,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "recoveryIndex": {
+      "value": 150,
+      "valPrcnt": 4,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "activity_score": {
+      "value": 87,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "activityBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHrBalance": {
+      "value": 4,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "hrvBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrv": {
+      "value": 63,
+      "unit": "ms"
+    },
+    "hrvBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "respiration": {
+      "value": 79,
+      "unit": ""
+    },
+    "temperature": {
+      "value": 93,
+      "unit": "°C"
+    },
+    "temperatureBreakUp": [
+      67,
+      45,
+      78,
+      90,
+      91,
+      92,
+      93
+    ]
+  },
+  {
+    "date": "2023-06-25",
+    "readiness_score": {
+      "value": 89,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHr": {
+      "value": 12,
+      "unit": "bpm"
+    },
+    "totalSleep": {
+      "value": 400,
+      "valPrcnt": 1,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "sleepBalance": {
+      "valPrcnt": 0,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "recoveryIndex": {
+      "value": 150,
+      "valPrcnt": 4,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "activity_score": {
+      "value": 87,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "activityBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHrBalance": {
+      "value": 4,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "hrvBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrv": {
+      "value": 63,
+      "unit": "ms"
+    },
+    "hrvBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "respiration": {
+      "value": 79,
+      "unit": ""
+    },
+    "temperature": {
+      "value": 93,
+      "unit": "°C"
+    },
+    "temperatureBreakUp": [
+      67,
+      45,
+      78,
+      90,
+      91,
+      92,
+      93
+    ]
+  },
+  {
+    "date": "2023-06-24",
+    "readiness_score": {
+      "value": 89,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHr": {
+      "value": 12,
+      "unit": "bpm"
+    },
+    "totalSleep": {
+      "value": 400,
+      "valPrcnt": 1,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "sleepBalance": {
+      "valPrcnt": 0,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "recoveryIndex": {
+      "value": 150,
+      "valPrcnt": 4,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "activity_score": {
+      "value": 87,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "activityBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHrBalance": {
+      "value": 4,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "hrvBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrv": {
+      "value": 63,
+      "unit": "ms"
+    },
+    "hrvBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "respiration": {
+      "value": 79,
+      "unit": ""
+    },
+    "temperature": {
+      "value": 93,
+      "unit": "°C"
+    },
+    "temperatureBreakUp": [
+      67,
+      45,
+      78,
+      90,
+      91,
+      92,
+      93
+    ]
+  },
+  {
+    "date": "2023-06-23",
+    "readiness_score": {
+      "value": 89,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHr": {
+      "value": 12,
+      "unit": "bpm"
+    },
+    "totalSleep": {
+      "value": 400,
+      "valPrcnt": 1,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "sleepBalance": {
+      "valPrcnt": 0,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "recoveryIndex": {
+      "value": 150,
+      "valPrcnt": 4,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "activity_score": {
+      "value": 87,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "activityBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHrBalance": {
+      "value": 4,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "hrvBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrv": {
+      "value": 63,
+      "unit": "ms"
+    },
+    "hrvBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "respiration": {
+      "value": 79,
+      "unit": ""
+    },
+    "temperature": {
+      "value": 93,
+      "unit": "°C"
+    },
+    "temperatureBreakUp": [
+      67,
+      45,
+      78,
+      90,
+      91,
+      92,
+      93
+    ]
+  },
+  {
+    "date": "2023-06-22",
+    "readiness_score": {
+      "value": 89,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHr": {
+      "value": 12,
+      "unit": "bpm"
+    },
+    "totalSleep": {
+      "value": 400,
+      "valPrcnt": 1,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "sleepBalance": {
+      "valPrcnt": 0,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "recoveryIndex": {
+      "value": 150,
+      "valPrcnt": 4,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "activity_score": {
+      "value": 87,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "activityBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHrBalance": {
+      "value": 4,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "hrvBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrv": {
+      "value": 63,
+      "unit": "ms"
+    },
+    "hrvBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "respiration": {
+      "value": 79,
+      "unit": ""
+    },
+    "temperature": {
+      "value": 93,
+      "unit": "°C"
+    },
+    "temperatureBreakUp": [
+      67,
+      45,
+      78,
+      90,
+      91,
+      92,
+      93
+    ]
+  },
+  {
+    "date": "2023-06-21",
+    "readiness_score": {
+      "value": 89,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHr": {
+      "value": 12,
+      "unit": "bpm"
+    },
+    "totalSleep": {
+      "value": 400,
+      "valPrcnt": 1,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "sleepBalance": {
+      "valPrcnt": 0,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "recoveryIndex": {
+      "value": 150,
+      "valPrcnt": 4,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "activity_score": {
+      "value": 87,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "activityBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHrBalance": {
+      "value": 4,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "hrvBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrv": {
+      "value": 63,
+      "unit": "ms"
+    },
+    "hrvBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "respiration": {
+      "value": 79,
+      "unit": ""
+    },
+    "temperature": {
+      "value": 93,
+      "unit": "°C"
+    },
+    "temperatureBreakUp": [
+      67,
+      45,
+      78,
+      90,
+      91,
+      92,
+      93
+    ]
+  },
+  {
+    "date": "2023-06-20",
+    "readiness_score": {
+      "value": 89,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHr": {
+      "value": 12,
+      "unit": "bpm"
+    },
+    "totalSleep": {
+      "value": 400,
+      "valPrcnt": 1,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "sleepBalance": {
+      "valPrcnt": 0,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "recoveryIndex": {
+      "value": 150,
+      "valPrcnt": 4,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "activity_score": {
+      "value": 87,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "activityBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHrBalance": {
+      "value": 4,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "hrvBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrv": {
+      "value": 63,
+      "unit": "ms"
+    },
+    "hrvBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "respiration": {
+      "value": 79,
+      "unit": ""
+    },
+    "temperature": {
+      "value": 93,
+      "unit": "°C"
+    },
+    "temperatureBreakUp": [
+      67,
+      45,
+      78,
+      90,
+      91,
+      92,
+      93
+    ]
+  },
+  {
+    "date": "2023-06-19",
+    "readiness_score": {
+      "value": 89,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHr": {
+      "value": 12,
+      "unit": "bpm"
+    },
+    "totalSleep": {
+      "value": 400,
+      "valPrcnt": 1,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "sleepBalance": {
+      "valPrcnt": 0,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "recoveryIndex": {
+      "value": 150,
+      "valPrcnt": 4,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "activity_score": {
+      "value": 87,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "activityBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHrBalance": {
+      "value": 4,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "hrvBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrv": {
+      "value": 63,
+      "unit": "ms"
+    },
+    "hrvBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "respiration": {
+      "value": 79,
+      "unit": ""
+    },
+    "temperature": {
+      "value": 93,
+      "unit": "°C"
+    },
+    "temperatureBreakUp": [
+      67,
+      45,
+      78,
+      90,
+      91,
+      92,
+      93
+    ]
+  },
+  {
+    "date": "2023-06-18",
+    "readiness_score": {
+      "value": 89,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHr": {
+      "value": 12,
+      "unit": "bpm"
+    },
+    "totalSleep": {
+      "value": 400,
+      "valPrcnt": 1,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "sleepBalance": {
+      "valPrcnt": 0,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "recoveryIndex": {
+      "value": 150,
+      "valPrcnt": 4,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "activity_score": {
+      "value": 87,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "activityBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHrBalance": {
+      "value": 4,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "hrvBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrv": {
+      "value": 63,
+      "unit": "ms"
+    },
+    "hrvBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "respiration": {
+      "value": 79,
+      "unit": ""
+    },
+    "temperature": {
+      "value": 93,
+      "unit": "°C"
+    },
+    "temperatureBreakUp": [
+      67,
+      45,
+      78,
+      90,
+      91,
+      92,
+      93
+    ]
+  },
+  {
+    "date": "2023-06-17",
+    "readiness_score": {
+      "value": 89,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHr": {
+      "value": 12,
+      "unit": "bpm"
+    },
+    "totalSleep": {
+      "value": 400,
+      "valPrcnt": 1,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "sleepBalance": {
+      "valPrcnt": 0,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "recoveryIndex": {
+      "value": 150,
+      "valPrcnt": 4,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "activity_score": {
+      "value": 87,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "activityBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHrBalance": {
+      "value": 4,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "hrvBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrv": {
+      "value": 63,
+      "unit": "ms"
+    },
+    "hrvBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "respiration": {
+      "value": 79,
+      "unit": ""
+    },
+    "temperature": {
+      "value": 93,
+      "unit": "°C"
+    },
+    "temperatureBreakUp": [
+      67,
+      45,
+      78,
+      90,
+      91,
+      92,
+      93
+    ]
+  },
+  {
+    "date": "2023-06-16",
+    "readiness_score": {
+      "value": 89,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHr": {
+      "value": 12,
+      "unit": "bpm"
+    },
+    "totalSleep": {
+      "value": 400,
+      "valPrcnt": 1,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "sleepBalance": {
+      "valPrcnt": 0,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "recoveryIndex": {
+      "value": 150,
+      "valPrcnt": 4,
+      "text": "Pay Attention",
+      "status": "warning"
+    },
+    "activity_score": {
+      "value": 87,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "activityBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "restingHrBalance": {
+      "value": 4,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "hrvBalance": {
+      "value": 1,
+      "valPrcnt": 100,
+      "text": "Optimal",
+      "status": "good"
+    },
+    "hrv": {
+      "value": 63,
+      "unit": "ms"
+    },
+    "hrvBreakUp": [
+      67,
+      45,
+      78
+    ],
+    "respiration": {
+      "value": 79,
+      "unit": ""
+    },
+    "temperature": {
+      "value": 93,
+      "unit": "°C"
+    },
+    "temperatureBreakUp": [
+      67,
+      45,
+      78,
+      90,
+      91,
+      92,
+      93
+    ]
+  }
+]

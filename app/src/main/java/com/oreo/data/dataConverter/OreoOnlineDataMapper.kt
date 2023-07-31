@@ -1,0 +1,333 @@
+package com.oreo.data.dataConverter
+
+import com.google.gson.Gson
+import com.noisefit_commans.common.averageWithoutZero
+import com.noisefit_commans.common.fromJson
+import com.noisefit_commans.common.minWithoutZero
+import com.noisefit_commans.data.model.DayTimeMovementBreakup
+import com.noisefit_commans.data.model.OreoBloodOxygenBreakup
+import com.noisefit_commans.data.model.OreoBodyTempNetworkEntity
+import com.noisefit_commans.data.model.OreoBodyTemperatureBreakup
+import com.noisefit_commans.data.model.OreoCommonNetworkEntity
+import com.noisefit_commans.data.model.OreoHeartNetworkEntity
+import com.noisefit_commans.data.model.OreoHeartRate
+import com.noisefit_commans.data.model.OreoRespiratoryData
+import com.noisefit_commans.data.model.OreoSleepData
+import com.noisefit_commans.data.model.OreoSleepNetworkEntity
+import com.noisefit_commans.data.model.OreoStepsData
+import com.noisefit_commans.data.model.OreoStepsNetworkEntity
+import com.noisefit_commans.data.model.OreoStressDataBreakup
+import com.noisefit_commans.data.model.OreoUserDataPost
+import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.to12HourFormat
+import com.oreo.data.db.implementation.OreoHeartRateDataImpl
+import com.oreo.data.db.implementation.OreoStressDataImpl
+import com.oreo.data.model.OreoUserSyncActivities
+import javax.inject.Inject
+
+class OreoOnlineDataMapper
+@Inject
+constructor(
+    private val stressDataImpl: OreoStressDataImpl,
+    private val oreoHeartRateDataImpl: OreoHeartRateDataImpl,
+) {
+
+    fun convertDataToPost(userSyncActivities: OreoUserSyncActivities): OreoUserDataPost? {
+        val combinedData = OreoUserDataPost()
+
+        val steps =
+            parseStepsDataOreo(userSyncActivities.stepsDataList, userSyncActivities.dayTimeMovement)
+        val stress = parseStressData(userSyncActivities.stressData)
+        val heartRateHistory = parseHeartHistoryData(userSyncActivities.hrHistoryData)
+        val bloodOxygen = parseBloodOxygenData(userSyncActivities.boData)
+        val bodyTemperature = parseBodyTemperature(userSyncActivities.bodyTemperature)
+        val respiratory = parseRespiratoryData(userSyncActivities.respiratory)
+
+
+        combinedData.activities = steps
+        combinedData.stress = stress
+        combinedData.heartRateHistory = heartRateHistory
+        combinedData.bloodOxygen = bloodOxygen
+        combinedData.bodyTemperature = bodyTemperature
+        combinedData.respiratory = respiratory
+
+        if (steps == null && stress == null && heartRateHistory == null
+            && bloodOxygen == null && bodyTemperature == null && respiratory == null
+        ) {
+            LOGS.d("Hurray!! just saved one api call")
+            return null
+        }
+        return combinedData
+    }
+
+    suspend fun getOreoSleepDataToPost(userSyncActivities: OreoUserSyncActivities): OreoUserDataPost {
+        val sleeps = parseSleepDataOreo(
+            userSyncActivities.sleepData
+        )
+        val combinedData = OreoUserDataPost()
+        combinedData.sleeps = sleeps
+
+
+        return combinedData
+    }
+
+    private fun parseStepsDataOreo(
+        stepsDataList: List<OreoStepsData>?,
+        dayTimeMovement: List<DayTimeMovementBreakup>?
+    ): ArrayList<OreoStepsNetworkEntity>? {
+        if (stepsDataList.isNullOrEmpty()) {
+            return null
+        }
+        val stepsList = ArrayList<OreoStepsNetworkEntity>()
+
+        stepsDataList.forEach { stepsData ->
+
+            val date = stepsData.date!!
+            val hourlyBreakupList = ArrayList<OreoStepsNetworkEntity.HourlyBreakup>()
+            stepsData.stepArray?.forEachIndexed { index, data ->
+                var hour = index
+                data.hourOfTheDay?.let {
+                    hour = it
+                }
+
+
+                if (data.steps != 0) {
+                    hourlyBreakupList.add(
+                        OreoStepsNetworkEntity.HourlyBreakup(
+                            data.steps,
+                            data.activeCalories,
+                            data.calories,
+                            data.distance,
+                            hour
+                        )
+                    )
+                }
+
+
+            }
+
+            val dayTimeData = dayTimeMovement?.firstOrNull {
+                it.date.equals(stepsData.date)
+            }
+            val dayDataBreakup = Gson().fromJson<List<Int>>(dayTimeData?.breakUp ?: "")
+
+
+            val dayBreakup =
+                OreoStepsNetworkEntity.DayBreakup(
+                    stepsData.totalSteps,
+                    stepsData.activeCalories ?: 0,
+                    stepsData.totalCalories,
+                    stepsData.totalDistance,
+                    date
+                )
+
+            val steps = OreoStepsNetworkEntity(
+                hourlyBreakupList, dayBreakup,
+                dayTimeMovement = dayDataBreakup
+            )
+            stepsList.add(steps)
+        }
+
+        if (stepsList.isEmpty()) {
+            return null
+        }
+        return stepsList
+    }
+
+
+    private suspend fun getSleepOverlayData(sleepData: OreoSleepData): Pair<List<Int>, List<Int>>/*SleepOverlayData*/ {
+        var offSet = 0
+        val midnightTime = "23:59"
+        val startTime = sleepData.sleepArray!![0].startTime!!
+        val timeIn24Hour =
+            DateFormats.formatTimeInto24HoursValue(startTime, DateFormats.dateTimeFormat5).toInt()
+
+
+        if (timeIn24Hour in 18..23) {
+            offSet = 1
+        }
+        LOGS.d("SLEEPGRAPH time $startTime $midnightTime $offSet")
+        val sleepStartDate = DateFormats.subtractDateFormat3(sleepData.date!!, offSet)!!
+        LOGS.d("SLEEPGRAPH sleepStartDate $sleepStartDate")
+        val sleepStartTime = DateFormats.convertDateTimeToTimeStamp3(startTime)
+        val sleepEndTime = DateFormats.addSecondToTimeStamp(sleepStartTime, sleepData.timeInBedTime)
+
+        LOGS.d("SLEEP_timeSTAMP : $sleepStartTime $sleepEndTime")
+        val hrData =
+            oreoHeartRateDataImpl.getHeartRateBetweenTimeStamp(sleepStartTime, sleepEndTime)
+        val hrv = stressDataImpl.getStressBetweenTimeStamp(sleepStartTime, sleepEndTime)
+
+        return Pair(hrData, hrv)
+    }
+
+
+    private suspend fun parseSleepDataOreo(
+        sleepDataList: List<OreoSleepData>?
+    ): ArrayList<OreoSleepNetworkEntity>? {
+        if (sleepDataList.isNullOrEmpty()) {
+            return null
+        }
+
+        val sleepList = ArrayList<OreoSleepNetworkEntity>()
+
+        sleepDataList.forEach { sleepData ->
+            val sleepOverlayData = getSleepOverlayData(sleepData)
+            val hourlyList = ArrayList<OreoSleepNetworkEntity.OreoHourlyBreakup>()
+
+            val nightTimeMovement = ArrayList<OreoSleepNetworkEntity.OreoMovementBreakup>()
+            sleepData.nightTimeMovement?.forEachIndexed { index, data ->
+                nightTimeMovement.add(
+                    OreoSleepNetworkEntity.OreoMovementBreakup(
+                        movementType = data.movementType,
+                        duration = data.duration,
+                        startTime = (data.startTime ?: ""),
+                        endTime = (data.endTime ?: "")
+                    )
+                )
+
+            }
+
+
+            sleepData.sleepArray?.forEachIndexed { i, data ->
+                hourlyList.add(
+                    OreoSleepNetworkEntity.OreoHourlyBreakup(
+                        sleepType = data.sleepType,
+                        duration = data.duration,
+                        startTime = data.startTime ?: "",
+                        endTime = data.endTime ?: ""
+                    )
+                )
+            }
+            var dayBreakup: OreoSleepNetworkEntity.OreoDayBreakup? = null
+            dayBreakup =
+                OreoSleepNetworkEntity.OreoDayBreakup(
+                    totalDeep = sleepData.deep,
+                    totalLight = sleepData.light,
+                    totalDuration = sleepData.total,
+                    timeInBed = sleepData.timeInBedTime,
+                    startTime = sleepData.startTime ?: "",
+                    endtime = sleepData.endTime ?: "",
+                    totalAwake = sleepData.awake,
+                    date = (sleepData.date ?: ""),
+                    totalRem = sleepData.remCount,
+                    sleepScore = sleepData.sleepScore,
+                    sleepEfficiency = sleepData.sleepEfficiency,
+                    restingHr = sleepOverlayData.first.minWithoutZero(),
+                    sleepLatency = sleepData.sleepLatency,
+                    hrBreakup = sleepOverlayData.first,
+                    hrvBreakup = sleepOverlayData.second,
+                    avgHrv = sleepOverlayData.second.averageWithoutZero(),
+                    readinessScore = sleepData.readinessScore ?: 0
+                )
+
+            val sleep = OreoSleepNetworkEntity(hourlyList, nightTimeMovement, dayBreakup)
+            sleepList.add(sleep)
+        }
+
+        if (sleepList.isEmpty()) {
+            return null
+        }
+
+        return sleepList
+
+    }
+
+    private fun parseStressData(stressDataList: List<OreoStressDataBreakup>?): ArrayList<OreoCommonNetworkEntity>? {
+        if (stressDataList.isNullOrEmpty()) {
+            return null
+        }
+        val commonList = ArrayList<OreoCommonNetworkEntity>()
+        stressDataList.forEach {
+            val breakUp = Gson().fromJson<List<Int>>(it.breakUp ?: "")
+            val networkReq = OreoCommonNetworkEntity()
+            networkReq.dayBreakup = OreoCommonNetworkEntity.DayBreakup(
+                breakUp = breakUp,
+                frequency = 5,
+                date = it.date ?: ""
+            )
+            commonList.add(networkReq)
+        }
+        return commonList
+    }
+
+    private fun parseRespiratoryData(stressDataList: List<OreoRespiratoryData>?): ArrayList<OreoCommonNetworkEntity>? {
+        if (stressDataList.isNullOrEmpty()) {
+            return null
+        }
+        val commonList = ArrayList<OreoCommonNetworkEntity>()
+        stressDataList.forEach {
+            val breakUp = Gson().fromJson<List<Int>>(it.breakUp ?: "")
+            val networkReq = OreoCommonNetworkEntity()
+            networkReq.dayBreakup = OreoCommonNetworkEntity.DayBreakup(
+                breakUp = breakUp,
+                frequency = 5,
+                date = it.date ?: ""
+            )
+            commonList.add(networkReq)
+        }
+        return commonList
+    }
+
+    private fun parseBodyTemperature(tempList: List<OreoBodyTemperatureBreakup>?): List<OreoBodyTempNetworkEntity>? {
+        if (tempList.isNullOrEmpty()) {
+            return null
+        }
+
+        val commonList = ArrayList<OreoBodyTempNetworkEntity>()
+        tempList.forEach {
+            val breakUp = Gson().fromJson<List<Float>>(it.breakUp ?: "")
+            val networkReq = OreoBodyTempNetworkEntity()
+            networkReq.dayBreakup = OreoBodyTempNetworkEntity.DayBreakup(
+                breakUp = breakUp,
+                frequency = 5,
+                date = it.date ?: ""
+            )
+            commonList.add(networkReq)
+        }
+        return commonList
+    }
+
+
+    private fun parseBloodOxygenData(bloodOxygenList: List<OreoBloodOxygenBreakup>?): ArrayList<OreoCommonNetworkEntity>? {
+
+        if (bloodOxygenList.isNullOrEmpty()) {
+            return null
+        }
+        val commonList = ArrayList<OreoCommonNetworkEntity>()
+        bloodOxygenList.forEach {
+            val breakUp = Gson().fromJson<List<Int>>(it.breakUp ?: "")
+            val networkReq = OreoCommonNetworkEntity()
+            networkReq.dayBreakup = OreoCommonNetworkEntity.DayBreakup(
+                breakUp = breakUp,
+                frequency = 15,
+                date = it.date ?: ""
+            )
+            commonList.add(networkReq)
+        }
+        return commonList
+    }
+
+    private fun parseHeartHistoryData(hrHistoryData: List<OreoHeartRate>?): List<OreoHeartNetworkEntity>? {
+
+        if (hrHistoryData.isNullOrEmpty()) {
+            return null
+        }
+
+        val commonList = ArrayList<OreoHeartNetworkEntity>()
+        hrHistoryData.forEach {
+            val breakUp = Gson().fromJson<List<Int>>(it.breakUp ?: "")
+            val networkReq = OreoHeartNetworkEntity()
+            networkReq.dayBreakup = OreoHeartNetworkEntity.DayBreakup(
+                breakUp = breakUp,
+                frequency = 5,
+                date = it.date ?: ""
+            )
+            commonList.add(networkReq)
+        }
+
+        return commonList
+    }
+
+
+}

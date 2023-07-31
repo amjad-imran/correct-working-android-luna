@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/ModalStyleReadiness"
+    android:layout_width="match_parent"
+    android:layout_marginTop="24dp"
+    android:layout_height="wrap_content"
+    tools:ignore="MissingDefaultResource">
+
+    <TextView
+        android:id="@+id/textView"
+        style="@style/H5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="@dimen/dimen_16dp"
+        android:text="@string/text_sleep"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView14"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="@dimen/dimen_16dp"
+        android:adjustViewBounds="true"
+        android:alpha="0.5"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_arrow_right_duotone"
+        app:layout_constraintBottom_toBottomOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView" />
+
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieAnimationView"
+        android:layout_width="196dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="@dimen/dimen_8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+
+    <TextView
+        android:id="@+id/tvValue"
+        style="@style/H32"
+        android:layout_marginTop="58dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/lottieAnimationView"
+        app:layout_constraintStart_toStartOf="@+id/lottieAnimationView"
+        app:layout_constraintTop_toTopOf="@+id/lottieAnimationView" />
+
+    <TextView
+        android:id="@+id/tvStatus"
+        style="@style/H5"
+        android:layout_marginTop="@dimen/dimen_8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/lottieAnimationView"
+        app:layout_constraintStart_toStartOf="@+id/lottieAnimationView"
+        app:layout_constraintTop_toBottomOf="@+id/tvValue" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="@dimen/dimen_4dp"
+        android:layout_height="@dimen/dimen_4dp"
+        android:layout_marginStart="@dimen/dimen_16dp"
+        android:background="@drawable/circle_gray"
+
+        app:layout_constraintBottom_toBottomOf="@+id/sleepPgbr"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/sleepPgbr" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="@dimen/dimen_4dp"
+        android:layout_height="@dimen/dimen_4dp"
+
+        android:layout_marginEnd="@dimen/dimen_16dp"
+        android:background="@drawable/circle_gray"
+        app:layout_constraintBottom_toBottomOf="@+id/sleepPgbr"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/sleepPgbr" />
+
+    <FrameLayout
+        android:id="@+id/sleepPgbr"
+        android:layout_width="0dp"
+        android:layout_height="8dp"
+        android:layout_marginStart="@dimen/dimen_4dp"
+        android:layout_marginTop="@dimen/dimen_24dp"
+        android:layout_marginEnd="@dimen/dimen_4dp"
+        app:layout_constraintEnd_toStartOf="@+id/view2"
+        app:layout_constraintStart_toEndOf="@+id/view"
+        app:layout_constraintTop_toBottomOf="@+id/tvStatus" />
+
+    <TextView
+        android:id="@+id/tvSleepStart"
+        style="@style/Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dimen_16dp"
+        android:layout_marginTop="@dimen/dimen_8dp"
+        android:text="dfsjjkfds"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sleepPgbr" />
+
+    <TextView
+        android:id="@+id/tvSleepEnd"
+        style="@style/Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_8dp"
+        android:layout_marginEnd="@dimen/dimen_16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sleepPgbr" />
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/layout_line_separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/dimen_16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSleepStart" />
+
+    <include
+        android:id="@+id/include2"
+        layout="@layout/layout_line_separator"
+        android:layout_width="1dp"
+        android:layout_height="@dimen/dimen_40dp"
+        android:layout_marginTop="@dimen/dimen_16dp"
+        android:layout_marginBottom="@dimen/dimen_16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include" />
+
+    <TextView
+        android:id="@+id/tvTotalSleepText"
+        style="@style/Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_total_sleep"
+        android:textColor="@color/white_64"
+        app:layout_constraintEnd_toStartOf="@+id/include2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/include2" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_8dp"
+        app:layout_constraintEnd_toEndOf="@+id/tvTotalSleepText"
+        app:layout_constraintStart_toStartOf="@+id/tvTotalSleepText"
+        app:layout_constraintTop_toBottomOf="@+id/tvTotalSleepText">
+
+        <TextView
+            android:id="@+id/tvSleepHour"
+            style="@style/H5"
+            android:layout_width="wrap_content"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="8" />
+
+        <TextView
+            android:id="@+id/textHour"
+            style="@style/Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="@dimen/dimen_2dp"
+            android:text="@string/text_hr"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/tvSleepHour"
+            app:layout_constraintStart_toEndOf="@+id/tvSleepHour" />
+
+        <TextView
+            android:id="@+id/tvSleepMinute"
+            style="@style/H5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvSleepHour"
+            app:layout_constraintStart_toEndOf="@+id/textHour"
+            tools:text="32" />
+
+        <TextView
+            android:id="@+id/textMins"
+            style="@style/Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="@dimen/dimen_2dp"
+            android:text="@string/text_mins"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/tvSleepMinute"
+            app:layout_constraintStart_toEndOf="@+id/tvSleepMinute" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <TextView
+        android:id="@+id/tvLowestHr"
+        style="@style/Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_lowest_hr"
+        android:textColor="@color/white_64"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/include2"
+        app:layout_constraintTop_toTopOf="@+id/include2" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_8dp"
+        app:layout_constraintEnd_toEndOf="@+id/tvLowestHr"
+        app:layout_constraintStart_toStartOf="@+id/tvLowestHr"
+        app:layout_constraintTop_toBottomOf="@+id/tvLowestHr">
+
+        <TextView
+            android:id="@+id/tvHrValue"
+            style="@style/H5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="--" />
+
+        <TextView
+            android:id="@+id/tvHrUnit"
+            android:text="@string/text_bpm_small"
+            style="@style/Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="@dimen/dimen_2dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/tvHrValue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvHrValue" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

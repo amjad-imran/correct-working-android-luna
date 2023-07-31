@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:id="@+id/tvGoogleFit"
+            style="@style/H6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_16dp"
+            android:layout_marginEnd="@dimen/dimen_16dp"
+            android:lineSpacingExtra="6dp"
+            android:text="@string/text_the_google_fit_app_tracks_your_movements_lets_you_set_goals_and_keeps_track_of_your_progress_to_coach_you_towards_a_healthier_life"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvGoogleFitLearnMore"
+            style="@style/H6"
+            android:layout_width="0dp"
+            android:layout_marginTop="@dimen/dimen_4dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_16dp"
+            android:lineSpacingExtra="6dp"
+            android:text="@string/text_learn_more"
+            android:textColor="@color/text_accent_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvGoogleFit" />
+
+        <TextView
+            android:id="@+id/tvConnectionText"
+            style="@style/H4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_16dp"
+            android:layout_marginTop="@dimen/dimen_24dp"
+            android:text="@string/text_connection"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvGoogleFitLearnMore" />
+
+        <TextView
+            android:id="@+id/tvConnection"
+            style="@style/H6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_16dp"
+            android:layout_marginTop="@dimen/dimen_8dp"
+            android:layout_marginEnd="@dimen/dimen_16dp"
+            android:lineSpacingExtra="6dp"
+            android:text="@string/text_tap_connect_to_log_into_your_google_fit_account_and_authorize_noisefit_access"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvConnectionText" />
+
+        <TextView
+            android:id="@+id/tvSyncText"
+            style="@style/H4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_16dp"
+            android:layout_marginTop="@dimen/dimen_24dp"
+            android:text="@string/text_sync_data"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvConnection" />
+
+        <TextView
+            android:id="@+id/tvSync"
+            style="@style/H6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_16dp"
+            android:layout_marginTop="@dimen/dimen_8dp"
+            android:layout_marginEnd="@dimen/dimen_16dp"
+            android:lineSpacingExtra="6dp"
+            android:text="@string/text_once_your_noisefit_and_google_fit_accounts_are_connected_your_workout_and_health_data_including_steps_distance_heart_rate_sleep_will_be_automatically_synced_to_google_fit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvSyncText" />
+
+        <TextView
+            android:id="@+id/tvPrivacyPolicy"
+            style="@style/H6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_16dp"
+            android:lineSpacingExtra="6dp"
+            android:layout_marginTop="@dimen/dimen_4dp"
+            android:text="@string/text_how_we_handle_data_privacy"
+            android:textColor="@color/text_accent_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvSync" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

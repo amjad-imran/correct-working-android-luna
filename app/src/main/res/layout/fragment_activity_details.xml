@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.activity.ActivityDetailsFragment">
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|center_horizontal|center"
+            android:orientation="horizontal"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:layout_marginTop="@dimen/side_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+            <ImageButton
+                android:id="@+id/backBtn"
+                style="@style/ToolbarBackButton"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_vertical"
+                android:contentDescription="@string/text_back" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_view_title"
+                style="@style/H4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:ellipsize="end"
+                android:fontFamily="@font/gilroy_medium"
+                android:gravity="center"
+                android:maxLines="1"
+                tools:ignore="RelativeOverlap" />
+
+            <ImageButton
+                android:id="@+id/viewShare"
+                style="@style/ToolbarBackButton"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="@dimen/side_margin"
+                android:padding="10dp"
+                android:src="@drawable/ic_share"
+                app:tint="@color/white" />
+
+        </RelativeLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:id="@+id/viewActivityback"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="@dimen/side_margin"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/back_image_step"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/ivActivityType"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/ic_steps_gradient"
+                    app:layout_constraintBottom_toBottomOf="@+id/viewActivityback"
+                    app:layout_constraintEnd_toEndOf="@+id/viewActivityback"
+                    app:layout_constraintStart_toStartOf="@+id/viewActivityback"
+                    app:layout_constraintTop_toTopOf="@+id/viewActivityback" />
+
+                <TextView
+                    android:id="@+id/tvTitle"
+                    style="@style/H4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="40dp"
+                    android:textColor="@color/bright_lime"
+                    app:layout_constraintBottom_toTopOf="@id/tvDayTime"
+                    app:layout_constraintStart_toEndOf="@id/viewActivityback"
+                    app:layout_constraintTop_toTopOf="@id/viewActivityback"
+                    tools:text="Outdoor Walk" />
+
+                <TextView
+                    android:id="@+id/tvDayTime"
+                    style="@style/H5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dimen_40dp"
+                    android:paddingTop="15dp"
+                    app:layout_constraintBottom_toTopOf="@id/tvTime"
+                    app:layout_constraintStart_toEndOf="@+id/viewActivityback"
+                    tools:text="Sunday, March 27" />
+
+                <TextView
+                    android:id="@+id/tvTime"
+                    style="@style/Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dimen_40dp"
+                    android:paddingTop="5dp"
+                    app:layout_constraintStart_toEndOf="@+id/viewActivityback"
+                    app:layout_constraintTop_toBottomOf="@id/tvDayTime"
+                    tools:text="11:33 am - 12:35 pm" />
+
+                <include
+                    android:id="@+id/separator1"
+                    layout="@layout/layout_divider_modal_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="30dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/viewActivityback" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvActivityDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/side_margin"
+                    android:orientation="vertical"
+                    android:nestedScrollingEnabled="false"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/separator1"
+                    app:spanCount="2"
+                    tools:itemCount="5"
+                    tools:listitem="@layout/row_details_item" />
+
+                <include
+                    android:id="@+id/separator2"
+                    layout="@layout/layout_divider_modal_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="20dp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/rvActivityDetails" />
+
+                <TextView
+                    android:id="@+id/tvRouteTitle"
+                    style="@style/H4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/side_margin"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/route"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/separator2" />
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:layout_marginStart="@dimen/side_margin"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="@dimen/side_margin"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvRouteTitle" />
+
+                <ProgressBar
+                    android:id="@+id/mapsPgBr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageTransparent"
+                    app:layout_constraintEnd_toEndOf="@+id/imageTransparent"
+                    app:layout_constraintStart_toStartOf="@+id/imageTransparent"
+                    app:layout_constraintTop_toTopOf="@+id/imageTransparent" />
+
+                <ImageView
+                    android:id="@+id/imageTransparent"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:layout_marginStart="@dimen/side_margin"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="@dimen/side_margin"
+                    android:src="@android:color/transparent"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvRouteTitle" />
+
+
+                <include
+                    android:id="@+id/separator3"
+                    layout="@layout/layout_divider_modal_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="@dimen/side_margin"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="@dimen/side_margin"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/imageTransparent" />
+
+                <include
+                    android:id="@+id/lytHrGraph"
+                    layout="@layout/layout_hr_graph"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/separator3"
+                    tools:visibility="visible" />
+
+
+                <include
+                    android:id="@+id/separator4"
+                    layout="@layout/layout_divider_modal_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="@dimen/side_margin"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="@dimen/side_margin"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/lytHrGraph" />
+
+                <TextView
+                    android:id="@+id/tvHeartRateZoneTitle"
+                    style="@style/H4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/side_margin"
+                    android:layout_marginTop="30dp"
+                    android:text="@string/heart_rate_zone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/separator4" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view_heart_zone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dimen_16dp"
+                    android:layout_marginEnd="@dimen/dimen_16dp"
+                    android:orientation="horizontal"
+                    android:nestedScrollingEnabled="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvHeartRateZoneTitle"
+                    app:spanCount="2"
+                    tools:itemCount="6"
+                    tools:listitem="@layout/row_heart_rate_zone" />
+
+                <include
+                    android:id="@+id/separator5"
+                    layout="@layout/layout_divider_modal_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="30dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/recycler_view_heart_zone" />
+
+
+                <TextView
+                    android:id="@+id/tvMsg"
+                    style="@style/H6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/side_margin"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="@dimen/side_margin"
+                    android:gravity="center_horizontal"
+                    android:lineSpacingExtra="6sp"
+                    android:text="@string/there_might_be_a_little_bit_of_inaccuracy_in_the_data_based_on_the_watch_performance"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/separator5" />
+
+                <Button
+                    android:id="@+id/btnFeedback"
+                    style="@style/SecondaryButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="30dp"
+                    android:fontFamily="@font/gilroy_medium"
+                    android:paddingStart="@dimen/dimen_24dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="@dimen/dimen_24dp"
+                    android:paddingBottom="5dp"
+                    android:text="@string/give_feedback"
+                    android:textSize="@dimen/text_12sp"
+                    app:backgroundTint="@null"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvMsg" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

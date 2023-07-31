@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/side_margin">
+
+        <ImageView
+            android:id="@+id/imvIcon"
+            android:layout_width="@dimen/dimen_24dp"
+            android:layout_height="@dimen/dimen_24dp"
+            android:src="@drawable/ic_weather"
+            app:layout_constraintBottom_toBottomOf="@+id/tvTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvTitle" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            style="@style/H5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/llSwitch"
+
+            app:layout_constraintEnd_toStartOf="@+id/llSwitch"
+            app:layout_constraintStart_toEndOf="@+id/imvIcon"
+            app:layout_constraintTop_toTopOf="@+id/llSwitch"
+            tools:text="Weather Updates" />
+
+        <!--<androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/llSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             />-->
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/llSwitch"
+            style="@style/CustomSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/tvTitleDisc"
+            style="@style/Small"
+            android:visibility="gone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/imvIcon"
+            app:layout_constraintTop_toBottomOf="@+id/llSwitch"
+            tools:text="Turn on the toggle for current location." />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

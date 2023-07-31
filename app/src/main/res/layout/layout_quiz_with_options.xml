@@ -1,0 +1,156 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:paddingBottom="16dp"
+        android:layout_height="wrap_content">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animViewAnswer"
+            android:layout_width="match_parent"
+            android:layout_height="188dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvQuestion"
+            style="@style/H4"
+            android:layout_width="match_parent"
+            android:layout_height="188dp"
+            android:gravity="center"
+            android:paddingStart="45dp"
+            android:paddingEnd="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/animViewAnswer"
+            tools:text="Who is the only player to have won the IPL Emerging Player of the Season award twice?" />
+
+        <ImageView
+            android:id="@+id/ivQ1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/ic_default_qq_chips"
+            app:layout_constraintEnd_toStartOf="@+id/ivQ2"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvQuestion"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tvOption1"
+            style="@style/Body"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="2"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/ivQ1"
+            app:layout_constraintEnd_toEndOf="@id/ivQ1"
+            app:layout_constraintStart_toStartOf="@id/ivQ1"
+            app:layout_constraintTop_toTopOf="@id/ivQ1"
+            tools:text="Royal Challengers Bangalore" />
+
+        <ImageView
+            android:id="@+id/ivQ2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/ic_default_qq_chips"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/ivQ1"
+            app:layout_constraintTop_toBottomOf="@id/tvQuestion"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tvOption2"
+            style="@style/Body"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="2"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/ivQ2"
+            app:layout_constraintEnd_toEndOf="@id/ivQ2"
+            app:layout_constraintStart_toStartOf="@id/ivQ2"
+            app:layout_constraintTop_toTopOf="@id/ivQ2"
+            tools:text="Royal Challengers Bangalore" />
+
+        <ImageView
+            android:id="@+id/ivQ3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/ic_default_qq_chips"
+            app:layout_constraintEnd_toStartOf="@+id/ivQ4"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivQ1"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tvOption3"
+            style="@style/Body"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="2"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/ivQ3"
+            app:layout_constraintEnd_toEndOf="@id/ivQ3"
+            app:layout_constraintStart_toStartOf="@id/ivQ3"
+            app:layout_constraintTop_toTopOf="@id/ivQ3"
+            tools:text="Royal Challengers Bangalore" />
+
+        <ImageView
+            android:id="@+id/ivQ4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/ic_default_qq_chips"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/ivQ3"
+            app:layout_constraintTop_toBottomOf="@id/ivQ2"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tvOption4"
+            style="@style/Body"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="2"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/ivQ4"
+            app:layout_constraintEnd_toEndOf="@id/ivQ4"
+            app:layout_constraintStart_toStartOf="@id/ivQ4"
+            app:layout_constraintTop_toTopOf="@id/ivQ4"
+            tools:text="Royal Challengers Bangalore" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

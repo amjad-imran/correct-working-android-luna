@@ -1,0 +1,12 @@
+package com.noisefit.data.repository.abstraction
+
+import com.noisefit_commans.models.weather.WeatherInfo
+import com.noisefit.data.remote.base.Resource
+import kotlinx.coroutines.flow.Flow
+
+interface WeatherRepository {
+    suspend fun getWeatherData(
+        lat: Double,
+        long: Double, units: String
+    ): Flow<Resource<WeatherInfo?>>
+}

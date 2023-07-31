@@ -1,0 +1,92 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/back_modal_yellow_10">
+
+        <TextView
+            android:id="@+id/tvTargetAchieve"
+            style="@style/H5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:text="@string/text_target_achieved"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tvCorrectAnswerCount"
+            style="@style/H6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:textColor="@color/white_64"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTargetAchieve"
+            tools:text="0/150 correct answer" />
+
+        <View
+            android:id="@+id/vBackProgress"
+            android:layout_width="0dp"
+            android:layout_height="16dp"
+            android:layout_marginHorizontal="@dimen/side_margin"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/back_progress_16"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvCorrectAnswerCount" />
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/pbSteps"
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="6dp"
+            app:indicatorColor="@color/purple_"
+            app:layout_constraintBottom_toBottomOf="@+id/vBackProgress"
+            app:layout_constraintEnd_toEndOf="@+id/vBackProgress"
+            app:layout_constraintStart_toStartOf="@+id/vBackProgress"
+            app:layout_constraintTop_toTopOf="@+id/vBackProgress"
+            app:trackColor="#19ffffff"
+            app:trackCornerRadius="2dp"
+            app:trackThickness="4dp" />
+
+        <View
+            style="@style/PrimaryButtonStyleHighlight2"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:id="@+id/viewCollect"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/vBackProgress" />
+
+        <TextView
+            android:id="@+id/btnCollect"
+            android:layout_width="wrap_content"
+            style="@style/H6"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="@+id/viewCollect"
+            app:layout_constraintBottom_toBottomOf="@id/viewCollect"
+            app:layout_constraintStart_toStartOf="@id/viewCollect"
+            app:layout_constraintEnd_toEndOf="@id/viewCollect"
+            tools:text="Collect 500"
+            app:drawableEndCompat="@drawable/ic_noise_c_20" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

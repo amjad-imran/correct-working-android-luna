@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false">
+
+        <TextView
+            android:id="@+id/tvDate"
+            style="@style/H4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:text="@string/text_highlights"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <include
+            android:id="@+id/layoutBedTime"
+            layout="@layout/layout_bedtime_variance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvDate" />
+
+        <TextView
+            android:id="@+id/tvBedTimeVariance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            tools:text="18"
+            android:textAppearance="@style/H3"
+            android:textSize="22sp"
+            app:layout_constraintStart_toStartOf="@+id/vCentreBedTimeVariance"
+            app:layout_constraintBottom_toTopOf="@+id/vCentreBedTimeVariance" />
+
+        <TextView
+            android:id="@+id/tvBedTimeVarianceUnit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            tools:text="min"
+            android:textAppearance="@style/Small"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvBedTimeVariance"
+            app:layout_constraintStart_toEndOf="@+id/tvBedTimeVariance" />
+
+        <View
+            android:id="@+id/vCentreBedTimeVariance"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:background="#999DFF"
+            app:layout_constraintBottom_toBottomOf="@+id/graphBedTimeVariance"
+            app:layout_constraintEnd_toEndOf="@+id/graphBedTimeVariance"
+            app:layout_constraintStart_toStartOf="@+id/layoutBedTime"
+            app:layout_constraintTop_toTopOf="@+id/graphBedTimeVariance" />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/graphBedTimeVariance"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/layoutBedTime"
+            app:layout_constraintEnd_toEndOf="@+id/layoutBedTime"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/layoutBedTime"
+            app:layout_constraintTop_toTopOf="@+id/layoutBedTime"
+            app:layout_constraintVertical_bias="1.0" />
+
+
+        <include
+            android:id="@+id/layoutAverageSleepDuration"
+            layout="@layout/layout_average_sleep_duration"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutBedTime" />
+
+        <View
+            android:id="@+id/vCentreSleepDuration"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginBottom="22dp"
+            android:background="#999DFF"
+            app:layout_constraintBottom_toBottomOf="@+id/layoutAverageSleepDuration"
+            app:layout_constraintEnd_toEndOf="@+id/graphSleepDuration"
+            app:layout_constraintStart_toStartOf="@+id/layoutAverageSleepDuration"
+            app:layout_constraintTop_toTopOf="@+id/graphSleepDuration" />
+        <LinearLayout
+            android:id="@+id/graphSleepDuration"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="80dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:layout_marginBottom="16dp"
+            android:orientation="horizontal"
+            android:gravity="bottom"
+            app:layout_constraintBottom_toBottomOf="@+id/layoutAverageSleepDuration"
+            app:layout_constraintEnd_toEndOf="@+id/layoutAverageSleepDuration"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/layoutAverageSleepDuration"
+            app:layout_constraintTop_toTopOf="@+id/layoutAverageSleepDuration" />
+
+
+
+        <TextView
+            android:id="@+id/tvSleepDurationHour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="6"
+            android:textAppearance="@style/H2"
+            android:textSize="22sp"
+            app:layout_constraintStart_toStartOf="@+id/vCentreSleepDuration"
+            app:layout_constraintBottom_toTopOf="@+id/vCentreSleepDuration" />
+
+        <TextView
+            android:id="@+id/tvSleepDurationHourUnit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:text="hr"
+            android:textAppearance="@style/Small"
+            app:layout_constraintBottom_toBottomOf="@+id/tvSleepDurationHour"
+            app:layout_constraintStart_toEndOf="@+id/tvSleepDurationHour" />
+
+        <TextView
+            android:id="@+id/tvSleepDurationMinute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="23"
+            android:layout_marginStart="6dp"
+            android:textAppearance="@style/H2"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvSleepDurationHour"
+            app:layout_constraintStart_toEndOf="@+id/tvSleepDurationHourUnit" />
+
+        <TextView
+            android:id="@+id/tvSleepDurationMinuteUnit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="min"
+            android:textAppearance="@style/Small"
+            android:layout_marginBottom="2dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvSleepDurationHour"
+            app:layout_constraintStart_toEndOf="@+id/tvSleepDurationMinute" />
+
+        <include
+            android:id="@+id/layoutAverageBedTime"
+            layout="@layout/layout_average_bed_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_margin="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutAverageSleepDuration" />
+        <View
+            android:id="@+id/vCentreAverageBedTime"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:background="#999DFF"
+            android:visibility="gone"
+            android:layout_marginBottom="-6dp"
+            app:layout_constraintBottom_toBottomOf="@+id/layoutAverageBedTime"
+            app:layout_constraintEnd_toEndOf="@+id/graphAverageBedTime"
+            app:layout_constraintStart_toStartOf="@+id/layoutAverageBedTime"
+            app:layout_constraintTop_toTopOf="@+id/graphAverageBedTime" />
+
+        <LinearLayout
+            android:id="@+id/graphAverageBedTime"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="80dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone"
+            android:gravity="bottom"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@+id/layoutAverageBedTime"
+            app:layout_constraintEnd_toEndOf="@+id/layoutAverageBedTime"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/layoutAverageBedTime"
+            app:layout_constraintTop_toTopOf="@+id/layoutAverageBedTime" />
+
+        <TextView
+            android:id="@+id/tvAverageBedTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="_:_"
+            android:visibility="gone"
+            android:textAppearance="@style/H2"
+            android:textSize="22sp"
+            app:layout_constraintStart_toStartOf="@+id/vCentreAverageBedTime"
+            app:layout_constraintTop_toBottomOf="@+id/vCentreAverageBedTime" />
+
+        <TextView
+            android:id="@+id/tvAverageBedTimeUnit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            tools:text="pm"
+            android:textAppearance="@style/Small"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvAverageBedTime"
+            app:layout_constraintStart_toEndOf="@+id/tvAverageBedTime" />
+        <include
+            android:id="@+id/layoutAverageSleepQuality"
+            layout="@layout/layout_average_sleep_quality"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:layout_margin="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutAverageBedTime" />
+        <View
+            android:id="@+id/vAverageSleepQuantity"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:background="#999DFF"
+            android:layout_marginBottom="22dp"
+            app:layout_constraintBottom_toBottomOf="@+id/layoutAverageSleepQuality"
+            app:layout_constraintEnd_toEndOf="@+id/graphAverageSleepQuality"
+            app:layout_constraintStart_toStartOf="@+id/layoutAverageSleepQuality"
+            app:layout_constraintTop_toTopOf="@+id/graphAverageSleepQuality" />
+
+        <TextView
+            android:id="@+id/tvAverageSleepQuality"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            tools:text="57/100"
+            android:textAppearance="@style/H2"
+            android:textSize="22sp"
+            app:layout_constraintStart_toStartOf="@+id/vAverageSleepQuantity"
+            app:layout_constraintBottom_toTopOf="@+id/vAverageSleepQuantity" />
+
+        <LinearLayout
+            android:id="@+id/graphAverageSleepQuality"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="80dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:layout_marginBottom="16dp"
+            android:gravity="bottom"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@+id/layoutAverageSleepQuality"
+            app:layout_constraintEnd_toEndOf="@+id/layoutAverageSleepQuality"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/layoutAverageSleepQuality"
+            app:layout_constraintTop_toTopOf="@+id/layoutAverageSleepQuality" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

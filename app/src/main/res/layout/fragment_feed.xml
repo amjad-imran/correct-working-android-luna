@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <me.dkzwm.widget.srl.SmoothRefreshLayout
+        android:id="@+id/swipeToRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.noisefit.ui.custom.swipeHeader.srl.extra.header.ClassicHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/animationView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitXY"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar2"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintBottom_toTopOf="@+id/textSyncingData"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed" />
+
+                <TextView
+                    android:id="@+id/textSyncingData"
+                    style="@style/Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/gilroy_medium"
+                    android:text="@string/text_refreshing"
+                    android:textColor="@android:color/white"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/progressBar2" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </com.noisefit.ui.custom.swipeHeader.srl.extra.header.ClassicHeader>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/lytCreatePost"
+                layout="@layout/layout_create_post_widget"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ProgressBar
+                android:id="@+id/progressBarInitial"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lytCreatePost"
+                tools:visibility="visible" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTimeline"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@+id/progressBarLoadMore"
+                app:layout_constraintTop_toBottomOf="@+id/progressBarInitial" />
+
+            <ProgressBar
+                android:id="@+id/progressBarLoadMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:visibility="visible" />
+
+            <include
+                android:id="@+id/progressBar"
+                layout="@layout/default_loader"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <!--  <androidx.core.widget.NestedScrollView
+              android:id="@+id/svMain"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/black">
+
+              <androidx.constraintlayout.widget.ConstraintLayout
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  tools:context=".ui.feeds.feed.FeedFragment">
+
+                  <View
+                      android:id="@+id/vPostAdd"
+                      style="@style/ModalStyleNew"
+                      android:layout_width="match_parent"
+                      android:layout_height="@dimen/dimen_40dp"
+                      android:layout_marginStart="@dimen/dimen_16dp"
+                      android:layout_marginTop="@dimen/dimen_32dp"
+                      android:layout_marginEnd="@dimen/dimen_16dp"
+                      app:layout_constraintEnd_toEndOf="parent"
+                      app:layout_constraintStart_toStartOf="parent"
+                      app:layout_constraintTop_toTopOf="parent" />
+
+                  <TextView
+                      android:id="@+id/textView29"
+                      style="@style/H6"
+                      android:layout_width="0dp"
+                      android:layout_height="wrap_content"
+                      android:layout_marginStart="@dimen/dimen_16dp"
+                      android:layout_marginTop="10dp"
+                      android:layout_marginEnd="@dimen/dimen_16dp"
+                      android:layout_marginBottom="10dp"
+                      android:text="@string/text_what_s_on_your_mind"
+                      app:layout_constraintBottom_toBottomOf="@+id/vPostAdd"
+                      app:layout_constraintEnd_toEndOf="@+id/vPostAdd"
+                      app:layout_constraintStart_toStartOf="@+id/vPostAdd"
+                      app:layout_constraintTop_toTopOf="@+id/vPostAdd" />
+
+                  <ProgressBar
+                      android:id="@+id/progressBar"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:visibility="gone"
+                      android:layout_marginTop="8dp"
+                      app:layout_constraintEnd_toEndOf="parent"
+                      app:layout_constraintStart_toStartOf="parent"
+                      app:layout_constraintTop_toBottomOf="@+id/vPostAdd"
+                      tools:visibility="visible" />
+
+                  <androidx.recyclerview.widget.RecyclerView
+                      android:id="@+id/rvTimeline"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      app:layout_constraintEnd_toEndOf="parent"
+                      app:layout_constraintStart_toStartOf="parent"
+                      app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+
+                  <ProgressBar
+                      android:id="@+id/progressBarLoadMore"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="8dp"
+                      android:visibility="gone"
+                      app:layout_constraintEnd_toEndOf="parent"
+                      app:layout_constraintStart_toStartOf="parent"
+                      app:layout_constraintTop_toBottomOf="@+id/rvTimeline"
+                      tools:visibility="visible" />
+
+
+              </androidx.constraintlayout.widget.ConstraintLayout>
+
+          </androidx.core.widget.NestedScrollView>-->
+    </me.dkzwm.widget.srl.SmoothRefreshLayout>
+
+
+</layout>

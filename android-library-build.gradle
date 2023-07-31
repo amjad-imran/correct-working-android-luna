@@ -1,0 +1,67 @@
+// build.gradle.kts.kts.kts.kts.kts for android libraries that contain UI
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'kotlin-parcelize'
+
+android {
+    compileSdkVersion Android.compileSdk
+//    buildToolsVersion Android.buildTools
+
+    defaultConfig {
+        minSdkVersion Android.minSdk
+        targetSdkVersion Android.targetSdk
+        versionCode Android.versionCode
+        versionName Android.versionName
+        multiDexEnabled = true
+        testInstrumentationRunner = AndroidXTest.instrumentationRunner
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = Java.java
+    }
+//    buildFeatures {
+//        compose true
+//    }
+//    composeOptions {
+//        kotlinCompilerExtensionVersion Compose.composeVersion
+//        kotlinCompilerVersion Kotlin.version
+//    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+    packagingOptions {
+        exclude("META-INF/AL2.0")
+        exclude("META-INF/LGPL2.1")
+    }
+}
+
+dependencies{
+
+
+    implementation Timber.timber
+    implementation AndroidX.localBroadcastManager
+    implementation PlayService.playServiceLocation
+    implementation Hilt.android
+    kapt Hilt.compiler
+
+    implementation AndroidX.coreKtx
+    implementation Kotlin.kotlinStandardLibrary
+    implementation Google.gson
+
+}

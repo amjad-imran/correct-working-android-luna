@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    xmlns:lineChart="http://schemas.android.com/tools"
+    android:layout_marginTop="24dp"
+    android:background="@color/black"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        style="@style/ModalStyleReadiness"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dimen_8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/constraintLayout"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView"
+            style="@style/H5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_16dp"
+            android:layout_marginTop="@dimen/dimen_16dp"
+            android:singleLine="true"
+            android:text="@string/text_sleep_score_o"
+            app:layout_constraintEnd_toStartOf="@+id/imageView14"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView14"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="@dimen/dimen_16dp"
+            android:adjustViewBounds="true"
+            android:alpha="0.5"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_arrow_right_duotone"
+            app:layout_constraintBottom_toBottomOf="@+id/textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView" />
+
+
+        <TextView
+            android:id="@+id/tvSleepScore"
+            style="@style/H2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_18dp"
+
+            app:layout_constraintStart_toStartOf="@+id/textView"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <TextView
+            android:id="@+id/tvAvgThisWeek"
+            style="@style/Small"
+            android:visibility="visible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_4dp"
+            android:layout_marginBottom="@dimen/dimen_16dp"
+            android:text="@string/text_avg_this_week"
+            android:textColor="@color/white_50"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tvSleepScore"
+            app:layout_constraintTop_toBottomOf="@+id/tvSleepScore" />
+
+        <TextView
+            android:id="@+id/tvDaysAvg"
+            style="@style/Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_4dp"
+            android:text="7 day avg"
+            android:textColor="@color/white_50"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@+id/tvSleepScore"
+            app:layout_constraintTop_toBottomOf="@+id/tvSleepScore" />
+
+        <com.oreo.ui.custom.LineChart
+            android:id="@+id/sleepLineChart"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_margin="@dimen/dimen_16dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvDaysAvg"
+            app:bgBottomColor="@android:color/transparent"
+            app:bgColor="@android:color/transparent"
+            app:bgLeftColor="@android:color/transparent"
+            app:bgRightColor="@android:color/transparent"
+            app:bgTopColor="@android:color/transparent"
+            app:bottomWith="5dp"
+            app:canScroll="false"
+            app:showExtremeLine="false"
+            app:centerLineColor="#80ffffff"
+            app:centerLineWidth="5dp"
+            app:chartLineColor="@color/accent_color_purple"
+            app:chartLineWidth="3dp"
+            app:fillColorEnd="#00c4b0ff"
+            app:fillColorStart="#80c4b0ff"
+            app:gridColor="#80FFFFFF"
+            app:hCount="6"
+            app:innerCircleColor="#ffffff"
+            app:innerCircleRadius="0dp"
+            app:leftWith="0dp"
+            app:rightWith="10dp"
+            app:scaleColor="#ff000000"
+            app:scaleLenth="4dp"
+            app:scaleNodeColor="#FFFFFF"
+            app:scaleNodeRadius="6dp"
+            app:showGrid="true"
+            app:showSelectedIndicator="false"
+            app:startFromRight="true"
+            app:showXAxis="false"
+            app:topWith="0dp"
+            app:vCount="2"
+            app:xLineColor="#80FFFFFF"
+            app:xMax="100"
+            app:xMin="0"
+            app:xTextColor="#FFFFFF"
+            app:xTextSize="16sp" />
+
+
+        <include
+            android:id="@+id/sleepLine"
+            layout="@layout/layout_line_separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:visibility="visible"
+            android:layout_marginTop="@dimen/dimen_12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sleepLineChart" />
+
+        <ImageView
+            android:id="@+id/sleepTrendImv"
+            android:layout_width="@dimen/dimen_16dp"
+            android:layout_height="@dimen/dimen_16dp"
+            android:layout_marginStart="@dimen/dimen_16dp"
+            android:layout_marginTop="@dimen/dimen_12dp"
+            android:layout_marginBottom="@dimen/dimen_16dp"
+            android:src="@drawable/ic_trend_up"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sleepLine" />
+
+        <TextView
+            android:id="@+id/sleepTrendValue"
+            style="@style/Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_4dp"
+            android:visibility="gone"
+            android:textColor="@color/steps_arc"
+            app:layout_constraintBottom_toBottomOf="@+id/sleepTrendImv"
+            app:layout_constraintStart_toEndOf="@+id/sleepTrendImv"
+            app:layout_constraintTop_toTopOf="@+id/sleepTrendImv" />
+
+        <TextView
+            android:id="@+id/tvSleepFromLast"
+            style="@style/Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_4dp"
+            android:text="@string/text_from_last_week"
+            android:visibility="gone"
+            android:textColor="@color/white_48"
+            app:layout_constraintBottom_toBottomOf="@+id/sleepTrendImv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/sleepTrendValue"
+            app:layout_constraintTop_toTopOf="@+id/sleepTrendImv" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        style="@style/ModalStyleReadiness"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dimen_8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/constraintLayout2"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView1"
+            style="@style/H5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_16dp"
+            android:layout_marginTop="@dimen/dimen_16dp"
+            android:singleLine="true"
+            android:text="@string/text_activity_score"
+            app:layout_constraintEnd_toStartOf="@+id/imageView15"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView15"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="@dimen/dimen_16dp"
+            android:adjustViewBounds="true"
+            android:alpha="0.5"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_arrow_right_duotone"
+            app:layout_constraintBottom_toBottomOf="@+id/textView1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView1" />
+
+
+        <TextView
+            android:id="@+id/tvActivityScore"
+            style="@style/H2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_18dp"
+
+            app:layout_constraintStart_toStartOf="@+id/textView1"
+            app:layout_constraintTop_toBottomOf="@+id/textView1" />
+
+        <TextView
+            android:id="@+id/tvActAvgThisWeek"
+            style="@style/Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_4dp"
+            android:layout_marginBottom="@dimen/dimen_16dp"
+            android:text="@string/text_avg_this_week"
+            android:textColor="@color/white_50"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tvActivityScore"
+            app:layout_constraintTop_toBottomOf="@+id/tvActivityScore" />
+
+        <TextView
+            android:id="@+id/tvDaysAvg1"
+            style="@style/Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_4dp"
+            android:text="7 day avg"
+            android:visibility="gone"
+            android:textColor="@color/white_64"
+            app:layout_constraintStart_toStartOf="@+id/tvActivityScore"
+            app:layout_constraintTop_toBottomOf="@+id/tvActivityScore" />
+
+        <com.oreo.ui.custom.LineChart
+            android:id="@+id/activityLineChart"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_margin="@dimen/dimen_16dp"
+            app:showExtremeLine="false"
+            app:hCount="7"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvDaysAvg1"
+            app:bgBottomColor="@android:color/transparent"
+            app:bgColor="@android:color/transparent"
+            app:bgLeftColor="@android:color/transparent"
+            android:visibility="gone"
+            app:bgRightColor="@android:color/transparent"
+            app:bgTopColor="@android:color/transparent"
+            app:bottomWith="5dp"
+            app:canScroll="false"
+            app:centerLineColor="#80ffffff"
+            app:centerLineWidth="5dp"
+            app:chartLineColor="#ffd230"
+            app:chartLineWidth="3dp"
+            app:fillColorEnd="#00ffd230"
+            app:fillColorStart="#80ffd230"
+            app:gridColor="#80FFFFFF"
+            app:rightWith="10dp"
+            app:innerCircleColor="#ffffff"
+            app:innerCircleRadius="0dp"
+            app:leftWith="0dp"
+
+            app:scaleColor="#ff000000"
+            app:scaleLenth="4dp"
+            app:scaleNodeColor="#FFFFFF"
+            app:scaleNodeRadius="6dp"
+            app:showGrid="true"
+            app:showSelectedIndicator="false"
+            app:showXAxis="false"
+            app:topWith="0dp"
+            app:vCount="2"
+            app:startFromRight="true"
+            app:xLineColor="#80FFFFFF"
+            app:xMax="100"
+            app:xMin="0"
+            app:xTextColor="#FFFFFF"
+            app:xTextSize="16sp" />
+
+        <include
+            android:id="@+id/activityLine"
+            android:visibility="gone"
+            layout="@layout/layout_line_separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/dimen_12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/activityLineChart" />
+
+        <ImageView
+            android:id="@+id/activityTrendImv"
+            android:layout_width="@dimen/dimen_16dp"
+            android:layout_height="@dimen/dimen_16dp"
+            android:layout_marginStart="@dimen/dimen_16dp"
+            android:layout_marginTop="@dimen/dimen_12dp"
+            android:visibility="gone"
+            android:layout_marginBottom="@dimen/dimen_16dp"
+            android:src="@drawable/ic_trend_up"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/activityLine" />
+
+        <TextView
+            android:id="@+id/activityTrendValue"
+            style="@style/Small"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_4dp"
+            android:text="5%"
+            android:textColor="@color/steps_arc"
+            app:layout_constraintBottom_toBottomOf="@+id/activityTrendImv"
+            app:layout_constraintStart_toEndOf="@+id/activityTrendImv"
+            app:layout_constraintTop_toTopOf="@+id/activityTrendImv" />
+
+        <TextView
+            android:id="@+id/tvActivityFrom"
+            style="@style/Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_4dp"
+            android:visibility="gone"
+            android:text="@string/text_from_last_week"
+            android:textColor="@color/white_48"
+            app:layout_constraintBottom_toBottomOf="@+id/activityTrendImv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/activityTrendValue"
+            app:layout_constraintTop_toTopOf="@+id/activityTrendImv" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,127 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/ModalStyleReadiness"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            style="@style/H6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:textColor="@color/white_80"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@string/text_daily_average_comparison" />
+
+        <TextView
+            android:id="@+id/tvMsg"
+            style="@style/H6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:textColor="@color/white_48"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            tools:text="@string/text_comparison_msg" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageView1"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="6dp"
+            android:src="@drawable/circle"
+            android:tint="@color/today_goal_progress_color"
+            app:layout_constraintEnd_toStartOf="@id/tvToday"
+            app:layout_constraintTop_toBottomOf="@id/tvMsg"
+            app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+
+        <TextView
+            android:id="@+id/tvToday"
+            style="@style/H6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:textColor="@color/lightest_gray"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/imageView1"
+            app:layout_constraintEnd_toStartOf="@+id/tvAverage"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/imageView1"
+            android:text="@string/text_today" />
+
+        <include
+            android:id="@+id/lytToday"
+            layout="@layout/layout_oscd_view_with_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvToday" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageView2"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="6dp"
+            android:src="@drawable/circle"
+            android:tint="@color/average_goal_progress_color"
+            app:layout_constraintEnd_toStartOf="@id/tvAverage"
+            app:layout_constraintTop_toBottomOf="@id/tvMsg"
+            app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+
+        <TextView
+            android:id="@+id/tvAverage"
+            style="@style/H6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:textColor="@color/lightest_gray"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/imageView2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tvToday"
+            app:layout_constraintTop_toTopOf="@id/imageView2"
+            android:text="@string/text_average" />
+
+        <include
+            android:id="@+id/lytAverage"
+            layout="@layout/layout_oscd_view_with_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="@id/imageView2"
+            app:layout_constraintTop_toBottomOf="@+id/tvToday" />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/scoreChart"
+            android:layout_width="match_parent"
+            android:layout_height="181dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:layout_marginBottom="@dimen/side_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lytToday" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

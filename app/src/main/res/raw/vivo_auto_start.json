@@ -1,0 +1,36 @@
+{
+  "title": "In order to receive notifications on your smartwatch from the app.",
+  "data": [
+    {
+      "type": "text",
+      "text": "Settings > Apps & notifications  > Special app access > Autostart > Choose NoiseFit app and turn it on.",
+      "image": null,
+      "bold": true
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/VIVOAutoStart/image4.JPEG"
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/VIVOAutoStart/image5.JPEG"
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/VIVOAutoStart/image3.JPEG"
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/VIVOAutoStart/image2.JPEG"
+    },
+    {
+      "type": "image",
+      "text": null,
+      "image": "https://images.gonoise.com/user-manual-guide/production/App+Update+SS/VIVOAutoStart/image1.JPEG"
+    }
+  ]
+}

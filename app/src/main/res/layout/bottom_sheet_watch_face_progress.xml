@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/list"
+            style="@style/ModalStyleDialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_12dp"
+            android:layout_marginTop="@dimen/dimen_12dp"
+            android:layout_marginEnd="@dimen/dimen_12dp"
+            android:layout_marginBottom="@dimen/dimen_12dp"
+            tools:listitem="@layout/fragment_privacy_bottom_dialog_list_dialog_item">
+
+            <View
+                android:layout_width="80dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="4dp"
+                android:alpha="0.5"
+                android:background="@drawable/back_bottom_sheet_drag"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvTitle"
+                style="@style/H4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/side_margin"
+                android:gravity="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Updating your watch" />
+
+
+            <TextView
+                android:id="@+id/tvMessage"
+                style="@style/H6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/side_margin"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:lineSpacingExtra="6sp"
+                app:layout_constraintEnd_toEndOf="@+id/tvTitle"
+                app:layout_constraintStart_toStartOf="@+id/tvTitle"
+                app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+                tools:text="Please wait while we are updating your watch version." />
+
+            <ImageView
+                android:id="@+id/ivWatchFace"
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                android:layout_marginTop="32dp"
+                android:adjustViewBounds="true"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvMessage"
+                tools:visibility="visible" />
+
+
+            <TextView
+                android:id="@+id/tvWatchFaceName"
+                style="@style/Small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="@dimen/side_margin"
+                android:gravity="center_horizontal"
+                android:lineSpacingExtra="258sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivWatchFace"
+                tools:text="More of White" />
+
+            <TextView
+                android:id="@+id/tvTypeText"
+                style="@style/Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:textColor="@color/very_light_pink"
+                app:layout_constraintBottom_toTopOf="@+id/pbUpdateProgress"
+                app:layout_constraintStart_toStartOf="@+id/pbUpdateProgress"
+                tools:text="@string/text_updating" />
+
+            <TextView
+                android:id="@+id/tvProgress"
+                style="@style/Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:textColor="@color/very_light_pink"
+                app:layout_constraintBottom_toTopOf="@+id/pbUpdateProgress"
+                app:layout_constraintEnd_toEndOf="@+id/pbUpdateProgress"
+                tools:text="25%" />
+
+            <com.noise.customprogress.StrippedProgressBar
+                android:id="@+id/pbUpdateProgress"
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginTop="54dp"
+                android:layout_marginEnd="@dimen/side_margin"
+                android:layout_marginBottom="54dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvWatchFaceName"
+                app:pBrand="info"
+                app:pLineSpacing="15dp"
+                app:pMaxProgress="100"
+                app:pProgress="0"
+                app:pProgressBgColor="@color/stripped_window_gray_light"
+                app:pRoundedCorners="true"
+                app:pShowPercentage="false"
+                app:pStriped="true"
+                app:trackColor="@color/modal_color"
+                app:trackCornerRadius="12dp"
+                app:trackThickness="24dp"
+                tools:progress="30" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+</layout>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvTabTitle"
+            style="@style/H5"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:gravity="center"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Buddies" />
+
+
+        <View
+            android:id="@+id/vBottom"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/accent_color_purple"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tvTabTitle"
+            app:layout_constraintStart_toStartOf="@+id/tvTabTitle"
+            app:layout_constraintTop_toBottomOf="@+id/tvTabTitle" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

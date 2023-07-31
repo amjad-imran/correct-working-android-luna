@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rowMain"
+    style="@style/SettingsRow"
+    android:layout_width="match_parent"
+    android:layout_height="72dp">
+
+    <include
+        android:id="@+id/topLine"
+        layout="@layout/layout_divider_modal_color"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ivBackGround"
+        android:background="@drawable/back_modal_new_round"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="16dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topLine"
+        app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+
+    <ImageView
+        android:id="@+id/ivSettingsImage"
+        android:layout_width="@dimen/dimen_20dp"
+        android:layout_height="@dimen/dimen_20dp"
+        android:adjustViewBounds="true"
+        app:layout_constraintBottom_toBottomOf="@+id/ivBackGround"
+        app:layout_constraintEnd_toEndOf="@+id/ivBackGround"
+        app:layout_constraintStart_toStartOf="@+id/ivBackGround"
+        app:layout_constraintTop_toTopOf="@+id/ivBackGround"
+       />
+
+    <TextView
+        android:id="@+id/tvSettingsTitle"
+        style="@style/H5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/side_margin"
+        android:layout_marginEnd="@dimen/dimen_8dp"
+        android:gravity="center_vertical"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivBackGround"
+        app:layout_constraintEnd_toStartOf="@+id/tvStatus"
+        app:layout_constraintStart_toEndOf="@+id/ivBackGround"
+        app:layout_constraintTop_toTopOf="@+id/ivBackGround"
+        tools:text="Settings" />
+
+    <TextView
+        android:id="@+id/tvStatus"
+        style="@style/H6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/side_margin"
+        app:layout_constraintBottom_toBottomOf="@+id/ivSettingsArrow"
+        app:layout_constraintEnd_toStartOf="@+id/ivSettingsArrow"
+        app:layout_constraintTop_toTopOf="@+id/ivSettingsArrow" />
+
+    <ImageView
+        android:id="@+id/ivSettingsArrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dimen_16dp"
+        android:padding="8dp"
+        android:src="@drawable/ic_arrow_right_duotone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tvSmartNotificationLabel"
+        style="@style/H4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/side_margin"
+        android:layout_marginTop="16dp"
+
+        android:maxLines="2"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toStartOf="@+id/switchSmartNotification"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switchSmartNotification"
+        style="@style/CustomSwitch"
+        android:layout_marginEnd="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/tvSmartNotificationLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvSmartNotificationLabel" />
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvSmartNotificationText"
+        style="@style/Small"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/switchSmartNotification"
+        app:layout_constraintStart_toStartOf="@+id/tvSmartNotificationLabel"
+        app:layout_constraintTop_toBottomOf="@id/tvSmartNotificationLabel"
+        tools:text="some text here" />
+
+    <include
+        android:id="@+id/topLine"
+        layout="@layout/layout_divider_modal_color"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSmartNotificationText" />
+</androidx.constraintlayout.widget.ConstraintLayout>

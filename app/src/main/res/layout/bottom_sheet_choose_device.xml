@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            style="@style/ModalStyleDialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_12dp"
+            android:layout_marginTop="@dimen/dimen_12dp"
+            android:layout_marginEnd="@dimen/dimen_12dp"
+            android:layout_marginBottom="@dimen/dimen_12dp"
+            android:paddingBottom="@dimen/dimen_24dp">
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="@dimen/dimen_80dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="@dimen/dimen_4dp"
+                android:background="#29000000"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/vDevice1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="@+id/ivDevice1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/ivDevice1" />
+
+            <ImageView
+                android:id="@+id/ivDevice1"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:adjustViewBounds="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+            <TextView
+                android:id="@+id/tvDevice1Name"
+                style="@style/H5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/tvDevice1Mac"
+                app:layout_constraintStart_toEndOf="@+id/ivDevice1"
+                app:layout_constraintTop_toTopOf="@+id/ivDevice1"
+                tools:text="Oreo" />
+
+            <TextView
+                android:id="@+id/tvDevice1Detail"
+                style="@style/H5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:textColor="@color/white_64"
+                app:layout_constraintBottom_toBottomOf="@+id/tvDevice1Name"
+                app:layout_constraintStart_toEndOf="@+id/tvDevice1Name"
+                app:layout_constraintTop_toTopOf="@+id/tvDevice1Name"
+                tools:text="(Colour and size)" />
+
+
+            <TextView
+                android:id="@+id/tvDevice1Mac"
+                style="@style/Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white_64"
+                app:layout_constraintBottom_toBottomOf="@+id/ivDevice1"
+                app:layout_constraintStart_toStartOf="@+id/tvDevice1Name"
+                app:layout_constraintTop_toBottomOf="@+id/tvDevice1Name"
+                tools:text="MAC D6:A3:D4:83:30:ED" />
+
+            <include
+                android:id="@+id/include3"
+                layout="@layout/layout_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivDevice1" />
+
+            <ImageView
+                android:id="@+id/ivDevice2"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:adjustViewBounds="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/include3" />
+
+            <View
+                android:id="@+id/vDevice2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="@+id/ivDevice2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/ivDevice2" />
+
+            <TextView
+                android:id="@+id/tvDevice2Name"
+                style="@style/H5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/tvDevice2Mac"
+                app:layout_constraintStart_toEndOf="@+id/ivDevice2"
+                app:layout_constraintTop_toTopOf="@+id/ivDevice2"
+                tools:text="ColorFit Pro" />
+
+            <TextView
+                android:id="@+id/tvDevice2Detail"
+                style="@style/H5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:textColor="@color/white_64"
+                app:layout_constraintBottom_toBottomOf="@+id/tvDevice2Name"
+                app:layout_constraintStart_toEndOf="@+id/tvDevice2Name"
+                app:layout_constraintTop_toTopOf="@+id/tvDevice2Name"
+                tools:text="(Colour and size)" />
+
+            <TextView
+                android:id="@+id/tvDevice2Mac"
+                style="@style/Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white_64"
+                app:layout_constraintBottom_toBottomOf="@+id/ivDevice2"
+                app:layout_constraintStart_toStartOf="@+id/tvDevice2Name"
+                app:layout_constraintTop_toBottomOf="@+id/tvDevice2Name"
+                tools:text="MAC D6:A3:D4:83:30:ED" />
+
+
+            <TextView
+                android:id="@+id/tvAddDevice"
+                style="@style/H5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:drawablePadding="8dp"
+                android:gravity="center_vertical"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:text="@string/text_add_a_device"
+                android:textColor="#ca99ff"
+                app:drawableStartCompat="@drawable/ic_add_device"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivDevice2" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/groupDevice2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="ivDevice2,tvDevice2Name,tvDevice2Detail,tvDevice2Mac" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/groupDevice1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="ivDevice1,tvDevice1Name,tvDevice1Detail,tvDevice1Mac,include3" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+</layout>

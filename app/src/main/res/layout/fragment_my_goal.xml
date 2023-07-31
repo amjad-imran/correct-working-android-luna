@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="features"
+            type="com.noisefit_commans.data.model.DeviceFeatures" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".ui.dashboard.feature.stock.StocksFragment">
+
+        <Button
+            android:id="@+id/tvEdit"
+            style="@style/TextButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:gravity="center"
+            android:textColor="@color/edit_profile_text_color"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/text_edit"
+            app:layout_constraintBottom_toBottomOf="@+id/lytToolbarWithDetails"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/lytToolbarWithDetails"
+            tools:visibility="visible" />
+
+        <include
+            android:id="@+id/lytToolbarWithDetails"
+            layout="@layout/layout_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            style="@style/ModalStyleNew"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:paddingBottom="@dimen/side_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lytToolbarWithDetails">
+
+            <com.noisefit_commans.ui.custom.GoalSettingsRow
+                android:id="@+id/llCaloriesGoal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="@dimen/side_margin"
+                android:visibility="visible"
+                app:hideTopLine="false"
+                app:image="@drawable/ic_calories"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:setFeatureVisibility="@{features.stepsData}"
+                app:showArrow="false"
+                app:text="@string/text_calories" />
+            <include
+                android:id="@+id/include1"
+                layout="@layout/layout_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginTop="13dp"
+                android:layout_marginEnd="@dimen/side_margin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/llCaloriesGoal" />
+
+
+            <com.noisefit_commans.ui.custom.GoalSettingsRow
+                android:id="@+id/llDistanceGoal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:hideTopLine="false"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginEnd="@dimen/side_margin"
+                app:image="@drawable/ic_distance"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/include1"
+                app:setFeatureVisibility="@{features.stepsData}"
+                app:showArrow="false"
+                app:text="@string/text_distance" />
+            <include
+                android:id="@+id/include2"
+                layout="@layout/layout_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginTop="13dp"
+                android:layout_marginEnd="@dimen/side_margin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/llDistanceGoal" />
+
+
+            <com.noisefit_commans.ui.custom.GoalSettingsRow
+                android:id="@+id/llStepsGoal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:layout_marginEnd="@dimen/side_margin"
+                android:layout_marginStart="@dimen/side_margin"
+                app:hideTopLine="false"
+                android:layout_marginTop="16dp"
+                app:image="@drawable/ic_steps"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/include2"
+                app:setFeatureVisibility="@{features.stepsData}"
+                app:showArrow="false"
+                app:text="Steps" />
+            <include
+                android:id="@+id/include3"
+                layout="@layout/layout_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginTop="13dp"
+                android:layout_marginEnd="@dimen/side_margin"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/llStepsGoal" />
+
+
+            <com.noisefit_commans.ui.custom.GoalSettingsRow
+                android:id="@+id/llDurationGoal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:hideTopLine="false"
+                android:layout_marginTop="16dp"
+                app:image="@drawable/ic_duration"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/include3"
+                app:setFeatureVisibility="@{features.stepsData}"
+                app:showArrow="false"
+                app:text="@string/text_duration" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bContinue"
+            style="@style/PrimaryButtonStyle"
+            android:layout_width="0dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:layout_marginBottom="32dp"
+            android:text="@string/text_save_changes"
+            android:visibility="gone"
+            app:backgroundTint="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <include
+            android:id="@+id/progressBar"
+            layout="@layout/default_loader"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
