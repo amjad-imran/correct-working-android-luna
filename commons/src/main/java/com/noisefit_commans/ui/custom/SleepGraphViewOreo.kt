@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import com.noisefit_commans.R
 import com.noisefit_commans.data.model.CountCardData
 import com.noisefit_commans.models.SleepData
+import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import java.util.Calendar
@@ -107,7 +108,6 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                     mTextPaintEdge
                 )
             }
-
 
 
             var totalDuration = 0
@@ -432,56 +432,57 @@ class SleepGraphViewOreo(var mContext: Context) : View(
     ) {
         if (startTimeStr == null || endTimeStr == null) return
 
-
-        val startTime = DateFormats.dateTimeFormat5.parse(startTimeStr)
-        val endTime = DateFormats.dateTimeFormat5.parse(endTimeStr)
-
-
-        val duration = (endTime.time - startTime.time) / 1000
-        LOGS.d("SLEEP_TIME $duration")
-
-        if (duration > 18000) {//5 hour
+        tryCatch {
+            val startTime = DateFormats.dateTimeFormat5.parse(startTimeStr)
+            val endTime = DateFormats.dateTimeFormat5.parse(endTimeStr)
 
 
-            val midTime = getCenterTime(startTime, endTime)
-            val midLeftTIme = getCenterTime(startTime, midTime.first)
-            val midRightTIme = getCenterTime(midTime.first, endTime)
+            val duration = (endTime.time - startTime.time) / 1000
+            LOGS.d("SLEEP_TIME $duration")
 
-            val center = (width - endPadding) / 2
+            if (duration > 18000) {//5 hour
 
-           /* canvas.drawText(
-                DateFormats.timeFormat2.format(midLeftTIme.first),
-                center / 2,
-                sectionHeight * 5,
-                mTextPaint
-            )*/
 
-            val offset = eachSecondsWidth * midTime.second
-            LOGS.d("OFFSET $offset")
+                val midTime = getCenterTime(startTime, endTime)
+                val midLeftTIme = getCenterTime(startTime, midTime.first)
+                val midRightTIme = getCenterTime(midTime.first, endTime)
 
-            canvas.drawText(
-                DateFormats.timeFormat2.format(midTime.first),
-                center-offset,
-                sectionHeight * 5,
-                mTextPaint
-            )
-            /*canvas.drawText(
-                DateFormats.timeFormat2.format(midRightTIme.first),
-                center + (center / 2),
-                sectionHeight * 5,
-                mTextPaint
-            )*/
+                val center = (width - endPadding) / 2
 
-        } else {
-            val midTime = getCenterTime(startTime, endTime)
-            val center = (width - pxFromDp(mContext, 45f) - endPadding) / 2
+                /* canvas.drawText(
+                        DateFormats.timeFormat2.format(midLeftTIme.first),
+                        center / 2,
+                        sectionHeight * 5,
+                        mTextPaint
+                    )*/
 
-            canvas.drawText(
-                DateFormats.timeFormat2.format(midTime.first),
-                center,
-                sectionHeight * 5,
-                mTextPaint
-            )
+                val offset = eachSecondsWidth * midTime.second
+                LOGS.d("OFFSET $offset")
+
+                canvas.drawText(
+                    DateFormats.timeFormat2.format(midTime.first),
+                    center - offset,
+                    sectionHeight * 5,
+                    mTextPaint
+                )
+                /*canvas.drawText(
+                        DateFormats.timeFormat2.format(midRightTIme.first),
+                        center + (center / 2),
+                        sectionHeight * 5,
+                        mTextPaint
+                    )*/
+
+            } else {
+                val midTime = getCenterTime(startTime, endTime)
+                val center = (width - pxFromDp(mContext, 45f) - endPadding) / 2
+
+                canvas.drawText(
+                    DateFormats.timeFormat2.format(midTime.first),
+                    center,
+                    sectionHeight * 5,
+                    mTextPaint
+                )
+            }
         }
     }
 
