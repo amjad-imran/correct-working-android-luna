@@ -26,14 +26,14 @@ class WelcomeFragment : BaseFragment<FragmentWelcomeBinding>(FragmentWelcomeBind
 
     private fun setOnBoardVideo() {
         binding.videoOnboard.apply {
-            setVideoURI(
-                Uri.parse(
-                    "android.resource://" + requireContext().packageName + "/" +
-                            R.raw.video_onboard
-                )
-            )
-            setOnPreparedListener { mp -> mp.isLooping = true }
-            start()
+//            setVideoURI(
+//                Uri.parse(
+//                    "android.resource://" + requireContext().packageName + "/" +
+//                            R.raw.video_onboard
+//                )
+//            )
+//            setOnPreparedListener { mp -> mp.isLooping = true }
+//            start()
         }
     }
 

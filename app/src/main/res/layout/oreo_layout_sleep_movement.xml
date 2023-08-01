@@ -96,7 +96,7 @@
         <com.oreo.ui.custom.SleepLineChart
             android:id="@+id/lineChart"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_200dp"
+            android:layout_height="120dp"
             android:visibility="gone"
             app:bgBottomColor="@android:color/transparent"
             app:bgColor="@android:color/transparent"

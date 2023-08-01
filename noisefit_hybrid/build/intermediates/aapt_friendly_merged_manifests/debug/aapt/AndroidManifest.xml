@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.noisefit_hybrid" >
+
+    <uses-sdk android:minSdkVersion="23" />
+
+    <application>
+        <service android:name="cn.appscomm.bluetooth.BluetoothLeService" />
+        <service android:name="cn.appscomm.ota.OtaService" />
+    </application>
+
+</manifest>

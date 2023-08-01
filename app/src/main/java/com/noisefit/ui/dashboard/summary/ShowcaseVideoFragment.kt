@@ -50,16 +50,16 @@ class ShowcaseVideoFragment :
 
     private fun setOnBoardVideo() {
         binding.videoOnboard.apply {
-            setVideoURI(
-                Uri.parse(
-                    "android.resource://" + requireContext().packageName + "/" +
-                            R.raw.video_round_up
-                )
-            )
-            setOnCompletionListener {
-                it.seekTo(8000)
-                it.start()
-            }
+//            setVideoURI(
+//                Uri.parse(
+//                    "android.resource://" + requireContext().packageName + "/" +
+//                            R.raw.video_round_up
+//                )
+//            )
+//            setOnCompletionListener {
+//                it.seekTo(8000)
+//                it.start()
+//            }
             start()
         }
     }

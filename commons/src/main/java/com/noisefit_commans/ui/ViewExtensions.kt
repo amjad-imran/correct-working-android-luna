@@ -77,6 +77,10 @@ fun Int.getColor(): Int {
     )
 }
 
+fun String?.clearAmPm(): String? {
+    return this?.lowercase()?.replace("pm","")?.replace("am","")?.trim()
+}
+
 fun String.isValidUrl(): Boolean = Patterns.WEB_URL.matcher(this).matches()
 
  fun CollapsingToolbarLayout.setScrollBehavior(enabled: Boolean) {

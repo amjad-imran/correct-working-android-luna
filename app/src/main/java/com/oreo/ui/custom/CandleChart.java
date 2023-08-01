@@ -204,6 +204,7 @@ public class CandleChart extends View {
             model = list.get(i);
             if (model.getType() != CandleChartModel.Type.INACTIVE) {
                 offSet = (list.size() - 1 - i) * 3 * chartLineWidth;
+                LOGS.INSTANCE.d("DSAdsasdadasdas::12:::activity  " + offSet);
                 hasActivity = true;
                 break;
             }
@@ -277,7 +278,7 @@ public class CandleChart extends View {
             float y = (mHeight - bottomWith) * 2 / 3f - (model.getLength() * (mHeight - topWith - bottomWith) / (xMax - xMin)) / 2f;
 
 
-            if (!model.getBottomLineText().isEmpty()) {
+            if (model.getBottomLineText() != null && !model.getBottomLineText().isEmpty()) {
 
                 String xText = model.getBottomLineText();
                 xTextPaint.getTextBounds(xText, 0, xText.length(), xTextBounds);
@@ -285,7 +286,7 @@ public class CandleChart extends View {
                 if (i == 0) {
 
                     canvas.drawText(xText, x + dip2px(5), mHeight - bottomWith / 4, xTextPaint);
-                }else if (i == list.size() - 1) {
+                } else if (i == list.size() - 1) {
 
                     canvas.drawText(xText, x - xTextBounds.width() - dip2px(5), mHeight - bottomWith / 4, xTextPaint);
                 } else {

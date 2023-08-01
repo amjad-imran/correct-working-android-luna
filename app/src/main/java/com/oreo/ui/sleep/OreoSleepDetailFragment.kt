@@ -13,11 +13,13 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoSleepDetailBinding
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.clearAmPm
 import com.noisefit_commans.ui.custom.NightTimeGraphViewOreo
 import com.noisefit_commans.ui.custom.SleepGraphViewOreo
 import com.noisefit_commans.ui.gone
@@ -40,6 +42,7 @@ import com.oreo.ui.sleep.banner.OreoSleepBannerFragment
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
+import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -93,11 +96,13 @@ class OreoSleepDetailFragment :
         sleepStartTime: String?,
         sleepEndTime: String?
     ) {
-        LOGS.d("dfadsfdsfdsfsdf ${hrv?.value?.size}")
+
         if (hrv?.value.isNullOrEmpty()) {
             binding.lytHRVariability.lineChart.gone()
             return
         }
+
+        val baseHrList = UtilClass.graphTwoHourBaseInterval(sleepStartTime.clearAmPm(), sleepEndTime.clearAmPm(),hrv?.value?.size?: 288)
 
         binding.lytHRVariability.lineChart.visible()
         val sleepChart = SleepChartModel()
@@ -112,7 +117,7 @@ class OreoSleepDetailFragment :
             }
 
             chartModel.value = value
-            chartModel.index = index.toString()
+            chartModel.index = baseHrList[index]
             chartModel.date = ""
             chartList.add(chartModel)
         }
@@ -138,19 +143,23 @@ class OreoSleepDetailFragment :
             return
         }
 
+
+        val baseHrList = UtilClass.graphTwoHourBaseInterval(sleepStartTime.clearAmPm(), sleepEndTime.clearAmPm(),heartRateList?.value?.size?: 288)
+
+
         binding.lytHeartRate.lineChart.visible()
         val sleepChart = SleepChartModel()
         val chartList = ArrayList<ChartModel>()
-        heartRateList?.value?.forEach {
+        heartRateList?.value?.forEachIndexed { index, data ->
             val chartModel = ChartModel()
 
-            var value = it
+            var value = data
             if (value == 255) {
                 value = 0
             }
 
             chartModel.value = value
-            chartModel.index = ""
+            chartModel.index = baseHrList[index]
             chartList.add(chartModel)
         }
         sleepChart.startTime = sleepStartTime ?: ""
