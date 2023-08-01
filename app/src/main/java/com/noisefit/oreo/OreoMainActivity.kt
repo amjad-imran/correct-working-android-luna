@@ -1,9 +1,16 @@
 package com.noisefit.oreo
 
+import android.Manifest
+import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.noisefit.BottomNavOption
@@ -16,11 +23,15 @@ import com.noisefit.ui.APP_UPDATE
 import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit.ui.common.BaseActivity
 import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.data.BinaryActionCallback
+import com.noisefit_commans.data.ErrorResponse
+import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.response.VersionCheckResponse
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.models.ColorFitDevice
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,6 +41,11 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     private val viewModel: OreoMainViewModel by viewModels()
     private var navController: NavController? = null
+
+    private val btAdapter by lazy {
+        BluetoothAdapter.getDefaultAdapter()
+    }
+    private val REQUEST_ENABLE_BT = 133
 
     companion object {
         fun getStartIntent(
@@ -95,6 +111,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         }
 
         viewModel.sessionManager.getPairedState()
+        checkBluetooth()
 
     }
 
@@ -112,6 +129,84 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     override fun initListener() {
 
+    }
+
+    fun checkBluetooth() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            checkBluetoothPermission(permissionGranted = {
+                if (btAdapter != null && !btAdapter.isEnabled) {
+                    enableBluetooth()
+                }
+            })
+        } else {
+            if (btAdapter == null) {
+                return
+            }
+            if (!btAdapter.isEnabled) {
+                enableBluetooth()
+                return
+            }
+        }
+    }
+    /**
+     * Should be called after all
+     * required bluetooth permissions are granted
+     */
+    fun enableBluetooth() {
+        try {
+            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
+        } catch (exp: Exception) {
+            showShortToast(getString(R.string.bluetooth_turn_on_request))
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun checkBluetoothPermission(
+        permissionGranted: () -> Unit
+    ) {
+        if (ContextCompat.checkSelfPermission(
+                this, Manifest.permission.BLUETOOTH_SCAN
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                this, Manifest.permission.BLUETOOTH_CONNECT
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            permissionGranted.invoke()
+        } else {
+            bluetoothPermissionResultListener.launch(
+                arrayOf(
+                    Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT
+                )
+            )
+        }
+    }
+
+    private val bluetoothPermissionResultListener = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) {
+        if (it[Manifest.permission.BLUETOOTH_SCAN] == true && it[Manifest.permission.BLUETOOTH_CONNECT] == true) {
+            if (btAdapter != null && !btAdapter.isEnabled) {
+                enableBluetooth()
+            }
+        } else {
+            onApiErrorReceived(
+                ErrorResponse(
+                    UIComponentType.AreYouSureDialog(getString(R.string.text_permission_required),
+                        getString(R.string.text_permission_denial_bluetooth),
+                        false,
+                        getString(R.string.text_allow),
+                        object : BinaryActionCallback {
+                            override fun yes() {
+                                ApplicationUtils.openAppSettings(this@OreoMainActivity)
+                            }
+
+                            override fun no() {}
+
+                        })
+                )
+            )
+
+        }
     }
 
     private fun checkIfShowUpdateDialog(versionCheckResponse: VersionCheckResponse): Boolean {
@@ -158,6 +253,15 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
     override fun observeSubscriber() {
+
+        viewModel.sessionManager.bluetoothState.observe(this) {
+            if (it) {
+                //uiController.onDisplayError("Bluetooth connected")
+            } else {
+                checkBluetooth()
+                //uiController.onDisplayError("Bluetooth disconnected")
+            }
+        }
 
 
         viewModel.sessionManager.versionCheckData.observe(this) {
