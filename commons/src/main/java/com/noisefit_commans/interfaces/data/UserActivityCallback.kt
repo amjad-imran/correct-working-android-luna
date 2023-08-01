@@ -1,6 +1,7 @@
 package com.noisefit_commans.interfaces.data
 
 import com.noisefit_commans.data.model.DayTimeMovementBreakup
+import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.data.model.OreoBloodOxygenBreakup
 import com.noisefit_commans.data.model.OreoBodyTemperatureBreakup
 import com.noisefit_commans.data.model.OreoHeartRate
@@ -8,7 +9,16 @@ import com.noisefit_commans.data.model.OreoRespiratoryData
 import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.data.model.OreoStepsData
 import com.noisefit_commans.data.model.OreoStressDataBreakup
-import com.noisefit_commans.models.*
+import com.noisefit_commans.models.BloodOxygenBreakup
+import com.noisefit_commans.models.BloodPressureData
+import com.noisefit_commans.models.BodyTemperatureBreakup
+import com.noisefit_commans.models.HeartRate
+import com.noisefit_commans.models.SleepData
+import com.noisefit_commans.models.SportsModeListGPS
+import com.noisefit_commans.models.SportsModeRequestList
+import com.noisefit_commans.models.StepsData
+import com.noisefit_commans.models.StressDataBreakup
+import com.noisefit_commans.models.SyncDataStatus
 
 sealed class UserActivityCallback {
 
@@ -16,6 +26,7 @@ sealed class UserActivityCallback {
     class StepsDataObtainedOreo(val stepsData: OreoStepsData) : UserActivityCallback()
 
     class RealStepsDataObtained(val stepsData: StepsData) : UserActivityCallback()
+    class AutoSportDataObtained(val data: List<OreoAutoSportData>) : UserActivityCallback()
     class GetTempFromLatLog(val lat: Double, val log: Double) : UserActivityCallback()
     class SleepDataObtained(val sleepData: SleepData) : UserActivityCallback()
     class SleepDataObtainedOreo(val sleepData: OreoSleepData) : UserActivityCallback()

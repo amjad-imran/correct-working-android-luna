@@ -8,7 +8,7 @@ import com.noisefit_commans.common.handleHrData
 import com.noisefit_commans.constants.CommonGlobals
 import com.noisefit_commans.constants.SportActivityName
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
-import com.noisefit_commans.data.model.OreoSleepData
+import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.data.model.OreoStepsData
 import com.noisefit_commans.enums.ApplicationType
 import com.noisefit_commans.models.AlarmsList
@@ -34,6 +34,7 @@ import com.noisefit_commans.models.WorldClockList
 import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import com.zhapp.ble.bean.AutoSportDataBean
 import com.zhapp.ble.bean.ClockInfoBean
 import com.zhapp.ble.bean.ContactBean
 import com.zhapp.ble.bean.ContinuousHeartRateBean
@@ -47,8 +48,8 @@ import com.zhapp.ble.bean.OfflineBloodOxygenBean
 import com.zhapp.ble.bean.OfflinePressureDataBean
 import com.zhapp.ble.bean.OfflineTemperatureDataBean
 import com.zhapp.ble.bean.PressureModeBean
-import com.zhapp.ble.bean.SettingTimeBean
 import com.zhapp.ble.bean.RealTimeBean
+import com.zhapp.ble.bean.SettingTimeBean
 import com.zhapp.ble.bean.SleepBean
 import com.zhapp.ble.bean.WidgetBean
 import com.zhapp.ble.bean.WorldClockBean
@@ -357,6 +358,24 @@ constructor(
             sleepReminder.reminderTime.second,
             sleepReminder.reminderTime.millisecond,
         )
+    }
+
+
+    fun parseAutoSport(p0: MutableList<AutoSportDataBean>?,colorFitDevice: ColorFitDevice): List<OreoAutoSportData> {
+        val data = ArrayList<OreoAutoSportData>()
+        p0?.forEach {
+            val oreoAutoSportData = OreoAutoSportData()
+            oreoAutoSportData.steps = it.autoSportSteps
+            oreoAutoSportData.startTime = (it.autoSportStartTime * 1000).toLong()
+            oreoAutoSportData.intensity = it.autoSportIntensity
+            oreoAutoSportData.isAccepted = false
+            oreoAutoSportData.duration = it.autoSportDuration
+            oreoAutoSportData.intensity = it.autoSportIntensity
+            oreoAutoSportData.calories = it.autoSportKcal
+            oreoAutoSportData.type = getSportName(it.autoSportType,colorFitDevice)
+            oreoAutoSportData.hrData =  gson.toJson(it.hrData)
+        }
+        return data
     }
 
     fun convertStress(p0: SedentaryData): PressureModeBean {

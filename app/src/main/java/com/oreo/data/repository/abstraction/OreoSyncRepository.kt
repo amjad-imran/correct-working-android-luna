@@ -3,6 +3,7 @@ package com.oreo.data.repository.abstraction
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.model.DayTimeMovementBreakup
+import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.data.model.UserSyncRawData
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.VersionCheckResponse
@@ -28,6 +29,10 @@ import kotlinx.coroutines.flow.Flow
 interface OreoSyncRepository {
 
     suspend fun saveStepsData(data: OreoStepsData): Flow<CacheResult<OreoStepsData?>>
+
+    suspend fun saveAutoWorkoutData(data: List<OreoAutoSportData>): Flow<CacheResult<Boolean?>>
+
+    suspend fun getAutoWorkoutData(): Flow<CacheResult<List<OreoAutoSportData>?>>
 
     suspend fun saveSleepData(data: OreoSleepData): Flow<CacheResult<Boolean?>>
     suspend fun saveHealthScoreData(score: Int, date: String): Flow<CacheResult<Boolean?>>

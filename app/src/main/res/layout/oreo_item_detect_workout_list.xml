@@ -60,7 +60,7 @@
                 style="@style/Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="10:20 am"
+
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -92,7 +92,7 @@
                 android:id="@+id/img1"
                 android:layout_width="12dp"
                 android:layout_height="12dp"
-                android:src="@drawable/ic_wf_time"
+                android:src="@drawable/ic_timer_white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -103,7 +103,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dimen_4dp"
-                android:text="10:20 am"
+
                 app:layout_constraintBottom_toBottomOf="parent"
 
                 app:layout_constraintStart_toEndOf="@+id/img1"
@@ -136,7 +136,7 @@
                 android:layout_width="12dp"
                 android:layout_height="12dp"
 
-                android:src="@drawable/ic_wf_time"
+                android:src="@drawable/ic_calories_white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -147,8 +147,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dimen_4dp"
-
-                android:text="10:20 am"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/img2"
                 app:layout_constraintTop_toTopOf="parent" />

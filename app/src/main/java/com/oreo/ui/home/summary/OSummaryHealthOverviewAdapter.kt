@@ -162,7 +162,7 @@ class OSummaryHealthOverviewAdapter :
                 )
             )
 
-            R.layout.list_o_w_alert_card_item -> HomeRecyclerViewHolder.WAlertViewHolder(
+            R.layout.list_o_w_alert_card_item -> HomeRecyclerViewHolder.AutoSportViewHolder(
                 ListOWAlertCardItemBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
@@ -248,8 +248,8 @@ class OSummaryHealthOverviewAdapter :
                 position
             )
 
-            is HomeRecyclerViewHolder.WAlertViewHolder -> holder.bind(
-                items[position] as OHealthOverview.WAlert,
+            is HomeRecyclerViewHolder.AutoSportViewHolder -> holder.bind(
+                items[position] as OHealthOverview.AutoSport,
                 position,
             )
 
@@ -276,7 +276,7 @@ class OSummaryHealthOverviewAdapter :
             is OHealthOverview.TodayWorkout -> R.layout.oreo_layout_recent_activity
             is OHealthOverview.Header -> R.layout.list_o_header_card_item
             is OHealthOverview.PairDevice -> R.layout.list_o_pair_device
-            is OHealthOverview.WAlert -> R.layout.list_o_w_alert_card_item
+            is OHealthOverview.AutoSport -> R.layout.list_o_w_alert_card_item
 //            is OHealthOverview.Demo -> R.layout.list_o_w_demo_card_item
         }
     }
@@ -826,10 +826,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         }
     }
 
-    class WAlertViewHolder(private val binding: ListOWAlertCardItemBinding) :
+    class AutoSportViewHolder(private val binding: ListOWAlertCardItemBinding) :
         HomeRecyclerViewHolder(binding) {
         fun bind(
-            data: OHealthOverview.WAlert,
+            data: OHealthOverview.AutoSport,
             position: Int,
         ) {
             var title = "${data.count} workouts detected"

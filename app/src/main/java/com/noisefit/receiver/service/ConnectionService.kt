@@ -22,7 +22,6 @@ import android.os.Message
 import android.os.SystemClock
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleService
-import com.noisefit.luna.R
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.local.db.DataBase
@@ -31,10 +30,10 @@ import com.noisefit.data.repository.LastSyncProvider
 import com.noisefit.data.repository.abstraction.SportEventRepository
 import com.noisefit.data.repository.abstraction.SyncRepository
 import com.noisefit.data.repository.abstraction.UserRepository
+import com.noisefit.luna.R
 import com.noisefit.receiver.broadcastReceiver.AudioSettingReceiver
 import com.noisefit.receiver.workManager.HealthOverviewDataType
 import com.noisefit.session.SessionManager
-import com.noisefit_commans.ui.tryCatch
 import com.noisefit.ui.myDevice.camera.CameraShutterActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit.util.FirebaseCrashlyticsUtils
@@ -71,7 +70,6 @@ import com.noisefit_commans.interfaces.data.IUserActivityDataCallback
 import com.noisefit_commans.interfaces.data.UserActivityAction
 import com.noisefit_commans.interfaces.data.UserActivityCallback
 import com.noisefit_commans.interfaces.data.UserActivityDataActions
-import com.noisefit_commans.utils.*
 import com.noisefit_commans.interfaces.device_data.IUpdateDeviceDataCallback
 import com.noisefit_commans.interfaces.device_data.QueryDeviceDataActions
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
@@ -87,10 +85,17 @@ import com.noisefit_commans.models.TimeFormats
 import com.noisefit_commans.models.UpdateStatus
 import com.noisefit_commans.models.WatchFirmwareDetails
 import com.noisefit_commans.models.WatchUpdateStatus
+import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.AppLogs
+import com.noisefit_commans.utils.CallHandler
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.LOW_VIBRATION
 import com.noisefit_commans.utils.PhoneRinger
+import com.noisefit_commans.utils.ServiceUtil
+import com.noisefit_commans.utils.VibrationUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -1228,6 +1233,12 @@ constructor() : LifecycleService() {
                                     }
                                 }
                         }
+
+                    }
+
+                    is UserActivityCallback.AutoSportDataObtained -> {
+                        LOGS.d(TAG, "SyncDataWork: onAutoSportData inside")
+
 
                     }
 

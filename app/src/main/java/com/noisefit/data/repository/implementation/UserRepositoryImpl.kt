@@ -995,6 +995,7 @@ class UserRepositoryImpl(
             }
 
             HealthOverviewDataType.SERVER_SYNC_SUCCESS -> {}
+            else -> {}
         }
 
         return Pair(hOverviewData, index)

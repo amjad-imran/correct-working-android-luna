@@ -32,7 +32,6 @@ import com.noisefit_commans.utils.LogEvents
 import com.noisefit_zhsdk.base.ZhApplicationHandler
 import com.zhapp.ble.ControlBleTools
 import com.zhapp.ble.bean.ActivityDurationBean
-import com.zhapp.ble.bean.AutoSportDataBean
 import com.zhapp.ble.bean.ContinuousBloodOxygenBean
 import com.zhapp.ble.bean.ContinuousHeartRateBean
 import com.zhapp.ble.bean.ContinuousPressureBean
@@ -121,7 +120,7 @@ constructor(
 
 
 
-        CallBackUtils.autoSportDataCallBack = autoSportDataCallBack
+
         CallBackUtils.fitnessDataCallBack = fitnessDataCallBack
         CallBackUtils.autoSportDataCallBack = autoSportsCallback
         CallBackUtils.realTimeDataCallback = realDataCallback
@@ -433,12 +432,30 @@ constructor(
         }
     }
 
-    private val autoSportsCallback: AutoSportDataCallBack = object : AutoSportDataCallBack {
-        override fun onAutoSportData(p0: MutableList<AutoSportDataBean>?) {
-            LOGS.d(TAG, "onAutoSportData ${Gson().toJson(p0)}")
+    private val autoSportsCallback: AutoSportDataCallBack = AutoSportDataCallBack { p0 ->
 
+        //[{"autoSportDuration":340,"autoSportIntensity":0,"autoSportKcal":5,"autoSportStartTime":1690863212,"autoSportSteps":601,"autoSportType":1,"hrData":[]}]
+
+//        val dataList = ArrayList<OreoAutoSportData>()
+//        dataList.add(OreoAutoSportData(0,false,false,340,0,5,1690863212,601,"running",null))
+        LOGS.d(TAG, "onAutoSportData ${Gson().toJson(p0)}")
+
+//        userActivityDataCallbacks?.onUserActivityDataReceived(
+//            UserActivityCallback.AutoSportDataObtained(
+//                dataList
+//            )
+//        )
+        AppLogs.sendAppLogs("onAutoSportData Sync data complete ${Gson().toJson(p0)}")
+        colorFitDevice?.let {
+            userActivityDataCallbacks?.onUserActivityDataReceived(
+                UserActivityCallback.AutoSportDataObtained(
+                    dataConverter.parseAutoSport(
+                        p0,
+                        it
+                    )
+                )
+            )
         }
-
     }
 
 
@@ -464,13 +481,6 @@ constructor(
 
     }
 
-    private var autoSportDataCallBack: AutoSportDataCallBack = object : AutoSportDataCallBack {
-        override fun onAutoSportData(p0: MutableList<AutoSportDataBean>?) {
-            LOGS.d("onAutoSportData ${Gson().toJson(p0)}")
-            AppLogs.sendAppLogs("onAutoSportData Sync data complete ${Gson().toJson(p0)}")
-        }
-
-    }
 
     //日常数据回调
     private val fitnessDataCallBack: FitnessDataCallBack =

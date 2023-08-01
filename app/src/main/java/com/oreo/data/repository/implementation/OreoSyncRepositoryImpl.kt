@@ -21,6 +21,7 @@ import com.noisefit.util.TestModeUtils
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.DayTimeMovementBreakup
+import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.data.model.UserSyncRawData
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.VersionCheckResponse
@@ -45,6 +46,7 @@ import com.noisefit_commans.data.model.OreoStepsData
 import com.noisefit_commans.data.model.OreoStressDataBreakup
 import com.noisefit_commans.utils.AppLogs
 import com.oreo.data.dataConverter.OreoOnlineDataMapper
+import com.oreo.data.db.implementation.OreoAutoSportDataImpl
 import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
 import com.oreo.data.db.implementation.OreoDayTimeMovementDataImpl
@@ -77,12 +79,24 @@ class OreoSyncRepositoryImpl(
     private val lastSyncProvider: LastSyncProvider,
     private val userActivityRepository: UserActivityRepository,
     private val testModeUtils: TestModeUtils,
+    private val oreoAutoSportDataImpl: OreoAutoSportDataImpl,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : OreoSyncRepository {
 
     override suspend fun saveStepsData(data: OreoStepsData): Flow<CacheResult<OreoStepsData?>> {
         return safeCacheCall(Dispatchers.IO) {
             stepsDataImpl.syncInsertOrUpdate(data)
+        }
+    }
+
+    override suspend fun getAutoWorkoutData(): Flow<CacheResult<List<OreoAutoSportData>?>> {
+        return safeCacheCall(Dispatchers.IO) {
+            oreoAutoSportDataImpl.getAllNotAcceptingData()
+        }
+    }
+    override suspend fun saveAutoWorkoutData(data: List<OreoAutoSportData>): Flow<CacheResult<Boolean?>> {
+        return safeCacheCall(Dispatchers.IO) {
+            oreoAutoSportDataImpl.insertData(data)
         }
     }
 

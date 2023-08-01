@@ -2,19 +2,12 @@ package com.noisefit.di
 
 import android.content.Context
 import androidx.room.Room
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
-import com.noisefit.data.local.db.abstraction.SleepDataSource
-import com.noisefit.data.local.db.abstraction.StepsDataSource
-import com.noisefit.data.local.db.database.SleepDao
-import com.noisefit.data.local.db.database.StepsDao
-import com.noisefit.data.local.db.implementation.SleepDataImpl
-import com.noisefit.data.local.db.implementation.StepsDataImpl
 import com.oreo.data.db.OreoDataBase
 import com.oreo.data.db.abstaction.OreoBodyTemperatureDataSource
 import com.oreo.data.db.abstaction.OreoDayTimeMovementDataSource
 import com.oreo.data.db.abstaction.OreoSleepDataSource
 import com.oreo.data.db.abstaction.OreoStepsDataSource
+import com.oreo.data.db.database.OreoAutoSportDao
 import com.oreo.data.db.database.OreoBloodOxygenDao
 import com.oreo.data.db.database.OreoBodyTemperatureDao
 import com.oreo.data.db.database.OreoDayTimeMovementDao
@@ -42,6 +35,7 @@ class OreoRoomModule {
     @Provides
     fun provideDataBase(@ApplicationContext appContext: Context): OreoDataBase {
         return Room.databaseBuilder(appContext, OreoDataBase::class.java, "noisefit-db-oreo")
+            .fallbackToDestructiveMigration()
             .build()
     }
 
@@ -121,6 +115,12 @@ class OreoRoomModule {
     @Provides
     fun providesBODao(database: OreoDataBase): OreoBloodOxygenDao {
         return database.bloodOxygenDao()
+    }
+
+    @Singleton
+    @Provides
+    fun providesAutoSportDao(database: OreoDataBase): OreoAutoSportDao {
+        return database.oreoAutoSportDao()
     }
 
     @Singleton

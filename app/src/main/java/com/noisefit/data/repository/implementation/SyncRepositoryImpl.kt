@@ -22,10 +22,12 @@ import com.noisefit.data.safeCacheCall
 import com.noisefit_commans.utils.EncryptUtils
 import com.noisefit.util.TestModeUtils
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.models.*
 import com.noisefit_commans.response.SleepBreakup
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.db.implementation.OreoAutoSportDataImpl
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -47,6 +49,7 @@ class SyncRepositoryImpl(
     private val lastSyncProvider: LastSyncProvider,
     private val userActivityRepository: UserActivityRepository,
     private val testModeUtils: TestModeUtils,
+
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : SyncRepository {
 

@@ -4,6 +4,7 @@ import com.noisefit.data.local.db.CacheResult
 import com.noisefit_commans.data.model.UserSyncActivities
 import com.noisefit_commans.data.model.UserSyncRawData
 import com.noisefit.data.remote.base.Resource
+import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.VersionCheckResponse
 import com.noisefit_commans.models.*
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.Flow
 interface SyncRepository {
 
     suspend fun saveStepsData(data: StepsData): Flow<CacheResult<StepsData?>>
+
 
     suspend fun saveSleepData(data: SleepData): Flow<CacheResult<Boolean?>>
 
