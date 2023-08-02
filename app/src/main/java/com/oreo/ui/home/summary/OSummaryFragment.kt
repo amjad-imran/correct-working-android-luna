@@ -213,12 +213,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 }
 
                 is ConnectState.UnPaired -> {
-                    //viewModel.handleUnPairState()
-
-                    context?.let {
-                        startActivity(PairDeviceActivity.getStartIntent(it))
-                        activity?.finish()
-                    }
+                    viewModel.handleUnPairState()
                 }
 
                 is ConnectState.Hibernate -> {

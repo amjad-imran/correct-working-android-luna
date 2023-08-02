@@ -118,12 +118,6 @@ class OreoMyDeviceFragment :
                     updateToolbarTitle("")
                     lytPairYourDeviceHeader.root.visible()
                 }
-
-
-                context?.let {
-                    startActivity(PairDeviceActivity.getStartIntent(it))
-                    activity?.finish()
-                }
             }
         }
 
