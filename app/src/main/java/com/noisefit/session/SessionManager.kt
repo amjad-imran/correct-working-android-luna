@@ -3,18 +3,11 @@ package com.noisefit.session
 import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ktx.Firebase
-import com.google.gson.Gson
 import com.noisefit.data.repository.abstraction.UserRepository
-import com.noisefit.receiver.workManager.DiyWatchFaceTransferStates
-import com.noisefit.receiver.workManager.HealthOverviewDataType
-import com.noisefit.receiver.workManager.WatchFaceTransferStates
-import com.noisefit.ui.friends.location.search.SearchStateType
 import com.noisefit.util.ApplicationUtils
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.matches.SportEvent
@@ -37,6 +30,7 @@ import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.oreo.receiver.workManager.HealthOverviewDataType
 import com.useinsider.insider.Insider
 import com.useinsider.insider.Insider.Instance
 import com.useinsider.insider.InsiderEvent
@@ -91,9 +85,7 @@ constructor(
 
     var upcomingSportEvent: SportEvent? = null
 
-    val watchFaceTransferStates = MutableLiveData<Event<WatchFaceTransferStates>>()
 
-    val diyWatchFaceTransferStates = MutableLiveData<Event<DiyWatchFaceTransferStates>>()
     var needToUpdateStreakData = MutableLiveData<Event<Pair<Long, Boolean>>>()
 
 
@@ -214,27 +206,19 @@ constructor(
     }
 
     fun getPairedState() {
-        val currentDevice = localDataStore.getPairDeviceType()
-        if (currentDevice == Device.RING) {
-            val device = ringDataStore.getRingDevice()
-            if (device == null) {
-                _connectStateRing.postValue(ConnectState.UnPaired())
-            }
-            setConnectedDeviceRing(device)
-        } else {
-            val device = localDataStore.getConnectedDevice()
-            if (device == null) {
-                _connectState.postValue(ConnectState.UnPaired())
-            }
-            setConnectedDevice(device)
+
+        val device = ringDataStore.getRingDevice()
+        if (device == null) {
+            _connectStateRing.postValue(ConnectState.UnPaired())
         }
+        setConnectedDeviceRing(device)
 
 
     }
 
     fun setConnectState(connectState: ConnectState) {
         GlobalScope.launch(Main) {
-            val device = when(connectState){
+            val device = when (connectState) {
                 is ConnectState.ConnectFailed -> connectState.noiseFitDevice?.bluetoothName
                 is ConnectState.ConnectSuccess -> connectState.noiseFitDevice?.bluetoothName
                 is ConnectState.Connecting -> connectState.noiseFitDevice?.bluetoothName
@@ -250,9 +234,10 @@ constructor(
             _connectState.value = connectState
         }
     }
+
     fun setConnectStateRing(connectState: ConnectState) {
         GlobalScope.launch(Main) {
-            val device = when(connectState){
+            val device = when (connectState) {
                 is ConnectState.ConnectFailed -> connectState.noiseFitDevice?.bluetoothName
                 is ConnectState.ConnectSuccess -> connectState.noiseFitDevice?.bluetoothName
                 is ConnectState.Connecting -> connectState.noiseFitDevice?.bluetoothName
@@ -274,6 +259,7 @@ constructor(
             _connectedDevice.value = colorFitDevice
         }
     }
+
     fun setConnectedDeviceRing(colorFitDevice: ColorFitDevice?) {
         GlobalScope.launch(Main) {
             _connectedDeviceRing.value = colorFitDevice
@@ -292,11 +278,6 @@ constructor(
         }
     }
 
-    fun saveSportsActivities(list: List<SportsModeResponse>?) {
-        GlobalScope.launch(Main) {
-            userRepository.saveActivity(list)
-        }
-    }
 
     fun setBluetoothState(boolean: Boolean) {
         GlobalScope.launch(Main) {
@@ -376,54 +357,15 @@ constructor(
 //        }
 //    }
 
-    fun updateUserLocationState(data: String?, id: Int?, type: SearchStateType) {
-
-        if (tempUserLocation == null) {
-            tempUserLocation = UserLocation()
-        }
-
-        when (type) {
-            SearchStateType.State -> {
-                tempUserLocation!!.stateChanged = true
-                tempUserLocation!!.stateId = id
-                tempUserLocation!!.state = data
-                tempUserLocation!!.cityId = 0
-                tempUserLocation!!.city = null
-            }
-
-            SearchStateType.City -> {
-                tempUserLocation!!.stateId = tempUserLocation!!.stateId
-                tempUserLocation!!.state = tempUserLocation!!.state
-                tempUserLocation!!.stateChanged = false
-                tempUserLocation!!.cityId = id
-                tempUserLocation!!.city = data
-            }
-        }
-
-
-    }
 
     /**
      * Returns connection status on the bases of _connectState state
      */
     fun isDeviceConnected(): Boolean {
-        val deviceType = localDataStore.getPairDeviceType()
-        if(deviceType==Device.RING){
-            if (connectStateRing.value == null) return false
-            return connectStateRing.value is ConnectState.ConnectSuccess
-        }else{
-            if (connectState.value == null) return false
-            return connectState.value is ConnectState.ConnectSuccess
-        }
-
+        if (connectStateRing.value == null) return false
+        return connectStateRing.value is ConnectState.ConnectSuccess
     }
 
-    /**
-     * Returns true if device paired
-     */
-    fun hasDevicePaired(): Boolean {
-        return localDataStore.getConnectedDevice() != null
-    }
 
     private fun logFirebaseEvent(eventName: String, data: HashMap<String, Any>) {
         val newEventName = eventName.lowercase().replace(" ", "_")
@@ -563,12 +505,8 @@ constructor(
         _reloadNotification.value = event
     }
 
-    fun saveLastSyncTime(device: Device, timeStamp: Long) {
-        if (device == Device.RING) {
-            ringDataStore.saveLastSyncTimeStamp(timeStamp)
-        } else {
-            localDataStore.saveLastSyncTimeStamp(timeStamp)
-        }
+    fun saveLastSyncTime(timeStamp: Long) {
+        ringDataStore.saveLastSyncTimeStamp(timeStamp)
     }
 
 
@@ -577,46 +515,14 @@ constructor(
         e?.let { FirebaseCrashlytics.getInstance().recordException(it) }
     }
 
-    fun getLastSyncTime(device: Device = Device.SMARTWATCH): Long? {
-        val timeStamp = if (device == Device.RING) {
-            ringDataStore.getLastSyncTimeStamp()
-        } else {
-            localDataStore.getLastSyncTimeStamp()
-        }
+    fun getLastSyncTime(): Long? {
+        val timeStamp = ringDataStore.getLastSyncTimeStamp()
+
         return if (timeStamp == -1L) {
             null
         } else {
             timeStamp
         }
     }
-
-    fun hibernateCurrentDevice(deviceHibernateStatus: (status: Boolean) -> Unit) {
-
-        when (localDataStore.getPairDeviceType()) {
-            Device.SMARTWATCH -> {
-                val device = localDataStore.getConnectedDevice()
-                if (device == null) {
-                    deviceHibernateStatus(true)
-                    return
-                }
-                hibernateWatchService.postValue(Event(true))
-            }
-
-            Device.RING -> {
-                val device = ringDataStore.getRingDevice()
-                if (device == null) {
-                    deviceHibernateStatus(true)
-                    return
-                }
-                hibernateRingService.postValue(Event(true))
-            }
-
-            else -> {
-                deviceHibernateStatus(false)
-            }
-        }
-    }
-
-
 }
 

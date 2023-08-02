@@ -3,7 +3,9 @@ package com.oreo.ui.workout.detect
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
+
 import com.noisefit.luna.databinding.FragmentDetectWorkoutBinding
+
 import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.ui.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint

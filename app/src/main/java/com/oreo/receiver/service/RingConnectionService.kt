@@ -24,13 +24,8 @@ import androidx.lifecycle.LifecycleService
 import com.noisefit.luna.R
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.local.db.CacheResult
-import com.noisefit.data.local.db.DataBase
 import com.noisefit.data.repository.LastSyncProvider
-import com.noisefit.data.repository.abstraction.SportEventRepository
-import com.noisefit.data.repository.abstraction.SyncRepository
 import com.noisefit.data.repository.abstraction.UserRepository
-import com.noisefit.receiver.broadcastReceiver.AudioSettingReceiver
-import com.noisefit.receiver.workManager.HealthOverviewDataType
 import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
 import com.noisefit.util.FirebaseCrashlyticsUtils
@@ -41,14 +36,12 @@ import com.noisefit.util.notif.NotificationUtil
 import com.noisefit.watch.ApplicationHandler
 import com.noisefit.watch.ConnectionHandler
 import com.noisefit.watch.DeviceQueryHandler
-import com.noisefit.watch.SDKWatchType
 import com.noisefit.watch.UpdateDeviceHandler
 import com.noisefit.watch.UserActivityHandler
 import com.noisefit.watch.WatchesSDK
 import com.noisefit_commans.constants.EventConstants
 import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.enums.Actions
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.data.enums.ServiceState
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
@@ -77,7 +70,6 @@ import com.noisefit_commans.models.TimeFormat
 import com.noisefit_commans.models.TimeFormats
 import com.noisefit_commans.models.UpdateStatus
 import com.noisefit_commans.models.WatchFirmwareDetails
-import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.CallHandler
@@ -90,6 +82,7 @@ import com.noisefit_commans.utils.ServiceUtil
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.db.OreoDataBase
 import com.oreo.data.repository.abstraction.OreoSyncRepository
+import com.oreo.receiver.workManager.HealthOverviewDataType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -158,8 +151,6 @@ constructor() : LifecycleService() {
     @Inject
     lateinit var userActivityHandler: UserActivityHandler
 
-    @Inject
-    lateinit var sportEventRepository: SportEventRepository
 
     @Inject
     lateinit var userRepository: UserRepository
@@ -489,18 +480,6 @@ constructor() : LifecycleService() {
             e.printStackTrace()
         }
 
-        try {
-
-            applicationContext.contentResolver.unregisterContentObserver(
-                AudioSettingReceiver(
-                    this,
-                    Handler(Looper.getMainLooper()),
-                    sessionManager
-                )
-            )
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
         try {
             unregisterReceiver(timeChangedReceiver)
         } catch (e: IllegalArgumentException) {
@@ -1122,11 +1101,6 @@ constructor() : LifecycleService() {
                             )
                             if (!it.sportsModeRequestList.activities.isNullOrEmpty()) {
 
-                                sessionManager.saveSportsActivities(it.sportsModeRequestList.activities)
-
-
-
-
                                 it.sportsModeRequestList.activities?.forEach { act ->
 
                                     val startTime = DateFormats.formatActivityTime6(act.time)
@@ -1173,7 +1147,6 @@ constructor() : LifecycleService() {
                             "Size : ${it.sportsModeResponse.activities?.size}"
                         )
                         if (!it.sportsModeResponse.activities.isNullOrEmpty()) {
-                            sessionManager.saveSportsActivities(it.sportsModeResponse.activities)
 
                             it.sportsModeResponse.activities?.forEach { act ->
                                 val startTime = DateFormats.formatActivityTime6(act.time)
@@ -1241,11 +1214,7 @@ constructor() : LifecycleService() {
 
     private fun updateNotification() {
         GlobalScope.launch(Dispatchers.IO) {
-            val stepsData = userRepository.getTodayStepsData()
-            stepsData?.let {
-                checkGoalNotification(it)
-            }
-            val lastSyncTime = sessionManager.getLastSyncTime(Device.RING)?.let {
+            val lastSyncTime = sessionManager.getLastSyncTime()?.let {
                 DateFormats.convertTimestampToDate(
                     it,
                     SimpleDateFormat("h:mm a", Locale.ENGLISH).apply {
@@ -1256,7 +1225,6 @@ constructor() : LifecycleService() {
 
             withContext(Dispatchers.Main) {
                 val notification = NotificationUtil.changeNotificationContent(
-                    Device.RING,
                     this@RingConnectionService,
                     time = lastSyncTime
                 )
@@ -1500,8 +1468,7 @@ constructor() : LifecycleService() {
                     LOGS.d(TAG, "battery Level Ring : $percent")
                     batteryNotificationUtils.handleNotification(
                         percent,
-                        queryCallback.batteryData.isCharging,
-                        Device.RING
+                        queryCallback.batteryData.isCharging
                     )
 
                     watchDataStore.updateBatteryPercentRing(percent)

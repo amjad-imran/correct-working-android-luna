@@ -37,16 +37,6 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:titleTextColor="@color/white"
                     tools:title="Test" />
-                <ImageView
-                    android:id="@+id/ivToolbarDeviceArrow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="56dp"
-                    android:src="@drawable/arrow_down_grey"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-                    app:layout_constraintStart_toEndOf="@+id/toolbar"
-                    app:layout_constraintTop_toTopOf="@+id/toolbar"
-                    tools:visibility="visible" />
                 <include
                     android:id="@+id/lytDeviceConnected"
                     layout="@layout/layout_connected_device"

@@ -37,11 +37,11 @@ constructor(
                 name = it
             }
         }
-        localDataStore.getConnectedDevice()?.let { colorFitDevice ->
+        /*localDataStore.getConnectedDevice()?.let { colorFitDevice ->
             colorFitDevice.deviceType?.let { deviceType ->
                 device = deviceType
             }
-        }
+        }*/
 
         return java.util.HashMap<String, Any?>().apply {
             this["user_id"] = userId

@@ -19,7 +19,6 @@ import com.noisefit_commans.ui.checkDayDifferenceMoreOne
 import com.noisefit.util.FirebaseCrashlyticsUtils
 import com.noisefit.watch.ApplicationHandler
 import com.noisefit_commans.constants.WatchInfoGlobals
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
@@ -54,24 +53,13 @@ class SplashViewModel
     private var ignoredVersion = 0
     private val _userOnBoardingFlow = MutableLiveData<UserOnBoardingFlow>()
     var userOnBoardingFlow = _userOnBoardingFlow
-    var currentDevice: Device? = Device.SMARTWATCH
 
     init {
         //Don't remove below line
         if (localDataStore.getLastStepsSyncWithServer() == 0L) {
             localDataStore.setLastStepsSyncWithServer(DateFormats.getTimeStamp())
         }
-        currentDevice = localDataStore.getPairDeviceType()
-        connectedDevice = when (currentDevice) {
-            Device.SMARTWATCH -> {
-                localDataStore.getConnectedDevice()
-            }
-            Device.RING -> {
-                ringDataStore.getRingDevice()
-            }
-
-            else -> null
-        }
+        connectedDevice = ringDataStore.getRingDevice()
         clearOldTableData()
         enableOldNotifications()
         WatchInfoGlobals.hideBleCallingDialogForThisSession = false
@@ -165,12 +153,15 @@ class SplashViewModel
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
                     }
+
                     is Resource.Loading -> {
                         setLoading(resource.loading)
                     }
+
                     is Resource.NetworkError -> {
                         sendMessage("")
                     }
+
                     is Resource.Success -> {
                         resource.data?.data?.let {
 
@@ -228,13 +219,9 @@ class SplashViewModel
                             )
 
                             if (it.otaResponse != null) {
-                                if(currentDevice==Device.RING){
-                                    sessionManager.forceOtaFlowRunning = false
-                                    sessionManager.forceOtaResponseRing = it.otaResponse
-                                }else{
-                                    sessionManager.forceOtaFlowRunning = false
-                                    sessionManager.forceOtaResponse = it.otaResponse
-                                }
+                                sessionManager.forceOtaFlowRunning = false
+                                sessionManager.forceOtaResponseRing = it.otaResponse
+
                             } else {
                                 sessionManager.forceOtaFlowRunning = false
                                 sessionManager.forceOtaResponse = null
@@ -269,6 +256,7 @@ class SplashViewModel
                             localDataStore.saveDeviceFeatures(it.deviceFeatures)
                         }
                     }
+
                     else -> {}
                 }
             }
@@ -314,6 +302,7 @@ class SplashViewModel
                     is CacheResult.Success -> {
                         LOGS.d("Deleted old tables")
                     }
+
                     is CacheResult.GenericError -> {
                         LOGS.d("Error in Deleting old tables")
                     }
@@ -366,11 +355,9 @@ class SplashViewModel
             return
         }
 
-        if (currentDevice == Device.RING) {
-            _userOnBoardingFlow.value = (UserOnBoardingFlow.SHOW_OREO_DASHBOARD)
-            return
-        }
-        _userOnBoardingFlow.value = (UserOnBoardingFlow.SHOW_DASHBOARD)
+
+        _userOnBoardingFlow.value = (UserOnBoardingFlow.SHOW_OREO_DASHBOARD)
+
 
     }
 

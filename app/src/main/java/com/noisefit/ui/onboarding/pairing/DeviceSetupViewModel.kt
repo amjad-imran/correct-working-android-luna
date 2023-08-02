@@ -8,7 +8,6 @@ import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit.watch.WatchForm
 import com.noisefit.watch.WatchesSDK
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.models.ColorFitDevice
@@ -32,7 +31,6 @@ constructor(
      * Updates device against user in case of logout-login
      */
     fun updateUserDevice(device: ColorFitDevice, forceRefresh: Boolean) {
-        val deviceType = localDataStore.getPairDeviceType()
 
         val deviceToken = localDataStore.getUserToken()
         if (deviceToken != null && !forceRefresh) {
@@ -45,7 +43,7 @@ constructor(
             addProperty("rssi", device.rssi)
             addProperty("watch_token", device.watchToken)
             addProperty("platform", "android")
-            addProperty("wearable_type", if (deviceType == Device.RING) "ring" else "watch")
+            addProperty("wearable_type", "ring")
         }
         viewModelScope.launch {
             userRepository.saveUserDevice(request).collect { resource ->
@@ -53,11 +51,7 @@ constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             it.userDevice.deviceFeatures?.let { features ->
-                                if (deviceType == Device.RING) {
-                                    ringDataStore.saveDeviceFeatures(features)
-                                } else {
-                                    localDataStore.saveDeviceFeatures(features)
-                                }
+                                ringDataStore.saveDeviceFeatures(features)
                             }
 
                             localDataStore.updateUserToken(it.tokens)

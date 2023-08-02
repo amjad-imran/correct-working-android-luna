@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.noisefit.MainActivity
 import com.noisefit.luna.R
 import com.noisefit_commans.data.response.Country
 import com.noisefit.luna.databinding.FragmentOtpCountryBinding
@@ -85,18 +84,7 @@ class OtpCountryFragment :
             }
         }
 
-        authViewModel.accountCreated.observe(this) {
-            it.getContent()?.let { value ->
-                if (value) {
-                    if (viewModel.localDataStore.getConnectedDevice() == null) {
-                        startActivity(PairDeviceActivity.getStartIntent(requireContext()))
-                    } else {
-                        startActivity(MainActivity.getStartIntent(requireContext()))
-                    }
-                    activity?.finish()
-                }
-            }
-        }
+
     }
 
     override fun onCountrySelected(country: Country) {

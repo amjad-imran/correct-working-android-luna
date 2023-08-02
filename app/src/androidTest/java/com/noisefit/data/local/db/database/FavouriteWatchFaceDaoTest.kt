@@ -4,9 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.filters.SmallTest
 import com.google.common.truth.Truth.assertThat
 import com.google.gson.Gson
-import com.noisefit.data.local.db.DataBase
 import com.noisefit_commans.models.FavouriteWatchFace
-import com.noisefit_commans.models.SportsModeResponse
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi

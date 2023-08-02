@@ -1,7 +1,6 @@
 package com.noisefit.oreo
 
 import androidx.lifecycle.MutableLiveData
-import com.noisefit.BottomNavOption
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore

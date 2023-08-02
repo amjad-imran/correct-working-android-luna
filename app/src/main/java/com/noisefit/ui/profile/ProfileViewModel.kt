@@ -35,9 +35,6 @@ constructor(
     var connectionHandler: ConnectionHandler,
     var sessionManager: SessionManager,
     private val repository: AuthenticationRepository,
-    private val watchFaceRepository: WatchFaceRepository,
-    private val userActivityRepository: UserActivityRepository,
-    private val feedsRepository: FeedRepository,
     private val lastSyncProvider: LastSyncProvider,
     val localDataStore: DataStoredInterface,
     private val userRepository: UserRepository,
@@ -143,14 +140,7 @@ constructor(
 
 
                             withContext(Dispatchers.IO) {
-                                watchFaceRepository.removeAllWatchfaceData()
                                 lastSyncProvider.removeUserDataLastSync()
-                                userActivityRepository.removeLocalChallengesData()
-                                userActivityRepository.removeLocalFriendsData()
-                                userActivityRepository.removeLocalRewardsData()
-                                userActivityRepository.removeLocalStreakData()
-                                feedsRepository.removeOfflineFeedData()
-                                localDataStore.setTimeLineCurrentPageCount(1)
                             }
                         }
                     }
@@ -189,14 +179,7 @@ constructor(
                                 }
                             }
                             withContext(Dispatchers.IO) {
-                                watchFaceRepository.removeAllWatchfaceData()
                                 lastSyncProvider.removeUserDataLastSync()
-                                userActivityRepository.removeLocalChallengesData()
-                                userActivityRepository.removeLocalFriendsData()
-                                userActivityRepository.removeLocalRewardsData()
-                                userActivityRepository.removeLocalStreakData()
-                                feedsRepository.removeOfflineFeedData()
-                                localDataStore.setTimeLineCurrentPageCount(1)
                             }
                         }
                     }
@@ -268,10 +251,6 @@ constructor(
             }
         }
 
-    }
-
-    fun canSubmitFeedback(): Boolean {
-        return localDataStore.getConnectedDevice() != null && localDataStore.getUser() != null
     }
 
 

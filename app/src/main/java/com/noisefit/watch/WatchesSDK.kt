@@ -2,6 +2,7 @@ package com.noisefit.watch
 
 
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.DeviceFeatures
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.DeviceType
@@ -10,14 +11,15 @@ import javax.inject.Inject
 class WatchesSDK
 @Inject
 constructor(
-    private var localDataStore: DataStoredInterface
+    private var localDataStore: DataStoredInterface,
+    private val ringDataStore: RingDataStore
 ) {
 
     fun getWatchType(connectedDevice: ColorFitDevice?): SDKWatchType {
         var cDevice = connectedDevice
 
         if (cDevice == null) {
-            cDevice = localDataStore.getConnectedDevice()
+            cDevice = ringDataStore.getRingDevice()
         }
 
         when (cDevice?.deviceType) {
@@ -155,26 +157,13 @@ constructor(
 
 
     fun getWatchType(): SDKWatchType? {
-        val connectedDevice = localDataStore.getConnectedDevice() ?: return null
+        val connectedDevice = ringDataStore.getRingDevice() ?: return null
 
         return getWatchType(connectedDevice)
     }
 
     fun getDevice(): ColorFitDevice? {
-        return localDataStore.getConnectedDevice()
-    }
-
-    fun getDevicesForLocation(): Boolean {
-        val device = localDataStore.getConnectedDevice()
-        when (device?.deviceType) {
-
-            DeviceType.COLORFIT_CALIBER.deviceType,
-            DeviceType.COLORFIT_GRAND.deviceType,
-            DeviceType.XFIT2.deviceType -> {
-                return true
-            }
-        }
-        return false
+        return ringDataStore.getRingDevice()
     }
 
     fun isCaloriesSupported(): Boolean {
@@ -209,11 +198,6 @@ constructor(
     fun getWatchForm(): WatchForm {
         val deviceFeatures = localDataStore.getDeviceFeatures() ?: return WatchForm.SQUARE
         return getWatchForm(deviceFeatures)
-    }
-
-    fun watchHasAGPS(): Boolean {
-        val connectedDevice = localDataStore.getConnectedDevice() ?: return false
-        return watchHasAGPS(connectedDevice)
     }
 
     private fun watchHasAGPS(connectedDevice: ColorFitDevice): Boolean {

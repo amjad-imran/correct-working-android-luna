@@ -3,11 +3,9 @@ package com.oreo.data.repository.implementation
 import com.google.gson.Gson
 import com.noisefit.data.dataConverter.OfflineDataMapper
 import com.noisefit.data.local.db.CacheResult
-import com.noisefit.data.local.db.implementation.GoogleFitDataImpl
 import com.noisefit.data.remote.abstraction.NetworkService
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.LastSyncProvider
-import com.noisefit.data.repository.abstraction.UserActivityRepository
 import com.noisefit.data.safeApiCallFlow
 import com.noisefit.data.safeCacheCall
 import com.noisefit.luna.BuildConfig
@@ -58,14 +56,12 @@ class OreoSyncRepositoryImpl(
     private val dayTimeMovementImpl: OreoDayTimeMovementDataImpl,
     private val respiratoryDataImpl: OreoRespiratoryDataImpl,
     private val sleepDataImpl: OreoSleepDataImpl,
-    private val googleFitDataImpl: GoogleFitDataImpl,
     private val bodyTemperatureDataImpl: OreoBodyTemperatureDataImpl,
     private val offlineDataMapper: OfflineDataMapper,
     private val gson: Gson,
     private val onlineDataMapper: OreoOnlineDataMapper,
     private val encryptUtils: EncryptUtils,
     private val lastSyncProvider: LastSyncProvider,
-    private val userActivityRepository: UserActivityRepository,
     private val testModeUtils: TestModeUtils,
     private val oreoAutoSportDataImpl: OreoAutoSportDataImpl,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
@@ -229,58 +225,58 @@ class OreoSyncRepositoryImpl(
 
     override suspend fun updateHashForLastSyncData(userSyncActivities: OreoUserSyncActivities) {
 
-       /* userSyncActivities.stepsDataList?.let {
-            localDatSource.setStepsLastSyncHash(
-                encryptUtils.md5(
-                    gson.toJson(
-                        it
-                    )
-                )
-            )
-        }
+        /* userSyncActivities.stepsDataList?.let {
+             localDatSource.setStepsLastSyncHash(
+                 encryptUtils.md5(
+                     gson.toJson(
+                         it
+                     )
+                 )
+             )
+         }
 
 
-        userSyncActivities.stressData?.let {
-            localDatSource.setStressLastSyncHash(
-                encryptUtils.md5(
-                    gson.toJson(
-                        it
-                    )
-                )
-            )
-        }
-        userSyncActivities.boData?.let {
-            localDatSource.setBloodOxygenLastSyncHash(
-                encryptUtils.md5(
-                    gson.toJson(
-                        it
-                    )
-                )
-            )
-        }
+         userSyncActivities.stressData?.let {
+             localDatSource.setStressLastSyncHash(
+                 encryptUtils.md5(
+                     gson.toJson(
+                         it
+                     )
+                 )
+             )
+         }
+         userSyncActivities.boData?.let {
+             localDatSource.setBloodOxygenLastSyncHash(
+                 encryptUtils.md5(
+                     gson.toJson(
+                         it
+                     )
+                 )
+             )
+         }
 
-        if (testModeUtils.saveHrHash()) {
-            userSyncActivities.hrHistoryData?.let {
-                localDatSource.setHeartLastSyncHash(
-                    encryptUtils.md5(
-                        gson.toJson(
-                            it
-                        )
-                    )
-                )
-            }
-        }
+         if (testModeUtils.saveHrHash()) {
+             userSyncActivities.hrHistoryData?.let {
+                 localDatSource.setHeartLastSyncHash(
+                     encryptUtils.md5(
+                         gson.toJson(
+                             it
+                         )
+                     )
+                 )
+             }
+         }
 
 
-        userSyncActivities.bodyTemperature?.let {
-            localDatSource.setBodyTempSyncHash(
-                encryptUtils.md5(
-                    gson.toJson(
-                        it
-                    )
-                )
-            )
-        }*/
+         userSyncActivities.bodyTemperature?.let {
+             localDatSource.setBodyTempSyncHash(
+                 encryptUtils.md5(
+                     gson.toJson(
+                         it
+                     )
+                 )
+             )
+         }*/
     }
 
     override suspend fun checkHalfSyncData() {
@@ -366,13 +362,13 @@ class OreoSyncRepositoryImpl(
 
     override suspend fun deleteServerSyncData(data: OreoUserSyncRawData) {
         val todayTimeStamp = DateFormats.convertTimeStampToStartOfDay(DateFormats.getTimeStamp())
-       /* val todayTimeStampForSleep = DateFormats.convertTimeStampToPrevious12ofDay(
-            DateFormats.subtractDate(
-                DateFormats.getTimeStamp(),
-                1
-            )
-        )
-        LOGS.d("deleteServerSyncData $todayTimeStamp $todayTimeStampForSleep")*/
+        /* val todayTimeStampForSleep = DateFormats.convertTimeStampToPrevious12ofDay(
+             DateFormats.subtractDate(
+                 DateFormats.getTimeStamp(),
+                 1
+             )
+         )
+         LOGS.d("deleteServerSyncData $todayTimeStamp $todayTimeStampForSleep")*/
 
         data.stepsDataList?.let {
             stepsDataImpl.updateServerSyncData(it)
@@ -562,10 +558,6 @@ class OreoSyncRepositoryImpl(
             ), userSyncRawData
         )
 
-    }
-
-    override suspend fun getGoogleFitUnSyncData(date: String): SyncGoogleFitData {
-        return googleFitDataImpl.getUnSyncedData(date)
     }
 
 

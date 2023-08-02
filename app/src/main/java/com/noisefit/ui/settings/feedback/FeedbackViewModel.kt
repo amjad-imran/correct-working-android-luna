@@ -15,7 +15,6 @@ import com.noisefit.watch.WatchesSDK
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.NoisefitApplication
 import com.noisefit_commans.constants.WatchInfoGlobals
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
@@ -185,14 +184,11 @@ constructor(
         val versionName = packageInfo.versionName
         val versionCode = packageInfo.versionCode
 
-        val pairedDeviceType = localDataStore.getPairDeviceType()
 
         val connectedDevice =
-            if (pairedDeviceType == Device.RING) {
+
                 ringDataStore.getRingDevice()
-            } else {
-                localDataStore.getConnectedDevice()
-            }
+
 
 
         val platform = "android"
@@ -200,12 +196,9 @@ constructor(
         val osVersion = Build.VERSION.RELEASE
         val appVersion = "$versionName($versionCode)"
         val watchName = connectedDevice?.bluetoothName.toString()
-        val watchFirmwareVersion = if (pairedDeviceType == Device.RING) {
+        val watchFirmwareVersion =
             WatchInfoGlobals.firmwareVersionRing
                 ?: WatchInfoGlobals.firmwareVersionNumberRing.toString()
-        } else {
-            WatchInfoGlobals.firmwareVersion ?: WatchInfoGlobals.firmwareVersionNumber.toString()
-        }
 
         LOGS.d("connectedDevice $watchName")
         return Feedback(
@@ -248,7 +241,7 @@ constructor(
 
                 if (FileLogsUtils.checkLogFileExist(
                         context,
-                        localDataStore.getConnectedDevice(),
+                        ringDataStore.getRingDevice(),
                         fileName
                     ) != null
                 ) {
@@ -256,7 +249,7 @@ constructor(
 
                     watchLogs = FileLogsUtils.getFile(
                         context,
-                        localDataStore.getConnectedDevice(),
+                        ringDataStore.getRingDevice(),
                         fileName
                     )
                 }

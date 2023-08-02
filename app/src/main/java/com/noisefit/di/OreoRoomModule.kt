@@ -2,6 +2,8 @@ package com.noisefit.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.oreo.data.db.OreoDataBase
 import com.oreo.data.db.abstaction.OreoBodyTemperatureDataSource
 import com.oreo.data.db.abstaction.OreoDayTimeMovementDataSource
@@ -35,7 +37,6 @@ class OreoRoomModule {
     @Provides
     fun provideDataBase(@ApplicationContext appContext: Context): OreoDataBase {
         return Room.databaseBuilder(appContext, OreoDataBase::class.java, "noisefit-db-oreo")
-            .fallbackToDestructiveMigration()
             .build()
     }
 

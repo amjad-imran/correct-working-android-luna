@@ -1,25 +1,18 @@
 package com.oreo.ui.device
 
 import android.os.Bundle
-import android.text.SpannableStringBuilder
 import android.view.View
-import androidx.core.text.bold
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import com.noisefit.MainActivity
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoMyDeviceBinding
-import com.noisefit.oreo.OreoMainActivity
 import com.noisefit.ui.SplashActivity
-import com.noisefit.ui.myDevice.MyDeviceAction
-import com.noisefit.ui.myDevice.MyDeviceFragmentDirections
 import com.noisefit.ui.myDevice.UNPAIR_REQUEST_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.models.ColorFitDevice
@@ -31,7 +24,6 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.Event
-import com.oreo.ui.profile.CHOOSE_DEVICE_KEY
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -56,13 +48,6 @@ class OreoMyDeviceFragment :
             //activity?.finish()
         }
 
-        binding.toolbar.setOnClickListener {
-            showDeviceSelector()
-        }
-        binding.ivToolbarDeviceArrow.setOnClickListener {
-            showDeviceSelector()
-        }
-
         binding.rowAboutDevice.setOnClickListener {
             navigate(R.id.OAboutDeviceFragment)
         }
@@ -71,7 +56,7 @@ class OreoMyDeviceFragment :
         }
 
         binding.rowWarrantyRegistration.setOnClickListener {
-            navigate(R.id.warrantyFragmentOreo)
+            //navigate(R.id.warrantyFragmentOreo)
         }
         binding.btnUnpair.setOnClickListener {
             setFragmentResultListener(UNPAIR_REQUEST_KEY) { _, bundle ->
@@ -88,17 +73,6 @@ class OreoMyDeviceFragment :
             navigate(R.id.unpairBottomDialogFragment)
 
         }
-
-
-//        val s =
-//            SpannableStringBuilder().append(getString(R.string.text_don_t_have_a_noisefit_device_yet_check_out_our_latest_collection_by_clicking_on_the))
-//                .append(" ").bold { append("'") }
-//                .bold { append(getString(R.string.text_get_noise)) }.bold { append("'") }
-//                .append(" ").append(getString(R.string.text_in_the_navbar))
-//        updateToolbarTitle(getString(R.string.text_no_device_paired))
-//        binding.lytPairYourDeviceHeader.tvMsg.text = s
-        binding.ivToolbarDeviceArrow.gone()
-
     }
 
     override fun subscribeObservers() {
@@ -120,8 +94,6 @@ class OreoMyDeviceFragment :
 
         mViewModel.startWatchFlow.observe(this) {
             it.getContent()?.let {
-                mViewModel.localDataStore.savePairDeviceType(Device.SMARTWATCH)
-                //startWatchService()
                 activity?.let { act ->
                     startActivity(SplashActivity.getStartIntent(act))
                     act.finish()
@@ -145,7 +117,6 @@ class OreoMyDeviceFragment :
                     btnReset.gone()
                     updateToolbarTitle("")
                     lytPairYourDeviceHeader.root.visible()
-                    binding.ivToolbarDeviceArrow.gone()
                 }
             }
         }
@@ -171,32 +142,32 @@ class OreoMyDeviceFragment :
                     mViewModel.updateDeviceConnectedStatus()
 
 
-                    val hasWatchDevice = mViewModel.localDataStore.getConnectedDevice()
-                    if (hasWatchDevice != null) {
-                        mViewModel.startWatchFlow.postValue(Event(true))
-                    }
+                    /* val hasWatchDevice = mViewModel.localDataStore.getConnectedDevice()
+                     if (hasWatchDevice != null) {
+                         mViewModel.startWatchFlow.postValue(Event(true))
+                     }*/
                 }
 
                 is ConnectState.Hibernate -> {
                     binding.progressBar.root.gone()
 
 
-                    when (mViewModel.nextAction) {
-                        MyDeviceAction.ADD_DEVICE -> {
-                            activity?.let {
-                                startActivity(PairDeviceActivity.getStartIntent(it))
-                                it.finish()
-                            }
-                        }
+                    /*  when (mViewModel.nextAction) {
+                          MyDeviceAction.ADD_DEVICE -> {
+                              activity?.let {
+                                  startActivity(PairDeviceActivity.getStartIntent(it))
+                                  it.finish()
+                              }
+                          }
 
-                        MyDeviceAction.SWITCH_TO_WATCH -> {
-                            mViewModel.localDataStore.getConnectedDevice()?.let {
-                                mViewModel.updateUserDevice(it, true)
-                            }
-                        }
+                          MyDeviceAction.SWITCH_TO_WATCH -> {
+                              mViewModel.localDataStore.getConnectedDevice()?.let {
+                                  mViewModel.updateUserDevice(it, true)
+                              }
+                          }
 
-                        else -> {}
-                    }
+                          else -> {}
+                      }*/
                 }
 
                 else -> {}
@@ -209,40 +180,6 @@ class OreoMyDeviceFragment :
         context?.let {
             ApplicationUtils.setRescueWorkManager(it)
         }
-    }
-
-    private fun showDeviceSelector() {
-        setFragmentResultListener(CHOOSE_DEVICE_KEY) { _, bundle ->
-            val addDevice = bundle.getBoolean("addDevice")
-            if (addDevice) {
-                mViewModel.setLoading(true)
-                mViewModel.nextAction = MyDeviceAction.ADD_DEVICE
-                mViewModel.sessionManager.hibernateCurrentDevice {
-                    if (!it) {
-                        context.showShortToast(getString(R.string.text_something_went_wrong))
-                    }
-                }
-
-                /* activity?.let {
-                     startActivity(PairDeviceActivity.getStartIntent(it))
-                     it.finish()
-                 }*/
-                return@setFragmentResultListener
-            }
-
-            val selectedDevice = bundle.getSerializable("selectedDevice") as Device
-
-            if (selectedDevice == Device.SMARTWATCH) {
-                mViewModel.setLoading(true)
-                mViewModel.nextAction = MyDeviceAction.SWITCH_TO_WATCH
-                mViewModel.sessionManager.hibernateCurrentDevice {
-                    if (!it) {
-                        context.showShortToast(getString(R.string.text_something_went_wrong))
-                    }
-                }
-            }
-        }
-        navigate(R.id.bottomSheetChooseDevice)
     }
 
     private fun showForceUnPairDialog() {
@@ -303,7 +240,6 @@ class OreoMyDeviceFragment :
                 requireContext(), noiseFitDevice?.ringInfo?.image ?: ""
             )
             updateToolbarTitle(noiseFitDevice?.bluetoothName)
-            binding.ivToolbarDeviceArrow.visible()
             tvLastSync.text = ""
             tvBatteryPercentage.text = ""
 
@@ -316,8 +252,7 @@ class OreoMyDeviceFragment :
         val batteryPercent = "${mViewModel.watchDataStore.getBatteryPercentRing()}% Battery level"
 
         val lastSync =
-            mViewModel.sessionManager.getLastSyncTime(Device.RING)
-                ?.let { DateFormats.getRelativeTime(it) }
+            mViewModel.sessionManager.getLastSyncTime()?.let { DateFormats.getRelativeTime(it) }
         val lastSyncText = "Synced : ${lastSync ?: getString(R.string.text_not_yet_syncyed)}"
         binding.lytDeviceConnected.apply {
             this.layoutDevice.setBackgroundResource(com.noisefit_commans.R.drawable.back_modal_new)
@@ -330,12 +265,10 @@ class OreoMyDeviceFragment :
             progressBarConnecting.gone()
             ivSettingsArrow.visible()
             imgWatch.loadWatchImage(
-                requireContext(), noiseFitDevice.ringInfo?.image ?: "",
-                R.drawable.watch_default
+                requireContext(), noiseFitDevice.ringInfo?.image ?: "", R.drawable.watch_default
             )
             tvBatteryPercentage.text = batteryPercent
             updateToolbarTitle(noiseFitDevice.bluetoothName)
-            binding.ivToolbarDeviceArrow.visible()
 
             tvLastSync.text = lastSyncText
 

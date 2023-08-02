@@ -9,7 +9,6 @@ import com.noisefit.data.repository.abstraction.DeviceRepository
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.response.RingInfoResponse
 import com.noisefit_commans.models.ColorFitDevice
@@ -38,7 +37,6 @@ constructor(
 
     var selectedColorFitDevice: ColorFitDevice? = null
 
-    var device: Device = Device.SMARTWATCH
     var tempColorFitDevice: ColorFitDevice? = null
     private val _deviceList = MutableLiveData<List<ColorFitNetworkDevice>>()
     private val ringInfo = MutableLiveData<List<RingInfoResponse>?>()
@@ -69,9 +67,6 @@ constructor(
     var isBLEScanning = false
 //    var troubleShootData: String? = null
 
-    fun getCurrentDeviceType(): Device? {
-        return localDataStore.getPairDeviceType()
-    }
 
     fun deviceScanQrCodeBean(data: String?): String? {
         //http:...?radio=d855eb6b43c8384e010209000000&random=016260&name=E15_43C8";
@@ -141,10 +136,9 @@ constructor(
     }
 
     fun fetchDeviceList() {
-        val dType: String = if (device == Device.RING) {
+        val dType: String =
             "ring"
-        } else
-            "watch"
+
         /*if (!getDevices().value.isNullOrEmpty()) {
             _deviceList.postValue(getDevices().value)
             _startBluetoothScan.postValue(Event(true))
@@ -251,13 +245,12 @@ constructor(
                 mcuPlatform = mcuPlatform?.name
             )
 
-            if (device == Device.RING) {
-                colorFitDevice.apply {
-                    this.ringInfo =
-                        getRingInfo(scannedDevice.mDeviceRadioBroadcastBean.serialNumber)
+
+            colorFitDevice.apply {
+                this.ringInfo =
+                    getRingInfo(scannedDevice.mDeviceRadioBroadcastBean.serialNumber)
 
 
-                }
             }
 
 

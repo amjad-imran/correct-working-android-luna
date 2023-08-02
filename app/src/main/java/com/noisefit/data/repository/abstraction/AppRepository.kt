@@ -14,10 +14,4 @@ interface AppRepository {
 
     suspend fun deleteOldTableData(): Flow<CacheResult<Unit?>>
 
-    suspend fun getHelpAndSupportList(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<List<HelpAndSupportResponse>>>>
-
-    suspend fun getHelpAndSupportByQuestionId(
-        id: Int,
-        manufacturer: String
-    ): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<HelpAndSupportDetailResponse>>>
 }

@@ -3,12 +3,10 @@ package com.noisefit_commans.data.local.abstraction
 
 import com.noisefit.data.remote.response.CatWiseWatchFacesItem
 import com.noisefit.data.remote.response.WatchFaceCustomListResponse
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.data.enums.ServiceState
 import com.noisefit_commans.data.model.*
 import com.noisefit_commans.data.model.matches.Matches
 import com.noisefit_commans.models.AppNotificationsSettings
-import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.EnabledAppsForNotifications
 import com.noisefit_commans.models.Location
 import com.noisefit_commans.models.LocationDataModel
@@ -29,8 +27,7 @@ interface DataStoredInterface {
     fun getDeviceToken(): String?
     fun updateLocations(location: Location)
     fun getLocation(): Location?
-    fun saveConnectedDevice(noiseFitDevice: ColorFitDevice): Boolean
-    fun getConnectedDevice(): ColorFitDevice?
+
     fun saveSchedulerTimeAndFrequency(interval: Int, syncFrequency: Int)
     fun getSchedulerTimeInterval(): Int?
     fun getSyncIntervalFrequency(): Int?
@@ -393,8 +390,6 @@ interface DataStoredInterface {
     fun setShowReviewPopUp(boolean: Boolean)
     fun isShowReviewPopUp(): Boolean
 
-    fun savePairDeviceType(device: Device?)
-    fun getPairDeviceType(): Device?
     fun setWatchFaceRatedId(id: Int)
     fun clearWatchFaceRatedId(id: Int)
     fun checkWatchFaceRatedIdExist(id: Int): Boolean

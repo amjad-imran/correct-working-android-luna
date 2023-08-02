@@ -6,7 +6,6 @@ import com.noisefit.session.SessionManager
 import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit.util.notif.NotificationEventsClass
 import com.noisefit.util.notif.NotificationUtil
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.models.DeviceType
 import com.noisefit_commans.utils.DateFormats
@@ -71,7 +70,7 @@ constructor(
         }
     }
 
-    fun handleNotification(currentBatteryLevel: Int, isCharging: Boolean, device: Device) {
+    fun handleNotification(currentBatteryLevel: Int, isCharging: Boolean) {
         var batteryNotification = localDataStore.getBatteryNotification()
         val context = NoiseFitApplicationMain.context!!
         // LOGS.d("$TAG ${Gson().toJson(batteryNotification)}")
@@ -93,11 +92,9 @@ constructor(
             if (!hasNotificationTriggered && !isCharging) {
                 LOGS.d("$TAG inside 9pm ")
                 if (currentBatteryLevel < batteryNotification.lastBatteryPercentage) {
-                    val message = if (device == Device.RING) {
+                    val message =
                         "Your Luna Ring battery level is $currentBatteryLevel%, Please charge before going to bed."
-                    } else {
-                        "Your noise watch battery level is $currentBatteryLevel%, Please charge before going to bed."
-                    }
+
 
                     LOGS.d("$TAG $message")
                     pushBatteryNotification(context, TITLE, message, "3")

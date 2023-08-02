@@ -8,7 +8,6 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit.data.remote.CityData
 import com.noisefit.data.remote.StateData
 import com.noisefit.data.remote.base.Resource
-import com.noisefit.data.repository.abstraction.FriendsRepository
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
@@ -21,7 +20,6 @@ import javax.inject.Inject
 class SearchStateViewModel
 @Inject
 constructor(
-    val friendsRepository: FriendsRepository,
     val localDataStore: DataStoredInterface,
     val sessionManager: SessionManager
 ) : BaseViewModel() {
@@ -45,13 +43,13 @@ constructor(
 
 
     fun updateUserLocationState(data: String?, id: Int?) {
-        sessionManager.updateUserLocationState(data, id, type)
+        //sessionManager.updateUserLocationState(data, id, type)
     }
 
 
     fun fetchStateList() {
 
-        viewModelScope.launch {
+       /* viewModelScope.launch {
             friendsRepository.getStateList().collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
@@ -78,14 +76,14 @@ constructor(
                     }
                 }
             }
-        }
+        }*/
 
     }
 
     fun fetchCityList() {
 
         viewModelScope.launch {
-            friendsRepository.getCityList(id!!).collect { resource ->
+           /* friendsRepository.getCityList(id!!).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
@@ -110,7 +108,7 @@ constructor(
                         }
                     }
                 }
-            }
+            }*/
         }
 
     }

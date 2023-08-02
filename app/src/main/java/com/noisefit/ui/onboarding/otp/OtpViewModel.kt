@@ -11,6 +11,7 @@ import com.noisefit.ui.onboarding.auth.AuthMode
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.User
 import com.noisefit_commans.data.response.Country
 import com.noisefit_commans.data.response.SendOtpResponse
@@ -28,6 +29,7 @@ class OtpViewModel
 @Inject
 constructor(
     val localDataStore: DataStoredInterface,
+    val ringDataStore: RingDataStore,
     private val authenticationRepository: AuthenticationRepository,
     val sessionManager: com.noisefit.session.SessionManager
 ) : BaseViewModel() {
@@ -254,7 +256,7 @@ constructor(
                 this["height"] = userInfo?.height ?: 0
                 this["weight"] = userInfo?.weight ?: 0
                 this["personality_type"] = getEndGameValue(user?.endGame)
-                val connectedDeviceData = localDataStore.getConnectedDevice()
+                val connectedDeviceData = ringDataStore.getRingDevice()
                 try {
                     if (connectedDeviceData != null) {
                         val arr = arrayOf(connectedDeviceData.bluetoothName)

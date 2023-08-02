@@ -9,7 +9,6 @@ import com.noisefit_commans.data.model.trophies.TrophyBadge
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.remote.request.UpdateAdditionalDetailRequest
 import com.noisefit_commans.data.response.*
-import com.noisefit.receiver.workManager.HealthOverviewDataType
 import com.noisefit_commans.data.model.Interest
 import com.noisefit_commans.models.*
 import kotlinx.coroutines.flow.Flow
@@ -78,9 +77,7 @@ interface UserRepository {
 
     suspend fun getRecentPlayedContent(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<NoiseHealthCategory?>>>
 
-    suspend fun getOfflineActivities(): List<SportsModeResponse>
 
-    suspend fun getUnSyncedActivities(): List<SportsModeResponse>
 
     suspend fun getSummaryRecentActivities(isForceRefresh: Boolean): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<RecentActivities>>>
 
@@ -91,9 +88,7 @@ interface UserRepository {
 
     suspend fun uploadCrashLogFile(file: File): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<MessageResponse>>>
 
-    suspend fun setActivitiesSynced()
 
-    suspend fun saveActivity(sportsModeResponse: List<SportsModeResponse>?)
 
 
     fun getUnitSystem(): Units
@@ -104,27 +99,9 @@ interface UserRepository {
 
     fun getUser(): User?
 
-    suspend fun getAllHealthOverview(deviceFeatures: DeviceFeatures): HealthOverviewData
-
-    suspend fun getSummaryHealthOverview(
-        deviceFeatures: DeviceFeatures
-    ): HealthOverviewData
-
-    suspend fun getHealthOverview(
-        healthOverviewDataType: HealthOverviewDataType,
-        healthOverviewData: HealthOverviewData?
-    ): Pair<HealthOverviewData, Int?>
-
-
-    suspend fun saveBloodOxygenData(
-        data: List<BloodOxygenBreakup>
-    ): Flow<CacheResult<Boolean?>>
-
 
     suspend fun getInterests(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<List<Interest>>>>
 
     suspend fun updateInterests(requestObject: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<List<Interest>>>>
-
-    suspend fun getTodayStepsData(): StepsData?
 
 }

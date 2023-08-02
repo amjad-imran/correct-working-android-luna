@@ -28,8 +28,8 @@ import com.oreo.data.db.database.OreoStressDao
 @Database(
     entities = [OreoStepsData::class, OreoHeartRate::class, OreoBloodOxygenBreakup::class,
         OreoBloodPressureData::class, OreoSleepData::class, OreoStressDataBreakup::class, OreoGoogleFitData::class,
-        OreoBodyTemperatureBreakup::class, OreoRespiratoryData::class, DayTimeMovementBreakup::class, OreoAutoSportData::class],
-    version = 1
+        OreoBodyTemperatureBreakup::class, OreoRespiratoryData::class, DayTimeMovementBreakup::class,OreoAutoSportData::class],
+    version = 1, exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class OreoDataBase : RoomDatabase() {

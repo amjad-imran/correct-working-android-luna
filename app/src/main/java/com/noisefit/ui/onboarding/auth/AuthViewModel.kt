@@ -13,7 +13,6 @@ import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.User
@@ -238,7 +237,7 @@ class AuthViewModel @Inject constructor(
             this["height"] = userInfo?.height ?: 0
             this["weight"] = userInfo?.weight ?: 0
             this["personality_type"] = getEndGameValue(user?.endGame)
-            val connectedDeviceData = localDataStore.getConnectedDevice()
+            val connectedDeviceData = ringDataStore.getRingDevice()
             try {
                 if (connectedDeviceData != null) {
                     val arr = arrayOf(connectedDeviceData.bluetoothName)
@@ -388,7 +387,7 @@ class AuthViewModel @Inject constructor(
             this["height"] = userInfo?.height ?: 0
             this["weight"] = userInfo?.weight ?: 0
             this["personality_type"] = getEndGameValue(user?.endGame)
-            val connectedDeviceData = localDataStore.getConnectedDevice()
+            val connectedDeviceData = ringDataStore.getRingDevice()
             try {
                 if (connectedDeviceData != null) {
                     val arr = arrayOf(connectedDeviceData.bluetoothName)
@@ -596,7 +595,7 @@ class AuthViewModel @Inject constructor(
             this["height"] = userInfo?.height ?: 0
             this["weight"] = userInfo?.weight ?: 0
             this["personality_type"] = getEndGameValue(user?.endGame)
-            val connectedDeviceData = localDataStore.getConnectedDevice()
+            val connectedDeviceData = ringDataStore.getRingDevice()
             try {
                 if (connectedDeviceData != null) {
                     val arr = arrayOf(connectedDeviceData.bluetoothName)
@@ -623,7 +622,7 @@ class AuthViewModel @Inject constructor(
     }
 
     fun isDevicePaired(): Boolean {
-        return (localDataStore.getConnectedDevice() != null || ringDataStore.getRingDevice() != null)
+        return ringDataStore.getRingDevice() != null
     }
 
 

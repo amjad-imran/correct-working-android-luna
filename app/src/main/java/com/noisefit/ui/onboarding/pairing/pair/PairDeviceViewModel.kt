@@ -19,7 +19,6 @@ import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.response.UpdateResponse
@@ -52,8 +51,6 @@ class PairDeviceViewModel @Inject constructor(
 ) :
     BaseViewModel() {
 
-    var currentDevice: Device = Device.SMARTWATCH
-
     var pairingTimeTaken: Long = 0
     var pairingSuccessEvent: Boolean = false
     var pairingFailedEvent: Boolean = false
@@ -81,20 +78,15 @@ class PairDeviceViewModel @Inject constructor(
 
 
     private fun saveColorFitDevice(colorFitDevice: ColorFitDevice) {
-        val isSaved: Boolean = if (currentDevice == Device.RING) {
+        val isSaved: Boolean =
             ringDataStore.saveRingDevice(colorFitDevice)
-        } else {
-            localDataStore.saveConnectedDevice(colorFitDevice)
-        }
-        localDataStore.savePairDeviceType(currentDevice)
         LOGS.d("CONNECT_STATE", "Device Saved $isSaved")
     }
 
 
+    fun removeWatchTokenFromServer(macAddress: String?) {
 
-    fun removeWatchTokenFromServer(macAddress:String?) {
-
-        if(macAddress.isNullOrEmpty()){
+        if (macAddress.isNullOrEmpty()) {
             LOGS.d("removeWatchTokenFromServer macAddress null")
             return
         }
@@ -113,13 +105,14 @@ class PairDeviceViewModel @Inject constructor(
                     is Resource.NetworkError -> {
                         setApiErrors(resource.response.apply {
                             this.uiComponentType as UIComponentType.RetryApiDialog
-                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback = object : BinaryActionCallback {
-                                override fun yes() {
-                                    removeWatchTokenFromServer(macAddress)
-                                }
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        removeWatchTokenFromServer(macAddress)
+                                    }
 
-                                override fun no() {}
-                            }
+                                    override fun no() {}
+                                }
                         })
                     }
 
@@ -133,6 +126,7 @@ class PairDeviceViewModel @Inject constructor(
 
         }
     }
+
     fun getDeviceFeatures() {
 
         if (colorFitDevice == null) {
@@ -197,11 +191,11 @@ class PairDeviceViewModel @Inject constructor(
             addProperty("address", device.address)
             addProperty("device_id", device.deviceId)
             addProperty("rssi", device.rssi)
-            if(device.watchToken.isNotEmpty()){
+            if (device.watchToken.isNotEmpty()) {
                 addProperty("watch_token", device.watchToken)
             }
             addProperty("platform", "android")
-            addProperty("wearable_type", if (currentDevice == Device.RING) "ring" else "watch")
+            addProperty("wearable_type", "ring")
         }
 
         sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_register_ud_start)
@@ -237,11 +231,7 @@ class PairDeviceViewModel @Inject constructor(
                         resource.data?.data?.let {
 
                             it.userDevice.deviceFeatures?.let { features ->
-                                if (currentDevice == Device.RING) {
-                                    ringDataStore.saveDeviceFeatures(features)
-                                } else {
-                                    localDataStore.saveDeviceFeatures(features)
-                                }
+                                ringDataStore.saveDeviceFeatures(features)
                             }
 
                             //TODO save token here
@@ -326,12 +316,15 @@ class PairDeviceViewModel @Inject constructor(
                     is Resource.GenericError -> {
                         //sendMessage(resource.message)
                     }
+
                     is Resource.Loading -> {
                         setLoading(resource.loading)
                     }
+
                     is Resource.NetworkError -> {
 
                     }
+
                     is Resource.Success -> {
                         resource.data?.data.let { response ->
                             if (response != null) {
@@ -351,10 +344,12 @@ class PairDeviceViewModel @Inject constructor(
                     is Download.Finished -> {
                         _updateFirmware.postValue(Event(it.file))
                     }
+
                     is Download.Progress -> {
                         LOGS.i("${it.percent}")
                         //_firmwareDownloadProgress.postValue(Event(it.percent))
                     }
+
                     is Download.Failed -> {
                         setApiErrors(
                             ErrorResponse(

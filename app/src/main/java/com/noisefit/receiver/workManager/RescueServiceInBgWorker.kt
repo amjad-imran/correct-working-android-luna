@@ -6,7 +6,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import androidx.annotation.NonNull
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
@@ -19,11 +18,9 @@ import com.google.common.util.concurrent.ListenableFuture
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.data.local.AppStaticData
-import com.noisefit.receiver.service.ConnectionService
 import com.noisefit.session.SessionManager
 import com.noisefit.ui.SplashActivity
 import com.noisefit_commans.data.enums.Actions
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.utils.LOGS
 import com.oreo.receiver.service.RingConnectionService
@@ -45,17 +42,10 @@ class RescueServiceInBgWorker
     @NonNull
     override fun doWork(): Result {
         //call methods to perform background task
-        LOGS.d(TAG,"RescueServiceInBgWorker inside rescue bg worker")
+        LOGS.d(TAG, "RescueServiceInBgWorker inside rescue bg worker")
         try {
-            //  sessionManager.logCustomCrashlyticsEvents(TAG, "inside rescue worker")
-            val connectedDeviceType = localDataStore.getPairDeviceType()
-            LOGS.d(TAG, "doWork() called $connectedDeviceType")
 
-            if (connectedDeviceType == Device.RING) {
-                connectionServiceOreo(Actions.START)
-            } else {
-                connectionService(Actions.START)
-            }
+            connectionServiceOreo(Actions.START)
 
         } catch (e: Exception) {
             //  sessionManager.logCustomCrashlyticsEvents(TAG, "inside rescue worker failed", e)
@@ -104,30 +94,15 @@ class RescueServiceInBgWorker
         return future
     }
 
-    private fun connectionService(action: Actions) {
-        //if (localDataStore.getConnectedDevice() == null) return
-        //if (localDataStore.getServiceState() == ServiceState.STOPPED && action == Actions.STOP) return
-        Intent(context, ConnectionService::class.java).also {
-            it.action = action.name
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                LOGS.i("Starting the service in >=26 Mode")
-                ContextCompat.startForegroundService(context, it)
-                return
-            }
-            LOGS.i("Starting the service in < 26 Mode")
-            context.startService(it)
-        }
-    }
-
     private fun connectionServiceOreo(action: Actions) {
         Intent(context, RingConnectionService::class.java).also {
             it.action = action.name
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                LOGS.i(TAG,"Starting the Ring service in >=26 Mode")
+                LOGS.i(TAG, "Starting the Ring service in >=26 Mode")
                 ContextCompat.startForegroundService(context, it)
                 return
             }
-            LOGS.i(TAG,"Starting the Ringservice in < 26 Mode")
+            LOGS.i(TAG, "Starting the Ringservice in < 26 Mode")
             context.startService(it)
         }
     }

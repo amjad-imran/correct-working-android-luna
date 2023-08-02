@@ -9,9 +9,6 @@ import android.os.Handler
 import android.os.Looper
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
-import com.noisefit.data.local.db.abstraction.FeedsDataSource
-import com.noisefit.data.local.db.abstraction.KeyValueDataSource
-import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.remote.abstraction.TokenRefreshApi
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.LastSyncItems
@@ -21,7 +18,6 @@ import com.noisefit.ui.onboarding.OnBoardActivity
 import com.noisefit.watch.SDKWatchType
 import com.noisefit.watch.WatchesSDK
 import com.noisefit_commans.constants.WatchInfoGlobals
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.Token
@@ -52,8 +48,6 @@ class NetworkConnectionInterceptor(
     private val lastSyncProvider: LastSyncProvider,
     private val localDataStore: DataStoredInterface,
     private val ringDataStore: RingDataStore,
-    private val keyValueDataSource: KeyValueDataSource,
-    private val feedsDBSource: FeedsDataSource,
     private val watchesSdk: WatchesSDK,
     private val tokenRefreshApi: TokenRefreshApi,
 ) : Interceptor {
@@ -87,13 +81,6 @@ class NetworkConnectionInterceptor(
 
         lastSyncProvider.removeUserDataLastSync()
 
-        removeLocalChallenges()
-        removeRewardsData()
-        removeStreakData()
-        removeTimelineData()
-
-
-
         Handler(Looper.getMainLooper()).post {
             appContext.showShortToast(appContext.getString(R.string.text_session_expired))
         }
@@ -105,39 +92,6 @@ class NetworkConnectionInterceptor(
         appContext.startActivity(OnBoardActivity.getStartIntent(appContext, true).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         })
-    }
-
-    private fun removeTimelineData() {
-        GlobalScope.launch(Dispatchers.IO) {
-            feedsDBSource.removeTimelineFeeds()
-            localDataStore.setTimeLineCurrentPageCount(1)
-        }
-    }
-
-    private fun removeLocalChallenges() {
-        GlobalScope.launch(Dispatchers.IO) {
-            keyValueDataSource.removeDataByType(KeyValueDataType.CHALLENGE_2)
-            keyValueDataSource.removeDataByType(KeyValueDataType.CHALLENGE_BUDDIES_2)
-            keyValueDataSource.removeDataByType(KeyValueDataType.WATCH_FACE_2)
-            keyValueDataSource.removeDataByType(KeyValueDataType.WATCH_FACE_2_CATEGORY_LIST)
-            keyValueDataSource.removeDataByType(KeyValueDataType.CHALLENGE_LEADERBOARD_2)
-
-        }
-    }
-
-    private fun removeRewardsData() {
-        GlobalScope.launch(Dispatchers.IO) {
-            keyValueDataSource.removeDataByType(KeyValueDataType.USER_COUPON)
-            keyValueDataSource.removeDataByType(KeyValueDataType.USER_COUPON_LIST)
-        }
-    }
-
-    private fun removeStreakData() {
-        GlobalScope.launch(Dispatchers.IO) {
-            keyValueDataSource.removeDataByType(KeyValueDataType.DASH_STREAK_DATA)
-            keyValueDataSource.removeDataByType(KeyValueDataType.COINS_PROFILE_DATA)
-            keyValueDataSource.removeDataByType(KeyValueDataType.ALL_TASK_LIST)
-        }
     }
 
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -204,12 +158,8 @@ class NetworkConnectionInterceptor(
         val request = chain.request()
         val userToken = localDataStore.getUserToken()
         val deviceId = localDataStore.getDeviceToken()
-        val pairedType = localDataStore.getPairDeviceType()
-        val device = if (pairedType == Device.RING) {
-            ringDataStore.getRingDevice()
-        } else {
-            localDataStore.getConnectedDevice()
-        }
+        val device = ringDataStore.getRingDevice()
+
         return request.newBuilder().apply {
             addHeader("content-type", "application/json")
             addHeader("version", BuildConfig.VERSION_CODE.toString())
@@ -237,16 +187,6 @@ class NetworkConnectionInterceptor(
             device?.let {
                 addHeader("device-id", it.deviceId.toString())
                 addHeader("device-type", it.deviceType.toString())
-
-                try {
-                    if (watchesSdk.getWatchType(it) == SDKWatchType.SDK_ZH && WatchInfoGlobals.firmwareDeviceId != 0 && pairedType != Device.RING) {
-                        addHeader("device-no", WatchInfoGlobals.firmwareDeviceId.toString())
-                    }
-                } catch (exp: IllegalArgumentException) {
-                    exp.printStackTrace()
-                }
-
-
             }
             addHeader("timezone", TimeZone.getDefault().id)
             addHeader(

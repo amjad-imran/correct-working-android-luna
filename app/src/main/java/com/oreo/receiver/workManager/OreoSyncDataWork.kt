@@ -11,7 +11,6 @@ import com.google.common.util.concurrent.ListenableFuture
 import com.noisefit.luna.R
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
-import com.noisefit.receiver.workManager.HealthOverviewDataType
 import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
 import com.noisefit.util.moveToServer.SleepNotificationUtils
@@ -20,7 +19,6 @@ import com.noisefit.watch.SDKWatchType
 import com.noisefit.watch.UserActivityHandler
 import com.noisefit.watch.WatchesSDK
 import com.noisefit_commans.constants.EventConstants
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.response.VersionCheckResponse
@@ -207,10 +205,10 @@ constructor(
                                     is Resource.Success -> {
 
                                         //TODO uncomment after testing -deepak
-                                       /* syncDataScope.launch {
-                                            syncRepository.deleteSleepServerSyncData(userActivities.second)
-                                        }
-                                        syncRepository.updateSleepHashForLastSyncData(userActivities.first)*/
+                                        /* syncDataScope.launch {
+                                             syncRepository.deleteSleepServerSyncData(userActivities.second)
+                                         }
+                                         syncRepository.updateSleepHashForLastSyncData(userActivities.first)*/
 
                                         LOGS.d(
                                             TAG,
@@ -351,7 +349,10 @@ constructor(
 
                         is UserActivityCallback.HealthScoreObtainedOreo -> {
                             job = syncDataScope.launch {
-                                syncRepository.saveHealthScoreData(userActivityCallback.score,userActivityCallback.date)
+                                syncRepository.saveHealthScoreData(
+                                    userActivityCallback.score,
+                                    userActivityCallback.date
+                                )
                                     .collect { resource ->
                                         when (resource) {
                                             is CacheResult.Success -> {
@@ -666,7 +667,7 @@ constructor(
 //                    sessionManager.logAppEvent(FunnelEvents.SyncEvents.Sync_Success.name, eventProperty)
                     if (localDataStore.isEnableGoogleFit()) {//TODO handle google fit sync
                         syncDataScope.launch {
-                            ApplicationUtils.startGoogleFitSyncScheduler(context)
+                            //ApplicationUtils.startGoogleFitSyncScheduler(context)
                         }
                     }
 
@@ -675,7 +676,7 @@ constructor(
                         when (watchesSdk.getWatchType(it)) {
                             SDKWatchType.SDK_ZH -> {
                                 syncDataScope.launch {
-                                    ApplicationUtils.startActivitySyncScheduler(context)
+                                    //ApplicationUtils.startActivitySyncScheduler(context)
                                 }
                             }
 
@@ -689,7 +690,7 @@ constructor(
 
                     sessionManager.forceSyncDataWithServer = false
 
-                    sessionManager.saveLastSyncTime(Device.RING, DateFormats.getTimeStamp())
+                    sessionManager.saveLastSyncTime(DateFormats.getTimeStamp())
                     sessionManager.setSyncCompletedState(Event(SyncDataStatus(status = EventConstants.UPDATE_STATUS_SUCCESS)))
                     LOGS.d(TAG, "OreoSyncDataWork: Completedz")
                     mFuture!!.set(Result.success())
@@ -707,4 +708,8 @@ constructor(
 
         return mFuture!!
     }
+}
+
+enum class HealthOverviewDataType {
+    STEPS, HEART, SLEEP, BLOOD, STRESS, TEMPERATURE, ALL, ACTIVITY, SERVER_SYNC_SUCCESS, AUTO_WORKOUT
 }

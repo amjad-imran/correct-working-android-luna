@@ -9,19 +9,14 @@ import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.DeviceRepository
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.session.SessionManager
-import com.noisefit.ui.myDevice.MyDeviceAction
-import com.noisefit.watch.CallingWatchUtils
 import com.noisefit.watch.ConnectionHandler
-import com.noisefit.watch.SDKWatchType
 import com.noisefit.watch.WatchesSDK
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.models.ColorFitDevice
-import com.noisefit_commans.models.DeviceType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,7 +37,6 @@ class OMyDeviceViewModel @Inject constructor(
     private var _deviceConnected: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
     var deviceConnected = _deviceConnected
 
-    var nextAction: MyDeviceAction? = null
     var startWatchFlow: MutableLiveData<Event<Boolean>> = MutableLiveData<Event<Boolean>>()
 
 

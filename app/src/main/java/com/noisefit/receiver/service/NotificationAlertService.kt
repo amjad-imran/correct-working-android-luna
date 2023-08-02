@@ -24,7 +24,6 @@ import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.delay
 
-import com.noisefit.util.music.MusicEventObservable
 import com.noisefit.util.music.mode.MusicMode
 import com.noisefit.util.notif.NotificationUtil
 import com.noisefit_commans.constants.CommonGlobals
@@ -64,8 +63,6 @@ class NotificationAlertService : NotificationListenerService() {
 
     private val NOTIFICATION_CATEGORY = "call"
     private val TAG = "NotificationAlertService"
-
-    var receiver: MusicEventObservable? = null
 
     private var lastMusicNode: MusicMode? = null
 

@@ -7,7 +7,6 @@ import com.noisefit.data.remote.abstraction.NetworkService
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.safeApiCallFlow
 import com.noisefit.luna.BuildConfig
-import com.noisefit.receiver.workManager.HealthOverviewDataType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
@@ -32,6 +31,7 @@ import com.oreo.data.model.health.OreoDashboardResponseModel
 import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.data.model.health.OreoSleepModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
+import com.oreo.receiver.workManager.HealthOverviewDataType
 import com.oreo.ui.DataType
 import com.oreo.ui.TestUserData
 import kotlinx.coroutines.CoroutineDispatcher

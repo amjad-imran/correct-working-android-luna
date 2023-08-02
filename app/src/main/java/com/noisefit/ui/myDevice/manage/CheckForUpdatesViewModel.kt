@@ -20,7 +20,6 @@ import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import com.noisefit.watch.WatchesSDK
 import com.noisefit_commans.constants.WatchInfoGlobals
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
@@ -84,21 +83,16 @@ class CheckForUpdatesViewModel @Inject constructor(
             return
         }
 
-        val pairedDevice = localDataStore.getPairDeviceType()
-        val deviceType = if (pairedDevice == Device.RING) {
-            ringDataSore.getRingDevice()?.deviceType
-        } else {
-            localDataStore.getConnectedDevice()?.deviceType
-        }
+        val deviceType = ringDataSore.getRingDevice()?.deviceType
 
         val requestObject = JsonObject().apply {
             addProperty(
                 "version",
-                if (pairedDevice == Device.RING) WatchInfoGlobals.firmwareVersionNumberRing else WatchInfoGlobals.firmwareVersionNumber
+                WatchInfoGlobals.firmwareVersionNumberRing
             )
             addProperty(
                 "firmware_id",
-                if (pairedDevice == Device.RING) WatchInfoGlobals.firmwareDeviceIdRing else WatchInfoGlobals.firmwareDeviceId
+                WatchInfoGlobals.firmwareDeviceIdRing
             )
             addProperty("device_type", deviceType)
             addProperty("platform", "android")
@@ -150,60 +144,6 @@ class CheckForUpdatesViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    fun checkForUpdatesRecent() {
-        _networkError.postValue(Event(false))
-        val deviceType = localDataStore.getConnectedDevice()?.deviceType
-
-        val requestObject = JsonObject().apply {
-            addProperty("version_number", WatchInfoGlobals.firmwareVersionNumber)
-            addProperty("firmware_id", WatchInfoGlobals.firmwareDeviceId)
-            addProperty("device_type", deviceType)
-            addProperty("build_number", WatchInfoGlobals.firmwareBuildNumber)
-            addProperty("platform", "android")
-        }
-
-        viewModelScope.launch {
-            deviceRepository.checkForUpdatesRecent(requestObject).collect { resource ->
-                when (resource) {
-                    is Resource.GenericError -> {
-                        sendMessage(resource.message)
-                    }
-
-                    is Resource.Loading -> {
-                        setLoading(resource.loading)
-                    }
-
-                    is Resource.NetworkError -> {
-                        _networkError.postValue(Event(true))
-                        setApiErrors(resource.response.apply {
-                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
-                                object : BinaryActionCallback {
-                                    override fun yes() {
-                                        checkForUpdatesRecent()
-                                    }
-
-                                    override fun no() {}
-                                }
-                        })
-                    }
-
-                    is Resource.Success -> {
-                        resource.data?.data.let { response ->
-
-                            if (response == null) {
-                                setUpdateAvailable(false)
-                            } else {
-                                setUpdateAvailable(true)
-                                _updateInfo.postValue(Event(response))
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
     }
 
     fun downloadFirmware(url: String, file: File, fileName: String) {
@@ -379,57 +319,6 @@ class CheckForUpdatesViewModel @Inject constructor(
                                     }
                                 })
                         )
-                    }
-                }
-            }
-        }
-
-    }
-
-    fun isUpdateAllowed(): Boolean {
-        val device = localDataStore.getConnectedDevice() ?: return false
-        return !(device.deviceType.equals(DeviceType.COLORFIT_NAV.deviceType, true)
-                || device.deviceType.equals(DeviceType.NOISEFIT_HYBRID.deviceType, true))
-    }
-
-    fun getAgpsFileUrl() {
-        viewModelScope.launch {
-            deviceRepository.getVendorAgpsFileUrl().collect { resource ->
-                when (resource) {
-                    is Resource.GenericError -> {
-                        AppLogs.sendAppLogs(LogEvents.Agps, AgpsEvents.DownloadFileFailed)
-                        sendMessage(resource.message)
-                    }
-
-                    is Resource.Loading -> {
-                        //setLoading(resource.loading)
-                    }
-
-                    is Resource.NetworkError -> {
-                        _networkError.postValue(Event(true))
-                        setApiErrors(resource.response.apply {
-                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
-                                object : BinaryActionCallback {
-                                    override fun yes() {
-                                        getAgpsFileUrl()
-                                    }
-
-                                    override fun no() {}
-                                }
-                        })
-                    }
-
-                    is Resource.Success -> {
-                        resource.data?.data.let { response ->
-                            response?.let {
-                                if (agpsFileLocation == null) return@let
-                                downloadAgpsFile1(
-                                    it.file,
-                                    agpsFileLocation!!,
-                                    "agps.brm"
-                                )
-                            }
-                        }
                     }
                 }
             }

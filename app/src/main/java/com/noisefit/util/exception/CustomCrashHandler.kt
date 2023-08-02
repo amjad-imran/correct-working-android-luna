@@ -3,6 +3,7 @@ package com.noisefit.util.exception
 import com.noisefit_commans.utils.LOGS
 import android.content.Context
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.utils.DateFormats
 import java.lang.StringBuilder
 
@@ -10,7 +11,8 @@ import java.lang.StringBuilder
 class CustomCrashHandler(
     private val context: Context?,
     private val defaultHandler: Thread.UncaughtExceptionHandler?,
-    private val localDataStore: DataStoredInterface
+    private val localDataStore: DataStoredInterface,
+    private val ringDataStore: RingDataStore,
 ) :
     Thread.UncaughtExceptionHandler {
 
@@ -39,7 +41,7 @@ class CustomCrashHandler(
         }else{
             crashStringBuilder.append("User Data : $user \n\n")
         }
-        val connectedDevice = localDataStore.getConnectedDevice()
+        val connectedDevice = ringDataStore.getRingDevice()
         if(connectedDevice==null){
             crashStringBuilder.append("Connected Device : No Device Connected \n\n")
         }else{

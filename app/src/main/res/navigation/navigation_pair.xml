@@ -2,11 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navigation_pair"
-    app:startDestination="@id/deviceConnectFragment">
-    <fragment
-        android:id="@+id/deviceConnectFragment"
-        android:name="com.noisefit.ui.onboarding.onboardProfile.OnBoardConnectDeviceFragment"
-        android:label="OnBoardDeviceConnect"/>
+    app:startDestination="@id/findDeviceListFragment">
     <fragment
         android:id="@+id/findDeviceListFragment"
         android:name="com.noisefit.ui.onboarding.pairing.find.FindDeviceListFragment"
@@ -17,12 +13,6 @@
         <action
             android:id="@+id/action_findDeviceListFragment_to_pairingFragment"
             app:destination="@id/pairingFragment" />
-        <argument
-            android:name="device"
-            app:argType="com.noisefit_commans.data.enums.Device"
-            android:defaultValue="SMARTWATCH" />
-
-
     </fragment>
     <fragment
         android:id="@+id/qrScanFragment"
@@ -45,10 +35,6 @@
         <argument
             android:name="colorFitDevice"
             app:argType="com.noisefit_commans.models.ColorFitDevice" />
-        <argument
-            android:name="device"
-            app:argType="com.noisefit_commans.data.enums.Device"
-            android:defaultValue="SMARTWATCH" />
     </fragment>
 
     <fragment

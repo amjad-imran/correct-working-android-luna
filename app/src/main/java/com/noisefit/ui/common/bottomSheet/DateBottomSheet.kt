@@ -26,12 +26,12 @@ class DateBottomSheet : BaseBottomSheetWithTransparent<FragmentDateBottomSheetBi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
-            val args = DateBottomSheetArgs.fromBundle(it)
-            mDate = args.date
-            mMonth = args.month - 1 //month Adjustment
-            mYear = args.year
-            mTitle = args.title
-            dobDialog = args.dobDialog
+//            val args = DateBottomSheetArgs.fromBundle(it)
+//            mDate = args.date
+//            mMonth = args.month - 1 //month Adjustment
+//            mYear = args.year
+//            mTitle = args.title
+//            dobDialog = args.dobDialog
 
         }
         binding.tvTitle.text = mTitle

@@ -19,7 +19,6 @@ import androidx.core.content.ContextCompat
 import androidx.work.WorkManager
 import com.airbnb.lottie.LottieDrawable
 import com.noisefit.luna.BuildConfig
-import com.noisefit.MainActivity
 import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
@@ -45,6 +44,7 @@ import com.noisefit.util.notif.NotificationEventsClass.NOTIFICATION_TYPE_EXTRA
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
 
+@SuppressLint("CustomSplashScreen")
 @AndroidEntryPoint
 class SplashActivity : BaseActivity<ActivitySplashBinding>() {
 
@@ -63,11 +63,6 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
         binding.lottieBackAnim.playAnimation(
             LottieDrawable.INFINITE,
             R.raw.anim_splash_screen
-        )
-
-        ApplicationUtils.startNotificationListenerService(
-            viewModel.localDataStore,
-            applicationContext
         )
 
         binding.tvAppVersion.text =
@@ -227,18 +222,6 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
 
     }
 
-    private fun goToDashboard() {
-        startActivity(
-            MainActivity.getStartIntent(
-                this,
-                viewModel.notificationType,
-                viewModel.notificationIndex,
-                viewModel.deeplink
-            )
-        )
-        finish()
-    }
-
     private fun goToOreoDashboard() {
         startActivity(
             OreoMainActivity.getStartIntent(
@@ -320,7 +303,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
                     }
 
                     UserOnBoardingFlow.SHOW_DASHBOARD -> {
-                        goToDashboard()
+                        goToOreoDashboard()
                     }
 
                     UserOnBoardingFlow.SETUP_PROFILE -> {
