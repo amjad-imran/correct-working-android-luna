@@ -1,4 +1,4 @@
-package com.noisefit.zhsdk.di
+package com.noisefit_zhsdk.di
 
 import android.content.Context
 import android.location.Geocoder

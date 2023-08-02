@@ -20,9 +20,6 @@ import com.noisefit.data.local.AppStaticData
 import com.noisefit.luna.databinding.FragmentProfileEditBinding
 import com.noisefit.ui.common.bottomSheet.DATE_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
-import com.noisefit.ui.friends.location.SAVE_LOCATION_REQUEST_KEY
-import com.noisefit.ui.friends.location.search.CLOSED_SEARCH_STATE_KEY
-import com.noisefit.ui.friends.profile.INTEREST_UPDATE_KEY
 import com.noisefit.ui.friends.profile.InterestSharedViewModel
 import com.noisefit.ui.profile.BottomSheetImagePicker.Companion.IMAGE_PICKER_RESULT
 import com.noisefit_commans.data.model.Interest
@@ -48,6 +45,10 @@ import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
+
+const val SAVE_LOCATION_REQUEST_KEY = "SAVE_LOCATION_REQUEST_KEY"
+const val CLOSED_SEARCH_STATE_KEY = "CLOSED_SEARCH_STATE_KEY"
+const val INTEREST_UPDATE_KEY = "INTEREST_UPDATE_KEY"
 
 @AndroidEntryPoint
 class ProfileEditFragment :
@@ -291,7 +292,7 @@ class ProfileEditFragment :
                     bundle.getParcelableArrayList<Interest>("selectedValues")
                 selectedValue?.let { it1 ->
                     viewModel.setInterests(it1)
-                    sharedViewModel.selectedInterests= it1
+                    sharedViewModel.selectedInterests = it1
                 }
             }
             navigate(
@@ -325,9 +326,10 @@ class ProfileEditFragment :
 
         }
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        sharedViewModel.selectedInterests= ArrayList()
+        sharedViewModel.selectedInterests = ArrayList()
     }
 
 

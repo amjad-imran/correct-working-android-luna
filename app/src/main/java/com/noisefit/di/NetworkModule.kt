@@ -2,8 +2,6 @@ package com.noisefit.di
 
 import android.content.Context
 import com.noisefit.luna.BuildConfig
-import com.noisefit.data.local.db.abstraction.FeedsDataSource
-import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.remote.NetworkConnectionInterceptor
 import com.noisefit.data.remote.NetworkConnectionInterceptorShop
 import com.noisefit.data.remote.NetworkConstants
@@ -144,8 +142,6 @@ object NetworkModule {
         localDataStore: DataStoredInterface,
         ringDataStore: RingDataStore,
         lastSyncProvider: LastSyncProvider,
-        keyValueDataSource: KeyValueDataSource,
-        feedsDBSource: FeedsDataSource,
         watchesSdk: WatchesSDK,
         tokenService: TokenRefreshApi
     ): NetworkConnectionInterceptor =
@@ -154,8 +150,6 @@ object NetworkModule {
             lastSyncProvider,
             localDataStore,
             ringDataStore,
-            keyValueDataSource,
-            feedsDBSource,
             watchesSdk,
             tokenService
         )

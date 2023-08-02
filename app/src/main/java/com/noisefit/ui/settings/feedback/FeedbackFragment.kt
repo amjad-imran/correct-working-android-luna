@@ -92,8 +92,7 @@ class FeedbackFragment : BaseFragment<FragmentFeedbackBinding>(FragmentFeedbackB
         }
 
         binding.tvHelp.setOnClickListener {
-            viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.FEEDBACK_HELP_CLICK)
-            navigate(R.id.helpAndSupportFragment)
+            //navigate(R.id.helpAndSupportFragment)
         }
         binding.ivAddAttachment.setOnClickListener {
             if ((viewModel.feedbackUriList.value?.size ?: 0) < 5) {

@@ -1,8 +1,5 @@
 package com.noisefit.ui.onboarding.pairing.pair
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -18,7 +15,6 @@ import androidx.navigation.fragment.navArgs
 import com.airbnb.lottie.LottieDrawable
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentPairingBinding
-import com.noisefit.receiver.service.ConnectionService
 import com.noisefit.receiver.service.FeedbackSubmitService
 import com.noisefit.receiver.service.ProblemType
 import com.noisefit.session.SessionManager
@@ -28,7 +24,6 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit.ui.onboarding.onboardProfile.ProfileSetupActivity
 import com.noisefit.ui.onboarding.pairing.DeviceSetupActivity
-import com.noisefit.ui.settings.helpAndSupport.HelpAndSupportType
 import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit.watch.ApplicationHandler
 import com.noisefit.watch.ConnectionHandler
@@ -126,13 +121,7 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
 
     override fun initListener() {
         binding.btnPairingIssue.setOnClickListener {
-            sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_unable_to_connect_pairing)
-            navigate(
-                PairingFragmentDirections.actionNavigationPairingToSupportListFragment(
-                    null,
-                    HelpAndSupportType.PAIRING_AND_CONNECTIVITY.name
-                )
-            )
+
 
 
         }
@@ -197,26 +186,14 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
             viewModel.pairState.postValue(PairState.PAIRED)
             vibrationUtils.vibrate(LOW_VIBRATION)
 
-            if (viewModel.currentDevice == Device.RING) {
-                if (!viewModel.isMyServiceRunning(
-                        RingConnectionService::class.java,
-                        requireContext()
-                    )
-                ) {
-                    startRingConnectionService(Actions.INIT_DEFAULT)
-                } else {
-                    LOGS.d("Ring connection service already running")
-                }
+            if (!viewModel.isMyServiceRunning(
+                    RingConnectionService::class.java,
+                    requireContext()
+                )
+            ) {
+                startRingConnectionService(Actions.INIT_DEFAULT)
             } else {
-                if (!viewModel.isMyServiceRunning(
-                        ConnectionService::class.java,
-                        requireContext()
-                    )
-                ) {
-                    connectionService(Actions.INIT_DEFAULT)
-                } else {
-                    LOGS.d("Service already running")
-                }
+                LOGS.d("Ring connection service already running")
             }
         } catch (ignored: Exception) {
             ignored.printStackTrace()
@@ -551,20 +528,6 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
 
     }
 
-    private fun connectionService(action: Actions) {
-        if (action == Actions.STOP) return
-        Intent(requireContext(), ConnectionService::class.java).also {
-            it.action = action.name
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                LOGS.i(TAG, "Starting the service in >=26 Mode")
-                ContextCompat.startForegroundService(requireContext(), it)
-                return
-            }
-            LOGS.i(TAG, "Starting the service in < 26 Mode")
-            activity?.startService(it)
-            AppLogs.sendAppLogs("Connection service started")
-        }
-    }
 
     private fun startRingConnectionService(action: Actions) {
         if (action == Actions.STOP) return

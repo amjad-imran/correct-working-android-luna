@@ -10,8 +10,6 @@ import com.google.firebase.messaging.RemoteMessage
 import com.noisefit.luna.BuildConfig
 import com.noisefit.data.local.AppStaticData
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
-import com.noisefit.data.local.db.abstraction.KeyValueDataSource
-import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.session.SessionManager
 import com.noisefit.util.notif.NotificationEventsClass
 import com.noisefit.util.notif.NotificationEventsClass.NOTIFICATION_INDEX_EXTRA
@@ -41,8 +39,6 @@ constructor() : FirebaseMessagingService() {
     @Inject
     lateinit var sessionManager: SessionManager
 
-    @Inject
-    lateinit var keyValueDataSource: KeyValueDataSource
 
     private val dataScope: CoroutineScope = object : CoroutineScope {
         override val coroutineContext: CoroutineContext =
@@ -118,16 +114,7 @@ constructor() : FirebaseMessagingService() {
     private suspend fun deleteCache(type: String) {
         when (type.lowercase()) {
             NotificationEventsClass.NOTIFICATION_TYPE_USER_ACCEPT_COMPETE_REQUEST -> {
-                keyValueDataSource.removeDataByKey(
-                    "0",
-                    KeyValueDataType.FRIENDS_COMPETITION
-                )
-            }
 
-            NotificationEventsClass.NOTIFICATION_TYPE_USER_ACCEPT_REQUEST -> {
-                keyValueDataSource.removeDataByType(
-                    KeyValueDataType.FRIENDS_ACTIVITY
-                )
             }
         }
     }

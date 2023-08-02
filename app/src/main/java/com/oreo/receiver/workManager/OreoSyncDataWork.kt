@@ -11,7 +11,6 @@ import com.google.common.util.concurrent.ListenableFuture
 import com.noisefit.luna.R
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
-import com.noisefit.receiver.workManager.HealthOverviewDataType
 import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
 import com.noisefit.util.moveToServer.SleepNotificationUtils
@@ -666,7 +665,7 @@ constructor(
 //                    sessionManager.logAppEvent(FunnelEvents.SyncEvents.Sync_Success.name, eventProperty)
                     if (localDataStore.isEnableGoogleFit()) {//TODO handle google fit sync
                         syncDataScope.launch {
-                            ApplicationUtils.startGoogleFitSyncScheduler(context)
+                            //ApplicationUtils.startGoogleFitSyncScheduler(context)
                         }
                     }
 
@@ -675,7 +674,7 @@ constructor(
                         when (watchesSdk.getWatchType(it)) {
                             SDKWatchType.SDK_ZH -> {
                                 syncDataScope.launch {
-                                    ApplicationUtils.startActivitySyncScheduler(context)
+                                    //ApplicationUtils.startActivitySyncScheduler(context)
                                 }
                             }
 
@@ -707,4 +706,7 @@ constructor(
 
         return mFuture!!
     }
+}
+enum class HealthOverviewDataType {
+    STEPS, HEART, SLEEP, BLOOD, STRESS, TEMPERATURE, ALL, ACTIVITY, SERVER_SYNC_SUCCESS
 }

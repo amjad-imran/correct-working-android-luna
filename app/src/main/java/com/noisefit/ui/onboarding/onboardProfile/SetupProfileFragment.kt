@@ -1,11 +1,9 @@
 package com.noisefit.ui.onboarding.onboardProfile
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import com.noisefit.MainActivity
-import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSetupProfileBinding
+import com.noisefit.oreo.OreoMainActivity
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit.ui.onboarding.pairing.DeviceSetupActivity
@@ -88,7 +86,7 @@ class SetupProfileFragment :
 
     private fun goToHomeActivity() {
         if (localDataStore.getConnectedDevice() == null) {
-            startActivity(MainActivity.getStartIntent(requireContext()))
+            startActivity(OreoMainActivity.getStartIntent(requireContext()))
             activity?.finish()
         } else {
             startActivity(DeviceSetupActivity.getStartIntent(requireContext()))

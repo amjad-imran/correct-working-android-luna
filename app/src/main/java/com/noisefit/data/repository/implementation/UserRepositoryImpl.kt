@@ -7,8 +7,6 @@ import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.dataConverter.OfflineDataMapper
 import com.noisefit.data.googleFit.GoogleFitDataObservers
 import com.noisefit.data.local.db.CacheResult
-import com.noisefit.data.local.db.database.ActivityDao
-import com.noisefit.data.local.db.implementation.*
 import com.noisefit_commans.data.model.*
 import com.noisefit_commans.data.model.trophies.Trophies
 import com.noisefit_commans.data.model.trophies.TrophyBadge
@@ -18,11 +16,9 @@ import com.noisefit.data.remote.request.UpdateAdditionalDetailRequest
 import com.noisefit_commans.data.response.*
 import com.noisefit.data.repository.LastSyncItems
 import com.noisefit.data.repository.LastSyncProvider
-import com.noisefit.data.repository.abstraction.UserActivityRepository
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.data.safeApiCallFlow
 import com.noisefit.data.safeCacheCall
-import com.noisefit.receiver.workManager.HealthOverviewDataType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.Interest
 import com.noisefit_commans.ui.checkDayDifferenceMoreOne
@@ -43,18 +39,10 @@ import java.io.File
 class UserRepositoryImpl(
     private val localDatSource: DataStoredInterface,
     private val remoteDataSource: NetworkService,
-    private val activityDao: ActivityDao,
-    private val stepsDataImpl: StepsDataImpl,
-    private val stressDataImpl: StressDataImpl,
     private val lastSyncProvider: LastSyncProvider,
-    private val heartRateDataImpl: HeartRateDataImpl,
-    private val bloodOxygenDataImpl: BloodOxygenDataImpl,
-    private val sleepDataImpl: SleepDataImpl,
-    private val bodyTemperatureDataImpl: BodyTemperatureDataImpl,
     private val offlineDataMapper: OfflineDataMapper,
     private val googleFitDataObservers: GoogleFitDataObservers,
     private val dataUnitConverter: DataUnitConverter,
-    private val userActivityRepository: UserActivityRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : UserRepository {
 
@@ -99,7 +87,6 @@ class UserRepositoryImpl(
 
     override suspend fun saveUserDevice(request: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<UpdateDeviceResponse>>> {
         return safeApiCallFlow(dispatcher) {
-            userActivityRepository.removeLocalStreakData()
             remoteDataSource.setUserDevice(
                 "${BuildConfig.BASE_URL_NEW}/master/user/v3/devices",
                 request
@@ -133,7 +120,6 @@ class UserRepositoryImpl(
 
     override suspend fun updateUserProfile(request: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<User>>> {
         return safeApiCallFlow(dispatcher) {
-            userActivityRepository.removeLocalStreakData()
             remoteDataSource.updateUserProfile(request)
         }
     }
@@ -571,42 +557,6 @@ class UserRepositoryImpl(
         }
     }
 
-    override suspend fun getOfflineActivities(): List<SportsModeResponse> {
-        return activityDao.getActivities()
-    }
-
-    override suspend fun saveActivity(sportsModeResponse: List<SportsModeResponse>?) {
-        val enableGoogleFit = localDatSource.isEnableGoogleFit()
-        LOGS.d("SAVE Activity")
-        sportsModeResponse?.forEach { response ->
-            if (enableGoogleFit) {
-                val sportsMode = offlineDataMapper.convertSportDataToGoogleFit(response)
-                sportsMode?.let {
-                    googleFitDataObservers.insertActivityData(sportsMode)
-                }
-
-            }
-
-
-
-            try {
-                GlobalScope.launch(dispatcher) {
-                    activityDao.insertActivity(sportsModeResponse = response)
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
-
-    override suspend fun getUnSyncedActivities(): List<SportsModeResponse> {
-        return activityDao.getUnSyncedActivities()
-    }
-
-    override suspend fun setActivitiesSynced() {
-        return activityDao.setActivitiesSynced()
-    }
-
     override fun getUnitSystem(): Units {
         return localDatSource.getUnit()
     }
@@ -623,393 +573,6 @@ class UserRepositoryImpl(
         return localDatSource.getUser()
     }
 
-    override suspend fun getTodayStepsData(): StepsData? {
-        val todayDate = DateFormats.getTodaysDateString(7)
-        return stepsDataImpl.getTodayData(todayDate)
-    }
-
-    override suspend fun getSummaryHealthOverview(
-        deviceFeatures: DeviceFeatures
-    ): HealthOverviewData {
-        try {
-            val todayDate = DateFormats.getTodaysDateString(7)
-            val user = localDatSource.getUser()
-
-            val healthOverviewList = ArrayList<HealthOverview>()
-            val stepsData = stepsDataImpl.getTodayData(todayDate)
-
-
-            val healthOverviewData = offlineDataMapper.convertHealthOverviewData(
-                stepsData,
-                user?.userGoals,
-                dataUnitConverter
-            )
-
-            if (deviceFeatures.heartRate == 1) {
-                healthOverviewList.add(
-                    offlineDataMapper.convertHeartRateOverviewData(
-                        heartRateDataImpl.getTodayData(todayDate)
-                    )
-                )
-            }
-
-
-            if (deviceFeatures.sleepData == 1) {
-                healthOverviewList.add(
-                    offlineDataMapper.convertSleepOverviewData(
-                        sleepDataImpl.getTodayData(todayDate)
-                    )
-                )
-            }
-
-
-            if (deviceFeatures.bloodOxygen == 1) {
-                healthOverviewList.add(
-                    offlineDataMapper.convertBloodOxygenOverviewData(
-                        bloodOxygenDataImpl.getTodayData(
-                            todayDate
-                        )
-                    )
-                )
-            }
-
-
-            if (deviceFeatures.stressCount == 1) {
-                healthOverviewList.add(
-                    offlineDataMapper.convertStressOverviewData(
-                        stressDataImpl.getTodayData(
-                            todayDate
-                        )
-                    )
-                )
-            }
-
-            if (deviceFeatures.bodyTemperature == 1) {
-                healthOverviewList.add(
-                    offlineDataMapper.convertBodyTempOverviewData(
-                        bodyTemperatureDataImpl.getTodayData(
-                            todayDate
-                        ),
-                        dataUnitConverter,
-                        localDatSource.getBodyTempUnit()
-                    )
-                )
-            }
-
-            if (deviceFeatures.stepsData == 1) {
-                healthOverviewList.add(
-                    offlineDataMapper.convertStepsOverviewData(
-                        stepsData,
-                        user?.userGoals
-                    )
-                )
-            }
-
-            if (deviceFeatures.stepsData == 1) {
-                healthOverviewList.add(
-                    offlineDataMapper.convertDistanceOverviewData(
-                        stepsData,
-                        user?.userGoals,
-                        dataUnitConverter
-                    )
-                )
-            }
-
-            if (deviceFeatures.calorieData == 1) {
-                healthOverviewList.add(
-                    offlineDataMapper.convertCaloriesOverviewData(
-                        stepsData
-                    )
-                )
-            }
-
-
-            healthOverviewData.healthOverviewList = healthOverviewList
-            return healthOverviewData
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return HealthOverviewData()
-    }
-
-    //TODO: Need to Think  a way to handle it more efficiently
-    override suspend fun getAllHealthOverview(deviceFeatures: DeviceFeatures): HealthOverviewData {
-        val todayDate = DateFormats.getTodaysDateString(7)
-        val user = localDatSource.getUser()
-
-        val healthOverviewList = ArrayList<HealthOverview>()
-        val stepsData = stepsDataImpl.getTodayData(todayDate)
-
-        val healthOverviewData = offlineDataMapper.convertHealthOverviewData(
-            stepsData,
-            user?.userGoals,
-            dataUnitConverter
-        )
-
-        if (deviceFeatures.stepsData == 1) {
-            healthOverviewList.add(
-                offlineDataMapper.convertStepsOverviewData(
-                    stepsData,
-                    user?.userGoals
-                )
-            )
-        }
-        if (deviceFeatures.stepsData == 1) {
-            healthOverviewList.add(
-                offlineDataMapper.convertDistanceOverviewData(
-                    stepsData,
-                    user?.userGoals,
-                    dataUnitConverter
-                )
-            )
-        }
-
-        if (deviceFeatures.calorieData == 1) {
-            healthOverviewList.add(
-                offlineDataMapper.convertCaloriesOverviewData(
-                    stepsData
-                )
-            )
-        }
-
-        if (deviceFeatures.heartRate == 1) {
-            healthOverviewList.add(
-                offlineDataMapper.convertHeartRateOverviewData(
-                    heartRateDataImpl.getTodayData(todayDate)
-                )
-            )
-        }
-
-
-        if (deviceFeatures.sleepData == 1) {
-            healthOverviewList.add(
-                offlineDataMapper.convertSleepOverviewData(
-                    sleepDataImpl.getTodayData(todayDate)
-                )
-            )
-        }
-
-
-        if (deviceFeatures.bloodOxygen == 1) {
-            healthOverviewList.add(
-                offlineDataMapper.convertBloodOxygenOverviewData(
-                    bloodOxygenDataImpl.getTodayData(
-                        todayDate
-                    )
-                )
-            )
-        }
-
-
-        if (deviceFeatures.stressCount == 1) {
-            healthOverviewList.add(
-                offlineDataMapper.convertStressOverviewData(
-                    stressDataImpl.getTodayData(
-                        todayDate
-                    )
-                )
-            )
-        }
-
-
-        if (deviceFeatures.bodyTemperature == 1) {
-            healthOverviewList.add(
-                offlineDataMapper.convertBodyTempOverviewData(
-                    bodyTemperatureDataImpl.getTodayData(
-                        todayDate
-                    ),
-                    dataUnitConverter,
-                    localDatSource.getBodyTempUnit()
-                )
-            )
-        }
-
-
-
-        healthOverviewData.healthOverviewList = healthOverviewList
-        return healthOverviewData
-
-
-    }
-
-    override suspend fun getHealthOverview(
-        healthOverviewDataType: HealthOverviewDataType,
-        healthOverviewData: HealthOverviewData?
-    ): Pair<HealthOverviewData, Int?> {
-        var hOverviewData = healthOverviewData
-        if (hOverviewData == null) {
-            hOverviewData = HealthOverviewData()
-        }
-
-        var index: Int? = null
-        if (hOverviewData.healthOverviewList == null) {
-            hOverviewData.healthOverviewList = ArrayList()
-        }
-        val todayDate = DateFormats.getTodaysDateString(7)
-        val user = localDatSource.getUser()
-
-        //val healthOverviewList = ArrayList<HealthOverview>()
-
-        when (healthOverviewDataType) {
-            HealthOverviewDataType.ALL, HealthOverviewDataType.ACTIVITY -> {
-
-            }
-
-            HealthOverviewDataType.STEPS -> {
-
-                val stepsData = stepsDataImpl.getTodayData(todayDate)
-
-                val hrOverview = offlineDataMapper.convertHealthOverviewData(
-                    stepsData,
-                    user?.userGoals,
-                    dataUnitConverter
-                )
-                hOverviewData.apply {
-                    stand = hrOverview.stand
-                    standGoal = hrOverview.standGoal
-                    calories = hrOverview.calories
-                    caloriesGoal = hrOverview.caloriesGoal
-                    distance = hrOverview.distance
-                    distanceGoal = hrOverview.distanceGoal
-                    activeMinute = hrOverview.activeMinute
-                    activeMinuteGoal = hrOverview.activeMinuteGoal
-                    stepsGoal = hrOverview.stepsGoal
-                    steps = hrOverview.steps
-                    stepsGoalProgress = hrOverview.stepsGoalProgress
-                    caloriesGoalProgress = hrOverview.caloriesGoalProgress
-                    distanceGoalProgress = hrOverview.distanceGoalProgress
-
-                }
-
-                index = hOverviewData.healthOverviewList?.indexOfFirst {
-                    it is HealthOverview.Steps
-                }
-
-                val distanceIndex = hOverviewData.healthOverviewList?.indexOfFirst {
-                    it is HealthOverview.Distance
-                }
-
-                val caloriesIndex = hOverviewData.healthOverviewList?.indexOfFirst {
-                    it is HealthOverview.Calories
-                }
-                if (index != -1) {
-                    hOverviewData.healthOverviewList!![index!!] =
-                        offlineDataMapper.convertStepsOverviewData(
-                            stepsData,
-                            user?.userGoals
-                        )
-                }
-
-                if (distanceIndex != -1) {
-                    hOverviewData.healthOverviewList!![distanceIndex!!] =
-                        offlineDataMapper.convertDistanceOverviewData(
-                            stepsData,
-                            user?.userGoals,
-                            dataUnitConverter
-                        )
-                }
-
-                if (caloriesIndex != -1) {
-                    hOverviewData.healthOverviewList!![caloriesIndex!!] =
-                        offlineDataMapper.convertCaloriesOverviewData(
-                            stepsData
-                        )
-                }
-
-            }
-            HealthOverviewDataType.STRESS -> {
-                index = hOverviewData.healthOverviewList?.indexOfFirst {
-                    it is HealthOverview.Stress
-                }
-                if (index != -1) {
-                    hOverviewData.healthOverviewList!![index!!] =
-                        offlineDataMapper.convertStressOverviewData(
-                            stressDataImpl.getTodayData(
-                                todayDate
-                            )
-                        )
-                }
-            }
-            HealthOverviewDataType.SLEEP -> {
-
-                index = hOverviewData.healthOverviewList?.indexOfFirst {
-                    it is HealthOverview.Sleep
-                }
-                if (index != -1) {
-                    hOverviewData.healthOverviewList!![index!!] =
-                        offlineDataMapper.convertSleepOverviewData(
-                            sleepDataImpl.getTodayData(todayDate)
-                        )
-                }
-
-
-            }
-            HealthOverviewDataType.HEART -> {
-
-                index = hOverviewData.healthOverviewList?.indexOfFirst {
-                    it is HealthOverview.HeartRate
-                }
-                if (index != -1) {
-                    hOverviewData.healthOverviewList!![index!!] =
-                        offlineDataMapper.convertHeartRateOverviewData(
-                            heartRateDataImpl.getTodayData(
-                                todayDate
-                            )
-                        )
-                }
-
-
-            }
-            HealthOverviewDataType.BLOOD -> {
-
-                index = hOverviewData.healthOverviewList?.indexOfFirst {
-                    it is HealthOverview.BloodOxygen
-                }
-                if (index != -1) {
-                    hOverviewData.healthOverviewList!![index!!] =
-                        offlineDataMapper.convertBloodOxygenOverviewData(
-                            bloodOxygenDataImpl.getTodayData(
-                                todayDate
-                            )
-                        )
-                }
-
-
-            }
-            HealthOverviewDataType.TEMPERATURE -> {
-
-                index = hOverviewData.healthOverviewList?.indexOfFirst {
-                    it is HealthOverview.BodyTemp
-                }
-                if (index != -1) {
-                    hOverviewData.healthOverviewList!![index!!] =
-                        offlineDataMapper.convertBodyTempOverviewData(
-                            bodyTemperatureDataImpl.getTodayData(
-                                todayDate
-                            ),
-                            dataUnitConverter,
-                            localDatSource.getBodyTempUnit()
-                        )
-                }
-
-            }
-
-            HealthOverviewDataType.SERVER_SYNC_SUCCESS -> {}
-        }
-
-        return Pair(hOverviewData, index)
-
-    }
-
-    override suspend fun saveBloodOxygenData(
-        data: List<BloodOxygenBreakup>
-    ): Flow<CacheResult<Boolean?>> {
-        return safeCacheCall(Dispatchers.IO) {
-            bloodOxygenDataImpl.insertData(
-                data
-            )
-        }
-    }
 
     override suspend fun getInterests(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<List<Interest>>>> {
         return safeApiCallFlow(dispatcher) {

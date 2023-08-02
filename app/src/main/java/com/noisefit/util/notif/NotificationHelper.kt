@@ -8,7 +8,6 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.noisefit.luna.R
-import com.noisefit.receiver.broadcastReceiver.StopFindMyPhoneBroadcast
 import com.noisefit.ui.SplashActivity
 
 import com.noisefit_commans.utils.LOGS
@@ -105,27 +104,6 @@ object NotificationHelper {
 
     }
 
-    fun getAction(context: Context, notificationType: String): NotificationCompat.Action? {
-        when (notificationType) {
-            NotificationEventsClass.FIND_PHONE_NOTIFICATION_KEY -> {
-                val snoozeIntent = Intent(context, StopFindMyPhoneBroadcast::class.java).apply {
-                    action = StopFindMyPhoneBroadcast.ACTION_STOP
-                }
-                val stopPendingIntent: PendingIntent =
-                    PendingIntent.getBroadcast(context, 0, snoozeIntent, PendingIntent.FLAG_MUTABLE)
-
-                return NotificationCompat.Action(
-                    0,
-                    context.getString(R.string.stop),
-                    stopPendingIntent
-                )
-            }
-            else -> {
-                return null
-            }
-        }
-    }
-
     fun getPriority(channelID: String): Int {
         when (channelID) {
             NotificationEventsClass.NOISE_PUSH_CHANNEL_ID -> {
@@ -150,20 +128,11 @@ object NotificationHelper {
 
         LOGS.d("NOTIFICATION_TYPE $notificationType")
 
-        val intent = when (notificationType) {
-            NotificationEventsClass.FIND_PHONE_NOTIFICATION_KEY -> {
-                Intent(context, StopFindMyPhoneBroadcast::class.java).apply {
-                    action = StopFindMyPhoneBroadcast.ACTION_STOP
-                }
-            }
-            else -> {
-                Intent(context, SplashActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    putExtra(NotificationEventsClass.NOTIFICATION_BUNDLE_TYPE, notificationType)
-                    putExtra(NotificationEventsClass.NOTIFICATION_BUNDLE_INDEX, notificationIndex)
-                    putExtra(NotificationEventsClass.NOTIFICATION_BUNDLE_LINK, deepLink)
-                }
-            }
+        val intent = Intent(context, SplashActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtra(NotificationEventsClass.NOTIFICATION_BUNDLE_TYPE, notificationType)
+            putExtra(NotificationEventsClass.NOTIFICATION_BUNDLE_INDEX, notificationIndex)
+            putExtra(NotificationEventsClass.NOTIFICATION_BUNDLE_LINK, deepLink)
         }
 
         return PendingIntent.getActivity(

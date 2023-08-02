@@ -3,13 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="viewModel"
-            type="com.noisefit.ui.dashboard.graphs.steps.StepsDetailsViewModel" />
-
-    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container"

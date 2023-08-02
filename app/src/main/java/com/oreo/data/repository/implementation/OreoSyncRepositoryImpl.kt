@@ -1,41 +1,18 @@
 package com.oreo.data.repository.implementation
 
 import com.google.gson.Gson
-import com.noisefit.luna.BuildConfig
 import com.noisefit.data.dataConverter.OfflineDataMapper
-import com.noisefit.data.dataConverter.OnlineDataMapper
 import com.noisefit.data.local.db.CacheResult
-import com.noisefit.data.local.db.implementation.BloodOxygenDataImpl
-import com.noisefit.data.local.db.implementation.BodyTemperatureDataImpl
-import com.noisefit.data.local.db.implementation.GoogleFitDataImpl
-import com.noisefit.data.local.db.implementation.HeartRateDataImpl
-import com.noisefit.data.local.db.implementation.StressDataImpl
 import com.noisefit.data.remote.abstraction.NetworkService
 import com.noisefit.data.remote.base.Resource
-import com.noisefit.data.repository.LastSyncItems
 import com.noisefit.data.repository.LastSyncProvider
-import com.noisefit.data.repository.abstraction.UserActivityRepository
 import com.noisefit.data.safeApiCallFlow
 import com.noisefit.data.safeCacheCall
+import com.noisefit.luna.BuildConfig
 import com.noisefit.util.TestModeUtils
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.DayTimeMovementBreakup
-import com.noisefit_commans.data.model.UserSyncRawData
-import com.noisefit_commans.data.response.BaseApiResponse
-import com.noisefit_commans.data.response.VersionCheckResponse
-import com.noisefit_commans.models.BloodOxygenBreakup
-import com.noisefit_commans.models.BodyTemperatureBreakup
-import com.noisefit_commans.models.HeartRate
-import com.noisefit_commans.models.StepDataGoogleFit
-import com.noisefit_commans.models.StressDataBreakup
-import com.noisefit_commans.models.SyncGoogleFitData
-import com.noisefit_commans.response.SleepBreakup
-import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.EncryptUtils
-import com.noisefit_commans.utils.LOGS
-import com.oreo.data.db.implementation.OreoSleepDataImpl
-import com.oreo.data.db.implementation.OreoStepsDataImpl
 import com.noisefit_commans.data.model.OreoBloodOxygenBreakup
 import com.noisefit_commans.data.model.OreoBodyTemperatureBreakup
 import com.noisefit_commans.data.model.OreoHeartRate
@@ -43,13 +20,22 @@ import com.noisefit_commans.data.model.OreoRespiratoryData
 import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.data.model.OreoStepsData
 import com.noisefit_commans.data.model.OreoStressDataBreakup
+import com.noisefit_commans.data.response.BaseApiResponse
+import com.noisefit_commans.data.response.VersionCheckResponse
+import com.noisefit_commans.models.StepDataGoogleFit
+import com.noisefit_commans.models.SyncGoogleFitData
+import com.noisefit_commans.response.SleepBreakup
 import com.noisefit_commans.utils.AppLogs
+import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.EncryptUtils
 import com.oreo.data.dataConverter.OreoOnlineDataMapper
 import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
 import com.oreo.data.db.implementation.OreoDayTimeMovementDataImpl
 import com.oreo.data.db.implementation.OreoHeartRateDataImpl
 import com.oreo.data.db.implementation.OreoRespiratoryDataImpl
+import com.oreo.data.db.implementation.OreoSleepDataImpl
+import com.oreo.data.db.implementation.OreoStepsDataImpl
 import com.oreo.data.db.implementation.OreoStressDataImpl
 import com.oreo.data.model.OreoUserSyncActivities
 import com.oreo.data.model.OreoUserSyncRawData
@@ -68,14 +54,12 @@ class OreoSyncRepositoryImpl(
     private val dayTimeMovementImpl: OreoDayTimeMovementDataImpl,
     private val respiratoryDataImpl: OreoRespiratoryDataImpl,
     private val sleepDataImpl: OreoSleepDataImpl,
-    private val googleFitDataImpl: GoogleFitDataImpl,
     private val bodyTemperatureDataImpl: OreoBodyTemperatureDataImpl,
     private val offlineDataMapper: OfflineDataMapper,
     private val gson: Gson,
     private val onlineDataMapper: OreoOnlineDataMapper,
     private val encryptUtils: EncryptUtils,
     private val lastSyncProvider: LastSyncProvider,
-    private val userActivityRepository: UserActivityRepository,
     private val testModeUtils: TestModeUtils,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : OreoSyncRepository {
@@ -214,58 +198,58 @@ class OreoSyncRepositoryImpl(
 
     override suspend fun updateHashForLastSyncData(userSyncActivities: OreoUserSyncActivities) {
 
-       /* userSyncActivities.stepsDataList?.let {
-            localDatSource.setStepsLastSyncHash(
-                encryptUtils.md5(
-                    gson.toJson(
-                        it
-                    )
-                )
-            )
-        }
+        /* userSyncActivities.stepsDataList?.let {
+             localDatSource.setStepsLastSyncHash(
+                 encryptUtils.md5(
+                     gson.toJson(
+                         it
+                     )
+                 )
+             )
+         }
 
 
-        userSyncActivities.stressData?.let {
-            localDatSource.setStressLastSyncHash(
-                encryptUtils.md5(
-                    gson.toJson(
-                        it
-                    )
-                )
-            )
-        }
-        userSyncActivities.boData?.let {
-            localDatSource.setBloodOxygenLastSyncHash(
-                encryptUtils.md5(
-                    gson.toJson(
-                        it
-                    )
-                )
-            )
-        }
+         userSyncActivities.stressData?.let {
+             localDatSource.setStressLastSyncHash(
+                 encryptUtils.md5(
+                     gson.toJson(
+                         it
+                     )
+                 )
+             )
+         }
+         userSyncActivities.boData?.let {
+             localDatSource.setBloodOxygenLastSyncHash(
+                 encryptUtils.md5(
+                     gson.toJson(
+                         it
+                     )
+                 )
+             )
+         }
 
-        if (testModeUtils.saveHrHash()) {
-            userSyncActivities.hrHistoryData?.let {
-                localDatSource.setHeartLastSyncHash(
-                    encryptUtils.md5(
-                        gson.toJson(
-                            it
-                        )
-                    )
-                )
-            }
-        }
+         if (testModeUtils.saveHrHash()) {
+             userSyncActivities.hrHistoryData?.let {
+                 localDatSource.setHeartLastSyncHash(
+                     encryptUtils.md5(
+                         gson.toJson(
+                             it
+                         )
+                     )
+                 )
+             }
+         }
 
 
-        userSyncActivities.bodyTemperature?.let {
-            localDatSource.setBodyTempSyncHash(
-                encryptUtils.md5(
-                    gson.toJson(
-                        it
-                    )
-                )
-            )
-        }*/
+         userSyncActivities.bodyTemperature?.let {
+             localDatSource.setBodyTempSyncHash(
+                 encryptUtils.md5(
+                     gson.toJson(
+                         it
+                     )
+                 )
+             )
+         }*/
     }
 
     override suspend fun checkHalfSyncData() {
@@ -351,13 +335,13 @@ class OreoSyncRepositoryImpl(
 
     override suspend fun deleteServerSyncData(data: OreoUserSyncRawData) {
         val todayTimeStamp = DateFormats.convertTimeStampToStartOfDay(DateFormats.getTimeStamp())
-       /* val todayTimeStampForSleep = DateFormats.convertTimeStampToPrevious12ofDay(
-            DateFormats.subtractDate(
-                DateFormats.getTimeStamp(),
-                1
-            )
-        )
-        LOGS.d("deleteServerSyncData $todayTimeStamp $todayTimeStampForSleep")*/
+        /* val todayTimeStampForSleep = DateFormats.convertTimeStampToPrevious12ofDay(
+             DateFormats.subtractDate(
+                 DateFormats.getTimeStamp(),
+                 1
+             )
+         )
+         LOGS.d("deleteServerSyncData $todayTimeStamp $todayTimeStampForSleep")*/
 
         data.stepsDataList?.let {
             stepsDataImpl.updateServerSyncData(it)
@@ -547,10 +531,6 @@ class OreoSyncRepositoryImpl(
             ), userSyncRawData
         )
 
-    }
-
-    override suspend fun getGoogleFitUnSyncData(date: String): SyncGoogleFitData {
-        return googleFitDataImpl.getUnSyncedData(date)
     }
 
 

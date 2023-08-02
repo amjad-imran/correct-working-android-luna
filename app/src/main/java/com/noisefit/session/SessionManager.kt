@@ -3,16 +3,10 @@ package com.noisefit.session
 import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ktx.Firebase
-import com.google.gson.Gson
 import com.noisefit.data.repository.abstraction.UserRepository
-import com.noisefit.receiver.workManager.DiyWatchFaceTransferStates
-import com.noisefit.receiver.workManager.HealthOverviewDataType
-import com.noisefit.receiver.workManager.WatchFaceTransferStates
-import com.noisefit.ui.friends.location.search.SearchStateType
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -37,6 +31,7 @@ import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.oreo.receiver.workManager.HealthOverviewDataType
 import com.useinsider.insider.Insider
 import com.useinsider.insider.Insider.Instance
 import com.useinsider.insider.InsiderEvent
@@ -91,9 +86,7 @@ constructor(
 
     var upcomingSportEvent: SportEvent? = null
 
-    val watchFaceTransferStates = MutableLiveData<Event<WatchFaceTransferStates>>()
 
-    val diyWatchFaceTransferStates = MutableLiveData<Event<DiyWatchFaceTransferStates>>()
     var needToUpdateStreakData = MutableLiveData<Event<Pair<Long, Boolean>>>()
 
 
@@ -292,11 +285,6 @@ constructor(
         }
     }
 
-    fun saveSportsActivities(list: List<SportsModeResponse>?) {
-        GlobalScope.launch(Main) {
-            userRepository.saveActivity(list)
-        }
-    }
 
     fun setBluetoothState(boolean: Boolean) {
         GlobalScope.launch(Main) {
@@ -376,32 +364,6 @@ constructor(
 //        }
 //    }
 
-    fun updateUserLocationState(data: String?, id: Int?, type: SearchStateType) {
-
-        if (tempUserLocation == null) {
-            tempUserLocation = UserLocation()
-        }
-
-        when (type) {
-            SearchStateType.State -> {
-                tempUserLocation!!.stateChanged = true
-                tempUserLocation!!.stateId = id
-                tempUserLocation!!.state = data
-                tempUserLocation!!.cityId = 0
-                tempUserLocation!!.city = null
-            }
-
-            SearchStateType.City -> {
-                tempUserLocation!!.stateId = tempUserLocation!!.stateId
-                tempUserLocation!!.state = tempUserLocation!!.state
-                tempUserLocation!!.stateChanged = false
-                tempUserLocation!!.cityId = id
-                tempUserLocation!!.city = data
-            }
-        }
-
-
-    }
 
     /**
      * Returns connection status on the bases of _connectState state

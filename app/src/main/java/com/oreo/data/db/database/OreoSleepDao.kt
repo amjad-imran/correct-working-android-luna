@@ -25,7 +25,7 @@ interface OreoSleepDao : BaseDao<OreoSleepData> {
     @Query(
         "SELECT id,is_synced,is_google_fit_sync,startTime,endTime,startDate,endDate," +
                 "availableSleepTypes,date,total,deep,light,sober,awake,remCount,breathQuality," +
-                "sleepScore,startTimeStamp,endTimeStamp,sleep_array,timeInBedTime,sleepLatency,sleepEfficiency," +
+                "sleepScore,startTimeStamp,endTimeStamp,sync_date,sleep_array,timeInBedTime,sleepLatency,sleepEfficiency," +
                 "night_time_movement,readiness_score FROM sleep_data where  total > 0 and sync_date >= :endDate and sync_date > 0 and is_synced = :isSync "
     )
     fun getUnSyncServerData(endDate: Long, isSync: Boolean): List<OreoSleepData>?

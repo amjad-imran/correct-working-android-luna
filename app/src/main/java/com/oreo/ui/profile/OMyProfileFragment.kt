@@ -8,18 +8,12 @@ import androidx.fragment.app.viewModels
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentMyProfileOreoBinding
 import com.noisefit.ui.onboarding.OnBoardActivity
-import com.noisefit.ui.profile.DELETE_KEY
 import com.noisefit.ui.profile.LOGOUT_KEY
 import com.noisefit.ui.profile.ProfileViewModel
-import com.noisefit.ui.profile.myprofile.MyProfileFragmentDirections
-import com.noisefit.ui.settings.helpAndSupport.HelpAndSupportType
-import com.noisefit.ui.web.WebViewActivity
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.loadCircleImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.AppConstants
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -52,7 +46,7 @@ class OMyProfileFragment :
 
     override fun initListener() {
         binding.llMyGoals.setOnClickListener {
-            navigate(R.id.myGoalFragment)
+            //navigate(R.id.myGoalFragment)
         }
         binding.rowAbout.setOnClickListener {
             navigate(R.id.aboutFragment)
@@ -61,9 +55,9 @@ class OMyProfileFragment :
             navigateUpSafe()
         }
         binding.rowHelp.setOnClickListener {
-            navigate(R.id.helpAndSupportFragment, Bundle().apply {
+           /* navigate(R.id.helpAndSupportFragment, Bundle().apply {
                 this.putSerializable("highlightTopic", HelpAndSupportType.NONE)
-            })
+            })*/
         }
 
 //        binding.tvCustomerSupport.setOnClickListener {
@@ -94,9 +88,9 @@ class OMyProfileFragment :
 
         binding.rowHelp.setOnClickListener {
 
-            navigate(R.id.helpAndSupportFragment, Bundle().apply {
+           /* navigate(R.id.helpAndSupportFragment, Bundle().apply {
                 this.putSerializable("highlightTopic", HelpAndSupportType.NONE)
-            })
+            })*/
         }
 
         binding.tvLogout.setOnClickListener {

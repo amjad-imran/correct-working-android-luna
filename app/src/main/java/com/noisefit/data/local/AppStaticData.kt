@@ -8,7 +8,6 @@ import com.noisefit_commans.data.model.CustomDaFitIcons
 import com.noisefit_commans.data.model.DistanceKmMiMapper
 import com.noisefit_commans.data.model.NotificationApp
 import com.noisefit_commans.data.model.WatchFaceWidgets
-import com.noisefit.ui.watchface.custom.iconBuzz.DaFitCustomWatchFaceFragment
 import com.noisefit_commans.data.enums.DaFitCustomListItem
 import com.noisefit_commans.data.enums.GridType
 import com.noisefit_commans.enums.ApplicationType

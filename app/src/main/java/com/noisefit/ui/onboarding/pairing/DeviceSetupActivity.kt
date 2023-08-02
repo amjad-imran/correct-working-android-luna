@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.activity.viewModels
-import com.noisefit.MainActivity
 import com.noisefit.luna.R
 import com.noisefit.data.local.AppStaticData
 import com.noisefit_commans.data.model.User
@@ -20,7 +19,6 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit.ui.onboarding.onboardProfile.SetupProfileViewModel
 import com.noisefit.watch.WatchesSDK
 import com.noisefit_commans.data.enums.Device
-import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.utils.AppConstants
 import com.noisefit_commans.utils.LOW_VIBRATION
 import com.noisefit_commans.utils.VibrationUtils
@@ -42,6 +40,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 import javax.inject.Inject
 
+
+const val OPEN_PROFILE = "OPEN_PROFILE"
 @AndroidEntryPoint
 class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
     private var setupStarted = false
@@ -64,7 +64,7 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
     companion object {
         fun getStartIntent(context: Context, openProfile: Boolean = false): Intent {
             return Intent(context, DeviceSetupActivity::class.java).apply {
-                this.putExtra(MainActivity.OPEN_PROFILE, openProfile)
+                this.putExtra(OPEN_PROFILE, openProfile)
             }
         }
     }
@@ -130,20 +130,11 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
     private fun startMainActivity() {
         val currentDevice = viewModel.localDataStore.getPairDeviceType()
 
-        if (currentDevice == Device.RING) {
+
             startActivity(OreoMainActivity.getStartIntent(this).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             })
-            return
-        }
 
-        startActivity(MainActivity.getStartIntent(this).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            this.putExtra(
-                MainActivity.OPEN_PROFILE,
-                intent.getBooleanExtra(MainActivity.OPEN_PROFILE, false)
-            )
-        })
 
     }
 

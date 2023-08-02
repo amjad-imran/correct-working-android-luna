@@ -5,7 +5,6 @@ import com.google.gson.JsonElement
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit_commans.data.model.matches.SportEvent
 import com.noisefit_commans.data.model.matches.score.MatchesResultScore
-import com.noisefit.data.repository.abstraction.SportEventRepository
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.utils.AppLogs
@@ -21,8 +20,7 @@ class SportUtils
 @Inject
 constructor(
     private val localDataStore: DataStoredInterface,
-    private val sessionManager: SessionManager,
-    private val sportEventRepository: SportEventRepository
+    private val sessionManager: SessionManager
 ) {
 
     private val TAG = "SportUtils"
@@ -121,106 +119,6 @@ constructor(
         }
         LOGS.d("$TAG  ${Gson().toJson(matchesResultScore)}")
         return matchesResultScore
-    }
-
-    private fun getUpcomingEvent() {
-        val date = DateFormats.getTodaysDateString(9)
-        GlobalScope.launch {
-            sportEventRepository.getSelectedSportEvent(date).collect { resource ->
-                when (resource) {
-                    is CacheResult.Success -> {
-                        if (resource.value != null) {
-                            LOGS.d("$TAG ${Gson().toJson(resource.value)}")
-                            sessionManager.upcomingSportEvent = resource.value
-                        } else {
-                            //seems like no events for today, setting an empty dummy data
-                            val sportEvent = SportEvent(
-                                0,
-                                NO_EVENT_FOR_TODAY,
-                                0,
-                                date,
-                                "",
-                                "",
-                                ""
-                            )
-                            sportEvent.lastCheckInDb = DateFormats.getTimeStamp()
-                            sessionManager.upcomingSportEvent = sportEvent
-
-                        }
-                    }
-                    is CacheResult.GenericError -> {
-                        LOGS.d("$TAG ${resource.errorMessage}")
-
-                    }
-                }
-            }
-        }
-    }
-
-    fun checkWhetherSportLiveOrNot(): Boolean {
-//        val apiCallIntervalInMilliseconds = 2/*localDataStore.getSportEvenApiCallInterval()*/ * 60000
-//        val lastSyncTime = localDataStore.getLastSportApiTimeStamp()
-//
-//        if (kotlin.math.abs(DateFormats.getTimeStamp() - lastSyncTime) > apiCallIntervalInMilliseconds) {
-//            LOGS.d(TAG, "checkSportWork bingo let's throw some score to the watch")
-//            return true
-//        }
-
-
-        val sportEventsEnabled = localDataStore.isEnableIpl()
-        if (!sportEventsEnabled) {
-            LOGS.d("$TAG sports event disabled. What a waste of the feature!!")
-            return false
-        }
-
-        val matchInfo = sessionManager.upcomingSportEvent
-        //check for upcoming event in session manager, if its null then query in db
-        if (matchInfo == null) {
-            getUpcomingEvent()
-            AppLogs.sendAppLogs("$TAG upcomingSportEvent is null. let check in db first and ignore this call")
-            LOGS.d("$TAG upcomingSportEvent is null. let check in db first and ignore this call")
-            return false
-        } else if (matchInfo.date != DateFormats.getTodaysDateString(9)) {
-            sessionManager.upcomingSportEvent = null
-            getUpcomingEvent()
-            AppLogs.sendAppLogs("$TAG  reset event, invalid date found")
-            LOGS.d("$TAG reset event, invalid date found")
-            return false
-        } else if (matchInfo.eventId == NO_EVENT_FOR_TODAY || matchInfo.eventId.isEmpty()) {
-            AppLogs.sendAppLogs("$TAG might be there is no events for today or waiting for db result!!")
-            LOGS.d("$TAG might be there is no events for today or waiting for db result!!")
-
-            val currentTimeStamp = DateFormats.getTimeStamp()
-            val timeAfter30Minutes = DateFormats.addMinuteToTimeStamp(matchInfo.lastCheckInDb, 30)
-
-            if (currentTimeStamp > timeAfter30Minutes) {
-                LOGS.d("$TAG fallback, incase user added a match but was not pick up by session manager")
-                sessionManager.upcomingSportEvent = null
-                getUpcomingEvent()
-            }
-
-            return false
-        }
-
-        val apiCallIntervalInMilliseconds = localDataStore.getSportEvenApiCallInterval() * 60000
-        val lastSyncTime = localDataStore.getLastSportApiTimeStamp()
-
-        AppLogs.sendAppLogs("$TAG check for condition")
-        LOGS.d(
-            TAG,
-            "checkSportWork called ${abs(DateFormats.getTimeStamp() - lastSyncTime)} ${
-                Gson().toJson(matchInfo)
-            } ${matchInfo.time} ${DateFormats.getTimeStamp()}"
-        )
-        if (kotlin.math.abs(DateFormats.getTimeStamp() - lastSyncTime) > apiCallIntervalInMilliseconds &&
-            (DateFormats.getTimeStamp() > matchInfo.timeInMilliseconds)
-        ) {
-            AppLogs.sendAppLogs("$TAG checkSportWork bingo let's throw some score to the watch")
-            LOGS.d(TAG, "checkSportWork bingo let's throw some score to the watch")
-            return true
-        }
-
-        return false
     }
 
 

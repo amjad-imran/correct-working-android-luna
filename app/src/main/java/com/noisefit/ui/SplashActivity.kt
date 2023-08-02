@@ -19,7 +19,6 @@ import androidx.core.content.ContextCompat
 import androidx.work.WorkManager
 import com.airbnb.lottie.LottieDrawable
 import com.noisefit.luna.BuildConfig
-import com.noisefit.MainActivity
 import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
@@ -227,18 +226,6 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
 
     }
 
-    private fun goToDashboard() {
-        startActivity(
-            MainActivity.getStartIntent(
-                this,
-                viewModel.notificationType,
-                viewModel.notificationIndex,
-                viewModel.deeplink
-            )
-        )
-        finish()
-    }
-
     private fun goToOreoDashboard() {
         startActivity(
             OreoMainActivity.getStartIntent(
@@ -320,7 +307,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
                     }
 
                     UserOnBoardingFlow.SHOW_DASHBOARD -> {
-                        goToDashboard()
+                        goToOreoDashboard()
                     }
 
                     UserOnBoardingFlow.SETUP_PROFILE -> {

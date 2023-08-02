@@ -32,7 +32,6 @@ import com.noisefit.luna.BuildConfig
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.data.remote.response.Watchface2
-import com.noisefit.receiver.broadcastReceiver.SportsNotificationReceiver
 import com.noisefit.receiver.service.NotificationAlertService
 import com.noisefit.receiver.workManager.*
 import com.noisefit_commans.common.roundToNearestDecimalFlooor
@@ -318,86 +317,6 @@ object ApplicationUtils {
         }
     }
 
-
-    fun scheduleMatchWork(context: Context) {
-        //scheduleMatchWork(11, 0, context)
-        setMatchAlarm(11, 0, context)
-    }
-
-    private fun scheduleMatchWork(hour: Int, minute: Int, context: Context) {
-        val uniqueId = UniqueMatchReminderWorkName
-        LOGS.d("scheduleMatchWork inside added")
-
-        val calendar: Calendar = Calendar.getInstance()
-        val nowMillis: Long = calendar.timeInMillis
-        if (calendar.get(Calendar.HOUR_OF_DAY) > hour ||
-            calendar.get(Calendar.HOUR_OF_DAY) == hour && calendar.get(Calendar.MINUTE) + 1 >= minute
-        ) {
-            calendar.add(Calendar.DAY_OF_MONTH, 1)
-        }
-        calendar.set(Calendar.HOUR_OF_DAY, hour)
-        calendar.set(Calendar.MINUTE, minute)
-        calendar.set(Calendar.SECOND, 0)
-        calendar.set(Calendar.MILLISECOND, 0)
-        val diff: Long = calendar.timeInMillis - nowMillis
-        val mWorkManager = WorkManager.getInstance(context)
-//        val constraints: Constraints = Builder()
-//            .setRequiredNetworkType(NetworkType.CONNECTED)
-//            .build()
-        mWorkManager.cancelAllWorkByTag(uniqueId)
-
-        WorkManager.getInstance(context).cancelUniqueWork(uniqueId)
-        val work =
-            OneTimeWorkRequest.Builder(MatchReminderWork::class.java)
-                .addTag(uniqueId)
-                .setInitialDelay(diff, TimeUnit.MILLISECONDS)
-                .build()
-        WorkManager.getInstance(context).enqueueUniqueWork(
-            uniqueId,
-            ExistingWorkPolicy.REPLACE,
-            work
-        )
-
-        LOGS.d("scheduleMatchWork added")
-    }
-
-    private fun setMatchAlarm(hour: Int, minute: Int, context: Context) {
-        val alarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, SportsNotificationReceiver::class.java)
-        intent.action = SportsNotificationReceiver.ACTION
-        val pendingIntent =
-            PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE)
-
-        val calendar: Calendar = Calendar.getInstance()
-        if (calendar.get(Calendar.HOUR_OF_DAY) > hour ||
-            calendar.get(Calendar.HOUR_OF_DAY) == hour && calendar.get(Calendar.MINUTE) /*+ 1*/ >= minute
-        ) {
-            calendar.add(Calendar.DAY_OF_MONTH, 1)
-        }
-        calendar.set(Calendar.HOUR_OF_DAY, hour)
-        calendar.set(Calendar.MINUTE, minute)
-        calendar.set(Calendar.SECOND, 0)
-        calendar.set(Calendar.MILLISECOND, 0)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            alarmManager.setExactAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP,
-                calendar.timeInMillis,
-                pendingIntent
-            )
-        }
-    }
-
-    fun cancelMatchAlarm(context: Context) {
-        val alarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager?
-        val intent = Intent(context, SportsNotificationReceiver::class.java)
-        intent.action = SportsNotificationReceiver.ACTION
-        val pendingIntent =
-            PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE)
-
-        alarmManager?.cancel(pendingIntent)
-    }
-
     fun setRescueWorkManager(context: Context) {
         val request = OneTimeWorkRequestBuilder<RescueServiceInBgWorker>()
             .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
@@ -405,31 +324,6 @@ object ApplicationUtils {
 
         WorkManager.getInstance(context).enqueue(request)
     }
-
-    fun startWeatherScheduler(context: Context) {
-
-        val uniqueId = UniqueWeatherWorkName
-        LOGS.d("$UniqueWeatherWorkName: inside startWeatherScheduler ")
-        /* if (!isWorkScheduled(uniqueId, context)) {*/
-
-        WorkManager.getInstance(context).cancelUniqueWork(uniqueId)
-        val constraints = Constraints.Builder()
-            .build()
-        val work =
-            PeriodicWorkRequest.Builder(WeatherWork::class.java, 1, TimeUnit.HOURS)
-                .addTag(uniqueId)
-                .setConstraints(constraints)
-                .build()
-
-        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
-            uniqueId,
-            ExistingPeriodicWorkPolicy.KEEP,
-            work
-
-        )
-        /*}*/
-    }
-
 
     fun stopWeatherScheduler(context: Context) {
         LOGS.d("$UniqueWeatherWorkName: inside stopWeatherScheduler ")
@@ -442,42 +336,8 @@ object ApplicationUtils {
     }
 
 
-    fun stopMatchReminderScheduler(context: Context) {
-        cancelMatchAlarm(context)
-        WorkManager.getInstance(context).cancelUniqueWork(UniqueMatchReminderWorkName)
-
-    }
-
     fun clearJobs(context: Context) {
         WorkManager.getInstance(context).cancelAllWork()
-    }
-
-    suspend fun startSyncScheduler(context: Context): Boolean {
-        val uniqueId = getUniqueSyncDataWorkName()
-        LOGS.d("SyncDataWork: inside startSyncScheduler ")
-        if (!isWorkScheduled(uniqueId, context)) {
-
-            WorkManager.getInstance(context).cancelUniqueWork(uniqueId)
-            val constraints = Constraints.Builder()
-                .build()
-
-
-            val work =
-                PeriodicWorkRequest.Builder(SyncDataWork::class.java, 60, TimeUnit.MINUTES)
-                    .addTag(uniqueId)
-                    .setConstraints(constraints)
-                    .build()
-
-            WorkManager.getInstance(context).enqueueUniquePeriodicWork(
-                uniqueId,
-                ExistingPeriodicWorkPolicy.KEEP,
-                work
-
-            )
-            return true
-        }
-
-        return false
     }
 
     suspend fun startOreoSyncScheduler(context: Context): Boolean {
@@ -509,75 +369,6 @@ object ApplicationUtils {
         return false
     }
 
-    fun startSportScheduler(context: Context) {
-        val uniqueId = getUniqueSportSyncWorkName()
-        LOGS.d("SportWork: inside startSportScheduler ")
-        AppLogs.sendAppLogs("startSportScheduler")
-        WorkManager.getInstance(context).cancelUniqueWork(uniqueId)
-
-        val work = OneTimeWorkRequest.Builder(SportWork::class.java)
-            .addTag(uniqueId)
-            .build()
-
-        WorkManager.getInstance(context).enqueueUniqueWork(
-            uniqueId,
-            ExistingWorkPolicy.REPLACE,
-            work
-        )
-    }
-
-    suspend fun startGoogleFitSyncScheduler(context: Context): Boolean {
-        val uniqueId = getUniqueGoogleFitWorkName()
-        LOGS.d("SyncDataWork: inside startGoogleFitSyncScheduler ")
-        if (!isWorkScheduled(uniqueId, context)) {
-
-            WorkManager.getInstance(context).cancelUniqueWork(uniqueId)
-            val work =
-                OneTimeWorkRequest.Builder(GoogleFitSyncWork::class.java)
-                    .addTag(uniqueId)
-                    .build()
-            WorkManager.getInstance(context).enqueueUniqueWork(
-                uniqueId,
-                ExistingWorkPolicy.KEEP,
-                work
-            )
-            return true
-        }
-
-        return false
-    }
-
-    suspend fun startActivitySyncScheduler(context: Context): Boolean {
-        val uniqueId = getUniqueActivitySyncWorkName()
-        LOGS.d("ActivitySyncWork: inside startActivitySyncScheduler ")
-        if (!isWorkScheduled(uniqueId, context)) {
-
-            WorkManager.getInstance(context).cancelUniqueWork(uniqueId)
-            val work =
-                OneTimeWorkRequest.Builder(ActivitySyncWork::class.java)
-                    .addTag(uniqueId)
-                    .build()
-            WorkManager.getInstance(context).enqueueUniqueWork(
-                uniqueId,
-                ExistingWorkPolicy.KEEP,
-                work
-            )
-            return true
-        }
-
-        return false
-    }
-
-    suspend fun isWatchFaceTransferInProgress(context: Context): Boolean {
-        val uniqueId = getUniqueWatcFaceSyncWorkName()
-        return isWorkScheduled1(uniqueId, context)
-    }
-
-    suspend fun isDIYWatchFaceTransferInProgress(context: Context): Boolean {
-        val uniqueId = getUniqueDiyWatchFaceSyncWorkName()
-        return isWorkScheduled1(uniqueId, context)
-    }
-
     private suspend fun isWorkScheduled1(workName: String, context: Context): Boolean {
         var running = false
         val workManager = WorkManager.getInstance(context)
@@ -588,83 +379,6 @@ object ApplicationUtils {
                 (workStatus.state == WorkInfo.State.RUNNING) or (workStatus.state == WorkInfo.State.ENQUEUED)
         }
         return running
-    }
-
-
-    suspend fun startWatchFaceTransferWorker(context: Context, watchface: Watchface2): Boolean {
-        val uniqueId = getUniqueWatcFaceSyncWorkName()
-        LOGS.d("WatchFaceTransferWorker: inside startWatchFaceTransferWorker ")
-        if (!isWorkScheduled(uniqueId, context)) {
-
-            WorkManager.getInstance(context).cancelUniqueWork(uniqueId)
-
-            val data = Data.Builder()
-            data.putString("watchFace", Gson().toJson(watchface))
-
-            val work =
-                OneTimeWorkRequest.Builder(WatchfaceWork::class.java)
-                    .setInputData(data.build())
-                    .addTag(uniqueId)
-                    .build()
-            WorkManager.getInstance(context).enqueueUniqueWork(
-                uniqueId,
-                ExistingWorkPolicy.REPLACE,
-                work
-            )
-            return true
-        }
-
-        return false
-    }
-
-    suspend fun startDiyWatchFaceTransferWorker(
-        context: Context,
-        watchFace: DiyCustomWatchFace
-    ): Boolean {
-        val uniqueId = getUniqueDiyWatchFaceSyncWorkName()
-        LOGS.d("WatchFaceTransferWorker: inside startDiyWatchFaceTransferWorker ")
-        if (!isWorkScheduled(uniqueId, context)) {
-
-            WorkManager.getInstance(context).cancelUniqueWork(uniqueId)
-
-            val data = Data.Builder()
-            data.putString("watchFace", Gson().toJson(watchFace))
-
-            val work =
-                OneTimeWorkRequest.Builder(DiyWatchfaceWork::class.java)
-                    .setInputData(data.build())
-                    .addTag(uniqueId)
-                    .build()
-            WorkManager.getInstance(context).enqueueUniqueWork(
-                uniqueId,
-                ExistingWorkPolicy.KEEP,
-                work
-            )
-            return true
-        }
-
-        return false
-    }
-
-    suspend fun startAGPSScheduler(context: Context): Boolean {
-        val uniqueId = getAGPSWorkName()
-        LOGS.d("ActivitySyncWork: inside startActivitySyncScheduler ")
-        if (!isWorkScheduled(uniqueId, context)) {
-
-            WorkManager.getInstance(context).cancelUniqueWork(uniqueId)
-            val work =
-                OneTimeWorkRequest.Builder(AgpsReminderWork::class.java)
-                    .addTag(uniqueId)
-                    .build()
-            WorkManager.getInstance(context).enqueueUniqueWork(
-                uniqueId,
-                ExistingWorkPolicy.REPLACE,
-                work
-            )
-            return true
-        }
-
-        return false
     }
 
     private suspend fun isWorkScheduled(workName: String, context: Context): Boolean {

@@ -1,9 +1,6 @@
 package com.oreo.data.db.implementation
 
 import androidx.room.Transaction
-import com.noisefit.data.local.db.abstraction.SleepDataSource
-import com.noisefit.data.local.db.database.SleepDao
-import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.data.model.OreoSleepData
 import com.oreo.data.db.abstaction.OreoSleepDataSource

@@ -9,9 +9,6 @@ import android.os.Handler
 import android.os.Looper
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
-import com.noisefit.data.local.db.abstraction.FeedsDataSource
-import com.noisefit.data.local.db.abstraction.KeyValueDataSource
-import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.remote.abstraction.TokenRefreshApi
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.LastSyncItems
@@ -52,8 +49,6 @@ class NetworkConnectionInterceptor(
     private val lastSyncProvider: LastSyncProvider,
     private val localDataStore: DataStoredInterface,
     private val ringDataStore: RingDataStore,
-    private val keyValueDataSource: KeyValueDataSource,
-    private val feedsDBSource: FeedsDataSource,
     private val watchesSdk: WatchesSDK,
     private val tokenRefreshApi: TokenRefreshApi,
 ) : Interceptor {
@@ -87,13 +82,6 @@ class NetworkConnectionInterceptor(
 
         lastSyncProvider.removeUserDataLastSync()
 
-        removeLocalChallenges()
-        removeRewardsData()
-        removeStreakData()
-        removeTimelineData()
-
-
-
         Handler(Looper.getMainLooper()).post {
             appContext.showShortToast(appContext.getString(R.string.text_session_expired))
         }
@@ -105,39 +93,6 @@ class NetworkConnectionInterceptor(
         appContext.startActivity(OnBoardActivity.getStartIntent(appContext, true).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         })
-    }
-
-    private fun removeTimelineData() {
-        GlobalScope.launch(Dispatchers.IO) {
-            feedsDBSource.removeTimelineFeeds()
-            localDataStore.setTimeLineCurrentPageCount(1)
-        }
-    }
-
-    private fun removeLocalChallenges() {
-        GlobalScope.launch(Dispatchers.IO) {
-            keyValueDataSource.removeDataByType(KeyValueDataType.CHALLENGE_2)
-            keyValueDataSource.removeDataByType(KeyValueDataType.CHALLENGE_BUDDIES_2)
-            keyValueDataSource.removeDataByType(KeyValueDataType.WATCH_FACE_2)
-            keyValueDataSource.removeDataByType(KeyValueDataType.WATCH_FACE_2_CATEGORY_LIST)
-            keyValueDataSource.removeDataByType(KeyValueDataType.CHALLENGE_LEADERBOARD_2)
-
-        }
-    }
-
-    private fun removeRewardsData() {
-        GlobalScope.launch(Dispatchers.IO) {
-            keyValueDataSource.removeDataByType(KeyValueDataType.USER_COUPON)
-            keyValueDataSource.removeDataByType(KeyValueDataType.USER_COUPON_LIST)
-        }
-    }
-
-    private fun removeStreakData() {
-        GlobalScope.launch(Dispatchers.IO) {
-            keyValueDataSource.removeDataByType(KeyValueDataType.DASH_STREAK_DATA)
-            keyValueDataSource.removeDataByType(KeyValueDataType.COINS_PROFILE_DATA)
-            keyValueDataSource.removeDataByType(KeyValueDataType.ALL_TASK_LIST)
-        }
     }
 
     override fun intercept(chain: Interceptor.Chain): Response {

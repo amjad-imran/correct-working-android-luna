@@ -66,8 +66,6 @@ interface OreoSyncRepository {
 
     suspend fun getUnSyncUserActivities(): Pair<OreoUserSyncActivities, OreoUserSyncRawData>
 
-    suspend fun getGoogleFitUnSyncData(date: String): SyncGoogleFitData?
-
     suspend fun updateGoogleFitUnSyncHeartRateStatus(heartRateList: List<OreoHeartRate>)
 
     suspend fun updateGoogleFitUnSyncSleepStatus(sleepData: OreoSleepData)

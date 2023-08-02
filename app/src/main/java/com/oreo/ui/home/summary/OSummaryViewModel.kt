@@ -3,7 +3,6 @@ package com.oreo.ui.home.summary
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.noisefit.data.remote.base.Resource
-import com.noisefit.receiver.workManager.HealthOverviewDataType
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType

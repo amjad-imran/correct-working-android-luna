@@ -5,9 +5,7 @@ import com.github.mikephil.charting.data.Entry
 import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.data.dataConverter.DataUnitConverter
-import com.noisefit.data.local.db.implementation.StressDataImpl
 import com.noisefit.ui.common.calculatePercentage
-import com.noisefit.util.graph.SleepChartUtils
 import com.noisefit.watch.SDKWatchType
 import com.noisefit.watch.WatchesSDK
 import com.noisefit_commans.common.fromJson
@@ -45,7 +43,6 @@ class OreoOfflineDataMapper
 @Inject
 constructor(
     val watches: WatchesSDK,
-    private val stressDataImpl: StressDataImpl,
     private val heartRateDataImpl: OreoHeartRateDataImpl,
 ) {
 
@@ -456,38 +453,6 @@ constructor(
         } else {
             "$time pm"
         }
-    }
-
-
-    fun convertSleepOverviewData(
-        dataList: List<SleepData>?
-    ): HealthOverview {
-        var duration = -1
-        var date = ""
-        var sleepScore = ""
-        if (!dataList.isNullOrEmpty()) {
-            val lastData = dataList.last()
-            // val currentValue = dataList.last()
-            duration = lastData.total
-            date = DateFormats.formatDate(
-                lastData.date,
-                DateFormats.dateFormat,
-                DateFormats.monthDateWithoutYear
-            )
-            if (lastData.sleepScore != 0) {
-                sleepScore =
-                    "${lastData.sleepScore} (${SleepChartUtils.getSleepScoreMessage(lastData.sleepScore).first})"
-            }
-
-        }
-
-
-//        val dummyData = parse24HoursFormatSleep(convertSleepData(dataList))
-        return HealthOverview.Sleep(
-            duration,
-            date,
-            sleepScore
-        )
     }
 
     fun convertHeartRate(data: List<HeartRate>?): HeartRateHistory {

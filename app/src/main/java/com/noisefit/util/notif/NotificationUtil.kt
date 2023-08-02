@@ -50,7 +50,6 @@ object NotificationUtil {
                     R.drawable.icon_transparent
                 )
             )
-            .addAction(NotificationHelper.getAction(context, notificationType))
             .setDefaults(DEFAULT_SOUND)
             .setContentText(content)
             .setContentIntent(contentIntent)

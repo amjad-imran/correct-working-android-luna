@@ -2,7 +2,6 @@ package com.noisefit.data.di
 
 import android.content.Context
 import androidx.room.Room
-import com.noisefit.data.local.db.DataBase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

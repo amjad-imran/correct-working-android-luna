@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import com.noisefit.MainActivity
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOnBoardCaloriesBinding
 import com.noisefit.oreo.OreoMainActivity
@@ -91,14 +90,8 @@ class OnBoardCaloriesFragment :
                     goToDeviceSetupActivity(openProfile)
 
                 } else {
-                    if (viewModel.localDataStore.getPairDeviceType() == Device.RING) {
                         startActivity(OreoMainActivity.getStartIntent(requireContext()))
                         activity?.finish()
-                    }
-                    else{
-                        startActivity(MainActivity.getStartIntent(requireContext(), openProfile))
-                        activity?.finish()
-                    }
                 }
             }
         }

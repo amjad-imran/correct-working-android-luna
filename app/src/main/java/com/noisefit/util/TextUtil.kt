@@ -1,12 +1,6 @@
 package com.noisefit.util
 
-import android.text.Spannable
-import android.text.SpannableStringBuilder
-import com.noisefit.ui.feeds.create.PostHashtagSpan
-import com.noisefit.ui.feeds.create.PostMentionSpan
 import com.noisefit_commans.ui.tryCatch
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 
 /**
@@ -28,30 +22,4 @@ fun String.findWordStart(offset: Int): Int {
         }
     }
     return start
-}
-
-fun String.generatePostSpan(): SpannableStringBuilder {
-    val builder = SpannableStringBuilder(this)
-    var pattern: Pattern = Pattern.compile("@\\w+")
-    var matcher: Matcher = pattern.matcher(this)
-    while (matcher.find()) {
-        builder.setSpan(
-            PostMentionSpan(),
-            matcher.start(),
-            matcher.end(),
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-    }
-
-    pattern = Pattern.compile("#\\w+");
-    matcher = pattern.matcher(this)
-    while (matcher.find()) {
-        builder.setSpan(
-            PostHashtagSpan(),
-            matcher.start(),
-            matcher.end(),
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-    }
-    return builder
 }

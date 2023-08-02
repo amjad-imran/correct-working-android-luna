@@ -1,18 +1,13 @@
 package com.oreo.ui.device
 
 import android.os.Bundle
-import android.text.SpannableStringBuilder
 import android.view.View
-import androidx.core.text.bold
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import com.noisefit.MainActivity
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoMyDeviceBinding
-import com.noisefit.oreo.OreoMainActivity
 import com.noisefit.ui.SplashActivity
 import com.noisefit.ui.myDevice.MyDeviceAction
-import com.noisefit.ui.myDevice.MyDeviceFragmentDirections
 import com.noisefit.ui.myDevice.UNPAIR_REQUEST_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
@@ -71,7 +66,7 @@ class OreoMyDeviceFragment :
         }
 
         binding.rowWarrantyRegistration.setOnClickListener {
-            navigate(R.id.warrantyFragmentOreo)
+            //navigate(R.id.warrantyFragmentOreo)
         }
         binding.btnUnpair.setOnClickListener {
             setFragmentResultListener(UNPAIR_REQUEST_KEY) { _, bundle ->

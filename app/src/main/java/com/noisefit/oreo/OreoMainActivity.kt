@@ -13,8 +13,6 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import com.noisefit.BottomNavOption
-import com.noisefit.MainViewModel
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ActivityOreoMainBinding
 import com.noisefit.ui.APP_CONTINUE
@@ -32,7 +30,6 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.showShortToast
-import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -363,4 +360,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     override fun logAppEvent(eventName: String, data: HashMap<String, Any?>) {
 
     }
+}
+enum class BottomNavOption {
+    HOME, EXPLORE, SHOP, MY_DEVICE, COMMUNITY
 }
