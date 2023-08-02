@@ -6,13 +6,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutDevice"
         android:layout_width="match_parent"
-        android:background="@drawable/back_modal_new_red"
+        tools:background="@color/black"
         android:layout_height="96dp">
 
         <ImageView
             android:id="@+id/imgWatch"
-            android:layout_width="72dp"
-            android:layout_height="0dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"

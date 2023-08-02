@@ -448,13 +448,11 @@ class OreoActivityFragment :
             binding.lytWorkouts.tvEmptyMsg.visible()
             if (mSharedViewModel.selectedDate == DateFormats.getCurrentDateOreoFormat()) {
                 binding.lytWorkouts.viewAddWorkout.visible()
-                binding.lytWorkouts.tvAddWorkout.visible()
                 binding.lytWorkouts.tvEmptyMsg.text =
                     getString(R.string.text_you_haven_t_added_any_workouts_for_today)
 
             } else {
                 binding.lytWorkouts.viewAddWorkout.gone()
-                binding.lytWorkouts.tvAddWorkout.gone()
                 binding.lytWorkouts.tvEmptyMsg.text =
                     getString(R.string.text_you_haven_t_added_any_workouts_for_this_day)
             }

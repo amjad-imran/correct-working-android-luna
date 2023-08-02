@@ -1,5 +1,6 @@
 package com.oreo.ui.device
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.setFragmentResultListener
@@ -115,7 +116,7 @@ class OreoMyDeviceFragment :
                     lytDeviceConnected.root.gone()
                     btnUnpair.gone()
                     btnReset.gone()
-                    updateToolbarTitle("")
+
                     lytPairYourDeviceHeader.root.visible()
                 }
             }
@@ -221,56 +222,45 @@ class OreoMyDeviceFragment :
         }
     }
 
-    private fun updateToolbarTitle(title: String?) {
-        binding.toolbar.text = title ?: ""
-    }
 
     private fun setStateConnecting(noiseFitDevice: ColorFitDevice?) {
         binding.lytDeviceConnected.apply {
-            this.layoutDevice.setBackgroundResource(R.drawable.back_modal_new_red)
-            tvStatus.text = getString(R.string.text_trying_to_connect)
-            tvStatus.setTextColor(
-                resources.getColor(
-                    R.color.color_error
-                )
-            )
-            progressBarConnecting.visible()
-            ivSettingsArrow.gone()
-            imgWatch.loadImage(
-                requireContext(), noiseFitDevice?.ringInfo?.image ?: ""
-            )
-            updateToolbarTitle(noiseFitDevice?.bluetoothName)
-            tvLastSync.text = ""
-            tvBatteryPercentage.text = ""
 
+            ivRingImage.loadWatchImage(
+                requireContext(),
+                noiseFitDevice?.ringInfo?.image ?: "",
+                R.drawable.ic_ring_default_sliver
+            )
+            tvRingName.text = noiseFitDevice?.bluetoothName
+            tvBattery.setTextColor(Color.parseColor("#ff7c94"))
+            tvBattery.text = "Trying to connect..."
+            tvOtherInfo.gone()
         }
 
         binding.lytFeatures.gone()
     }
 
     private fun setStateConnected(noiseFitDevice: ColorFitDevice) {
-        val batteryPercent = "${mViewModel.watchDataStore.getBatteryPercentRing()}% Battery level"
+        val batteryPercent = mViewModel.watchDataStore.getBatteryPercentRing()
 
         val lastSync =
             mViewModel.sessionManager.getLastSyncTime()?.let { DateFormats.getRelativeTime(it) }
         val lastSyncText = "Synced : ${lastSync ?: getString(R.string.text_not_yet_syncyed)}"
         binding.lytDeviceConnected.apply {
-            this.layoutDevice.setBackgroundResource(com.noisefit_commans.R.drawable.back_modal_new)
-            tvStatus.text = getString(R.string.text_connected)
-            tvStatus.setTextColor(
-                resources.getColor(
-                    R.color.white
-                )
-            )
-            progressBarConnecting.gone()
-            ivSettingsArrow.visible()
-            imgWatch.loadWatchImage(
-                requireContext(), noiseFitDevice.ringInfo?.image ?: "", R.drawable.watch_default
-            )
-            tvBatteryPercentage.text = batteryPercent
-            updateToolbarTitle(noiseFitDevice.bluetoothName)
 
-            tvLastSync.text = lastSyncText
+            ivRingImage.loadWatchImage(
+                requireContext(),
+                noiseFitDevice.ringInfo?.image ?: "",
+                R.drawable.ic_ring_default_sliver
+            )
+            tvRingName.text = noiseFitDevice.bluetoothName
+
+            pbRing.progress = batteryPercent
+            tvBattery.setTextColor(resources.getColor(R.color.white_64))
+            tvBattery.text = "$batteryPercent%"
+
+            tvOtherInfo.visible()
+            tvOtherInfo.text = " | $lastSyncText"
 
         }
 

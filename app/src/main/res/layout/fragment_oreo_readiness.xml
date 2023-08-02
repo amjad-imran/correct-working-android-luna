@@ -8,23 +8,17 @@
         tools:background="@color/black"
         android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/lytToolbar"
-            layout="@layout/oreo_layout_toolbar_with_2_icons"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="parent" />
 
         <ScrollView
             android:id="@+id/svMain"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:visibility="gone"
-            tools:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lytToolbar">
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -33,13 +27,39 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
 
+                <ImageView
+                    android:id="@+id/imageView48"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/readiness_back_top"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/back_stick_bottom"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView48" />
+
+                <include
+                    android:id="@+id/lytToolbar"
+                    layout="@layout/oreo_layout_toolbar_with_2_icons"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <com.oreo.ui.custom.LineChart
                     android:id="@+id/rvTopGraph"
                     android:layout_width="match_parent"
                     android:layout_height="180dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lytToolbar"
                     lineChart:bgBottomColor="@android:color/transparent"
                     lineChart:bgColor="@android:color/transparent"
                     lineChart:bgLeftColor="@android:color/transparent"
@@ -73,7 +93,7 @@
                     lineChart:xTextColor="#FFFFFF"
                     lineChart:xTextSize="12sp"
                     lineChart:yLineColor="#00FFFFFF"
-                    lineChart:yTextSize="12sp"  />
+                    lineChart:yTextSize="12sp" />
 
 
                 <include
