@@ -27,13 +27,23 @@ class OActivityListAdapter(
     var unitsSystem = Units.METRIC
     var connectedDevice: String = ""
 
+    fun removeItem(position: Int) {
+        try {
+            mDataSet.removeAt(position)
+            notifyItemRemoved(position)
+        } catch (exp: ArrayIndexOutOfBoundsException) {
+            exp.printStackTrace()
+            //CASE : when Swap is in progress
+        }
+
+    }
     inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
         fun bind(activity: OActivityListModal, mode: ItemPos) {
 
             view.setOnClickListener {
                 if (!activity.isHeader) {
-                    listener.onActivitySelected(activity)
+                    listener.onActivitySelected(activity,bindingAdapterPosition)
                 }
             }
             if (itemViewType == RecentActivityViewType.HEADER.type) {
@@ -74,7 +84,7 @@ class OActivityListAdapter(
                 }
 
                 view.findViewById<TextView>(R.id.tvName).text = activity.getFormattedActivityName()
-                val time =  DateFormats.convert24HourTo12(activity.startTime, DateFormats.timeWithSecond)
+                val time =  DateFormats.convert24HourTo12(activity.startTime)
                 if(time.isNotEmpty()){
                     val timeArray = time.split(" ")
                     if(timeArray.isNotEmpty() && timeArray.size == 2){
@@ -200,7 +210,7 @@ enum class RecentActivityViewType(val type: Int) {
 }
 
 interface OActivityListInteraction {
-    fun onActivitySelected(activity: OActivityListModal)
+    fun onActivitySelected(activity: OActivityListModal,position: Int)
 }
 
 enum class ItemPos {

@@ -1087,6 +1087,12 @@ interface NetworkService {
     ): BaseApiResponse<List<OreoSleepModel>>
 
     @GET
+    suspend fun deleteWorkout(
+        @Url url: String
+    ): BaseApiResponse<Any>
+
+
+    @GET
     suspend fun getActivityHistory(
         @Url url: String, @Query("date") selectDate: String,
     ): BaseApiResponse<List<OreoActivityModel>>

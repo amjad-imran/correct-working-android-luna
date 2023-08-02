@@ -68,5 +68,8 @@ interface OreoUserActivityRepository {
         pageLimit: Int
     ): Flow<Resource<BaseApiResponse<List<OActivityListModal>>>>
 
+    suspend fun deleteWorkoutFromServer(
+        id:String
+    ):Flow<Resource<BaseApiResponse<Any>>>
     suspend fun getContributorDetailsInfo(contributorType: String): Flow<Resource<BaseApiResponse<OContributorResponseModal>>>
 }

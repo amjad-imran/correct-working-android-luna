@@ -25,6 +25,7 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.receiver.workManager.HealthOverviewDataType
+import com.oreo.ui.workout.add.ADD_WORKOUT_REQUEST_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -52,6 +53,14 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             navigate(R.id.OMyProfileFragment)
         }
 
+        setFragmentResultListener(ADD_WORKOUT_REQUEST_KEY) { _, bundle ->
+            val allow = bundle.getBoolean("allow")
+
+            if (allow) {
+                viewModel.getRecentWorkoutList()
+
+            }
+        }
         binding.layoutRefresh.animationView.setAnimation(R.raw.loading_swipe_anim)
         binding.swipeToRefresh.setOnRefreshListener(object : RefreshingListenerAdapter() {
             override fun onRefreshing() {
