@@ -60,11 +60,11 @@ class OMyProfileFragment :
         binding.backBtn.setOnClickListener {
             navigateUpSafe()
         }
-        binding.rowHelp.setOnClickListener {
-            navigate(R.id.helpAndSupportFragment, Bundle().apply {
-                this.putSerializable("highlightTopic", HelpAndSupportType.NONE)
-            })
-        }
+//        binding.rowHelp.setOnClickListener {
+//            navigate(R.id.helpAndSupportFragment, Bundle().apply {
+//                this.putSerializable("highlightTopic", HelpAndSupportType.NONE)
+//            })
+//        }
 
 //        binding.tvCustomerSupport.setOnClickListener {
 //            startActivity(
@@ -94,9 +94,10 @@ class OMyProfileFragment :
 
         binding.rowHelp.setOnClickListener {
 
-            navigate(R.id.helpAndSupportFragment, Bundle().apply {
-                this.putSerializable("highlightTopic", HelpAndSupportType.NONE)
-            })
+//            navigate(R.id.helpAndSupportFragment, Bundle().apply {
+//                this.putSerializable("highlightTopic", HelpAndSupportType.NONE)
+//            })
+            navigate(R.id.oreoHealthAndSupportFragment)
         }
 
         binding.tvLogout.setOnClickListener {

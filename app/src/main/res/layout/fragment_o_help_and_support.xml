@@ -20,6 +20,7 @@
             layout="@layout/layout_divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lytToolbar" />
@@ -113,6 +114,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <include
                     android:id="@+id/divider2"
                     layout="@layout/layout_divider"
@@ -125,16 +127,52 @@
 
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvQueries"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/side_margin"
-                    android:layout_marginTop="24dp"
                     android:layout_marginEnd="@dimen/side_margin"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider2"
-                    tools:itemCount="5" />
+                    tools:itemCount="1"
+                    tools:listitem="@layout/oreo_hs_parent_item" />
+
+                <TextView
+                    android:id="@+id/tvRaiseComplain"
+                    style="@style/H6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/side_margin"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="@dimen/side_margin"
+                    android:text="@string/text_raise_a_complaint"
+                    android:textColor="#88b0ff"
+                    app:layout_constraintTop_toBottomOf="@+id/rvQueries" />
+
+                <include
+                    android:id="@+id/divider3"
+                    layout="@layout/layout_divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvRaiseComplain" />
+                <TextView
+                    android:id="@+id/tvHelpline"
+                    style="@style/H6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/side_margin"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="@dimen/side_margin"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginBottom="37dp"
+                    android:text="@string/text_customer_support_helpline"
+                    android:textColor="#88b0ff"
+                    app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

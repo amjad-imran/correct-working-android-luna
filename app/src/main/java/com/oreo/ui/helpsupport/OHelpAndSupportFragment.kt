@@ -1,23 +1,19 @@
 package com.oreo.ui.helpsupport
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentOHelpAndSupportBinding
+import com.noisefit_commans.ui.BaseFragment
+import dagger.hilt.android.AndroidEntryPoint
 
-class OHelpAndSupportFragment : Fragment() {
+@AndroidEntryPoint
+class OHelpAndSupportFragment :
+    BaseFragment<FragmentOHelpAndSupportBinding>(FragmentOHelpAndSupportBinding::inflate) {
 
+    override fun initListener() {
 
+    }
 
+    override fun subscribeObservers() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_o_help_and_support, container, false)
     }
 
 

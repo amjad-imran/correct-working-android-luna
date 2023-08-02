@@ -1689,4 +1689,6 @@
     <string name="text_sleep_reminder_failed">Sleep Reminder update failed</string>
     <string name="text_comparison_msg">You’re burning more calories today than you normally do</string>
     <string name="text_hr_lower">hr</string>
+    <string name="text_customer_support_helpline">Customer support helpline</string>
+    <string name="text_raise_a_complaint">Raise a complaint</string>
 </resources>
