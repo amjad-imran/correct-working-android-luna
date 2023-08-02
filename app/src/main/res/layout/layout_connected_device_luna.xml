@@ -64,6 +64,7 @@
             android:textColor="@color/white_64"
             app:layout_constraintBottom_toBottomOf="@+id/tvBattery"
             app:layout_constraintStart_toEndOf="@+id/tvBattery"
+            app:layout_constraintTop_toTopOf="@+id/tvBattery"
             tools:text="78%" />
 
 
