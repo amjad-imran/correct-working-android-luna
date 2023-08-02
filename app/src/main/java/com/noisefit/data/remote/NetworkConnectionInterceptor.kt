@@ -18,7 +18,6 @@ import com.noisefit.ui.onboarding.OnBoardActivity
 import com.noisefit.watch.SDKWatchType
 import com.noisefit.watch.WatchesSDK
 import com.noisefit_commans.constants.WatchInfoGlobals
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.Token
@@ -159,12 +158,8 @@ class NetworkConnectionInterceptor(
         val request = chain.request()
         val userToken = localDataStore.getUserToken()
         val deviceId = localDataStore.getDeviceToken()
-        val pairedType = localDataStore.getPairDeviceType()
-        val device = if (pairedType == Device.RING) {
-            ringDataStore.getRingDevice()
-        } else {
-            localDataStore.getConnectedDevice()
-        }
+        val device = ringDataStore.getRingDevice()
+
         return request.newBuilder().apply {
             addHeader("content-type", "application/json")
             addHeader("version", BuildConfig.VERSION_CODE.toString())
@@ -192,16 +187,6 @@ class NetworkConnectionInterceptor(
             device?.let {
                 addHeader("device-id", it.deviceId.toString())
                 addHeader("device-type", it.deviceType.toString())
-
-                try {
-                    if (watchesSdk.getWatchType(it) == SDKWatchType.SDK_ZH && WatchInfoGlobals.firmwareDeviceId != 0 && pairedType != Device.RING) {
-                        addHeader("device-no", WatchInfoGlobals.firmwareDeviceId.toString())
-                    }
-                } catch (exp: IllegalArgumentException) {
-                    exp.printStackTrace()
-                }
-
-
             }
             addHeader("timezone", TimeZone.getDefault().id)
             addHeader(

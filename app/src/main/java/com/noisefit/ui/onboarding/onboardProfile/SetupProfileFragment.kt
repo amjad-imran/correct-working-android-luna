@@ -8,6 +8,7 @@ import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit.ui.onboarding.pairing.DeviceSetupActivity
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.utils.InsiderAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -21,7 +22,7 @@ class SetupProfileFragment :
     private var currentPosition: Int = 0
 
     @Inject
-    lateinit var localDataStore: DataStoredInterface
+    lateinit var ringDataStore: RingDataStore
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -85,7 +86,7 @@ class SetupProfileFragment :
     }
 
     private fun goToHomeActivity() {
-        if (localDataStore.getConnectedDevice() == null) {
+        if (ringDataStore.getRingDevice() == null) {
             startActivity(OreoMainActivity.getStartIntent(requireContext()))
             activity?.finish()
         } else {

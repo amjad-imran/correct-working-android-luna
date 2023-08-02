@@ -253,9 +253,5 @@ constructor(
 
     }
 
-    fun canSubmitFeedback(): Boolean {
-        return localDataStore.getConnectedDevice() != null && localDataStore.getUser() != null
-    }
-
 
 }

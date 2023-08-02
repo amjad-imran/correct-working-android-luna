@@ -126,12 +126,4 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
         }*/
     }
 
-
-    private fun unpairDevice() {
-        viewModel.localDataStore.getConnectedDevice()?.let {
-            viewModel.connectionHandler.getConnectionActions(it)?.disconnect(it)
-        }
-        startActivity(OnBoardActivity.getStartIntent(requireActivity()))
-        requireActivity().finish()
-    }
 }

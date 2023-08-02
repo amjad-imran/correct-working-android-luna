@@ -32,7 +32,6 @@ import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.SingleActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.enums.Actions
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.interfaces.base.BaseInitializeCallbacks
 import com.noisefit_commans.interfaces.connection.BindState
@@ -89,7 +88,6 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
 
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
 
-        viewModel.currentDevice = args.device
         initUi(args.colorFitDevice)
         startPairing()
         initListener()
@@ -121,7 +119,6 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
 
     override fun initListener() {
         binding.btnPairingIssue.setOnClickListener {
-
 
 
         }
@@ -419,11 +416,9 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
                         }
 
                         is ConnectState.ReconnectStatus -> {
-                            var text = if (viewModel.currentDevice == Device.RING) {
+                            var text =
                                 "Ring is already connected with another account"
-                            } else {
-                                "Watch is already connected with another account. Please reset the watch and try again"
-                            }
+
 
                             var showResetDialog = false
                             when (connectState.watchBindState) {
@@ -549,13 +544,10 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
         applicationHandler.unInitSdks(args.colorFitDevice)
         // connectionHandler.getConnectionActions()?.disconnect()
         connectionHandler.getConnectionActions()?.removeCallbacks()
-        if (viewModel.currentDevice == Device.RING) {
-            sessionManager.setConnectedDeviceRing(null)
-            sessionManager.setConnectStateRing(ConnectState.UnPaired())
-        } else {
-            sessionManager.setConnectedDevice(null)
-            sessionManager.setConnectState(ConnectState.UnPaired())
-        }
+
+        sessionManager.setConnectedDeviceRing(null)
+        sessionManager.setConnectStateRing(ConnectState.UnPaired())
+
         AppLogs.sendAppLogs("All connection get disconnected")
         try {
             if (moveBack) {
@@ -568,19 +560,13 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
     private fun initUi(colorFitDevice: ColorFitDevice) {
         activity?.let {
 
-            if (viewModel.currentDevice == Device.RING) {
-                binding.ivWatchImage.loadWatchImage(//TODO change for ring
-                    it,
-                    colorFitDevice.ringInfo?.image ?: "",
-                    R.drawable.watch_default
-                )
-            } else {
-                binding.ivWatchImage.loadWatchImage(
-                    it,
-                    colorFitDevice.url,
-                    R.drawable.watch_default
-                )
-            }
+
+            binding.ivWatchImage.loadWatchImage(//TODO change for ring
+                it,
+                colorFitDevice.ringInfo?.image ?: "",
+                R.drawable.watch_default
+            )
+
         }
         binding.tvWatchMac.text = "MAC ${colorFitDevice.address}"
         binding.tvWatchName.text = colorFitDevice.bluetoothName

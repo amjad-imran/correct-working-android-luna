@@ -20,6 +20,7 @@ import com.noisefit.util.SportUtils
 import com.noisefit.util.TestModeUtils
 import com.noisefit.watch.*
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.interfaces.base.BaseInitializeInterface
 import com.noisefit_commans.interfaces.connection.ConnectionDataActions
 import com.noisefit_commans.interfaces.data.UserActivityDataActions
@@ -83,9 +84,10 @@ object AppModule {
     @Singleton
     @Provides
     fun provideWatches(
-        localDataStore: DataStoredInterface
+        localDataStore: DataStoredInterface,
+        ringDataStore: RingDataStore
     ): WatchesSDK {
-        return WatchesSDK(localDataStore)
+        return WatchesSDK(localDataStore,ringDataStore)
     }
 
 

@@ -21,7 +21,6 @@ import com.noisefit.data.local.AppStaticData
 import com.noisefit.session.SessionManager
 import com.noisefit.ui.SplashActivity
 import com.noisefit_commans.data.enums.Actions
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.utils.LOGS
 import com.oreo.receiver.service.RingConnectionService
@@ -45,9 +44,6 @@ class RescueServiceInBgWorker
         //call methods to perform background task
         LOGS.d(TAG, "RescueServiceInBgWorker inside rescue bg worker")
         try {
-            //  sessionManager.logCustomCrashlyticsEvents(TAG, "inside rescue worker")
-            val connectedDeviceType = localDataStore.getPairDeviceType()
-            LOGS.d(TAG, "doWork() called $connectedDeviceType")
 
             connectionServiceOreo(Actions.START)
 

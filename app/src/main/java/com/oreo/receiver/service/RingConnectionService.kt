@@ -42,7 +42,6 @@ import com.noisefit.watch.WatchesSDK
 import com.noisefit_commans.constants.EventConstants
 import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.enums.Actions
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.data.enums.ServiceState
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
@@ -1215,7 +1214,7 @@ constructor() : LifecycleService() {
 
     private fun updateNotification() {
         GlobalScope.launch(Dispatchers.IO) {
-            val lastSyncTime = sessionManager.getLastSyncTime(Device.RING)?.let {
+            val lastSyncTime = sessionManager.getLastSyncTime()?.let {
                 DateFormats.convertTimestampToDate(
                     it,
                     SimpleDateFormat("h:mm a", Locale.ENGLISH).apply {
@@ -1226,7 +1225,6 @@ constructor() : LifecycleService() {
 
             withContext(Dispatchers.Main) {
                 val notification = NotificationUtil.changeNotificationContent(
-                    Device.RING,
                     this@RingConnectionService,
                     time = lastSyncTime
                 )
@@ -1470,8 +1468,7 @@ constructor() : LifecycleService() {
                     LOGS.d(TAG, "battery Level Ring : $percent")
                     batteryNotificationUtils.handleNotification(
                         percent,
-                        queryCallback.batteryData.isCharging,
-                        Device.RING
+                        queryCallback.batteryData.isCharging
                     )
 
                     watchDataStore.updateBatteryPercentRing(percent)

@@ -239,39 +239,6 @@ object ApplicationUtils {
         return (floor(Math.random() * 16) + 1).toInt()
     }
 
-    fun startNotificationListenerService(localDataStore: DataStoredInterface, context: Context) {
-        if (localDataStore.getConnectedDevice() == null) return
-        if (!localDataStore.isNotificationAlertEnabled()) return
-        if (notificationActionGranted(context)) {
-            try {
-
-                try {
-                    val pm = context.packageManager
-                    pm.setComponentEnabledSetting(
-                        ComponentName(
-                            context,
-                            NotificationAlertService::class.java
-                        ),
-                        PackageManager.COMPONENT_ENABLED_STATE_DEFAULT,
-                        PackageManager.DONT_KILL_APP
-                    )
-                    pm.setComponentEnabledSetting(
-                        ComponentName(
-                            context,
-                            NotificationAlertService::class.java
-                        ),
-                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP
-                    )
-
-                } catch (exp: Exception) {
-                    exp.printStackTrace()
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
-
     fun isMyServiceRunning(serviceClass: Class<*>, context: Context): Boolean {
         val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         for (service in manager.getRunningServices(Int.MAX_VALUE)) {

@@ -5,6 +5,7 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
@@ -17,6 +18,7 @@ class UncaughtExceptionHandlerContentProvider : ContentProvider() {
     @InstallIn(SingletonComponent::class)
     interface ContentProviderEntrypoint{
         fun getLocalDataStore() : DataStoredInterface
+        fun getLocalDataStoreRing() : RingDataStore
     }
 
     override fun onCreate(): Boolean {
@@ -24,7 +26,8 @@ class UncaughtExceptionHandlerContentProvider : ContentProvider() {
         val appContext = context?.applicationContext ?: throw IllegalStateException()
         val hiltEntryPoint =
             EntryPointAccessors.fromApplication(appContext, ContentProviderEntrypoint::class.java)
-        val myHandler = CustomCrashHandler(context, Thread.getDefaultUncaughtExceptionHandler(),hiltEntryPoint.getLocalDataStore())
+        val myHandler = CustomCrashHandler(context, Thread.getDefaultUncaughtExceptionHandler(),
+            hiltEntryPoint.getLocalDataStore(),hiltEntryPoint.getLocalDataStoreRing())
         Thread.setDefaultUncaughtExceptionHandler(myHandler)
         return true
     }

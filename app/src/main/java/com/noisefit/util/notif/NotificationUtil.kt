@@ -14,7 +14,6 @@ import com.noisefit.data.local.AppStaticData
 import com.noisefit.util.notif.NotificationEventsClass.APP_UPDATE_NOTIFICATION_KEY
 import com.noisefit.util.notif.NotificationEventsClass.FIND_PHONE_NOTIFICATION_KEY
 import com.noisefit.util.notif.NotificationEventsClass.LOCAL_NOTIFICATION_KEY
-import com.noisefit_commans.data.enums.Device
 
 
 object NotificationUtil {
@@ -116,7 +115,6 @@ object NotificationUtil {
 
 
     fun changeNotificationContent(
-        device: Device,
         context: Context,
         time: String? = null
     ): Notification {
@@ -133,11 +131,8 @@ object NotificationUtil {
         if (BuildConfig.DEBUG) {
             title += " - Dev"
 
-            if (device == Device.SMARTWATCH) {
-                title += " - watch"
-            } else if (device == Device.RING) {
-                title += " - ring"
-            }
+
+            title += " - ring"
         }
 
         return getNotification(context, title, lastSync)!!

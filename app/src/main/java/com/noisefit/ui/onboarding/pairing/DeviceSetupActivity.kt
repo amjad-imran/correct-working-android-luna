@@ -18,7 +18,6 @@ import com.noisefit.ui.common.BaseActivity
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit.ui.onboarding.onboardProfile.SetupProfileViewModel
 import com.noisefit.watch.WatchesSDK
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.utils.AppConstants
 import com.noisefit_commans.utils.LOW_VIBRATION
 import com.noisefit_commans.utils.VibrationUtils
@@ -42,6 +41,7 @@ import javax.inject.Inject
 
 
 const val OPEN_PROFILE = "OPEN_PROFILE"
+
 @AndroidEntryPoint
 class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
     private var setupStarted = false
@@ -83,57 +83,34 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
         sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_device_setup_start)
         setupStarted = false
 
-        val pairedDevice = viewModel.localDataStore.getPairDeviceType()
-        if (pairedDevice == Device.RING) {
-            viewModel.ringDataStore.getRingDevice()?.let {
-                initUi(it)
-                deviceSetupViewModel.updateUserDevice(it, true)
-            }
-        } else {
-            viewModel.localDataStore.getConnectedDevice()?.let {
-                initUi(it)
-                deviceSetupViewModel.updateUserDevice(it, true)
-            }
+        viewModel.ringDataStore.getRingDevice()?.let {
+            initUi(it)
+            deviceSetupViewModel.updateUserDevice(it, true)
         }
+
 
         saveDefaultUserValue()
 
 
         Handler(Looper.getMainLooper()).postDelayed({
-            if (pairedDevice == Device.RING) {
-                if (sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
-                    showShortToast(getString(R.string.text_no_device_connected))
-                    sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_device_setup_failed,
-                        HashMap<String, Any>().apply {
-                            this["status"] = "failed"
-                        })
+            if (sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
+                showShortToast(getString(R.string.text_no_device_connected))
+                sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_device_setup_failed,
+                    HashMap<String, Any>().apply {
+                        this["status"] = "failed"
+                    })
 
-                    startMainActivity()
-                }
-            } else {
-                if (sessionManager.connectState.value !is ConnectState.ConnectSuccess) {
-                    showShortToast(getString(R.string.text_no_device_connected))
-                    sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_device_setup_failed,
-                        HashMap<String, Any>().apply {
-                            this["status"] = "failed"
-                        })
-
-                    startMainActivity()
-                }
+                startMainActivity()
             }
-
 
         }, 5000)
 
     }
 
     private fun startMainActivity() {
-        val currentDevice = viewModel.localDataStore.getPairDeviceType()
-
-
-            startActivity(OreoMainActivity.getStartIntent(this).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            })
+        startActivity(OreoMainActivity.getStartIntent(this).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        })
 
 
     }
@@ -165,13 +142,10 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
 
             override fun onAnimationEnd(animation: Animator?) {
                 if (deviceSetupViewModel.currentAnimation == 0) {
-                    val currentDevice = viewModel.localDataStore.getPairDeviceType()
 
-                    val connectState = if (currentDevice == Device.RING) {
+                    val connectState =
                         sessionManager.connectStateRing.value
-                    } else {
-                        sessionManager.connectState.value
-                    }
+
 
                     if (connectState is ConnectState.ConnectSuccess) {
                         binding.vPlayer.repeatCount = 0

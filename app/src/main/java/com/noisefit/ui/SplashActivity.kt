@@ -44,6 +44,7 @@ import com.noisefit.util.notif.NotificationEventsClass.NOTIFICATION_TYPE_EXTRA
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
 
+@SuppressLint("CustomSplashScreen")
 @AndroidEntryPoint
 class SplashActivity : BaseActivity<ActivitySplashBinding>() {
 
@@ -62,11 +63,6 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
         binding.lottieBackAnim.playAnimation(
             LottieDrawable.INFINITE,
             R.raw.anim_splash_screen
-        )
-
-        ApplicationUtils.startNotificationListenerService(
-            viewModel.localDataStore,
-            applicationContext
         )
 
         binding.tvAppVersion.text =

@@ -16,7 +16,6 @@ import com.noisefit_commans.NoisefitApplication
 import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
@@ -133,14 +132,11 @@ class FeedbackNewViewModel @Inject constructor(
         val versionName = packageInfo.versionName
         val versionCode = packageInfo.versionCode
 
-        val pairedDeviceType = localDataStore.getPairDeviceType()
 
         val connectedDevice =
-            if (pairedDeviceType == Device.RING) {
-                ringDataStore.getRingDevice()
-            } else {
-                localDataStore.getConnectedDevice()
-            }
+
+            ringDataStore.getRingDevice()
+
 
         val platform = "android"
         val mobileDevice = "${Build.BRAND} ${Build.MODEL}"
@@ -148,12 +144,10 @@ class FeedbackNewViewModel @Inject constructor(
         val appVersion = "$versionName($versionCode)"
         val watchName = connectedDevice?.bluetoothName.toString()
         val watchFirmwareVersion =
-            if (pairedDeviceType == Device.RING) {
-                WatchInfoGlobals.firmwareVersionRing
-                    ?: WatchInfoGlobals.firmwareVersionNumberRing.toString()
-            } else {
-                WatchInfoGlobals.firmwareVersion ?: WatchInfoGlobals.firmwareVersionNumber.toString()
-            }
+
+            WatchInfoGlobals.firmwareVersionRing
+                ?: WatchInfoGlobals.firmwareVersionNumberRing.toString()
+
 
         LOGS.d("connectedDevice $watchName")
         return FeedbackNew(

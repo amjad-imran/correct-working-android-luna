@@ -7,7 +7,6 @@ import com.google.gson.reflect.TypeToken
 import com.noisefit.data.remote.response.CatWiseWatchFacesItem
 import com.noisefit.data.remote.response.WatchFaceCustomListResponse
 import com.noisefit_commans.constants.WatchInfoGlobals
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.data.enums.ServiceState
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.DashboardBanner
@@ -948,18 +947,6 @@ class DataStoredImpl
 
     }
 
-    override fun saveConnectedDevice(noiseFitDevice: ColorFitDevice): Boolean {
-        return mPrefs.edit()?.putString(NOISE_FIT_DEVICE, gson.toJson(noiseFitDevice))?.commit()
-            ?: false
-    }
-
-    override fun getConnectedDevice(): ColorFitDevice? {
-        return gson.fromJson(
-            mPrefs.getString(NOISE_FIT_DEVICE, null), ColorFitDevice::class.java
-        )
-
-    }
-
     override fun saveSchedulerTimeAndFrequency(interval: Int, syncFrequency: Int) {
         mPrefs.edit()?.putInt(SCHEDULER_TIME_INTERVAL, interval)
             ?.putInt(SYNC_INTERVAL_FREQUENCY, syncFrequency)?.apply()
@@ -1464,20 +1451,6 @@ class DataStoredImpl
         mPrefs.edit().remove(QUIZ_QUESTION_DATA).apply()
     }
 
-    override fun savePairDeviceType(device: Device?) {
-        LOGS.d("PAIR_DEVICE savePairDeviceType $device")
-        if (device == null) {
-            mPrefs.edit()?.remove(PAIR_DEVICE_TYPE)?.commit()
-        } else {
-            mPrefs.edit()?.putString(PAIR_DEVICE_TYPE, device.toString())?.commit()
-        }
-    }
-
-    override fun getPairDeviceType(): Device? {
-        val dValue = mPrefs.getString(PAIR_DEVICE_TYPE, "")
-        LOGS.d("PAIR_DEVICE getPairDeviceType $dValue")
-        return Device.getValueFromStrings(dValue)
-    }
 
     override fun setFeedPostCreateCount(count: Int) {
         mPrefs.edit()?.putInt(FEEDS_POST_COUNT, count)?.apply()

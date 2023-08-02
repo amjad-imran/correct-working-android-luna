@@ -11,7 +11,6 @@ import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit.watch.CallingWatchUtils
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.models.ColorFitDevice
@@ -45,16 +44,12 @@ class UnpairBottomDialogFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val deviceType = localDataStore.getPairDeviceType()
 
+        defValue = "Ring"
 
-        connectedDevice = if (deviceType == Device.RING) {
-            defValue = "Ring"
+        connectedDevice =
             ringDataStore.getRingDevice()
-        } else {
-            defValue = "Watch"
-            localDataStore.getConnectedDevice()
-        }
+
         val bleName = connectedDevice?.bluetoothName ?: defValue
         val title = "Unpair $bleName "
 

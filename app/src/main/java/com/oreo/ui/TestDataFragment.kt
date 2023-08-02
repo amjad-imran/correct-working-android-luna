@@ -14,7 +14,6 @@ import com.noisefit.luna.databinding.FragmentTestDataBinding
 import com.noisefit.luna.databinding.RowTabsBinding
 import com.noisefit.luna.databinding.TestUserDataBinding
 import com.noisefit.session.SessionManager
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
@@ -63,7 +62,7 @@ class TestDataFragment : BaseFragment<FragmentTestDataBinding>(FragmentTestDataB
         binding.toolbar.tvTitle.text = "Ring Data"
 
         binding.tvLastSync.text = "last sync ${
-            sessionManager.getLastSyncTime(Device.RING)?.let { DateFormats.getRelativeTime(it) }
+            sessionManager.getLastSyncTime()?.let { DateFormats.getRelativeTime(it) }
         }"
 
 

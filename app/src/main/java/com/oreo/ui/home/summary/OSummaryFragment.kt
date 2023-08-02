@@ -15,7 +15,6 @@ import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.constants.EventConstants
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
 import com.noisefit_commans.models.ColorFitDevice
@@ -169,7 +168,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     }
 
     private fun shouldSync() {
-        val lastSyncTime = viewModel.sessionManager.getLastSyncTime(Device.RING) ?: 0L
+        val lastSyncTime = viewModel.sessionManager.getLastSyncTime() ?: 0L
         LOGS.d("shouldSync $lastSyncTime -- ${DateFormats.getTimeStamp()}")
         if (kotlin.math.abs(DateFormats.getTimeStamp() - lastSyncTime) > 300000L) {
             syncData()
@@ -214,7 +213,12 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 }
 
                 is ConnectState.UnPaired -> {
-                    viewModel.handleUnPairState()
+                    //viewModel.handleUnPairState()
+
+                    context?.let {
+                        startActivity(PairDeviceActivity.getStartIntent(it))
+                        activity?.finish()
+                    }
                 }
 
                 is ConnectState.Hibernate -> {

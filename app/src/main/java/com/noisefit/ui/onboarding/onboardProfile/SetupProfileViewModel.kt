@@ -743,7 +743,7 @@ class SetupProfileViewModel
                 this["height"] = userInfo?.height ?: 0
                 this["weight"] = userInfo?.weight ?: 0
                 this["personality_type"] = getEndGameValue(user.endGame)
-                val connectedDeviceData = localDataStore.getConnectedDevice()
+                val connectedDeviceData = ringDataStore.getRingDevice()
                 try {
                     if (connectedDeviceData != null) {
                         val arr = arrayOf(connectedDeviceData.bluetoothName)
@@ -764,7 +764,7 @@ class SetupProfileViewModel
     }
 
     fun isDevicePaired(): Boolean {
-        return localDataStore.getConnectedDevice() != null
+        return ringDataStore.getRingDevice() != null
     }
 
 

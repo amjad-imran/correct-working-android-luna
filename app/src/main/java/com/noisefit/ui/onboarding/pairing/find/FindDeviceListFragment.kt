@@ -43,7 +43,6 @@ import com.noisefit.util.DeviceUtil
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
@@ -72,7 +71,6 @@ class FindDeviceListFragment :
       }*/
     private val handler = Handler(Looper.getMainLooper())
     private val viewModel: SearchNearbyDeviceViewModel by activityViewModels()
-    val args: FindDeviceListFragmentArgs by navArgs()
 
 
     private val btAdapter by lazy {
@@ -89,18 +87,12 @@ class FindDeviceListFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        try {
-            viewModel.device = args.device
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        if (viewModel.device == Device.RING) {
-            binding.bScan.gone()
-            binding.textView2.text =
-                getString(R.string.text_make_sure_your_oreo_is_connected_to_the_charger_and_your_phone_s_bluetooth_is_enabled)
-        } else
-            binding.textView2.text =
-                getString(R.string.text_just_make_sure_your_watch_and_the_phone_s_bluetooth_connection_are_on)
+
+
+        binding.bScan.gone()
+        binding.textView2.text =
+            getString(R.string.text_make_sure_your_oreo_is_connected_to_the_charger_and_your_phone_s_bluetooth_is_enabled)
+
         viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_device_list)
         binding.lScanning.repeatCount = 0
         binding.lScanning.setAnimation(R.raw.anim_device_default)
@@ -578,9 +570,7 @@ class FindDeviceListFragment :
                 navigate(
                     FindDeviceListFragmentDirections.actionFindDeviceListFragmentToPairingFragment(
                         colorFitDevice
-                    ).apply {
-                        this.device = viewModel.device
-                    }
+                    )
                 )
             }
         } else {

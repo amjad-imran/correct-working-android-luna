@@ -19,7 +19,6 @@ import com.noisefit.watch.SDKWatchType
 import com.noisefit.watch.UserActivityHandler
 import com.noisefit.watch.WatchesSDK
 import com.noisefit_commans.constants.EventConstants
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.response.VersionCheckResponse
@@ -691,7 +690,7 @@ constructor(
 
                     sessionManager.forceSyncDataWithServer = false
 
-                    sessionManager.saveLastSyncTime(Device.RING, DateFormats.getTimeStamp())
+                    sessionManager.saveLastSyncTime(DateFormats.getTimeStamp())
                     sessionManager.setSyncCompletedState(Event(SyncDataStatus(status = EventConstants.UPDATE_STATUS_SUCCESS)))
                     LOGS.d(TAG, "OreoSyncDataWork: Completedz")
                     mFuture!!.set(Result.success())

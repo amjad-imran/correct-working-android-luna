@@ -11,7 +11,6 @@ import com.noisefit.ui.onboarding.onboardProfile.GuestProfileSetupActivity
 import com.noisefit.ui.onboarding.onboardProfile.SetupProfileViewModel
 import com.noisefit.ui.onboarding.pairing.DeviceSetupActivity
 import com.noisefit.util.ApplicationUtils
-import com.noisefit_commans.data.enums.Device
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.InsiderAppEvents
