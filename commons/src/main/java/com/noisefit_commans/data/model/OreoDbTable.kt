@@ -1,11 +1,13 @@
 package com.noisefit_commans.data.model
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.noisefit_commans.models.ColorfitData
+import kotlinx.parcelize.Parcelize
 
 
 @Entity(
@@ -41,6 +43,26 @@ data class OreoBloodOxygenBreakup(
     @ColumnInfo(name = "break_up") @SerializedName("break_up") var breakUp: String? = null,
     @SerializedName("date") var date: String? = null
 ) : ColorfitData()
+
+
+@Entity(
+    tableName = "auto_sport", indices = [Index(value = ["startTime"], unique = true)]
+)
+@Parcelize
+data class OreoAutoSportData(
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    @ColumnInfo(name = "is_synced") var isSynced: Boolean = false,
+    @ColumnInfo(name = "is_accepted") var isAccepted: Boolean = false,
+    @ColumnInfo(name = "duration") var duration: Int = 0,
+    @ColumnInfo(name = "intensity") @SerializedName("intensity") var intensity: Int? = null,
+    @ColumnInfo(name = "calories") @SerializedName("calories") var calories: Int = 0,
+    @ColumnInfo(name = "startTime") @SerializedName("startTime") var startTime: Long = 0,
+    @ColumnInfo(name = "steps") @SerializedName("steps") var steps: Int = 0,
+    @ColumnInfo(name = "type") @SerializedName("type") var type: String? = null,
+    @ColumnInfo(name = "hr") @SerializedName("hr") var hrData: String? = null,
+    @SerializedName("date") var date: String? = null
+) : ColorfitData(), Parcelable
+
 
 
 @Entity(

@@ -17,9 +17,11 @@ sealed class OHealthOverview {
 
     class PairDevice() : OHealthOverview()
 
-    class WAlert(
+    class AutoSport(
         val count: Int
     ) : OHealthOverview()
+
+
 
 //    class Demo(
 //        val hrValue: Int,

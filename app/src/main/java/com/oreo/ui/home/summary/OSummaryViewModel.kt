@@ -1,7 +1,6 @@
 package com.oreo.ui.home.summary
 
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
@@ -145,6 +144,11 @@ constructor(
                     DateFormats.getCurrentDate(DateFormats.dateTimeFormatWithWeekWithoutYear)
                 )
             )
+            val autoSportCount = userRepository.getSummaryAutoWorkoutCount()
+            if (autoSportCount > 0) {
+                userActivities.add(OHealthOverview.AutoSport(autoSportCount))
+            }
+
 //            userActivities.add(1, OHealthOverview.WAlert(2))
             if (ringDataStore.getRingDevice() == null) {
                 userActivities.add(OHealthOverview.PairDevice())

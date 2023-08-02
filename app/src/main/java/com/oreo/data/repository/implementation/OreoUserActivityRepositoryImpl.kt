@@ -3,15 +3,17 @@ package com.oreo.data.repository.implementation
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
-import com.noisefit.luna.BuildConfig
 import com.noisefit.data.remote.abstraction.NetworkService
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.safeApiCallFlow
+import com.noisefit.luna.BuildConfig
+import com.noisefit.receiver.workManager.HealthOverviewDataType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.dataConverter.OreoOfflineDataMapper
+import com.oreo.data.db.implementation.OreoAutoSportDataImpl
 import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
 import com.oreo.data.db.implementation.OreoHeartRateDataImpl
@@ -52,6 +54,7 @@ class OreoUserActivityRepositoryImpl(
     private val temperatureDataImpl: OreoBodyTemperatureDataImpl,
     private val sleepDataImpl: OreoSleepDataImpl,
     private val stepsDataImpl: OreoStepsDataImpl,
+    private val oreoAutoSportDataImpl: OreoAutoSportDataImpl,
     private val offlineDataMapper: OreoOfflineDataMapper,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : OreoUserActivityRepository {
@@ -259,6 +262,7 @@ class OreoUserActivityRepositoryImpl(
 
             HealthOverviewDataType.ACTIVITY -> {}
             HealthOverviewDataType.SERVER_SYNC_SUCCESS -> {}
+            HealthOverviewDataType.AUTO_WORKOUT -> {}
         }
 
         return Pair(hOverviewData, index)
@@ -440,6 +444,9 @@ class OreoUserActivityRepositoryImpl(
 
     }
 
+    override suspend fun getSummaryAutoWorkoutCount(): Int {
+        return oreoAutoSportDataImpl.getAllNotAcceptingData()?.size ?: 0
+    }
 
     override suspend fun getSummaryHRHealthOverview(): OHealthOverview? {
         try {

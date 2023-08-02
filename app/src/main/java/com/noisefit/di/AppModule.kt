@@ -28,6 +28,7 @@ import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataActions
 import com.noisefit_commans.utils.EncryptUtils
 import com.oreo.data.dataConverter.OreoOfflineDataMapper
 import com.oreo.data.dataConverter.OreoOnlineDataMapper
+import com.oreo.data.db.implementation.OreoAutoSportDataImpl
 import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
 import com.oreo.data.db.implementation.OreoDayTimeMovementDataImpl
@@ -186,6 +187,7 @@ object AppModule {
         encryptUtils: EncryptUtils,
         lastSyncProvider: LastSyncProvider,
         testModeUtils: TestModeUtils,
+        oreoAutoSportDataImpl: OreoAutoSportDataImpl,
         gson: Gson
     ): OreoSyncRepository =
         OreoSyncRepositoryImpl(
@@ -205,6 +207,9 @@ object AppModule {
             encryptUtils,
             lastSyncProvider,
             testModeUtils
+            userActivityRepository,
+            testModeUtils,
+            oreoAutoSportDataImpl
         )
 
 
@@ -297,6 +302,7 @@ object AppModule {
         stepsDataImpl: OreoStepsDataImpl,
         sleepDataImpl: OreoSleepDataImpl,
         offlineDataMapper: OreoOfflineDataMapper,
+        oreoAutoSportDataImpl: OreoAutoSportDataImpl
     ): OreoUserActivityRepository =
         OreoUserActivityRepositoryImpl(
             remoteDataSource,
@@ -309,8 +315,9 @@ object AppModule {
             temperatureDataImpl,
             sleepDataImpl,
             stepsDataImpl,
-            offlineDataMapper
-        )
+            oreoAutoSportDataImpl,
+            offlineDataMapper,
+            )
 
 
     @Singleton

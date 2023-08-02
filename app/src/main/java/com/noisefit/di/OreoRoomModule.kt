@@ -9,6 +9,7 @@ import com.oreo.data.db.abstaction.OreoBodyTemperatureDataSource
 import com.oreo.data.db.abstaction.OreoDayTimeMovementDataSource
 import com.oreo.data.db.abstaction.OreoSleepDataSource
 import com.oreo.data.db.abstaction.OreoStepsDataSource
+import com.oreo.data.db.database.OreoAutoSportDao
 import com.oreo.data.db.database.OreoBloodOxygenDao
 import com.oreo.data.db.database.OreoBodyTemperatureDao
 import com.oreo.data.db.database.OreoDayTimeMovementDao
@@ -115,6 +116,12 @@ class OreoRoomModule {
     @Provides
     fun providesBODao(database: OreoDataBase): OreoBloodOxygenDao {
         return database.bloodOxygenDao()
+    }
+
+    @Singleton
+    @Provides
+    fun providesAutoSportDao(database: OreoDataBase): OreoAutoSportDao {
+        return database.oreoAutoSportDao()
     }
 
     @Singleton

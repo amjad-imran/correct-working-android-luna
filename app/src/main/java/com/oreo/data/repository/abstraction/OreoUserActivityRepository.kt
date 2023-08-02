@@ -29,6 +29,7 @@ interface OreoUserActivityRepository {
 
     suspend fun getSummaryHRHealthOverview(): OHealthOverview?
 
+    suspend fun getSummaryAutoWorkoutCount(): Int
     suspend fun getTestData(): List<TestUserData>
 
     suspend fun getTestDataListByType(data: TestUserData): List<Any>
