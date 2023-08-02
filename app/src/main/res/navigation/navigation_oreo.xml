@@ -272,9 +272,13 @@
         <argument
             android:name="workoutName"
             app:argType="string" />
+
         <argument
             android:name="workoutId"
             app:argType="string" />
+        <argument
+            android:name="position"
+            app:argType="integer" />
     </fragment>
 
     <dialog

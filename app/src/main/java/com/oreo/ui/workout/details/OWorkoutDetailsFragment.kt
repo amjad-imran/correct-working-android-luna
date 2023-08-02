@@ -3,6 +3,8 @@ package com.oreo.ui.workout.details
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
@@ -19,6 +21,7 @@ import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.model.SleepChartModel
 import dagger.hilt.android.AndroidEntryPoint
 
+const val DELETE_WORKOUT_REQUEST_KEY = "DELETE_WORKOUT_REQUEST_KEY"
 @AndroidEntryPoint
 class OWorkoutDetailsFragment :
     BaseFragment<FragmentOWorkoutDetailsBinding>(FragmentOWorkoutDetailsBinding::inflate) {
@@ -34,6 +37,7 @@ class OWorkoutDetailsFragment :
         setDefaultUiValue()
         setRecycler()
         mViewModel.getWorkoutDetails(args.workoutId)
+        mViewModel.position = args.position
     }
 
     private fun setRecycler() {
@@ -46,6 +50,11 @@ class OWorkoutDetailsFragment :
     override fun initListener() {
         binding.lytToolbar.backBtn.setOnClickListener {
             navigateUpSafe()
+        }
+
+        binding.tvEdit.setOnClickListener {
+            val id = mViewModel.workoutDetailsResponse.value?.id
+            mViewModel.deleteWorkout(id!!)
         }
 
     }
@@ -76,6 +85,16 @@ class OWorkoutDetailsFragment :
             }
         }
 
+        mViewModel.workoutDeletedResponse.observe(this) {
+            it?.getContent()?.let { response ->
+                setFragmentResult(
+                    DELETE_WORKOUT_REQUEST_KEY,
+                    bundleOf("allow" to true, "position" to mViewModel.position)
+
+                )
+                navigateUpSafe()
+            }
+        }
         mViewModel.getApiErrors().observe(this) {
             it?.getContent()?.let { response ->
                 uiController.onApiErrorReceived(response)
@@ -177,6 +196,15 @@ class OWorkoutDetailsFragment :
                     "Calories",
                     it.calories.toString(),
                     "Kcal",
+                )
+            )
+        }
+        if (it.steps != null && it.steps > 0) {
+            activityList.add(
+                OWDActivityData(
+                    "Steps",
+                    it.steps.toString(),
+                    "",
                 )
             )
         }

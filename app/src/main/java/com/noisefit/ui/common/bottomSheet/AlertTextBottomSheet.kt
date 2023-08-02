@@ -58,6 +58,9 @@ class AlertTextBottomSheet :
 
     override fun initListener() {
         binding.btnAllow.setOnClickListener {
+            requireActivity().supportFragmentManager.setFragmentResult(
+                ALERT_REQUEST_KEY, bundleOf("allow" to true)
+            )
             setFragmentResult(
                 ALERT_REQUEST_KEY,
                 bundleOf("allow" to true)

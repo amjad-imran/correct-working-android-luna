@@ -10,6 +10,7 @@ data class OWorkoutDetailsResponseModel(
     val deviceId: String,
     val duration: Long?=null,
     val calories: Int?=null,
+    val steps: Int?=null,
     @SerializedName("activity_type")
     val activityType: String?=null,
     @SerializedName("start_time")

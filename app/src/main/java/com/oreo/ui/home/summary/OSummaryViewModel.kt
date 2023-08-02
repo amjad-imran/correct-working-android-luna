@@ -304,7 +304,7 @@ constructor(
     }
 
 
-    private fun getRecentWorkoutList() {
+     fun getRecentWorkoutList() {
         viewModelScope.launch {
             userRepository.getRecentWorkoutList().collect { resource ->
                 when (resource) {

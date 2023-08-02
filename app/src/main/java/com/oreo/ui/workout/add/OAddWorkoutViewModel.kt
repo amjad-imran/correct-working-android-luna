@@ -11,6 +11,7 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.OAddWorkout
@@ -48,17 +49,33 @@ constructor(
         if (data == null) {
             return
         }
+
+
         autoWorkoutId = data.id
         addWorkout.duration = TimeUnit.SECONDS.toMinutes(data.duration.toLong()).toInt()
         val endTime = DateFormats.addMinuteToTimeStamp(data.startTime, addWorkout.duration)
         addWorkout.calories = data.calories
         addWorkout.intensity = getIntensity(data.intensity ?: 0)
-        addWorkout.startTimeIn24H =
-            DateFormats.convertTimestampToDate(data.startTime, DateFormats.time12Meridian)
+
 
         addWorkout.endTimeIn24H =
-            DateFormats.convertTimestampToDate(endTime, DateFormats.time12Meridian)
+            DateFormats.convertTimestampToDate(endTime, DateFormats.timeFormat)
         activityType = data.type
+
+        tryCatch {
+            val startTime =   DateFormats.convertTimestampToDate(data.startTime, DateFormats.timeFormat)
+            if(startTime.isNotEmpty()){
+                val startArray = startTime.split(":")
+                addWorkout.startHour = startArray[0].toInt()
+                addWorkout.startMinute = startArray[1].toInt()
+            }
+            val endTimeText =   DateFormats.convertTimestampToDate(endTime, DateFormats.timeFormat)
+            if(endTimeText.isNotEmpty()){
+                val endArray = endTimeText.split(":")
+                addWorkout.endHour = endArray[0].toInt()
+                addWorkout.endMinute = endArray[1].toInt()
+            }
+        }
         autoSport.postValue(true)
     }
 
