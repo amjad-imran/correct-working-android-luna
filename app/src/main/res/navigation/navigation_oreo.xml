@@ -105,15 +105,11 @@
             app:argType="string" />
     </fragment>
 
-    </fragment>
     <fragment
         android:id="@+id/oreoHealthAndSupportFragment"
         android:name="com.oreo.ui.helpsupport.OHelpAndSupportFragment"
         android:label="OreoHealthAndSupport" />
-    <dialog
-        android:id="@+id/bottomSheetChooseDevice"
-        android:name="com.oreo.ui.profile.BottomSheetChooseDevice"
-        android:label="BottomSheetChooseDevice" />
+
     <include app:graph="@navigation/navigation_profile_edit" />
 
     <dialog
