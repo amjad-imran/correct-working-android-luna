@@ -34,17 +34,13 @@ constructor(
                     is CacheResult.Success -> {
                         val hm = HashMap<String, ArrayList<OreoAutoSportData>>()
 
-//                        val dummyList = ArrayList<OreoAutoSportData>()
-//                        dummyList.addAll(resource.value!!)
-//                        dummyList.addAll(resource.value!!)
-//                        dummyList.addAll(resource.value!!)
 
                         resource.value?.forEach {
                             val date = DateFormats.convertTimestampToDate(
                                 it.startTime ,
                                 DateFormats.monthDateWithoutYear2
                             )
-//                            val date = Random.nextInt(0,100).toString()
+
 
                             if (hm.containsKey(date)) {
                                 val programmeList = hm[date]!!

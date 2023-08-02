@@ -615,11 +615,11 @@ constructor(
             override fun onContinuousPressureData(data: ContinuousPressureBean) {
                 LOGS.d(TAG, "onOfflinePressureData : $data ${data.date}")
                 if (colorFitDevice?.deviceType.equals(DeviceType.NOISEFIT_LUNA.deviceType, true)) {
-                    userActivityDataCallbacks?.onUserActivityDataReceived(
-                        UserActivityCallback.StressDataObtainedOreo(
-                            oreoDataConverter.parseStressData(data)
-                        )
-                    )
+//                    userActivityDataCallbacks?.onUserActivityDataReceived(
+//                        UserActivityCallback.StressDataObtainedOreo(
+//                            oreoDataConverter.parseStressData(data)
+//                        )
+//                    )
                 } else {
                     userActivityDataCallbacks?.onUserActivityDataReceived(
                         UserActivityCallback.StressDataObtained(
@@ -633,11 +633,11 @@ constructor(
 
             override fun onOfflinePressureData(data: OfflinePressureDataBean) {
                 LOGS.d(TAG, "onOfflinePressureData : $data ${data.date}")
-                userActivityDataCallbacks?.onUserActivityDataReceived(
-                    UserActivityCallback.StressDataObtained(
-                        dataConverter.parseStressData(data)
-                    )
-                )
+//                userActivityDataCallbacks?.onUserActivityDataReceived(
+//                    UserActivityCallback.StressDataObtained(
+//                        dataConverter.parseStressData(data)
+//                    )
+//                )
                 AppLogs.sendAppLogs("$TRACK_TAG onOfflinePressureData : $data ${data.date}")
                 AppLogs.sendAppLogs("Sent Offline Pressure Data")
             }
