@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/ic_nudge_back">
+        android:background="@drawable/ic_sleep_nudge_back">
 
         <TextView
             android:id="@+id/tvTitle"

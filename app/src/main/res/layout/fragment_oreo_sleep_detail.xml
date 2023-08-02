@@ -5,8 +5,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:background="@color/black">
+        android:layout_height="match_parent">
 
 
         <ScrollView
@@ -69,10 +68,10 @@
                     lineChart:bottomWith="30dp"
                     lineChart:centerLineColor="@color/white_80"
                     lineChart:centerLineWidth="3dp"
-                    lineChart:chartLineColor="#d8b4ff"
+                    lineChart:chartLineColor="#c5a8ed"
                     lineChart:chartLineWidth="2dp"
-                    lineChart:fillColorEnd="#00aa5bff"
-                    lineChart:fillColorStart="#4caa5bff"
+                    lineChart:fillColorEnd="#00c6a7e8"
+                    lineChart:fillColorStart="#4cc6a7e8"
                     lineChart:gridColor="@color/white_12"
                     lineChart:hCount="11"
                     lineChart:innerCircleColor="#ffffff"
@@ -114,7 +113,7 @@
                     layout="@layout/layout_divider"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="24dp"
                     app:layout_constraintTop_toBottomOf="@id/lytSleepScore" />
 
                 <include

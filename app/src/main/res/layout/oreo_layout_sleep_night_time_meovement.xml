@@ -26,6 +26,7 @@
             android:layout_marginEnd="@dimen/side_margin"
             android:background="@drawable/circle_black"
             android:gravity="center"
+            android:visibility="invisible"
             android:src="@drawable/ic_info_new"
             app:layout_constraintBottom_toBottomOf="@id/tvTitle"
             app:layout_constraintEnd_toEndOf="parent"

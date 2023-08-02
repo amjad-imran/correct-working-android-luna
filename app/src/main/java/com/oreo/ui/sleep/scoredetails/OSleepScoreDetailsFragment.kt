@@ -274,7 +274,7 @@ class OSleepScoreDetailsFragment :
         handleShowTrendCompareProgress(it)
         when (mViewModel.itemType) {
             ClickViewType.SLEEP.name -> {
-                binding.lytAllTimeAvg.lytProgress.pbSteps.setIndicatorColor(
+                binding.lytAllTimeAvg.pbSteps.setIndicatorColor(
                     ContextCompat.getColor(
                         requireContext(),
                         R.color.white
@@ -357,7 +357,7 @@ class OSleepScoreDetailsFragment :
             ClickViewType.TOTAL_BURN_WEEK.name,
             ClickViewType.STEP_DAY.name,
             ClickViewType.TOTAL_BURN_MONTH.name -> {
-                binding.lytAllTimeAvg.lytProgress.pbSteps.setIndicatorColor(
+                binding.lytAllTimeAvg.pbSteps.setIndicatorColor(
                     ContextCompat.getColor(
                         requireContext(),
                         R.color.white
@@ -433,7 +433,7 @@ class OSleepScoreDetailsFragment :
 
             ClickViewType.READINESS.name -> {
 
-                binding.lytAllTimeAvg.lytProgress.pbSteps.setIndicatorColor(
+                binding.lytAllTimeAvg.pbSteps.setIndicatorColor(
                     ContextCompat.getColor(
                         requireContext(),
                         R.color.white
@@ -917,24 +917,24 @@ class OSleepScoreDetailsFragment :
         }
 
         if (todayTrendProg > yesterdayTrendProg && todayTrendProg > allTimeTrendProg) {
-            binding.lytScoreOverview.lytToday.lytProgress.pbSteps.progress = 100
+            binding.lytScoreOverview.lytToday.pbSteps.progress = 100
             updateProgressColor(0)
             val showYesPer = yesterdayTrendProg.toFloat().times(100).div(todayTrendProg).toInt()
             val showAllPer = allTimeTrendProg.toFloat().times(100).div(todayTrendProg).toInt()
             mViewModel.setTrendData(100 - showYesPer)
-            binding.lytScoreOverview.lytYesterday.lytProgress.pbSteps.progress = showYesPer
-            binding.lytAllTimeAvg.lytProgress.pbSteps.progress = showAllPer
+            binding.lytScoreOverview.lytYesterday.pbSteps.progress = showYesPer
+            binding.lytAllTimeAvg.pbSteps.progress = showAllPer
 
         } else if (yesterdayTrendProg > todayTrendProg && yesterdayTrendProg > allTimeTrendProg) {
-            binding.lytScoreOverview.lytYesterday.lytProgress.pbSteps.progress = 100
+            binding.lytScoreOverview.lytYesterday.pbSteps.progress = 100
             updateProgressColor(1)
             val showTodayPer = todayTrendProg.toFloat().times(100).div(yesterdayTrendProg).toInt()
             val showAllPer = allTimeTrendProg.toFloat().times(100).div(yesterdayTrendProg).toInt()
             mViewModel.setTrendData(100 - showTodayPer)
-            binding.lytScoreOverview.lytToday.lytProgress.pbSteps.progress = showTodayPer
-            binding.lytAllTimeAvg.lytProgress.pbSteps.progress = showAllPer
+            binding.lytScoreOverview.lytToday.pbSteps.progress = showTodayPer
+            binding.lytAllTimeAvg.pbSteps.progress = showAllPer
         } else if (allTimeTrendProg > todayTrendProg && allTimeTrendProg > yesterdayTrendProg) {
-            binding.lytAllTimeAvg.lytProgress.pbSteps.progress = 100
+            binding.lytAllTimeAvg.pbSteps.progress = 100
             val showTodayPer = todayTrendProg.toFloat().times(100).div(allTimeTrendProg).toInt()
             val showYesPer = yesterdayTrendProg.toFloat().times(100).div(allTimeTrendProg).toInt()
 
@@ -948,30 +948,30 @@ class OSleepScoreDetailsFragment :
                 mViewModel.setTrendData(100 - tPercent)
                 mViewModel.isTodayGreater = false
             }
-            binding.lytScoreOverview.lytYesterday.lytProgress.pbSteps.progress = showYesPer
-            binding.lytScoreOverview.lytToday.lytProgress.pbSteps.progress = showTodayPer
+            binding.lytScoreOverview.lytYesterday.pbSteps.progress = showYesPer
+            binding.lytScoreOverview.lytToday.pbSteps.progress = showTodayPer
             updateProgressColor(2)
         } else if (todayTrendProg == yesterdayTrendProg) {
             if (todayTrendProg == allTimeTrendProg) {
                 updateProgressColor(3)
-                binding.lytScoreOverview.lytToday.lytProgress.pbSteps.progress = todayTrendProg
-                binding.lytScoreOverview.lytYesterday.lytProgress.pbSteps.progress =
+                binding.lytScoreOverview.lytToday.pbSteps.progress = todayTrendProg
+                binding.lytScoreOverview.lytYesterday.pbSteps.progress =
                     yesterdayTrendProg
-                binding.lytAllTimeAvg.lytProgress.pbSteps.progress =
+                binding.lytAllTimeAvg.pbSteps.progress =
                     allTimeTrendProg
             } else {
                 mViewModel.isProgressEqual = true
                 updateProgressColor(3)
-                binding.lytScoreOverview.lytToday.lytProgress.pbSteps.progress = todayTrendProg
-                binding.lytScoreOverview.lytYesterday.lytProgress.pbSteps.progress =
+                binding.lytScoreOverview.lytToday.pbSteps.progress = todayTrendProg
+                binding.lytScoreOverview.lytYesterday.pbSteps.progress =
                     yesterdayTrendProg
             }
         } else if (todayTrendProg == allTimeTrendProg) {
             updateProgressColor(3)
-            binding.lytScoreOverview.lytToday.lytProgress.pbSteps.progress = todayTrendProg
-            binding.lytScoreOverview.lytYesterday.lytProgress.pbSteps.progress =
+            binding.lytScoreOverview.lytToday.pbSteps.progress = todayTrendProg
+            binding.lytScoreOverview.lytYesterday.pbSteps.progress =
                 yesterdayTrendProg
-            binding.lytAllTimeAvg.lytProgress.pbSteps.progress =
+            binding.lytAllTimeAvg.pbSteps.progress =
                 allTimeTrendProg
         }
 
@@ -1161,13 +1161,13 @@ class OSleepScoreDetailsFragment :
                 )
             }
         }
-        binding.lytScoreOverview.lytToday.lytProgress.pbSteps.setIndicatorColor(
+        binding.lytScoreOverview.lytToday.pbSteps.setIndicatorColor(
             todayColor
         )
-        binding.lytScoreOverview.lytYesterday.lytProgress.pbSteps.setIndicatorColor(
+        binding.lytScoreOverview.lytYesterday.pbSteps.setIndicatorColor(
             yesterdayColor
         )
-        binding.lytAllTimeAvg.lytProgress.pbSteps.setIndicatorColor(
+        binding.lytAllTimeAvg.pbSteps.setIndicatorColor(
             allTimeColor
         )
     }
