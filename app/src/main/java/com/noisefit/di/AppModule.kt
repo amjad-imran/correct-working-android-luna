@@ -206,8 +206,6 @@ object AppModule {
             onlineDataMapper,
             encryptUtils,
             lastSyncProvider,
-            testModeUtils
-            userActivityRepository,
             testModeUtils,
             oreoAutoSportDataImpl
         )

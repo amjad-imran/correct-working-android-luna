@@ -206,10 +206,10 @@ constructor(
                                     is Resource.Success -> {
 
                                         //TODO uncomment after testing -deepak
-                                       /* syncDataScope.launch {
-                                            syncRepository.deleteSleepServerSyncData(userActivities.second)
-                                        }
-                                        syncRepository.updateSleepHashForLastSyncData(userActivities.first)*/
+                                        /* syncDataScope.launch {
+                                             syncRepository.deleteSleepServerSyncData(userActivities.second)
+                                         }
+                                         syncRepository.updateSleepHashForLastSyncData(userActivities.first)*/
 
                                         LOGS.d(
                                             TAG,
@@ -350,7 +350,10 @@ constructor(
 
                         is UserActivityCallback.HealthScoreObtainedOreo -> {
                             job = syncDataScope.launch {
-                                syncRepository.saveHealthScoreData(userActivityCallback.score,userActivityCallback.date)
+                                syncRepository.saveHealthScoreData(
+                                    userActivityCallback.score,
+                                    userActivityCallback.date
+                                )
                                     .collect { resource ->
                                         when (resource) {
                                             is CacheResult.Success -> {
@@ -707,6 +710,7 @@ constructor(
         return mFuture!!
     }
 }
+
 enum class HealthOverviewDataType {
-    STEPS, HEART, SLEEP, BLOOD, STRESS, TEMPERATURE, ALL, ACTIVITY, SERVER_SYNC_SUCCESS
+    STEPS, HEART, SLEEP, BLOOD, STRESS, TEMPERATURE, ALL, ACTIVITY, SERVER_SYNC_SUCCESS, AUTO_WORKOUT
 }

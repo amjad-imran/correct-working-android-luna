@@ -24,13 +24,8 @@ import androidx.lifecycle.LifecycleService
 import com.noisefit.luna.R
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.local.db.CacheResult
-import com.noisefit.data.local.db.DataBase
 import com.noisefit.data.repository.LastSyncProvider
-import com.noisefit.data.repository.abstraction.SportEventRepository
-import com.noisefit.data.repository.abstraction.SyncRepository
 import com.noisefit.data.repository.abstraction.UserRepository
-import com.noisefit.receiver.broadcastReceiver.AudioSettingReceiver
-import com.noisefit.receiver.workManager.HealthOverviewDataType
 import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
 import com.noisefit.util.FirebaseCrashlyticsUtils
@@ -88,6 +83,7 @@ import com.noisefit_commans.utils.ServiceUtil
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.db.OreoDataBase
 import com.oreo.data.repository.abstraction.OreoSyncRepository
+import com.oreo.receiver.workManager.HealthOverviewDataType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
