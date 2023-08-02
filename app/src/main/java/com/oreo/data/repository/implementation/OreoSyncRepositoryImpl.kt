@@ -1,42 +1,21 @@
 package com.oreo.data.repository.implementation
 
 import com.google.gson.Gson
-import com.noisefit.luna.BuildConfig
 import com.noisefit.data.dataConverter.OfflineDataMapper
-import com.noisefit.data.dataConverter.OnlineDataMapper
 import com.noisefit.data.local.db.CacheResult
-import com.noisefit.data.local.db.implementation.BloodOxygenDataImpl
-import com.noisefit.data.local.db.implementation.BodyTemperatureDataImpl
 import com.noisefit.data.local.db.implementation.GoogleFitDataImpl
-import com.noisefit.data.local.db.implementation.HeartRateDataImpl
-import com.noisefit.data.local.db.implementation.StressDataImpl
 import com.noisefit.data.remote.abstraction.NetworkService
 import com.noisefit.data.remote.base.Resource
-import com.noisefit.data.repository.LastSyncItems
 import com.noisefit.data.repository.LastSyncProvider
 import com.noisefit.data.repository.abstraction.UserActivityRepository
 import com.noisefit.data.safeApiCallFlow
 import com.noisefit.data.safeCacheCall
+import com.noisefit.luna.BuildConfig
 import com.noisefit.util.TestModeUtils
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.DayTimeMovementBreakup
 import com.noisefit_commans.data.model.OreoAutoSportData
-import com.noisefit_commans.data.model.UserSyncRawData
-import com.noisefit_commans.data.response.BaseApiResponse
-import com.noisefit_commans.data.response.VersionCheckResponse
-import com.noisefit_commans.models.BloodOxygenBreakup
-import com.noisefit_commans.models.BodyTemperatureBreakup
-import com.noisefit_commans.models.HeartRate
-import com.noisefit_commans.models.StepDataGoogleFit
-import com.noisefit_commans.models.StressDataBreakup
-import com.noisefit_commans.models.SyncGoogleFitData
-import com.noisefit_commans.response.SleepBreakup
-import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.EncryptUtils
-import com.noisefit_commans.utils.LOGS
-import com.oreo.data.db.implementation.OreoSleepDataImpl
-import com.oreo.data.db.implementation.OreoStepsDataImpl
 import com.noisefit_commans.data.model.OreoBloodOxygenBreakup
 import com.noisefit_commans.data.model.OreoBodyTemperatureBreakup
 import com.noisefit_commans.data.model.OreoHeartRate
@@ -44,7 +23,14 @@ import com.noisefit_commans.data.model.OreoRespiratoryData
 import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.data.model.OreoStepsData
 import com.noisefit_commans.data.model.OreoStressDataBreakup
+import com.noisefit_commans.data.response.BaseApiResponse
+import com.noisefit_commans.data.response.VersionCheckResponse
+import com.noisefit_commans.models.StepDataGoogleFit
+import com.noisefit_commans.models.SyncGoogleFitData
+import com.noisefit_commans.response.SleepBreakup
 import com.noisefit_commans.utils.AppLogs
+import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.EncryptUtils
 import com.oreo.data.dataConverter.OreoOnlineDataMapper
 import com.oreo.data.db.implementation.OreoAutoSportDataImpl
 import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
@@ -52,6 +38,8 @@ import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
 import com.oreo.data.db.implementation.OreoDayTimeMovementDataImpl
 import com.oreo.data.db.implementation.OreoHeartRateDataImpl
 import com.oreo.data.db.implementation.OreoRespiratoryDataImpl
+import com.oreo.data.db.implementation.OreoSleepDataImpl
+import com.oreo.data.db.implementation.OreoStepsDataImpl
 import com.oreo.data.db.implementation.OreoStressDataImpl
 import com.oreo.data.model.OreoUserSyncActivities
 import com.oreo.data.model.OreoUserSyncRawData
@@ -94,6 +82,19 @@ class OreoSyncRepositoryImpl(
             oreoAutoSportDataImpl.getAllNotAcceptingData()
         }
     }
+
+    override suspend fun deleteAllAutoWorkoutData(): Flow<CacheResult<Boolean?>> {
+        return safeCacheCall(Dispatchers.IO) {
+            oreoAutoSportDataImpl.deleteAllAutoSport()
+        }
+    }
+
+    override suspend fun deleteAutoWorkoutData(id: Int): Flow<CacheResult<Boolean?>> {
+        return safeCacheCall(Dispatchers.IO) {
+            oreoAutoSportDataImpl.deleteAutoSport(id)
+        }
+    }
+
     override suspend fun saveAutoWorkoutData(data: List<OreoAutoSportData>): Flow<CacheResult<Boolean?>> {
         return safeCacheCall(Dispatchers.IO) {
             oreoAutoSportDataImpl.insertData(data)

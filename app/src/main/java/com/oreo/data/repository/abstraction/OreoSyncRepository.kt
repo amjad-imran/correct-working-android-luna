@@ -4,16 +4,6 @@ import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.model.DayTimeMovementBreakup
 import com.noisefit_commans.data.model.OreoAutoSportData
-import com.noisefit_commans.data.model.UserSyncRawData
-import com.noisefit_commans.data.response.BaseApiResponse
-import com.noisefit_commans.data.response.VersionCheckResponse
-import com.noisefit_commans.models.BloodOxygenBreakup
-import com.noisefit_commans.models.BodyTemperatureBreakup
-import com.noisefit_commans.models.HeartRate
-import com.noisefit_commans.models.StepDataGoogleFit
-import com.noisefit_commans.models.StressDataBreakup
-import com.noisefit_commans.models.SyncGoogleFitData
-import com.noisefit_commans.response.SleepBreakup
 import com.noisefit_commans.data.model.OreoBloodOxygenBreakup
 import com.noisefit_commans.data.model.OreoBodyTemperatureBreakup
 import com.noisefit_commans.data.model.OreoHeartRate
@@ -21,6 +11,11 @@ import com.noisefit_commans.data.model.OreoRespiratoryData
 import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.data.model.OreoStepsData
 import com.noisefit_commans.data.model.OreoStressDataBreakup
+import com.noisefit_commans.data.response.BaseApiResponse
+import com.noisefit_commans.data.response.VersionCheckResponse
+import com.noisefit_commans.models.StepDataGoogleFit
+import com.noisefit_commans.models.SyncGoogleFitData
+import com.noisefit_commans.response.SleepBreakup
 import com.oreo.data.model.OreoUserSyncActivities
 import com.oreo.data.model.OreoUserSyncRawData
 import kotlinx.coroutines.flow.Flow
@@ -33,6 +28,9 @@ interface OreoSyncRepository {
     suspend fun saveAutoWorkoutData(data: List<OreoAutoSportData>): Flow<CacheResult<Boolean?>>
 
     suspend fun getAutoWorkoutData(): Flow<CacheResult<List<OreoAutoSportData>?>>
+
+    suspend fun deleteAllAutoWorkoutData(): Flow<CacheResult<Boolean?>>
+    suspend fun deleteAutoWorkoutData(id: Int): Flow<CacheResult<Boolean?>>
 
     suspend fun saveSleepData(data: OreoSleepData): Flow<CacheResult<Boolean?>>
     suspend fun saveHealthScoreData(score: Int, date: String): Flow<CacheResult<Boolean?>>

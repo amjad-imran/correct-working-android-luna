@@ -1,6 +1,7 @@
 package com.oreo.ui.home.summary
 
 import androidx.lifecycle.viewModelScope
+import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
@@ -22,9 +23,11 @@ import com.oreo.data.model.ChartModel
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.health.ODashboardSleepModel
 import com.oreo.data.model.health.OreoDashboardResponseModel
+import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -37,6 +40,7 @@ constructor(
     val sessionManager: SessionManager,
     val localDataStore: DataStoredInterface,
     val ringDataStore: RingDataStore,
+    private val syncRepository: OreoSyncRepository,
     private val userRepository: OreoUserActivityRepository,
 ) : BaseViewModel() {
 
@@ -255,12 +259,22 @@ constructor(
         return sleepArray
     }
 
+    fun removeAutoWorkoutCard() {
+        val index = summary.healthOverviewData.value?.indexOfFirst {
+            it is OHealthOverview.AutoSport
+        }
+        if (index != null && index != -1) {
+            summary.healthOverviewData.value?.removeAt(index)
+            summary.healthOverviewData.postValue(summary.healthOverviewData.value)
+        }
+    }
+
     fun handleUnPairState() {
         val index = summary.healthOverviewData.value?.indexOfFirst {
             it is OHealthOverview.PairDevice
         }
         if (index == -1) {
-            summary.healthOverviewData.value?.add(2, OHealthOverview.PairDevice())
+            summary.healthOverviewData.value?.add(1, OHealthOverview.PairDevice())
             summary.healthOverviewData.postValue(summary.healthOverviewData.value)
         }
 
@@ -400,6 +414,20 @@ constructor(
         return false
     }
 
+    fun deleteAllAutoWorkout(){
+        viewModelScope.launch {
+            syncRepository.deleteAllAutoWorkoutData().collect{resource->
+                when(resource){
+                    is CacheResult.Success ->{
+
+                    }
+                    is CacheResult.GenericError ->{
+
+                    }
+                }
+            }
+        }
+    }
     fun getDeviceConnected(): ColorFitDevice? {
         return ringDataStore.getRingDevice()
     }

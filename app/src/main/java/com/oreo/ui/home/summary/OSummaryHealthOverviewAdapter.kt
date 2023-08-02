@@ -45,7 +45,7 @@ sealed class OSummaryHealthOverviewClickEnum {
     data class ItemWorkoutClick(val id: String, val workOutName: String) :
         OSummaryHealthOverviewClickEnum()
 
-    object WorkoutAlertDismiss : OSummaryHealthOverviewClickEnum()
+    object AutoSportsDelete : OSummaryHealthOverviewClickEnum()
 
     object WorkoutAlertWhatisThis : OSummaryHealthOverviewClickEnum()
 
@@ -847,7 +847,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             }
 
             binding.btnCancel.setOnClickListener {
-                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.WorkoutAlertDismiss)
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.AutoSportsDelete)
             }
 
         }
@@ -875,11 +875,11 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 //            }
 //
 //            binding.tvSpoValue.setOnClickListener {
-//                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.WorkoutAlertDismiss)
+//                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.AutoSportsDelete)
 //            }
 //
 //            binding.tvStressValue.setOnClickListener {
-//                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.WorkoutAlertDismiss)
+//                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.AutoSportsDelete)
 //            }
 //
 //        }

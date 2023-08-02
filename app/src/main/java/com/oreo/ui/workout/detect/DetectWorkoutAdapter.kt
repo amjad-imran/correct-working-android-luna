@@ -25,10 +25,10 @@ class DetectWorkoutAdapter(val detectWorkoutListener: DetectWorkoutListener) :
                 DateFormats.convertTimestampToDate(resultData.startTime, DateFormats.time12Meridian).lowercase()
             binding.tvTitle.text = resultData.type
             binding.btnCancel.setOnClickListener {
-                detectWorkoutListener.onDismissWorkout()
+                detectWorkoutListener.onDismissWorkout(resultData, bindingAdapterPosition)
             }
             binding.btnIdentify.setOnClickListener {
-                detectWorkoutListener.onIdentifyWorkout()
+                detectWorkoutListener.onIdentifyWorkout(resultData, bindingAdapterPosition)
             }
         }
     }
@@ -49,6 +49,16 @@ class DetectWorkoutAdapter(val detectWorkoutListener: DetectWorkoutListener) :
         holder.bind(mDataSet[position])
     }
 
+    fun removeItem(position: Int) {
+        try {
+            mDataSet.removeAt(position)
+            notifyItemRemoved(position)
+        } catch (exp: ArrayIndexOutOfBoundsException) {
+            exp.printStackTrace()
+            //CASE : when Swap is in progress
+        }
+
+    }
     fun setData(resultData: List<OreoAutoSportData>) {
         mDataSet.clear()
         mDataSet.addAll(resultData)
@@ -57,7 +67,7 @@ class DetectWorkoutAdapter(val detectWorkoutListener: DetectWorkoutListener) :
 }
 
 interface DetectWorkoutListener {
-    fun onIdentifyWorkout()
-    fun onDismissWorkout()
+    fun onIdentifyWorkout(data: OreoAutoSportData, position: Int)
+    fun onDismissWorkout(data: OreoAutoSportData, position: Int)
 }
 

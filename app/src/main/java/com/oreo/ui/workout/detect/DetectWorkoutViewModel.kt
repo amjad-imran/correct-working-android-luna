@@ -12,7 +12,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.random.Random
 
 @HiltViewModel
 class DetectWorkoutViewModel
@@ -22,8 +21,8 @@ constructor(
 ) : BaseViewModel() {
 
     private val _oreoAutoSportData =
-        MutableLiveData<Pair<ArrayList<String>, HashMap<String, ArrayList<OreoAutoSportData>>>>()
-    val oreoAutoSportData: LiveData<Pair<ArrayList<String>, HashMap<String, ArrayList<OreoAutoSportData>>>> =
+        MutableLiveData<Pair<ArrayList<String>, LinkedHashMap<String, ArrayList<OreoAutoSportData>>>>()
+    val oreoAutoSportData: LiveData<Pair<ArrayList<String>, LinkedHashMap<String, ArrayList<OreoAutoSportData>>>> =
         _oreoAutoSportData
 
 
@@ -32,7 +31,7 @@ constructor(
             syncRepository.getAutoWorkoutData().collect { resource ->
                 when (resource) {
                     is CacheResult.Success -> {
-                        val hm = HashMap<String, ArrayList<OreoAutoSportData>>()
+                        val hm = LinkedHashMap<String, ArrayList<OreoAutoSportData>>()
 
 
                         resource.value?.forEach {
@@ -40,6 +39,7 @@ constructor(
                                 it.startTime ,
                                 DateFormats.monthDateWithoutYear2
                             )
+
 
 
                             if (hm.containsKey(date)) {
@@ -53,13 +53,33 @@ constructor(
 
                             }
                         }
+
                         val dateList = ArrayList<String>()
                         hm.forEach {
                             dateList.add(it.key)
                         }
 
 
+                        dateList.reverse()
                         _oreoAutoSportData.postValue(Pair(dateList, hm))
+                    }
+
+                    is CacheResult.GenericError -> {
+
+                    }
+                }
+            }
+
+        }
+    }
+
+    fun deleteAutoSport(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            syncRepository.deleteAutoWorkoutData(id).collect { resource ->
+                when (resource) {
+                    is CacheResult.Success -> {
+
+
                     }
 
                     is CacheResult.GenericError -> {

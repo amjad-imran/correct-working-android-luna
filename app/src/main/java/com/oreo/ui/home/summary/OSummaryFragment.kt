@@ -128,11 +128,12 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                     navigate(R.id.detectWorkoutListFragment)
                 }
 
-                is OSummaryHealthOverviewClickEnum.WorkoutAlertDismiss -> {
+                is OSummaryHealthOverviewClickEnum.AutoSportsDelete -> {
                     setFragmentResultListener(ALERT_REQUEST_KEY) { _, bundle ->
                         val allow = bundle.getBoolean("allow")
                         if (allow) {
-
+                            viewModel.deleteAllAutoWorkout()
+                            viewModel.removeAutoWorkoutCard()
                         }
                     }
                     navigate(

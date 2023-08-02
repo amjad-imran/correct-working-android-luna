@@ -1,5 +1,6 @@
 package com.oreo.ui.workout.details
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -12,13 +13,16 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
+import com.oreo.data.model.ChartModel
 import com.oreo.data.model.OWDActivityData
 import com.oreo.data.model.OWorkoutDetailsResponseModel
+import com.oreo.data.model.SleepChartModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class OWorkoutDetailsFragment :
     BaseFragment<FragmentOWorkoutDetailsBinding>(FragmentOWorkoutDetailsBinding::inflate) {
+
     private val mViewModel: OWorkoutDetailsViewModel by viewModels()
     private val args: OWorkoutDetailsFragmentArgs by navArgs()
     private val mAdapter: OWorkoutDetailslAdapter by lazy {
@@ -87,8 +91,9 @@ class OWorkoutDetailsFragment :
 
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateUi(it: OWorkoutDetailsResponseModel) {
-        binding.lytIntensity.tvIntensityType.text = it.intensity
+//        binding.lytIntensity.tvIntensityType.text = it.intensity
         if ((it.hrLow == null || it.hrLow == 0) && (it.hrAvg == null || it.hrLow == 0)) {
             binding.lytHeartRate.root.gone()
             binding.divider2.root.gone()
@@ -109,13 +114,47 @@ class OWorkoutDetailsFragment :
                 binding.lytHeartRate.lytSubtitleValue2.tvUnit.visible()
                 binding.lytHeartRate.lytSubtitleValue2.tvUnit.visible()
                 binding.lytHeartRate.lytSubtitleValue2.tvUnit.text = "bpm"
-            }
-            else
-            {
+            } else {
                 binding.lytHeartRate.lytSubtitleValue2.tvUnit.gone()
                 binding.lytHeartRate.lytSubtitleValue2.tvUnit.gone()
             }
+
+
+            binding.lytHeartRate.lineChart.visible()
+            val sleepChart = SleepChartModel()
+            val chartList = ArrayList<ChartModel>()
+//            it.hrAvg.forEach {
+//                val chartModel = ChartModel()
+//
+//                var value = it
+//                if (value == 255) {
+//                    value = 0
+//                }
+//
+//                chartModel.value = value
+//                chartModel.index = ""
+//                chartList.add(chartModel)
+//            }
+//            sleepChart.startTime = DateFormats.formatActivityTime8(it.startTime)
+//            sleepChart.endTime = DateFormats.formatActivityTime8(it.endTime)
+//            sleepChart.list = chartList
+//
+//            binding.lytHeartRate.lineChart.updateGraphColor(
+//                Color.parseColor("#ff3358"),
+//                Color.parseColor("#4cff3358"),
+//                Color.parseColor("#00ff3358")
+//            )
+//
+//            binding.lytHeartRate.lineChart.updateDataWithMax(sleepChart, 5, false, true)
+
         }
+
+        if (it.date == DateFormats.getCurrentDate(DateFormats.dateFormat3)) {
+            binding.tvEdit.visible()
+        }
+
+        binding.rvActivityDetails.visible()
+        binding.lytActivityItem.root.visible()
         binding.lytActivityItem.tvActivityDate.text = DateFormats.formatActivityDate(it.date)
         binding.lytActivityItem.tvTime.text = "${
             DateFormats.formatActivityTime8(it.startTime).lowercase()
