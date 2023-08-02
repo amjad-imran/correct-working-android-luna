@@ -237,7 +237,7 @@ public class SleepLineChart extends View {
             if (item.getValue() > 0 && item.getValue() < minValue) {
                 lastMinValueIndex = i;
                 minValue = item.getValue();
-                LOGS.INSTANCE.d("updateDataminValue " + xMax + " " + xMin);
+//                LOGS.INSTANCE.d("updateDataminValue " + xMax + " " + xMin);
             }
         }
         if (count > 0) {

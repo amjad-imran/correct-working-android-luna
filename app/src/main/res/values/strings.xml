@@ -1227,6 +1227,7 @@
     <string name="text_achieved">Achieved</string>
     <string name="text_search_icon">search icon</string>
     <string name="text_search_your_query_here">Search your query here</string>
+    <string name="text_search_your_issue_here">Search your issue here</string>
     <string name="text_phone">Phone</string>
     <string name="text_any_other_query">Any other query?</string>
     <string name="text_issue_still_not_resolved">Issue still not resolved?</string>

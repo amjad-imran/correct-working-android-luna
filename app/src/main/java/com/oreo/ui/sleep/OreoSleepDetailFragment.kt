@@ -60,9 +60,9 @@ class OreoSleepDetailFragment :
         OreoSleepContributorAdapter(object :
             OreoSleepContributorAdapter.ContributorItemClickListener {
             override fun onItemClick(resultData: ArrayList<Contributors>, position: Int) {
-                if (resultData[position].barPercent > 0) {
+//                if (resultData[position].barPercent > 0) {
                     openContributorBottomSheet(resultData, position)
-                }
+//                }
             }
         })
     }

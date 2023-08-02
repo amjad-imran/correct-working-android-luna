@@ -51,9 +51,9 @@ class OreoReadinessFragment :
         OreoSleepContributorAdapter(object :
             OreoSleepContributorAdapter.ContributorItemClickListener {
             override fun onItemClick(resultData: ArrayList<Contributors>, position: Int) {
-                if (resultData[position].barPercent > 0) {
+//                if (resultData[position].barPercent > 0) {
                     openContributorBottomSheet(resultData, position)
-                }
+//                }
             }
 
         })
@@ -130,7 +130,7 @@ class OreoReadinessFragment :
             if (value == 255) {
                 value = 0
             }
-            LOGS.d("updateDataminValue $value")
+//            LOGS.d("updateDataminValue $value")
             chartModel.value = value
             chartModel.index = ""
             chartList.add(chartModel)

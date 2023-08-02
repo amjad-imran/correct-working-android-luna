@@ -223,6 +223,7 @@ class NetworkConnectionInterceptor(
 
             userToken?.let {
                 addHeader("access-token", "Bearer ${userToken.access_token}")
+//                addHeader("access-token", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyNTUxMjksImRldmljZV9pZCI6MTQsImlhdCI6MTY5MDkwNjk3NiwiZXhwIjoxNjkxNTExNzc2fQ.NRPFktro1K35IuuKYeS-8RifjzAd5n3_7lvAQQ4-2Fk")
             }
             if (request.url.toString().contains("/master/user/v3/devices", true)) {
                 userToken?.let {

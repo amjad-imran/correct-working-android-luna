@@ -67,9 +67,9 @@ class OreoActivityFragment :
     private val mActivityAdapter: OreoAContributorAdapter by lazy {
         OreoAContributorAdapter(object : OreoAContributorAdapter.ContributorItemClickListener {
             override fun onItemClick(resultData: ArrayList<Contributors>, position: Int) {
-                if (resultData[position].barPercent > 0) {
+//                if (resultData[position].barPercent > 0) {
                     openContributorBottomSheet(resultData, position)
-                }
+//                }
             }
         })
     }
