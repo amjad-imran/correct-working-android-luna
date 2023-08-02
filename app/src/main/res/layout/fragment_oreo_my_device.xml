@@ -18,7 +18,10 @@
         <ScrollView
             android:id="@+id/svMain"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/btnUnpair"
+            app:layout_constraintTop_toTopOf="parent">
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,13 +36,24 @@
                     android:gravity="center|start"
                     android:paddingStart="@dimen/side_margin"
                     android:paddingEnd="@dimen/side_margin"
+                    android:text="@string/text_device"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:titleTextColor="@color/white"
-                    tools:title="Test" />
+                    app:titleTextColor="@color/white" />
+
+                <include
+                    layout="@layout/layout_divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
                 <include
                     android:id="@+id/lytDeviceConnected"
-                    layout="@layout/layout_connected_device"
+                    layout="@layout/layout_connected_device_luna"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:layout_marginStart="@dimen/side_margin"
@@ -91,36 +105,36 @@
 
                 </LinearLayout>
 
-                <Button
-                    android:id="@+id/btnReset"
-                    style="@style/TextButtonStyle2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="28dp"
-                    android:visibility="gone"
-                    tools:visibility="visible"
-                    android:text="Test tap reset"
-                    app:layout_constraintBottom_toBottomOf="@+id/btnUnpair"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/btnUnpair"
-                    app:layout_constraintVertical_bias="0.0" />
 
-                <Button
-                    android:id="@+id/btnUnpair"
-                    style="@style/TextButtonStyle2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="28dp"
-                    android:layout_marginBottom="28dp"
-                    android:text="@string/text_unpair_device"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/lytFeatures" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </ScrollView>
+
+        <Button
+            android:id="@+id/btnUnpair"
+            style="@style/TextButtonStyle2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="36dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:text="@string/text_unpair_device"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btnReset"
+            style="@style/TextButtonStyle2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="28dp"
+            android:text="Test tap reset"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/btnUnpair"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btnUnpair"
+            app:layout_constraintVertical_bias="0.0"
+            tools:visibility="visible" />
 
         <include
             android:id="@+id/progressBar"
@@ -132,18 +146,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <include
             android:id="@+id/lytPairYourDeviceHeader"
             layout="@layout/layout_oreo_pair_your_device"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"
-            tools:visibility="visible"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

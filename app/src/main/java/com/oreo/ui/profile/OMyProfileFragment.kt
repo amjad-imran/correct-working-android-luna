@@ -45,9 +45,6 @@ class OMyProfileFragment :
 
 
     override fun initListener() {
-        binding.llMyGoals.setOnClickListener {
-            //navigate(R.id.myGoalFragment)
-        }
         binding.rowAbout.setOnClickListener {
             navigate(R.id.aboutFragment)
         }
@@ -91,6 +88,7 @@ class OMyProfileFragment :
            /* navigate(R.id.helpAndSupportFragment, Bundle().apply {
                 this.putSerializable("highlightTopic", HelpAndSupportType.NONE)
             })*/
+            navigate(R.id.oreoHealthAndSupportFragment)
         }
 
         binding.tvLogout.setOnClickListener {

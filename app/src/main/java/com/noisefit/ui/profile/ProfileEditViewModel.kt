@@ -487,14 +487,16 @@ constructor(
                 addProperty("step_length", 70)
             }
             userObject.add("info", userInfo)
-
-            userObject.add("interest_id", JsonArray().apply {
-                interests.value?.forEach { id ->
-                    if (id.id != null) {
-                        this.add(id.id!!.toInt())
-                    }
-                }
-            })
+            if (interests.value != null) {
+                if (interests.value!!.size > 0)
+                    userObject.add("interest_id", JsonArray().apply {
+                        interests.value?.forEach { id ->
+                            if (id.id != null) {
+                                this.add(id.id!!.toInt())
+                            }
+                        }
+                    })
+            }
 
         } catch (exp: Exception) {
             LOGS.d("User Info null")

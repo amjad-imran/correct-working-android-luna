@@ -4,6 +4,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container"
+        android:background="@drawable/oreo_default_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
