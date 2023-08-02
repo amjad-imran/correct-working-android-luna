@@ -16,7 +16,7 @@
     <fragment
         android:id="@+id/navigation_oreo_readiness"
         android:name="com.oreo.ui.readiness.OreoReadinessFragment"
-        android:label="ReadinessFragment" >
+        android:label="ReadinessFragment">
         <action
             android:id="@+id/action_navigation_readiness_details_frag_to_descriptionPopUpBottomDialogFragment"
             app:destination="@id/descriptionPopUpBottomDialogFragment" />
@@ -24,7 +24,7 @@
     <fragment
         android:id="@+id/navigation_oreo_workouts"
         android:name="com.oreo.ui.activity.OreoActivityFragment"
-        android:label="OreoActivityFragment" >
+        android:label="OreoActivityFragment">
         <action
             android:id="@+id/action_navigation_activity_details_frag_to_descriptionPopUpBottomDialogFragment"
             app:destination="@id/descriptionPopUpBottomDialogFragment" />
@@ -99,11 +99,17 @@
     <fragment
         android:id="@+id/sleepDetailsParentOreo"
         android:name="com.oreo.ui.sleep.OSleepDetailsParentFragment"
-        android:label="SleepScoreDetails" >
-        <argument android:name="viewType"
-            app:argType="string"/>
+        android:label="SleepScoreDetails">
+        <argument
+            android:name="viewType"
+            app:argType="string" />
     </fragment>
 
+    </fragment>
+    <fragment
+        android:id="@+id/oreoHealthAndSupportFragment"
+        android:name="com.oreo.ui.helpsupport.OHelpAndSupportFragment"
+        android:label="OreoHealthAndSupport" />
     <dialog
         android:id="@+id/bottomSheetChooseDevice"
         android:name="com.oreo.ui.profile.BottomSheetChooseDevice"
@@ -126,8 +132,9 @@
             app:argType="com.oreo.data.model.Contributors[]"
             app:nullable="true" />
 
-        <argument android:name="contriType"
-            app:argType="string"/>
+        <argument
+            android:name="contriType"
+            app:argType="string" />
     </dialog>
 
     <fragment

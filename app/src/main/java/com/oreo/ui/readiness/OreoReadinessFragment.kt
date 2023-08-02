@@ -50,9 +50,9 @@ class OreoReadinessFragment :
         OreoSleepContributorAdapter(object :
             OreoSleepContributorAdapter.ContributorItemClickListener {
             override fun onItemClick(resultData: ArrayList<Contributors>, position: Int) {
-                if (resultData[position].barPercent > 0) {
+//                if (resultData[position].barPercent > 0) {
                     openContributorBottomSheet(resultData, position)
-                }
+//                }
             }
 
         })
@@ -220,7 +220,6 @@ class OreoReadinessFragment :
         sleepChart.endTime = endTime ?: ""
         sleepChart.list = chartList
 
-        LOGS.d("sdasdaasdadsdas ${ sleepChart.list.size}")
         binding.lytTemperature.lineChart.updateGraphColor(
             Color.parseColor("#ff7525"),
             Color.parseColor("#4cff7525"),

@@ -91,6 +91,7 @@ class OMyProfileFragment :
            /* navigate(R.id.helpAndSupportFragment, Bundle().apply {
                 this.putSerializable("highlightTopic", HelpAndSupportType.NONE)
             })*/
+            navigate(R.id.oreoHealthAndSupportFragment)
         }
 
         binding.tvLogout.setOnClickListener {

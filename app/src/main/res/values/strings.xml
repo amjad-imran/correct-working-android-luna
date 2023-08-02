@@ -1227,6 +1227,7 @@
     <string name="text_achieved">Achieved</string>
     <string name="text_search_icon">search icon</string>
     <string name="text_search_your_query_here">Search your query here</string>
+    <string name="text_search_your_issue_here">Search your issue here</string>
     <string name="text_phone">Phone</string>
     <string name="text_any_other_query">Any other query?</string>
     <string name="text_issue_still_not_resolved">Issue still not resolved?</string>
@@ -1689,4 +1690,6 @@
     <string name="text_comparison_msg">You’re burning more calories today than you normally do</string>
     <string name="text_hr_lower">hr</string>
     <string name="text_device">Device</string>
+    <string name="text_customer_support_helpline">Customer support helpline</string>
+    <string name="text_raise_a_complaint">Raise a complaint</string>
 </resources>
