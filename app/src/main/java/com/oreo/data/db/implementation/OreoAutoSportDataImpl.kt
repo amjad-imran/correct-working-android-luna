@@ -20,5 +20,15 @@ constructor(
         return true
     }
 
+    override suspend fun deleteAllAutoSport(): Boolean {
+        oreoAutoSportDao.deleteAllAutoSport(false)
+        return true
+    }
+
+    override suspend fun deleteAutoSport(id: Int): Boolean {
+        oreoAutoSportDao.deleteAutoSport(id)
+        return true
+    }
+
 
 }

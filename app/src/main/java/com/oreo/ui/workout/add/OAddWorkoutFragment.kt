@@ -7,12 +7,12 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import com.noisefit.luna.R
+import androidx.navigation.fragment.navArgs
 import com.noisefit.data.local.AppStaticData
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOAddWorkoutBinding
 import com.noisefit.ui.common.bottomSheet.TIME_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
-import com.noisefit_commans.common.upToNDecimal
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.disable
 import com.noisefit_commans.ui.enable
@@ -29,8 +29,11 @@ import kotlin.math.roundToInt
 class OAddWorkoutFragment :
     BaseFragment<FragmentOAddWorkoutBinding>(FragmentOAddWorkoutBinding::inflate) {
     private val viewModel: OAddWorkoutViewModel by viewModels()
+    private val args: OAddWorkoutFragmentArgs by navArgs()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.convertAutoSport(args.autoSport)
     }
 
     private fun setToolbar() {
@@ -193,7 +196,7 @@ class OAddWorkoutFragment :
                             viewModel.minimumWorkoutTime.toString()
                         )
                     )
-                } else if (!DateFormats.checkDifferenceInBtwInterval(
+                } else if (DateFormats.checkDifferenceInBtwInterval(
                         viewModel.addWorkout.startHour,
                         viewModel.addWorkout.startMinute,
                         hourOfDay,
@@ -333,10 +336,10 @@ class OAddWorkoutFragment :
 
     }
 
-    private fun enableSaveBtn() {
-        if (viewModel.addWorkout.duration > 0 &&
-            viewModel.addWorkout.intensity.isNotEmpty() &&
-            viewModel.workoutListModal != null
+    private fun enableSaveBtn(forceSave:Boolean = false) {
+        if ((viewModel.addWorkout.duration > 0 &&
+                    viewModel.addWorkout.intensity.isNotEmpty() &&
+                    viewModel.workoutListModal != null) || forceSave
         ) {
             binding.lytToolbar.apply {
                 tvSave.enable()
@@ -346,10 +349,45 @@ class OAddWorkoutFragment :
         }
     }
 
+    private fun disableSelection() {
+        binding.lytIntensity.root.disable()
+
+        binding.lytStartEnd.lytStartTime.root.disable()
+        binding.lytStartEnd.lytEndTime.root.disable()
+    }
+
+    private fun setPrefillData() {
+        enableSaveBtn(true)
+        setIntensity()
+
+        binding.lytCaloriesBurn.tvCalBurnValue.text  = viewModel.addWorkout.calories.toString()
+        binding.lytCaloriesBurn.tvDurationValue.text = viewModel.addWorkout.duration.toString()
+        setTextWhite(binding.lytStartEnd.lytStartTime.tvTimeValue)
+        binding.lytStartEnd.lytStartTime.tvTimeValue.text = viewModel.addWorkout.startTimeIn24H
+
+        setTextWhite(binding.lytStartEnd.lytEndTime.tvTimeValue)
+        binding.lytStartEnd.lytEndTime.tvTimeValue.text = viewModel.addWorkout.endTimeIn24H
+        binding.lytWorkout.tvWorkout.text = viewModel.activityType
+
+        binding.lytToolbar.apply {
+            tvTitle.text = getString(R.string.text_identify_workout)
+        }
+
+    }
+
     override fun subscribeObservers() {
         viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->
                 context.showShortToast(message)
+            }
+        }
+
+        viewModel.autoSport.observe(this) {
+            it?.let {
+                if (it) {
+                    setPrefillData()
+                    disableSelection()
+                }
             }
         }
         viewModel.getApiErrors().observe(this) {

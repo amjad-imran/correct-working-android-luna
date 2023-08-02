@@ -28,14 +28,14 @@
             android:layout_height="match_parent"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="@dimen/dimen_16dp"
+            android:layout_marginTop="@dimen/dimen_8dp"
             android:ellipsize="end"
             android:singleLine="true"
-            app:layout_constraintBottom_toTopOf="@+id/tvTime"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/ivActivity"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.5"
+
+            app:layout_constraintTop_toTopOf="@+id/ivActivity"
             tools:text="Strength Training" />
 
         <TextView
@@ -45,8 +45,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:textColor="@color/white_80"
+            android:layout_marginTop="@dimen/dimen_4dp"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+
             app:layout_constraintStart_toEndOf="@+id/ivActivity"
             app:layout_constraintTop_toBottomOf="@+id/tvActivityDate"
             app:layout_constraintVertical_bias="0.5"

@@ -11,7 +11,7 @@ import com.noisefit_commans.data.model.OreoAutoSportData
 @Dao
 interface OreoAutoSportDao : BaseDao<OreoAutoSportData> {
 
-    @Query("SELECT * FROM auto_sport where is_accepted = :isAccepted")
+    @Query("SELECT * FROM auto_sport where is_accepted = :isAccepted order by startTime DESC")
     fun getAllNotAcceptingData(isAccepted: Boolean): List<OreoAutoSportData>?
 //
 //
@@ -19,8 +19,11 @@ interface OreoAutoSportDao : BaseDao<OreoAutoSportData> {
 //    fun updateViaDate(breakUp: String, date: String, is_synced: Boolean)
 //
 //
-//    @Query("Delete FROM blood_oxygen where date = :date")
-//    fun deleteTodayData(date: String)
+    @Query("Delete FROM auto_sport where id = :id")
+    fun deleteAutoSport(id: Int)
+
+    @Query("Delete FROM auto_sport where  is_accepted = :isAccepted")
+    fun deleteAllAutoSport(isAccepted: Boolean)
 //
 //    @Query("UPDATE blood_oxygen SET is_google_fit_sync = :is_google_fit_sync WHERE id IN (:ids)")
 //    fun updateGoogleFitStatus(ids: List<Int>, is_google_fit_sync: Boolean)

@@ -15,6 +15,7 @@ import com.google.gson.reflect.TypeToken
 import com.noisefit_commans.NoisefitApplication
 import com.noisefit_commans.constants.EventConstants
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
+import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.interfaces.data.IUserActivityDataCallback
 import com.noisefit_commans.interfaces.data.UserActivityCallback
 import com.noisefit_commans.interfaces.data.UserActivityDataActions
@@ -436,8 +437,15 @@ constructor(
 
         //[{"autoSportDuration":340,"autoSportIntensity":0,"autoSportKcal":5,"autoSportStartTime":1690863212,"autoSportSteps":601,"autoSportType":1,"hrData":[]}]
 
-//        val dataList = ArrayList<OreoAutoSportData>()
-//        dataList.add(OreoAutoSportData(0,false,false,340,0,5,1690863212,601,"running",null))
+        val dataList = ArrayList<OreoAutoSportData>()
+        val timestamp = 1690863212 * 1000L
+        dataList.add(OreoAutoSportData(0,false,false,340,0,5,timestamp,601,"running",null))
+        dataList.add(OreoAutoSportData(0,false,false,140,1,15,1690692397000,1201,"walking",null))
+        dataList.add(OreoAutoSportData(0,false,false,100,0,25,1690778797000,1901,"other",null))
+        dataList.add(OreoAutoSportData(0,false,false,140,1,5,1690778797000,61,"running",null))
+        dataList.add(OreoAutoSportData(0,false,false,130,0,120,1690865197000,600,"running",null))
+        dataList.add(OreoAutoSportData(0,false,false,500,2,500,1690958797000,6010,"running",null))
+
         LOGS.d(TAG, "onAutoSportData ${Gson().toJson(p0)}")
 
 //        userActivityDataCallbacks?.onUserActivityDataReceived(

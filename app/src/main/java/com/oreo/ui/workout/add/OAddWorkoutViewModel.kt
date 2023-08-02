@@ -4,17 +4,23 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
+import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.OAddWorkout
 import com.oreo.data.model.OWorkoutListModal
+import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,25 +29,51 @@ class OAddWorkoutViewModel
 constructor(
     private val userActivityRepository: OreoUserActivityRepository,
     private val localDatSource: DataStoredInterface,
+    private val syncRepository: OreoSyncRepository
 ) : BaseViewModel() {
 
     val minimumWorkoutTime = 10
     val maxWorkoutTime = 180
+
+    var autoSport = MutableLiveData<Boolean>()
     private val _addWorkoutResponse = MutableLiveData<Boolean>()
     val addWorkoutResponse = _addWorkoutResponse
     private val _oWorkoutListModalResponse = MutableLiveData<List<OWorkoutListModal>>()
     val oWorkoutListModalResponse: LiveData<List<OWorkoutListModal>> = _oWorkoutListModalResponse
     var addWorkout = OAddWorkout()
     var workoutListModal: OWorkoutListModal? = null
+    var activityType: String? = null
+    var autoWorkoutId: Int? = null
+    fun convertAutoSport(data: OreoAutoSportData?) {
+        if (data == null) {
+            return
+        }
+        autoWorkoutId = data.id
+        addWorkout.duration = TimeUnit.SECONDS.toMinutes(data.duration.toLong()).toInt()
+        val endTime = DateFormats.addMinuteToTimeStamp(data.startTime, addWorkout.duration)
+        addWorkout.calories = data.calories
+        addWorkout.intensity = getIntensity(data.intensity ?: 0)
+        addWorkout.startTimeIn24H =
+            DateFormats.convertTimestampToDate(data.startTime, DateFormats.time12Meridian)
 
+        addWorkout.endTimeIn24H =
+            DateFormats.convertTimestampToDate(endTime, DateFormats.time12Meridian)
+        activityType = data.type
+        autoSport.postValue(true)
+    }
 
     fun addWorkout() {
 
+        val type = if (workoutListModal?.activityType?.isNotEmpty() == true) {
+            workoutListModal?.activityType
+        } else {
+            activityType
+        }
         viewModelScope.launch {
             val requestObject = JsonObject().apply {
                 this.addProperty("duration", addWorkout.duration)
                 this.addProperty("calories", addWorkout.calories)
-                this.addProperty("activity_type", workoutListModal?.activityType)
+                this.addProperty("activity_type", type)
                 this.addProperty("start_time", addWorkout.startTimeIn24H)
                 this.addProperty("end_time", addWorkout.endTimeIn24H)
                 this.addProperty("intensity", addWorkout.intensity)
@@ -76,6 +108,9 @@ constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
+                            autoWorkoutId?.let {
+                                deleteAutoSport(it)
+                            }
                             _addWorkoutResponse.postValue(true)
 
                         }
@@ -84,10 +119,43 @@ constructor(
             }
         }
     }
+
+    private fun deleteAutoSport(id: Int) {
+        GlobalScope.launch {
+            syncRepository.deleteAutoWorkoutData(id).collect { resource ->
+                when (resource) {
+                    is CacheResult.GenericError -> {
+
+                    }
+
+                    is CacheResult.Success -> {
+
+                    }
+                }
+            }
+        }
+    }
+
     fun getWorkoutDuration(): Int {
         val diffInHours = addWorkout.endHour - addWorkout.startHour
 
         return (diffInHours * 60) + (addWorkout.endMinute - addWorkout.startMinute)
+    }
+
+    private fun getIntensity(intensity: Int): String {
+        return when (intensity) {
+            0 -> {
+                "Easy"
+            }
+
+            1 -> {
+                "Moderate"
+            }
+
+            else -> {
+                "Hard"
+            }
+        }
     }
 
     fun getCaloriesBurnt(): Float {

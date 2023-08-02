@@ -27,7 +27,7 @@ class NameUpdateBottomSheet :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
-            userName = NameUpdateBottomSheetArgs.fromBundle(it).name
+//            userName = NameUpdateBottomSheetArgs.fromBundle(it).name
         }
 
         if (!userName.isNullOrEmpty()) {

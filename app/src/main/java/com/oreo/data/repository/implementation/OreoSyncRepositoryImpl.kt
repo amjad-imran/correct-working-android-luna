@@ -78,6 +78,19 @@ class OreoSyncRepositoryImpl(
             oreoAutoSportDataImpl.getAllNotAcceptingData()
         }
     }
+
+    override suspend fun deleteAllAutoWorkoutData(): Flow<CacheResult<Boolean?>> {
+        return safeCacheCall(Dispatchers.IO) {
+            oreoAutoSportDataImpl.deleteAllAutoSport()
+        }
+    }
+
+    override suspend fun deleteAutoWorkoutData(id: Int): Flow<CacheResult<Boolean?>> {
+        return safeCacheCall(Dispatchers.IO) {
+            oreoAutoSportDataImpl.deleteAutoSport(id)
+        }
+    }
+
     override suspend fun saveAutoWorkoutData(data: List<OreoAutoSportData>): Flow<CacheResult<Boolean?>> {
         return safeCacheCall(Dispatchers.IO) {
             oreoAutoSportDataImpl.insertData(data)

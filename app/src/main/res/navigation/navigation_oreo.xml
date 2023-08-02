@@ -162,6 +162,8 @@
         android:id="@+id/addWorkoutFragment"
         android:name="com.oreo.ui.workout.add.OAddWorkoutFragment"
         android:label="AddWorkoutFragment">
+
+
         <action
             android:id="@+id/action_navigation_add_workout_frag_to_selectWorkoutFragment"
             app:destination="@id/selectWorkoutBottomSheet" />
@@ -173,6 +175,11 @@
         <action
             android:id="@+id/action_addWorkoutFragment_to_timeBottomSheet"
             app:destination="@id/timeBottomSheet" />
+        <argument
+            android:name="autoSport"
+            android:defaultValue="@null"
+            app:argType="com.noisefit_commans.data.model.OreoAutoSportData"
+            app:nullable="true" />
 
     </fragment>
 
