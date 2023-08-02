@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -25,6 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 import kotlin.math.roundToInt
 
+const val ADD_WORKOUT_REQUEST_KEY = "ADD_WORKOUT_REQUEST_KEY"
 @AndroidEntryPoint
 class OAddWorkoutFragment :
     BaseFragment<FragmentOAddWorkoutBinding>(FragmentOAddWorkoutBinding::inflate) {
@@ -275,19 +278,21 @@ class OAddWorkoutFragment :
         binding.lytStartEnd.lytStartTime.tvTimeValue.text = startTime
     }
 
-    private fun setEndTimeBetween() {
+    private fun setEndTimeBetween(ignoreDuration:Boolean = true) {
         val endTime = DateFormats.formatTimeWithAmPm(
             viewModel.addWorkout.endHour,
             viewModel.addWorkout.endMinute
         )
-//        if (viewModel.oAddWorkout.endHour != 0) {
+
         setTextWhite(binding.lytStartEnd.lytEndTime.tvTimeValue)
-//        }
         viewModel.addWorkout.endTimeIn24H = DateFormats.formatTime(
             viewModel.addWorkout.endHour,
             viewModel.addWorkout.endMinute
         )
-        setDuration()
+        if(ignoreDuration){
+            setDuration()
+        }
+
         binding.lytStartEnd.lytEndTime.tvTimeValue.text = endTime
     }
 
@@ -360,13 +365,10 @@ class OAddWorkoutFragment :
         enableSaveBtn(true)
         setIntensity()
 
-        binding.lytCaloriesBurn.tvCalBurnValue.text  = viewModel.addWorkout.calories.toString()
+        binding.lytCaloriesBurn.tvCalBurnValue.text = viewModel.addWorkout.calories.toString()
         binding.lytCaloriesBurn.tvDurationValue.text = viewModel.addWorkout.duration.toString()
-        setTextWhite(binding.lytStartEnd.lytStartTime.tvTimeValue)
-        binding.lytStartEnd.lytStartTime.tvTimeValue.text = viewModel.addWorkout.startTimeIn24H
-
-        setTextWhite(binding.lytStartEnd.lytEndTime.tvTimeValue)
-        binding.lytStartEnd.lytEndTime.tvTimeValue.text = viewModel.addWorkout.endTimeIn24H
+        setStartTimeBetween()
+        setEndTimeBetween(false)
         binding.lytWorkout.tvWorkout.text = viewModel.activityType
 
         binding.lytToolbar.apply {
@@ -405,6 +407,12 @@ class OAddWorkoutFragment :
         viewModel.addWorkoutResponse.observe(this) {
             it?.let {
                 if (it) {
+
+                    setFragmentResult(
+                        ADD_WORKOUT_REQUEST_KEY,
+                        bundleOf("allow" to true)
+
+                    )
                     navigateUpSafe()
                 }
             }

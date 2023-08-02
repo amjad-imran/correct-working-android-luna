@@ -439,12 +439,12 @@ constructor(
 
         val dataList = ArrayList<OreoAutoSportData>()
         val timestamp = 1690863212 * 1000L
-        dataList.add(OreoAutoSportData(0,false,false,340,0,5,timestamp,601,"running",null))
-        dataList.add(OreoAutoSportData(0,false,false,140,1,15,1690692397000,1201,"walking",null))
-        dataList.add(OreoAutoSportData(0,false,false,100,0,25,1690778797000,1901,"other",null))
-        dataList.add(OreoAutoSportData(0,false,false,140,1,5,1690778797000,61,"running",null))
-        dataList.add(OreoAutoSportData(0,false,false,130,0,120,1690865197000,600,"running",null))
-        dataList.add(OreoAutoSportData(0,false,false,500,2,500,1690958797000,6010,"running",null))
+        dataList.add(OreoAutoSportData(0,false,false,3400,0,5,timestamp,601,"running",null))
+        dataList.add(OreoAutoSportData(0,false,false,1400,1,15,1690692397000,1201,"walking",null))
+        dataList.add(OreoAutoSportData(0,false,false,1000,0,25,1690778797000,1901,"other",null))
+        dataList.add(OreoAutoSportData(0,false,false,1400,1,5,1690778797000,61,"running",null))
+        dataList.add(OreoAutoSportData(0,false,false,1300,0,120,1690865197000,600,"running",null))
+        dataList.add(OreoAutoSportData(0,false,false,1800,2,500,1690958797000,6010,"running",null))
 
         LOGS.d(TAG, "onAutoSportData ${Gson().toJson(p0)}")
 

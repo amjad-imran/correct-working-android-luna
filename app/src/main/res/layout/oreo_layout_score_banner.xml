@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/H4"
-            android:text="@string/text_noisefit_cues"
+            android:text="@string/text_luna_cues"
             android:id="@+id/tvTitle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

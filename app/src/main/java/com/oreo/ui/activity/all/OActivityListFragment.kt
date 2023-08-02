@@ -1,16 +1,17 @@
 package com.oreo.ui.activity.all
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOActivityListBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
 import com.oreo.data.model.OActivityListModal
+import com.oreo.ui.workout.details.DELETE_WORKOUT_REQUEST_KEY
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -35,6 +36,19 @@ class OActivityListFragment :
 
     override fun initListener() {
 
+        setFragmentResultListener(DELETE_WORKOUT_REQUEST_KEY) { _, bundle ->
+            val allow = bundle.getBoolean("allow")
+            val position = bundle.getInt("position")
+            if (allow) {
+                if (position != -1) {
+                    adapter.removeItem(position)
+                    if (adapter.itemCount == 0 || adapter.itemCount == 1) {
+                        binding.rv.gone()
+                    }
+                }
+
+            }
+        }
         binding.lytToolbar.apply {
             backBtn.setOnClickListener {
                 navigateUpSafe()
@@ -127,9 +141,10 @@ class OActivityListFragment :
 //    }
 
 
-    override fun onActivitySelected(activity: OActivityListModal) {
+    override fun onActivitySelected(activity: OActivityListModal, position: Int) {
         navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
             putString("workoutId", activity.id)
+            putInt("position", position)
             putString("workoutName", activity.getFormattedActivityName())
         })
     }

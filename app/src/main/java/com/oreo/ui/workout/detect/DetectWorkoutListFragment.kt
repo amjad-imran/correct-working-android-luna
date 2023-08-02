@@ -2,16 +2,12 @@ package com.oreo.ui.workout.detect
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentDetectWorkoutListBinding
-import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY
 import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.utils.LOGS
 import com.oreo.ui.activity.OreoDMAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -72,34 +68,35 @@ class DetectWorkoutListFragment :
 
                     override fun onDismissWorkout(data: OreoAutoSportData, key: String) {
 
-                        setFragmentResultListener(ALERT_REQUEST_KEY) { _, bundle ->
-                            val allow = bundle.getBoolean("allow")
-                            if (allow) {
-                                val remainingDataList = pairData.second[key]
-                                val index = remainingDataList?.indexOfFirst { it.id == data.id }
-                                val titleIndex = pairData.first.indexOfFirst { it == key }
-                                if (index != null && index != -1) {
-                                    remainingDataList.removeAt(index)
-                                }
-                                pairData.second[key] = remainingDataList!!
-                                pagerAdapter.createFragment(titleIndex)
-                                binding.vpFriends.adapter?.notifyItemChanged(titleIndex)
-                                LOGS.d("SDAsdasdasd ${Gson().toJson(pairData.second[key])}")
-                            }
+                        val remainingDataList = pairData.second[key]
+                        val index = remainingDataList?.indexOfFirst { it.id == data.id }
+                        val titleIndex = pairData.first.indexOfFirst { it == key }
+                        if (index != null && index != -1) {
+                            remainingDataList.removeAt(index)
                         }
-                        navigate(
-                            DetectWorkoutListFragmentDirections.actionDetectWorkoutListFragmentToAlertTextBottomSheet(
-                                getString(R.string.text_dismiss_activity_title),
-                                getString(R.string.text_dismiss_activity_desc), "", ""
-                            )
-                        )
+                        pairData.second[key] = remainingDataList!!
+
+//                        if (remainingDataList.isEmpty()) {
+//                            pairData.first.removeAt(titleIndex)
+//                            TabLayoutMediator(binding.tabLayout, binding.vpFriends) { tab, position ->
+//                                tab.text = pairData.first[position]
+//                            }.attach()
+//                            binding.vpFriends.adapter = pagerAdapter
+//                            binding.vpFriends.adapter?.notifyItemRemoved(titleIndex)
+////                            binding.vpFriends.currentItem = pairData.first.size
+////                            TabLayoutMediator(binding.tabLayout, binding.vpFriends) { tab, position ->
+////                                tab.text = pairData.first[position]
+////                            }.attach()
+////                            binding.vpFriends.adapter?.notifyDataSetChanged()
+//                        }
+
                     }
 
                 })
         binding.vpFriends.isUserInputEnabled = true
 
         binding.vpFriends.adapter = pagerAdapter
-        binding.vpFriends.setCurrentItem(pairData.first.size)
+        binding.vpFriends.currentItem = pairData.first.size
         TabLayoutMediator(binding.tabLayout, binding.vpFriends) { tab, position ->
             tab.text = pairData.first[position]
         }.attach()

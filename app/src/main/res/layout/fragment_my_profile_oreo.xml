@@ -83,18 +83,6 @@
                     android:gravity="center_vertical"
                     app:layout_constraintTop_toBottomOf="@+id/include14"
                     app:text="Your profile" />
-                <com.noisefit_commans.ui.custom.SettingsRow
-                    android:id="@+id/llMyGoals"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="visible"
-                    app:image="@drawable/ic_profile_my_goals"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:gravity="center_vertical"
-                    app:layout_constraintTop_toBottomOf="@+id/llMyProfile"
-                    app:text="@string/text_your_goals" />
-
 
                 <com.noisefit_commans.ui.custom.SettingsRow
                     android:id="@+id/rowHelp"
@@ -104,7 +92,7 @@
                     app:image="@drawable/ic_profile_help"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/llMyGoals"
+                    app:layout_constraintTop_toBottomOf="@+id/llMyProfile"
                     app:text="@string/text_help_and_support" />
 
                 <com.noisefit_commans.ui.custom.SettingsRow

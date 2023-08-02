@@ -82,10 +82,10 @@
 
     <color name="black_white_inverse">#FF000000</color>
     <color name="white">#FFFFFF</color>
-    <color name="oreo_sleep_bar_color">#bda6ff</color>
+    <color name="oreo_sleep_bar_color">#c5a8ed</color>
     <color name="oreo_activity_bar_color">#ffd230</color>
     <color name="oreo_activity_bar_color_50">#80ffd230</color>
-    <color name="oreo_contributor_warning">#ff5c7a</color>
+    <color name="oreo_contributor_warning">#ff7c94</color>
 
     <color name="lightest_gray">#8a8c8e</color>
     <color name="text_color">#7D7D7D</color>
@@ -113,11 +113,11 @@
     <color name="calories_complete_goal">#ffbcc8</color>
 
     <color name="deep_start">#232aed</color>
-    <color name="deep_start_oreo">#5e0cda</color>
+    <color name="deep_start_oreo">#7156cc</color>
     <color name="light_start">#575eff</color>
-    <color name="light_start_oreo">#b470ff</color>
+    <color name="light_start_oreo">#9762cc</color>
     <color name="rem_start">#afb3ff</color>
-    <color name="rem_start_oreo">#c4b0ff</color>
+    <color name="rem_start_oreo">#c6a7e5</color>
     <color name="awake_start">#ff6624</color>
 
     <color name="stress_high">#e95050</color>
@@ -242,11 +242,11 @@
     <color name="readiness_progress_color_50">#80ff7525</color>
     <color name="readiness_light_progress_color">#ffbd97</color>
     <color name="graph_line">#19ffffff</color>
-    <color name="sleep_trend_bar_color">#d3abff</color>
-    <color name="sleep_trend_bar_color_50">#80d8b4ff</color>
-    <color name="sleep_chart_line_color">#d8b4ff</color>
-    <color name="sleep_fill_start_color">#4caa5bff</color>
-    <color name="sleep_fill_end_color">#00aa5bff</color>
+    <color name="sleep_trend_bar_color">#c5a8ed</color>
+    <color name="sleep_trend_bar_color_50">#80c5a8ed</color>
+    <color name="sleep_chart_line_color">#ca99ff</color>
+    <color name="sleep_fill_start_color">#4cc6a7e8</color>
+    <color name="sleep_fill_end_color">#00c6a7e8</color>
     <color name="activity_chart_line_color">#ffda55</color>
     <color name="activity_fill_start_color">#80d6a700</color>
     <color name="activity_fill_end_color">#00ffd230</color>
@@ -254,8 +254,8 @@
     <color name="readiness_chart_line_color">#ff9050</color>
     <color name="readiness_fill_start_color">#80ff7525</color>
     <color name="readiness_fill_end_color">#00ff7525</color>
-    <color name="sleep_selected_bar_color">#d3abff</color>
-    <color name="sleep_un_selected_bar_color">#6b5980</color>
+    <color name="sleep_selected_bar_color">#c5a8ed</color>
+    <color name="sleep_un_selected_bar_color">#665d86</color>
     <color name="readiness_selected_bar_color">#ff7525</color>
     <color name="readiness_un_selected_bar_color">#8e4921</color>
     <color name="activity_selected_bar_color">#ffd230</color>

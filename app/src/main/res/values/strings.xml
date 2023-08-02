@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Luna Ring</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
@@ -1661,7 +1661,7 @@
     <string name="text_last_month">Last month</string>
     <string name="text_luna_ring">Luna ring</string>
     <string name="text_pair_your_device_to_start_using">Pair your device to start using.</string>
-    <string name="text_noisefit_cues">NoiseFit cues</string>
+    <string name="text_luna_cues" tools:ignore="ExtraTranslation">Luna cues</string>
     <string name="text_check_for_an_update">Check for an update</string>
     <string name="text_what_s_new">What’s new?</string>
     <string name="text_new_update_available">New update available</string>

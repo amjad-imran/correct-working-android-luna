@@ -45,9 +45,6 @@ class OMyProfileFragment :
 
 
     override fun initListener() {
-        binding.llMyGoals.setOnClickListener {
-            //navigate(R.id.myGoalFragment)
-        }
         binding.rowAbout.setOnClickListener {
             navigate(R.id.aboutFragment)
         }

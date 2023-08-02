@@ -286,23 +286,7 @@ class ProfileEditFragment :
                 )
             )
         }
-        binding.tvInterestsValue.setOnClickListener {
-            setFragmentResultListener(INTEREST_UPDATE_KEY) { _, bundle ->
-                val selectedValue =
-                    bundle.getParcelableArrayList<Interest>("selectedValues")
-                selectedValue?.let { it1 ->
-                    viewModel.setInterests(it1)
-                    sharedViewModel.selectedInterests = it1
-                }
-            }
-            navigate(
-                ProfileEditFragmentDirections.actionProfileEditFragmentToBottomSheetInterestSelector()
-                    .apply {
-                        this.shouldUpdate = false
-                    }
-            )
 
-        }
 
         binding.tvUnitValue.setOnClickListener {
             setFragmentResultListener(VALUE_REQUEST_KEY) { _, bundle ->
@@ -337,10 +321,7 @@ class ProfileEditFragment :
         binding.tvNameValue.text = viewModel.userName.value
     }
 
-    private fun updateInterests(interests: ArrayList<Interest>) {
-        binding.tvInterestsValue.text =
-            viewModel.getUserInterestToDisplay(interests, "Add interests")
-    }
+
 
     private fun logProfileEvent(user: User) {
 
@@ -453,7 +434,7 @@ class ProfileEditFragment :
         }
         viewModel.interests.observe(this) {
             it?.let {
-                updateInterests(it)
+//                updateInterests(it)
             }
         }
         viewModel.unit.observe(this) {

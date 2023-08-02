@@ -376,6 +376,9 @@
     <style name="ModalStyleReadiness">
         <item name="android:background">@drawable/back_modal_dialog</item>
     </style>
+    <style name="ModalStyleTransparentOreo">
+        <item name="android:background">@drawable/back_modal_transparent_oreo</item>
+    </style>
 
     <style name="ModalStyleDialogNew">
         <item name="android:background">@drawable/back_modal_dialog_10</item>
