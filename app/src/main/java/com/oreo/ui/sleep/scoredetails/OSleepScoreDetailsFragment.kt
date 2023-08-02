@@ -155,9 +155,9 @@ class OSleepScoreDetailsFragment :
     }
 
     override fun subscribeObservers() {
-        mViewModel.trendDiff.observe(this) {
-            updateTrendPercent()
-        }
+//        mViewModel.trendDiff.observe(this) {
+//            updateTrendPercent()
+//        }
 
         mViewModel.internalDetailsData.observe(this) {
             if (it != null) {
@@ -755,19 +755,21 @@ class OSleepScoreDetailsFragment :
                         binding.lytScoreOverview.tvScoreMsg.visible()
                         mViewModel.isProgressEqual = true
                     }
-//                    val compPro = "${mViewModel.trendDifferenceProgress} %"
-//                    binding.lytScoreOverview.tvTrendProg.text = compPro
-                    updateTrendPercent()
+
+                    val calPercent= (((yesterdayProgress.toFloat()-todayProgress.toFloat())/yesterdayProgress.toFloat())*100).roundToInt()
+                    val compPro = "${calPercent.toString().replace("-","")} %"
+                    binding.lytScoreOverview.tvTrendProg.text = compPro
+//                    updateTrendPercent()
                 }
 
             }
         }
     }
 
-    private fun updateTrendPercent() {
-        if (!isTrendValueUpdate())
-            binding.lytScoreOverview.tvTrendProg.text = "${mViewModel.trendDiff.value} %"
-    }
+//    private fun updateTrendPercent() {
+//        if (!isTrendValueUpdate())
+//            binding.lytScoreOverview.tvTrendProg.text = "${mViewModel.trendDiff.value} %"
+//    }
 
     private fun setTopDateLabel(data: String) {
         val dateRangeValue: String = when (mViewModel.dayType?.lowercase()) {
