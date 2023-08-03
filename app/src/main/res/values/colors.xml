@@ -260,4 +260,5 @@
     <color name="readiness_un_selected_bar_color">#80e5b9a6</color>
     <color name="activity_selected_bar_color">#8ed3f1</color>
     <color name="activity_un_selected_bar_color">#4c7689</color>
+    <color name="text_color_luna">#88b0ff</color>
 </resources>

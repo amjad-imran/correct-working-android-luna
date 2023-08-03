@@ -444,7 +444,9 @@ class OreoActivityFragment :
             mWorkoutAdapter.setData(recentWorkout)
             binding.lytWorkouts.rvWorkouts.visible()
             binding.lytWorkouts.tvEmptyMsg.gone()
+            binding.lytWorkouts.ivViewAll.visible()
         } else {
+            binding.lytWorkouts.ivViewAll.invisible()
             binding.lytWorkouts.rvWorkouts.gone()
             binding.lytWorkouts.tvEmptyMsg.visible()
             if (mSharedViewModel.selectedDate == DateFormats.getCurrentDateOreoFormat()) {
