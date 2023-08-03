@@ -162,15 +162,15 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 }
 
                 OSummaryHealthOverviewClickEnum.ActivityDetailsWorkoutClick -> {
-                    mainViewModel.navigateTo(BottomNavOption.COMMUNITY)
+                    mainViewModel.navigateTo(BottomNavOption.ACTIVITY)
                 }
 
                 OSummaryHealthOverviewClickEnum.ReadinessDetailsWorkoutClick -> {
-                    mainViewModel.navigateTo(BottomNavOption.SHOP)
+                    mainViewModel.navigateTo(BottomNavOption.READINESS)
                 }
 
                 OSummaryHealthOverviewClickEnum.SleepDetailsWorkoutClick -> {
-                    mainViewModel.navigateTo(BottomNavOption.EXPLORE)
+                    mainViewModel.navigateTo(BottomNavOption.SLEEP)
                 }
             }
         }
