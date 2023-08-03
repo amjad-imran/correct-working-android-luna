@@ -149,7 +149,7 @@ object DistanceUtil {
     }
     fun convertMeterToKm(value: Int?): String {
         if (value == null) return "0"
-        val df = DecimalFormat(".#")
+        val df = DecimalFormat("#.#")
         return df.format(value * ME_TO_KM)
     }
 
