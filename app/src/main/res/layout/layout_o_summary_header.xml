@@ -38,7 +38,6 @@
         android:layout_width="@dimen/dimen_32dp"
         android:layout_height="@dimen/dimen_32dp"
         android:indeterminate="false"
-        android:progress="50"
         app:indicatorSize="@dimen/dimen_32dp"
         app:trackColor="#1effffff"
         app:layout_constraintBottom_toBottomOf="@+id/oreoStatus"

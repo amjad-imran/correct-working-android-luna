@@ -23,7 +23,6 @@
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/app_background"
             android:gravity="center_vertical|center_horizontal|center"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"

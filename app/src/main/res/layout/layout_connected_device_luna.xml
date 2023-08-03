@@ -17,16 +17,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ProgressBar
-            android:id="@+id/pbRing"
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/batteryStatus"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:indeterminate="false"
+            app:indicatorSize="48dp"
+            app:trackColor="#3dffffff"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/ivRingImage"
             app:layout_constraintEnd_toEndOf="@+id/ivRingImage"
             app:layout_constraintStart_toStartOf="@+id/ivRingImage"
-            app:layout_constraintTop_toTopOf="@+id/ivRingImage" />
+            app:layout_constraintTop_toTopOf="@+id/ivRingImage"
+            app:trackThickness="2dp" />
 
         <TextView
             android:id="@+id/tvRingName"
@@ -49,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:textColor="#ff7c94"
+            android:textColor="@color/oreo_contributor_warning"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tvRingName"
             app:layout_constraintTop_toBottomOf="@+id/tvRingName"

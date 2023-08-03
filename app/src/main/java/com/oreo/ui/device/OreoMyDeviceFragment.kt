@@ -225,10 +225,10 @@ class OreoMyDeviceFragment :
 
     private fun setStateConnecting(noiseFitDevice: ColorFitDevice?) {
         binding.lytDeviceConnected.apply {
+            batteryStatus.gone()
 
-            ivRingImage.loadWatchImage(
+            ivRingImage.loadImage(
                 requireContext(),
-                noiseFitDevice?.ringInfo?.image ?: "",
                 R.drawable.ic_ring_default_sliver
             )
             tvRingName.text = noiseFitDevice?.bluetoothName
@@ -255,10 +255,18 @@ class OreoMyDeviceFragment :
             )
             tvRingName.text = noiseFitDevice.bluetoothName
 
-            pbRing.progress = batteryPercent
-            tvBattery.setTextColor(resources.getColor(R.color.white_64))
-            tvBattery.text = "$batteryPercent%"
+            batteryStatus.visible()
+            batteryStatus.progress = batteryPercent
 
+            if (batteryPercent <= 20) {
+                batteryStatus.setIndicatorColor(resources.getColor(R.color.oreo_contributor_warning))
+                tvBattery.setTextColor(resources.getColor(R.color.oreo_contributor_warning))
+            } else {
+                batteryStatus.setIndicatorColor(resources.getColor(R.color.white))
+                tvBattery.setTextColor(resources.getColor(R.color.white_64))
+            }
+
+            tvBattery.text = "$batteryPercent%"
             tvOtherInfo.visible()
             tvOtherInfo.text = " | $lastSyncText"
 

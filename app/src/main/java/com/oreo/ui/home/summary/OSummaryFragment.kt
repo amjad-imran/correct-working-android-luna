@@ -20,6 +20,7 @@ import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
@@ -188,6 +189,16 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
     override fun subscribeObservers() {
 
+        viewModel.deviceConnected.observe(this) { connected ->
+            if (!connected) {
+                binding.lytHeader.batteryStatus.gone()
+                binding.lytHeader.oreoStatus.loadImage(
+                    requireContext(),
+                    R.drawable.ic_no_device_luna
+                )
+            }
+        }
+
         viewModel.sessionManager.syncCompleted.observe(this) {
             it?.getContent()?.let { syncDataStatus ->
                 when (syncDataStatus.status) {
@@ -213,18 +224,19 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 }
 
                 is ConnectState.Connecting -> {
-                    setConnectingState(true)
+                    //setConnectingState(true)
                 }
 
                 is ConnectState.ConnectSuccess -> {
-                    setConnectingState(false)
+                    //setConnectingState(false)
                     shouldSync()
-                    setStateConnected(connectedState.noiseFitDevice)
+                    //setStateConnected(connectedState.noiseFitDevice)
                     viewModel.checkBatteryPercentage()
                 }
 
                 is ConnectState.UnPaired -> {
                     viewModel.handleUnPairState()
+                    viewModel.updateDeviceConnectedStatus()
                 }
 
                 is ConnectState.Hibernate -> {
@@ -283,15 +295,19 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
     private fun setConnectingState(connecting: Boolean) {
         binding.lytHeader.batteryStatus.isIndeterminate = connecting
+        binding.lytHeader.batteryStatus.gone()
+        binding.lytHeader.oreoStatus.loadImage(requireContext(), R.drawable.ic_no_device_luna)
+
     }
 
     private fun setStateConnected(noiseFitDevice: ColorFitDevice) {
+        binding.lytHeader.batteryStatus.visible()
         val batteryPercentage = viewModel.watchDataStore.getBatteryPercentRing()
         binding.lytHeader.batteryStatus.progress = batteryPercentage
+        binding.lytHeader.oreoStatus.loadImage(requireContext(), R.drawable.ic_ring_default_sliver)
         if (batteryPercentage < 20) {
             binding.lytHeader.oreoStatus.setBackgroundResource(R.drawable.back_modal_red_circle)
             binding.lytHeader.batteryStatus.setIndicatorColor(resources.getColor(R.color.color_error))
-
         } else {
             binding.lytHeader.oreoStatus.setBackgroundResource(R.drawable.back_modal_new_round)
             binding.lytHeader.batteryStatus.setIndicatorColor(resources.getColor(R.color.white))
