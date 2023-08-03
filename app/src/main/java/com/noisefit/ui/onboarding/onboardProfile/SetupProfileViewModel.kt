@@ -8,6 +8,7 @@ import com.google.gson.JsonObject
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.session.SessionManager
+import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -601,7 +602,7 @@ class SetupProfileViewModel
 
 
 //        val caloriesGoal = getCaloriesGoal()
-        val caloriesGoal = getCaloriesGoal2()
+        var caloriesGoal = getCaloriesGoal2()
         val distanceGoal = getDistanceGoal()
 
         val dob = getDob()
@@ -625,6 +626,24 @@ class SetupProfileViewModel
         /*val uInfo = UserInfo(weight, height, 0, dob, gender.value!!.type, 70)
         user.userInfo = uInfo
         localDataStore.saveUserInfo(user)*/
+
+        val stepGoalNew = ApplicationUtils.bmiCalculate(
+            getHeight().toFloat(),
+            getWeight().toFloat(),
+            weightUnitSystem.type,
+            heightUnitSystem.type
+        )
+        val caloriesGoalNew = ApplicationUtils.bmrCalculate(
+            getHeight().toFloat(),
+            getWeight().toFloat(),
+            weightUnitSystem.type,
+            heightUnitSystem.type,
+            getAge(),
+            gender.value ?: Gender.MALE
+
+        )
+        stepsGoal = stepGoalNew.second.toInt()
+        caloriesGoal=caloriesGoalNew
 
         val userObject = JsonObject().apply {
             addProperty("first_name", userName.value)

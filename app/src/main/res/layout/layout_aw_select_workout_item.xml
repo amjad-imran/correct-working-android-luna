@@ -5,7 +5,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/back_modal_dialog">
+        android:background="@drawable/back_modal_transparent_oreo">
 
         <TextView
             android:id="@+id/tvTitle"

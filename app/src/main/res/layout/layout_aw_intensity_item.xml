@@ -9,7 +9,7 @@
             android:id="@+id/viewIntensity"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@drawable/back_modal_dialog"
+            android:background="@drawable/back_modal_transparent_oreo"
             app:layout_constraintBottom_toBottomOf="@+id/lytItem"
             app:layout_constraintEnd_toEndOf="@+id/lytItem"
             app:layout_constraintStart_toStartOf="@+id/lytItem"

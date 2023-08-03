@@ -26,6 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dimen_8dp"
             android:padding="@dimen/dimen_8dp"
+            android:visibility="invisible"
             android:src="@drawable/ic_arrow_right_duotone"
             app:layout_constraintBottom_toBottomOf="@id/textView66"
             app:layout_constraintEnd_toEndOf="parent"
