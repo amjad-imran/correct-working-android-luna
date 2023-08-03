@@ -48,9 +48,9 @@ class OActivityListAdapter(
                 }
             }
             if (itemViewType == RecentActivityViewType.HEADER.type) {
-                if (bindingAdapterPosition==0){
-                    view.findViewById<View>(R.id.include45).gone()
-                }
+//                if (bindingAdapterPosition==0){
+//                    view.findViewById<View>(R.id.include45).gone()
+//                }
                 var date = activity.createdDate
                 if (date == DateFormats.getCurrentDate(DateFormats.dateFormat6)) {
                     date = "Today’s Workouts"

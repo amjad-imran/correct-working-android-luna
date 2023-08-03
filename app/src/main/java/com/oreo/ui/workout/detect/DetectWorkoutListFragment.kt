@@ -17,28 +17,19 @@ class DetectWorkoutListFragment :
     BaseFragment<FragmentDetectWorkoutListBinding>(FragmentDetectWorkoutListBinding::inflate) {
     private lateinit var pagerAdapter: DetectWorkoutPagerAdapter
     private val viewModel: DetectWorkoutViewModel by viewModels()
-    private val dmGraphAdapter: OreoDMAdapter by lazy {
-        OreoDMAdapter()
-    }
 
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setAdapter()
+
         if (viewModel.oreoAutoSportData.value?.second.isNullOrEmpty()) {
             viewModel.getNotAcceptingData()
         }
 
     }
 
-    private fun setAdapter() {
-        with(binding.rvDMGraph) {
-            adapter = dmGraphAdapter
-        }
 
-
-    }
 
 
     override fun initListener() {
@@ -94,9 +85,9 @@ class DetectWorkoutListFragment :
 
                 })
         binding.vpFriends.isUserInputEnabled = true
-
+        binding.vpFriends.offscreenPageLimit = 1
         binding.vpFriends.adapter = pagerAdapter
-        binding.vpFriends.currentItem = pairData.first.size
+        binding.vpFriends.setCurrentItem(pairData.first.size,false)
         TabLayoutMediator(binding.tabLayout, binding.vpFriends) { tab, position ->
             tab.text = pairData.first[position]
         }.attach()

@@ -296,6 +296,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             devicePaired: Boolean
         ) {
 
+            binding.imv.loadImage(binding.imv.context, R.drawable.ic_readiness_card_bg1)
+
             val scoreValue = data.data.readinessScore ?: 0
             if (scoreValue == 0) {
                 binding.tvValue.text = "--"
@@ -311,7 +313,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             if (scoreValue >= 0) {
                 binding.lottieAnimationView.repeatCount = 0
-                binding.lottieAnimationView.setAnimation(R.raw.anim_activity_meter)
+                binding.lottieAnimationView.setAnimation(R.raw.lottie_meter_readiness)
                 binding.lottieAnimationView.setMaxProgress(
                     MiscUtil.scorePercentCalculator(
                         scoreValue.toFloat()
@@ -335,7 +337,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             lastPosition: Int,
             devicePaired: Boolean
         ) {
-
+            binding.imv.loadImage(binding.imv.context, R.drawable.ic_sleep_card_bg1)
             val scoreValue = data.data.sleepScore ?: 0
             if (scoreValue <= 0) {
                 binding.tvSleepStart.text = "Start time"
@@ -397,7 +399,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             if (scoreValue >= 0) {
                 binding.lottieAnimationView.repeatCount = 0
-                binding.lottieAnimationView.setAnimation(R.raw.anim_activity_meter)
+                binding.lottieAnimationView.setAnimation(R.raw.lottie_meter_sleep)
                 binding.lottieAnimationView.setMaxProgress(
                     MiscUtil.scorePercentCalculator(
                         scoreValue.toFloat()
@@ -421,7 +423,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             lastPosition: Int,
             devicePaired: Boolean
         ) {
-
+            binding.imv.loadImage(binding.imv.context, R.drawable.ic_activity_card_bg1)
             val scoreValue = data.data.activityScore ?: 0
             val caloriesGoalText = "/ ${data.caloriesGoal}"
             if (scoreValue <= 0) {
@@ -443,7 +445,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             if (scoreValue >= 0) {
                 binding.lottieAnimationView.repeatCount = 0
-                binding.lottieAnimationView.setAnimation(R.raw.anim_activity_meter)
+                binding.lottieAnimationView.setAnimation(R.raw.lottie_meter_activity)
                 binding.lottieAnimationView.setMaxProgress(
                     MiscUtil.scorePercentCalculator(
                         scoreValue.toFloat()
