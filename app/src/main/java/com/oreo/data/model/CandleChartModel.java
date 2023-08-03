@@ -6,7 +6,16 @@ public class CandleChartModel extends ChartModel {
     private int color;
 
     private String bottomLineText;
+    private String topText;
     private Type type;
+
+    public String getTopText() {
+        return topText;
+    }
+
+    public void setTopText(String topText) {
+        this.topText = topText;
+    }
 
     public int getLength() {
         return length;
