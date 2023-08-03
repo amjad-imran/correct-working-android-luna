@@ -28,27 +28,26 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tvTitle"
             tools:text="93%" />
-        <View
-            android:id="@+id/vBack"
-            android:layout_width="0dp"
-            android:layout_height="16dp"
-            android:background="@drawable/back_progress_16"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="4dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+<!--        <View-->
+<!--            android:id="@+id/vBack"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="16dp"-->
+<!--            android:background="@drawable/back_progress_16"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            android:layout_marginTop="4dp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/tvTitle" />-->
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/pbSteps"
             android:layout_width="0dp"
             android:layout_height="4dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintBottom_toBottomOf="@id/vBack"
-            app:layout_constraintEnd_toEndOf="@id/vBack"
-            app:layout_constraintStart_toStartOf="@id/vBack"
-            app:layout_constraintTop_toTopOf="@id/vBack"
+            android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
             app:trackColor="#0fffffff"
             app:trackCornerRadius="2dp"
             app:trackThickness="4dp" />
