@@ -113,6 +113,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                     navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
                         putString("workoutName", type.workOutName)
                         putString("workoutId", type.id)
+                        putInt("position", type.position)
                     })
                 }
 
