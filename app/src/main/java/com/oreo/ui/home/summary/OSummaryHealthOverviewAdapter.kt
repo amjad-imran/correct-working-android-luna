@@ -312,14 +312,14 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             }
 
             if (scoreValue >= 0) {
-//                binding.lottieAnimationView.repeatCount = 0
-//                binding.lottieAnimationView.setAnimation(R.raw.lottie_meter_readiness)
-//                binding.lottieAnimationView.setMaxProgress(
-//                    MiscUtil.scorePercentCalculator(
-//                        scoreValue.toFloat()
-//                    )
-//                )
-//                binding.lottieAnimationView.playAnimation()
+                binding.lottieAnimationView.repeatCount = 0
+                binding.lottieAnimationView.setAnimation(R.raw.lottie_meter_readiness)
+                binding.lottieAnimationView.setMaxProgress(
+                    MiscUtil.scorePercentCalculator(
+                        scoreValue.toFloat()
+                    )
+                )
+                binding.lottieAnimationView.playAnimation()
 
             }
 
@@ -398,14 +398,14 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
 
             if (scoreValue >= 0) {
-//                binding.lottieAnimationView.repeatCount = 0
-//                binding.lottieAnimationView.setAnimation(R.raw.lottie_meter_sleep)
-//                binding.lottieAnimationView.setMaxProgress(
-//                    MiscUtil.scorePercentCalculator(
-//                        scoreValue.toFloat()
-//                    )
-//                )
-//                binding.lottieAnimationView.playAnimation()
+                binding.lottieAnimationView.repeatCount = 0
+                binding.lottieAnimationView.setAnimation(R.raw.lottie_meter_sleep)
+                binding.lottieAnimationView.setMaxProgress(
+                    MiscUtil.scorePercentCalculator(
+                        scoreValue.toFloat()
+                    )
+                )
+                binding.lottieAnimationView.playAnimation()
 
             }
 
@@ -444,14 +444,14 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
 
             if (scoreValue >= 0) {
-//                binding.lottieAnimationView.repeatCount = 0
-//                binding.lottieAnimationView.setAnimation(R.raw.lottie_meter_activity)
-//                binding.lottieAnimationView.setMaxProgress(
-//                    MiscUtil.scorePercentCalculator(
-//                        scoreValue.toFloat()
-//                    )
-//                )
-//                binding.lottieAnimationView.playAnimation()
+                binding.lottieAnimationView.repeatCount = 0
+                binding.lottieAnimationView.setAnimation(R.raw.lottie_meter_activity)
+                binding.lottieAnimationView.setMaxProgress(
+                    MiscUtil.scorePercentCalculator(
+                        scoreValue.toFloat()
+                    )
+                )
+                binding.lottieAnimationView.playAnimation()
 
             }
 
