@@ -3,6 +3,7 @@ package com.oreo.ui.custom;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -200,27 +201,29 @@ public class CandleChart extends View {
         mHeight = h;
         CandleChartModel model;
         boolean hasActivity = false;
-        for (int i = list.size() - 1; i >= 0; i--) {
-            model = list.get(i);
-            if (model.getType() != CandleChartModel.Type.INACTIVE) {
-                offSet = (list.size() - 1 - i) * 3 * chartLineWidth;
-                LOGS.INSTANCE.d("DSAdsasdadasdas::12:::activity  " + offSet);
-                hasActivity = true;
-                break;
-            }
-        }
-        if (!hasActivity) {
+//        for (int i = list.size() - 1; i >= 0; i--) {
+//            model = list.get(i);
+//            if (model.getType() != CandleChartModel.Type.INACTIVE) {
+//                offSet =0 ;// = (list.size() - 1 - i) * 3 * chartLineWidth;
+//                LOGS.INSTANCE.d("DSAdsasdadasdas::12:::activity  " + offSet);
+//                hasActivity = true;
+//                break;
+//            }
+//        }
+//        if (!hasActivity) {
 
-            Calendar calendar = Calendar.getInstance();
-            int minutes = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE);
-            offSet = ((list.size() - minutes) / 5f) * 3 * chartLineWidth;
-            LOGS.INSTANCE.d("DSAdsasdadasdas::12:::  " + offSet);
-            if (offSet < 0) {
-                offSet = ((list.size() / 2f) * 3 * chartLineWidth);
-            }
+        Calendar calendar = Calendar.getInstance();
+        int minutes = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE);
 
-            LOGS.INSTANCE.d("DSAdsasdadasdas:: " + offSet);
+        int offsetToRemoveFromMainList = 288 - list.size();
+        int offsetToRemove = (int) (minutes / 5f) - offsetToRemoveFromMainList;
+        offSet = (list.size() - offsetToRemove) * 3 * chartLineWidth;
+        if (offSet < 0) {
+            offSet = ((list.size() / 2f) * 3 * chartLineWidth);
         }
+
+        LOGS.INSTANCE.d("DSAdsasdadasdas:: " + offSet);
+//        }
     }
 
     @Override
@@ -319,13 +322,15 @@ public class CandleChart extends View {
             rectF.bottom = y + (model.getLength() * (mHeight - topWith - bottomWith) / (xMax - xMin));
             chartLinePaint.setColor(model.getColor());
             canvas.drawRoundRect(rectF, chartLineWidth, chartLineWidth, chartLinePaint);
-//            if (!TextUtils.isEmpty(model.getMarkText())) {
-//                markPaint.setColor(Color.parseColor("#80000000"));
+//            if (model.getBottomLineText() != null && !model.getBottomLineText().isEmpty()) {
+//                markPaint.setColor(Color.parseColor("#1effffff"));
 //                markPaint.setStyle(Paint.Style.FILL);
-//                canvas.drawCircle(x, y - (mHeight - bottomWith) * 0.2f, 40f, markPaint);
+//                markPaint.setTextSize(16);
+//                canvas.drawCircle(x, y - (mHeight ) * 0.18f, 25f, markPaint);
 //                markPaint.setColor(Color.parseColor("#ffffff"));
-//                markPaint.getTextBounds(model.getMarkText(), 0, model.getMarkText().length(), xTextBounds);
-//                canvas.drawText(model.getMarkText(), x - xTextBounds.width() / 2f, y - (mHeight - bottomWith) * 0.2f + xTextBounds.height() / 2f, markPaint);
+//
+//                markPaint.getTextBounds("2", 0, "2".length(), xTextBounds);
+//                canvas.drawText("2", x - xTextBounds.width() / 2f, y - (mHeight ) * 0.18f + xTextBounds.height() / 2f, markPaint);
 //            }
 
         }

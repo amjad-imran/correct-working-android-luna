@@ -3,10 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/ModalStyleReadiness"
+
     android:layout_width="match_parent"
     android:layout_marginTop="24dp"
     android:layout_height="wrap_content"
     tools:ignore="MissingDefaultResource">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView"
@@ -37,6 +50,7 @@
         android:id="@+id/lottieAnimationView"
         android:layout_width="196dp"
         android:layout_height="120dp"
+        app:lottie_imageAssetsFolder="images"
         android:layout_marginTop="@dimen/dimen_8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

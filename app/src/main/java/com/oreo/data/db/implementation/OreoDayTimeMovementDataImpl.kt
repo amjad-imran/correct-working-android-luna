@@ -66,6 +66,10 @@ constructor(
         return null
     }
 
+    override suspend fun getTodayDayTimeMovement(date: String): String? {
+        return dayTimeDao.getTodayData(date)?.breakUp
+    }
+
     override suspend fun checkHalfSyncData() {
 
         /*

@@ -24,7 +24,6 @@ import com.noisefit_commans.data.model.OreoStressDataBreakup
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.VersionCheckResponse
 import com.noisefit_commans.models.StepDataGoogleFit
-import com.noisefit_commans.models.SyncGoogleFitData
 import com.noisefit_commans.response.SleepBreakup
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
@@ -70,6 +69,12 @@ class OreoSyncRepositoryImpl(
     override suspend fun saveStepsData(data: OreoStepsData): Flow<CacheResult<OreoStepsData?>> {
         return safeCacheCall(Dispatchers.IO) {
             stepsDataImpl.syncInsertOrUpdate(data)
+        }
+    }
+
+    override suspend fun getMovementData(date:String): Flow<CacheResult<String?>> {
+        return safeCacheCall(Dispatchers.IO) {
+            dayTimeMovementImpl.getTodayDayTimeMovement(date)
         }
     }
 

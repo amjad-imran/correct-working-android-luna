@@ -25,6 +25,8 @@ interface OreoSyncRepository {
 
     suspend fun saveStepsData(data: OreoStepsData): Flow<CacheResult<OreoStepsData?>>
 
+    suspend fun getMovementData(date:String): Flow<CacheResult<String?>>
+
     suspend fun saveAutoWorkoutData(data: List<OreoAutoSportData>): Flow<CacheResult<Boolean?>>
 
     suspend fun getAutoWorkoutData(): Flow<CacheResult<List<OreoAutoSportData>?>>
