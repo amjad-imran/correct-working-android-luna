@@ -87,12 +87,6 @@ class FindDeviceListFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
-        binding.bScan.gone()
-        binding.textView2.text =
-            getString(R.string.text_make_sure_your_oreo_is_connected_to_the_charger_and_your_phone_s_bluetooth_is_enabled)
-
         viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_device_list)
         binding.lScanning.repeatCount = 0
         binding.lScanning.setAnimation(R.raw.anim_device_default)
@@ -311,94 +305,11 @@ class FindDeviceListFragment :
         }
     }
 
-    fun checkCameraPermission(callback: () -> Unit) {
-        if (ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.CAMERA
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            callback.invoke()
-        } else {
-            cameraResult.launch(Manifest.permission.CAMERA)
-        }
-    }
-
-    private val cameraResult = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) {
-        if (it) {
-            if (!ApplicationUtils.isLocationProviderEnabled(requireContext())) {
-                showLocationTurnOnDialogCamera()
-            } else {
-                viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_scan_clicked)
-                navigate(R.id.qrScanFragment)
-            }
-        } else {
-            uiController.onApiErrorReceived(
-                ErrorResponse(
-                    UIComponentType.AreYouSureDialog(
-                        getString(R.string.text_permission_required),
-                        getString(R.string.text_camera_permission_qr),
-                        false,
-                        getString(R.string.text_allow),
-                        object : BinaryActionCallback {
-                            override fun yes() {
-                                activity?.let { act ->
-                                    ApplicationUtils.openAppSettings(act)
-                                }
-                            }
-
-                            override fun no() {
-
-                            }
-
-                        }
-
-                    )
-                )
-            )
-
-        }
-    }
-
 
     override fun initListener() {
         binding.backBtn.setOnClickListener {
             viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_device_back)
             activity?.finish()
-        }
-        binding.bScan.setOnClickListener {
-            checkCameraPermission {
-                checkLocationPermission {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        checkBluetoothPermission {
-                            if (!ApplicationUtils.isLocationProviderEnabled(requireContext())) {
-                                showLocationTurnOnDialogCamera()
-                            } else {
-                                viewModel.sessionManager.addUserAttributeToInsider(false,
-                                    HashMap<String, Any>().apply
-                                    {
-                                        this["pair_device_method_used"] = "QR Scan"
-                                    })
-                                viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_scan_clicked)
-                                navigate(R.id.qrScanFragment)
-                            }
-                        }
-                    } else {
-                        if (!ApplicationUtils.isLocationProviderEnabled(requireContext())) {
-                            showLocationTurnOnDialogCamera()
-                        } else {
-                            viewModel.sessionManager.addUserAttributeToInsider(false,
-                                HashMap<String, Any>().apply
-                                {
-                                    this["pair_device_method_used"] = "QR Scan"
-                                })
-                            viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_scan_clicked)
-                            navigate(R.id.qrScanFragment)
-                        }
-                    }
-                }
-            }
         }
         binding.lScanning.setOnClickListener {
 

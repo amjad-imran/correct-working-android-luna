@@ -2,7 +2,17 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navigation_pair"
-    app:startDestination="@id/findDeviceListFragment">
+    app:startDestination="@id/connectRingFragment">
+    <fragment
+        android:id="@+id/connectRingFragment"
+        android:name="com.noisefit.ui.onboarding.pairing.ConnectRingFragment"
+        android:label="ConnectRingFragment" >
+        <action
+            android:id="@+id/action_connectRingFragment_to_findDeviceListFragment"
+            app:destination="@id/findDeviceListFragment"
+            app:popUpTo="@id/connectRingFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/findDeviceListFragment"
         android:name="com.noisefit.ui.onboarding.pairing.find.FindDeviceListFragment"
@@ -14,16 +24,7 @@
             android:id="@+id/action_findDeviceListFragment_to_pairingFragment"
             app:destination="@id/pairingFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/qrScanFragment"
-        android:name="com.noisefit.ui.onboarding.pairing.qr.QrScanFragment"
-        android:label="QrScanFragment" >
-        <action
-            android:id="@+id/action_qrScanFragment_to_pairingFragment"
-            app:destination="@id/pairingFragment"
-            app:popUpTo="@id/qrScanFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
+
     <fragment
         android:id="@+id/pairingFragment"
         android:name="com.noisefit.ui.onboarding.pairing.pair.PairingFragment"
@@ -37,30 +38,5 @@
             app:argType="com.noisefit_commans.models.ColorFitDevice" />
     </fragment>
 
-    <fragment
-        android:id="@+id/helpAndSupportListFragment"
-        android:name="com.noisefit.ui.settings.helpAndSupport.sublist.HelpAndSupportListFragment"
-        android:label="HelpAndSupportListFragment">
-        <argument
-            android:name="helpSupportItem"
-            app:argType="com.noisefit_commans.data.response.HelpAndSupportResponse"
-            app:nullable="true" />
-        <action
-            android:id="@+id/action_navigation_help_and_support_list_to_details_fragment"
-            app:destination="@+id/helpAndSupportDetailsFragment" />
-        <argument
-            android:name="type"
-            app:argType="string"
-            app:nullable="true" />
 
-    </fragment>
-    <fragment
-        android:id="@+id/helpAndSupportDetailsFragment"
-        android:name="com.noisefit.ui.settings.helpAndSupport.details.HelpAndSupportDetailsFragment"
-        android:label="HelpAndSupportDetailsFragment" >
-
-        <argument
-            android:name="questionId"
-            app:argType="integer" />
-    </fragment>
 </navigation>

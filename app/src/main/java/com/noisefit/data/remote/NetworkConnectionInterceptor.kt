@@ -188,6 +188,8 @@ class NetworkConnectionInterceptor(
                 addHeader("device-id", it.deviceId.toString())
                 addHeader("device-type", it.deviceType.toString())
             }
+            addHeader("wearable-type", "ring")
+
             addHeader("timezone", TimeZone.getDefault().id)
             addHeader(
                 "offset",

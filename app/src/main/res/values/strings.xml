@@ -1692,4 +1692,12 @@
     <string name="text_device">Device</string>
     <string name="text_customer_support_helpline">Customer support helpline</string>
     <string name="text_raise_a_complaint">Raise a complaint</string>
+    <string name="text_login_message">Use any of the below mentioned options to join NoiseFit and start your fit and healthy lifestyle</string>
+    <string name="text_welcome_to_noisefit">Welcome to NoiseFit</string>
+    <string name="text_connect_your_luna_ring">Connect your Luna Ring</string>
+    <string name="text_ring_connect_message"><![CDATA[Connect your Luna Ring to the charger & make sure that Bluetooth is enabled on your phone.]]></string>
+    <string name="text_search_now">Search now</string>
+    <string name="text_no_luna_ring_yet">No Luna Ring yet?</string>
+    <string name="text_ring_message_find_device">Make sure your ring is placed on the charger and your phone’s bluetooth is enabled.</string>
+    <string name="text_pairing_ring_message">Make sure your ring is placed on the charger</string>
 </resources>

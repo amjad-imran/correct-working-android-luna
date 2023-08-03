@@ -851,11 +851,11 @@ class QrScanFragment : BaseFragment<FragmentQrScanBinding>(FragmentQrScanBinding
                             )
                         }*/
 
-                        navigate(
+                      /*  navigate(
                             QrScanFragmentDirections.actionQrScanFragmentToPairingFragment(
                                 colorFitDevice
                             )
-                        )
+                        )*/
 
                         viewModel.tempColorFitDevice = colorFitDevice
                         colorFitDevice.address?.let { viewModel.checkWatchTokenExist(it) }
@@ -872,11 +872,11 @@ class QrScanFragment : BaseFragment<FragmentQrScanBinding>(FragmentQrScanBinding
 
     private fun moveToPairingScreen(colorFitDevice: ColorFitDevice, watchToken: String) {
         colorFitDevice.watchToken = watchToken
-        navigate(
+       /* navigate(
             QrScanFragmentDirections.actionQrScanFragmentToPairingFragment(
                 colorFitDevice
             )
-        )
+        )*/
     }
 
     private fun showOpenPlayStoreDialog(packageName: String, deviceName: String, appIcon: Int) {

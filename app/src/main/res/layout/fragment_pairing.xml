@@ -31,7 +31,7 @@
             android:layout_marginTop="@dimen/_16sdp"
             android:layout_marginEnd="@dimen/side_margin"
             android:gravity="center"
-            android:text="@string/text_keep_your_watch_near_your_phone"
+            android:text="@string/text_pairing_ring_message"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/textView"
             app:layout_constraintTop_toBottomOf="@+id/textView" />

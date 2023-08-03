@@ -24,8 +24,8 @@ class OnBoardGenderFragment :
 
         viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.LAND_ON_ENTER_GENDER_PAGE_VISIT)
         binding.lytOnBoardProgress.apply {
-            pgBr.progress = 48
-            tvCount.text = getString(R.string.text_4)
+            pgBr.progress = 60
+            tvCount.text = getString(R.string.text_3)
         }
 
 

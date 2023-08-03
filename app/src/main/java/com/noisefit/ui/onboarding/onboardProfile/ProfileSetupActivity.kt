@@ -28,10 +28,7 @@ class ProfileSetupActivity : BaseActivity<ActivityProfileSetupBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         firebaseViewModel.generateToken()
-        binding.lottieBackAnim.playAnimation(
-            LottieDrawable.INFINITE,
-            R.raw.anim_challenge_back
-        )
+
     }
 
     override fun logAppEvent(eventName: String, data: HashMap<String, Any?>) {
