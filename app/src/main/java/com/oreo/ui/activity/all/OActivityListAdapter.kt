@@ -9,8 +9,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.luna.R
 import com.noisefit.data.dataConverter.DataUnitConverter
+import com.noisefit.luna.R
 import com.noisefit_commans.models.Units
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
@@ -37,33 +37,40 @@ class OActivityListAdapter(
         }
 
     }
+
     inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
         fun bind(activity: OActivityListModal, mode: ItemPos) {
 
             view.setOnClickListener {
                 if (!activity.isHeader) {
-                    listener.onActivitySelected(activity,bindingAdapterPosition)
+                    listener.onActivitySelected(activity, bindingAdapterPosition)
                 }
             }
             if (itemViewType == RecentActivityViewType.HEADER.type) {
+                if (bindingAdapterPosition==0){
+                    view.findViewById<View>(R.id.include45).gone()
+                }
                 var date = activity.createdDate
-                if(date == DateFormats.getCurrentDate(DateFormats.dateFormat6)){
+                if (date == DateFormats.getCurrentDate(DateFormats.dateFormat6)) {
                     date = "Today’s Workouts"
                 }
                 view.findViewById<TextView>(R.id.tvDate).text = date
             } else {
                 when (mode) {
                     ItemPos.TOP -> {
-                        view.findViewById<View>(R.id.parentContainer)
-                            .setBackgroundResource(R.drawable.o_top_rounded_back)
+                        view.findViewById<View>(R.id.parentContainer).apply {
+                            setBackgroundResource(R.drawable.o_top_rounded_back)
+                        }
                         view.findViewById<View>(R.id.view16).visible()
                     }
+
                     ItemPos.CENTRE -> {
                         view.findViewById<View>(R.id.parentContainer)
                             .setBackgroundResource(R.drawable.o_center_flat_back)
                         view.findViewById<View>(R.id.view16).visible()
                     }
+
                     ItemPos.BOTTOM -> {
                         view.findViewById<View>(R.id.parentContainer).apply {
                             setBackgroundResource(R.drawable.o_bottom_rounded_back)
@@ -75,7 +82,7 @@ class OActivityListAdapter(
 
                     ItemPos.DEFAULT -> {
                         view.findViewById<View>(R.id.parentContainer).apply {
-                            setBackgroundResource(R.drawable.back_modal_dialog)
+                            setBackgroundResource(R.drawable.back_modal_transparent_oreo)
                             bottom = 16
                         }
 
@@ -84,19 +91,24 @@ class OActivityListAdapter(
                 }
 
                 view.findViewById<TextView>(R.id.tvName).text = activity.getFormattedActivityName()
-                val time =  DateFormats.convert24HourTo12(activity.startTime)
-                if(time.isNotEmpty()){
+                val time = DateFormats.convert24HourTo12(activity.startTime)
+                if (time.isNotEmpty()) {
                     val timeArray = time.split(" ")
-                    if(timeArray.isNotEmpty() && timeArray.size == 2){
+                    if (timeArray.isNotEmpty() && timeArray.size == 2) {
                         view.findViewById<TextView>(R.id.tvStart).text = buildSpannedString {
                             append(timeArray[0])
                             inSpans(
-                                ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.white_48))
+                                ForegroundColorSpan(
+                                    ContextCompat.getColor(
+                                        view.context,
+                                        R.color.white_48
+                                    )
+                                )
                             ) {
                                 append(" ${timeArray[1].lowercase()}")
                             }
                         }
-                    }else{
+                    } else {
                         view.findViewById<TextView>(R.id.tvStart).text = time
                     }
                 }
@@ -166,9 +178,9 @@ class OActivityListAdapter(
             } ?: return ItemPos.TOP
 
             if (nextItem == null) {
-                if(previousItem.isHeader){
+                if (previousItem.isHeader) {
                     return ItemPos.DEFAULT
-                }else{
+                } else {
                     return ItemPos.BOTTOM
                 }
             }
@@ -210,7 +222,7 @@ enum class RecentActivityViewType(val type: Int) {
 }
 
 interface OActivityListInteraction {
-    fun onActivitySelected(activity: OActivityListModal,position: Int)
+    fun onActivitySelected(activity: OActivityListModal, position: Int)
 }
 
 enum class ItemPos {

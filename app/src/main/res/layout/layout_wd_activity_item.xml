@@ -15,7 +15,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_margin="@dimen/dimen_16dp"
-            android:src="@drawable/ic_wd_activity"
+            android:src="@drawable/ic_o_workout"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
