@@ -57,10 +57,6 @@
             android:name="usePassword"
             app:argType="boolean" />
     </fragment>
-    <fragment
-        android:id="@+id/deviceConnectFragment"
-        android:name="com.noisefit.ui.onboarding.onboardProfile.OnBoardConnectDeviceFragment"
-        android:label="DeviceConnectFragment" />
     <dialog
         android:id="@+id/existingUserBottomSheet"
         android:name="com.noisefit.ui.onboarding.otp.number.ExistingUserCnfBottomSheet"

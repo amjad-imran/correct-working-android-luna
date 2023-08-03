@@ -40,7 +40,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/side_margin"
-                    android:layout_marginTop="@dimen/dimen_96dp"
+                    android:layout_marginTop="90dp"
                     android:layout_marginEnd="@dimen/side_margin"
                     android:text="@string/text_looking_for_your_device"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -56,7 +56,8 @@
                     android:layout_marginTop="@dimen/dimen_24dp"
                     android:layout_marginEnd="@dimen/side_margin"
                     android:lineSpacingExtra="6sp"
-                    tools:text="@string/text_just_make_sure_your_watch_and_the_phone_s_bluetooth_connection_are_on"
+                    android:fontFamily="@font/gilroy_regular"
+                    android:text="@string/text_ring_message_find_device"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/textView"
                     app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -83,33 +84,16 @@
                     app:lottie_autoPlay="true"
                     app:lottie_repeatCount="1" />
 
-
                 <TextView
                     android:id="@+id/tvDevicesFound"
                     style="@style/H5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/side_margin"
-                    app:layout_constraintBottom_toBottomOf="@+id/bScan"
+                    android:layout_marginTop="32dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/bScan"
+                    app:layout_constraintTop_toBottomOf="@+id/vBackWatch"
                     tools:text="4 devices found" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/bScan"
-                    style="@style/PrimaryButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="@dimen/side_margin"
-                    android:drawableEnd="@drawable/ic_qr_scan"
-                    android:paddingStart="@dimen/dimen_24dp"
-                    android:paddingEnd="@dimen/dimen_24dp"
-                    android:text="@string/text_scan"
-                    android:textAllCaps="false"
-                    android:textSize="12sp"
-                    app:backgroundTint="@null"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/lScanning" />
 
                 <View
                     android:id="@+id/view9"
@@ -136,9 +120,8 @@
                     app:layout_constraintBottom_toTopOf="@+id/bPairLater"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/bScan"
+                    app:layout_constraintTop_toBottomOf="@+id/tvDevicesFound"
                     app:layout_constraintVertical_bias="0.0">
-
 
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -163,10 +146,10 @@
                     android:layout_marginBottom="16dp"
                     android:paddingStart="24dp"
                     android:paddingEnd="24dp"
-                    android:visibility="gone"
                     android:text="@string/text_pair_later"
                     android:textAllCaps="false"
                     android:textSize="12sp"
+                    android:visibility="gone"
                     app:backgroundTint="@null"
                     app:layout_constraintBottom_toTopOf="@+id/tvTroubleShoot"
                     app:layout_constraintEnd_toEndOf="parent"
