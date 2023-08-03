@@ -37,11 +37,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.gson.Gson
 import com.noisefit_commans.NoisefitApplication
 import com.noisefit_commans.R
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.model.Emoji
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
@@ -61,6 +62,20 @@ fun SnapHelper.getSnapPosition(recyclerView: RecyclerView): Int {
     val layoutManager = recyclerView.layoutManager ?: return RecyclerView.NO_POSITION
     val snapView = findSnapView(layoutManager) ?: return RecyclerView.NO_POSITION
     return layoutManager.getPosition(snapView)
+}
+
+fun String?.getParseList(): List<Int> {
+    val list = this?.replace("255", "0")
+
+    var breakupArray = Gson().fromJson<List<Int>>(list ?: "")
+    if (breakupArray.isNullOrEmpty()) {
+        val dummyArray = ArrayList<Int>()
+        for (i in 0..287) {
+            dummyArray.add(0)
+        }
+        breakupArray = dummyArray
+    }
+    return breakupArray
 }
 
 @UiThread

@@ -34,6 +34,7 @@ import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
+import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Collections
 
@@ -44,7 +45,7 @@ class OreoReadinessFragment :
     ScrollListener {
     private val mViewModel: OreoReadinessViewModel by viewModels()
     private val mSharedViewModel: SharedOSCDViewModel by activityViewModels()
-    var currentItem: Int = 0
+
 
     private val mReadinessConAdapter: OreoSleepContributorAdapter by lazy {
         OreoSleepContributorAdapter(object :
@@ -120,10 +121,13 @@ class OreoReadinessFragment :
             binding.lytHeartRate.lineChart.gone()
             return
         }
+
+        val baseHrList = UtilClass.graphBaseInterval(null, null, heartRateData.size)
+
         binding.lytHeartRate.lineChart.visible()
         val sleepChart = SleepChartModel()
         val chartList = ArrayList<ChartModel>()
-        heartRateData.forEach {
+        heartRateData.forEachIndexed { index, it ->
             val chartModel = ChartModel()
 
             var value = it
@@ -132,7 +136,7 @@ class OreoReadinessFragment :
             }
 
             chartModel.value = value
-            chartModel.index = ""
+            chartModel.index = baseHrList[index]
             chartList.add(chartModel)
         }
         sleepChart.startTime = startTime ?: ""
@@ -161,10 +165,14 @@ class OreoReadinessFragment :
             binding.lytHRVariability.lineChart.gone()
             return
         }
+
+        val baseHrList = UtilClass.graphBaseInterval(null, null, hrvBreakUp.size)
+
         binding.lytHRVariability.lineChart.visible()
         val sleepChart = SleepChartModel()
         val chartList = ArrayList<ChartModel>()
-        hrvBreakUp.forEach {
+
+        hrvBreakUp.forEachIndexed { index, it ->
             val chartModel = ChartModel()
 
             var value = it
@@ -173,7 +181,7 @@ class OreoReadinessFragment :
             }
 
             chartModel.value = value
-            chartModel.index = ""
+            chartModel.index = baseHrList[index]
             chartList.add(chartModel)
         }
         sleepChart.startTime = startTime ?: ""
@@ -203,8 +211,10 @@ class OreoReadinessFragment :
         }
         binding.lytTemperature.lineChart.visible()
         val sleepChart = SleepChartModel()
+        val baseHrList = UtilClass.graphBaseInterval(null, null, temperatureBreakUp.size)
+
         val chartList = ArrayList<ChartModel>()
-        temperatureBreakUp.forEach {
+        temperatureBreakUp.forEachIndexed { index, it ->
             val chartModel = ChartModel()
 
             var value = it
@@ -213,7 +223,7 @@ class OreoReadinessFragment :
             }
 
             chartModel.value = value.toInt()
-            chartModel.index = ""
+            chartModel.index = baseHrList[index]
             chartList.add(chartModel)
         }
         sleepChart.startTime = startTime ?: ""

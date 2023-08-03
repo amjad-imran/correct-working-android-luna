@@ -3,10 +3,13 @@ package com.oreo.ui.workout.detect
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.ui.getParseList
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +27,9 @@ constructor(
         MutableLiveData<Pair<ArrayList<String>, LinkedHashMap<String, ArrayList<OreoAutoSportData>>>>()
     val oreoAutoSportData: LiveData<Pair<ArrayList<String>, LinkedHashMap<String, ArrayList<OreoAutoSportData>>>> =
         _oreoAutoSportData
+
+    private val _dayTimeMovementList = MutableLiveData<List<Int>>()
+    val dayTimeMovementList: LiveData<List<Int>> = _dayTimeMovementList
 
 
     fun getNotAcceptingData() {
@@ -62,6 +68,24 @@ constructor(
 
                         dateList.reverse()
                         _oreoAutoSportData.postValue(Pair(dateList, hm))
+                    }
+
+                    is CacheResult.GenericError -> {
+
+                    }
+                }
+            }
+
+        }
+    }
+
+    fun getDayTimeMovement(date:String) {
+
+        viewModelScope.launch(Dispatchers.IO) {
+            syncRepository.getMovementData(date).collect { resource ->
+                when (resource) {
+                    is CacheResult.Success -> {
+                        _dayTimeMovementList.postValue(resource.value.getParseList())
                     }
 
                     is CacheResult.GenericError -> {
