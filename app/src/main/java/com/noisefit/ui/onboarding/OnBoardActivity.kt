@@ -26,11 +26,6 @@ class OnBoardActivity : BaseActivity<ActivityOnBoardBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding.lottieBackAnim.playAnimation(
-            LottieDrawable.INFINITE,
-            R.raw.anim_challenge_back
-        )
-
         val showLogin = intent.getBooleanExtra("showLogin", false)
 
         if (showLogin) {

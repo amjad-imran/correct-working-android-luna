@@ -7,7 +7,10 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.activityViewModels
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOnBoardWeightBinding
+import com.noisefit.oreo.OreoMainActivity
+import com.noisefit.ui.onboarding.onboardProfile.GuestProfileSetupActivity
 import com.noisefit.ui.onboarding.onboardProfile.SetupProfileViewModel
+import com.noisefit.ui.onboarding.pairing.DeviceSetupActivity
 import com.noisefit_commans.models.WeightUnitSystem
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.InsiderAppEvents
@@ -34,8 +37,8 @@ class OnBoardWeightFragment :
         super.onViewCreated(view, savedInstanceState)
         viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.LAND_ON_ENTER_WEIGHT_PAGE_VISIT)
         binding.lytOnBoardProgress.apply {
-            pgBr.progress = 72
-            tvCount.text = getString(R.string.text_6)
+            pgBr.progress = 100
+            tvCount.text = getString(R.string.text_5)
         }
 
         viewModel.initialWeightUnit()
@@ -66,7 +69,10 @@ class OnBoardWeightFragment :
         binding.btnContinue.setOnClickListener {
             viewModel.saveUserInfoLocally()
             viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.CONTINUE_ENTER_WEIGHT_CLICK)
-            navigate(R.id.onBoardStepsGoalFragment)
+            //navigate(R.id.onBoardStepsGoalFragment)
+
+            viewModel.updateUserProfile()
+
         }
 
         binding.btnMetric.setOnClickListener {
@@ -98,7 +104,22 @@ class OnBoardWeightFragment :
 
 
     override fun subscribeObservers() {
+        viewModel.successMessage.observe(this) {
+            it.getContent()?.let {
+                val openProfile = activity is GuestProfileSetupActivity
+                viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.CONTINUE_ENTER_DAILY_GOAL_CLICK)
+                if (viewModel.isDevicePaired()) {
+                    goToDeviceSetupActivity(openProfile)
+                } else {
+                    startActivity(OreoMainActivity.getStartIntent(requireContext()))
+                    activity?.finish()
+                }
+            }
+        }
+    }
 
-
+    private fun goToDeviceSetupActivity(openProfile: Boolean) {
+        startActivity(DeviceSetupActivity.getStartIntent(requireContext(), openProfile))
+        activity?.finish()
     }
 }

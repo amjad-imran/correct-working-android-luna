@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/lytHome"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/ivHome"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/ic_dash_summary_default" />
+
+        <TextView
+            style="@style/Tinny"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:fontFamily="@font/gilroy_medium"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:text="@string/text_home" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lytSleep"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/ivSleep"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/ic_dash_oreo_sleep_default" />
+
+        <TextView
+            style="@style/Tinny"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:fontFamily="@font/gilroy_medium"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:text="@string/text_sleep"
+            tools:text="Home" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lytReadiness"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/ivReadiness"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/ic_dash_oreo_readiness_default" />
+
+        <TextView
+            style="@style/Tinny"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:fontFamily="@font/gilroy_medium"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:text="Readiness"
+            tools:text="Home" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lytActivity"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/ivActivity"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/ic_dash_oreo_activity_default" />
+
+        <TextView
+            style="@style/Tinny"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:fontFamily="@font/gilroy_medium"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:text="Activity"
+            tools:text="Home" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lytMyDevice"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/ivMyDevice"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/ic_dash_device_default" />
+
+        <TextView
+            style="@style/Tinny"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:fontFamily="@font/gilroy_medium"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:text="@string/text_my_device"
+            tools:text="Home" />
+    </LinearLayout>
+
+
+</LinearLayout>

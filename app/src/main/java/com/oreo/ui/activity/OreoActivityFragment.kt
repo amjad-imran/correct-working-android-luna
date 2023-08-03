@@ -54,17 +54,18 @@ class OreoActivityFragment :
 
     private val mWorkoutAdapter: OreoAWorkoutAdapter by lazy {
         OreoAWorkoutAdapter(object : OreoAWorkoutAdapter.OnItemClickListener {
-            override fun onItemClick(data: OActivityListModal) {
-                moveToDetailsScreen(data)
+            override fun onItemClick(data: OActivityListModal,position: Int) {
+                moveToDetailsScreen(data,position)
             }
 
         })
     }
 
-    private fun moveToDetailsScreen(data: OActivityListModal) {
+    private fun moveToDetailsScreen(data: OActivityListModal,position: Int) {
         navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
             putString("workoutName", data.getFormattedActivityName())
             putString("workoutId", data.id)
+            putInt("position", position)
         })
     }
 
@@ -284,7 +285,7 @@ class OreoActivityFragment :
                         lowMovValue++
                         chartModel.length =
                             (binding.lytDailyMovement.candleChart.max * 0.4).toInt()
-                        chartModel.color = Color.parseColor("#4cffd230")
+                        chartModel.color = Color.parseColor("#2d525b")
                         chartModel.type = CandleChartModel.Type.LOW
 
                     }
@@ -293,7 +294,7 @@ class OreoActivityFragment :
                         medMovValue++
                         chartModel.length =
                             (binding.lytDailyMovement.candleChart.max * 0.6).toInt()
-                        chartModel.color = Color.parseColor("#ffd230")
+                        chartModel.color = Color.parseColor("#8ed3f1")
                         chartModel.type = CandleChartModel.Type.MEDIUM
                     }
 
@@ -309,7 +310,7 @@ class OreoActivityFragment :
                     else -> {
                         chartModel.length =
                             (binding.lytDailyMovement.candleChart.max * 0.2).toInt()
-                        chartModel.color = Color.parseColor("#4c4c4c")
+                        chartModel.color = Color.parseColor("#3dffffff")
                         chartModel.type = CandleChartModel.Type.INACTIVE
                         inactiveMovValue++
                     }
@@ -443,7 +444,9 @@ class OreoActivityFragment :
             mWorkoutAdapter.setData(recentWorkout)
             binding.lytWorkouts.rvWorkouts.visible()
             binding.lytWorkouts.tvEmptyMsg.gone()
+            binding.lytWorkouts.ivViewAll.visible()
         } else {
+            binding.lytWorkouts.ivViewAll.invisible()
             binding.lytWorkouts.rvWorkouts.gone()
             binding.lytWorkouts.tvEmptyMsg.visible()
             if (mSharedViewModel.selectedDate == DateFormats.getCurrentDateOreoFormat()) {

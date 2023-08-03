@@ -24,20 +24,19 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/side_margin"
             android:layout_marginTop="4dp"
-            android:textSize="12sp"
             android:layout_marginEnd="@dimen/side_margin"
             android:textColor="@color/white_48"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tvToday"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@id/tvToday"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvToday"
+            app:layout_constraintTop_toTopOf="@id/tvToday"
             tools:text="46" />
 
-        <include
-            android:id="@+id/lytProgress"
-            layout="@layout/layout_goals_progress"
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/pbSteps"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="4dp"
             android:layout_marginStart="@dimen/side_margin"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="@dimen/side_margin"
@@ -45,7 +44,10 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvToday" />
+            app:layout_constraintTop_toBottomOf="@+id/tvToday"
+            app:trackColor="#0affffff"
+            app:trackCornerRadius="2dp"
+            app:trackThickness="4dp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -82,15 +82,7 @@ class PrivacyBottomDialogFragment : BaseBottomSheet<FragmentPrivacyBottomDialogL
             })
         )
 
-        binding.checkbox.setOnCheckedChangeListener { _, isChecked ->
-            // Code here
-            if (isChecked) {
-                binding.btnAgree.enable()
-            } else {
-                binding.btnAgree.disable()
-            }
-        }
-
+        binding.btnAgree.enable()
         binding.btnAgree.setOnClickListener {
             listener?.onPrivacyStatus(true)
             dismiss()

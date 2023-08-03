@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Luna Ring</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
@@ -1661,7 +1661,7 @@
     <string name="text_last_month">Last month</string>
     <string name="text_luna_ring">Luna ring</string>
     <string name="text_pair_your_device_to_start_using">Pair your device to start using.</string>
-    <string name="text_noisefit_cues">NoiseFit cues</string>
+    <string name="text_luna_cues" tools:ignore="ExtraTranslation">Luna cues</string>
     <string name="text_check_for_an_update">Check for an update</string>
     <string name="text_what_s_new">What’s new?</string>
     <string name="text_new_update_available">New update available</string>
@@ -1692,4 +1692,12 @@
     <string name="text_device">Device</string>
     <string name="text_customer_support_helpline">Customer support helpline</string>
     <string name="text_raise_a_complaint">Raise a complaint</string>
+    <string name="text_login_message">Use any of the below mentioned options to join NoiseFit and start your fit and healthy lifestyle</string>
+    <string name="text_welcome_to_noisefit">Welcome to NoiseFit</string>
+    <string name="text_connect_your_luna_ring">Connect your Luna Ring</string>
+    <string name="text_ring_connect_message"><![CDATA[Connect your Luna Ring to the charger & make sure that Bluetooth is enabled on your phone.]]></string>
+    <string name="text_search_now">Search now</string>
+    <string name="text_no_luna_ring_yet">No Luna Ring yet?</string>
+    <string name="text_ring_message_find_device">Make sure your ring is placed on the charger and your phone’s bluetooth is enabled.</string>
+    <string name="text_pairing_ring_message">Make sure your ring is placed on the charger</string>
 </resources>

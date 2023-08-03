@@ -60,11 +60,6 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding.lottieBackAnim.playAnimation(
-            LottieDrawable.INFINITE,
-            R.raw.anim_splash_screen
-        )
-
         binding.tvAppVersion.text =
             getString(R.string.app_version, ApplicationUtils.getAppVersion())
         viewModel.setIgnoreVersion(viewModel.localDataStore.getIgnoreVersion())

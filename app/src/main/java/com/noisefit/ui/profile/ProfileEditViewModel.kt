@@ -25,6 +25,7 @@ import com.noisefit.ui.onboarding.onboardProfile.MinHeightInCm
 import com.noisefit.ui.onboarding.onboardProfile.MinHeightInInches
 import com.noisefit.ui.onboarding.onboardProfile.MinWeightInKg
 import com.noisefit.ui.onboarding.onboardProfile.MinWeightInLbs
+import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -44,6 +45,8 @@ import com.noisefit_commans.utils.ScreenUtils
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.Period
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -153,6 +156,13 @@ constructor(
     fun getDob(): String {
         val month = dobMonth
         return "$dobYear-${month.toMakeTwoDecimal()}-${dobDate.toMakeTwoDecimal()}"
+    }
+
+    fun getAge(): Int {
+        return Period.between(
+            LocalDate.of(dobYear, dobMonth, dobDate),
+            LocalDate.now()
+        ).years
     }
 
     fun setDob(year: Int, month: Int, day: Int) {
@@ -319,6 +329,16 @@ constructor(
             "female" -> Gender.FEMALE.type
             "non-binary", "other" -> Gender.OTHER.type
             else -> Gender.NotToSay.type
+        }
+        return temp
+    }
+    private fun getGenderForBmr(): Gender {
+
+        val temp: Gender = when (gender.value?.lowercase()) {
+            "male" -> Gender.MALE
+            "female" -> Gender.FEMALE
+            "non-binary", "other" -> Gender.OTHER
+            else -> Gender.NotToSay
         }
         return temp
     }
@@ -503,12 +523,33 @@ constructor(
             userInfo = null
         }
 
+        val stepGoalNew = ApplicationUtils.bmiCalculate(
+            heightInCm.value!!.toFloat(),
+            weightInKg.value!!.toFloat(),
+            unit.value?.name?:Units.METRIC.name,
+            unit.value?.name?:Units.METRIC.name
+        )
+
+        val caloriesGoalNew = ApplicationUtils.bmrCalculate(
+            heightInCm.value!!.toFloat(),
+            weightInKg.value!!.toFloat(),
+            unit.value?.name?:Units.METRIC.name,
+            unit.value?.name?:Units.METRIC.name,
+            getAge(),
+            getGenderForBmr()
+
+        )
+        val stepsGoal = stepGoalNew.second.toInt()
+       val caloriesGoal=caloriesGoalNew
+
 
         val userGoals = JsonObject()
         userGoals.apply {
             addProperty("sleep_goals", DefaultSleepGoal)
-            addProperty("step_goals", localUser?.userGoals?.stepGoal)
-            addProperty("calories_goals", localUser?.userGoals?.caloriesGoal)
+            addProperty("step_goals", stepsGoal)
+//            addProperty("step_goals", localUser?.userGoals?.stepGoal)
+            addProperty("calories_goals", caloriesGoal)
+//            addProperty("calories_goals", localUser?.userGoals?.caloriesGoal)
             addProperty("distance_goals", getDistanceInMeter(localUser?.userGoals?.distanceGoal))
             addProperty("unit_system", unit.value?.name)
         }

@@ -42,7 +42,7 @@ sealed class OSummaryHealthOverviewClickEnum {
     object SleepDetailsWorkoutClick : OSummaryHealthOverviewClickEnum()
     object ActivityDetailsWorkoutClick : OSummaryHealthOverviewClickEnum()
     object ReadinessDetailsWorkoutClick : OSummaryHealthOverviewClickEnum()
-    data class ItemWorkoutClick(val id: String, val workOutName: String) :
+    data class ItemWorkoutClick(val id: String, val workOutName: String, val position: Int) :
         OSummaryHealthOverviewClickEnum()
 
     object AutoSportsDelete : OSummaryHealthOverviewClickEnum()
@@ -369,9 +369,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     DateFormats.time12Meridian
                 )
 
-                binding.tvHrValue.text = if(data.data.lowestHr==null){
+                binding.tvHrValue.text = if (data.data.lowestHr == null) {
                     "--"
-                }else{
+                } else {
                     data.data.lowestHr.toString()
                 }
 
@@ -765,11 +765,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.rvWorkouts.layoutManager =
                 LinearLayoutManager(binding.rvWorkouts.context, LinearLayoutManager.VERTICAL, false)
             val adapter1 = OreoAWorkoutAdapter(object : OreoAWorkoutAdapter.OnItemClickListener {
-                override fun onItemClick(data: OActivityListModal) {
+                override fun onItemClick(data: OActivityListModal, position: Int) {
                     itemClickListener?.invoke(
                         OSummaryHealthOverviewClickEnum.ItemWorkoutClick(
                             data.id ?: "",
-                            data.getFormattedActivityName()
+                            data.getFormattedActivityName(),
+                            position
                         )
                     )
                 }
@@ -794,10 +795,15 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.AddWorkoutClick)
 
             }
+
             binding.ivViewAll.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.ViewAllWorkoutClick)
 
             }
+            if (todayWorkout.listData.isNotEmpty()) {
+                binding.ivViewAll.visible()
+            } else
+                binding.ivViewAll.invisible()
 
         }
     }

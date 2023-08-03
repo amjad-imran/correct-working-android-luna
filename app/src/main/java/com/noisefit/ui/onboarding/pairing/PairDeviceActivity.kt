@@ -24,10 +24,6 @@ class PairDeviceActivity : BaseActivity<ActivityPairDeviceBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.lottieBackAnim.playAnimation(
-            LottieDrawable.INFINITE,
-            R.raw.anim_challenge_back
-        )
     }
 
 

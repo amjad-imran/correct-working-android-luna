@@ -113,6 +113,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                     navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
                         putString("workoutName", type.workOutName)
                         putString("workoutId", type.id)
+                        putInt("position", type.position)
                     })
                 }
 
@@ -162,15 +163,15 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 }
 
                 OSummaryHealthOverviewClickEnum.ActivityDetailsWorkoutClick -> {
-                    mainViewModel.navigateTo(BottomNavOption.COMMUNITY)
+                    mainViewModel.navigateTo(BottomNavOption.ACTIVITY)
                 }
 
                 OSummaryHealthOverviewClickEnum.ReadinessDetailsWorkoutClick -> {
-                    mainViewModel.navigateTo(BottomNavOption.SHOP)
+                    mainViewModel.navigateTo(BottomNavOption.READINESS)
                 }
 
                 OSummaryHealthOverviewClickEnum.SleepDetailsWorkoutClick -> {
-                    mainViewModel.navigateTo(BottomNavOption.EXPLORE)
+                    mainViewModel.navigateTo(BottomNavOption.SLEEP)
                 }
             }
         }

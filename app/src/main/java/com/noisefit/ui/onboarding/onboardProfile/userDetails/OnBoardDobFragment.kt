@@ -22,8 +22,8 @@ class OnBoardDobFragment :
         super.onViewCreated(view, savedInstanceState)
         viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.LAND_ON_ENTER_AGE_PAGE_VISIT)
         binding.lytOnBoardProgress.apply {
-            pgBr.progress = 36
-            tvCount.text = getString(R.string.text_3)
+            pgBr.progress = 40
+            tvCount.text = getString(R.string.text_2)
         }
 
         val c = Calendar.getInstance()

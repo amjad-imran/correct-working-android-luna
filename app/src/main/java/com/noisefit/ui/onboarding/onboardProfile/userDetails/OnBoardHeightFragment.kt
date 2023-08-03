@@ -36,8 +36,8 @@ class OnBoardHeightFragment :
         super.onViewCreated(view, savedInstanceState)
         viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.LAND_ON_ENTER_HEIGHT_PAGE_VISIT)
         binding.lytOnBoardProgress.apply {
-            pgBr.progress = 60
-            tvCount.text = getString(R.string.text_5)
+            pgBr.progress = 80
+            tvCount.text = getString(R.string.text_4)
         }
 
         handleButton()

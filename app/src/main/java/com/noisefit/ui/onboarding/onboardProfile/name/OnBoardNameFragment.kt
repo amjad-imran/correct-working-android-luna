@@ -33,7 +33,7 @@ class OnBoardNameFragment :
 //        }
         viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.ACCOUNT_SET_UP_STARTED)
         binding.lytOnBoardProgress.apply {
-            pgBr.progress = 12
+            pgBr.progress = 20
             tvCount.text = getString(R.string.text_1)
         }
 
@@ -86,7 +86,7 @@ class OnBoardNameFragment :
 
             viewModel.saveUserInfoLocally()
             viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.CONTINUE_ENTER_NAME_CLICK)
-            navigate(R.id.endGameFragment)
+            navigate(R.id.onBoardDobFragment)
         }
     }
 

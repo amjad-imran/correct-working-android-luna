@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,6 +33,7 @@ import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.share.ShareUtil
 import dagger.hilt.android.AndroidEntryPoint
+import eightbitlab.com.blurview.RenderScriptBlur
 
 @AndroidEntryPoint
 class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
@@ -58,68 +60,53 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         super.onCreate(savedInstanceState)
 
         navController = findNavController(com.noisefit.luna.R.id.o_nav_host_fragment)
-        binding.navView.itemIconTintList = null
-        binding.navView.setOnItemReselectedListener {
-            return@setOnItemReselectedListener
-        }
-
-        binding.navView.setOnItemSelectedListener {
-            val lastDestination = navController?.currentDestination
-
-            when (it.itemId) {
-                R.id.navigation_oreo_home -> {
-                    if (lastDestination?.id != R.id.navigation_oreo_home) {
-                        navController?.popBackStack(R.id.navigation_oreo_home, true)
-                        navController?.navigate(R.id.navigation_oreo_home)
-                    }
-                }
-
-                R.id.navigation_oreo_readiness -> {
-                    if (lastDestination?.id != R.id.navigation_oreo_readiness) {
-                        navController?.popBackStack(R.id.navigation_oreo_readiness, true)
-                        navController?.navigate(R.id.navigation_oreo_readiness)
-                    }
-                }
-
-                R.id.navigation_oreo_workouts -> {
-                    if (lastDestination?.id != R.id.navigation_oreo_workouts) {
-                        navController?.popBackStack(R.id.navigation_oreo_workouts, true)
-                        navController?.navigate(R.id.navigation_oreo_workouts)
-                    }
-                }
-
-                R.id.navigation_oreo_sleep -> {
-                    if (lastDestination?.id != R.id.navigation_oreo_sleep) {
-                        navController?.popBackStack(R.id.navigation_oreo_sleep, true)
-                        navController?.navigate(R.id.navigation_oreo_sleep)
-                    }
-                }
-
-                R.id.navigation_oreo_my_device -> {
-                    if (lastDestination?.id != R.id.navigation_oreo_my_device) {
-                        navController?.popBackStack(R.id.navigation_oreo_my_device, true)
-                        navController?.navigate(R.id.navigation_oreo_my_device)
-                    }
-                }
-
-
-            }
-            true
-        }
+        setNavViewListeners()
+        setBlur()
 
         viewModel.sessionManager.getPairedState()
         checkBluetooth()
 
     }
 
-    private fun setBottomMenu(colorFitDevice: ColorFitDevice?) {
-        val lastDestination = navController?.currentDestination
+    private fun setBlur() {
+        val radius = 20f;
 
+        val decorView = getWindow().getDecorView();
+        // ViewGroup you want to start blur from. Choose root as close to BlurView in hierarchy as possible.
+        val rootView =  binding.container
 
-        //setSelected()
-        lastDestination?.let {
-            if (it.id == R.id.navigation_oreo_home) {
-                binding.navView.selectedItemId = com.noisefit.luna.R.id.navigation_summary
+        // Optional:
+        // Set drawable to draw in the beginning of each blurred frame.
+        // Can be used in case your layout has a lot of transparent space and your content
+        // gets a too low alpha value after blur is applied.
+        val windowBackground = decorView.getBackground();
+
+        binding.blurView.setupWith(rootView, RenderScriptBlur(this)) // or RenderEffectBlur
+            .setFrameClearDrawable(windowBackground) // Optional
+            .setBlurRadius(radius)
+    }
+
+    private fun setNavViewListeners() {
+        binding.navView.apply {
+            lytHome.setOnClickListener {
+                selectMenuItem(BottomNavOption.HOME)
+
+            }
+            lytActivity.setOnClickListener {
+                selectMenuItem(BottomNavOption.ACTIVITY)
+
+            }
+            lytReadiness.setOnClickListener {
+                selectMenuItem(BottomNavOption.READINESS)
+
+            }
+            lytSleep.setOnClickListener {
+                selectMenuItem(BottomNavOption.SLEEP)
+
+            }
+            lytMyDevice.setOnClickListener {
+                selectMenuItem(BottomNavOption.MY_DEVICE)
+
             }
         }
     }
@@ -145,6 +132,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             }
         }
     }
+
     /**
      * Should be called after all
      * required bluetooth permissions are granted
@@ -272,21 +260,24 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         viewModel.bottomNavigation.observe(this) {
             it.getContent()?.let { navOpt ->
                 when (navOpt) {
-                    BottomNavOption.HOME -> {}
-                    BottomNavOption.EXPLORE -> {
-                        binding.navView.selectedItemId = R.id.navigation_oreo_sleep
-                    }
-
-                    BottomNavOption.SHOP -> {
-                        binding.navView.selectedItemId = R.id.navigation_oreo_readiness
+                    BottomNavOption.HOME -> {
+                        selectMenuItem(BottomNavOption.HOME)
                     }
 
                     BottomNavOption.MY_DEVICE -> {
-                        binding.navView.selectedItemId = R.id.navigation_oreo_my_device
+                        selectMenuItem(BottomNavOption.MY_DEVICE)
                     }
 
-                    BottomNavOption.COMMUNITY -> {
-                        binding.navView.selectedItemId = R.id.navigation_oreo_workouts
+                    BottomNavOption.SLEEP -> {
+                        selectMenuItem(BottomNavOption.SLEEP)
+                    }
+
+                    BottomNavOption.READINESS -> {
+                        selectMenuItem(BottomNavOption.READINESS)
+                    }
+
+                    BottomNavOption.ACTIVITY -> {
+                        selectMenuItem(BottomNavOption.ACTIVITY)
                     }
                 }
             }
@@ -302,10 +293,10 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 R.id.navigation_oreo_my_device,
                 R.id.navigation_oreo_sleep
                 -> {
-                    binding.navView.visible()
+                    binding.navView.root.visible()
                 }
 
-                else -> binding.navView.gone()
+                else -> binding.navView.root.gone()
             }
         }
 
@@ -340,7 +331,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     if (it.currentDestination?.id == R.id.navigation_oreo_home) {
                         finish()
                     } else {
-                        binding.navView.selectedItemId = com.noisefit.luna.R.id.navigation_oreo_home
+                        selectMenuItem(BottomNavOption.HOME)
                         navController?.popBackStack(R.id.navigation_oreo_home, true)
                         navController?.navigate(R.id.navigation_oreo_home)
                     }
@@ -353,6 +344,82 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         } ?: super.onBackPressed()
     }
 
+    //TODO opimize
+    private fun selectMenuItem(item: BottomNavOption) {
+        when (item) {
+            BottomNavOption.HOME -> {
+                binding.navView.ivHome.setImageResource(R.drawable.ic_dash_summary_selected)
+                binding.navView.ivSleep.setImageResource(R.drawable.ic_dash_oreo_sleep_default)
+                binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness_default)
+                binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity_default)
+                binding.navView.ivMyDevice.setImageResource(R.drawable.ic_dash_device_default)
+
+                val lastDestination = navController?.currentDestination
+                if (lastDestination?.id != R.id.navigation_oreo_home) {
+                    navController?.popBackStack(R.id.navigation_oreo_home, true)
+                    navController?.navigate(R.id.navigation_oreo_home)
+                }
+            }
+
+            BottomNavOption.SLEEP -> {
+                binding.navView.ivHome.setImageResource(R.drawable.ic_dash_summary_default)
+                binding.navView.ivSleep.setImageResource(R.drawable.ic_dash_oreo_sleep)
+                binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness_default)
+                binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity_default)
+                binding.navView.ivMyDevice.setImageResource(R.drawable.ic_dash_device_default)
+
+                val lastDestination = navController?.currentDestination
+                if (lastDestination?.id != R.id.navigation_oreo_sleep) {
+                    navController?.popBackStack(R.id.navigation_oreo_sleep, true)
+                    navController?.navigate(R.id.navigation_oreo_sleep)
+                }
+            }
+
+            BottomNavOption.READINESS -> {
+                binding.navView.ivHome.setImageResource(R.drawable.ic_dash_summary_default)
+                binding.navView.ivSleep.setImageResource(R.drawable.ic_dash_oreo_sleep_default)
+                binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness)
+                binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity_default)
+                binding.navView.ivMyDevice.setImageResource(R.drawable.ic_dash_device_default)
+                val lastDestination = navController?.currentDestination
+                if (lastDestination?.id != R.id.navigation_oreo_readiness) {
+                    navController?.popBackStack(R.id.navigation_oreo_readiness, true)
+                    navController?.navigate(R.id.navigation_oreo_readiness)
+                }
+            }
+
+            BottomNavOption.ACTIVITY -> {
+                binding.navView.ivHome.setImageResource(R.drawable.ic_dash_summary_default)
+                binding.navView.ivSleep.setImageResource(R.drawable.ic_dash_oreo_sleep_default)
+                binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness_default)
+                binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity)
+                binding.navView.ivMyDevice.setImageResource(R.drawable.ic_dash_device_default)
+
+                val lastDestination = navController?.currentDestination
+                if (lastDestination?.id != R.id.navigation_oreo_workouts) {
+                    navController?.popBackStack(R.id.navigation_oreo_workouts, true)
+                    navController?.navigate(R.id.navigation_oreo_workouts)
+                }
+            }
+
+            BottomNavOption.MY_DEVICE -> {
+                binding.navView.ivHome.setImageResource(R.drawable.ic_dash_summary_default)
+                binding.navView.ivSleep.setImageResource(R.drawable.ic_dash_oreo_sleep_default)
+                binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness_default)
+                binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity_default)
+                binding.navView.ivMyDevice.setImageResource(R.drawable.ic_dash_device_selected)
+
+                val lastDestination = navController?.currentDestination
+                if (lastDestination?.id != R.id.navigation_oreo_my_device) {
+                    navController?.popBackStack(R.id.navigation_oreo_my_device, true)
+                    navController?.navigate(R.id.navigation_oreo_my_device)
+                }
+            }
+        }
+
+
+    }
+
     override fun getViewBinding() = ActivityOreoMainBinding.inflate(layoutInflater)
 
     override fun setLoadingView(): DefaultLoaderBinding = binding.progressBar
@@ -361,6 +428,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     }
 }
+
 enum class BottomNavOption {
-    HOME, EXPLORE, SHOP, MY_DEVICE, COMMUNITY
+    HOME, SLEEP, READINESS, ACTIVITY, MY_DEVICE
 }

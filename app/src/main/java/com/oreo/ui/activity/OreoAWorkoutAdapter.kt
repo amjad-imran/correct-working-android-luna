@@ -23,7 +23,7 @@ class OreoAWorkoutAdapter(val mListener:OnItemClickListener) :
                 binding.divider1.root.visible()
 
             binding.root.setOnClickListener {
-                mListener.onItemClick(resultData)
+                mListener.onItemClick(resultData,bindingAdapterPosition)
             }
         }
     }
@@ -51,7 +51,7 @@ class OreoAWorkoutAdapter(val mListener:OnItemClickListener) :
     }
 
     interface OnItemClickListener{
-        fun onItemClick(data: OActivityListModal)
+        fun onItemClick(data: OActivityListModal,position: Int)
     }
 }
 

@@ -55,7 +55,7 @@ class OAddWorkoutFragment :
             tvSave.setTextColor(
                 ContextCompat.getColor(
                     requireContext(),
-                    R.color.accent_color_purple
+                    R.color.text_color_luna
                 )
             )
         }

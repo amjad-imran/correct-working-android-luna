@@ -328,6 +328,7 @@ dependencies {
     implementation("com.robinhood.ticker:ticker:2.0.4")
     implementation("com.github.skydoves:balloon:1.5.2")
 
+    implementation("com.github.Dimezis:BlurView:version-2.0.3")
 
     implementation("com.github.bmarrdev:android-DecoView-charting:v1.2")
     implementation("com.github.alirezat775:carousel-view:1.1.1")

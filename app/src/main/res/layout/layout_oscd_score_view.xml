@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        style="@style/ModalStyleReadiness"
+        style="@style/ModalStyleTransparentOreo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

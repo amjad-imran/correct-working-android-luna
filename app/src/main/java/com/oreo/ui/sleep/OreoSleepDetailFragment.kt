@@ -126,7 +126,7 @@ class OreoSleepDetailFragment :
         sleepChart.list = chartList
 
         binding.lytHRVariability.lineChart.updateGraphColor(
-            Color.parseColor("#ff59da"),
+            Color.parseColor("#ff80e3"),
             Color.parseColor("#4cff59da"),
             Color.parseColor("#00ff59da")
         )
@@ -166,9 +166,9 @@ class OreoSleepDetailFragment :
         sleepChart.endTime = sleepEndTime ?: ""
         sleepChart.list = chartList
         binding.lytHeartRate.lineChart.updateGraphColor(
-            Color.parseColor("#ff3358"),
-            Color.parseColor("#4cff3358"),
-            Color.parseColor("#00ff3358")
+            Color.parseColor("#ff6b86"),
+            Color.parseColor("#4cff6581"),
+            Color.parseColor("#00ff6581")
         )
 
         binding.lytHeartRate.lineChart.updateDataWithMax(sleepChart, 5, false, true)
@@ -194,7 +194,6 @@ class OreoSleepDetailFragment :
     }
 
     private fun setSleepBannerViewPager(data: List<Nudges>?) {
-
         if (data.isNullOrEmpty()) {
             binding.lytSleepScore.lytSleepScoreBanner.root.gone()
             return

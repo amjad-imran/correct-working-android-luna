@@ -669,7 +669,7 @@ fun TextView.makeLinks(
             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         spannableString.setSpan(
-            ForegroundColorSpan(resources.getColor(com.noisefit_commans.R.color.purple_)),
+            ForegroundColorSpan(resources.getColor(com.noisefit_commans.R.color.link_color)),
             startIndexOfLink,
             startIndexOfLink + link.first.length,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
