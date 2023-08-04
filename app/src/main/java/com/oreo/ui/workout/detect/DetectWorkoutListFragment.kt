@@ -8,6 +8,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentDetectWorkoutListBinding
 import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.utils.LOGS
 import com.oreo.ui.activity.OreoDMAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -50,11 +51,13 @@ class DetectWorkoutListFragment :
                 pairData.second,
                 pairData.first,
                 object : DetectWorkoutFragmentListener {
-                    override fun onIdentifyWorkout(data: OreoAutoSportData, key: String) {
-                        navigate(R.id.addWorkoutFragment, Bundle().apply {
-                            putParcelable("autoSport", data)
+                    override fun onIdentifyWorkout(
+                        data: OreoAutoSportData,
+                        key: String,
+                        movementList: List<Int>?
+                    ) {
+                        navigate(DetectWorkoutListFragmentDirections.actionDetectWorkoutListFragmentToAddWorkoutFragment().setMovementList(movementList?.toIntArray()).setAutoSport(data))
 
-                        })
                     }
 
                     override fun onDismissWorkout(data: OreoAutoSportData, key: String) {

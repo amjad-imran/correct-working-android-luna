@@ -5,9 +5,18 @@ public class CandleChartModel extends ChartModel {
     private int length;
     private int color;
 
+    private String identifyText;
     private String bottomLineText;
     private String topText;
     private Type type;
+
+    public String getIdentifyText() {
+        return identifyText;
+    }
+
+    public void setIdentifyText(String identifyText) {
+        this.identifyText = identifyText;
+    }
 
     public String getTopText() {
         return topText;

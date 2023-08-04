@@ -11,7 +11,6 @@ import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY
 import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.CandleChartModel
 import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,13 +25,17 @@ class DetectWorkoutFragment :
     private val viewModel: DetectWorkoutViewModel by viewModels()
     private var detectWorkoutFragmentListener: DetectWorkoutFragmentListener? = null
     private val oreoAutoSportData = ArrayList<OreoAutoSportData>()
-    private var key: String = ""
+
 
 
     private val detectWorkoutAdapter: DetectWorkoutAdapter by lazy {
         DetectWorkoutAdapter(object : DetectWorkoutListener {
             override fun onIdentifyWorkout(data: OreoAutoSportData, position: Int) {
-                detectWorkoutFragmentListener?.onIdentifyWorkout(data, key)
+                detectWorkoutFragmentListener?.onIdentifyWorkout(
+                    data,
+                    viewModel.dayKey,
+                    viewModel.movementList
+                )
             }
 
             override fun onDismissWorkout(data: OreoAutoSportData, position: Int) {
@@ -46,7 +49,7 @@ class DetectWorkoutFragment :
                     if (updated) {
                         viewModel.deleteAutoSport(data.id)
                         detectWorkoutAdapter.removeItem(position)
-                        detectWorkoutFragmentListener?.onDismissWorkout(data, key)
+                        detectWorkoutFragmentListener?.onDismissWorkout(data, viewModel.dayKey)
                     }
                 }
 
@@ -103,7 +106,7 @@ class DetectWorkoutFragment :
     }
 
     private fun setData(movementList: List<Int>) {
-
+        viewModel.movementList = movementList
         val topIndexList = UtilClass.getDetectedWorkoutMovementList(oreoAutoSportData)
         val baseHrList = UtilClass.graphBaseInterval(null, null, movementList.size)
         val candleChartModelList: MutableList<CandleChartModel> =
@@ -111,7 +114,7 @@ class DetectWorkoutFragment :
         movementList.forEachIndexed { index, data ->
 
             val chartModel = CandleChartModel()
-            LOGS.d("DSAsad;kjklsadjlksdaljjsadljld ${topIndexList[index]}")
+
             chartModel.bottomLineText = baseHrList[index]
             chartModel.topText = topIndexList[index].toString()
             when (data) {
@@ -162,7 +165,7 @@ class DetectWorkoutFragment :
             it.getParcelableArrayList<OreoAutoSportData>(ARG_PARAM1)
                 ?.let { it1 -> oreoAutoSportData.addAll(it1) }
 
-            key = it.getString(ARG_PARAM2)!!
+            viewModel.dayKey = it.getString(ARG_PARAM2)!!
         }
     }
 
@@ -181,6 +184,6 @@ class DetectWorkoutFragment :
 }
 
 interface DetectWorkoutFragmentListener {
-    fun onIdentifyWorkout(data: OreoAutoSportData, key: String)
+    fun onIdentifyWorkout(data: OreoAutoSportData, key: String, movementList: List<Int>?)
     fun onDismissWorkout(data: OreoAutoSportData, key: String)
 }
