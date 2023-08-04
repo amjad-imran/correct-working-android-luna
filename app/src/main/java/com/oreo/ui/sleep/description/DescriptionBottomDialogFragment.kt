@@ -81,7 +81,7 @@ class DescriptionBottomDialogFragment :
         if (pos == 0) {
             isFirst = true
         }
-        binding.vpImageSlider.currentItem = pos
+        binding.vpImageSlider.setCurrentItem(pos, false)
 
 
     }
