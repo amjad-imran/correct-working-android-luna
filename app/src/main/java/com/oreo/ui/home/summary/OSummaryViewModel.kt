@@ -28,7 +28,6 @@ import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -310,7 +309,7 @@ constructor(
 
     fun getRecentWorkoutList() {
         viewModelScope.launch {
-            userRepository.getRecentWorkoutList().collect { resource ->
+            userRepository.getRecentWorkoutList(true).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
@@ -347,6 +346,11 @@ constructor(
                                 data.value = "1"
                                 data.listData = it
                                 summary.healthOverviewData.postValue(summary.healthOverviewData.value)
+                                summary.healthOverviewData.value?.add(
+                                    OHealthOverview.Dummy(
+                                        "1"
+                                    )
+                                )
                             } else {
                                 summary.healthOverviewData.value?.add(
                                     OHealthOverview.TodayWorkout(
@@ -354,7 +358,13 @@ constructor(
                                         it
                                     )
                                 )
+                                summary.healthOverviewData.value?.add(
+                                    OHealthOverview.Dummy(
+                                        "1"
+                                    )
+                                )
                                 summary.healthOverviewData.postValue(summary.healthOverviewData.value)
+
                             }
                         }
                     }

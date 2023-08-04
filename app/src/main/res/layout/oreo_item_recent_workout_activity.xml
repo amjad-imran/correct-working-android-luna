@@ -7,8 +7,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/back_modal_transparent_oreo"
         android:layout_height="wrap_content">
 
 
