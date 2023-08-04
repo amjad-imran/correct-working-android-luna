@@ -158,7 +158,7 @@
 
                 <include
                     android:id="@+id/lytWorkouts"
-                    layout="@layout/oreo_layout_recent_activity"
+                    layout="@layout/oreo_layout_workout_activity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="40dp"

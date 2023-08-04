@@ -475,10 +475,10 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
-    override suspend fun getRecentWorkoutList(): Flow<Resource<BaseApiResponse<List<OActivityListModal>>>> {
+    override suspend fun getRecentWorkoutList(isToday: Boolean): Flow<Resource<BaseApiResponse<List<OActivityListModal>>>> {
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.OREO_BASE_URL}/activity/v1/recent/workout"
-            remoteDataSource.getRecentWorkoutList(url)
+            remoteDataSource.getRecentWorkoutList(url,isToday)
         }
     }
 

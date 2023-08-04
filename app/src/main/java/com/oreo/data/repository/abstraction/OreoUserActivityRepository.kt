@@ -43,7 +43,7 @@ interface OreoUserActivityRepository {
     suspend fun getWorkoutDetails(id: String): Flow<Resource<BaseApiResponse<OWorkoutDetailsResponseModel>>>
 
     suspend fun getWorkoutList(): Flow<Resource<BaseApiResponse<List<OWorkoutListModal>>>>
-    suspend fun getRecentWorkoutList(): Flow<Resource<BaseApiResponse<List<OActivityListModal>>>>
+    suspend fun getRecentWorkoutList(isToday: Boolean): Flow<Resource<BaseApiResponse<List<OActivityListModal>>>>
 
     suspend fun getInternalPagesData(
         selectDate: String,

@@ -23,12 +23,9 @@ sealed class OHealthOverview {
 
 
 
-//    class Demo(
-//        val hrValue: Int,
-//        val spo2Value: Int,
-//        val stressValue: Int,
-//        val bodyTempValue: Int
-//    ) : OHealthOverview()
+    class Dummy(
+        var value: String,
+    ) : OHealthOverview()
 
     class Readiness(
         val data: ODashboardReadinessModel
