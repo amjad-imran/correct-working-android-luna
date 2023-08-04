@@ -178,6 +178,7 @@ public class CandleChart extends View {
      * @param datas real data point
      */
     public void updateData(List<CandleChartModel> datas) {
+        LOGS.INSTANCE.d("DSAdsasdadasdas updateData");
         list.clear();
         list.addAll(datas);
         postInvalidate();
@@ -191,9 +192,6 @@ public class CandleChart extends View {
         this.xMax = xMax;
     }
 
-    public void setScrollListener(ScrollListener listener) {
-        this.onChartScrollChangedListener = listener;
-    }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -201,21 +199,23 @@ public class CandleChart extends View {
         mHeight = h;
         CandleChartModel model;
 //        boolean hasActivity = false;
-//        for (int i = list.size() - 1; i >= 0; i--) {
-//            model = list.get(i);
-//            if (model.getTopText() != null && !model.getTopText().equalsIgnoreCase("null") && !model.getTopText().isEmpty()) {
-//                offSet = (list.size() - 1 - i) * 3 * chartLineWidth;
-//                LOGS.INSTANCE.d("DSAdsasdadasdas::12:::activity  " + offSet);
+        LOGS.INSTANCE.d("DSAdsasdadasdas::12:::activity  " + list.size());
+        for (int i = list.size() - 1; i >= 0; i--) {
+            model = list.get(i);
+            LOGS.INSTANCE.d("DSAdsasdadasdas::12:::activity  " + model.getTopText());
+            if (model.getTopText() != null) {
+                offSet = (list.size() - 1 - i) * 3 * chartLineWidth;
+                LOGS.INSTANCE.d("DSAdsasdadasdas::12:::activity  " + offSet);
 //                hasActivity = true;
-//                break;
-//            }
-//        }
+                break;
+            }
+        }
 //        if (!hasActivity) {
 
-            Calendar calendar = Calendar.getInstance();
-            int minutes = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE);
+        Calendar calendar = Calendar.getInstance();
+        int minutes = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE);
 
-            int offsetToRemoveFromMainList = 288 - list.size();
+        int offsetToRemoveFromMainList = 288 - list.size();
             int offsetToRemove = (int) (minutes / 5f) - offsetToRemoveFromMainList;
             offSet = (list.size() - offsetToRemove) * 3 * chartLineWidth;
             if (offSet < 0) {
@@ -287,33 +287,14 @@ public class CandleChart extends View {
                 xTextPaint.getTextBounds(xText, 0, xText.length(), xTextBounds);
                 xTextPaint.setColor(xTextColor);
                 if (i == 0) {
-
                     canvas.drawText(xText, x + dip2px(5), mHeight - bottomWith / 4, xTextPaint);
                 } else if (i == list.size() - 1) {
-
                     canvas.drawText(xText, x - xTextBounds.width() - dip2px(5), mHeight - bottomWith / 4, xTextPaint);
                 } else {
-
                     canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 4, xTextPaint);
                 }
                 canvas.drawLine(x, topWith, x, mHeight - bottomWith, xTextPaint);
             }
-
-//            if ((i + 1) % 48 == 0 || i == 0) {
-//                String xText = model.getIndex();
-//                xTextPaint.getTextBounds(xText, 0, xText.length(), xTextBounds);
-//                xTextPaint.setColor(xTextColor & 0x80ffffff);
-//                xTextPaint.setColor(xTextColor);
-//                if (i == 0) {
-//                    canvas.drawText(xText, x + dip2px(5), mHeight - bottomWith / 4, xTextPaint);
-//                } if( i == list.size() - 1){
-//                    canvas.drawText(xText, x - xTextBounds.width() - dip2px(5), mHeight - bottomWith / 4, xTextPaint);
-//                }else {
-//                    canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 4, xTextPaint);
-//                }
-//                xTextPaint.setColor(Color.parseColor("#FF7A7977"));
-//                canvas.drawLine(x, topWith, x, mHeight - bottomWith, xTextPaint);
-//            }
 
 
             rectF.left = x - chartLineWidth;
@@ -331,6 +312,20 @@ public class CandleChart extends View {
 
                 markPaint.getTextBounds(model.getTopText(), 0, model.getTopText().length(), xTextBounds);
                 canvas.drawText(model.getTopText(), x - xTextBounds.width() / 2f, y - (mHeight) * 0.18f + xTextBounds.height() / 2f, markPaint);
+            }
+
+            if (model.getIdentifyText() != null && !model.getIdentifyText().equalsIgnoreCase("null") && !model.getIdentifyText().equalsIgnoreCase("ignore") && !model.getIdentifyText().isEmpty()) {
+                markPaint.setColor(Color.parseColor("#ffffff"));
+                markPaint.setStyle(Paint.Style.FILL);
+                markPaint.setTextSize(16f);
+               // canvas.drawRect(x - xTextBounds.width() / 2f, mHeight - bottomWith / 2, 0, 0, markPaint);
+                canvas.drawCircle(x, y - (mHeight) * 0.05f, 5f, markPaint);
+//                canvas.drawCircle(x, mHeight - bottomWith / 2, 5f, markPaint);
+//                canvas.drawRect(x, mHeight - bottomWith / 2, 5f,5f, markPaint);
+
+                markPaint.getTextBounds(model.getIdentifyText(), 0, model.getIdentifyText().length(), xTextBounds);
+                canvas.drawText(model.getIdentifyText(), x - xTextBounds.width() / 2f, mHeight - bottomWith / 2, markPaint);
+//                canvas.drawText(model.getIdentifyText(), x - xTextBounds.width() / 2f, y - (mHeight) * 0.18f + xTextBounds.height() / 2f, markPaint);
             }
 
         }
@@ -381,28 +376,6 @@ public class CandleChart extends View {
     }
 
 
-    private int scrollPosition = -1;
-
-    private void callBack() {
-        if (null == onChartScrollChangedListener || null == list || list.size() <= 0) {
-            return;
-        }
-        float unitH = (mWith - leftWith - rightWith) / hCount;
-        int tempPosition;
-        if ((offSet + moveOffSet) >= (list.size() - 1) * unitH) {
-            tempPosition = list.size() - 1;
-        } else if ((offSet + moveOffSet) < 0) {
-            tempPosition = 0;
-        } else {
-            tempPosition = (int) ((offSet + moveOffSet) / unitH);
-        }
-
-        if (scrollPosition == tempPosition) {
-            return;
-        }
-        scrollPosition = tempPosition;
-        onChartScrollChangedListener.onPositionSelected(scrollPosition, list.get(scrollPosition));
-    }
 
 
     private void resetData() {
@@ -415,9 +388,5 @@ public class CandleChart extends View {
         return (int) (dpValue * scale + 0.5f);
     }
 
-    private int sp2px(float spValue) {
-        final float fontScale = getContext().getResources().getDisplayMetrics().scaledDensity;
-        return (int) (spValue * fontScale + 0.5f);
-    }
 
 }

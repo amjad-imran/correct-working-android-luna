@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class OAddWorkout(
     var duration: Int = 0,
+    var steps: Int = 0,
     var calories: Int = 0,
     var startTimeIn24H: String = "",
     var endTimeIn24H: String = "",

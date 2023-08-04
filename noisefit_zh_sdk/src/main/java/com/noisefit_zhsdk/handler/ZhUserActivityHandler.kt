@@ -448,22 +448,22 @@ constructor(
 
         LOGS.d(TAG, "onAutoSportData ${Gson().toJson(p0)}")
 
-//        userActivityDataCallbacks?.onUserActivityDataReceived(
-//            UserActivityCallback.AutoSportDataObtained(
-//                dataList
-//            )
-//        )
-        AppLogs.sendAppLogs("onAutoSportData Sync data complete ${Gson().toJson(p0)}")
-        colorFitDevice?.let {
-            userActivityDataCallbacks?.onUserActivityDataReceived(
-                UserActivityCallback.AutoSportDataObtained(
-                    dataConverter.parseAutoSport(
-                        p0,
-                        it
-                    )
-                )
+        userActivityDataCallbacks?.onUserActivityDataReceived(
+            UserActivityCallback.AutoSportDataObtained(
+                dataList
             )
-        }
+        )
+        AppLogs.sendAppLogs("onAutoSportData Sync data complete ${Gson().toJson(p0)}")
+//        colorFitDevice?.let {
+//            userActivityDataCallbacks?.onUserActivityDataReceived(
+//                UserActivityCallback.AutoSportDataObtained(
+//                    dataConverter.parseAutoSport(
+//                        p0,
+//                        it
+//                    )
+//                )
+//            )
+//        }
     }
 
 

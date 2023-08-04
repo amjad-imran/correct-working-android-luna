@@ -45,19 +45,20 @@ constructor(
     var workoutListModal: OWorkoutListModal? = null
     var activityType: String? = null
     var autoWorkoutId: Int? = null
+    var movementList: List<Int>? = null
+    var preFilledOreoAutoSportData: OreoAutoSportData? = null
     fun convertAutoSport(data: OreoAutoSportData?) {
         if (data == null) {
             return
         }
 
-
+        preFilledOreoAutoSportData = data
         autoWorkoutId = data.id
         addWorkout.duration = TimeUnit.SECONDS.toMinutes(data.duration.toLong()).toInt()
         val endTime = DateFormats.addMinuteToTimeStamp(data.startTime, addWorkout.duration)
         addWorkout.calories = data.calories
         addWorkout.intensity = getIntensity(data.intensity ?: 0)
-
-
+        addWorkout.steps = data.steps
         activityType = data.type
 
         tryCatch {
@@ -90,6 +91,7 @@ constructor(
                 this.addProperty("calories", addWorkout.calories)
                 this.addProperty("activity_type", type)
                 this.addProperty("start_time", addWorkout.startTimeIn24H)
+                this.addProperty("steps", addWorkout.steps)
                 this.addProperty("end_time", addWorkout.endTimeIn24H)
                 this.addProperty("intensity", addWorkout.intensity)
             }
