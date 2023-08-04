@@ -314,4 +314,8 @@
         android:id="@+id/bottomSheetImagePicker"
         android:name="com.noisefit.ui.profile.BottomSheetImagePicker"
         android:label="ProfileEditFragment" />
+    <fragment
+        android:id="@+id/fragmentAllDone"
+        android:name="com.noisefit.ui.onboarding.AllDoneActivity"
+        android:label="FragmentAllDone" />
 </navigation>

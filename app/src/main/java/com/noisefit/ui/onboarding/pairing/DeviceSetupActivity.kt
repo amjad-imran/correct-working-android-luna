@@ -7,20 +7,16 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.activity.viewModels
-import com.noisefit.luna.R
 import com.noisefit.data.local.AppStaticData
-import com.noisefit_commans.data.model.User
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ActivityDeviceSetupBinding
-import com.noisefit.oreo.OreoMainActivity
-import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit.session.SessionManager
 import com.noisefit.ui.common.BaseActivity
-import com.noisefit_commans.ui.showShortToast
+import com.noisefit.ui.onboarding.AllDoneActivity
 import com.noisefit.ui.onboarding.onboardProfile.SetupProfileViewModel
 import com.noisefit.watch.WatchesSDK
-import com.noisefit_commans.utils.AppConstants
-import com.noisefit_commans.utils.LOW_VIBRATION
-import com.noisefit_commans.utils.VibrationUtils
+import com.noisefit_commans.data.model.User
+import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.models.ColorFitDevice
@@ -32,9 +28,13 @@ import com.noisefit_commans.models.SportsModeList
 import com.noisefit_commans.models.UnitSystem
 import com.noisefit_commans.models.UserGoals
 import com.noisefit_commans.models.UserInfo
+import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.utils.AppConstants
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.LOW_VIBRATION
+import com.noisefit_commans.utils.VibrationUtils
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 import javax.inject.Inject
@@ -108,9 +108,10 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
     }
 
     private fun startMainActivity() {
-        startActivity(OreoMainActivity.getStartIntent(this).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        })
+//        startActivity(OreoMainActivity.getStartIntent(this).apply {
+//            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//        })
+        startActivity(Intent(this, AllDoneActivity::class.java))
 
 
     }
