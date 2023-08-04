@@ -3,20 +3,20 @@ package com.oreo.ui.activity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.noisefit.luna.R
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.luna.R
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.averageWithoutZero
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.OContributorResponseModal
-import com.oreo.data.model.health.Nudges
 import com.oreo.data.model.health.OreoActivityModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,9 +26,9 @@ import javax.inject.Inject
 @HiltViewModel
 class OreoActivityViewModel @Inject constructor(
     private val userActivityRepository: OreoUserActivityRepository,
-    val localDataStore: DataStoredInterface
-) :
-    BaseViewModel() {
+    val localDataStore: DataStoredInterface,
+    val ringDataStore: RingDataStore
+) : BaseViewModel() {
 
 
     private val _activityHistoryResponse = MutableLiveData<List<OreoActivityModel>>()

@@ -1,15 +1,15 @@
 package com.oreo.ui.sleep
 
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.noisefit.luna.R
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.luna.R
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.averageWithoutZero
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.CountCardData
 import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.data.model.SleepStageAnalysis
@@ -30,13 +30,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class OreoSleepDetailsViewModel @Inject constructor(
-    val userActivityRepository: OreoUserActivityRepository
+class OreoSleepDetailsViewModel
+@Inject
+constructor(
+    val userActivityRepository: OreoUserActivityRepository,
+    val ringDataStore: RingDataStore,
 ) : BaseViewModel() {
-
-    var topDateLastScrollPosition = 0
-    var topGraphLastScrollPosition = 15
-
 
     private val _sleepHistoryResponse = MutableLiveData<List<OreoSleepModel>>()
     val sleepHistoryResponse: LiveData<List<OreoSleepModel>> = _sleepHistoryResponse

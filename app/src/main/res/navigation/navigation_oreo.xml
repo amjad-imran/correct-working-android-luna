@@ -183,6 +183,11 @@
             android:defaultValue="@null"
             app:argType="com.noisefit_commans.data.model.OreoAutoSportData"
             app:nullable="true" />
+        <argument
+            android:name="movementList"
+            app:argType="integer[]"
+            app:nullable="true"
+            android:defaultValue="@null" />
 
     </fragment>
 
@@ -257,6 +262,10 @@
         <action
             android:id="@+id/action_detectWorkoutListFragment_to_alertTextBottomSheet"
             app:destination="@id/alertTextBottomSheet" />
+
+        <action
+            android:id="@+id/action_detectWorkoutListFragment_to_addWorkoutFragment"
+            app:destination="@id/addWorkoutFragment" />
 
     </fragment>
 

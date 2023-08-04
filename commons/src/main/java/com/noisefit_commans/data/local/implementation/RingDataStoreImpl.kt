@@ -7,7 +7,6 @@ import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.DeviceFeatures
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.LOGS
 import javax.inject.Inject
 
 private const val RING_DEVICE_INFO = "RING_DEVICE_INFO"
@@ -18,6 +17,10 @@ private const val DEVICE_FEATURES = "device_features"
 private const val LAST_SYNC_WITH_SERVER = "LAST_SYNC_WITH_SERVER"
 private const val LAST_SYNC = "LAST_SYNC"
 
+private const val REGISTER_DAY_KEY = "REGISTER_DAY_KEY"
+private const val SLEEP_WALKAROUND_KEY = "SLEEP_WALKAROUND_KEY"
+private const val READINESS_WALKAROUND_KEY = "READINESS_WALKAROUND_KEY"
+private const val ACTIVITY_WALKAROUND_KEY = "ACTIVITY_WALKAROUND_KEY"
 
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
@@ -85,6 +88,38 @@ class RingDataStoreImpl
 
     override fun getLastSyncTimeStamp(): Long {
         return mPrefs.getLong(LAST_SYNC, -1)
+    }
+
+    override fun setRegisterDay(day: Int) {
+        mPrefs.edit()?.putInt(REGISTER_DAY_KEY, day)?.apply()
+    }
+
+    override fun getRegisterDay(): Int {
+        return mPrefs.getInt(REGISTER_DAY_KEY, -1)
+    }
+
+    override fun setSleepWalkAroundShown(status: Boolean) {
+        mPrefs.edit()?.putBoolean(SLEEP_WALKAROUND_KEY, status)?.apply()
+    }
+
+    override fun isSleepWalkAroundShown(): Boolean {
+        return mPrefs.getBoolean(SLEEP_WALKAROUND_KEY, false)
+    }
+
+    override fun setReadinessWalkAroundShown(status: Boolean) {
+        mPrefs.edit()?.putBoolean(READINESS_WALKAROUND_KEY, status)?.apply()
+    }
+
+    override fun isReadinessWalkAroundShown(): Boolean {
+        return mPrefs.getBoolean(READINESS_WALKAROUND_KEY, false)
+    }
+
+    override fun setActivityWalkAroundShown(status: Boolean) {
+        mPrefs.edit()?.putBoolean(ACTIVITY_WALKAROUND_KEY, status)?.apply()
+    }
+
+    override fun isActivityWalkAroundShown(): Boolean {
+        return mPrefs.getBoolean(ACTIVITY_WALKAROUND_KEY, false)
     }
 
     override fun saveLastSyncTimeStamp(timeStamp: Long) {

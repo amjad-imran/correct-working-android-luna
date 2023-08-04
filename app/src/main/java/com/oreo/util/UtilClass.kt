@@ -10,7 +10,55 @@ import java.util.concurrent.TimeUnit
 
 object UtilClass {
 
+    fun getDetectedWorkoutMovement(data: OreoAutoSportData): HashMap<Int, String> {
+
+        val hm = HashMap<Int, String>()
+
+        tryCatch {
+            var start = 0
+            var end = 0
+
+            val startTime =
+                DateFormats.convertTimestampToDate(data.startTime, DateFormats.timeFormat)
+            if (startTime.isNotEmpty()) {
+                val startArray = startTime.split(":")
+                val startHour = startArray[0].toInt()
+                val startMinute = startArray[1].toInt()
+
+                start = (startHour * 12) + (startMinute / 5)
+                LOGS.d("getDetectedWorkoutMovementList start:: $start $startHour $startMinute ")
+                hm.put(start, "$startHour:$startMinute")
+            }
+            val endTime = DateFormats.addMinuteToTimeStamp(
+                data.startTime,
+                TimeUnit.SECONDS.toMinutes(data.duration.toLong()).toInt()
+            )
+            val endTimeText =
+                DateFormats.convertTimestampToDate(endTime, DateFormats.timeFormat)
+            if (endTimeText.isNotEmpty()) {
+                val endArray = endTimeText.split(":")
+                val endHour = endArray[0].toInt()
+                val endMinute = endArray[1].toInt()
+                end = (endHour * 12) + (endMinute / 5)
+                LOGS.d("getDetectedWorkoutMovementList end:: $end $endHour $endMinute ")
+                hm.put(end, "$endHour:$endMinute")
+
+                for (i in start..end) {
+
+                    if (!hm.containsKey(i)) {
+                        hm.put(i, "ignore")
+                    }
+                }
+            }
+
+
+        }
+        LOGS.d("getDetectedWorkoutMovementList ${Gson().toJson(hm)}")
+        return hm
+    }
+
     fun getDetectedWorkoutMovementList(dataList: ArrayList<OreoAutoSportData>): HashMap<Int, Int> {
+        dataList.reverse()
         val hm = HashMap<Int, Int>()
         var index = 0;
         dataList.forEach { data ->
