@@ -136,54 +136,8 @@ class PairDeviceViewModel @Inject constructor(
             return
         }
 
-        if (localDataStore.getUser() != null) {
-            updateUserDevice(colorFitDevice!!)
-            return
-        }
+        updateUserDevice(colorFitDevice!!)
 
-
-        sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_register_df_start)
-
-        viewModelScope.launch {
-            deviceRepository.getDeviceFeature(colorFitDevice?.deviceId ?: -1).collect { resource ->
-                when (resource) {
-                    is Resource.GenericError -> {
-                        sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_register_df_ge)
-                        AppLogs.sendAppLogs(LogEvents.Binding, BindingEvents.NetworkIssue)
-                        sendMessage(resource.message)
-                    }
-
-                    is Resource.Loading -> {
-                        setLoading(resource.loading)
-                    }
-
-                    is Resource.NetworkError -> {
-                        sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_register_df_ne)
-                        AppLogs.sendAppLogs(LogEvents.Binding, BindingEvents.NetworkIssue)
-                        setApiErrors(resource.response.apply {
-                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
-                                object : BinaryActionCallback {
-                                    override fun yes() {
-                                        getDeviceFeatures()
-                                    }
-
-                                    override fun no() {}
-                                }
-                        })
-                    }
-
-                    is Resource.Success -> {
-                        sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_register_df_complete)
-                        resource.data?.data?.let {
-                            localDataStore.saveDeviceFeatures(it.deviceFeatures)
-                            saveColorFitDevice(colorFitDevice!!)
-                            _deviceSetupSuccess.postValue(Event(true))
-
-                        }
-                    }
-                }
-            }
-        }
     }
 
     fun updateUserDevice(device: ColorFitDevice) {
