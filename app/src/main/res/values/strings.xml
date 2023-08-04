@@ -1703,4 +1703,12 @@
     <string name="text_all_done">All done!</string>
     <string name="text_for_the_most_accurate_readings_wear_the_ring_on_your_index_finger_with_its_sensors_facing_the_palm_side">For the most accurate readings, wear the ring on your index finger with its sensors facing the palm side.</string>
     <string name="text_let_s_go">Let\'s go</string>
+    <string name="text_the_sleep_tab_is_where_where_you_can_explore_your_sleep_quality_in_detail">The sleep tab is where you can explore your sleep quality in detail.</string>
+    <string name="text_luna_measures_your_sleep_automatically_all_you_have_to_do_is_wear_it_to_bed">Luna measures your sleep automatically, all you have to do is wear it to bed.</string>
+    <string name="text_you_ll_see_your_first_sleep_metrics_after_your_first_night_wearing_the_ring">You’ll see your first sleep metrics after your first night wearing the ring.</string>
+    <string name="text_the_readiness_tab_gives_you_an_overview_of_your_key_recovery_metrics">The readiness tab gives you an overview of your key recovery metrics.</string>
+    <string name="text_your_daily_readiness_score_is_based_on_your_sleep_activity_and_body_signals">Your daily Readiness Score is based on your sleep, activity and body signals.</string>
+    <string name="text_the_activity_tab_is_where_you_can_follow_your_daily_movement_workouts_and_easy_days">The Activity tab is where you can follow your daily movement, workouts, and easy days.</string>
+    <string name="text_all_physical_activity_from_housework_to_training_count_towards_your_daily_goal">All physical activity from housework to training count towards your daily goal.</string>
+    <string name="text_your_activity_score_updates_continuously_as_luna_learns_how_active_you_are_throughout_the_week">Your Activity Score updates continuously, as Luna learns how active you are throughout the week.</string>
 </resources>

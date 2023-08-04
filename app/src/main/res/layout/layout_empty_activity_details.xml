@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageView48"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:src="@drawable/activity_back_top"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/back_stick_bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView48" />
+
+
+    <TextView
+        android:id="@+id/textView82"
+        style="@style/H2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_24dp"
+        android:text="@string/text_activity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView48" />
+
+
+    <ImageView
+        android:id="@+id/imageView49"
+        android:layout_width="@dimen/dimen_24dp"
+        android:layout_height="@dimen/dimen_24dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="45dp"
+        android:src="@drawable/ic_calories_new"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView82" />
+
+    <TextView
+        android:id="@+id/text1"
+        style="@style/H6"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dimen_20dp"
+        android:layout_marginEnd="@dimen/dimen_30dp"
+        android:text="@string/text_the_activity_tab_is_where_you_can_follow_your_daily_movement_workouts_and_easy_days"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView49"
+        app:layout_constraintTop_toTopOf="@+id/imageView49" />
+
+    <ImageView
+        android:id="@+id/imageView50"
+        android:layout_width="@dimen/dimen_24dp"
+        android:layout_height="@dimen/dimen_24dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="@dimen/dimen_32dp"
+        android:src="@drawable/ic_walkaround_dumble"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text1" />
+
+    <TextView
+        android:id="@+id/text2"
+        style="@style/H6"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dimen_20dp"
+        android:layout_marginEnd="@dimen/dimen_30dp"
+        android:text="@string/text_all_physical_activity_from_housework_to_training_count_towards_your_daily_goal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView50"
+        app:layout_constraintTop_toTopOf="@+id/imageView50" />
+
+    <ImageView
+        android:id="@+id/imageView51"
+        android:layout_width="@dimen/dimen_24dp"
+        android:layout_height="@dimen/dimen_24dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="@dimen/dimen_32dp"
+        android:src="@drawable/ic_calender"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text2" />
+
+    <TextView
+        style="@style/H6"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dimen_20dp"
+        android:layout_marginEnd="@dimen/dimen_30dp"
+        android:text="@string/text_your_activity_score_updates_continuously_as_luna_learns_how_active_you_are_throughout_the_week"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView51"
+        app:layout_constraintTop_toTopOf="@+id/imageView51" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bGoToSettings"
+        style="@style/PrimaryButtonStyle"
+        android:layout_width="0dp"
+        android:layout_marginStart="@dimen/dimen_30dp"
+        android:layout_marginEnd="@dimen/dimen_30dp"
+        android:layout_marginBottom="84dp"
+        android:text="@string/text_get_started"
+        android:visibility="visible"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -72,9 +72,23 @@ class OreoReadinessFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setRecycler()
-        mViewModel.getReadinessDetailsData()
-//        mViewModel.getReadinessTestData()
 
+
+        if (mViewModel.ringDataStore.isReadinessWalkAroundShown()) {
+            mViewModel.getReadinessDetailsData()
+        } else {
+            showWalkAround(true)
+        }
+
+    }
+
+    private fun showWalkAround(show: Boolean) {
+        if (show) {
+            binding.lytEmptyView.root.visible()
+            binding.svMain.gone()
+        } else {
+            binding.lytEmptyView.root.gone()
+        }
     }
 
     private fun setReadinessBannerViewPager(data: List<Nudges>?) {
@@ -267,6 +281,11 @@ class OreoReadinessFragment :
             }
         }
     override fun initListener() {
+        binding.lytEmptyView.bGoToSettings.setOnClickListener {
+            showWalkAround(false)
+            mViewModel.ringDataStore.setReadinessWalkAroundShown(true)
+            mViewModel.getReadinessDetailsData()
+        }
         binding.lytToolbar.tvTitle.text = getString(R.string.text_readiness)
         binding.lytToolbar.view1.visible()
         binding.lytToolbar.ivAddFriend.visible()
