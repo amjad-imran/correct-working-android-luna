@@ -463,7 +463,11 @@ class ProfileEditFragment :
             if (it.isNullOrEmpty()) {
                 binding.tvNumberLabel.gone()
                 binding.tvNumberValue.gone()
+                binding.include8.root.gone()
             } else {
+                binding.tvNumberLabel.visible()
+                binding.tvNumberValue.visible()
+                binding.include8.root.visible()
                 binding.tvNumberValue.text = it
             }
         }
