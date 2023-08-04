@@ -149,7 +149,7 @@
                     android:text="@string/text_pair_later"
                     android:textAllCaps="false"
                     android:textSize="12sp"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:backgroundTint="@null"
                     app:layout_constraintBottom_toTopOf="@+id/tvTroubleShoot"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -157,13 +157,13 @@
 
                 <TextView
                     android:id="@+id/tvTroubleShoot"
-                    style="@style/H6"
+                    style="@style/Small"
                     android:layout_width="wrap_content"
                     android:layout_height="36dp"
                     android:layout_marginBottom="16dp"
                     android:gravity="center"
+                    android:visibility="invisible"
                     android:text="@string/text_unable_to_search_or_pair_your_device"
-                    android:textColor="#6AC5FF"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />

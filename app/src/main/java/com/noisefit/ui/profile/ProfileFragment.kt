@@ -8,19 +8,20 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentProfileBinding
+import com.noisefit.ui.onboarding.OnBoardActivity
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
-import com.noisefit.ui.onboarding.OnBoardActivity
 import com.noisefit_commans.utils.InsiderAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 
-enum class UserType(val type: String){
+enum class UserType(val type: String) {
     Admin("admin"),
     Influencer("influencer"),
     User("user"),
     None("none")
 }
+
 @AndroidEntryPoint
 class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate) {
 
@@ -33,6 +34,12 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
         binding.lifecycleOwner = this
         viewModel.getUserData()
         //viewModel.getUserStats()
+
+        if (viewModel.numberAvailable.value == true) {
+            binding.include44.root.visible()
+        } else {
+            binding.include44.root.gone()
+        }
     }
 
     override fun initListener() {
@@ -44,24 +51,8 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
 
             viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.ACCOUNT_MYPROFILE_EDIT_CLICK)
             navigate(R.id.navigation_profile_edit)
-
-            //navigate(ProfileFragmentDirections.actionProfileFragmentToProfileEditFragment())
         }
 
-//        binding.tvLogout.setOnClickListener {
-//
-//            setFragmentResultListener(LOGOUT_KEY) { key, bundle ->
-//                val isSelected = bundle.getBoolean("isSelected")
-//                if (isSelected) {
-//                    viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.ACCOUNT_MY_PROFILE_LOGOUT_CLICK)
-//                    viewModel.logoutUser()
-//                }
-//            }
-//
-//            navigate(
-//                ProfileFragmentDirections.actionProfileEditFragmentToLogoutBottomSheet()
-//            )
-//        }
         binding.tvDeleteAccount.setOnClickListener {
             setFragmentResultListener(DELETE_KEY) { key, bundle ->
                 val isSelected = bundle.getBoolean("isSelected")
