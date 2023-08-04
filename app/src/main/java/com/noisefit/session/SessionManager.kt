@@ -75,6 +75,7 @@ constructor(
 
     var batterPercent = MutableLiveData(0)
     var batteryPercentRing = MutableLiveData(0)
+    var isRingCharging = MutableLiveData(false)
     var isWorkSchedulerScheduled = false
 
     var forceOtaFlowRunning: Boolean = false
@@ -115,6 +116,7 @@ constructor(
     private val _connectState = MutableLiveData<ConnectState>()
     private val _connectStateRing = MutableLiveData<ConnectState>()
     private val _bluetoothOnState = MutableLiveData<Boolean>()
+    private val _bluetoothOnStateDash = MutableLiveData<Boolean>()
     private val _syncCompleted = MutableLiveData<Event<SyncDataStatus>>()
     private val _showSyncOfflineData = MutableLiveData<Event<HealthOverviewDataType>>()
 
@@ -139,6 +141,9 @@ constructor(
 
     val bluetoothState: LiveData<Boolean>
         get() = _bluetoothOnState
+
+    val bluetoothStateDash: LiveData<Boolean>
+        get() = _bluetoothOnStateDash
 
     val syncCompleted: LiveData<Event<SyncDataStatus>>
         get() = _syncCompleted
@@ -284,6 +289,7 @@ constructor(
             if (_bluetoothOnState.value != boolean) {
                 _bluetoothOnState.value = boolean
             }
+            _bluetoothOnStateDash.value = boolean
         }
     }
 

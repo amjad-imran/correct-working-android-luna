@@ -118,19 +118,6 @@ class SplashViewModel
 
     fun checkAppVersion() {
 
-        //  2.0.0
-        //    201
-        connectedDevice?.let {
-            val lastFetchTimeStamp = localDataStore.getDeviceFeaturesLastSyncTime()
-            val fetchPeriod = localDataStore.getFeatureIntervalFetchPeriod()
-            if (fetchPeriod != 0) {
-                if (lastFetchTimeStamp.checkTimeDifferenceMoreThanN(fetchPeriod)) {
-                    getDeviceFeatures(it)
-                }
-            }
-
-        }
-
         val requestObject = JsonObject().apply {
             addProperty("platform", "android")
             addProperty("version", BuildConfig.VERSION_CODE)
@@ -245,22 +232,6 @@ class SplashViewModel
             }
         }
 
-    }
-
-    fun getDeviceFeatures(colorFitDevice: ColorFitDevice) {
-        viewModelScope.launch {
-            deviceRepository.getDeviceFeature(colorFitDevice.deviceId).collect { resource ->
-                when (resource) {
-                    is Resource.Success -> {
-                        resource.data?.data?.let {
-                            localDataStore.saveDeviceFeatures(it.deviceFeatures)
-                        }
-                    }
-
-                    else -> {}
-                }
-            }
-        }
     }
 
     private fun handleAppVersion(versionCheckResponse: VersionCheckResponse) {

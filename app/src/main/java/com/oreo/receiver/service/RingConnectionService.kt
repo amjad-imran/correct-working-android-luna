@@ -127,6 +127,7 @@ constructor() : LifecycleService() {
 
     @Inject
     lateinit var syncRepository: OreoSyncRepository
+
     @Inject
     lateinit var firebaseCrashlyticsUtils: FirebaseCrashlyticsUtils
 
@@ -1060,7 +1061,10 @@ constructor() : LifecycleService() {
                                 .collect { resource ->
                                     when (resource) {
                                         is CacheResult.Success -> {
-                                            LOGS.d(TAG, "SyncDataWork: onAutoSportData ${resource.value}")
+                                            LOGS.d(
+                                                TAG,
+                                                "SyncDataWork: onAutoSportData ${resource.value}"
+                                            )
                                             sessionManager.setShowSyncOfflineData(
                                                 Event(
                                                     HealthOverviewDataType.AUTO_WORKOUT
@@ -1464,6 +1468,7 @@ constructor() : LifecycleService() {
                 is QueryCallback.BatteryDataObtained -> {
                     val percent = queryCallback.batteryData.percentage ?: 0
                     sessionManager.batteryPercentRing.postValue(percent)
+                    sessionManager.isRingCharging.postValue(queryCallback.batteryData.isCharging)
 
                     LOGS.d(TAG, "battery Level Ring : $percent")
                     batteryNotificationUtils.handleNotification(

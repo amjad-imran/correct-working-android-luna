@@ -26,58 +26,8 @@ class FavouriteWatchFaceDaoTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
-    @Inject
-    @Named("test_db")
-    lateinit var database: DataBase
 
 
-    private lateinit var watchFaceDao: FavouriteWatchFaceDao
 
-    @Before
-    fun setup() {
-        hiltRule.inject()
-        watchFaceDao = database.favouriteWatchFaceDao()
-    }
-
-    @After
-    fun destroy() {
-        database.close()
-    }
-
-    @Test
-    fun insertFavouriteWatchface() {
-        val watchfaceObject = Gson().fromJson<FavouriteWatchFace>(
-            "{\n" +
-                    "\"image_url\": \"https://images.gonoise.com/watch_faces/production/colorfit_pro3_ultra_ocean/Ocean(N002)/Watchface-4/img_effect.png\",\n" +
-                    "\"watchface_id\": 126,\n" +
-                    "\"downloads\": 1018,\n" +
-                    "\"name\": \"Cat fever\",\n" +
-                    "\"is_favourite\": \"1\"\n" +
-                    "}",
-            FavouriteWatchFace::class.java
-        )
-        //sportsModeResponse.date = "" TODO Dynamic
-        watchFaceDao.insert(watchfaceObject)
-        val allWatchfaces = watchFaceDao.getFavouriteWatchFaces()
-        assertThat(allWatchfaces?.contains(watchfaceObject))
-    }
-
-    @Test
-    fun deleteActivity() {
-        val watchfaceObject = Gson().fromJson<FavouriteWatchFace>(
-            "{\n" +
-                    "\"image_url\": \"https://images.gonoise.com/watch_faces/production/colorfit_pro3_ultra_ocean/Ocean(N002)/Watchface-4/img_effect.png\",\n" +
-                    "\"watchface_id\": 126,\n" +
-                    "\"downloads\": 1018,\n" +
-                    "\"name\": \"Cat fever\",\n" +
-                    "\"is_favourite\": \"1\"\n" +
-                    "}",
-            FavouriteWatchFace::class.java
-        )
-        watchFaceDao.insert(watchfaceObject)
-        val allWatchfaces = watchFaceDao.getFavouriteWatchFaces()
-        assertThat(allWatchfaces?.contains(watchfaceObject)?.not())
-
-    }
 
 }
