@@ -73,7 +73,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         val decorView = getWindow().getDecorView();
         // ViewGroup you want to start blur from. Choose root as close to BlurView in hierarchy as possible.
-        val rootView =  binding.container
+        val rootView = binding.container
 
         // Optional:
         // Set drawable to draw in the beginning of each blurred frame.
@@ -293,10 +293,14 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 R.id.navigation_oreo_my_device,
                 R.id.navigation_oreo_sleep
                 -> {
+                    binding.view27.visible()
                     binding.navView.root.visible()
                 }
 
-                else -> binding.navView.root.gone()
+                else -> {
+                    binding.view27.gone()
+                    binding.navView.root.gone()
+                }
             }
         }
 
