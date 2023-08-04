@@ -27,4 +27,15 @@ interface RingDataStore {
     fun saveLastSyncTimeStamp(timeStamp: Long)
     fun getLastSyncTimeStamp(): Long?
 
+    fun setRegisterDay(day: Int)
+    fun getRegisterDay(): Int?
+
+    fun setSleepWalkAroundShown(status: Boolean)
+    fun isSleepWalkAroundShown(): Boolean
+
+    fun setReadinessWalkAroundShown(status: Boolean)
+    fun isReadinessWalkAroundShown(): Boolean
+
+    fun setActivityWalkAroundShown(status: Boolean)
+    fun isActivityWalkAroundShown(): Boolean
 }

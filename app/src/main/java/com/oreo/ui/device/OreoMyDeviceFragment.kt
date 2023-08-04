@@ -107,7 +107,7 @@ class OreoMyDeviceFragment :
                 binding.apply {
                     lytDeviceConnected.root.visible()
                     btnUnpair.visible()
-                    btnReset.visible()
+                    //btnReset.visible()
                     lytPairYourDeviceHeader.root.gone()
                 }
 
@@ -115,7 +115,7 @@ class OreoMyDeviceFragment :
                 binding.apply {
                     lytDeviceConnected.root.gone()
                     btnUnpair.gone()
-                    btnReset.gone()
+                    //btnReset.gone()
 
                     lytPairYourDeviceHeader.root.visible()
                 }
@@ -232,7 +232,7 @@ class OreoMyDeviceFragment :
                 R.drawable.ic_ring_default_sliver
             )
             tvRingName.text = noiseFitDevice?.bluetoothName
-            tvBattery.setTextColor(Color.parseColor("#ff7c94"))
+            tvBattery.setTextColor(resources.getColor(R.color.oreo_contributor_warning))
             tvBattery.text = "Trying to connect..."
             tvOtherInfo.gone()
         }
@@ -267,8 +267,15 @@ class OreoMyDeviceFragment :
             }
 
             tvBattery.text = "$batteryPercent%"
+
             tvOtherInfo.visible()
-            tvOtherInfo.text = " | $lastSyncText"
+
+            if (mViewModel.sessionManager.isRingCharging.value == true) {
+                tvOtherInfo.text = " | Charging"
+            } else {
+                tvOtherInfo.text = " | $lastSyncText"
+            }
+
 
         }
 

@@ -6,10 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.noisefit.NoiseFitApplicationMain
-import com.noisefit.luna.R
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
@@ -26,13 +27,14 @@ import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
-class OreoReadinessViewModel @Inject constructor(
-    val userActivityRepository: OreoUserActivityRepository
+class OreoReadinessViewModel
+@Inject
+constructor(
+    val userActivityRepository: OreoUserActivityRepository,
+    val ringDataStore: RingDataStore,
 ) : BaseViewModel() {
 
 
-    var topDateLastScrollPosition = 0
-    var topGraphLastScrollPosition = 15
 
     private val _readinessData = MutableLiveData<TestDataModel>()
     val readinessData: LiveData<TestDataModel>

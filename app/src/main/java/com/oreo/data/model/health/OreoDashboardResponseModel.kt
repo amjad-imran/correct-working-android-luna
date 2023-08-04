@@ -15,7 +15,10 @@ data class OreoDashboardResponseModel(
     val sleepScoreAvg: ODashboardSleepScoreModel? = null,
     @SerializedName("readinessScoreAvg")
     val readinessScoreAvg: ODashboardReadinessScoreModel? = null,
-)
+    @SerializedName("registerDate")
+    val registerDate: Int? = null,
+
+    )
 
 data class ODashboardReadinessModel(
     val readinessScore: Int? = 0,

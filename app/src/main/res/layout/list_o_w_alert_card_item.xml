@@ -11,7 +11,7 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/back_modal_dialog"
+            android:background="@drawable/back_modal_dialog_new"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -40,7 +40,7 @@
                 android:layout_marginEnd="@dimen/dimen_16dp"
                 android:paddingBottom="@dimen/dimen_16dp"
                 android:text="@string/text_review"
-                android:textColor="@color/purple_"
+                android:textColor="@color/medium_movement"
 
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/btnCancel"
@@ -70,7 +70,7 @@
 
             android:gravity="center"
             android:text="@string/text_what_is_this"
-            android:textColor="@color/purple_"
+            android:textColor="@color/medium_movement"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

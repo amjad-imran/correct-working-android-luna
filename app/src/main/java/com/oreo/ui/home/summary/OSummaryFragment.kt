@@ -189,12 +189,26 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
     override fun subscribeObservers() {
 
-        viewModel.deviceConnected.observe(this) { connected ->
-            if (!connected) {
+
+        viewModel.sessionManager.bluetoothStateDash.observe(this) {
+            if (it) {
+
+            } else {
                 binding.lytHeader.batteryStatus.gone()
                 binding.lytHeader.oreoStatus.loadImage(
                     requireContext(),
-                    R.drawable.ic_no_device_luna
+                    R.drawable.ic_luna_state_bt_off
+                )
+                binding.lytHeader.oreoStatus.setBackgroundResource(R.drawable.back_modal_new_round)
+            }
+        }
+
+        viewModel.deviceConnected.observe(this) { connected ->
+            if (!connected) {
+                binding.lytHeader.ivExclamation.visible()
+                binding.lytHeader.oreoStatus.loadImage(
+                    requireContext(),
+                    R.drawable.ic_ring_default_sliver
                 )
             }
         }
@@ -224,13 +238,13 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 }
 
                 is ConnectState.Connecting -> {
-                    //setConnectingState(true)
+                    setConnectingState(true)
                 }
 
                 is ConnectState.ConnectSuccess -> {
-                    //setConnectingState(false)
+                    setConnectingState(false)
                     shouldSync()
-                    //setStateConnected(connectedState.noiseFitDevice)
+                    setStateConnected(connectedState.noiseFitDevice)
                     viewModel.checkBatteryPercentage()
                 }
 
@@ -295,22 +309,40 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
     private fun setConnectingState(connecting: Boolean) {
         binding.lytHeader.batteryStatus.isIndeterminate = connecting
-        binding.lytHeader.batteryStatus.gone()
-        binding.lytHeader.oreoStatus.loadImage(requireContext(), R.drawable.ic_no_device_luna)
+
+        if (viewModel.sessionManager.bluetoothStateDash.value == true) {
+            binding.lytHeader.batteryStatus.visible()
+            binding.lytHeader.oreoStatus.loadImage(
+                requireContext(),
+                R.drawable.ic_ring_default_sliver
+            )
+        }
 
     }
 
     private fun setStateConnected(noiseFitDevice: ColorFitDevice) {
         binding.lytHeader.batteryStatus.visible()
+        binding.lytHeader.ivExclamation.gone()
         val batteryPercentage = viewModel.watchDataStore.getBatteryPercentRing()
         binding.lytHeader.batteryStatus.progress = batteryPercentage
-        binding.lytHeader.oreoStatus.loadImage(requireContext(), R.drawable.ic_ring_default_sliver)
         if (batteryPercentage < 20) {
             binding.lytHeader.oreoStatus.setBackgroundResource(R.drawable.back_modal_red_circle)
             binding.lytHeader.batteryStatus.setIndicatorColor(resources.getColor(R.color.color_error))
         } else {
             binding.lytHeader.oreoStatus.setBackgroundResource(R.drawable.back_modal_new_round)
             binding.lytHeader.batteryStatus.setIndicatorColor(resources.getColor(R.color.white))
+        }
+
+        if (viewModel.sessionManager.isRingCharging.value == true) {
+            binding.lytHeader.oreoStatus.loadImage(
+                requireContext(),
+                R.drawable.ic_luna_state_charge
+            )
+        } else {
+            binding.lytHeader.oreoStatus.loadImage(
+                requireContext(),
+                R.drawable.ic_ring_default_sliver
+            )
         }
     }
 

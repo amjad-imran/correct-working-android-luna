@@ -13,7 +13,6 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoActivityBinding
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
@@ -39,7 +38,6 @@ import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Arrays
 
 
 @AndroidEntryPoint
@@ -50,7 +48,7 @@ class OreoActivityFragment :
 
     private val mViewModel: OreoActivityViewModel by viewModels()
     private val mSharedViewModel: SharedOSCDViewModel by activityViewModels()
-    var currentItem: Int = 0
+
 
     private val mWorkoutAdapter: OreoAWorkoutAdapter by lazy {
         OreoAWorkoutAdapter(object : OreoAWorkoutAdapter.OnItemClickListener {
@@ -93,8 +91,22 @@ class OreoActivityFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setRecyclerView()
-        mViewModel.getActivityDetailsData()
 
+
+        if (mViewModel.ringDataStore.isActivityWalkAroundShown()) {
+            mViewModel.getActivityDetailsData()
+        } else {
+            showWalkAround(true)
+        }
+    }
+
+    private fun showWalkAround(show: Boolean) {
+        if (show) {
+            binding.lytEmptyView.root.visible()
+            binding.svMain.gone()
+        } else {
+            binding.lytEmptyView.root.gone()
+        }
     }
 
     private fun setSleepBannerViewPager(data: List<Nudges>?) {
@@ -464,6 +476,11 @@ class OreoActivityFragment :
     }
 
     override fun initListener() {
+        binding.lytEmptyView.bGoToSettings.setOnClickListener {
+            mViewModel.ringDataStore.setActivityWalkAroundShown(true)
+            showWalkAround(false)
+            mViewModel.getActivityDetailsData()
+        }
         binding.lytToolbar.tvTitle.text = getString(R.string.text_workout_page_title)
         binding.lytToolbar.view1.visible()
         binding.lytToolbar.ivAddFriend.visible()

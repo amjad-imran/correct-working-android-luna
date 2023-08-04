@@ -15,16 +15,27 @@ data class OreoReadinessModel(
     val activityScore: CommonDataModel? = null,
     val activityBalance: CommonDataModel? = null,
     val restingHrBalance: CommonDataModel? = null,
-    val hrBreakUp: List<Int>? = null,
+    val hrBreakUp: UnitDataModelArray? = null,
     val hrvBalance: CommonDataModel? = null,
     val hrv: UnitDataModel? = null,
-    val hrvBreakUp: List<Int>? = null,
+    val hrvBreakUp: UnitDataModelArray? = null,
     val respiration: UnitDataModel? = null,
     val temperature: UnitDataModelFloat? = null,
-    val temperatureBreakUp: List<Float>? = null
+    val temperatureBreakUp: UnitDataModelArrayFloat? = null
 
 
 )
 
 data class UnitDataModel(val value: Int)
+data class UnitDataModelArray(
+    val value: List<Int>?,
+    val avg: Int? = null,
+    val low: Int? = null,
+    val max: Int? = null
+)
+data class UnitDataModelArrayFloat(
+    val value: List<Float>?,
+    val avg: Float? = null,
+)
+
 data class UnitDataModelFloat(val value: Float)

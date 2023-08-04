@@ -161,18 +161,24 @@ constructor(
                 userActivities.add(OHealthOverview.PairDevice())
             }
 
+//            ringDataStore.setRegisterDay(data.registerDate ?: -1)
             if (isMorningTime()) {
-                data.readiness?.let {
-                    userActivities.add(OHealthOverview.Readiness(data.readiness))
-                }
-                data.sleep?.let {
-                    userActivities.add(
-                        OHealthOverview.Sleep(
-                            data.sleep,
-                            makeSleepArray(data.sleep)
+                if (data.registerDate != 0) {
+                    data.readiness?.let {
+                        userActivities.add(OHealthOverview.Readiness(data.readiness))
+                    }
+
+
+                    data.sleep?.let {
+                        userActivities.add(
+                            OHealthOverview.Sleep(
+                                data.sleep,
+                                makeSleepArray(data.sleep)
+                            )
                         )
-                    )
+                    }
                 }
+
                 data.activity?.let {
                     val caloriesGoal = summary.user?.userGoals?.caloriesGoal ?: 0
                     userActivities.add(OHealthOverview.Activity(data.activity, caloriesGoal))
@@ -183,17 +189,21 @@ constructor(
                     val caloriesGoal = summary.user?.userGoals?.caloriesGoal ?: 0
                     userActivities.add(OHealthOverview.Activity(data.activity, caloriesGoal))
                 }
-                data.readiness?.let {
-                    userActivities.add(OHealthOverview.Readiness(data.readiness))
-                }
-                data.sleep?.let {
-                    userActivities.add(
-                        OHealthOverview.Sleep(
-                            data.sleep,
-                            makeSleepArray(data.sleep)
+
+                if (data.registerDate != 0) {
+                    data.readiness?.let {
+                        userActivities.add(OHealthOverview.Readiness(data.readiness))
+                    }
+                    data.sleep?.let {
+                        userActivities.add(
+                            OHealthOverview.Sleep(
+                                data.sleep,
+                                makeSleepArray(data.sleep)
+                            )
                         )
-                    )
+                    }
                 }
+
             }
 
             if (hrValue != null) {

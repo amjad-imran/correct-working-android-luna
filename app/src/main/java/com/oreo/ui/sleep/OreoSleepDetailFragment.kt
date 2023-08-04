@@ -13,7 +13,6 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoSleepDetailBinding
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
@@ -85,11 +84,23 @@ class OreoSleepDetailFragment :
         super.onViewCreated(view, savedInstanceState)
         //sleepDayGraphView = SleepGraphViewOreo(requireContext())
         setRecycler()
-        viewModel.getSleepDetailsData()
 
+        if (viewModel.ringDataStore.isSleepWalkAroundShown()) {
+            viewModel.getSleepDetailsData()
+        } else {
+            showWalkAround(true)
+        }
 
     }
 
+    private fun showWalkAround(show: Boolean) {
+        if (show) {
+            binding.lytEmptyView.root.visible()
+            binding.svMain.gone()
+        } else {
+            binding.lytEmptyView.root.gone()
+        }
+    }
 
     private fun showHeartRateVariabilityGraph(
         hrv: CommonListDataModel?,
@@ -283,6 +294,11 @@ class OreoSleepDetailFragment :
         binding.lytToolbar.ivAddFriend.visible()
         binding.lytToolbar.ivAddFriend.setImageResource(R.drawable.ic_calenders)
 
+        binding.lytEmptyView.bGoToSettings.setOnClickListener {
+            showWalkAround(false)
+            viewModel.ringDataStore.setSleepWalkAroundShown(true)
+            viewModel.getSleepDetailsData()
+        }
 
 
         binding.lytToolbar.view1.setOnClickListener {
