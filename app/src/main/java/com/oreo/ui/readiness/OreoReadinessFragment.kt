@@ -52,7 +52,7 @@ class OreoReadinessFragment :
             OreoSleepContributorAdapter.ContributorItemClickListener {
             override fun onItemClick(resultData: ArrayList<Contributors>, position: Int) {
 //                if (resultData[position].barPercent > 0) {
-                    openContributorBottomSheet(resultData, position)
+                openContributorBottomSheet(resultData, position)
 //                }
             }
 
@@ -200,7 +200,7 @@ class OreoReadinessFragment :
     }
 
     private fun showTemperatureGraph(
-        temperatureBreakUp: List<Float>,
+        temperatureBreakUp: List<Float>?,
         startTime: String,
         endTime: String
     ) {
@@ -252,6 +252,7 @@ class OreoReadinessFragment :
 
 
     }
+
     var resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -266,6 +267,7 @@ class OreoReadinessFragment :
 
             }
         }
+
     override fun initListener() {
         binding.lytToolbar.tvTitle.text = getString(R.string.text_readiness)
         binding.lytToolbar.view1.visible()
@@ -472,18 +474,15 @@ class OreoReadinessFragment :
         binding.lytHeartRate.tvSubtitle2.text = getString(R.string.text_average)
 
         if (it.hrBreakUp != null) {
-            if (it.hrBreakUp.isNotEmpty()) {
-                val minHrIndex: Int = it.hrBreakUp.indexOf(Collections.min(it.hrBreakUp))
-                val minHrValue: Int = it.hrBreakUp[minHrIndex]
-                val avgHrValue = it.hrBreakUp.averageWithoutZero()
-                binding.lytHeartRate.lytSubtitleValue1.tvValue.text = minHrValue.toString()
+            if (!it.hrBreakUp.value.isNullOrEmpty()) {
+                binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "${it.hrBreakUp.low}"
                 binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
                 binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
-                binding.lytHeartRate.lytSubtitleValue2.tvValue.text = avgHrValue.toString()
+                binding.lytHeartRate.lytSubtitleValue2.tvValue.text = "${it.hrBreakUp.avg}"
                 binding.lytHeartRate.lytSubtitleValue2.tvUnit.visible()
                 binding.lytHeartRate.lytSubtitleValue2.tvUnit.text = "bpm"
                 //todo will change startTime, endTime
-                showHeartRateGraph(it.hrBreakUp, it.date, it.date)
+                showHeartRateGraph(it.hrBreakUp.value, it.date, it.date)
             } else {
                 binding.lytHeartRate.lineChart.gone()
                 heartRateDefaultView()
@@ -499,19 +498,15 @@ class OreoReadinessFragment :
         binding.lytHRVariability.tvSubtitle2.text = getString(R.string.text_max)
 
         if (it.hrvBreakUp != null) {
-            if (it.hrvBreakUp.isNotEmpty()) {
-                val maxHrvIndex: Int = it.hrvBreakUp.indexOf(Collections.max(it.hrvBreakUp))
-                val maxHrvValue: Int = it.hrvBreakUp[maxHrvIndex]
-                val avgHrvValue = it.hrvBreakUp.averageWithoutZero()
-                binding.lytHRVariability.lytSubtitleValue1.tvValue.text = avgHrvValue.toString()
+            if (!it.hrvBreakUp.value.isNullOrEmpty()) {
+                binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "${it.hrvBreakUp.avg}"
                 binding.lytHRVariability.lytSubtitleValue1.tvUnit.visible()
                 binding.lytHRVariability.lytSubtitleValue1.tvUnit.text = "ms"
-                binding.lytHRVariability.lytSubtitleValue2.tvValue.text = maxHrvValue.toString()
+                binding.lytHRVariability.lytSubtitleValue2.tvValue.text = "${it.hrvBreakUp.max}"
                 binding.lytHRVariability.lytSubtitleValue2.tvUnit.visible()
                 binding.lytHRVariability.lytSubtitleValue2.tvUnit.text = "ms"
                 //todo will change startTime, endTime
-                showHeartRateVariabilityGraph(it.hrvBreakUp, it.date, it.date)
-
+                showHeartRateVariabilityGraph(it.hrvBreakUp.value, it.date, it.date)
             } else {
                 binding.lytHRVariability.lineChart.gone()
                 hrvDefaultView()
@@ -528,13 +523,12 @@ class OreoReadinessFragment :
         binding.lytTemperature.divider1.root.invisible()
 
 
-        if (!it.temperatureBreakUp.isNullOrEmpty()) {
-            val avgHrvValue = it.temperatureBreakUp.averageWithoutZeroFloat()
-            binding.lytTemperature.lytSubtitleValue1.tvValue.text = avgHrvValue.toString()
+        if (!it.temperatureBreakUp?.value.isNullOrEmpty()) {
+            binding.lytTemperature.lytSubtitleValue1.tvValue.text = "${it.temperatureBreakUp?.avg}"
             binding.lytTemperature.lytSubtitleValue1.tvUnit.visible()
             binding.lytTemperature.lytSubtitleValue1.tvUnit.text = "°F"
             //todo will change startTime, endTime
-            showTemperatureGraph(it.temperatureBreakUp, it.date, it.date)
+            showTemperatureGraph(it.temperatureBreakUp?.value, it.date, it.date)
 
         } else {
             binding.lytTemperature.lineChart.gone()
