@@ -1115,7 +1115,8 @@ interface NetworkService {
 
     @GET
     suspend fun getRecentWorkoutList(
-        @Url url: String
+        @Url url: String,
+        @Query("today") today:Boolean
     ): BaseApiResponse<List<OActivityListModal>>
 
     @GET

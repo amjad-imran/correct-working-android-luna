@@ -1445,6 +1445,7 @@
     <string name="text_report_abuse">Report abuse</string>
 
     <string name="text_workouts">Workouts</string>
+    <string name="text_today_workouts">Today\'s workouts</string>
     <string name="text_no_post_found">No post found</string>
     <string name="text_no_post_found_me">No post found! Share your first post now.</string>
     <string name="text_noise">Noise</string>

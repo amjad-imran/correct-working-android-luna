@@ -18,6 +18,7 @@ import com.noisefit.luna.databinding.ListReadinessCardItemBinding
 import com.noisefit.luna.databinding.ListReadinessScoreCardItemBinding
 import com.noisefit.luna.databinding.ListSleepActivityCardItemBinding
 import com.noisefit.luna.databinding.ListSleepCardItemBinding
+import com.noisefit.luna.databinding.OreoDummyViewBinding
 import com.noisefit.luna.databinding.OreoLayoutRecentActivityBinding
 import com.noisefit.ui.common.calculatePercentage
 import com.noisefit.util.ApplicationUtils
@@ -177,6 +178,13 @@ class OSummaryHealthOverviewAdapter :
 //                    false
 //                )
 //            )
+            R.layout.oreo_dummy_view -> HomeRecyclerViewHolder.OreoDummyViewHolder(
+                OreoDummyViewBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
 
 
             else -> throw IllegalArgumentException("Invalid ViewType Provided")
@@ -257,6 +265,7 @@ class OSummaryHealthOverviewAdapter :
 //                items[position] as OHealthOverview.Demo,
 //                position,
 //            )
+            is HomeRecyclerViewHolder.OreoDummyViewHolder -> {}
             else -> {}
         }
     }
@@ -277,7 +286,7 @@ class OSummaryHealthOverviewAdapter :
             is OHealthOverview.Header -> R.layout.list_o_header_card_item
             is OHealthOverview.PairDevice -> R.layout.list_o_pair_device
             is OHealthOverview.AutoSport -> R.layout.list_o_w_alert_card_item
-//            is OHealthOverview.Demo -> R.layout.list_o_w_demo_card_item
+            is OHealthOverview.Dummy -> R.layout.oreo_dummy_view
         }
     }
 }
@@ -764,7 +773,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.tvEmptyMsg.gone()
             binding.rvWorkouts.layoutManager =
                 LinearLayoutManager(binding.rvWorkouts.context, LinearLayoutManager.VERTICAL, false)
-            val adapter1 = OreoAWorkoutAdapter(object : OreoAWorkoutAdapter.OnItemClickListener {
+            val adapter1 = OreoRWorkoutAdapter(object : OreoRWorkoutAdapter.OnItemClickListener {
                 override fun onItemClick(data: OActivityListModal, position: Int) {
                     itemClickListener?.invoke(
                         OSummaryHealthOverviewClickEnum.ItemWorkoutClick(
@@ -781,15 +790,15 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 setRecycledViewPool(RecyclerView.RecycledViewPool())
             }
 
-            var todayWorkText = "Workouts"
-            todayWorkout.listData.forEach {
-                val date = it.createdDate
-                if (date == DateFormats.getCurrentDate(DateFormats.dateFormat6)) {
-                    todayWorkText = "Today’s Workouts"
-                    return@forEach
-                }
-            }
-            binding.textView66.text = todayWorkText
+//            var todayWorkText = "Workouts"
+//            todayWorkout.listData.forEach {
+//                val date = it.createdDate
+//                if (date == DateFormats.getCurrentDate(DateFormats.dateFormat6)) {
+//                    todayWorkText = "Today’s Workouts"
+//                    return@forEach
+//                }
+//            }
+//            binding.textView66.text = todayWorkText
             adapter1.setData(todayWorkout.listData)
             binding.viewAddWorkout.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.AddWorkoutClick)
@@ -800,10 +809,20 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.ViewAllWorkoutClick)
 
             }
-            if (todayWorkout.listData.isNotEmpty()) {
-                binding.ivViewAll.visible()
-            } else
-                binding.ivViewAll.invisible()
+//            if (todayWorkout.listData.isNotEmpty()) {
+//                binding.ivViewAll.visible()
+//            } else
+//                binding.ivViewAll.invisible()
+
+        }
+    }
+
+    class OreoDummyViewHolder(private val binding: OreoDummyViewBinding) :
+        HomeRecyclerViewHolder(binding) {
+        fun bind(
+
+        ) {
+
 
         }
     }
