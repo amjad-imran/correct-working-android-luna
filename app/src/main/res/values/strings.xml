@@ -467,7 +467,7 @@
     <string name="text_start_time_less">Start time should be less then end time</string>
     <string name="text_start_time_less_then_current_time">Start time should be less then current time</string>
     <string name="text_end_time_greater">End time should be greater then start time</string>
-    <string name="text_end_time_greater_then_current_time">End time should be greater then current time</string>
+    <string name="text_end_time_greater_then_current_time">End time should not be greater then current time</string>
     <string name="text_start_end_time_should_be_different">Start and End time should be different</string>
     <string name="text_select_start_time_first">Select start time first</string>
     <string name="text_start_and_end_time_should_be_greater_than_the_selected_frequency">Start and End time should be greater than the selected frequency</string>
