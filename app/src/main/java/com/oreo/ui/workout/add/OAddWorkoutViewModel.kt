@@ -58,8 +58,6 @@ constructor(
         addWorkout.intensity = getIntensity(data.intensity ?: 0)
 
 
-        addWorkout.endTimeIn24H =
-            DateFormats.convertTimestampToDate(endTime, DateFormats.timeFormat)
         activityType = data.type
 
         tryCatch {

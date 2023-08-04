@@ -11,6 +11,7 @@ import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY
 import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.CandleChartModel
 import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
@@ -103,15 +104,16 @@ class DetectWorkoutFragment :
 
     private fun setData(movementList: List<Int>) {
 
+        val topIndexList = UtilClass.getDetectedWorkoutMovementList(oreoAutoSportData)
         val baseHrList = UtilClass.graphBaseInterval(null, null, movementList.size)
         val candleChartModelList: MutableList<CandleChartModel> =
             java.util.ArrayList<CandleChartModel>()
         movementList.forEachIndexed { index, data ->
 
             val chartModel = CandleChartModel()
-
+            LOGS.d("DSAsad;kjklsadjlksdaljjsadljld ${topIndexList[index]}")
             chartModel.bottomLineText = baseHrList[index]
-
+            chartModel.topText = topIndexList[index].toString()
             when (data) {
                 1 -> {
 
@@ -141,7 +143,7 @@ class DetectWorkoutFragment :
 
                 else -> {
                     chartModel.length =
-                        (binding.candleChart.max * 0.8).toInt()
+                        (binding.candleChart.max * 0.2).toInt()
                     chartModel.color = Color.parseColor("#4c4c4c")
                     chartModel.type = CandleChartModel.Type.INACTIVE
 

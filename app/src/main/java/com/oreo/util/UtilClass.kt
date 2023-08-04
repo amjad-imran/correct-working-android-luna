@@ -1,8 +1,55 @@
 package com.oreo.util
 
+import com.google.gson.Gson
+import com.noisefit_commans.data.model.OreoAutoSportData
+import com.noisefit_commans.ui.tryCatch
+import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
 import java.util.Arrays
+import java.util.concurrent.TimeUnit
 
 object UtilClass {
+
+    fun getDetectedWorkoutMovementList(dataList: ArrayList<OreoAutoSportData>): HashMap<Int, Int> {
+        val hm = HashMap<Int, Int>()
+        var index = 0;
+        dataList.forEach { data ->
+
+            tryCatch {
+                var start = 0
+                var end = 0
+                index += 1
+                val startTime =
+                    DateFormats.convertTimestampToDate(data.startTime, DateFormats.timeFormat)
+                if (startTime.isNotEmpty()) {
+                    val startArray = startTime.split(":")
+                    val startHour = startArray[0].toInt()
+                    val startMinute = startArray[1].toInt()
+                    LOGS.d("getDetectedWorkoutMovementList start:: $startHour $startMinute ")
+                    start = (startHour * 12) + (startMinute/5)
+                }
+                val endTime = DateFormats.addMinuteToTimeStamp(
+                    data.startTime,
+                    TimeUnit.SECONDS.toMinutes(data.duration.toLong()).toInt()
+                )
+                val endTimeText =
+                    DateFormats.convertTimestampToDate(endTime, DateFormats.timeFormat)
+                if (endTimeText.isNotEmpty()) {
+                    val endArray = endTimeText.split(":")
+                    val endHour = endArray[0].toInt()
+                    val endMinute = endArray[1].toInt()
+                    end = (endHour * 12) + (endMinute/5)
+                    LOGS.d("getDetectedWorkoutMovementList end:: $endHour $endMinute ")
+                }
+
+                val avg = (end + start) / 2
+
+                hm.put(avg, index)
+            }
+        }
+        LOGS.d("getDetectedWorkoutMovementList ${Gson().toJson(hm)}")
+        return hm
+    }
 
     private fun getHour(index: Int): String {
 

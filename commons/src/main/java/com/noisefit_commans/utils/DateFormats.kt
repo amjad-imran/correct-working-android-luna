@@ -1065,14 +1065,12 @@ object DateFormats {
         val calendar = Calendar.getInstance()
 
         //first day of week
-        calendar[Calendar.WEEK_OF_YEAR] = week
-
+        calendar[Calendar.WEEK_OF_YEAR] = (week - 1)
 
         val formatter = SimpleDateFormat("dd", Locale.getDefault()) // PST`
-
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
         val startDate: Date = calendar.time
         val startDateInStr = formatter.format(startDate)
-
 
         calendar.add(Calendar.DATE, 6)
         val enddate: Date = calendar.time

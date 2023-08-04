@@ -1,5 +1,6 @@
 package com.oreo.ui.home.summary
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
@@ -46,6 +47,9 @@ constructor(
 
 
     var summary = OSummary()
+
+    private var _deviceConnected: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
+    var deviceConnected = _deviceConnected
 
 
     fun initData() {
@@ -304,7 +308,7 @@ constructor(
     }
 
 
-     fun getRecentWorkoutList() {
+    fun getRecentWorkoutList() {
         viewModelScope.launch {
             userRepository.getRecentWorkoutList().collect { resource ->
                 when (resource) {
@@ -414,21 +418,27 @@ constructor(
         return false
     }
 
-    fun deleteAllAutoWorkout(){
+    fun deleteAllAutoWorkout() {
         viewModelScope.launch {
-            syncRepository.deleteAllAutoWorkoutData().collect{resource->
-                when(resource){
-                    is CacheResult.Success ->{
+            syncRepository.deleteAllAutoWorkoutData().collect { resource ->
+                when (resource) {
+                    is CacheResult.Success -> {
 
                     }
-                    is CacheResult.GenericError ->{
+
+                    is CacheResult.GenericError -> {
 
                     }
                 }
             }
         }
     }
+
     fun getDeviceConnected(): ColorFitDevice? {
         return ringDataStore.getRingDevice()
+    }
+
+    fun updateDeviceConnectedStatus() {
+        _deviceConnected.value = (ringDataStore.getRingDevice() != null)
     }
 }
