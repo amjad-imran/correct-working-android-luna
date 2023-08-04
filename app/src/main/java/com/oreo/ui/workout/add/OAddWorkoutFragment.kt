@@ -230,7 +230,7 @@ class OAddWorkoutFragment :
                     viewModel.addWorkout.endHour,
                     viewModel.addWorkout.endMinute,
                     1,
-                    getString(R.string.text_start_time)
+                    getString(R.string.text_end_time)
                 )
             )
         }
