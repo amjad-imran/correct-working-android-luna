@@ -1700,4 +1700,7 @@
     <string name="text_no_luna_ring_yet">No Luna Ring yet?</string>
     <string name="text_ring_message_find_device">Make sure your ring is placed on the charger and your phone’s bluetooth is enabled.</string>
     <string name="text_pairing_ring_message">Make sure your ring is placed on the charger</string>
+    <string name="text_all_done">All done!</string>
+    <string name="text_for_the_most_accurate_readings_wear_the_ring_on_your_index_finger_with_its_sensors_facing_the_palm_side">For the most accurate readings, wear the ring on your index finger with its sensors facing the palm side.</string>
+    <string name="text_let_s_go">Let\'s go</string>
 </resources>
