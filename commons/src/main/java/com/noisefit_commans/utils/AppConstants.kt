@@ -14,12 +14,14 @@ object AppConstants {
         "https://www.youtube.com/playlist?list=PLFfb47orPjGR4o4ScUw3dDwwxio0q4DHu"
     const val URL_CONTACT_SUPPORT = "https://www.gonoise.com/pages/register-your-complaint"
     const val URL_PRIVACY_POLICY = "https://www.gonoise.com/pages/app-privacy-policy"
-    const val URL_FEEDS_GUIDELINES = "https://www.gonoise.com/pages/community-guidelines-for-noise-fit"
+    const val URL_FEEDS_GUIDELINES =
+        "https://www.gonoise.com/pages/community-guidelines-for-noise-fit"
     const val URL_TERMS_OF_USE = "https://www.gonoise.com/pages/terms-of-use"
     const val URL_NPL_TERMS_OF_USE =
         "https://www.gonoise.com/pages/terms-and-conditions-for-noise-premiere-league"
     const val URL_GOOGLE_FIT = "https://www.google.com/fit"
     const val URL_WARRANTY_REGISTRATION = "https://www.gonoise.com/pages/warranty-registration"
+    const val NO_LUNA_RING = "https://www.gonoise.com/pages/luna-smart-ring"
     const val STEP_COUNT = "STEP COUNT"
     const val SLEEP_HOURS = "SLEEP HOURS"
     const val DISTANCE = "DISTANCE"
@@ -28,7 +30,8 @@ object AppConstants {
     const val BLOOD_OXYGEN = "BLOOD OXYGEN"
     const val BLOOD_PRESSURE = "BLOOD PRESSURE"
     const val BODY_TEMPERATURE = "BODY TEMPERATURE"
-//    const val METERS_IN_MILE = 1600
+
+    //    const val METERS_IN_MILE = 1600
 //    const val METERS_IN_KM = 1000
     const val KM_TO_MILE = 0.621
 
