@@ -269,7 +269,7 @@ class OSCDViewModel @Inject constructor(
             else
                 chartModel.index = it.date
 
-            LOGS.d("dsakjdsalkjlkdsa $itemClickType")
+
             when (itemClickType) {
                 ViewItemClickType.TOTAL_SLEEP.name,
                 ViewItemClickType.TIME_IN_BED.name -> {

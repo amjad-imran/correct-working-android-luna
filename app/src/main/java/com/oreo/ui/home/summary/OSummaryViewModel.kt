@@ -161,7 +161,7 @@ constructor(
                 userActivities.add(OHealthOverview.PairDevice())
             }
 
-//            ringDataStore.setRegisterDay(data.registerDate ?: -1)
+            ringDataStore.setRegisterDay(data.registerDate ?: -1)
             if (isMorningTime()) {
                 if (data.registerDate != 0) {
                     data.readiness?.let {

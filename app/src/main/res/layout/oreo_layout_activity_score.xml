@@ -21,6 +21,23 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/emptyText"
+            style="@style/Small"
+            android:visibility="gone"
+            android:layout_width="0dp"
+            android:layout_marginTop="@dimen/dimen_12dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_12dp"
+            android:layout_marginEnd="@dimen/dimen_12dp"
+            android:layout_marginBottom="@dimen/dimen_16dp"
+            android:text="@string/text_you_will_see_your_activity_score_after_wearing_the_ring"
+            android:textColor="@color/white_80"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+
+        <TextView
             android:id="@+id/tvValue"
             style="@style/H2"
             android:layout_width="wrap_content"

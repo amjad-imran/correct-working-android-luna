@@ -46,9 +46,6 @@ constructor(
     private val _contributorInfo = MutableLiveData<OContributorResponseModal>()
     val contributorInfo: LiveData<OContributorResponseModal> = _contributorInfo
 
-    /* private val _sleepDetailsData = MutableLiveData<TestSleepDataModel>()
-     val sleepDetailsData: LiveData<TestSleepDataModel>
-         get() = _sleepDetailsData*/
 
     var dateList = ArrayList<String>()
     fun getPrefixAndSuffixList(dataList: List<OreoSleepModel>): Triple<ArrayList<ChartModel>, ArrayList<ChartModel>, ArrayList<ChartModel>> {
@@ -59,6 +56,16 @@ constructor(
         dataList.forEach {
             val chartModel = ChartModel()
             chartModel.date = it.date
+            var currentDayText = ""
+            if (it.date == DateFormats.getCurrentDate(DateFormats.dateFormat3)) {
+                currentDayText = "Today, "
+            }
+            val formattedDate = DateFormats.formatDate(
+                it.date,
+                DateFormats.dateFormat3,
+                DateFormats.dateFormat7
+            )
+            chartModel.formattedDate = "$currentDayText $formattedDate"
             chartModel.index = DateFormats.formatWeek(it.date)
             chartModel.value = it.sleepScore?.value ?: 0
             list.add(chartModel)
@@ -270,10 +277,14 @@ constructor(
             val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
                 dayData.totalSleep?.value ?: 0
             )
+            val leftText: String = if (hour > 0) {
+                "$hour hr $minute min"
+            } else
+                "$minute min"
             result.add(
                 Contributors(
                     title = "Total sleep",
-                    leftText = "$hour hr $minute min",
+                    leftText = leftText,
                     leftTextColor = textColor,
                     barColor = barColor,
                     barPercent = dayData.totalSleep?.valPrcnt ?: 0,
@@ -306,8 +317,7 @@ constructor(
                     backgroundRes = background
                 )
             )
-        }
-        else {
+        } else {
             result.add(
                 Contributors(
                     title = "Efficiency",
@@ -332,8 +342,7 @@ constructor(
                     backgroundRes = background
                 )
             )
-        }
-        else {
+        } else {
             result.add(
                 Contributors(
                     title = "Restfulness",
@@ -351,7 +360,11 @@ constructor(
             val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
                 dayData.remSleep!!.value ?: 0
             )
-            val leftText = "$hour hr $minute min, ${dayData.remSleep?.valPrcnt ?: 0}%"
+            val leftText: String = if (hour > 0) {
+                "$hour hr $minute min, ${dayData.remSleep?.valPrcnt ?: 0}%"
+            } else {
+                "$minute min, ${dayData.remSleep?.valPrcnt ?: 0}%"
+            }
             result.add(
                 Contributors(
                     title = "REM sleep",
@@ -380,7 +393,11 @@ constructor(
             val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
                 dayData.deepSleep?.value ?: 0
             )
-            val leftText = "$hour hr $minute min, ${dayData.deepSleep?.valPrcnt ?: 0}%"
+            val leftText: String = if (hour > 0) {
+                "$hour hr $minute min, ${dayData.deepSleep?.valPrcnt ?: 0}%"
+            } else{
+                "$minute min, ${dayData.deepSleep?.valPrcnt ?: 0}%"
+            }
             result.add(
                 Contributors(
                     title = "Deep sleep",

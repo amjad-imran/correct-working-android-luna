@@ -103,7 +103,7 @@ object UtilClass {
 
         return when (index) {
             0 -> {
-                "   12 am"
+                "12 am"
             }
 
             47 -> {

@@ -171,8 +171,10 @@ class OreoActivityFragment :
                     binding.lytAScoreData.lytScore.tvQuality.gone()
                 }
             } else {
+
                 binding.lytAScoreData.lytScore.tvValue.text = "-"
                 binding.lytAScoreData.lytScore.tvQuality.gone()
+
             }
 
             if (it.activeCalories != null) {
@@ -226,8 +228,17 @@ class OreoActivityFragment :
                 distanceDefaultView()
             }
         } else {
-            binding.lytAScoreData.lytScore.tvValue.text = "-"
-            binding.lytAScoreData.lytScore.tvQuality.gone()
+            if (mViewModel.ringDataStore.getRegisterDay() == 0) {
+                binding.lytAScoreData.lytScore.emptyText.text = getString(R.string.text_you_will_see_your_activity_score_after_wearing_the_ring)
+                binding.lytAScoreData.lytScore.emptyText.visible()
+                binding.lytAScoreData.lytScore.tvValue.gone()
+                binding.lytAScoreData.lytScore.tvQuality.gone()
+            } else {
+                binding.lytAScoreData.lytScore.emptyText.gone()
+                binding.lytAScoreData.lytScore.tvValue.text = "-"
+                binding.lytAScoreData.lytScore.tvQuality.gone()
+            }
+
             goalProgressDefaultView()
             totalBurnDefaultView()
             stepCountDefaultView()

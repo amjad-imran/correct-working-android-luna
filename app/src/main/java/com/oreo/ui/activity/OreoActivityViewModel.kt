@@ -109,6 +109,16 @@ class OreoActivityViewModel @Inject constructor(
         val list = java.util.ArrayList<ChartModel>()
         dataList.forEach {
             val chartModel = ChartModel()
+            var currentDayText = ""
+            if (it.date == DateFormats.getCurrentDate(DateFormats.dateFormat3)) {
+                currentDayText = "Today, "
+            }
+            val formattedDate = DateFormats.formatDate(
+                it.date,
+                DateFormats.dateFormat3,
+                DateFormats.dateFormat7
+            )
+            chartModel.formattedDate = "$currentDayText $formattedDate"
             chartModel.date = it.date
             chartModel.index = DateFormats.formatWeek(it.date)
             chartModel.value = it.activityScore?.value ?: 0

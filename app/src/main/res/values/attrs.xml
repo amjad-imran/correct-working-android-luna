@@ -134,6 +134,7 @@
         <attr name="bottomWith" />
         <attr name="topWith" />
         <attr name="scaleLenth" />
+        <attr name="alwaysShowCircle" />
         <attr name="innerCircleRadius" />
         <attr name="outCircleRadius" />
         <attr name="scaleNodeRadius" />
@@ -174,6 +175,7 @@
     <attr name="scaleColor" format="color"/>
     <attr name="xLineColor" format="color"/>
     <attr name="yLineColor" format="color"/>
+    <attr name="alwaysShowCircle" format="boolean"/>
     <attr name="innerCircleColor" format="color"/>
     <attr name="outCircleColor" format="color"/>
     <attr name="chartLineColor" format="color"/>
