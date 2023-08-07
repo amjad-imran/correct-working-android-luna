@@ -193,19 +193,10 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     }
 
     override fun subscribeObservers() {
-
-
-        viewModel.sessionManager.bluetoothStateDash.observe(this) {
-            if (it) {
-
-            } else {
-               stateBluetoothOff()
-            }
-        }
-
         viewModel.deviceConnected.observe(this) { connected ->
             if (!connected) {
                 binding.lytHeader.ivExclamation.visible()
+                binding.lytHeader.batteryStatus.gone()
                 binding.lytHeader.oreoStatus.loadImage(
                     requireContext(),
                     R.drawable.ic_ring_default_sliver
@@ -234,7 +225,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         viewModel.sessionManager.connectStateRing.observe(this) { connectedState ->
             when (connectedState) {
                 is ConnectState.ConnectFailed -> {
-
+                    setConnectingState(true)
                 }
 
                 is ConnectState.Connecting -> {
@@ -251,10 +242,6 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 is ConnectState.UnPaired -> {
                     viewModel.handleUnPairState()
                     viewModel.updateDeviceConnectedStatus()
-                }
-
-                is ConnectState.Hibernate -> {
-
                 }
 
                 else -> {}
@@ -307,7 +294,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
     }
 
-    private fun stateBluetoothOff(){
+    private fun stateBluetoothOff() {
         binding.lytHeader.batteryStatus.gone()
         binding.lytHeader.oreoStatus.loadImage(
             requireContext(),
@@ -319,14 +306,14 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     private fun setConnectingState(connecting: Boolean) {
         binding.lytHeader.batteryStatus.isIndeterminate = connecting
 
-        if (viewModel.sessionManager.bluetoothStateDash.value == true) {
+        if (viewModel.sessionManager.bluetoothStateDash.value == false) {
+            stateBluetoothOff()
+        } else {
             binding.lytHeader.batteryStatus.visible()
             binding.lytHeader.oreoStatus.loadImage(
                 requireContext(),
                 R.drawable.ic_ring_default_sliver
             )
-        }else{
-            stateBluetoothOff()
         }
 
     }

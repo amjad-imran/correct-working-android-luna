@@ -84,15 +84,6 @@ constructor(
 
     var needDfuUpdate = MutableLiveData(Event(false))
 
-    var upcomingSportEvent: SportEvent? = null
-
-
-    var needToUpdateStreakData = MutableLiveData<Event<Pair<Long, Boolean>>>()
-
-
-    var hibernateWatchService = MutableLiveData<Event<Boolean>>()
-    var hibernateRingService = MutableLiveData<Event<Boolean>>()
-
 
     /**
      * Handle App Updates

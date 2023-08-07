@@ -952,48 +952,7 @@ constructor() : LifecycleService() {
     // Connection core logic above please don't change these until you are pros :D -- ends
     //----------------------------------------------------------------------------------------------
 
-
-    /**
-     * Stop service
-     * clear watch related data in session manager
-     */
-    private fun hibernateService() {
-        isStopServiceCalled = true
-        val device = ringDataStore.getRingDevice()
-        LOGS.i(TAG, "Hibernating service started for ${device?.bluetoothName}")
-
-        sessionManager.forceOtaFlowRunning = false
-        sessionManager.forceOtaResponseRing = null
-
-
-        device?.let { colorFitDevice ->
-            applicationHandler.unInitSdks(colorFitDevice)
-            connectionHandler.getConnectionActions(colorFitDevice)?.let { connectionDataActions ->
-                connectionDataActions.removeCallbacks()
-            }
-            ApplicationUtils.clearJobs(this)
-            timer?.cancel()
-            applicationContext.cacheDir?.deleteRecursively()
-            LOGS.i(TAG, "Hibernating service device data cleared ${device?.bluetoothName}")
-        }
-        unregisterReceivers()
-        reconnectHandler.removeCallbacks(bluetoothReconnectRunnable)
-        isServiceStarted = false
-        localDataStore.setServiceState(ServiceState.STOPPED)
-        WatchInfoGlobals.resetData()
-        sessionManager.clearSessionManagerHibernate()
-        sessionManager.setConnectStateRing(ConnectState.Hibernate())
-        LOGS.i(TAG, "Hibernating service stopSelf() for ${device?.bluetoothName}")
-        stopSelf()
-    }
-
     private fun setQueryObserver() {
-        sessionManager.hibernateRingService.observe(this) {
-            it.getContent()?.let {
-                hibernateService()
-            }
-        }
-
 
         sessionManager.deviceQueryAction.observe(this) {
             val connectedDevice = ringDataStore.getRingDevice() ?: return@observe

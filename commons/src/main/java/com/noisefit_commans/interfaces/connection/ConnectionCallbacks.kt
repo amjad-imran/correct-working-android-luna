@@ -32,7 +32,6 @@ sealed class ConnectState {
 
     class UnPaired() : ConnectState()
     class ReconnectStatus(val watchBindState:WatchBindState) : ConnectState()
-    class Hibernate() : ConnectState()
 }
 
 sealed class BindState {
