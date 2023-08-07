@@ -105,7 +105,7 @@ public class DeviceScanQrCodeBean implements Parcelable {
         private String deviceMac = ""; //mac地址
         private int deviceType = 0; //设备类型
         private int deviceVersion = 0; //设备版本号
-        private String serialNumber = "";     //随机验证码
+        private String serialNumber = null;     //随机验证码
         private boolean isBind = false; //是否被绑定
         private boolean isUserMode = false; //是否用户模式
         private boolean isDirectConnection = false; //是否支持直连绑定

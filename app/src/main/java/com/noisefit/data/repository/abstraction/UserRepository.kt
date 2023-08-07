@@ -3,6 +3,9 @@ package com.noisefit.data.repository.abstraction
 import android.net.Uri
 import com.google.gson.JsonObject
 import com.noisefit.data.local.db.CacheResult
+import com.noisefit.data.remote.CityData
+import com.noisefit.data.remote.StateData
+import com.noisefit.data.remote.UserLocationUpdatedResponse
 import com.noisefit_commans.data.model.*
 import com.noisefit_commans.data.model.trophies.Trophies
 import com.noisefit_commans.data.model.trophies.TrophyBadge
@@ -104,4 +107,7 @@ interface UserRepository {
 
     suspend fun updateInterests(requestObject: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<List<Interest>>>>
 
+    suspend fun saveUserLocation(request: JsonObject): Flow<Resource<BaseApiResponse<UserLocationUpdatedResponse>>>
+    suspend fun getStateList(): Flow<Resource<BaseApiResponse<List<StateData>>>>
+    suspend fun getCityList(stateId: Int): Flow<Resource<BaseApiResponse<List<CityData>>>>
 }

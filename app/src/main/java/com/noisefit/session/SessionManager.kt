@@ -7,6 +7,7 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ktx.Firebase
 import com.noisefit.data.repository.abstraction.UserRepository
+import com.noisefit.ui.friends.location.search.SearchStateType
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
@@ -84,15 +85,6 @@ constructor(
 
     var needDfuUpdate = MutableLiveData(Event(false))
 
-    var upcomingSportEvent: SportEvent? = null
-
-
-    var needToUpdateStreakData = MutableLiveData<Event<Pair<Long, Boolean>>>()
-
-
-    var hibernateWatchService = MutableLiveData<Event<Boolean>>()
-    var hibernateRingService = MutableLiveData<Event<Boolean>>()
-
 
     /**
      * Handle App Updates
@@ -104,11 +96,6 @@ constructor(
      * is true if watchface or ota transfer is in progress
      */
     var transferInProgress = false
-
-//    val checkSport = MutableLiveData<Event<Boolean>>()
-
-    private val _connectedDevice = MutableLiveData<ColorFitDevice?>()
-    val connectedDevice: LiveData<ColorFitDevice?> = _connectedDevice
 
     private val _connectedDeviceRing = MutableLiveData<ColorFitDevice?>()
     val connectedDeviceRing: LiveData<ColorFitDevice?> = _connectedDeviceRing
@@ -154,9 +141,6 @@ constructor(
     val showSyncOfflineData: LiveData<Event<HealthOverviewDataType>>
         get() = _showSyncOfflineData
 
-    val connectState: LiveData<ConnectState>
-        get() = _connectState
-
     val connectStateRing: LiveData<ConnectState>
         get() = _connectStateRing
 
@@ -197,7 +181,6 @@ constructor(
     fun clearSessionManager() {
         forceOtaResponse = null
         forceOtaResponseRing = null
-        _connectedDevice.postValue(null)
         _connectedDeviceRing.postValue(null)
         _connectState.postValue(ConnectState.UnPaired())
         _connectStateRing.postValue(ConnectState.UnPaired())
@@ -206,7 +189,6 @@ constructor(
     fun clearSessionManagerHibernate() {
         forceOtaResponse = null
         forceOtaResponseRing = null
-        _connectedDevice.value = (null)
         _connectedDeviceRing.value = (null)
     }
 
@@ -221,47 +203,9 @@ constructor(
 
     }
 
-    fun setConnectState(connectState: ConnectState) {
-        GlobalScope.launch(Main) {
-            val device = when (connectState) {
-                is ConnectState.ConnectFailed -> connectState.noiseFitDevice?.bluetoothName
-                is ConnectState.ConnectSuccess -> connectState.noiseFitDevice?.bluetoothName
-                is ConnectState.Connecting -> connectState.noiseFitDevice?.bluetoothName
-                is ConnectState.DfuMode -> connectState.noiseFitDevice?.bluetoothName
-                is ConnectState.DisconnectFailed -> connectState.noiseFitDevice?.bluetoothName
-                is ConnectState.DisconnectSuccess -> connectState.noiseFitDevice?.bluetoothName
-                is ConnectState.Hibernate -> "Hibernate"
-                is ConnectState.ReconnectStatus -> "Reconnect"
-                is ConnectState.Start -> connectState.noiseFitDevice?.bluetoothName
-                is ConnectState.UnPaired -> "Unpaired"
-            }
-            LOGS.d("DEVICE_SET  setConnectState $device $connectState")
-            _connectState.value = connectState
-        }
-    }
-
     fun setConnectStateRing(connectState: ConnectState) {
         GlobalScope.launch(Main) {
-            val device = when (connectState) {
-                is ConnectState.ConnectFailed -> connectState.noiseFitDevice?.bluetoothName
-                is ConnectState.ConnectSuccess -> connectState.noiseFitDevice?.bluetoothName
-                is ConnectState.Connecting -> connectState.noiseFitDevice?.bluetoothName
-                is ConnectState.DfuMode -> connectState.noiseFitDevice?.bluetoothName
-                is ConnectState.DisconnectFailed -> connectState.noiseFitDevice?.bluetoothName
-                is ConnectState.DisconnectSuccess -> connectState.noiseFitDevice?.bluetoothName
-                is ConnectState.Hibernate -> "Hibernate"
-                is ConnectState.ReconnectStatus -> "Reconnect"
-                is ConnectState.Start -> connectState.noiseFitDevice?.bluetoothName
-                is ConnectState.UnPaired -> "Unpaired"
-            }
-            LOGS.d("DEVICE_SET setConnectStateRing $device $connectState")
             _connectStateRing.value = connectState
-        }
-    }
-
-    fun setConnectedDevice(colorFitDevice: ColorFitDevice?) {
-        GlobalScope.launch(Main) {
-            _connectedDevice.value = colorFitDevice
         }
     }
 
@@ -529,6 +473,31 @@ constructor(
         } else {
             timeStamp
         }
+    }
+    fun updateUserLocationState(data: String?, id: Int?, type: SearchStateType) {
+
+        if (tempUserLocation == null) {
+            tempUserLocation = UserLocation()
+        }
+
+        when (type) {
+            SearchStateType.State -> {
+                tempUserLocation!!.stateChanged = true
+                tempUserLocation!!.stateId = id
+                tempUserLocation!!.state = data
+                tempUserLocation!!.cityId = 0
+                tempUserLocation!!.city = null
+            }
+            SearchStateType.City -> {
+                tempUserLocation!!.stateId = tempUserLocation!!.stateId
+                tempUserLocation!!.state = tempUserLocation!!.state
+                tempUserLocation!!.stateChanged = false
+                tempUserLocation!!.cityId = id
+                tempUserLocation!!.city = data
+            }
+        }
+
+
     }
 }
 

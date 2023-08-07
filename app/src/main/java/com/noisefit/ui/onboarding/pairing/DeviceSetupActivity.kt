@@ -193,21 +193,6 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
     }
 
     override fun observeSubscriber() {
-        sessionManager.connectState.observe(this) { connectedState ->
-            LOGS.d("CONNECT_STATE", "PairingSuccessFragment > $connectedState")
-            when (connectedState) {
-                is ConnectState.ConnectSuccess -> {
-                    if (!setupStarted) {
-                        setupStarted = true
-                        initDefaultValue()
-                    }
-
-                }
-
-                else -> {}
-            }
-        }
-
         sessionManager.connectStateRing.observe(this) { connectedState ->
             LOGS.d("CONNECT_STATE", "PairingSuccessFragment > $connectedState")
             when (connectedState) {
@@ -222,7 +207,6 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
                 else -> {}
             }
         }
-
     }
 
     private fun initDefaultValue() {
@@ -295,40 +279,6 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
     }
 
     private fun sendDefaultSportsMode() {
-
-
-        sessionManager.connectedDevice.value?.deviceType?.let {
-            if (it.equals(DeviceType.COLORFIT_PRO_2_OXY.deviceType, true)) {
-                sessionManager.sendUpdateQueryAction(
-                    UpdateDeviceAction.SetSportModeInfo(
-                        SportsModeList().apply {
-                            this.sportsModes = AppConstants.sportsModeListOxy
-                        }
-                    ))
-            } else if (it.equals(DeviceType.COLORFIT_PRO_2.deviceType, true)) {
-                sessionManager.sendUpdateQueryAction(
-                    UpdateDeviceAction.SetSportModeInfo(
-                        SportsModeList().apply {
-                            this.sportsModes = AppConstants.sportsModeListPro2
-                        }
-                    ))
-            } else if (it.equals(DeviceType.COLORFIT_2.deviceType, true)) {
-                sessionManager.sendUpdateQueryAction(
-                    UpdateDeviceAction.SetSportModeInfo(
-                        SportsModeList().apply {
-                            this.sportsModes = AppConstants.sportsModeListPro2
-                        }
-                    ))
-            } else {
-
-                sessionManager.sendUpdateQueryAction(
-                    UpdateDeviceAction.SetSportModeInfo(
-                        SportsModeList().apply {
-                            this.sportsModes = AppConstants.sportsModeList
-                        }
-                    ))
-            }
-        }
 
     }
 

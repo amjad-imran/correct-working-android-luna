@@ -51,7 +51,7 @@ class UnpairBottomDialogFragment :
             ringDataStore.getRingDevice()
 
         val bleName = connectedDevice?.bluetoothName ?: defValue
-        val title = "Unpair $bleName "
+        val title = "Unpair your $bleName?"
 
         val messageBuilder =
             StringBuilder("Are you sure you want to unpair your $bleName from NoiseFit?")

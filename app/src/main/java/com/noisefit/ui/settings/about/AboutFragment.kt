@@ -39,7 +39,7 @@ class AboutFragment : BaseFragment<FragmentAboutBinding>(FragmentAboutBinding::i
             )
         }
         binding.rowCheckForUpdate.setOnClickListener {
-            ShareUtil.openPlayStore(requireContext(),"com.noisefit")
+            ShareUtil.openPlayStore(requireContext(),"com.noisefit.luna")
         }
     }
 
