@@ -20,7 +20,7 @@ class SleepProgressbarView(var mContext: Context) : View(
 
     private lateinit var deepPaint: Paint
 
-    private var sleepArray: ArrayList<SleepData.SleepDataBreakup>? = ArrayList()
+    private var sleepArray: ArrayList<SleepData.SleepDataBreakup> = ArrayList()
     private var tooltipEntryArray: ArrayList<ToolTipEntry>? = ArrayList()
 
 
@@ -70,10 +70,7 @@ class SleepProgressbarView(var mContext: Context) : View(
                     if (paint != null) {
                         val rectF = RectF(start, top, end, bottom)
                         canvas.drawRoundRect(
-                            rectF,
-                            pxFromDp(mContext, 4f),
-                            pxFromDp(mContext, 4f),
-                            paint
+                            rectF, pxFromDp(mContext, 4f), pxFromDp(mContext, 4f), paint
                         )
 
                     }
@@ -81,13 +78,7 @@ class SleepProgressbarView(var mContext: Context) : View(
 
                     tooltipEntryArray!!.add(
                         ToolTipEntry(
-                            start,
-                            end,
-                            top,
-                            bottom,
-                            rowData.duration,
-                            rowData.sleepType,
-                            range
+                            start, end, top, bottom, rowData.duration, rowData.sleepType, range
                         )
                     )
                     start = end
@@ -116,7 +107,11 @@ class SleepProgressbarView(var mContext: Context) : View(
     }
 
     fun setData(sleepArray: ArrayList<SleepData.SleepDataBreakup>?) {
-        this.sleepArray = sleepArray
+        val array = sleepArray?.filter {
+            it.duration >= 60
+        }
+        this.sleepArray.clear()
+        this.sleepArray.addAll(array ?: ArrayList())
     }
 
 
