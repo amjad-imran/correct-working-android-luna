@@ -45,7 +45,7 @@ constructor(
 
 
     fun updateUserLocationState(data: String?, id: Int?) {
-        //sessionManager.updateUserLocationState(data, id, type)
+        sessionManager.updateUserLocationState(data, id, type)
     }
 
 

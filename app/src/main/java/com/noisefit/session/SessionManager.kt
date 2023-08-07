@@ -7,6 +7,7 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ktx.Firebase
 import com.noisefit.data.repository.abstraction.UserRepository
+import com.noisefit.ui.friends.location.search.SearchStateType
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
@@ -472,6 +473,31 @@ constructor(
         } else {
             timeStamp
         }
+    }
+    fun updateUserLocationState(data: String?, id: Int?, type: SearchStateType) {
+
+        if (tempUserLocation == null) {
+            tempUserLocation = UserLocation()
+        }
+
+        when (type) {
+            SearchStateType.State -> {
+                tempUserLocation!!.stateChanged = true
+                tempUserLocation!!.stateId = id
+                tempUserLocation!!.state = data
+                tempUserLocation!!.cityId = 0
+                tempUserLocation!!.city = null
+            }
+            SearchStateType.City -> {
+                tempUserLocation!!.stateId = tempUserLocation!!.stateId
+                tempUserLocation!!.state = tempUserLocation!!.state
+                tempUserLocation!!.stateChanged = false
+                tempUserLocation!!.cityId = id
+                tempUserLocation!!.city = data
+            }
+        }
+
+
     }
 }
 
