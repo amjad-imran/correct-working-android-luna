@@ -325,7 +325,7 @@ constructor(
             result.add(
                 Contributors(
                     title = "Restfulness",
-                    leftText = "${dayData.restFullness?.valPrcnt}%",
+                    leftText = "${dayData.restFullness?.text}",
                     leftTextColor = textColor,
                     barColor = barColor,
                     barPercent = dayData.restFullness?.valPrcnt ?: 0,
