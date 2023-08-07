@@ -224,20 +224,37 @@ class OreoMyDeviceFragment :
 
 
     private fun setStateConnecting(noiseFitDevice: ColorFitDevice?) {
-        binding.lytDeviceConnected.apply {
-            batteryStatus.gone()
+        if (mViewModel.sessionManager.bluetoothStateDash.value == true) {
+            binding.lytDeviceConnected.apply {
+                batteryStatus.gone()
 
-            ivRingImage.loadImage(
-                requireContext(),
-                R.drawable.ic_ring_default_sliver
-            )
-            tvRingName.text = noiseFitDevice?.bluetoothName
-            tvBattery.setTextColor(resources.getColor(R.color.oreo_contributor_warning))
-            tvBattery.text = "Trying to connect..."
-            tvOtherInfo.gone()
+                ivRingImage.loadImage(
+                    requireContext(),
+                    R.drawable.ic_ring_default_sliver
+                )
+                tvRingName.text = noiseFitDevice?.bluetoothName
+                tvBattery.setTextColor(resources.getColor(R.color.oreo_contributor_warning))
+                tvBattery.text = "Trying to connect..."
+                tvOtherInfo.gone()
+            }
+        } else {
+            setStateBtOff(noiseFitDevice)
         }
 
         binding.lytFeatures.gone()
+    }
+
+    private fun setStateBtOff(noiseFitDevice: ColorFitDevice?) {
+        binding.lytDeviceConnected.batteryStatus.gone()
+        binding.lytDeviceConnected.ivRingImage.loadImage(
+            requireContext(),
+            R.drawable.ic_luna_state_bt_off,
+        )
+
+        binding.lytDeviceConnected.tvRingName.text = noiseFitDevice?.bluetoothName
+        binding.lytDeviceConnected.tvBattery.text = "Make sure your bluetooth is on..."
+        binding.lytDeviceConnected.tvOtherInfo.gone()
+
     }
 
     private fun setStateConnected(noiseFitDevice: ColorFitDevice) {

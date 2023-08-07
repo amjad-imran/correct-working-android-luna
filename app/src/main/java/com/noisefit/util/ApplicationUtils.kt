@@ -31,8 +31,6 @@ import com.hookedonplay.decoviewlib.charts.SeriesItem
 import com.noisefit.luna.BuildConfig
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
-import com.noisefit.data.remote.response.Watchface2
-import com.noisefit.receiver.service.NotificationAlertService
 import com.noisefit.receiver.workManager.*
 import com.noisefit_commans.common.roundToNearestDecimalFlooor
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -157,49 +155,6 @@ object ApplicationUtils {
         activity.startActivity(intent)
     }
 
-    fun requestNotificationAccess(activity: Activity) {
-        val accessIntent = Intent()
-        accessIntent.action = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS
-        } else "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"
-        accessIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        accessIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-        accessIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
-        activity.startActivity(accessIntent)
-    }
-
-    fun isNotificationServiceRunning(context: Context): Boolean {
-        val contentResolver: ContentResolver = context.contentResolver
-        val enabledNotificationListeners =
-            Settings.Secure.getString(contentResolver, "enabled_notification_listeners")
-        return enabledNotificationListeners != null && enabledNotificationListeners.contains(
-            NotificationAlertService.SERVICE_NAME
-        )
-    }
-
-
-    fun seriesItemWithInset(
-        context: Context,
-        initialValue: Float,
-        maxValue: Float,
-        color: Int,
-        inset: Float,
-        width: Float
-    ): SeriesItem {
-
-        return SeriesItem.Builder(context.resources.getColor(color, null))
-            .setInset(PointF(inset, inset))
-            .setShowPointWhenEmpty(true)
-            .setRange(0f, maxValue, initialValue).setLineWidth(width).build()
-    }
-
-    fun seriesItemWithoutInset(
-        context: Context, initialValue: Float, maxValue: Float, color: Int, width: Float
-    ): SeriesItem {
-        return SeriesItem.Builder(context.resources.getColor(color, null))
-            .setShowPointWhenEmpty(true)
-            .setRange(0f, maxValue, initialValue).setLineWidth(width).build()
-    }
 
     fun isLocationProviderEnabled(context: Context): Boolean {
         val locationManager =

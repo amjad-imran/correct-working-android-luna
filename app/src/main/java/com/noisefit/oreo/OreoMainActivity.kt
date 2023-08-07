@@ -33,6 +33,7 @@ import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.share.ShareUtil
 import dagger.hilt.android.AndroidEntryPoint
+import eightbitlab.com.blurview.RenderEffectBlur
 import eightbitlab.com.blurview.RenderScriptBlur
 
 @AndroidEntryPoint
@@ -70,18 +71,16 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     private fun setBlur() {
         val radius = 20f;
-
-        val decorView = getWindow().getDecorView();
-        // ViewGroup you want to start blur from. Choose root as close to BlurView in hierarchy as possible.
+        val decorView = window.decorView;
         val rootView = binding.container
+        val windowBackground = decorView.background
 
-        // Optional:
-        // Set drawable to draw in the beginning of each blurred frame.
-        // Can be used in case your layout has a lot of transparent space and your content
-        // gets a too low alpha value after blur is applied.
-        val windowBackground = decorView.getBackground();
-
-        binding.blurView.setupWith(rootView, RenderScriptBlur(this)) // or RenderEffectBlur
+        val blurAlgo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            RenderEffectBlur()
+        } else {
+            RenderScriptBlur(this)
+        }
+        binding.blurView.setupWith(rootView, blurAlgo) // or RenderEffectBlur
             .setFrameClearDrawable(windowBackground) // Optional
             .setBlurRadius(radius)
     }
@@ -229,7 +228,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         supportFragmentManager.setFragmentResultListener(APP_UPDATE, this) { key, bundle ->
             val isSelected = bundle.getBoolean("isSelected")
             if (isSelected) {
-                ShareUtil.openPlayStore(this@OreoMainActivity, "com.noisefit")
+                ShareUtil.openPlayStore(this@OreoMainActivity, "com.noisefit.luna")
             }
         }
         navController?.navigate(R.id.appUpdateBottomSheet, Bundle().apply {

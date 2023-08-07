@@ -89,7 +89,7 @@ class OActivityListFragment :
     private fun setRecycler() {
         binding.rv.layoutManager = LinearLayoutManager(context)
         binding.rv.adapter = adapter
-        adapter.connectedDevice = viewModel.sessionManager.connectedDevice.value?.deviceType ?: ""
+        adapter.connectedDevice = viewModel.sessionManager.connectedDeviceRing.value?.deviceType ?: ""
         adapter.unitsSystem = viewModel.localDataStore.getUnit()
     }
 

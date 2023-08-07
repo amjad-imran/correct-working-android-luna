@@ -186,7 +186,7 @@ class FeedbackFragment : BaseFragment<FragmentFeedback2Binding>(FragmentFeedback
                     setFragmentResultListener(RATE_NOW) { key, bundle ->
                         val isSelected = bundle.getBoolean("isSelected")
                         if (isSelected) {
-                            ShareUtil.openPlayStore(requireContext(), "com.noisefit")
+                            ShareUtil.openPlayStore(requireContext(), "com.noisefit.luna")
                             navigateUpSafe()
                         }
                     }
