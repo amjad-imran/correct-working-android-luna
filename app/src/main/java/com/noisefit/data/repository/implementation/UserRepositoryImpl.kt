@@ -7,6 +7,9 @@ import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.dataConverter.OfflineDataMapper
 import com.noisefit.data.googleFit.GoogleFitDataObservers
 import com.noisefit.data.local.db.CacheResult
+import com.noisefit.data.remote.CityData
+import com.noisefit.data.remote.StateData
+import com.noisefit.data.remote.UserLocationUpdatedResponse
 import com.noisefit_commans.data.model.*
 import com.noisefit_commans.data.model.trophies.Trophies
 import com.noisefit_commans.data.model.trophies.TrophyBadge
@@ -70,6 +73,29 @@ class UserRepositoryImpl(
     override suspend fun getRecentTrophies(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<List<TrophyBadge>>>> {
         return safeApiCallFlow(dispatcher) {
             remoteDataSource.getRecentTrophies()
+        }
+    }
+
+    override suspend fun saveUserLocation(request: JsonObject): Flow<Resource<BaseApiResponse<UserLocationUpdatedResponse>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${BuildConfig.BASE_URL_NEW}/users/location/save"
+            remoteDataSource.saveUserLocation(url, request)
+        }
+    }
+
+    override suspend fun getStateList(): Flow<Resource<BaseApiResponse<List<StateData>>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${BuildConfig.BASE_URL_NEW}/master/location/state_list/1"
+            remoteDataSource.getStateList(url)
+        }
+    }
+    override suspend fun getCityList(stateId: Int): Flow<Resource<BaseApiResponse<List<CityData>>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${BuildConfig.BASE_URL_NEW}/master/location/city_list/$stateId"
+            remoteDataSource.getCityList(url)
         }
     }
 

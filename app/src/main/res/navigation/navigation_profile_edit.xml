@@ -35,7 +35,7 @@
 
     <dialog
         android:id="@+id/locationBottomSheet"
-        android:name="com.noisefit.ui.friends.location.LocationBottomSheet"
+        android:name="com.noisefit.ui.common.location.LocationBottomSheet"
         android:label="LocationBottomSheet">
         <argument
             android:name="shouldUpdate"

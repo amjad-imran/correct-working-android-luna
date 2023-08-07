@@ -54,9 +54,9 @@ class SearchStateFragment :
         super.onViewCreated(view, savedInstanceState)
 
         arguments?.let {
-//            viewModel.type = SearchStateFragmentArgs.fromBundle(it).type
-//            viewModel.id = SearchStateFragmentArgs.fromBundle(it).id
-//            viewModel.name = SearchStateFragmentArgs.fromBundle(it).data
+            viewModel.type = SearchStateFragmentArgs.fromBundle(it).type
+            viewModel.id = SearchStateFragmentArgs.fromBundle(it).id
+            viewModel.name = SearchStateFragmentArgs.fromBundle(it).data
         }
 
         when (viewModel.type) {
