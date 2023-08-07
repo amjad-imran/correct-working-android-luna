@@ -118,13 +118,18 @@ constructor(
 
     private fun convertIntToChartModel(data: List<Int>?): ArrayList<ChartModel> {
         val list = ArrayList<ChartModel>()
+        val chartModel1 = ChartModel()
+        chartModel1.date = ""
+        chartModel1.index = ""
+        chartModel1.value = 0
+        list.add(chartModel1)
         data?.forEach {
             val chartModel = ChartModel()
             var value = it
             if (value < 0) {
                 value = 0
             }
-            chartModel.value = value
+            chartModel.value = value//(10..100).random()
             chartModel.date = ""
             chartModel.index = ""
             list.add(chartModel)

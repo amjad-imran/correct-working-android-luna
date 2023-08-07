@@ -62,7 +62,7 @@ public class LineChart extends View {
     private float outCircleRadius;
     private float scaleNodeRadius;
 
-
+    private boolean showLastCircle;
     private Paint bgPaint;
     private Paint bgLeftPaint;
     private Paint bgRightPaint;
@@ -447,17 +447,71 @@ public class LineChart extends View {
             avgValue = sum / count;
         }
 
+
         xMax += offSet;
         xMin -= offSet;
         if (xMin < 0) {
             xMin = 0;
         }
-
+        LOGS.INSTANCE.d("dsasdasad " + avgValue + " " + xMax + " " + xMin);
 
 
         postInvalidate();
     }
 
+    public void updateDataWithMaxMin(List<ChartModel> datas, List<ChartModel> prefixList, List<ChartModel> suffixList, int offSet, boolean showLastCircle) {
+        list.clear();
+        list.addAll(prefixList);
+        list.addAll(datas);
+        list.addAll(suffixList);
+        prefixCount = prefixList.size();
+        suffixCount = suffixList.size();
+
+
+        xMax = 0;
+        ChartModel item;
+        int sum = 0;
+        int count = 0;
+        for (int i = 0; i < datas.size(); i++) {
+            item = datas.get(i);
+            if (item.getValue() == 0) {
+                continue;
+            }
+
+
+            if (xMax == 0) {
+                xMax = item.getValue();
+            }
+            if (xMin == 0) {
+                xMin = item.getValue();
+            }
+            if (item.getValue() > xMax) {
+                xMax = item.getValue();
+            }
+
+            if (item.getValue() > 0 && item.getValue() < xMin) {
+                xMin = item.getValue();
+            }
+
+            sum += item.getValue();
+            count += 1;
+        }
+        if (count != 0) {
+            avgValue = sum / count;
+        }
+
+
+        this.showLastCircle = showLastCircle;
+        xMax += offSet;
+        xMin -= offSet;
+        if (xMin < 0) {
+            xMin = 0;
+        }
+        LOGS.INSTANCE.d("dsasdasad " + avgValue + " " + xMax + " " + xMin);
+
+
+        postInvalidate();
+    }
 
     public int getMax() {
         return xMax;
@@ -547,7 +601,6 @@ public class LineChart extends View {
 
 
     private void drawLeft(Canvas canvas) {
-        LOGS.INSTANCE.d("drawLeft " + showExtremeLine + " " + xMin + " " + xMax + " " + avgValue);
 
         String maxStr = String.valueOf(xMax);
         String minStr = String.valueOf(xMin);
@@ -566,9 +619,9 @@ public class LineChart extends View {
         }
         float avg = mHeight - bottomWith - avgValue * (mHeight - topWith - bottomWith) / (xMax - xMin);
 
-
         if (avgValue > 0) {
             canvas.drawLine(leftWith, avg, mWith - rightWith, avg, centerLinePaint);
+
         }
 
         if (showAvgValueText) {
@@ -662,6 +715,13 @@ public class LineChart extends View {
                 }
             }
             canvas.drawLine(x, topWith, x, mHeight - bottomWith, gridPaint);
+
+            if (showLastCircle) {
+
+                if (i == 1 && current.getValue() > 0) {
+                    canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint);
+                }
+            }
         }
 //        canvas.drawPath(fillPath, chartLineFillPaint);
         if ((offSet + moveOffSet) < 0 || (offSet + moveOffSet) > (list.size() - 1) * unitHLenth) {

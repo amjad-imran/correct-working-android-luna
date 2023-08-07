@@ -34,7 +34,6 @@ import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MiscUtil
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
-import com.oreo.ui.activity.OreoAWorkoutAdapter
 import com.oreo.util.graph.OCombineChartUtils
 
 sealed class OSummaryHealthOverviewClickEnum {
@@ -553,11 +552,13 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 }
 
 
+//                LOGS.d("dsjasdlkjasdljaskldjldsa ${Gson().toJson(data.sleepValue)}")
                 binding.sleepLineChart.updateDataWithMaxMin(
                     data.sleepValue,
                     ArrayList(),
                     ArrayList(),
-                    20
+                    20,
+                    true
                 )
             } else {
 
@@ -579,7 +580,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     data.activityValue,
                     ArrayList(),
                     ArrayList(),
-                    20
+                    20,
+                    true
                 )
                 binding.tvActAvgThisWeek.gone()
                 binding.tvDaysAvg1.visible()
@@ -754,7 +756,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     binding.tvSleepFromLast.invisible()
                 }
 
-                binding.lineChart.updateDataWithMaxMin(data.value, ArrayList(), ArrayList(), 20)
+
+
+                binding.lineChart.updateDataWithMaxMin(data.value, ArrayList(), ArrayList(), 20,true)
             } else {
 
                 binding.tvAvgThisWeek.visible()
