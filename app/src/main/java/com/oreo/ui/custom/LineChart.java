@@ -93,6 +93,7 @@ public class LineChart extends View {
     private boolean showAvgValueText = false;
     private boolean showExtremeLine = false;
     private boolean startFromRight = false;
+    private boolean alwaysShowCircle = true;
     private int mWith;
     private int mHeight;
 
@@ -175,6 +176,7 @@ public class LineChart extends View {
         showAvgValueText = ta.getBoolean(R.styleable.LineChart_showAvgValue, false);
         showExtremeLine = ta.getBoolean(R.styleable.LineChart_showExtremeLine, true);
         startFromRight = ta.getBoolean(R.styleable.LineChart_startFromRight, false);
+        alwaysShowCircle = ta.getBoolean(R.styleable.LineChart_alwaysShowCircle, true);
         ta.recycle();
         initPaint();
 
@@ -427,7 +429,7 @@ public class LineChart extends View {
             if (xMax == 0) {
                 xMax = item.getValue();
             }
-            if(xMin == 0){
+            if (xMin == 0) {
                 xMin = item.getValue();
             }
             if (item.getValue() > xMax) {
@@ -502,9 +504,9 @@ public class LineChart extends View {
         drawBg(canvas);
         drawTop(canvas);
         drawBottom(canvas);
+        drawLeft(canvas);
         drawContent(canvas);
         drawRight(canvas);
-        drawLeft(canvas);
     }
 
 
@@ -545,6 +547,7 @@ public class LineChart extends View {
 
 
     private void drawLeft(Canvas canvas) {
+        LOGS.INSTANCE.d("drawLeft " + showExtremeLine + " " + xMin + " " + xMax + " " + avgValue);
 
         String maxStr = String.valueOf(xMax);
         String minStr = String.valueOf(xMin);
@@ -563,9 +566,9 @@ public class LineChart extends View {
         }
         float avg = mHeight - bottomWith - avgValue * (mHeight - topWith - bottomWith) / (xMax - xMin);
 
+
         if (avgValue > 0) {
             canvas.drawLine(leftWith, avg, mWith - rightWith, avg, centerLinePaint);
-
         }
 
         if (showAvgValueText) {
@@ -616,9 +619,33 @@ public class LineChart extends View {
                     canvas.drawPath(path, chartLinePaint);
                 }
             }
+
             if (current.getValue() > 0) {
-                canvas.drawCircle(x, y, outCircleRadius, outCirclePaint);
-                canvas.drawCircle(x, y, innerCircleRadius, innerCirclePaint);
+                if (alwaysShowCircle) {
+                    canvas.drawCircle(x, y, outCircleRadius, outCirclePaint);
+                    canvas.drawCircle(x, y, innerCircleRadius, innerCirclePaint);
+                } else {
+                    if (i == firstPosition) {
+                        next = list.get(i + 1);
+                        if (next.getValue() == 0) {
+                            canvas.drawCircle(x, y, outCircleRadius, outCirclePaint);
+                            canvas.drawCircle(x, y, innerCircleRadius, innerCirclePaint);
+                        }
+                    } else if (i == lastPosition - 1) {
+                        ChartModel pre = list.get(i - 1);
+                        if(pre.getValue() == 0){
+                            canvas.drawCircle(x, y, outCircleRadius, outCirclePaint);
+                            canvas.drawCircle(x, y, innerCircleRadius, innerCirclePaint);
+                        }
+                    }else{
+                        ChartModel pre = list.get(i - 1);
+                        next = list.get(i + 1);
+                        if(pre.getValue() == 0 && next.getValue() == 0){
+                            canvas.drawCircle(x, y, outCircleRadius, outCirclePaint);
+                            canvas.drawCircle(x, y, innerCircleRadius, innerCirclePaint);
+                        }
+                    }
+                }
             }
 
             if (showXAxis) {
