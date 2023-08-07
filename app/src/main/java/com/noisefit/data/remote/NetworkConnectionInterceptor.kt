@@ -7,28 +7,25 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import com.noisefit.luna.BuildConfig
-import com.noisefit.luna.R
 import com.noisefit.data.remote.abstraction.TokenRefreshApi
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.LastSyncItems
 import com.noisefit.data.repository.LastSyncProvider
 import com.noisefit.data.safeApiCallFlow
+import com.noisefit.luna.BuildConfig
+import com.noisefit.luna.R
 import com.noisefit.ui.onboarding.OnBoardActivity
-import com.noisefit.watch.SDKWatchType
 import com.noisefit.watch.WatchesSDK
-import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.Token
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.LOGS
 import com.useinsider.insider.Insider
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Request
@@ -117,6 +114,11 @@ class NetworkConnectionInterceptor(
             }
             if (contentType.contains("application/json", true)) {
                 AppLogger.logResponse(newRequest.url.toString(), response.code, bodyString)
+
+                val tx = response.sentRequestAtMillis
+                val rx = response.receivedResponseAtMillis
+
+                AppLogs.sendAppLogs("API Response Time -> ${rx-tx} ms URL->${newRequest.url}")
             }
             if (response.code == STATUS_CODE_REFRESH) {//Refresh token
 
@@ -170,10 +172,11 @@ class NetworkConnectionInterceptor(
             addHeader("device-manufacturer", Build.BRAND)
             addHeader("os-version", Build.VERSION.RELEASE)
             addHeader("platform", "android")
+            addHeader("epoch-time", System.currentTimeMillis().toString())
 
             userToken?.let {
                 addHeader("access-token", "Bearer ${userToken.access_token}")
-//                addHeader("access-token", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyNTUxMjksImRldmljZV9pZCI6MTU0LCJpYXQiOjE2OTEzOTgyMDUsImV4cCI6MTY5MTQxMjYwNX0.yGZGnQIEe6pW8ejkObnA5CXh5rHcCkNdIJrVLCg9zZM")
+//                addHeader("access-token", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyNTUxMjksImRldmljZV9pZCI6MTU0LCJpYXQiOjE2OTExNTAwMTcsImV4cCI6MTY5MTE2NDQxN30.YEXyvpzRcqiZtC5OHrQhKNt30AGURbSLZk15la3aTqw")
                }
             if (request.url.toString().contains("/master/user/v3/devices", true)) {
                 userToken?.let {

@@ -902,6 +902,7 @@ object DateFormats {
         return SimpleDateFormat("yyyy-MM-ddHH:mm", defaultLocale).parse("$date$time").time
 
     }
+
     fun convertDateTimeToTimeStamp3(dateTime: String): Long {
         return dateTimeFormat5.parse(dateTime).time
 
@@ -1068,7 +1069,7 @@ object DateFormats {
         val calendar = Calendar.getInstance()
 
         //first day of week
-        calendar[Calendar.WEEK_OF_YEAR] = (week - 1)
+        calendar.set(Calendar.WEEK_OF_YEAR, week)
 
         val formatter = SimpleDateFormat("dd", Locale.getDefault()) // PST`
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
