@@ -1712,4 +1712,7 @@
     <string name="text_the_activity_tab_is_where_you_can_follow_your_daily_movement_workouts_and_easy_days">The Activity tab is where you can follow your daily movement, workouts, and easy days.</string>
     <string name="text_all_physical_activity_from_housework_to_training_count_towards_your_daily_goal">All physical activity from housework to training count towards your daily goal.</string>
     <string name="text_your_activity_score_updates_continuously_as_luna_learns_how_active_you_are_throughout_the_week">Your Activity Score updates continuously, as Luna learns how active you are throughout the week.</string>
+    <string name="text_you_will_see_your_sleep_score_after_your_first_sleep_analysis">You will see your sleep score after your first sleep analysis</string>
+    <string name="text_you_will_see_your_readiness_score_after_first_sleep_analysis">You will see your readiness score after first sleep analysis</string>
+    <string name="text_you_will_see_your_activity_score_after_wearing_the_ring">You will see your activity score after wearing the ring</string>
 </resources>

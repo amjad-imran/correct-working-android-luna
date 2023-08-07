@@ -132,8 +132,7 @@ class OreoSleepDetailFragment :
             chartModel.date = ""
             chartList.add(chartModel)
         }
-        sleepChart.startTime = sleepStartTime ?: ""
-        sleepChart.endTime = sleepEndTime ?: ""
+
         sleepChart.list = chartList
 
         binding.lytHRVariability.lineChart.updateGraphColor(
@@ -173,8 +172,7 @@ class OreoSleepDetailFragment :
             chartModel.index = baseHrList[index]
             chartList.add(chartModel)
         }
-        sleepChart.startTime = sleepStartTime ?: ""
-        sleepChart.endTime = sleepEndTime ?: ""
+
         sleepChart.list = chartList
         binding.lytHeartRate.lineChart.updateGraphColor(
             Color.parseColor("#ff6b86"),
@@ -476,6 +474,7 @@ class OreoSleepDetailFragment :
 
         setSleepBannerViewPager(dayData.nudges)
 
+
         val sleepScoreData = dayData.sleepScore
         if (sleepScoreData != null) {
             if (sleepScoreData.value != null) {
@@ -490,8 +489,10 @@ class OreoSleepDetailFragment :
                 binding.lytSleepScore.lytSleepAvg.tvQuality.text = sleepScoreData.text
                 binding.lytSleepScore.lytSleepAvg.tvQuality.visible()
             } else {
+
                 binding.lytSleepScore.lytSleepAvg.tvValue.text = "-"
                 binding.lytSleepScore.lytSleepAvg.tvQuality.gone()
+
             }
 
             //total sleep
@@ -541,8 +542,16 @@ class OreoSleepDetailFragment :
             }
 
         } else {
-            binding.lytSleepScore.lytSleepAvg.tvValue.text = "-"
-            binding.lytSleepScore.lytSleepAvg.tvQuality.gone()
+            if (viewModel.ringDataStore.getRegisterDay() == 0) {
+                binding.lytSleepScore.lytSleepAvg.emptyText.text = getString(R.string.text_you_will_see_your_sleep_score_after_your_first_sleep_analysis)
+                binding.lytSleepScore.lytSleepAvg.emptyText.visible()
+                binding.lytSleepScore.lytSleepAvg.tvValue.gone()
+                binding.lytSleepScore.lytSleepAvg.tvQuality.gone()
+            } else {
+                binding.lytSleepScore.lytSleepAvg.emptyText.gone()
+                binding.lytSleepScore.lytSleepAvg.tvValue.text = "-"
+                binding.lytSleepScore.lytSleepAvg.tvQuality.gone()
+            }
             totalSleepNoDataView()
             totalTimeInBedDefaultView()
             sleepEfficiencyDefaultView()
@@ -634,6 +643,8 @@ class OreoSleepDetailFragment :
                 binding.lytHRVariability.lytSubtitleValue2.tvUnit.gone()
             }
         } else {
+
+
             binding.lytHRVariability.lineChart.gone()
             binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "-"
             binding.lytHRVariability.lytSubtitleValue2.tvValue.text = "-"

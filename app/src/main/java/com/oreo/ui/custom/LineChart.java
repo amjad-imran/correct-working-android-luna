@@ -14,7 +14,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.google.gson.Gson;
 import com.noisefit.luna.R;
 import com.noisefit_commans.utils.LOGS;
 import com.oreo.data.model.ChartModel;
@@ -307,13 +306,15 @@ public class LineChart extends View {
         xMax = 0;
         ChartModel item;
         int sum = 0;
+        int noneZeroValueCount = 0;
         int count = 0;
         for (int i = 0; i < datas.size(); i++) {
             item = datas.get(i);
             if (item.getValue() == 0) {
                 continue;
             }
-            LOGS.INSTANCE.d("asddsdsadsad :: " + item.getValue());
+            noneZeroValueCount += 1;
+
             if (xMax == 0) {
                 xMax = item.getValue();
 
@@ -325,10 +326,15 @@ public class LineChart extends View {
             sum += item.getValue();
             count += 1;
         }
-        if (count != 0) {
-            avgValue = sum / count;
-        }
 
+        LOGS.INSTANCE.d("NonZeroValues = " + noneZeroValueCount + " " + datas.size() / 2);
+        if (noneZeroValueCount <= datas.size() / 2) {
+            avgValue = 0;
+        } else {
+            if (count != 0) {
+                avgValue = sum / count;
+            }
+        }
 
         if (xMax < 20) {
             xMax += 5;
@@ -342,7 +348,7 @@ public class LineChart extends View {
     }
 
     public void updateDataWithMax(List<ChartModel> datas, List<ChartModel> prefixList, List<ChartModel> suffixList) {
-        LOGS.INSTANCE.d("asddsdsadsad :: " + new Gson().toJson(datas));
+
         list.clear();
         list.addAll(prefixList);
         list.addAll(datas);
@@ -350,7 +356,7 @@ public class LineChart extends View {
         prefixCount = prefixList.size();
         suffixCount = suffixList.size();
 
-
+        int noneZeroValueCount = 0;
         xMax = 0;
         ChartModel item;
         int sum = 0;
@@ -360,7 +366,9 @@ public class LineChart extends View {
             if (item.getValue() == 0) {
                 continue;
             }
-            LOGS.INSTANCE.d("asddsdsadsad :: " + item.getValue());
+
+            noneZeroValueCount += 1;
+
             if (xMax == 0) {
                 xMax = item.getValue();
 
@@ -372,9 +380,15 @@ public class LineChart extends View {
             sum += item.getValue();
             count += 1;
         }
-        if (count != 0) {
-            avgValue = sum / count;
+
+        if (noneZeroValueCount <= datas.size() / 2) {
+            avgValue = 0;
+        } else {
+            if (count != 0) {
+                avgValue = sum / count;
+            }
         }
+
 
         if (xMax < 20) {
             xMax += 5;
@@ -385,7 +399,7 @@ public class LineChart extends View {
         }
 
 
-        LOGS.INSTANCE.d("asddsdsadsad linechart" + xMin + " " + xMax + " " + avgValue);
+
         postInvalidate();
     }
 
@@ -408,7 +422,8 @@ public class LineChart extends View {
             if (item.getValue() == 0) {
                 continue;
             }
-            LOGS.INSTANCE.d("asddsdsadsad :: " + item.getValue());
+
+
             if (xMax == 0) {
                 xMax = item.getValue();
             }
@@ -437,7 +452,7 @@ public class LineChart extends View {
         }
 
 
-        LOGS.INSTANCE.d("asddsdsadsad linechart" + xMin + " " + xMax + " " + avgValue);
+
         postInvalidate();
     }
 
@@ -612,8 +627,8 @@ public class LineChart extends View {
                 xTextPaint.getTextBounds(xText, 0, xText.length(), xTextBounds);
                 xTextPaint.setColor(xTextColor & 0x80ffffff);
                 canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 4, xTextPaint);
-                if (showSelectedIndicator) {
-                    String title = list.get(i).getDate();
+                if (showSelectedIndicator && list.get(i).getFormattedDate() != null) {
+                    String title = list.get(i).getFormattedDate();
                     float xInd = indicatorOffSet + (moveOffSet * list.size() * indicatorUnitLength / (list.size() * unitHLenth)) + (mWith - leftWith - rightWith) * divisor + leftWith - i * indicatorUnitLength;
                     xTextPaint.getTextBounds(title, 0, title.length(), xTextBounds);
                     canvas.drawText(title, xInd - xTextBounds.width() / 2f, topWith / 2 + xTextBounds.height() / 2f, xTextPaint);
@@ -642,8 +657,8 @@ public class LineChart extends View {
             xTextPaint.getTextBounds(xText, 0, xText.length(), xTextBounds);
             canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 4, xTextPaint);
 
-            if (showSelectedIndicator) {
-                String title = list.get(position).getDate();
+            if (showSelectedIndicator && list.get(position).getFormattedDate() != null) {
+                String title = list.get(position).getFormattedDate();
                 float xInd = indicatorOffSet + (moveOffSet * list.size() * indicatorUnitLength / (list.size() * unitHLenth)) + (mWith - leftWith - rightWith) * divisor + leftWith - position * indicatorUnitLength;
                 xTextPaint.getTextBounds(title, 0, title.length(), xTextBounds);
                 canvas.drawText(title, xInd - xTextBounds.width() / 2f, topWith / 2 + xTextBounds.height() / 2f, xTextPaint);

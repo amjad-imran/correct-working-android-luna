@@ -8,18 +8,19 @@ data class OWorkoutDetailsResponseModel(
     val userId: String,
     @SerializedName("device_id")
     val deviceId: String,
-    val duration: Long?=null,
-    val calories: Int?=null,
-    val steps: Int?=null,
+    val duration: Long? = null,
+    val calories: Int? = null,
+    val hrArray: List<Int>? = null,
+    val steps: Int? = null,
     @SerializedName("activity_type")
-    val activityType: String?=null,
+    val activityType: String? = null,
     @SerializedName("start_time")
-    val startTime: String?=null,
+    val startTime: String? = null,
     @SerializedName("end_time")
-    val endTime: String?=null,
-    val intensity: String?=null,
+    val endTime: String? = null,
+    val intensity: String? = null,
     @SerializedName("created_date")
-    val createdDate: String?=null,
+    val createdDate: String? = null,
     val date: String?=null,
     @SerializedName("hr_avg")
     val hrAvg: Int? = null,

@@ -154,8 +154,7 @@ class OreoReadinessFragment :
             chartModel.index = baseHrList[index]
             chartList.add(chartModel)
         }
-        sleepChart.startTime = startTime ?: ""
-        sleepChart.endTime = endTime ?: ""
+
         sleepChart.list = chartList
 
         binding.lytHeartRate.lineChart.updateGraphColor(
@@ -199,8 +198,7 @@ class OreoReadinessFragment :
             chartModel.index = baseHrList[index]
             chartList.add(chartModel)
         }
-        sleepChart.startTime = startTime ?: ""
-        sleepChart.endTime = endTime ?: ""
+
         sleepChart.list = chartList
 
         binding.lytHRVariability.lineChart.updateGraphColor(
@@ -241,8 +239,7 @@ class OreoReadinessFragment :
             chartModel.index = baseHrList[index]
             chartList.add(chartModel)
         }
-        sleepChart.startTime = startTime ?: ""
-        sleepChart.endTime = endTime ?: ""
+
         sleepChart.list = chartList
 
         binding.lytTemperature.lineChart.updateGraphColor(
@@ -414,13 +411,23 @@ class OreoReadinessFragment :
                     binding.lytRScoreData.lytScore.tvQuality.gone()
                 }
             } else {
+
                 binding.lytRScoreData.lytScore.tvValue.text = "-"
                 binding.lytRScoreData.lytScore.tvQuality.gone()
+
             }
 
         } else {
-            binding.lytRScoreData.lytScore.tvValue.text = "-"
-            binding.lytRScoreData.lytScore.tvQuality.gone()
+            if (mViewModel.ringDataStore.getRegisterDay() == 0) {
+                binding.lytRScoreData.lytScore.emptyText.text = getString(R.string.text_you_will_see_your_readiness_score_after_first_sleep_analysis)
+                binding.lytRScoreData.lytScore.emptyText.visible()
+                binding.lytRScoreData.lytScore.tvValue.gone()
+                binding.lytRScoreData.lytScore.tvQuality.gone()
+            } else {
+                binding.lytRScoreData.lytScore.emptyText.gone()
+                binding.lytRScoreData.lytScore.tvValue.text = "-"
+                binding.lytRScoreData.lytScore.tvQuality.gone()
+            }
         }
         //resting HR
         if (it.restingHr != null) {

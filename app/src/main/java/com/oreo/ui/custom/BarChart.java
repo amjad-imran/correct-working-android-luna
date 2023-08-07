@@ -183,39 +183,6 @@ public class BarChart extends View {
         xTextBounds = new Rect();
     }
 
-    /**
-     * set data points
-     *
-     * @param datas      real data point
-     * @param prefixList placeholder before real data point
-     * @param suffixList placeholder after real data point
-     */
-    public void updateData(List<ChartModel> datas, List<ChartModel> prefixList, List<ChartModel> suffixList) {
-        list.clear();
-        list.addAll(prefixList);
-        list.addAll(datas);
-        list.addAll(suffixList);
-        prefixCount = prefixList.size();
-        suffixCount = suffixList.size();
-
-        ChartModel item;
-        int sum = 0;
-        int count = 0;
-        for (int i = 0; i < datas.size(); i++) {
-            item = datas.get(i);
-            if (item.getValue() == 0) {
-                continue;
-            }
-            sum += item.getValue();
-            count += 1;
-        }
-        if(count!=0){
-            avgValue = sum / count;
-        }
-
-
-        postInvalidate();
-    }
 
 
     public void updateDataWithMax(List<ChartModel> datas, List<ChartModel> prefixList, List<ChartModel> suffixList,
@@ -230,7 +197,7 @@ public class BarChart extends View {
 
 
 
-
+        int noneZeroValueCount = 0;
         xMax = 0;
         ChartModel item;
         int sum = 0;
@@ -240,7 +207,8 @@ public class BarChart extends View {
             if (item.getValue() == 0) {
                 continue;
             }
-            LOGS.INSTANCE.d("asddsdsadsad :: " + item.getValue() );
+            noneZeroValueCount += 1;
+
             if (xMax == 0 ) {
                 xMax = item.getValue();
 
@@ -252,8 +220,12 @@ public class BarChart extends View {
             sum += item.getValue();
             count += 1;
         }
-        if(count!=0){
-            avgValue = sum / count;
+        if (noneZeroValueCount <= datas.size() / 2) {
+            avgValue = 0;
+        } else {
+            if (count != 0) {
+                avgValue = sum / count;
+            }
         }
 
 
@@ -266,7 +238,7 @@ public class BarChart extends View {
         }
 
 
-        LOGS.INSTANCE.d("asddsdsadsad barchart " + xMin + " " + xMax + " " + avgValue);
+
 
         this.lineNormalColor = lineNormalColor;
         this.lineSelectColor = lineSelectColor;

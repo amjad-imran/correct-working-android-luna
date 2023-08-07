@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.github.mikephil.charting.data.CombinedData
+import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ListActivityBurnCardItemBinding
 import com.noisefit.luna.databinding.ListHeartRateCardItemBinding
@@ -191,6 +192,30 @@ class OSummaryHealthOverviewAdapter :
         }
     }
 
+    override fun onViewRecycled(holder: HomeRecyclerViewHolder) {
+        when (holder) {
+            is HomeRecyclerViewHolder.ActivityViewHolder -> {
+                LOGS.d("onViewRecycled ActivityViewHolder")
+            }
+
+            is HomeRecyclerViewHolder.HeartRateViewHolder -> {
+                LOGS.d("onViewRecycled HeartRateViewHolder")
+            }
+
+            is HomeRecyclerViewHolder.ReadinessScoreViewHolder -> {
+                LOGS.d("onViewRecycled ReadinessScoreViewHolder")
+            }
+
+
+            is HomeRecyclerViewHolder.OreoDummyViewHolder -> {}
+            else -> {}
+        }
+        super.onViewRecycled(holder)
+    }
+    override fun onFailedToRecycleView(holder: HomeRecyclerViewHolder): Boolean {
+        LOGS.d("onViewRecycled failed")
+        return super.onFailedToRecycleView(holder)
+    }
     override fun onBindViewHolder(holder: HomeRecyclerViewHolder, position: Int) {
         holder.itemClickListener = itemClickListener
         when (holder) {
@@ -407,14 +432,14 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
 
             if (scoreValue >= 0) {
-                binding.lottieAnimationView.repeatCount = 0
-                binding.lottieAnimationView.setAnimation(R.raw.lottie_meter_sleep)
-                binding.lottieAnimationView.setMaxProgress(
-                    MiscUtil.scorePercentCalculator(
-                        scoreValue.toFloat()
-                    )
-                )
-                binding.lottieAnimationView.playAnimation()
+//                binding.lottieAnimationView.repeatCount = 0
+//                binding.lottieAnimationView.setAnimation(R.raw.lottie_meter_readiness)
+//                binding.lottieAnimationView.setMaxProgress(
+//                    MiscUtil.scorePercentCalculator(
+//                        scoreValue.toFloat()
+//                    )
+//                )
+//                binding.lottieAnimationView.playAnimation()
 
             }
 
@@ -454,7 +479,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             if (scoreValue >= 0) {
                 binding.lottieAnimationView.repeatCount = 0
-                binding.lottieAnimationView.setAnimation(R.raw.lottie_meter_activity)
+                binding.lottieAnimationView.setAnimation(R.raw.lottie_meter_readiness)
                 binding.lottieAnimationView.setMaxProgress(
                     MiscUtil.scorePercentCalculator(
                         scoreValue.toFloat()
@@ -526,6 +551,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     binding.sleepTrendValue.invisible()
                     binding.tvSleepFromLast.invisible()
                 }
+
 
                 binding.sleepLineChart.updateDataWithMaxMin(
                     data.sleepValue,

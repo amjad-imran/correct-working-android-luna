@@ -82,15 +82,11 @@
             android:id="@+id/lineChart"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:layout_marginStart="@dimen/side_margin"
             android:layout_marginTop="32dp"
-            android:layout_marginEnd="@dimen/side_margin"
-
             android:visibility="gone"
             app:bgBottomColor="@android:color/transparent"
             app:bgColor="@android:color/transparent"
             app:bgLeftColor="@android:color/transparent"
-
             app:bgRightColor="@android:color/transparent"
             app:bgTopColor="@android:color/transparent"
             app:bottomWith="20dp"

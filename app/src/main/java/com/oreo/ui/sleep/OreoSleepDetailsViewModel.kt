@@ -17,6 +17,7 @@ import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.models.SleepMovementType
 import com.noisefit_commans.models.SleepType
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
@@ -46,9 +47,7 @@ constructor(
     private val _contributorInfo = MutableLiveData<OContributorResponseModal>()
     val contributorInfo: LiveData<OContributorResponseModal> = _contributorInfo
 
-    /* private val _sleepDetailsData = MutableLiveData<TestSleepDataModel>()
-     val sleepDetailsData: LiveData<TestSleepDataModel>
-         get() = _sleepDetailsData*/
+
 
     var dateList = ArrayList<String>()
     fun getPrefixAndSuffixList(dataList: List<OreoSleepModel>): Triple<ArrayList<ChartModel>, ArrayList<ChartModel>, ArrayList<ChartModel>> {
@@ -59,6 +58,16 @@ constructor(
         dataList.forEach {
             val chartModel = ChartModel()
             chartModel.date = it.date
+            var currentDayText = ""
+            if (it.date == DateFormats.getCurrentDate(DateFormats.dateFormat3)) {
+                currentDayText = "Today, "
+            }
+            val formattedDate = DateFormats.formatDate(
+                it.date,
+                DateFormats.dateFormat3,
+                DateFormats.dateFormat7
+            )
+            chartModel.formattedDate = "$currentDayText $formattedDate"
             chartModel.index = DateFormats.formatWeek(it.date)
             chartModel.value = it.sleepScore?.value ?: 0
             list.add(chartModel)

@@ -1,6 +1,7 @@
 package com.oreo.ui.workout.details
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
@@ -11,6 +12,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOWorkoutDetailsBinding
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.clearAmPm
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
@@ -19,6 +21,7 @@ import com.oreo.data.model.ChartModel
 import com.oreo.data.model.OWDActivityData
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.model.SleepChartModel
+import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
 
 const val DELETE_WORKOUT_REQUEST_KEY = "DELETE_WORKOUT_REQUEST_KEY"
@@ -139,33 +142,37 @@ class OWorkoutDetailsFragment :
             }
 
 
-            binding.lytHeartRate.lineChart.visible()
-            val sleepChart = SleepChartModel()
-            val chartList = ArrayList<ChartModel>()
-//            it.hrAvg.forEach {
-//                val chartModel = ChartModel()
-//
-//                var value = it
-//                if (value == 255) {
-//                    value = 0
-//                }
-//
-//                chartModel.value = value
-//                chartModel.index = ""
-//                chartList.add(chartModel)
-//            }
-//            sleepChart.startTime = DateFormats.formatActivityTime8(it.startTime)
-//            sleepChart.endTime = DateFormats.formatActivityTime8(it.endTime)
-//            sleepChart.list = chartList
-//
-//            binding.lytHeartRate.lineChart.updateGraphColor(
-//                Color.parseColor("#ff3358"),
-//                Color.parseColor("#4cff3358"),
-//                Color.parseColor("#00ff3358")
-//            )
-//
-//            binding.lytHeartRate.lineChart.updateDataWithMax(sleepChart, 5, false, true)
+            if (!it.hrArray.isNullOrEmpty()) {
+                binding.lytHeartRate.lineChart.visible()
+                 val baseDataList = UtilClass.graphTwoHourBaseInterval(it.startTime.clearAmPm(),it.endTime,it.hrArray.size)
 
+
+                val sleepChart = SleepChartModel()
+                val chartList = ArrayList<ChartModel>()
+                it.hrArray.forEachIndexed { index, data ->
+                    val chartModel = ChartModel()
+
+                    var value = data
+                    if (value == 255) {
+                        value = 0
+                    }
+
+
+                    chartModel.index = baseDataList[index]
+                    chartModel.value = value
+                    chartList.add(chartModel)
+                }
+
+                sleepChart.list = chartList
+
+                binding.lytHeartRate.lineChart.updateGraphColor(
+                    Color.parseColor("#ff3358"),
+                    Color.parseColor("#4cff3358"),
+                    Color.parseColor("#00ff3358")
+                )
+
+                binding.lytHeartRate.lineChart.updateDataWithMax(sleepChart, 5, false, true)
+            }
         }
 
         if (it.date == DateFormats.getCurrentDate(DateFormats.dateFormat3)) {

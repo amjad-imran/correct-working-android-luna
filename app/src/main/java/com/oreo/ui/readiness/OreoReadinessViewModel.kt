@@ -93,27 +93,6 @@ constructor(
     }
 
 
-    fun getReadinessTestData() {
-        lateinit var jsonString: String
-        try {
-            jsonString =
-                NoiseFitApplicationMain.context?.assets?.open("readiness_dummy_response.json")
-                    ?.bufferedReader()
-                    .use { it?.readText() ?: "" }
-        } catch (ioException: IOException) {
-            LOGS.d(ioException)
-        }
-        val listOfReadinessType = object : TypeToken<List<OreoReadinessModel>>() {}.type
-        val resultData =
-            Gson().fromJson(jsonString, listOfReadinessType) as ArrayList<OreoReadinessModel>
-        _readinessHistoryResponse.postValue(resultData)
-
-        resultData.firstOrNull()?.let {
-            _dayReadinessData.postValue(it)
-        }
-
-
-    }
 
     fun getReadinessDetailsData(date: String? = null) {
         viewModelScope.launch {
@@ -162,14 +141,7 @@ constructor(
 
     }
 
-    fun getDatesArray(activityList: List<OreoReadinessModel>?): List<String> {
-        if (activityList.isNullOrEmpty()) return ArrayList()
-        val datesArray = ArrayList<String>()
-        activityList.forEach {
-            datesArray.add(it.date)
-        }
-        return datesArray
-    }
+
     var dateList = ArrayList<String>()
     fun getPrefixAndSuffixList(dataList: List<OreoReadinessModel>):
             Triple<ArrayList<ChartModel>, ArrayList<ChartModel>, ArrayList<ChartModel>> {
@@ -177,6 +149,16 @@ constructor(
         val list = java.util.ArrayList<ChartModel>()
         dataList.forEach {
             val chartModel = ChartModel()
+            var currentDayText = ""
+            if (it.date == DateFormats.getCurrentDate(DateFormats.dateFormat3)) {
+                currentDayText = "Today, "
+            }
+            val formattedDate = DateFormats.formatDate(
+                it.date,
+                DateFormats.dateFormat3,
+                DateFormats.dateFormat7
+            )
+            chartModel.formattedDate = "$currentDayText $formattedDate"
             chartModel.date = it.date
             chartModel.index = DateFormats.formatWeek(it.date)
             chartModel.value = it.readinessScore?.value ?: 0
