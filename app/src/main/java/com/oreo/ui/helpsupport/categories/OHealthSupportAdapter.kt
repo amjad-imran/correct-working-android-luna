@@ -1,4 +1,4 @@
-package com.oreo.ui.helpsupport
+package com.oreo.ui.helpsupport.categories
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -39,7 +39,7 @@ class OHealthSupportAdapter : RecyclerView.Adapter<OHealthSupportAdapter.ViewHol
 
     override fun getItemCount() = mDataSet.size
 
-    override fun onBindViewHolder(holder: OHealthSupportAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(mDataSet[position])
     }
 

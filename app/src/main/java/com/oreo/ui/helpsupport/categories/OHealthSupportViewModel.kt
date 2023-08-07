@@ -1,4 +1,4 @@
-package com.oreo.ui.helpsupport
+package com.oreo.ui.helpsupport.categories
 
 import android.text.TextUtils
 import androidx.lifecycle.LiveData

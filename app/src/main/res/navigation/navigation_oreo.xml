@@ -107,7 +107,7 @@
 
     <fragment
         android:id="@+id/oreoHealthAndSupportFragment"
-        android:name="com.oreo.ui.helpsupport.OHelpAndSupportFragment"
+        android:name="com.oreo.ui.helpsupport.categories.OHelpAndSupportFragment"
         android:label="OreoHealthAndSupport" />
 
     <include app:graph="@navigation/navigation_profile_edit" />

@@ -1,4 +1,4 @@
-package com.oreo.ui.helpsupport
+package com.oreo.ui.helpsupport.categories
 
 import android.os.Bundle
 import android.view.View
