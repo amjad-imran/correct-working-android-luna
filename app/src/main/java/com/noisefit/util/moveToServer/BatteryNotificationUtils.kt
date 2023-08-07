@@ -13,8 +13,8 @@ import com.noisefit_commans.utils.LOGS
 import javax.inject.Inject
 
 private const val TAG = "BatteryNotificationUtils"
-private const val TITLE = "Watch Battery Alert ⚠"
-private const val TITLE_1 = "Watch Battery Alert"
+private const val TITLE = "Luna Ring Battery Alert ⚠"
+private const val TITLE_1 = "Luna Ring Battery Alert"
 const val CHARGE_REMINDER = "CHARGING_REMINDER"
 
 class BatteryNotificationUtils
@@ -155,7 +155,7 @@ constructor(
                     //trigger the notification
                     if (currentBatteryLevel < batteryNotification.lastBatteryPercentage) {
                         val message =
-                            "⚠️Your noise watch battery is extremely low $currentBatteryLevel% ⚠️Please plug the charger."
+                            "⚠️Your luna ring battery is extremely low $currentBatteryLevel% ⚠️Please plug the charger."
                         LOGS.d("$TAG $message")
                         pushBatteryNotification(context, TITLE, message, "1")
                         notificationTriggerFor =
@@ -179,7 +179,7 @@ constructor(
                     //trigger the notification
                     if (currentBatteryLevel < batteryNotification.lastBatteryPercentage) {
                         val message =
-                            "Your noise watch battery level is low $currentBatteryLevel%. Please plug the charger."
+                            "Your luna ring battery level is low $currentBatteryLevel%. Please plug the charger."
                         LOGS.d("$TAG $message")
                         pushBatteryNotification(context, TITLE_1, message, "0")
                         notificationTriggerFor =
@@ -203,7 +203,7 @@ constructor(
                     //trigger the notification
                     if (currentBatteryLevel > batteryNotification.lastBatteryPercentage && isCharging) {
                         val message =
-                            "Your noise watch is sufficiently charged. Please unplug the charger."
+                            "Your luna ring is sufficiently charged. Please unplug the charger."
                         LOGS.d("$TAG $message")
                         pushBatteryNotification(context, TITLE_1, message, "2")
                         notificationTriggerFor =

@@ -286,11 +286,18 @@ constructor(
         val index = summary.healthOverviewData.value?.indexOfFirst {
             it is OHealthOverview.PairDevice
         }
+
+        val autoSportIndex = summary.healthOverviewData.value?.indexOfFirst {
+            it is OHealthOverview.AutoSport
+        }
+        if (autoSportIndex != null && autoSportIndex != -1) {
+            summary.healthOverviewData.value?.removeAt(autoSportIndex)
+        }
         if (index == -1) {
             summary.healthOverviewData.value?.add(1, OHealthOverview.PairDevice())
-            summary.healthOverviewData.postValue(summary.healthOverviewData.value)
         }
 
+        summary.healthOverviewData.postValue(summary.healthOverviewData.value)
     }
 
     fun updateManualValue(manualMeasurement: ManualMeasurement) {
