@@ -17,24 +17,15 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoSleepDetailBinding
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit.util.ApplicationUtils
-import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.ui.clearAmPm
+import com.noisefit_commans.ui.*
 import com.noisefit_commans.ui.custom.NightTimeGraphViewOreo
 import com.noisefit_commans.ui.custom.SleepGraphViewOreo
-import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.invisible
-import com.noisefit_commans.ui.showShortToast
-import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.SleepChartModel
-import com.oreo.data.model.health.CommonListDataModel
-import com.oreo.data.model.health.Nudges
-import com.oreo.data.model.health.OreoSleepModel
-import com.oreo.data.model.health.SleepHourlyBreakup
-import com.oreo.data.model.health.SleepMovementBreakup
+import com.oreo.data.model.health.*
 import com.oreo.ui.custom.ScrollListener
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.sleep.banner.OreoSleepBannerFragment
@@ -63,7 +54,7 @@ class OreoSleepDetailFragment :
             OreoSleepContributorAdapter.ContributorItemClickListener {
             override fun onItemClick(resultData: ArrayList<Contributors>, position: Int) {
 //                if (resultData[position].barPercent > 0) {
-                    openContributorBottomSheet(resultData, position)
+                openContributorBottomSheet(resultData, position)
 //                }
             }
         })
