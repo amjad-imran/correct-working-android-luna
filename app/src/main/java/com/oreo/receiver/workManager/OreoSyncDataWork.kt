@@ -31,6 +31,7 @@ import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.models.SyncDataStatus
 import com.noisefit_commans.models.TimeFormat
 import com.noisefit_commans.models.TimeFormats
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
@@ -85,6 +86,8 @@ constructor(
     }
 
     lateinit var job: Job
+
+    private var lastTimeStamp: Long = 0
 
     private fun shouldSync(): Boolean {
         LOGS.d(TAG, "shouldSync() ${sessionManager.forceSyncDataWithServer}")
@@ -566,8 +569,11 @@ constructor(
 
                         is UserActivityCallback.UserDataSyncUpdated -> {
                             if (userActivityCallback.syncDataStatus.status == EventConstants.UPDATE_STATUS_SUCCESS) {
-                                //timer.cancel()
+                                timer.cancel()
                                 returnSuccess(success)
+
+                                AppLogs.sendAppLogs("RING SYNC TIME => ${System.currentTimeMillis() - lastTimeStamp}")
+
                             }
                         }
 
@@ -578,7 +584,7 @@ constructor(
 
             })
         }
-
+        lastTimeStamp = System.currentTimeMillis()
         sessionManager.sendUserActivityAction(
             UserActivityAction.SyncUserActivity(
                 "",

@@ -41,7 +41,7 @@
     <color name="edit_text_color">#FFFFFF</color>
 
     <color name="background_dialog">#141b23</color>
-    <color name="background_dialog_overlay">#66101010</color>
+    <color name="background_dialog_overlay">#66141b23</color>
     <color name="background_ongoing">#60BF2D</color>
 
 
