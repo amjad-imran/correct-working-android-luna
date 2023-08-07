@@ -29,7 +29,7 @@
         android:layout_marginBottom="@dimen/dimen_8dp"
         android:background="@drawable/back_modal_new_round"
         android:padding="@dimen/dimen_8dp"
-        android:src="@drawable/ic_luna_white"
+        android:src="@drawable/ic_ring_default_sliver"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -40,6 +40,7 @@
         android:layout_height="@dimen/dimen_32dp"
         android:indeterminate="false"
         app:indicatorSize="@dimen/dimen_32dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/oreoStatus"
         app:layout_constraintEnd_toEndOf="@+id/oreoStatus"
         app:layout_constraintStart_toStartOf="@+id/oreoStatus"

@@ -50,6 +50,11 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     }
 
     override fun initListener() {
+        binding.lytHeader.batteryStatus.setOnClickListener {
+            mainViewModel.navigateTo(BottomNavOption.MY_DEVICE)
+        }
+
+
         binding.lytHeader.profileView1.setOnClickListener {
             navigate(R.id.OMyProfileFragment)
         }
@@ -194,12 +199,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             if (it) {
 
             } else {
-                binding.lytHeader.batteryStatus.gone()
-                binding.lytHeader.oreoStatus.loadImage(
-                    requireContext(),
-                    R.drawable.ic_luna_state_bt_off
-                )
-                binding.lytHeader.oreoStatus.setBackgroundResource(R.drawable.back_modal_new_round)
+               stateBluetoothOff()
             }
         }
 
@@ -307,6 +307,15 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
     }
 
+    private fun stateBluetoothOff(){
+        binding.lytHeader.batteryStatus.gone()
+        binding.lytHeader.oreoStatus.loadImage(
+            requireContext(),
+            R.drawable.ic_luna_state_bt_off
+        )
+        binding.lytHeader.oreoStatus.setBackgroundResource(R.drawable.back_modal_new_round)
+    }
+
     private fun setConnectingState(connecting: Boolean) {
         binding.lytHeader.batteryStatus.isIndeterminate = connecting
 
@@ -316,6 +325,8 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 requireContext(),
                 R.drawable.ic_ring_default_sliver
             )
+        }else{
+            stateBluetoothOff()
         }
 
     }

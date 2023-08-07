@@ -17,7 +17,7 @@
             android:id="@+id/ivHome"
             android:layout_width="22dp"
             android:layout_height="22dp"
-            android:src="@drawable/ic_dash_summary_default" />
+            android:src="@drawable/ic_dash_summary_selected" />
 
         <TextView
             style="@style/Tinny"

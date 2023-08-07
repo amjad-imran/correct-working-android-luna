@@ -105,11 +105,6 @@ constructor(
      */
     var transferInProgress = false
 
-//    val checkSport = MutableLiveData<Event<Boolean>>()
-
-    private val _connectedDevice = MutableLiveData<ColorFitDevice?>()
-    val connectedDevice: LiveData<ColorFitDevice?> = _connectedDevice
-
     private val _connectedDeviceRing = MutableLiveData<ColorFitDevice?>()
     val connectedDeviceRing: LiveData<ColorFitDevice?> = _connectedDeviceRing
 
@@ -154,9 +149,6 @@ constructor(
     val showSyncOfflineData: LiveData<Event<HealthOverviewDataType>>
         get() = _showSyncOfflineData
 
-    val connectState: LiveData<ConnectState>
-        get() = _connectState
-
     val connectStateRing: LiveData<ConnectState>
         get() = _connectStateRing
 
@@ -197,7 +189,6 @@ constructor(
     fun clearSessionManager() {
         forceOtaResponse = null
         forceOtaResponseRing = null
-        _connectedDevice.postValue(null)
         _connectedDeviceRing.postValue(null)
         _connectState.postValue(ConnectState.UnPaired())
         _connectStateRing.postValue(ConnectState.UnPaired())
@@ -206,7 +197,6 @@ constructor(
     fun clearSessionManagerHibernate() {
         forceOtaResponse = null
         forceOtaResponseRing = null
-        _connectedDevice.value = (null)
         _connectedDeviceRing.value = (null)
     }
 
@@ -221,47 +211,9 @@ constructor(
 
     }
 
-    fun setConnectState(connectState: ConnectState) {
-        GlobalScope.launch(Main) {
-            val device = when (connectState) {
-                is ConnectState.ConnectFailed -> connectState.noiseFitDevice?.bluetoothName
-                is ConnectState.ConnectSuccess -> connectState.noiseFitDevice?.bluetoothName
-                is ConnectState.Connecting -> connectState.noiseFitDevice?.bluetoothName
-                is ConnectState.DfuMode -> connectState.noiseFitDevice?.bluetoothName
-                is ConnectState.DisconnectFailed -> connectState.noiseFitDevice?.bluetoothName
-                is ConnectState.DisconnectSuccess -> connectState.noiseFitDevice?.bluetoothName
-                is ConnectState.Hibernate -> "Hibernate"
-                is ConnectState.ReconnectStatus -> "Reconnect"
-                is ConnectState.Start -> connectState.noiseFitDevice?.bluetoothName
-                is ConnectState.UnPaired -> "Unpaired"
-            }
-            LOGS.d("DEVICE_SET  setConnectState $device $connectState")
-            _connectState.value = connectState
-        }
-    }
-
     fun setConnectStateRing(connectState: ConnectState) {
         GlobalScope.launch(Main) {
-            val device = when (connectState) {
-                is ConnectState.ConnectFailed -> connectState.noiseFitDevice?.bluetoothName
-                is ConnectState.ConnectSuccess -> connectState.noiseFitDevice?.bluetoothName
-                is ConnectState.Connecting -> connectState.noiseFitDevice?.bluetoothName
-                is ConnectState.DfuMode -> connectState.noiseFitDevice?.bluetoothName
-                is ConnectState.DisconnectFailed -> connectState.noiseFitDevice?.bluetoothName
-                is ConnectState.DisconnectSuccess -> connectState.noiseFitDevice?.bluetoothName
-                is ConnectState.Hibernate -> "Hibernate"
-                is ConnectState.ReconnectStatus -> "Reconnect"
-                is ConnectState.Start -> connectState.noiseFitDevice?.bluetoothName
-                is ConnectState.UnPaired -> "Unpaired"
-            }
-            LOGS.d("DEVICE_SET setConnectStateRing $device $connectState")
             _connectStateRing.value = connectState
-        }
-    }
-
-    fun setConnectedDevice(colorFitDevice: ColorFitDevice?) {
-        GlobalScope.launch(Main) {
-            _connectedDevice.value = colorFitDevice
         }
     }
 
