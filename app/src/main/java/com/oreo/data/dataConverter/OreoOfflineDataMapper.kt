@@ -3,14 +3,15 @@ package com.oreo.data.dataConverter
 import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.data.Entry
 import com.google.gson.Gson
-import com.noisefit.luna.R
 import com.noisefit.data.dataConverter.DataUnitConverter
+import com.noisefit.luna.R
 import com.noisefit.ui.common.calculatePercentage
 import com.noisefit.watch.SDKWatchType
 import com.noisefit.watch.WatchesSDK
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.common.maxWithoutZero
 import com.noisefit_commans.common.minWithoutZero
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.HealthOverview
 import com.noisefit_commans.data.model.HealthOverviewData
 import com.noisefit_commans.data.model.OreoHeartRate
@@ -43,6 +44,7 @@ class OreoOfflineDataMapper
 @Inject
 constructor(
     val watches: WatchesSDK,
+    val ringDataStore: RingDataStore,
     private val heartRateDataImpl: OreoHeartRateDataImpl,
 ) {
 
@@ -424,6 +426,13 @@ constructor(
             lastHr = lastHrValue.toString()
         }
 
+        if (lastHr == "0") {
+            val lastMeasureValue = ringDataStore.getManualMeasurementValue()
+            if ((lastMeasureValue.timeStamp) + (60 * 1000) > System.currentTimeMillis() && lastMeasureValue.value > 0) {
+                lastHr = lastMeasureValue.value.toString()
+
+            }
+        }
 
         if (overAllMinValue == Int.MAX_VALUE) {
             overAllMinValue = 69

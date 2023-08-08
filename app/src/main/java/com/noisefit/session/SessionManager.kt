@@ -23,6 +23,7 @@ import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.Gender
+import com.noisefit_commans.models.ManualMeasurement
 import com.noisefit_commans.models.SportsModeRequest
 import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.models.SyncDataStatus
@@ -55,18 +56,15 @@ constructor(
 ) {
 
     companion object {
-        var incomingNumber: String? = null
-        var senderName: String? = null
+
         val TAG = "SessionManager"
-        var ringing = false
-        var callReceived: Boolean = false
 
     }
 
     var tempUserLocation: UserLocation? = null
 
     var forceSyncDataWithServer: Boolean = false
-    var isCameraShutterActivityOpened: Boolean = false
+
 
     //    var clevertap: CleverTapAPI? = null
     var insiderAppEventWithoutParams: Insider? = null
@@ -77,7 +75,6 @@ constructor(
     var batterPercent = MutableLiveData(0)
     var batteryPercentRing = MutableLiveData(0)
     var isRingCharging = MutableLiveData(false)
-    var isWorkSchedulerScheduled = false
 
     var forceOtaFlowRunning: Boolean = false
     var forceOtaResponse: UpdateResponse? = null
@@ -106,7 +103,7 @@ constructor(
     private val _bluetoothOnStateDash = MutableLiveData<Boolean>()
     private val _syncCompleted = MutableLiveData<Event<SyncDataStatus>>()
     private val _showSyncOfflineData = MutableLiveData<Event<HealthOverviewDataType>>()
-
+    private val _manualMeasurementValue = MutableLiveData<Event<Boolean>>()
     private val _deviceQueryAction = MutableLiveData<QueryAction>()
     private val _updateDeviceQueryAction = MutableLiveData<UpdateDeviceAction>()
     private val _deviceQueryCallback = MutableLiveData<QueryCallback>()
@@ -125,6 +122,9 @@ constructor(
 
     val reloadNotification: LiveData<Event<Boolean>>
         get() = _reloadNotification
+
+    val manualMeasurementValue: LiveData<Event<Boolean>>
+        get() = _manualMeasurementValue
 
     val bluetoothState: LiveData<Boolean>
         get() = _bluetoothOnState
@@ -185,6 +185,13 @@ constructor(
         _connectState.postValue(ConnectState.UnPaired())
         _connectStateRing.postValue(ConnectState.UnPaired())
     }
+
+    fun setManualMeasurementValue(status: Boolean) {
+        GlobalScope.launch(Main) {
+            _manualMeasurementValue.value = Event(status)
+        }
+    }
+
 
     fun clearSessionManagerHibernate() {
         forceOtaResponse = null
@@ -318,136 +325,136 @@ constructor(
 
 
     private fun logFirebaseEvent(eventName: String, data: HashMap<String, Any>) {
-        val newEventName = eventName.lowercase().replace(" ", "_")
-        Firebase.analytics.logEvent(newEventName, ApplicationUtils.convertMapToBundle(data))
-        LOGS.d("LOGS_FIREBASE_EVENT $newEventName ")
+//        val newEventName = eventName.lowercase().replace(" ", "_")
+//        Firebase.analytics.logEvent(newEventName, ApplicationUtils.convertMapToBundle(data))
+//        LOGS.d("LOGS_FIREBASE_EVENT $newEventName ")
     }
 
     fun logEvent(eventName: String, status: String) {
-        logInsiderAppEvent(
-            eventName,
-            HashMap<String, Any>().apply {
-                this["status"] = status
-            })
+//        logInsiderAppEvent(
+//            eventName,
+//            HashMap<String, Any>().apply {
+//                this["status"] = status
+//            })
     }
 
     fun logInsiderAppEvent(eventName: String) {
-        insiderAppEventWithoutParams = Instance
-
-        val newEventName = eventName.lowercase().replace(" ", "_")
-        insiderAppEventWithoutParams?.tagEvent(newEventName)?.build()
-        LOGS.d("LOGS_INSIDER_EVENT $newEventName")
-        Firebase.analytics.logEvent(newEventName, null)
+//        insiderAppEventWithoutParams = Instance
+//
+//        val newEventName = eventName.lowercase().replace(" ", "_")
+//        insiderAppEventWithoutParams?.tagEvent(newEventName)?.build()
+//        LOGS.d("LOGS_INSIDER_EVENT $newEventName")
+//        Firebase.analytics.logEvent(newEventName, null)
         // LOGS.d("LOGS_FIREBASE_EVENT $newEventName ")
     }
 
     fun logInsiderAppEvent(eventName: String, data: HashMap<String, Any>) {
-        val newEventName = eventName.lowercase().replace(" ", "_")
-        insiderAppEventWithParams = Instance.tagEvent(newEventName)
-        data.forEach { (key, value) ->
-            val key1 = key.lowercase().replace(" ", "_")
-            when (value) {
-                is String -> {
-                    insiderAppEventWithParams?.addParameterWithString(key1, value)
-                }
-
-                is Double -> {
-                    insiderAppEventWithParams?.addParameterWithDouble(key1, value)
-                }
-
-                is Boolean -> {
-                    insiderAppEventWithParams?.addParameterWithBoolean(key1, value)
-                }
-
-                is Int -> {
-                    insiderAppEventWithParams?.addParameterWithInt(key1, value)
-                }
-
-                is Date -> {
-                    insiderAppEventWithParams?.addParameterWithDate(key1, value)
-                }
-
-
-            }
-        }
-//        LOGS.d("LOGS_INSIDER_EVENT_HAS_PARAMS $newEventName ${Gson().toJson(data)}")
-        insiderAppEventWithParams?.build()
-
-        Firebase.analytics.logEvent(newEventName, ApplicationUtils.convertMapToBundle(data))
+//        val newEventName = eventName.lowercase().replace(" ", "_")
+//        insiderAppEventWithParams = Instance.tagEvent(newEventName)
+//        data.forEach { (key, value) ->
+//            val key1 = key.lowercase().replace(" ", "_")
+//            when (value) {
+//                is String -> {
+//                    insiderAppEventWithParams?.addParameterWithString(key1, value)
+//                }
+//
+//                is Double -> {
+//                    insiderAppEventWithParams?.addParameterWithDouble(key1, value)
+//                }
+//
+//                is Boolean -> {
+//                    insiderAppEventWithParams?.addParameterWithBoolean(key1, value)
+//                }
+//
+//                is Int -> {
+//                    insiderAppEventWithParams?.addParameterWithInt(key1, value)
+//                }
+//
+//                is Date -> {
+//                    insiderAppEventWithParams?.addParameterWithDate(key1, value)
+//                }
+//
+//
+//            }
+//        }
+////        LOGS.d("LOGS_INSIDER_EVENT_HAS_PARAMS $newEventName ${Gson().toJson(data)}")
+//        insiderAppEventWithParams?.build()
+//
+//        Firebase.analytics.logEvent(newEventName, ApplicationUtils.convertMapToBundle(data))
         //LOGS.d("LOGS_FIREBASE_EVENT_HAS_PARAMS $newEventName ")
     }
 
     fun addUserAttributeToInsider(isLogin: Boolean, data: HashMap<String, Any>) {
-        val insiderUserData = Instance.currentUser
-        val firebaseInstance = Firebase.analytics
-        data.forEach { (key, value) ->
-            when (value) {
-                is String -> {
-                    if (key.equals("name", true)) {
-                        insiderUserData.setName(value)
-                        firebaseInstance.setUserProperty(key, value)
-
-                    } else if (key.equals("gender", true)) {
-                        if (value.lowercase() == Gender.MALE.name.lowercase())
-                            insiderUserData.setGender(InsiderGender.MALE)
-                        else if (value.lowercase() == Gender.FEMALE.name.lowercase())
-                            insiderUserData.setGender(InsiderGender.FEMALE)
-                        else
-                            insiderUserData.setGender(InsiderGender.OTHER)
-                    } else if (key.equals("dob", true) && !value.equals("null", true)) {
-                        tryCatch {
-                            firebaseInstance.setUserProperty(key, value)
-                            insiderUserData.setBirthday(
-                                DateFormats.getDateFormatFromString2(
-                                    value
-                                )
-                            )
-                            firebaseInstance.setUserProperty(key, value)
-                        }
-
-                    } else if (key.equals("home_page_visit", true)) {
-                        Instance.visitHomePage()
-                        firebaseInstance.logEvent(key, null)
-                    } else {
-                        insiderUserData?.setCustomAttributeWithString(key, value)
-                        firebaseInstance.setUserProperty(key, value)
-                    }
-
-
-                }
-
-                is Int -> {
-                    if (key.equals("age", true)) {
-                        insiderUserData.setAge(value)
-                    } else
-                        insiderUserData?.setCustomAttributeWithInt(key, value)
-                }
-
-                is Double -> {
-                    insiderUserData?.setCustomAttributeWithDouble(key, value)
-                }
-
-                is Boolean -> {
-                    insiderUserData?.setCustomAttributeWithBoolean(key, value)
-                }
-
-            }
-        }
-        if (isLogin) {
-            Instance.setGDPRConsent(true)
-            insiderUserData.setEmailOptin(true)
-            insiderUserData.setSMSOptin(true)
-            //identifiers
-            val user = localDataStore.getUser()
-            val identifiers = InsiderIdentifiers()
-            identifiers.addUserID(user?.id.toString())
-            identifiers.addEmail(user?.email.toString())
-            if (!user?.mobile.isNullOrEmpty()) {
-                val phoneNumber: String = "+91" + user?.mobile.toString()
-                identifiers.addPhoneNumber(phoneNumber.trim())
-            }
-            insiderUserData.login(identifiers)
-        }
+//        val insiderUserData = Instance.currentUser
+//        val firebaseInstance = Firebase.analytics
+//        data.forEach { (key, value) ->
+//            when (value) {
+//                is String -> {
+//                    if (key.equals("name", true)) {
+//                        insiderUserData.setName(value)
+//                        firebaseInstance.setUserProperty(key, value)
+//
+//                    } else if (key.equals("gender", true)) {
+//                        if (value.lowercase() == Gender.MALE.name.lowercase())
+//                            insiderUserData.setGender(InsiderGender.MALE)
+//                        else if (value.lowercase() == Gender.FEMALE.name.lowercase())
+//                            insiderUserData.setGender(InsiderGender.FEMALE)
+//                        else
+//                            insiderUserData.setGender(InsiderGender.OTHER)
+//                    } else if (key.equals("dob", true) && !value.equals("null", true)) {
+//                        tryCatch {
+//                            firebaseInstance.setUserProperty(key, value)
+//                            insiderUserData.setBirthday(
+//                                DateFormats.getDateFormatFromString2(
+//                                    value
+//                                )
+//                            )
+//                            firebaseInstance.setUserProperty(key, value)
+//                        }
+//
+//                    } else if (key.equals("home_page_visit", true)) {
+//                        Instance.visitHomePage()
+//                        firebaseInstance.logEvent(key, null)
+//                    } else {
+//                        insiderUserData?.setCustomAttributeWithString(key, value)
+//                        firebaseInstance.setUserProperty(key, value)
+//                    }
+//
+//
+//                }
+//
+//                is Int -> {
+//                    if (key.equals("age", true)) {
+//                        insiderUserData.setAge(value)
+//                    } else
+//                        insiderUserData?.setCustomAttributeWithInt(key, value)
+//                }
+//
+//                is Double -> {
+//                    insiderUserData?.setCustomAttributeWithDouble(key, value)
+//                }
+//
+//                is Boolean -> {
+//                    insiderUserData?.setCustomAttributeWithBoolean(key, value)
+//                }
+//
+//            }
+//        }
+//        if (isLogin) {
+//            Instance.setGDPRConsent(true)
+//            insiderUserData.setEmailOptin(true)
+//            insiderUserData.setSMSOptin(true)
+//            //identifiers
+//            val user = localDataStore.getUser()
+//            val identifiers = InsiderIdentifiers()
+//            identifiers.addUserID(user?.id.toString())
+//            identifiers.addEmail(user?.email.toString())
+//            if (!user?.mobile.isNullOrEmpty()) {
+//                val phoneNumber: String = "+91" + user?.mobile.toString()
+//                identifiers.addPhoneNumber(phoneNumber.trim())
+//            }
+//            insiderUserData.login(identifiers)
+//        }
 
     }
 

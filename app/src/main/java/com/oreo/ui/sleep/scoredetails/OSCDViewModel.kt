@@ -12,11 +12,9 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
-import com.oreo.data.model.BreakUp
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Comparison
 import com.oreo.data.model.OInternalPageResponseModal
-import com.oreo.data.model.OTestInternalPageResponseModal
 import com.oreo.data.model.ResultData
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,14 +28,13 @@ class OSCDViewModel @Inject constructor(
 
 
     var topDateLastScrollPosition = 0
-    var topGraphLastScrollPosition = 15
+
 
     var dayType: String? = null
     var viewType: String? = null
     var itemType: String? = null
     var itemClickType: String? = null
     var selectedDate: String? = null
-    var defaultDayPos: Int = 0
     var isProgressEqual: Boolean = false
     var trendDifferenceProgress: Int = 0
 
@@ -52,16 +49,9 @@ class OSCDViewModel @Inject constructor(
     val comparisonData: LiveData<Comparison>
         get() = _comparisonData
 
-    private val _internalActDetailsData = MutableLiveData<OTestInternalPageResponseModal>()
 
-    /*val internalActDetailsData: LiveData<OTestInternalPageResponseModal>
-        get() = _internalActDetailsData
-*/
     private val _topLevelData = MutableLiveData<ResultData>()
     val topLevelData: LiveData<ResultData> = _topLevelData
-
-    /* private val _topActLevelData = MutableLiveData<ResultData>()
-     val topActLevelData: LiveData<ResultData> = _topActLevelData*/
 
     fun setTrendData(value: Int) {
         trendDifferenceProgress = value
@@ -175,27 +165,13 @@ class OSCDViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-//                            _internalActDetailsData.postValue(it)
                             _internalDetailsData.postValue(it)
 
                             it.result?.firstOrNull()?.let { data ->
-//                                _topActLevelData.postValue(data)
                                 _topLevelData.postValue(data)
                             }
 
-                            /*val comparison = Comparison()
-                            val breakUpList = ArrayList<BreakUp>()
-                            for (i in 0 until 23) {
-                                val child = BreakUp()
-                                child.calories = 10.plus(i.times(5))
-                                child.avgCalories = 25.plus(i.times(2))
-                                child.hourOfDay = 16000
-                                breakUpList.add(child)
-                            }
-                            comparison.today = 44
-                            comparison.average = 66
-                            comparison.breakup = breakUpList
-                            _comparisonData.postValue(comparison)*/
+
                         }
                     }
                 }
@@ -256,7 +232,7 @@ class OSCDViewModel @Inject constructor(
     ): Triple<Pair<ArrayList<ChartModel>, Int>, ArrayList<ChartModel>, ArrayList<ChartModel>> {
         dataList.reversed()
         val list = java.util.ArrayList<ChartModel>()
-
+        var max = 10
         dataList.forEach {
 
 
@@ -279,13 +255,34 @@ class OSCDViewModel @Inject constructor(
                     chartModel.value = hour
                 }
 
+                ViewItemClickType.DISTANCE.name -> {
+                    chartModel.isDistanceGraph = true
+                    chartModel.value = it.data.toInt()
+                }
+
                 else -> {
                     chartModel.value = it.data.toInt()
                 }
             }
 
+
+
+
             list.add(chartModel)
         }
+
+        when (itemClickType) {
+            ViewItemClickType.ACTIVITY_SCORE.name,
+            ViewItemClickType.READINESS_SCORE.name,
+            ViewItemClickType.SLEEP_SCORE.name -> {
+                max = 100
+            }
+
+            else -> {
+
+            }
+        }
+
 
         val suffix = java.util.ArrayList<ChartModel>()
         for (i in 1..14) {
@@ -303,7 +300,7 @@ class OSCDViewModel @Inject constructor(
         chartModel.date = ""
         prefix.add(chartModel)
 
-        return Triple(Pair(list, 0), suffix, prefix)
+        return Triple(Pair(list, max), suffix, prefix)
     }
 
     fun updateSelectedDate(date: String) {

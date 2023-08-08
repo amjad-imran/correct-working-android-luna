@@ -145,8 +145,7 @@ constructor(
             val userName = "${getGreetingMessage()}, ${
                 summary.user?.getOnlyFirstName()?.trim()?.ifEmpty { "Stranger" }
             }"
-            val userActivities =
-                ArrayList<OHealthOverview>()
+            val userActivities = ArrayList<OHealthOverview>()
 
             val hrValue = userRepository.getSummaryHRHealthOverview()
 
@@ -156,10 +155,10 @@ constructor(
                     DateFormats.getCurrentDate(DateFormats.dateTimeFormatWithWeekWithoutYear)
                 )
             )
-            val autoSportCount = userRepository.getSummaryAutoWorkoutCount()
-            if (autoSportCount > 0) {
-                userActivities.add(OHealthOverview.AutoSport(autoSportCount))
-            }
+//            val autoSportCount = userRepository.getSummaryAutoWorkoutCount()
+//            if (autoSportCount > 0) {
+//                userActivities.add(OHealthOverview.AutoSport(autoSportCount))
+//            }
 
 //            userActivities.add(1, OHealthOverview.WAlert(2))
             if (ringDataStore.getRingDevice() == null) {
@@ -251,8 +250,10 @@ constructor(
         if (data == null) {
             return sleepArray
         }
+
         data.sleepStage.forEach {
             val type = it.sleepType
+            LOGS.d("makeSleepArray $type")
             if (type?.lowercase() == "awake") {
                 sleepArray.add(
                     SleepData.SleepDataBreakup(
@@ -292,12 +293,12 @@ constructor(
             it is OHealthOverview.PairDevice
         }
 
-        val autoSportIndex = summary.healthOverviewData.value?.indexOfFirst {
-            it is OHealthOverview.AutoSport
-        }
-        if (autoSportIndex != null && autoSportIndex != -1) {
-            summary.healthOverviewData.value?.removeAt(autoSportIndex)
-        }
+//        val autoSportIndex = summary.healthOverviewData.value?.indexOfFirst {
+//            it is OHealthOverview.AutoSport
+//        }
+//        if (autoSportIndex != null && autoSportIndex != -1) {
+//            summary.healthOverviewData.value?.removeAt(autoSportIndex)
+//        }
         if (index == -1) {
             summary.healthOverviewData.value?.add(1, OHealthOverview.PairDevice())
         }
@@ -305,7 +306,8 @@ constructor(
         summary.healthOverviewData.postValue(summary.healthOverviewData.value)
     }
 
-    fun updateManualValue(manualMeasurement: ManualMeasurement) {
+    fun updateManualValue() {
+        val manualMeasurement = ringDataStore.getManualMeasurementValue()
         if (manualMeasurement.manualMeasureType == ManualMeasureType.HEART_RATE) {
             val index = summary.healthOverviewData.value?.indexOfFirst {
                 it is OHealthOverview.HeartRate

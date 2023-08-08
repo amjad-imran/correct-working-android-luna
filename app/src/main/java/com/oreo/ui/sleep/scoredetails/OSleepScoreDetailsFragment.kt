@@ -987,7 +987,6 @@ class OSleepScoreDetailsFragment :
             binding.lytTopGraphView.rvTopBarGraph.updateDataWithMax(
                 topGraphData.first.first,
                 topGraphData.third,
-
                 topGraphData.second,
                 topGraphData.first.second,
                 barGraphScoreColor().first,

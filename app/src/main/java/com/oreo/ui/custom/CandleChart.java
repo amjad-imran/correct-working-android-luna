@@ -199,13 +199,13 @@ public class CandleChart extends View {
         mHeight = h;
         CandleChartModel model;
 //        boolean hasActivity = false;
-        LOGS.INSTANCE.d("DSAdsasdadasdas::12:::activity  " + list.size());
+
         for (int i = list.size() - 1; i >= 0; i--) {
             model = list.get(i);
-            LOGS.INSTANCE.d("DSAdsasdadasdas::12:::activity  " + model.getTopText());
+
             if (model.getTopText() != null) {
                 offSet = (list.size() - 1 - i) * 3 * chartLineWidth;
-                LOGS.INSTANCE.d("DSAdsasdadasdas::12:::activity  " + offSet);
+
 //                hasActivity = true;
                 break;
             }
