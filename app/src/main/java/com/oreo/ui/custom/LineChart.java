@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.noisefit.luna.R;
+import com.noisefit_commans.utils.DistanceUtil;
 import com.noisefit_commans.utils.LOGS;
 import com.oreo.data.model.ChartModel;
 
@@ -28,7 +29,7 @@ public class LineChart extends View {
     private int bgRightColor;
     private int bgTopColor;
     private int bgBottomColor;
-
+    private boolean isDistanceGraph;
     private int xTextColor;
     private int yTextColor;
     private int scaleColor;
@@ -62,7 +63,7 @@ public class LineChart extends View {
     private float outCircleRadius;
     private float scaleNodeRadius;
 
-
+    private boolean showLastCircle;
     private Paint bgPaint;
     private Paint bgLeftPaint;
     private Paint bgRightPaint;
@@ -316,7 +317,7 @@ public class LineChart extends View {
                 continue;
             }
             noneZeroValueCount += 1;
-
+            isDistanceGraph = datas.get(i).isDistanceGraph();
             if (xMax == 0) {
                 xMax = item.getValue();
 
@@ -329,7 +330,7 @@ public class LineChart extends View {
             count += 1;
         }
 
-        LOGS.INSTANCE.d("NonZeroValues = " + noneZeroValueCount + " " + datas.size() / 2);
+
         if (noneZeroValueCount <= datas.size() / 2) {
             avgValue = 0;
         } else {
@@ -338,14 +339,16 @@ public class LineChart extends View {
             }
         }
 
-        if (xMax < 20) {
-            xMax += 5;
-        } else if (xMax < 100) {
-            xMax += 50;
-        } else if (xMax < 1000) {
-            xMax += 500;
+        if (xMax1 == 100) {
+            xMax = xMax1;
+        } else {
+            int perOfMax = (xMax * 20) / 100;
+            LOGS.INSTANCE.d("NonZeroValuesBarMax --> " + perOfMax + " ----> " + xMax);
+            xMax += perOfMax;
         }
 
+
+        LOGS.INSTANCE.d("NonZeroValuesxMax = " + xMax);
         postInvalidate();
     }
 
@@ -368,7 +371,7 @@ public class LineChart extends View {
             if (item.getValue() == 0) {
                 continue;
             }
-
+            isDistanceGraph = datas.get(i).isDistanceGraph();
             noneZeroValueCount += 1;
 
             if (xMax == 0) {
@@ -392,21 +395,21 @@ public class LineChart extends View {
         }
 
 
-        if (xMax < 20) {
-            xMax += 5;
-        } else if (xMax < 100) {
-            xMax += 50;
-        } else if (xMax < 1000) {
-            xMax += 500;
-        }
+//        if (xMax < 20) {
+//            xMax += 5;
+//        } else if (xMax < 100) {
+//            xMax += 50;
+//        } else if (xMax < 1000) {
+//            xMax += 500;
+//        }
 
-
+        xMax = 120;
 
         postInvalidate();
     }
 
 
-    public void updateDataWithMaxMin(List<ChartModel> datas, List<ChartModel> prefixList, List<ChartModel> suffixList, int offSet) {
+    public void updateDataWithMaxMin(List<ChartModel> datas, List<ChartModel> prefixList, List<ChartModel> suffixList, int offSet, boolean showLastCircle) {
         list.clear();
         list.addAll(prefixList);
         list.addAll(datas);
@@ -447,17 +450,18 @@ public class LineChart extends View {
             avgValue = sum / count;
         }
 
+
+        this.showLastCircle = showLastCircle;
         xMax += offSet;
         xMin -= offSet;
         if (xMin < 0) {
             xMin = 0;
         }
-
+        LOGS.INSTANCE.d("dsasdasad " + avgValue + " " + xMax + " " + xMin);
 
 
         postInvalidate();
     }
-
 
     public int getMax() {
         return xMax;
@@ -547,25 +551,33 @@ public class LineChart extends View {
 
 
     private void drawLeft(Canvas canvas) {
-        LOGS.INSTANCE.d("drawLeft " + showExtremeLine + " " + xMin + " " + xMax + " " + avgValue);
 
-        String maxStr = String.valueOf(xMax);
+        String maxStr;
+        String avgStr;
+        if (isDistanceGraph) {
+            maxStr = DistanceUtil.INSTANCE.convertMeterToKm(xMax);
+            avgStr = DistanceUtil.INSTANCE.convertMeterToKm(avgValue);
+        } else {
+            maxStr = String.valueOf(xMax);
+            avgStr = String.valueOf(avgValue);
+        }
+
         String minStr = String.valueOf(xMin);
-        String avgStr = String.valueOf(avgValue);
+
         xTextPaint.setColor(xTextColor & 0x80ffffff);
         if (showExtremeLine) {
-            float max = mHeight - bottomWith - xMax * (mHeight - topWith - bottomWith) / (xMax - xMin);
-            canvas.drawLine(leftWith, max, mWith - rightWith, max, gridPaint);
+
+            float max = mHeight - bottomWith - (xMax - xMin) * (mHeight - topWith - bottomWith) / (xMax - xMin);
+            canvas.drawLine(leftWith, max, mWith, max, gridPaint);
             xTextPaint.getTextBounds(maxStr, 0, maxStr.length(), xTextBounds);
-            canvas.drawText(maxStr, mWith - rightWith + dip2px(10), max + xTextBounds.height() / 2f, xTextPaint);
+            canvas.drawText(maxStr, mWith - rightWith - xTextBounds.width() + dip2px(10), max + xTextBounds.height() / 2f + dip2px(10), xTextPaint);
 
             float min = mHeight - bottomWith - 0 * (mHeight - topWith - bottomWith) / (xMax - xMin);
-            canvas.drawLine(leftWith, min, mWith - rightWith, min, gridPaint);
+            canvas.drawLine(leftWith, min, mWith, min, gridPaint);
             xTextPaint.getTextBounds(maxStr, 0, maxStr.length(), xTextBounds);
-            canvas.drawText(minStr, mWith - rightWith + dip2px(10), min + xTextBounds.height() / 2f, xTextPaint);
+            canvas.drawText(minStr, mWith - rightWith + dip2px(10), min + xTextBounds.height() / 2f - dip2px(10), xTextPaint);
         }
-        float avg = mHeight - bottomWith - avgValue * (mHeight - topWith - bottomWith) / (xMax - xMin);
-
+        float avg = mHeight - bottomWith - (avgValue - xMin) * (mHeight - topWith - bottomWith) / (xMax - xMin);
 
         if (avgValue > 0) {
             canvas.drawLine(leftWith, avg, mWith - rightWith, avg, centerLinePaint);
@@ -633,14 +645,14 @@ public class LineChart extends View {
                         }
                     } else if (i == lastPosition - 1) {
                         ChartModel pre = list.get(i - 1);
-                        if(pre.getValue() == 0){
+                        if (pre.getValue() == 0) {
                             canvas.drawCircle(x, y, outCircleRadius, outCirclePaint);
                             canvas.drawCircle(x, y, innerCircleRadius, innerCirclePaint);
                         }
-                    }else{
+                    } else {
                         ChartModel pre = list.get(i - 1);
                         next = list.get(i + 1);
-                        if(pre.getValue() == 0 && next.getValue() == 0){
+                        if (pre.getValue() == 0 && next.getValue() == 0) {
                             canvas.drawCircle(x, y, outCircleRadius, outCirclePaint);
                             canvas.drawCircle(x, y, innerCircleRadius, innerCirclePaint);
                         }
@@ -662,6 +674,13 @@ public class LineChart extends View {
                 }
             }
             canvas.drawLine(x, topWith, x, mHeight - bottomWith, gridPaint);
+
+            if (showLastCircle) {
+
+                if (i == 1 && current.getValue() > 0) {
+                    canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint);
+                }
+            }
         }
 //        canvas.drawPath(fillPath, chartLineFillPaint);
         if ((offSet + moveOffSet) < 0 || (offSet + moveOffSet) > (list.size() - 1) * unitHLenth) {

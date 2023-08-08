@@ -27,6 +27,8 @@ public class SleepLineChart extends View {
     private boolean showLowCircle;
 
     private boolean showHighCircle;
+
+
     private int yTextColor;
     private int bgColor;
     private int bgLeftColor;

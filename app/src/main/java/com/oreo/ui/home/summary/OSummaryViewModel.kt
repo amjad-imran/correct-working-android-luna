@@ -118,13 +118,18 @@ constructor(
 
     private fun convertIntToChartModel(data: List<Int>?): ArrayList<ChartModel> {
         val list = ArrayList<ChartModel>()
+        val chartModel1 = ChartModel()
+        chartModel1.date = ""
+        chartModel1.index = ""
+        chartModel1.value = 0
+        list.add(chartModel1)
         data?.forEach {
             val chartModel = ChartModel()
             var value = it
             if (value < 0) {
                 value = 0
             }
-            chartModel.value = value
+            chartModel.value = value//(10..100).random()
             chartModel.date = ""
             chartModel.index = ""
             list.add(chartModel)
@@ -140,8 +145,7 @@ constructor(
             val userName = "${getGreetingMessage()}, ${
                 summary.user?.getOnlyFirstName()?.trim()?.ifEmpty { "Stranger" }
             }"
-            val userActivities =
-                ArrayList<OHealthOverview>()
+            val userActivities = ArrayList<OHealthOverview>()
 
             val hrValue = userRepository.getSummaryHRHealthOverview()
 
@@ -151,10 +155,10 @@ constructor(
                     DateFormats.getCurrentDate(DateFormats.dateTimeFormatWithWeekWithoutYear)
                 )
             )
-            val autoSportCount = userRepository.getSummaryAutoWorkoutCount()
-            if (autoSportCount > 0) {
-                userActivities.add(OHealthOverview.AutoSport(autoSportCount))
-            }
+//            val autoSportCount = userRepository.getSummaryAutoWorkoutCount()
+//            if (autoSportCount > 0) {
+//                userActivities.add(OHealthOverview.AutoSport(autoSportCount))
+//            }
 
 //            userActivities.add(1, OHealthOverview.WAlert(2))
             if (ringDataStore.getRingDevice() == null) {
@@ -246,8 +250,10 @@ constructor(
         if (data == null) {
             return sleepArray
         }
+
         data.sleepStage.forEach {
             val type = it.sleepType
+            LOGS.d("makeSleepArray $type")
             if (type?.lowercase() == "awake") {
                 sleepArray.add(
                     SleepData.SleepDataBreakup(
@@ -286,14 +292,22 @@ constructor(
         val index = summary.healthOverviewData.value?.indexOfFirst {
             it is OHealthOverview.PairDevice
         }
+
+//        val autoSportIndex = summary.healthOverviewData.value?.indexOfFirst {
+//            it is OHealthOverview.AutoSport
+//        }
+//        if (autoSportIndex != null && autoSportIndex != -1) {
+//            summary.healthOverviewData.value?.removeAt(autoSportIndex)
+//        }
         if (index == -1) {
             summary.healthOverviewData.value?.add(1, OHealthOverview.PairDevice())
-            summary.healthOverviewData.postValue(summary.healthOverviewData.value)
         }
 
+        summary.healthOverviewData.postValue(summary.healthOverviewData.value)
     }
 
-    fun updateManualValue(manualMeasurement: ManualMeasurement) {
+    fun updateManualValue() {
+        val manualMeasurement = ringDataStore.getManualMeasurementValue()
         if (manualMeasurement.manualMeasureType == ManualMeasureType.HEART_RATE) {
             val index = summary.healthOverviewData.value?.indexOfFirst {
                 it is OHealthOverview.HeartRate

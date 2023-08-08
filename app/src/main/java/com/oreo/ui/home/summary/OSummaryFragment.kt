@@ -16,7 +16,6 @@ import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.constants.EventConstants
 import com.noisefit_commans.interfaces.connection.ConnectState
-import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
@@ -283,11 +282,12 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 binding.progressBar.root.gone()
             }
         }
-        viewModel.sessionManager.updateDeviceCallback.observe(this) {
-            it.getContent()?.let { callback ->
-                if (callback is UpdateDeviceDataCallback.ManualMeasurementObtained) {
-                    viewModel.updateManualValue(callback.manualMeasurement)
+        viewModel.sessionManager.manualMeasurementValue.observe(this) {
+            it.getContent()?.let {
+                if (it) {
+                    viewModel.updateManualValue()
                 }
+
             }
         }
 

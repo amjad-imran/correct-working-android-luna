@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.DeviceFeatures
 import com.noisefit_commans.models.ColorFitDevice
+import com.noisefit_commans.models.ManualMeasurement
 import com.noisefit_commans.utils.DateFormats
 import javax.inject.Inject
 
@@ -21,7 +22,7 @@ private const val REGISTER_DAY_KEY = "REGISTER_DAY_KEY"
 private const val SLEEP_WALKAROUND_KEY = "SLEEP_WALKAROUND_KEY"
 private const val READINESS_WALKAROUND_KEY = "READINESS_WALKAROUND_KEY"
 private const val ACTIVITY_WALKAROUND_KEY = "ACTIVITY_WALKAROUND_KEY"
-
+private const val MANUAL_MEASUREMENT_KEY = "MANUAL_MEASUREMENT_KEY"
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
 
@@ -120,6 +121,14 @@ class RingDataStoreImpl
 
     override fun isActivityWalkAroundShown(): Boolean {
         return mPrefs.getBoolean(ACTIVITY_WALKAROUND_KEY, false)
+    }
+
+    override fun setManualMeasurementValue(data: ManualMeasurement) {
+        mPrefs.edit()?.putString(MANUAL_MEASUREMENT_KEY, gson.toJson(data))?.commit()
+    }
+
+    override fun getManualMeasurementValue(): ManualMeasurement {
+        return gson.fromJson(mPrefs.getString(MANUAL_MEASUREMENT_KEY, null), ManualMeasurement::class.java)
     }
 
     override fun saveLastSyncTimeStamp(timeStamp: Long) {

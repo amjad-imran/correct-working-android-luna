@@ -2,11 +2,7 @@ package com.noisefit.data.remote.abstraction
 
 import com.google.gson.JsonObject
 import com.noisefit.data.model.*
-import com.noisefit.data.model.diy.DiyCustomWatchFacesData
-import com.noisefit.data.model.timeline.CommentData
 import com.noisefit.data.model.timeline.FriendTimeline
-import com.noisefit.data.model.timeline.ReactionData
-import com.noisefit.data.model.timeline.TimelineData
 import com.noisefit.data.remote.CityData
 import com.noisefit.data.remote.StateData
 import com.noisefit.data.remote.UserLocationUpdatedResponse
@@ -14,8 +10,6 @@ import com.noisefit.data.remote.request.LoginRequest
 import com.noisefit.data.remote.request.RegistrationRequest
 import com.noisefit.data.remote.request.UpdateAdditionalDetailRequest
 import com.noisefit.data.remote.response.CatWiseWatchFacesItem
-import com.noisefit.data.remote.response.DiyMyCreation
-import com.noisefit.data.remote.response.WatchFaceCategory2
 import com.noisefit.data.remote.response.WatchFaceCustomListResponse
 import com.noisefit.data.remote.response.Watchface2
 import com.noisefit_commans.data.model.*
@@ -164,16 +158,6 @@ interface NetworkService {
         @Part image: MultipartBody.Part?
     ): BaseApiResponseImage
 
-    @Multipart
-    @POST
-    suspend fun createPost(
-        @Url url: String,
-        @Part image: MultipartBody.Part?,
-        @Part("caption") caption: RequestBody,
-        @Part("tagged_user") tags: RequestBody,
-        @Part("media_type") mediaType: RequestBody?
-    ): BaseApiResponse<Any>
-
 
     @Multipart
     @POST("/users/upload_crash_report")
@@ -228,17 +212,6 @@ interface NetworkService {
         @Url url: String
     ): BaseApiResponse<WatchFaceCustomListResponse>
 
-    @GET
-    suspend fun getWatchFace2CustomData(
-        @Url url: String
-    ): BaseApiResponse<List<Watchface2>>
-
-    @GET
-    suspend fun getWatchfaceCategoriesV2(
-        @Url url: String,
-        @Query("category_id") category_id: Int? = null,
-        @Query("page") page: Int? = null
-    ): BaseApiResponse<List<WatchFaceCategory2>>
 
     @POST("/watch_faces/v3/current")
     suspend fun setRecentWatchFace(
@@ -255,41 +228,6 @@ interface NetworkService {
         @Url url: String
     ): BaseApiResponse<List<Watchface2>?>
 
-    @GET
-    suspend fun getDiyCustomWatchFaces(
-        @Url url: String
-    ): BaseApiResponse<DiyCustomWatchFacesData>
-
-    @GET
-    suspend fun getDiyWatchFaceOnlineList(
-        @Url url: String
-    ): BaseApiResponse<List<DiyMyCreation>>
-
-    @GET
-    suspend fun deleteDiyWatchFaceOnline(
-        @Url url: String
-    ): BaseApiResponseData<Any>
-
-    //https://app-micro-uat.gonoise.com/watch_faces/v2/save/custom_watchface
-    @Multipart
-    @POST
-    suspend fun createDiyWatchFaceOnline(
-        @Url url: String,
-        @Part("filter") filter: RequestBody,
-        @Part("filter_intensity") filterIntensity: RequestBody,
-        @Part("text_layer_name") textLayerName: RequestBody,
-        @Part("text_layer_link") textLayerLink: RequestBody,
-        @Part("text_bin") textBin: RequestBody,
-        @Part("text_type") textType: RequestBody,
-        @Part("colour") colour: RequestBody,
-        @Part file: MultipartBody.Part?
-
-    ): BaseApiResponseData<Any>
-
-    @POST
-    suspend fun createDiyWatchFaceOnlineWM(
-        @Url url: String, @Body requestObject: JsonObject
-    ): BaseApiResponseData<Any>
 
     @GET("/cloud_watch_faces/v3/dial_plate/info")
     suspend fun getWatchFaceDownloadInfo(
@@ -301,10 +239,6 @@ interface NetworkService {
         @Url url: String, @Body requestObject: JsonObject
     ): BaseApiResponseData<Any>
 
-    @POST
-    suspend fun rateWatchFace(
-        @Url url: String, @Body requestObject: JsonObject
-    ): BaseApiResponseData<Any>
 
     @GET
     suspend fun getFavouriteWatchFaces(
@@ -337,20 +271,6 @@ interface NetworkService {
     ): BaseApiResponse<List<WatchFace>>
 
 
-    //HistoryData APIs
-    @POST
-    suspend fun postCombinedHistoryData(
-        @Url url: String,
-        @Body requestObject: UserDataPost
-    ): BaseApiResponse<VersionCheckResponse>
-
-    @POST
-    suspend fun postSleepHistoryData(
-        @Url url: String,
-        @Body requestObject: UserDataPost
-    ): BaseApiResponse<VersionCheckResponse>
-
-
     //HistoryData APIs ring
     @POST
     suspend fun postOreoCombinedHistoryData(
@@ -364,20 +284,6 @@ interface NetworkService {
         @Body requestObject: OreoUserDataPost
     ): BaseApiResponse<VersionCheckResponse>
 
-//    @POST("/multisync/create")
-//    suspend fun postCombinedBloodOxygenData(@Body requestObject: CombinedStressBloodPost): BaseApiResponse<MessageResponse>
-//
-//    @POST("/stress")
-//    suspend fun postStressData(@Body requestObject: CommonActivityPost): BaseApiResponse<MessageResponse>
-//
-//    @POST("/temps")
-//    suspend fun postBodyTempData(@Body requestObject: BodyTemperaturePost): BaseApiResponse<MessageResponse>
-//
-//    @POST("/blood_oxygen")
-//    suspend fun postBloodOxygenData(@Body requestObject: CommonActivityPost): BaseApiResponse<MessageResponse>
-//
-//    @POST("/heart_rates")
-//    suspend fun postHrHistoryData(@Body requestObject: HrHistoryPost): BaseApiResponse<MessageResponse>
 
 
     @GET
@@ -560,136 +466,11 @@ interface NetworkService {
         @Url string: String,
     ): BaseApiResponse<List<CityData>>
 
-    @GET
-    suspend fun getUserFriendEmoji(
-        @Url string: String,
-    ): BaseApiResponse<UserFriendReactions>
 
     @POST
     suspend fun saveUserLocation(
         @Url string: String, @Body jsonObject: JsonObject
     ): BaseApiResponse<UserLocationUpdatedResponse>
-
-    @POST
-    suspend fun postEmojiToUser(
-        @Url string: String, @Body jsonObject: JsonObject
-    ): BaseApiResponse<Any>
-
-    @POST
-    suspend fun getFriendProfile(
-        @Url string: String, @Body jsonObject: JsonObject
-    ): BaseApiResponse<FriendProfile>
-
-    @POST
-    suspend fun getCommonFriends(
-        @Url string: String, @Body jsonObject: JsonObject
-    ): BaseApiResponse<List<BuddiesUserNew>>
-
-    @GET
-    suspend fun getFriendChallenges(
-        @Url string: String,
-    ): BaseApiResponse<ChallengeFriendListingResponse>
-
-    @GET
-    suspend fun getPendingRequestCount(
-        @Url string: String,
-    ): BaseApiResponse<RequestCountResponse>
-
-    @POST
-    suspend fun getFriendBadges(
-        @Url string: String, @Body jsonObject: JsonObject
-    ): BaseApiResponse<List<FriendBadge>>
-
-    @GET
-    suspend fun getCompetitionFriendList(
-        @Url string: String,
-    ): BaseApiResponse<CompeteFriendResponse>
-
-    @POST
-    suspend fun getNoiseFitContactsList(
-        @Url url: String, @Body jsonObject: JsonObject
-    ): BaseApiResponse<List<BuddiesUserNew>>
-
-    @POST
-    suspend fun getInterestList(
-        @Url url: String, @Body jsonObject: JsonObject
-    ): BaseApiResponse<List<BuddiesUserNew>>
-
-    @POST
-    suspend fun getPastWinnerList(
-        @Url url: String, @Body jsonObject: JsonObject
-    ): BaseApiResponse<List<BuddiesUserNew>>
-
-    @POST
-    suspend fun getNearByList(
-        @Url url: String, @Body jsonObject: JsonObject
-    ): BaseApiResponse<List<BuddiesUserNew>>
-
-    @GET
-    suspend fun getReceivedRequest(
-        @Url url: String,
-    ): BaseApiResponse<ReceivedRequestResponse>
-
-    @GET
-    suspend fun getSentRequest(
-        @Url url: String,
-    ): BaseApiResponse<ReceivedRequestResponse>
-
-    @GET
-    suspend fun getAllCompetitionRequests(
-        @Url url: String,
-    ): BaseApiResponse<List<Requests>>
-
-    @POST
-    suspend fun setCompetitionRequestStatus(
-        @Url url: String, @Body jsonObject: JsonObject
-    ): BaseApiResponse<String>
-
-    @POST
-    suspend fun setFriendRequestStatus(
-        @Url url: String, @Body jsonObject: JsonObject
-    ): BaseApiResponse<String>
-
-    @GET
-    suspend fun getAllSummaryData(
-        @Url url: String,
-    ): BaseApiResponse<RoundUpResponse>
-
-    //rewards
-    @GET
-    suspend fun getTransactionHistory(
-        @Url url: String
-    ): BaseApiResponse<TransHistoryData>
-
-    @GET
-    suspend fun getTaskListData(
-        @Url url: String
-    ): BaseApiResponse<TaskListData>
-
-    @GET
-    suspend fun getRewardAboutData(
-        @Url url: String
-    ): BaseApiResponse<List<RewardAboutData>>
-
-    @GET
-    suspend fun getStreaksAboutData(
-        @Url url: String
-    ): BaseApiResponse<AboutStreakResponse>
-
-    @GET
-    suspend fun getRewardProfileData(
-        @Url url: String
-    ): BaseApiResponse<RewardProfileData>
-
-    @GET
-    suspend fun getDealsList(
-        @Url url: String
-    ): BaseApiResponse<AllDealsResponse>
-
-    @GET
-    suspend fun getStreakData(
-        @Url url: String
-    ): BaseApiResponse<StreakDetailsResponse>
 
 
     //Challenge APIs
@@ -864,140 +645,18 @@ interface NetworkService {
         @Url url: String
     ): BaseApiResponse<VoucherListData>
 
-    @GET
-    suspend fun getVoucherDetails(
-        @Url url: String
-    ): BaseApiResponse<VoucherDetailsData>
-
-    @GET
-    suspend fun getCouponDetails(
-        @Url url: String
-    ): BaseApiResponse<VoucherDetailsData>
-
-    //content
-    @GET
-    suspend fun getContentList(
-        @Url url: String
-    ): BaseApiResponse<ContentListData>
-
-    @GET
-    suspend fun getSubCategoriesList(
-        @Url url: String
-    ): BaseApiResponse<List<VideosList>>
-
-    @GET
-    suspend fun getVideoDetails(
-        @Url url: String
-    ): BaseApiResponse<VideosList>
-
-    @POST
-    suspend fun updateVideoProgress(
-        @Url url: String, @Body jsonObject: JsonObject
-    ): BaseApiResponse<Any>
-
-    @POST
-    suspend fun getFriendsFriend(
-        @Url url: String, @Body jsonObject: JsonObject
-    ): BaseApiResponse<List<FriendsFriendListData>>
-
-    @POST
-    suspend fun reportFeed(
-        @Url url: String, @Body jsonObject: JsonObject
-    ): BaseApiResponse<DeleteCommentResponse>
-
-    @PUT
-    suspend fun editComment(
-        @Url url: String, @Body jsonObject: JsonObject
-    ): BaseApiResponse<Any>
-
-    @GET
-    suspend fun getComment(
-        @Url url: String
-    ): BaseApiResponse<ArrayList<CommentData>>
-
-    @POST
-    suspend fun addComment(
-        @Url url: String, @Body jsonObject: JsonObject
-    ): BaseApiResponse<List<CommentData>>
-
-    @PUT
-    suspend fun editReaction(@Url url: String, @Body jsonObject: JsonObject): BaseApiResponse<Any>
-
-    @POST
-    suspend fun addCommentReply(
-        @Url url: String, @Body jsonObject: JsonObject
-    ): BaseApiResponse<Any>
-
-    @PUT
-    suspend fun updateCommentReply(
-        @Url url: String, @Body jsonObject: JsonObject
-    ): BaseApiResponse<Any>
-
-    @GET
-    suspend fun getCommentReply(
-        @Url url: String
-    ): BaseApiResponse<Any>
-
-    @DELETE
-    suspend fun deleteCommentReply(
-        @Url url: String
-    ): BaseApiResponse<Any>
-
-    @POST
-    suspend fun addReaction(
-        @Url url: String, @Body jsonObject: JsonObject
-    ): BaseApiResponse<List<ReactionData>>
-
 
     @GET
     suspend fun getTimeLine(
         @Url url: String
     ): BaseApiResponse<FriendTimeline>
 
-    @GET
-    suspend fun getPostReactions(
-        @Url url: String
-    ): BaseApiResponse<List<UserFriendReactions>>
-
-    @GET
-    suspend fun getPostReactionsPaginate(
-        @Url url: String,
-        @Query("type") reaction: Int?,
-        @Query("getCount") getCount: Int?,
-        @Query("page") page: Int
-    ): BaseApiResponse<ReactionsUsers>
-
-
-    @GET
-    suspend fun getPostReactionsComments(
-        @Url url: String,
-        @Query("page") pageNo: Int
-    ): BaseApiResponse<TimelineData>
-
-    @GET
-    suspend fun getNoiseTimeLine(
-        @Url url: String
-    ): BaseApiResponse<FriendTimeline>
 
     @GET
     suspend fun getDashboardFeed(
         @Url url: String
     ): BaseApiResponse<FeedResponse>
 
-    @DELETE
-    suspend fun deletePorC(
-        @Url url: String
-    ): BaseApiResponse<DeleteCommentResponse>
-
-    @GET
-    suspend fun getTemplateList(
-        @Url url: String
-    ): BaseApiResponse<Any>
-
-    @GET
-    suspend fun getPostList(
-        @Url url: String
-    ): BaseApiResponse<Any>
 
     @GET
     suspend fun getRecentChallenges(
@@ -1007,72 +666,6 @@ interface NetworkService {
     @GET("/activities/v3/list/feeds")
     suspend fun geRecentActivities(
     ): BaseApiResponse<RecentActivities>
-
-    @GET
-    suspend fun getReportedList(
-        @Url url: String
-    ): BaseApiResponse<List<ReportAbuseData>>
-
-    @GET
-    suspend fun getImageTemplates(
-        @Url url: String
-    ): BaseApiResponse<List<ImageTemplate>>
-
-    @GET
-    suspend fun getTagFriendsList(
-        @Url url: String
-    ): BaseApiResponse<List<MentionUser>>
-
-    @PUT
-    suspend fun updatePost(
-        @Url url: String, @Body jsonObject: JsonObject
-    ): BaseApiResponse<Any>
-
-    @GET
-    suspend fun getNoiseProfileData(
-        @Url url: String
-    ): BaseApiResponse<NoiseProfileData>
-
-    @GET
-    suspend fun getPostDetailsData(@Url url: String): BaseApiResponse<TimelineData>
-
-
-    //NPL
-    @GET
-    suspend fun getNplDashScoreCard(@Url url: String): BaseApiResponse<ScoreCardData>
-
-    @GET
-    suspend fun getNplProfile(@Url url: String): BaseApiResponse<Any>
-
-    @GET
-    suspend fun getMatchesData(@Url url: String): BaseApiResponse<NplDashResponse>
-
-    @GET
-    suspend fun getPredictionHistory(@Url url: String): BaseApiResponse<List<PredictionHistoryData>>
-
-    @POST
-    suspend fun collectReward(
-        @Url url: String, @Body jsonObject: JsonObject
-    ): BaseApiResponse<CollectCoinResponse>
-
-    @POST
-    suspend fun collectQuizWinReward(
-        @Url url: String, @Body jsonObject: JsonObject
-    ): BaseApiResponse<Any>
-
-    @POST
-    suspend fun predictWinner(@Url url: String, @Body jsonObject: JsonObject): BaseApiResponse<Any>
-
-    @GET
-    suspend fun getNplWins(@Url url: String): BaseApiResponse<WinListData>
-
-    @GET
-    suspend fun getNplQuizData(@Url url: String): BaseApiResponse<NplQuizDataModel>
-
-    @POST
-    suspend fun submitQuizAnswer(
-        @Url url: String, @Body jsonObject: JsonObject
-    ): BaseApiResponse<SubmitAnswerDataModel>
 
 
     /**
@@ -1160,6 +753,12 @@ interface NetworkService {
         @Url url: String,
         @Query("type") contributorType: String
     ): BaseApiResponse<OContributorResponseModal>
+
+    @POST
+    suspend fun savePairingErrorLogs(
+        @Url url: String,
+        @Body requestObject: JsonObject
+    ): BaseApiResponse<Any>
 
     @GET
     suspend fun getWorkoutDetails(
