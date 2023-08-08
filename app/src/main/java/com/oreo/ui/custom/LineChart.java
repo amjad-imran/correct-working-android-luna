@@ -402,7 +402,6 @@ public class LineChart extends View {
         }
 
 
-
         postInvalidate();
     }
 
@@ -568,6 +567,7 @@ public class LineChart extends View {
         float avg = mHeight - bottomWith - (avgValue - xMin) * (mHeight - topWith - bottomWith) / (xMax - xMin);
 
         if (avgValue > 0) {
+//            avg = avg - centerLineWidth / 2f;
             canvas.drawLine(leftWith, avg, mWith - rightWith, avg, centerLinePaint);
 
         }
