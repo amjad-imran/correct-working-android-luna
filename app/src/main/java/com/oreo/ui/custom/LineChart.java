@@ -309,14 +309,14 @@ public class LineChart extends View {
         xMax = 0;
         ChartModel item;
         int sum = 0;
-        int noneZeroValueCount = 0;
+//        int noneZeroValueCount = 0;
         int count = 0;
         for (int i = 0; i < datas.size(); i++) {
             item = datas.get(i);
             if (item.getValue() == 0) {
                 continue;
             }
-            noneZeroValueCount += 1;
+//            noneZeroValueCount += 1;
             isDistanceGraph = datas.get(i).isDistanceGraph();
             if (xMax == 0) {
                 xMax = item.getValue();
@@ -331,12 +331,8 @@ public class LineChart extends View {
         }
 
 
-        if (noneZeroValueCount <= datas.size() / 2) {
-            avgValue = 0;
-        } else {
-            if (count != 0) {
-                avgValue = sum / count;
-            }
+        if (count != 0) {
+            avgValue = sum / count;
         }
 
         if (xMax1 == 100) {
@@ -583,7 +579,7 @@ public class LineChart extends View {
             canvas.drawLine(leftWith, avg, mWith - rightWith, avg, centerLinePaint);
         }
 
-        if (showAvgValueText) {
+        if (showAvgValueText && avgValue > 0) {
             xTextPaint.getTextBounds(avgStr, 0, avgStr.length(), xTextBounds);
             canvas.drawText(avgStr, leftWith + dip2px(5), avg - xTextBounds.height(), xTextPaint);
         }
