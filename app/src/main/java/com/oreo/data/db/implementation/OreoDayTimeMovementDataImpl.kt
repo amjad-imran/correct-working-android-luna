@@ -61,9 +61,8 @@ constructor(
     }
 
 
-    override suspend fun getTodayData(date: String): List<DayTimeMovementBreakup>? {
-        //return bloodOxygenDao.getTodayData(date)
-        return null
+    override suspend fun getTodayData(date: String): DayTimeMovementBreakup? {
+        return dayTimeDao.getTodayData(date)
     }
 
     override suspend fun getTodayDayTimeMovement(date: String): String? {

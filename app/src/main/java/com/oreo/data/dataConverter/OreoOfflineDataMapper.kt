@@ -435,6 +435,7 @@ constructor(
 
         return OHealthOverview.HeartRate(
             lastHr,
+            false,
             null,
             "Last measured now",
             candleChartList,

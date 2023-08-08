@@ -20,6 +20,7 @@ import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
@@ -196,7 +197,9 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         viewModel.deviceConnected.observe(this) { connected ->
             if (!connected) {
                 binding.lytHeader.ivExclamation.visible()
-                binding.lytHeader.batteryStatus.gone()
+                binding.lytHeader.batteryStatus.invisible()
+                binding.lytHeader.lottieAnimView.gone()
+                binding.lytHeader.oreoStatus.visible()
                 binding.lytHeader.oreoStatus.loadImage(
                     requireContext(),
                     R.drawable.ic_ring_default_sliver
@@ -296,6 +299,8 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
     private fun stateBluetoothOff() {
         binding.lytHeader.batteryStatus.gone()
+        binding.lytHeader.lottieAnimView.gone()
+        binding.lytHeader.oreoStatus.visible()
         binding.lytHeader.oreoStatus.loadImage(
             requireContext(),
             R.drawable.ic_luna_state_bt_off
@@ -309,11 +314,9 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         if (viewModel.sessionManager.bluetoothStateDash.value == false) {
             stateBluetoothOff()
         } else {
-            binding.lytHeader.batteryStatus.visible()
-            binding.lytHeader.oreoStatus.loadImage(
-                requireContext(),
-                R.drawable.ic_ring_default_sliver
-            )
+            binding.lytHeader.batteryStatus.invisible()
+            binding.lytHeader.lottieAnimView.visible()
+            binding.lytHeader.oreoStatus.invisible()
         }
 
     }
@@ -321,6 +324,8 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     private fun setStateConnected(noiseFitDevice: ColorFitDevice) {
         binding.lytHeader.batteryStatus.visible()
         binding.lytHeader.ivExclamation.gone()
+        binding.lytHeader.lottieAnimView.gone()
+        binding.lytHeader.oreoStatus.visible()
         val batteryPercentage = viewModel.watchDataStore.getBatteryPercentRing()
         binding.lytHeader.batteryStatus.progress = batteryPercentage
         if (batteryPercentage < 20) {
