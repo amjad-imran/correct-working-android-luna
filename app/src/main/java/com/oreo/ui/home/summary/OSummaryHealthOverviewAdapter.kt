@@ -52,7 +52,6 @@ sealed class OSummaryHealthOverviewClickEnum {
     object ViewAllWorkoutClick : OSummaryHealthOverviewClickEnum()
     object WorkoutAlertIdentify : OSummaryHealthOverviewClickEnum()
 
-//    class DemoClick(val manualMeasureType: ManualMeasureType) : OSummaryHealthOverviewClickEnum()
 }
 
 class OSummaryHealthOverviewAdapter :
@@ -284,10 +283,6 @@ class OSummaryHealthOverviewAdapter :
                 position,
             )
 
-//            is HomeRecyclerViewHolder.DemoViewHolder -> holder.bind(
-//                items[position] as OHealthOverview.Demo,
-//                position,
-//            )
             is HomeRecyclerViewHolder.OreoDummyViewHolder -> {}
             else -> {}
         }
@@ -389,7 +384,6 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     data.data.totalSleep ?: 0
                 )
 
-//                LOGS.d("sdasadjsdajlksadjlkdsa ${ data.sleepArray.first().startTime} ${Gson().toJson(data.sleepArray)}")
                 binding.tvSleepStart.text = DateFormats.formatDate(
                     data.sleepArray.first().startTime,
                     DateFormats.dateTimeFormat5,
@@ -557,7 +551,6 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 }
 
 
-//                LOGS.d("dsjasdlkjasdljaskldjldsa ${Gson().toJson(data.sleepValue)}")
                 binding.sleepLineChart.updateDataWithMaxMin(
                     data.sleepValue,
                     ArrayList(),

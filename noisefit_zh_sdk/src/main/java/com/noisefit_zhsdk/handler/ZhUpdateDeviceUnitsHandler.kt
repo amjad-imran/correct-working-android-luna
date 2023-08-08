@@ -165,11 +165,17 @@ constructor(
             if (p0 == null) {
                 return
             }
+
+            var isError = false
+            if(p0.errorReason >0){
+                isError = true
+            }
+
             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                 UpdateDeviceDataCallback.ManualMeasurementObtained(
                     ManualMeasurement(
                         false,
-                        !p0.isWrist,
+                        isError,
                         p0.measureValue,
                         oreoDataConverter.getMeasureType(p0.measureType),
                         System.currentTimeMillis()
