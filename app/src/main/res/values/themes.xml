@@ -42,13 +42,6 @@
         <item name="android:background">@drawable/back_modal_new</item>
     </style>
 
-    <style name="IntensitySeekbar" parent="Widget.AppCompat.SeekBar">
-        <item name="android:progressBackgroundTint">#00008080</item>
-        <item name="android:progressTint">#ffffff</item>
-        <item name="android:thumbTint">#ffffff</item>
-        <item name="thumbRadius">@dimen/dimen_24dp</item>
-    </style>
-
 
     <style name="Small" parent="BaseTextRegular">
         <item name="android:lineSpacingExtra">8sp</item>
@@ -123,10 +116,6 @@
         <item name="android:background">@drawable/back_modal_new</item>
     </style>
 
-    <style name="ModalStyleTransparent">
-        <item name="android:background">@android:color/transparent</item>
-    </style>
-
     <style name="ButtonAppearance">
         <item name="cornerFamilyTopLeft">rounded</item>
         <item name="cornerFamilyBottomLeft">rounded</item>
@@ -193,21 +182,6 @@
         <item name="android:textColor">@drawable/btn_secondary_color_selector</item>
     </style>
 
-    <style name="AccentButtonStyle" parent="ThemeOverlay.Material3.Button.TextButton">
-        <item name="shapeAppearance">@style/ButtonAppearance</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">40dp</item>
-        <item name="android:textSize">@dimen/text_14sp</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:fontFamily">@font/gilroy_medium</item>
-        <item name="android:paddingTop">0dp</item>
-        <item name="android:paddingBottom">0dp</item>
-        <item name="android:singleLine">true</item>
-        <item name="android:ellipsize">end</item>
-        <item name="android:background">@drawable/btn_accent_bg_selector</item>
-        <item name="android:textColor">@drawable/btn_accent_color_selector</item>
-    </style>
-
     <style name="TextButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -252,22 +226,6 @@
         <item name="android:textColorPrimary">@color/md_theme_light_text_color</item>
     </style>
 
-    <style name="MyDatePickerSpinnerStyleUpdate" parent="@android:style/Widget.Material.DatePicker">
-        <item name="android:datePickerMode">spinner</item>
-        <item name="android:calendarViewShown">false</item>
-        <item name="android:background">@android:color/transparent</item>
-        <item name="colorControlNormal">@color/divider_color_update</item>
-        <item name="android:textColorPrimary">@color/md_theme_light_text_color_update</item>
-    </style>
-
-    <style name="SubmitButtonAppearance">
-        <item name="cornerFamilyTopLeft">rounded</item>
-        <item name="cornerFamilyBottomLeft">rounded</item>
-        <item name="cornerFamilyTopRight">rounded</item>
-        <item name="cornerFamilyBottomRight">rounded</item>
-        <item name="cornerSize">26dp</item>
-    </style>
-
     <style name="PasswordInputLayoutStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -278,12 +236,6 @@
     </style>
 
 
-
-
-    <style name="TransparentBackgroundDialog" parent="Theme.Design.Light.BottomSheetDialog">
-        <item name="android:colorBackground">@android:color/transparent</item>
-    </style>
-
     <style name="textSelectorValueUpdate" parent="BaseText">
         <item name="android:textColor">@color/md_theme_dark_text_color_h3</item>
         <item name="colorControlNormal">@color/divider_color_update</item>
@@ -291,31 +243,8 @@
         <item name="android:textSize">@dimen/text_20sp</item>
     </style>
 
-    <style name="AlertDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
-        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
-        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
-    </style>
-
-    <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/white_negative</item>
-        <item name="backgroundTint">#00000000</item>
-    </style>
-
-    <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@android:color/white</item>
-        <item name="backgroundTint">#00000000</item>
-    </style>
-
     <style name="ShapeAppearanceOverlay.App.CornerSize50Percent" parent="">
         <item name="cornerSize">50%</item>
-    </style>
-
-    <style name="ShapeAppearanceOverlay.App.CornerSize5Percent" parent="">
-        <item name="cornerSize">5%</item>
-    </style>
-
-    <style name="ShapeAppearanceOverlay.App.CornerSize10Percent" parent="">
-        <item name="cornerSize">10%</item>
     </style>
 
     <style name="ShapeAppearanceOverlay.App.CornerSize20dp" parent="">
@@ -324,9 +253,6 @@
 
     <style name="ShapeAppearanceOverlay.App.CornerSize10dp" parent="">
         <item name="cornerSize">10dp</item>
-    </style>
-    <style name="ShapeAppearanceOverlay.App.CornerSize12dp" parent="">
-        <item name="cornerSize">12dp</item>
     </style>
 
     <style name="ShapeAppearanceOverlay.App.CornerSize4dp" parent="">
@@ -339,11 +265,6 @@
 
     <style name="ShapeAppearanceOverlay.App.CornerSize30dp" parent="">
         <item name="cornerSize">30dp</item>
-    </style>
-
-    <style name="CustomCheckbox02" parent="@style/Widget.AppCompat.CompoundButton.CheckBox">
-        <item name="android:button">@drawable/custom_checkbox</item>
-        <item name="android:background">@android:color/transparent</item>
     </style>
 
     <style name="CustomChipStyle" parent="Widget.MaterialComponents.Chip.Choice">
@@ -401,26 +322,8 @@
     <style name="ModalStyleDialogNew">
         <item name="android:background">@drawable/back_modal_dialog_10</item>
     </style>
-    <style name="Theme.NoiseFit.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-    <style name="Theme.NoiseFit.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     <style name="Theme.NoiseFit.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-
-    <style name="CustomCardViewStyleTopCorner" parent="@style/Widget.MaterialComponents.CardView">
-        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay_card_custom_corners</item>
-    </style>
-
-
-    <style name="ShapeAppearanceOverlay_card_custom_corners" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopRight">4dp</item>
-        <item name="cornerSizeTopLeft">8dp</item>
-        <item name="cornerSizeBottomRight">16dp</item>
-        <item name="cornerSizeBottomLeft">0dp</item>
-
-    </style>
 
 </resources>
