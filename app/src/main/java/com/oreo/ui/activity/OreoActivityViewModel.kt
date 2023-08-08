@@ -246,7 +246,11 @@ class OreoActivityViewModel @Inject constructor(
             val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
                 stayActive.value ?: 0
             )
-            val leftText = "$hour hr inactivity"
+            val leftText: String = if (hour > 0) {
+                "$hour hr $minute min inactivity"
+            } else
+                "$minute min inactivity"
+
             result.add(
                 Contributors(
                     title = "Stay active",

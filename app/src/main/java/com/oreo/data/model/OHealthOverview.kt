@@ -22,14 +22,13 @@ sealed class OHealthOverview {
     ) : OHealthOverview()
 
 
-
     class Dummy(
         var value: String,
     ) : OHealthOverview()
 
     class Readiness(
         val data: ODashboardReadinessModel
-        ) : OHealthOverview()
+    ) : OHealthOverview()
 
     class Sleep(
         val data: ODashboardSleepModel,
@@ -43,7 +42,8 @@ sealed class OHealthOverview {
 
     class HeartRate(
         var value: String,
-        var errorMessage: String?=null,
+        var isMeasuring: Boolean = false,
+        var errorMessage: String? = null,
         var lastTime: String,
         val candleValue: ArrayList<CandleEntry> = ArrayList(),
         val lineData: Pair<ArrayList<Entry>, ArrayList<Int>>,
@@ -75,8 +75,8 @@ sealed class OHealthOverview {
 
     class TodayWorkout(
         var value: String,
-        var listData:List<OActivityListModal>
-        ) : OHealthOverview()
+        var listData: List<OActivityListModal>
+    ) : OHealthOverview()
 
     class OreoBattery(
         val value: String,

@@ -209,10 +209,12 @@ class OSummaryHealthOverviewAdapter :
         }
         super.onViewRecycled(holder)
     }
+
     override fun onFailedToRecycleView(holder: HomeRecyclerViewHolder): Boolean {
         LOGS.d("onViewRecycled failed")
         return super.onFailedToRecycleView(holder)
     }
+
     override fun onBindViewHolder(holder: HomeRecyclerViewHolder, position: Int) {
         holder.itemClickListener = itemClickListener
         when (holder) {
@@ -673,6 +675,14 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 chart.invalidate()
             }
 
+            if (data.isMeasuring) {
+                binding.lottieAnimView.visible()
+                binding.imvHrMeasure.invisible()
+            } else {
+                binding.lottieAnimView.invisible()
+                binding.imvHrMeasure.visible()
+            }
+
             binding.imvHrMeasure.setOnClickListener {
                 if (binding.tvLastMeasure.text == "measuring") {
                     return@setOnClickListener
@@ -684,6 +694,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.tvLastMeasure.visible()
                 binding.tvEmptyConnect.gone()
                 binding.tvLastMeasure.text = "measuring"
+
+                binding.lottieAnimView.visible()
+                binding.imvHrMeasure.invisible()
+
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.MeasureHRClick)
             }
 
@@ -756,7 +770,13 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
 
 
-                binding.lineChart.updateDataWithMaxMin(data.value, ArrayList(), ArrayList(), 20,true)
+                binding.lineChart.updateDataWithMaxMin(
+                    data.value,
+                    ArrayList(),
+                    ArrayList(),
+                    20,
+                    true
+                )
             } else {
 
                 binding.tvAvgThisWeek.visible()

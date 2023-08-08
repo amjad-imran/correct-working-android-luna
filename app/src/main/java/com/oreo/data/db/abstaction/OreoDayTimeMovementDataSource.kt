@@ -7,7 +7,7 @@ interface OreoDayTimeMovementDataSource {
         data: DayTimeMovementBreakup
     ): Boolean
 
-    suspend fun getTodayData(date: String): List<DayTimeMovementBreakup>?
+    suspend fun getTodayData(date: String): DayTimeMovementBreakup?
 
     suspend fun getTodayDayTimeMovement(date: String): String?
     suspend fun getUnSyncServerData(endDate: Long, isSync: Boolean): List<DayTimeMovementBreakup>?

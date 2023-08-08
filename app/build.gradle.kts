@@ -135,7 +135,7 @@ android {
             buildConfigField("String", "INSIDER_PARTNER", "\"gonoiseuat\"")
 
             //Oreo URLs
-            buildConfigField("String", "OREO_BASE_URL", "\"https://stage-oreo.gonoise.com\"")
+            buildConfigField("String", "OREO_BASE_URL", "\"https://uat-app.gonoise.com/luna\"")
 
 
             versionNameSuffix = ".uat"
@@ -176,7 +176,7 @@ android {
             buildConfigField("String", "BASE_URL_NOISE_CONNECT", "\"https://noise-connect.gonoise.com\"")
 
             //Oreo URLs
-            buildConfigField("String", "OREO_BASE_URL", "\"https://stage-oreo.gonoise.com\"")
+            buildConfigField("String", "OREO_BASE_URL", "\"https://app.gonoise.com/luna\"")
 
 
             manifestPlaceholders["crashlyticsCollectionEnabled"] = "true"

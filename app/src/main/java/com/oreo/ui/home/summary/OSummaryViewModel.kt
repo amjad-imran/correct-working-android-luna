@@ -319,9 +319,11 @@ constructor(
                 if (manualMeasurement.isError) {
                     data.errorMessage = "Unable to measure, try again"
                     data.value = "0"
+                    data.isMeasuring = false
                 } else {
                     data.lastTime = "Last measure now"
                     data.errorMessage = null
+                    data.isMeasuring = manualMeasurement.isMeasuring
                     data.value = manualMeasurement.value.toString()
                 }
                 summary.refreshPosition = index
