@@ -8,7 +8,8 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.oreo.data.model.OHSModel
 
-class OHealthSupportAdapter : RecyclerView.Adapter<OHealthSupportAdapter.ViewHolder>() {
+class OHealthSupportAdapter(val mListener: OHSClickListener) :
+    RecyclerView.Adapter<OHealthSupportAdapter.ViewHolder>() {
     val mDataSet = ArrayList<OHSModel>()
 
     inner class ViewHolder(val binding: OreoHsParentItemBinding) :
@@ -20,11 +21,15 @@ class OHealthSupportAdapter : RecyclerView.Adapter<OHealthSupportAdapter.ViewHol
                 binding.divider.root.gone() else
                 binding.divider.root.visible()
 
+            binding.root.setOnClickListener {
+                mListener.onItemClickListener(resultData.id,resultData.title)
+            }
+
         }
     }
 
     interface OHSClickListener {
-        fun onItemClickListener(id: String)
+        fun onItemClickListener(id: String,title:String)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

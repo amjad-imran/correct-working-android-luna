@@ -17,7 +17,14 @@ class OHelpAndSupportFragment :
     BaseFragment<FragmentOHelpAndSupportBinding>(FragmentOHelpAndSupportBinding::inflate) {
     private val mViewModel: OHealthSupportViewModel by viewModels()
     private val mAdapter: OHealthSupportAdapter by lazy {
-        OHealthSupportAdapter()
+        OHealthSupportAdapter(object : OHealthSupportAdapter.OHSClickListener {
+            override fun onItemClickListener(id: String, title: String) {
+                navigate(R.id.oreoHSQuestionFragment, Bundle().apply {
+                    putString("title", title)
+                    putString("id", id)
+                })
+            }
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -31,7 +38,6 @@ class OHelpAndSupportFragment :
         with(binding.rvQueries) {
             adapter = mAdapter
         }
-//        mAdapter.setData(mViewModel.getDummyHelpData())
     }
 
     override fun initListener() {

@@ -1712,4 +1712,8 @@
     <string name="text_the_activity_tab_is_where_you_can_follow_your_daily_movement_workouts_and_easy_days">The Activity tab is where you can follow your daily movement, workouts, and easy days.</string>
     <string name="text_all_physical_activity_from_housework_to_training_count_towards_your_daily_goal">All physical activity from housework to training count towards your daily goal.</string>
     <string name="text_your_activity_score_updates_continuously_as_luna_learns_how_active_you_are_throughout_the_week">Your Activity Score updates continuously, as Luna learns how active you are throughout the week.</string>
+    <string name="text_found_what_you_re_looking_for">Found what you’re looking for?</string>
+    <string name="text_still_got_questions_talk_to_an_expert">Still got questions? Talk to an expert</string>
+    <string name="text_call">Call</string>
+    <string name="text_bad_feedback_msg">Or continue browsing through our help and support to find what you’re looking for**</string>
 </resources>
