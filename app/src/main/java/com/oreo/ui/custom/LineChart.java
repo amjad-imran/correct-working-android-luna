@@ -14,6 +14,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.google.gson.Gson;
 import com.noisefit.luna.R;
 import com.noisefit_commans.utils.LOGS;
 import com.oreo.data.model.ChartModel;
@@ -554,7 +555,7 @@ public class LineChart extends View {
         String avgStr = String.valueOf(avgValue);
         xTextPaint.setColor(xTextColor & 0x80ffffff);
         if (showExtremeLine) {
-            float max = mHeight - bottomWith - xMax * (mHeight - topWith - bottomWith) / (xMax - xMin);
+            float max = mHeight - bottomWith - (xMax - xMin) * (mHeight - topWith - bottomWith) / (xMax - xMin);
             canvas.drawLine(leftWith, max, mWith - rightWith, max, gridPaint);
             xTextPaint.getTextBounds(maxStr, 0, maxStr.length(), xTextBounds);
             canvas.drawText(maxStr, mWith - rightWith + dip2px(10), max + xTextBounds.height() / 2f, xTextPaint);
@@ -564,7 +565,7 @@ public class LineChart extends View {
             xTextPaint.getTextBounds(maxStr, 0, maxStr.length(), xTextBounds);
             canvas.drawText(minStr, mWith - rightWith + dip2px(10), min + xTextBounds.height() / 2f, xTextPaint);
         }
-        float avg = mHeight - bottomWith - avgValue * (mHeight - topWith - bottomWith) / (xMax - xMin);
+        float avg = mHeight - bottomWith - (avgValue - xMin) * (mHeight - topWith - bottomWith) / (xMax - xMin);
 
         if (avgValue > 0) {
             canvas.drawLine(leftWith, avg, mWith - rightWith, avg, centerLinePaint);
@@ -633,14 +634,14 @@ public class LineChart extends View {
                         }
                     } else if (i == lastPosition - 1) {
                         ChartModel pre = list.get(i - 1);
-                        if(pre.getValue() == 0){
+                        if (pre.getValue() == 0) {
                             canvas.drawCircle(x, y, outCircleRadius, outCirclePaint);
                             canvas.drawCircle(x, y, innerCircleRadius, innerCirclePaint);
                         }
-                    }else{
+                    } else {
                         ChartModel pre = list.get(i - 1);
                         next = list.get(i + 1);
-                        if(pre.getValue() == 0 && next.getValue() == 0){
+                        if (pre.getValue() == 0 && next.getValue() == 0) {
                             canvas.drawCircle(x, y, outCircleRadius, outCirclePaint);
                             canvas.drawCircle(x, y, innerCircleRadius, innerCirclePaint);
                         }
