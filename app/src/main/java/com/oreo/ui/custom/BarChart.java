@@ -200,7 +200,7 @@ public class BarChart extends View {
 
 
 
-        int noneZeroValueCount = 0;
+//        int noneZeroValueCount = 0;
         xMax = 0;
         ChartModel item;
         int sum = 0;
@@ -211,7 +211,7 @@ public class BarChart extends View {
                 continue;
             }
             isDistanceGraph = datas.get(i).isDistanceGraph();
-            noneZeroValueCount += 1;
+//            noneZeroValueCount += 1;
 
             if (xMax == 0 ) {
                 xMax = item.getValue();
@@ -224,12 +224,8 @@ public class BarChart extends View {
             sum += item.getValue();
             count += 1;
         }
-        if (noneZeroValueCount <= datas.size() / 2) {
-            avgValue = 0;
-        } else {
-            if (count != 0) {
-                avgValue = sum / count;
-            }
+        if (count != 0) {
+            avgValue = sum / count;
         }
 
         if (xMax1 == 100) {
@@ -361,7 +357,7 @@ public class BarChart extends View {
             canvas.drawLine(leftWith, avg, mWith, avg, centerLinePaint);
         }
 
-        if (showAvgValueText) {
+        if (showAvgValueText && avgValue > 0) {
             xTextPaint.getTextBounds(avgStr, 0, avgStr.length(), xTextBounds);
             canvas.drawText(avgStr, leftWith + dip2px(5), avg - xTextBounds.height(), xTextPaint);
         }
