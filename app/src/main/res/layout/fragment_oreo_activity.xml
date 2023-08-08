@@ -78,10 +78,10 @@
                     lineChart:bottomWith="30dp"
                     lineChart:centerLineColor="@color/white_80"
                     lineChart:centerLineWidth="3dp"
-                    lineChart:chartLineColor="#ffda55"
+                    lineChart:chartLineColor="@color/activity_chart_line_color"
                     lineChart:chartLineWidth="4dp"
-                    lineChart:fillColorEnd="#00ffd230"
-                    lineChart:fillColorStart="#80d6a700"
+                    lineChart:fillColorEnd="@color/activity_fill_end_color"
+                    lineChart:fillColorStart="@color/activity_fill_start_color"
                     lineChart:gridColor="@color/white_12"
                     lineChart:hCount="11"
                     lineChart:innerCircleColor="#ffffff"
@@ -138,7 +138,7 @@
                     layout="@layout/layout_divider"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="32dp"
+                    android:layout_marginTop="24dp"
                     app:layout_constraintTop_toBottomOf="@id/lytAContributor" />
 
                 <include
@@ -153,7 +153,7 @@
                     layout="@layout/layout_divider"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="32dp"
+                    android:layout_marginTop="24dp"
                     app:layout_constraintTop_toBottomOf="@id/lytDailyMovement" />
 
                 <include

@@ -243,7 +243,7 @@ class OreoActivityViewModel @Inject constructor(
         val trainingVolume = actContributors?.trainingVolume
         if (stayActive != null) {
             val (textColor, barColor, background) = getContributorsColors(stayActive.status)
-            val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
+            val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(
                 stayActive.value ?: 0
             )
             val leftText: String = if (hour > 0) {
