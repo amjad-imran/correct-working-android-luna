@@ -10,7 +10,7 @@
 
         <TextView
             android:id="@+id/tvTitle"
-            style="@style/H4"
+            style="@style/H6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/side_margin"
