@@ -869,7 +869,8 @@ data class ManualMeasurement(
     @SerializedName("isMeasuring") var isMeasuring: Boolean = false,
     @SerializedName("isError") var isError: Boolean = false,
     @SerializedName("value") var value: Int = 0,
-    @SerializedName("manualMeasureType") var manualMeasureType: ManualMeasureType
+    @SerializedName("manualMeasureType") var manualMeasureType: ManualMeasureType,
+    @SerializedName("timeStamp") var timeStamp: Long = 0
 ) : ColorfitData() {
 
 }

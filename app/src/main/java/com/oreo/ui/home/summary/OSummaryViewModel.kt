@@ -145,8 +145,7 @@ constructor(
             val userName = "${getGreetingMessage()}, ${
                 summary.user?.getOnlyFirstName()?.trim()?.ifEmpty { "Stranger" }
             }"
-            val userActivities =
-                ArrayList<OHealthOverview>()
+            val userActivities = ArrayList<OHealthOverview>()
 
             val hrValue = userRepository.getSummaryHRHealthOverview()
 
@@ -305,7 +304,8 @@ constructor(
         summary.healthOverviewData.postValue(summary.healthOverviewData.value)
     }
 
-    fun updateManualValue(manualMeasurement: ManualMeasurement) {
+    fun updateManualValue() {
+        val manualMeasurement = ringDataStore.getManualMeasurementValue()
         if (manualMeasurement.manualMeasureType == ManualMeasureType.HEART_RATE) {
             val index = summary.healthOverviewData.value?.indexOfFirst {
                 it is OHealthOverview.HeartRate

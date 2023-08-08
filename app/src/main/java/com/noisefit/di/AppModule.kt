@@ -10,13 +10,10 @@ import com.noisefit.data.googleFit.GoogleFitDataObservers
 import com.noisefit.data.local.dataStored.abstraction.IOfflineApiResponseStore
 import com.noisefit.data.remote.abstraction.DownloadService
 import com.noisefit.data.remote.abstraction.NetworkService
-import com.noisefit.data.remote.abstraction.ShopService
 import com.noisefit.data.repository.LastSyncProvider
 import com.noisefit.data.repository.abstraction.*
 import com.noisefit.data.repository.implementation.*
 import com.noisefit.data.repository.pagingSource.TimelinePagingSource
-import com.noisefit.session.SessionManager
-import com.noisefit.util.SportUtils
 import com.noisefit.util.TestModeUtils
 import com.noisefit.watch.*
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -38,8 +35,10 @@ import com.oreo.data.db.implementation.OreoRespiratoryDataImpl
 import com.oreo.data.db.implementation.OreoSleepDataImpl
 import com.oreo.data.db.implementation.OreoStepsDataImpl
 import com.oreo.data.db.implementation.OreoStressDataImpl
+import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
+import com.oreo.data.repository.implementation.OreoDeviceRepositoryImpl
 import com.oreo.data.repository.implementation.OreoSyncRepositoryImpl
 import com.oreo.data.repository.implementation.OreoUserActivityRepositoryImpl
 import dagger.Module
@@ -170,6 +169,19 @@ object AppModule {
             dataUnitConverter
         )
 
+
+    @Singleton
+    @Provides
+    fun providerOreoDeviceRepository(
+        localDataSource: DataStoredInterface,
+        remoteDataSource: NetworkService,
+        gson: Gson
+    ): OreoDeviceRepository =
+        OreoDeviceRepositoryImpl(
+            localDataSource,
+            remoteDataSource,
+            gson
+        )
 
     @Singleton
     @Provides

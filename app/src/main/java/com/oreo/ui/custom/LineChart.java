@@ -392,14 +392,15 @@ public class LineChart extends View {
         }
 
 
-        if (xMax < 20) {
-            xMax += 5;
-        } else if (xMax < 100) {
-            xMax += 50;
-        } else if (xMax < 1000) {
-            xMax += 500;
-        }
+//        if (xMax < 20) {
+//            xMax += 5;
+//        } else if (xMax < 100) {
+//            xMax += 50;
+//        } else if (xMax < 1000) {
+//            xMax += 500;
+//        }
 
+        xMax = 120;
 
 
         postInvalidate();

@@ -1469,6 +1469,10 @@ constructor() : LifecycleService() {
     private val updateDeviceCallback = object : IUpdateDeviceDataCallback {
         override fun onUpdateDataReceived(dataCallback: UpdateDeviceDataCallback) {
             when (dataCallback) {
+                is UpdateDeviceDataCallback.ManualMeasurementObtained->{
+                    ringDataStore.setManualMeasurementValue(dataCallback.manualMeasurement)
+                    sessionManager.setManualMeasurementValue(true)
+                }
                 is UpdateDeviceDataCallback.FirmwareUpgradeProgress -> {
                     if (dataCallback.watchUpdateStatus.status == UpdateStatus.COMPLETED ||
                         dataCallback.watchUpdateStatus.status == UpdateStatus.ERROR ||

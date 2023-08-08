@@ -171,7 +171,8 @@ constructor(
                         false,
                         !p0.isWrist,
                         p0.measureValue,
-                        oreoDataConverter.getMeasureType(p0.measureType)
+                        oreoDataConverter.getMeasureType(p0.measureType),
+                        System.currentTimeMillis()
                     )
                 )
             )

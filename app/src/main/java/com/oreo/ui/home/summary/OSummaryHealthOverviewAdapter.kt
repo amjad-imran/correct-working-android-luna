@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.github.mikephil.charting.data.CombinedData
-import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ListActivityBurnCardItemBinding
 import com.noisefit.luna.databinding.ListHeartRateCardItemBinding
@@ -458,23 +457,29 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         ) {
             binding.imv.loadImage(binding.imv.context, R.drawable.ic_activity_card_bg1)
             val scoreValue = data.data.activityScore ?: 0
-            val caloriesGoalText = "/ ${data.caloriesGoal}"
+
             if (scoreValue <= 0) {
                 binding.tvValue.text = "--"
                 binding.tvStatus.text = "No data"
                 binding.tvTodayDesc.text = ""
-                binding.tvCalories.text = "--"
-                binding.tvTotalCalories.text = caloriesGoalText
             } else {
                 binding.tvValue.text = scoreValue.toString()
                 binding.tvStatus.text = data.data.status
-                binding.tvCalories.text = data.data.activeCalories.toString()
-                binding.tvTotalCalories.text = caloriesGoalText
+
+
                 if (!data.data.nudge.isNullOrEmpty()) {
                     binding.tvTodayDesc.text = data.data.nudge
                 }
             }
 
+            val caloriesGoalText = "/ ${data.caloriesGoal}"
+            binding.tvTotalCalories.text = caloriesGoalText
+
+            binding.tvCalories.text = if ((data.data.activeCalories?:0) > 0) {
+                data.data.activeCalories.toString()
+            } else {
+                "--"
+            }
 
             if (scoreValue >= 0) {
                 binding.lottieAnimationView.repeatCount = 0
@@ -706,9 +711,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.tvLastMeasure.gone()
             }
 
-            binding.root.setOnClickListener {
-//                   itemClickListener?.invoke(it, data, position)
-            }
+//            binding.root.setOnClickListener {
+////                   itemClickListener?.invoke(it, data, position)
+//            }
         }
     }
 

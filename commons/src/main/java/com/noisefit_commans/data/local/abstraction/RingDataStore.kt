@@ -2,6 +2,7 @@ package com.noisefit_commans.data.local.abstraction
 
 import com.noisefit_commans.data.model.DeviceFeatures
 import com.noisefit_commans.models.ColorFitDevice
+import com.noisefit_commans.models.ManualMeasurement
 
 interface RingDataStore {
     fun saveRingDevice(noiseFitDevice: ColorFitDevice): Boolean
@@ -38,4 +39,7 @@ interface RingDataStore {
 
     fun setActivityWalkAroundShown(status: Boolean)
     fun isActivityWalkAroundShown(): Boolean
+
+    fun setManualMeasurementValue(data: ManualMeasurement)
+    fun getManualMeasurementValue(): ManualMeasurement
 }
