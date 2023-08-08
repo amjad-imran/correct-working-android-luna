@@ -8,7 +8,6 @@
     <color name="white_40">#40ffffff</color>
     <color name="white_60">#96ffffff</color>
     <color name="progress_bar_back">#1AFFFFFF</color>
-    <color name="secondary_btn_color_disabled">#1effffff</color>
     <color name="text_enabled">#51bf76</color>
     <color name="input_hint_color">#eeeeee</color>
     <color name="divider_color">#1AFFFFFF</color>
@@ -17,34 +16,16 @@
     <color name="transparent">#00FFFFFF</color>
     <color name="edit_hint_color">#1AFFFFFF</color>
     <color name="edit_text_color">#FFFFFF</color>
-    <color name="challenge_completed_pg">#ff6200</color>
-    <color name="dark_lime">#89c000</color>
-    <color name="tab_background_color">#262B2F</color>
-    <color name="tab_selected_color">@android:color/white</color>
-    <color name="tab_selected_bg_color">#66FFFFFF</color>
-    <color name="tab_unselected_color">#EEEEEE</color>
     <color name="lightest_gray">#8a8c8e</color>
-    <color name="steps_color">#51bf76</color>
     <color name="body_temp">#ff8b16</color>
-    <color name="distance_color">#f4c232</color>
-    <color name="steps_complete_color">#cbffdc</color>
     <color name="blood_oxygen_color">#6cd0c6</color>
-    <color name="distance_complete_color">#f7e4b0</color>
-    <color name="calories_color">#ff2c52</color>
-    <color name="calories_complete_goal">#ffbcc8</color>
     <!--<color name="text_color">#FF000000</color>-->
     <color name="teal_200">#FF03DAC5</color>
 
     <color name="text_color_workout_item_label">#89c000</color>
-    <color name="text_color_workout_item_date">#8a8c8e</color>
-    <color name="text_color_workout_item_calories">#eeeeee</color>
 
     <color name="text_color">#8a8c8e</color>
-    <color name="distance">#f4c232</color>
-    <color name="text_color_h5">#EEEEEE</color>
     <color name="text_color_update">#99ffffff</color>
-    <color name="text_color_inverse_h5">#7D7D7D</color>
-    <color name="text_color_inverse_h8">#7D7D7D</color>
 
     <color name="deep_start">#232aed</color>
     <color name="light_start">#575eff</color>
@@ -56,9 +37,6 @@
     <color name="stress_normal">#51bf76</color>
     <color name="stress_relax">#6cd0c6</color>
 
-    <color name="modal_selected">#F9F9F9</color>
-    <color name="modal_unselected">@color/modal_color</color>
-
     <color name="warm_up_start">#22E8D4</color>
     <color name="warm_up_end">#22E8D4</color>
 
@@ -69,26 +47,14 @@
 
     <color name="fat_burn_start">#3CFE8A</color>
     <color name="fat_burn_end">#3CFE8A</color>
-    <color name="extreme_start">#FF2C52</color>
-    <color name="extreme_end">#FF2C52</color>
-    <color name="below_zone_start">#6AC5FF</color>
-    <color name="below_zone_end">#6AC5FF</color>
     <color name="color_error">#ff3358</color>
-    <color name="background_ongoing">#60BF2D</color>
 
-    <color name="activity_heart_rate_start">#99ed54a7</color>
-    <color name="activity_heart_rate_end">#4bed54a7</color>
-    <color name="md_theme_text_color_h7">#FFFFFF</color>
     <color name="very_light_pink">#eeeeee</color>
     <color name="sleep_graph_line">#262b2f</color>
-    <color name="marker_border">#8a8c8e</color>
     <color name="darker_gray">#8a8c8e</color>
     <color name="sbi_x_pulse">#16283b</color>
-    <color name="trophy_collect_text_color">#242a2e</color>
-    <color name="badge_color">#ff2c52</color>
     <color name="friends_calories_color">#ff4668</color>
     <color name="friends_steps_color">#40e281</color>
-    <color name="friends_steps_color_bg">#8040e281</color>
     <color name="friends_distance_color">#ffed65</color>
     <color name="friends_request_status_color">#ffba00</color>
 </resources>
