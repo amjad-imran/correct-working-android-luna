@@ -7,7 +7,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOHSQuestionariesBinding
-import com.noisefit.ui.myDevice.UNPAIR_REQUEST_KEY
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.displayToast
 import dagger.hilt.android.AndroidEntryPoint

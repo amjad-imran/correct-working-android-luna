@@ -342,4 +342,17 @@
         android:id="@+id/badRatingBottomSheet"
         android:name="com.oreo.ui.helpsupport.questionaries.BottomSheetBadRating"
         android:label="BadRatingBottomSheet" />
+    <!--    <fragment-->
+    <!--        android:id="@+id/qrCodeScanFragment"-->
+    <!--        android:name="com.noisefit.ui.myDevice.warranty.QrCodeScanFragment"-->
+    <!--        android:label="QrCodeScanFragment" />-->
+    <fragment
+        android:id="@+id/warrantyFragment"
+        android:name="com.oreo.ui.warranty.OWarrantyFragment"
+        android:label="WarrantyFragment" />
+    <fragment
+        android:id="@+id/qrCodeScanFragment"
+        android:name="com.oreo.ui.warranty.QrCodeScanFragment"
+        android:label="QrCodeScanFragment" />
+
 </navigation>
