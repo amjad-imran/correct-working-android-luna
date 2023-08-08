@@ -261,7 +261,7 @@ class OreoActivityFragment :
     private fun returnMovementProgress(highMovValue: Int): Pair<Int, String> {
         val valueInSec = highMovValue.times(60)
         val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(valueInSec)
-        val leftText = "$hour hr $minute min"
+        val leftText = "$hour h $minute min"
         val progress = valueInSec.toFloat().times(100).div(100).toInt()
         return Pair(progress, leftText)
 
