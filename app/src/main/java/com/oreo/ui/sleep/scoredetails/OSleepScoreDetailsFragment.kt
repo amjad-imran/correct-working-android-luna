@@ -11,11 +11,7 @@ import com.noisefit.oreo.util.graph.OLineChartUtils
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.clearDrawables
 import com.noisefit_commans.common.setCompoundDrawable
-import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.showShortToast
-import com.noisefit_commans.ui.tryCatch
-import com.noisefit_commans.ui.visible
+import com.noisefit_commans.ui.*
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DistanceUtil
 import com.oreo.data.model.ChartModel
@@ -208,9 +204,13 @@ class OSleepScoreDetailsFragment :
                         binding.lytTopGraphView.lytLabelValue1.root.visible()
                         binding.lytTopGraphView.lytLabelValue11.root.gone()
                         binding.lytTopGraphView.lytLabelValue1.tvValue.text =
-                            it.data.roundToInt().toString()
-                        binding.lytTopGraphView.lytLabelValue1.tvUnit.visible()
-                        binding.lytTopGraphView.lytLabelValue1.tvUnit.text = "steps"
+                            checkZeroData(it.data.roundToInt())
+                        if (it.data.roundToInt() == 0) {
+                            binding.lytTopGraphView.lytLabelValue1.tvUnit.gone()
+                        } else {
+                            binding.lytTopGraphView.lytLabelValue1.tvUnit.visible()
+                            binding.lytTopGraphView.lytLabelValue1.tvUnit.text = "steps"
+                        }
                         setTopDateLabel(it.date)
                     }
 
@@ -218,27 +218,42 @@ class OSleepScoreDetailsFragment :
                         binding.lytTopGraphView.lytLabelValue1.root.visible()
                         binding.lytTopGraphView.lytLabelValue11.root.gone()
                         binding.lytTopGraphView.lytLabelValue1.tvValue.text =
-                            it.data.roundToInt().toString()
-                        binding.lytTopGraphView.lytLabelValue1.tvUnit.visible()
-                        binding.lytTopGraphView.lytLabelValue1.tvUnit.text = "kcal"
+                            checkZeroData(it.data.roundToInt())
+                        if (it.data.roundToInt() == 0) {
+                            binding.lytTopGraphView.lytLabelValue1.tvUnit.gone()
+                        } else {
+                            binding.lytTopGraphView.lytLabelValue1.tvUnit.visible()
+                            binding.lytTopGraphView.lytLabelValue1.tvUnit.text = "kcal"
+                        }
                         setTopDateLabel(it.date)
                     }
 
                     ViewItemClickType.DISTANCE.name -> {
                         binding.lytTopGraphView.lytLabelValue1.root.visible()
                         binding.lytTopGraphView.lytLabelValue11.root.gone()
-                        binding.lytTopGraphView.lytLabelValue1.tvValue.text =
-                            DistanceUtil.convertMeterToKm(it.data.roundToInt())
-                        binding.lytTopGraphView.lytLabelValue1.tvUnit.visible()
-                        binding.lytTopGraphView.lytLabelValue1.tvUnit.text = "km"
+                        if (it.data.roundToInt() == 0) {
+                            binding.lytTopGraphView.lytLabelValue1.tvValue.text = "-"
+                            binding.lytTopGraphView.lytLabelValue1.tvUnit.gone()
+                        } else {
+                            binding.lytTopGraphView.lytLabelValue1.tvValue.text =
+                                DistanceUtil.convertMeterToKm(it.data.roundToInt())
+                            binding.lytTopGraphView.lytLabelValue1.tvUnit.visible()
+                            binding.lytTopGraphView.lytLabelValue1.tvUnit.text = "km"
+                        }
                         setTopDateLabel(it.date)
                     }
                     ViewItemClickType.BODY_TEMPERATURE.name -> {
                         binding.lytTopGraphView.lytLabelValue1.root.visible()
                         binding.lytTopGraphView.lytLabelValue11.root.gone()
-                        binding.lytTopGraphView.lytLabelValue1.tvValue.text = it.data.toString()
-                        binding.lytTopGraphView.lytLabelValue1.tvUnit.visible()
-                        binding.lytTopGraphView.lytLabelValue1.tvUnit.text = "°F"
+
+                        if (it.data == 0F) {
+                            binding.lytTopGraphView.lytLabelValue1.tvValue.text = "-"
+                            binding.lytTopGraphView.lytLabelValue1.tvUnit.gone()
+                        } else {
+                            binding.lytTopGraphView.lytLabelValue1.tvValue.text = it.data.toString()
+                            binding.lytTopGraphView.lytLabelValue1.tvUnit.visible()
+                            binding.lytTopGraphView.lytLabelValue1.tvUnit.text = "°F"
+                        }
                         setTopDateLabel(it.date)
                     }
 
@@ -248,18 +263,28 @@ class OSleepScoreDetailsFragment :
                         val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
                             it.data.roundToInt()
                         )
-                        binding.lytTopGraphView.lytLabelValue11.tvHour.text = "$hour"
-                        binding.lytTopGraphView.lytLabelValue11.tvHourUnit.text =
-                            getString(R.string.text_hr_lower)
-                        binding.lytTopGraphView.lytLabelValue11.tvMinute.text = "$minute"
-                        binding.lytTopGraphView.lytLabelValue11.tvMinuteUnit.text = "min"
+                        if (hour > 0) {
+                            binding.lytTopGraphView.lytLabelValue11.tvHour.text = "$hour"
+                            binding.lytTopGraphView.lytLabelValue11.tvHourUnit.text =
+                                getString(R.string.text_hr_lower)
+                            if (minute > 0) {
+                                binding.lytTopGraphView.lytLabelValue11.tvMinute.text = "$minute"
+                                binding.lytTopGraphView.lytLabelValue11.tvMinuteUnit.text = "min"
+                            } else {
+                                binding.lytTopGraphView.lytLabelValue11.tvMinute.invisible()
+                                binding.lytTopGraphView.lytLabelValue11.tvMinuteUnit.invisible()
+                            }
+                        }
+                        else{
+                            binding.lytTopGraphView.lytLabelValue11.tvHour.text = "-"
+                            binding.lytTopGraphView.lytLabelValue11.tvHourUnit.invisible()
+                        }
                         setTopDateLabel(it.date)
                     }
                 }
             } else {
                 binding.lytTopGraphView.lytLabelValue1.root.visible()
                 binding.lytTopGraphView.lytLabelValue11.root.gone()
-
                 binding.lytTopGraphView.lytLabelValue1.tvValue.text =
                     checkZeroData(it.data.roundToInt())
                 setTopDateLabel(it.date)
@@ -268,8 +293,8 @@ class OSleepScoreDetailsFragment :
         }
     }
 
-    fun checkZeroData(value: Int):String {
-        val displayValue:String = if (value == 0) {
+    private fun checkZeroData(value: Int): String {
+        val displayValue: String = if (value == 0) {
             "-"
         } else
             value.toString()
