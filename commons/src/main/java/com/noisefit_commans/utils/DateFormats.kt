@@ -100,6 +100,10 @@ object DateFormats {
     val timeFormat = SimpleDateFormat("HH:mm", defaultLocale)
 
     @SuppressLint("ConstantLocale")
+    val timeFormat12 = SimpleDateFormat("hh:mm a", defaultLocale)
+
+
+    @SuppressLint("ConstantLocale")
     val timeFormatSleepTime = SimpleDateFormat("yyyy-MM-dd HH:mm", defaultLocale)
 
     @SuppressLint("ConstantLocale")
@@ -431,6 +435,20 @@ object DateFormats {
             val dateFormatOutput = SimpleDateFormat("hh:mm a", defaultLocale)
             val date = simpleDateFormat.parse(time) ?: return ""
             dateFormatOutput.format(date)
+        } catch (exp: Exception) {
+            ""
+        }
+    }
+
+    fun convertTimeIntoTime(
+        time: String?,
+        current: SimpleDateFormat,
+        requested: SimpleDateFormat
+    ): String {
+        return try {
+            if (time.isNullOrEmpty()) return ""
+            val date = current.parse(time) ?: return ""
+            requested.format(date)
         } catch (exp: Exception) {
             ""
         }
@@ -1309,6 +1327,23 @@ object DateFormats {
         return cal1.compareTo(cal2)
     }
 
+    fun checkStartTimeLess(
+        time: String,
+        endTime: String,
+        simpleDateFormat: SimpleDateFormat
+    ): Boolean {
+
+        try {
+            val date1 = simpleDateFormat.parse(time)
+            val date2 = simpleDateFormat.parse(endTime)
+            if (date1 != null) {
+                return date1.before(date2)
+            }
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+        return false
+    }
 
     fun getHistoryMonths(historyYears: Int): Array<String> {
         val list = ArrayList<String>()

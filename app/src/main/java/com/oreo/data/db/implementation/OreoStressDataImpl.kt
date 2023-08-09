@@ -122,8 +122,11 @@ constructor(
     }
 
     private fun extractDataByStartTime(dayData: OreoStressDataBreakup, dayStartMinutes: Double): List<Int> {
-        val startPos = (dayStartMinutes / 5 - 1).toInt()
+        var startPos = (dayStartMinutes / 5 - 1).toInt()
         val breakupArray = Gson().fromJson<List<Int>>(dayData.breakUp ?: "")
+        if (startPos < 0) {
+            startPos = 0
+        }
         if (breakupArray.size != 288) {
             val currentSize = breakupArray.size
             breakupArray.toMutableList()
@@ -139,8 +142,11 @@ constructor(
         dayStartMinutes: Double,
         day2MinutesCeil: Double
     ): List<Int> {
-        val startPos = (dayStartMinutes / 5 - 1).toInt()
+        var startPos = (dayStartMinutes / 5 - 1).toInt()
         val endPos = (day2MinutesCeil / 5 - 1).toInt()
+        if (startPos < 0) {
+            startPos = 0
+        }
         val breakupArray = Gson().fromJson<List<Int>>(dayData.breakUp ?: "")
         if (breakupArray.size != 288) {
             val currentSize = breakupArray.size

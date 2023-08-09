@@ -12,24 +12,16 @@ import com.noisefit_commans.ui.getColor
 import com.noisefit_commans.utils.LOGS
 
 
-class SleepProgressbarView(var mContext: Context) : View(
-    mContext
-) {
-    private var sleepGraphInteractionListener: SleepGraphInteractionListener? = null
+class SleepProgressbarView(var mContext: Context) : View(mContext) {
+
 
     private var mPaint: Paint = Paint()
 
     private lateinit var deepPaint: Paint
 
     private var sleepArray: ArrayList<SleepData.SleepDataBreakup> = ArrayList()
-    //private var tooltipEntryArray: ArrayList<ToolTipEntry>? = ArrayList()
-
 
     var endPadding = 0.0f
-
-    fun setInteraction(sleepGraphInteractionListener: SleepGraphInteractionListener) {
-        this.sleepGraphInteractionListener = sleepGraphInteractionListener
-    }
 
     @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas) {
@@ -72,7 +64,6 @@ class SleepProgressbarView(var mContext: Context) : View(
                     }
 
                     if (paint != null) {
-                        LOGS.d("dfhkdkjfsfds ${rowData.sleepType}")
                         val rectF = RectF(start, top, end, bottom)
                         canvas.drawRoundRect(
                             rectF, pxFromDp(mContext, 4f), pxFromDp(mContext, 4f), paint
@@ -106,6 +97,7 @@ class SleepProgressbarView(var mContext: Context) : View(
     }
 
     fun setData(sleepArray: ArrayList<SleepData.SleepDataBreakup>?) {
+        LOGS.d("sleepupdate")
         val array = sleepArray?.filter {
             it.duration >= 60
         }

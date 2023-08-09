@@ -2,6 +2,7 @@ package com.oreo.ui.home.summary
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.session.SessionManager
@@ -15,7 +16,6 @@ import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.ManualMeasureType
-import com.noisefit_commans.models.ManualMeasurement
 import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
@@ -251,30 +251,54 @@ constructor(
             return sleepArray
         }
 
-        data.sleepStage.forEach {
-            val type = it.sleepType
-            LOGS.d("makeSleepArray $type")
+        var duration = 0
+
+        data.sleepStage.forEachIndexed { index, data1 ->
+            val type = data1.sleepType
+
+
             if (type?.lowercase() == "awake") {
+                if (duration != 0) {
+
+                    sleepArray.add(
+                        SleepData.SleepDataBreakup(
+                            startTime = data1.startTime,
+                            endTime = data1.endTime,
+                            sleepType = "DEEP",
+                            duration = duration
+                        )
+                    )
+                    duration = 0
+                }
                 sleepArray.add(
                     SleepData.SleepDataBreakup(
-                        startTime = it.startTime,
-                        endTime = it.endTime,
+                        startTime = data1.startTime,
+                        endTime = data1.endTime,
                         sleepType = "AWAKE",
-                        duration = it.duration ?: 0
+                        duration = data1.duration ?: 0
                     )
                 )
             } else {
-                sleepArray.add(
-                    SleepData.SleepDataBreakup(
-                        startTime = it.startTime,
-                        endTime = it.endTime,
-                        sleepType = "DEEP",
-                        duration = it.duration ?: 0
-                    )
-                )
+                duration += (data1.duration?.toInt()) ?: 0
             }
 
+            if (index == data.sleepStage.size - 1 && duration != 0) {
+
+                sleepArray.add(
+                    SleepData.SleepDataBreakup(
+                        startTime = data1.startTime,
+                        endTime = data1.endTime,
+                        sleepType = "DEEP",
+                        duration = duration
+                    )
+                )
+                duration = 0
+            }
+
+
         }
+
+
         return sleepArray
     }
 
