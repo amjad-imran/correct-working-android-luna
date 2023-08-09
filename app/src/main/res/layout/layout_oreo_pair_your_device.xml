@@ -25,7 +25,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_ring_default_sliver"
+            android:src="@drawable/ic_ring_default_silver"
             app:layout_constraintBottom_toBottomOf="@+id/ivBackGround"
             app:layout_constraintEnd_toEndOf="@+id/ivBackGround"
             app:layout_constraintStart_toStartOf="@+id/ivBackGround"

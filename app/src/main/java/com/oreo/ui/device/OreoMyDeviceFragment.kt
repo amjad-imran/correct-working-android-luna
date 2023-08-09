@@ -1,6 +1,5 @@
 package com.oreo.ui.device
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.setFragmentResultListener
@@ -23,7 +22,6 @@ import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.loadWatchImage
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.Event
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -209,7 +207,7 @@ class OreoMyDeviceFragment :
 
                 ivRingImage.loadImage(
                     requireContext(),
-                    R.drawable.ic_ring_default_sliver
+                    R.drawable.ic_ring_default_silver
                 )
                 tvRingName.text = noiseFitDevice?.bluetoothName
                 tvBattery.setTextColor(resources.getColor(R.color.oreo_contributor_warning))
@@ -246,7 +244,7 @@ class OreoMyDeviceFragment :
             ivRingImage.loadWatchImage(
                 requireContext(),
                 noiseFitDevice.ringInfo?.image ?: "",
-                R.drawable.ic_ring_default_sliver
+                R.drawable.ic_ring_default_silver
             )
             tvRingName.text = noiseFitDevice.bluetoothName
 

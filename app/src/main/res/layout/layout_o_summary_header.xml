@@ -29,7 +29,7 @@
         android:layout_marginBottom="@dimen/dimen_8dp"
         android:background="@drawable/back_modal_new_round"
         android:padding="@dimen/dimen_8dp"
-        android:src="@drawable/ic_ring_default_sliver"
+        android:src="@drawable/ic_ring_default_silver"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

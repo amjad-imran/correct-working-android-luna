@@ -47,15 +47,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.43" />-->
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/vBackWatch"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@+id/layoutWatch"
-            app:layout_constraintEnd_toEndOf="@+id/layoutWatch"
-            app:layout_constraintStart_toStartOf="@+id/layoutWatch"
-            app:layout_constraintTop_toTopOf="@+id/layoutWatch"
-            app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/layoutWatch"
@@ -75,7 +67,7 @@
             app:layout_constraintEnd_toEndOf="@+id/layoutWatch"
             app:layout_constraintStart_toStartOf="@+id/layoutWatch"
             app:layout_constraintTop_toTopOf="@+id/layoutWatch"
-            tools:src="@drawable/watch_default" />
+            tools:src="@drawable/ic_ring_default_silver" />
 
 
         <TextView

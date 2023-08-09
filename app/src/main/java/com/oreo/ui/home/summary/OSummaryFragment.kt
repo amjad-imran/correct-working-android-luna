@@ -201,7 +201,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 binding.lytHeader.oreoStatus.visible()
                 binding.lytHeader.oreoStatus.loadImage(
                     requireContext(),
-                    R.drawable.ic_ring_default_sliver
+                    R.drawable.ic_ring_default_silver
                 )
             }
         }
@@ -344,7 +344,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         } else {
             binding.lytHeader.oreoStatus.loadImage(
                 requireContext(),
-                R.drawable.ic_ring_default_sliver
+                R.drawable.ic_ring_default_silver
             )
         }
     }
