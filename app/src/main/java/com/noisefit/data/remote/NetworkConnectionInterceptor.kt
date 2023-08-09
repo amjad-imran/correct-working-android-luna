@@ -176,8 +176,7 @@ class NetworkConnectionInterceptor(
 
             userToken?.let {
                 addHeader("access-token", "Bearer ${userToken.access_token}")
-//                addHeader("access-token", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyNTUxOTUsImlhdCI6MTY5MTU1NDE0MSwiZXhwIjoxNjkxNTY4NTQxfQ.16zIdNgOf3boCW3z2z9aPsVzhiu7nVHOKe_COH3IwGs")
-//                addHeader("access-token", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyNTUxMjksImRldmljZV9pZCI6MTU0LCJpYXQiOjE2OTE1NTUwMzUsImV4cCI6MTY5MTU2OTQzNX0.omBeQ0HIKlJzcAjgKieyIO0ZT1oZ49gyFMzc1mFs2HI")
+//                addHeader("access-token", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyNTUyMjEsImRldmljZV9pZCI6MTU0LCJpYXQiOjE2OTE1NjY0NTUsImV4cCI6MTY5MTU4MDg1NX0.ciDZq0pQwd5fXfo83hTFoqHHnN5u8eb_P8GgZj9kgP8")
                }
             if (request.url.toString().contains("/master/user/v3/devices", true)) {
                 userToken?.let {

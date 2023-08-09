@@ -462,6 +462,17 @@ class OreoSleepDetailFragment :
 
     }
 
+    private fun setSleepScore(sleepScoreData: CommonDataModel) {
+        binding.lytSleepScore.lytSleepAvg.tvValue.text = sleepScoreData.value.toString()
+        val statusColor = ContextCompat.getColor(
+            binding.lytSleepScore.lytSleepAvg.tvValue.context,
+            viewModel.getStatusColors(sleepScoreData.status)
+        )
+        binding.lytSleepScore.lytSleepAvg.tvQuality.setTextColor(statusColor)
+        binding.lytSleepScore.lytSleepAvg.tvQuality.text = sleepScoreData.text
+        binding.lytSleepScore.lytSleepAvg.tvQuality.visible()
+    }
+
     private fun updateUi(dayData: OreoSleepModel) {
         //for sleep score
         binding.lytSleepScore.lytSleepAvg.tvTitle.text = getString(R.string.text_sleep_score_o)
@@ -474,18 +485,15 @@ class OreoSleepDetailFragment :
         val sleepScoreData = dayData.sleepScore
         if (sleepScoreData != null) {
             if (sleepScoreData.value != null) {
-                if (sleepScoreData.value == 0 || sleepScoreData.value == 255) {
-                    binding.lytSleepScore.lytSleepAvg.tvValue.text = "-"
-                    binding.lytSleepScore.lytSleepAvg.tvQuality.gone()
+                if (sleepScoreData.value == 0) {
+                    if (dayData.totalSleep?.value != 0) {
+                        setSleepScore(sleepScoreData)
+                    } else {
+                        binding.lytSleepScore.lytSleepAvg.tvValue.text = "-"
+                        binding.lytSleepScore.lytSleepAvg.tvQuality.gone()
+                    }
                 } else {
-                    binding.lytSleepScore.lytSleepAvg.tvValue.text = sleepScoreData.value.toString()
-                    val statusColor = ContextCompat.getColor(
-                        binding.lytSleepScore.lytSleepAvg.tvValue.context,
-                        viewModel.getStatusColors(sleepScoreData.status)
-                    )
-                    binding.lytSleepScore.lytSleepAvg.tvQuality.setTextColor(statusColor)
-                    binding.lytSleepScore.lytSleepAvg.tvQuality.text = sleepScoreData.text
-                    binding.lytSleepScore.lytSleepAvg.tvQuality.visible()
+                    setSleepScore(sleepScoreData)
                 }
             } else {
                 binding.lytSleepScore.lytSleepAvg.tvValue.text = "-"
