@@ -20,6 +20,7 @@ import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.SleepChartModel
+import com.oreo.data.model.health.CommonDataModel
 import com.oreo.data.model.health.Nudges
 import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.ui.custom.ScrollListener
@@ -376,6 +377,21 @@ class OreoReadinessFragment :
         }
 
     }
+    private fun setReadinessScore(readinessData: CommonDataModel) {
+        binding.lytRScoreData.lytScore.tvValue.text =
+            readinessData.value.toString()
+        if (readinessData.text != null) {
+            val statusColor = ContextCompat.getColor(
+                binding.lytRScoreData.lytScore.tvValue.context,
+                mViewModel.getStatusColors(readinessData.status)
+            )
+            binding.lytRScoreData.lytScore.tvQuality.setTextColor(statusColor)
+            binding.lytRScoreData.lytScore.tvQuality.text = readinessData.text
+            binding.lytRScoreData.lytScore.tvQuality.visible()
+        } else {
+            binding.lytRScoreData.lytScore.tvQuality.gone()
+        }
+    }
 
     private fun updateUiRead(it: OreoReadinessModel) {
         binding.lytRScoreData.lytScore.tvTitle.text = getString(R.string.text_readiness_score)
@@ -390,23 +406,15 @@ class OreoReadinessFragment :
         if (it.readinessScore != null) {
             val readinessData = it.readinessScore
             if (readinessData.value != null) {
-                if (readinessData.value == 0 || readinessData.value == 255) {
-                    binding.lytRScoreData.lytScore.tvValue.text = "-"
-                    binding.lytRScoreData.lytScore.tvQuality.gone()
-                } else {
-                    binding.lytRScoreData.lytScore.tvValue.text =
-                        readinessData.value.toString()
-                    if (readinessData.text != null) {
-                        val statusColor = ContextCompat.getColor(
-                            binding.lytRScoreData.lytScore.tvValue.context,
-                            mViewModel.getStatusColors(readinessData.status)
-                        )
-                        binding.lytRScoreData.lytScore.tvQuality.setTextColor(statusColor)
-                        binding.lytRScoreData.lytScore.tvQuality.text = readinessData.text
-                        binding.lytRScoreData.lytScore.tvQuality.visible()
+                if (readinessData.value == 0) {
+                    if (it.totalSleep?.value != 0) {
+                        setReadinessScore(readinessData)
                     } else {
+                        binding.lytRScoreData.lytScore.tvValue.text = "-"
                         binding.lytRScoreData.lytScore.tvQuality.gone()
                     }
+                } else {
+                    setReadinessScore(readinessData)
                 }
             } else {
                 binding.lytRScoreData.lytScore.tvValue.text = "-"
@@ -465,16 +473,9 @@ class OreoReadinessFragment :
         }
         //temperature
         if (it.temperature != null) {
-//            val tempData = it.temperature
             binding.lytRScoreData.lytSec3.lytHrMn.root.gone()
             binding.lytRScoreData.lytSec3.tvPercentValue.visible()
             binding.lytRScoreData.lytSec3.lytBpmView.root.gone()
-
-//            val temperatureData =
-//                if (tempData.unit == "°C") MiscUtil.getCelsius(tempData.value.toString())
-//                else MiscUtil.getFahrenheit(
-//                    tempData.value.toString()
-//                )
             binding.lytRScoreData.lytSec3.tvPercentValue.text =
                 "${it.temperature?.value} °F"
         } else {
@@ -577,8 +578,6 @@ class OreoReadinessFragment :
         binding.lytTemperature.tvSubtitle1.text = getString(R.string.text_average)
         binding.lytTemperature.tvSubtitle2.gone()
         binding.lytTemperature.divider1.root.invisible()
-
-
         if (!it.temperatureBreakUp?.value.isNullOrEmpty()) {
             binding.lytTemperature.lytSubtitleValue1.tvValue.text = "${it.temperatureBreakUp?.avg}"
             binding.lytTemperature.lytSubtitleValue1.tvUnit.visible()
@@ -590,8 +589,6 @@ class OreoReadinessFragment :
             binding.lytTemperature.lineChart.gone()
             temperatureGraphDefaultView()
         }
-
-
     }
 
     private fun heartRateDefaultView() {
