@@ -47,7 +47,7 @@
             app:layout_constraintEnd_toEndOf="@+id/animateView"
             app:layout_constraintStart_toStartOf="@+id/animateView"
             app:layout_constraintTop_toTopOf="@+id/animateView"
-            tools:src="@drawable/watch_default" />
+            tools:src="@drawable/ic_ring_default_silver" />
 <!--
         <include
             android:id="@+id/lScanning"

@@ -559,6 +559,20 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
             )
 
         }
+
+        val colorInfo = if (colorFitDevice.ringInfo != null) {
+            " (${colorFitDevice.ringInfo?.color}, Size ${colorFitDevice.ringInfo?.size})"
+        } else {
+            null
+        }
+
+        if (colorInfo != null) {
+            binding.tvWatchNameInfo.visible()
+            binding.tvWatchNameInfo.text = colorInfo
+        }
+
+
+
         binding.tvWatchMac.text = "MAC ${colorFitDevice.address}"
         binding.tvWatchName.text = colorFitDevice.bluetoothName
 

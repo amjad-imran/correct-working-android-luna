@@ -48,7 +48,6 @@
             app:layout_constraintVertical_bias="0.43" />-->
 
 
-
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/layoutWatch"
             android:layout_width="240dp"
@@ -76,10 +75,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_24sdp"
-            android:text="@string/text_colorfit_ultra_2"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvWatchNameInfo"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layoutWatch" />
+            app:layout_constraintTop_toBottomOf="@+id/layoutWatch"
+            tools:text="@string/text_colorfit_ultra_2" />
+
+        <TextView
+            android:id="@+id/tvWatchNameInfo"
+            style="@style/H3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="@dimen/_24sdp"
+            android:textColor="@color/white_48"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tvWatchName"
+            app:layout_constraintTop_toBottomOf="@+id/layoutWatch"
+            tools:text="(Silver, Size 11)"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/tvWatchMac"
@@ -87,17 +104,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_8sdp"
-            android:text="@string/text_colorfit_ultra_2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvWatchName" />
+            app:layout_constraintTop_toBottomOf="@+id/tvWatchName"
+            tools:text="@string/text_colorfit_ultra_2" />
 
         <ImageButton
             android:id="@+id/btnCopyMac"
             android:layout_width="wrap_content"
-            android:padding="@dimen/dimen_8dp"
-            android:background="@android:color/transparent"
             android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:padding="@dimen/dimen_8dp"
             android:src="@drawable/ic_copy_mac"
             app:layout_constraintBottom_toBottomOf="@+id/tvWatchMac"
             app:layout_constraintStart_toEndOf="@+id/tvWatchMac"
