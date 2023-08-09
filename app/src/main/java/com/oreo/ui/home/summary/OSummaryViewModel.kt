@@ -333,7 +333,7 @@ constructor(
 
     fun updateManualValue() {
         val manualMeasurement = ringDataStore.getManualMeasurementValue()
-        if (manualMeasurement.manualMeasureType == ManualMeasureType.HEART_RATE) {
+        if (manualMeasurement != null && manualMeasurement.manualMeasureType == ManualMeasureType.HEART_RATE) {
             val index = summary.healthOverviewData.value?.indexOfFirst {
                 it is OHealthOverview.HeartRate
             }
