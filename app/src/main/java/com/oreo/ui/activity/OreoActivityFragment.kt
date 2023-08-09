@@ -17,11 +17,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoActivityBinding
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit.util.ApplicationUtils
-import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.invisible
-import com.noisefit_commans.ui.showShortToast
-import com.noisefit_commans.ui.visible
+import com.noisefit_commans.ui.*
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DistanceUtil
 import com.noisefit_commans.utils.LOGS
@@ -52,14 +48,14 @@ class OreoActivityFragment :
 
     private val mWorkoutAdapter: OreoAWorkoutAdapter by lazy {
         OreoAWorkoutAdapter(object : OreoAWorkoutAdapter.OnItemClickListener {
-            override fun onItemClick(data: OActivityListModal,position: Int) {
-                moveToDetailsScreen(data,position)
+            override fun onItemClick(data: OActivityListModal, position: Int) {
+                moveToDetailsScreen(data, position)
             }
 
         })
     }
 
-    private fun moveToDetailsScreen(data: OActivityListModal,position: Int) {
+    private fun moveToDetailsScreen(data: OActivityListModal, position: Int) {
         navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
             putString("workoutName", data.getFormattedActivityName())
             putString("workoutId", data.id)
@@ -71,7 +67,7 @@ class OreoActivityFragment :
         OreoAContributorAdapter(object : OreoAContributorAdapter.ContributorItemClickListener {
             override fun onItemClick(resultData: ArrayList<Contributors>, position: Int) {
 //                if (resultData[position].barPercent > 0) {
-                    openContributorBottomSheet(resultData, position)
+                openContributorBottomSheet(resultData, position)
 //                }
             }
         })
@@ -157,36 +153,44 @@ class OreoActivityFragment :
         val scoreData = it.activityScore
         if (scoreData != null) {
             if (scoreData.value != null) {
-                binding.lytAScoreData.lytScore.tvValue.text = scoreData.value.toString()
-                if (scoreData.level != null) {
-                    val statusColor = ContextCompat.getColor(
-                        binding.lytAScoreData.lytScore.tvValue.context,
-                        mViewModel.getStatusColors(scoreData.status)
-                    )
-                    binding.lytAScoreData.lytScore.tvQuality.setTextColor(statusColor)
-
-                    binding.lytAScoreData.lytScore.tvQuality.text = scoreData.level
-                    binding.lytAScoreData.lytScore.tvQuality.visible()
-                } else {
+                if (scoreData.value == 0 || scoreData.value == 255) {
+                    binding.lytAScoreData.lytScore.tvValue.text = "-"
                     binding.lytAScoreData.lytScore.tvQuality.gone()
+                } else {
+                    binding.lytAScoreData.lytScore.tvValue.text = scoreData.value.toString()
+                    if (scoreData.level != null) {
+                        val statusColor = ContextCompat.getColor(
+                            binding.lytAScoreData.lytScore.tvValue.context,
+                            mViewModel.getStatusColors(scoreData.status)
+                        )
+                        binding.lytAScoreData.lytScore.tvQuality.setTextColor(statusColor)
+
+                        binding.lytAScoreData.lytScore.tvQuality.text = scoreData.level
+                        binding.lytAScoreData.lytScore.tvQuality.visible()
+                    } else {
+                        binding.lytAScoreData.lytScore.tvQuality.gone()
+                    }
                 }
             } else {
-
                 binding.lytAScoreData.lytScore.tvValue.text = "-"
                 binding.lytAScoreData.lytScore.tvQuality.gone()
 
             }
 
             if (it.activeCalories != null) {
-                binding.lytAScoreData.lytSec1.lytHrMn.root.gone()
-                binding.lytAScoreData.lytSec1.tvPercentValue.gone()
-                binding.lytAScoreData.lytSec1.lytBpmView.root.visible()
-                binding.lytAScoreData.lytSec1.lytBpmView.tvUnit.visible()
+                if (it.activeCalories == 0) {
+                    goalProgressDefaultView()
+                } else {
+                    binding.lytAScoreData.lytSec1.lytHrMn.root.gone()
+                    binding.lytAScoreData.lytSec1.tvPercentValue.gone()
+                    binding.lytAScoreData.lytSec1.lytBpmView.root.visible()
+                    binding.lytAScoreData.lytSec1.lytBpmView.tvUnit.visible()
 
-                val user = mViewModel.localDataStore.getUser()
-                val actCalories = "${it.activeCalories}/${user?.userGoals?.caloriesGoal}"
-                binding.lytAScoreData.lytSec1.lytBpmView.tvValue.text = actCalories
-                binding.lytAScoreData.lytSec1.lytBpmView.tvUnit.text = "kcal"
+                    val user = mViewModel.localDataStore.getUser()
+                    val actCalories = "${it.activeCalories}/${user?.userGoals?.caloriesGoal}"
+                    binding.lytAScoreData.lytSec1.lytBpmView.tvValue.text = actCalories
+                    binding.lytAScoreData.lytSec1.lytBpmView.tvUnit.text = "kcal"
+                }
             } else {
                 goalProgressDefaultView()
             }
@@ -194,42 +198,55 @@ class OreoActivityFragment :
 
 
             if (it.totalCalories != null) {
-                binding.lytAScoreData.lytSec2.lytHrMn.root.gone()
-                binding.lytAScoreData.lytSec2.tvPercentValue.gone()
-                binding.lytAScoreData.lytSec2.lytBpmView.root.visible()
-                binding.lytAScoreData.lytSec2.lytBpmView.tvUnit.visible()
+                if (it.totalCalories == 0) {
+                    totalBurnDefaultView()
+                } else {
+                    binding.lytAScoreData.lytSec2.lytHrMn.root.gone()
+                    binding.lytAScoreData.lytSec2.tvPercentValue.gone()
+                    binding.lytAScoreData.lytSec2.lytBpmView.root.visible()
+                    binding.lytAScoreData.lytSec2.lytBpmView.tvUnit.visible()
 
-                binding.lytAScoreData.lytSec2.lytBpmView.tvValue.text =
-                    it.totalCalories.toString()
-                binding.lytAScoreData.lytSec2.lytBpmView.tvUnit.text = "kcal"
+                    binding.lytAScoreData.lytSec2.lytBpmView.tvValue.text =
+                        it.totalCalories.toString()
+                    binding.lytAScoreData.lytSec2.lytBpmView.tvUnit.text = "kcal"
+                }
             } else {
                 totalBurnDefaultView()
             }
 
             if (it.steps != null) {
-                binding.lytAScoreData.lytSec3.lytHrMn.root.gone()
-                binding.lytAScoreData.lytSec3.tvPercentValue.visible()
-                binding.lytAScoreData.lytSec3.lytBpmView.root.gone()
-                binding.lytAScoreData.lytSec3.tvPercentValue.text = it.steps.toString()
+                if (it.steps == 0) {
+                    stepCountDefaultView()
+                } else {
+                    binding.lytAScoreData.lytSec3.lytHrMn.root.gone()
+                    binding.lytAScoreData.lytSec3.tvPercentValue.visible()
+                    binding.lytAScoreData.lytSec3.lytBpmView.root.gone()
+                    binding.lytAScoreData.lytSec3.tvPercentValue.text = it.steps.toString()
+                }
             } else {
                 stepCountDefaultView()
             }
 
             if (it.distance != null) {
-                binding.lytAScoreData.lytSec4.lytHrMn.root.gone()
-                binding.lytAScoreData.lytSec4.tvPercentValue.gone()
-                binding.lytAScoreData.lytSec4.lytBpmView.root.visible()
-                binding.lytAScoreData.lytSec4.lytBpmView.tvUnit.visible()
-                binding.lytAScoreData.lytSec4.lytBpmView.tvValue.text =
-                    DistanceUtil.convertMeterToKm(it.distance)
-                binding.lytAScoreData.lytSec4.lytBpmView.tvUnit.text = "km"
+                if (it.distance == 0) {
+                    distanceDefaultView()
+                } else {
+                    binding.lytAScoreData.lytSec4.lytHrMn.root.gone()
+                    binding.lytAScoreData.lytSec4.tvPercentValue.gone()
+                    binding.lytAScoreData.lytSec4.lytBpmView.root.visible()
+                    binding.lytAScoreData.lytSec4.lytBpmView.tvUnit.visible()
+                    binding.lytAScoreData.lytSec4.lytBpmView.tvValue.text =
+                        DistanceUtil.convertMeterToKm(it.distance)
+                    binding.lytAScoreData.lytSec4.lytBpmView.tvUnit.text = "km"
+                }
 
             } else {
                 distanceDefaultView()
             }
         } else {
             if (mViewModel.ringDataStore.getRegisterDay() == 0) {
-                binding.lytAScoreData.lytScore.emptyText.text = getString(R.string.text_you_will_see_your_activity_score_after_wearing_the_ring)
+                binding.lytAScoreData.lytScore.emptyText.text =
+                    getString(R.string.text_you_will_see_your_activity_score_after_wearing_the_ring)
                 binding.lytAScoreData.lytScore.emptyText.visible()
                 binding.lytAScoreData.lytScore.tvValue.gone()
                 binding.lytAScoreData.lytScore.tvQuality.gone()
@@ -268,7 +285,6 @@ class OreoActivityFragment :
     }
 
 
-
     private fun handleMovementViews(it: OreoActivityModel) {
 
 
@@ -292,9 +308,13 @@ class OreoActivityFragment :
         var inactiveMovValue: Int = 0
         val movementList = it.daytimeMovement?.movement
 
-        val baseHrList = UtilClass.graphBaseInterval(it.daytimeMovement?.startTime, it.daytimeMovement?.endTime,movementList?.size?: 288)
+        val baseHrList = UtilClass.graphBaseInterval(
+            it.daytimeMovement?.startTime,
+            it.daytimeMovement?.endTime,
+            movementList?.size ?: 288
+        )
 
-     //   LOGS.d("asdsdadsasad ${Gson().toJson(baseHrList)}")
+        //   LOGS.d("asdsdadsasad ${Gson().toJson(baseHrList)}")
 
         if (movementList?.isNotEmpty() == true) {
             movementList.forEachIndexed { index, data ->
