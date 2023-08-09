@@ -259,12 +259,21 @@ class OSleepScoreDetailsFragment :
             } else {
                 binding.lytTopGraphView.lytLabelValue1.root.visible()
                 binding.lytTopGraphView.lytLabelValue11.root.gone()
+
                 binding.lytTopGraphView.lytLabelValue1.tvValue.text =
-                    it.data.roundToInt().toString()
+                    checkZeroData(it.data.roundToInt())
                 setTopDateLabel(it.date)
             }
 
         }
+    }
+
+    fun checkZeroData(value: Int):String {
+        val displayValue:String = if (value == 0) {
+            "-"
+        } else
+            value.toString()
+        return displayValue
     }
 
     private fun updateUI(it: OInternalPageResponseModal) {
@@ -585,8 +594,7 @@ class OSleepScoreDetailsFragment :
 //                        val compPro = "${mViewModel.trendDifferenceProgress} steps"
                         val compPro = "$difference steps"
                         binding.lytScoreOverview.tvTrendProg.text = compPro
-                    }
-                    else if (mViewModel.itemClickType == ViewItemClickType.ACTIVE_CALORIES.name
+                    } else if (mViewModel.itemClickType == ViewItemClickType.ACTIVE_CALORIES.name
                     ) {
                         var difference = 0
                         todayProgress =
@@ -720,7 +728,10 @@ class OSleepScoreDetailsFragment :
                                 val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
                                     tempProgress.toInt()
                                 )
-                                binding.lytScoreOverview.tvTrendProg.text = "$hour hr $minute min"
+                                val trendDifProgress = if (hour > 0) "$hour hr $minute min"
+                                else
+                                    "$minute min"
+                                binding.lytScoreOverview.tvTrendProg.text = trendDifProgress
                                 binding.lytScoreOverview.tvTrendProg.setTextColor(
                                     ContextCompat.getColor(
                                         requireContext(),
@@ -736,7 +747,10 @@ class OSleepScoreDetailsFragment :
                                 val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
                                     tempProgress.toInt()
                                 )
-                                binding.lytScoreOverview.tvTrendProg.text = "$hour hr $minute min"
+                                val trendDifProgress = if (hour > 0) "$hour hr $minute min"
+                                else
+                                    "$minute min"
+                                binding.lytScoreOverview.tvTrendProg.text = trendDifProgress
                                 binding.lytScoreOverview.tvTrendProg.setTextColor(
                                     ContextCompat.getColor(
                                         requireContext(),
@@ -752,10 +766,13 @@ class OSleepScoreDetailsFragment :
                                 val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
                                     todayProgress.toInt()
                                 )
+                                val trendDifProgress = if (hour > 0) "$hour hr $minute min"
+                                else
+                                    "$minute min"
                                 binding.lytScoreOverview.tvTrendProg.gone()
                                 binding.lytScoreOverview.tvScoreMsg.visible()
                                 mViewModel.isProgressEqual = true
-                                binding.lytScoreOverview.tvTrendProg.text = "$hour hr $minute min"
+                                binding.lytScoreOverview.tvTrendProg.text = trendDifProgress
                             }
                         }
                     }
