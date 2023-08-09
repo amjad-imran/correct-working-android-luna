@@ -79,7 +79,7 @@
 
     <style name="DialogCorners">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">@dimen/dimen_24dp</item>
+        <item name="cornerSize">@dimen/dimen_28dp</item>
     </style>
 
 <!--    <style name="ModalStyle">-->
