@@ -56,11 +56,11 @@ class UnpairBottomDialogFragment :
         val messageBuilder =
             StringBuilder("Are you sure you want to unpair your $bleName from NoiseFit?")
 
-        val callingWatchMessage = getBleCallingStatusMessage()
-        if (!callingWatchMessage.isNullOrEmpty()) {
-            messageBuilder.append("\n\n")
-            messageBuilder.append(callingWatchMessage)
-        }
+//        val callingWatchMessage = getBleCallingStatusMessage()
+//        if (!callingWatchMessage.isNullOrEmpty()) {
+//            messageBuilder.append("\n\n")
+//            messageBuilder.append(callingWatchMessage)
+//        }
 
         binding.tvTitle.text = title
         binding.tvPrivacy.text = messageBuilder.toString()
