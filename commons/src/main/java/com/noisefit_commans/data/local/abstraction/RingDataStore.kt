@@ -41,5 +41,5 @@ interface RingDataStore {
     fun isActivityWalkAroundShown(): Boolean
 
     fun setManualMeasurementValue(data: ManualMeasurement)
-    fun getManualMeasurementValue(): ManualMeasurement
+    fun getManualMeasurementValue(): ManualMeasurement?
 }

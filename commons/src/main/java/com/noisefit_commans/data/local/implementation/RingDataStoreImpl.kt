@@ -127,7 +127,7 @@ class RingDataStoreImpl
         mPrefs.edit()?.putString(MANUAL_MEASUREMENT_KEY, gson.toJson(data))?.commit()
     }
 
-    override fun getManualMeasurementValue(): ManualMeasurement {
+    override fun getManualMeasurementValue(): ManualMeasurement? {
         return gson.fromJson(mPrefs.getString(MANUAL_MEASUREMENT_KEY, null), ManualMeasurement::class.java)
     }
 
