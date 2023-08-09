@@ -11,6 +11,7 @@ import com.noisefit_commans.utils.AppConstants
 
 class ConnectRingFragment :
     BaseFragment<FragmentConnectRingBinding>(FragmentConnectRingBinding::inflate) {
+    private var currentPosition: Int = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -25,6 +26,19 @@ class ConnectRingFragment :
             setOnPreparedListener { mp -> mp.isLooping = false }
             start()
         }
+    }
+
+
+    override fun onPause() {
+        super.onPause()
+        currentPosition = binding.videoOnboard.currentPosition
+        binding.videoOnboard.pause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.videoOnboard.seekTo(currentPosition)
+        binding.videoOnboard.start()
     }
 
 

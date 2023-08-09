@@ -72,6 +72,7 @@ class FindDeviceListFragment :
       }*/
     private val handler = Handler(Looper.getMainLooper())
     private val viewModel: SearchNearbyDeviceViewModel by activityViewModels()
+    private var currentPosition: Int = 0
 
 
     private val btAdapter by lazy {
@@ -850,6 +851,18 @@ class FindDeviceListFragment :
 
     override fun onDeviceFound(deviceEntity: DeviceEntity) {
         viewModel.onDeviceFound(deviceEntity)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        currentPosition = binding.videoOnboard.currentPosition
+        binding.videoOnboard.pause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.videoOnboard.seekTo(currentPosition)
+        binding.videoOnboard.start()
     }
 
     override fun onDestroyView() {
