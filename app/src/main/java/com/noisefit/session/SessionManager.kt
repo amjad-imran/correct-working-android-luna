@@ -1,17 +1,13 @@
 package com.noisefit.session
 
-import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.ktx.Firebase
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.ui.friends.location.search.SearchStateType
-import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
-import com.noisefit_commans.data.model.matches.SportEvent
 import com.noisefit_commans.data.response.UpdateResponse
 import com.noisefit_commans.data.response.VersionCheckResponse
 import com.noisefit_commans.interfaces.QueryAction
@@ -22,26 +18,15 @@ import com.noisefit_commans.interfaces.data.UserActivityCallback
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
 import com.noisefit_commans.models.ColorFitDevice
-import com.noisefit_commans.models.Gender
-import com.noisefit_commans.models.ManualMeasurement
 import com.noisefit_commans.models.SportsModeRequest
-import com.noisefit_commans.models.SportsModeResponse
-import com.noisefit_commans.models.SyncDataStatus
 import com.noisefit_commans.models.UserLocation
-import com.noisefit_commans.ui.tryCatch
-import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
-import com.noisefit_commans.utils.LOGS
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import com.useinsider.insider.Insider
-import com.useinsider.insider.Insider.Instance
 import com.useinsider.insider.InsiderEvent
-import com.useinsider.insider.InsiderGender
-import com.useinsider.insider.InsiderIdentifiers
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -101,7 +86,7 @@ constructor(
     private val _connectStateRing = MutableLiveData<ConnectState>()
     private val _bluetoothOnState = MutableLiveData<Boolean>()
     private val _bluetoothOnStateDash = MutableLiveData<Boolean>()
-    private val _syncCompleted = MutableLiveData<Event<SyncDataStatus>>()
+    private val _syncCompleted = MutableLiveData<Event<SyncEvents>>()
     private val _showSyncOfflineData = MutableLiveData<Event<HealthOverviewDataType>>()
     private val _manualMeasurementValue = MutableLiveData<Event<Boolean>>()
     private val _deviceQueryAction = MutableLiveData<QueryAction>()
@@ -132,7 +117,7 @@ constructor(
     val bluetoothStateDash: LiveData<Boolean>
         get() = _bluetoothOnStateDash
 
-    val syncCompleted: LiveData<Event<SyncDataStatus>>
+    val syncCompleted: LiveData<Event<SyncEvents>>
         get() = _syncCompleted
 
 //    val dateChanged: LiveData<Event<Boolean>>
@@ -244,7 +229,7 @@ constructor(
         }
     }
 
-    fun setSyncCompletedState(syncDataStatus: Event<SyncDataStatus>) {
+    fun setSyncCompletedState(syncDataStatus: Event<SyncEvents>) {
         GlobalScope.launch(Main) {
             if (_syncCompleted.value != syncDataStatus) {
                 _syncCompleted.value = syncDataStatus
@@ -481,6 +466,7 @@ constructor(
             timeStamp
         }
     }
+
     fun updateUserLocationState(data: String?, id: Int?, type: SearchStateType) {
 
         if (tempUserLocation == null) {
@@ -495,6 +481,7 @@ constructor(
                 tempUserLocation!!.cityId = 0
                 tempUserLocation!!.city = null
             }
+
             SearchStateType.City -> {
                 tempUserLocation!!.stateId = tempUserLocation!!.stateId
                 tempUserLocation!!.state = tempUserLocation!!.state

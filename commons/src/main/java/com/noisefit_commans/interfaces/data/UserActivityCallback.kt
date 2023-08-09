@@ -1,5 +1,6 @@
 package com.noisefit_commans.interfaces.data
 
+import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.data.model.DayTimeMovementBreakup
 import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.data.model.OreoBloodOxygenBreakup
@@ -18,7 +19,6 @@ import com.noisefit_commans.models.SportsModeListGPS
 import com.noisefit_commans.models.SportsModeRequestList
 import com.noisefit_commans.models.StepsData
 import com.noisefit_commans.models.StressDataBreakup
-import com.noisefit_commans.models.SyncDataStatus
 
 sealed class UserActivityCallback {
 
@@ -48,8 +48,7 @@ sealed class UserActivityCallback {
     class BodyTemperatureObtainedOreo(val bodyTemperatureBreakupData: OreoBodyTemperatureBreakup) :
         UserActivityCallback()
 
-    class UserDataSyncUpdated(val syncDataStatus: SyncDataStatus) : UserActivityCallback()
-    class SportsModeStatusChange(val syncDataStatus: SyncDataStatus) : UserActivityCallback()
+    class UserDataSyncUpdated(val syncStatus: SyncEvents) : UserActivityCallback()
 
     //    class SportsModeDataObtained(val sportsModeResponse: SportsModeList) : UserActivityCallback()
     class HeartHistoryObtained(val heartRateData: List<HeartRate>) : UserActivityCallback()

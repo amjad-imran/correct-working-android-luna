@@ -10,8 +10,6 @@ interface UserActivityDataCallbacks {
     fun onBloodOxygenObtained(bloodOxygen: BloodOxygen)
     fun onBloodPressureObtained(bloodPressureData: BloodPressureData)
     fun onStressDataObtained(stressData: StressData)
-    fun onUserDataSyncUpdated(syncDataStatus: SyncDataStatus)
-    fun onSportsModeStatusChange(syncDataStatus: SyncDataStatus)
     fun onSportsModeDataObtained(sportsModeResponse: SportsModeList)
     fun onHeartHistoryObtained(heartRateHistory: HeartRateHistory)
     fun onSportsModeDataObtainedGPS(sportsModeResponse: SportsModeListGPS)

@@ -11,7 +11,8 @@ interface TokenRefreshApi {
     @GET
     suspend fun refreshAccessToken(
         @Url url: String,
-        @Header("refresh-token") refreshToken: String
+        @Header("refresh-token") refreshToken: String,
+        @Header("wearable-type") wearableType: String
     ): BaseApiResponse<Token>
 
 }

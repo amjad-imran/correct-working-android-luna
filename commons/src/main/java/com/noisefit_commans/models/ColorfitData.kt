@@ -582,10 +582,6 @@ data class BatteryData(
 ) :
     ColorfitData()
 
-data class SyncDataStatus(
-    @SerializedName("progress") var progress: Int = 0,
-    @SerializedName("status") var status: String? = null
-) : ColorfitData()
 
 data class DoNotDisturb(
     @SerializedName("status") var status: Boolean = false,
