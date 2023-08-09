@@ -25,6 +25,7 @@ import com.oreo.data.model.CandleChartModel
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.OActivityListModal
+import com.oreo.data.model.health.ActivityScore
 import com.oreo.data.model.health.Nudges
 import com.oreo.data.model.health.OreoActivityModel
 import com.oreo.ui.custom.ScrollListener
@@ -140,6 +141,22 @@ class OreoActivityFragment :
         }
     }
 
+    private fun setActivityScore(scoreData: ActivityScore) {
+        binding.lytAScoreData.lytScore.tvValue.text = scoreData.value.toString()
+        if (scoreData.level != null) {
+            val statusColor = ContextCompat.getColor(
+                binding.lytAScoreData.lytScore.tvValue.context,
+                mViewModel.getStatusColors(scoreData.status)
+            )
+            binding.lytAScoreData.lytScore.tvQuality.setTextColor(statusColor)
+
+            binding.lytAScoreData.lytScore.tvQuality.text = scoreData.level
+            binding.lytAScoreData.lytScore.tvQuality.visible()
+        } else {
+            binding.lytAScoreData.lytScore.tvQuality.gone()
+        }
+    }
+
     private fun updateUi(it: OreoActivityModel) {
         //activity score data
         binding.lytAScoreData.lytSec1.tvTitle.text = getString(R.string.text_active_calorie)
@@ -147,29 +164,19 @@ class OreoActivityFragment :
         binding.lytAScoreData.lytSec3.tvTitle.text = getString(R.string.text_steps)
         binding.lytAScoreData.lytSec4.tvTitle.text = getString(R.string.text_distance)
         binding.lytAScoreData.lytScore.tvTitle.text = getString(R.string.text_activity_score)
-
         setSleepBannerViewPager(it.nudges)
-
         val scoreData = it.activityScore
         if (scoreData != null) {
             if (scoreData.value != null) {
-                if (scoreData.value == 0 || scoreData.value == 255) {
-                    binding.lytAScoreData.lytScore.tvValue.text = "-"
-                    binding.lytAScoreData.lytScore.tvQuality.gone()
-                } else {
-                    binding.lytAScoreData.lytScore.tvValue.text = scoreData.value.toString()
-                    if (scoreData.level != null) {
-                        val statusColor = ContextCompat.getColor(
-                            binding.lytAScoreData.lytScore.tvValue.context,
-                            mViewModel.getStatusColors(scoreData.status)
-                        )
-                        binding.lytAScoreData.lytScore.tvQuality.setTextColor(statusColor)
-
-                        binding.lytAScoreData.lytScore.tvQuality.text = scoreData.level
-                        binding.lytAScoreData.lytScore.tvQuality.visible()
+                if (scoreData.value == 0) {
+                    if (it.steps != 0) {
+                        setActivityScore(scoreData)
                     } else {
+                        binding.lytAScoreData.lytScore.tvValue.text = "-"
                         binding.lytAScoreData.lytScore.tvQuality.gone()
                     }
+                } else {
+                    setActivityScore(scoreData)
                 }
             } else {
                 binding.lytAScoreData.lytScore.tvValue.text = "-"
@@ -484,7 +491,7 @@ class OreoActivityFragment :
     private fun updateWorkoutUI(recentWorkout: List<OActivityListModal>?) {
         val itemCount = recentWorkout?.size
         if ((itemCount ?: 0) > 0) {
-            mWorkoutAdapter.setData(recentWorkout?:ArrayList())
+            mWorkoutAdapter.setData(recentWorkout ?: ArrayList())
             binding.lytWorkouts.rvWorkouts.visible()
             binding.lytWorkouts.tvEmptyMsg.gone()
             binding.lytWorkouts.ivViewAll.visible()
@@ -495,9 +502,9 @@ class OreoActivityFragment :
         }
 
         if (mSharedViewModel.selectedDate == DateFormats.getCurrentDateOreoFormat()) {
-            if(mViewModel.ringDataStore.getRingDevice()!=null){
+            if (mViewModel.ringDataStore.getRingDevice() != null) {
                 binding.lytWorkouts.viewAddWorkout.visible()
-            }else{
+            } else {
                 binding.lytWorkouts.viewAddWorkout.gone()
             }
             binding.lytWorkouts.tvEmptyMsg.text =
