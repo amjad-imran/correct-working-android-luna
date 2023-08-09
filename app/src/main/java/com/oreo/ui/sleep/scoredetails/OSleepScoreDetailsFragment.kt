@@ -211,13 +211,14 @@ class OSleepScoreDetailsFragment :
                             it.data.roundToInt().toString()
                         binding.lytTopGraphView.lytLabelValue1.tvUnit.visible()
                         binding.lytTopGraphView.lytLabelValue1.tvUnit.text = "steps"
-                         setTopDateLabel(it.date)
+                        setTopDateLabel(it.date)
                     }
 
                     ViewItemClickType.ACTIVE_CALORIES.name -> {
                         binding.lytTopGraphView.lytLabelValue1.root.visible()
                         binding.lytTopGraphView.lytLabelValue11.root.gone()
-                        binding.lytTopGraphView.lytLabelValue1.tvValue.text = it.data.roundToInt().toString()
+                        binding.lytTopGraphView.lytLabelValue1.tvValue.text =
+                            it.data.roundToInt().toString()
                         binding.lytTopGraphView.lytLabelValue1.tvUnit.visible()
                         binding.lytTopGraphView.lytLabelValue1.tvUnit.text = "kcal"
                         setTopDateLabel(it.date)
@@ -235,7 +236,7 @@ class OSleepScoreDetailsFragment :
                     ViewItemClickType.BODY_TEMPERATURE.name -> {
                         binding.lytTopGraphView.lytLabelValue1.root.visible()
                         binding.lytTopGraphView.lytLabelValue11.root.gone()
-                        binding.lytTopGraphView.lytLabelValue1.tvValue.text =it.data.toString()
+                        binding.lytTopGraphView.lytLabelValue1.tvValue.text = it.data.toString()
                         binding.lytTopGraphView.lytLabelValue1.tvUnit.visible()
                         binding.lytTopGraphView.lytLabelValue1.tvUnit.text = "°F"
                         setTopDateLabel(it.date)
@@ -258,7 +259,8 @@ class OSleepScoreDetailsFragment :
             } else {
                 binding.lytTopGraphView.lytLabelValue1.root.visible()
                 binding.lytTopGraphView.lytLabelValue11.root.gone()
-                binding.lytTopGraphView.lytLabelValue1.tvValue.text = it.data.roundToInt().toString()
+                binding.lytTopGraphView.lytLabelValue1.tvValue.text =
+                    it.data.roundToInt().toString()
                 setTopDateLabel(it.date)
             }
 
@@ -542,8 +544,7 @@ class OSleepScoreDetailsFragment :
                 binding.lytScoreOverview.tvScoreMsg.gone()
             } else {
                 if (isTrendValueUpdate()) {
-                    if (mViewModel.itemClickType == ViewItemClickType.ACTIVE_CALORIES.name ||
-                        mViewModel.itemClickType == ViewItemClickType.STEPS.name
+                    if (mViewModel.itemClickType == ViewItemClickType.STEPS.name
                     ) {
                         var difference = 0
                         todayProgress =
@@ -585,7 +586,48 @@ class OSleepScoreDetailsFragment :
                         val compPro = "$difference steps"
                         binding.lytScoreOverview.tvTrendProg.text = compPro
                     }
-                    else if (
+                    else if (mViewModel.itemClickType == ViewItemClickType.ACTIVE_CALORIES.name
+                    ) {
+                        var difference = 0
+                        todayProgress =
+                            trendData.today.value.toLong()
+                        yesterdayProgress =
+                            trendData.yesterday.value.toLong()
+                        if (todayProgress > yesterdayProgress) {
+                            binding.lytScoreOverview.tvTrendProg.setCompoundDrawable(R.drawable.ic_trend_up)
+                            binding.lytScoreOverview.tvTrendProg.setTextColor(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    R.color.steps_arc
+                                )
+                            )
+                            binding.lytScoreOverview.tvTrendProg.visible()
+                            binding.lytScoreOverview.tvScoreMsg.visible()
+                            mViewModel.isProgressEqual = false
+                            difference = todayProgress.toInt() - yesterdayProgress.toInt()
+                            mViewModel.isTodayGreater = true
+                        } else if (yesterdayProgress > todayProgress) {
+                            binding.lytScoreOverview.tvTrendProg.setCompoundDrawable(R.drawable.ic_trend_down)
+                            binding.lytScoreOverview.tvTrendProg.setTextColor(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    R.color.color_error
+                                )
+                            )
+                            binding.lytScoreOverview.tvTrendProg.visible()
+                            binding.lytScoreOverview.tvScoreMsg.visible()
+                            mViewModel.isProgressEqual = false
+                            difference = yesterdayProgress.toInt() - todayProgress.toInt()
+                            mViewModel.isTodayGreater = false
+                        } else {
+                            binding.lytScoreOverview.tvTrendProg.gone()
+                            binding.lytScoreOverview.tvScoreMsg.visible()
+                            mViewModel.isProgressEqual = true
+                        }
+//                        val compPro = "${mViewModel.trendDifferenceProgress} steps"
+                        val compPro = "$difference kcal"
+                        binding.lytScoreOverview.tvTrendProg.text = compPro
+                    } else if (
                         mViewModel.itemClickType == ViewItemClickType.DISTANCE.name
                     ) {
                         var difference = 0
@@ -626,8 +668,7 @@ class OSleepScoreDetailsFragment :
                         }
                         val compPro = "${DistanceUtil.convertMeterToKm(difference)} km"
                         binding.lytScoreOverview.tvTrendProg.text = compPro
-                    }
-                    else if (
+                    } else if (
                         mViewModel.itemClickType == ViewItemClickType.BODY_TEMPERATURE.name
                     ) {
                         var difference = 0
@@ -668,9 +709,7 @@ class OSleepScoreDetailsFragment :
                         }
                         val compPro = "$difference °F"
                         binding.lytScoreOverview.tvTrendProg.text = compPro
-                    }
-
-                    else {
+                    } else {
                         tryCatch {
                             binding.lytScoreOverview.tvTrendProg.clearDrawables()
                             val tempProgress: Long
@@ -756,8 +795,9 @@ class OSleepScoreDetailsFragment :
                         mViewModel.isProgressEqual = true
                     }
 
-                    val calPercent= (((yesterdayProgress.toFloat()-todayProgress.toFloat())/yesterdayProgress.toFloat())*100).roundToInt()
-                    val compPro = "${calPercent.toString().replace("-","")} %"
+                    val calPercent =
+                        (((yesterdayProgress.toFloat() - todayProgress.toFloat()) / yesterdayProgress.toFloat()) * 100).roundToInt()
+                    val compPro = "${calPercent.toString().replace("-", "")} %"
                     binding.lytScoreOverview.tvTrendProg.text = compPro
 //                    updateTrendPercent()
                 }

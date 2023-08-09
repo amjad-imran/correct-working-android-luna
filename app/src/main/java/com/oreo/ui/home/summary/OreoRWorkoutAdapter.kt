@@ -3,9 +3,11 @@ package com.oreo.ui.home.summary
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.OreoItemRecentWorkoutActivityBinding
 import com.noisefit.luna.databinding.OreoItemWorkoutActivityBinding
 import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
 import com.oreo.data.model.OActivityListModal
 
@@ -22,7 +24,7 @@ class OreoRWorkoutAdapter(val mListener:OnItemClickListener) :
                 binding.divider1.root.invisible()
             } else
                 binding.divider1.root.visible()
-
+            binding.imageView8.loadImage(binding.imageView8.context,resultData.iconUrl, R.drawable.ic_o_workout)
             binding.root.setOnClickListener {
                 mListener.onItemClick(resultData,bindingAdapterPosition)
             }
