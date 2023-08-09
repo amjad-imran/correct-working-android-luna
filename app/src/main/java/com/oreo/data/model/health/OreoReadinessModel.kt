@@ -15,6 +15,7 @@ data class OreoReadinessModel(
     val activityScore: CommonDataModel? = null,
     val activityBalance: CommonDataModel? = null,
     val restingHrBalance: CommonDataModel? = null,
+    val hrReserve: CommonDataModel? = null,
     val hrBreakUp: UnitDataModelArray? = null,
     val hrvBalance: CommonDataModel? = null,
     val hrv: UnitDataModel? = null,

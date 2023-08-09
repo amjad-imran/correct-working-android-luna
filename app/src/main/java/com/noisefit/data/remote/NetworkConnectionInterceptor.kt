@@ -176,8 +176,8 @@ class NetworkConnectionInterceptor(
 
             userToken?.let {
                 addHeader("access-token", "Bearer ${userToken.access_token}")
-                //addHeader("access-token", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyNCwiaWF0IjoxNjkxNTczNzExLCJleHAiOjE2OTE1ODgxMTF9.IHGFlSrEWs-cE9qSrEdpMQdajVBsKimN-sQZnVlMcO0")
-            }
+                //addHeader("access-token", "access-token: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyNCwiaWF0IjoxNjkxNTY1NjcyLCJleHAiOjE2OTE1ODAwNzJ9.s3IIR9TBmZHioFX7ymGocxJ-g_m-rr9jBOiYjkthIRs")
+               }
             if (request.url.toString().contains("/master/user/v3/devices", true)) {
                 userToken?.let {
                     addHeader("refresh-token", "Bearer ${userToken.refresh_token}")
@@ -210,7 +210,6 @@ class NetworkConnectionInterceptor(
             tokenRefreshApi.refreshAccessToken(
                 "${BuildConfig.BASE_URL_NEW}/auth_v2/refresh-token",
                 "Bearer $refreshToken", "ring"
-
             )
         }
     }

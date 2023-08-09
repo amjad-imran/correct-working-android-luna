@@ -82,6 +82,7 @@
                     lineChart:chartLineColor="#c5a8ed"
                     lineChart:chartLineWidth="2dp"
                     lineChart:fillColorEnd="#00c6a7e8"
+
                     lineChart:fillColorStart="#4cc6a7e8"
                     lineChart:gridColor="@color/white_12"
                     lineChart:hCount="11"
@@ -96,6 +97,7 @@
                     lineChart:scaleNodeColor="#FFFFFF"
                     lineChart:scaleNodeRadius="6dp"
                     lineChart:showGrid="true"
+
                     lineChart:topWith="40dp"
                     lineChart:vCount="2"
                     lineChart:xLineColor="#80FFFFFF"

@@ -481,7 +481,7 @@ interface NetworkService {
         @Path("number") number: String
     ): BaseApiResponse<WarrantyResponse>
 
-    @POST("/users/v3/watch_token")
+    @POST("/master/user/ring-token")
     suspend fun checkWatchTokenExist(
         @Body jsonObject: JsonObject
     ): BaseApiResponse<WatchTokenResponse>
@@ -489,7 +489,7 @@ interface NetworkService {
     //  @GET("/warranty/check/{number}")
     //    suspend fun checkWarranty(
     //        @Path("number") number: String
-    @POST("/users/v3/watch_token/remove")
+    @POST("/master/user/ring-token/remove")
     suspend fun removeWatchTokenFromServer(
         @Body jsonObject: JsonObject
     ): BaseApiResponseData<Any>

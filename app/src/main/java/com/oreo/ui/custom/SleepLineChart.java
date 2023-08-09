@@ -41,6 +41,7 @@ public class SleepLineChart extends View {
 
     private int scaleNodeColor;
 
+    private Paint outCirclePaint;
     private int gridColor;
     private int xMax;
     private int xMin;
@@ -203,6 +204,10 @@ public class SleepLineChart extends View {
         chartLinePaint.setAntiAlias(true);
         chartLinePaint.setStyle(Paint.Style.STROKE);
 
+        outCirclePaint = new Paint();
+        outCirclePaint.setColor(chartLineColor);
+        outCirclePaint.setAntiAlias(true);
+
     }
 
     public void updateDataWithMax(SleepChartModel datas, int maxOffset, boolean showHighCircle, boolean showLowCircle) {
@@ -257,45 +262,7 @@ public class SleepLineChart extends View {
         postInvalidate();
     }
 
-    public void updateData(SleepChartModel datas) {
-        sleepModel = datas;
-        list.clear();
-        list.addAll(sleepModel.getList());
 
-        Collections.reverse(list);
-
-        ChartModel item;
-        int sum = 0;
-        int count = 0;
-        for (int i = 0; i < list.size(); i++) {
-            item = list.get(i);
-            if (item.getValue() == 0) {
-                continue;
-            }
-            sum += item.getValue();
-            count += 1;
-            if (maxValue == 0 && minValue == 0) {
-                lastMinValueIndex = i;
-                lastMaxValueIndex = i;
-                maxValue = item.getValue();
-                minValue = item.getValue();
-            }
-            if (item.getValue() > maxValue) {
-                lastMaxValueIndex = i;
-                maxValue = item.getValue();
-            }
-            if (item.getValue() > 0 && item.getValue() < minValue) {
-                lastMinValueIndex = i;
-                minValue = item.getValue();
-            }
-        }
-        if (count > 0) {
-            avgValue = sum / count;
-        }
-
-        LOGS.INSTANCE.d("updateData " + xMax);
-        postInvalidate();
-    }
 
     public int getMax() {
         return xMax;
@@ -311,7 +278,7 @@ public class SleepLineChart extends View {
         mWith = w;
         mHeight = h;
 
-        unitHLenth = (mWith - leftWith - rightWith) / (list.size() - 1);
+
     }
 
     @Override
@@ -387,20 +354,36 @@ public class SleepLineChart extends View {
     }
 
     private void drawContent(Canvas canvas) {
-        if (null == list || list.size() <= 0) {
+        if (null == list || list.size() == 0) {
             return;
         }
+
+        unitHLenth = (mWith - leftWith - rightWith) / (list.size() - 1);
+
+//        Collections.reverse(list);
+
+
+        int firstPosition = 0;
+
+        int lastPosition = list.size();
+
         ChartModel current, next;
         for (int i = 0; i < list.size(); i++) {
+
             current = list.get(i);
             float x = (mWith - leftWith - rightWith) + leftWith - i * unitHLenth;
             float y = mHeight - bottomWith - (current.getValue() - xMin) * (mHeight - topWith - bottomWith) / (xMax - xMin);
             path.reset();
             fillPath.reset();
             path.moveTo(x, y);
+
+
+
             if (i < list.size() - 1) {
                 next = list.get(i + 1);
+
                 if (current.getValue() > 0 && next.getValue() > 0) {
+
                     float x1 = (mWith - leftWith - rightWith) + leftWith - (i + 1) * unitHLenth;
                     float y1 = mHeight - bottomWith - (next.getValue() - xMin) * (mHeight - topWith - bottomWith) / (xMax - xMin);
                     path.cubicTo(x1 + (x - x1) / 4, y, x - (x - x1) / 4, y1, x1, y1);
@@ -413,8 +396,31 @@ public class SleepLineChart extends View {
                     //draw chart line second, need to cover fill color
                     canvas.drawPath(path, chartLinePaint);
                 }
-            }
 
+
+            }
+            if (current.getValue() > 0) {
+                if (i == firstPosition) {
+
+                    next = list.get(i + 1);
+                    if (next.getValue() == 0) {
+                        canvas.drawCircle(x, y, 1f, outCirclePaint);
+                    }
+                } else if (i == lastPosition - 1) {
+                    ChartModel pre = list.get(i - 1);
+                    if (pre.getValue() == 0) {
+                        canvas.drawCircle(x, y, 1f, outCirclePaint);
+
+                    }
+                } else {
+                    ChartModel pre = list.get(i - 1);
+                    next = list.get(i + 1);
+                    if (pre.getValue() == 0 && next.getValue() == 0) {
+                        canvas.drawCircle(x, y, 1f, outCirclePaint);
+                    }
+                }
+
+            }
             if (showXAxis) {
                 if (list.get(i) != null && list.get(i).getIndex() != null && !list.get(i).getIndex().isEmpty()) {
                     String xText = list.get(i).getIndex();
@@ -422,7 +428,6 @@ public class SleepLineChart extends View {
                     if (i == 0) {
                         xTextPaint.setColor(Color.parseColor("#ffffff"));
                         canvas.drawText(xText, x - xTextBounds.width() , mHeight - bottomWith / 4, xTextPaint);
-//                        canvas.drawText(xText, x + dip2px(5), mHeight - bottomWith / 4, xTextPaint);
                     } else if (i == list.size() - 1) {
                         xTextPaint.setColor(Color.parseColor("#ffffff"));
                         canvas.drawText(xText, x , mHeight - bottomWith / 4, xTextPaint);
@@ -432,19 +437,24 @@ public class SleepLineChart extends View {
                     }
 
 
-//                    canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 4, xTextPaint);
                 }
             }
 
 
             if (showLowCircle) {
                 if (i == lastMinValueIndex) {
+//
+//                    Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_dot_circle_graph);
+//                    canvas.drawBitmap(bmp, x, y, null); // 24 is the height of image
+
                     canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint);
                 }
             }
 
             if (showHighCircle) {
                 if (i == lastMaxValueIndex) {
+//                    Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_dot_circle_graph);
+//                    canvas.drawBitmap(bmp, x, y , null); // 24 is the height of image
                     canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint);
                 }
             }
