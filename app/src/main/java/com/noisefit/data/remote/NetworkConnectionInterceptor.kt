@@ -118,7 +118,7 @@ class NetworkConnectionInterceptor(
                 val tx = response.sentRequestAtMillis
                 val rx = response.receivedResponseAtMillis
 
-                AppLogs.sendAppLogs("API Response Time -> ${rx-tx} ms URL->${newRequest.url}")
+                AppLogs.sendAppLogs("API Response Time -> ${rx - tx} ms URL->${newRequest.url}")
             }
             if (response.code == STATUS_CODE_REFRESH) {//Refresh token
 
@@ -176,7 +176,7 @@ class NetworkConnectionInterceptor(
 
             userToken?.let {
                 addHeader("access-token", "Bearer ${userToken.access_token}")
-//                addHeader("access-token", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyNTUyMjEsImRldmljZV9pZCI6MTU0LCJpYXQiOjE2OTE1NjY0NTUsImV4cCI6MTY5MTU4MDg1NX0.ciDZq0pQwd5fXfo83hTFoqHHnN5u8eb_P8GgZj9kgP8")
+                //addHeader("access-token", "access-token: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyNCwiaWF0IjoxNjkxNTY1NjcyLCJleHAiOjE2OTE1ODAwNzJ9.s3IIR9TBmZHioFX7ymGocxJ-g_m-rr9jBOiYjkthIRs")
                }
             if (request.url.toString().contains("/master/user/v3/devices", true)) {
                 userToken?.let {
@@ -209,7 +209,7 @@ class NetworkConnectionInterceptor(
         return safeApiCallFlow(Dispatchers.IO) {
             tokenRefreshApi.refreshAccessToken(
                 "${BuildConfig.BASE_URL_NEW}/auth_v2/refresh-token",
-                "Bearer $refreshToken"
+                "Bearer $refreshToken", "ring"
             )
         }
     }

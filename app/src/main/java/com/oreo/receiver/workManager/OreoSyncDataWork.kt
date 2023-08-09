@@ -18,7 +18,7 @@ import com.noisefit.util.notif.NotificationUtil
 import com.noisefit.watch.SDKWatchType
 import com.noisefit.watch.UserActivityHandler
 import com.noisefit.watch.WatchesSDK
-import com.noisefit_commans.constants.EventConstants
+import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.response.VersionCheckResponse
@@ -28,7 +28,6 @@ import com.noisefit_commans.interfaces.data.UserActivityAction
 import com.noisefit_commans.interfaces.data.UserActivityCallback
 import com.noisefit_commans.interfaces.data.UserActivityDataActions
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
-import com.noisefit_commans.models.SyncDataStatus
 import com.noisefit_commans.models.TimeFormat
 import com.noisefit_commans.models.TimeFormats
 import com.noisefit_commans.utils.AppLogs
@@ -252,7 +251,7 @@ constructor(
 
     private suspend fun getSyncData(success: () -> Unit, failed: () -> Unit) {
         LOGS.d(TAG, "getSyncData() ")
-        sessionManager.setSyncCompletedState(Event(SyncDataStatus(status = EventConstants.UPDATE_STATUS_STARTED)))
+        sessionManager.setSyncCompletedState(Event(SyncEvents.Started(0, 0)))
         //sessionManager.setShowSyncOfflineData(Event(false))
 //        if (sessionManager == null || !sessionManager.isDeviceConnected()) {
 //            LOGS.d(TAG, "OreoSyncDataWork: Device is disconnected")
@@ -568,13 +567,14 @@ constructor(
                         }
 
                         is UserActivityCallback.UserDataSyncUpdated -> {
-                            if (userActivityCallback.syncDataStatus.status == EventConstants.UPDATE_STATUS_SUCCESS) {
+                            if (userActivityCallback.syncStatus is SyncEvents.Success) {
                                 timer.cancel()
                                 returnSuccess(success)
 
                                 AppLogs.sendAppLogs("RING SYNC TIME => ${System.currentTimeMillis() - lastTimeStamp}")
 
                             }
+                            sessionManager.setSyncCompletedState(Event(userActivityCallback.syncStatus))
                         }
 
                         else -> {}
@@ -697,7 +697,7 @@ constructor(
                     sessionManager.forceSyncDataWithServer = false
 
                     sessionManager.saveLastSyncTime(DateFormats.getTimeStamp())
-                    sessionManager.setSyncCompletedState(Event(SyncDataStatus(status = EventConstants.UPDATE_STATUS_SUCCESS)))
+                    sessionManager.setSyncCompletedState(Event(SyncEvents.Success(100, 100)))
                     LOGS.d(TAG, "OreoSyncDataWork: Completedz")
                     mFuture!!.set(Result.success())
                     //  job.cancel()
@@ -705,7 +705,7 @@ constructor(
                 failed = {
 //                    sessionManager.logAppEvent(FunnelEvents.SyncEvents.Sync_Error.name, eventProperty)
                     sessionManager.forceSyncDataWithServer = false
-                    sessionManager.setSyncCompletedState(Event(SyncDataStatus(status = EventConstants.UPDATE_STATUS_FAILED)))
+                    sessionManager.setSyncCompletedState(Event(SyncEvents.Failed))
                     mFuture!!.set(Result.failure())
                 }
             )

@@ -34,7 +34,6 @@ sealed class QueryCallback {
     class WristLiftGestureObtained(val wristLiftGesture: WristLiftGesture) : QueryCallback()
     class BrightnessLevelObtained(val level: Int) : QueryCallback()
     class VibrationIntensityObtained(val vibrationIntensity: VibrationIntensity) : QueryCallback()
-    class DeviceUnitsSync(syncDataStatus: SyncDataStatus) : QueryCallback()
     class ScreenAwakeIntervalObtained(val interval: Int) : QueryCallback()
     class HeartRateIntervalObtained(val interval: HeartRateInterval) : QueryCallback()
     class Spo2SettingsObtained(val spo2Data: Spo2Data) : QueryCallback()

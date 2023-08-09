@@ -1,14 +1,13 @@
 package com.noisefit_commans.constants
 
-object EventConstants {
-    const val UPDATE_STATUS_STARTED = "started"
-    const val UPDATE_STATUS_IN_PROGRESS = "in_progress"
-    const val UPDATE_STATUS_INTERRUPTED = "interrupted"
-    const val UPDATE_STATUS_SUCCESS = "success"
-    const val UPDATE_STATUS_FAILED = "failed"
+sealed class SyncEvents {
+    data class Started(val progress: Int, val total: Int) : SyncEvents()
+    data class InProgress(val progress: Int, val total: Int) : SyncEvents()
+    data class Success(val progress: Int, val total: Int) : SyncEvents()
+    object Failed : SyncEvents()
 }
 
-object ConnectionEventsConstants{
+object ConnectionEventsConstants {
     const val Disconnect_success = "disconnect_success"
     const val Success = "success"
     const val Connecting = "connecting"
@@ -17,7 +16,8 @@ object ConnectionEventsConstants{
     const val Timeout = "timeout"
     const val Retry = "retry"
 }
-object WatchFaceEventsConstants{
+
+object WatchFaceEventsConstants {
     const val Timeout = "timeout"
     const val Busy = "Busy"
     const val Failed = "failed"

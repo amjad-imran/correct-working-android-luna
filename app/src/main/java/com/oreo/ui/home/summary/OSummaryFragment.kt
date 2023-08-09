@@ -14,7 +14,7 @@ import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
-import com.noisefit_commans.constants.EventConstants
+import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseFragment
@@ -79,6 +79,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 }
 
                 binding.layoutRefresh.textSyncingData.visible()
+                binding.swipeToRefresh.refreshComplete()
 
                 syncData()
             }
@@ -188,6 +189,10 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         val lastSyncTime = viewModel.sessionManager.getLastSyncTime() ?: 0L
         LOGS.d("shouldSync $lastSyncTime -- ${DateFormats.getTimeStamp()}")
         if (kotlin.math.abs(DateFormats.getTimeStamp() - lastSyncTime) > 300000L) {
+            binding.lytHeader.tvHeaderStatus.apply {
+                text = context.getString(R.string.text_updating_dot)
+                visible()
+            }
             syncData()
         }
     }
@@ -208,17 +213,37 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         viewModel.sessionManager.syncCompleted.observe(this) {
             it?.getContent()?.let { syncDataStatus ->
-                when (syncDataStatus.status) {
-                    EventConstants.UPDATE_STATUS_SUCCESS -> {
-                        resetSwipeLoadingAnim()
-
-                    }
-
-                    EventConstants.UPDATE_STATUS_FAILED -> {
+                when(syncDataStatus){
+                    SyncEvents.Failed -> {
+                        binding.lytHeader.tvHeaderStatus.gone()
+                        binding.lytHeader.pbSync.gone()
                         resetSwipeLoadingAnim()
                     }
-
-                    EventConstants.UPDATE_STATUS_STARTED -> {
+                    is SyncEvents.InProgress ->{
+                        LOGS.d("Progress_____________ ${syncDataStatus.progress}")
+                        binding.lytHeader.pbSync.max = syncDataStatus.total
+                        binding.lytHeader.pbSync.progress = syncDataStatus.progress
+                        binding.lytHeader.pbSync.visible()
+                        binding.lytHeader.tvHeaderStatus.apply {
+                            text = getString(R.string.text_updating_dot)
+                            visible()
+                        }
+                    }
+                    is SyncEvents.Started -> {
+                        binding.lytHeader.pbSync.max = syncDataStatus.total
+                        binding.lytHeader.pbSync.progress = syncDataStatus.progress
+                        binding.lytHeader.pbSync.visible()
+                        binding.lytHeader.tvHeaderStatus.apply {
+                            text = getString(R.string.text_updating_dot)
+                            visible()
+                        }
+                    }
+                    is SyncEvents.Success -> {
+                        binding.lytHeader.pbSync.max = syncDataStatus.total
+                        binding.lytHeader.pbSync.progress = syncDataStatus.progress
+                        binding.lytHeader.tvHeaderStatus.gone()
+                        binding.lytHeader.pbSync.gone()
+                        resetSwipeLoadingAnim()
                     }
                 }
             }
@@ -301,6 +326,8 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         binding.lytHeader.batteryStatus.gone()
         binding.lytHeader.lottieAnimView.gone()
         binding.lytHeader.oreoStatus.visible()
+        binding.lytHeader.tvHeaderStatus.gone()
+
         binding.lytHeader.oreoStatus.loadImage(
             requireContext(),
             R.drawable.ic_luna_state_bt_off
@@ -314,6 +341,12 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         if (viewModel.sessionManager.bluetoothStateDash.value == false) {
             stateBluetoothOff()
         } else {
+
+            binding.lytHeader.tvHeaderStatus.apply {
+                text = context.getString(R.string.text_connecting_dot)
+                visible()
+            }
+
             binding.lytHeader.batteryStatus.invisible()
             binding.lytHeader.lottieAnimView.visible()
             binding.lytHeader.oreoStatus.invisible()
@@ -326,6 +359,11 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         binding.lytHeader.ivExclamation.gone()
         binding.lytHeader.lottieAnimView.gone()
         binding.lytHeader.oreoStatus.visible()
+
+        if (binding.lytHeader.tvHeaderStatus.text.equals(getString(R.string.text_connecting_dot))) {
+            binding.lytHeader.tvHeaderStatus.gone()
+        }
+
         val batteryPercentage = viewModel.watchDataStore.getBatteryPercentRing()
         binding.lytHeader.batteryStatus.progress = batteryPercentage
         if (batteryPercentage < 20) {

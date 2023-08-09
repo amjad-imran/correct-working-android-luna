@@ -39,7 +39,7 @@ import com.noisefit.watch.DeviceQueryHandler
 import com.noisefit.watch.UpdateDeviceHandler
 import com.noisefit.watch.UserActivityHandler
 import com.noisefit.watch.WatchesSDK
-import com.noisefit_commans.constants.EventConstants
+import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.enums.Actions
 import com.noisefit_commans.data.enums.ServiceState
@@ -1003,10 +1003,6 @@ constructor() : LifecycleService() {
         sessionManager.userActivityCallback.observe(this) { event ->
             event.peekContent()?.let {
                 when (it) {
-                    is UserActivityCallback.SportsModeStatusChange -> {
-                        LOGS.d(TAG, "SportsModeStatusChange " + it.syncDataStatus)
-                        handleSportsModeStatus(it.syncDataStatus.status)
-                    }
 
                     is UserActivityCallback.RealStepsDataObtained -> {
                         LOGS.d(TAG, "SportsModeStatusChange " + it.stepsData)
@@ -1152,8 +1148,8 @@ constructor() : LifecycleService() {
 
         sessionManager.syncCompleted.observe(this) {
             it?.peekContent()?.let {
-                val status = it.status
-                if (status == EventConstants.UPDATE_STATUS_SUCCESS) {
+                val status = it
+                if (status is SyncEvents.Success) {
                     updateNotification()
                 }
             }
@@ -1500,10 +1496,6 @@ constructor() : LifecycleService() {
                     LOGS.d(TAG, "steps Data testing : ${userActivityCallback.stepsData.totalSteps}")
                 }
 
-                is UserActivityCallback.SportsModeStatusChange -> {
-                    //LOGS.d("SportsModeStatusChange " + userActivityCallback.syncDataStatus)
-                    //handleSportsModeStatus(userActivityCallback.syncDataStatus.status)
-                }
 
                 is UserActivityCallback.SportsModeDataObtained -> {
                     //LOGS.d("SportsModeDataObtained6 " + userActivityCallback.sportsModeRequestList)

@@ -933,4 +933,6 @@
     <string name="text_you_will_see_your_sleep_score_after_your_first_sleep_analysis">You will see your sleep score after your first sleep analysis</string>
     <string name="text_you_will_see_your_readiness_score_after_first_sleep_analysis">You will see your readiness score after first sleep analysis</string>
     <string name="text_you_will_see_your_activity_score_after_wearing_the_ring">You will see your activity score after wearing the ring</string>
+    <string name="text_connecting_dot">Connecting..</string>
+    <string name="text_updating_dot">Updating..</string>
 </resources>

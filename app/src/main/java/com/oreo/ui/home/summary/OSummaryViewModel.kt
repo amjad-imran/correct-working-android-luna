@@ -317,12 +317,13 @@ constructor(
             it is OHealthOverview.PairDevice
         }
 
-//        val autoSportIndex = summary.healthOverviewData.value?.indexOfFirst {
-//            it is OHealthOverview.AutoSport
-//        }
-//        if (autoSportIndex != null && autoSportIndex != -1) {
-//            summary.healthOverviewData.value?.removeAt(autoSportIndex)
-//        }
+         val autoSportIndex = summary.healthOverviewData.value?.indexOfFirst {
+             it is OHealthOverview.TodayWorkout
+         }
+
+         if (autoSportIndex != null && autoSportIndex != -1) {
+             summary.healthOverviewData.value?.removeAt(autoSportIndex)
+         }
         if (index == -1) {
             summary.healthOverviewData.value?.add(1, OHealthOverview.PairDevice())
         }
@@ -390,36 +391,26 @@ constructor(
                             val index = summary.healthOverviewData.value?.indexOfFirst {
                                 it is OHealthOverview.TodayWorkout
                             }
+                            val isRingConnected = ringDataStore.getRingDevice() != null
+
                             if (index != null && index != -1) {
-                                if (!workoutList.isNullOrEmpty()) {
-                                    val data =
-                                        summary.healthOverviewData.value!![index] as OHealthOverview.TodayWorkout
-                                    data.value = "1"
-                                    data.listData = workoutList
-                                    data.isRingConnected = ringDataStore.getRingDevice() != null
-                                    summary.healthOverviewData.postValue(summary.healthOverviewData.value)
-                                    summary.healthOverviewData.value?.add(
-                                        OHealthOverview.Dummy(
-                                            "1"
-                                        )
-                                    )
-                                }
+                                val data =
+                                    summary.healthOverviewData.value!![index] as OHealthOverview.TodayWorkout
+                                data.value = "1"
+                                data.listData = workoutList
+                                data.isRingConnected = isRingConnected
+                                summary.healthOverviewData.postValue(summary.healthOverviewData.value)
                             } else {
-                                if (!workoutList.isNullOrEmpty()) {
+
+                                if (isRingConnected || workoutList.isNotEmpty()) {
                                     summary.healthOverviewData.value?.add(
                                         OHealthOverview.TodayWorkout(
                                             "1",
-                                            ringDataStore.getRingDevice() != null,
+                                            isRingConnected,
                                             workoutList
                                         )
                                     )
-                                    summary.healthOverviewData.value?.add(
-                                        OHealthOverview.Dummy(
-                                            "1"
-                                        )
-                                    )
                                     summary.healthOverviewData.postValue(summary.healthOverviewData.value)
-
                                 }
                             }
                         }
