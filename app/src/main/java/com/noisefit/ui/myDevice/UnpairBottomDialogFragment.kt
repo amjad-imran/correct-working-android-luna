@@ -54,7 +54,7 @@ class UnpairBottomDialogFragment :
         val title = "Unpair your $bleName?"
 
         val messageBuilder =
-            StringBuilder("Are you sure you want to unpair your $bleName from NoiseFit?")
+            StringBuilder("Are you sure you want to unpair your $bleName?")
 
 //        val callingWatchMessage = getBleCallingStatusMessage()
 //        if (!callingWatchMessage.isNullOrEmpty()) {
