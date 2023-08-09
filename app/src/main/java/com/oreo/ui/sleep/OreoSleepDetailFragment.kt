@@ -598,12 +598,12 @@ class OreoSleepDetailFragment :
         )
         //heart rate
         binding.lytHeartRate.tvTitle.text = getString(R.string.text_heart_rate)
+        binding.lytHeartRate.tvSubtitle1.text = getString(R.string.text_average_hr)
+        binding.lytHeartRate.tvSubtitle2.text = getString(R.string.text_lowest_hr)
         val heartRateData = dayData.hr
         if (heartRateData != null) {
             showHeartRateGraph(dayData.hr, sleepStartTime, sleepEndTime)
 
-            binding.lytHeartRate.tvSubtitle1.text = getString(R.string.text_average)
-            binding.lytHeartRate.tvSubtitle2.text = getString(R.string.text_lowest_heart_rate)
             if (heartRateData.low != null) {
                 if (heartRateData.low == 0 || heartRateData.low == 255) {
                     binding.lytHeartRate.lytSubtitleValue2.tvValue.text = "-"
@@ -644,12 +644,14 @@ class OreoSleepDetailFragment :
 
         //heart variability
         binding.lytHRVariability.tvTitle.text = getString(R.string.text_heart_rate_variability)
+        binding.lytHRVariability.tvSubtitle1.text =
+            getString(R.string.text_average_hrv)
+        binding.lytHRVariability.tvSubtitle2.text =
+            getString(R.string.text_max)
         val heartVariabilityData = dayData.hrv
         if (heartVariabilityData != null) {
             showHeartRateVariabilityGraph(dayData.hrv, sleepStartTime, sleepEndTime)
 
-            binding.lytHRVariability.tvSubtitle1.text =
-                getString(R.string.text_heart_rate_variability)
             if (heartVariabilityData.avg != null) {
                 if (heartVariabilityData.avg == 0 || heartVariabilityData.avg == 255) {
                     binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "-"
@@ -664,8 +666,6 @@ class OreoSleepDetailFragment :
                 binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "-"
                 binding.lytHRVariability.lytSubtitleValue1.tvUnit.gone()
             }
-            binding.lytHRVariability.tvSubtitle2.text =
-                getString(R.string.text_max)
             if (heartVariabilityData.max != null) {
                 if (heartVariabilityData.max == 0 || heartVariabilityData.max == 255) {
                     binding.lytHRVariability.lytSubtitleValue2.tvValue.text = "-"

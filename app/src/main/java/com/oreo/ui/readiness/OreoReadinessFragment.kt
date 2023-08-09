@@ -507,8 +507,8 @@ class OreoReadinessFragment :
 
         //set data on heart rate
         binding.lytHeartRate.tvTitle.text = getString(R.string.text_heart_rate)
-        binding.lytHeartRate.tvSubtitle1.text = getString(R.string.text_lowest_heart_rate)
-        binding.lytHeartRate.tvSubtitle2.text = getString(R.string.text_average)
+        binding.lytHeartRate.tvSubtitle1.text = getString(R.string.text_lowest_hr)
+        binding.lytHeartRate.tvSubtitle2.text = getString(R.string.text_average_hr)
 
         if (it.hrBreakUp != null) {
             if (!it.hrBreakUp.value.isNullOrEmpty()) {
