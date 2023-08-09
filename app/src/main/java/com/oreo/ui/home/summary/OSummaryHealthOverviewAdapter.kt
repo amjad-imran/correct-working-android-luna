@@ -497,7 +497,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     caloriesGoal
                 ))
 
-            binding.ltProgresso.pbSteps.apply {
+            binding.pbSteps.apply {
                 progress = caloriesProgress.toInt()
                 setIndicatorColor(
                     R.color.medium_movement.getColor()

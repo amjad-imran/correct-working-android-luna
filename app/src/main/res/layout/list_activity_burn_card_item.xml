@@ -5,20 +5,20 @@
     style="@style/ModalStyleReadinessNew"
 
     android:layout_width="match_parent"
-    android:layout_marginTop="24dp"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="24dp">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imv"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:adjustViewBounds="true"
-        app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp" />
 
     <TextView
         android:id="@+id/textView"
@@ -47,19 +47,19 @@
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottieAnimationView"
         android:layout_width="196dp"
-        app:lottie_imageAssetsFolder="images"
         android:layout_height="120dp"
         android:layout_marginTop="@dimen/dimen_8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:lottie_imageAssetsFolder="images" />
 
     <TextView
         android:id="@+id/tvValue"
         style="@style/H32"
-        android:layout_marginTop="58dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="58dp"
         app:layout_constraintEnd_toEndOf="@+id/lottieAnimationView"
         app:layout_constraintStart_toStartOf="@+id/lottieAnimationView"
         app:layout_constraintTop_toTopOf="@+id/lottieAnimationView" />
@@ -67,9 +67,9 @@
     <TextView
         android:id="@+id/tvStatus"
         style="@style/H5"
-        android:layout_marginTop="@dimen/dimen_8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_8dp"
 
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="@+id/lottieAnimationView"
@@ -101,16 +101,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTodayDesc" />
 
-    <include
-        android:id="@+id/ltProgresso"
-        layout="@layout/layout_o_progressbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/pbSteps"
+        android:layout_width="0dp"
+        android:layout_height="4dp"
         android:layout_marginStart="@dimen/dimen_16dp"
-        android:layout_marginTop="@dimen/dimen_12dp"
+        android:layout_marginTop="19dp"
         android:layout_marginEnd="@dimen/dimen_16dp"
+        app:trackColor="#3dffffff"
         app:layout_constraintEnd_toEndOf="parent"
+        app:trackCornerRadius="2dp"
+        app:trackThickness="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/line" />
 
@@ -120,12 +121,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dimen_16dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="@dimen/dimen_16dp"
         android:text="@string/text_active_calorie"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ltProgresso" />
+        app:layout_constraintTop_toBottomOf="@+id/pbSteps" />
 
     <TextView
         android:id="@+id/tvCalories"
@@ -143,14 +144,14 @@
     <TextView
         android:id="@+id/tvTotalCalories"
         style="@style/H6"
-        tools:text="/ 500"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/dimen_16dp"
         android:textColor="@color/white_64"
         app:layout_constraintBottom_toBottomOf="@+id/tvActiveCalorieText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvActiveCalorieText" />
+        app:layout_constraintTop_toTopOf="@+id/tvActiveCalorieText"
+        tools:text="/ 500" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
