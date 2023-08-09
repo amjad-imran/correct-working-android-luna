@@ -187,10 +187,9 @@ class OWorkoutDetailsFragment :
             DateFormats.formatActivityTime8(it.startTime).lowercase()
         } - ${DateFormats.formatActivityTime8(it.endTime).lowercase()}"
 
-        binding.lytActivityItem.ivActivity.loadImage(
+        binding.lytActivityItem.ivWorkoutImage.loadImage(
             requireContext(),
-            it.iconUrl,
-            R.drawable.ic_o_workout
+            it.iconUrl
         )
         prepareDataForActivity(it)
     }
