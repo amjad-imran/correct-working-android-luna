@@ -349,7 +349,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
             binding.lytHeader.batteryStatus.invisible()
             binding.lytHeader.lottieAnimView.visible()
-            binding.lytHeader.oreoStatus.invisible()
+            binding.lytHeader.oreoStatus.visible()
         }
 
     }

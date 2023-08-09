@@ -162,6 +162,9 @@ constructor(
         return breakupArray.subList(startPos, 288)
     }
 
+    /**
+     * 12:03 - 6:17
+     */
     private fun extractDataByStartTimeEndTime(
         dayData: OreoHeartRate,
         dayStartMinutes: Double,
