@@ -327,7 +327,7 @@ constructor(
     fun convertHeartRateOverviewData(
         data: OreoHeartRate?
     ): OHealthOverview.HeartRate {
-
+        LOGS.d("Sdaljhsadjhsadjhjksda ${Gson().toJson(data)}")
 
         val list = data?.breakUp?.replace("255", "0")
         var breakupArray = Gson().fromJson<List<Int>>(list ?: "")
@@ -428,7 +428,7 @@ constructor(
 
         if (lastHr == "0") {
             val lastMeasureValue = ringDataStore.getManualMeasurementValue()
-            if ((lastMeasureValue.timeStamp) + (60 * 1000) > System.currentTimeMillis() && lastMeasureValue.value > 0) {
+            if (lastMeasureValue != null && (lastMeasureValue.timeStamp) + (60 * 1000) > System.currentTimeMillis() && lastMeasureValue.value > 0) {
                 lastHr = lastMeasureValue.value.toString()
 
             }
@@ -441,6 +441,8 @@ constructor(
         if (overAllMinValue != 0) {
             overAllMinValue -= 9
         }
+
+        LOGS.d("Sdaljhsadjhsadjhjksda ${Gson().toJson(lineChartList)}")
 
         return OHealthOverview.HeartRate(
             lastHr,

@@ -117,7 +117,7 @@ constructor(
 
             }
         }
-        LOGS.d("$TAG  ${Gson().toJson(matchesResultScore)}")
+        //LOGS.d("$TAG  ${Gson().toJson(matchesResultScore)}")
         return matchesResultScore
     }
 
