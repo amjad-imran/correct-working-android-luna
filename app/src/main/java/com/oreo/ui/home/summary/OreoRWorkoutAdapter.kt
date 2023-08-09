@@ -24,7 +24,7 @@ class OreoRWorkoutAdapter(val mListener:OnItemClickListener) :
                 binding.divider1.root.invisible()
             } else
                 binding.divider1.root.visible()
-            binding.imageView8.loadImage(binding.imageView8.context,resultData.iconUrl, R.drawable.ic_o_workout)
+            binding.ivWorkoutImage.loadImage(binding.imageView8.context,resultData.iconUrl)
             binding.root.setOnClickListener {
                 mListener.onItemClick(resultData,bindingAdapterPosition)
             }

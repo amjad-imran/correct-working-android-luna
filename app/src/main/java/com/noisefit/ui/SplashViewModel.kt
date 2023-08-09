@@ -152,58 +152,7 @@ class SplashViewModel
                     is Resource.Success -> {
                         resource.data?.data?.let {
 
-                            val bannerTimeStamp = if (it.bannerTime.isNullOrEmpty()) {
-                                0L
-                            } else {
-                                try {
-                                    it.bannerTime?.toLongOrNull()
-                                } catch (exp: Exception) {
-                                    0L
-                                }
-                            }
-                            val summaryTimeStamp = if (it.summaryUpdate.isNullOrEmpty()) {
-                                0L
-                            } else {
-                                try {
-                                    it.summaryUpdate?.toLongOrNull()
-                                } catch (exp: Exception) {
-                                    0L
-                                }
-                            }
-                            val workoutImagesTimeStamp =
-                                if (it.workoutImageUpdate.isNullOrEmpty()) {
-                                    0L
-                                } else {
-                                    try {
-                                        it.workoutImageUpdate?.toLongOrNull()
-                                    } catch (exp: Exception) {
-                                        0L
-                                    }
-                                }
-                            val helpUpdateTimStamp = if (it.helpUpdate.isNullOrEmpty()) {
-                                0L
-                            } else {
-                                try {
-                                    it.helpUpdate?.toLongOrNull()
-                                } catch (exp: Exception) {
-                                    0L
-                                }
-                            }
-                            lastSyncProvider.setSyncTimeStamp(
-                                LastSyncItems.DASHBOARD_BANNER_SERVER_UPDATE_1,
-                                bannerTimeStamp ?: 0L
-                            )
-                            lastSyncProvider.setSyncTimeStamp(
-                                LastSyncItems.SUMMARY_SERVER_TIMESTAMP, summaryTimeStamp ?: 0L
-                            )
-                            lastSyncProvider.setSyncTimeStamp(
-                                LastSyncItems.WORKOUT_IMAGES_SERVER_TIMESTAMP,
-                                workoutImagesTimeStamp ?: 0L
-                            )
 
-                            lastSyncProvider.setSyncTimeStamp(
-                                LastSyncItems.H_AND_SUPPORT_SERVER_UPDATE, helpUpdateTimStamp ?: 0L
-                            )
 
                             if (it.otaResponse != null) {
                                 sessionManager.forceOtaFlowRunning = false
@@ -214,13 +163,6 @@ class SplashViewModel
                                 sessionManager.forceOtaResponse = null
                                 sessionManager.forceOtaResponseRing = null
                             }
-
-                            if (it.testMode.equals("1")) {
-                                localDataStore.setIsTestModeOn(true)
-                            } else {
-                                localDataStore.setIsTestModeOn(false)
-                            }
-
 
                             localDataStore.saveFeatureIntervalFetchPeriod(it.resetInterval ?: 24)
                             localDataStore.saveHistoryYears(it.calendarYears ?: 2)

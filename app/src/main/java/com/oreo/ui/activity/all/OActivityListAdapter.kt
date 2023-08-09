@@ -92,8 +92,8 @@ class OActivityListAdapter(
                     }
                 }
 
-                val imageView = view.findViewById<ImageView>(R.id.imageView8)
-                imageView.loadImage(imageView.context, activity.iconUrl, R.drawable.ic_o_workout)
+                val imageView = view.findViewById<ImageView>(R.id.ivWorkoutImage)
+                imageView.loadImage(imageView.context, activity.iconUrl)
 
                 view.findViewById<TextView>(R.id.tvName).text = activity.getFormattedActivityName()
                 val time = DateFormats.convert24HourTo12(activity.startTime)

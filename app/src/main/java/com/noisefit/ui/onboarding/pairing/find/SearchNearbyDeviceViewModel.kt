@@ -139,12 +139,12 @@ constructor(
         val dType: String =
             "ring"
 
-        /*if (!getDevices().value.isNullOrEmpty()) {
+        if (!getDevices().value.isNullOrEmpty()) {
             _deviceList.postValue(getDevices().value)
             _startBluetoothScan.postValue(Event(true))
             return
 
-        }*/
+        }
 
         sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_fetch_device_start)
         viewModelScope.launch {

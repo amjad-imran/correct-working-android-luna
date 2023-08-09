@@ -9,17 +9,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imageView8"
-            android:layout_width="@dimen/dimen_48dp"
-            android:layout_height="@dimen/dimen_48dp"
-            android:layout_margin="@dimen/dimen_16dp"
-            android:src="@drawable/ic_o_workout"
+            android:background="@drawable/back_modal_new_round"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_margin="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription" />
+            app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+
+        <ImageView
+            android:id="@+id/ivWorkoutImage"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:padding="4dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView8"
+            app:layout_constraintEnd_toEndOf="@+id/imageView8"
+            app:layout_constraintStart_toStartOf="@+id/imageView8"
+            app:layout_constraintTop_toTopOf="@+id/imageView8"
+            tools:src="@drawable/ic_o_workout" />
+
 
         <TextView
             android:id="@+id/tvActivityName"
@@ -43,6 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginBottom="4dp"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/imageView8"
             app:layout_constraintStart_toEndOf="@+id/imageView8"
