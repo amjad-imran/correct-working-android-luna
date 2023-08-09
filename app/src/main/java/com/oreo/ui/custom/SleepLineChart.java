@@ -278,8 +278,7 @@ public class SleepLineChart extends View {
         mWith = w;
         mHeight = h;
 
-        unitHLenth = (mWith - leftWith - rightWith) / (list.size() - 1);
-        LOGS.INSTANCE.d("Dsakjsdajldasj "+unitHLenth);
+
     }
 
     @Override
@@ -359,6 +358,8 @@ public class SleepLineChart extends View {
             return;
         }
 
+        unitHLenth = (mWith - leftWith - rightWith) / (list.size() - 1);
+
 //        Collections.reverse(list);
 
 
@@ -375,6 +376,7 @@ public class SleepLineChart extends View {
             path.reset();
             fillPath.reset();
             path.moveTo(x, y);
+
 
 
             if (i < list.size() - 1) {
