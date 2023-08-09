@@ -484,16 +484,16 @@ constructor(
             )
         }
 
-        if (dayData?.restingHrBalance != null) {
-            val (textColor, barColor, background) = getContributorsColors(dayData.restingHrBalance.status)
+        if (dayData?.hrReserve != null) {
+            val (textColor, barColor, background) = getContributorsColors(dayData.hrReserve.status)
 
             result.add(
                 Contributors(
                     title = "Heart rate reserve",
-                    leftText = dayData.restingHrBalance.text,
+                    leftText = dayData.hrReserve.text,
                     leftTextColor = textColor,
                     barColor = barColor,
-                    barPercent = dayData.restingHrBalance.valPrcnt ?: 0,
+                    barPercent = dayData.hrReserve.valPrcnt ?: 0,
                     backgroundRes = background
                 )
             )
