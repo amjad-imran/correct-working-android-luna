@@ -111,7 +111,9 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
 //        startActivity(OreoMainActivity.getStartIntent(this).apply {
 //            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 //        })
-        startActivity(Intent(this, AllDoneActivity::class.java))
+        startActivity(Intent(this, AllDoneActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        })
 
 
     }
