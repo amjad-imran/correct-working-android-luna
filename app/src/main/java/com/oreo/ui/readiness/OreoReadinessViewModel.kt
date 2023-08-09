@@ -268,7 +268,7 @@ constructor(
             it.date.equals(date, false)
         }
         if (dayData != null) {
-            _dayReadinessData.postValue(dayData!!)
+            _dayReadinessData.postValue(dayData)
         }
     }
 
@@ -333,11 +333,11 @@ constructor(
         val result = ArrayList<Contributors>()
 
         if (dayData?.totalSleep != null) {
-            val (textColor, barColor, background) = getContributorsColors(dayData.totalSleep!!.status)
+            val (textColor, barColor, background) = getContributorsColors(dayData.totalSleep.status)
             result.add(
                 Contributors(
                     title = "Yesterday's sleep duration",
-                    leftText = dayData?.totalSleep.text,
+                    leftText = dayData.totalSleep.text,
                     leftTextColor = textColor,
                     barColor = barColor,
                     barPercent = dayData.totalSleep.valPrcnt ?: 0,
@@ -357,11 +357,11 @@ constructor(
             )
         }
         if (dayData?.sleepBalance != null) {
-            val (textColor, barColor, background) = getContributorsColors(dayData.sleepBalance!!.status)
+            val (textColor, barColor, background) = getContributorsColors(dayData.sleepBalance.status)
             result.add(
                 Contributors(
                     title = "Sleep balance",
-                    leftText = dayData?.sleepBalance.text,
+                    leftText = dayData.sleepBalance.text,
                     leftTextColor = textColor,
                     barColor = barColor,
                     barPercent = dayData.sleepBalance.valPrcnt ?: 0,
@@ -382,7 +382,7 @@ constructor(
         }
 
         if (dayData?.activityScore != null) {
-            val (textColor, barColor, background) = getContributorsColors(dayData.activityScore!!.status)
+            val (textColor, barColor, background) = getContributorsColors(dayData.activityScore.status)
 
             result.add(
                 Contributors(
@@ -390,7 +390,7 @@ constructor(
                     leftText = dayData.activityScore.text,
                     leftTextColor = textColor,
                     barColor = barColor,
-                    barPercent = dayData.activityScore?.valPrcnt ?: 0,
+                    barPercent = dayData.activityScore.value ?: 0,
                     backgroundRes = background
                 )
             )
@@ -408,7 +408,7 @@ constructor(
         }
 
         if (dayData?.activityBalance != null) {
-            val (textColor, barColor, background) = getContributorsColors(dayData.activityBalance!!.status)
+            val (textColor, barColor, background) = getContributorsColors(dayData.activityBalance.status)
 
             result.add(
                 Contributors(
@@ -416,7 +416,7 @@ constructor(
                     leftText = dayData.activityBalance.text,
                     leftTextColor = textColor,
                     barColor = barColor,
-                    barPercent = dayData.activityBalance?.valPrcnt ?: 0,
+                    barPercent = dayData.activityBalance.valPrcnt ?: 0,
                     backgroundRes = background
                 )
             )
@@ -434,14 +434,14 @@ constructor(
         }
 
         if (dayData?.hrvBalance != null) {
-            val (textColor, barColor, background) = getContributorsColors(dayData.hrvBalance!!.status)
+            val (textColor, barColor, background) = getContributorsColors(dayData.hrvBalance.status)
             result.add(
                 Contributors(
                     title = "HRV balance",
-                    leftText = dayData?.hrvBalance.text,
+                    leftText = dayData.hrvBalance.text,
                     leftTextColor = textColor,
                     barColor = barColor,
-                    barPercent = dayData.hrvBalance?.valPrcnt ?: 0,
+                    barPercent = dayData.hrvBalance.valPrcnt ?: 0,
                     backgroundRes = background
                 )
             )
@@ -459,15 +459,15 @@ constructor(
         }
 
         if (dayData?.restingHrBalance != null) {
-            val (textColor, barColor, background) = getContributorsColors(dayData.restingHrBalance!!.status)
+            val (textColor, barColor, background) = getContributorsColors(dayData.restingHrBalance.status)
 
             result.add(
                 Contributors(
                     title = "Resting Hr",
-                    leftText = dayData?.restingHrBalance.text,
+                    leftText = dayData.restingHrBalance.text,
                     leftTextColor = textColor,
                     barColor = barColor,
-                    barPercent = dayData.restingHrBalance?.valPrcnt ?: 0,
+                    barPercent = dayData.restingHrBalance.valPrcnt ?: 0,
                     backgroundRes = background
                 )
             )
@@ -485,15 +485,15 @@ constructor(
         }
 
         if (dayData?.restingHrBalance != null) {
-            val (textColor, barColor, background) = getContributorsColors(dayData.restingHrBalance!!.status)
+            val (textColor, barColor, background) = getContributorsColors(dayData.restingHrBalance.status)
 
             result.add(
                 Contributors(
                     title = "Heart rate reserve",
-                    leftText = dayData?.restingHrBalance.text,
+                    leftText = dayData.restingHrBalance.text,
                     leftTextColor = textColor,
                     barColor = barColor,
-                    barPercent = dayData.restingHrBalance?.valPrcnt ?: 0,
+                    barPercent = dayData.restingHrBalance.valPrcnt ?: 0,
                     backgroundRes = background
                 )
             )
@@ -511,15 +511,15 @@ constructor(
         }
 
         if (dayData?.recoveryIndex != null) {
-            val (textColor, barColor, background) = getContributorsColors(dayData.recoveryIndex!!.status)
+            val (textColor, barColor, background) = getContributorsColors(dayData.recoveryIndex.status)
 
             result.add(
                 Contributors(
                     title = "Recovery index",
-                    leftText = dayData?.recoveryIndex.text,
+                    leftText = dayData.recoveryIndex.text,
                     leftTextColor = textColor,
                     barColor = barColor,
-                    barPercent = dayData.recoveryIndex?.valPrcnt ?: 0,
+                    barPercent = dayData.recoveryIndex.valPrcnt ?: 0,
                     backgroundRes = background
                 )
             )

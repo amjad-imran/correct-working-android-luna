@@ -386,35 +386,41 @@ constructor(
                     }
 
                     is Resource.Success -> {
-                        resource.data?.data?.let {
+                        resource.data?.data?.let { workoutList ->
                             val index = summary.healthOverviewData.value?.indexOfFirst {
                                 it is OHealthOverview.TodayWorkout
                             }
                             if (index != null && index != -1) {
-                                val data =
-                                    summary.healthOverviewData.value!![index] as OHealthOverview.TodayWorkout
-                                data.value = "1"
-                                data.listData = it
-                                summary.healthOverviewData.postValue(summary.healthOverviewData.value)
-                                summary.healthOverviewData.value?.add(
-                                    OHealthOverview.Dummy(
-                                        "1"
+                                if (!workoutList.isNullOrEmpty()) {
+                                    val data =
+                                        summary.healthOverviewData.value!![index] as OHealthOverview.TodayWorkout
+                                    data.value = "1"
+                                    data.listData = workoutList
+                                    data.isRingConnected = ringDataStore.getRingDevice() != null
+                                    summary.healthOverviewData.postValue(summary.healthOverviewData.value)
+                                    summary.healthOverviewData.value?.add(
+                                        OHealthOverview.Dummy(
+                                            "1"
+                                        )
                                     )
-                                )
+                                }
                             } else {
-                                summary.healthOverviewData.value?.add(
-                                    OHealthOverview.TodayWorkout(
-                                        "1",
-                                        it
+                                if (!workoutList.isNullOrEmpty()) {
+                                    summary.healthOverviewData.value?.add(
+                                        OHealthOverview.TodayWorkout(
+                                            "1",
+                                            ringDataStore.getRingDevice() != null,
+                                            workoutList
+                                        )
                                     )
-                                )
-                                summary.healthOverviewData.value?.add(
-                                    OHealthOverview.Dummy(
-                                        "1"
+                                    summary.healthOverviewData.value?.add(
+                                        OHealthOverview.Dummy(
+                                            "1"
+                                        )
                                     )
-                                )
-                                summary.healthOverviewData.postValue(summary.healthOverviewData.value)
+                                    summary.healthOverviewData.postValue(summary.healthOverviewData.value)
 
+                                }
                             }
                         }
                     }

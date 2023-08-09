@@ -25,5 +25,7 @@ data class OWorkoutDetailsResponseModel(
     @SerializedName("hr_avg")
     val hrAvg: Int? = null,
     @SerializedName("hr_low")
-    val hrLow: Int? = null
+    val hrLow: Int? = null,
+    @SerializedName("icon_url")
+    val iconUrl: String? = null
 )

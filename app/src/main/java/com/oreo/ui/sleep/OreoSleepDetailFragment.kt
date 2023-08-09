@@ -18,23 +18,16 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoSleepDetailBinding
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit.util.ApplicationUtils
-import com.noisefit_commans.ui.BaseFragment
+
+import com.noisefit_commans.ui.*
 import com.noisefit_commans.ui.custom.NightTimeGraphViewOreo
 import com.noisefit_commans.ui.custom.SleepGraphViewOreo
-import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.invisible
-import com.noisefit_commans.ui.showShortToast
-import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.SleepChartModel
-import com.oreo.data.model.health.CommonListDataModel
-import com.oreo.data.model.health.Nudges
-import com.oreo.data.model.health.OreoSleepModel
-import com.oreo.data.model.health.SleepHourlyBreakup
-import com.oreo.data.model.health.SleepMovementBreakup
+import com.oreo.data.model.health.*
 import com.oreo.ui.custom.ScrollListener
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.sleep.banner.OreoSleepBannerFragment
@@ -63,7 +56,7 @@ class OreoSleepDetailFragment :
             OreoSleepContributorAdapter.ContributorItemClickListener {
             override fun onItemClick(resultData: ArrayList<Contributors>, position: Int) {
 //                if (resultData[position].barPercent > 0) {
-                    openContributorBottomSheet(resultData, position)
+                openContributorBottomSheet(resultData, position)
 //                }
             }
         })
@@ -113,8 +106,10 @@ class OreoSleepDetailFragment :
             return
         }
 
+
         val baseTimeList =
             UtilClass.graphTwoHoursInterval(sleepStartTime, sleepEndTime, hrv?.value?.size ?: 288)
+
 
 
         binding.lytHRVariability.lineChart.visible()
@@ -154,6 +149,7 @@ class OreoSleepDetailFragment :
             binding.lytHeartRate.lineChart.gone()
             return
         }
+
 
 
         val baseTimeList = UtilClass.graphTwoHoursInterval(
@@ -473,6 +469,17 @@ class OreoSleepDetailFragment :
 
     }
 
+    private fun setSleepScore(sleepScoreData: CommonDataModel) {
+        binding.lytSleepScore.lytSleepAvg.tvValue.text = sleepScoreData.value.toString()
+        val statusColor = ContextCompat.getColor(
+            binding.lytSleepScore.lytSleepAvg.tvValue.context,
+            viewModel.getStatusColors(sleepScoreData.status)
+        )
+        binding.lytSleepScore.lytSleepAvg.tvQuality.setTextColor(statusColor)
+        binding.lytSleepScore.lytSleepAvg.tvQuality.text = sleepScoreData.text
+        binding.lytSleepScore.lytSleepAvg.tvQuality.visible()
+    }
+
     private fun updateUi(dayData: OreoSleepModel) {
         //for sleep score
         binding.lytSleepScore.lytSleepAvg.tvTitle.text = getString(R.string.text_sleep_score_o)
@@ -481,25 +488,21 @@ class OreoSleepDetailFragment :
         binding.lytSleepScore.lytRestHr.tvTitle.text = "Resting HR"
         binding.lytSleepScore.lytSleepEfficiency.tvTitle.text =
             getString(R.string.text_sleep_efficiency)
-
         setSleepBannerViewPager(dayData.nudges)
-
-
         val sleepScoreData = dayData.sleepScore
         if (sleepScoreData != null) {
             if (sleepScoreData.value != null) {
-                binding.lytSleepScore.lytSleepAvg.tvValue.text = sleepScoreData.value.toString()
-                binding.lytSleepScore.lytSleepAvg.tvValue.text = sleepScoreData.value.toString()
-
-                val statusColor = ContextCompat.getColor(
-                    binding.lytSleepScore.lytSleepAvg.tvValue.context,
-                    viewModel.getStatusColors(sleepScoreData.status)
-                )
-                binding.lytSleepScore.lytSleepAvg.tvQuality.setTextColor(statusColor)
-                binding.lytSleepScore.lytSleepAvg.tvQuality.text = sleepScoreData.text
-                binding.lytSleepScore.lytSleepAvg.tvQuality.visible()
+                if (sleepScoreData.value == 0) {
+                    if (dayData.totalSleep?.value != 0) {
+                        setSleepScore(sleepScoreData)
+                    } else {
+                        binding.lytSleepScore.lytSleepAvg.tvValue.text = "-"
+                        binding.lytSleepScore.lytSleepAvg.tvQuality.gone()
+                    }
+                } else {
+                    setSleepScore(sleepScoreData)
+                }
             } else {
-
                 binding.lytSleepScore.lytSleepAvg.tvValue.text = "-"
                 binding.lytSleepScore.lytSleepAvg.tvQuality.gone()
 
@@ -543,17 +546,22 @@ class OreoSleepDetailFragment :
 
             //resting heart rate
             if (dayData.restingHr != null) {
-                binding.lytSleepScore.lytRestHr.lytHrMn.tvHour.text =
-                    "${dayData.restingHr?.value ?: 0}"
-                binding.lytSleepScore.lytRestHr.lytHrMn.tvHourUnit.text = " bpm"
-                restingHrDataView()
+                if (dayData.restingHr!!.value == 0 || dayData.restingHr!!.value == 255) {
+                    restingHrDefaultView()
+                } else {
+                    binding.lytSleepScore.lytRestHr.lytHrMn.tvHour.text =
+                        "${dayData.restingHr?.value ?: 0}"
+                    binding.lytSleepScore.lytRestHr.lytHrMn.tvHourUnit.text = " bpm"
+                    restingHrDataView()
+                }
             } else {
                 restingHrDefaultView()
             }
 
         } else {
             if (viewModel.ringDataStore.getRegisterDay() == 0) {
-                binding.lytSleepScore.lytSleepAvg.emptyText.text = getString(R.string.text_you_will_see_your_sleep_score_after_your_first_sleep_analysis)
+                binding.lytSleepScore.lytSleepAvg.emptyText.text =
+                    getString(R.string.text_you_will_see_your_sleep_score_after_your_first_sleep_analysis)
                 binding.lytSleepScore.lytSleepAvg.emptyText.visible()
                 binding.lytSleepScore.lytSleepAvg.tvValue.gone()
                 binding.lytSleepScore.lytSleepAvg.tvQuality.gone()
@@ -597,19 +605,29 @@ class OreoSleepDetailFragment :
             binding.lytHeartRate.tvSubtitle1.text = getString(R.string.text_average)
             binding.lytHeartRate.tvSubtitle2.text = getString(R.string.text_lowest_heart_rate)
             if (heartRateData.low != null) {
-                binding.lytHeartRate.lytSubtitleValue2.tvValue.text =
-                    heartRateData.low.toString()
-                binding.lytHeartRate.lytSubtitleValue2.tvUnit.visible()
-                binding.lytHeartRate.lytSubtitleValue2.tvUnit.text = "bpm"
+                if (heartRateData.low == 0 || heartRateData.low == 255) {
+                    binding.lytHeartRate.lytSubtitleValue2.tvValue.text = "-"
+                    binding.lytHeartRate.lytSubtitleValue2.tvUnit.gone()
+                } else {
+                    binding.lytHeartRate.lytSubtitleValue2.tvValue.text =
+                        heartRateData.low.toString()
+                    binding.lytHeartRate.lytSubtitleValue2.tvUnit.visible()
+                    binding.lytHeartRate.lytSubtitleValue2.tvUnit.text = "bpm"
+                }
             } else {
                 binding.lytHeartRate.lytSubtitleValue2.tvValue.text = "-"
                 binding.lytHeartRate.lytSubtitleValue2.tvUnit.gone()
             }
             if (heartRateData.avg != null) {
-                binding.lytHeartRate.lytSubtitleValue1.tvValue.text =
-                    heartRateData.avg.toString()
-                binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
-                binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
+                if (heartRateData.avg == 0 || heartRateData.avg == 255) {
+                    binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
+                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.gone()
+                } else {
+                    binding.lytHeartRate.lytSubtitleValue1.tvValue.text =
+                        heartRateData.avg.toString()
+                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
+                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
+                }
             } else {
                 binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
                 binding.lytHeartRate.lytSubtitleValue1.tvUnit.gone()
@@ -633,10 +651,15 @@ class OreoSleepDetailFragment :
             binding.lytHRVariability.tvSubtitle1.text =
                 getString(R.string.text_heart_rate_variability)
             if (heartVariabilityData.avg != null) {
-                binding.lytHRVariability.lytSubtitleValue1.tvValue.text =
-                    heartVariabilityData.avg.toString()
-                binding.lytHRVariability.lytSubtitleValue1.tvUnit.visible()
-                binding.lytHRVariability.lytSubtitleValue1.tvUnit.text = "ms"
+                if (heartVariabilityData.avg == 0 || heartVariabilityData.avg == 255) {
+                    binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "-"
+                    binding.lytHRVariability.lytSubtitleValue1.tvUnit.gone()
+                } else {
+                    binding.lytHRVariability.lytSubtitleValue1.tvValue.text =
+                        heartVariabilityData.avg.toString()
+                    binding.lytHRVariability.lytSubtitleValue1.tvUnit.visible()
+                    binding.lytHRVariability.lytSubtitleValue1.tvUnit.text = "ms"
+                }
             } else {
                 binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "-"
                 binding.lytHRVariability.lytSubtitleValue1.tvUnit.gone()
@@ -644,17 +667,20 @@ class OreoSleepDetailFragment :
             binding.lytHRVariability.tvSubtitle2.text =
                 getString(R.string.text_max)
             if (heartVariabilityData.max != null) {
-                binding.lytHRVariability.lytSubtitleValue2.tvValue.text =
-                    heartVariabilityData.max.toString()
-                binding.lytHRVariability.lytSubtitleValue2.tvUnit.visible()
-                binding.lytHRVariability.lytSubtitleValue2.tvUnit.text = "ms"
+                if (heartVariabilityData.max == 0 || heartVariabilityData.max == 255) {
+                    binding.lytHRVariability.lytSubtitleValue2.tvValue.text = "-"
+                    binding.lytHRVariability.lytSubtitleValue2.tvUnit.gone()
+                } else {
+                    binding.lytHRVariability.lytSubtitleValue2.tvValue.text =
+                        heartVariabilityData.max.toString()
+                    binding.lytHRVariability.lytSubtitleValue2.tvUnit.visible()
+                    binding.lytHRVariability.lytSubtitleValue2.tvUnit.text = "ms"
+                }
             } else {
                 binding.lytHRVariability.lytSubtitleValue2.tvValue.text = "-"
                 binding.lytHRVariability.lytSubtitleValue2.tvUnit.gone()
             }
         } else {
-
-
             binding.lytHRVariability.lineChart.gone()
             binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "-"
             binding.lytHRVariability.lytSubtitleValue2.tvValue.text = "-"

@@ -28,9 +28,9 @@ class OreoSleepStageAnalysisAdapter :
             }else{
                 val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(sleepStageAnalysis.timeInMinutes)
                 val sleepString = if (hour == 0) {
-                    "${minute}min${if (minute > 1) "s" else ""}"
+                    "${minute}min"
                 } else {
-                    "${hour}hr ${minute}min${if (minute > 1) "s" else ""}"
+                    "${hour}hr ${minute}min"
                 }
                 val percentage = "${sleepStageAnalysis.percentage}%"
                 binding.tvLevel.text = getLevel(sleepStageAnalysis.percentage)

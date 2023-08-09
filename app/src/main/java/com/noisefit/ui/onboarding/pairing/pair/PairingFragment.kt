@@ -93,18 +93,8 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
         initListener()
         startTryAgainTimer()
         startAutoReconnectTimer()
-        handleViewForPromotionalBanner()
 
 
-    }
-
-
-    private fun handleViewForPromotionalBanner() {
-        if (PromotionalUtil.showPromotionalBanner(args.colorFitDevice)) {
-            binding.vBackWatch.loadImage(requireContext(), R.drawable.bg_pulse_circle_pairing)
-        } else {
-            binding.vBackWatch.setBackgroundColor(resources.getColor(R.color.modal_color))
-        }
     }
 
     val callback: OnBackPressedCallback =
@@ -557,6 +547,7 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
         }
     }
 
+
     private fun initUi(colorFitDevice: ColorFitDevice) {
         activity?.let {
 
@@ -564,10 +555,24 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
             binding.ivWatchImage.loadWatchImage(//TODO change for ring
                 it,
                 colorFitDevice.ringInfo?.image ?: "",
-                R.drawable.watch_default
+                R.drawable.ic_ring_default_silver
             )
 
         }
+
+        val colorInfo = if (colorFitDevice.ringInfo != null) {
+            " (${colorFitDevice.ringInfo?.color}, Size ${colorFitDevice.ringInfo?.size})"
+        } else {
+            null
+        }
+
+        if (colorInfo != null) {
+            binding.tvWatchNameInfo.visible()
+            binding.tvWatchNameInfo.text = colorInfo
+        }
+
+
+
         binding.tvWatchMac.text = "MAC ${colorFitDevice.address}"
         binding.tvWatchName.text = colorFitDevice.bluetoothName
 

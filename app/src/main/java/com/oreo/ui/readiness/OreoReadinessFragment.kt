@@ -15,17 +15,12 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoReadinessBinding
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
-import com.noisefit_commans.common.averageWithoutZero
-import com.noisefit_commans.common.averageWithoutZeroFloat
-import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.invisible
-import com.noisefit_commans.ui.showShortToast
-import com.noisefit_commans.ui.visible
+import com.noisefit_commans.ui.*
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.SleepChartModel
+import com.oreo.data.model.health.CommonDataModel
 import com.oreo.data.model.health.Nudges
 import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.ui.custom.ScrollListener
@@ -36,7 +31,6 @@ import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Collections
 
 
 @AndroidEntryPoint
@@ -383,6 +377,21 @@ class OreoReadinessFragment :
         }
 
     }
+    private fun setReadinessScore(readinessData: CommonDataModel) {
+        binding.lytRScoreData.lytScore.tvValue.text =
+            readinessData.value.toString()
+        if (readinessData.text != null) {
+            val statusColor = ContextCompat.getColor(
+                binding.lytRScoreData.lytScore.tvValue.context,
+                mViewModel.getStatusColors(readinessData.status)
+            )
+            binding.lytRScoreData.lytScore.tvQuality.setTextColor(statusColor)
+            binding.lytRScoreData.lytScore.tvQuality.text = readinessData.text
+            binding.lytRScoreData.lytScore.tvQuality.visible()
+        } else {
+            binding.lytRScoreData.lytScore.tvQuality.gone()
+        }
+    }
 
     private fun updateUiRead(it: OreoReadinessModel) {
         binding.lytRScoreData.lytScore.tvTitle.text = getString(R.string.text_readiness_score)
@@ -397,21 +406,17 @@ class OreoReadinessFragment :
         if (it.readinessScore != null) {
             val readinessData = it.readinessScore
             if (readinessData.value != null) {
-                binding.lytRScoreData.lytScore.tvValue.text =
-                    readinessData.value.toString()
-                if (readinessData.text != null) {
-                    val statusColor = ContextCompat.getColor(
-                        binding.lytRScoreData.lytScore.tvValue.context,
-                        mViewModel.getStatusColors(readinessData.status)
-                    )
-                    binding.lytRScoreData.lytScore.tvQuality.setTextColor(statusColor)
-                    binding.lytRScoreData.lytScore.tvQuality.text = readinessData.text
-                    binding.lytRScoreData.lytScore.tvQuality.visible()
+                if (readinessData.value == 0) {
+                    if (it.totalSleep?.value != 0) {
+                        setReadinessScore(readinessData)
+                    } else {
+                        binding.lytRScoreData.lytScore.tvValue.text = "-"
+                        binding.lytRScoreData.lytScore.tvQuality.gone()
+                    }
                 } else {
-                    binding.lytRScoreData.lytScore.tvQuality.gone()
+                    setReadinessScore(readinessData)
                 }
             } else {
-
                 binding.lytRScoreData.lytScore.tvValue.text = "-"
                 binding.lytRScoreData.lytScore.tvQuality.gone()
 
@@ -419,7 +424,8 @@ class OreoReadinessFragment :
 
         } else {
             if (mViewModel.ringDataStore.getRegisterDay() == 0) {
-                binding.lytRScoreData.lytScore.emptyText.text = getString(R.string.text_you_will_see_your_readiness_score_after_first_sleep_analysis)
+                binding.lytRScoreData.lytScore.emptyText.text =
+                    getString(R.string.text_you_will_see_your_readiness_score_after_first_sleep_analysis)
                 binding.lytRScoreData.lytScore.emptyText.visible()
                 binding.lytRScoreData.lytScore.tvValue.gone()
                 binding.lytRScoreData.lytScore.tvQuality.gone()
@@ -432,13 +438,17 @@ class OreoReadinessFragment :
         //resting HR
         if (it.restingHr != null) {
             val rHrData = it.restingHr
-            binding.lytRScoreData.lytSec1.lytBpmView.tvValue.text =
-                rHrData.value.toString()
-            binding.lytRScoreData.lytSec1.lytHrMn.root.gone()
-            binding.lytRScoreData.lytSec1.tvPercentValue.gone()
-            binding.lytRScoreData.lytSec1.lytBpmView.root.visible()
-            binding.lytRScoreData.lytSec1.lytBpmView.tvUnit.text = "bpm"
-            binding.lytRScoreData.lytSec1.lytBpmView.tvUnit.visible()
+            if (rHrData.value == 0 || rHrData.value == 255) {
+                restHrDefaultView()
+            } else {
+                binding.lytRScoreData.lytSec1.lytBpmView.tvValue.text =
+                    rHrData.value.toString()
+                binding.lytRScoreData.lytSec1.lytHrMn.root.gone()
+                binding.lytRScoreData.lytSec1.tvPercentValue.gone()
+                binding.lytRScoreData.lytSec1.lytBpmView.root.visible()
+                binding.lytRScoreData.lytSec1.lytBpmView.tvUnit.text = "bpm"
+                binding.lytRScoreData.lytSec1.lytBpmView.tvUnit.visible()
+            }
 
         } else {
             restHrDefaultView()
@@ -446,29 +456,26 @@ class OreoReadinessFragment :
         //hrv
         if (it.hrv != null) {
             val hrvData = it.hrv
-            binding.lytRScoreData.lytSec2.lytHrMn.root.gone()
-            binding.lytRScoreData.lytSec2.tvPercentValue.gone()
-            binding.lytRScoreData.lytSec2.lytBpmView.root.visible()
+            if (hrvData.value == 0 || hrvData.value == 255) {
+                hrVariabilityDefaultView()
+            } else {
+                binding.lytRScoreData.lytSec2.lytHrMn.root.gone()
+                binding.lytRScoreData.lytSec2.tvPercentValue.gone()
+                binding.lytRScoreData.lytSec2.lytBpmView.root.visible()
 
-            binding.lytRScoreData.lytSec2.lytBpmView.tvValue.text =
-                hrvData.value.toString()
-            binding.lytRScoreData.lytSec2.lytBpmView.tvUnit.text = "ms"
-            binding.lytRScoreData.lytSec2.lytBpmView.tvUnit.visible()
+                binding.lytRScoreData.lytSec2.lytBpmView.tvValue.text =
+                    hrvData.value.toString()
+                binding.lytRScoreData.lytSec2.lytBpmView.tvUnit.text = "ms"
+                binding.lytRScoreData.lytSec2.lytBpmView.tvUnit.visible()
+            }
         } else {
             hrVariabilityDefaultView()
         }
         //temperature
         if (it.temperature != null) {
-//            val tempData = it.temperature
             binding.lytRScoreData.lytSec3.lytHrMn.root.gone()
             binding.lytRScoreData.lytSec3.tvPercentValue.visible()
             binding.lytRScoreData.lytSec3.lytBpmView.root.gone()
-
-//            val temperatureData =
-//                if (tempData.unit == "°C") MiscUtil.getCelsius(tempData.value.toString())
-//                else MiscUtil.getFahrenheit(
-//                    tempData.value.toString()
-//                )
             binding.lytRScoreData.lytSec3.tvPercentValue.text =
                 "${it.temperature?.value} °F"
         } else {
@@ -478,14 +485,18 @@ class OreoReadinessFragment :
         //respiration
         if (it.respiration != null) {
             val resData = it.respiration
-            binding.lytRScoreData.lytSec4.lytHrMn.root.gone()
-            binding.lytRScoreData.lytSec4.tvPercentValue.gone()
-            binding.lytRScoreData.lytSec4.lytBpmView.root.visible()
+            if (resData.value == 0 || resData.value == 255) {
+                respiratoryRateDefaultView()
+            } else {
+                binding.lytRScoreData.lytSec4.lytHrMn.root.gone()
+                binding.lytRScoreData.lytSec4.tvPercentValue.gone()
+                binding.lytRScoreData.lytSec4.lytBpmView.root.visible()
 
-            binding.lytRScoreData.lytSec4.lytBpmView.tvValue.text =
-                resData.value.toString()
-            binding.lytRScoreData.lytSec4.lytBpmView.tvUnit.text = "bpm"
-            binding.lytRScoreData.lytSec4.lytBpmView.tvUnit.visible()
+                binding.lytRScoreData.lytSec4.lytBpmView.tvValue.text =
+                    resData.value.toString()
+                binding.lytRScoreData.lytSec4.lytBpmView.tvUnit.text = "bpm"
+                binding.lytRScoreData.lytSec4.lytBpmView.tvUnit.visible()
+            }
         } else {
             respiratoryRateDefaultView()
         }
@@ -501,14 +512,24 @@ class OreoReadinessFragment :
 
         if (it.hrBreakUp != null) {
             if (!it.hrBreakUp.value.isNullOrEmpty()) {
-                binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "${it.hrBreakUp.low}"
-                binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
-                binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
-                binding.lytHeartRate.lytSubtitleValue2.tvValue.text = "${it.hrBreakUp.avg}"
-                binding.lytHeartRate.lytSubtitleValue2.tvUnit.visible()
-                binding.lytHeartRate.lytSubtitleValue2.tvUnit.text = "bpm"
-                //todo will change startTime, endTime
-                showHeartRateGraph(it.hrBreakUp.value, it.date, it.date)
+                if (it.hrBreakUp.low == 0 || it.hrBreakUp.low == 255) {
+                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.gone()
+                    binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
+                } else {
+                    binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "${it.hrBreakUp.low}"
+                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
+                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
+                }
+                if (it.hrBreakUp.avg == 0 || it.hrBreakUp.avg == 255) {
+                    binding.lytHeartRate.lytSubtitleValue2.tvUnit.gone()
+                    binding.lytHeartRate.lytSubtitleValue2.tvValue.text = "-"
+                } else {
+                    binding.lytHeartRate.lytSubtitleValue2.tvValue.text = "${it.hrBreakUp.avg}"
+                    binding.lytHeartRate.lytSubtitleValue2.tvUnit.visible()
+                    binding.lytHeartRate.lytSubtitleValue2.tvUnit.text = "bpm"
+                    //todo will change startTime, endTime
+                    showHeartRateGraph(it.hrBreakUp.value, it.date, it.date)
+                }
             } else {
                 binding.lytHeartRate.lineChart.gone()
                 heartRateDefaultView()
@@ -525,12 +546,22 @@ class OreoReadinessFragment :
 
         if (it.hrvBreakUp != null) {
             if (!it.hrvBreakUp.value.isNullOrEmpty()) {
-                binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "${it.hrvBreakUp.avg}"
-                binding.lytHRVariability.lytSubtitleValue1.tvUnit.visible()
-                binding.lytHRVariability.lytSubtitleValue1.tvUnit.text = "ms"
-                binding.lytHRVariability.lytSubtitleValue2.tvValue.text = "${it.hrvBreakUp.max}"
-                binding.lytHRVariability.lytSubtitleValue2.tvUnit.visible()
-                binding.lytHRVariability.lytSubtitleValue2.tvUnit.text = "ms"
+                if (it.hrvBreakUp.avg == 0 || it.hrvBreakUp.avg == 255) {
+                    binding.lytHRVariability.lytSubtitleValue1.tvUnit.gone()
+                    binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "-"
+                } else {
+                    binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "${it.hrvBreakUp.avg}"
+                    binding.lytHRVariability.lytSubtitleValue1.tvUnit.visible()
+                    binding.lytHRVariability.lytSubtitleValue1.tvUnit.text = "ms"
+                }
+                if (it.hrvBreakUp.max == 0 || it.hrvBreakUp.max == 255) {
+                    binding.lytHRVariability.lytSubtitleValue2.tvUnit.gone()
+                    binding.lytHRVariability.lytSubtitleValue2.tvValue.text = "-"
+                } else {
+                    binding.lytHRVariability.lytSubtitleValue2.tvValue.text = "${it.hrvBreakUp.max}"
+                    binding.lytHRVariability.lytSubtitleValue2.tvUnit.visible()
+                    binding.lytHRVariability.lytSubtitleValue2.tvUnit.text = "ms"
+                }
                 //todo will change startTime, endTime
                 showHeartRateVariabilityGraph(it.hrvBreakUp.value, it.date, it.date)
             } else {
@@ -547,8 +578,6 @@ class OreoReadinessFragment :
         binding.lytTemperature.tvSubtitle1.text = getString(R.string.text_average)
         binding.lytTemperature.tvSubtitle2.gone()
         binding.lytTemperature.divider1.root.invisible()
-
-
         if (!it.temperatureBreakUp?.value.isNullOrEmpty()) {
             binding.lytTemperature.lytSubtitleValue1.tvValue.text = "${it.temperatureBreakUp?.avg}"
             binding.lytTemperature.lytSubtitleValue1.tvUnit.visible()
@@ -560,8 +589,6 @@ class OreoReadinessFragment :
             binding.lytTemperature.lineChart.gone()
             temperatureGraphDefaultView()
         }
-
-
     }
 
     private fun heartRateDefaultView() {

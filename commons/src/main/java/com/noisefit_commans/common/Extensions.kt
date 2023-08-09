@@ -52,7 +52,7 @@ fun String.decodeHex(): String {
 }
 
 fun List<Int>.averageWithoutZero(): Int {
-    val newList = this.filter { it != 0 }
+    val newList = this.filter { it != 0 && it != 255 }
     return if (newList.isNotEmpty()) {
         newList.average().roundToInt()
     } else {
@@ -70,7 +70,7 @@ fun List<Float>.averageWithoutZeroFloat(): Int {
 }
 
 fun List<Int>.minWithoutZero(): Int {
-    val newList = this.filter { it != 0 }
+    val newList = this.filter { it != 0 && it != 255 }
     return if (newList.isNotEmpty()) {
         newList.minOrNull() ?: 0
     } else {
@@ -79,7 +79,7 @@ fun List<Int>.minWithoutZero(): Int {
 }
 
 fun List<Int>.maxWithoutZero(): Int {
-    val newList = this.filter { it != 0 }
+    val newList = this.filter { it != 0 && it != 255 }
     return if (newList.isNotEmpty()) {
         newList.maxOrNull() ?: 0
     } else {

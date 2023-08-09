@@ -10,16 +10,26 @@
         android:layout_height="wrap_content">
 
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivActivity"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_margin="@dimen/dimen_16dp"
-            android:src="@drawable/ic_o_workout"
+            android:layout_margin="16dp"
+            android:background="@drawable/back_modal_new_round"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription" />
+            app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+
+        <ImageView
+            android:id="@+id/ivWorkoutImage"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            app:layout_constraintBottom_toBottomOf="@+id/ivActivity"
+            app:layout_constraintEnd_toEndOf="@+id/ivActivity"
+            app:layout_constraintStart_toStartOf="@+id/ivActivity"
+            app:layout_constraintTop_toTopOf="@+id/ivActivity"
+            tools:src="@drawable/ic_o_workout" />
 
         <TextView
             android:id="@+id/tvActivityDate"
@@ -27,8 +37,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="@dimen/dimen_16dp"
             android:layout_marginTop="@dimen/dimen_8dp"
+            android:layout_marginEnd="@dimen/dimen_16dp"
             android:ellipsize="end"
             android:singleLine="true"
             app:layout_constraintEnd_toEndOf="parent"
@@ -44,8 +54,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:textColor="@color/white_80"
             android:layout_marginTop="@dimen/dimen_4dp"
+            android:textColor="@color/white_80"
             android:textSize="12sp"
 
             app:layout_constraintStart_toEndOf="@+id/ivActivity"

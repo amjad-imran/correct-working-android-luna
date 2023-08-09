@@ -11,11 +11,7 @@ import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOWorkoutDetailsBinding
 import com.noisefit.util.ApplicationUtils
-import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.ui.clearAmPm
-import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.showShortToast
-import com.noisefit_commans.ui.visible
+import com.noisefit_commans.ui.*
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.OWDActivityData
@@ -25,6 +21,7 @@ import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
 
 const val DELETE_WORKOUT_REQUEST_KEY = "DELETE_WORKOUT_REQUEST_KEY"
+
 @AndroidEntryPoint
 class OWorkoutDetailsFragment :
     BaseFragment<FragmentOWorkoutDetailsBinding>(FragmentOWorkoutDetailsBinding::inflate) {
@@ -144,7 +141,11 @@ class OWorkoutDetailsFragment :
 
             if (!it.hrArray.isNullOrEmpty()) {
                 binding.lytHeartRate.lineChart.visible()
-                 val baseDataList = UtilClass.graphTwoHourBaseInterval(it.startTime.clearAmPm(),it.endTime,it.hrArray.size)
+                val baseDataList = UtilClass.graphTwoHourBaseInterval(
+                    it.startTime.clearAmPm(),
+                    it.endTime,
+                    it.hrArray.size
+                )
 
 
                 val sleepChart = SleepChartModel()
@@ -185,6 +186,11 @@ class OWorkoutDetailsFragment :
         binding.lytActivityItem.tvTime.text = "${
             DateFormats.formatActivityTime8(it.startTime).lowercase()
         } - ${DateFormats.formatActivityTime8(it.endTime).lowercase()}"
+
+        binding.lytActivityItem.ivWorkoutImage.loadImage(
+            requireContext(),
+            it.iconUrl
+        )
         prepareDataForActivity(it)
     }
 

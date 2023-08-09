@@ -9,6 +9,7 @@ import android.bluetooth.le.ScanResult
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -71,6 +72,7 @@ class FindDeviceListFragment :
       }*/
     private val handler = Handler(Looper.getMainLooper())
     private val viewModel: SearchNearbyDeviceViewModel by activityViewModels()
+    private var currentPosition: Int = 0
 
 
     private val btAdapter by lazy {
@@ -92,6 +94,8 @@ class FindDeviceListFragment :
         binding.lScanning.setAnimation(R.raw.anim_device_default)
         binding.lScanning.playAnimation()
 
+        setVideo()
+
 
         viewModel.clearScannedDeviceList()
         setRecycler()
@@ -106,6 +110,19 @@ class FindDeviceListFragment :
             binding.backBtn.visible()
         } else {
             binding.backBtn.gone()
+        }
+    }
+
+    private fun setVideo() {
+        binding.videoOnboard.apply {
+            setVideoURI(
+                Uri.parse(
+                    "android.resource://" + requireContext().packageName + "/" +
+                            R.raw.video_find_ring
+                )
+            )
+            setOnPreparedListener { mp -> mp.isLooping = true }
+            start()
         }
     }
 
@@ -307,6 +324,11 @@ class FindDeviceListFragment :
 
 
     override fun initListener() {
+
+        binding.ivRefresh.setOnClickListener {
+            viewModel.fetchDeviceList()
+        }
+
         binding.backBtn.setOnClickListener {
             viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_device_back)
             activity?.finish()
@@ -783,6 +805,7 @@ class FindDeviceListFragment :
 
     override fun onScanStarted() {
         viewModel.findDeviceState = FindDeviceState.SEARCHING
+        binding.ivRefresh.gone()
 
         if (nullableBinding == null) return
 
@@ -808,6 +831,10 @@ class FindDeviceListFragment :
 
     override fun onScanFinished() {
         try {
+            binding.ivRefresh.visible()
+
+
+
             viewModel.findDeviceState = FindDeviceState.FINISHED
             binding.lScanning.repeatCount = 0
             binding.lScanning.setAnimation(R.raw.anim_device_search_to_refresh)
@@ -824,6 +851,18 @@ class FindDeviceListFragment :
 
     override fun onDeviceFound(deviceEntity: DeviceEntity) {
         viewModel.onDeviceFound(deviceEntity)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        currentPosition = binding.videoOnboard.currentPosition
+        binding.videoOnboard.pause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.videoOnboard.seekTo(currentPosition)
+        binding.videoOnboard.start()
     }
 
     override fun onDestroyView() {

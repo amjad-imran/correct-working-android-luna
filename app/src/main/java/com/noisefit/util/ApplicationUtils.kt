@@ -849,14 +849,19 @@ object ApplicationUtils {
 
     }
 
+    /**
+     * duration in minutes
+     */
     fun getActivityDurationFormat2(duration: Long?): String {
         if (duration == null) return ""
-        val hrs = (duration / 3600)
-        val mins = (duration % 3600 / 60)
-        val secs = duration % 60
 
+        val (hour, minute) = getFormattedSleepDuration(
+            (duration ?: 0L).toInt()
+        )
+
+        val secs = 0
         // Output like "00:00:00"
-        return String.format("%02d:%02d:%02d", hrs, mins, secs)
+        return String.format("%02d:%02d:%02d", hour, minute, secs)
     }
 
     fun calculateProgressPercentage(nplData: NplLeague): Int {

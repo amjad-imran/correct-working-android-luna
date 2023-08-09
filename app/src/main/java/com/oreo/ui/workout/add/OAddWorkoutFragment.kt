@@ -20,6 +20,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.disable
 import com.noisefit_commans.ui.enable
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
@@ -32,6 +33,7 @@ import java.util.Calendar
 import kotlin.math.roundToInt
 
 const val ADD_WORKOUT_REQUEST_KEY = "ADD_WORKOUT_REQUEST_KEY"
+
 @AndroidEntryPoint
 class OAddWorkoutFragment :
     BaseFragment<FragmentOAddWorkoutBinding>(FragmentOAddWorkoutBinding::inflate) {
@@ -84,6 +86,11 @@ class OAddWorkoutFragment :
             val workout = bundle.getParcelable<OWorkoutListModal>("workout")
             workout?.let {
                 viewModel.workoutListModal = workout
+
+                context?.let { ctx ->
+                    binding.lytWorkout.ivWorkoutImage.loadImage(ctx, workout.iconUrl)
+                }
+
                 binding.lytWorkout.tvWorkout.text = workout.getFormattedActivityName()
                 setCalories()
             }
@@ -162,7 +169,7 @@ class OAddWorkoutFragment :
         }
         binding.lytStartEnd.lytEndTime.root.setOnClickListener {
 
-            if(binding.lytStartEnd.lytStartTime.tvTimeValue.text == getString(R.string.text_enter)){
+            if (binding.lytStartEnd.lytStartTime.tvTimeValue.text == getString(R.string.text_enter)) {
                 context.showShortToast(getString(R.string.text_select_start_time_first))
                 return@setOnClickListener
             }
@@ -180,7 +187,7 @@ class OAddWorkoutFragment :
                     ) > 0
                 ) {
                     context.showShortToast(getString(R.string.text_end_time_greater_then_current_time))
-                }else if (DateFormats.compareTime(
+                } else if (DateFormats.compareTime(
                         hourOfDay,
                         minute,
                         viewModel.addWorkout.startHour,
@@ -283,7 +290,7 @@ class OAddWorkoutFragment :
         binding.lytStartEnd.lytStartTime.tvTimeValue.text = startTime
     }
 
-    private fun setEndTimeBetween(ignoreDuration:Boolean = true) {
+    private fun setEndTimeBetween(ignoreDuration: Boolean = true) {
         val endTime = DateFormats.formatTimeWithAmPm(
             viewModel.addWorkout.endHour,
             viewModel.addWorkout.endMinute
@@ -294,7 +301,7 @@ class OAddWorkoutFragment :
             viewModel.addWorkout.endHour,
             viewModel.addWorkout.endMinute
         )
-        if(ignoreDuration){
+        if (ignoreDuration) {
             setDuration()
         }
 
@@ -346,7 +353,7 @@ class OAddWorkoutFragment :
 
     }
 
-    private fun enableSaveBtn(forceSave:Boolean = false) {
+    private fun enableSaveBtn(forceSave: Boolean = false) {
         if ((viewModel.addWorkout.duration > 0 &&
                     viewModel.addWorkout.intensity.isNotEmpty() &&
                     viewModel.workoutListModal != null) || forceSave
@@ -405,9 +412,9 @@ class OAddWorkoutFragment :
                         (binding.candleChart.max * 0.4).toInt()
 
                     chartModel.type = CandleChartModel.Type.LOW
-                    chartModel.color = if ( chartModel.identifyText == "null") {
+                    chartModel.color = if (chartModel.identifyText == "null") {
                         Color.parseColor("#3d3d3d")
-                    } else  if (chartModel.identifyText != "ignore") {
+                    } else if (chartModel.identifyText != "ignore") {
                         chartModel.length =
                             (binding.candleChart.max * 1.2).toInt()
                         Color.parseColor("#ffffff")
@@ -425,7 +432,7 @@ class OAddWorkoutFragment :
 
                     chartModel.color = if (chartModel.identifyText == "null") {
                         Color.parseColor("#3d3d3d")
-                    } else  if (chartModel.identifyText != "ignore") {
+                    } else if (chartModel.identifyText != "ignore") {
                         chartModel.length =
                             (binding.candleChart.max * 1.2).toInt()
                         Color.parseColor("#ffffff")
@@ -443,7 +450,7 @@ class OAddWorkoutFragment :
 
                     chartModel.color = if (chartModel.identifyText == "null") {
                         Color.parseColor("#3d3d3d")
-                    } else  if (chartModel.identifyText != "ignore") {
+                    } else if (chartModel.identifyText != "ignore") {
                         chartModel.length =
                             (binding.candleChart.max * 1.2).toInt()
                         Color.parseColor("#ffffff")
@@ -464,12 +471,12 @@ class OAddWorkoutFragment :
 
                         Color.parseColor("#3d3d3d")
 
-                    } else  if (chartModel.identifyText != "ignore") {
+                    } else if (chartModel.identifyText != "ignore") {
                         chartModel.length =
                             (binding.candleChart.max * 1.2).toInt()
                         Color.parseColor("#ffffff")
 
-                    }else{
+                    } else {
                         Color.parseColor("#4c4c4c")
                     }
 
