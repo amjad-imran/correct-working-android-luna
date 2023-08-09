@@ -4,6 +4,7 @@ import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.text.buildSpannedString
@@ -13,6 +14,7 @@ import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.luna.R
 import com.noisefit_commans.models.Units
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.OActivityListModal
@@ -89,6 +91,9 @@ class OActivityListAdapter(
                         view.findViewById<View>(R.id.view16).gone()
                     }
                 }
+
+                val imageView = view.findViewById<ImageView>(R.id.imageView8)
+                imageView.loadImage(imageView.context, activity.iconUrl, R.drawable.ic_o_workout)
 
                 view.findViewById<TextView>(R.id.tvName).text = activity.getFormattedActivityName()
                 val time = DateFormats.convert24HourTo12(activity.startTime)

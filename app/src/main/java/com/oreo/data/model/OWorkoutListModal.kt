@@ -28,7 +28,6 @@ data class OActivityListModal(
     @Transient var isHeader: Boolean = false,
     @SerializedName("date") var date: String? = null,
     @SerializedName("id") val id: String? = null,
-
     @SerializedName("duration") val duration: Long? = null,
     @SerializedName("calories") val calories: String? = null,
     @SerializedName("activity_type") val activityType: String? = null,
@@ -36,6 +35,7 @@ data class OActivityListModal(
     @SerializedName("end_time") val endTime: String? = null,
     @SerializedName("intensity") val intensity: String? = null,
     @SerializedName("created_date") val createdDate: String? = null,
+    @SerializedName("icon_url") val iconUrl:String?=null
 ) : Parcelable{
     fun getFormattedActivityName(): String {
         val activityName =  activityType ?: return ""
