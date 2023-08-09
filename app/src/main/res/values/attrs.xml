@@ -148,6 +148,7 @@
         <attr name="showSelectedIndicator"/>
         <attr name="titleWidth"/>
         <attr name="showExtremeLine"/>
+        <attr name="hideMaxMinValueText"/>
         <attr name="startFromRight"/>
     </declare-styleable>
 
@@ -204,6 +205,7 @@
     <attr name="showXAxis" format="boolean"/>
     <attr name="showAvgValue" format="boolean"/>
     <attr name="showSelectedIndicator" format="boolean"/>
+    <attr name="hideMaxMinValueText" format="boolean"/>
     <attr name="showExtremeLine" format="boolean"/>
     <attr name="startFromRight" format="boolean"/>
 

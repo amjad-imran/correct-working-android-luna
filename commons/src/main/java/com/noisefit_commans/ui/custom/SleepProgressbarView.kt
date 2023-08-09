@@ -97,7 +97,7 @@ class SleepProgressbarView(var mContext: Context) : View(mContext) {
     }
 
     fun setData(sleepArray: ArrayList<SleepData.SleepDataBreakup>?) {
-        LOGS.d("sleepupdate")
+
         val array = sleepArray?.filter {
             it.duration >= 60
         }

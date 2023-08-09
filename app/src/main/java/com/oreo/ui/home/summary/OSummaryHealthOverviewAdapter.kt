@@ -419,8 +419,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             }
 
             val sleepDayGraphView = SleepProgressbarView(binding.sleepPgbr.context)
+            binding.sleepPgbr.removeAllViews()
             binding.sleepPgbr.addView(sleepDayGraphView)
             sleepDayGraphView.setData(data.sleepArray)
+
 
 
             if (scoreValue >= 0) {

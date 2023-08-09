@@ -5,7 +5,10 @@ import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import java.lang.Math.abs
+import java.lang.Math.floor
 import java.util.concurrent.TimeUnit
+import kotlin.math.ceil
 
 object UtilClass {
 
@@ -285,7 +288,11 @@ object UtilClass {
 
         println("nearestStart startTimeFull $startTimeFull")
         val startHr = startTimeFull[0].toInt()
-        val startMin = startTimeFull[1].toInt()
+
+        val originalStartMin = startTimeFull[1].toInt()
+        var startMin = originalStartMin
+
+        startMin = (5 * (floor(abs(startMin.toDouble() / 5)))).toInt()
         val startTimeOffset = startHr * 12 + (startMin / 5)
         var nearestStart = getNearest2Number(startHr)
         val nearestStartTimeOffset = (nearestStart * 12) - startTimeOffset
@@ -310,9 +317,11 @@ object UtilClass {
             }
 
         println("nearestStart endTimeFull $endTimeFull")
-        var endHr = endTimeFull[0].toInt()
+        val endHr = endTimeFull[0].toInt()
 
-        val endMin = endTimeFull[1].toInt()
+        val originalEndMin = endTimeFull[1].toInt()
+        var endMin = originalEndMin
+        endMin = (5 * (ceil(abs(endMin.toDouble() / 5)))).toInt()
         val endTimeOffset = endHr * 12 + (endMin / 5)
         val nearestEnd = getNearest2Number(endHr) - 2
         val nearestEndTimeOffset = nearestEnd * 12
@@ -322,7 +331,7 @@ object UtilClass {
 
         println("nearestStart $nearestEndAdj  $nearestEndTimeOffsetAdj ")
 
-        hm[0] = formatTime(startHr, startMin)
+        hm[0] = formatTime(startHr, originalStartMin)
 //       println("totalItems $totalItems firstBottomText $firstBottomText lastBottomText $lastBottomText lastIndex $lastIndex" )
         for (i in nearestStartTimeOffset until nearestEndAdj step 24) {
 
@@ -332,7 +341,7 @@ object UtilClass {
         }
 
 
-        hm[nearestEndAdj] = formatTime(endHr, endMin)
+        hm[nearestEndAdj] = formatTime(endHr, originalEndMin)
 
         return hm
     }
@@ -359,9 +368,21 @@ object UtilClass {
             endTimeFormat = "23:60:00"
         }
 
-        val startTimeFull = startTime.split(":")
-        var startHr = startTimeFull[0].toInt()
-        val startMin = startTimeFull[1].toInt()
+        val startTimeFull =
+            if (startTime.lowercase().contains("am") || startTime.lowercase().contains("pm")) {
+                DateFormats.convertTimeIntoTime(
+                    startTime,
+                    DateFormats.timeFormat12,
+                    DateFormats.timeFormat
+                ).split(":")
+            } else {
+                startTime.split(":")
+            }
+
+        val startHr = startTimeFull[0].toInt()
+        val originalStartMin = startTimeFull[1].toInt()
+        var startMin = originalStartMin
+        startMin = (5 * (floor(abs(startMin.toDouble() / 5)))).toInt()
         val startTimeOffset = startHr * 12 + (startMin / 5)
         var nearestStart = getNearest4Number(startHr)
         val nearestStartTimeOffset = (nearestStart * 12) - startTimeOffset
@@ -370,14 +391,27 @@ object UtilClass {
         println("nearestStart  $startTimeOffset $nearestStartTimeOffset")
 
 
-        val endTimeFull = endTimeFormat!!.split(":")
-        var endHr = endTimeFull[0].toInt()
-        if (endHr < 12) {
-            endHr += 12
-        }
-        val endMin = endTimeFull[1].toInt()
-        val endTimeOffset = endHr * 12 + (endMin / 5)
-        var nearestEnd = getNearest4Number(endHr) - 4
+        val endTimeFull =
+            if (endTimeFormat.lowercase().contains("am") || endTimeFormat.lowercase()
+                    .contains("pm")
+            ) {
+                DateFormats.convertTimeIntoTime(
+                    endTimeFormat,
+                    DateFormats.timeFormat12,
+                    DateFormats.timeFormat
+                ).split(":")
+            } else {
+                endTimeFormat.split(":")
+            }
+
+
+        val endHr = endTimeFull[0].toInt()
+
+        val originalEndMin = endTimeFull[1].toInt()
+        var endMin = originalEndMin
+        endMin = (5 * (ceil(abs(endMin.toDouble() / 5)))).toInt()
+        val endTimeOffset = endHr * 12 + (endMin/ 5)
+        val nearestEnd = getNearest4Number(endHr) - 4
         val nearestEndTimeOffset = nearestEnd * 12
 
         val nearestEndAdj = endTimeOffset - startTimeOffset
@@ -386,7 +420,7 @@ object UtilClass {
         println("nearestStart $nearestEndAdj  $nearestEndTimeOffsetAdj ")
 
 
-        hm[0] = formatTime(startHr, startMin)
+        hm[0] = formatTime(startHr, originalStartMin)
 //       println("totalItems $totalItems firstBottomText $firstBottomText lastBottomText $lastBottomText lastIndex $lastIndex" )
         for (i in nearestStartTimeOffset until nearestEndAdj step 48) {
 
@@ -395,7 +429,7 @@ object UtilClass {
             nearestStart += 4
         }
 
-        hm[endIndex - 1] = formatTime(endHr, endMin)
+        hm[endIndex - 1] = formatTime(endHr, originalEndMin)
 
         return hm
     }
@@ -406,30 +440,7 @@ object UtilClass {
             "$hr:$min",
             DateFormats.timeFormat,
             DateFormats.timeFormat12
-        )
-//        return if (hr == 0 && min == 0) {
-//            "12 am"
-//        } else if ((hr == 23 && min == 59) || (hr == 23 && min == 60) || (hr == 24 && min == 0)) {
-//            "12 am"
-//        } else if (hr < 12) {
-//            addZeroPrefixMin(hr, min)
-//        } else {
-//            var hrIn12 = hr - 12
-//            if (hrIn12 == 0) {
-//                hrIn12 = 12
-//            }
-//            addZeroPrefixMin(hrIn12, min)
-//
-//
-//        }
-    }
-
-    private fun addZeroPrefixMin(hr: Int, min: Int): String {
-        return if (min <= 9) {
-            "$hr:0$min pm"
-        } else {
-            "$hr:$min pm"
-        }
+        ).lowercase()
     }
 
 

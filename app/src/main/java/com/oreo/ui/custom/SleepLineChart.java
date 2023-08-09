@@ -428,7 +428,6 @@ public class SleepLineChart extends View {
                     if (i == 0) {
                         xTextPaint.setColor(Color.parseColor("#ffffff"));
                         canvas.drawText(xText, x - xTextBounds.width() , mHeight - bottomWith / 4, xTextPaint);
-//                        canvas.drawText(xText, x + dip2px(5), mHeight - bottomWith / 4, xTextPaint);
                     } else if (i == list.size() - 1) {
                         xTextPaint.setColor(Color.parseColor("#ffffff"));
                         canvas.drawText(xText, x , mHeight - bottomWith / 4, xTextPaint);
@@ -438,7 +437,6 @@ public class SleepLineChart extends View {
                     }
 
 
-//                    canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 4, xTextPaint);
                 }
             }
 

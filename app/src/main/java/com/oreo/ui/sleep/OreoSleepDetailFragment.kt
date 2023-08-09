@@ -137,7 +137,7 @@ class OreoSleepDetailFragment :
             Color.parseColor("#4cff59da"),
             Color.parseColor("#00ff59da")
         )
-//        binding.lytHRVariability.lineChart.updateDataWithMax(sleepChart, 5, true, false)
+        binding.lytHRVariability.lineChart.updateDataWithMax(sleepChart, 5, true, false)
     }
 
     private fun showHeartRateGraph(
@@ -158,7 +158,7 @@ class OreoSleepDetailFragment :
             heartRateList?.value?.size ?: 288
         )
 
-        LOGS.d("dsakjdsalkjsladjlksdajldsajldsajl ${heartRateList?.value?.size} ${Gson().toJson(baseTimeList)}")
+       // LOGS.d("dsakjdsalkjsladjlksdajldsajldsajl ${heartRateList?.value?.size} ${Gson().toJson(baseTimeList)}")
 
         binding.lytHeartRate.lineChart.visible()
         val sleepChart = SleepChartModel()
