@@ -54,13 +54,13 @@ class NearbyDevicesAdapter(private val listener: NearbyDevicesClickListener?) :
                 binding.ivWatchImage.loadWatchImage(
                     itemView.context,
                     colorFitDevice.url,
-                    R.drawable.watch_default
+                    R.drawable.ic_ring_default_silver
                 )
             } else {
                 binding.ivWatchImage.loadWatchImage(
                     itemView.context,
                     colorFitDevice.ringInfo?.image ?: "",
-                    R.drawable.watch_default
+                    R.drawable.ic_ring_default_silver
                 )
             }
 

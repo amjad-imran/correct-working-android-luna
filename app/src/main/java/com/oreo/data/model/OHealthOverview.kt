@@ -75,6 +75,7 @@ sealed class OHealthOverview {
 
     class TodayWorkout(
         var value: String,
+        var isRingConnected: Boolean,
         var listData: List<OActivityListModal>
     ) : OHealthOverview()
 

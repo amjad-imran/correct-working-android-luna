@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
             android:padding="8dp"
-            android:textColor="@color/white"
+            android:textColor="#82a8f3"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

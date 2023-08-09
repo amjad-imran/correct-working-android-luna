@@ -263,7 +263,7 @@
     <string name="text_otp_hint">____</string>
     <string name="text_looking_for_your_device">Looking for your device</string>
     <string name="text_pairing">Pairing</string>
-    <string name="text_keep_your_watch_near_your_phone">Keep your watch near your phone.</string>
+    <string name="text_keep_your_watch_near_your_phone">Make sure your ring is placed on the charger.</string>
     <string name="text_unable_to_pair_your_device">Unable to pair your device?</string>
     <string name="text_stop_pairing">Stop pairing</string>
     <string name="text_colorfit_ultra_2">ColorFit Ultra 2</string>
