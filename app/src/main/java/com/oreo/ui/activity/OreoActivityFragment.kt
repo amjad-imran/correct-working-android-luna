@@ -271,7 +271,7 @@ class OreoActivityFragment :
         handleMovementViews(it)
 
 
-        it.workout?.let { it1 -> updateWorkoutUI(it1) }
+        updateWorkoutUI(it.workout)
 
     }
 
@@ -481,10 +481,10 @@ class OreoActivityFragment :
         }
 
 
-    private fun updateWorkoutUI(recentWorkout: List<OActivityListModal>) {
+    private fun updateWorkoutUI(recentWorkout: List<OActivityListModal>?) {
         val itemCount = recentWorkout?.size
         if ((itemCount ?: 0) > 0) {
-            mWorkoutAdapter.setData(recentWorkout)
+            mWorkoutAdapter.setData(recentWorkout?:ArrayList())
             binding.lytWorkouts.rvWorkouts.visible()
             binding.lytWorkouts.tvEmptyMsg.gone()
             binding.lytWorkouts.ivViewAll.visible()
@@ -492,17 +492,21 @@ class OreoActivityFragment :
             binding.lytWorkouts.ivViewAll.invisible()
             binding.lytWorkouts.rvWorkouts.gone()
             binding.lytWorkouts.tvEmptyMsg.visible()
-            if (mSharedViewModel.selectedDate == DateFormats.getCurrentDateOreoFormat()) {
+        }
+
+        if (mSharedViewModel.selectedDate == DateFormats.getCurrentDateOreoFormat()) {
+            if(mViewModel.ringDataStore.getRingDevice()!=null){
                 binding.lytWorkouts.viewAddWorkout.visible()
-                binding.lytWorkouts.tvEmptyMsg.text =
-                    getString(R.string.text_you_haven_t_added_any_workouts_for_today)
-
-            } else {
+            }else{
                 binding.lytWorkouts.viewAddWorkout.gone()
-                binding.lytWorkouts.tvEmptyMsg.text =
-                    getString(R.string.text_you_haven_t_added_any_workouts_for_this_day)
             }
+            binding.lytWorkouts.tvEmptyMsg.text =
+                getString(R.string.text_you_haven_t_added_any_workouts_for_today)
 
+        } else {
+            binding.lytWorkouts.viewAddWorkout.gone()
+            binding.lytWorkouts.tvEmptyMsg.text =
+                getString(R.string.text_you_haven_t_added_any_workouts_for_this_day)
         }
     }
 

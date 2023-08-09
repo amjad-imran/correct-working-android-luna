@@ -471,7 +471,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             val caloriesGoalText = "/ ${data.caloriesGoal}"
             binding.tvTotalCalories.text = caloriesGoalText
 
-            binding.tvCalories.text = if ((data.data.activeCalories?:0) > 0) {
+            binding.tvCalories.text = if ((data.data.activeCalories ?: 0) > 0) {
                 data.data.activeCalories.toString()
             } else {
                 "--"
@@ -833,6 +833,14 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 }
 
             })
+
+
+            if (todayWorkout.isRingConnected) {
+                binding.viewAddWorkout.visible()
+            } else {
+                binding.viewAddWorkout.gone()
+            }
+
             binding.rvWorkouts.apply {
                 adapter = adapter1
                 setRecycledViewPool(RecyclerView.RecycledViewPool())

@@ -371,6 +371,7 @@ constructor(
                                     summary.healthOverviewData.value!![index] as OHealthOverview.TodayWorkout
                                 data.value = "1"
                                 data.listData = it
+                                data.isRingConnected = ringDataStore.getRingDevice() != null
                                 summary.healthOverviewData.postValue(summary.healthOverviewData.value)
                                 summary.healthOverviewData.value?.add(
                                     OHealthOverview.Dummy(
@@ -381,6 +382,7 @@ constructor(
                                 summary.healthOverviewData.value?.add(
                                     OHealthOverview.TodayWorkout(
                                         "1",
+                                        ringDataStore.getRingDevice() != null,
                                         it
                                     )
                                 )
