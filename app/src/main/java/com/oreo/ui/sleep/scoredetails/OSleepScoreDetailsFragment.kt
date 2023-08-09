@@ -889,24 +889,27 @@ class OSleepScoreDetailsFragment :
         }
         if (isTrendValueUpdate()) {
             if (todayTrendValue != "No data") {
-                if (mViewModel.itemClickType == ViewItemClickType.ACTIVE_CALORIES.name
-                ) {
-                    binding.lytScoreOverview.lytToday.tvScore.text = "${todayTrendValue} kcal"
-                } else if (mViewModel.itemClickType == ViewItemClickType.STEPS.name
-                ) {
-                    binding.lytScoreOverview.lytToday.tvScore.text = "${todayTrendValue} steps"
-                } else if (mViewModel.itemClickType == ViewItemClickType.DISTANCE.name
-                ) {
-                    binding.lytScoreOverview.lytToday.tvScore.text =
-                        "${DistanceUtil.convertMeterToKm(todayTrendValue.toInt())} km"
-                } else if (mViewModel.itemClickType == ViewItemClickType.BODY_TEMPERATURE.name) {
-                    binding.lytScoreOverview.lytToday.tvScore.text =
-                        "${it.trendData?.today?.value.toString()} °F"
-                } else {
-                    val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
-                        todayTrendValue.toFloat().roundToInt()
-                    )
-                    binding.lytScoreOverview.lytToday.tvScore.text = "$hour hr $minute min"
+                when (mViewModel.itemClickType) {
+                    ViewItemClickType.ACTIVE_CALORIES.name -> {
+                        binding.lytScoreOverview.lytToday.tvScore.text = "${todayTrendValue} kcal"
+                    }
+                    ViewItemClickType.STEPS.name -> {
+                        binding.lytScoreOverview.lytToday.tvScore.text = "${todayTrendValue} steps"
+                    }
+                    ViewItemClickType.DISTANCE.name -> {
+                        binding.lytScoreOverview.lytToday.tvScore.text =
+                            "${DistanceUtil.convertMeterToKm(todayTrendValue.toInt())} km"
+                    }
+                    ViewItemClickType.BODY_TEMPERATURE.name -> {
+                        binding.lytScoreOverview.lytToday.tvScore.text =
+                            "${it.trendData?.today?.value.toString()} °F"
+                    }
+                    else -> {
+                        val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
+                            todayTrendValue.toFloat().roundToInt()
+                        )
+                        binding.lytScoreOverview.lytToday.tvScore.text = "$hour hr $minute min"
+                    }
                 }
             } else {
                 binding.lytScoreOverview.lytToday.tvScore.text = todayTrendValue
@@ -944,25 +947,28 @@ class OSleepScoreDetailsFragment :
         if (isTrendValueUpdate()
         ) {
             if (yesterdayTrendValue != "No data") {
-                if (mViewModel.itemClickType == ViewItemClickType.ACTIVE_CALORIES.name
-                ) {
-                    binding.lytScoreOverview.lytYesterday.tvScore.text = "$yesterdayTrendValue kcal"
-                } else if (mViewModel.itemClickType == ViewItemClickType.STEPS.name
-                ) {
-                    binding.lytScoreOverview.lytYesterday.tvScore.text =
-                        "$yesterdayTrendValue steps"
-                } else if (mViewModel.itemClickType == ViewItemClickType.DISTANCE.name
-                ) {
-                    binding.lytScoreOverview.lytYesterday.tvScore.text =
-                        "${DistanceUtil.convertMeterToKm(yesterdayTrendValue.toInt())} km"
-                } else if (mViewModel.itemClickType == ViewItemClickType.BODY_TEMPERATURE.name) {
-                    binding.lytScoreOverview.lytYesterday.tvScore.text =
-                        "${it.trendData?.yesterday?.value.toString()} °F"
-                } else {
-                    val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
-                        yesterdayTrendValue.toFloat().roundToInt()
-                    )
-                    binding.lytScoreOverview.lytYesterday.tvScore.text = "$hour hr $minute min"
+                when (mViewModel.itemClickType) {
+                    ViewItemClickType.ACTIVE_CALORIES.name -> {
+                        binding.lytScoreOverview.lytYesterday.tvScore.text = "$yesterdayTrendValue kcal"
+                    }
+                    ViewItemClickType.STEPS.name -> {
+                        binding.lytScoreOverview.lytYesterday.tvScore.text =
+                            "$yesterdayTrendValue steps"
+                    }
+                    ViewItemClickType.DISTANCE.name -> {
+                        binding.lytScoreOverview.lytYesterday.tvScore.text =
+                            "${DistanceUtil.convertMeterToKm(yesterdayTrendValue.toInt())} km"
+                    }
+                    ViewItemClickType.BODY_TEMPERATURE.name -> {
+                        binding.lytScoreOverview.lytYesterday.tvScore.text =
+                            "${it.trendData?.yesterday?.value.toString()} °F"
+                    }
+                    else -> {
+                        val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
+                            yesterdayTrendValue.toFloat().roundToInt()
+                        )
+                        binding.lytScoreOverview.lytYesterday.tvScore.text = "$hour hr $minute min"
+                    }
                 }
             } else
                 binding.lytScoreOverview.lytYesterday.tvScore.text = yesterdayTrendValue
@@ -972,24 +978,27 @@ class OSleepScoreDetailsFragment :
 
         if (isTrendValueUpdate()) {
             if (allTimeTrendValue != "No data") {
-                if (mViewModel.itemClickType == ViewItemClickType.ACTIVE_CALORIES.name
-                ) {
-                    binding.lytAllTimeAvg.tvScore.text = "$allTimeTrendValue kcal"
-                } else if (mViewModel.itemClickType == ViewItemClickType.STEPS.name
-                ) {
-                    binding.lytAllTimeAvg.tvScore.text = "$allTimeTrendValue steps"
-                } else if (mViewModel.itemClickType == ViewItemClickType.DISTANCE.name
-                ) {
-                    binding.lytAllTimeAvg.tvScore.text =
-                        "${DistanceUtil.convertMeterToKm(allTimeTrendValue.toInt())} km"
-                } else if (mViewModel.itemClickType == ViewItemClickType.BODY_TEMPERATURE.name) {
-                    binding.lytAllTimeAvg.tvScore.text =
-                        "${it.trendData?.allTimeAvg.toString()} °F"
-                } else {
-                    val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
-                        allTimeTrendValue.toInt()
-                    )
-                    binding.lytAllTimeAvg.tvScore.text = "$hour hr $minute min"
+                when (mViewModel.itemClickType) {
+                    ViewItemClickType.ACTIVE_CALORIES.name -> {
+                        binding.lytAllTimeAvg.tvScore.text = "$allTimeTrendValue kcal"
+                    }
+                    ViewItemClickType.STEPS.name -> {
+                        binding.lytAllTimeAvg.tvScore.text = "$allTimeTrendValue steps"
+                    }
+                    ViewItemClickType.DISTANCE.name -> {
+                        binding.lytAllTimeAvg.tvScore.text =
+                            "${DistanceUtil.convertMeterToKm(allTimeTrendValue.toInt())} km"
+                    }
+                    ViewItemClickType.BODY_TEMPERATURE.name -> {
+                        binding.lytAllTimeAvg.tvScore.text =
+                            "${it.trendData?.allTimeAvg.toString()} °F"
+                    }
+                    else -> {
+                        val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
+                            allTimeTrendValue.toInt()
+                        )
+                        binding.lytAllTimeAvg.tvScore.text = "$hour hr $minute min"
+                    }
                 }
             } else
                 binding.lytAllTimeAvg.tvScore.text = allTimeTrendValue
