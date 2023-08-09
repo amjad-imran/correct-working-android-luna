@@ -2,8 +2,6 @@ package com.oreo.ui.custom;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
@@ -95,6 +93,7 @@ public class LineChart extends View {
 
     private boolean showAvgValueText = false;
     private boolean showExtremeLine = false;
+
     private boolean startFromRight = false;
     private boolean alwaysShowCircle = true;
     private int mWith;
@@ -178,6 +177,7 @@ public class LineChart extends View {
         titleWidth = ta.getDimension(R.styleable.LineChart_titleWidth, 0f);
         showAvgValueText = ta.getBoolean(R.styleable.LineChart_showAvgValue, false);
         showExtremeLine = ta.getBoolean(R.styleable.LineChart_showExtremeLine, true);
+
         startFromRight = ta.getBoolean(R.styleable.LineChart_startFromRight, false);
         alwaysShowCircle = ta.getBoolean(R.styleable.LineChart_alwaysShowCircle, true);
         ta.recycle();
@@ -565,15 +565,21 @@ public class LineChart extends View {
         xTextPaint.setColor(xTextColor & 0x80ffffff);
         if (showExtremeLine) {
 
+
             float max = mHeight - bottomWith - (xMax - xMin) * (mHeight - topWith - bottomWith) / (xMax - xMin);
             canvas.drawLine(leftWith, max, mWith, max, gridPaint);
-            xTextPaint.getTextBounds(maxStr, 0, maxStr.length(), xTextBounds);
-            canvas.drawText(maxStr, mWith - rightWith - xTextBounds.width() + dip2px(10), max + xTextBounds.height() / 2f + dip2px(10), xTextPaint);
+            if (showAvgValueText) {
+                xTextPaint.getTextBounds(maxStr, 0, maxStr.length(), xTextBounds);
+                canvas.drawText(maxStr, mWith - rightWith - xTextBounds.width() + dip2px(10), max + xTextBounds.height() / 2f + dip2px(10), xTextPaint);
 
+            }
             float min = mHeight - bottomWith - 0 * (mHeight - topWith - bottomWith) / (xMax - xMin);
             canvas.drawLine(leftWith, min, mWith, min, gridPaint);
-            xTextPaint.getTextBounds(maxStr, 0, maxStr.length(), xTextBounds);
-            canvas.drawText(minStr, mWith - rightWith + dip2px(10), min + xTextBounds.height() / 2f - dip2px(10), xTextPaint);
+            if (showAvgValueText) {
+                xTextPaint.getTextBounds(maxStr, 0, maxStr.length(), xTextBounds);
+                canvas.drawText(minStr, mWith - rightWith + dip2px(10), min + xTextBounds.height() / 2f - dip2px(10), xTextPaint);
+
+            }
         }
         float avg = mHeight - bottomWith - (avgValue - xMin) * (mHeight - topWith - bottomWith) / (xMax - xMin);
 
