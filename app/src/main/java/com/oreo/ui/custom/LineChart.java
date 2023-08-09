@@ -2,6 +2,8 @@ package com.oreo.ui.custom;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
@@ -630,6 +632,7 @@ public class LineChart extends View {
 
             if (current.getValue() > 0) {
                 if (alwaysShowCircle) {
+
                     canvas.drawCircle(x, y, outCircleRadius, outCirclePaint);
                     canvas.drawCircle(x, y, innerCircleRadius, innerCirclePaint);
                 } else {

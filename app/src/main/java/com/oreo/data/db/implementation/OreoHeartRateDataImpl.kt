@@ -147,8 +147,11 @@ constructor(
     }
 
     private fun extractDataByStartTime(dayData: OreoHeartRate, dayStartMinutes: Double): List<Int> {
-        val startPos = (dayStartMinutes / 5 - 1).toInt()
+        var startPos = (dayStartMinutes / 5 - 1).toInt()
         val breakupArray = Gson().fromJson<List<Int>>(dayData.breakUp ?: "")
+        if (startPos < 0) {
+            startPos = 0
+        }
         if (breakupArray.size != 288) {
             val currentSize = breakupArray.size
             breakupArray.toMutableList()
