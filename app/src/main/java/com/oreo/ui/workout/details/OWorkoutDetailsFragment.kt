@@ -183,7 +183,7 @@ class OWorkoutDetailsFragment :
         binding.rvActivityDetails.visible()
         binding.lytActivityItem.root.visible()
         binding.lytActivityItem.tvActivityDate.text = DateFormats.formatActivityDate(it.date)
-        binding.lytActivityItem.tvTime.text = "${it.startTime} - ${it.endTime}"
+        binding.lytActivityItem.tvTime.text = DateFormats.getActivityDisplayDates(it.startTime,it.endTime)
 
         binding.lytActivityItem.ivWorkoutImage.loadImage(
             requireContext(),

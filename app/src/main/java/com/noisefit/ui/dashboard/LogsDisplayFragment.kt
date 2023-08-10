@@ -8,7 +8,14 @@ import com.noisefit.luna.databinding.FragmentLogsDisplayBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.AppLogs
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
@@ -17,9 +24,19 @@ import java.io.IOException
 
 class LogsDisplayFragment :
     BaseFragment<FragmentLogsDisplayBinding>(FragmentLogsDisplayBinding::inflate) {
+
+    val job = Job()
+    val uiScope = CoroutineScope(Dispatchers.IO + job)
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        displayLogs(false)
+
+        binding.progressBar.root.visible()
+        uiScope.launch {
+            displayLogs(false)
+        }
+
     }
 
     override fun initListener() {
@@ -47,7 +64,7 @@ class LogsDisplayFragment :
     override fun subscribeObservers() {
     }
 
-    private fun displayLogs(showRingData: Boolean) {
+    suspend fun displayLogs(showRingData: Boolean) {
         val folder = File(requireActivity().externalCacheDir?.absolutePath, AppLogs.getLogsFolder())
         val file: File = File(folder, "logs.txt")
 
@@ -71,9 +88,11 @@ class LogsDisplayFragment :
         } catch (e: IOException) {
             //You'll need to add proper error handling here
         }
-        binding.tvContent.text = text.toString()
-        binding.tvContent.movementMethod = ScrollingMovementMethod()
 
-
+        withContext(Dispatchers.Main) {
+            binding.tvContent.text = text.toString()
+            binding.tvContent.movementMethod = ScrollingMovementMethod()
+            binding.progressBar.root.gone()
+        }
     }
 }
