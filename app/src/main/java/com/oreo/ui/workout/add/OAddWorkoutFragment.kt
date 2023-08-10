@@ -16,20 +16,14 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOAddWorkoutBinding
 import com.noisefit.ui.common.bottomSheet.TIME_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
-import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.ui.disable
-import com.noisefit_commans.ui.enable
-import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.loadImage
-import com.noisefit_commans.ui.showShortToast
-import com.noisefit_commans.ui.visible
+import com.noisefit_commans.ui.*
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.CandleChartModel
 import com.oreo.data.model.OWorkoutListModal
 import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Calendar
+import java.util.*
 import kotlin.math.roundToInt
 
 const val ADD_WORKOUT_REQUEST_KEY = "ADD_WORKOUT_REQUEST_KEY"
@@ -336,7 +330,7 @@ class OAddWorkoutFragment :
     }
 
     private fun setDefaultUIValue() {
-
+        binding.lytWorkout.ivWorkoutImage.setImageResource(R.drawable.ic_o_workout_new)
         binding.lytCaloriesBurn.tvDurationValue.text = "--"
         binding.lytCaloriesBurn.tvDurationUnit.text = getString(R.string.text_min)
         binding.lytCaloriesBurn.tvCalBurnValue.text = "--"
