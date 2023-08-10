@@ -75,14 +75,19 @@ class NightTimeGraphViewOreo(var mContext: Context) : View(
         if (sleepArray != null && sleepArray!!.size > 0) {
 
             countCardData?.leftValue?.let { startTime ->
-                canvas.drawText(startTime, 0f, sectionHeight * 4, mTextPaintEdge)
+                canvas.drawText(
+                    startTime.lowercase(),
+                    0f,
+                    (sectionHeight * 4) - pxFromDp(context, 2.0f),
+                    mTextPaintEdge
+                )
             }
 
             countCardData?.rightValue?.let { endTime ->
                 canvas.drawText(
-                    endTime,
+                    endTime.lowercase(),
                     (width - pxFromDp(mContext, 45f) - endPadding),
-                    sectionHeight * 4,
+                    sectionHeight * 4 - pxFromDp(context, 2.0f),
                     mTextPaintEdge
                 )
             }
@@ -392,6 +397,6 @@ class NightTimeGraphViewOreo(var mContext: Context) : View(
         this.isDisable = isDisable
         setPaint()
         endPadding = pxFromDp(mContext, 48f)
-        startPadding = pxFromDp(mContext,3f)
+        startPadding = pxFromDp(mContext, 3f)
     }
 }

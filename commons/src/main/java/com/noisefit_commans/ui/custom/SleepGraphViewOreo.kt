@@ -83,7 +83,10 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                         startTime,
                         DateFormats.dateTimeFormat5,
                         DateFormats.time12Meridian
-                    ), 0f, sectionHeight * 5, mTextPaintEdge
+                    ).lowercase(),
+                    0f,
+                    (sectionHeight * 5) - pxFromDp(context, 5.0f),
+                    mTextPaintEdge
                 )
             }
 
@@ -102,9 +105,9 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                         endTime,
                         DateFormats.dateTimeFormat5,
                         DateFormats.time12Meridian
-                    ),
+                    ).lowercase(),
                     (width - textWidth - endPadding),
-                    sectionHeight * 5,
+                    sectionHeight * 5 - pxFromDp(context, 5.0f),
                     mTextPaintEdge
                 )
             }
@@ -460,9 +463,9 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                 LOGS.d("OFFSET $offset")
 
                 canvas.drawText(
-                    DateFormats.timeFormat2.format(midTime.first),
+                    DateFormats.timeFormat2.format(midTime.first).lowercase(),
                     center - offset,
-                    sectionHeight * 5,
+                    sectionHeight * 5 - pxFromDp(context, 5.0f),
                     mTextPaint
                 )
                 /*canvas.drawText(
@@ -477,9 +480,9 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                 val center = (width - pxFromDp(mContext, 45f) - endPadding) / 2
 
                 canvas.drawText(
-                    DateFormats.timeFormat2.format(midTime.first),
+                    DateFormats.timeFormat2.format(midTime.first).lowercase(),
                     center,
-                    sectionHeight * 5,
+                    sectionHeight * 5 - pxFromDp(context, 5.0f),
                     mTextPaint
                 )
             }
