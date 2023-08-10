@@ -308,7 +308,8 @@ class OreoSleepDetailFragment :
             resultLauncher.launch(
                 HistoryCalendarActivity.getStartIntent(
                     requireContext(),
-                    mSharedViewModel.selectedDate,
+                    viewModel.sleepHistoryResponse.value?.lastOrNull()?.date
+                        ?: mSharedViewModel.selectedDate,
                     "ring"
                 )
             )
