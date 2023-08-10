@@ -267,16 +267,28 @@ class OSleepScoreDetailsFragment :
                             binding.lytTopGraphView.lytLabelValue11.tvHour.text = "$hour"
                             binding.lytTopGraphView.lytLabelValue11.tvHourUnit.text =
                                 getString(R.string.text_hr_lower)
+                            binding.lytTopGraphView.lytLabelValue11.tvHourUnit.visible()
                             if (minute > 0) {
                                 binding.lytTopGraphView.lytLabelValue11.tvMinute.text = "$minute"
                                 binding.lytTopGraphView.lytLabelValue11.tvMinuteUnit.text = "min"
+                                binding.lytTopGraphView.lytLabelValue11.tvMinute.visible()
+                                binding.lytTopGraphView.lytLabelValue11.tvMinuteUnit.visible()
                             } else {
                                 binding.lytTopGraphView.lytLabelValue11.tvMinute.invisible()
                                 binding.lytTopGraphView.lytLabelValue11.tvMinuteUnit.invisible()
                             }
                         } else {
-                            binding.lytTopGraphView.lytLabelValue11.tvHour.text = "-"
-                            binding.lytTopGraphView.lytLabelValue11.tvHourUnit.invisible()
+                            if (minute > 0) {
+                                binding.lytTopGraphView.lytLabelValue11.tvMinute.text = "$minute"
+                                binding.lytTopGraphView.lytLabelValue11.tvMinuteUnit.text = "min"
+                                binding.lytTopGraphView.lytLabelValue11.tvMinute.visible()
+                                binding.lytTopGraphView.lytLabelValue11.tvMinuteUnit.visible()
+                            } else {
+                                binding.lytTopGraphView.lytLabelValue11.tvMinute.invisible()
+                                binding.lytTopGraphView.lytLabelValue11.tvMinuteUnit.invisible()
+                                binding.lytTopGraphView.lytLabelValue11.tvHour.text = "-"
+                                binding.lytTopGraphView.lytLabelValue11.tvHourUnit.invisible()
+                            }
                         }
                         setTopDateLabel(it.date)
                     }
@@ -878,7 +890,7 @@ class OSleepScoreDetailsFragment :
 
         //today data
         val todayTrendValue: String
-        val todayTrendProg: Int
+        var todayTrendProg: Int
         if (it.trendData?.today?.value == null || it.trendData.today.value.toInt() == 0) {
             todayTrendValue = "No data"
             todayTrendProg = 0
@@ -918,7 +930,7 @@ class OSleepScoreDetailsFragment :
 
         //yesterday data
         val yesterdayTrendValue: String
-        val yesterdayTrendProg: Int
+        var yesterdayTrendProg: Int
         if (it.trendData?.yesterday?.value == null || it.trendData.yesterday.value.toInt() == 0) {
             yesterdayTrendValue = "No data"
             yesterdayTrendProg = 0
@@ -935,7 +947,7 @@ class OSleepScoreDetailsFragment :
                 it.trendData.allTimeAvg.toFloat().roundToInt().toString()
             }
 
-        val allTimeTrendProg: Int =
+        var allTimeTrendProg: Int =
             if (it.trendData?.allTimeAvg == null || it.trendData.allTimeAvg.toInt() == 0) {
                 0
             } else
@@ -1007,6 +1019,40 @@ class OSleepScoreDetailsFragment :
             binding.lytAllTimeAvg.tvScore.text = allTimeTrendValue
         }
 
+
+        //show top graph
+        val topGraphData = mViewModel.getPrefixAndSuffixList(
+            it.result as ArrayList<ResultData>,
+            mViewModel.dayType
+        )
+        if (isTrendValueUpdate()) {
+            binding.lytTopGraphView.rvTopBarGraph.visible()
+            binding.lytTopGraphView.rvTopGraph.gone()
+            binding.lytTopGraphView.rvTopBarGraph.updateDataWithMax(
+                topGraphData.first.first,
+                topGraphData.third,
+                topGraphData.second,
+                topGraphData.first.second,
+                barGraphScoreColor().first,
+                barGraphScoreColor().second
+
+            )
+        } else {
+            binding.lytTopGraphView.rvTopBarGraph.gone()
+            binding.lytTopGraphView.rvTopGraph.visible()
+            binding.lytTopGraphView.rvTopGraph.updateDataWithMax(
+                topGraphData.first.first,
+                topGraphData.third,
+                topGraphData.second,
+                topGraphData.first.second,
+                lineGraphScoreColor().first,
+                lineGraphScoreColor().second,
+                lineGraphScoreColor().third
+
+            )
+        }
+        mViewModel.topDateLastScrollPosition = it.result.size - 1
+
         if (todayTrendProg > yesterdayTrendProg && todayTrendProg > allTimeTrendProg) {
             binding.lytScoreOverview.lytToday.pbSteps.progress = 100
             updateProgressColor(0)
@@ -1045,19 +1091,37 @@ class OSleepScoreDetailsFragment :
         } else if (todayTrendProg == yesterdayTrendProg) {
             if (todayTrendProg == allTimeTrendProg) {
                 updateProgressColor(3)
-                binding.lytScoreOverview.lytToday.pbSteps.progress = 100
-                binding.lytScoreOverview.lytYesterday.pbSteps.progress =
-                    100
-                binding.lytAllTimeAvg.pbSteps.progress =
-                    100
+                if (todayTrendProg == 0) {
+                    binding.lytScoreOverview.lytToday.pbSteps.progress = 1
+                    binding.lytScoreOverview.lytYesterday.pbSteps.progress =
+                        1
+                    binding.lytAllTimeAvg.pbSteps.progress =
+                        1
+                } else {
+                    binding.lytScoreOverview.lytToday.pbSteps.progress = 100
+                    binding.lytScoreOverview.lytYesterday.pbSteps.progress =
+                        100
+                    binding.lytAllTimeAvg.pbSteps.progress =
+                        100
+                }
             } else {
-                mViewModel.isProgressEqual = true
-                updateProgressColor(3)
-                binding.lytScoreOverview.lytToday.pbSteps.progress = 100
-                binding.lytScoreOverview.lytYesterday.pbSteps.progress =
-                    100
-                binding.lytAllTimeAvg.pbSteps.progress =
-                    allTimeTrendProg.toFloat().times(100).div(todayTrendProg).toInt()
+                if (todayTrendProg > 0) {
+                    mViewModel.isProgressEqual = true
+                    updateProgressColor(3)
+                    binding.lytScoreOverview.lytToday.pbSteps.progress = 100
+                    binding.lytScoreOverview.lytYesterday.pbSteps.progress =
+                        100
+                    binding.lytAllTimeAvg.pbSteps.progress =
+                        allTimeTrendProg.toFloat().times(100).div(todayTrendProg).toInt()
+                } else {
+                    updateProgressColor(3)
+                    binding.lytScoreOverview.lytToday.pbSteps.progress = 0
+                    binding.lytScoreOverview.lytYesterday.pbSteps.progress =
+                        0
+                    binding.lytAllTimeAvg.pbSteps.progress =
+                        allTimeTrendProg.toFloat().times(100).div(todayTrendProg).toInt()
+
+                }
             }
         } else if (yesterdayTrendProg == allTimeTrendProg) {
             updateProgressColor(3)
@@ -1076,39 +1140,6 @@ class OSleepScoreDetailsFragment :
                 100
         }
 
-
-        //show top graph
-        val topGraphData = mViewModel.getPrefixAndSuffixList(
-            it.result as ArrayList<ResultData>,
-            mViewModel.dayType
-        )
-        if (isTrendValueUpdate()) {
-            binding.lytTopGraphView.rvTopBarGraph.visible()
-            binding.lytTopGraphView.rvTopGraph.gone()
-            binding.lytTopGraphView.rvTopBarGraph.updateDataWithMax(
-                topGraphData.first.first,
-                topGraphData.third,
-                topGraphData.second,
-                topGraphData.first.second,
-                barGraphScoreColor().first,
-                barGraphScoreColor().second
-
-            )
-        } else {
-            binding.lytTopGraphView.rvTopBarGraph.gone()
-            binding.lytTopGraphView.rvTopGraph.visible()
-            binding.lytTopGraphView.rvTopGraph.updateDataWithMax(
-                topGraphData.first.first,
-                topGraphData.third,
-                topGraphData.second,
-                topGraphData.first.second,
-                lineGraphScoreColor().first,
-                lineGraphScoreColor().second,
-                lineGraphScoreColor().third
-
-            )
-        }
-        mViewModel.topDateLastScrollPosition = it.result.size - 1
 
     }
 

@@ -99,7 +99,6 @@
             android:id="@+id/rvSleepStage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:layout_marginStart="@dimen/side_margin"
             android:layout_marginEnd="@dimen/side_margin"
