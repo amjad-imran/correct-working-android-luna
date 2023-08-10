@@ -3,9 +3,6 @@ package com.oreo.ui.readiness
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
@@ -13,7 +10,6 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.OContributorResponseModal
@@ -23,7 +19,6 @@ import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,7 +28,6 @@ constructor(
     val userActivityRepository: OreoUserActivityRepository,
     val ringDataStore: RingDataStore,
 ) : BaseViewModel() {
-
 
 
     private val _readinessData = MutableLiveData<TestDataModel>()
@@ -91,7 +85,6 @@ constructor(
 
 
     }
-
 
 
     fun getReadinessDetailsData(date: String? = null) {
@@ -564,6 +557,15 @@ constructor(
         } else {
             R.color.steps_arc
         }
+    }
+
+    fun getDummyBreakUpDataForTimeDisplay(): List<Int> {
+        val dummyList = ArrayList<Int>()
+        for (i in 0..287) {
+            dummyList.add(0)
+        }
+        return dummyList
+
     }
 
 

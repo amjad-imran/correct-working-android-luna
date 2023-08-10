@@ -98,7 +98,7 @@
             android:id="@+id/lineChart"
             android:layout_width="match_parent"
             android:layout_height="120dp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:bgBottomColor="@android:color/transparent"
             app:bgColor="@android:color/transparent"
             app:bgLeftColor="@android:color/transparent"
@@ -110,7 +110,6 @@
             app:centerLineWidth="5dp"
             app:chartLineWidth="2dp"
             app:gridColor="#80FFFFFF"
-
             app:innerCircleColor="#ffffff"
             app:showSelectedIndicator="true"
 

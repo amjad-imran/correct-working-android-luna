@@ -123,20 +123,19 @@ class OreoReadinessFragment :
 
 
     private fun showHeartRateGraph(heartRateData: List<Int>, startTime: String, endTime: String) {
-
-
         LOGS.d("showHeartRateGraph $startTime $endTime")
-        if (heartRateData.isNullOrEmpty()) {
-            binding.lytHeartRate.lineChart.gone()
-            return
-        }
+        val breakUpData = if (heartRateData.isNullOrEmpty()) {
+            mViewModel.getDummyBreakUpDataForTimeDisplay()
+        } else
+            heartRateData
 
-        val baseHrList = UtilClass.graphBaseInterval(null, null, heartRateData.size)
+
+        val baseHrList = UtilClass.graphBaseInterval(null, null, breakUpData.size)
 
         binding.lytHeartRate.lineChart.visible()
         val sleepChart = SleepChartModel()
         val chartList = ArrayList<ChartModel>()
-        heartRateData.forEachIndexed { index, it ->
+        breakUpData.forEachIndexed { index, it ->
             val chartModel = ChartModel()
 
             var value = it
@@ -167,20 +166,18 @@ class OreoReadinessFragment :
         startTime: String,
         endTime: String
     ) {
+        val breakUpData = if (hrvBreakUp.isNullOrEmpty()) {
+            mViewModel.getDummyBreakUpDataForTimeDisplay()
+        } else
+            hrvBreakUp
 
-
-        if (hrvBreakUp.isNullOrEmpty()) {
-            binding.lytHRVariability.lineChart.gone()
-            return
-        }
-
-        val baseHrList = UtilClass.graphBaseInterval(null, null, hrvBreakUp.size)
+        val baseHrList = UtilClass.graphBaseInterval(null, null, breakUpData.size)
 
         binding.lytHRVariability.lineChart.visible()
         val sleepChart = SleepChartModel()
         val chartList = ArrayList<ChartModel>()
 
-        hrvBreakUp.forEachIndexed { index, it ->
+        breakUpData.forEachIndexed { index, it ->
             val chartModel = ChartModel()
 
             var value = it
@@ -210,18 +207,17 @@ class OreoReadinessFragment :
         startTime: String,
         endTime: String
     ) {
+        val breakUpData = if (temperatureBreakUp.isNullOrEmpty()) {
+            mViewModel.getDummyBreakUpDataForTimeDisplay()
+        } else
+            temperatureBreakUp
 
-
-        if (temperatureBreakUp.isNullOrEmpty()) {
-            binding.lytTemperature.lineChart.gone()
-            return
-        }
         binding.lytTemperature.lineChart.visible()
         val sleepChart = SleepChartModel()
-        val baseHrList = UtilClass.graphBaseInterval(null, null, temperatureBreakUp.size)
+        val baseHrList = UtilClass.graphBaseInterval(null, null, breakUpData.size ?: 0)
 
         val chartList = ArrayList<ChartModel>()
-        temperatureBreakUp.forEachIndexed { index, it ->
+        breakUpData.forEachIndexed { index, it ->
             val chartModel = ChartModel()
 
             var value = it
@@ -377,6 +373,7 @@ class OreoReadinessFragment :
         }
 
     }
+
     private fun setReadinessScore(readinessData: CommonDataModel) {
         binding.lytRScoreData.lytScore.tvValue.text =
             readinessData.value.toString()
@@ -509,7 +506,6 @@ class OreoReadinessFragment :
         binding.lytHeartRate.tvTitle.text = getString(R.string.text_heart_rate)
         binding.lytHeartRate.tvSubtitle1.text = getString(R.string.text_lowest_hr)
         binding.lytHeartRate.tvSubtitle2.text = getString(R.string.text_average_hr)
-
         if (it.hrBreakUp != null) {
             if (!it.hrBreakUp.value.isNullOrEmpty()) {
                 if (it.hrBreakUp.low == 0 || it.hrBreakUp.low == 255) {
@@ -527,23 +523,21 @@ class OreoReadinessFragment :
                     binding.lytHeartRate.lytSubtitleValue2.tvValue.text = "${it.hrBreakUp.avg}"
                     binding.lytHeartRate.lytSubtitleValue2.tvUnit.visible()
                     binding.lytHeartRate.lytSubtitleValue2.tvUnit.text = "bpm"
-                    //todo will change startTime, endTime
-                    showHeartRateGraph(it.hrBreakUp.value, it.date, it.date)
                 }
             } else {
-                binding.lytHeartRate.lineChart.gone()
                 heartRateDefaultView()
             }
         } else {
-            binding.lytHeartRate.lineChart.gone()
             heartRateDefaultView()
         }
+        //todo will change startTime, endTime
+        showHeartRateGraph(it.hrBreakUp?.value ?: ArrayList(), it.date, it.date)
+
 
         //set data on heart rate variability
         binding.lytHRVariability.tvTitle.text = getString(R.string.text_heart_rate_variability)
         binding.lytHRVariability.tvSubtitle1.text = getString(R.string.text_average_hrv)
         binding.lytHRVariability.tvSubtitle2.text = getString(R.string.text_max)
-
         if (it.hrvBreakUp != null) {
             if (!it.hrvBreakUp.value.isNullOrEmpty()) {
                 if (it.hrvBreakUp.avg == 0 || it.hrvBreakUp.avg == 255) {
@@ -562,16 +556,18 @@ class OreoReadinessFragment :
                     binding.lytHRVariability.lytSubtitleValue2.tvUnit.visible()
                     binding.lytHRVariability.lytSubtitleValue2.tvUnit.text = "ms"
                 }
-                //todo will change startTime, endTime
-                showHeartRateVariabilityGraph(it.hrvBreakUp.value, it.date, it.date)
             } else {
-                binding.lytHRVariability.lineChart.gone()
                 hrvDefaultView()
             }
         } else {
-            binding.lytHRVariability.lineChart.gone()
             hrvDefaultView()
         }
+        //todo will change startTime, endTime
+        showHeartRateVariabilityGraph(
+            it.hrvBreakUp?.value ?: ArrayList(),
+            it.date,
+            it.date
+        )
 
         //set data on temperature
         binding.lytTemperature.tvTitle.text = getString(R.string.text_temperature)
@@ -582,13 +578,11 @@ class OreoReadinessFragment :
             binding.lytTemperature.lytSubtitleValue1.tvValue.text = "${it.temperatureBreakUp?.avg}"
             binding.lytTemperature.lytSubtitleValue1.tvUnit.visible()
             binding.lytTemperature.lytSubtitleValue1.tvUnit.text = "°F"
-            //todo will change startTime, endTime
-            showTemperatureGraph(it.temperatureBreakUp?.value, it.date, it.date)
-
         } else {
-            binding.lytTemperature.lineChart.gone()
             temperatureGraphDefaultView()
         }
+        //todo will change startTime, endTime
+        showTemperatureGraph(it.temperatureBreakUp?.value ?: ArrayList(), it.date, it.date)
     }
 
     private fun heartRateDefaultView() {
