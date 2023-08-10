@@ -17,10 +17,10 @@ class OreoAWorkoutAdapter(val mListener:OnItemClickListener) :
         fun bind(resultData: OActivityListModal) {
             binding.tvActivityName.text = resultData.getFormattedActivityName()
             binding.tvCalories.text = resultData.calories
-            if (bindingAdapterPosition == mDataSet.size - 1) {
-                binding.divider1.root.invisible()
-            } else
-                binding.divider1.root.visible()
+//            if (bindingAdapterPosition == mDataSet.size - 1) {
+//                binding.divider1.root.invisible()
+//            } else
+//                binding.divider1.root.visible()
 
             binding.root.setOnClickListener {
                 mListener.onItemClick(resultData,bindingAdapterPosition)
