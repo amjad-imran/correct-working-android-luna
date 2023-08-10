@@ -11,6 +11,7 @@ import com.noisefit_commans.data.model.CountCardData
 import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.models.SleepMovementType
+import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 
 class NightTimeGraphViewOreo(var mContext: Context) : View(
@@ -84,10 +85,13 @@ class NightTimeGraphViewOreo(var mContext: Context) : View(
             }
 
             countCardData?.rightValue?.let { endTime ->
+
+                val textWidth = mTextPaintEdge.measureText(endTime.lowercase())
+
                 canvas.drawText(
                     endTime.lowercase(),
-                    (width - pxFromDp(mContext, 45f) - endPadding),
-                    sectionHeight * 4 - pxFromDp(context, 2.0f),
+                    (width - textWidth - endPadding),
+                    sectionHeight * 4 - SleepGraphViewOreo.pxFromDp(context, 2.0f),
                     mTextPaintEdge
                 )
             }
