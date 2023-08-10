@@ -109,7 +109,7 @@ constructor(
     }
 
     private fun extractDataByEndTime(day2Data: OreoStressDataBreakup, day2MinutesCeil: Double): List<Int> {
-        val endPos = (day2MinutesCeil / 5 - 1).toInt()
+        val endPos = (day2MinutesCeil / 5).toInt()
         val breakupArray = Gson().fromJson<List<Int>>(day2Data.breakUp ?: "")
         if (breakupArray.size != 288) {
             val currentSize = breakupArray.size
@@ -143,7 +143,7 @@ constructor(
         day2MinutesCeil: Double
     ): List<Int> {
         var startPos = (dayStartMinutes / 5 - 1).toInt()
-        val endPos = (day2MinutesCeil / 5 - 1).toInt()
+        val endPos = (day2MinutesCeil / 5).toInt()
         if (startPos < 0) {
             startPos = 0
         }

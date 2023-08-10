@@ -255,13 +255,12 @@ public class SleepLineChart extends View {
 
         xMax = maxValue + maxOffset;
         xMin = minValue - maxOffset;
-        LOGS.INSTANCE.d("updateData " + xMax + " " + xMin + " "+minValue +" "+maxValue );
+        LOGS.INSTANCE.d("updateData " + xMax + " " + xMin + " " + minValue + " " + maxValue);
         if (xMin < 0) {
             xMin = 0;
         }
         postInvalidate();
     }
-
 
 
     public int getMax() {
@@ -378,7 +377,6 @@ public class SleepLineChart extends View {
             path.moveTo(x, y);
 
 
-
             if (i < list.size() - 1) {
                 next = list.get(i + 1);
 
@@ -421,19 +419,30 @@ public class SleepLineChart extends View {
                 }
 
             }
+
+
+            float leftTextEndPos = 0;
+            float rightTextStartPos = 0;
+
             if (showXAxis) {
                 if (list.get(i) != null && list.get(i).getIndex() != null && !list.get(i).getIndex().isEmpty()) {
                     String xText = list.get(i).getIndex();
                     xTextPaint.getTextBounds(xText, 0, xText.length(), xTextBounds);
                     if (i == 0) {
                         xTextPaint.setColor(Color.parseColor("#ffffff"));
-                        canvas.drawText(xText, x - xTextBounds.width() , mHeight - bottomWith / 4, xTextPaint);
+                        canvas.drawText(xText, x - xTextBounds.width(), mHeight - bottomWith / 4, xTextPaint);
+                        leftTextEndPos = xTextPaint.measureText(xText);
+
                     } else if (i == list.size() - 1) {
                         xTextPaint.setColor(Color.parseColor("#ffffff"));
-                        canvas.drawText(xText, x , mHeight - bottomWith / 4, xTextPaint);
+                        canvas.drawText(xText, x, mHeight - bottomWith / 4, xTextPaint);
                     } else {
-                        xTextPaint.setColor(xTextColor & 0x80ffffff);
-                        canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 4, xTextPaint);
+
+                        /*LOGS.INSTANCE.d("LINE_CHART  "+"");
+                        if (leftTextEndPos < (x - xTextBounds.width() / 2f)) {*/
+                            xTextPaint.setColor(xTextColor & 0x80ffffff);
+                            canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 4, xTextPaint);
+                        //}
                     }
 
 

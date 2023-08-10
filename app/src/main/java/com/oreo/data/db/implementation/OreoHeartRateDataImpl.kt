@@ -100,19 +100,19 @@ constructor(
 
             return extractDataByStartTimeEndTime(day1Data, day1MinutesCeil, day2MinutesCeil)
         } else {
-            LOGS.d("SLEEP_HR day1Data : $startTimeStamp endTimeStamp: $endTimeStamp")
+            LOGS.d("getSleepOverlayData SLEEP_HR day1Data : $startTimeStamp endTimeStamp: $endTimeStamp")
 
             val day1Data = getTodayData(startDate)
             val day2Data = getTodayData(endDate)
 
-            LOGS.d("SLEEP_HR startTimeStamp : $day1Data day2Data: $day2Data")
+            LOGS.d(" getSleepOverlayDataSLEEP_HR startTimeStamp : $day1Data day2Data: $day2Data")
 
             if (day1Data == null || day2Data == null) return ArrayList()
 
             val day1Minutes = DateFormats.getDayElapsedMinutesFromTimeStamp(startTimeStamp)
             val day2Minutes = DateFormats.getDayElapsedMinutesFromTimeStamp(endTimeStamp)
 
-            LOGS.d("SLEEP_HR day1Minutes : $day1Minutes day2Minutes: $day2Minutes")
+            LOGS.d(" getSleepOverlayData SLEEP_HR day1Minutes : $day1Minutes day2Minutes: $day2Minutes")
 
 
             if (day1Minutes == null || day2Minutes == null) return ArrayList()
@@ -120,12 +120,12 @@ constructor(
             val day1MinutesCeil = 5 * (floor(abs(day1Minutes.toDouble() / 5)))
             val day2MinutesCeil = 5 * (ceil(abs(day2Minutes.toDouble() / 5)))
 
-            LOGS.d("SLEEP_HR day1MinutesCeil : $day1MinutesCeil day2MinutesCeil: $day2MinutesCeil")
+            LOGS.d("getSleepOverlayData SLEEP_HR day1MinutesCeil : $day1MinutesCeil day2MinutesCeil: $day2MinutesCeil")
 
             val day1List = extractDataByStartTime(day1Data, day1MinutesCeil)
             val day2List = extractDataByEndTime(day2Data, day2MinutesCeil)
 
-            LOGS.d("SLEEP_HR day1List : $day1List day2List: $day2List")
+            LOGS.d("getSleepOverlayData SLEEP_HR day1List : $day1List day2List: $day2List")
 
             return day1List.toMutableList().apply {
                 addAll(day2List)
@@ -134,7 +134,9 @@ constructor(
     }
 
     private fun extractDataByEndTime(day2Data: OreoHeartRate, day2MinutesCeil: Double): List<Int> {
-        val endPos = (day2MinutesCeil / 5 - 1).toInt()
+        val endPos = (day2MinutesCeil / 5).toInt()
+        LOGS.d("getSleepOverlayData endPos :$day2MinutesCeil $endPos")
+
         val breakupArray = Gson().fromJson<List<Int>>(day2Data.breakUp ?: "")
         if (breakupArray.size != 288) {
             val currentSize = breakupArray.size
