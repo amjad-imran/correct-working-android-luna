@@ -11,6 +11,7 @@ import com.noisefit_commans.data.model.CountCardData
 import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.models.SleepMovementType
+import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 
 class NightTimeGraphViewOreo(var mContext: Context) : View(
@@ -75,14 +76,22 @@ class NightTimeGraphViewOreo(var mContext: Context) : View(
         if (sleepArray != null && sleepArray!!.size > 0) {
 
             countCardData?.leftValue?.let { startTime ->
-                canvas.drawText(startTime, 0f, sectionHeight * 4, mTextPaintEdge)
+                canvas.drawText(
+                    startTime.lowercase(),
+                    0f,
+                    (sectionHeight * 4) - pxFromDp(context, 2.0f),
+                    mTextPaintEdge
+                )
             }
 
             countCardData?.rightValue?.let { endTime ->
+
+                val textWidth = mTextPaintEdge.measureText(endTime.lowercase())
+
                 canvas.drawText(
-                    endTime,
-                    (width - pxFromDp(mContext, 45f) - endPadding),
-                    sectionHeight * 4,
+                    endTime.lowercase(),
+                    (width - textWidth - endPadding),
+                    sectionHeight * 4 - SleepGraphViewOreo.pxFromDp(context, 2.0f),
                     mTextPaintEdge
                 )
             }
@@ -392,6 +401,6 @@ class NightTimeGraphViewOreo(var mContext: Context) : View(
         this.isDisable = isDisable
         setPaint()
         endPadding = pxFromDp(mContext, 48f)
-        startPadding = pxFromDp(mContext,3f)
+        startPadding = pxFromDp(mContext, 3f)
     }
 }

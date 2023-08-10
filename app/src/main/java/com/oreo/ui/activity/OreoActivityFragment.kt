@@ -533,7 +533,8 @@ class OreoActivityFragment :
             resultLauncher.launch(
                 HistoryCalendarActivity.getStartIntent(
                     requireContext(),
-                    mSharedViewModel.selectedDate,
+                    mViewModel.activityHistoryResponse.value?.lastOrNull()?.date
+                        ?: mSharedViewModel.selectedDate,
                     "ring"
                 )
             )
