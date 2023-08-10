@@ -274,8 +274,7 @@ class OSleepScoreDetailsFragment :
                                 binding.lytTopGraphView.lytLabelValue11.tvMinute.invisible()
                                 binding.lytTopGraphView.lytLabelValue11.tvMinuteUnit.invisible()
                             }
-                        }
-                        else{
+                        } else {
                             binding.lytTopGraphView.lytLabelValue11.tvHour.text = "-"
                             binding.lytTopGraphView.lytLabelValue11.tvHourUnit.invisible()
                         }
@@ -949,7 +948,8 @@ class OSleepScoreDetailsFragment :
             if (yesterdayTrendValue != "No data") {
                 when (mViewModel.itemClickType) {
                     ViewItemClickType.ACTIVE_CALORIES.name -> {
-                        binding.lytScoreOverview.lytYesterday.tvScore.text = "$yesterdayTrendValue kcal"
+                        binding.lytScoreOverview.lytYesterday.tvScore.text =
+                            "$yesterdayTrendValue kcal"
                     }
                     ViewItemClickType.STEPS.name -> {
                         binding.lytScoreOverview.lytYesterday.tvScore.text =
@@ -1045,25 +1045,35 @@ class OSleepScoreDetailsFragment :
         } else if (todayTrendProg == yesterdayTrendProg) {
             if (todayTrendProg == allTimeTrendProg) {
                 updateProgressColor(3)
-                binding.lytScoreOverview.lytToday.pbSteps.progress = todayTrendProg
+                binding.lytScoreOverview.lytToday.pbSteps.progress = 100
                 binding.lytScoreOverview.lytYesterday.pbSteps.progress =
-                    yesterdayTrendProg
+                    100
                 binding.lytAllTimeAvg.pbSteps.progress =
-                    allTimeTrendProg
+                    100
             } else {
                 mViewModel.isProgressEqual = true
                 updateProgressColor(3)
-                binding.lytScoreOverview.lytToday.pbSteps.progress = todayTrendProg
+                binding.lytScoreOverview.lytToday.pbSteps.progress = 100
                 binding.lytScoreOverview.lytYesterday.pbSteps.progress =
-                    yesterdayTrendProg
+                    100
+                binding.lytAllTimeAvg.pbSteps.progress =
+                    allTimeTrendProg.toFloat().times(100).div(todayTrendProg).toInt()
             }
+        } else if (yesterdayTrendProg == allTimeTrendProg) {
+            updateProgressColor(3)
+            binding.lytScoreOverview.lytToday.pbSteps.progress =
+                todayTrendProg.toFloat().times(100).div(yesterdayTrendProg).toInt()
+            binding.lytScoreOverview.lytYesterday.pbSteps.progress =
+                100
+            binding.lytAllTimeAvg.pbSteps.progress = 100
+
         } else if (todayTrendProg == allTimeTrendProg) {
             updateProgressColor(3)
-            binding.lytScoreOverview.lytToday.pbSteps.progress = todayTrendProg
+            binding.lytScoreOverview.lytToday.pbSteps.progress = 100
             binding.lytScoreOverview.lytYesterday.pbSteps.progress =
-                yesterdayTrendProg
+                yesterdayTrendProg.toFloat().times(100).div(todayTrendProg).toInt()
             binding.lytAllTimeAvg.pbSteps.progress =
-                allTimeTrendProg
+                100
         }
 
 
