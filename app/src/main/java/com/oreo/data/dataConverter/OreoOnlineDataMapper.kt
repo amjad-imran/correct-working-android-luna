@@ -147,13 +147,13 @@ constructor(
         if (timeIn24Hour in 18..23) {
             offSet = 1
         }
-        LOGS.d("SLEEPGRAPH time $startTime $midnightTime $offSet")
+        LOGS.d("getSleepOverlayData time $startTime $midnightTime $offSet")
         val sleepStartDate = DateFormats.subtractDateFormat3(sleepData.date!!, offSet)!!
-        LOGS.d("SLEEPGRAPH sleepStartDate $sleepStartDate")
+        LOGS.d("getSleepOverlayData sleepStartDate $sleepStartDate")
         val sleepStartTime = DateFormats.convertDateTimeToTimeStamp3(startTime)
         val sleepEndTime = DateFormats.addSecondToTimeStamp(sleepStartTime, sleepData.timeInBedTime)
 
-        LOGS.d("SLEEP_timeSTAMP : $sleepStartTime $sleepEndTime")
+        LOGS.d("getSleepOverlayData SLEEP_timeSTAMP : $sleepStartTime $sleepEndTime")
         val hrData =
             oreoHeartRateDataImpl.getHeartRateBetweenTimeStamp(sleepStartTime, sleepEndTime)
         val hrv = stressDataImpl.getStressBetweenTimeStamp(sleepStartTime, sleepEndTime)

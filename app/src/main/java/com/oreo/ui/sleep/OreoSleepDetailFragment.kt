@@ -145,11 +145,10 @@ class OreoSleepDetailFragment :
         sleepStartTime: String?,
         sleepEndTime: String?
     ) {
-        if (heartRateList?.value.isNullOrEmpty()) {
+        if ((heartRateList?.value?.size ?: 0) <= 1) {
             binding.lytHeartRate.lineChart.gone()
             return
         }
-
 
 
         val baseTimeList = UtilClass.graphTwoHoursInterval(
@@ -158,7 +157,7 @@ class OreoSleepDetailFragment :
             heartRateList?.value?.size ?: 288
         )
 
-       // LOGS.d("dsakjdsalkjsladjlksdajldsajldsajl ${heartRateList?.value?.size} ${Gson().toJson(baseTimeList)}")
+        // LOGS.d("dsakjdsalkjsladjlksdajldsajldsajl ${heartRateList?.value?.size} ${Gson().toJson(baseTimeList)}")
 
         binding.lytHeartRate.lineChart.visible()
         val sleepChart = SleepChartModel()
