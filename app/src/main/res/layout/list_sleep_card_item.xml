@@ -112,7 +112,8 @@
 
     <TextView
         android:id="@+id/tvSleepStart"
-        style="@style/Small"
+        style="@style/H6"
+        android:textSize="12sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dimen_16dp"
@@ -123,7 +124,8 @@
 
     <TextView
         android:id="@+id/tvSleepEnd"
-        style="@style/Small"
+        style="@style/H6"
+        android:textSize="12sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimen_8dp"
@@ -155,7 +157,8 @@
 
     <TextView
         android:id="@+id/tvTotalSleepText"
-        style="@style/Small"
+        style="@style/H6"
+        android:textSize="12sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/text_total_sleep"
@@ -185,7 +188,8 @@
 
         <TextView
             android:id="@+id/textHour"
-            style="@style/Small"
+            style="@style/H6"
+            android:textSize="12sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
@@ -208,7 +212,8 @@
 
         <TextView
             android:id="@+id/textMins"
-            style="@style/Small"
+            style="@style/H6"
+            android:textSize="12sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
@@ -222,7 +227,8 @@
 
     <TextView
         android:id="@+id/tvLowestHr"
-        style="@style/Small"
+        style="@style/H6"
+        android:textSize="12sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/text_lowest_hr"
@@ -253,7 +259,8 @@
         <TextView
             android:id="@+id/tvHrUnit"
             android:text="@string/text_bpm_small"
-            style="@style/Small"
+            style="@style/H6"
+            android:textSize="12sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
