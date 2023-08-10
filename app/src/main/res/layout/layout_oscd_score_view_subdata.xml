@@ -25,7 +25,6 @@
             android:layout_marginStart="@dimen/side_margin"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="@dimen/side_margin"
-            android:textColor="@color/white_48"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@id/tvToday"
             app:layout_constraintEnd_toEndOf="parent"
