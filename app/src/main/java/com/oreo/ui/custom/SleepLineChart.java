@@ -94,6 +94,9 @@ public class SleepLineChart extends View {
     private int minValue;
     private LinearGradient linearGradient;
 
+    float leftTextEndPos = 0;
+    float rightTextStartPos = 0;
+
     public SleepLineChart(Context context) {
         super(context);
         initPaint();
@@ -421,8 +424,7 @@ public class SleepLineChart extends View {
             }
 
 
-            float leftTextEndPos = 0;
-            float rightTextStartPos = 0;
+
 
             if (showXAxis) {
                 if (list.get(i) != null && list.get(i).getIndex() != null && !list.get(i).getIndex().isEmpty()) {
@@ -432,17 +434,14 @@ public class SleepLineChart extends View {
                         xTextPaint.setColor(Color.parseColor("#ffffff"));
                         canvas.drawText(xText, x - xTextBounds.width(), mHeight - bottomWith / 4, xTextPaint);
                         leftTextEndPos = xTextPaint.measureText(xText);
-
                     } else if (i == list.size() - 1) {
                         xTextPaint.setColor(Color.parseColor("#ffffff"));
                         canvas.drawText(xText, x, mHeight - bottomWith / 4, xTextPaint);
                     } else {
-
-                        /*LOGS.INSTANCE.d("LINE_CHART  "+"");
-                        if (leftTextEndPos < (x - xTextBounds.width() / 2f)) {*/
+                        if (leftTextEndPos < (x - xTextBounds.width() / 2f)) {
                             xTextPaint.setColor(xTextColor & 0x80ffffff);
                             canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 4, xTextPaint);
-                        //}
+                        }
                     }
 
 
