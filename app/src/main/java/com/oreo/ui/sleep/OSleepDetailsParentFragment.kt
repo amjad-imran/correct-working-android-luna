@@ -217,7 +217,7 @@ class OSleepDetailsParentFragment :
             }
 
             ViewItemClickType.RESTING_HR.name -> {
-                trendTitle = "Resting hr"
+                trendTitle = "Resting HR"
             }
 
             ViewItemClickType.READINESS_SCORE.name -> {

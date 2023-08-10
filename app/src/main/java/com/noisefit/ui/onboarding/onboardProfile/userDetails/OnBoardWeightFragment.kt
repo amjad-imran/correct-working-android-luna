@@ -13,6 +13,8 @@ import com.noisefit.ui.onboarding.onboardProfile.SetupProfileViewModel
 import com.noisefit.ui.onboarding.pairing.DeviceSetupActivity
 import com.noisefit_commans.models.WeightUnitSystem
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit_commans.utils.WheelAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -104,6 +106,21 @@ class OnBoardWeightFragment :
 
 
     override fun subscribeObservers() {
+
+        viewModel.getLoading().observe(viewLifecycleOwner) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
+            }
+        }
+        viewModel.getApiErrors().observe(viewLifecycleOwner) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
+            }
+        }
+
+
         viewModel.successMessage.observe(this) {
             it.getContent()?.let {
                 val openProfile = activity is GuestProfileSetupActivity

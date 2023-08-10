@@ -859,7 +859,7 @@ class OSleepScoreDetailsFragment :
                 DateFormats.getConvertToDateFormat(
                     data,
                     DateFormats.dateFormat3,
-                    DateFormats.dateTimeFormatWithWeekWithoutYear
+                    DateFormats.dateTimeFormatWithWeekWithoutYearShort
                 ) ?: ""
             }
 
