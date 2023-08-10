@@ -935,4 +935,5 @@
     <string name="text_you_will_see_your_activity_score_after_wearing_the_ring">You will see your activity score after wearing the ring</string>
     <string name="text_connecting_dot">Connecting..</string>
     <string name="text_updating_dot">Updating..</string>
+    <string name="text_seven_day_avg">7 day avg</string>
 </resources>
