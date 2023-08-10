@@ -159,7 +159,7 @@ android {
 
 
             versionNameSuffix = ".staging.luna"
-            manifestPlaceholders["crashlyticsCollectionEnabled"] = "true"
+            manifestPlaceholders["crashlyticsCollectionEnabled"] = "false"
             manifestPlaceholders["partner"] = "gonoiseuat"
 
         }

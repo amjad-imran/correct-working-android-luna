@@ -38,6 +38,11 @@ class OfflineDataMapper
         sleepData.date = data[sleepDataSize].date
         sleepData.breathQuality = data[sleepDataSize].breathQuality
         sleepData.sleepScore = data[sleepDataSize].sleepScore
+        sleepData.sleepLatency = data[sleepDataSize].sleepLatency
+        sleepData.sleepEfficiency = data[sleepDataSize].sleepEfficiency
+        sleepData.timeInBedTime = data[sleepDataSize].timeInBedTime
+        sleepData.nightTimeMovement = data[sleepDataSize].nightTimeMovement
+
 
         var totalDeep = 0
         var totalLight = 0
