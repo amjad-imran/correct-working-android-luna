@@ -64,7 +64,7 @@ constructor(
             return
         }
         viewModelScope.launch {
-            userRepository.getDashboardData().collect { resource ->
+            userRepository.getDashboardData(forceRefresh).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)

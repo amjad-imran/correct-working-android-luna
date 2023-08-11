@@ -3,13 +3,22 @@ package com.oreo.data.repository.implementation
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
+import com.noisefit.data.local.db.CacheResult
+import com.noisefit.data.local.db.abstraction.CACHE_CLEAR_DEFAULT
+import com.noisefit.data.local.db.abstraction.KeyValueDataSource
+import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.remote.abstraction.NetworkService
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.data.remote.response.Watchface2
 import com.noisefit.data.safeApiCallFlow
+import com.noisefit.data.safeCacheCall
 import com.noisefit.luna.BuildConfig
+import com.noisefit_commans.common.checkDayDifferenceMoreNMinutes
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.model.FriendsData
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
+import com.noisefit_commans.ui.checkDayDifferenceMoreOne
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.dataConverter.OreoOfflineDataMapper
 import com.oreo.data.db.implementation.OreoAutoSportDataImpl
@@ -37,6 +46,7 @@ import com.oreo.ui.TestUserData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -55,6 +65,7 @@ class OreoUserActivityRepositoryImpl(
     private val stepsDataImpl: OreoStepsDataImpl,
     private val oreoAutoSportDataImpl: OreoAutoSportDataImpl,
     private val offlineDataMapper: OreoOfflineDataMapper,
+    private val keyValueDataSource: KeyValueDataSource,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : OreoUserActivityRepository {
 
@@ -75,7 +86,92 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
-    override suspend fun getDashboardData(): Flow<Resource<BaseApiResponse<OreoDashboardResponseModel>>> {
+    override suspend fun getDashboardData(forceRefresh: Boolean): Flow<Resource<BaseApiResponse<OreoDashboardResponseModel>>> {
+
+        return flow {
+            val type = KeyValueDataType.DASHBOARD
+            var resultData: OreoDashboardResponseModel? = null
+
+
+            val cacheResult = safeCacheCall(Dispatchers.IO) {
+
+                val localData =
+                    keyValueDataSource.getData("", type)
+                        ?: return@safeCacheCall null
+
+                val lastCallTime = localData.getSafeLastSyncValue()
+
+                val shouldCallApi =
+                    lastCallTime.checkDayDifferenceMoreOne() || forceRefresh || lastCallTime.checkDayDifferenceMoreNMinutes(
+                        CACHE_CLEAR_DEFAULT
+                    )
+
+                if (shouldCallApi) {
+                    keyValueDataSource.removeDataByKey("", KeyValueDataType.DASHBOARD)
+                    return@safeCacheCall null
+                } else {
+
+                    if (localData.value == null) {
+                        return@safeCacheCall null
+                    }
+
+                    return@safeCacheCall localData.value?.let {
+                        Gson().fromJson<OreoDashboardResponseModel>(
+                            it
+                        )
+                    }
+                }
+            }
+
+            cacheResult.collect { resource ->
+                when (resource) {
+                    is CacheResult.Success -> {
+
+                        resource.value?.let {
+                            resultData = it
+                        }
+                    }
+                    is CacheResult.GenericError -> {
+
+                    }
+                }
+            }
+
+            val serverResult = safeApiCallFlow(dispatcher) {
+                val url = "${BuildConfig.OREO_BASE_URL}/protean/v1/dashboard"
+                remoteDataSource.getDashboardData(url)
+            }
+
+            serverResult.collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        emit(Resource.GenericError(resource.message, resource.errorCode))
+                    }
+                    is Resource.Loading -> {
+                        emit(Resource.Loading(resource.loading))
+                    }
+                    is Resource.NetworkError -> {
+                        emit(Resource.NetworkError(resource.response, resource.code))
+                    }
+                    is Resource.Success -> {
+
+                        resource.data?.data?.let { response ->
+                            resultData = response
+                        }
+                    }
+                }
+            }
+
+
+        }
+
+
+
+
+
+
+
+
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.OREO_BASE_URL}/protean/v1/dashboard"
             remoteDataSource.getDashboardData(url)
@@ -478,7 +574,7 @@ class OreoUserActivityRepositoryImpl(
     override suspend fun getRecentWorkoutList(isToday: Boolean): Flow<Resource<BaseApiResponse<List<OActivityListModal>>>> {
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.OREO_BASE_URL}/activity/v1/recent/workout"
-            remoteDataSource.getRecentWorkoutList(url,isToday)
+            remoteDataSource.getRecentWorkoutList(url, isToday)
         }
     }
 
@@ -505,6 +601,7 @@ class OreoUserActivityRepositoryImpl(
             remoteDataSource.getActivityInternalPagesData(url, selectDate, dayType, contriType)
         }
     }
+
     override suspend fun getReadinessInternalPagesData(
         selectDate: String,
         dayType: String,

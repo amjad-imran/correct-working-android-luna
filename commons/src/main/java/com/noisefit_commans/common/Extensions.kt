@@ -18,10 +18,12 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import android.widget.Toast
 import com.noisefit_commans.NoisefitApplication
+import com.noisefit_commans.utils.DateFormats
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
+import java.util.Calendar
 import java.util.Locale
 import kotlin.math.roundToInt
 
@@ -36,6 +38,18 @@ fun Int?.convertMinuteIntoSeconds(): Int {
 
     return this * 60
 
+}
+
+fun Long.checkDayDifferenceMoreNMinutes(value: Int): Boolean {
+    val timeStamp = DateFormats.getTimeStamp()
+    val cal = Calendar.getInstance()
+    cal.timeInMillis = this
+    cal.add(Calendar.MINUTE, value)
+    if (timeStamp > cal.timeInMillis) {
+        return true
+    }
+
+    return false
 }
 
 fun String.decodeHex(): String {
