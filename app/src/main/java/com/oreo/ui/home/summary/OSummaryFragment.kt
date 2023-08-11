@@ -46,7 +46,6 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setAdapter()
-        viewModel.initData()
     }
 
     override fun initListener() {
@@ -213,13 +212,14 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         viewModel.sessionManager.syncCompleted.observe(this) {
             it?.getContent()?.let { syncDataStatus ->
-                when(syncDataStatus){
+                when (syncDataStatus) {
                     SyncEvents.Failed -> {
                         binding.lytHeader.tvHeaderStatus.gone()
                         binding.lytHeader.pbSync.gone()
                         resetSwipeLoadingAnim()
                     }
-                    is SyncEvents.InProgress ->{
+
+                    is SyncEvents.InProgress -> {
                         LOGS.d("Progress_____________ ${syncDataStatus.progress}")
                         binding.lytHeader.pbSync.max = syncDataStatus.total
                         binding.lytHeader.pbSync.progress = syncDataStatus.progress
@@ -229,6 +229,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                             visible()
                         }
                     }
+
                     is SyncEvents.Started -> {
                         binding.lytHeader.pbSync.max = syncDataStatus.total
                         binding.lytHeader.pbSync.progress = syncDataStatus.progress
@@ -238,6 +239,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                             visible()
                         }
                     }
+
                     is SyncEvents.Success -> {
                         binding.lytHeader.pbSync.max = syncDataStatus.total
                         binding.lytHeader.pbSync.progress = syncDataStatus.progress
@@ -404,6 +406,9 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
     override fun onResume() {
         super.onResume()
+        viewModel.initData()
+
+
 //        viewModel.getRecentWorkoutList()
     }
 
