@@ -1,6 +1,8 @@
 package com.oreo.data.db.implementation
 
 import androidx.room.Transaction
+import com.google.gson.Gson
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.model.OreoBodyTemperatureBreakup
 import com.oreo.data.db.abstaction.OreoBodyTemperatureDataSource
 import com.oreo.data.db.database.OreoBodyTemperatureDao
@@ -23,7 +25,11 @@ constructor(
         if (prevData == null) {
             bodyTemperatureDao.insert(data)
         } else {
-            bodyTemperatureDao.updateViaDate(data.breakUp ?: "", data.date!!,false)
+            val newBreakup = Gson().fromJson<List<Float>>(data.breakUp ?: "")
+            val prevBreakup = Gson().fromJson<List<Float>>(prevData.breakUp ?: "")
+            if (newBreakup.sum() != prevBreakup.sum()) {
+                bodyTemperatureDao.updateViaDate(data.breakUp ?: "", data.date!!, false)
+            }
         }
 
         return true

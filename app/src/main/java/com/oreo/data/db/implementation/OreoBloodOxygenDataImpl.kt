@@ -1,6 +1,8 @@
 package com.oreo.data.db.implementation
 
 import androidx.room.Transaction
+import com.google.gson.Gson
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.model.OreoBloodOxygenBreakup
 import com.noisefit_commans.models.BloodOxygenBreakup
 import com.oreo.data.db.abstaction.OreoBloodOxygenDataSource
@@ -25,7 +27,11 @@ constructor(
         if (prevData == null) {
             bloodOxygenDao.insert(data)
         } else {
-            bloodOxygenDao.updateViaDate(data.breakUp ?: "", data.date!!,false)
+            val newBreakup = Gson().fromJson<List<Int>>(data.breakUp ?: "")
+            val prevBreakup = Gson().fromJson<List<Int>>(prevData.breakUp ?: "")
+            if (newBreakup.sum() != prevBreakup.sum()) {
+                bloodOxygenDao.updateViaDate(data.breakUp ?: "", data.date!!, false)
+            }
         }
         return true
     }
@@ -54,24 +60,23 @@ constructor(
     }
 
 
-    override suspend fun getTodayData(date: String): List<OreoBloodOxygenBreakup>? {
-        //return bloodOxygenDao.getTodayData(date)
-        return null
+    override suspend fun getTodayData(date: String): OreoBloodOxygenBreakup? {
+        return bloodOxygenDao.getTodayData(date)
     }
 
     override suspend fun checkHalfSyncData() {
 
-/*
-        val halfSyncList = bloodOxygenDao.checkHalfSyncData(false)
-        val chunkList = halfSyncList?.chunked(500)
+        /*
+                val halfSyncList = bloodOxygenDao.checkHalfSyncData(false)
+                val chunkList = halfSyncList?.chunked(500)
 
-        chunkList?.forEach { dataList ->
-            val dateList = ArrayList<String>()
-            dataList.forEach { data ->
-                dateList.add(data.date!!)
-            }
-            //  LOGS.d("updateServerSyncData ${Gson().toJson(ids)}")
-            bloodOxygenDao.updateHalfSyncData(false, dateList)
-        }*/
+                chunkList?.forEach { dataList ->
+                    val dateList = ArrayList<String>()
+                    dataList.forEach { data ->
+                        dateList.add(data.date!!)
+                    }
+                    //  LOGS.d("updateServerSyncData ${Gson().toJson(ids)}")
+                    bloodOxygenDao.updateHalfSyncData(false, dateList)
+                }*/
     }
 }

@@ -1,6 +1,8 @@
 package com.oreo.data.db.implementation
 
 import androidx.room.Transaction
+import com.google.gson.Gson
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.model.OreoBloodOxygenBreakup
 import com.noisefit_commans.data.model.OreoRespiratoryData
 import com.noisefit_commans.models.BloodOxygenBreakup
@@ -22,13 +24,16 @@ constructor(
             return false
         }
 
-
         val prevData = getTodayData(data.date!!)
 
         if (prevData == null) {
             respiratoryDao.insert(data)
         } else {
-            respiratoryDao.updateViaDate(data.breakUp ?: "", data.date!!,false)
+            val newBreakup = Gson().fromJson<List<Int>>(data.breakUp ?: "")
+            val prevBreakup = Gson().fromJson<List<Int>>(prevData.breakUp ?: "")
+            if (newBreakup.sum() != prevBreakup.sum()) {
+                respiratoryDao.updateViaDate(data.breakUp ?: "", data.date!!, false)
+            }
         }
         return true
     }
@@ -59,9 +64,8 @@ constructor(
     }
 
 
-    override suspend fun getTodayData(date: String): List<OreoRespiratoryData>? {
-        //return bloodOxygenDao.getTodayData(date)
-        return null
+    override suspend fun getTodayData(date: String): OreoRespiratoryData? {
+        return respiratoryDao.getTodayData(date)
     }
 
     override suspend fun checkHalfSyncData() {
