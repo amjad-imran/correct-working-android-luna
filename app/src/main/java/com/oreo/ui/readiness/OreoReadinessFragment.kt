@@ -152,9 +152,10 @@ class OreoReadinessFragment :
 
         binding.lytHeartRate.lineChart.updateGraphColor(
             Color.parseColor("#ff6b86"),
-            Color.parseColor("#4cff6581"),
-            Color.parseColor("#00ff6581")
+            Color.parseColor("#CCff6581"),
+            Color.parseColor("#0Dff6581")
         )
+
 
         binding.lytHeartRate.lineChart.updateDataWithMax(sleepChart, 5, false, true)
 
@@ -194,8 +195,8 @@ class OreoReadinessFragment :
 
         binding.lytHRVariability.lineChart.updateGraphColor(
             Color.parseColor("#ff80e3"),
-            Color.parseColor("#4cff59da"),
-            Color.parseColor("#00ff59da")
+            Color.parseColor("#CCff59da"),
+            Color.parseColor("#0Dff59da")
         )
 
         binding.lytHRVariability.lineChart.updateDataWithMax(sleepChart, 5, true, false)

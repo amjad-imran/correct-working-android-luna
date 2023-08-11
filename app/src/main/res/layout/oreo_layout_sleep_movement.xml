@@ -105,19 +105,17 @@
             app:bgTopColor="@android:color/transparent"
             app:bottomWith="20dp"
             app:centerLineColor="#80ffffff"
-            app:centerLineWidth="5dp"
+            app:centerLineWidth="2dp"
             app:chartLineWidth="2dp"
             app:gridColor="#80FFFFFF"
             app:innerCircleColor="#ffffff"
             app:showSelectedIndicator="true"
-
             app:innerCircleRadius="4dp"
 
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lytSubtitleValue1"
             app:leftWith="@dimen/dimen_16dp"
-
             app:lineNormalColor="#fff"
             app:rightWith="32dp"
             app:scaleColor="#ff000000"

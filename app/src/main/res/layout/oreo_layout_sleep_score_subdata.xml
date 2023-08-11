@@ -4,6 +4,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <include
             android:id="@+id/lytSleepAvg"
             layout="@layout/oreo_layout_activity_score"
@@ -18,8 +19,8 @@
             layout="@layout/oreo_layout_sleep_score_item"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toStartOf="@+id/lytTimeInBed"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -30,9 +31,9 @@
             layout="@layout/oreo_layout_sleep_score_item"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            android:layout_marginTop="8dp"
             app:layout_constraintStart_toEndOf="@+id/lytTotalSleep"
             app:layout_constraintTop_toBottomOf="@+id/lytSleepAvg" />
 
@@ -41,8 +42,8 @@
             layout="@layout/oreo_layout_sleep_score_item"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toStartOf="@+id/lytRestHr"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
