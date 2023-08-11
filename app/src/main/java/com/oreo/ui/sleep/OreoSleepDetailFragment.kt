@@ -598,19 +598,19 @@ class OreoSleepDetailFragment :
         )
         //heart rate
         binding.lytHeartRate.tvTitle.text = getString(R.string.text_heart_rate)
-        binding.lytHeartRate.tvSubtitle1.text = getString(R.string.text_average_hr)
-        binding.lytHeartRate.tvSubtitle2.text = getString(R.string.text_lowest_hr)
+        binding.lytHeartRate.tvSubtitle1.text = getString(R.string.text_lowest_hr)
+        binding.lytHeartRate.tvSubtitle2.text = getString(R.string.text_average_hr)
         val heartRateData = dayData.hr
         if (heartRateData != null) {
             showHeartRateGraph(dayData.hr, sleepStartTime, sleepEndTime)
 
-            if (heartRateData.low != null) {
-                if (heartRateData.low == 0 || heartRateData.low == 255) {
+            if (heartRateData.avg != null) {
+                if (heartRateData.avg == 0 || heartRateData.avg == 255) {
                     binding.lytHeartRate.lytSubtitleValue2.tvValue.text = "-"
                     binding.lytHeartRate.lytSubtitleValue2.tvUnit.gone()
                 } else {
                     binding.lytHeartRate.lytSubtitleValue2.tvValue.text =
-                        heartRateData.low.toString()
+                        heartRateData.avg.toString()
                     binding.lytHeartRate.lytSubtitleValue2.tvUnit.visible()
                     binding.lytHeartRate.lytSubtitleValue2.tvUnit.text = "bpm"
                 }
@@ -618,13 +618,13 @@ class OreoSleepDetailFragment :
                 binding.lytHeartRate.lytSubtitleValue2.tvValue.text = "-"
                 binding.lytHeartRate.lytSubtitleValue2.tvUnit.gone()
             }
-            if (heartRateData.avg != null) {
-                if (heartRateData.avg == 0 || heartRateData.avg == 255) {
+            if (heartRateData.low != null) {
+                if (heartRateData.low == 0 || heartRateData.low == 255) {
                     binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
                     binding.lytHeartRate.lytSubtitleValue1.tvUnit.gone()
                 } else {
                     binding.lytHeartRate.lytSubtitleValue1.tvValue.text =
-                        heartRateData.avg.toString()
+                        heartRateData.low.toString()
                     binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
                     binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
                 }
