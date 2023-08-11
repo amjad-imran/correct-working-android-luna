@@ -289,7 +289,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         viewModel.sessionManager.showSyncOfflineData.observe(this) {
             it?.getContent()?.let { userActivity ->
                 if (userActivity == HealthOverviewDataType.SERVER_SYNC_SUCCESS) {
-                    viewModel.getDashboardDataFromServer(true, false)
+                    viewModel.getDashboardDataFromServer(true)
                 }
 
             }

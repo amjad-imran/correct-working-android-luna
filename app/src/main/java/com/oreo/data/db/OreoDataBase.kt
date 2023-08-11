@@ -47,7 +47,6 @@ abstract class OreoDataBase : RoomDatabase() {
     abstract fun respiratoryDao(): OreoRespiratoryDao
     abstract fun dayTimeMovementDao(): OreoDayTimeMovementDao
 
-
     abstract fun keyValueDao(): KeyValueDao
 
     /*abstract fun googleFitDao(): GoogleFitDao*/

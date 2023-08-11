@@ -54,15 +54,13 @@ constructor(
     fun initData() {
         summary.user = localDataStore.getUser()
 
-        getDashboardDataFromServer(true, true)
+        getDashboardDataFromServer(false)
     }
 
 
-    fun getDashboardDataFromServer(forceRefresh: Boolean, hitActivityData: Boolean) {
-        if (!summary.healthOverviewData.value.isNullOrEmpty() && !forceRefresh) {
-            summary.healthOverviewData.postValue(summary.healthOverviewData.value)
-            return
-        }
+    fun getDashboardDataFromServer(forceRefresh: Boolean) {
+        LOGS.d("FORCE_REFRESH $forceRefresh")
+
         viewModelScope.launch {
             userRepository.getDashboardData(forceRefresh).collect { resource ->
                 when (resource) {
@@ -80,7 +78,7 @@ constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        getDashboardDataFromServer(forceRefresh, hitActivityData)
+                                        getDashboardDataFromServer(forceRefresh)
                                     }
 
                                     override fun no() {
@@ -92,7 +90,7 @@ constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            getInitialOfflineData(it, hitActivityData)
+                            getInitialOfflineData(it)
                         }
                     }
                 }
@@ -138,7 +136,7 @@ constructor(
         return list
     }
 
-    private fun getInitialOfflineData(data: OreoDashboardResponseModel, hitActivityData: Boolean) {
+    private fun getInitialOfflineData(data: OreoDashboardResponseModel) {
 
 
         viewModelScope.launch(Dispatchers.IO) {
