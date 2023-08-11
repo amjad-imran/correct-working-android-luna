@@ -56,6 +56,8 @@ data class RingInfo(
     val yearOfProduction: Int? = null,
     @SerializedName("image")
     val image: String? = null,
+    @SerializedName("image_url_2")
+    val image2: String? = null,
     @SerializedName("versionNumber")
     val versionNumber: Int? = null,
     @SerializedName("serialNoRaw")

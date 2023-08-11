@@ -304,6 +304,7 @@ constructor(
                         size = mapping.size,
                         color = info.color,
                         image = info.imageUrl,
+                        image2 = info.imageUrl2,
                         serialNoRaw = serial
                     )
                     return@outer

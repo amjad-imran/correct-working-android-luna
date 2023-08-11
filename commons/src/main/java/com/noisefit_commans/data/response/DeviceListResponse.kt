@@ -13,6 +13,8 @@ data class RingInfoResponse(
     val color: String? = null,
     @SerializedName("image_url")
     val imageUrl: String? = null,
+    @SerializedName("image_url_2")
+    val imageUrl2: String? = null,
     val mapping: List<RingInfoMappingResponse> = ArrayList()
 )
 

@@ -21,13 +21,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/tvFromFitness"
             style="@style/H6"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_16dp"
             android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="@dimen/dimen_16dp"
             android:layout_marginEnd="@dimen/side_margin"
             android:lineSpacingExtra="6sp"
             android:text="@string/text_from_fitness_and_health_to_work_and_style_noisefit_helps_you_stay_at_the_top_of_everything"
@@ -40,49 +41,53 @@
             android:layout_width="match_parent"
             android:layout_height="383dp"
             android:layout_margin="@dimen/side_margin"
+            app:layout_constraintBottom_toTopOf="@id/bContinue"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/bContinue"
             app:layout_constraintTop_toBottomOf="@+id/hello_from_">
 
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cvVideo"
+            <!--            <com.google.android.material.card.MaterialCardView-->
+            <!--                android:id="@+id/cvVideo"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                app:cardCornerRadius="24dp"-->
+            <!--                app:cardElevation="0dp"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintHorizontal_bias="1.0"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="parent">-->
+
+            <!--                <ImageView-->
+            <!--                    android:id="@+id/videoOnboard"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:src="@drawable/ic_kohli_onboarding"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:contentDescription="Ring charge"/>-->
+            <!--            </com.google.android.material.card.MaterialCardView>-->
+
+            <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="24dp"
-                app:cardElevation="0dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <VideoView
-                    android:id="@+id/videoOnboard"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="Ring charge"/>
-            </com.google.android.material.card.MaterialCardView>
-
-
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_kohli_onboarding"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/bContinue"
             style="@style/PrimaryButtonStyle"
-            android:layout_marginEnd="@dimen/side_margin"
-            android:layout_marginBottom="@dimen/bottom_margin"
-            android:paddingStart="@dimen/button_h_padding"
-            android:paddingEnd="@dimen/button_h_padding"
             android:layout_width="match_parent"
             android:layout_marginStart="@dimen/side_margin"
-            android:text="@string/text_get_started"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:layout_marginBottom="@dimen/bottom_margin"
             android:contentDescription="@string/text_get_started"
+            android:paddingStart="@dimen/button_h_padding"
+            android:paddingEnd="@dimen/button_h_padding"
+            android:text="@string/text_get_started"
             app:backgroundTint="@null"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
