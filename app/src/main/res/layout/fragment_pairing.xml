@@ -68,16 +68,16 @@
             app:layout_constraintTop_toTopOf="@+id/layoutWatch"
             tools:src="@drawable/ic_ring_default_silver" />
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/layoutWatchLayer2"
-            android:layout_width="240dp"
-            android:visibility="invisible"
-            android:layout_height="240dp"
-            app:layout_constraintBottom_toBottomOf="@id/ivWatchImage"
-            app:layout_constraintEnd_toEndOf="@+id/ivWatchImage"
-            app:layout_constraintStart_toStartOf="@id/ivWatchImage"
-            app:layout_constraintTop_toTopOf="@+id/ivWatchImage"
-            app:lottie_autoPlay="true" />
+<!--        <com.airbnb.lottie.LottieAnimationView-->
+<!--            android:id="@+id/layoutWatchLayer2"-->
+<!--            android:layout_width="240dp"-->
+<!--            android:visibility="invisible"-->
+<!--            android:layout_height="240dp"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/ivWatchImage"-->
+<!--            app:layout_constraintEnd_toEndOf="@+id/ivWatchImage"-->
+<!--            app:layout_constraintStart_toStartOf="@id/ivWatchImage"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/ivWatchImage"-->
+<!--            app:lottie_autoPlay="true" />-->
 
 
         <TextView

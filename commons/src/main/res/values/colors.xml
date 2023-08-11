@@ -58,13 +58,13 @@
     <color name="text_enabled">#51bf76</color>
 
     <color name="deep_start">#232aed</color>
-    <color name="deep_start_oreo">#6148f8</color>
+    <color name="deep_start_oreo">#7156cc</color>
     <color name="light_start">#575eff</color>
-    <color name="light_start_oreo">#9a5fee</color>
+    <color name="light_start_oreo">#9762cc</color>
     <color name="rem_start">#afb3ff</color>
-    <color name="rem_start_oreo">#b1acf3</color>
+    <color name="rem_start_oreo">#c6a7e5</color>
     <color name="awake_start">#ff6624</color>
-    <color name="awake_start_oreo">#eae2ff</color>
+    <color name="awake_start_oreo">#ede5ff</color>
 
     <color name="stress_high">#e95050</color>
     <color name="stress_medium">#f4c232</color>
