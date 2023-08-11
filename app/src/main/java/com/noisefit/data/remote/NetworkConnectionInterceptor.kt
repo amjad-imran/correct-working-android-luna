@@ -65,16 +65,6 @@ class NetworkConnectionInterceptor(
         localDataStore.deleteUserToken()
         localDataStore.deleteFcmToken()
         localDataStore.setWarrantyStatus(-1)
-        localDataStore.setIsWatchFaceRewardEarned(false)
-        localDataStore.clearQuizQuestionData()
-
-        lastSyncProvider.removeSyncTimeStamp(
-            listOf(
-                LastSyncItems.WATCHFACE_CATEGORIES,
-                LastSyncItems.WATCHFACE_MAIN_LIST,
-                LastSyncItems.FAVOURITES_WATCHFACE
-            )
-        )
 
         lastSyncProvider.removeUserDataLastSync()
 
@@ -135,7 +125,9 @@ class NetworkConnectionInterceptor(
                                 }
                             }
 
-                            else -> {}
+                            else -> {
+                                logoutUser()
+                            }
                         }
                     }
                 }
@@ -177,7 +169,7 @@ class NetworkConnectionInterceptor(
             userToken?.let {
                 addHeader("access-token", "Bearer ${userToken.access_token}")
 //                addHeader("access-token", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyNTUyMjEsImRldmljZV9pZCI6MTU0LCJpYXQiOjE2OTE2NTUzMDUsImV4cCI6MTY5MTY2OTcwNX0.hf65-pJDlg0ZnJ_1oh4uicrnrAt1wYuoQgNUnMcuETY")
-               }
+            }
             if (request.url.toString().contains("/master/user/v3/devices", true)) {
                 userToken?.let {
                     addHeader("refresh-token", "Bearer ${userToken.refresh_token}")

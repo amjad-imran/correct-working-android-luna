@@ -407,7 +407,7 @@
     <string name="change_profile_picture">Change Profile Picture</string>
     <string name="badges">Badges</string>
     <string name="logout_ques">Logout?</string>
-    <string name="are_you_sure_to_logout_from_your_nnoisefit_account">Are you sure to logout from your\Luna Ring Account</string>
+    <string name="are_you_sure_to_logout_from_your_nnoisefit_account">Are you sure to logout from your\nLuna Ring Account</string>
     <string name="delete_account_ques">Delete Account?</string>
     <string name="are_you_sure_want_to_delete_your_noisefit_account_all_your_data_will_be_lost_if_you_delete_your_account">Are you sure want to delete your Luna Ring account? All your data will be lost if you delete your account</string>
     <string name="text_sos">SOS</string>
