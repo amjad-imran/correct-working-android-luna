@@ -180,8 +180,8 @@ class OreoSleepDetailFragment :
         sleepChart.list = chartList
         binding.lytHeartRate.lineChart.updateGraphColor(
             Color.parseColor("#ff6b86"),
-            Color.parseColor("#4cff6581"),
-            Color.parseColor("#00ff6581")
+            Color.parseColor("#4cff3358"),
+            Color.parseColor("#00ff3358")
         )
 
         binding.lytHeartRate.lineChart.updateDataWithMax(sleepChart, 5, false, true)

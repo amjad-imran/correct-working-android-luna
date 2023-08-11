@@ -735,7 +735,7 @@
     <string name="text_sleep_efficiency">Sleep efficiency</string>
     <string name="text_lowest_heart_rate">Lowest heart rate</string>
     <string name="text_max">Max</string>
-    <string name="text_night_time_movement">Night time movement</string>
+    <string name="text_night_time_movement">Night time movements</string>
     <string name="text_activity_score">Activity score</string>
     <string name="text_high">High</string>
     <string name="text_medium">Medium</string>

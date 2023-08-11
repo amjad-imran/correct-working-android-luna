@@ -235,23 +235,23 @@ class NightTimeGraphViewOreo(var mContext: Context) : View(
         mPaintMedLine = Paint().apply {
             isAntiAlias = true
             style = Paint.Style.STROKE
-            color = Color.parseColor("#80ca99ff")
+            color = Color.parseColor("#80ac7edb")
             strokeWidth = pxFromDp(mContext, 1f)
         }
         mPaintLowLine = Paint().apply {
             isAntiAlias = true
             style = Paint.Style.STROKE
-            color = Color.parseColor("#805e0cda")
+            color = Color.parseColor("#807156cc")
             strokeWidth = pxFromDp(mContext, 1f)
         }
 
         mPaintLow = Paint().apply {
             style = Paint.Style.FILL
-            color = Color.parseColor("#5e0cda")
+            color = Color.parseColor("#7156cc")
         }
         mPaintMed = Paint().apply {
             style = Paint.Style.FILL
-            color = Color.parseColor("#b470ff")
+            color = Color.parseColor("#ac7edb")
         }
         mPaintHigh = Paint().apply {
             style = Paint.Style.FILL
