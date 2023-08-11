@@ -61,6 +61,8 @@ interface OreoSyncRepository {
         data: OreoRespiratoryData
     ): Flow<CacheResult<Boolean?>>
 
+    suspend fun markDataSynced(data: OreoUserSyncRawData)
+
     suspend fun deleteServerSyncData(data: OreoUserSyncRawData)
 
     suspend fun deleteSleepServerSyncData(data: OreoUserSyncRawData)

@@ -170,9 +170,10 @@ constructor(
 
                                 }
                                 //TODO uncomment after testing -deepak
-                                /*syncDataScope.launch {
-                                    syncRepository.deleteServerSyncData(userActivities.second)
-                                }*/
+                                syncDataScope.launch {
+                                    syncRepository.markDataSynced(userActivities.second)
+                                    //syncRepository.deleteServerSyncData(userActivities.second)
+                                }
 
                                 //syncRepository.updateHashForLastSyncData(userActivities.first)
 
@@ -210,10 +211,10 @@ constructor(
                                     is Resource.Success -> {
 
                                         //TODO uncomment after testing -deepak
-                                        /* syncDataScope.launch {
+                                         syncDataScope.launch {
                                              syncRepository.deleteSleepServerSyncData(userActivities.second)
                                          }
-                                         syncRepository.updateSleepHashForLastSyncData(userActivities.first)*/
+                                         /*syncRepository.updateSleepHashForLastSyncData(userActivities.first)*/
 
                                         LOGS.d(
                                             TAG,
