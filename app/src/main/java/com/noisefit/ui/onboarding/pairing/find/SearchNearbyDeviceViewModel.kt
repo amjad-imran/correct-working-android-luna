@@ -388,9 +388,9 @@ constructor(
 
     fun isProfileSetupComplete(): Boolean {
         val user = localDataStore.getUser() ?: return false
-        if (user.userInfo?.dob.isNullOrEmpty() &&
-            user.userInfo?.height == 0 &&
-            user.userInfo?.weight == 0
+        if (user.userInfo?.dob.isNullOrEmpty() || (user.userInfo?.height
+                ?: 0) == 0 || (user.userInfo?.weight ?: 0) == 0 || (user.userGoals?.caloriesGoal
+                ?: 0) == 0
         ) {
             return false
         }
