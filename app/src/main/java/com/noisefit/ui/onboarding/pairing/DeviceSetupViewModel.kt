@@ -83,7 +83,7 @@ constructor(
         return when (watchForm) {
             WatchForm.SQUARE, WatchForm.ARC -> {
                 when (animationType) {
-                    0 -> R.raw.anim_setup_waiting_rect
+                    0 -> R.raw.anim_pairing
                     1 -> R.raw.anim_setup_setting_up_rect
                     2 -> R.raw.anim_setup_success_rect
                     else -> {

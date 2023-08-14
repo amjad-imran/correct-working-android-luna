@@ -1,5 +1,6 @@
 package com.noisefit.ui.onboarding.pairing
 
+import android.animation.Animator
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -25,6 +26,7 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.LOW_VIBRATION
 import com.noisefit_commans.utils.VibrationUtils
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
@@ -68,9 +70,10 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
         viewModel.localDataStore.setDeviceSetupPendingStatus(true)
         deviceSetupViewModel.getDeviceType()
 
-        binding.layoutWatch.repeatCount = LottieDrawable.INFINITE
+        binding.layoutWatch.repeatCount = 0
         binding.layoutWatch.setAnimation(R.raw.anim_pairing)
         binding.layoutWatch.playAnimation()
+        deviceSetupViewModel.currentAnimation = 0
 
 
         sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_device_setup_start)
@@ -133,47 +136,47 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
 
     override fun initListener() {
 
-//        binding.vPlayer.addAnimatorListener(object : Animator.AnimatorListener {
-//            override fun onAnimationStart(animation: Animator?) {
-//            }
-//
-//            override fun onAnimationEnd(animation: Animator?) {
-//                if (deviceSetupViewModel.currentAnimation == 0) {
-//
-//                    val connectState =
-//                        sessionManager.connectStateRing.value
-//
-//
-//                    if (connectState is ConnectState.ConnectSuccess) {
-//                        binding.vPlayer.repeatCount = 0
-//                        binding.vPlayer.setAnimation(deviceSetupViewModel.getAnimation(1))
-//                        binding.vPlayer.playAnimation()
-//                        deviceSetupViewModel.currentAnimation = 1
-//                    } else {
-//                        binding.vPlayer.repeatCount = 0
-//                        binding.vPlayer.setAnimation(deviceSetupViewModel.getAnimation(0))
-//                        binding.vPlayer.playAnimation()
-//                        deviceSetupViewModel.currentAnimation = 0
-//                    }
-//                } else if (deviceSetupViewModel.currentAnimation == 1) {
-//                    binding.vPlayer.repeatCount = 0
-//                    binding.vPlayer.setAnimation(deviceSetupViewModel.getAnimation(2))
-//                    binding.vPlayer.playAnimation()
-//                    deviceSetupViewModel.currentAnimation = 2
-//                    vibrationUtils.vibrate(LOW_VIBRATION)
-//                } else if (deviceSetupViewModel.currentAnimation == 2) {
-//                    viewModel.localDataStore.setDeviceSetupPendingStatus(false)
-//                    startMainActivity()
-//                }
-//
-//            }
-//
-//            override fun onAnimationCancel(animation: Animator?) {
-//            }
-//
-//            override fun onAnimationRepeat(animation: Animator?) {
-//            }
-//        })
+        binding.layoutWatch.addAnimatorListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator?) {
+            }
+
+            override fun onAnimationEnd(animation: Animator?) {
+                if (deviceSetupViewModel.currentAnimation == 0) {
+
+                    val connectState =
+                        sessionManager.connectStateRing.value
+
+
+                    if (connectState is ConnectState.ConnectSuccess) {
+                        binding.layoutWatch.repeatCount = 0
+                        binding.layoutWatch.setAnimation(R.raw.anim_pairing)
+                        binding.layoutWatch.playAnimation()
+                        deviceSetupViewModel.currentAnimation = 1
+                    } else {
+                        binding.layoutWatch.repeatCount = 0
+                        binding.layoutWatch.setAnimation(R.raw.anim_pairing)
+                        binding.layoutWatch.playAnimation()
+                        deviceSetupViewModel.currentAnimation = 0
+                    }
+                } else if (deviceSetupViewModel.currentAnimation == 1) {
+                    binding.layoutWatch.repeatCount = 0
+                    binding.layoutWatch.setAnimation(R.raw.anim_pairing)
+                    binding.layoutWatch.playAnimation()
+                    deviceSetupViewModel.currentAnimation = 2
+                    vibrationUtils.vibrate(LOW_VIBRATION)
+                } else if (deviceSetupViewModel.currentAnimation == 2) {
+                    viewModel.localDataStore.setDeviceSetupPendingStatus(false)
+                    startMainActivity()
+                }
+
+            }
+
+            override fun onAnimationCancel(animation: Animator?) {
+            }
+
+            override fun onAnimationRepeat(animation: Animator?) {
+            }
+        })
 
 
         /*binding.bGetStarted.setOnClickListener {

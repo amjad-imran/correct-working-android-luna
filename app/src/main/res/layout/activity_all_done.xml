@@ -42,6 +42,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textView2" />
+
         <ImageView
             android:id="@+id/ivWatchImage"
             android:layout_width="120dp"
@@ -51,6 +52,19 @@
             app:layout_constraintStart_toStartOf="@+id/vPlayer"
             app:layout_constraintTop_toTopOf="@+id/vPlayer"
             tools:src="@drawable/ic_ring_default_silver" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/layoutWatchLayer2"
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@id/ivWatchImage"
+            app:layout_constraintEnd_toEndOf="@+id/ivWatchImage"
+            app:layout_constraintStart_toStartOf="@id/ivWatchImage"
+            app:layout_constraintTop_toTopOf="@+id/ivWatchImage"
+            app:lottie_autoPlay="true"
+            app:lottie_rawRes="@raw/anim_pair_success_glow" />
+
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/bLetsGo"
