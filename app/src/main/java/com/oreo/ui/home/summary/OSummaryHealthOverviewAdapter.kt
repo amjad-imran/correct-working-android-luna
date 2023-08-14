@@ -468,7 +468,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 }
             }
 
-            val caloriesGoalText = "/ ${data.caloriesGoal}"
+            val caloriesGoalText = "/ ${data.caloriesGoal} kcal"
             binding.tvTotalCalories.text = caloriesGoalText
 
             binding.tvCalories.text = if ((data.data.activeCalories ?: 0) > 0) {

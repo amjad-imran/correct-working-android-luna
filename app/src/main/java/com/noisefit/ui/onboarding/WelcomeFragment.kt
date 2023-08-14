@@ -25,7 +25,7 @@ class WelcomeFragment : BaseFragment<FragmentWelcomeBinding>(FragmentWelcomeBind
     }
 
     private fun setOnBoardVideo() {
-        binding.videoOnboard.apply {
+//        binding.videoOnboard.apply {
 //            setVideoURI(
 //                Uri.parse(
 //                    "android.resource://" + requireContext().packageName + "/" +
@@ -34,19 +34,19 @@ class WelcomeFragment : BaseFragment<FragmentWelcomeBinding>(FragmentWelcomeBind
 //            )
 //            setOnPreparedListener { mp -> mp.isLooping = true }
 //            start()
-        }
+//        }
     }
 
     override fun onPause() {
         super.onPause()
-        currentPosition = binding.videoOnboard.currentPosition
-        binding.videoOnboard.pause()
+//        currentPosition = binding.videoOnboard.currentPosition
+//        binding.videoOnboard.pause()
     }
 
     override fun onResume() {
         super.onResume()
-        binding.videoOnboard.seekTo(currentPosition)
-        binding.videoOnboard.start()
+//        binding.videoOnboard.seekTo(currentPosition)
+//        binding.videoOnboard.start()
     }
 
     override fun initListener() {

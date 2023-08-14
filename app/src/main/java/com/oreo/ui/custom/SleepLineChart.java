@@ -136,7 +136,7 @@ public class SleepLineChart extends View {
         chartLineWidth = ta.getDimension(R.styleable.SleepLineChart_chartLineWidth, 10f);
         scaleNodeColor = ta.getColor(R.styleable.SleepLineChart_scaleNodeColor, 0xff000000);
         scaleNodeRadius = ta.getDimension(R.styleable.SleepLineChart_scaleNodeRadius, 3f);
-        centerLineWidth = ta.getDimension(R.styleable.SleepLineChart_centerLineWidth, 10f);
+        centerLineWidth = ta.getDimension(R.styleable.SleepLineChart_centerLineWidth, 2f);
         centerLineColor = ta.getColor(R.styleable.SleepLineChart_centerLineColor, 0xff000000);
         fillColorStart = ta.getColor(R.styleable.SleepLineChart_fillColorStart, 0x80ffffff);
         fillColorEnd = ta.getColor(R.styleable.SleepLineChart_fillColorEnd, 0x00000000);
@@ -174,7 +174,7 @@ public class SleepLineChart extends View {
         centerLinePaint.setColor(centerLineColor);
         centerLinePaint.setStrokeWidth(centerLineWidth);
         centerLinePaint.setStyle(Paint.Style.STROKE);
-        centerLinePaint.setPathEffect(new DashPathEffect(new float[]{5, 10}, 0));
+        centerLinePaint.setPathEffect(new DashPathEffect(new float[]{1, 4}, 0));
 
         chartLinePaint = new Paint();
         chartLinePaint.setStrokeWidth(chartLineWidth);

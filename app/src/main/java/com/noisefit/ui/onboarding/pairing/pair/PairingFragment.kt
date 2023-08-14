@@ -554,7 +554,7 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
 
             binding.ivWatchImage.loadWatchImage(//TODO change for ring
                 it,
-                colorFitDevice.ringInfo?.image ?: "",
+                colorFitDevice.ringInfo?.image2 ?: "",
                 R.drawable.ic_ring_default_silver
             )
 
@@ -597,6 +597,8 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
                 binding.layoutWatch.repeatCount = LottieDrawable.INFINITE
                 binding.layoutWatch.setAnimation(R.raw.anim_pairing)
                 binding.layoutWatch.playAnimation()
+
+//                binding.layoutWatchLayer2.gone()
                 //binding.layoutWatch.circularProgressBar.startAnimation()
                 binding.textView.text = getString(R.string.text_pairing)
                 binding.tvPairStatus.text = getString(R.string.text_keep_your_watch_near_your_phone)
@@ -607,6 +609,12 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
                 binding.layoutWatch.repeatCount = LottieDrawable.INFINITE
                 binding.layoutWatch.setAnimation(R.raw.anim_pair_failed)
                 binding.layoutWatch.playAnimation()
+
+//                binding.layoutWatchLayer2.visible()
+//                binding.layoutWatchLayer2.repeatCount = LottieDrawable.INFINITE
+//                binding.layoutWatchLayer2.setAnimation(R.raw.anim_pair_failed)
+//                binding.layoutWatchLayer2.playAnimation()
+
                 binding.textView.text = getString(R.string.text_pairing_unsuccess)
                 binding.tvPairStatus.text = getString(
                     R.string.text_watch_pair_fail,
@@ -619,6 +627,13 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
             PairState.PAIRED -> {
                 binding.layoutWatch.repeatCount = 1
                 binding.layoutWatch.setAnimation(R.raw.anim_pair_success)
+
+//                binding.layoutWatchLayer2.visible()
+//                binding.layoutWatchLayer2.repeatCount = LottieDrawable.INFINITE
+//                binding.layoutWatchLayer2.setAnimation(R.raw.anim_pair_success)
+//                binding.layoutWatchLayer2.playAnimation()
+
+
                 binding.btnPairingIssue.gone()
                 binding.btnStopPairing.gone()
                 binding.btnStart.visible()
