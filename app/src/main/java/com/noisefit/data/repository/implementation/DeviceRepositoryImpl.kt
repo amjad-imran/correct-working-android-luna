@@ -46,7 +46,7 @@ class DeviceRepositoryImpl(
     override suspend fun getDeviceList(dType: String): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<DeviceListResponse>>> {
         return safeApiCallFlow(dispatcher) {
             remoteDataSource.getDeviceList(
-                "${BuildConfig.BASE_URL_NEW}/master/devices/list",
+                "${BuildConfig.BASE_URL_NEW}/user_detail/ring/devices/list",
                 dType
             )
         }

@@ -146,10 +146,9 @@ class PairDeviceViewModel @Inject constructor(
             addProperty("device_id", device.deviceId)
             addProperty("rssi", device.rssi)
             if (device.watchToken.isNotEmpty()) {
-                addProperty("watch_token", device.watchToken)
+                addProperty("ring_token", device.watchToken)
             }
             addProperty("platform", "android")
-            addProperty("wearable_type", "ring")
         }
 
         sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_register_ud_start)

@@ -32,7 +32,7 @@ class AppRepositoryImpl(
     override suspend fun checkAppVersion(request: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<VersionCheckResponse>>> {
         return safeApiCallFlow(dispatcher) {
             remoteDataSource.checkAppVersion(
-                "${BuildConfig.BASE_URL_NEW}/master/app_version/check",
+                "${BuildConfig.BASE_URL_NEW}/core/app_version",
                 request
             )
         }
