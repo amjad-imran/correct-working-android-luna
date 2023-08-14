@@ -123,23 +123,6 @@ data class TeamInfo(
 ) : Parcelable {
 
 
-    /**
-     * Chennai Super Kings (CSK) - Chennai
-    Delhi Capitals (DC) - Delhi
-    Gujarat Titans (GT) - Gujarat
-    Kolkata Knight Riders (KOL)(KKR) - Kolkata
-    Lucknow Super Giants (LSG) - Lucknow
-    Mumbai Indians (MI) - Mumbai
-    Punjab Kings (PBKS) - Punjab
-    Rajasthan Royals (RR) - Rajasthan
-    Royal Challengers Bangalore (RCB)- Bangalore
-    Sunrisers Hyderabad (SRH) - Hyderabad
-     */
-    fun getTeamNames(): String {
-
-        return AppConstants.teamNameMapping(shortName, teamName ?: "")
-    }
-
 }
 
 @Parcelize
