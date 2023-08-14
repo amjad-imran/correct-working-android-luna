@@ -22,7 +22,6 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.lottie.LottieDrawable
 import com.google.android.gms.common.api.ApiException
@@ -30,8 +29,8 @@ import com.google.android.gms.location.*
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.noisefit.luna.R
 import com.noisefit.data.repository.abstraction.IBluetoothScan
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.DialogUnsupportedDeviceBinding
 import com.noisefit.luna.databinding.FragmentFindDeviceListBinding
 import com.noisefit.oreo.OreoMainActivity
@@ -101,9 +100,16 @@ class FindDeviceListFragment :
         setRecycler()
         viewModel.fetchDeviceList()
 
+        /*
+        id=7
+        title=Ring Bluetooth Scanning Issues
+        depend on categories api last item, once changed, value changes required here
+         */
         binding.tvTroubleShoot.setOnClickListener {
-            //TODO
-
+            navigate(R.id.oreoHSQuestionFragment, Bundle().apply {
+                putString("title", "Ring Bluetooth Scanning Issues")
+                putString("id", "7")
+            })
         }
 
         if (PairDeviceActivity.showBack) {

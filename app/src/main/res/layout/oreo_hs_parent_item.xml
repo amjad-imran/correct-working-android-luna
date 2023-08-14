@@ -6,8 +6,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/ivIcon"
+
+        <View
+            android:id="@+id/view1"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginTop="@dimen/side_margin"
@@ -16,6 +17,15 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/back_modal_new_round" />
+        <ImageView
+            android:id="@+id/ivIcon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:layout_constraintBottom_toBottomOf="@id/view1"
+            app:layout_constraintStart_toStartOf="@id/view1"
+            app:layout_constraintEnd_toEndOf="@id/view1"
+            app:layout_constraintTop_toTopOf="@id/view1"
             tools:src="@drawable/image_npl" />
 
         <TextView

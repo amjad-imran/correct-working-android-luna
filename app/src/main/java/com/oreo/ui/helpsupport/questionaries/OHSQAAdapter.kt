@@ -1,5 +1,6 @@
 package com.oreo.ui.helpsupport.questionaries
 
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,17 +10,18 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.oreo.data.model.OHSQuestionariesResponseModel
 
-class OHSQAAdapter(val mListener: OnItemClickListener) :
+class OHSQAAdapter :
     RecyclerView.Adapter<OHSQAAdapter.ViewHolder>() {
     private val mDataset = ArrayList<OHSQuestionariesResponseModel>()
+    var lastSelectedPos: Int = -1
 
     inner class ViewHolder(val binding: OreoHsQuestionariesItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(result: OHSQuestionariesResponseModel) {
-            binding.tvTitle.text=result.title
-            binding.tvDesc.text=result.description
+            binding.tvTitle.text = result.question
+            binding.tvDesc.text = Html.fromHtml(result.answer)
 
-            if (result.isExpendable) {
+            if (lastSelectedPos == bindingAdapterPosition) {
                 binding.tvDesc.visible()
                 binding.ivExpand.setImageResource(R.drawable.ic_hs_collapse)
             } else {
@@ -27,11 +29,21 @@ class OHSQAAdapter(val mListener: OnItemClickListener) :
                 binding.tvDesc.gone()
             }
             binding.root.setOnClickListener {
-                mListener.onItemClick(!result.isExpendable,bindingAdapterPosition)
+                val lastPos = lastSelectedPos
+                lastSelectedPos = bindingAdapterPosition
+                if(lastPos==lastSelectedPos){
+                    lastSelectedPos = -1
+                    notifyItemChanged(lastPos)
+                }else{
+                    notifyItemChanged(lastPos)
+                    notifyItemChanged(lastSelectedPos)
+                }
+
             }
 
         }
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = OreoHsQuestionariesItemBinding.inflate(
@@ -56,14 +68,4 @@ class OHSQAAdapter(val mListener: OnItemClickListener) :
         notifyDataSetChanged()
     }
 
-    fun updateData(isExpanded: Boolean, position: Int) {
-        mDataset[position].isExpendable = isExpanded
-        mDataset[position] = mDataset[position]
-        notifyDataSetChanged()
-
-    }
-
-    interface OnItemClickListener {
-        fun onItemClick(isExpanded: Boolean,position: Int)
-    }
 }
