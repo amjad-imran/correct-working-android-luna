@@ -124,8 +124,12 @@ class NetworkConnectionInterceptor(
                                     response = chain.proceed(getHeaders(chain))
                                 }
                             }
+                            is Resource.Loading -> {}
+                            is Resource.GenericError -> {
+                                logoutUser()
+                            }
 
-                            else -> {
+                            is Resource.NetworkError -> {
                                 logoutUser()
                             }
                         }
