@@ -48,7 +48,7 @@
                     android:textColor="@color/white_64"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Phone" />
+                    android:text="@string/text_phone" />
 
                 <TextView
                     android:id="@+id/tvDeviceName"
@@ -73,49 +73,7 @@
                     app:layout_constraintTop_toTopOf="@id/tvDeviceName"
                     tools:text=" ( Samsung Galaxy S22 )" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/lytSearch"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="@dimen/dimen_16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="@dimen/dimen_16dp"
-                    android:background="@drawable/back_modal_new"
-                    android:visibility="visible"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvDeviceName">
-
-                    <EditText
-                        android:id="@+id/etSearch"
-                        style="@style/H6"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dimen_16dp"
-                        android:layout_marginEnd="@dimen/dimen_16dp"
-                        android:hint="@string/text_search_your_issue_here"
-                        android:importantForAutofill="no"
-                        android:singleLine="true"
-                        android:textColorHint="@color/white_64"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/searchImv"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/searchImv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/dimen_16dp"
-                        android:contentDescription="@string/text_search_icon"
-                        android:src="@drawable/ic_search"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <include
+                 <include
                     android:id="@+id/divider2"
                     layout="@layout/layout_divider"
                     android:layout_width="match_parent"
@@ -123,7 +81,7 @@
                     android:layout_marginTop="24dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/lytSearch" />
+                    app:layout_constraintTop_toBottomOf="@id/tvDeviceName" />
 
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -131,54 +89,45 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/side_margin"
+                    android:layout_marginTop="24dp"
                     android:layout_marginEnd="@dimen/side_margin"
+                    android:background="@drawable/back_modal_transparent_oreo"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider2"
-                    tools:itemCount="1"
+                    tools:itemCount="5"
                     tools:listitem="@layout/oreo_hs_parent_item" />
 
-                <TextView
-                    android:id="@+id/tvRaiseComplain"
-                    style="@style/H6"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/side_margin"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginEnd="@dimen/side_margin"
-                    android:text="@string/text_raise_a_complaint"
-                    android:textColor="#88b0ff"
-                    app:layout_constraintTop_toBottomOf="@+id/rvQueries" />
-
-                <include
-                    android:id="@+id/divider3"
-                    layout="@layout/layout_divider"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvRaiseComplain" />
-                <TextView
-                    android:id="@+id/tvHelpline"
-                    style="@style/H6"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/side_margin"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="@dimen/side_margin"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginBottom="37dp"
-                    android:text="@string/text_customer_support_helpline"
-                    android:textColor="#88b0ff"
-                    app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </androidx.core.widget.NestedScrollView>
+        <TextView
+            android:id="@+id/tvHelpline"
+            style="@style/H6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="32dp"
+            android:text="@string/text_customer_support_helpline"
+            android:textColor="#88b0ff"/>
+        <include
+            android:id="@+id/progressBar"
+            layout="@layout/default_loader"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

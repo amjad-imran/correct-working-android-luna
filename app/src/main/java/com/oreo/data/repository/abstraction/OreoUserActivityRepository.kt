@@ -4,12 +4,7 @@ import com.google.gson.JsonObject
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
-import com.oreo.data.model.OActivityListModal
-import com.oreo.data.model.OContributorResponseModal
-import com.oreo.data.model.OHealthOverview
-import com.oreo.data.model.OInternalPageResponseModal
-import com.oreo.data.model.OWorkoutDetailsResponseModel
-import com.oreo.data.model.OWorkoutListModal
+import com.oreo.data.model.*
 import com.oreo.data.model.health.OreoActivityModel
 import com.oreo.data.model.health.OreoDashboardResponseModel
 import com.oreo.data.model.health.OreoReadinessModel
@@ -69,7 +64,9 @@ interface OreoUserActivityRepository {
     ): Flow<Resource<BaseApiResponse<List<OActivityListModal>>>>
 
     suspend fun deleteWorkoutFromServer(
-        id:String
-    ):Flow<Resource<BaseApiResponse<Any>>>
+        id: String
+    ): Flow<Resource<BaseApiResponse<Any>>>
+
     suspend fun getContributorDetailsInfo(contributorType: String): Flow<Resource<BaseApiResponse<OContributorResponseModal>>>
+    suspend fun getHSCategories(): Flow<Resource<BaseApiResponse<List<OHSModel>>>>
 }

@@ -9,12 +9,12 @@
 
         <ImageButton
             android:id="@+id/backBtn"
-            android:layout_height="32dp"
             android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="24dp"
             android:background="@drawable/back_modal_new_round"
             android:src="@drawable/ic_cross_profile"
-            android:layout_marginTop="24dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,13 +29,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-<!--                <ImageView-->
-<!--                    android:id="@+id/imvProfile"-->
-<!--                    android:layout_width="@dimen/dimen_48dp"-->
-<!--                    android:layout_height="@dimen/dimen_48dp"-->
-<!--                    android:layout_marginStart="@dimen/side_margin"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent" />-->
+                <!--                <ImageView-->
+                <!--                    android:id="@+id/imvProfile"-->
+                <!--                    android:layout_width="@dimen/dimen_48dp"-->
+                <!--                    android:layout_height="@dimen/dimen_48dp"-->
+                <!--                    android:layout_marginStart="@dimen/side_margin"-->
+                <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                <!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
                 <TextView
                     android:id="@+id/tvName"
@@ -51,16 +51,16 @@
                     tools:text="Hey, Abhishek" />
 
 
-<!--                <ImageView-->
-<!--                    android:id="@+id/ivSettingsArrow"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginEnd="@dimen/side_margin"-->
-<!--                    android:padding="8dp"-->
-<!--                    android:src="@drawable/ic_arrow_right_duotone"-->
-<!--                    app:layout_constraintBottom_toBottomOf="@+id/imvProfile"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="@+id/imvProfile" />-->
+                <!--                <ImageView-->
+                <!--                    android:id="@+id/ivSettingsArrow"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginEnd="@dimen/side_margin"-->
+                <!--                    android:padding="8dp"-->
+                <!--                    android:src="@drawable/ic_arrow_right_duotone"-->
+                <!--                    app:layout_constraintBottom_toBottomOf="@+id/imvProfile"-->
+                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+                <!--                    app:layout_constraintTop_toTopOf="@+id/imvProfile" />-->
 
                 <include
                     android:id="@+id/include14"
@@ -76,11 +76,11 @@
                     android:id="@+id/llMyProfile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
                     android:visibility="visible"
                     app:image="@drawable/ic_your_profile"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:gravity="center_vertical"
                     app:layout_constraintTop_toBottomOf="@+id/include14"
                     app:text="Your profile" />
 
@@ -88,7 +88,7 @@
                     android:id="@+id/rowHelp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:image="@drawable/ic_profile_help"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -125,37 +125,37 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/rowAbout" />
 
-<!--                <TextView-->
-<!--                    android:id="@+id/tvCustomerSupport"-->
-<!--                    style="@style/H5"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginStart="@dimen/side_margin"-->
-<!--                    android:padding="@dimen/dimen_12dp"-->
-<!--                    android:layout_marginTop="16dp"-->
-<!--                    android:textColor="#60ffffff"-->
-<!--                    android:text="@string/text_customer_support"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toBottomOf="@+id/rowAbout" />-->
+                <!--                <TextView-->
+                <!--                    android:id="@+id/tvCustomerSupport"-->
+                <!--                    style="@style/H5"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginStart="@dimen/side_margin"-->
+                <!--                    android:padding="@dimen/dimen_12dp"-->
+                <!--                    android:layout_marginTop="16dp"-->
+                <!--                    android:textColor="#60ffffff"-->
+                <!--                    android:text="@string/text_customer_support"-->
+                <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                <!--                    app:layout_constraintTop_toBottomOf="@+id/rowAbout" />-->
 
 
-
-<!--                <com.google.android.material.textview.MaterialTextView-->
-<!--                    android:id="@+id/tvDeleteAccount"-->
-<!--                    style="@style/H5"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginStart="@dimen/side_margin"-->
-<!--                    android:layout_marginBottom="12dp"-->
-<!--                    android:padding="@dimen/dimen_12dp"-->
-<!--                    android:text="@string/delete_account"-->
-<!--                    android:textColor="#60ffffff"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toBottomOf="@+id/tvLogout" />-->
+                <!--                <com.google.android.material.textview.MaterialTextView-->
+                <!--                    android:id="@+id/tvDeleteAccount"-->
+                <!--                    style="@style/H5"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginStart="@dimen/side_margin"-->
+                <!--                    android:layout_marginBottom="12dp"-->
+                <!--                    android:padding="@dimen/dimen_12dp"-->
+                <!--                    android:text="@string/delete_account"-->
+                <!--                    android:textColor="#60ffffff"-->
+                <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                <!--                    app:layout_constraintTop_toBottomOf="@+id/tvLogout" />-->
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
+
         <TextView
             android:id="@+id/tvLogout"
             style="@style/H6"
@@ -166,8 +166,8 @@
             android:padding="@dimen/dimen_12dp"
             android:text="@string/logout"
             android:textColor="@color/white_64"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
 
         <include
