@@ -118,14 +118,14 @@ class OWarrantyFragment :
     }
 
     private fun showSerialNoDialog() {
-        val builder = AlertDialog.Builder(context)
+       /* val builder = AlertDialog.Builder(context)
         val view = layoutInflater.inflate(R.layout.dialog_serial_no, null, false)
         builder.setView(view)
         val alertDialog = builder.create()
         view.findViewById<ImageView>(R.id.ivCloseDialog).setOnClickListener {
             alertDialog.dismiss()
         }
-        alertDialog.show()
+        alertDialog.show()*/
     }
 
 }
