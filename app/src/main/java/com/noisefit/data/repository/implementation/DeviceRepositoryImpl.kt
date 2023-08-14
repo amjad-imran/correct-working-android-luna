@@ -8,24 +8,23 @@ import android.net.Uri
 import android.provider.ContactsContract
 import android.text.TextUtils
 import com.google.gson.JsonObject
-import com.noisefit.luna.BuildConfig
 import com.noisefit.NoiseFitApplicationMain
-import com.noisefit_commans.data.model.Feedback
-import com.noisefit_commans.data.model.NotificationApp
-import com.noisefit_commans.data.model.warranty.MarketPlace
 import com.noisefit.data.remote.abstraction.NetworkService
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.remote.response.Watchface2
-import com.noisefit_commans.data.response.*
 import com.noisefit.data.repository.LastSyncProvider
 import com.noisefit.data.repository.abstraction.DeviceRepository
 import com.noisefit.data.safeApiCallFlow
+import com.noisefit.luna.BuildConfig
+import com.noisefit_commans.data.model.Feedback
+import com.noisefit_commans.data.model.NotificationApp
+import com.noisefit_commans.data.model.warranty.MarketPlace
+import com.noisefit_commans.data.response.*
+import com.noisefit_commans.enums.ApplicationType
+import com.noisefit_commans.models.Contact
 import com.noisefit_commans.ui.getRequestBody
 import com.noisefit_commans.ui.numberWithSTDCode
 import com.noisefit_commans.ui.onlyNumber
-import com.noisefit_commans.enums.ApplicationType
-import com.noisefit_commans.models.Contact
-import com.noisefit_commans.models.WatchFace
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -411,7 +410,8 @@ class DeviceRepositoryImpl(
 
     override suspend fun checkForUpdates(requestObject: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<UpdateResponse>>> {
         return safeApiCallFlow(dispatcher) {
-            remoteDataSource.checkForUpdates(requestObject)
+            val url = "${BuildConfig.BASE_URL_NEW}/core/firmware_versions"
+            remoteDataSource.checkForUpdates(url, requestObject)
         }
     }
 
@@ -446,12 +446,13 @@ class DeviceRepositoryImpl(
             remoteDataSource.getMarketPlaces(url)
         }
     }
+
     override suspend fun checkWatchTokenExist(macAddress: String): Flow<Resource<BaseApiResponse<WatchTokenResponse>>> {
         return safeApiCallFlow(dispatcher) {
-
+            val url = "${BuildConfig.BASE_URL_NEW}/user_detail/ring/ring-token"
             val requestObject = JsonObject()
             requestObject.addProperty("address", macAddress)
-            remoteDataSource.checkWatchTokenExist(requestObject)
+            remoteDataSource.checkWatchTokenExist(url, requestObject)
         }
     }
 
@@ -459,9 +460,10 @@ class DeviceRepositoryImpl(
         macAddress: String
     ): Flow<Resource<BaseApiResponseData<Any>>> {
         return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.BASE_URL_NEW}/user_detail/ring/ring-token/remove"
             val requestObject = JsonObject()
             requestObject.addProperty("address", macAddress)
-            remoteDataSource.removeWatchTokenFromServer(requestObject)
+            remoteDataSource.removeWatchTokenFromServer(url, requestObject)
         }
     }
 
