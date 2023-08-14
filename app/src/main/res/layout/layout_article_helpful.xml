@@ -13,7 +13,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_40dp"
-            android:text="@string/text_was_this_article_helpful"
+            android:text="@string/text_found_what_you_re_looking_for"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -23,11 +23,13 @@
             android:id="@+id/ivThumbsUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:src="@drawable/ic_thumbs_up"
             android:alpha="0.5"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/ivThumbsDown"
             app:layout_constraintHorizontal_bias="0.5"
+            android:layout_marginBottom="@dimen/dimen_40dp"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView25" />
@@ -45,20 +47,5 @@
             app:layout_constraintStart_toEndOf="@+id/ivThumbsUp"
             app:layout_constraintTop_toTopOf="@+id/ivThumbsUp" />
 
-        <TextView
-            android:id="@+id/btnAnyOtherQuery"
-            style="@style/H5"
-            android:padding="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:layout_marginBottom="@dimen/dimen_40dp"
-            android:text="@string/text_any_other_query"
-            android:textAllCaps="false"
-            android:textColor="@color/text_accent_color"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivThumbsUp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

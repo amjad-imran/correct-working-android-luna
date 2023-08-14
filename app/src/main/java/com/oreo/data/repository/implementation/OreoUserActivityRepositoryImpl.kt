@@ -12,20 +12,8 @@ import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.dataConverter.OreoOfflineDataMapper
-import com.oreo.data.db.implementation.OreoAutoSportDataImpl
-import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
-import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
-import com.oreo.data.db.implementation.OreoHeartRateDataImpl
-import com.oreo.data.db.implementation.OreoRespiratoryDataImpl
-import com.oreo.data.db.implementation.OreoSleepDataImpl
-import com.oreo.data.db.implementation.OreoStepsDataImpl
-import com.oreo.data.db.implementation.OreoStressDataImpl
-import com.oreo.data.model.OActivityListModal
-import com.oreo.data.model.OContributorResponseModal
-import com.oreo.data.model.OHealthOverview
-import com.oreo.data.model.OInternalPageResponseModal
-import com.oreo.data.model.OWorkoutDetailsResponseModel
-import com.oreo.data.model.OWorkoutListModal
+import com.oreo.data.db.implementation.*
+import com.oreo.data.model.*
 import com.oreo.data.model.health.OreoActivityModel
 import com.oreo.data.model.health.OreoDashboardResponseModel
 import com.oreo.data.model.health.OreoReadinessModel
@@ -478,7 +466,7 @@ class OreoUserActivityRepositoryImpl(
     override suspend fun getRecentWorkoutList(isToday: Boolean): Flow<Resource<BaseApiResponse<List<OActivityListModal>>>> {
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.OREO_BASE_URL}/activity/v1/recent/workout"
-            remoteDataSource.getRecentWorkoutList(url,isToday)
+            remoteDataSource.getRecentWorkoutList(url, isToday)
         }
     }
 
@@ -505,6 +493,7 @@ class OreoUserActivityRepositoryImpl(
             remoteDataSource.getActivityInternalPagesData(url, selectDate, dayType, contriType)
         }
     }
+
     override suspend fun getReadinessInternalPagesData(
         selectDate: String,
         dayType: String,
@@ -546,6 +535,13 @@ class OreoUserActivityRepositoryImpl(
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.OREO_BASE_URL}/activity/v1/workout_detail/${id}"
             remoteDataSource.getWorkoutDetails(url)
+        }
+    }
+
+    override suspend fun getHSCategories(): Flow<Resource<BaseApiResponse<List<OHSModel>>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/protean/v1/help_and_support/categories"
+            remoteDataSource.getHSCategories(url)
         }
     }
 
