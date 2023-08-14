@@ -109,7 +109,10 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
 
     override fun initListener() {
         binding.btnPairingIssue.setOnClickListener {
-
+            navigate(R.id.oreoHSQuestionFragment, Bundle().apply {
+                putString("title", "Ring Bluetooth Scanning Issues")
+                putString("id", "7")
+            })
 
         }
         binding.btnStopPairing.setOnClickListener {
@@ -598,8 +601,8 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
                 binding.layoutWatch.setAnimation(R.raw.anim_pairing)
                 binding.layoutWatch.playAnimation()
 
-//                binding.layoutWatchLayer2.gone()
-                //binding.layoutWatch.circularProgressBar.startAnimation()
+                binding.layoutWatchLayer2.gone()
+//                binding.layoutWatch.circularProgressBar.startAnimation()
                 binding.textView.text = getString(R.string.text_pairing)
                 binding.tvPairStatus.text = getString(R.string.text_keep_your_watch_near_your_phone)
                 binding.btnStopPairing.text = getString(R.string.text_stop_pairing)
@@ -610,10 +613,10 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
                 binding.layoutWatch.setAnimation(R.raw.anim_pair_failed)
                 binding.layoutWatch.playAnimation()
 
-//                binding.layoutWatchLayer2.visible()
-//                binding.layoutWatchLayer2.repeatCount = LottieDrawable.INFINITE
-//                binding.layoutWatchLayer2.setAnimation(R.raw.anim_pair_failed)
-//                binding.layoutWatchLayer2.playAnimation()
+                binding.layoutWatchLayer2.visible()
+                binding.layoutWatchLayer2.repeatCount = LottieDrawable.INFINITE
+                binding.layoutWatchLayer2.setAnimation(R.raw.anim_pair_failed_glow)
+                binding.layoutWatchLayer2.playAnimation()
 
                 binding.textView.text = getString(R.string.text_pairing_unsuccess)
                 binding.tvPairStatus.text = getString(
@@ -628,10 +631,10 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
                 binding.layoutWatch.repeatCount = 1
                 binding.layoutWatch.setAnimation(R.raw.anim_pair_success)
 
-//                binding.layoutWatchLayer2.visible()
-//                binding.layoutWatchLayer2.repeatCount = LottieDrawable.INFINITE
-//                binding.layoutWatchLayer2.setAnimation(R.raw.anim_pair_success)
-//                binding.layoutWatchLayer2.playAnimation()
+                binding.layoutWatchLayer2.visible()
+                binding.layoutWatchLayer2.repeatCount = LottieDrawable.INFINITE
+                binding.layoutWatchLayer2.setAnimation(R.raw.anim_pair_success_glow)
+                binding.layoutWatchLayer2.playAnimation()
 
 
                 binding.btnPairingIssue.gone()
