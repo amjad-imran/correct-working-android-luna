@@ -107,8 +107,19 @@
 
     <fragment
         android:id="@+id/oreoHealthAndSupportFragment"
-        android:name="com.oreo.ui.helpsupport.OHelpAndSupportFragment"
+        android:name="com.oreo.ui.helpsupport.categories.OHelpAndSupportFragment"
         android:label="OreoHealthAndSupport" />
+    <fragment
+        android:id="@+id/oreoHSQuestionFragment"
+        android:name="com.oreo.ui.helpsupport.questionaries.OHSQAFragment"
+        android:label="OHSQAFragment">
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="id"
+            app:argType="string" />
+    </fragment>
 
     <include app:graph="@navigation/navigation_profile_edit" />
 
@@ -185,9 +196,9 @@
             app:nullable="true" />
         <argument
             android:name="movementList"
+            android:defaultValue="@null"
             app:argType="integer[]"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
 
     </fragment>
 
@@ -327,4 +338,21 @@
         android:id="@+id/fragmentAllDone"
         android:name="com.noisefit.ui.onboarding.AllDoneActivity"
         android:label="FragmentAllDone" />
+    <dialog
+        android:id="@+id/badRatingBottomSheet"
+        android:name="com.oreo.ui.helpsupport.questionaries.BottomSheetBadRating"
+        android:label="BadRatingBottomSheet" />
+    <!--    <fragment-->
+    <!--        android:id="@+id/qrCodeScanFragment"-->
+    <!--        android:name="com.noisefit.ui.myDevice.warranty.QrCodeScanFragment"-->
+    <!--        android:label="QrCodeScanFragment" />-->
+    <fragment
+        android:id="@+id/warrantyFragment"
+        android:name="com.oreo.ui.warranty.OWarrantyFragment"
+        android:label="WarrantyFragment" />
+    <fragment
+        android:id="@+id/qrCodeScanFragment"
+        android:name="com.oreo.ui.warranty.QrCodeScanFragment"
+        android:label="QrCodeScanFragment" />
+
 </navigation>

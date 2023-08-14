@@ -22,11 +22,7 @@ import com.noisefit_commans.models.SportsModeRequestList
 import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.models.WatchFace
 import com.noisefit_commans.response.SleepHistoryResponse
-import com.oreo.data.model.OActivityListModal
-import com.oreo.data.model.OContributorResponseModal
-import com.oreo.data.model.OInternalPageResponseModal
-import com.oreo.data.model.OWorkoutDetailsResponseModel
-import com.oreo.data.model.OWorkoutListModal
+import com.oreo.data.model.*
 import com.oreo.data.model.health.OreoActivityModel
 import com.oreo.data.model.health.OreoDashboardResponseModel
 import com.oreo.data.model.health.OreoReadinessModel
@@ -245,8 +241,9 @@ interface NetworkService {
         @Url url: String
     ): BaseApiResponseData<List<WatchFace>>
 
-    @POST("/firmware-versions/v3")
+    @POST
     suspend fun checkForUpdates(
+        @Url url:String,
         @Body requestObject: JsonObject
     ): BaseApiResponseData<UpdateResponse>
 
@@ -481,16 +478,18 @@ interface NetworkService {
         @Path("number") number: String
     ): BaseApiResponse<WarrantyResponse>
 
-    @POST("/master/user/ring-token")
+    @POST
     suspend fun checkWatchTokenExist(
+        @Url url:String,
         @Body jsonObject: JsonObject
     ): BaseApiResponse<WatchTokenResponse>
 
     //  @GET("/warranty/check/{number}")
     //    suspend fun checkWarranty(
     //        @Path("number") number: String
-    @POST("/master/user/ring-token/remove")
+    @POST
     suspend fun removeWatchTokenFromServer(
+        @Url url: String,
         @Body jsonObject: JsonObject
     ): BaseApiResponseData<Any>
 
@@ -764,6 +763,10 @@ interface NetworkService {
     suspend fun getWorkoutDetails(
         @Url url: String
     ): BaseApiResponse<OWorkoutDetailsResponseModel>
+    @GET
+    suspend fun getHSCategories(
+        @Url url: String
+    ): BaseApiResponse<List<OHSModel>>
     /**
      * ---------------------------------------------------------------------------------
      *                                Oreo Services End

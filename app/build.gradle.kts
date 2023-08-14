@@ -54,10 +54,10 @@ android {
             keyPassword = "android"
         }
         create("release") {
-            storeFile = file("noise.keystore")
-            storePassword = "gonoise@noisefit"
-            keyAlias = "gonoise@noisefit"
-            keyPassword = "gonoise@noisefit"
+            storeFile = file("luna.keystore")
+            storePassword = "luna@noise"
+            keyAlias = "luna@noise"
+            keyPassword = "luna@noise"
         }
     }
 

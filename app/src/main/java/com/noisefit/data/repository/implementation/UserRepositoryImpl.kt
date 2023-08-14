@@ -114,7 +114,7 @@ class UserRepositoryImpl(
     override suspend fun saveUserDevice(request: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<UpdateDeviceResponse>>> {
         return safeApiCallFlow(dispatcher) {
             remoteDataSource.setUserDevice(
-                "${BuildConfig.BASE_URL_NEW}/master/user/v3/devices",
+                "${BuildConfig.BASE_URL_NEW}/user_detail/ring/devices",
                 request
             )
         }

@@ -143,7 +143,7 @@ public class YAxisRenderer extends AxisRenderer {
 
         if (!mYAxis.isEnabled())
             return;
-        Log.d("drawLine", "inside");
+//        Log.d("drawLine", "inside");
         if (mYAxis.isDrawGridLinesEnabled()) {
 
             int clipRestoreCount = c.save();
@@ -160,7 +160,7 @@ public class YAxisRenderer extends AxisRenderer {
 
             // draw the grid
             for (int i = 0; i < positions.length; i += 2) {
-                Log.d("drawLine", "drawLine" + positions[i] + " " + i + " " + positions.length);
+//                Log.d("drawLine", "drawLine" + positions[i] + " " + i + " " + positions.length);
                 // draw a path because lines don't support dashing on lower android versions
                 if (i == 2 && mYAxis.isShowMiddleGrid()) {
                     mGridPaint.setStrokeWidth(6f);

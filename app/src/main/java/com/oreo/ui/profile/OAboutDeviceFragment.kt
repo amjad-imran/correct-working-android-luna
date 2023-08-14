@@ -47,7 +47,7 @@ class OAboutDeviceFragment :
     private fun setUi() {
         connectedDevice = ringDataStore.getRingDevice()
         binding.ivDevice.loadImage(
-            requireContext(), connectedDevice?.ringInfo?.image
+            requireContext(), connectedDevice?.ringInfo?.image2
         )
         binding.tvVersion.text = "MAC ${connectedDevice?.address ?: ""}"
 
@@ -79,7 +79,7 @@ class OAboutDeviceFragment :
         }
         response.add(AboutDeviceData("Colour", connectedDevice.ringInfo?.color ?: "-"))
         response.add(AboutDeviceData("Size", size))
-        response.add(AboutDeviceData("Bootloader", "-"))
+//        response.add(AboutDeviceData("Bootloader", "-"))
         response.add(
             AboutDeviceData(
                 "Serial number",
