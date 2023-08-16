@@ -15,13 +15,6 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.InsiderAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 
-enum class UserType(val type: String) {
-    Admin("admin"),
-    Influencer("influencer"),
-    User("user"),
-    None("none")
-}
-
 @AndroidEntryPoint
 class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBinding::inflate) {
 
