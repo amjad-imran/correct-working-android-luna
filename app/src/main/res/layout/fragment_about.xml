@@ -27,7 +27,7 @@
                     android:layout_width="@dimen/dimen_56dp"
                     android:layout_height="@dimen/dimen_56dp"
                     android:layout_marginTop="@dimen/dimen_32dp"
-                    android:src="@drawable/ic_noisefit_logo_short_new"
+                    android:src="@mipmap/ic_launcher"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

@@ -43,7 +43,7 @@ class AppUpdateBottomSheet : BaseBottomSheetWithTransparent<LayoutAppUpdateBotto
             return
         }
 
-        binding.ivLogo.loadImage(requireContext(), R.drawable.ic_noise_logo_1)
+        binding.ivLogo.loadImage(requireContext(), R.mipmap.ic_launcher)
         binding.tvTitle.text = getString(R.string.text_noisefit_update)
         var description = versionCheckResponse.description
         if (description.isNullOrEmpty()) {
