@@ -17,21 +17,21 @@ class OHealthSupportAdapter(val mListener: OHSClickListener) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(resultData: OHSModel) {
             binding.tvTitle.text = resultData.title
-            binding.ivIcon.loadImage(binding.ivIcon.context,resultData.imgUrl)
+            binding.ivIcon.loadImage(binding.ivIcon.context, resultData.icon_url)
 
             if (bindingAdapterPosition == mDataSet.size - 1)
                 binding.divider.root.gone() else
                 binding.divider.root.visible()
 
             binding.root.setOnClickListener {
-                mListener.onItemClickListener(resultData.id,resultData.title)
+                mListener.onItemClickListener(resultData.id, resultData.title)
             }
 
         }
     }
 
     interface OHSClickListener {
-        fun onItemClickListener(id: String,title:String)
+        fun onItemClickListener(id: String, title: String)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
