@@ -128,7 +128,7 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:692776363643:android:40c9b57caf0b1d99cc64de",
+        "mobilesdk_app_id": "1:692776363643:android:85e902f2b18d6ac2cc64de",
         "android_client_info": {
           "package_name": "com.noisefit.luna"
         }
@@ -170,6 +170,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "692776363643-kj537v22l8suf6qo0k8ho0kddk592kj4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.noisefit.luna.dev",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
         {
           "client_id": "692776363643-ekmmtuuqdjs94hg9rs243rsnjfn08j5r.apps.googleusercontent.com",
           "client_type": 3
