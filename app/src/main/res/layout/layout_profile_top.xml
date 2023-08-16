@@ -15,8 +15,7 @@
             android:transitionName="profilePic"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView"
-            tools:src="@drawable/ic_noiselogo_black_background" />
+            app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
 
         <View
             android:id="@+id/viewCommunity"

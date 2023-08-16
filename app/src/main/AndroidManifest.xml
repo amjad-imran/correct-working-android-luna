@@ -163,7 +163,7 @@
             android:value="${cleverTapId}" />
         <meta-data
             android:name="CLEVERTAP_NOTIFICATION_ICON"
-            android:value="ic_noisefit_logo_short" />
+            android:value="ic_luna_logo_short" />
         <meta-data
             android:name="CLEVERTAP_TOKEN"
             android:value="${cleverTapToken}" /> <!-- IMPORTANT: To force use Google AD ID to uniquely identify  users, use the following meta tag. GDPR mandates that if you are using this tag, there is prominent disclousure to your end customer in their application. Read more about GDPR here - https://clevertap.com/blog/in-preparation-of-gdpr-compliance/ -->
