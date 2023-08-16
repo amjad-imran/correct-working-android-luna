@@ -100,23 +100,6 @@
                 app:wheel_drawableSize="18dp"
                 app:wheel_item_height="44dp" />
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="@color/background_dialog_overlay"
-                app:layout_constraintBottom_toTopOf="@+id/include5"
-                app:layout_constraintEnd_toEndOf="@+id/wheelPicker"
-                app:layout_constraintStart_toStartOf="@+id/wheelPicker"
-                app:layout_constraintTop_toTopOf="@+id/wheelPicker" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="@color/background_dialog_overlay"
-                app:layout_constraintBottom_toBottomOf="@+id/wheelPicker"
-                app:layout_constraintEnd_toEndOf="@+id/wheelPicker"
-                app:layout_constraintStart_toStartOf="@+id/wheelPicker"
-                app:layout_constraintTop_toBottomOf="@+id/include4" />
             <Button
                 android:id="@+id/btnCancel"
                 style="@style/SecondaryButtonStyle"
