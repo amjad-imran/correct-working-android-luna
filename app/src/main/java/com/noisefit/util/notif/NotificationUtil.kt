@@ -130,9 +130,6 @@ object NotificationUtil {
         var title = AppStaticData.NOTIFICATION_TITLE
         if (BuildConfig.DEBUG) {
             title += " - Dev"
-
-
-            title += " - ring"
         }
 
         return getNotification(context, title, lastSync)!!
