@@ -60,8 +60,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding.tvAppVersion.text =
-            getString(R.string.app_version, ApplicationUtils.getAppVersion())
+//
         viewModel.setIgnoreVersion(viewModel.localDataStore.getIgnoreVersion())
         handleBackgroundNotifications(intent)
 
@@ -77,9 +76,9 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
 
 
     private fun startOnBoardFlow() {
-        if (BuildConfig.DEBUG) {
+       /* if (BuildConfig.DEBUG) {
             viewModel.checkOnBoardingFlow()
-        } else {
+        } else {*/
             Handler(Looper.getMainLooper()).postDelayed({
                 try {
                     viewModel.checkOnBoardingFlow()
@@ -87,8 +86,8 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
                     //Context null handling
                     exp.printStackTrace()
                 }
-            }, 3000)
-        }
+            }, 4000)
+       // }
 
         dirtyWorkers()
     }
