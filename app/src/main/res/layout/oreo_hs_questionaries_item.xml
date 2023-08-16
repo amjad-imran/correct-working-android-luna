@@ -29,13 +29,11 @@
 
         <TextView
             android:id="@+id/tvDesc"
-            style="@style/H6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
             android:layout_marginTop="16dp"
-            android:textColor="@color/white_48"
             app:layout_constraintTop_toBottomOf="@id/tvTitle"
             tools:text="The Luna Ring is a smart wearable designed to monitor and track various aspects of your health and well-being. It measures your sleep patterns, activity levels, heart rate, body temperature, and more. The ring connects to a mobile app, providing personalized insights to help you improve your overall health." />
 

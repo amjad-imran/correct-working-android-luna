@@ -53,6 +53,10 @@
             android:name="id"
             app:argType="string" />
     </fragment>
+    <dialog
+        android:id="@+id/badRatingBottomSheet"
+        android:name="com.oreo.ui.helpsupport.questionaries.BottomSheetBadRating"
+        android:label="BadRatingBottomSheet" />
 
 
 

@@ -1,5 +1,7 @@
 package com.oreo.ui.helpsupport.questionaries
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.setFragmentResultListener
@@ -55,7 +57,12 @@ class OHSQAFragment :
         setFragmentResultListener(CALL_REQUEST_KEY) { _, bundle ->
             val isCall = bundle.getBoolean("call")
             if (isCall) {
-                //todo redirect for call
+                val intent = Intent(Intent.ACTION_SEND)
+                intent.putExtra(Intent.EXTRA_EMAIL, arrayOf<String>("luna.support@nexxbase.com"))
+                intent.putExtra(Intent.EXTRA_SUBJECT, "")
+                intent.putExtra(Intent.EXTRA_TEXT, "")
+                intent.type = "message/rfc822"
+                startActivity(Intent.createChooser(intent, "Send email"))
             } else {
                 binding.lytHelpful.ivThumbsDown.alpha = 0.5f
             }

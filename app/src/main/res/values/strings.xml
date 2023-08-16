@@ -937,9 +937,9 @@
     <string name="text_updating_dot">Updating..</string>
     <string name="text_seven_day_avg">7 day avg</string>
     <string name="text_found_what_you_re_looking_for">Found what you’re looking for?</string>
-    <string name="text_still_got_questions_talk_to_an_expert">Still got questions? Talk to an expert</string>
+    <string name="text_still_got_questions_talk_to_an_expert">Still got questions?</string>
     <string name="text_call">Call</string>
     <string name="text_help">Help</string>
     <string name="text_warranty_registered"> Add text </string>
-    <string name="text_bad_feedback_msg">Or continue browsing through our help and support to find what you’re looking for**</string>
+    <string name="text_bad_feedback_msg">If you have any query, write to us on luna.support@nexxbase.com</string>
 </resources>
