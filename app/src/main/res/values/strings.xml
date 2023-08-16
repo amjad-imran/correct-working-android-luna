@@ -299,7 +299,7 @@
     <string name="text_5">05</string>
     <string name="text_7">07</string>
     <string name="text_8">08</string>
-    <string name="text_unable_to_search_or_pair_your_device">Unable to search or pair your device?</string>
+    <string name="text_unable_to_search_or_pair_your_device">Unable to find or pair your device?</string>
     <string name="text_agree_and_continue">Agree and continue</string>
     <string name="text_i_agree_with_noisefit_terms"><![CDATA[I agree with Luna Ring Terms & Conditions and acknowledge Luna Ring’s Privacy Policy.]]></string>
     <string name="text_i_agree_with_npl_terms"><![CDATA[By clicking on “Agree and continue” you agree with Luna Ring Terms & Conditions and acknowledge Luna Ring’s Privacy Policy.]]></string>

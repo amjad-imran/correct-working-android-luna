@@ -3,31 +3,17 @@ package com.oreo.ui.home.summary
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.github.mikephil.charting.data.CombinedData
 import com.noisefit.luna.R
-import com.noisefit.luna.databinding.ListActivityBurnCardItemBinding
-import com.noisefit.luna.databinding.ListHeartRateCardItemBinding
-import com.noisefit.luna.databinding.ListOHeaderCardItemBinding
-import com.noisefit.luna.databinding.ListOPairDeviceBinding
-import com.noisefit.luna.databinding.ListOWAlertCardItemBinding
-import com.noisefit.luna.databinding.ListOreoBatteryPercentItemBinding
-import com.noisefit.luna.databinding.ListReadinessCardItemBinding
-import com.noisefit.luna.databinding.ListReadinessScoreCardItemBinding
-import com.noisefit.luna.databinding.ListSleepActivityCardItemBinding
-import com.noisefit.luna.databinding.ListSleepCardItemBinding
-import com.noisefit.luna.databinding.OreoDummyViewBinding
-import com.noisefit.luna.databinding.OreoLayoutRecentActivityBinding
+import com.noisefit.luna.databinding.*
 import com.noisefit.ui.common.calculatePercentage
 import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.ui.*
 import com.noisefit_commans.ui.custom.SleepProgressbarView
-import com.noisefit_commans.ui.getColor
-import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.invisible
-import com.noisefit_commans.ui.loadImage
-import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MiscUtil
@@ -331,13 +317,26 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             if (scoreValue == 0) {
                 binding.tvValue.text = "--"
                 binding.tvStatus.text = "No data"
-                binding.tvTodayDesc.text = ""
-                binding.tvTodayDesc.invisible()
+//                binding.tvTodayDesc.text = ""
+//                binding.tvTodayDesc.invisible()
 
             } else {
                 binding.tvValue.text = scoreValue.toString()
                 binding.tvStatus.text = data.data.status
-                binding.tvTodayDesc.visible()
+//                binding.tvTodayDesc.visible()
+            }
+
+            if (data.data.nudge.isNullOrEmpty()) {
+                (binding.tvTodayDesc.layoutParams as ConstraintLayout.LayoutParams).apply {
+                    topMargin = 24
+                    bottomMargin = 0
+                }
+            } else {
+                (binding.tvTodayDesc.layoutParams as ConstraintLayout.LayoutParams).apply {
+                    topMargin = 24
+                    bottomMargin = 26
+                }
+                binding.tvTodayDesc.text = data.data.nudge
             }
 
             if (scoreValue >= 0) {
