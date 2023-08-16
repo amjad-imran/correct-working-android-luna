@@ -1,7 +1,0 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/animView"
-        android:layout_width="match_parent"
-        android:layout_height="300dp" />
-</layout>

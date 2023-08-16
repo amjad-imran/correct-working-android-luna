@@ -112,6 +112,14 @@ class NetworkConnectionInterceptor(
             }
             if (response.code == STATUS_CODE_REFRESH) {//Refresh token
 
+                val lastTimestamp = localDataStore.getLastTokenRefreshTimestamp()
+                val currentTimestamp = System.currentTimeMillis()
+                val difference = (currentTimestamp - lastTimestamp)
+                if (difference < (10 * 1000) && lastTimestamp != 0L) {
+                    throw IOException("Error Connecting to internet")
+                }
+
+                localDataStore.saveLastTokenRefreshTimestamp()
                 runBlocking {
 
                     getUpdatedToken().collect { resource ->

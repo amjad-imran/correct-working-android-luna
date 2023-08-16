@@ -492,31 +492,20 @@ class FindDeviceListFragment :
     }
 
     private fun startPairing(colorFitDevice: ColorFitDevice) {
-        val (isUnSupported, playStorePackage, appIcon) = deviceUtil.isUnsupportedDevice(
-            colorFitDevice
-        )
-        viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_device_clicked,
-            HashMap<String, Any>().apply {
-                this["name"] = colorFitDevice.bluetoothName ?: ""
-                this["supported"] = !isUnSupported
-            })
-        if (!isUnSupported) {
-            colorFitDevice.userId = viewModel.userId()
-            viewModel.tempColorFitDevice = colorFitDevice
-            colorFitDevice.address?.let { viewModel.checkWatchTokenExist(it) }
 
-            if (findNavController().currentDestination?.id == R.id.findDeviceListFragment) {
-                navigate(
-                    FindDeviceListFragmentDirections.actionFindDeviceListFragmentToPairingFragment(
-                        colorFitDevice
-                    )
+
+        colorFitDevice.userId = viewModel.userId()
+        viewModel.tempColorFitDevice = colorFitDevice
+        colorFitDevice.address?.let { viewModel.checkWatchTokenExist(it) }
+
+        if (findNavController().currentDestination?.id == R.id.findDeviceListFragment) {
+            navigate(
+                FindDeviceListFragmentDirections.actionFindDeviceListFragmentToPairingFragment(
+                    colorFitDevice
                 )
-            }
-        } else {
-            playStorePackage?.let {
-                showOpenPlayStoreDialog(it, colorFitDevice.bluetoothName ?: "", appIcon)
-            }
+            )
         }
+
     }
 
     private fun moveToPairingScreen(colorFitDevice: ColorFitDevice, watchToken: String) {
