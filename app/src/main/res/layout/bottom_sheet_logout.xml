@@ -45,6 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_24dp"
                 android:gravity="center"
+                android:textColor="#8a8c8e"
                 android:lineSpacingExtra="6sp"
                 android:text="@string/are_you_sure_to_logout_from_your_nnoisefit_account"
                 app:layout_constraintEnd_toEndOf="parent"

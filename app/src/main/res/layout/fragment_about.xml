@@ -78,7 +78,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/include5"
-                    app:textAbout="@string/text_terms_and_conditions" />
+                    app:textAbout="@string/text_terms_and_condition_new" />
 
                 <com.noisefit_commans.ui.custom.AboutRow
                     android:id="@+id/rowPrivacyPolicy"
