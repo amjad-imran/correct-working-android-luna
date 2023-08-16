@@ -942,4 +942,5 @@
     <string name="text_help">Help</string>
     <string name="text_warranty_registered"> Add text </string>
     <string name="text_bad_feedback_msg">If you have any query, write to us on luna.support@nexxbase.com</string>
+    <string name="text_got_something_to_share_tell_us">Got something to share? Tell us.</string>
 </resources>
