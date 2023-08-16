@@ -39,7 +39,7 @@
     </fragment>
 
     <fragment
-        android:id="@+id/oreoHealthAndSupportFragment"
+        android:id="@+id/oreoHelpAndSupportFragment"
         android:name="com.oreo.ui.helpsupport.categories.OHelpAndSupportFragment"
         android:label="OreoHealthAndSupport" />
     <fragment
