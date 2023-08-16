@@ -184,6 +184,8 @@ private const val LATER_NOW_REVIEW_SHOWN_TIMESTAMP = "LATER_NOW_REVIEW_SHOWN_TIM
 private const val SHOW_REVIEW_POP_UP = "SHOW_REVIEW_POP_UP"
 private const val PAIR_DEVICE_TYPE = "PAIR_DEVICE_TYPE"
 private const val WF_RATING_KEY = "WF_RATING_KEY"
+private const val TOKEN_LAST_UPDATE = "TOKEN_LAST_UPDATE"
+
 
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
@@ -518,6 +520,14 @@ class DataStoredImpl
 
     override fun setLastStepsSyncWithServer(timeStamp: Long) {
         mPrefs.edit()?.putLong(STEPS_LAST_SYNC_WITH_SERVER, timeStamp)?.apply()
+    }
+
+    override fun getLastTokenRefreshTimestamp(): Long {
+        return mPrefs.getLong(TOKEN_LAST_UPDATE, 0)
+    }
+
+    override fun saveLastTokenRefreshTimestamp() {
+        mPrefs.edit()?.putLong(TOKEN_LAST_UPDATE, System.currentTimeMillis())?.commit()
     }
 
     override fun getLastClearTables(): Long {

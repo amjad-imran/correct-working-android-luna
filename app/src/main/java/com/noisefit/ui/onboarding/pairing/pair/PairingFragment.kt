@@ -555,10 +555,9 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
         activity?.let {
 
 
-            binding.ivWatchImage.loadWatchImage(//TODO change for ring
+            binding.ivWatchImage.loadImage(
                 it,
-                colorFitDevice.ringInfo?.image2 ?: "",
-                R.drawable.ic_ring_default_silver
+                colorFitDevice.ringInfo?.image2 ?: ""
             )
 
         }

@@ -643,52 +643,6 @@ object ApplicationUtils {
         }
     }
 
-    fun getImageForTask(taskEnum: String?): Int {
-        val imageType = when (taskEnum) {
-            TaskEnums.WATCH_PAIR.type -> {
-                R.drawable.ic_task_watch_paired
-            }
-
-            TaskEnums.PROFILE.type -> {
-                R.drawable.ic_task_p_complete
-            }
-
-            TaskEnums.STEPS.type -> {
-                R.drawable.ic_task_c_steps
-            }
-
-            TaskEnums.DISTANCE.type -> {
-                R.drawable.ic_task_distance
-            }
-
-            TaskEnums.CALORIES.type -> {
-                R.drawable.ic_task_calories
-            }
-
-            TaskEnums.CUSTOM_WATCHFACE.type -> {
-                R.drawable.ic_task_wf_created
-            }
-
-            TaskEnums.CHALLENGE_PARTICIPATION.type -> {
-                R.drawable.ic_task_c_joined
-            }
-
-            TaskEnums.FRIEND_ADDED.type -> {
-                R.drawable.ic_task_add_friend
-            }
-
-            TaskEnums.WORKOUT.type -> {
-                R.drawable.ic_task_w_complete
-            }
-
-            TaskEnums.SHARE.type -> {
-                R.drawable.ic_task_w_share
-            }
-
-            else -> 0
-        }
-        return imageType
-    }
 
     fun bmiCalculate(
         height: Float,

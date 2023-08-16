@@ -133,9 +133,7 @@ class FeedbackNewViewModel @Inject constructor(
         val versionCode = packageInfo.versionCode
 
 
-        val connectedDevice =
-
-            ringDataStore.getRingDevice()
+        val connectedDevice = ringDataStore.getRingDevice()
 
 
         val platform = "android"
@@ -143,11 +141,8 @@ class FeedbackNewViewModel @Inject constructor(
         val osVersion = Build.VERSION.RELEASE
         val appVersion = "$versionName($versionCode)"
         val watchName = connectedDevice?.bluetoothName.toString()
-        val watchFirmwareVersion =
-
-            WatchInfoGlobals.firmwareVersionRing
-                ?: WatchInfoGlobals.firmwareVersionNumberRing.toString()
-
+        val watchFirmwareVersion = WatchInfoGlobals.firmwareVersionRing
+            ?: WatchInfoGlobals.firmwareVersionNumberRing.toString()
 
         LOGS.d("connectedDevice $watchName")
         return FeedbackNew(
@@ -161,7 +156,6 @@ class FeedbackNewViewModel @Inject constructor(
             problemType,
             comment,
             DateFormats.getTodaysDateString(9)
-
         )
     }
 

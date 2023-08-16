@@ -86,69 +86,7 @@ constructor() {
     * spinning
     * */
 
-    fun getAppIconImageMighty(functionId: Int): Int {
-        return when (functionId) {
-            2 -> R.drawable.ic_mighty_app_sport
-            20 -> R.drawable.ic_mighty_app_history
-            19 -> R.drawable.ic_mighty_app_activity
-            3 -> R.drawable.ic_mighty_app_heart_rate
-            4 -> R.drawable.ic_mighty_app_spo2
-            18 -> R.drawable.ic_mighty_app_sleep
 
-            21 -> R.drawable.ic_mighty_app_breath
-            29 -> R.drawable.ic_mighty_app_call
-            30 -> R.drawable.ic_mighty_app_contact
-
-            8 -> R.drawable.ic_mighty_app_alarm
-            5 -> R.drawable.ic_mighty_app_weather
-            9 -> R.drawable.ic_mighty_app_timer
-
-            25 -> R.drawable.ic_mighty_app_stopwatch
-
-            23 -> R.drawable.ic_mighty_app_music
-            24 -> R.drawable.ic_mighty_app_camera
-            12 -> R.drawable.ic_mighty_app_find_phone
-
-            33 -> R.drawable.ic_mighty_app_flashlight
-            7 -> R.drawable.ic_mighty_app_settings
-
-            else -> R.drawable.ic_sports_walk
-        }
-    }
-
-    fun getImageForApp(functionId: Int): Int {
-        return when (functionId) {
-            0 -> R.drawable.ic_sports_walk
-//            1 -> R.drawable.ic_workouts_history_sort
-            2, 32 -> R.drawable.ic_activity
-            3 -> R.drawable.ic_heart_rate
-            4 -> R.drawable.ic_sleep
-            5 -> R.drawable.ic_act_spo2
-            6 -> R.drawable.ic_alarm_clock
-            7 -> R.drawable.ic_my_reminder
-//            8 -> R.drawable.ic_stopwatch_sort
-//            9 -> R.drawable.ic_timer_sort
-            10 -> R.drawable.ic_music
-            11 -> R.drawable.ic_weather
-//            12 -> R.drawable.ic_breathing_sort
-//            13 -> R.drawable.ic_notification_sort
-//            14 -> R.drawable.ic_find_phone_sort
-//            15 -> R.drawable.ic_setting_sort
-//            16 -> R.drawable.ic_femal_sort
-            17 -> R.drawable.ic_stress
-            18 -> R.drawable.ic_world_clock
-            19 -> R.drawable.ic_stock
-//            20 -> "Air pressure"
-//            21 -> "Compass"
-//            22 -> "ECG"
-//            23 -> "Temperature"
-            24 -> R.drawable.ic_call_accept
-            25 -> R.drawable.ic_contact
-//            26 -> "Frequent contacts"
-            27 -> R.drawable.ic_camera_shutter
-            else -> R.drawable.ic_sports_walk
-        }
-    }
 
 
     fun getColorFromActivity(activityName: String?): ActivityColor {
