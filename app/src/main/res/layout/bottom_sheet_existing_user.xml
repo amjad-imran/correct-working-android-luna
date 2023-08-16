@@ -22,7 +22,7 @@
                 android:id="@+id/divider"
                 android:layout_width="@dimen/dimen_80dp"
                 android:layout_height="2dp"
-                android:layout_marginTop="@dimen/dimen_4dp"
+                android:layout_marginTop="@dimen/dimen_8dp"
                 android:background="#29000000"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

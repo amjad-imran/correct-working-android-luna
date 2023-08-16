@@ -249,7 +249,7 @@
     <string name="text_new_trophy_earned">New trophy earned</string>
     <string name="text_manage_apps">Manage apps</string>
     <string name="text_selected_matches">Selected Matches</string>
-    <string name="text_hello_from_the_nnoisefit_fam">Hello from the Luna Ring Fam</string>
+    <string name="text_hello_from_the_nnoisefit_fam">Hello from the Luna Fam</string>
     <string name="text_from_fitness_and_health_to_work_and_style_noisefit_helps_you_stay_at_the_top_of_everything">From fitness and health to work and style, Luna Ring helps you stay at the top of everything.</string>
     <string name="text_what_do_you_ncall_home">What do you\ncall home?</string>
     <string name="text_don_t_live_here_npick_your_country_from_the_dropdown">Don’t live here?\nPick your country from the dropdown.</string>
@@ -530,7 +530,8 @@
     <string name="text_about_sleep_message">Sleep provides insight into your sleep habits. Sleep trackers and monitors can help you determine the amount of time you are in bed and asleep. Noise devices estimate your time in bed and your time asleep by analysing changes in physical activity, including movement during the night.</string>
     <string name="text_image">Image</string>
     <string name="text_search_button">Search button</string>
-    <string name="text_mobile_otp">Please enter the code we just sent to (+91) %s to kickstart your app journey.</string>
+    <string name="text_mobile_otp">OTP has been send to</string>
+    <string name="text_enter_otp">Enter OTP to continue.</string>
     <string name="text_email_otp">Please enter the code we just sent to %s to proceed.</string>
     <string name="text_choose_background">Choose background</string>
     <string name="text_user_currently_using">User currently using</string>
@@ -942,4 +943,5 @@
     <string name="text_help">Help</string>
     <string name="text_warranty_registered"> Add text </string>
     <string name="text_bad_feedback_msg">If you have any query, write to us on luna.support@nexxbase.com</string>
+    <string name="text_log_in">Log in</string>
 </resources>
