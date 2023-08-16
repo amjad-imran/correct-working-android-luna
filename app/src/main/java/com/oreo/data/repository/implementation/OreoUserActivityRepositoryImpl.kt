@@ -540,14 +540,14 @@ class OreoUserActivityRepositoryImpl(
 
     override suspend fun getHSCategories(): Flow<Resource<BaseApiResponse<List<OHSModel>>>> {
         return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.BASE_URL_NEW}/core/help_and_support/categories"
+            val url = "${BuildConfig.BASE_URL_NEW}/core/help_and_support/ring/categories"
             remoteDataSource.getHSCategories(url)
         }
     }
 
     override suspend fun getHSQAnswer(quesId: String): Flow<Resource<BaseApiResponse<List<OHSQuestionariesResponseModel>>>> {
         return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.BASE_URL_NEW}/core/help_and_support/answers/${quesId}"
+            val url = "${BuildConfig.BASE_URL_NEW}/core/help_and_support/ring/answers/${quesId}"
             remoteDataSource.getHSQAnswer(url)
         }
     }

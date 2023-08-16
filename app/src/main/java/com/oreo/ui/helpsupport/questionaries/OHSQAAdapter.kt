@@ -1,6 +1,8 @@
 package com.oreo.ui.helpsupport.questionaries
 
+import android.os.Build
 import android.text.Html
+import android.text.Spanned
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -19,7 +21,7 @@ class OHSQAAdapter :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(result: OHSQuestionariesResponseModel) {
             binding.tvTitle.text = result.question
-            binding.tvDesc.text = Html.fromHtml(result.answer)
+            binding.tvDesc.text = fromHtml(result.answer)
 
             if (lastSelectedPos == bindingAdapterPosition) {
                 binding.tvDesc.visible()
@@ -41,6 +43,13 @@ class OHSQAAdapter :
 
             }
 
+        }
+    }
+    fun fromHtml(source: String?): Spanned? {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY)
+        } else {
+            Html.fromHtml(source)
         }
     }
 
