@@ -613,7 +613,7 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
                 binding.layoutWatch.playAnimation()
 
                 binding.layoutWatchLayer2.visible()
-                binding.layoutWatchLayer2.repeatCount = LottieDrawable.INFINITE
+                binding.layoutWatchLayer2.repeatCount = 0
                 binding.layoutWatchLayer2.setAnimation(R.raw.anim_pair_failed_glow)
                 binding.layoutWatchLayer2.playAnimation()
 
@@ -631,7 +631,7 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
                 binding.layoutWatch.setAnimation(R.raw.anim_pair_success)
 
                 binding.layoutWatchLayer2.visible()
-                binding.layoutWatchLayer2.repeatCount = LottieDrawable.INFINITE
+                binding.layoutWatchLayer2.repeatCount = 0
                 binding.layoutWatchLayer2.setAnimation(R.raw.anim_pair_success_glow)
                 binding.layoutWatchLayer2.playAnimation()
 
