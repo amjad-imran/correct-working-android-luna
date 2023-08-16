@@ -14,6 +14,7 @@ import com.noisefit_commans.common.setCompoundDrawable
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DistanceUtil
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Comparison
 import com.oreo.data.model.OInternalPageResponseModal

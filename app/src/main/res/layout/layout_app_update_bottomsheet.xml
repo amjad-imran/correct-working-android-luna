@@ -53,7 +53,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_gravity="center_horizontal"
-                tools:src="@drawable/ic_noise_logo_1" />
+                tools:src="@mipmap/ic_launcher" />
 
 
             <TextView

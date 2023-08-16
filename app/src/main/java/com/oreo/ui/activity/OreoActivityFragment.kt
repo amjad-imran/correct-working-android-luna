@@ -282,11 +282,16 @@ class OreoActivityFragment :
 
     }
 
-    private fun returnMovementProgress(highMovValue: Int): Pair<Int, String> {
-        val valueInSec = highMovValue.times(60)
-        val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(valueInSec)
+
+    private fun returnMovementProgress(value: Int, total: Int): Pair<Int, String> {
+        val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(value.times(5))
         val leftText = "$hour h $minute min"
-        val progress = valueInSec.toFloat().times(100).div(100).toInt()
+        var progress = (value.toFloat() / total).times(100).toInt()
+
+        if (progress == 0) {
+            progress = 1
+        }
+
         return Pair(progress, leftText)
 
     }
@@ -299,16 +304,7 @@ class OreoActivityFragment :
             java.util.ArrayList<CandleChartModel>()
 
 
-        val defaultInterval = 5
         binding.lytDailyMovement.lytDMHigh.tvTitle.text = getString(R.string.text_high_movement)
-        var highProgress = 1
-        val highRemark: String
-        var medProgress = 1
-        var medRemark = ""
-        var lowProgress = 1
-        var lowRemark = ""
-        var inactiveProgress = 1
-        var inactiveRemark = ""
         var highMovValue = 0
         var medMovValue: Int = 0
         var lowMovValue: Int = 0
@@ -388,18 +384,16 @@ class OreoActivityFragment :
             binding.lytDailyMovement.candleChart.updateData(candleChartModelList)
         }
 
+        val totalValue = highMovValue + medMovValue + lowMovValue + inactiveMovValue
 
-        highProgress = returnMovementProgress(highMovValue * defaultInterval).first
-        highRemark = returnMovementProgress(highMovValue * defaultInterval).second
+        val (highProgress, highRemark) = returnMovementProgress(highMovValue, totalValue)
+        val (medProgress, medRemark) = returnMovementProgress(medMovValue, totalValue)
+        val (lowProgress, lowRemark) = returnMovementProgress(lowMovValue, totalValue)
+        val (inactiveProgress, inactiveRemark) = returnMovementProgress(
+            inactiveMovValue,
+            totalValue
+        )
 
-        medProgress = returnMovementProgress(medMovValue * defaultInterval).first
-        medRemark = returnMovementProgress(medMovValue * defaultInterval).second
-
-        lowProgress = returnMovementProgress(lowMovValue * defaultInterval).first
-        lowRemark = returnMovementProgress(lowMovValue * defaultInterval).second
-
-        inactiveProgress = returnMovementProgress(inactiveMovValue * defaultInterval).first
-        inactiveRemark = returnMovementProgress(inactiveMovValue * defaultInterval).second
 
         binding.lytDailyMovement.lytDMHigh.pbSteps.progress = highProgress
         binding.lytDailyMovement.lytDMHigh.tvRemark.text = highRemark
