@@ -107,7 +107,7 @@ class FindDeviceListFragment :
          */
         binding.tvTroubleShoot.setOnClickListener {
             navigate(R.id.oreoHSQuestionFragment, Bundle().apply {
-                putString("title", "Ring Bluetooth Scanning Issues")
+                putString("title", "Ring bluetooth scanning issues")
                 putString("id", "7")
             })
         }

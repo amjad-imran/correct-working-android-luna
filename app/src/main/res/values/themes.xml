@@ -135,6 +135,7 @@
         <item name="android:singleLine">true</item>
         <item name="android:ellipsize">end</item>
         <item name="android:paddingTop">0dp</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:paddingBottom">0dp</item>
         <item name="android:fontFamily">@font/gilroy_medium</item>
         <item name="android:background">@drawable/btn_primary_bg_selector</item>
@@ -175,6 +176,7 @@
         <item name="android:textSize">14sp</item>
         <item name="android:singleLine">true</item>
         <item name="android:ellipsize">end</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:fontFamily">@font/gilroy_medium</item>
         <item name="android:paddingTop">0dp</item>
         <item name="android:paddingBottom">0dp</item>
