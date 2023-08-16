@@ -18,6 +18,7 @@
     <string name="text_today">Today</string>
     <string name="text_warranty_registration">Warranty registration</string>
     <string name="text_terms_and_conditions"><![CDATA[Terms & Conditions]]></string>
+    <string name="text_terms_and_condition_new">Terms and Conditions</string>
     <string name="text_privacy_policy">Privacy Policy</string>
     <string name="text_idle_alert">Idle alert</string>
     <string name="text_edit_health_overview">Edit health overview</string>
