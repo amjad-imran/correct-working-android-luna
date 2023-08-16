@@ -15,7 +15,7 @@ class BottomSheetBadRating : BaseBottomSheetWithTransparent<BottomSheetBadRating
 ) {
     override fun initListener() {
         binding.tvDesc.makeLinks(
-            true,
+            false,
             Pair("luna.support@nexxbase.com", View.OnClickListener {
                 val intent = Intent(Intent.ACTION_SEND)
                 intent.putExtra(Intent.EXTRA_EMAIL, arrayOf<String>("luna.support@nexxbase.com"))
