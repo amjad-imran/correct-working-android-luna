@@ -56,7 +56,7 @@ class PrivacyBottomDialogFragment : BaseBottomSheet<FragmentPrivacyBottomDialogL
 
         binding.tvPrivacy.text =
             getString(R.string.text_i_agree_with_noisefit_terms)
-        binding.tvPrivacy.makeLinks(true,
+        binding.tvPrivacy.makeLinks(false,
             Pair("Terms & Conditions", View.OnClickListener {
                 activity?.let {
                     startActivity(
