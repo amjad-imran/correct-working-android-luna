@@ -18,6 +18,7 @@ import com.noisefit_commans.interfaces.IQueryDataCallback
 import com.noisefit_commans.interfaces.QueryCallback
 import com.noisefit_commans.interfaces.data.UserActivityCallback
 import com.noisefit_commans.interfaces.device_data.QueryDeviceDataActions
+import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
 import com.noisefit_commans.models.BatteryData
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.CustomReplyData
@@ -175,7 +176,16 @@ constructor(
     }
 
     override fun resetTrigger() {
-        ControlBleTools.getInstance().unbindDeviceWaitConfirmation(null)
+        ControlBleTools.getInstance().unbindDeviceWaitConfirmation(object : SendCmdStateListener() {
+            override fun onState(state: SendCmdState) {
+                LOGS.d("resetTrigger", " State $state")
+                if (state == SendCmdState.SUCCEED) {
+
+                } else {
+
+                }
+            }
+        })
     }
 
     override fun getAgpsState() {
@@ -236,6 +246,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("calling timeout")
                         }
+
                         else -> {}
                     }
                 }
@@ -317,6 +328,7 @@ constructor(
                              )
                          )*/
                     }
+
                     1 -> {
                         //Reject
                         testQueryDeviceDataCallback?.onQueryDataReceived(
@@ -326,6 +338,7 @@ constructor(
                         )
                         AppLogs.sendAppLogs("$TAG call reject")
                     }
+
                     2 -> {
                         //Mute
                         testQueryDeviceDataCallback?.onQueryDataReceived(
@@ -371,8 +384,10 @@ constructor(
             }
 
             override fun onDeviceInfo(deviceInfoBean: DeviceInfoBean) {
-                LOGS.d(TAG, "${deviceInfoBean.firmwareVersion} ${deviceInfoBean.equipmentNumber} " +
-                        "S.No ${deviceInfoBean.serialNumber}")
+                LOGS.d(
+                    TAG, "${deviceInfoBean.firmwareVersion} ${deviceInfoBean.equipmentNumber} " +
+                            "S.No ${deviceInfoBean.serialNumber}"
+                )
 
                 if (noiseFitDevice?.deviceType.equals(DeviceType.NOISEFIT_LUNA.deviceType, true)) {
                     WatchInfoGlobals.firmwareVersionRing = deviceInfoBean.firmwareVersion
@@ -450,6 +465,7 @@ constructor(
                         )
                         AppLogs.sendAppLogs("Send music play command")
                     }
+
                     MusicProtos.SEPlayerControlCommand.PAUSE_VALUE -> {
                         setPlayPauseMusic(false)
                         testQueryDeviceDataCallback?.onQueryDataReceived(
@@ -459,6 +475,7 @@ constructor(
                         )
                         AppLogs.sendAppLogs("Send music pause command")
                     }
+
                     MusicProtos.SEPlayerControlCommand.PREV_VALUE -> {
                         setMusicPlayerState()
                         testQueryDeviceDataCallback?.onQueryDataReceived(
@@ -468,6 +485,7 @@ constructor(
                         )
                         AppLogs.sendAppLogs("Send music previous command")
                     }
+
                     MusicProtos.SEPlayerControlCommand.NEXT_VALUE -> {
                         setMusicPlayerState()
                         testQueryDeviceDataCallback?.onQueryDataReceived(
@@ -477,10 +495,12 @@ constructor(
                         )
                         AppLogs.sendAppLogs("Send music next command")
                     }
+
                     MusicProtos.SEPlayerControlCommand.ADJUST_VOLUME_UP_VALUE -> {
                         updateVolume(true)
                         AppLogs.sendAppLogs("Send music volume up command")
                     }
+
                     MusicProtos.SEPlayerControlCommand.ADJUST_VOLUME_DOWN_VALUE -> {
                         updateVolume(
                             false
@@ -802,6 +822,7 @@ constructor(
                         )
 
                     }
+
                     1 -> {
                         testQueryDeviceDataCallback?.onQueryDataReceived(
                             QueryCallback.CloseCameraShutterActivity(
@@ -810,6 +831,7 @@ constructor(
                         )
                         AppLogs.sendAppLogs("sent request for close camera shutter")
                     }
+
                     2 -> {
                         testQueryDeviceDataCallback?.onQueryDataReceived(QueryCallback.ClickCameraImage)
                         AppLogs.sendAppLogs("sent request for click camera image")
@@ -1011,9 +1033,11 @@ constructor(
                         SendCmdState.SUCCEED -> {
                             AppLogs.sendAppLogs("BLE call connection succeed")
                         }
+
                         SendCmdState.TIMEOUT -> {
                             AppLogs.sendAppLogs("BLE call connection timeout")
                         }
+
                         else -> {}
                     }
                 }
