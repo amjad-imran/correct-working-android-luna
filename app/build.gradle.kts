@@ -236,7 +236,6 @@ dependencies {
 
     implementation(CalenderView.calendarView)
 //    implementation(CleverTap.sdk)
-    implementation(ColorPickerView.colorPicketView)
 
     implementation(Exoplayer.core)
     implementation(Exoplayer.dash)
@@ -248,7 +247,6 @@ dependencies {
     implementation(Firebase.crashlytics)
     implementation(Firebase.messagining)
 
-    implementation(SeekBar.circularSeekBar)
 
 //    //Custom Calendar for Activity
     implementation(platform(Firebase.bom))
@@ -256,10 +254,7 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.2")
 
     implementation(Glide.glide)
-    implementation(Konfetti.konfetti)
-    implementation(Konfetti.konfettiCore)
     implementation("com.github.yalantis:ucrop:2.2.6")
-    implementation("com.github.zomato:androidphotofilters:1.0.2")
 
     implementation(Google.gson)
     implementation(Google.playCore)
@@ -269,7 +264,6 @@ dependencies {
     implementation(PinView.PinView)
 
     implementation(Hilt.android)
-    implementation(Maps.mapUtils)
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.appcompat:appcompat:1.4.1")
     implementation("com.google.android.material:material:1.4.0")
@@ -283,7 +277,6 @@ dependencies {
     implementation(Kotlinx.androidCore)
     implementation(Kotlinx.coroutinesCore)
 
-    implementation(ImagePicker.imagePicker)
 //    implementation(InstallReferral.installReferrer)
 
     implementation(PlayService.playServiceAuth)
@@ -292,7 +285,6 @@ dependencies {
     implementation(PlayService.playServiceLocation)
     implementation(PlayService.playServiceMaps)
 
-    implementation(QRScanner.qrScanner)
     implementation(Lottie.library)
 
     implementation(SwipeRefresh.swipeRefreshLibraryCore)
@@ -302,10 +294,8 @@ dependencies {
     implementation(Retrofit.converter)
     implementation(Retrofit.okttp3Interceptor)
 
-    implementation(SparkButton.button)
     /*implementation(Retrofit.brcypt)*/
 
-    implementation(Huawei.scanPlus)
     kapt(Room.Compiler)
     implementation(Room.ktx)
     implementation(RxPermissions.rxPermission)
@@ -325,8 +315,6 @@ dependencies {
     implementation(Insider.location)
     implementation("com.google.android.flexbox:flexbox:3.0.0")
     implementation("net.danlew:android.joda:2.12.1")
-    implementation("com.robinhood.ticker:ticker:2.0.4")
-    implementation("com.github.skydoves:balloon:1.5.2")
 
     implementation("com.github.Dimezis:BlurView:version-2.0.3")
 
