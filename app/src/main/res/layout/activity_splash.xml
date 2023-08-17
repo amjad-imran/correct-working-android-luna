@@ -9,31 +9,50 @@
         android:background="@drawable/oreo_default_bg"
         tools:context=".ui.SplashActivity">
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_rawRes="@raw/anim_splash_screen" />
+
         <ProgressBar
             android:id="@+id/pbLoading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dimen_16dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/tvAppVersion"
-            app:layout_constraintEnd_toEndOf="@+id/tvAppVersion"
-            app:layout_constraintStart_toStartOf="@+id/tvAppVersion" />
+            app:layout_constraintBottom_toTopOf="@+id/ivSplash"
+            app:layout_constraintEnd_toEndOf="@+id/ivSplash"
+            app:layout_constraintStart_toStartOf="@+id/ivSplash" />
 
-        <TextView
-            android:id="@+id/tvAppVersion"
+        <ImageView
+            android:id="@+id/ivSplash"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:fontFamily="sans-serif-medium"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            android:textStyle="normal"
+            android:src="@drawable/ic_luna_splash"
+            android:layout_marginBottom="47dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0"
-            tools:text="version 1.0.1" />
+            app:layout_constraintStart_toStartOf="parent" />
+        <!--        <TextView-->
+        <!--            android:id="@+id/tvAppVersion"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginBottom="16dp"-->
+        <!--            android:fontFamily="sans-serif-medium"-->
+        <!--            android:textColor="@color/white"-->
+        <!--            android:textSize="12sp"-->
+        <!--            android:textStyle="normal"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            app:layout_constraintVertical_bias="1.0"-->
+        <!--            tools:text="version 1.0.1" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

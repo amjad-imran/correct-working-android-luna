@@ -394,4 +394,10 @@ interface DataStoredInterface {
     fun clearWatchFaceRatedId(id: Int)
     fun checkWatchFaceRatedIdExist(id: Int): Boolean
 
+    fun saveLastTokenRefreshTimestamp()
+    fun getLastTokenRefreshTimestamp(): Long
+
+    fun isPreviouslyPaired(): Boolean
+    fun setPreviouslyPaired()
+
 }

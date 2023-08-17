@@ -1,7 +1,11 @@
 package com.noisefit.ui.onboarding.otp.verify
 
 import android.content.IntentFilter
+import android.graphics.Color
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.google.android.gms.auth.api.phone.SmsRetriever
@@ -10,7 +14,6 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOtpVerifyBinding
 import com.noisefit.receiver.broadcastReceiver.OTPReceiveListener
 import com.noisefit.receiver.broadcastReceiver.OtpBroadcastReceiver
-import com.noisefit.ui.common.*
 import com.noisefit.ui.onboarding.auth.AuthViewModel
 import com.noisefit.ui.onboarding.onboardProfile.ProfileSetupActivity
 import com.noisefit.ui.onboarding.otp.OtpViewModel
@@ -37,11 +40,36 @@ class OtpVerifyFragment :
         viewModel.user = authViewModel.user
         viewModel.email = authViewModel.email
 
+        if (!viewModel.contactNumber.value.isNullOrEmpty()) {
+            val mobileNumber = viewModel.contactNumber.value
+            val text = "OTP has been send to ${mobileNumber} Enter OTP to continue."
+            val spannableString = SpannableString(text)
+            // It is used to set the span to the string
+            val white80 = ForegroundColorSpan(Color.parseColor("#ccffffff"))
+            val linkColor = ForegroundColorSpan(Color.parseColor("#82a8f3"))
 
-        binding.tvSubHeading.text = viewModel.contactNumber.value?.let { mobileNumber ->
-            getString(R.string.text_mobile_otp, mobileNumber)
+            spannableString.setSpan(
+                white80,
+                1, "OTP has been send to ".length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            spannableString.setSpan(
+                linkColor,
+                "OTP has been send to ".length,
+                "OTP has been send to $mobileNumber".length,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            spannableString.setSpan(
+                white80,
+                "OTP has been send to $mobileNumber".length,
+                "OTP has been send to $mobileNumber Enter OTP to continue.".length,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            binding.tvSubHeading.text = spannableString
+        } else {
+            binding.tvSubHeading.text =
+                getString(R.string.text_passwords_can_be_tricky_just_look_for_the_4_digit_otp_we_just_sent_and_kickstart_your_app_journey)
         }
-            ?: getString(R.string.text_passwords_can_be_tricky_just_look_for_the_4_digit_otp_we_just_sent_and_kickstart_your_app_journey)
+
 
         startSMSRetrieverClient()
 
@@ -136,13 +164,13 @@ class OtpVerifyFragment :
         viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->
                 context.showShortToast(message)
-           }
+            }
         }
 //        successfully otp match
         viewModel.getApiErrors().observe(this) {
             it?.getContent()?.let { response ->
                 uiController.onApiErrorReceived(response)
-                }
+            }
         }
         viewModel.getLoading().observe(this) {
             uiController.displayProgressBar(it, "")

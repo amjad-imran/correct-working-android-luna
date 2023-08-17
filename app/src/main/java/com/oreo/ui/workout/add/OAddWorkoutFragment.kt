@@ -205,7 +205,7 @@ class OAddWorkoutFragment :
                             viewModel.minimumWorkoutTime.toString()
                         )
                     )
-                } else if (DateFormats.checkDifferenceInBtwInterval(
+                }/* else if (DateFormats.checkDifferenceInBtwInterval(//OS-408
                         viewModel.addWorkout.startHour,
                         viewModel.addWorkout.startMinute,
                         hourOfDay,
@@ -219,7 +219,7 @@ class OAddWorkoutFragment :
                             viewModel.maxWorkoutTime.toString()
                         )
                     )
-                } else {
+                }*/ else {
                     viewModel.addWorkout.endHour = hourOfDay
                     viewModel.addWorkout.endMinute = minute
                     setEndTimeBetween()

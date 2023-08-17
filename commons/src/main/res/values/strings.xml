@@ -5,6 +5,7 @@
     <string name="text_enabled">Enabled</string>
     <string name="text_unpair_device">Unpair device</string>
     <string name="delete_account">Delete Account</string>
+    <string name="text_delete_account">Delete account</string>
     <string name="logout">Logout</string>
     <string name="text_customer_support">Customer support</string>
     <string name="text_about">About</string>

@@ -79,7 +79,7 @@ class RescueServiceInBgWorker
         }
 
         val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_noisefit_logo_short)
+            .setSmallIcon(R.drawable.ic_luna_logo_short)
             .setContentTitle(title)
             .setContentIntent(contentIntent)
             .setLocalOnly(true)

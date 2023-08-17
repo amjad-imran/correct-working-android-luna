@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.activity.viewModels
+import com.airbnb.lottie.LottieDrawable
 import com.noisefit.data.local.AppStaticData
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ActivityDeviceSetupBinding
@@ -19,24 +20,16 @@ import com.noisefit_commans.data.model.User
 import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
-import com.noisefit_commans.models.ColorFitDevice
-import com.noisefit_commans.models.CustomReplyData
-import com.noisefit_commans.models.DeviceType
-import com.noisefit_commans.models.DeviceUnits
-import com.noisefit_commans.models.Gender
-import com.noisefit_commans.models.SportsModeList
-import com.noisefit_commans.models.UnitSystem
-import com.noisefit_commans.models.UserGoals
-import com.noisefit_commans.models.UserInfo
+import com.noisefit_commans.models.*
+import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
-import com.noisefit_commans.utils.AppConstants
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.LOW_VIBRATION
 import com.noisefit_commans.utils.VibrationUtils
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Calendar
+import java.util.*
 import javax.inject.Inject
 
 
@@ -62,7 +55,10 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
 
 
     companion object {
-        fun getStartIntent(context: Context, openProfile: Boolean = false): Intent {
+        fun getStartIntent(
+            context: Context,
+            openProfile: Boolean = false
+        ): Intent {
             return Intent(context, DeviceSetupActivity::class.java).apply {
                 this.putExtra(OPEN_PROFILE, openProfile)
             }
@@ -73,10 +69,11 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
         super.onCreate(savedInstanceState)
         viewModel.localDataStore.setDeviceSetupPendingStatus(true)
         deviceSetupViewModel.getDeviceType()
+        viewModel.localDataStore.setPreviouslyPaired()
 
-        binding.vPlayer.repeatCount = 0
-        binding.vPlayer.setAnimation(deviceSetupViewModel.getAnimation(0))
-        binding.vPlayer.playAnimation()
+        binding.layoutWatch.repeatCount = 0
+        binding.layoutWatch.setAnimation(R.raw.anim_pairing)
+        binding.layoutWatch.playAnimation()
         deviceSetupViewModel.currentAnimation = 0
 
 
@@ -85,6 +82,7 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
 
         viewModel.ringDataStore.getRingDevice()?.let {
             initUi(it)
+            binding.ivWatchImage.loadImage(this, it.ringInfo?.image2)
             deviceSetupViewModel.updateUserDevice(it, true)
         }
 
@@ -139,7 +137,7 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
 
     override fun initListener() {
 
-        binding.vPlayer.addAnimatorListener(object : Animator.AnimatorListener {
+        binding.layoutWatch.addAnimatorListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(animation: Animator?) {
             }
 
@@ -151,20 +149,20 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
 
 
                     if (connectState is ConnectState.ConnectSuccess) {
-                        binding.vPlayer.repeatCount = 0
-                        binding.vPlayer.setAnimation(deviceSetupViewModel.getAnimation(1))
-                        binding.vPlayer.playAnimation()
+                        binding.layoutWatch.repeatCount = 0
+                        binding.layoutWatch.setAnimation(R.raw.anim_pairing)
+                        binding.layoutWatch.playAnimation()
                         deviceSetupViewModel.currentAnimation = 1
                     } else {
-                        binding.vPlayer.repeatCount = 0
-                        binding.vPlayer.setAnimation(deviceSetupViewModel.getAnimation(0))
-                        binding.vPlayer.playAnimation()
+                        binding.layoutWatch.repeatCount = 0
+                        binding.layoutWatch.setAnimation(R.raw.anim_pairing)
+                        binding.layoutWatch.playAnimation()
                         deviceSetupViewModel.currentAnimation = 0
                     }
                 } else if (deviceSetupViewModel.currentAnimation == 1) {
-                    binding.vPlayer.repeatCount = 0
-                    binding.vPlayer.setAnimation(deviceSetupViewModel.getAnimation(2))
-                    binding.vPlayer.playAnimation()
+                    binding.layoutWatch.repeatCount = 0
+                    binding.layoutWatch.setAnimation(R.raw.anim_pairing)
+                    binding.layoutWatch.playAnimation()
                     deviceSetupViewModel.currentAnimation = 2
                     vibrationUtils.vibrate(LOW_VIBRATION)
                 } else if (deviceSetupViewModel.currentAnimation == 2) {

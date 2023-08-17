@@ -44,6 +44,9 @@
 
 -keep public enum com.noisefit.** { *; }
 
+#Luna
+-keep class com.oreo.data.model.** { *; }
+-keep public enum com.oreo.** { *; }
 
 #Commons
 -keep class com.noisefit_commans.models.** { *; }

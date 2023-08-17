@@ -38,5 +38,26 @@
             app:argType="com.noisefit_commans.models.ColorFitDevice" />
     </fragment>
 
+    <fragment
+        android:id="@+id/oreoHelpAndSupportFragment"
+        android:name="com.oreo.ui.helpsupport.categories.OHelpAndSupportFragment"
+        android:label="OreoHealthAndSupport" />
+    <fragment
+        android:id="@+id/oreoHSQuestionFragment"
+        android:name="com.oreo.ui.helpsupport.questionaries.OHSQAFragment"
+        android:label="OHSQAFragment">
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="id"
+            app:argType="string" />
+    </fragment>
+    <dialog
+        android:id="@+id/badRatingBottomSheet"
+        android:name="com.oreo.ui.helpsupport.questionaries.BottomSheetBadRating"
+        android:label="BadRatingBottomSheet" />
+
+
 
 </navigation>

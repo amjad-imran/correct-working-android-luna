@@ -18,6 +18,7 @@
     <string name="text_today">Today</string>
     <string name="text_warranty_registration">Warranty registration</string>
     <string name="text_terms_and_conditions"><![CDATA[Terms & Conditions]]></string>
+    <string name="text_terms_and_condition_new">Terms and Conditions</string>
     <string name="text_privacy_policy">Privacy Policy</string>
     <string name="text_idle_alert">Idle alert</string>
     <string name="text_edit_health_overview">Edit health overview</string>
@@ -249,7 +250,7 @@
     <string name="text_new_trophy_earned">New trophy earned</string>
     <string name="text_manage_apps">Manage apps</string>
     <string name="text_selected_matches">Selected Matches</string>
-    <string name="text_hello_from_the_nnoisefit_fam">Hello from the Luna Ring Fam</string>
+    <string name="text_hello_from_the_nnoisefit_fam">Hello from the Luna Fam</string>
     <string name="text_from_fitness_and_health_to_work_and_style_noisefit_helps_you_stay_at_the_top_of_everything">From fitness and health to work and style, Luna Ring helps you stay at the top of everything.</string>
     <string name="text_what_do_you_ncall_home">What do you\ncall home?</string>
     <string name="text_don_t_live_here_npick_your_country_from_the_dropdown">Don’t live here?\nPick your country from the dropdown.</string>
@@ -299,7 +300,7 @@
     <string name="text_5">05</string>
     <string name="text_7">07</string>
     <string name="text_8">08</string>
-    <string name="text_unable_to_search_or_pair_your_device">Unable to search or pair your device?</string>
+    <string name="text_unable_to_search_or_pair_your_device">Unable to find or pair your device?</string>
     <string name="text_agree_and_continue">Agree and continue</string>
     <string name="text_i_agree_with_noisefit_terms"><![CDATA[I agree with Luna Ring Terms & Conditions and acknowledge Luna Ring’s Privacy Policy.]]></string>
     <string name="text_i_agree_with_npl_terms"><![CDATA[By clicking on “Agree and continue” you agree with Luna Ring Terms & Conditions and acknowledge Luna Ring’s Privacy Policy.]]></string>
@@ -530,7 +531,8 @@
     <string name="text_about_sleep_message">Sleep provides insight into your sleep habits. Sleep trackers and monitors can help you determine the amount of time you are in bed and asleep. Noise devices estimate your time in bed and your time asleep by analysing changes in physical activity, including movement during the night.</string>
     <string name="text_image">Image</string>
     <string name="text_search_button">Search button</string>
-    <string name="text_mobile_otp">Please enter the code we just sent to (+91) %s to kickstart your app journey.</string>
+    <string name="text_mobile_otp">OTP has been send to</string>
+    <string name="text_enter_otp">Enter OTP to continue.</string>
     <string name="text_email_otp">Please enter the code we just sent to %s to proceed.</string>
     <string name="text_choose_background">Choose background</string>
     <string name="text_user_currently_using">User currently using</string>
@@ -937,9 +939,11 @@
     <string name="text_updating_dot">Updating..</string>
     <string name="text_seven_day_avg">7 day avg</string>
     <string name="text_found_what_you_re_looking_for">Found what you’re looking for?</string>
-    <string name="text_still_got_questions_talk_to_an_expert">Still got questions? Talk to an expert</string>
+    <string name="text_still_got_questions_talk_to_an_expert">Still got questions?</string>
     <string name="text_call">Call</string>
     <string name="text_help">Help</string>
     <string name="text_warranty_registered"> Add text </string>
-    <string name="text_bad_feedback_msg">Or continue browsing through our help and support to find what you’re looking for**</string>
+    <string name="text_bad_feedback_msg">If you have any query, write to us on luna.support@nexxbase.com</string>
+    <string name="text_got_something_to_share_tell_us">Got something to share? Tell us.</string>
+    <string name="text_log_in">Log in</string>
 </resources>

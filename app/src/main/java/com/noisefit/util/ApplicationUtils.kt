@@ -643,52 +643,6 @@ object ApplicationUtils {
         }
     }
 
-    fun getImageForTask(taskEnum: String?): Int {
-        val imageType = when (taskEnum) {
-            TaskEnums.WATCH_PAIR.type -> {
-                R.drawable.ic_task_watch_paired
-            }
-
-            TaskEnums.PROFILE.type -> {
-                R.drawable.ic_task_p_complete
-            }
-
-            TaskEnums.STEPS.type -> {
-                R.drawable.ic_task_c_steps
-            }
-
-            TaskEnums.DISTANCE.type -> {
-                R.drawable.ic_task_distance
-            }
-
-            TaskEnums.CALORIES.type -> {
-                R.drawable.ic_task_calories
-            }
-
-            TaskEnums.CUSTOM_WATCHFACE.type -> {
-                R.drawable.ic_task_wf_created
-            }
-
-            TaskEnums.CHALLENGE_PARTICIPATION.type -> {
-                R.drawable.ic_task_c_joined
-            }
-
-            TaskEnums.FRIEND_ADDED.type -> {
-                R.drawable.ic_task_add_friend
-            }
-
-            TaskEnums.WORKOUT.type -> {
-                R.drawable.ic_task_w_complete
-            }
-
-            TaskEnums.SHARE.type -> {
-                R.drawable.ic_task_w_share
-            }
-
-            else -> 0
-        }
-        return imageType
-    }
 
     fun bmiCalculate(
         height: Float,
@@ -705,13 +659,13 @@ object ApplicationUtils {
         val weightValue: Float
         val finalValue: Float
 
-        val heightValue: Float = if (unitTypeHeight == HeightUnitSystem.METRIC.type) {
+        val heightValue: Float = if (unitTypeHeight.lowercase() == HeightUnitSystem.METRIC.type.lowercase()) {
             height.div(100)
         } else {
             height.times(0.02).toFloat()
         }
 
-        weightValue = if (unitTypeWeight == WeightUnitSystem.METRIC.type) {
+        weightValue = if (unitTypeWeight.lowercase() == WeightUnitSystem.METRIC.type.lowercase()) {
             weight
         } else {
             weight.times(0.45).toFloat()//converted in kg
@@ -759,7 +713,7 @@ object ApplicationUtils {
         var defValue4: Float
 
         val heightValue: Float
-        if (unitTypeHeight == HeightUnitSystem.METRIC.type) {
+        if (unitTypeHeight.lowercase() == HeightUnitSystem.METRIC.type.lowercase()) {
             heightValue = height
             if (gender == Gender.FEMALE) {
                 defValue1 = 655.0955F
@@ -788,14 +742,15 @@ object ApplicationUtils {
         }
 
         val weightValue: Float
-        if (unitTypeWeight == WeightUnitSystem.METRIC.type) {
+        if (unitTypeWeight.lowercase() == WeightUnitSystem.METRIC.type.lowercase()) {
             weightValue = weight
             if (gender == Gender.FEMALE) {
                 defValue1 = 655.0955F
                 defValue2 = 9.5634F
                 defValue3 = 1.8496F
                 defValue4 = 4.6756F
-            } else {
+            }
+            else {
                 defValue1 = 66.473F
                 defValue2 = 13.7516F
                 defValue3 = 5.0033F

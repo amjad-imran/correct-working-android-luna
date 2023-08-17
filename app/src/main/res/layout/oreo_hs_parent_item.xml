@@ -1,13 +1,15 @@
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/ivIcon"
+
+        <View
+            android:id="@+id/view1"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginTop="@dimen/side_margin"
@@ -16,24 +18,39 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/back_modal_new_round" />
+        <ImageView
+            android:id="@+id/ivIcon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:layout_constraintBottom_toBottomOf="@id/view1"
+            app:layout_constraintStart_toStartOf="@id/view1"
+            app:layout_constraintEnd_toEndOf="@id/view1"
+            app:layout_constraintTop_toTopOf="@id/view1"
             tools:src="@drawable/image_npl" />
 
         <TextView
             android:id="@+id/tvTitle"
             style="@style/H6"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="8dp"
+            android:singleLine="true"
+            android:lines="1"
+            android:ellipsize="end"
             app:layout_constraintBottom_toBottomOf="@id/ivIcon"
+            app:layout_constraintEnd_toStartOf="@+id/imageView52"
             app:layout_constraintStart_toEndOf="@id/ivIcon"
             app:layout_constraintTop_toTopOf="@id/ivIcon"
             tools:text="Pairing" />
 
         <ImageView
+            android:id="@+id/imageView52"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_arrow_right_cal"
             android:layout_marginEnd="@dimen/side_margin"
+            android:src="@drawable/ic_arrow_right_cal"
             app:layout_constraintBottom_toBottomOf="@id/ivIcon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/ivIcon" />

@@ -60,8 +60,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding.tvAppVersion.text =
-            getString(R.string.app_version, ApplicationUtils.getAppVersion())
+//
         viewModel.setIgnoreVersion(viewModel.localDataStore.getIgnoreVersion())
         handleBackgroundNotifications(intent)
 
@@ -87,7 +86,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
                     //Context null handling
                     exp.printStackTrace()
                 }
-            }, 3000)
+            }, 4000)
         }
 
         dirtyWorkers()
@@ -306,7 +305,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
                         finish()
                     }
 
-                    UserOnBoardingFlow.PAIR_DEVICE->{
+                    UserOnBoardingFlow.PAIR_DEVICE -> {
                         startActivity(PairDeviceActivity.getStartIntent(this))
                         finish()
                     }

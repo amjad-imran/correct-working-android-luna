@@ -69,15 +69,6 @@ class OHealthSupportViewModel @Inject constructor(
         }
     }
 
-    fun getDummyHelpData(): ArrayList<OHSModel> {
-        val testData = ArrayList<OHSModel>()
-        testData.add(OHSModel(id = "1", imgUrl = "", title = "Getting started"))
-        testData.add(OHSModel(id = "1", imgUrl = "", title = "Care for your Luna Ring"))
-        testData.add(OHSModel(id = "1", imgUrl = "", title = "Product safety and use"))
-        return testData
-
-    }
-
     private fun getDeviceName(): String {
 
         val manufacturer: String = BuildUtils.getDeviceManufacturer()
