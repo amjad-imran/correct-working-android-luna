@@ -83,8 +83,8 @@ android {
                 "GOOGLE_CLIENT_ID",
                 "\"692776363643-ekmmtuuqdjs94hg9rs243rsnjfn08j5r.apps.googleusercontent.com\""
             )
-            manifestPlaceholders["cleverTapToken"] = "322-4c6"
-            manifestPlaceholders["cleverTapId"] = "694-RRK-595Z"
+//            manifestPlaceholders["cleverTapToken"] = "322-4c6"
+//            manifestPlaceholders["cleverTapId"] = "694-RRK-595Z"
             manifestPlaceholders["google_client_id"] = "AIzaSyAqpPkqIlKRjEceF-oUy3zH4xD6dl4ISZQ"
 
             signingConfig = signingConfigs.getByName("release")
@@ -108,8 +108,8 @@ android {
                 "GOOGLE_CLIENT_ID",
                 "\"692776363643-ekmmtuuqdjs94hg9rs243rsnjfn08j5r.apps.googleusercontent.com\""
             )
-            manifestPlaceholders["cleverTapToken"] = "322-4c690"
-            manifestPlaceholders["cleverTapId"] = "694-RRK-595Z07087"
+//            manifestPlaceholders["cleverTapToken"] = "322-4c690"
+//            manifestPlaceholders["cleverTapId"] = "694-RRK-595Z07087"
             manifestPlaceholders["google_client_id"] = "AIzaSyAqpPkqIlKRjEceF-oUy3zH4xD6dl4ISZQ"
 
             signingConfig = signingConfigs.getByName("debug")
@@ -132,7 +132,7 @@ android {
             buildConfigField("String", "API_URL_STOCK", "\"https://api.twelvedata.com\"")
             buildConfigField("String", "BASE_URL_NOISE_CONNECT", "\"https://noise-connect-stage.gonoise.in\"")
             buildConfigField("String", "NOISE_CONNECT_KEY", "\"d8f021fd65e25982003ddce3cac2225e\"")
-            buildConfigField("String", "INSIDER_PARTNER", "\"gonoiseuat\"")
+            buildConfigField("String", "INSIDER_PARTNER", "\"gonoiselunaapp\"")
 
             //Oreo URLs
             buildConfigField("String", "OREO_BASE_URL", "\"https://uat-app.gonoise.com/luna\"")
@@ -140,7 +140,7 @@ android {
 
             versionNameSuffix = ".uat"
             manifestPlaceholders["crashlyticsCollectionEnabled"] = "true"
-            manifestPlaceholders["partner"] = "gonoiseuat"
+            manifestPlaceholders["partner"] = "gonoiselunaapp"
         }
         create("staging") {
             buildConfigField("String", "BASE_URL", "\"https://app-micro-staging.gonoise.com\"")
@@ -152,7 +152,7 @@ android {
             buildConfigField("String", "API_URL_STOCK", "\"https://api.twelvedata.com\"")
             buildConfigField("String", "BASE_URL_NOISE_CONNECT", "\"https://noise-connect-stage.gonoise.in\"")
             buildConfigField("String", "NOISE_CONNECT_KEY", "\"d8f021fd65e25982003ddce3cac2225e\"")
-            buildConfigField("String", "INSIDER_PARTNER", "\"gonoiseuat\"")
+            buildConfigField("String", "INSIDER_PARTNER", "\"gonoiselunaapp\"")
 
             //Oreo URLs
             buildConfigField("String", "OREO_BASE_URL", "\"https://stage-app.gonoise.com/luna\"")
@@ -160,7 +160,7 @@ android {
 
             versionNameSuffix = ".staging.luna"
             manifestPlaceholders["crashlyticsCollectionEnabled"] = "true"
-            manifestPlaceholders["partner"] = "gonoiseuat"
+            manifestPlaceholders["partner"] = "gonoiselunaapp"
 
         }
         create("live") {
@@ -171,7 +171,7 @@ android {
             buildConfigField("String", "SHOP_API_URL", "\"https://pre-order.gonoise.com\"")
             buildConfigField("String", "API_URL_WEATHER", "\"http://api.openweathermap.org\"")
             buildConfigField("String", "API_URL_STOCK", "\"https://api.twelvedata.com\"")
-            buildConfigField("String", "INSIDER_PARTNER", "\"gonoiseapp\"")
+            buildConfigField("String", "INSIDER_PARTNER", "\"gonoiselunaapp\"")
             buildConfigField("String", "NOISE_CONNECT_KEY", "\"d8f021fd65e25982003ddce3cac2225e\"")
             buildConfigField("String", "BASE_URL_NOISE_CONNECT", "\"https://noise-connect.gonoise.com\"")
 
@@ -180,7 +180,7 @@ android {
 
 
             manifestPlaceholders["crashlyticsCollectionEnabled"] = "true"
-            manifestPlaceholders["partner"] = "gonoiseapp"
+            manifestPlaceholders["partner"] = "gonoiselunaapp"
         }
 
 
