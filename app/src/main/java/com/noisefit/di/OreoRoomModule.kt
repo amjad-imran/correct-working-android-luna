@@ -40,16 +40,24 @@ class OreoRoomModule {
     @Provides
     fun provideDataBase(@ApplicationContext appContext: Context): OreoDataBase {
         return Room.databaseBuilder(appContext, OreoDataBase::class.java, "noisefit-db-oreo")
+            .addMigrations(MIGRATION_1_2)
             .build()
     }
 
-    /* private val MIGRATION_1_2: Migration = object : Migration(1, 2) {
+     private val MIGRATION_1_2: Migration = object : Migration(1, 2) {
          override fun migrate(database: SupportSQLiteDatabase) {
-             database.execSQL("ALTER TABLE `sleep_data` ADD COLUMN readiness_score INTEGER")
+             database.execSQL(
+                 "CREATE TABLE IF NOT EXISTS `key_value` " +
+                         "(`uId` INTEGER NOT NULL, " +
+                         "`lastSync` INTEGER," +
+                         "`value` TEXT," +
+                         "`type` TEXT," +
+                         "`key` TEXT, PRIMARY KEY(`uId`))"
+             )
          }
      }
 
-     private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
+     /*private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
          override fun migrate(database: SupportSQLiteDatabase) {
              database.execSQL(
                  "CREATE TABLE IF NOT EXISTS `day_time_movement` " +
