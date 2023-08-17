@@ -153,7 +153,6 @@ class SplashViewModel
                         resource.data?.data?.let {
 
 
-
                             if (it.otaResponse != null) {
                                 sessionManager.forceOtaFlowRunning = false
                                 sessionManager.forceOtaResponseRing = it.otaResponse
@@ -231,7 +230,6 @@ class SplashViewModel
 
     fun checkOnBoardingFlow() {
 
-        val userLogin = localDataStore.getUser()
         val privacyPolicyAccepted = localDataStore.getPrivacyPolicyStatus()
         connectedDevice?.let {
             applicationHandler.initSdks(connectedDevice).apply {
@@ -252,8 +250,21 @@ class SplashViewModel
             return
         }
 
+        val userLogin = localDataStore.getUser()
         if (userLogin == null) {
             _userOnBoardingFlow.value = (UserOnBoardingFlow.ASK_FOR_LOGIN)
+            return
+        }
+
+        val isPreviouslyPaired = localDataStore.isPreviouslyPaired()
+
+        if (ringDataStore.getRingDevice() == null && !isPreviouslyPaired) {
+            _userOnBoardingFlow.value = (UserOnBoardingFlow.PAIR_DEVICE)
+            return
+        }
+
+        if (!isProfileSetupComplete()) {
+            _userOnBoardingFlow.value = (UserOnBoardingFlow.SETUP_PROFILE)
             return
         }
 
@@ -262,12 +273,6 @@ class SplashViewModel
             _userOnBoardingFlow.value = (UserOnBoardingFlow.SETUP_PROFILE)
             return
         }
-
-        if (!isProfileSetupComplete()) {
-            _userOnBoardingFlow.value = (UserOnBoardingFlow.PAIR_DEVICE)
-            return
-        }
-
 
         _userOnBoardingFlow.value = (UserOnBoardingFlow.SHOW_OREO_DASHBOARD)
 

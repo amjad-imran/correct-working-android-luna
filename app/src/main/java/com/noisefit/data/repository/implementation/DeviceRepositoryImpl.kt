@@ -571,7 +571,7 @@ class DeviceRepositoryImpl(
 
     override suspend fun submitFeedbackNew(request: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<String>>> {
         val url =
-            "${BuildConfig.BASE_URL_NEW}/master/help_and_support/feedback"
+            "${BuildConfig.BASE_URL_NEW}/core/ring/help_and_support/feedback"
         return safeApiCallFlow(dispatcher) {
             remoteDataSource.submitFeedbackNew(url, request)
         }

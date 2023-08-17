@@ -397,4 +397,7 @@ interface DataStoredInterface {
     fun saveLastTokenRefreshTimestamp()
     fun getLastTokenRefreshTimestamp(): Long
 
+    fun isPreviouslyPaired(): Boolean
+    fun setPreviouslyPaired()
+
 }

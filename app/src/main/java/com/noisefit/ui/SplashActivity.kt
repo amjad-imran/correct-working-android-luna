@@ -76,9 +76,9 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
 
 
     private fun startOnBoardFlow() {
-       /* if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             viewModel.checkOnBoardingFlow()
-        } else {*/
+        } else {
             Handler(Looper.getMainLooper()).postDelayed({
                 try {
                     viewModel.checkOnBoardingFlow()
@@ -87,7 +87,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
                     exp.printStackTrace()
                 }
             }, 4000)
-       // }
+        }
 
         dirtyWorkers()
     }
@@ -305,7 +305,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
                         finish()
                     }
 
-                    UserOnBoardingFlow.PAIR_DEVICE->{
+                    UserOnBoardingFlow.PAIR_DEVICE -> {
                         startActivity(PairDeviceActivity.getStartIntent(this))
                         finish()
                     }
