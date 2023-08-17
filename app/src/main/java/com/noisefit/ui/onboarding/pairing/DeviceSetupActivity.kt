@@ -69,6 +69,7 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
         super.onCreate(savedInstanceState)
         viewModel.localDataStore.setDeviceSetupPendingStatus(true)
         deviceSetupViewModel.getDeviceType()
+        viewModel.localDataStore.setPreviouslyPaired()
 
         binding.layoutWatch.repeatCount = 0
         binding.layoutWatch.setAnimation(R.raw.anim_pairing)

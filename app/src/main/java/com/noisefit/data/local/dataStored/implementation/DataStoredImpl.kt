@@ -135,6 +135,7 @@ private const val RECENT_ACTIVITIES_LIST = "RECENT_ACTIVITIES_LIST"
 private const val HISTORY_YEARS = "HISTORY_YEARS"
 private const val DASHBOARD_BANNERS_1 = "DASHBOARD_BANNERS_1"
 private const val ROUND_UP_DATA = "ROUND_UP_DATA"
+private const val IS_PREVIOUSLY_PAIRED = "IS_PREVIOUSLY_PAIRED"
 private const val WORKOUT_IMAGES = "WORKOUT_IMAGES"
 
 
@@ -194,6 +195,14 @@ class DataStoredImpl
 @Inject constructor(
     private val gson: Gson, private val mPrefs: SharedPreferences
 ) : DataStoredInterface {
+
+    override fun isPreviouslyPaired(): Boolean {
+        return mPrefs.getBoolean(IS_PREVIOUSLY_PAIRED, false)
+    }
+
+    override fun setPreviouslyPaired() {
+        mPrefs.edit()?.putBoolean(IS_PREVIOUSLY_PAIRED, true)?.apply()
+    }
 
     override fun getDashboardBanners(): DashboardBannerData? {
         return mPrefs.getString(DASHBOARD_BANNERS_1, null)
