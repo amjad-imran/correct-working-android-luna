@@ -87,6 +87,7 @@ class OAddWorkoutFragment :
 
                 binding.lytWorkout.tvWorkout.text = workout.getFormattedActivityName()
                 setCalories()
+                enableSaveBtn()
             }
         }
 
