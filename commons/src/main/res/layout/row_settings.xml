@@ -42,7 +42,7 @@
 
     <TextView
         android:id="@+id/tvSettingsTitle"
-        style="@style/H5"
+        style="@style/H6"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/side_margin"
