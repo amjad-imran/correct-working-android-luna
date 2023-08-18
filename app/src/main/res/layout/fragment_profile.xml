@@ -63,7 +63,7 @@
                 android:layout_marginEnd="24dp"
                 android:padding="10dp"
                 android:text="@string/edit"
-                android:textColor="@color/text_color_luna"
+                android:textColor="@color/white_64"
                 tools:ignore="RelativeOverlap" />
 
         </RelativeLayout>
@@ -531,14 +531,13 @@
                     android:layout_marginBottom="55dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/container1"
-                    app:layout_constraintBottom_toTopOf="@+id/tvDeleteAccount">
+                    app:layout_constraintTop_toBottomOf="@+id/container1">
                     <androidx.constraintlayout.widget.Guideline
                         android:id="@+id/guideline4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        app:layout_constraintGuide_begin="112dp" />
+                        app:layout_constraintGuide_begin="113dp" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tvNumberLabel"
@@ -560,7 +559,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/side_margin"
                         android:text="@{viewModel.user.getMobileNumber()}"
-                        android:textColor="@color/white"
                         android:layout_marginStart="@dimen/side_margin"
                         android:visibility="@{viewModel.numberAvailable ? View.VISIBLE : View.GONE}"
                         app:layout_constraintBottom_toBottomOf="@+id/tvNumberLabel"
@@ -627,18 +625,7 @@
 <!--                    app:layout_constraintStart_toStartOf="parent"-->
 <!--                    app:layout_constraintTop_toBottomOf="@+id/container2" />-->
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tvDeleteAccount"
-                    style="@style/H6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/side_margin"
-                    android:layout_marginBottom="24dp"
-                    android:padding="@dimen/dimen_12dp"
-                    android:text="@string/text_delete_account"
-                    android:textColor="#ff5b79"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"/>
+
 
 
 
@@ -673,6 +660,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvLogout" />
 -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvDeleteAccount"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginBottom="24dp"
+            android:padding="@dimen/dimen_12dp"
+            android:text="@string/text_delete_account"
+            android:textColor="#ff5b79"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
         <include
             android:id="@+id/progressBar"
             layout="@layout/default_loader"
