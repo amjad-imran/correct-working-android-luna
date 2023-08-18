@@ -491,6 +491,7 @@ class OreoSleepDetailFragment :
         setSleepBannerViewPager(dayData.nudges)
         val sleepScoreData = dayData.sleepScore
         if (sleepScoreData != null) {
+            binding.lytSleepScore.lytSleepAvg.emptyText.gone()
             if (sleepScoreData.value != null) {
                 if (sleepScoreData.value == 0) {
                     if (dayData.totalSleep?.value != 0) {
