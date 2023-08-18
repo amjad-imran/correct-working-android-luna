@@ -346,7 +346,7 @@ constructor(val zhApplicationHandler: ZhApplicationHandler) : ConnectionDataActi
 
     override fun disconnect(noiseFitDevice: ColorFitDevice) {
         isReconnect = false
-        LOGS.d("$TAG disconnect")
+        LOGS.d("$TAG disconnect   isCOnnected ${controlBleTools?.isConnect}")
         isDisconnect = true
         if (controlBleTools?.isConnect!!) {
             controlBleTools?.unbindDevice(object : SendCmdStateListener() {

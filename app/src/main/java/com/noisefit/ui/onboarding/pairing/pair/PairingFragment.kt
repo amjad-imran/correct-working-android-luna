@@ -6,25 +6,25 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.LayoutInflater
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.airbnb.lottie.LottieDrawable
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.noisefit.luna.R
+import com.noisefit.luna.databinding.DialogResetDeviceBinding
+import com.noisefit.luna.databinding.DialogUnsupportedDeviceBinding
 import com.noisefit.luna.databinding.FragmentPairingBinding
 import com.noisefit.receiver.service.FeedbackSubmitService
 import com.noisefit.receiver.service.ProblemType
 import com.noisefit.session.SessionManager
-import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.showShortToast
-import com.noisefit_commans.ui.visible
 import com.noisefit.ui.onboarding.onboardProfile.ProfileSetupActivity
 import com.noisefit.ui.onboarding.pairing.DeviceSetupActivity
-import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit.watch.ApplicationHandler
 import com.noisefit.watch.ConnectionHandler
 import com.noisefit_commans.common.copyToClipBoard
@@ -43,10 +43,6 @@ import com.noisefit_commans.models.DeviceFirmware
 import com.noisefit_commans.models.DeviceType
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.utils.*
-import com.noisefit_commans.utils.AppLogs
-import com.noisefit_commans.utils.ConnectEvents
-import com.noisefit_commans.utils.LOGS
-import com.noisefit_commans.utils.LogEvents
 import com.oreo.receiver.service.RingConnectionService
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.TimeUnit
@@ -438,6 +434,11 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
                             }
 
                             if (showResetDialog) {
+
+                                showResetRingDialog(colorFitDevice)
+                                return
+
+
                                 val infoAlert = UIComponentType.InfoAlertDialog(
                                     "Already connected?",
                                     text,
@@ -512,6 +513,35 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
                 }
             })
         }
+
+
+    }
+
+    private fun showResetRingDialog(device: ColorFitDevice) {
+        var alert: androidx.appcompat.app.AlertDialog? = null
+        val builder =
+            MaterialAlertDialogBuilder(requireContext(), R.style.MaterialAlertDialog_rounded)
+        val dialogView: DialogResetDeviceBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(requireContext()),
+            R.layout.dialog_reset_device, null, false
+        )
+        dialogView.apply {
+
+            btnAllow.setOnClickListener {
+                connectionHandler.getConnectionActions()?.disconnect(device)
+
+                alert?.dismiss()
+                findNavController().navigateUp()
+            }
+            btnCancel.setOnClickListener {
+                alert?.dismiss()
+                findNavController().navigateUp()
+            }
+        }
+        builder.setView(dialogView.root)
+        builder.setCancelable(false)
+        alert = builder.create()
+        alert.show()
 
 
     }
