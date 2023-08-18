@@ -119,7 +119,7 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
             when (viewModel.pairState.value) {
                 PairState.PAIRING -> {
 
-                    onDisconnect()
+                        onDisconnect()
                 }
 
                 PairState.FAILED -> {
@@ -528,14 +528,14 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
         dialogView.apply {
 
             btnAllow.setOnClickListener {
-                connectionHandler.getConnectionActions()?.disconnect(device)
+                connectionHandler.getConnectionActions()?.forceDisconnect(device)
 
                 alert?.dismiss()
-                findNavController().navigateUp()
+                this@PairingFragment.findNavController().navigateUp()
             }
             btnCancel.setOnClickListener {
                 alert?.dismiss()
-                findNavController().navigateUp()
+                this@PairingFragment.findNavController().navigateUp()
             }
         }
         builder.setView(dialogView.root)

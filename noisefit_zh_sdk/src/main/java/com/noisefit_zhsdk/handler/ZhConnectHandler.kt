@@ -366,6 +366,22 @@ constructor(val zhApplicationHandler: ZhApplicationHandler) : ConnectionDataActi
         }
     }
 
+    override fun forceDisconnect(noiseFitDevice: ColorFitDevice) {
+        isReconnect = false
+        LOGS.d("$TAG forceDisconnect controlBleTools $controlBleTools")
+        isDisconnect = true
+
+        controlBleTools?.unbindDevice(object : SendCmdStateListener() {
+            override fun onState(state: SendCmdState) {
+                LOGS.d(TAG, "onState $state ")
+                Handler(Looper.myLooper()!!).postDelayed({
+                    controlBleTools?.disconnect()
+                    removeBond(noiseFitDevice)
+                }, 1000)
+            }
+        })
+    }
+
     private fun removeBond(noiseFitDevice: ColorFitDevice) {
         //移除通话蓝牙配对 Remove call bluetooth pairing
         LOGS.d("$TAG removeBond")
