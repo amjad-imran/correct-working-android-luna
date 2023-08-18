@@ -946,4 +946,5 @@
     <string name="text_bad_feedback_msg">If you have any query, write to us on luna.support@nexxbase.com</string>
     <string name="text_got_something_to_share_tell_us">Got something to share? Tell us.</string>
     <string name="text_log_in">Log in</string>
+    <string name="text_privacy_message">Welcome to Luna Ring. You can use this App to manage your ring and view related exercise and health data. We will strictly abide by relevant laws, regulations and privacy policies to protect your personal information. To provide the most basic services, the App needs to be connected to the internet.</string>
 </resources>
