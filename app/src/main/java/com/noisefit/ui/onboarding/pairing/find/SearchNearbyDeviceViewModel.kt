@@ -121,10 +121,10 @@ constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            if (it.watchToken.isNullOrEmpty()) {
+                            if (it.ringToken.isNullOrEmpty()) {
                                 _watchToken.postValue(Event(""))
                             } else {
-                                _watchToken.postValue(Event(it.watchToken))
+                                _watchToken.postValue(Event(it.ringToken))
                             }
 
                         }

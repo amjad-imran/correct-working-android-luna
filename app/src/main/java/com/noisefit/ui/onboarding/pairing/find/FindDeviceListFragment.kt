@@ -498,13 +498,13 @@ class FindDeviceListFragment :
         viewModel.tempColorFitDevice = colorFitDevice
         colorFitDevice.address?.let { viewModel.checkWatchTokenExist(it) }
 
-        if (findNavController().currentDestination?.id == R.id.findDeviceListFragment) {
+        /*if (findNavController().currentDestination?.id == R.id.findDeviceListFragment) {
             navigate(
                 FindDeviceListFragmentDirections.actionFindDeviceListFragmentToPairingFragment(
                     colorFitDevice
                 )
             )
-        }
+        }*/
 
     }
 
