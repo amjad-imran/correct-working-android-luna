@@ -87,7 +87,7 @@
                     lineChart:fillColorStart="@color/sleep_fill_start_color"
                     lineChart:gridColor="@color/white_12"
                     lineChart:hCount="11"
-                    lineChart:innerCircleColor="#ffffff"
+                    lineChart:innerCircleColor="#e9d4ff"
                     lineChart:innerCircleRadius="4dp"
                     lineChart:leftWith="0dp"
                     lineChart:outCircleColor="#66aa5bff"

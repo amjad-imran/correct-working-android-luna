@@ -133,7 +133,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                 var end: Float
                 var top = 0f
                 var bottom = 0f
-                val barHeight = pxFromDp(mContext, 12f)
+                val barHeight = pxFromDp(mContext, 16f)
 
                 for (i in sleepArray!!.indices) {
                     var paint: Paint? = null
@@ -423,6 +423,21 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                     start = end
                 }
             }
+        }else{
+            canvas.drawText(
+                "12 am",
+                0f,
+                (sectionHeight * 5) - pxFromDp(context, 5.0f),
+                mTextPaint
+            )
+
+            val textWidth = mTextPaint.measureText("12 am")
+            canvas.drawText(
+                "12 am",
+                (width - textWidth - endPadding),
+                sectionHeight * 5 - pxFromDp(context, 5.0f),
+                mTextPaint
+            )
         }
     }
 
@@ -560,7 +575,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
         mPaint = Paint()
         mPaint.isAntiAlias = true
         mPaint.style = Paint.Style.STROKE
-        mPaint.color = ContextCompat.getColor(mContext, R.color.white_12)
+        mPaint.color = Color.parseColor("#1effffff")
         mPaint.strokeWidth = pxFromDp(mContext, 1f)
         mPaint2 = Paint()
         mPaint2.isAntiAlias = true

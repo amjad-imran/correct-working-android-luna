@@ -110,7 +110,7 @@ constructor() : LifecycleService() {
     private val TAG = RingConnectionService::class.java.simpleName
 
     @Inject
-    lateinit var  deviceRepository: DeviceRepository
+    lateinit var deviceRepository: DeviceRepository
 
     @Inject
     lateinit var batteryNotificationUtils: BatteryNotificationUtils
@@ -465,10 +465,11 @@ constructor() : LifecycleService() {
         sessionManager.setConnectStateRing(ConnectState.UnPaired())
         stopSelf()
     }
-    private fun removeWatchTokenFromServer(macAddress:String?) {
+
+    private fun removeWatchTokenFromServer(macAddress: String?) {
 
 
-        if(macAddress.isNullOrEmpty()){
+        if (macAddress.isNullOrEmpty()) {
             LOGS.d("removeWatchTokenFromServer macAddress null")
             return
         }
@@ -1479,6 +1480,9 @@ constructor() : LifecycleService() {
                     )
                     sessionManager.firmwareVersion = version
                     watchDataStore.updateFirmwareVersion(version)
+                    WatchInfoGlobals.serialNumberRing?.let {
+                        watchDataStore.updateSerialNo(it)
+                    }
                     watchDataStore.saveDeviceFirmwareDetails(
                         WatchFirmwareDetails(
                             WatchInfoGlobals.firmwareVersionNumberRing,
@@ -1502,10 +1506,11 @@ constructor() : LifecycleService() {
     private val updateDeviceCallback = object : IUpdateDeviceDataCallback {
         override fun onUpdateDataReceived(dataCallback: UpdateDeviceDataCallback) {
             when (dataCallback) {
-                is UpdateDeviceDataCallback.ManualMeasurementObtained->{
+                is UpdateDeviceDataCallback.ManualMeasurementObtained -> {
                     ringDataStore.setManualMeasurementValue(dataCallback.manualMeasurement)
                     sessionManager.setManualMeasurementValue(true)
                 }
+
                 is UpdateDeviceDataCallback.FirmwareUpgradeProgress -> {
                     if (dataCallback.watchUpdateStatus.status == UpdateStatus.COMPLETED ||
                         dataCallback.watchUpdateStatus.status == UpdateStatus.ERROR ||

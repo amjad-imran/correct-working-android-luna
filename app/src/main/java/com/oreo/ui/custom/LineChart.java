@@ -1,7 +1,10 @@
 package com.oreo.ui.custom;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
@@ -10,9 +13,12 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.Shader;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
+import androidx.core.content.res.ResourcesCompat;
 
 import com.noisefit.luna.R;
 import com.noisefit_commans.utils.DistanceUtil;
@@ -85,6 +91,7 @@ public class LineChart extends View {
     private Paint chartLinePaint;
     private Paint chartLineFillPaint;
     private Paint scaleNodePaint;
+    private Bitmap glowDotBitmap;
     private ScrollListener onChartScrollChangedListener;
     private Path path = new Path();
     private Path fillPath = new Path();
@@ -206,8 +213,11 @@ public class LineChart extends View {
         bgBottomPaint = new Paint();
         bgBottomPaint.setColor(bgBottomColor);
 
+
+        Typeface fontGilroy = ResourcesCompat.getFont(this.getContext(), com.noisefit_commans.R.font.gilroy_medium);
         xTextPaint = new Paint();
         xTextPaint.setTextSize(xTextSize);
+        xTextPaint.setTypeface(fontGilroy);
         xTextPaint.setAntiAlias(true);
 
         xLinePaint = new Paint();
@@ -241,6 +251,9 @@ public class LineChart extends View {
         chartLineFillPaint.setStyle(Paint.Style.FILL);
         chartLineFillPaint.setAntiAlias(true);
 
+        Resources res = getResources();
+        Bitmap bitmap = BitmapFactory.decodeResource(res, com.noisefit_commans.R.drawable.ic_glow_graph);
+        glowDotBitmap = Bitmap.createScaledBitmap(bitmap, dip2px(40), dip2px(40), true);
 
         scaleNodePaint = new Paint();
         scaleNodePaint.setColor(scaleNodeColor);
@@ -683,7 +696,13 @@ public class LineChart extends View {
             if (showLastCircle) {
 
                 if (i == 1 && current.getValue() > 0) {
-                    canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint);
+
+                    float width = glowDotBitmap.getWidth() / 2;
+                    float height = glowDotBitmap.getHeight() / 2;
+
+                    canvas.drawBitmap(glowDotBitmap, x - width, y - height, scaleNodePaint);
+
+                    //canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint);
                 }
             }
         }
@@ -700,7 +719,12 @@ public class LineChart extends View {
         float y1 = mHeight - bottomWith - (list.get(position).getValue() - xMin) * (mHeight - topWith - bottomWith) / (xMax - xMin);
         if (list.get(position).getValue() > 0 && (moveOffSet == 0 || (offSet + moveOffSet) == (list.size() - 1) * unitHLenth)) {
             y = y1;
-            canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint);
+
+            float width = glowDotBitmap.getWidth() / 2;
+            float height = glowDotBitmap.getHeight() / 2;
+
+            canvas.drawBitmap(glowDotBitmap, x - width, y - height, scaleNodePaint);
+            //canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint);
         }
         if (moveOffSet == 0 && showXAxis) {
             String xText = list.get(position).getIndex();
