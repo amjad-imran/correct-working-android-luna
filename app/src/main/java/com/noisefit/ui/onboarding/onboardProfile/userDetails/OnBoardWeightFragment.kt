@@ -136,7 +136,7 @@ class OnBoardWeightFragment :
     }
 
     private fun goToDeviceSetupActivity(openProfile: Boolean) {
-        startActivity(DeviceSetupActivity.getStartIntent(requireContext(), openProfile))
+        startActivity(DeviceSetupActivity.getStartIntent(requireContext(), openProfile, setupDevice = true))
         activity?.finish()
     }
 }

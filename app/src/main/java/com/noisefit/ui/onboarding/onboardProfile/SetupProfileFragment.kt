@@ -90,7 +90,7 @@ class SetupProfileFragment :
             startActivity(OreoMainActivity.getStartIntent(requireContext()))
             activity?.finish()
         } else {
-            startActivity(DeviceSetupActivity.getStartIntent(requireContext()))
+            startActivity(DeviceSetupActivity.getStartIntent(requireContext(), setupDevice = true))
             activity?.finish()
         }
     }

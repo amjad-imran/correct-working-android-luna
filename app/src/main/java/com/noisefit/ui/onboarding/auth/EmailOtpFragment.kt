@@ -167,7 +167,12 @@ class EmailOtpFragment :
                 if (value) {
                     if (viewModel.isDevicePaired()) {
                         if (viewModel.isProfileSetupComplete()) {
-                            startActivity(DeviceSetupActivity.getStartIntent(requireContext()))
+                            startActivity(
+                                DeviceSetupActivity.getStartIntent(
+                                    requireContext(),
+                                    setupDevice = true
+                                )
+                            )
                             activity?.finish()
                         } else {
                             startActivity(ProfileSetupActivity.getStartIntent(requireContext()))

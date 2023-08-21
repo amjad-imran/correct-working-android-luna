@@ -82,7 +82,8 @@ class JoinNoisefitFragment :
                 if (value) {
                     if (authViewModel.isDevicePaired()) {
                         if (authViewModel.isProfileSetupComplete()) {
-                            startActivity(DeviceSetupActivity.getStartIntent(requireContext()))
+                            startActivity(DeviceSetupActivity.getStartIntent(requireContext(),
+                                setupDevice = true))
                             activity?.finish()
                         } else {
                             startActivity(ProfileSetupActivity.getStartIntent(requireContext()))

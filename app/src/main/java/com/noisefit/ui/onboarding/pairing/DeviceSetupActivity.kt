@@ -34,6 +34,7 @@ import javax.inject.Inject
 
 
 const val OPEN_PROFILE = "OPEN_PROFILE"
+const val SETUP_DEVICE = "SETUP_DEVICE"
 
 @AndroidEntryPoint
 class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
@@ -57,10 +58,12 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
     companion object {
         fun getStartIntent(
             context: Context,
-            openProfile: Boolean = false
+            openProfile: Boolean = false,
+            setupDevice: Boolean = false
         ): Intent {
             return Intent(context, DeviceSetupActivity::class.java).apply {
                 this.putExtra(OPEN_PROFILE, openProfile)
+                this.putExtra(SETUP_DEVICE, setupDevice)
             }
         }
     }
@@ -83,7 +86,10 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
         viewModel.ringDataStore.getRingDevice()?.let {
             initUi(it)
             binding.ivWatchImage.loadImage(this, it.ringInfo?.image2)
-            deviceSetupViewModel.updateUserDevice(it, true)
+
+            if (intent.getBooleanExtra(SETUP_DEVICE, false)) {
+                deviceSetupViewModel.updateUserDevice(it, true)
+            }
         }
 
 

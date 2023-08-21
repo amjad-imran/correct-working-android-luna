@@ -1084,16 +1084,17 @@ object DateFormats {
         return false
     }
 
-    fun getStartAndEndWeek(week: Int): String {
+    fun getStartAndEndWeek(week: Int, year: Int): String {
         val calendar = Calendar.getInstance()
 
+        calendar.set(Calendar.YEAR, year)
         //first day of week
         calendar.set(Calendar.WEEK_OF_YEAR, week)
 
         val formatter = SimpleDateFormat("dd", Locale.getDefault()) // PST`
 
         val firstDay = calendar.firstDayOfWeek
-        calendar.set(Calendar.DAY_OF_WEEK,firstDay)
+        calendar.set(Calendar.DAY_OF_WEEK, firstDay)
 
         //calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
         val startDate: Date = calendar.time
