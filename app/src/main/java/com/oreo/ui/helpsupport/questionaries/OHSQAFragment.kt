@@ -7,9 +7,11 @@ import android.view.View
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import com.facebook.share.Share
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOHSQuestionariesBinding
 import com.noisefit_commans.ui.*
+import com.noisefit_commans.utils.share.ShareUtil
 import com.oreo.data.model.OHSQuestionariesResponseModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -57,12 +59,9 @@ class OHSQAFragment :
         setFragmentResultListener(CALL_REQUEST_KEY) { _, bundle ->
             val isCall = bundle.getBoolean("call")
             if (isCall) {
-                val intent = Intent(Intent.ACTION_SEND)
-                intent.putExtra(Intent.EXTRA_EMAIL, arrayOf<String>("luna.support@nexxbase.com"))
-                intent.putExtra(Intent.EXTRA_SUBJECT, "")
-                intent.putExtra(Intent.EXTRA_TEXT, "")
-                intent.type = "message/rfc822"
-                startActivity(Intent.createChooser(intent, "Send email"))
+                context?.let {
+                    ShareUtil.composeEmail(it,"luna.support@nexxbase.com","")
+                }
             } else {
                 binding.lytHelpful.ivThumbsDown.alpha = 0.5f
             }

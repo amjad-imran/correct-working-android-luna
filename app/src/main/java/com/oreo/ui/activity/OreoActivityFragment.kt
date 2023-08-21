@@ -167,6 +167,8 @@ class OreoActivityFragment :
         setSleepBannerViewPager(it.nudges)
         val scoreData = it.activityScore
         if (scoreData != null) {
+            binding.lytAScoreData.lytScore.emptyText.gone()
+            binding.lytAScoreData.lytScore.tvValue.visible()
             if (scoreData.value != null) {
                 if (scoreData.value == 0) {
                     if (it.steps != 0) {

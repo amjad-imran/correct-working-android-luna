@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
+import androidx.core.content.ContextCompat.startActivity
+
 
 object ShareUtil {
 
@@ -15,6 +17,22 @@ object ShareUtil {
     const val PACKAGE_PRIME = "com.noisefit.prime"
     const val PACKAGE_ACE = "com.noise.fit.ace"
     const val PACKAGE_APEX = "com.yc.noisefit"
+
+
+    fun composeEmail(context: Context, email: String, subject: String?) {
+        try {
+            val selectorIntent = Intent(Intent.ACTION_SENDTO)
+            selectorIntent.data = Uri.parse("mailto:")
+            val emailIntent = Intent(Intent.ACTION_SEND)
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject)
+            emailIntent.putExtra(Intent.EXTRA_TEXT, subject)
+            emailIntent.selector = selectorIntent
+            context.startActivity(Intent.createChooser(emailIntent, "Send email"))
+        } catch (exp: Exception) {
+            exp.printStackTrace()
+        }
+    }
 
     fun shareOnFacebook(context: Context, imageUri: Uri?) {
         val whatsappIntent = Intent(Intent.ACTION_SEND)
