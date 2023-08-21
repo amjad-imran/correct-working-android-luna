@@ -20,6 +20,7 @@ import com.noisefit_commans.utils.MiscUtil
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.util.graph.OCombineChartUtils
+import java.lang.Math.abs
 
 sealed class OSummaryHealthOverviewClickEnum {
     object MeasureHRClick : OSummaryHealthOverviewClickEnum()
@@ -524,7 +525,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.tvDaysAvg.visible()
                 binding.sleepLineChart.visible()
                 binding.sleepLine.root.visible()
-                val trendValue = "${data.sleepTrend}%"
+                val trendValue = "${kotlin.math.abs(data.sleepTrend?:0)}%"
                 if (data.sleepTrend != null && data.sleepTrend > 0) {
                     binding.sleepTrendValue.text = trendValue
                     binding.sleepTrendValue.setTextColor(Color.parseColor("#29cc74"))
@@ -590,7 +591,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.activityTrendValue.visible()
                 binding.tvActivityFrom.visible()
 
-                val trendValue = "${data.activityTrend}%"
+                val trendValue = "${kotlin.math.abs(data.activityTrend?:0)}%"
                 if (data.activityTrend != null && data.activityTrend > 0) {
                     binding.activityTrendValue.text = trendValue
                     binding.activityTrendValue.setTextColor(Color.parseColor("#29cc74"))
@@ -740,7 +741,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.tvSleepScore.visible()
                 binding.tvEmpty.gone()
                 binding.lineChart.visible()
-                val trendValue = "${data.trend}%"
+                val trendValue = "${kotlin.math.abs(data.trend ?: 0)}%"
                 if (data.trend != null && data.trend > 0) {
                     binding.sleepTrendValue.text = trendValue
                     binding.sleepTrendValue.setTextColor(Color.parseColor("#29cc74"))
