@@ -498,17 +498,18 @@ class FindDeviceListFragment :
         viewModel.tempColorFitDevice = colorFitDevice
         colorFitDevice.address?.let { viewModel.checkWatchTokenExist(it) }
 
-        if (findNavController().currentDestination?.id == R.id.findDeviceListFragment) {
+       /* if (findNavController().currentDestination?.id == R.id.findDeviceListFragment) {
             navigate(
                 FindDeviceListFragmentDirections.actionFindDeviceListFragmentToPairingFragment(
                     colorFitDevice
                 )
             )
-        }
+        }*/
 
     }
 
     private fun moveToPairingScreen(colorFitDevice: ColorFitDevice, watchToken: String) {
+        LOGS.d("moveToPairingScreen")
         if (findNavController().currentDestination?.id == R.id.findDeviceListFragment) {
             colorFitDevice.watchToken = watchToken
             navigate(

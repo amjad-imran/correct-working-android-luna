@@ -7,12 +7,17 @@ import com.noisefit_commans.constants.ConnectionEventsConstants
 import com.noisefit_commans.constants.ConnectionEventsConstants.Connecting
 import com.noisefit_commans.constants.ConnectionEventsConstants.Disconnected
 import com.noisefit_commans.constants.ConnectionEventsConstants.Timeout
+import com.noisefit_commans.constants.WatchInfoGlobals
+import com.noisefit_commans.interfaces.QueryCallback
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.connection.ConnectionCallbacks
 import com.noisefit_commans.interfaces.connection.ConnectionDataActions
+import com.noisefit_commans.interfaces.connection.ResetStates
 import com.noisefit_commans.interfaces.connection.WatchBindState
 import com.noisefit_commans.interfaces.data.UserActivityCallback
+import com.noisefit_commans.models.BatteryData
 import com.noisefit_commans.models.ColorFitDevice
+import com.noisefit_commans.models.DeviceFirmware
 import com.noisefit_commans.models.DeviceType
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.ConnectEvents
@@ -23,9 +28,11 @@ import com.zhapp.ble.BleBCManager
 import com.zhapp.ble.BleCommonAttributes
 import com.zhapp.ble.ControlBleTools
 import com.zhapp.ble.bean.BindDeviceBean
+import com.zhapp.ble.bean.DeviceInfoBean
 import com.zhapp.ble.callback.BindDeviceStateCallBack
 import com.zhapp.ble.callback.BleStateCallBack
 import com.zhapp.ble.callback.CallBackUtils
+import com.zhapp.ble.callback.DeviceInfoCallBack
 import com.zhapp.ble.callback.DisconnectReasonCallBack
 import com.zhapp.ble.callback.RequestDeviceBindStateCallBack
 import com.zhapp.ble.callback.UnbindDeviceCallBack
@@ -366,20 +373,80 @@ constructor(val zhApplicationHandler: ZhApplicationHandler) : ConnectionDataActi
         }
     }
 
-    override fun forceDisconnect(noiseFitDevice: ColorFitDevice) {
-        isReconnect = false
-        LOGS.d("$TAG forceDisconnect controlBleTools $controlBleTools")
-        isDisconnect = true
+    override fun forceDisconnect(
+        noiseFitDevice: ColorFitDevice,
+        callback: (states: ResetStates) -> Unit
+    ) {
+        callback.invoke(ResetStates.STARTED)
+        controlBleTools?.connect(
+            noiseFitDevice.bluetoothName!!,
+            noiseFitDevice.address!!
+        )
+        CallBackUtils.deviceInfoCallBack = object : DeviceInfoCallBack {
 
-        controlBleTools?.unbindDevice(object : SendCmdStateListener() {
-            override fun onState(state: SendCmdState) {
-                LOGS.d(TAG, "onState $state ")
-                Handler(Looper.myLooper()!!).postDelayed({
-                    controlBleTools?.disconnect()
-                    removeBond(noiseFitDevice)
-                }, 1000)
+            override fun onBatteryInfo(capacity: Int, chargeStatus: Int) {
+
+                var isCharging = false
+                if (chargeStatus == 1) {
+                    isCharging = true
+                }
+                LOGS.d("onBatteryInfo ${chargeStatus} $isCharging")
+
+                if (isCharging) {
+
+                    controlBleTools?.unbindDevice(object : SendCmdStateListener() {
+                        override fun onState(state: SendCmdState) {
+                            LOGS.d(TAG, "forceDisconnect onState $state ")
+                            Handler(Looper.myLooper()!!).postDelayed({
+                                controlBleTools?.disconnect()
+                                callback.invoke(ResetStates.RESET_SUCCESS)
+                            }, 1000)
+                        }
+                    })
+                } else {
+                    callback.invoke(ResetStates.NOT_ON_CHARGING)
+
+                }
+
+            }
+
+            override fun onDeviceInfo(deviceInfoBean: DeviceInfoBean) {
+
+            }
+        }
+
+
+        controlBleTools?.setBleStateCallBack(object : BleStateCallBack {
+            override fun onConnectState(state: Int) {
+                LOGS.d(TAG, "forceDisconnect onConnectState $state")
+                when (state) {
+                    BleCommonAttributes.STATE_CONNECTED -> {
+                        callback.invoke(ResetStates.CONNECTED)
+                        controlBleTools?.getDeviceBattery(null)
+                    }
+
+                    BleCommonAttributes.STATE_CONNECTING -> {
+                        AppLogs.sendAppLogs("$TAG : forceDisconnect onConnectState Connecting")
+
+                    }
+
+                    BleCommonAttributes.STATE_TIME_OUT -> {
+                        callback.invoke(ResetStates.CONNECTION_FAILED)
+                        AppLogs.sendAppLogs("$TAG : forceDisconnect onConnectState TimeOut")
+
+                    }
+
+                    BleCommonAttributes.STATE_DISCONNECTED -> {
+                        //callback.invoke(ResetStates.CONNECTION_FAILED)
+                        AppLogs.sendAppLogs("$TAG : forceDisconnect disconnected")
+
+
+                    }
+
+                }
             }
         })
+
     }
 
     private fun removeBond(noiseFitDevice: ColorFitDevice) {

@@ -19,43 +19,29 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:gravity="center"
-                android:text="@string/text_do_you_want_to_reset"
+                android:text="Performing Ring factory reset"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
-                android:id="@+id/btnCancel"
-                style="@style/SecondaryButtonStyle"
+            <TextView
+                style="@style/H6"
                 android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="32dp"
-                android:text="@string/text_cancel"
-                app:backgroundTint="@null"
+                android:layout_marginBottom="24dp"
+                android:gravity="center"
+                android:text="Resetting ring to factory settings. This may take few seconds. Please wait..."
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/btnAllow"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView23" />
 
-            <Button
-                android:id="@+id/btnAllow"
-                style="@style/PrimaryButtonStyle"
-                android:layout_width="0dp"
-                android:layout_marginEnd="16dp"
-                android:text="Reset"
-                app:backgroundTint="@null"
-                app:layout_constraintBottom_toBottomOf="@+id/btnCancel"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/btnCancel"
-                app:layout_constraintTop_toTopOf="@+id/btnCancel" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </RelativeLayout>
 </layout>
