@@ -51,6 +51,7 @@ class PairDeviceViewModel @Inject constructor(
 ) :
     BaseViewModel() {
 
+    val navigateUp = MutableLiveData<Event<Boolean>>()
     var pairingTimeTaken: Long = 0
     var pairingSuccessEvent: Boolean = false
     var pairingFailedEvent: Boolean = false
