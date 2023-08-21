@@ -403,6 +403,8 @@ class OreoReadinessFragment :
 
         //readiness score
         if (it.readinessScore != null) {
+            binding.lytRScoreData.lytScore.emptyText.gone()
+            binding.lytRScoreData.lytScore.tvValue.visible()
             val readinessData = it.readinessScore
             if (readinessData.value != null) {
                 if (readinessData.value == 0) {

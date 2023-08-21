@@ -69,6 +69,9 @@ public class SleepLineChart extends View {
     private Paint chartLinePaint;
     private Paint chartLineFillPaint;
 
+    private Paint avgBackPaint;
+
+
     private Paint scaleNodePaint;
 
     private ScrollListener onChartScrollChangedListener;
@@ -188,6 +191,12 @@ public class SleepLineChart extends View {
         chartLineFillPaint.setAntiAlias(true);
 
 
+        avgBackPaint = new Paint();
+        avgBackPaint.setStyle(Paint.Style.FILL);
+        avgBackPaint.setColor(Color.parseColor("#07121e"));
+        avgBackPaint.setAntiAlias(true);
+
+
         scaleNodePaint = new Paint();
         scaleNodePaint.setColor(scaleNodeColor);
         scaleNodePaint.setAntiAlias(true);
@@ -290,8 +299,8 @@ public class SleepLineChart extends View {
         drawTop(canvas);
         drawBottom(canvas);
         drawRight(canvas);
-        drawLeft(canvas);
         drawContent(canvas);
+        drawLeft(canvas);
     }
 
 
@@ -351,6 +360,12 @@ public class SleepLineChart extends View {
         canvas.drawLine(leftWith, avg, mWith - rightWith, avg, centerLinePaint);
         xTextPaint.getTextBounds(avgStr, 0, avgStr.length(), xTextBounds);
         xTextPaint.setColor(Color.WHITE);
+
+        float width = xTextPaint.measureText(avgStr);
+        float padding = dip2px(2);
+        canvas.drawRect(leftWith + dip2px(5) - padding, avg - dip2px(18),
+                leftWith + dip2px(5) + width + padding, avg-dip2px(4),
+                avgBackPaint);
         canvas.drawText(avgStr, leftWith + dip2px(5), avg - xTextBounds.height(), xTextPaint);
 
     }
@@ -422,8 +437,6 @@ public class SleepLineChart extends View {
                 }
 
             }
-
-
 
 
             if (showXAxis) {
