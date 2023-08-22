@@ -144,10 +144,10 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
     override fun initListener() {
 
         binding.layoutWatch.addAnimatorListener(object : Animator.AnimatorListener {
-            override fun onAnimationStart(animation: Animator?) {
+            override fun onAnimationStart(animation: Animator) {
             }
 
-            override fun onAnimationEnd(animation: Animator?) {
+            override fun onAnimationEnd(animation: Animator) {
                 if (deviceSetupViewModel.currentAnimation == 0) {
 
                     val connectState =
@@ -178,10 +178,10 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
 
             }
 
-            override fun onAnimationCancel(animation: Animator?) {
+            override fun onAnimationCancel(animation: Animator) {
             }
 
-            override fun onAnimationRepeat(animation: Animator?) {
+            override fun onAnimationRepeat(animation: Animator) {
             }
         })
 

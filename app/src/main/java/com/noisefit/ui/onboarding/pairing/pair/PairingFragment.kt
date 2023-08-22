@@ -1,5 +1,6 @@
 package com.noisefit.ui.onboarding.pairing.pair
 
+import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -9,6 +10,8 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
@@ -28,6 +31,7 @@ import com.noisefit.ui.onboarding.pairing.DeviceSetupActivity
 import com.noisefit.watch.ApplicationHandler
 import com.noisefit.watch.ConnectionHandler
 import com.noisefit_commans.common.copyToClipBoard
+import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.SingleActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -166,23 +170,60 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
         }
     }
 
-    private fun startDeviceService() {
-
-        try {
-            viewModel.pairState.postValue(PairState.PAIRED)
-            vibrationUtils.vibrate(LOW_VIBRATION)
-
-            if (!viewModel.isMyServiceRunning(
-                    RingConnectionService::class.java,
-                    requireContext()
-                )
-            ) {
-                startRingConnectionService(Actions.INIT_DEFAULT)
+    private fun checkNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (NotificationManagerCompat.from(requireContext()).areNotificationsEnabled()) {
+                startConnectionService()
             } else {
-                LOGS.d("Ring connection service already running")
+                notificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
-        } catch (ignored: Exception) {
-            ignored.printStackTrace()
+        } else {
+            startConnectionService()
+        }
+    }
+    private fun startConnectionService() {
+        if (!viewModel.isMyServiceRunning(
+                RingConnectionService::class.java,
+                requireContext()
+            )
+        ) {
+            startRingConnectionService(Actions.INIT_DEFAULT)
+        } else {
+            LOGS.d("Service already running")
+        }
+    }
+
+    private val notificationPermission = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            startConnectionService()
+        } else {
+            context.showShortToast("Notification permission required")
+            uiController.onApiErrorReceived(ErrorResponse(
+                UIComponentType.AreYouSureDialog(
+                    getString(R.string.text_permission_required),
+                    "Notification permission required",
+                    false,
+                    getString(R.string.text_allow),
+                    object : BinaryActionCallback {
+                        override fun yes() {
+                            checkNotificationPermission()
+                        }
+
+                        override fun no() {
+
+                        }
+
+                    }
+                )
+            ))
+
+            // Explain to the user that the feature is unavailable because the
+            // features requires a permission that the user has denied. At the
+            // same time, respect the user's decision. Don't link to system
+            // settings in an effort to convince the user to change their
+            // decision.
         }
     }
 
@@ -197,12 +238,24 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
         viewModel.continueDeviceSetup.observe(this) {
             it.getContent()?.let {
                 navigateUpSafe()
-                startDeviceService()
+                try {
+                    viewModel.pairState.postValue(PairState.PAIRED)
+                    vibrationUtils.vibrate(LOW_VIBRATION)
+                    checkNotificationPermission()
+                } catch (ignored: Exception) {
+                    ignored.printStackTrace()
+                }
             }
         }
         viewModel.deviceSetupSuccess.observe(this) {
             it.getContent()?.let {
-                startDeviceService()
+                try {
+                    viewModel.pairState.postValue(PairState.PAIRED)
+                    vibrationUtils.vibrate(LOW_VIBRATION)
+                    checkNotificationPermission()
+                } catch (ignored: Exception) {
+                    ignored.printStackTrace()
+                }
             }
         }
 
