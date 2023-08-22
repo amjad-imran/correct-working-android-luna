@@ -14,6 +14,7 @@ import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.ChartModel
+import com.oreo.data.model.GraphDummyModel
 import com.oreo.data.model.OWDActivityData
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.model.SleepChartModel
@@ -172,7 +173,11 @@ class OWorkoutDetailsFragment :
                     Color.parseColor("#00ff3358")
                 )
 
-                binding.lytHeartRate.lineChart.updateDataWithMax(sleepChart, 5, false, true, false)
+                binding.lytHeartRate.lineChart.updateDataWithMax(sleepChart, 5, false,
+                    true,  GraphDummyModel(
+                        false,40,100
+                    )
+                )
             }
         }
 

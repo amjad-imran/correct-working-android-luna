@@ -24,6 +24,7 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
+import com.oreo.data.model.GraphDummyModel
 import com.oreo.data.model.SleepChartModel
 import com.oreo.data.model.health.*
 import com.oreo.ui.custom.ScrollListener
@@ -148,7 +149,9 @@ class OreoSleepDetailFragment :
             Color.parseColor("#0Dff59da")
         )
         binding.lytHRVariability.lineChart.updateDataWithMax(
-            sleepChart, 5, true, false, hasDummyData
+            sleepChart, 5, true, false,  GraphDummyModel(
+                hasDummyData,0,200
+            )
         )
     }
 
@@ -212,7 +215,9 @@ class OreoSleepDetailFragment :
 
         binding.lytHeartRate.lineChart.updateDataWithMax(
             sleepChart, 5, false, true,
-            hasDummyData
+            GraphDummyModel(
+                hasDummyData,40,100
+            )
         )
 
     }

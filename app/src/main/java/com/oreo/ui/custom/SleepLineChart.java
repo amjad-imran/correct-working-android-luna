@@ -16,6 +16,7 @@ import android.view.View;
 import com.noisefit.luna.R;
 import com.noisefit_commans.utils.LOGS;
 import com.oreo.data.model.ChartModel;
+import com.oreo.data.model.GraphDummyModel;
 import com.oreo.data.model.SleepChartModel;
 
 import java.util.ArrayList;
@@ -117,6 +118,17 @@ public class SleepLineChart extends View {
         super(context, attrs, defStyleAttr);
         init(attrs);
 //        updateData();
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        drawBg(canvas);
+        drawTop(canvas);
+        drawBottom(canvas);
+        drawRight(canvas);
+        drawContent(canvas);
+        drawLeft(canvas);
     }
 
 
@@ -224,9 +236,9 @@ public class SleepLineChart extends View {
     }
 
     public void updateDataWithMax(SleepChartModel datas, int maxOffset,
-                                  boolean showHighCircle, boolean showLowCircle, boolean hasDummyData) {
+                                  boolean showHighCircle, boolean showLowCircle, GraphDummyModel dummy) {
         sleepModel = datas;
-        mHasDummyData = hasDummyData;
+        mHasDummyData = dummy.getHasDummyData();
         list.clear();
         list.addAll(sleepModel.getList());
 
@@ -268,8 +280,13 @@ public class SleepLineChart extends View {
 
 //        xMax += maxOffset;
 
-        xMax = maxValue + maxOffset;
-        xMin = minValue - maxOffset;
+        if(mHasDummyData){
+            xMax = dummy.getMax();
+            xMin = dummy.getMin();
+        }else {
+            xMax = maxValue + maxOffset;
+            xMin = minValue - maxOffset;
+        }
         LOGS.INSTANCE.d("updateData " + xMax + " " + xMin + " " + minValue + " " + maxValue);
         if (xMin < 0) {
             xMin = 0;
@@ -295,16 +312,7 @@ public class SleepLineChart extends View {
 
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        drawBg(canvas);
-        drawTop(canvas);
-        drawBottom(canvas);
-        drawRight(canvas);
-        drawContent(canvas);
-        drawLeft(canvas);
-    }
+
 
 
     private void drawBg(Canvas canvas) {

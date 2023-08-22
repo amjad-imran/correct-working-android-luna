@@ -19,6 +19,7 @@ import com.noisefit_commans.ui.*
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
+import com.oreo.data.model.GraphDummyModel
 import com.oreo.data.model.SleepChartModel
 import com.oreo.data.model.health.CommonDataModel
 import com.oreo.data.model.health.Nudges
@@ -162,7 +163,9 @@ class OreoReadinessFragment :
 
         binding.lytHeartRate.lineChart.updateDataWithMax(
             sleepChart, 5,
-            false, true, hasDummyData
+            false, true,  GraphDummyModel(
+                hasDummyData,40,100
+            )
         )
 
 
@@ -212,7 +215,9 @@ class OreoReadinessFragment :
 
         binding.lytHRVariability.lineChart.updateDataWithMax(
             sleepChart, 5,
-            true, false, hasDummyData
+            true, false,  GraphDummyModel(
+                hasDummyData,0,200
+            )
         )
 
     }
@@ -260,7 +265,9 @@ class OreoReadinessFragment :
 
         binding.lytTemperature.lineChart.updateDataWithMax(
             sleepChart, 5,
-            true, false, hasDummyData
+            true, false,  GraphDummyModel(
+                hasDummyData,80,110
+            )
         )
 
     }

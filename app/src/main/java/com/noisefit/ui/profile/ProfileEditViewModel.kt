@@ -507,7 +507,7 @@ constructor(
                 addProperty("step_length", 70)
             }
             userObject.add("info", userInfo)
-            if (interests.value != null) {
+            /*if (interests.value != null) {
                 if (interests.value!!.size > 0)
                     userObject.add("interest_id", JsonArray().apply {
                         interests.value?.forEach { id ->
@@ -516,7 +516,7 @@ constructor(
                             }
                         }
                     })
-            }
+            }*/
 
         } catch (exp: Exception) {
             LOGS.d("User Info null")
@@ -557,7 +557,7 @@ constructor(
 
 
 
-        tempLocation?.let {
+        /*tempLocation?.let {
             val userLocation = JsonObject()
             userLocation.apply {
                 addProperty("city_id", it.cityId)
@@ -565,7 +565,7 @@ constructor(
             }
 
             userObject.add("location", userLocation)
-        }
+        }*/
 
 
 
