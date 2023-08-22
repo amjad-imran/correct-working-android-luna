@@ -167,13 +167,14 @@ constructor(
     /**
      * 12:03 - 6:17
      */
+    //TODO make common for stress
     private fun extractDataByStartTimeEndTime(
         dayData: OreoHeartRate,
         dayStartMinutes: Double,
         day2MinutesCeil: Double
     ): List<Int> {
         var startPos = (dayStartMinutes / 5 - 1).toInt()
-        val endPos = (day2MinutesCeil / 5 - 1).toInt()
+        val endPos = (day2MinutesCeil / 5).toInt()
         if (startPos < 0) {
             startPos = 0
         }
