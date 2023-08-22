@@ -84,6 +84,7 @@ public class SleepLineChart extends View {
 
     private Rect xTextBounds;
     private SleepChartModel sleepModel;
+    private boolean mHasDummyData = true;
     private List<ChartModel> list = new ArrayList<>();
     private boolean showXAxis = true;
 
@@ -222,8 +223,10 @@ public class SleepLineChart extends View {
 
     }
 
-    public void updateDataWithMax(SleepChartModel datas, int maxOffset, boolean showHighCircle, boolean showLowCircle) {
+    public void updateDataWithMax(SleepChartModel datas, int maxOffset,
+                                  boolean showHighCircle, boolean showLowCircle, boolean hasDummyData) {
         sleepModel = datas;
+        mHasDummyData = hasDummyData;
         list.clear();
         list.addAll(sleepModel.getList());
 
@@ -356,17 +359,21 @@ public class SleepLineChart extends View {
         xTextPaint.getTextBounds(maxStr, 0, maxStr.length(), xTextBounds);
         canvas.drawText(minStr, mWith - rightWith + dip2px(10), min + xTextBounds.height() / 2f, xTextPaint);
 
-        float avg = mHeight - bottomWith - (avgValue - xMin) * (mHeight - topWith - bottomWith) / (xMax - xMin);
-        canvas.drawLine(leftWith, avg, mWith - rightWith, avg, centerLinePaint);
-        xTextPaint.getTextBounds(avgStr, 0, avgStr.length(), xTextBounds);
-        xTextPaint.setColor(Color.WHITE);
 
-        float width = xTextPaint.measureText(avgStr);
-        float padding = dip2px(2);
-        canvas.drawRect(leftWith + dip2px(5) - padding, avg - dip2px(18),
-                leftWith + dip2px(5) + width + padding, avg-dip2px(4),
-                avgBackPaint);
-        canvas.drawText(avgStr, leftWith + dip2px(5), avg - xTextBounds.height(), xTextPaint);
+        if (!mHasDummyData) {
+            float avg = mHeight - bottomWith - (avgValue - xMin) * (mHeight - topWith - bottomWith) / (xMax - xMin);
+            canvas.drawLine(leftWith, avg, mWith - rightWith, avg, centerLinePaint);
+            xTextPaint.getTextBounds(avgStr, 0, avgStr.length(), xTextBounds);
+            xTextPaint.setColor(Color.WHITE);
+
+            float width = xTextPaint.measureText(avgStr);
+            float padding = dip2px(2);
+            canvas.drawRect(leftWith + dip2px(5) - padding, avg - dip2px(18),
+                    leftWith + dip2px(5) + width + padding, avg - dip2px(4),
+                    avgBackPaint);
+            canvas.drawText(avgStr, leftWith + dip2px(5), avg - xTextBounds.height(), xTextPaint);
+
+        }
 
     }
 
@@ -462,7 +469,7 @@ public class SleepLineChart extends View {
             }
 
 
-            if (showLowCircle) {
+            if (showLowCircle && !mHasDummyData) {
                 if (i == lastMinValueIndex) {
 //
 //                    Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_dot_circle_graph);
@@ -472,7 +479,7 @@ public class SleepLineChart extends View {
                 }
             }
 
-            if (showHighCircle) {
+            if (showHighCircle && !mHasDummyData) {
                 if (i == lastMaxValueIndex) {
 //                    Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_dot_circle_graph);
 //                    canvas.drawBitmap(bmp, x, y , null); // 24 is the height of image

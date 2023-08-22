@@ -124,10 +124,13 @@ class OreoReadinessFragment :
 
     private fun showHeartRateGraph(heartRateData: List<Int>, startTime: String, endTime: String) {
         LOGS.d("showHeartRateGraph $startTime $endTime")
+        var hasDummyData = true
         val breakUpData = if (heartRateData.isNullOrEmpty()) {
             mViewModel.getDummyBreakUpDataForTimeDisplay()
-        } else
+        } else {
+            hasDummyData = false
             heartRateData
+        }
 
 
         val baseHrList = UtilClass.graphBaseInterval(null, null, breakUpData.size)
@@ -157,7 +160,10 @@ class OreoReadinessFragment :
         )
 
 
-        binding.lytHeartRate.lineChart.updateDataWithMax(sleepChart, 5, false, true)
+        binding.lytHeartRate.lineChart.updateDataWithMax(
+            sleepChart, 5,
+            false, true, hasDummyData
+        )
 
 
     }
@@ -167,10 +173,15 @@ class OreoReadinessFragment :
         startTime: String,
         endTime: String
     ) {
+
+        var hasDummyData = true
+
         val breakUpData = if (hrvBreakUp.isNullOrEmpty()) {
             mViewModel.getDummyBreakUpDataForTimeDisplay()
-        } else
+        } else{
+            hasDummyData = false
             hrvBreakUp
+        }
 
         val baseHrList = UtilClass.graphBaseInterval(null, null, breakUpData.size)
 
@@ -199,7 +210,10 @@ class OreoReadinessFragment :
             Color.parseColor("#0Dff59da")
         )
 
-        binding.lytHRVariability.lineChart.updateDataWithMax(sleepChart, 5, true, false)
+        binding.lytHRVariability.lineChart.updateDataWithMax(
+            sleepChart, 5,
+            true, false, hasDummyData
+        )
 
     }
 
@@ -208,10 +222,14 @@ class OreoReadinessFragment :
         startTime: String,
         endTime: String
     ) {
+        var hasDummyData = true
         val breakUpData = if (temperatureBreakUp.isNullOrEmpty()) {
             mViewModel.getDummyBreakUpDataForTimeDisplay()
-        } else
+        } else{
+            hasDummyData = false
             temperatureBreakUp
+
+        }
 
         binding.lytTemperature.lineChart.visible()
         val sleepChart = SleepChartModel()
@@ -240,7 +258,10 @@ class OreoReadinessFragment :
         )
 
 
-        binding.lytTemperature.lineChart.updateDataWithMax(sleepChart, 5, true, false)
+        binding.lytTemperature.lineChart.updateDataWithMax(
+            sleepChart, 5,
+            true, false, hasDummyData
+        )
 
     }
 

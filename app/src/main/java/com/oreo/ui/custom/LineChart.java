@@ -228,6 +228,7 @@ public class LineChart extends View {
 
         centerLinePaint = new Paint();
         centerLinePaint.setColor(centerLineColor);
+        centerLinePaint.setAlpha(100);
         centerLinePaint.setStrokeWidth(centerLineWidth);
         centerLinePaint.setStyle(Paint.Style.STROKE);
         centerLinePaint.setPathEffect(new DashPathEffect(new float[]{5, 10}, 0));
@@ -309,7 +310,9 @@ public class LineChart extends View {
 
     }
 
-    public void updateDataWithMax(List<ChartModel> datas, List<ChartModel> prefixList, List<ChartModel> suffixList, int xMax1, int lineColor, int fillStartColor, int fillEndColor) {
+    public void updateDataWithMax(List<ChartModel> datas, List<ChartModel> prefixList,
+                                  List<ChartModel> suffixList, int xMax1, int lineColor,
+                                  int fillStartColor, int fillEndColor) {
         list.clear();
         list.addAll(prefixList);
         list.addAll(datas);
@@ -324,14 +327,14 @@ public class LineChart extends View {
         xMax = 0;
         ChartModel item;
         int sum = 0;
-//        int noneZeroValueCount = 0;
+        int noneZeroValueCount = 0;
         int count = 0;
         for (int i = 0; i < datas.size(); i++) {
             item = datas.get(i);
             if (item.getValue() == 0) {
                 continue;
             }
-//            noneZeroValueCount += 1;
+            noneZeroValueCount += 1;
             isDistanceGraph = datas.get(i).isDistanceGraph();
             if (xMax == 0) {
                 xMax = item.getValue();
@@ -345,9 +348,12 @@ public class LineChart extends View {
             count += 1;
         }
 
-
-        if (count != 0) {
-            avgValue = sum / count;
+        if (noneZeroValueCount <= datas.size() / 2) {
+            avgValue = 0;
+        } else {
+            if (count != 0) {
+                avgValue = sum / count;
+            }
         }
 
         if (xMax1 == 100) {
@@ -683,7 +689,7 @@ public class LineChart extends View {
 
                 xTextPaint.getTextBounds(xText, 0, xText.length(), xTextBounds);
                 xTextPaint.setColor(xTextColor & 0x80ffffff);
-                canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 4, xTextPaint);
+                canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 3, xTextPaint);
                 if (showSelectedIndicator && list.get(i).getFormattedDate() != null) {
                     String title = list.get(i).getFormattedDate();
                     float xInd = indicatorOffSet + (moveOffSet * list.size() * indicatorUnitLength / (list.size() * unitHLenth)) + (mWith - leftWith - rightWith) * divisor + leftWith - i * indicatorUnitLength;
@@ -730,7 +736,7 @@ public class LineChart extends View {
             String xText = list.get(position).getIndex();
             xTextPaint.setColor(xTextColor);
             xTextPaint.getTextBounds(xText, 0, xText.length(), xTextBounds);
-            canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 4, xTextPaint);
+            canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 3, xTextPaint);
 
             if (showSelectedIndicator && list.get(position).getFormattedDate() != null) {
                 String title = list.get(position).getFormattedDate();

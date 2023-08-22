@@ -172,7 +172,7 @@ class OWorkoutDetailsFragment :
                     Color.parseColor("#00ff3358")
                 )
 
-                binding.lytHeartRate.lineChart.updateDataWithMax(sleepChart, 5, false, true)
+                binding.lytHeartRate.lineChart.updateDataWithMax(sleepChart, 5, false, true, false)
             }
         }
 

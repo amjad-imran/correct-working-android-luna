@@ -107,14 +107,16 @@ class OreoSleepDetailFragment :
         val ssTime: String?
         val seTime: String?
         var breakUpData = ArrayList<Int>()
+        var hasDummyData = true
         if (hrv?.value.isNullOrEmpty()) {
-            breakUpData=viewModel.getDummyBreakUpDataForTimeDisplay()
+            breakUpData = viewModel.getDummyBreakUpDataForTimeDisplay()
             ssTime = null
             seTime = null
         } else {
+            hasDummyData = false
             seTime = sleepEndTime
             ssTime = sleepStartTime
-           breakUpData= hrv?.value as ArrayList<Int>
+            breakUpData = hrv?.value as ArrayList<Int>
         }
 
         val baseTimeList =
@@ -145,7 +147,9 @@ class OreoSleepDetailFragment :
             Color.parseColor("#CCff59da"),
             Color.parseColor("#0Dff59da")
         )
-        binding.lytHRVariability.lineChart.updateDataWithMax(sleepChart, 5, true, false)
+        binding.lytHRVariability.lineChart.updateDataWithMax(
+            sleepChart, 5, true, false, hasDummyData
+        )
     }
 
     private fun showHeartRateGraph(
@@ -160,14 +164,16 @@ class OreoSleepDetailFragment :
         val ssTime: String?
         val seTime: String?
         var breakUpData = ArrayList<Int>()
+        var hasDummyData = true
         if (heartRateList?.value.isNullOrEmpty()) {
-            breakUpData=viewModel.getDummyBreakUpDataForTimeDisplay()
+            breakUpData = viewModel.getDummyBreakUpDataForTimeDisplay()
             ssTime = null
             seTime = null
         } else {
+            hasDummyData = false
             seTime = sleepEndTime
             ssTime = sleepStartTime
-            breakUpData= heartRateList?.value as ArrayList<Int>
+            breakUpData = heartRateList?.value as ArrayList<Int>
         }
 
 
@@ -204,7 +210,10 @@ class OreoSleepDetailFragment :
             Color.parseColor("#0Dff6581")
         )
 
-        binding.lytHeartRate.lineChart.updateDataWithMax(sleepChart, 5, false, true)
+        binding.lytHeartRate.lineChart.updateDataWithMax(
+            sleepChart, 5, false, true,
+            hasDummyData
+        )
 
     }
 

@@ -171,6 +171,7 @@ public class BarChart extends View {
 
         centerLinePaint = new Paint();
         centerLinePaint.setColor(centerLineColor);
+        centerLinePaint.setAlpha(100);
         centerLinePaint.setStrokeWidth(centerLineWidth);
         centerLinePaint.setStyle(Paint.Style.STROKE);
         centerLinePaint.setPathEffect(new DashPathEffect(new float[]{5, 10}, 0));
@@ -392,7 +393,7 @@ public class BarChart extends View {
             String xText = list.get(i).getIndex();
             xTextPaint.getTextBounds(xText, 0, xText.length(), xTextBounds);
             xTextPaint.setColor(xTextColor & 0x80ffffff);
-            canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 4, xTextPaint);
+            canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 3, xTextPaint);
 
             if(showSelectedIndicator) {
                 String title = list.get(i).getDate();
@@ -421,7 +422,7 @@ public class BarChart extends View {
             String xText = list.get(position).getIndex();
             xTextPaint.setColor(xTextColor);
             xTextPaint.getTextBounds(xText, 0, xText.length(), xTextBounds);
-            canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 4, xTextPaint);
+            canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 3, xTextPaint);
 
             if(showSelectedIndicator) {
                 String title = list.get(position).getDate();
