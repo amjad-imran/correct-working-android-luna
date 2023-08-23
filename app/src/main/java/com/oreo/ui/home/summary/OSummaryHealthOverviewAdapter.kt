@@ -50,16 +50,16 @@ class OSummaryHealthOverviewAdapter :
 
     var items = listOf<OHealthOverview>()
         set(value) {
-            field = value
-            if (refreshPosition != null) {
-                if (refreshPosition != -1) {
-                    notifyItemChanged(refreshPosition!!)
-                } else {
-                    notifyDataSetChanged()
+            tryCatch {
+                field = value
+                if (refreshPosition != null) {
+                    if (refreshPosition != -1) {
+                        notifyItemChanged(refreshPosition!!)
+                    } else {
+                        notifyDataSetChanged()
+                    }
                 }
             }
-
-
         }
 
     var itemClickListener: ((type: OSummaryHealthOverviewClickEnum) -> Unit)? =
