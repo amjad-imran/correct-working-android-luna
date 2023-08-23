@@ -166,12 +166,11 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
                         deviceSetupViewModel.currentAnimation = 0
                     }
                 } else if (deviceSetupViewModel.currentAnimation == 1) {
-                    binding.layoutWatch.repeatCount = 0
+                    /*binding.layoutWatch.repeatCount = 0
                     binding.layoutWatch.setAnimation(R.raw.anim_pairing)
                     binding.layoutWatch.playAnimation()
-                    deviceSetupViewModel.currentAnimation = 2
+                    deviceSetupViewModel.currentAnimation = 2*/
                     vibrationUtils.vibrate(LOW_VIBRATION)
-                } else if (deviceSetupViewModel.currentAnimation == 2) {
                     viewModel.localDataStore.setDeviceSetupPendingStatus(false)
                     startMainActivity()
                 }
@@ -232,10 +231,10 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
         Handler(Looper.getMainLooper()).postDelayed({
             setUnit()
         }, 5000)
-        Handler(Looper.getMainLooper()).postDelayed({
+        /*Handler(Looper.getMainLooper()).postDelayed({
             sessionManager.sendUpdateQueryAction(UpdateDeviceAction.SetBrightnessLevel(3))
 //            setWeather()
-        }, 6000)
+        }, 6000)*/
         /*Handler(Looper.getMainLooper()).postDelayed({
             localDataStore.setDeviceSetupPendingStatus(false)
             vibrationUtils.vibrate(LOW_VIBRATION)

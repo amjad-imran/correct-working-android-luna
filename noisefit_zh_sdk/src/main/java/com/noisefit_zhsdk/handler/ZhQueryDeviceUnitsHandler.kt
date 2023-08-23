@@ -1047,24 +1047,49 @@ constructor(
 
     private fun initLogListener() {
         ControlBleTools.getInstance().deviceLogCallBack = object : DeviceLogCallBack {
-            override fun onLogI(tag: String, msg: String) {
-                FileLogsUtils.saveILogs(noiseFitDevice, tag, msg, FileLogsUtils.LogType.Watch)
+            override fun onLogI(tag: String?, msg: String?, p2: String?) {
+                FileLogsUtils.saveILogs(
+                    noiseFitDevice,
+                    tag ?: "",
+                    msg ?: "",
+                    FileLogsUtils.LogType.Watch
+                )
             }
 
-            override fun onLogV(tag: String, msg: String) {
-                FileLogsUtils.saveWLogs(noiseFitDevice, tag, msg, FileLogsUtils.LogType.Watch)
+            override fun onLogV(tag: String?, msg: String?, p2: String?) {
+                FileLogsUtils.saveWLogs(
+                    noiseFitDevice,
+                    tag ?: "",
+                    msg ?: "",
+                    FileLogsUtils.LogType.Watch
+                )
             }
 
-            override fun onLogE(tag: String, msg: String) {
-                FileLogsUtils.saveELogs(noiseFitDevice, tag, msg, FileLogsUtils.LogType.Watch)
+            override fun onLogE(tag: String?, msg: String?, p2: String?) {
+                FileLogsUtils.saveELogs(
+                    noiseFitDevice,
+                    tag ?: "",
+                    msg ?: "",
+                    FileLogsUtils.LogType.Watch
+                )
             }
 
-            override fun onLogD(tag: String, msg: String) {
-                FileLogsUtils.saveDLogs(noiseFitDevice, tag, msg, FileLogsUtils.LogType.Watch)
+            override fun onLogD(tag: String?, msg: String?, p2: String?) {
+                FileLogsUtils.saveDLogs(
+                    noiseFitDevice,
+                    tag ?: "",
+                    msg ?: "",
+                    FileLogsUtils.LogType.Watch
+                )
             }
 
-            override fun onLogW(tag: String, msg: String) {
-                FileLogsUtils.saveWLogs(noiseFitDevice, tag, msg, FileLogsUtils.LogType.Watch)
+            override fun onLogW(tag: String?, msg: String?, p2: String?) {
+                FileLogsUtils.saveWLogs(
+                    noiseFitDevice,
+                    tag ?: "",
+                    msg ?: "",
+                    FileLogsUtils.LogType.Watch
+                )
             }
 
         }

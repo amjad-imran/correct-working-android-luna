@@ -329,6 +329,13 @@ class OreoActivityFragment :
                 chartModel.bottomLineText = baseHrList[index]
 
                 when (data) {
+                    0 -> {
+                        chartModel.length =
+                            (binding.lytDailyMovement.candleChart.max * 0.2).toInt()
+                        chartModel.color = Color.parseColor("#3dffffff")
+                        chartModel.type = CandleChartModel.Type.INACTIVE
+                        inactiveMovValue++
+                    }
                     1 -> {
                         lowMovValue++
                         chartModel.length =
@@ -346,7 +353,7 @@ class OreoActivityFragment :
                         chartModel.type = CandleChartModel.Type.MEDIUM
                     }
 
-                    3, 4 -> {
+                    3 -> {
                         highMovValue++
                         chartModel.length =
                             (binding.lytDailyMovement.candleChart.max * 0.8).toInt()
@@ -360,7 +367,6 @@ class OreoActivityFragment :
                             (binding.lytDailyMovement.candleChart.max * 0.2).toInt()
                         chartModel.color = Color.parseColor("#3dffffff")
                         chartModel.type = CandleChartModel.Type.INACTIVE
-                        inactiveMovValue++
                     }
                 }
                 chartModel.value = data
@@ -373,7 +379,7 @@ class OreoActivityFragment :
         } else {
             for (index in 0..287) {
                 val chartModel = CandleChartModel()
-                inactiveMovValue++
+                //inactiveMovValue++
                 chartModel.bottomLineText = baseHrList[index]
                 chartModel.length =
                     (binding.lytDailyMovement.candleChart.max * 0.2).toInt()
