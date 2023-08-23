@@ -108,24 +108,24 @@ object UtilClass {
                 "12 am"
             }
 
-            47 -> {
-                "4 am"
-            }
+//            47 -> {
+//                "4 am"
+//            }
 
-            95 -> {
-                "8 am"
+            71 -> {
+                "6 am"
             }
 
             143 -> {
                 "12 pm"
             }
 
-            191 -> {
-                "4 pm"
-            }
+//            191 -> {
+//                "4 pm"
+//            }
 
-            239 -> {
-                "8 pm"
+            215 -> {
+                "6 pm"
             }
 
             287 -> {
@@ -211,11 +211,12 @@ object UtilClass {
         var hm = HashMap<Int, String>()
         if (startTime == null || endTime == null) {
             hm[0] = getHour(0)
-            hm[47] = getHour(47)
-            hm[95] = getHour(95)
+//            hm[47] = getHour(47)
+            hm[71] = getHour(71)
+//            hm[95] = getHour(95)
             hm[143] = getHour(143)
-            hm[191] = getHour(191)
-            hm[239] = getHour(239)
+//            hm[191] = getHour(191)
+            hm[215] = getHour(215)
             hm[287] = getHour(287)
             return hm
         }
@@ -260,11 +261,11 @@ object UtilClass {
         val hm = HashMap<Int, String>()
         if (startTime == null || endTime == null) {
             hm[0] = getHour(0)
-            hm[47] = getHour(47)
-            hm[95] = getHour(95)
+//            hm[47] = getHour(47)
+            hm[71] = getHour(71)
             hm[143] = getHour(143)
-            hm[191] = getHour(191)
-            hm[239] = getHour(239)
+//            hm[191] = getHour(191)
+            hm[215] = getHour(215)
             hm[287] = getHour(287)
             return hm
         }
@@ -355,11 +356,11 @@ object UtilClass {
         val hm = HashMap<Int, String>()
         if (startTime == null || endTime == null) {
             hm[0] = getHour(0)
-            hm[47] = getHour(47)
-            hm[95] = getHour(95)
+//            hm[47] = getHour(47)
+            hm[71] = getHour(71)
             hm[143] = getHour(143)
-            hm[191] = getHour(191)
-            hm[239] = getHour(239)
+//            hm[191] = getHour(191)
+            hm[215] = getHour(215)
             hm[287] = getHour(287)
             return hm
         }

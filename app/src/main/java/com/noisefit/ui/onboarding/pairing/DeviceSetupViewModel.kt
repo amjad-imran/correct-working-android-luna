@@ -41,7 +41,9 @@ constructor(
             addProperty("address", device.address)
             addProperty("device_id", device.deviceId)
             addProperty("rssi", device.rssi)
-            addProperty("watch_token", device.watchToken)
+            if (device.watchToken.isNotEmpty()) {
+                addProperty("ring_token", device.watchToken)
+            }
             addProperty("platform", "android")
             addProperty("wearable_type", "ring")
         }

@@ -8,6 +8,6 @@ data class DeviceFeatureResponse(
 )
 
 data class WatchTokenResponse(
-    @SerializedName("watch_token")
-    val watchToken: String? = null
+    @SerializedName("ring_token")
+    val ringToken: String? = null
 )

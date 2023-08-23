@@ -1,7 +1,10 @@
 package com.oreo.ui.custom;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
@@ -10,9 +13,12 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.Shader;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
+import androidx.core.content.res.ResourcesCompat;
 
 import com.noisefit.luna.R;
 import com.noisefit_commans.utils.DistanceUtil;
@@ -85,6 +91,7 @@ public class LineChart extends View {
     private Paint chartLinePaint;
     private Paint chartLineFillPaint;
     private Paint scaleNodePaint;
+    private Bitmap glowDotBitmap;
     private ScrollListener onChartScrollChangedListener;
     private Path path = new Path();
     private Path fillPath = new Path();
@@ -206,8 +213,11 @@ public class LineChart extends View {
         bgBottomPaint = new Paint();
         bgBottomPaint.setColor(bgBottomColor);
 
+
+        Typeface fontGilroy = ResourcesCompat.getFont(this.getContext(), com.noisefit_commans.R.font.gilroy_medium);
         xTextPaint = new Paint();
         xTextPaint.setTextSize(xTextSize);
+        xTextPaint.setTypeface(fontGilroy);
         xTextPaint.setAntiAlias(true);
 
         xLinePaint = new Paint();
@@ -218,6 +228,7 @@ public class LineChart extends View {
 
         centerLinePaint = new Paint();
         centerLinePaint.setColor(centerLineColor);
+        centerLinePaint.setAlpha(100);
         centerLinePaint.setStrokeWidth(centerLineWidth);
         centerLinePaint.setStyle(Paint.Style.STROKE);
         centerLinePaint.setPathEffect(new DashPathEffect(new float[]{5, 10}, 0));
@@ -241,6 +252,9 @@ public class LineChart extends View {
         chartLineFillPaint.setStyle(Paint.Style.FILL);
         chartLineFillPaint.setAntiAlias(true);
 
+        Resources res = getResources();
+        Bitmap bitmap = BitmapFactory.decodeResource(res, com.noisefit_commans.R.drawable.ic_glow_graph);
+        glowDotBitmap = Bitmap.createScaledBitmap(bitmap, dip2px(40), dip2px(40), true);
 
         scaleNodePaint = new Paint();
         scaleNodePaint.setColor(scaleNodeColor);
@@ -296,7 +310,9 @@ public class LineChart extends View {
 
     }
 
-    public void updateDataWithMax(List<ChartModel> datas, List<ChartModel> prefixList, List<ChartModel> suffixList, int xMax1, int lineColor, int fillStartColor, int fillEndColor) {
+    public void updateDataWithMax(List<ChartModel> datas, List<ChartModel> prefixList,
+                                  List<ChartModel> suffixList, int xMax1, int lineColor,
+                                  int fillStartColor, int fillEndColor) {
         list.clear();
         list.addAll(prefixList);
         list.addAll(datas);
@@ -311,14 +327,14 @@ public class LineChart extends View {
         xMax = 0;
         ChartModel item;
         int sum = 0;
-//        int noneZeroValueCount = 0;
+        int noneZeroValueCount = 0;
         int count = 0;
         for (int i = 0; i < datas.size(); i++) {
             item = datas.get(i);
             if (item.getValue() == 0) {
                 continue;
             }
-//            noneZeroValueCount += 1;
+            noneZeroValueCount += 1;
             isDistanceGraph = datas.get(i).isDistanceGraph();
             if (xMax == 0) {
                 xMax = item.getValue();
@@ -332,9 +348,12 @@ public class LineChart extends View {
             count += 1;
         }
 
-
-        if (count != 0) {
-            avgValue = sum / count;
+        if (noneZeroValueCount <= datas.size() / 2) {
+            avgValue = 0;
+        } else {
+            if (count != 0) {
+                avgValue = sum / count;
+            }
         }
 
         if (xMax1 == 100) {
@@ -670,7 +689,7 @@ public class LineChart extends View {
 
                 xTextPaint.getTextBounds(xText, 0, xText.length(), xTextBounds);
                 xTextPaint.setColor(xTextColor & 0x80ffffff);
-                canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 4, xTextPaint);
+                canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 3, xTextPaint);
                 if (showSelectedIndicator && list.get(i).getFormattedDate() != null) {
                     String title = list.get(i).getFormattedDate();
                     float xInd = indicatorOffSet + (moveOffSet * list.size() * indicatorUnitLength / (list.size() * unitHLenth)) + (mWith - leftWith - rightWith) * divisor + leftWith - i * indicatorUnitLength;
@@ -683,7 +702,13 @@ public class LineChart extends View {
             if (showLastCircle) {
 
                 if (i == 1 && current.getValue() > 0) {
-                    canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint);
+
+                    float width = glowDotBitmap.getWidth() / 2;
+                    float height = glowDotBitmap.getHeight() / 2;
+
+                    canvas.drawBitmap(glowDotBitmap, x - width, y - height, scaleNodePaint);
+
+                    //canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint);
                 }
             }
         }
@@ -700,13 +725,18 @@ public class LineChart extends View {
         float y1 = mHeight - bottomWith - (list.get(position).getValue() - xMin) * (mHeight - topWith - bottomWith) / (xMax - xMin);
         if (list.get(position).getValue() > 0 && (moveOffSet == 0 || (offSet + moveOffSet) == (list.size() - 1) * unitHLenth)) {
             y = y1;
-            canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint);
+
+            float width = glowDotBitmap.getWidth() / 2;
+            float height = glowDotBitmap.getHeight() / 2;
+
+            canvas.drawBitmap(glowDotBitmap, x - width, y - height, scaleNodePaint);
+            //canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint);
         }
         if (moveOffSet == 0 && showXAxis) {
             String xText = list.get(position).getIndex();
             xTextPaint.setColor(xTextColor);
             xTextPaint.getTextBounds(xText, 0, xText.length(), xTextBounds);
-            canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 4, xTextPaint);
+            canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 3, xTextPaint);
 
             if (showSelectedIndicator && list.get(position).getFormattedDate() != null) {
                 String title = list.get(position).getFormattedDate();

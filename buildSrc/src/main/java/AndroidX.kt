@@ -25,14 +25,6 @@ object AndroidX {
         "androidx.navigation:navigation-fragment-ktx:$navigationKtxVersion"
     const val navigationUiKtx = "androidx.navigation:navigation-ui-ktx:$navigationKtxVersion"
 
-    private const val cameraxVersion = "1.0.1"
-    const val camera2 = "androidx.camera:camera-camera2:$cameraxVersion"
-
-    // CameraX Lifecycle Library
-    const val cameraLifeCycle = "androidx.camera:camera-lifecycle:$cameraxVersion"
-
-    // CameraX View class
-    const val cameraView = "androidx.camera:camera-view:1.0.0-alpha28"
 
     private const val lifecycleExtensionVersion = "2.2.0"
     const val lifecycleExtension =
@@ -71,9 +63,6 @@ object AndroidX {
 
     val libraries = arrayListOf<String>().apply {
         add(coreKtx)
-        add(camera2)
-        add(cameraLifeCycle)
-        add(cameraView)
         add(concurrentFuturesKtx)
         add(constraintLayout)
         add(fragmentKtx)

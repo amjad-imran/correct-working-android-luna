@@ -34,6 +34,7 @@ import javax.inject.Inject
 
 
 const val OPEN_PROFILE = "OPEN_PROFILE"
+const val SETUP_DEVICE = "SETUP_DEVICE"
 
 @AndroidEntryPoint
 class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
@@ -57,10 +58,12 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
     companion object {
         fun getStartIntent(
             context: Context,
-            openProfile: Boolean = false
+            openProfile: Boolean = false,
+            setupDevice: Boolean = false
         ): Intent {
             return Intent(context, DeviceSetupActivity::class.java).apply {
                 this.putExtra(OPEN_PROFILE, openProfile)
+                this.putExtra(SETUP_DEVICE, setupDevice)
             }
         }
     }
@@ -83,7 +86,10 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
         viewModel.ringDataStore.getRingDevice()?.let {
             initUi(it)
             binding.ivWatchImage.loadImage(this, it.ringInfo?.image2)
-            deviceSetupViewModel.updateUserDevice(it, true)
+
+            if (intent.getBooleanExtra(SETUP_DEVICE, false)) {
+                deviceSetupViewModel.updateUserDevice(it, true)
+            }
         }
 
 
@@ -138,10 +144,10 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
     override fun initListener() {
 
         binding.layoutWatch.addAnimatorListener(object : Animator.AnimatorListener {
-            override fun onAnimationStart(animation: Animator?) {
+            override fun onAnimationStart(animation: Animator) {
             }
 
-            override fun onAnimationEnd(animation: Animator?) {
+            override fun onAnimationEnd(animation: Animator) {
                 if (deviceSetupViewModel.currentAnimation == 0) {
 
                     val connectState =
@@ -160,22 +166,21 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
                         deviceSetupViewModel.currentAnimation = 0
                     }
                 } else if (deviceSetupViewModel.currentAnimation == 1) {
-                    binding.layoutWatch.repeatCount = 0
+                    /*binding.layoutWatch.repeatCount = 0
                     binding.layoutWatch.setAnimation(R.raw.anim_pairing)
                     binding.layoutWatch.playAnimation()
-                    deviceSetupViewModel.currentAnimation = 2
+                    deviceSetupViewModel.currentAnimation = 2*/
                     vibrationUtils.vibrate(LOW_VIBRATION)
-                } else if (deviceSetupViewModel.currentAnimation == 2) {
                     viewModel.localDataStore.setDeviceSetupPendingStatus(false)
                     startMainActivity()
                 }
 
             }
 
-            override fun onAnimationCancel(animation: Animator?) {
+            override fun onAnimationCancel(animation: Animator) {
             }
 
-            override fun onAnimationRepeat(animation: Animator?) {
+            override fun onAnimationRepeat(animation: Animator) {
             }
         })
 
@@ -226,10 +231,10 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
         Handler(Looper.getMainLooper()).postDelayed({
             setUnit()
         }, 5000)
-        Handler(Looper.getMainLooper()).postDelayed({
+        /*Handler(Looper.getMainLooper()).postDelayed({
             sessionManager.sendUpdateQueryAction(UpdateDeviceAction.SetBrightnessLevel(3))
 //            setWeather()
-        }, 6000)
+        }, 6000)*/
         /*Handler(Looper.getMainLooper()).postDelayed({
             localDataStore.setDeviceSetupPendingStatus(false)
             vibrationUtils.vibrate(LOW_VIBRATION)

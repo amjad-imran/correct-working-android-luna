@@ -19,6 +19,7 @@ import com.noisefit_commans.ui.*
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
+import com.oreo.data.model.GraphDummyModel
 import com.oreo.data.model.SleepChartModel
 import com.oreo.data.model.health.CommonDataModel
 import com.oreo.data.model.health.Nudges
@@ -124,10 +125,13 @@ class OreoReadinessFragment :
 
     private fun showHeartRateGraph(heartRateData: List<Int>, startTime: String, endTime: String) {
         LOGS.d("showHeartRateGraph $startTime $endTime")
+        var hasDummyData = true
         val breakUpData = if (heartRateData.isNullOrEmpty()) {
             mViewModel.getDummyBreakUpDataForTimeDisplay()
-        } else
+        } else {
+            hasDummyData = false
             heartRateData
+        }
 
 
         val baseHrList = UtilClass.graphBaseInterval(null, null, breakUpData.size)
@@ -157,7 +161,12 @@ class OreoReadinessFragment :
         )
 
 
-        binding.lytHeartRate.lineChart.updateDataWithMax(sleepChart, 5, false, true)
+        binding.lytHeartRate.lineChart.updateDataWithMax(
+            sleepChart, 5,
+            false, true,  GraphDummyModel(
+                hasDummyData,40,100
+            )
+        )
 
 
     }
@@ -167,10 +176,15 @@ class OreoReadinessFragment :
         startTime: String,
         endTime: String
     ) {
+
+        var hasDummyData = true
+
         val breakUpData = if (hrvBreakUp.isNullOrEmpty()) {
             mViewModel.getDummyBreakUpDataForTimeDisplay()
-        } else
+        } else{
+            hasDummyData = false
             hrvBreakUp
+        }
 
         val baseHrList = UtilClass.graphBaseInterval(null, null, breakUpData.size)
 
@@ -199,7 +213,12 @@ class OreoReadinessFragment :
             Color.parseColor("#0Dff59da")
         )
 
-        binding.lytHRVariability.lineChart.updateDataWithMax(sleepChart, 5, true, false)
+        binding.lytHRVariability.lineChart.updateDataWithMax(
+            sleepChart, 5,
+            true, false,  GraphDummyModel(
+                hasDummyData,0,200
+            )
+        )
 
     }
 
@@ -208,10 +227,14 @@ class OreoReadinessFragment :
         startTime: String,
         endTime: String
     ) {
+        var hasDummyData = true
         val breakUpData = if (temperatureBreakUp.isNullOrEmpty()) {
             mViewModel.getDummyBreakUpDataForTimeDisplay()
-        } else
+        } else{
+            hasDummyData = false
             temperatureBreakUp
+
+        }
 
         binding.lytTemperature.lineChart.visible()
         val sleepChart = SleepChartModel()
@@ -240,7 +263,12 @@ class OreoReadinessFragment :
         )
 
 
-        binding.lytTemperature.lineChart.updateDataWithMax(sleepChart, 5, true, false)
+        binding.lytTemperature.lineChart.updateDataWithMax(
+            sleepChart, 5,
+            true, false,  GraphDummyModel(
+                hasDummyData,80,110
+            )
+        )
 
     }
 
@@ -403,6 +431,8 @@ class OreoReadinessFragment :
 
         //readiness score
         if (it.readinessScore != null) {
+            binding.lytRScoreData.lytScore.emptyText.gone()
+            binding.lytRScoreData.lytScore.tvValue.visible()
             val readinessData = it.readinessScore
             if (readinessData.value != null) {
                 if (readinessData.value == 0) {

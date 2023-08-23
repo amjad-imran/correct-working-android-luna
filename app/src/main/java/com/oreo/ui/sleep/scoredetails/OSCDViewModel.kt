@@ -341,5 +341,14 @@ class OSCDViewModel @Inject constructor(
 
     }
 
+    //date format is yyyy-MM-dd
+    fun getYearFromDate(selectedDate: String?): String {
+        return try {
+            selectedDate?.subSequence(0, 4).toString()
+        } catch (exp: Exception) {
+            ""
+        }
+    }
+
 
 }

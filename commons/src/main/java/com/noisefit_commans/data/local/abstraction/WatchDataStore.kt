@@ -94,6 +94,8 @@ interface WatchDataStore {
     fun saveWeatherDataModel(data: WeatherDataModel)
 
     fun getWeatherDataModel(startTimeStamp: Long, endTimeStamp: Long): WeatherDataModel?
+    fun updateSerialNo(serialNumberRing: String)
+    fun getSerialNo(): String?
 }
 
 //WeatherDataModel

@@ -1,33 +1,37 @@
 package com.noisefit.ui.onboarding.pairing.pair
 
+import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.LayoutInflater
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.airbnb.lottie.LottieDrawable
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.noisefit.luna.R
+import com.noisefit.luna.databinding.DialogResetDeviceBinding
+import com.noisefit.luna.databinding.DialogResetingDeviceBinding
 import com.noisefit.luna.databinding.FragmentPairingBinding
 import com.noisefit.receiver.service.FeedbackSubmitService
 import com.noisefit.receiver.service.ProblemType
 import com.noisefit.session.SessionManager
-import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.showShortToast
-import com.noisefit_commans.ui.visible
 import com.noisefit.ui.onboarding.onboardProfile.ProfileSetupActivity
 import com.noisefit.ui.onboarding.pairing.DeviceSetupActivity
-import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit.watch.ApplicationHandler
 import com.noisefit.watch.ConnectionHandler
 import com.noisefit_commans.common.copyToClipBoard
+import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.SingleActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -37,16 +41,13 @@ import com.noisefit_commans.interfaces.base.BaseInitializeCallbacks
 import com.noisefit_commans.interfaces.connection.BindState
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.connection.ConnectionCallbacks
+import com.noisefit_commans.interfaces.connection.ResetStates
 import com.noisefit_commans.interfaces.connection.WatchBindState
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.DeviceFirmware
 import com.noisefit_commans.models.DeviceType
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.utils.*
-import com.noisefit_commans.utils.AppLogs
-import com.noisefit_commans.utils.ConnectEvents
-import com.noisefit_commans.utils.LOGS
-import com.noisefit_commans.utils.LogEvents
 import com.oreo.receiver.service.RingConnectionService
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.TimeUnit
@@ -84,7 +85,6 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
 
@@ -170,36 +170,92 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
         }
     }
 
-    private fun startDeviceService() {
-
-        try {
-            viewModel.pairState.postValue(PairState.PAIRED)
-            vibrationUtils.vibrate(LOW_VIBRATION)
-
-            if (!viewModel.isMyServiceRunning(
-                    RingConnectionService::class.java,
-                    requireContext()
-                )
-            ) {
-                startRingConnectionService(Actions.INIT_DEFAULT)
+    private fun checkNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (NotificationManagerCompat.from(requireContext()).areNotificationsEnabled()) {
+                startConnectionService()
             } else {
-                LOGS.d("Ring connection service already running")
+                notificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
-        } catch (ignored: Exception) {
-            ignored.printStackTrace()
+        } else {
+            startConnectionService()
+        }
+    }
+    private fun startConnectionService() {
+        if (!viewModel.isMyServiceRunning(
+                RingConnectionService::class.java,
+                requireContext()
+            )
+        ) {
+            startRingConnectionService(Actions.INIT_DEFAULT)
+        } else {
+            LOGS.d("Service already running")
+        }
+    }
+
+    private val notificationPermission = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            startConnectionService()
+        } else {
+            context.showShortToast("Notification permission required")
+            uiController.onApiErrorReceived(ErrorResponse(
+                UIComponentType.AreYouSureDialog(
+                    getString(R.string.text_permission_required),
+                    "Notification permission required",
+                    false,
+                    getString(R.string.text_allow),
+                    object : BinaryActionCallback {
+                        override fun yes() {
+                            checkNotificationPermission()
+                        }
+
+                        override fun no() {
+
+                        }
+
+                    }
+                )
+            ))
+
+            // Explain to the user that the feature is unavailable because the
+            // features requires a permission that the user has denied. At the
+            // same time, respect the user's decision. Don't link to system
+            // settings in an effort to convince the user to change their
+            // decision.
         }
     }
 
     override fun subscribeObservers() {
+
+        viewModel.navigateUp.observe(this) {
+            it.getContent()?.let {
+                navigateUpSafe()
+            }
+        }
+
         viewModel.continueDeviceSetup.observe(this) {
             it.getContent()?.let {
                 navigateUpSafe()
-                startDeviceService()
+                try {
+                    viewModel.pairState.postValue(PairState.PAIRED)
+                    vibrationUtils.vibrate(LOW_VIBRATION)
+                    checkNotificationPermission()
+                } catch (ignored: Exception) {
+                    ignored.printStackTrace()
+                }
             }
         }
         viewModel.deviceSetupSuccess.observe(this) {
             it.getContent()?.let {
-                startDeviceService()
+                try {
+                    viewModel.pairState.postValue(PairState.PAIRED)
+                    vibrationUtils.vibrate(LOW_VIBRATION)
+                    checkNotificationPermission()
+                } catch (ignored: Exception) {
+                    ignored.printStackTrace()
+                }
             }
         }
 
@@ -438,6 +494,11 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
                             }
 
                             if (showResetDialog) {
+
+                                showResetRingDialog(colorFitDevice)
+                                return
+
+
                                 val infoAlert = UIComponentType.InfoAlertDialog(
                                     "Already connected?",
                                     text,
@@ -512,6 +573,79 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
                 }
             })
         }
+
+
+    }
+
+    private fun showResettingRingDialog(device: ColorFitDevice) {
+
+        var alert: androidx.appcompat.app.AlertDialog? = null
+        val builder =
+            MaterialAlertDialogBuilder(requireContext(), R.style.MaterialAlertDialog_rounded)
+        val dialogView: DialogResetingDeviceBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(requireContext()),
+            R.layout.dialog_reseting_device, null, false
+        )
+        builder.setView(dialogView.root)
+        builder.setCancelable(false)
+        alert = builder.create()
+        alert.show()
+        connectionHandler.getConnectionActions()?.forceDisconnect(device) { states ->
+            LOGS.d("RESET_STATES $states")
+
+            when (states) {
+                ResetStates.STARTED -> {
+
+                }
+
+                ResetStates.CONNECTED -> {}
+                ResetStates.CONNECTION_FAILED -> {
+                    context.showShortToast("Connection Failed")
+                    alert.dismiss()
+                    viewModel.navigateUp.postValue(Event(true))
+                }
+
+                ResetStates.NOT_ON_CHARGING -> {
+                    context.showShortToast("Ring not on charging")
+                    alert.dismiss()
+                    viewModel.navigateUp.postValue(Event(true))
+                }
+
+                ResetStates.RESET_SUCCESS -> {
+                    context.showShortToast("Reset Successful")
+                    alert.dismiss()
+                    viewModel.navigateUp.postValue(Event(true))
+                }
+            }
+
+
+        }
+
+    }
+
+    private fun showResetRingDialog(device: ColorFitDevice) {
+        var alert: androidx.appcompat.app.AlertDialog? = null
+        val builder =
+            MaterialAlertDialogBuilder(requireContext(), R.style.MaterialAlertDialog_rounded)
+        val dialogView: DialogResetDeviceBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(requireContext()),
+            R.layout.dialog_reset_device, null, false
+        )
+        dialogView.apply {
+
+            btnAllow.setOnClickListener {
+                showResettingRingDialog(device)
+                alert?.dismiss()
+            }
+            btnCancel.setOnClickListener {
+                alert?.dismiss()
+                viewModel.navigateUp.postValue(Event(true))
+            }
+        }
+        builder.setView(dialogView.root)
+        builder.setCancelable(false)
+        alert = builder.create()
+        alert.show()
 
 
     }

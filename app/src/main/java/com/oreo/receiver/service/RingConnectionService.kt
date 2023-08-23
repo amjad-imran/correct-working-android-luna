@@ -24,7 +24,9 @@ import androidx.lifecycle.LifecycleService
 import com.noisefit.luna.R
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.local.db.CacheResult
+import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.LastSyncProvider
+import com.noisefit.data.repository.abstraction.DeviceRepository
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
@@ -106,6 +108,9 @@ constructor() : LifecycleService() {
     private val executor: Executor = Executor()
 
     private val TAG = RingConnectionService::class.java.simpleName
+
+    @Inject
+    lateinit var deviceRepository: DeviceRepository
 
     @Inject
     lateinit var batteryNotificationUtils: BatteryNotificationUtils
@@ -439,6 +444,7 @@ constructor() : LifecycleService() {
         }
 
         device?.let { colorFitDevice ->
+            removeWatchTokenFromServer(colorFitDevice.address)
             LOGS.i(TAG, "Stopping the foreground service - inside")
             applicationHandler.unInitSdks(colorFitDevice)
             connectionHandler.getConnectionActions(colorFitDevice)?.let { connectionDataActions ->
@@ -458,6 +464,38 @@ constructor() : LifecycleService() {
         sessionManager.clearSessionManager()
         sessionManager.setConnectStateRing(ConnectState.UnPaired())
         stopSelf()
+    }
+
+    private fun removeWatchTokenFromServer(macAddress: String?) {
+
+
+        if (macAddress.isNullOrEmpty()) {
+            LOGS.d("removeWatchTokenFromServer macAddress null")
+            return
+        }
+
+        GlobalScope.launch {
+            deviceRepository.removeWatchTokenFromServer(macAddress).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+
+                    }
+
+                    is Resource.Loading -> {
+
+                    }
+
+                    is Resource.NetworkError -> {
+
+                    }
+
+                    is Resource.Success -> {
+
+                    }
+                }
+            }
+
+        }
     }
 
     private fun registerBluetoothReceivers() {
@@ -1442,6 +1480,9 @@ constructor() : LifecycleService() {
                     )
                     sessionManager.firmwareVersion = version
                     watchDataStore.updateFirmwareVersion(version)
+                    WatchInfoGlobals.serialNumberRing?.let {
+                        watchDataStore.updateSerialNo(it)
+                    }
                     watchDataStore.saveDeviceFirmwareDetails(
                         WatchFirmwareDetails(
                             WatchInfoGlobals.firmwareVersionNumberRing,
@@ -1465,10 +1506,11 @@ constructor() : LifecycleService() {
     private val updateDeviceCallback = object : IUpdateDeviceDataCallback {
         override fun onUpdateDataReceived(dataCallback: UpdateDeviceDataCallback) {
             when (dataCallback) {
-                is UpdateDeviceDataCallback.ManualMeasurementObtained->{
+                is UpdateDeviceDataCallback.ManualMeasurementObtained -> {
                     ringDataStore.setManualMeasurementValue(dataCallback.manualMeasurement)
                     sessionManager.setManualMeasurementValue(true)
                 }
+
                 is UpdateDeviceDataCallback.FirmwareUpgradeProgress -> {
                     if (dataCallback.watchUpdateStatus.status == UpdateStatus.COMPLETED ||
                         dataCallback.watchUpdateStatus.status == UpdateStatus.ERROR ||

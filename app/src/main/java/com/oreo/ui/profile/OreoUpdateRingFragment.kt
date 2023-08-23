@@ -41,7 +41,7 @@ class OreoUpdateRingFragment :
         minimumBatteryLevel = viewModel.watchesSDK.getMinimumBatteryLevel()
 
         viewModel.sessionManager.forceOtaResponseRing?.let {
-            binding.toolbar.tvTitle.text = "Version ${it.version}"
+            binding.toolbar.tvTitle.text = "Version ${it.version_name}"
             binding.tvUpdateMessage.text = it.descriptionEnglish
         }
 

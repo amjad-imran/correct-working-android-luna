@@ -18,6 +18,7 @@ data class UpdateResponse(
     val version: Int = 0,
     @SerializedName("url")
     val url: String = "",
+    val version_name: String = "",
     @SerializedName("hr_url")
     val hrUrl: String? = null,
     @SerializedName("image_url")

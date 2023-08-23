@@ -42,10 +42,10 @@ private const val WATCH_INFO_LOG = "WATCH_INFO_LOG"
 private const val UPDATE_OTA_TIMESTAMP = "UPDATE_OTA_TIMESTAMP"
 private const val WATCH_MAPS_LAT_LONG = "WATCH_MAPS_LAT_LONG"
 private const val DEFAULT_VALUE = "DEFAULT_VALUE"
+private const val SERIAL_NO = "SERIAL_NO"
 
 private const val RYEEX_WATCH_TOKEN_ARG = "RYEEX_WATCH_TOKEN_ARG"
 private const val WEATHER_SPORT_DATA_KEY = "WEATHER_SPORT_DATA_KEY_2"
-
 
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -57,6 +57,16 @@ constructor(
     private val gson: Gson,
     private val mPrefs: SharedPreferences
 ) : WatchDataStore {
+
+    override fun getSerialNo(): String? {
+        return mPrefs.getString(SERIAL_NO, null)
+    }
+
+    override fun updateSerialNo(serialNumberRing: String) {
+        mPrefs.edit()
+            ?.putString(SERIAL_NO, serialNumberRing)
+            ?.apply()
+    }
 
     override fun setLastUpdatedTimeStamp(timeStamp: Long) {
         mPrefs.edit()
@@ -285,6 +295,7 @@ constructor(
     override fun getBatteryPercent(): Int {
         return mPrefs.getInt(BATTERY_PERCENT, 0)
     }
+
     override fun getBatteryPercentRing(): Int {
         return mPrefs.getInt(BATTERY_PERCENT_RING, 0)
     }
@@ -295,6 +306,7 @@ constructor(
                 ?.commit()
         }
     }
+
     override fun updateBatteryPercentRing(percent: Int?) {
         percent?.let {
             mPrefs.edit()?.putInt(BATTERY_PERCENT_RING, it)

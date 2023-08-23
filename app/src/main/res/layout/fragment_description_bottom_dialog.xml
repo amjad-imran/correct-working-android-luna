@@ -5,16 +5,16 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@android:color/transparent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/list"
             style="@style/ModalStyleDialog"
-            android:layout_marginTop="200dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="500dp"
             android:layout_marginStart="@dimen/dimen_12dp"
+            android:layout_marginTop="@dimen/dimen_12dp"
             android:layout_marginEnd="@dimen/dimen_12dp"
             android:layout_marginBottom="@dimen/dimen_12dp">
 
@@ -34,6 +34,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="@dimen/dimen_16dp"
+                android:layout_marginBottom="8dp"
                 app:layout_constraintBottom_toTopOf="@+id/tabLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

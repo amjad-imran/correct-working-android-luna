@@ -153,6 +153,23 @@ class NightTimeGraphViewOreo(var mContext: Context) : View(
                     start = end
                 }
             }
+        } else {
+            canvas.drawText(
+                "12 am",
+                0f,
+                (sectionHeight * 4) - pxFromDp(context, 2.0f),
+                mTextPaint
+            )
+
+
+            val textWidth = mTextPaint.measureText("12 am")
+
+            canvas.drawText(
+                "12 am",
+                (width - textWidth - endPadding),
+                sectionHeight * 4 - SleepGraphViewOreo.pxFromDp(context, 2.0f),
+                mTextPaint
+            )
         }
     }
 

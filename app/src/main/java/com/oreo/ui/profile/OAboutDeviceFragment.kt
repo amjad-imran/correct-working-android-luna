@@ -12,6 +12,7 @@ import com.noisefit_commans.common.copyToClipBoard
 import com.noisefit_commans.common.decodeHex
 import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.local.abstraction.RingDataStore
+import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseFragment
@@ -31,6 +32,9 @@ class OAboutDeviceFragment :
 
     @Inject
     lateinit var ringDataStore: RingDataStore
+
+    @Inject
+    lateinit var watchDataStore: WatchDataStore
 
     private val updateViewModel: CheckForUpdatesViewModel by activityViewModels()
 
@@ -70,7 +74,6 @@ class OAboutDeviceFragment :
 
         response.add(AboutDeviceData("Generation", "1"))
 
-        LOGS.d("SERIAL_NO ${WatchInfoGlobals.serialNumberRing}")
 
         val size = if (connectedDevice.ringInfo?.size != null) {
             "${connectedDevice.ringInfo?.size}"
@@ -79,11 +82,15 @@ class OAboutDeviceFragment :
         }
         response.add(AboutDeviceData("Colour", connectedDevice.ringInfo?.color ?: "-"))
         response.add(AboutDeviceData("Size", size))
-//        response.add(AboutDeviceData("Bootloader", "-"))
         response.add(
             AboutDeviceData(
                 "Serial number",
-                connectedDevice.ringInfo?.serialNoRaw ?: "-"
+                if (connectedDevice.ringInfo?.serialNoRaw.isNullOrEmpty()) {
+                    val sNo = watchDataStore.getSerialNo()
+                    sNo ?: "-"
+                } else {
+                    connectedDevice.ringInfo?.serialNoRaw ?: "-"
+                }
             )
         )
 

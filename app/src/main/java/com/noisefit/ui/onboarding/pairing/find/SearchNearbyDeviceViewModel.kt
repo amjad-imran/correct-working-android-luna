@@ -19,6 +19,7 @@ import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.RingSerialNoParser
 import com.noisefit_commans.utils.bleUtils.CRPScanRecordInfo.McuPlatform
 import com.noisefit_commans.utils.bleUtils.DeviceEntity
 import com.noisefit_commans.utils.bleUtils.DeviceScanQrCodeBean
@@ -121,10 +122,10 @@ constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            if (it.watchToken.isNullOrEmpty()) {
+                            if (it.ringToken.isNullOrEmpty()) {
                                 _watchToken.postValue(Event(""))
                             } else {
-                                _watchToken.postValue(Event(it.watchToken))
+                                _watchToken.postValue(Event(it.ringToken))
                             }
 
                         }
@@ -286,8 +287,11 @@ constructor(
             ":",
             ""
         )
+        val convertedSerialNo = RingSerialNoParser().convertSerialNo(serial)
+        LOGS.w("INPUT : $serial convertedSerialNo $convertedSerialNo")
+
         val code = try {
-            serial.substring(10, 12).toInt()
+            convertedSerialNo.substring(7, 9).toInt()
         } catch (exp: Exception) {
             0
         }
@@ -305,7 +309,7 @@ constructor(
                         color = info.color,
                         image = info.imageUrl,
                         image2 = info.imageUrl2,
-                        serialNoRaw = serial
+                        serialNoRaw = convertedSerialNo
                     )
                     return@outer
                 }

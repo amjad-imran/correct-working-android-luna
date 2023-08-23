@@ -119,7 +119,7 @@
     <string name="text_read_more">Read More</string>
     <string name="text_more_exp">more</string>
     <string name="text_less_exp">less</string>
-    <string name="text_choose_from">Choose From</string>
+    <string name="text_choose_from">Choose from</string>
     <string name="character_name">qwertyuiopasdfghjklzxcvbnm QWERTYUIOPASDFGHJKLZXCVBNM</string>
     <string name="character_warranty">qwertyuiopasdfghjklzxcvbnm 1234567890 QWERTYUIOPASDFGHJKLZXCVBNM</string>
     <string name="text_find_my_phone">Find My Phone</string>
@@ -395,7 +395,7 @@
     <string name="text_stop_searching">Stop Searching</string>
     <string name="text_sms_alert">SMS alert</string>
     <string name="text_no_application_selected">No application selected</string>
-    <string name="my_profile_page_title">My Profile</string>
+    <string name="my_profile_page_title">Your profile</string>
     <string name="edit">Edit</string>
     <string name="name">Name</string>
     <string name="gender">Gender</string>
@@ -941,9 +941,11 @@
     <string name="text_found_what_you_re_looking_for">Found what you’re looking for?</string>
     <string name="text_still_got_questions_talk_to_an_expert">Still got questions?</string>
     <string name="text_call">Call</string>
-    <string name="text_help">Help</string>
+    <string name="text_help">Help and support</string>
     <string name="text_warranty_registered"> Add text </string>
     <string name="text_bad_feedback_msg">If you have any query, write to us on luna.support@nexxbase.com</string>
     <string name="text_got_something_to_share_tell_us">Got something to share? Tell us.</string>
     <string name="text_log_in">Log in</string>
+    <string name="text_privacy_message">Welcome to Luna Ring. You can use this App to manage your ring and view related exercise and health data. We will strictly abide by relevant laws, regulations and privacy policies to protect your personal information. To provide the most basic services, the App needs to be connected to the internet.</string>
+    <string name="text_do_you_want_to_reset">Ring is already connected with other device, Do you want to reset?</string>
 </resources>

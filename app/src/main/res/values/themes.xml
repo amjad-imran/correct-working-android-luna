@@ -88,13 +88,13 @@
 
     <style name="EditTextStyle">
         <item name="android:layout_height">60dp</item>
-        <item name="android:background">@drawable/back_modal</item>
+        <item name="android:background">@drawable/back_modal_edittext</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:paddingStart">@dimen/side_margin</item>
         <item name="android:paddingEnd">@dimen/side_margin</item>
         <item name="android:textColor">@color/edit_text_color</item>
         <item name="android:textColorHint">@color/edit_hint_color</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">@font/gilroy_medium</item>
     </style>
     <style name="EditTextStyleSearch">

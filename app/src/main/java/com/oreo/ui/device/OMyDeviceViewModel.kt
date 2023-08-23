@@ -48,62 +48,6 @@ class OMyDeviceViewModel @Inject constructor(
         _deviceConnected.value = (ringDataStore.getRingDevice() != null)
     }
 
-    fun updateUserDevice(device: ColorFitDevice, forceRefresh: Boolean) {
-        val deviceToken = localDataStore.getUserToken()
-        if (deviceToken != null && !forceRefresh) {
-            return
-        }
-
-        val request = JsonObject().apply {
-            addProperty("address", device.address)
-            addProperty("device_id", device.deviceId)
-            addProperty("rssi", device.rssi)
-            addProperty("watch_token", device.watchToken)
-            addProperty("platform", "android")
-            addProperty("wearable_type", "watch")
-        }
-        viewModelScope.launch {
-            userRepository.saveUserDevice(request).collect { resource ->
-                when (resource) {
-
-                    is Resource.GenericError -> {
-                        sendMessage(resource.message)
-                    }
-
-                    is Resource.Loading -> {
-                        setLoading(resource.loading)
-                    }
-
-                    is Resource.NetworkError -> {
-                        setApiErrors(resource.response.apply {
-                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
-                                object : BinaryActionCallback {
-                                    override fun yes() {
-                                        updateUserDevice(device, forceRefresh)
-                                    }
-
-                                    override fun no() {
-
-                                    }
-                                }
-                        })
-                    }
-
-
-                    is Resource.Success -> {
-                        resource.data?.data?.let {
-                            it.userDevice.deviceFeatures?.let { features ->
-                                localDataStore.saveDeviceFeatures(features)
-                            }
-                            localDataStore.updateUserToken(it.tokens)
-
-                            startWatchFlow.postValue(Event(true))
-                        }
-                    }
-                }
-            }
-        }
-    }
 
 
 }
