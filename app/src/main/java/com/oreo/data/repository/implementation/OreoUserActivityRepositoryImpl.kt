@@ -3,13 +3,17 @@ package com.oreo.data.repository.implementation
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
+import com.noisefit.data.local.dataStored.abstraction.IOfflineApiResponseStore
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.local.db.abstraction.CACHE_CLEAR_DEFAULT
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType
+import com.noisefit.data.local.db.fromJson
 import com.noisefit.data.remote.abstraction.NetworkService
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.remote.response.Watchface2
+import com.noisefit.data.repository.LastSyncItems
+import com.noisefit.data.repository.LastSyncProvider
 import com.noisefit.data.safeApiCallFlow
 import com.noisefit.data.safeCacheCall
 import com.noisefit.luna.BuildConfig
@@ -37,6 +41,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
 
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -56,6 +61,8 @@ class OreoUserActivityRepositoryImpl(
     private val oreoAutoSportDataImpl: OreoAutoSportDataImpl,
     private val offlineDataMapper: OreoOfflineDataMapper,
     private val keyValueDataSource: KeyValueDataSource,
+    private val lastSyncProvider: LastSyncProvider,
+    private val offlineApiStore: IOfflineApiResponseStore,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : OreoUserActivityRepository {
 
@@ -1136,17 +1143,219 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
+    private fun shouldCallBannerApi(
+        serverTime: Long,
+        localTime: Long
+    ): Boolean {
+        if (serverTime == 0L) return true
+        if (localTime == 0L) return true
+
+        return localTime < serverTime
+    }
+
+    fun getLocalHelpAndSupportData(removeData: Boolean): List<OHSModel>? {
+        if (removeData) {
+            offlineApiStore.setHelpAndSupportList(null)
+            return ArrayList()
+        }
+        return offlineApiStore.getHelpAndSupportList()
+    }
+
     override suspend fun getHSCategories(): Flow<Resource<BaseApiResponse<List<OHSModel>>>> {
-        return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.BASE_URL_NEW}/core/ring/help_and_support/categories"
-            remoteDataSource.getHSCategories(url)
+        return flow {
+
+            val serverUpdateTimeStamp =
+                lastSyncProvider.getSyncTimeStamp(LastSyncItems.H_AND_SUPPORT_SERVER_UPDATE)
+            val localSyncTime =
+                lastSyncProvider.getSyncTimeStamp(LastSyncItems.HELP_AND_SUPPORT_LIST)
+
+            val shouldCallApi = shouldCallBannerApi(serverUpdateTimeStamp, localSyncTime)
+
+            val resultData = ArrayList<OHSModel>()
+
+            val cacheResult = safeCacheCall(Dispatchers.IO) {
+                getLocalHelpAndSupportData(shouldCallApi)
+            }
+            cacheResult.collect { resource ->
+                when (resource) {
+                    is CacheResult.Success -> {
+
+                        resource.value?.let {
+                            resultData.clear()
+                            resultData.addAll(it)
+                        }
+                    }
+
+                    is CacheResult.GenericError -> {
+
+                    }
+                }
+            }
+
+
+            if (resultData.isNotEmpty()) {
+                emit(Resource.Success(BaseApiResponse(data = resultData, message = "")))
+                return@flow
+            }
+
+            val serverResult = safeApiCallFlow(dispatcher) {
+                val url = "${BuildConfig.BASE_URL_NEW}/core/ring/help_and_support/categories"
+                remoteDataSource.getHSCategories(url)
+            }
+
+
+            serverResult.collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        emit(Resource.GenericError(resource.message, resource.errorCode))
+                    }
+
+                    is Resource.Loading -> {
+                        emit(Resource.Loading(resource.loading))
+                    }
+
+                    is Resource.NetworkError -> {
+                        emit(Resource.NetworkError(resource.response, resource.code))
+                    }
+
+                    is Resource.Success -> {
+
+                        resource.data?.data?.let { response ->
+                            withContext(Dispatchers.IO) {
+                                keyValueDataSource.removeDataByType(KeyValueDataType.H_AND_S)
+                            }
+                            lastSyncProvider.setSyncTimeStamp(LastSyncItems.HELP_AND_SUPPORT_LIST)
+                            resultData.clear()
+                            resultData.addAll(response)
+                        }
+                    }
+                }
+            }
+
+            if (resultData.isNotEmpty()) {
+                safeCacheCall(Dispatchers.IO) {
+                    offlineApiStore.setHelpAndSupportList(resultData)
+                }.collect { resource ->
+                    when (resource) {
+                        is CacheResult.Success -> {
+                            emit(Resource.Success(BaseApiResponse(data = resultData, message = "")))
+                        }
+
+                        is CacheResult.GenericError -> {
+                            emit(Resource.GenericError(message = "Something went wrong", 0))
+                        }
+                    }
+                }
+            }
         }
     }
 
     override suspend fun getHSQAnswer(quesId: String): Flow<Resource<BaseApiResponse<List<OHSQuestionariesResponseModel>>>> {
-        return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.BASE_URL_NEW}/core/ring/help_and_support/answers/${quesId}"
-            remoteDataSource.getHSQAnswer(url)
+        return flow {
+            val resultData = ArrayList<OHSQuestionariesResponseModel>()
+
+            val cacheResult = safeCacheCall(Dispatchers.IO) {
+
+                val localData =
+                    keyValueDataSource.getData(quesId, KeyValueDataType.H_AND_S)
+                        ?: return@safeCacheCall null
+
+                if (localData.value == null) {
+                    return@safeCacheCall null
+                }
+
+                return@safeCacheCall localData.value?.let {
+                    Gson().fromJson<List<OHSQuestionariesResponseModel>>(
+                        it
+                    )
+                }
+            }
+            cacheResult.collect { resource ->
+                when (resource) {
+                    is CacheResult.Success -> {
+
+                        resource.value?.let {
+                            resultData.addAll(it)
+                        }
+                    }
+
+                    is CacheResult.GenericError -> {
+
+                    }
+                }
+            }
+
+
+            if (resultData.isNotEmpty()) {
+                emit(
+                    Resource.Success(
+                        BaseApiResponse(
+                            data = resultData,
+                            message = "",
+                        )
+                    )
+                )
+                return@flow
+            }
+
+            val serverResult = safeApiCallFlow(dispatcher) {
+                val url = "${BuildConfig.BASE_URL_NEW}/core/ring/help_and_support/answers/${quesId}"
+                remoteDataSource.getHSQAnswer(url)
+            }
+
+
+            serverResult.collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        emit(Resource.GenericError(resource.message, resource.errorCode))
+                    }
+
+                    is Resource.Loading -> {
+                        emit(Resource.Loading(resource.loading))
+                    }
+
+                    is Resource.NetworkError -> {
+                        emit(Resource.NetworkError(resource.response, resource.code))
+                    }
+
+                    is Resource.Success -> {
+
+                        resource.data?.data?.let { response ->
+                            resultData.clear()
+                            resultData.addAll(response)
+                        }
+                    }
+                }
+            }
+
+            if (resultData.isNotEmpty()) {
+                safeCacheCall(Dispatchers.IO) {
+                    keyValueDataSource.insertData(
+                        KeyValue(
+                            key = quesId,
+                            value = gson.toJson(resultData),
+                            type = KeyValueDataType.H_AND_S.name
+                        )
+                    )
+                }.collect { resource ->
+                    when (resource) {
+                        is CacheResult.Success -> {
+                            emit(
+                                Resource.Success(
+                                    BaseApiResponse(
+                                        data = resultData,
+                                        message = "",
+                                    )
+                                )
+                            )
+                        }
+
+                        is CacheResult.GenericError -> {
+                            emit(Resource.GenericError(message = "Something went wrong", 0))
+                        }
+                    }
+                }
+            }
         }
     }
 

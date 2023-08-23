@@ -18,5 +18,5 @@ interface KeyValueDataSource {
 }
 
 enum class KeyValueDataType {
-    DASHBOARD, ACTIVITY, SLEEP, READINESS, CONTRIBUTORS
+    DASHBOARD, ACTIVITY, SLEEP, READINESS, CONTRIBUTORS, H_AND_S
 }

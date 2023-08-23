@@ -66,7 +66,6 @@ class NetworkConnectionInterceptor(
         localDataStore.deleteFcmToken()
         localDataStore.setWarrantyStatus(-1)
 
-        lastSyncProvider.removeUserDataLastSync()
 
         Handler(Looper.getMainLooper()).post {
             appContext.showShortToast(appContext.getString(R.string.text_session_expired))

@@ -314,7 +314,9 @@ object AppModule {
         sleepDataImpl: OreoSleepDataImpl,
         offlineDataMapper: OreoOfflineDataMapper,
         oreoAutoSportDataImpl: OreoAutoSportDataImpl,
-        keyValueDataSource: KeyValueDataSource
+        keyValueDataSource: KeyValueDataSource,
+        lastSyncProvider: LastSyncProvider,
+        offlineApiStore: IOfflineApiResponseStore
     ): OreoUserActivityRepository =
         OreoUserActivityRepositoryImpl(
             remoteDataSource,
@@ -329,7 +331,9 @@ object AppModule {
             stepsDataImpl,
             oreoAutoSportDataImpl,
             offlineDataMapper,
-            keyValueDataSource
+            keyValueDataSource,
+            lastSyncProvider,
+            offlineApiStore
         )
 
 

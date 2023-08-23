@@ -63,12 +63,9 @@ interface UserRepository {
         pageLimit: Int
     ): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<List<SportsModeResponse>>>>
 
-    suspend fun getWorkoutShareImages(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<List<String>>>>
-
     suspend fun getActivitiesDetails(itemId: Int): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<SportsModeResponse>>>
 
     suspend fun getRecentActivitiesDates(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<JsonObject>>>
-    suspend fun getDashboardBanner(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<DashboardBannerData>>>
 
     suspend fun postActivities(request: SportsModeRequestList): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseActivity>>
 
@@ -82,7 +79,6 @@ interface UserRepository {
 
 
 
-    suspend fun getSummaryRecentActivities(isForceRefresh: Boolean): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<RecentActivities>>>
 
     suspend fun uploadUserImage(imageUri: Uri): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseImage>>
     suspend fun geRecentActivities(isForceRefresh: Boolean): Flow<Resource<BaseApiResponse<RecentActivities>>>
