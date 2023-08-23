@@ -129,6 +129,7 @@
             app:xMin="0"
             app:xTextColor="#FFFFFF"
             app:xTextSize="10sp"
+            app:noDataSize="12dp"
             app:yLineColor="#00FFFFFF"
             app:yTextColor="@color/white_64"
             app:yTextSize="10sp"
