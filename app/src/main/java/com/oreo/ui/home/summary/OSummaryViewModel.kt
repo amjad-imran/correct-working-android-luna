@@ -22,6 +22,7 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.OHealthOverview
+import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.health.ODashboardSleepModel
 import com.oreo.data.model.health.OreoDashboardResponseModel
 import com.oreo.data.repository.abstraction.OreoSyncRepository
@@ -163,6 +164,7 @@ constructor(
 //            userActivities.add(1, OHealthOverview.WAlert(2))
             if (ringDataStore.getRingDevice() == null) {
                 userActivities.add(OHealthOverview.PairDevice())
+                hrValue?.measureState = TapMeasureState.NO_DEVICE
             }
 
             ringDataStore.setRegisterDay(data.registerDate ?: -1)
@@ -317,13 +319,13 @@ constructor(
             it is OHealthOverview.PairDevice
         }
 
-         val autoSportIndex = summary.healthOverviewData.value?.indexOfFirst {
-             it is OHealthOverview.TodayWorkout
-         }
+        val autoSportIndex = summary.healthOverviewData.value?.indexOfFirst {
+            it is OHealthOverview.TodayWorkout
+        }
 
-         if (autoSportIndex != null && autoSportIndex != -1) {
-             summary.healthOverviewData.value?.removeAt(autoSportIndex)
-         }
+        if (autoSportIndex != null && autoSportIndex != -1) {
+            summary.healthOverviewData.value?.removeAt(autoSportIndex)
+        }
         if (index == -1) {
             summary.healthOverviewData.value?.add(1, OHealthOverview.PairDevice())
         }
@@ -342,13 +344,22 @@ constructor(
                 val data = summary.healthOverviewData.value!![index] as OHealthOverview.HeartRate
 
                 if (manualMeasurement.isError) {
-                    data.errorMessage = "Unable to measure, try again"
+                    /*data.errorMessage = "Unable to measure, try again"
                     data.value = "0"
-                    data.isMeasuring = false
+                    data.isMeasuring = false*/
+
+                    data.measureState = TapMeasureState.ERROR
                 } else {
-                    data.lastTime = "Last measure now"
-                    data.errorMessage = null
-                    data.isMeasuring = manualMeasurement.isMeasuring
+
+                    if (manualMeasurement.isMeasuring) {
+                        data.measureState = TapMeasureState.MEASURING
+                    } else {
+                        data.measureState = TapMeasureState.LAST_MEASURED
+                    }
+
+                    //data.lastTime = "Last measure now"
+                    /*data.errorMessage = null
+                    data.isMeasuring = manualMeasurement.isMeasuring*/
                     data.value = manualMeasurement.value.toString()
                 }
                 summary.refreshPosition = index
@@ -430,6 +441,18 @@ constructor(
     fun measureHr(status: Boolean) {
         LOGS.d("manual HR")
         LOGS.d("onMeasuring manual HR")
+
+        val index = summary.healthOverviewData.value?.indexOfFirst {
+            it is OHealthOverview.HeartRate
+        }
+        if (index != null) {
+            val data = summary.healthOverviewData.value!![index] as OHealthOverview.HeartRate
+            data.measureState = TapMeasureState.MEASURING
+            summary.refreshPosition = index
+            summary.healthOverviewData.postValue(summary.healthOverviewData.value)
+        }
+
+
         sessionManager.sendUpdateQueryAction(
             UpdateDeviceAction.SetManualMeasurement(
                 ManualMeasureType.HEART_RATE, status

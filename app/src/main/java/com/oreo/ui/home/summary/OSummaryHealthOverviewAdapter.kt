@@ -19,11 +19,12 @@ import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MiscUtil
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
+import com.oreo.data.model.TapMeasureState
 import com.oreo.util.graph.OCombineChartUtils
 import java.lang.Math.abs
 
 sealed class OSummaryHealthOverviewClickEnum {
-    object MeasureHRClick : OSummaryHealthOverviewClickEnum()
+    data class MeasureHRClick(val position: Int) : OSummaryHealthOverviewClickEnum()
     object PairDeviceClicked : OSummaryHealthOverviewClickEnum()
     object AddWorkoutClick : OSummaryHealthOverviewClickEnum()
     object SleepDetailsWorkoutClick : OSummaryHealthOverviewClickEnum()
@@ -525,7 +526,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.tvDaysAvg.visible()
                 binding.sleepLineChart.visible()
                 binding.sleepLine.root.visible()
-                val trendValue = "${kotlin.math.abs(data.sleepTrend?:0)}%"
+                val trendValue = "${kotlin.math.abs(data.sleepTrend ?: 0)}%"
                 if (data.sleepTrend != null && data.sleepTrend > 0) {
                     binding.sleepTrendValue.text = trendValue
                     binding.sleepTrendValue.setTextColor(Color.parseColor("#29cc74"))
@@ -591,7 +592,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.activityTrendValue.visible()
                 binding.tvActivityFrom.visible()
 
-                val trendValue = "${kotlin.math.abs(data.activityTrend?:0)}%"
+                val trendValue = "${kotlin.math.abs(data.activityTrend ?: 0)}%"
                 if (data.activityTrend != null && data.activityTrend > 0) {
                     binding.activityTrendValue.text = trendValue
                     binding.activityTrendValue.setTextColor(Color.parseColor("#29cc74"))
@@ -653,8 +654,67 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             val combinedData = CombinedData()
 
-            binding.tvHeartValue.text = data.value
-            binding.tvLastMeasure.text = data.lastTime
+
+
+            when (data.measureState) {
+                TapMeasureState.NO_DEVICE -> {
+                    binding.lottieAnimView.invisible()
+                    binding.imvHrMeasure.visible()
+
+                    binding.groupValue.gone()
+                    binding.tvEmptyConnect.visible()
+                    binding.tvEmptyConnect.text =
+                        binding.tvEmptyConnect.context.getString(R.string.text_connect_your_device_to_measure)
+
+                }
+
+                TapMeasureState.LAST_MEASURED -> {
+                    binding.lottieAnimView.invisible()
+                    binding.imvHrMeasure.visible()
+
+                    binding.groupValue.visible()
+                    binding.tvEmptyConnect.gone()
+
+                    binding.tvHeartValue.text = data.value
+                    binding.tvLastMeasure.text = data.lastTime
+
+                }
+
+                TapMeasureState.MEASURING -> {
+                    binding.lottieAnimView.visible()
+                    binding.imvHrMeasure.invisible()
+
+                    binding.groupValue.visible()
+                    binding.tvEmptyConnect.gone()
+
+                    binding.tvHeartValue.text = "--"
+                    binding.tvLastMeasure.text = "measuring"
+                }
+
+                TapMeasureState.DEFAULT -> {
+                    binding.lottieAnimView.invisible()
+                    binding.imvHrMeasure.visible()
+
+                    binding.groupValue.visible()
+                    binding.tvEmptyConnect.gone()
+
+                    binding.tvHeartValue.text = "--"
+                    binding.tvLastMeasure.text = "Tap to measure"
+                }
+
+                TapMeasureState.ERROR -> {
+                    binding.lottieAnimView.invisible()
+                    binding.imvHrMeasure.visible()
+
+                    binding.groupValue.gone()
+                    binding.tvEmptyConnect.visible()
+                    binding.tvEmptyConnect.text = "Unable to measure"
+
+                }
+            }
+
+            //binding.tvHeartValue.text = data.value
+            //binding.tvLastMeasure.text = data.lastTime
 
             if (data.lineData.first.isNotEmpty() && data.lineData.first.size > 1) {
                 combinedData.setData(
@@ -675,48 +735,46 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 chart.invalidate()
             }
 
-            if (data.isMeasuring) {
+
+            /*if (data.isMeasuring) {
                 binding.lottieAnimView.visible()
                 binding.imvHrMeasure.invisible()
             } else {
                 binding.lottieAnimView.invisible()
                 binding.imvHrMeasure.visible()
-            }
+            }*/
 
             binding.imvHrMeasure.setOnClickListener {
-                if (binding.tvLastMeasure.text == "measuring") {
+
+                if (data.measureState == TapMeasureState.MEASURING || data.measureState == TapMeasureState.NO_DEVICE) {
                     return@setOnClickListener
                 }
+                itemClickListener?.invoke(
+                    OSummaryHealthOverviewClickEnum.MeasureHRClick(
+                        bindingAdapterPosition
+                    )
+                )
+                return@setOnClickListener
 
-                binding.tvHeartValue.text = "--"
-                binding.tvHeartValue.visible()
-                binding.tvHeartUnit.visible()
-                binding.tvLastMeasure.visible()
-                binding.tvEmptyConnect.gone()
-                binding.tvLastMeasure.text = "measuring"
 
-                binding.lottieAnimView.visible()
-                binding.imvHrMeasure.invisible()
-
-                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.MeasureHRClick)
             }
 
-            if (data.errorMessage.isNullOrEmpty()) {
-                binding.tvEmptyConnect.gone()
-            } else {
-                binding.tvEmptyConnect.text = data.errorMessage
-                binding.tvEmptyConnect.visible()
-            }
-            if (data.value.toInt() > 0) {
-                binding.tvEmptyConnect.gone()
-                binding.tvHeartValue.visible()
-                binding.tvHeartUnit.visible()
-                binding.tvLastMeasure.visible()
-            } else {
-                binding.tvHeartValue.gone()
-                binding.tvHeartUnit.gone()
-                binding.tvLastMeasure.gone()
-            }
+            /* if (data.errorMessage.isNullOrEmpty()) {
+                 binding.tvEmptyConnect.gone()
+             } else {
+                 binding.tvEmptyConnect.text = data.errorMessage
+                 binding.tvEmptyConnect.visible()
+             }
+             if (data.value.toInt() > 0) {
+                 binding.tvEmptyConnect.gone()
+                 binding.tvHeartValue.visible()
+                 binding.tvHeartUnit.visible()
+                 binding.tvLastMeasure.visible()
+             } else {
+                 binding.tvHeartValue.gone()
+                 binding.tvHeartUnit.gone()
+                 binding.tvLastMeasure.gone()
+             }*/
 
 //            binding.root.setOnClickListener {
 ////                   itemClickListener?.invoke(it, data, position)

@@ -37,6 +37,7 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.implementation.OreoHeartRateDataImpl
 import com.oreo.data.model.OHealthOverview
+import com.oreo.data.model.TapMeasureState
 import javax.inject.Inject
 
 
@@ -446,12 +447,11 @@ constructor(
 
         return OHealthOverview.HeartRate(
             lastHr,
-            false,
-            null,
             "Last measured now",
             candleChartList,
             Pair(lineChartList, lineColorList),
-            xLabelList, overAllMinValue.toFloat(), average
+            xLabelList, overAllMinValue.toFloat(), average,
+            measureState = TapMeasureState.DEFAULT
         )
     }
 

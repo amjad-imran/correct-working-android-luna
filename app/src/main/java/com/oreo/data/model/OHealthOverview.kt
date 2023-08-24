@@ -42,14 +42,13 @@ sealed class OHealthOverview {
 
     class HeartRate(
         var value: String,
-        var isMeasuring: Boolean = false,
-        var errorMessage: String? = null,
         var lastTime: String,
         val candleValue: ArrayList<CandleEntry> = ArrayList(),
         val lineData: Pair<ArrayList<Entry>, ArrayList<Int>>,
         val xLabelList: ArrayList<String> = ArrayList(),
         val axisMinimum: Float,
-        val average: Float
+        val average: Float,
+        var measureState: TapMeasureState = TapMeasureState.DEFAULT
     ) : OHealthOverview()
 
     class SleepActivityScore(
@@ -83,4 +82,8 @@ sealed class OHealthOverview {
         val value: String,
 
         ) : OHealthOverview()
+}
+
+enum class TapMeasureState {
+    NO_DEVICE, LAST_MEASURED, MEASURING, DEFAULT,ERROR
 }

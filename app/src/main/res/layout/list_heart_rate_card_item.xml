@@ -89,9 +89,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dimen_8dp"
+        android:layout_marginBottom="-5dp"
         android:textColor="@color/white_64"
         android:textSize="10sp"
-        android:layout_marginBottom="-5dp"
         app:layout_constraintBottom_toBottomOf="@+id/imvHrMeasure"
         app:layout_constraintStart_toEndOf="@+id/imvHrMeasure"
         tools:ignore="SmallSp"
@@ -132,4 +132,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imvHrMeasure"
         app:layout_constraintTop_toTopOf="@+id/imvHrMeasure" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="tvLastMeasure,tvHeartValue,tvHeartUnit" />
 </androidx.constraintlayout.widget.ConstraintLayout>
