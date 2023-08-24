@@ -446,15 +446,15 @@ class OreoActivityViewModel @Inject constructor(
     ): List<Int> {
         if (originalList.isNullOrEmpty()) {
             return if (includeInvalid) {
-                MutableList(48) { 255 }
+                MutableList(96) { 255 }
             } else {
-                MutableList(48) { 0 }
+                MutableList(96) { 0 }
 
             }
         }
         val combinedList = ArrayList<Int>()
-        for (i in originalList.indices step 6) {
-            val endIndex = i + 6
+        for (i in originalList.indices step 3) {
+            val endIndex = i + 3
             if (endIndex <= originalList.size) {
                 val max = if (includeInvalid){
                     originalList.subList(i, endIndex).maxWithInvalidMovementValues()

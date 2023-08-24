@@ -70,10 +70,10 @@ class DayMovementsAdapter() :
         private fun setTime(position: Int) {
             val value = when (position) {
                 0 -> "12 am"
-                11 -> "6 am"
-                23 -> "12 pm"
-                35 -> "6 pm"
-                47 -> "12 am"
+                23 -> "6 am"
+                47 -> "12 pm"
+                71 -> "6 pm"
+                95 -> "12 am"
                 else -> null
             }
             if (!value.isNullOrEmpty()) {

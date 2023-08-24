@@ -38,6 +38,7 @@ import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Random
 
 
 @AndroidEntryPoint
@@ -284,7 +285,7 @@ class OreoActivityFragment :
 
 
     private fun returnMovementProgress(value: Int, total: Int): Pair<Int, String> {
-        val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(value.times(30))
+        val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(value.times(15))
         val leftText = "$hour h $minute min"
         var progress = (value.toFloat() / total).times(100).toInt()
 
@@ -306,9 +307,9 @@ class OreoActivityFragment :
         val newListInvalid = mViewModel.getCombinedMovementData(movementList, true)
 
         var highMovValue = 0
-        var medMovValue: Int = 0
-        var lowMovValue: Int = 0
-        var inactiveMovValue: Int = 0
+        var medMovValue = 0
+        var lowMovValue = 0
+        var inactiveMovValue = 0
         if (movementList?.isNotEmpty() == true) {
             newListInvalid.forEachIndexed { index, data ->
                 when (data) {
@@ -319,6 +320,7 @@ class OreoActivityFragment :
                     1 -> {
                         lowMovValue++
                     }
+
                     2 -> {
                         medMovValue++
                     }
@@ -374,7 +376,7 @@ class OreoActivityFragment :
         binding.lytDailyMovement.rvMovements.apply {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            addItemDecoration(OverlapDecoration(dpToPx(-27, this.context).toInt()))
+            addItemDecoration(OverlapDecoration(dpToPx(-29, this.context).toInt()))
             adapter = DayMovementsAdapter().apply {
                 setData(data)
             }
