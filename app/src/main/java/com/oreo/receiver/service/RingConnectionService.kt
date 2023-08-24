@@ -1355,12 +1355,12 @@ constructor() : LifecycleService() {
 
                         if (state == BluetoothAdapter.STATE_ON) {
                             AppLogs.sendAppLogs("RingConnectionService : Bluetooth turned ON")
-                            LOGS.i(TAG, "STATE_ON")
+                            LOGS.w(TAG, "STATE_ON")
                             sessionManager.setBluetoothState(true)
                             btStatus = "bt on"
                         }
                         if (state == BluetoothAdapter.STATE_OFF || state == BluetoothAdapter.STATE_TURNING_OFF) {
-                            LOGS.i(TAG, "STATE_OFF")
+                            LOGS.w(TAG, "STATE_OFF")
                             AppLogs.sendAppLogs("RingConnectionService : Bluetooth turned OFF")
                             statusFailedConnection = true
 
