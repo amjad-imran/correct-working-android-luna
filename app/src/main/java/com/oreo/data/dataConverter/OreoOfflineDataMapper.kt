@@ -37,6 +37,8 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.implementation.OreoHeartRateDataImpl
 import com.oreo.data.model.OHealthOverview
+import com.oreo.data.model.TapMeasureState
+import org.joda.time.format.ISODateTimeFormat.hour
 import javax.inject.Inject
 
 
@@ -446,25 +448,33 @@ constructor(
 
         return OHealthOverview.HeartRate(
             lastHr,
-            false,
-            null,
             "Last measured now",
             candleChartList,
             Pair(lineChartList, lineColorList),
-            xLabelList, overAllMinValue.toFloat(), average
+            xLabelList, overAllMinValue.toFloat(), average,
+            measureState = TapMeasureState.DEFAULT
         )
     }
 
     private fun handleHrFormat(time: Int): String {
-        return if (time == 1 || time == 24) {
-            "12 am"
-        } else if (time == 12) {
-            "12 pm"
-        } else if (time < 12) {
-            "$time am"
-        } else {
-            "$time pm"
+
+        if(time==1 || time==24){
+            return "12 am"
         }
+
+
+        var hour  = time
+        var suffix = ""
+        if(hour>11) {
+            suffix = "pm"
+            if(hour>12)
+                hour -= 12;
+        } else {
+            suffix = "am"
+            if(hour==0)
+                hour = 12;
+        }
+        return "$hour $suffix"
     }
 
     fun convertHeartRate(data: List<HeartRate>?): HeartRateHistory {

@@ -84,6 +84,7 @@ class AppUpdateBottomSheet : BaseBottomSheetWithTransparent<LayoutAppUpdateBotto
             getString(R.string.text_noisefit_is_currently_under_maintenance) + " " + getString(R.string.text_please_check_back_again_later)
         binding.tvDesc.text = maintenanceMsg
         binding.btnAllow.gone()
+        binding.btnRemindLater.text = "Ok"
         binding.btnRemindLater.visible()
         isMaintenanceMode = true
         binding.btnRemindLater.setOnClickListener {

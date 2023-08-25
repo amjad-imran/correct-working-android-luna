@@ -87,6 +87,23 @@ fun List<Int>.maxWithoutZero(): Int {
     }
 }
 
+fun List<Int>.maxWithoutInvalidMovementValues(): Int {
+    val newList = this.filter { it != 0 && it != 255 && it != 5 && it != 4 }
+    return if (newList.isNotEmpty()) {
+        newList.maxOrNull() ?: 0
+    } else {
+        0
+    }
+}
+fun List<Int>.maxWithInvalidMovementValues(): Int {
+    val newList = this.filter { it != 0 && it != 255 && it != 5 && it != 4 }
+    return if (newList.isNotEmpty()) {
+        newList.maxOrNull() ?: 255
+    } else {
+        255
+    }
+}
+
 fun Bitmap.convertCorner(radius: Float): Bitmap {
     val rad = (Resources.getSystem().displayMetrics.density * radius + 0.5f).toInt()
     val output = Bitmap.createBitmap(this.width, this.height, Bitmap.Config.ARGB_8888)

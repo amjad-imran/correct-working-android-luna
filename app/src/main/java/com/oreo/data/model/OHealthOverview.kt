@@ -15,6 +15,10 @@ sealed class OHealthOverview {
         val date: String
     ) : OHealthOverview()
 
+    class Alerts(
+        val alertList: HashMap<AlertType, DashAlert>
+    ) : OHealthOverview()
+
     class PairDevice() : OHealthOverview()
 
     class AutoSport(
@@ -42,14 +46,13 @@ sealed class OHealthOverview {
 
     class HeartRate(
         var value: String,
-        var isMeasuring: Boolean = false,
-        var errorMessage: String? = null,
         var lastTime: String,
         val candleValue: ArrayList<CandleEntry> = ArrayList(),
         val lineData: Pair<ArrayList<Entry>, ArrayList<Int>>,
         val xLabelList: ArrayList<String> = ArrayList(),
         val axisMinimum: Float,
-        val average: Float
+        val average: Float,
+        var measureState: TapMeasureState = TapMeasureState.DEFAULT
     ) : OHealthOverview()
 
     class SleepActivityScore(
@@ -83,4 +86,18 @@ sealed class OHealthOverview {
         val value: String,
 
         ) : OHealthOverview()
+}
+
+data class DashAlert(
+    val message: String,
+    val isCancellable: Boolean,
+    var type: AlertType = AlertType.DEFAULT,
+)
+
+enum class AlertType {
+    BLUETOOTH, OTA_UPDATE, DEFAULT
+}
+
+enum class TapMeasureState {
+    NO_DEVICE, LAST_MEASURED, MEASURING, DEFAULT, ERROR
 }

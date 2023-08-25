@@ -126,7 +126,7 @@ class SplashViewModel
                 addProperty("device_type", it.deviceType)
                 watchDataStore.getDeviceFirmwareDetails()?.let { firmware ->
                     val deviceDetailsObj = JsonObject().apply {
-                        //addProperty("version", 49)
+                        //addProperty("version", 111)
                         this.addProperty("version", firmware.version)
                         this.addProperty("firmware_id", firmware.firmwareId)
                     }
@@ -159,7 +159,6 @@ class SplashViewModel
 
                             } else {
                                 sessionManager.forceOtaFlowRunning = false
-                                sessionManager.forceOtaResponse = null
                                 sessionManager.forceOtaResponseRing = null
                             }
 
