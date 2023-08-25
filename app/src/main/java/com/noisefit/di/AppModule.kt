@@ -66,9 +66,16 @@ object AppModule {
     @Provides
     fun provideOreoNetworkEntityMapper(
         stressDataImpl: OreoStressDataImpl,
+        respiratoryDataImpl: OreoRespiratoryDataImpl,
+        temperatureDataImpl: OreoBodyTemperatureDataImpl,
         oreoHeartRateDataImpl: OreoHeartRateDataImpl,
     ): OreoOnlineDataMapper {
-        return OreoOnlineDataMapper(stressDataImpl, oreoHeartRateDataImpl)
+        return OreoOnlineDataMapper(
+            stressDataImpl,
+            respiratoryDataImpl,
+            temperatureDataImpl,
+            oreoHeartRateDataImpl
+        )
     }
 
     @Singleton
@@ -86,7 +93,7 @@ object AppModule {
         localDataStore: DataStoredInterface,
         ringDataStore: RingDataStore
     ): WatchesSDK {
-        return WatchesSDK(localDataStore,ringDataStore)
+        return WatchesSDK(localDataStore, ringDataStore)
     }
 
 
@@ -146,8 +153,6 @@ object AppModule {
         lastSyncProvider: LastSyncProvider
     ): DeviceRepository =
         DeviceRepositoryImpl(remoteDataSource, lastSyncProvider)
-
-
 
 
     @Singleton
@@ -329,7 +334,7 @@ object AppModule {
             stepsDataImpl,
             oreoAutoSportDataImpl,
             offlineDataMapper,
-            )
+        )
 
 
     @Singleton

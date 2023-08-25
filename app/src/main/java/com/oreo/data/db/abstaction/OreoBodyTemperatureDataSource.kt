@@ -20,4 +20,6 @@ interface OreoBodyTemperatureDataSource {
     ): Int
 
     suspend fun checkHalfSyncData()
+    suspend fun getDataBetweenTimeStamp(startTimeStamp: Long, endTimeStamp: Long): List<Float>
+
 }

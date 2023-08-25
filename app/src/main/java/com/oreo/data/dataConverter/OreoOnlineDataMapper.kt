@@ -21,15 +21,22 @@ import com.noisefit_commans.data.model.OreoUserDataPost
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.to12HourFormat
+import com.oreo.data.db.abstaction.OreoBodyTemperatureDataSource
+import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
 import com.oreo.data.db.implementation.OreoHeartRateDataImpl
+import com.oreo.data.db.implementation.OreoRespiratoryDataImpl
 import com.oreo.data.db.implementation.OreoStressDataImpl
 import com.oreo.data.model.OreoUserSyncActivities
+import com.oreo.data.model.SleepOverlayData
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 class OreoOnlineDataMapper
 @Inject
 constructor(
     private val stressDataImpl: OreoStressDataImpl,
+    private val respiratoryData: OreoRespiratoryDataImpl,
+    private val temperatureData: OreoBodyTemperatureDataSource,
     private val oreoHeartRateDataImpl: OreoHeartRateDataImpl,
 ) {
 
@@ -136,7 +143,7 @@ constructor(
     }
 
 
-    private suspend fun getSleepOverlayData(sleepData: OreoSleepData): Pair<List<Int>, List<Int>>/*SleepOverlayData*/ {
+    private suspend fun getSleepOverlayData(sleepData: OreoSleepData): SleepOverlayData/*SleepOverlayData*/ {
         var offSet = 0
         val midnightTime = "23:59"
         val startTime = sleepData.sleepArray!![0].startTime!!
@@ -157,8 +164,10 @@ constructor(
         val hrData =
             oreoHeartRateDataImpl.getHeartRateBetweenTimeStamp(sleepStartTime, sleepEndTime)
         val hrv = stressDataImpl.getStressBetweenTimeStamp(sleepStartTime, sleepEndTime)
+        val resp = respiratoryData.getDataBetweenTimeStamp(sleepStartTime, sleepEndTime)
+        val temp = temperatureData.getDataBetweenTimeStamp(sleepStartTime, sleepEndTime)
 
-        return Pair(hrData, hrv)
+        return SleepOverlayData(hrData, hrv, resp, temp)
     }
 
 
@@ -213,11 +222,15 @@ constructor(
                     totalRem = sleepData.remCount,
                     sleepScore = sleepData.sleepScore,
                     sleepEfficiency = sleepData.sleepEfficiency,
-                    restingHr = sleepOverlayData.first.minWithoutZero(),
+                    restingHr = sleepOverlayData.hrBreakup.minWithoutZero(),
                     sleepLatency = sleepData.sleepLatency,
-                    hrBreakup = sleepOverlayData.first,
-                    hrvBreakup = sleepOverlayData.second,
-                    avgHrv = sleepOverlayData.second.averageWithoutZero(),
+                    hrBreakup = sleepOverlayData.hrBreakup,
+                    hrvBreakup = sleepOverlayData.stressBreakup,
+                    respBreakup = sleepOverlayData.respBreakup,
+                    tempBreakup = sleepOverlayData.tempBreakup,
+                    avgResp = sleepOverlayData.respBreakup.average().roundToInt() ?: 0,
+                    maxTemp = sleepOverlayData.tempBreakup.maxOrNull() ?: 0f,
+                    avgHrv = sleepOverlayData.stressBreakup.averageWithoutZero(),
                     readinessScore = sleepData.readinessScore ?: 0
                 )
 
