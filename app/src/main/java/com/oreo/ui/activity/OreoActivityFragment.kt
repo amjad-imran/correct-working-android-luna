@@ -4,6 +4,8 @@ package com.oreo.ui.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -338,7 +340,9 @@ class OreoActivityFragment :
             }
         }
 
-        mDayMovementAdapter.setData(newList)
+        binding.lytDailyMovement.movementChart.setData(newList)
+
+        //mDayMovementAdapter.setData(newList)
 
 
         val totalValue = highMovValue + medMovValue + lowMovValue + inactiveMovValue
@@ -376,16 +380,6 @@ class OreoActivityFragment :
         )
     }
 
-    private fun setMovementsRecycler(data: List<Int>) {
-        binding.lytDailyMovement.rvMovements.apply {
-            layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            addItemDecoration(OverlapDecoration(dpToPx(-29, this.context).toInt()))
-            adapter = DayMovementsAdapter().apply {
-                setData(data)
-            }
-        }
-    }
 
 
     private fun distanceDefaultView() {
@@ -430,12 +424,12 @@ class OreoActivityFragment :
             adapter = mWorkoutAdapter
         }
 
-        binding.lytDailyMovement.rvMovements.apply {
+       /* binding.lytDailyMovement.rvMovements.apply {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             addItemDecoration(OverlapDecoration(dpToPx(-29, this.context).toInt()))
             adapter = mDayMovementAdapter
-        }
+        }*/
 
 
     }
@@ -486,6 +480,9 @@ class OreoActivityFragment :
     }
 
     override fun initListener() {
+
+
+
         binding.lytEmptyView.bGoToSettings.setOnClickListener {
             mViewModel.ringDataStore.setActivityWalkAroundShown(true)
             showWalkAround(false)

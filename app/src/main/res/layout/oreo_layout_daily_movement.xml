@@ -35,17 +35,35 @@
             tools:ignore="ContentDescription" />
 
 
-        <androidx.recyclerview.widget.RecyclerView
+        <HorizontalScrollView
             android:id="@+id/rvMovements"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="@dimen/side_margin"
             app:layout_constraintBottom_toTopOf="@id/lytDMGStatus"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle">
+
+            <com.oreo.ui.custom.MovementChart
+                android:id="@+id/movementChart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </HorizontalScrollView>
+
+        <!--  <androidx.recyclerview.widget.RecyclerView
+              android:id="@+id/rvMovements"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="16dp"
+              android:layout_marginStart="@dimen/side_margin"
+              android:layout_marginEnd="@dimen/side_margin"
+              app:layout_constraintBottom_toTopOf="@id/lytDMGStatus"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/tvTitle" />-->
 
 
         <include
