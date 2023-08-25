@@ -86,14 +86,15 @@ constructor(
         val batteryList = batteryNotification.batteryNotificationData!!
         LOGS.d("$TAG ${currentBatteryLevel} last: ${batteryNotification.lastBatteryPercentage}")
 
-        if (currentBatteryLevel < 25 && DateFormats.isTimeBetween(21)) {
+
+        if (currentBatteryLevel <= 20 /*&& DateFormats.isTimeBetween(21)*/) {
             val hasNotificationTriggered = localDataStore.getChargeOverNightNotification()
 
             if (!hasNotificationTriggered && !isCharging) {
                 LOGS.d("$TAG inside 9pm ")
                 if (currentBatteryLevel < batteryNotification.lastBatteryPercentage) {
                     val message =
-                        "Your Luna Ring battery level is $currentBatteryLevel%, Please charge before going to bed."
+                        "Your Luna Ring battery level is $currentBatteryLevel%"
 
 
                     LOGS.d("$TAG $message")

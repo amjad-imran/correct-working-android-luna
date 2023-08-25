@@ -794,12 +794,15 @@ public class LineChart extends View {
         } else if ((offSet + moveOffSet) < 0) {
             tempPosition = 0;
         } else {
-            tempPosition = (int) ((offSet + moveOffSet) / unitH);
+            tempPosition = Math.round(((offSet + moveOffSet) / unitH));
         }
 
         if (scrollPosition == tempPosition) {
             return;
         }
+
+
+
         scrollPosition = tempPosition;
         if (isSelected) {
             onChartScrollChangedListener.onPositionSelected(scrollPosition, list.get(scrollPosition));
