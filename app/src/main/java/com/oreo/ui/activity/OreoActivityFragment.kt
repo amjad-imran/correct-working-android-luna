@@ -60,6 +60,10 @@ class OreoActivityFragment :
         })
     }
 
+    private val mDayMovementAdapter: DayMovementsAdapter by lazy {
+        DayMovementsAdapter()
+    }
+
     private fun moveToDetailsScreen(data: OActivityListModal, position: Int) {
         navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
             putString("workoutName", data.getFormattedActivityName())
@@ -334,7 +338,7 @@ class OreoActivityFragment :
             }
         }
 
-        setMovementsRecycler(newList)
+        mDayMovementAdapter.setData(newList)
 
 
         val totalValue = highMovValue + medMovValue + lowMovValue + inactiveMovValue
@@ -424,6 +428,13 @@ class OreoActivityFragment :
         }
         with(binding.lytWorkouts.rvWorkouts) {
             adapter = mWorkoutAdapter
+        }
+
+        binding.lytDailyMovement.rvMovements.apply {
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            addItemDecoration(OverlapDecoration(dpToPx(-29, this.context).toInt()))
+            adapter = mDayMovementAdapter
         }
 
 
