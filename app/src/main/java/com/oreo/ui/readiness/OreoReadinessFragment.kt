@@ -16,6 +16,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoReadinessBinding
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit_commans.ui.*
+import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
@@ -123,8 +124,9 @@ class OreoReadinessFragment :
     }
 
 
-    private fun showHeartRateGraph(heartRateData: List<Int>, startTime: String, endTime: String) {
-        LOGS.d("showHeartRateGraph $startTime $endTime")
+    private fun showHeartRateGraph(heartRateData: List<Int>,
+                                   startTime: String, endTime: String) {
+        /*LOGS.d("showHeartRateGraph $startTime $endTime")
         var hasDummyData = true
         val breakUpData = if (heartRateData.isNullOrEmpty()) {
             mViewModel.getDummyBreakUpDataForTimeDisplay()
@@ -134,7 +136,30 @@ class OreoReadinessFragment :
         }
 
 
-        val baseHrList = UtilClass.graphBaseInterval(null, null, breakUpData.size)
+        val baseHrList = UtilClass.graphBaseInterval(null, null, breakUpData.size)*/
+
+
+        val ssTime: String?
+        val seTime: String?
+        var breakUpData = ArrayList<Int>()
+        var hasDummyData = true
+        if (heartRateData.isNullOrEmpty()) {
+            breakUpData = mViewModel.getDummyBreakUpDataForTimeDisplay()
+            ssTime = null
+            seTime = null
+        } else {
+            hasDummyData = false
+            seTime = startTime
+            ssTime = endTime
+            breakUpData = heartRateData as ArrayList<Int>
+        }
+
+
+        val baseTimeList = UtilClass.graphTwoHoursInterval(
+            ssTime,
+            seTime,
+            breakUpData.size ?: 288
+        )
 
         binding.lytHeartRate.lineChart.visible()
         val sleepChart = SleepChartModel()
@@ -148,7 +173,7 @@ class OreoReadinessFragment :
             }
 
             chartModel.value = value
-            chartModel.index = baseHrList[index]
+            chartModel.index = baseTimeList[index]
             chartList.add(chartModel)
         }
 
@@ -177,7 +202,7 @@ class OreoReadinessFragment :
         endTime: String
     ) {
 
-        var hasDummyData = true
+       /* var hasDummyData = true
 
         val breakUpData = if (hrvBreakUp.isNullOrEmpty()) {
             mViewModel.getDummyBreakUpDataForTimeDisplay()
@@ -187,6 +212,30 @@ class OreoReadinessFragment :
         }
 
         val baseHrList = UtilClass.graphBaseInterval(null, null, breakUpData.size)
+*/
+
+
+        val ssTime: String?
+        val seTime: String?
+        var breakUpData = ArrayList<Int>()
+        var hasDummyData = true
+        if (hrvBreakUp.isNullOrEmpty()) {
+            breakUpData = mViewModel.getDummyBreakUpDataForTimeDisplay()
+            ssTime = null
+            seTime = null
+        } else {
+            hasDummyData = false
+            seTime = startTime
+            ssTime = endTime
+            breakUpData = hrvBreakUp as ArrayList<Int>
+        }
+
+
+        val baseTimeList = UtilClass.graphTwoHoursInterval(
+            ssTime,
+            seTime,
+            breakUpData.size ?: 288
+        )
 
         binding.lytHRVariability.lineChart.visible()
         val sleepChart = SleepChartModel()
@@ -201,7 +250,7 @@ class OreoReadinessFragment :
             }
 
             chartModel.value = value
-            chartModel.index = baseHrList[index]
+            chartModel.index = baseTimeList[index]
             chartList.add(chartModel)
         }
 
@@ -227,7 +276,7 @@ class OreoReadinessFragment :
         startTime: String,
         endTime: String
     ) {
-        var hasDummyData = true
+     /*   var hasDummyData = true
         val breakUpData = if (temperatureBreakUp.isNullOrEmpty()) {
             mViewModel.getDummyBreakUpDataForTimeDisplay()
         } else{
@@ -236,11 +285,33 @@ class OreoReadinessFragment :
 
         }
 
-        binding.lytTemperature.lineChart.visible()
-        val sleepChart = SleepChartModel()
         val baseHrList = UtilClass.graphBaseInterval(null, null, breakUpData.size ?: 0)
+*/
 
+        val ssTime: String?
+        val seTime: String?
+        var breakUpData = ArrayList<Float>()
+        var hasDummyData = true
+        if (temperatureBreakUp.isNullOrEmpty()) {
+            breakUpData = mViewModel.getDummyBreakUpDataForTimeDisplayFloat()
+            ssTime = null
+            seTime = null
+        } else {
+            hasDummyData = false
+            seTime = startTime
+            ssTime = endTime
+            breakUpData = temperatureBreakUp as ArrayList<Float>
+        }
+
+        val baseTimeList = UtilClass.graphTwoHoursInterval(
+            ssTime,
+            seTime,
+            breakUpData.size ?: 288
+        )
+
+        binding.lytTemperature.lineChart.visible()
         val chartList = ArrayList<ChartModel>()
+        val sleepChart = SleepChartModel()
         breakUpData.forEachIndexed { index, it ->
             val chartModel = ChartModel()
 
@@ -250,7 +321,7 @@ class OreoReadinessFragment :
             }
 
             chartModel.value = value.toInt()
-            chartModel.index = baseHrList[index]
+            chartModel.index = baseTimeList[index]
             chartList.add(chartModel)
         }
 
@@ -563,7 +634,19 @@ class OreoReadinessFragment :
             heartRateDefaultView()
         }
         //todo will change startTime, endTime
-        showHeartRateGraph(it.hrBreakUp?.value ?: ArrayList(), it.date, it.date)
+        val sleepStartTime = DateFormats.formatDate(
+            it.start_time,
+            DateFormats.dateTimeFormat5,
+            DateFormats.time12Meridian
+        )
+        val sleepEndTime = DateFormats.formatDate(
+            it.end_time,
+            DateFormats.dateTimeFormat5,
+            DateFormats.time12Meridian
+        )
+
+        showHeartRateGraph(it.hrBreakUp?.value ?: ArrayList(),
+            sleepStartTime, sleepEndTime)
 
 
         //set data on heart rate variability
@@ -597,8 +680,7 @@ class OreoReadinessFragment :
         //todo will change startTime, endTime
         showHeartRateVariabilityGraph(
             it.hrvBreakUp?.value ?: ArrayList(),
-            it.date,
-            it.date
+            sleepStartTime, sleepEndTime
         )
 
         //set data on temperature

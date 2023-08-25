@@ -559,10 +559,18 @@ constructor(
         }
     }
 
-    fun getDummyBreakUpDataForTimeDisplay(): List<Int> {
+    fun getDummyBreakUpDataForTimeDisplay(): ArrayList<Int> {
         val dummyList = ArrayList<Int>()
         for (i in 0..287) {
             dummyList.add(0)
+        }
+        return dummyList
+
+    }
+    fun getDummyBreakUpDataForTimeDisplayFloat(): ArrayList<Float> {
+        val dummyList = ArrayList<Float>()
+        for (i in 0..287) {
+            dummyList.add(0f)
         }
         return dummyList
 
