@@ -212,10 +212,14 @@ class OSummaryHealthOverviewAdapter :
 
     override fun getItemViewType(position: Int): Int {
         return when (items[position]) {
+            is OHealthOverview.Readiness -> R.layout.list_readiness_card_item
+            is OHealthOverview.Sleep -> R.layout.list_sleep_card_item
+            is OHealthOverview.Activity -> R.layout.list_activity_burn_card_item
+
+
+
             is OHealthOverview.Alerts -> R.layout.list_o_alerts
 
-            is OHealthOverview.Readiness -> R.layout.list_readiness_card_item
-            is OHealthOverview.Activity -> R.layout.list_activity_burn_card_item
             is OHealthOverview.FitnessOverView -> R.layout.list_health_overview_card_item
 
             is OHealthOverview.HeartRate -> R.layout.list_heart_rate_card_item
@@ -223,7 +227,6 @@ class OSummaryHealthOverviewAdapter :
             is OHealthOverview.OreoBattery -> R.layout.list_oreo_battery_percent_item
             is OHealthOverview.ReadinessScore -> R.layout.list_readiness_score_card_item
 
-            is OHealthOverview.Sleep -> R.layout.list_sleep_card_item
 
             is OHealthOverview.SleepActivityScore -> R.layout.list_sleep_activity_card_item
 

@@ -338,7 +338,7 @@ constructor(
     }
 
     fun handleUnPairState() {
-        val index = summary.healthOverviewData.value?.indexOfFirst {
+     /*   val index = summary.healthOverviewData.value?.indexOfFirst {
             it is OHealthOverview.PairDevice
         }
 
@@ -353,7 +353,10 @@ constructor(
             summary.healthOverviewData.value?.add(1, OHealthOverview.PairDevice())
         }
 
-        summary.healthOverviewData.postValue(summary.healthOverviewData.value)
+        summary.healthOverviewData.postValue(summary.healthOverviewData.value)*/
+
+
+
     }
 
     fun updateManualValue() {
