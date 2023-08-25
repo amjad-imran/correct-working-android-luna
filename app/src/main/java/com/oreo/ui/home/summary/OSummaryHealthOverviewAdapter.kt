@@ -217,7 +217,6 @@ class OSummaryHealthOverviewAdapter :
             is OHealthOverview.Activity -> R.layout.list_activity_burn_card_item
 
 
-
             is OHealthOverview.Alerts -> R.layout.list_o_alerts
 
             is OHealthOverview.FitnessOverView -> R.layout.list_health_overview_card_item
@@ -393,9 +392,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             devicePaired: Boolean
         ) {
             binding.imv.loadImage(binding.imv.context, R.drawable.ic_activity_card_bg1)
-            val scoreValue = data.data.activityScore ?: 0
+            val scoreValue = data.data.activityScore
 
-            if (scoreValue <= 0) {
+            if (scoreValue == null) {
                 binding.tvValue.text = "--"
                 binding.tvStatus.text = "No data"
                 binding.tvTodayDesc.text = ""
@@ -418,12 +417,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 "--"
             }
 
-            if (scoreValue >= 0) {
+            if ((scoreValue ?: 0) >= 0) {
                 binding.lottieAnimationView.repeatCount = 0
                 binding.lottieAnimationView.setAnimation(R.raw.lottie_meter_activity)
                 binding.lottieAnimationView.setMaxProgress(
                     MiscUtil.scorePercentCalculator(
-                        scoreValue.toFloat()
+                        (scoreValue ?: 0).toFloat()
                     )
                 )
                 binding.lottieAnimationView.playAnimation()
