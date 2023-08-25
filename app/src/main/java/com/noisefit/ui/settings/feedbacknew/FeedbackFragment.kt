@@ -182,27 +182,27 @@ class FeedbackFragment : BaseFragment<FragmentFeedback2Binding>(FragmentFeedback
 
         viewModel.submittedSuccessfully.observe(this) {
             if (it) {
-                if (viewModel.rating == 4 || viewModel.rating == 5) {
-                    setFragmentResultListener(RATE_NOW) { key, bundle ->
+//                if (viewModel.rating == 4 || viewModel.rating == 5) {
+                     setFragmentResultListener(RATE_NOW) { key, bundle ->
                         val isSelected = bundle.getBoolean("isSelected")
                         if (isSelected) {
-                            ShareUtil.openPlayStore(requireContext(), "com.noisefit.luna")
+//                            ShareUtil.openPlayStore(requireContext(), "com.noisefit.luna")
                             navigateUpSafe()
                         }
                     }
-                    setFragmentResultListener(LATER) { key, bundle ->
-                        val isSelected = bundle.getBoolean("isSelected")
-                        if (isSelected) {
-                            navigateUpSafe()
-                        }
-                    }
+//                    setFragmentResultListener(LATER) { key, bundle ->
+//                        val isSelected = bundle.getBoolean("isSelected")
+//                        if (isSelected) {
+//                            navigateUpSafe()
+//                        }
+//                    }
                     navigate(R.id.rateNowBottomSheet,Bundle().apply {
                         putString("cameFrom","feedback")
                     })
-                } else {
-                    uiController.onDisplayError(getString(R.string.text_feedback_successful))
-                    navigateUpSafe()
-                }
+//                } else {
+//                    uiController.onDisplayError(getString(R.string.text_feedback_successful))
+//                    navigateUpSafe()
+//                }
 
             }
         }
