@@ -149,8 +149,8 @@ class OreoReadinessFragment :
             seTime = null
         } else {
             hasDummyData = false
-            seTime = startTime
-            ssTime = endTime
+            seTime = endTime
+            ssTime = startTime
             breakUpData = heartRateData as ArrayList<Int>
         }
 
@@ -225,8 +225,8 @@ class OreoReadinessFragment :
             seTime = null
         } else {
             hasDummyData = false
-            seTime = startTime
-            ssTime = endTime
+            seTime = endTime
+            ssTime = startTime
             breakUpData = hrvBreakUp as ArrayList<Int>
         }
 
@@ -298,8 +298,8 @@ class OreoReadinessFragment :
             seTime = null
         } else {
             hasDummyData = false
-            seTime = startTime
-            ssTime = endTime
+            seTime = endTime
+            ssTime = startTime
             breakUpData = temperatureBreakUp as ArrayList<Float>
         }
 
@@ -696,7 +696,7 @@ class OreoReadinessFragment :
             temperatureGraphDefaultView()
         }
         //todo will change startTime, endTime
-        showTemperatureGraph(it.temperatureBreakUp?.value ?: ArrayList(), it.date, it.date)
+        showTemperatureGraph(it.temperatureBreakUp?.value ?: ArrayList(), sleepStartTime, sleepEndTime)
     }
 
     private fun heartRateDefaultView() {
