@@ -754,6 +754,10 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 return@setOnClickListener
             }
 
+            if (viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
+                return@setOnClickListener
+            }
+
             viewModel.measureHr(true)
             return@setOnClickListener
         }

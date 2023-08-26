@@ -424,17 +424,20 @@ constructor(
 
 
         var lastHr = "0"
-        if ((lastHrValue ?: 0) > 0) {
+        /*if ((lastHrValue ?: 0) > 0) {
             lastHr = lastHrValue.toString()
-        }
+        }*/
 
-        if (lastHr == "0") {
-            val lastMeasureValue = ringDataStore.getManualMeasurementValue()
-            if (lastMeasureValue != null && (lastMeasureValue.timeStamp) + (60 * 1000) > System.currentTimeMillis() && lastMeasureValue.value > 0) {
-                lastHr = lastMeasureValue.value.toString()
+        var measureTime = 0L
+        /*if (lastHr == "0") {*/
+        val lastMeasureValue = ringDataStore.getManualMeasurementValue()
+        if (lastMeasureValue != null && (lastMeasureValue.timeStamp) + (5 * 60 * 1000) > System.currentTimeMillis() && lastMeasureValue.value > 0) {
+            lastHr = lastMeasureValue.value.toString()
+            measureTime = lastMeasureValue.timeStamp
 
-            }
         }
+        //}
+
 
         if (overAllMinValue == Int.MAX_VALUE) {
             overAllMinValue = 69
@@ -444,34 +447,42 @@ constructor(
             overAllMinValue -= 9
         }
 
-        LOGS.d("Sdaljhsadjhsadjhjksda ${Gson().toJson(lineChartList)}")
+        //LOGS.d("Sdaljhsadjhsadjhjksda ${Gson().toJson(lineChartList)}")
+        var measureState = TapMeasureState.DEFAULT
+
+        val measureText = if (measureTime == 0L) {
+            ""
+        } else {
+            measureState = TapMeasureState.LAST_MEASURED
+            "Last measured ${DateFormats.getRelativeTime(measureTime).lowercase()}"
+        }
 
         return OHealthOverview.HeartRate(
             lastHr,
-            "Last measured now",
+            measureText,
             candleChartList,
             Pair(lineChartList, lineColorList),
             xLabelList, overAllMinValue.toFloat(), average,
-            measureState = TapMeasureState.DEFAULT
+            measureState
         )
     }
 
     private fun handleHrFormat(time: Int): String {
 
-        if(time==1 || time==24){
+        if (time == 1 || time == 24) {
             return "12 am"
         }
 
 
-        var hour  = time
+        var hour = time
         var suffix = ""
-        if(hour>11) {
+        if (hour > 11) {
             suffix = "pm"
-            if(hour>12)
+            if (hour > 12)
                 hour -= 12;
         } else {
             suffix = "am"
-            if(hour==0)
+            if (hour == 0)
                 hour = 12;
         }
         return "$hour $suffix"

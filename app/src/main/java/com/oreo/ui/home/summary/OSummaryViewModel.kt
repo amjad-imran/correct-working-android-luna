@@ -338,23 +338,22 @@ constructor(
     }
 
     fun handleUnPairState() {
-     /*   val index = summary.healthOverviewData.value?.indexOfFirst {
-            it is OHealthOverview.PairDevice
-        }
+        /*   val index = summary.healthOverviewData.value?.indexOfFirst {
+               it is OHealthOverview.PairDevice
+           }
 
-        val autoSportIndex = summary.healthOverviewData.value?.indexOfFirst {
-            it is OHealthOverview.TodayWorkout
-        }
+           val autoSportIndex = summary.healthOverviewData.value?.indexOfFirst {
+               it is OHealthOverview.TodayWorkout
+           }
 
-        if (autoSportIndex != null && autoSportIndex != -1) {
-            summary.healthOverviewData.value?.removeAt(autoSportIndex)
-        }
-        if (index == -1) {
-            summary.healthOverviewData.value?.add(1, OHealthOverview.PairDevice())
-        }
+           if (autoSportIndex != null && autoSportIndex != -1) {
+               summary.healthOverviewData.value?.removeAt(autoSportIndex)
+           }
+           if (index == -1) {
+               summary.healthOverviewData.value?.add(1, OHealthOverview.PairDevice())
+           }
 
-        summary.healthOverviewData.postValue(summary.healthOverviewData.value)*/
-
+           summary.healthOverviewData.postValue(summary.healthOverviewData.value)*/
 
 
     }
@@ -371,6 +370,7 @@ constructor(
                     stateHeartRateCard.value?.measureState = TapMeasureState.MEASURING
                 } else {
                     stateHeartRateCard.value?.measureState = TapMeasureState.LAST_MEASURED
+                    stateHeartRateCard.value?.lastTime = "Last measured just now"
                 }
                 stateHeartRateCard.value?.value = manualMeasurement.value.toString()
             }
