@@ -675,7 +675,7 @@ class OSleepScoreDetailsFragment :
                     } else if (
                         mViewModel.itemClickType == ViewItemClickType.DISTANCE.name
                     ) {
-                        var difference = 0
+                        var difference = 0f
                         todayProgress =
                             trendData.today.value.toLong()
                         yesterdayProgress =
@@ -691,7 +691,7 @@ class OSleepScoreDetailsFragment :
                             binding.lytScoreOverview.tvTrendProg.visible()
                             binding.lytScoreOverview.tvScoreMsg.visible()
                             mViewModel.isProgressEqual = false
-                            difference = todayProgress.toInt() - yesterdayProgress.toInt()
+                            difference = DistanceUtil.convertMeterToKm(todayProgress.toInt()).toFloat() - DistanceUtil.convertMeterToKm(yesterdayProgress.toInt()).toFloat()
                             mViewModel.isTodayGreater = true
                         } else if (yesterdayProgress > todayProgress) {
                             binding.lytScoreOverview.tvTrendProg.setCompoundDrawable(R.drawable.ic_trend_down)
@@ -704,14 +704,14 @@ class OSleepScoreDetailsFragment :
                             binding.lytScoreOverview.tvTrendProg.visible()
                             binding.lytScoreOverview.tvScoreMsg.visible()
                             mViewModel.isProgressEqual = false
-                            difference = yesterdayProgress.toInt() - todayProgress.toInt()
+                            difference = DistanceUtil.convertMeterToKm(yesterdayProgress.toInt()).toFloat() - DistanceUtil.convertMeterToKm(todayProgress.toInt()).toFloat()
                             mViewModel.isTodayGreater = false
                         } else {
                             binding.lytScoreOverview.tvTrendProg.gone()
                             binding.lytScoreOverview.tvScoreMsg.visible()
                             mViewModel.isProgressEqual = true
                         }
-                        val compPro = "${DistanceUtil.convertMeterToKm(difference)} km"
+                        val compPro = "${String.format("%.1f", difference)} km"
                         binding.lytScoreOverview.tvTrendProg.text = compPro
                     } else if (
                         mViewModel.itemClickType == ViewItemClickType.BODY_TEMPERATURE.name

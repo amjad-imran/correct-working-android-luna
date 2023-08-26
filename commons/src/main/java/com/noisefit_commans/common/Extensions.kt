@@ -96,7 +96,7 @@ fun List<Int>.maxWithoutInvalidMovementValues(): Int {
     }
 }
 fun List<Int>.maxWithInvalidMovementValues(): Int {
-    val newList = this.filter { it != 0 && it != 255 && it != 5 && it != 4 }
+    val newList = this.filter {it != 255 && it != 5 && it != 4 }
     return if (newList.isNotEmpty()) {
         newList.maxOrNull() ?: 255
     } else {
