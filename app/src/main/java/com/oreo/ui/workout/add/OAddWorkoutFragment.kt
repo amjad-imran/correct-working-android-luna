@@ -282,7 +282,12 @@ class OAddWorkoutFragment :
             viewModel.addWorkout.startHour,
             viewModel.addWorkout.startMinute
         )
+
+        if (viewModel.isStartTimeSelected && viewModel.isEndTimeSelected) {
+            setDuration()
+        }
         binding.lytStartEnd.lytStartTime.tvTimeValue.text = startTime
+        viewModel.isStartTimeSelected = true
     }
 
     private fun setEndTimeBetween(ignoreDuration: Boolean = true) {
@@ -299,7 +304,7 @@ class OAddWorkoutFragment :
         if (ignoreDuration) {
             setDuration()
         }
-
+        viewModel.isEndTimeSelected = true
         binding.lytStartEnd.lytEndTime.tvTimeValue.text = endTime
     }
 

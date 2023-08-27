@@ -47,6 +47,11 @@ constructor(
     var autoWorkoutId: Int? = null
     var movementList: List<Int>? = null
     var preFilledOreoAutoSportData: OreoAutoSportData? = null
+
+
+    var isStartTimeSelected = false
+    var isEndTimeSelected = false
+
     fun convertAutoSport(data: OreoAutoSportData?) {
         if (data == null) {
             return
