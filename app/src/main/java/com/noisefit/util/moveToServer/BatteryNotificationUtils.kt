@@ -6,7 +6,9 @@ import com.noisefit.session.SessionManager
 import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit.util.notif.NotificationEventsClass
 import com.noisefit.util.notif.NotificationUtil
+import com.noisefit_commans.data.local.abstraction.ChargingNotificationLevel
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.models.DeviceType
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
@@ -21,6 +23,7 @@ class BatteryNotificationUtils
 @Inject
 constructor(
     val localDataStore: DataStoredInterface,
+    val watchDataStore: WatchDataStore,
     val sessionManager: SessionManager
 ) {
 
@@ -70,183 +73,45 @@ constructor(
         }
     }
 
-    fun handleNotification(currentBatteryLevel: Int, isCharging: Boolean) {
-        var batteryNotification = localDataStore.getBatteryNotification()
-        val context = NoiseFitApplicationMain.context!!
-        // LOGS.d("$TAG ${Gson().toJson(batteryNotification)}")
-        if (batteryNotification == null || batteryNotification.batteryNotificationData.isNullOrEmpty()) {
-            batteryNotification = com.noisefit_commans.data.model.BatteryNotification(
-                getBatteryNotList(),
-                currentBatteryLevel
-            )
-            setBatteryNotification(batteryNotification)
-        }
-        handleLastState(currentBatteryLevel)
-        var notificationTriggerFor: com.noisefit_commans.data.model.BatteryNotificationType? = null
-        val batteryList = batteryNotification.batteryNotificationData!!
-        LOGS.d("$TAG ${currentBatteryLevel} last: ${batteryNotification.lastBatteryPercentage}")
-
-        if (currentBatteryLevel < 25 && DateFormats.isTimeBetween(21)) {
-            val hasNotificationTriggered = localDataStore.getChargeOverNightNotification()
-
-            if (!hasNotificationTriggered && !isCharging) {
-                LOGS.d("$TAG inside 9pm ")
-                if (currentBatteryLevel < batteryNotification.lastBatteryPercentage) {
-                    val message =
-                        "Your Luna Ring battery level is $currentBatteryLevel%, Please charge before going to bed."
-
-
-                    LOGS.d("$TAG $message")
-                    pushBatteryNotification(context, TITLE, message, "3")
-                    localDataStore.setChargeOverNightNotification(true)
-                    batteryNotification.lastBatteryPercentage = currentBatteryLevel
-                    logLastState(CHARGE_REMINDER, currentBatteryLevel)
-                    setNotificationTriggerStatus(batteryNotification, null)
-                    return
-                }
-
-            }
-
-        } else {
-            localDataStore.setChargeOverNightNotification(false)
-        }
-
-
-        //reset
-        when (currentBatteryLevel) {
-            in 0..5 -> {
-                resetExcept(
-                    batteryNotification,
-                    com.noisefit_commans.data.model.BatteryNotificationType.CRITICAL
-                )
-            }
-
-            in 6..20 -> {
-                resetExcept(
-                    batteryNotification,
-                    com.noisefit_commans.data.model.BatteryNotificationType.CRITICAL_REMINDER
-                )
-            }
-
-            in 95..100 -> {
-                resetExcept(
-                    batteryNotification,
-                    com.noisefit_commans.data.model.BatteryNotificationType.FULL
-                )
-            }
-
-            else -> {
-                resetAllState(batteryNotification)
-
-            }
-        }
-
-
-        //broadcast notification
-        when (currentBatteryLevel) {
-            in 0..5 -> {
-                val searchedObj =
-                    hasNotificationTriggered(
-                        batteryList,
-                        com.noisefit_commans.data.model.BatteryNotificationType.CRITICAL
-                    )
-
-                if (searchedObj != null) {
-                    //trigger the notification
-                    if (currentBatteryLevel < batteryNotification.lastBatteryPercentage) {
-                        val message =
-                            "⚠️Your luna ring battery is extremely low $currentBatteryLevel% ⚠️Please plug the charger."
-                        LOGS.d("$TAG $message")
-                        pushBatteryNotification(context, TITLE, message, "1")
-                        notificationTriggerFor =
-                            com.noisefit_commans.data.model.BatteryNotificationType.CRITICAL
-                        logLastState(
-                            com.noisefit_commans.data.model.BatteryNotificationType.CRITICAL.name,
-                            currentBatteryLevel
-                        )
-                    }
-
-                }
-            }
-
-            in 6..20 -> {
-                val searchedObj =
-                    hasNotificationTriggered(
-                        batteryList,
-                        com.noisefit_commans.data.model.BatteryNotificationType.CRITICAL_REMINDER
-                    )
-                if (searchedObj != null) {
-                    //trigger the notification
-                    if (currentBatteryLevel < batteryNotification.lastBatteryPercentage) {
-                        val message =
-                            "Your luna ring battery level is low $currentBatteryLevel%. Please plug the charger."
-                        LOGS.d("$TAG $message")
-                        pushBatteryNotification(context, TITLE_1, message, "0")
-                        notificationTriggerFor =
-                            com.noisefit_commans.data.model.BatteryNotificationType.CRITICAL_REMINDER
-                        logLastState(
-                            com.noisefit_commans.data.model.BatteryNotificationType.CRITICAL_REMINDER.name,
-                            currentBatteryLevel
-                        )
-                    }
-
-                }
-            }
-
-            in 95..100 -> {
-                val searchedObj =
-                    hasNotificationTriggered(
-                        batteryList,
-                        com.noisefit_commans.data.model.BatteryNotificationType.FULL
-                    )
-                if (searchedObj != null) {
-                    //trigger the notification
-                    if (currentBatteryLevel > batteryNotification.lastBatteryPercentage && isCharging) {
-                        val message =
-                            "Your luna ring is sufficiently charged. Please unplug the charger."
-                        LOGS.d("$TAG $message")
-                        pushBatteryNotification(context, TITLE_1, message, "2")
-                        notificationTriggerFor =
-                            com.noisefit_commans.data.model.BatteryNotificationType.FULL
-                        logLastState(
-                            com.noisefit_commans.data.model.BatteryNotificationType.FULL.name,
-                            currentBatteryLevel
-                        )
-                    }
-
-                }
-            }
-
-            else -> {
-
-            }
-
-        }
-
-        batteryNotification.lastBatteryPercentage = currentBatteryLevel
-        setNotificationTriggerStatus(batteryNotification, notificationTriggerFor)
-
-    }
-
-    private fun setNotificationTriggerStatus(
-        batteryNotification: com.noisefit_commans.data.model.BatteryNotification,
-        batteryNotificationType: com.noisefit_commans.data.model.BatteryNotificationType?
+    fun handleBatteryNotification(
+        currentBatteryLevel: Int,
+        lastBatteryLevel: Int,
+        isCharging: Boolean
     ) {
-        batteryNotificationType?.let {
-            batteryNotification.batteryNotificationData!!.forEach {
-                if (batteryNotificationType == it.type) {
-                    it.hasTriggered = true
-                    return@forEach
-                }
-
-            }
+        if (isCharging) {
+            watchDataStore.resetChargingNotificationData()
+            return
         }
-        setBatteryNotification(batteryNotification)
+
+        if (currentBatteryLevel > lastBatteryLevel) {
+            if (currentBatteryLevel > 20) {
+                watchDataStore.resetChargingNotificationData()
+            }
+            return
+        }
+
+        if (currentBatteryLevel <= 20) {
+            val message =
+                "Your Luna Ring battery level is $currentBatteryLevel%"
+
+            val notificationShown = watchDataStore.getChargingNotificationsShown()
+
+            val level = when (currentBatteryLevel) {
+                in 0..5 -> ChargingNotificationLevel.LEVEL_5
+                in 6..10 -> ChargingNotificationLevel.LEVEL_10
+                in 11..15 -> ChargingNotificationLevel.LEVEL_15
+                in 16..20 -> ChargingNotificationLevel.LEVEL_20
+                else -> null
+            } ?: return
+
+            if (notificationShown[level.name] == true) {
+                return
+            }
+            watchDataStore.setChargingNotificationShown(level)
+            pushBatteryNotification(NoiseFitApplicationMain.context!!, TITLE, message, "3")
+        }
     }
 
-    private fun setBatteryNotification(batteryNotification: com.noisefit_commans.data.model.BatteryNotification) {
-        localDataStore.setBatteryNotification(batteryNotification)
-    }
 
     private fun logLastState(type: String, batteryPercentage: Int) {
 //        sessionManager.logFirebaseEvent(

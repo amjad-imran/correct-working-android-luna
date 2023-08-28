@@ -96,6 +96,15 @@ interface WatchDataStore {
     fun getWeatherDataModel(startTimeStamp: Long, endTimeStamp: Long): WeatherDataModel?
     fun updateSerialNo(serialNumberRing: String)
     fun getSerialNo(): String?
+
+    fun resetChargingNotificationData()
+
+    fun setChargingNotificationShown(level: ChargingNotificationLevel)
+    fun getChargingNotificationsShown(): HashMap<String, Boolean>
+}
+
+enum class ChargingNotificationLevel {
+    LEVEL_5, LEVEL_10, LEVEL_15, LEVEL_20
 }
 
 //WeatherDataModel

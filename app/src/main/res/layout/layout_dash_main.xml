@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <include
+            android:id="@+id/lytHeader"
+            layout="@layout/list_o_header_card_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp" />
+
+        <include
+            android:id="@+id/lytPairDevice"
+            layout="@layout/list_o_pair_device"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_24dp" />
+
+        <include
+            android:id="@+id/lytAlerts"
+            layout="@layout/list_o_alerts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_24dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvHealthData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <include
+            android:id="@+id/lytHeartRate"
+            layout="@layout/list_heart_rate_card_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_24dp" />
+
+
+        <include
+            android:id="@+id/lytSleepAvg"
+            layout="@layout/list_sleep_activity_card_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_24dp" />
+
+        <include
+            android:id="@+id/lytReadinessAvg"
+            layout="@layout/list_readiness_score_card_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_24dp" />
+
+        <include
+            android:id="@+id/lytWorkouts"
+            layout="@layout/oreo_layout_recent_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_24dp" />
+
+        <include
+            android:id="@+id/lytDummy"
+            layout="@layout/oreo_dummy_view"
+            android:layout_width="match_parent"
+            android:layout_height="64dp" />
+
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

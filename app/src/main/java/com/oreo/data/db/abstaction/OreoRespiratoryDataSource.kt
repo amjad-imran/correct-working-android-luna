@@ -12,4 +12,5 @@ interface OreoRespiratoryDataSource {
     suspend fun deleteOldData(timeStamp: Long): Int
     suspend fun updateServerSyncData(dataList: List<OreoRespiratoryData>, timeStamp: Long): Int
     suspend fun checkHalfSyncData()
+    suspend fun getDataBetweenTimeStamp(startTimeStamp: Long, endTimeStamp: Long): List<Int>
 }

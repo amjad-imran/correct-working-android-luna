@@ -78,7 +78,11 @@ data class OreoSleepNetworkEntity(
         @SerializedName("sleep_efficiency") var sleepEfficiency: Int,
         @SerializedName("resting_hr") var restingHr: Int,
         @SerializedName("sleep_latency") var sleepLatency: Int,
+        @SerializedName("max_temp") var maxTemp: Float,
+        @SerializedName("avg_resp") var avgResp: Int,
         @SerializedName("hr_breakup") var hrBreakup: List<Int>,
+        @SerializedName("temp_breakup") var tempBreakup: List<Float>,
+        @SerializedName("resp_breakup") var respBreakup: List<Int>,
         @SerializedName("hrv_breakup") var hrvBreakup: List<Int>,
     ) : OreoUserActivitiesPost()
 

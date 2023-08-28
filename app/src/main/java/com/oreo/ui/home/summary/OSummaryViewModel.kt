@@ -2,7 +2,6 @@ package com.oreo.ui.home.summary
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.session.SessionManager
@@ -20,9 +19,16 @@ import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.model.AlertType
 import com.oreo.data.model.ChartModel
+import com.oreo.data.model.DashAlert
+import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
+import com.oreo.data.model.TapMeasureState
+import com.oreo.data.model.health.ODashboardActivityScoreModel
+import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepModel
+import com.oreo.data.model.health.ODashboardSleepScoreModel
 import com.oreo.data.model.health.OreoDashboardResponseModel
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
@@ -41,8 +47,18 @@ constructor(
     val localDataStore: DataStoredInterface,
     val ringDataStore: RingDataStore,
     private val syncRepository: OreoSyncRepository,
-    private val userRepository: OreoUserActivityRepository,
+    val userRepository: OreoUserActivityRepository,
 ) : BaseViewModel() {
+
+
+    val stateHeaderCard = MutableLiveData<Pair<String, String>>()//Name,Date
+    val stateHeartRateCard = MutableLiveData<OHealthOverview.HeartRate?>()
+    val statePairDeviceCard = MutableLiveData<Boolean>()
+    val stateDashAlerts = MutableLiveData<HashMap<AlertType, DashAlert>>()
+    val stateSleepAvgCard =
+        MutableLiveData<Pair<ODashboardSleepScoreModel?, ODashboardActivityScoreModel?>>()
+    val stateReadinessAvgCard = MutableLiveData<ODashboardReadinessScoreModel?>()
+    val stateWorkouts = MutableLiveData<List<OActivityListModal>>()
 
 
     var summary = OSummary()
@@ -52,9 +68,48 @@ constructor(
 
 
     fun initData() {
-        summary.user = localDataStore.getUser()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            summary.user = localDataStore.getUser()
+            stateHeaderCard.postValue(
+                Pair(
+                    getGreetingMessageValue(),
+                    DateFormats.getCurrentDate(DateFormats.dateTimeFormatWithWeekWithoutYear)
+                )
+            )
+            val device = ringDataStore.getRingDevice()
+            statePairDeviceCard.postValue(device == null)
+            stateHeartRateCard.postValue(userRepository.getSummaryHRHealthOverview().apply {
+                if (device == null) {
+                    this?.measureState = TapMeasureState.NO_DEVICE
+                }
+            })
+        }
+
+        updateAlerts()
+
+
+
 
         getDashboardDataFromServer(false)
+    }
+
+    private fun updateAlerts() {
+        val dashAlert = HashMap<AlertType, DashAlert>()
+
+        val btState = sessionManager.bluetoothStateDash.value
+        if (btState == false) {
+            dashAlert[AlertType.BLUETOOTH] =
+                DashAlert("Authorize Bluetooth connectivity for Luna", false)
+        }
+
+        if (sessionManager.forceOtaResponseRing != null) {
+            dashAlert[AlertType.OTA_UPDATE] =
+                DashAlert("Ring firmware update available", false)
+        }
+
+
+        stateDashAlerts.postValue(dashAlert)
     }
 
 
@@ -114,7 +169,7 @@ constructor(
 //        }
 //    }
 
-    private fun convertIntToChartModel(data: List<Int>?): ArrayList<ChartModel> {
+    fun convertIntToChartModel(data: List<Int>?): ArrayList<ChartModel> {
         val list = ArrayList<ChartModel>()
         val chartModel1 = ChartModel()
         chartModel1.date = ""
@@ -136,32 +191,27 @@ constructor(
         return list
     }
 
-    private fun getInitialOfflineData(data: OreoDashboardResponseModel) {
+    fun getGreetingMessageValue(): String {
+        return "${getGreetingMessage()}, ${
+            summary.user?.getOnlyFirstName()?.trim()?.ifEmpty { "Stranger" }
+        }"
+    }
+
+    private fun getInitialOfflineData(data: OreoDashboardResponseModel, hitActivityData: Boolean) {
 
 
         viewModelScope.launch(Dispatchers.IO) {
-            val userName = "${getGreetingMessage()}, ${
-                summary.user?.getOnlyFirstName()?.trim()?.ifEmpty { "Stranger" }
-            }"
+
             val userActivities = ArrayList<OHealthOverview>()
 
-            val hrValue = userRepository.getSummaryHRHealthOverview()
 
-            userActivities.add(
-                0, OHealthOverview.Header(
-                    userName,
-                    DateFormats.getCurrentDate(DateFormats.dateTimeFormatWithWeekWithoutYear)
-                )
-            )
 //            val autoSportCount = userRepository.getSummaryAutoWorkoutCount()
 //            if (autoSportCount > 0) {
 //                userActivities.add(OHealthOverview.AutoSport(autoSportCount))
 //            }
 
 //            userActivities.add(1, OHealthOverview.WAlert(2))
-            if (ringDataStore.getRingDevice() == null) {
-                userActivities.add(OHealthOverview.PairDevice())
-            }
+
 
             ringDataStore.setRegisterDay(data.registerDate ?: -1)
             if (isMorningTime()) {
@@ -208,33 +258,8 @@ constructor(
 
             }
 
-            if (hrValue != null) {
-                userActivities.add(hrValue)
-            }
-
-            if (data.activityScoreAvg != null && data.sleepScoreAvg != null) {
-
-                userActivities.add(
-                    OHealthOverview.SleepActivityScore(
-                        data.sleepScoreAvg.sleepScore,
-                        data.sleepScoreAvg.trend,
-                        convertIntToChartModel(data.sleepScoreAvg.value),
-                        data.activityScoreAvg.activityScore,
-                        data.activityScoreAvg.trend,
-                        convertIntToChartModel(data.activityScoreAvg.value)
-                    )
-                )
-            }
-
-            if (data.readinessScoreAvg != null) {
-                userActivities.add(
-                    OHealthOverview.ReadinessScore(
-                        data.readinessScoreAvg.readinessScore,
-                        data.readinessScoreAvg.trend,
-                        convertIntToChartModel(data.readinessScoreAvg.value)
-                    )
-                )
-            }
+            stateSleepAvgCard.postValue(Pair(data.sleepScoreAvg, data.activityScoreAvg))
+            stateReadinessAvgCard.postValue(data.readinessScoreAvg)
 
             summary.healthOverviewData.postValue(userActivities)
             getRecentWorkoutList()
@@ -311,47 +336,74 @@ constructor(
     }
 
     fun handleUnPairState() {
-        val index = summary.healthOverviewData.value?.indexOfFirst {
-            it is OHealthOverview.PairDevice
-        }
+        /*   val index = summary.healthOverviewData.value?.indexOfFirst {
+               it is OHealthOverview.PairDevice
+           }
 
-         val autoSportIndex = summary.healthOverviewData.value?.indexOfFirst {
-             it is OHealthOverview.TodayWorkout
-         }
+           val autoSportIndex = summary.healthOverviewData.value?.indexOfFirst {
+               it is OHealthOverview.TodayWorkout
+           }
 
-         if (autoSportIndex != null && autoSportIndex != -1) {
-             summary.healthOverviewData.value?.removeAt(autoSportIndex)
-         }
-        if (index == -1) {
-            summary.healthOverviewData.value?.add(1, OHealthOverview.PairDevice())
-        }
+           if (autoSportIndex != null && autoSportIndex != -1) {
+               summary.healthOverviewData.value?.removeAt(autoSportIndex)
+           }
+           if (index == -1) {
+               summary.healthOverviewData.value?.add(1, OHealthOverview.PairDevice())
+           }
 
-        summary.healthOverviewData.postValue(summary.healthOverviewData.value)
+           summary.healthOverviewData.postValue(summary.healthOverviewData.value)*/
+
+
     }
 
     fun updateManualValue() {
         val manualMeasurement = ringDataStore.getManualMeasurementValue()
         if (manualMeasurement != null && manualMeasurement.manualMeasureType == ManualMeasureType.HEART_RATE) {
-            val index = summary.healthOverviewData.value?.indexOfFirst {
-                it is OHealthOverview.HeartRate
-            }
-            if (index != null) {
-                LOGS.d("dsasddsadsdads ${manualMeasurement.isError} ${manualMeasurement.isMeasuring}")
-                val data = summary.healthOverviewData.value!![index] as OHealthOverview.HeartRate
 
-                if (manualMeasurement.isError) {
-                    data.errorMessage = "Unable to measure, try again"
-                    data.value = "0"
-                    data.isMeasuring = false
+
+            if (manualMeasurement.isError) {
+                stateHeartRateCard.value?.measureState = TapMeasureState.ERROR
+            } else {
+                if (manualMeasurement.isMeasuring) {
+                    stateHeartRateCard.value?.measureState = TapMeasureState.MEASURING
                 } else {
-                    data.lastTime = "Last measure now"
-                    data.errorMessage = null
-                    data.isMeasuring = manualMeasurement.isMeasuring
+                    stateHeartRateCard.value?.measureState = TapMeasureState.LAST_MEASURED
+                    stateHeartRateCard.value?.lastTime = "Last measured just now"
+                }
+                stateHeartRateCard.value?.value = manualMeasurement.value.toString()
+            }
+            stateHeartRateCard.postValue(stateHeartRateCard.value)
+
+
+            /*    val index = summary.healthOverviewData.value?.indexOfFirst {
+                    it is OHealthOverview.HeartRate
+                }
+                if (index != null) {
+                    LOGS.d("dsasddsadsdads ${manualMeasurement.isError} ${manualMeasurement.isMeasuring}")
+                    val data = summary.healthOverviewData.value!![index] as OHealthOverview.HeartRate
+
+                    if (manualMeasurement.isError) {
+                        *//*data.errorMessage = "Unable to measure, try again"
+                    data.value = "0"
+                    data.isMeasuring = false*//*
+
+                    data.measureState = TapMeasureState.ERROR
+                } else {
+
+                    if (manualMeasurement.isMeasuring) {
+                        data.measureState = TapMeasureState.MEASURING
+                    } else {
+                        data.measureState = TapMeasureState.LAST_MEASURED
+                    }
+
+                    //data.lastTime = "Last measure now"
+                    *//*data.errorMessage = null
+                    data.isMeasuring = manualMeasurement.isMeasuring*//*
                     data.value = manualMeasurement.value.toString()
                 }
                 summary.refreshPosition = index
                 summary.healthOverviewData.postValue(summary.healthOverviewData.value)
-            }
+            }*/
         }
     }
 
@@ -386,31 +438,35 @@ constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let { workoutList ->
-                            val index = summary.healthOverviewData.value?.indexOfFirst {
-                                it is OHealthOverview.TodayWorkout
-                            }
-                            val isRingConnected = ringDataStore.getRingDevice() != null
 
-                            if (index != null && index != -1) {
-                                val data =
-                                    summary.healthOverviewData.value!![index] as OHealthOverview.TodayWorkout
-                                data.value = "1"
-                                data.listData = workoutList
-                                data.isRingConnected = isRingConnected
-                                summary.healthOverviewData.postValue(summary.healthOverviewData.value)
-                            } else {
+                            stateWorkouts.postValue(workoutList)
 
-                                if (isRingConnected || workoutList.isNotEmpty()) {
-                                    summary.healthOverviewData.value?.add(
-                                        OHealthOverview.TodayWorkout(
-                                            "1",
-                                            isRingConnected,
-                                            workoutList
-                                        )
-                                    )
-                                    summary.healthOverviewData.postValue(summary.healthOverviewData.value)
-                                }
-                            }
+
+                            /*  val index = summary.healthOverviewData.value?.indexOfFirst {
+                                  it is OHealthOverview.TodayWorkout
+                              }
+                              val isRingConnected = ringDataStore.getRingDevice() != null
+
+                              if (index != null && index != -1) {
+                                  val data =
+                                      summary.healthOverviewData.value!![index] as OHealthOverview.TodayWorkout
+                                  data.value = "1"
+                                  data.listData = workoutList
+                                  data.isRingConnected = isRingConnected
+                                  summary.healthOverviewData.postValue(summary.healthOverviewData.value)
+                              } else {
+
+                                  if (isRingConnected || workoutList.isNotEmpty()) {
+                                      summary.healthOverviewData.value?.add(
+                                          OHealthOverview.TodayWorkout(
+                                              "1",
+                                              isRingConnected,
+                                              workoutList
+                                          )
+                                      )
+                                      summary.healthOverviewData.postValue(summary.healthOverviewData.value)
+                                  }
+                              }*/
                         }
                     }
                 }
@@ -426,8 +482,10 @@ constructor(
     }
 
     fun measureHr(status: Boolean) {
-        LOGS.d("manual HR")
-        LOGS.d("onMeasuring manual HR")
+        stateHeartRateCard.value?.measureState = TapMeasureState.MEASURING
+        stateHeartRateCard.postValue(stateHeartRateCard.value)
+
+
         sessionManager.sendUpdateQueryAction(
             UpdateDeviceAction.SetManualMeasurement(
                 ManualMeasureType.HEART_RATE, status
@@ -495,5 +553,17 @@ constructor(
 
     fun updateDeviceConnectedStatus() {
         _deviceConnected.value = (ringDataStore.getRingDevice() != null)
+    }
+
+    fun updateBluetoothStateInList(it: Boolean) {
+        if (it) {
+            stateDashAlerts.value?.remove(AlertType.BLUETOOTH)
+        } else {
+            stateDashAlerts.value?.set(
+                AlertType.BLUETOOTH,
+                DashAlert("Authorize Bluetooth connectivity for Luna", false)
+            )
+        }
+        stateDashAlerts.postValue(stateDashAlerts.value)
     }
 }

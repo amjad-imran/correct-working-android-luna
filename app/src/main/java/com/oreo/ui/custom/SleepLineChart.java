@@ -10,8 +10,11 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.Shader;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.View;
+
+import androidx.core.content.res.ResourcesCompat;
 
 import com.noisefit.luna.R;
 import com.noisefit_commans.utils.LOGS;
@@ -52,6 +55,7 @@ public class SleepLineChart extends View {
     private float bottomWith;
     private float topWith;
     private float xTextSize;
+    private float noDataSize;
     private float scaleNodeRadius;
     private Paint bgPaint;
     private Paint bgLeftPaint;
@@ -60,6 +64,8 @@ public class SleepLineChart extends View {
     private Paint bgBottomPaint;
 
     private Paint xTextPaint;
+
+    private Paint noDataPaint;
     private Paint gridPaint;
     private Paint centerLinePaint;
     private int centerLineColor;
@@ -144,6 +150,7 @@ public class SleepLineChart extends View {
         xMax = ta.getInt(R.styleable.SleepLineChart_xMax, 10);
         xMin = ta.getInt(R.styleable.SleepLineChart_xMin, 0);
         xTextSize = ta.getDimension(R.styleable.SleepLineChart_xTextSize, 8f);
+        noDataSize = ta.getDimension(R.styleable.SleepLineChart_noDataSize, 12f);
         leftWith = ta.getDimension(R.styleable.SleepLineChart_leftWith, 16f);
         rightWith = ta.getDimension(R.styleable.SleepLineChart_rightWith, 8f);
         bottomWith = ta.getDimension(R.styleable.SleepLineChart_bottomWith, 16f);
@@ -179,9 +186,18 @@ public class SleepLineChart extends View {
         bgBottomPaint = new Paint();
         bgBottomPaint.setColor(bgBottomColor);
 
+
+        Typeface fontGilroy = ResourcesCompat.getFont(this.getContext(), com.noisefit_commans.R.font.gilroy_medium);
         xTextPaint = new Paint();
         xTextPaint.setTextSize(xTextSize);
+        xTextPaint.setTypeface(fontGilroy);
         xTextPaint.setAntiAlias(true);
+
+        noDataPaint = new Paint();
+        noDataPaint.setTextSize(noDataSize);
+        noDataPaint.setColor(getResources().getColor(R.color.white));
+        noDataPaint.setTypeface(fontGilroy);
+        noDataPaint.setAntiAlias(true);
 
         gridPaint = new Paint();
         gridPaint.setColor(gridColor);
@@ -280,10 +296,10 @@ public class SleepLineChart extends View {
 
 //        xMax += maxOffset;
 
-        if(mHasDummyData){
+        if (mHasDummyData) {
             xMax = dummy.getMax();
             xMin = dummy.getMin();
-        }else {
+        } else {
             xMax = maxValue + maxOffset;
             xMin = minValue - maxOffset;
         }
@@ -311,8 +327,6 @@ public class SleepLineChart extends View {
 
 
     }
-
-
 
 
     private void drawBg(Canvas canvas) {
@@ -381,6 +395,16 @@ public class SleepLineChart extends View {
                     avgBackPaint);
             canvas.drawText(avgStr, leftWith + dip2px(5), avg - xTextBounds.height(), xTextPaint);
 
+        } else {
+            String noDataText = "No data available";
+            float textWidth = noDataPaint.measureText(noDataText);
+
+            float textX = (mWith - leftWith) / 2 - textWidth / 2;
+            float textY = (mHeight / 2) + dip2px(4);
+            canvas.drawText(noDataText, textX, textY, noDataPaint);
+
+            canvas.drawLine(leftWith, mHeight / 2, textX - dip2px(8), mHeight / 2, gridPaint);
+            canvas.drawLine(textX + textWidth + dip2px(8), mHeight / 2, mWith - rightWith, mHeight / 2, gridPaint);
         }
 
     }

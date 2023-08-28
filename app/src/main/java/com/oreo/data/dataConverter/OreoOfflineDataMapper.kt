@@ -37,6 +37,10 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.implementation.OreoHeartRateDataImpl
 import com.oreo.data.model.OHealthOverview
+import com.oreo.data.model.TapMeasureState
+import org.joda.time.format.ISODateTimeFormat.hour
+import java.util.Calendar
+import java.util.TimeZone
 import javax.inject.Inject
 
 
@@ -347,7 +351,10 @@ constructor(
         var overAllMinValue = Int.MAX_VALUE
         var overAllMaxValue = -1
         var hrCount = 0
-        var lastHrValue: Int? = null
+        var lastHrValue: Pair<Int, Long>? = null//HR value,timer
+
+        LOGS.w("convertHeartRateOverviewData ${data?.breakUp}")
+
         hRWithIntervalList.forEachIndexed { index, hrList ->
 
 
@@ -366,14 +373,6 @@ constructor(
                 max = min
             }
 
-
-            hrList.forEach { value ->
-                if (value != 0) {
-                    lastHrValue = value
-                }
-            }
-
-
             val avg = (min + max) / 2
             if (avg != 0) {
                 if (min < overAllMinValue) {
@@ -384,6 +383,16 @@ constructor(
                 }
                 avgList.add(avg)
 
+            }
+
+            hrList.forEachIndexed { index2, value ->
+                if (value != 0) {
+
+                    val indexMillis = ((index * 6) + index2) * 5 * 60L * 1000L
+                    LOGS.w("convertHeartRateOverviewData $index $indexMillis")
+
+                    lastHrValue = Pair(value, indexMillis)
+                }
             }
 
             //if any change chunk value then divide 12 by that chunk value to get below correct xlabel list
@@ -422,17 +431,43 @@ constructor(
 
 
         var lastHr = "0"
-        if ((lastHrValue ?: 0) > 0) {
+        /*if ((lastHrValue ?: 0) > 0) {
             lastHr = lastHrValue.toString()
-        }
+        }*/
 
-        if (lastHr == "0") {
-            val lastMeasureValue = ringDataStore.getManualMeasurementValue()
-            if (lastMeasureValue != null && (lastMeasureValue.timeStamp) + (60 * 1000) > System.currentTimeMillis() && lastMeasureValue.value > 0) {
-                lastHr = lastMeasureValue.value.toString()
+        var manualMeasureTime = 0L
+        /*if (lastHr == "0") {*/
+        val lastMeasureValue = ringDataStore.getManualMeasurementValue()
+        if (lastMeasureValue != null && (lastMeasureValue.timeStamp) + (60 * 60 * 1000) > System.currentTimeMillis() && lastMeasureValue.value > 0) {
+            lastHr = lastMeasureValue.value.toString()
+            manualMeasureTime = lastMeasureValue.timeStamp
+
+        }
+        //}
+
+
+        if (lastHrValue != null) {
+            val cal = Calendar.getInstance(TimeZone.getDefault())
+            cal.set(Calendar.HOUR_OF_DAY, 0)
+            cal.set(Calendar.MINUTE, 0)
+            cal.set(Calendar.SECOND, 0)
+            cal.set(Calendar.MILLISECOND, 0)
+
+            val dayStartTimeStamp = cal.timeInMillis
+            val hrTimestamp = dayStartTimeStamp + lastHrValue?.second!!
+            LOGS.w("convertHeartRateOverviewData ${lastHrValue?.first} ${lastHrValue?.second} $hrTimestamp  $manualMeasureTime")
+
+            if (hrTimestamp > manualMeasureTime) {
+                lastHr = lastHrValue?.first.toString()
+                manualMeasureTime = hrTimestamp
+                LOGS.w("convertHeartRateOverviewData new HR set $dayStartTimeStamp + ${lastHrValue?.second} =  $hrTimestamp")
 
             }
+
         }
+
+
+
 
         if (overAllMinValue == Int.MAX_VALUE) {
             overAllMinValue = 69
@@ -442,29 +477,45 @@ constructor(
             overAllMinValue -= 9
         }
 
-        LOGS.d("Sdaljhsadjhsadjhjksda ${Gson().toJson(lineChartList)}")
+        //LOGS.d("Sdaljhsadjhsadjhjksda ${Gson().toJson(lineChartList)}")
+        var measureState = TapMeasureState.DEFAULT
+
+        val measureText = if (manualMeasureTime == 0L) {
+            ""
+        } else {
+            measureState = TapMeasureState.LAST_MEASURED
+            "Last measured ${DateFormats.getRelativeTime(manualMeasureTime).lowercase()}"
+        }
 
         return OHealthOverview.HeartRate(
             lastHr,
-            false,
-            null,
-            "Last measured now",
+            measureText,
             candleChartList,
             Pair(lineChartList, lineColorList),
-            xLabelList, overAllMinValue.toFloat(), average
+            xLabelList, overAllMinValue.toFloat(), average,
+            measureState
         )
     }
 
     private fun handleHrFormat(time: Int): String {
-        return if (time == 1 || time == 24) {
-            "12 am"
-        } else if (time == 12) {
-            "12 pm"
-        } else if (time < 12) {
-            "$time am"
-        } else {
-            "$time pm"
+
+        if (time == 1 || time == 24) {
+            return "12 am"
         }
+
+
+        var hour = time
+        var suffix = ""
+        if (hour > 11) {
+            suffix = "pm"
+            if (hour > 12)
+                hour -= 12;
+        } else {
+            suffix = "am"
+            if (hour == 0)
+                hour = 12;
+        }
+        return "$hour $suffix"
     }
 
     fun convertHeartRate(data: List<HeartRate>?): HeartRateHistory {

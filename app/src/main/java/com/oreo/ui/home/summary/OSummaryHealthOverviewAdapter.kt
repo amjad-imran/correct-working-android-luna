@@ -1,42 +1,51 @@
 package com.oreo.ui.home.summary
 
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.github.mikephil.charting.data.CombinedData
+import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.*
 import com.noisefit.ui.common.calculatePercentage
+import com.noisefit.ui.dashboard.summary.DashboardBannerAction
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.ui.custom.SleepProgressbarView
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MiscUtil
+import com.oreo.data.model.AlertType
+import com.oreo.data.model.DashAlert
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
+import com.oreo.data.model.TapMeasureState
+import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.util.graph.OCombineChartUtils
 import java.lang.Math.abs
 
 sealed class OSummaryHealthOverviewClickEnum {
-    object MeasureHRClick : OSummaryHealthOverviewClickEnum()
-    object PairDeviceClicked : OSummaryHealthOverviewClickEnum()
-    object AddWorkoutClick : OSummaryHealthOverviewClickEnum()
     object SleepDetailsWorkoutClick : OSummaryHealthOverviewClickEnum()
     object ActivityDetailsWorkoutClick : OSummaryHealthOverviewClickEnum()
     object ReadinessDetailsWorkoutClick : OSummaryHealthOverviewClickEnum()
-    data class ItemWorkoutClick(val id: String, val workOutName: String, val position: Int) :
-        OSummaryHealthOverviewClickEnum()
+
 
     object AutoSportsDelete : OSummaryHealthOverviewClickEnum()
 
     object WorkoutAlertWhatisThis : OSummaryHealthOverviewClickEnum()
 
-    object ViewAllWorkoutClick : OSummaryHealthOverviewClickEnum()
     object WorkoutAlertIdentify : OSummaryHealthOverviewClickEnum()
 
 }
@@ -50,7 +59,7 @@ class OSummaryHealthOverviewAdapter :
 
     var items = listOf<OHealthOverview>()
         set(value) {
-            tryCatch {
+            try {
                 field = value
                 if (refreshPosition != null) {
                     if (refreshPosition != -1) {
@@ -59,6 +68,8 @@ class OSummaryHealthOverviewAdapter :
                         notifyDataSetChanged()
                     }
                 }
+            } catch (exp: Exception) {
+                exp.printStackTrace()
             }
         }
 
@@ -100,13 +111,6 @@ class OSummaryHealthOverviewAdapter :
                 )
             )
 
-            R.layout.list_heart_rate_card_item -> HomeRecyclerViewHolder.HeartRateViewHolder(
-                ListHeartRateCardItemBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
-            )
 
             R.layout.list_readiness_score_card_item -> HomeRecyclerViewHolder.ReadinessScoreViewHolder(
                 ListReadinessScoreCardItemBinding.inflate(
@@ -124,29 +128,6 @@ class OSummaryHealthOverviewAdapter :
                 )
             )
 
-            R.layout.oreo_layout_recent_activity -> HomeRecyclerViewHolder.TodayWorkoutPercentViewHolder(
-                OreoLayoutRecentActivityBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
-            )
-
-            R.layout.list_o_header_card_item -> HomeRecyclerViewHolder.HeaderViewHolder(
-                ListOHeaderCardItemBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
-            )
-
-            R.layout.list_o_pair_device -> HomeRecyclerViewHolder.PairDeviceViewHolder(
-                ListOPairDeviceBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
-            )
 
             R.layout.list_o_w_alert_card_item -> HomeRecyclerViewHolder.AutoSportViewHolder(
                 ListOWAlertCardItemBinding.inflate(
@@ -163,38 +144,10 @@ class OSummaryHealthOverviewAdapter :
 //                    false
 //                )
 //            )
-            R.layout.oreo_dummy_view -> HomeRecyclerViewHolder.OreoDummyViewHolder(
-                OreoDummyViewBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
-            )
 
 
             else -> throw IllegalArgumentException("Invalid ViewType Provided")
         }
-    }
-
-    override fun onViewRecycled(holder: HomeRecyclerViewHolder) {
-        when (holder) {
-            is HomeRecyclerViewHolder.ActivityViewHolder -> {
-                LOGS.d("onViewRecycled ActivityViewHolder")
-            }
-
-            is HomeRecyclerViewHolder.HeartRateViewHolder -> {
-                LOGS.d("onViewRecycled HeartRateViewHolder")
-            }
-
-            is HomeRecyclerViewHolder.ReadinessScoreViewHolder -> {
-                LOGS.d("onViewRecycled ReadinessScoreViewHolder")
-            }
-
-
-            is HomeRecyclerViewHolder.OreoDummyViewHolder -> {}
-            else -> {}
-        }
-        super.onViewRecycled(holder)
     }
 
     override fun onFailedToRecycleView(holder: HomeRecyclerViewHolder): Boolean {
@@ -207,13 +160,6 @@ class OSummaryHealthOverviewAdapter :
         when (holder) {
             is HomeRecyclerViewHolder.ActivityViewHolder -> holder.bind(
                 items[position] as OHealthOverview.Activity,
-                position,
-                lastPosition,
-                devicePaired
-            )
-
-            is HomeRecyclerViewHolder.HeartRateViewHolder -> holder.bind(
-                items[position] as OHealthOverview.HeartRate,
                 position,
                 lastPosition,
                 devicePaired
@@ -247,32 +193,17 @@ class OSummaryHealthOverviewAdapter :
                 devicePaired
             )
 
-            is HomeRecyclerViewHolder.TodayWorkoutPercentViewHolder -> holder.bind(
-                items[position] as OHealthOverview.TodayWorkout,
-                position,
-                lastPosition,
-                devicePaired
-            )
 
             is HomeRecyclerViewHolder.OreoBatteryPercentViewHolder -> holder.bind(
 
             )
 
-            is HomeRecyclerViewHolder.HeaderViewHolder -> holder.bind(
-                items[position] as OHealthOverview.Header,
-                position,
-            )
-
-            is HomeRecyclerViewHolder.PairDeviceViewHolder -> holder.bind(
-                position
-            )
 
             is HomeRecyclerViewHolder.AutoSportViewHolder -> holder.bind(
                 items[position] as OHealthOverview.AutoSport,
                 position,
             )
 
-            is HomeRecyclerViewHolder.OreoDummyViewHolder -> {}
             else -> {}
         }
     }
@@ -282,13 +213,22 @@ class OSummaryHealthOverviewAdapter :
     override fun getItemViewType(position: Int): Int {
         return when (items[position]) {
             is OHealthOverview.Readiness -> R.layout.list_readiness_card_item
+            is OHealthOverview.Sleep -> R.layout.list_sleep_card_item
             is OHealthOverview.Activity -> R.layout.list_activity_burn_card_item
+
+
+            is OHealthOverview.Alerts -> R.layout.list_o_alerts
+
             is OHealthOverview.FitnessOverView -> R.layout.list_health_overview_card_item
+
             is OHealthOverview.HeartRate -> R.layout.list_heart_rate_card_item
+
             is OHealthOverview.OreoBattery -> R.layout.list_oreo_battery_percent_item
             is OHealthOverview.ReadinessScore -> R.layout.list_readiness_score_card_item
-            is OHealthOverview.Sleep -> R.layout.list_sleep_card_item
+
+
             is OHealthOverview.SleepActivityScore -> R.layout.list_sleep_activity_card_item
+
             is OHealthOverview.TodayWorkout -> R.layout.oreo_layout_recent_activity
             is OHealthOverview.Header -> R.layout.list_o_header_card_item
             is OHealthOverview.PairDevice -> R.layout.list_o_pair_device
@@ -452,9 +392,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             devicePaired: Boolean
         ) {
             binding.imv.loadImage(binding.imv.context, R.drawable.ic_activity_card_bg1)
-            val scoreValue = data.data.activityScore ?: 0
+            val scoreValue = data.data.activityScore
 
-            if (scoreValue <= 0) {
+            if (scoreValue == null) {
                 binding.tvValue.text = "--"
                 binding.tvStatus.text = "No data"
                 binding.tvTodayDesc.text = ""
@@ -477,12 +417,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 "--"
             }
 
-            if (scoreValue >= 0) {
+            if ((scoreValue ?: 0) >= 0) {
                 binding.lottieAnimationView.repeatCount = 0
                 binding.lottieAnimationView.setAnimation(R.raw.lottie_meter_activity)
                 binding.lottieAnimationView.setMaxProgress(
                     MiscUtil.scorePercentCalculator(
-                        scoreValue.toFloat()
+                        (scoreValue ?: 0).toFloat()
                     )
                 )
                 binding.lottieAnimationView.playAnimation()
@@ -525,7 +465,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.tvDaysAvg.visible()
                 binding.sleepLineChart.visible()
                 binding.sleepLine.root.visible()
-                val trendValue = "${kotlin.math.abs(data.sleepTrend?:0)}%"
+                val trendValue = "${kotlin.math.abs(data.sleepTrend ?: 0)}%"
                 if (data.sleepTrend != null && data.sleepTrend > 0) {
                     binding.sleepTrendValue.text = trendValue
                     binding.sleepTrendValue.setTextColor(Color.parseColor("#29cc74"))
@@ -591,7 +531,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.activityTrendValue.visible()
                 binding.tvActivityFrom.visible()
 
-                val trendValue = "${kotlin.math.abs(data.activityTrend?:0)}%"
+                val trendValue = "${kotlin.math.abs(data.activityTrend ?: 0)}%"
                 if (data.activityTrend != null && data.activityTrend > 0) {
                     binding.activityTrendValue.text = trendValue
                     binding.activityTrendValue.setTextColor(Color.parseColor("#29cc74"))
@@ -635,92 +575,6 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.root.setOnClickListener {
                 //   itemClickListener?.invoke(it, data, position)
             }
-        }
-    }
-
-    class HeartRateViewHolder(private val binding: ListHeartRateCardItemBinding) :
-        HomeRecyclerViewHolder(binding) {
-        fun bind(
-            data: OHealthOverview.HeartRate,
-            position: Int,
-            lastPosition: Int,
-            devicePaired: Boolean
-        ) {
-
-            val chart = binding.candleChart
-
-            OCombineChartUtils.setChart(chart, data.xLabelList, data.axisMinimum, data.average)
-
-            val combinedData = CombinedData()
-
-            binding.tvHeartValue.text = data.value
-            binding.tvLastMeasure.text = data.lastTime
-
-            if (data.lineData.first.isNotEmpty() && data.lineData.first.size > 1) {
-                combinedData.setData(
-                    OCombineChartUtils.generateLineData(
-                        data.lineData.first,
-                        binding.candleChart,
-                        data.lineData.second,
-                        data.axisMinimum
-                    )
-                )
-                combinedData.setData(
-                    OCombineChartUtils.generateCandleData(
-                        data.candleValue,
-                        R.color.o_heart_bg
-                    )
-                )
-                chart.data = combinedData
-                chart.invalidate()
-            }
-
-            if (data.isMeasuring) {
-                binding.lottieAnimView.visible()
-                binding.imvHrMeasure.invisible()
-            } else {
-                binding.lottieAnimView.invisible()
-                binding.imvHrMeasure.visible()
-            }
-
-            binding.imvHrMeasure.setOnClickListener {
-                if (binding.tvLastMeasure.text == "measuring") {
-                    return@setOnClickListener
-                }
-
-                binding.tvHeartValue.text = "--"
-                binding.tvHeartValue.visible()
-                binding.tvHeartUnit.visible()
-                binding.tvLastMeasure.visible()
-                binding.tvEmptyConnect.gone()
-                binding.tvLastMeasure.text = "measuring"
-
-                binding.lottieAnimView.visible()
-                binding.imvHrMeasure.invisible()
-
-                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.MeasureHRClick)
-            }
-
-            if (data.errorMessage.isNullOrEmpty()) {
-                binding.tvEmptyConnect.gone()
-            } else {
-                binding.tvEmptyConnect.text = data.errorMessage
-                binding.tvEmptyConnect.visible()
-            }
-            if (data.value.toInt() > 0) {
-                binding.tvEmptyConnect.gone()
-                binding.tvHeartValue.visible()
-                binding.tvHeartUnit.visible()
-                binding.tvLastMeasure.visible()
-            } else {
-                binding.tvHeartValue.gone()
-                binding.tvHeartUnit.gone()
-                binding.tvLastMeasure.gone()
-            }
-
-//            binding.root.setOnClickListener {
-////                   itemClickListener?.invoke(it, data, position)
-//            }
         }
     }
 
@@ -809,106 +663,6 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         }
     }
 
-    class TodayWorkoutPercentViewHolder(private val binding: OreoLayoutRecentActivityBinding) :
-        HomeRecyclerViewHolder(binding) {
-        fun bind(
-            todayWorkout: OHealthOverview.TodayWorkout,
-            position: Int,
-            lastPosition: Int,
-            devicePaired: Boolean
-        ) {
-
-            binding.tvEmptyMsg.gone()
-            binding.rvWorkouts.layoutManager =
-                LinearLayoutManager(binding.rvWorkouts.context, LinearLayoutManager.VERTICAL, false)
-            val adapter1 = OreoRWorkoutAdapter(object : OreoRWorkoutAdapter.OnItemClickListener {
-                override fun onItemClick(data: OActivityListModal, position: Int) {
-                    itemClickListener?.invoke(
-                        OSummaryHealthOverviewClickEnum.ItemWorkoutClick(
-                            data.id ?: "",
-                            data.getFormattedActivityName(),
-                            position
-                        )
-                    )
-                }
-
-            })
-
-
-            if (todayWorkout.isRingConnected) {
-                binding.viewAddWorkout.visible()
-            } else {
-                binding.viewAddWorkout.gone()
-            }
-
-            binding.rvWorkouts.apply {
-                adapter = adapter1
-                setRecycledViewPool(RecyclerView.RecycledViewPool())
-            }
-
-//            var todayWorkText = "Workouts"
-//            todayWorkout.listData.forEach {
-//                val date = it.createdDate
-//                if (date == DateFormats.getCurrentDate(DateFormats.dateFormat6)) {
-//                    todayWorkText = "Today’s Workouts"
-//                    return@forEach
-//                }
-//            }
-//            binding.textView66.text = todayWorkText
-            adapter1.setData(todayWorkout.listData)
-            binding.viewAddWorkout.setOnClickListener {
-                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.AddWorkoutClick)
-
-            }
-
-            binding.ivViewAll.setOnClickListener {
-                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.ViewAllWorkoutClick)
-
-            }
-//            if (todayWorkout.listData.isNotEmpty()) {
-//                binding.ivViewAll.visible()
-//            } else
-//                binding.ivViewAll.invisible()
-
-        }
-    }
-
-    class OreoDummyViewHolder(private val binding: OreoDummyViewBinding) :
-        HomeRecyclerViewHolder(binding) {
-        fun bind(
-
-        ) {
-
-
-        }
-    }
-
-    class HeaderViewHolder(private val binding: ListOHeaderCardItemBinding) :
-        HomeRecyclerViewHolder(binding) {
-        fun bind(
-            data: OHealthOverview.Header,
-            position: Int,
-        ) {
-            binding.tvGreeting.text = data.greeting
-            binding.tvDate.text = data.date
-
-        }
-    }
-
-    class PairDeviceViewHolder(private val binding: ListOPairDeviceBinding) :
-        HomeRecyclerViewHolder(binding) {
-        fun bind(
-            position: Int,
-        ) {
-
-            binding.btnPairDevice.setOnClickListener {
-                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.PairDeviceClicked)
-            }
-
-
-        }
-    }
-
     class AutoSportViewHolder(private val binding: ListOWAlertCardItemBinding) :
         HomeRecyclerViewHolder(binding) {
         fun bind(
@@ -968,7 +722,62 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 //        }
 //    }
 
+    class AlertsAdapter(val listener: AlertClickListener) :
+        RecyclerView.Adapter<AlertsAdapter.ViewHolder>() {
+        private var mDataSet = ArrayList<DashAlert>()
 
+        inner class ViewHolder(private val binding: RowDashAlertBinding) :
+            RecyclerView.ViewHolder(binding.root) {
+
+            fun bind(data: DashAlert) {
+
+                binding.tvAlertMessage.text = data.message
+                if (data.isCancellable) {
+                    binding.ivClose.visible()
+                } else {
+                    binding.ivClose.invisible()
+                }
+
+                binding.root.setOnClickListener {
+                    listener.onAlertClicked(data.type)
+                }
+            }
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view =
+                RowDashAlertBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            return ViewHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            holder.bind(mDataSet[position])
+        }
+
+        override fun getItemCount(): Int = mDataSet.size
+
+        fun setDataSet(dataSet: HashMap<AlertType, DashAlert>) {
+            mDataSet.clear()
+            val list = ArrayList<DashAlert>()
+            dataSet.forEach {
+                list.add(it.value.apply {
+                    this.type = it.key
+                })
+            }
+            mDataSet.addAll(list)
+            notifyDataSetChanged()
+        }
+    }
+
+
+}
+
+interface AlertClickListener {
+    fun onAlertClicked(alertType: AlertType)
 }
 
 

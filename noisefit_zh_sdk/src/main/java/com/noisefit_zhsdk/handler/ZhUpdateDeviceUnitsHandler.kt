@@ -268,6 +268,20 @@ constructor(
             ), object : SendCmdStateListener(null) {
                 override fun onState(state: SendCmdState) {
                     LOGS.d(ZhQueryDeviceUnitsHandler.TAG, "$state")
+
+                    if(state==SendCmdState.NOT_SUPPORT){
+                        testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                            UpdateDeviceDataCallback.ManualMeasurementObtained(
+                                ManualMeasurement(
+                                    false,
+                                    true,
+                                    0,
+                                    manualMeasureType,
+                                    System.currentTimeMillis()
+                                )
+                            )
+                        )
+                    }
                 }
             })
     }

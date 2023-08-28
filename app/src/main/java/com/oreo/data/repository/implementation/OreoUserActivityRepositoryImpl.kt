@@ -923,7 +923,7 @@ class OreoUserActivityRepositoryImpl(
         return oreoAutoSportDataImpl.getAllNotAcceptingData()?.size ?: 0
     }
 
-    override suspend fun getSummaryHRHealthOverview(): OHealthOverview? {
+    override suspend fun getSummaryHRHealthOverview(): OHealthOverview.HeartRate? {
         try {
             val todayDate = DateFormats.getTodaysDateString(10)
             return offlineDataMapper.convertHeartRateOverviewData(

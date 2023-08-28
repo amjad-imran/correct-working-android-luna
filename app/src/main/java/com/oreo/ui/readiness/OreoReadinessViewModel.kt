@@ -3,8 +3,10 @@ package com.oreo.ui.readiness
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.RingDataStore
@@ -119,6 +121,7 @@ constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
+
                             _readinessHistoryResponse.postValue(it.reversed())
 
                             it.firstOrNull()?.let { data ->
@@ -559,10 +562,18 @@ constructor(
         }
     }
 
-    fun getDummyBreakUpDataForTimeDisplay(): List<Int> {
+    fun getDummyBreakUpDataForTimeDisplay(): ArrayList<Int> {
         val dummyList = ArrayList<Int>()
         for (i in 0..287) {
             dummyList.add(0)
+        }
+        return dummyList
+
+    }
+    fun getDummyBreakUpDataForTimeDisplayFloat(): ArrayList<Float> {
+        val dummyList = ArrayList<Float>()
+        for (i in 0..287) {
+            dummyList.add(0f)
         }
         return dummyList
 

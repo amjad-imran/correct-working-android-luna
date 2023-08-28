@@ -245,7 +245,7 @@ class OSleepDetailsParentFragment :
             }
 
             ViewItemClickType.TOTAL_CALORIES_BURNED.name -> {
-                trendTitle = "Total calories burned"
+                trendTitle = "Total calories"
             }
 
             ViewItemClickType.STEPS.name -> {

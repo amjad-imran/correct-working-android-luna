@@ -54,6 +54,7 @@
         <attr name="xMax" />
         <attr name="xMin" />
         <attr name="xTextSize" />
+        <attr name="noDataSize" />
         <attr name="leftWith" />
         <attr name="rightWith" />
         <attr name="bottomWith" />
@@ -189,6 +190,7 @@
     <attr name="xMax" format="integer"/>
     <attr name="xMin" format="integer"/>
     <attr name="xTextSize" format="dimension"/>
+    <attr name="noDataSize" format="dimension"/>
     <attr name="yTextSize" format="dimension"/>
     <attr name="leftWith" format="dimension"/>
     <attr name="rightWith" format="dimension"/>

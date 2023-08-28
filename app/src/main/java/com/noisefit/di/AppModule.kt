@@ -67,9 +67,16 @@ object AppModule {
     @Provides
     fun provideOreoNetworkEntityMapper(
         stressDataImpl: OreoStressDataImpl,
+        respiratoryDataImpl: OreoRespiratoryDataImpl,
+        temperatureDataImpl: OreoBodyTemperatureDataImpl,
         oreoHeartRateDataImpl: OreoHeartRateDataImpl,
     ): OreoOnlineDataMapper {
-        return OreoOnlineDataMapper(stressDataImpl, oreoHeartRateDataImpl)
+        return OreoOnlineDataMapper(
+            stressDataImpl,
+            respiratoryDataImpl,
+            temperatureDataImpl,
+            oreoHeartRateDataImpl
+        )
     }
 
     @Singleton

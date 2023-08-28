@@ -32,10 +32,11 @@ class RateNowBottomSheet :
         cameFrom = arguments?.let {
             RateNowBottomSheetArgs.fromBundle(it).cameFrom
         }.toString()
-        val msg: String = if (localDataStore.getUser()?.firstName.isNullOrEmpty())
-            "Hi Noisemaker, Your feedback is very important for us. please take a moment to rate us."
-        else
-            "Hi ${localDataStore.getUser()?.firstName}, Your feedback is very important for us. please take a moment to rate us."
+//        val msg: String = if (localDataStore.getUser()?.firstName.isNullOrEmpty())
+//            "Hi Noisemaker, Your feedback is very important for us. please take a moment to rate us."
+//        else
+//            "Hi ${localDataStore.getUser()?.firstName}, Your feedback is very important for us. please take a moment to rate us."
+        val msg="Hearing from you helps us create the best experience on Luna Ring."
         binding.tvMessage.text = msg
         initListener()
 

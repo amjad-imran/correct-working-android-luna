@@ -3,25 +3,31 @@ package com.oreo.ui.activity
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoActivityBinding
+import com.noisefit.ui.common.OverlapDecoration
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit.util.ApplicationUtils
-import com.noisefit_commans.ui.*
+import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DistanceUtil
 import com.noisefit_commans.utils.LOGS
-import com.oreo.data.model.CandleChartModel
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.OActivityListModal
@@ -33,8 +39,8 @@ import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
-import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Random
 
 
 @AndroidEntryPoint
@@ -54,6 +60,10 @@ class OreoActivityFragment :
             }
 
         })
+    }
+
+    private val mDayMovementAdapter: DayMovementsAdapter by lazy {
+        DayMovementsAdapter()
     }
 
     private fun moveToDetailsScreen(data: OActivityListModal, position: Int) {
@@ -117,8 +127,7 @@ class OreoActivityFragment :
         data.forEach {
             fragments.add(OreoActivityBannerFragment.newInstance(it))
         }
-        val winsAdapter =
-            OreoSleepBannerAdapter(childFragmentManager, lifecycle, fragments)
+        val winsAdapter = OreoSleepBannerAdapter(childFragmentManager, lifecycle, fragments)
         binding.lytAScoreData.lytAScoreBanner.vpBannerSlider.apply {
             clipToPadding = false
             clipChildren = false
@@ -275,18 +284,14 @@ class OreoActivityFragment :
         binding.lytAContributor.tvTitle.text = getString(R.string.text_activity_contributors)
         mActivityAdapter.setData(mViewModel.getContributorsData(it) as ArrayList<Contributors>)
 
-
         //handle daily movement views
         handleMovementViews(it)
-
-
         updateWorkoutUI(it.workout)
-
     }
 
 
     private fun returnMovementProgress(value: Int, total: Int): Pair<Int, String> {
-        val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(value.times(5))
+        val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(value.times(15))
         val leftText = "$hour h $minute min"
         var progress = (value.toFloat() / total).times(100).toInt()
 
@@ -300,97 +305,45 @@ class OreoActivityFragment :
 
 
     private fun handleMovementViews(it: OreoActivityModel) {
-
-
-        val candleChartModelList: MutableList<CandleChartModel> =
-            java.util.ArrayList<CandleChartModel>()
-
-
         binding.lytDailyMovement.lytDMHigh.tvTitle.text = getString(R.string.text_high_movement)
-        var highMovValue = 0
-        var medMovValue: Int = 0
-        var lowMovValue: Int = 0
-        var inactiveMovValue: Int = 0
+
         val movementList = it.daytimeMovement?.movement
 
-        val baseHrList = UtilClass.graphBaseInterval(
-            it.daytimeMovement?.startTime,
-            it.daytimeMovement?.endTime,
-            movementList?.size ?: 288
-        )
+        val newList = mViewModel.getCombinedMovementData(movementList, false)
+        val newListInvalid = mViewModel.getCombinedMovementData(movementList, true)
 
-        //   LOGS.d("asdsdadsasad ${Gson().toJson(baseHrList)}")
-
+        var highMovValue = 0
+        var medMovValue = 0
+        var lowMovValue = 0
+        var inactiveMovValue = 0
         if (movementList?.isNotEmpty() == true) {
-            movementList.forEachIndexed { index, data ->
-
-                val chartModel = CandleChartModel()
-
-                chartModel.bottomLineText = baseHrList[index]
-
+            newListInvalid.forEachIndexed { index, data ->
                 when (data) {
                     0 -> {
-                        chartModel.length =
-                            (binding.lytDailyMovement.candleChart.max * 0.2).toInt()
-                        chartModel.color = Color.parseColor("#3dffffff")
-                        chartModel.type = CandleChartModel.Type.INACTIVE
                         inactiveMovValue++
                     }
+
                     1 -> {
                         lowMovValue++
-                        chartModel.length =
-                            (binding.lytDailyMovement.candleChart.max * 0.4).toInt()
-                        chartModel.color = Color.parseColor("#2d525b")
-                        chartModel.type = CandleChartModel.Type.LOW
-
                     }
 
                     2 -> {
                         medMovValue++
-                        chartModel.length =
-                            (binding.lytDailyMovement.candleChart.max * 0.6).toInt()
-                        chartModel.color = Color.parseColor("#8ed3f1")
-                        chartModel.type = CandleChartModel.Type.MEDIUM
                     }
 
                     3 -> {
                         highMovValue++
-                        chartModel.length =
-                            (binding.lytDailyMovement.candleChart.max * 0.8).toInt()
-                        chartModel.color = Color.parseColor("#ffffff")
-
-                        chartModel.type = CandleChartModel.Type.HIGH
                     }
 
-                    else -> {
-                        chartModel.length =
-                            (binding.lytDailyMovement.candleChart.max * 0.2).toInt()
-                        chartModel.color = Color.parseColor("#3dffffff")
-                        chartModel.type = CandleChartModel.Type.INACTIVE
-                    }
+                    else -> {}
                 }
-                chartModel.value = data
-                candleChartModelList.add(chartModel)
             }
-
-
-
-            binding.lytDailyMovement.candleChart.updateData(candleChartModelList)
-        } else {
-            for (index in 0..287) {
-                val chartModel = CandleChartModel()
-                //inactiveMovValue++
-                chartModel.bottomLineText = baseHrList[index]
-                chartModel.length =
-                    (binding.lytDailyMovement.candleChart.max * 0.2).toInt()
-                chartModel.color = Color.parseColor("#4c4c4c")
-                chartModel.type = CandleChartModel.Type.INACTIVE
-                chartModel.value = 0
-                candleChartModelList.add(chartModel)
-            }
-
-            binding.lytDailyMovement.candleChart.updateData(candleChartModelList)
         }
+
+        binding.lytDailyMovement.movementChart.setData(newList)
+
+        //mDayMovementAdapter.setData(newList)
+
 
         val totalValue = highMovValue + medMovValue + lowMovValue + inactiveMovValue
 
@@ -398,8 +351,7 @@ class OreoActivityFragment :
         val (medProgress, medRemark) = returnMovementProgress(medMovValue, totalValue)
         val (lowProgress, lowRemark) = returnMovementProgress(lowMovValue, totalValue)
         val (inactiveProgress, inactiveRemark) = returnMovementProgress(
-            inactiveMovValue,
-            totalValue
+            inactiveMovValue, totalValue
         )
 
 
@@ -427,6 +379,7 @@ class OreoActivityFragment :
             ContextCompat.getColor(requireContext(), R.color.inactive_movement)
         )
     }
+
 
 
     private fun distanceDefaultView() {
@@ -470,6 +423,13 @@ class OreoActivityFragment :
         with(binding.lytWorkouts.rvWorkouts) {
             adapter = mWorkoutAdapter
         }
+
+       /* binding.lytDailyMovement.rvMovements.apply {
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            addItemDecoration(OverlapDecoration(dpToPx(-29, this.context).toInt()))
+            adapter = mDayMovementAdapter
+        }*/
 
 
     }
@@ -520,6 +480,9 @@ class OreoActivityFragment :
     }
 
     override fun initListener() {
+
+
+
         binding.lytEmptyView.bGoToSettings.setOnClickListener {
             mViewModel.ringDataStore.setActivityWalkAroundShown(true)
             showWalkAround(false)
@@ -601,9 +564,7 @@ class OreoActivityFragment :
             val topGraphData = mViewModel.getPrefixAndSuffixList(it)
             mSharedViewModel.selectedDate = mViewModel.dateList[mViewModel.dateList.size - 1]
             binding.rvTopGraph.updateDataWithMax(
-                topGraphData.first,
-                topGraphData.third,
-                topGraphData.second
+                topGraphData.first, topGraphData.third, topGraphData.second
             )
             mViewModel.getContributorInfo()
         }

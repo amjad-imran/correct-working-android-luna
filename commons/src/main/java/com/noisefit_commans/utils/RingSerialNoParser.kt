@@ -23,8 +23,7 @@ class RingSerialNoParser {
                 (serialNo.substring(8, 10)).decodeHex().byteToInt().toString() + ""
             val text6: String =
                 (serialNo.substring(10, 12)).decodeHex().byteToInt().toString() + ""
-            val text7: String =
-                ((serialNo.substring(12, 16)).decodeHex()).byteToInt().toString() + ""
+            val text7 = Integer.decode("0x"+serialNo.substring(12, 16)).toString()
             return (text1 + text2 + text3 + repairZero(text4, 2)
                     + repairZero(text5, 2) + repairZero(text6, 2) + repairZero(text7, 5))
         } catch (exp: Exception) {

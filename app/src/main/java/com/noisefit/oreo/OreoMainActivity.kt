@@ -118,14 +118,17 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             checkBluetoothPermission(permissionGranted = {
                 if (btAdapter != null && !btAdapter.isEnabled) {
+                    viewModel.sessionManager.setBluetoothState(false)
                     enableBluetooth()
                 }
             })
         } else {
             if (btAdapter == null) {
+                viewModel.sessionManager.setBluetoothState(false)
                 return
             }
             if (!btAdapter.isEnabled) {
+                viewModel.sessionManager.setBluetoothState(false)
                 enableBluetooth()
                 return
             }
@@ -141,6 +144,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
         } catch (exp: Exception) {
+            viewModel.sessionManager.setBluetoothState(false)
             showShortToast(getString(R.string.bluetooth_turn_on_request))
         }
     }
@@ -237,6 +241,13 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
     override fun observeSubscriber() {
+
+        viewModel.checkBluetooth.observe(this) {
+            it.getContent()?.let {
+                checkBluetooth()
+            }
+        }
+
 
         viewModel.sessionManager.bluetoothState.observe(this) {
             if (it) {

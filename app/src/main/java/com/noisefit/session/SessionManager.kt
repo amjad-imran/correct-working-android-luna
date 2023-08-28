@@ -164,7 +164,6 @@ constructor(
     }
 
     fun clearSessionManager() {
-        forceOtaResponse = null
         forceOtaResponseRing = null
         _connectedDeviceRing.postValue(null)
         _connectState.postValue(ConnectState.UnPaired())
@@ -179,7 +178,6 @@ constructor(
 
 
     fun clearSessionManagerHibernate() {
-        forceOtaResponse = null
         forceOtaResponseRing = null
         _connectedDeviceRing.value = (null)
     }

@@ -100,7 +100,7 @@
                         android:layout_height="wrap_content"
                         android:visibility="visible"
                         app:image="@drawable/ic_profile_about"
-                        app:text="About Device" />
+                        app:text="About device" />
 
 
                 </LinearLayout>
