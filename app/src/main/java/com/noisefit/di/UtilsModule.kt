@@ -8,6 +8,7 @@ import com.noisefit.util.moveToServer.BatteryNotificationUtils
 import com.noisefit.util.moveToServer.SleepNotificationUtils
 import com.noisefit.watch.WatchesSDK
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.utils.*
 import dagger.Module
 import dagger.Provides
@@ -80,9 +81,10 @@ object UtilsModule {
     @Provides
     fun provideBatteryNotificationUtils(
         localDataStore: DataStoredInterface,
+        watchDataStore: WatchDataStore,
         sessionManager: SessionManager
     ): BatteryNotificationUtils {
-        return BatteryNotificationUtils(localDataStore, sessionManager)
+        return BatteryNotificationUtils(localDataStore, watchDataStore, sessionManager)
     }
 
     @Singleton

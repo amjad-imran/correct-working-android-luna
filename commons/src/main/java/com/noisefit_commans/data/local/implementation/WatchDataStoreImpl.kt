@@ -3,6 +3,7 @@ package com.noisefit_commans.data.local.implementation
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.noisefit_commans.data.local.abstraction.ChargingNotificationLevel
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.models.Contact
 import com.noisefit_commans.models.CustomReplyData
@@ -44,6 +45,8 @@ private const val WATCH_MAPS_LAT_LONG = "WATCH_MAPS_LAT_LONG"
 private const val DEFAULT_VALUE = "DEFAULT_VALUE"
 private const val SERIAL_NO = "SERIAL_NO"
 
+private const val CHARGING_NOTIFICATION = "CHARGING_NOTIFICATION"
+
 private const val RYEEX_WATCH_TOKEN_ARG = "RYEEX_WATCH_TOKEN_ARG"
 private const val WEATHER_SPORT_DATA_KEY = "WEATHER_SPORT_DATA_KEY_2"
 
@@ -57,6 +60,28 @@ constructor(
     private val gson: Gson,
     private val mPrefs: SharedPreferences
 ) : WatchDataStore {
+
+    override fun resetChargingNotificationData() {
+        mPrefs.edit().remove(CHARGING_NOTIFICATION).commit()
+    }
+
+    override fun getChargingNotificationsShown(): HashMap<String, Boolean> {
+        val hashMap = Gson().fromJson<HashMap<String, Boolean>>(
+            mPrefs.getString(CHARGING_NOTIFICATION, "") ?: ""
+        )
+        return hashMap ?: HashMap()
+    }
+
+    override fun setChargingNotificationShown(level: ChargingNotificationLevel) {
+        var hashMap = Gson().fromJson<HashMap<String, Boolean>>(
+            mPrefs.getString(CHARGING_NOTIFICATION, "") ?: ""
+        )
+        if (hashMap == null) {
+            hashMap = HashMap()
+        }
+        hashMap[level.name] = true
+        mPrefs.edit().putString(CHARGING_NOTIFICATION, Gson().toJson(hashMap)).commit()
+    }
 
     override fun getSerialNo(): String? {
         return mPrefs.getString(SERIAL_NO, null)
