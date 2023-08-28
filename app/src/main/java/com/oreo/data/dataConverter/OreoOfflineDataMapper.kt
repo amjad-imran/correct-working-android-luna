@@ -39,6 +39,7 @@ import com.oreo.data.db.implementation.OreoHeartRateDataImpl
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.TapMeasureState
 import org.joda.time.format.ISODateTimeFormat.hour
+import java.util.Calendar
 import javax.inject.Inject
 
 
@@ -349,7 +350,7 @@ constructor(
         var overAllMinValue = Int.MAX_VALUE
         var overAllMaxValue = -1
         var hrCount = 0
-        var lastHrValue: Int? = null
+        var lastHrValue: Pair<Int, Long>? = null//HR value,timer
         hRWithIntervalList.forEachIndexed { index, hrList ->
 
 
@@ -369,9 +370,12 @@ constructor(
             }
 
 
-            hrList.forEach { value ->
+            hrList.forEachIndexed { index2, value ->
                 if (value != 0) {
-                    lastHrValue = value
+
+                    val indexMillis = ((index * 6) + index2) * 5 * 1000L
+
+                    lastHrValue = Pair(value, indexMillis)
                 }
             }
 
@@ -428,15 +432,35 @@ constructor(
             lastHr = lastHrValue.toString()
         }*/
 
-        var measureTime = 0L
+        var manualMeasureTime = 0L
         /*if (lastHr == "0") {*/
         val lastMeasureValue = ringDataStore.getManualMeasurementValue()
         if (lastMeasureValue != null && (lastMeasureValue.timeStamp) + (5 * 60 * 1000) > System.currentTimeMillis() && lastMeasureValue.value > 0) {
             lastHr = lastMeasureValue.value.toString()
-            measureTime = lastMeasureValue.timeStamp
+            manualMeasureTime = lastMeasureValue.timeStamp
 
         }
         //}
+
+
+        if (lastHrValue != null) {
+            val cal = Calendar.getInstance()
+            cal.set(Calendar.HOUR, 0)
+            cal.set(Calendar.MINUTE, 0)
+            cal.set(Calendar.SECOND, 0)
+            cal.set(Calendar.MILLISECOND, 0)
+
+            val dayStartTimeStamp = cal.timeInMillis
+            val hrTimestamp = dayStartTimeStamp + lastHrValue?.second!!
+            if (hrTimestamp > manualMeasureTime) {
+                lastHr = lastHrValue?.first.toString()
+                manualMeasureTime = hrTimestamp
+            }
+
+            //LOGS.w("dayStartTimeStamp $dayStartTimeStamp dataMillis ${lastHrValue?.first} ${lastHrValue?.second} ${dayStartTimeStamp + lastHrValue?.second!!}")
+        }
+
+
 
 
         if (overAllMinValue == Int.MAX_VALUE) {
@@ -450,11 +474,11 @@ constructor(
         //LOGS.d("Sdaljhsadjhsadjhjksda ${Gson().toJson(lineChartList)}")
         var measureState = TapMeasureState.DEFAULT
 
-        val measureText = if (measureTime == 0L) {
+        val measureText = if (manualMeasureTime == 0L) {
             ""
         } else {
             measureState = TapMeasureState.LAST_MEASURED
-            "Last measured ${DateFormats.getRelativeTime(measureTime).lowercase()}"
+            "Last measured ${DateFormats.getRelativeTime(manualMeasureTime).lowercase()}"
         }
 
         return OHealthOverview.HeartRate(
