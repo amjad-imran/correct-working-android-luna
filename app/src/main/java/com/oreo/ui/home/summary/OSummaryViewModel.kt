@@ -197,7 +197,7 @@ constructor(
         }"
     }
 
-    private fun getInitialOfflineData(data: OreoDashboardResponseModel, hitActivityData: Boolean) {
+    private fun getInitialOfflineData(data: OreoDashboardResponseModel) {
 
 
         viewModelScope.launch(Dispatchers.IO) {
