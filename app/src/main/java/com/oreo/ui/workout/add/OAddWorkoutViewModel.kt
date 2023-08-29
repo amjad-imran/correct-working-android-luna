@@ -159,6 +159,11 @@ constructor(
     }
 
     fun getWorkoutDuration(): Int {
+
+        if(!isStartTimeSelected || !isEndTimeSelected){
+            return 0
+        }
+
         val diffInHours = addWorkout.endHour - addWorkout.startHour
 
         return (diffInHours * 60) + (addWorkout.endMinute - addWorkout.startMinute)
