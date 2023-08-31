@@ -149,7 +149,7 @@ class OreoSleepDetailFragment :
             Color.parseColor("#0Dff59da")
         )
         binding.lytHRVariability.lineChart.updateDataWithMax(
-            sleepChart, 5, true, false,  GraphDummyModel(
+            sleepChart, 20, true, false,  GraphDummyModel(
                 hasDummyData,0,200
             )
         )
@@ -214,7 +214,7 @@ class OreoSleepDetailFragment :
         )
 
         binding.lytHeartRate.lineChart.updateDataWithMax(
-            sleepChart, 5, false, true,
+            sleepChart, 20, false, true,
             GraphDummyModel(
                 hasDummyData,40,100
             )

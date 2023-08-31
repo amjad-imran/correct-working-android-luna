@@ -405,7 +405,8 @@ constructor(val zhApplicationHandler: ZhApplicationHandler) : ConnectionDataActi
                     })
                 } else {
                     callback.invoke(ResetStates.NOT_ON_CHARGING)
-
+                    isDisconnect = true
+                    controlBleTools?.disconnect()
                 }
 
             }
@@ -433,6 +434,8 @@ constructor(val zhApplicationHandler: ZhApplicationHandler) : ConnectionDataActi
                     BleCommonAttributes.STATE_TIME_OUT -> {
                         callback.invoke(ResetStates.CONNECTION_FAILED)
                         AppLogs.sendAppLogs("$TAG : forceDisconnect onConnectState TimeOut")
+                        isDisconnect = true
+                        controlBleTools?.disconnect()
 
                     }
 

@@ -693,7 +693,10 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 lytHeartRate.tvEmptyConnect.gone()
 
                 lytHeartRate.tvHeartValue.text = data.value
-                lytHeartRate.tvLastMeasure.text = data.lastTime
+                lytHeartRate.tvLastMeasure.apply {
+                    setTextColor(Color.parseColor("#a3ffffff"))
+                    text = data.lastTime
+                }
 
             }
 
@@ -701,31 +704,40 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 lytHeartRate.lottieAnimView.visible()
                 lytHeartRate.imvHrMeasure.invisible()
 
-                lytHeartRate.groupValue.visible()
-                lytHeartRate.tvEmptyConnect.gone()
+                lytHeartRate.groupValue.gone()
+                lytHeartRate.tvEmptyConnect.visible()
 
-                lytHeartRate.tvHeartValue.text = "--"
-                lytHeartRate.tvLastMeasure.text = "measuring"
+                lytHeartRate.tvEmptyConnect.apply {
+                    setTextColor(resources.getColor(R.color.white))
+                    text = "Measuring.."
+                }
             }
 
             TapMeasureState.DEFAULT -> {
                 lytHeartRate.lottieAnimView.invisible()
                 lytHeartRate.imvHrMeasure.visible()
 
-                lytHeartRate.groupValue.visible()
-                lytHeartRate.tvEmptyConnect.gone()
-
-                lytHeartRate.tvHeartValue.text = "--"
-                lytHeartRate.tvLastMeasure.text = "Tap to measure"
+                lytHeartRate.groupValue.gone()
+                lytHeartRate.tvEmptyConnect.visible()
+                lytHeartRate.tvEmptyConnect.apply {
+                    setTextColor(Color.parseColor("#88b0ff"))
+                    text = "Tap to measure"
+                }
             }
 
             TapMeasureState.ERROR -> {
                 lytHeartRate.lottieAnimView.invisible()
                 lytHeartRate.imvHrMeasure.visible()
 
-                lytHeartRate.groupValue.gone()
-                lytHeartRate.tvEmptyConnect.visible()
-                lytHeartRate.tvEmptyConnect.text = "Unable to measure"
+                lytHeartRate.groupValue.visible()
+                lytHeartRate.tvEmptyConnect.gone()
+                lytHeartRate.tvHeartValue.gone()
+
+                lytHeartRate.tvLastMeasure.apply {
+                    setTextColor(Color.parseColor("#88b0ff"))
+                    text = "Try again"
+                }
+                lytHeartRate.tvHeartUnit.text = "Unable to measure"
 
             }
         }
