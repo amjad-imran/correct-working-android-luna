@@ -601,6 +601,8 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
                 ResetStates.CONNECTED -> {}
                 ResetStates.CONNECTION_FAILED -> {
                     context.showShortToast("Connection Failed")
+
+
                     alert.dismiss()
                     viewModel.navigateUp.postValue(Event(true))
                 }
