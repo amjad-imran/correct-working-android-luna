@@ -1,5 +1,7 @@
 package com.noisefit_commans.data.model
 
+import java.io.File
+
 class FeedbackNew(
     var platform: String,
     var mobileDevice: String,
@@ -12,4 +14,6 @@ class FeedbackNew(
     var suggestions: String,
     var date: String,
     var user_id: Int? = null,
+    var file: File? = null,
+    var watchLogs: File? = null
 )
