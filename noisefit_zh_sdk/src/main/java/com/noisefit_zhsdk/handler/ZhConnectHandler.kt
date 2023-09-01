@@ -390,7 +390,7 @@ constructor(val zhApplicationHandler: ZhApplicationHandler) : ConnectionDataActi
                 if (chargeStatus == 1) {
                     isCharging = true
                 }
-                LOGS.d("onBatteryInfo ${chargeStatus} $isCharging")
+                LOGS.d("onBatteryInfo $capacity $chargeStatus $isCharging")
 
                 if (isCharging) {
 

@@ -183,6 +183,13 @@ object FileLogsUtils {
         return getUri(path, context)
     }
 
+    fun getFileUri(
+        context: Context
+    ): Uri? {
+        val path = "$LogsFolder/$LogsTxtFile"
+        return getUri(path, context)
+    }
+
     fun getZipFileUri(context: Context,path: String): Uri? {
         return getUri(path, context)
     }
