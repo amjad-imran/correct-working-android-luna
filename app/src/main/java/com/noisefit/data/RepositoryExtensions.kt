@@ -1,7 +1,6 @@
 package com.noisefit.data
 
 import com.google.gson.Gson
-import com.noisefit_commans.data.UIComponentType
 import com.noisefit.data.local.db.CacheConstants.CACHE_TIMEOUT
 import com.noisefit.data.local.db.CacheErrors.CACHE_ERROR_TIMEOUT
 import com.noisefit.data.local.db.CacheErrors.CACHE_ERROR_UNKNOWN
@@ -11,7 +10,9 @@ import com.noisefit.data.remote.NetworkErrors.NETWORK_ERROR
 import com.noisefit.data.remote.NetworkErrors.NETWORK_ERROR_205
 import com.noisefit.data.remote.NetworkErrors.NETWORK_ERROR_TIMEOUT
 import com.noisefit.data.remote.NetworkErrors.NETWORK_ERROR_UNKNOWN
+import com.noisefit.data.remote.NetworkErrors.WRONG_CLIENT_TIME_ERROR
 import com.noisefit.data.remote.base.Resource
+import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.response.ErrorResponse
 import com.noisefit_commans.utils.LOGS
 import kotlinx.coroutines.CoroutineDispatcher
@@ -52,7 +53,13 @@ suspend fun <T> safeApiCallFlow(
                     emit(networkError(NETWORK_ERROR_205, 205))
                 }
                 is IOException -> {
-                    emit(networkError(NETWORK_ERROR, null))
+                    val message = throwable.message
+                    if (message == WRONG_CLIENT_TIME_ERROR) {
+                        emit(networkError(message, null))
+                    } else {
+                        emit(networkError(NETWORK_ERROR, null))
+                    }
+
                 }
                 is HttpException -> {
                     val code = throwable.code()
@@ -114,9 +121,7 @@ private fun genericError(message: ErrorResponse?, statusCode: Int?): Resource.Ge
 }
 
 private fun networkError(message: String?, statusCode: Int?): Resource.NetworkError {
-    message?.let {
-        LOGS.d(it)
-    }
+
 
     //return Resource.NetworkError(message, statusCode)
     return Resource.NetworkError(
@@ -125,6 +130,17 @@ private fun networkError(message: String?, statusCode: Int?): Resource.NetworkEr
         ), statusCode
     )
 }
+
+//private fun wrongClientTimeError(message: String?, statusCode: Int?): Resource.WrongClientTimeError {
+//
+//
+//    //return Resource.NetworkError(message, statusCode)
+//    return Resource.WrongClientTimeError(
+//        com.noisefit_commans.data.ErrorResponse(
+//            UIComponentType.WrongTimeDialog(message)
+//        ), statusCode
+//    )
+//}
 
 private fun convertErrorBody(throwable: HttpException): ErrorResponse? {
     return try {

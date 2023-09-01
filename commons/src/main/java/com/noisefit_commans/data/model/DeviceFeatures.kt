@@ -175,4 +175,6 @@ data class DeviceFeatures(
     var cwGif: String = "",
     @SerializedName("sleep_reminder")
     var sleepReminder: Int = 0,
+    @SerializedName("share_logs")
+    var shareLogs: Int = 0,
 )

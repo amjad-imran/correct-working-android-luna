@@ -7,9 +7,9 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import com.noisefit.data.remote.NetworkErrors.WRONG_CLIENT_TIME_ERROR
 import com.noisefit.data.remote.abstraction.TokenRefreshApi
 import com.noisefit.data.remote.base.Resource
-import com.noisefit.data.repository.LastSyncItems
 import com.noisefit.data.repository.LastSyncProvider
 import com.noisefit.data.safeApiCallFlow
 import com.noisefit.luna.BuildConfig
@@ -51,6 +51,8 @@ class NetworkConnectionInterceptor(
 
     private val STATUS_CODE_LOGOUT = 401
     private val STATUS_CODE_REFRESH = 403
+    private val WRONG_TIME_CODE = 406
+
 
     /**
      * Created here because of cyclic dependency
@@ -109,43 +111,51 @@ class NetworkConnectionInterceptor(
 
                 AppLogs.sendAppLogs("API Response Time -> ${rx - tx} ms URL->${newRequest.url}")
             }
-            if (response.code == STATUS_CODE_REFRESH) {//Refresh token
 
-                val lastTimestamp = localDataStore.getLastTokenRefreshTimestamp()
-                val currentTimestamp = System.currentTimeMillis()
-                val difference = (currentTimestamp - lastTimestamp)
-                if (difference < (10 * 1000) && lastTimestamp != 0L) {
-                    throw IOException("Error Connecting to internet")
+            when (response.code) {
+                WRONG_TIME_CODE -> {// wrong time
+                    throw IOException(WRONG_CLIENT_TIME_ERROR)
                 }
 
-                localDataStore.saveLastTokenRefreshTimestamp()
-                runBlocking {
+                STATUS_CODE_REFRESH -> {//Refresh token
+                    val lastTimestamp = localDataStore.getLastTokenRefreshTimestamp()
+                    val currentTimestamp = System.currentTimeMillis()
+                    val difference = (currentTimestamp - lastTimestamp)
+                    if (difference < (10 * 1000) && lastTimestamp != 0L) {
+                        throw IOException("Error Connecting to internet")
+                    }
 
-                    getUpdatedToken().collect { resource ->
-                        when (resource) {
-                            is Resource.Success -> {
-                                resource.data?.let {
+                    localDataStore.saveLastTokenRefreshTimestamp()
+                    runBlocking {
 
-                                    localDataStore.updateUserToken(it.data)
+                        getUpdatedToken().collect { resource ->
+                            when (resource) {
+                                is Resource.Success -> {
+                                    resource.data?.let {
 
-                                    response = chain.proceed(getHeaders(chain))
+                                        localDataStore.updateUserToken(it.data)
+
+                                        response = chain.proceed(getHeaders(chain))
+                                    }
                                 }
-                            }
 
-                            is Resource.Loading -> {}
-                            is Resource.GenericError -> {
-                                logoutUser()
-                            }
+                                is Resource.Loading -> {}
+                                is Resource.GenericError -> {
+                                    logoutUser()
+                                }
 
-                            is Resource.NetworkError -> {
-                                logoutUser()
+                                is Resource.NetworkError -> {
+                                    logoutUser()
+                                }
                             }
                         }
                     }
+
                 }
 
-            } else if (response.code == STATUS_CODE_LOGOUT) {
-                logoutUser()
+                STATUS_CODE_LOGOUT -> {
+                    logoutUser()
+                }
             }
 
             return response

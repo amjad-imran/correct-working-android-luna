@@ -143,7 +143,7 @@ object NetworkModule {
         ringDataStore: RingDataStore,
         lastSyncProvider: LastSyncProvider,
         watchesSdk: WatchesSDK,
-        tokenService: TokenRefreshApi
+        tokenService: TokenRefreshApi,
     ): NetworkConnectionInterceptor =
         NetworkConnectionInterceptor(
             appContext,

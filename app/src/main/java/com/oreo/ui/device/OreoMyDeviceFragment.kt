@@ -13,6 +13,7 @@ import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.model.DeviceFeatures
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.models.ColorFitDevice
@@ -20,9 +21,13 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.loadWatchImage
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.FileLogsUtils
+import com.noisefit_commans.utils.share.ShareUtil
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,10 +37,33 @@ class OreoMyDeviceFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //binding.features = mViewModel.localDataStore.getDeviceFeatures()
+        binding.features = DeviceFeatures(shareLogs = 1)
+
         binding.lifecycleOwner = this
     }
 
     override fun initListener() {
+
+        binding.rowAppLogs.setOnClickListener {
+            if (mViewModel.appLogFile?.exists() == true) {
+                context?.let { ctx ->
+                    ShareUtil.shareFile(ctx, AppLogs.getFileUri(ctx))
+                }
+            } else {
+                context.showShortToast("No logs")
+            }
+        }
+
+        binding.rowShareRingLogs.setOnClickListener {
+            if (mViewModel.watchLogFile?.exists() == true) {
+                context?.let { ctx ->
+                    ShareUtil.shareFile(ctx, FileLogsUtils.getFileUri(ctx))
+                }
+            } else {
+                context.showShortToast("No logs")
+            }
+        }
 
         binding.btnReset.setOnClickListener {
             mViewModel.sessionManager.sendQueryAction(QueryAction.ResetTrigger)
@@ -146,6 +174,7 @@ class OreoMyDeviceFragment :
                          mViewModel.startWatchFlow.postValue(Event(true))
                      }*/
                 }
+
                 else -> {}
             }
 

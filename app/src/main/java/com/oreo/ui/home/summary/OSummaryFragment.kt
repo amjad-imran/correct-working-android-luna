@@ -98,6 +98,11 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                     return
                 }
 
+                if (viewModel.stateHeartRateCard.value?.measureState == TapMeasureState.MEASURING) {
+                    binding.swipeToRefresh.refreshComplete()
+                    return
+                }
+
                 binding.layoutRefresh.textSyncingData.visible()
                 binding.swipeToRefresh.refreshComplete()
 
@@ -693,6 +698,8 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 lytHeartRate.tvEmptyConnect.gone()
 
                 lytHeartRate.tvHeartValue.text = data.value
+                lytHeartRate.tvHeartUnit.text = getString(R.string.text_bpm_small)
+
                 lytHeartRate.tvLastMeasure.apply {
                     setTextColor(Color.parseColor("#a3ffffff"))
                     text = data.lastTime

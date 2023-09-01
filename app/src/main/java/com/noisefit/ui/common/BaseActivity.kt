@@ -14,15 +14,27 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.noisefit.luna.R
 import com.noisefit.data.remote.NetworkErrors.NETWORK_ERROR
 import com.noisefit.data.remote.NetworkErrors.NETWORK_ERROR_TIMEOUT
 import com.noisefit.data.remote.NetworkErrors.NETWORK_ERROR_UNKNOWN
-import com.noisefit_commans.databinding.DefaultLoaderBinding
+import com.noisefit.data.remote.NetworkErrors.WRONG_CLIENT_TIME_ERROR
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.LayoutCustomWatchConnectedAlertBinding
-import com.noisefit_commans.data.*
+import com.noisefit_commans.data.BinaryActionCallback
+import com.noisefit_commans.data.DialogInputCaptureCallback
+import com.noisefit_commans.data.ErrorResponse
+import com.noisefit_commans.data.SingleActionCallback
+import com.noisefit_commans.data.SnackbarUndoCallback
+import com.noisefit_commans.data.TodoCallback
+import com.noisefit_commans.data.TrinaryActionCallback
+import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit_commans.databinding.LayoutCustomAlertBinding
-import com.noisefit_commans.ui.*
+import com.noisefit_commans.ui.MessageDisplayMode
+import com.noisefit_commans.ui.UIController
+import com.noisefit_commans.ui.displayToast
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.visible
 
 
 abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), UIController {
@@ -89,22 +101,33 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), UIControlle
             is UIComponentType.None -> {
             }
             is UIComponentType.RetryApiDialog -> {
+                var showWrongDialog = false
                 var message = (response.uiComponentType as UIComponentType.RetryApiDialog).message
                 if (message == null) {
                     message = "Error Connecting To Internet, Retry?"
-                } else if (message.equals(NETWORK_ERROR, true) || message.equals(
-                        NETWORK_ERROR_TIMEOUT,
-                        true
-                    )
-                    || message.equals(NETWORK_ERROR_UNKNOWN, true)
+                } else if (message.equals(NETWORK_ERROR, true) ||
+                    message.equals(NETWORK_ERROR_TIMEOUT, true) ||
+                    message.equals(NETWORK_ERROR_UNKNOWN, true)
                 ) {
                     message = "Error Connecting To Internet, Retry?"
+                } else if (message.equals(WRONG_CLIENT_TIME_ERROR, true)) {
+                    message = "Wrong client time"
+                    showWrongDialog = true
                 }
-                showRetryDialog(
-                    "Failed",
-                    message,
-                    (response.uiComponentType as UIComponentType.RetryApiDialog).callback
-                )
+
+                if (showWrongDialog) {
+                    showWrongTimeDialog(
+                        "Failed",
+                        message
+                    )
+                } else {
+                    showRetryDialog(
+                        "Failed",
+                        message,
+                        (response.uiComponentType as UIComponentType.RetryApiDialog).callback
+                    )
+                }
+
             }
             is UIComponentType.SnackBar -> {
             }
@@ -127,11 +150,21 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), UIControlle
                     (response.uiComponentType as UIComponentType.InfoAlertDialog).callback
                 )
             }
+
             is UIComponentType.InfoWatchConnectedAlertDialog -> {
                 showWatchConnectedInfoDialog(
                     (response.uiComponentType as UIComponentType.InfoWatchConnectedAlertDialog).title,
                     (response.uiComponentType as UIComponentType.InfoWatchConnectedAlertDialog).message,
                     (response.uiComponentType as UIComponentType.InfoWatchConnectedAlertDialog).callback
+                )
+            }
+
+            is UIComponentType.WrongTimeDialog -> {
+                showInfoDialog(
+                    (response.uiComponentType as UIComponentType.WrongTimeDialog).message ?: "",
+                    "",
+                    "",
+                    null
                 )
             }
         }
@@ -294,28 +327,47 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), UIControlle
 
     }
 
+    private fun showWrongTimeDialog(
+        title: String,
+        message: String?
+    ): AlertDialog {
+        var alert: AlertDialog? = null
+        val builder = MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_rounded)
+
+        val layoutCustomAlertBinding: LayoutCustomAlertBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(this),
+            com.noisefit_commans.R.layout.layout_custom_alert, null, false
+        )
+        layoutCustomAlertBinding.apply {
+            tvTitle.text = title
+            tvDesc.text = message
+            btnAllow.text = "Exit"
+            btnAllow.setOnClickListener {
+                alert?.dismiss()
+                System.exit(0)
+            }
+            btnCancel.gone()
+
+        }
+        builder.setView(layoutCustomAlertBinding.root)
+        builder.setCancelable(false)
+        alert = builder.create()
+
+        if (!(this as Activity).isFinishing) {
+            alert.show()
+        }
+        return alert
+
+    }
+
     private fun showRetryDialog(
         title: String,
         message: String?,
         callback: BinaryActionCallback?
     ): AlertDialog {
-        /*return MaterialAlertDialogBuilder(this)
-            .setTitle(title)
-            .setCancelable(false)
-            .setMessage(message)
-            .setNegativeButton(resources.getString(R.string.text_cancel)) { dialog, which ->
-                dialog.dismiss()
-                callback?.no()
-                dialogInView = null
-            }
-            .setPositiveButton(resources.getString(R.string.text_yes)) { dialog, which ->
-                dialog.dismiss()
-                callback?.yes()
-                dialogInView = null
-            }
-            .show()*/
         var alert: AlertDialog? = null
         val builder = MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_rounded)
+
         val layoutCustomAlertBinding: LayoutCustomAlertBinding = DataBindingUtil.inflate(
             LayoutInflater.from(this),
             com.noisefit_commans.R.layout.layout_custom_alert, null, false
