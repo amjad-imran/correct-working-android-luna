@@ -22,8 +22,6 @@ import com.noisefit_commans.models.SportsModeRequest
 import com.noisefit_commans.models.UserLocation
 import com.noisefit_commans.utils.Event
 import com.oreo.receiver.workManager.HealthOverviewDataType
-import com.useinsider.insider.Insider
-import com.useinsider.insider.InsiderEvent
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -51,9 +49,9 @@ constructor(
     var forceSyncDataWithServer: Boolean = false
 
 
-    //    var clevertap: CleverTapAPI? = null
-    var insiderAppEventWithoutParams: Insider? = null
-    var insiderAppEventWithParams: InsiderEvent? = null
+//    //    var clevertap: CleverTapAPI? = null
+//    var insiderAppEventWithoutParams: Insider? = null
+//    var insiderAppEventWithParams: InsiderEvent? = null
 
     var firmwareVersion: String? = null
 
@@ -104,6 +102,7 @@ constructor(
     val forceDisconnect = MutableLiveData<Event<Boolean>>()
 
 //    private val _connectWatch = MutableLiveData<ColorFitDevice>()
+
 
     val reloadNotification: LiveData<Event<Boolean>>
         get() = _reloadNotification
@@ -204,6 +203,8 @@ constructor(
             _connectedDeviceRing.value = colorFitDevice
         }
     }
+
+
 
     fun setSportsModeRequest(sportsModeRequest: SportsModeRequest?) {
         GlobalScope.launch(Main) {
