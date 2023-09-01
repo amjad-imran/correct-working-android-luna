@@ -88,9 +88,6 @@ constructor(
 
         updateAlerts()
 
-
-
-
         getDashboardDataFromServer(true, true)
     }
 
@@ -264,6 +261,13 @@ constructor(
             stateReadinessAvgCard.postValue(data.readinessScoreAvg)
 
             summary.healthOverviewData.postValue(userActivities)
+
+            val device = ringDataStore.getRingDevice()
+            stateHeartRateCard.postValue(userRepository.getSummaryHRHealthOverview().apply {
+                if (device == null) {
+                    this?.measureState = TapMeasureState.NO_DEVICE
+                }
+            })
             getRecentWorkoutList()
 
         }
