@@ -7,7 +7,7 @@
 
         <variable
             name="features"
-            type="com.oreo.data.model.OreoDeviceFeatures" />
+            type="com.noisefit_commans.data.model.DeviceFeatures" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -95,6 +95,22 @@
                         app:text="Warranty registration" />
 
                     <com.noisefit_commans.ui.custom.SettingsRow
+                        android:id="@+id/rowAppLogs"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:image="@drawable/ic_profile_about"
+                        app:setFeatureVisibility="@{features.shareLogs}"
+                        app:text="Share App Logs" />
+
+                    <com.noisefit_commans.ui.custom.SettingsRow
+                        android:id="@+id/rowShareRingLogs"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:image="@drawable/ic_profile_about"
+                        app:setFeatureVisibility="@{features.shareLogs}"
+                        app:text="Share Ring Logs" />
+
+                    <com.noisefit_commans.ui.custom.SettingsRow
                         android:id="@+id/rowAboutDevice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -152,8 +168,8 @@
             layout="@layout/layout_oreo_pair_your_device"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
             android:layout_marginBottom="64dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

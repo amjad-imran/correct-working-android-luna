@@ -11,6 +11,7 @@ import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.session.SessionManager
 import com.noisefit.watch.ConnectionHandler
 import com.noisefit.watch.WatchesSDK
+import com.noisefit_commans.NoisefitApplication
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -18,9 +19,14 @@ import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.FileLogsUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,15 +45,83 @@ class OMyDeviceViewModel @Inject constructor(
 
     var startWatchFlow: MutableLiveData<Event<Boolean>> = MutableLiveData<Event<Boolean>>()
 
+    var watchLogFile: File? = null
+    var appLogFile: File? = null
+
 
     init {
         _deviceConnected.value = (ringDataStore.getRingDevice() != null)
+        getLogsPath()
     }
 
     fun updateDeviceConnectedStatus() {
         _deviceConnected.value = (ringDataStore.getRingDevice() != null)
     }
 
+    fun getLogsPath() {
+        viewModelScope.launch {
+            getFileLogs().collect { files ->
+                appLogFile = files.first
+                watchLogFile = files.second
+
+                var hasLogFiles = false
+                if (appLogFile?.exists() == false) {
+                    appLogFile = null
+                } else {
+                    hasLogFiles = true
+                }
+                if (watchLogFile?.exists() == false) {
+                    watchLogFile = null
+                } else {
+                    hasLogFiles = true
+                }
+            }
+        }
+    }
+
+    private suspend fun getFileLogs(): Flow<Pair<File?, File?>> {
+        return flow {
+
+            val context = NoisefitApplication.context!!
+            var appLogs: File? = null
+            try {
+                appLogs = AppLogs.getFile(context)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+
+            var watchLogs: File? = null
+            try {
+
+                val fileName = watchDataStore.getLogPathName()
+
+
+                if (FileLogsUtils.checkLogFileExist(
+                        context,
+                        ringDataStore.getRingDevice(),
+                        fileName
+                    ) != null
+                ) {
+
+
+                    watchLogs = FileLogsUtils.getFile(
+                        context,
+                        ringDataStore.getRingDevice(),
+                        fileName
+                    )
+
+
+                }
+
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            emit(Pair(appLogs, watchLogs))
+        }
+    }
 
 
 }
