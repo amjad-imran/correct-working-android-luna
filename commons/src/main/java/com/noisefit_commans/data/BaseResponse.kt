@@ -18,6 +18,11 @@ sealed class UIComponentType {
         var callback: BinaryActionCallback? = null
     }
 
+    class WrongTimeDialog(val message: String?) :
+        UIComponentType() {
+        var callback: BinaryActionCallback? = null
+    }
+
     class InfoAlertDialog(val title: String, val message: String?, val ctaText: String) :
         UIComponentType() {
         var callback: SingleActionCallback? = null
