@@ -98,7 +98,7 @@
                         android:id="@+id/rowAppLogs"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:image="@drawable/ic_profile_about"
+                        app:image="@drawable/ic_share"
                         app:setFeatureVisibility="@{features.shareLogs}"
                         app:text="Share App Logs" />
 
@@ -106,7 +106,7 @@
                         android:id="@+id/rowShareRingLogs"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:image="@drawable/ic_profile_about"
+                        app:image="@drawable/ic_share"
                         app:setFeatureVisibility="@{features.shareLogs}"
                         app:text="Share Ring Logs" />
 
