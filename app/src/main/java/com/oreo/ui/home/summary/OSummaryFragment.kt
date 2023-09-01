@@ -98,6 +98,11 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                     return
                 }
 
+                if (viewModel.stateHeartRateCard.value?.measureState == TapMeasureState.MEASURING) {
+                    binding.swipeToRefresh.refreshComplete()
+                    return
+                }
+
                 binding.layoutRefresh.textSyncingData.visible()
                 binding.swipeToRefresh.refreshComplete()
 
