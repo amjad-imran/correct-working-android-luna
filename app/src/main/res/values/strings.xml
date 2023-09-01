@@ -949,4 +949,6 @@
     <string name="text_privacy_message">Welcome to Luna Ring. You can use this App to manage your ring and view related exercise and health data. We will strictly abide by relevant laws, regulations and privacy policies to protect your personal information. To provide the most basic services, the App needs to be connected to the internet.</string>
     <string name="text_do_you_want_to_reset">Ring is already connected with other device, Do you want to reset?</string>
     <string name="text_thank_u_sharing">Thank you for sharing!</string>
+    <string name="text_wrong_time">Wrong time</string>
+    <string name="text_adjust_date">Adjust date</string>
 </resources>

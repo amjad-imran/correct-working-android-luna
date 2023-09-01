@@ -210,10 +210,9 @@ object DateFormats {
         return df.format(c)
     }
 
-    fun getCurrentYear(): String {
+    fun getDate(timeFormat: SimpleDateFormat): String {
         val c = Calendar.getInstance().time
-        val df = SimpleDateFormat("yyyy", Locale.getDefault())
-        return df.format(c)
+        return timeFormat.format(c)
     }
 
     fun getCurrentMonth(): String {
