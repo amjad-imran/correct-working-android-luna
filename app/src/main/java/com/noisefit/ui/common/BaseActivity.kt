@@ -3,8 +3,10 @@ package com.noisefit.ui.common
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -35,6 +37,7 @@ import com.noisefit_commans.ui.UIController
 import com.noisefit_commans.ui.displayToast
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.DateFormats
 
 
 abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), UIController {
@@ -116,10 +119,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), UIControlle
                 }
 
                 if (showWrongDialog) {
-                    showWrongTimeDialog(
-                        "Failed",
-                        message
-                    )
+                    showWrongTimeDialog()
                 } else {
                     showRetryDialog(
                         "Failed",
@@ -327,10 +327,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), UIControlle
 
     }
 
-    private fun showWrongTimeDialog(
-        title: String,
-        message: String?
-    ): AlertDialog {
+    private fun showWrongTimeDialog(): AlertDialog {
         var alert: AlertDialog? = null
         val builder = MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_rounded)
 
@@ -339,11 +336,18 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), UIControlle
             com.noisefit_commans.R.layout.layout_custom_alert, null, false
         )
         layoutCustomAlertBinding.apply {
-            tvTitle.text = title
-            tvDesc.text = message
-            btnAllow.text = "Exit"
+            val desc =
+                "Your phone date is inaccurate! Adjust your clock and try again\n\n Your phone date and time is: ${
+                    DateFormats.getDate(DateFormats.dateTimeFormat)
+                }"
+            tvTitle.text = getString(R.string.text_wrong_time)
+            tvDesc.text = desc
+            btnAllow.text = getString(R.string.text_adjust_date)
             btnAllow.setOnClickListener {
                 alert?.dismiss()
+
+                val intent = Intent(Settings.ACTION_DATE_SETTINGS)
+                startActivity(intent)
                 System.exit(0)
             }
             btnCancel.gone()
