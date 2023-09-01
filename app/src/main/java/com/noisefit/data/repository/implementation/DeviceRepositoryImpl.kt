@@ -584,7 +584,7 @@ class DeviceRepositoryImpl(
         if (feedback.file != null) {
             logList.add(
                 MultipartBody.Part.createFormData(
-                    "log",
+                    "logs",
                     "appLogs.txt"/*feedback.file!!.name*/,
                     feedback.file!!.asRequestBody("text/plain".toMediaTypeOrNull())
                 )
@@ -598,7 +598,7 @@ class DeviceRepositoryImpl(
             }
             logList.add(
                 MultipartBody.Part.createFormData(
-                    "log",
+                    "logs",
                     filename/*feedback.watchLogs!!.name*/,
                     feedback.watchLogs!!.asRequestBody("text/plain".toMediaTypeOrNull())
                 )
@@ -607,7 +607,7 @@ class DeviceRepositoryImpl(
 
 
         val url =
-            "${BuildConfig.BASE_URL_NEW}/core/ring/help_and_support/feedback"
+            "${BuildConfig.BASE_URL_NEW}/core/ring/help_and_support/log_feedback"
         return safeApiCallFlow(dispatcher) {
             remoteDataSource.submitFeedbackFile(
                 url,
