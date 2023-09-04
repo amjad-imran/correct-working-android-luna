@@ -594,7 +594,7 @@ class OreoReadinessFragment :
 
                 binding.lytRScoreData.lytSec4.lytBpmView.tvValue.text =
                     resData.value.toString()
-                binding.lytRScoreData.lytSec4.lytBpmView.tvUnit.text = "bpm"
+                binding.lytRScoreData.lytSec4.lytBpmView.tvUnit.text = "/min"
                 binding.lytRScoreData.lytSec4.lytBpmView.tvUnit.visible()
             }
         } else {
