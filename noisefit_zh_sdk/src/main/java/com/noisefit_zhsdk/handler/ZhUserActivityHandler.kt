@@ -15,9 +15,11 @@ import com.google.gson.reflect.TypeToken
 import com.noisefit_commans.NoisefitApplication
 import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
+import com.noisefit_commans.interfaces.QueryCallback
 import com.noisefit_commans.interfaces.data.IUserActivityDataCallback
 import com.noisefit_commans.interfaces.data.UserActivityCallback
 import com.noisefit_commans.interfaces.data.UserActivityDataActions
+import com.noisefit_commans.models.BatteryData
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.DeviceType
 import com.noisefit_commans.models.LocationDataModel
@@ -122,7 +124,6 @@ constructor(
 
         CallBackUtils.fitnessDataCallBack = fitnessDataCallBack
         CallBackUtils.autoSportDataCallBack = autoSportsCallback
-        CallBackUtils.realTimeDataCallback = realDataCallback
         CallBackUtils.setSportCallBack(object : SportCallBack {
             override fun onDevSportInfo(data: DevSportInfoBean) {
                 LOGS.d(TAG, "onDevSportInfo $data")
@@ -467,27 +468,6 @@ constructor(
     }
 
 
-    private val realDataCallback = object : RealTimeDataCallBack {
-        override fun onResult(p0: RealTimeBean?) {
-            if (!colorFitDevice?.deviceType.equals(DeviceType.NOISEFIT_LUNA.deviceType, true)) {
-                p0?.let {
-                    userActivityDataCallbacks?.onUserActivityDataReceived(
-                        UserActivityCallback.RealStepsDataObtained(
-                            dataConverter.parseStepsData(
-                                p0
-                            )
-                        )
-                    )
-                }
-            }
-
-        }
-
-        override fun onFail() {
-
-        }
-
-    }
 
 
     //日常数据回调

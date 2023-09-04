@@ -358,7 +358,7 @@ class OreoSleepDetailFragment :
 
             mSharedViewModel.selectedTab = 0
             mSharedViewModel.itemType = ClickViewType.SLEEP.name
-            mSharedViewModel.itemClickType = ViewItemClickType.SLEEP_SCORE.name
+            mSharedViewModel.itemClickType = ViewItemClickType.SLEEP_SCORE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
             })
@@ -366,7 +366,7 @@ class OreoSleepDetailFragment :
         binding.lytSleepScore.lytTotalSleep.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
             mSharedViewModel.itemType = ClickViewType.SLEEP.name
-            mSharedViewModel.itemClickType = ViewItemClickType.TOTAL_SLEEP.name
+            mSharedViewModel.itemClickType = ViewItemClickType.TOTAL_SLEEP
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
             })
@@ -374,7 +374,7 @@ class OreoSleepDetailFragment :
         binding.lytSleepScore.lytTimeInBed.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
             mSharedViewModel.itemType = ClickViewType.SLEEP.name
-            mSharedViewModel.itemClickType = ViewItemClickType.TIME_IN_BED.name
+            mSharedViewModel.itemClickType = ViewItemClickType.TIME_IN_BED
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
             })
@@ -382,7 +382,7 @@ class OreoSleepDetailFragment :
         binding.lytSleepScore.lytSleepEfficiency.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
             mSharedViewModel.itemType = ClickViewType.SLEEP.name
-            mSharedViewModel.itemClickType = ViewItemClickType.SLEEP_EFFICIENCY.name
+            mSharedViewModel.itemClickType = ViewItemClickType.SLEEP_EFFICIENCY
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
             })
@@ -390,7 +390,7 @@ class OreoSleepDetailFragment :
         binding.lytSleepScore.lytRestHr.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
             mSharedViewModel.itemType = ClickViewType.SLEEP.name
-            mSharedViewModel.itemClickType = ViewItemClickType.RESTING_HR.name
+            mSharedViewModel.itemClickType = ViewItemClickType.RESTING_HR
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
             })

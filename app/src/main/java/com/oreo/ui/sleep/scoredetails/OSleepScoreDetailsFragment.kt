@@ -52,7 +52,7 @@ class OSleepScoreDetailsFragment :
             mViewModel.viewType = it.get(VIEW_TYPE).toString()
         }
         mViewModel.selectedDate = mSharedViewModel.selectedDate
-        mViewModel.itemClickType = mSharedViewModel.itemClickType
+        mViewModel.itemClickType = mSharedViewModel.itemClickType?.name ?: ""
 
         if (mViewModel.viewType?.lowercase() == "sleep")
             mViewModel.getInternalDetailsData()
@@ -213,6 +213,7 @@ class OSleepScoreDetailsFragment :
                         }
                         setTopDateLabel(it.date)
                     }
+
                     ViewItemClickType.SLEEP_EFFICIENCY.name -> {
                         binding.lytTopGraphView.lytLabelValue1.root.visible()
                         binding.lytTopGraphView.lytLabelValue11.root.gone()
@@ -912,7 +913,11 @@ class OSleepScoreDetailsFragment :
             }
 
             else -> {
-                "Avg in ${DateFormats.getMonth(data.toInt() - 1)} ${mViewModel.getYearFromDate(mViewModel.selectedDate)}"
+                "Avg in ${DateFormats.getMonth(data.toInt() - 1)} ${
+                    mViewModel.getYearFromDate(
+                        mViewModel.selectedDate
+                    )
+                }"
             }
         }
 
@@ -937,6 +942,7 @@ class OSleepScoreDetailsFragment :
                     ViewItemClickType.ACTIVE_CALORIES.name -> {
                         binding.lytScoreOverview.lytToday.tvScore.text = "${todayTrendValue} kcal"
                     }
+
                     ViewItemClickType.SLEEP_EFFICIENCY.name -> {
                         binding.lytScoreOverview.lytToday.tvScore.text = "${todayTrendValue}%"
                     }
@@ -1007,10 +1013,12 @@ class OSleepScoreDetailsFragment :
                         binding.lytScoreOverview.lytYesterday.tvScore.text =
                             "$yesterdayTrendValue kcal"
                     }
+
                     ViewItemClickType.SLEEP_EFFICIENCY.name -> {
                         binding.lytScoreOverview.lytYesterday.tvScore.text =
                             "$yesterdayTrendValue%"
                     }
+
                     ViewItemClickType.RESPIRATORY_RATE.name -> {
                         binding.lytScoreOverview.lytYesterday.tvScore.text =
                             "$yesterdayTrendValue /min"
@@ -1054,6 +1062,7 @@ class OSleepScoreDetailsFragment :
                     ViewItemClickType.RESPIRATORY_RATE.name -> {
                         binding.lytAllTimeAvg.tvScore.text = "$allTimeTrendValue /min"
                     }
+
                     ViewItemClickType.SLEEP_EFFICIENCY.name -> {
                         binding.lytAllTimeAvg.tvScore.text = "$allTimeTrendValue%"
                     }
@@ -1436,60 +1445,64 @@ class OSleepScoreDetailsFragment :
     private fun getTrendTitle(): String {
         var trendTitle = ""
         when (mSharedViewModel.itemClickType) {
-            ViewItemClickType.SLEEP_SCORE.name -> {
+            ViewItemClickType.SLEEP_SCORE -> {
                 trendTitle = "Sleep score trend"
             }
 
-            ViewItemClickType.TOTAL_SLEEP.name -> {
+            ViewItemClickType.TOTAL_SLEEP -> {
                 trendTitle = "Total sleep trend"
             }
 
-            ViewItemClickType.SLEEP_EFFICIENCY.name -> {
+            ViewItemClickType.SLEEP_EFFICIENCY -> {
                 trendTitle = "Sleep efficiency trend"
             }
 
-            ViewItemClickType.TIME_IN_BED.name -> {
+            ViewItemClickType.TIME_IN_BED -> {
                 trendTitle = "Time in bed trend"
             }
 
-            ViewItemClickType.RESTING_HR.name -> {
+            ViewItemClickType.RESTING_HR -> {
                 trendTitle = "Resting hr trend"
             }
 
-            ViewItemClickType.READINESS_SCORE.name -> {
+            ViewItemClickType.READINESS_SCORE -> {
                 trendTitle = "Readiness score trend "
             }
 
-            ViewItemClickType.HR_VARIABILITY.name -> {
+            ViewItemClickType.HR_VARIABILITY -> {
                 trendTitle = "Hr variability trend"
             }
 
-            ViewItemClickType.BODY_TEMPERATURE.name -> {
+            ViewItemClickType.BODY_TEMPERATURE -> {
                 trendTitle = "Body temperature trend"
             }
 
-            ViewItemClickType.RESPIRATORY_RATE.name -> {
+            ViewItemClickType.RESPIRATORY_RATE -> {
                 trendTitle = "Respiratory rate trend"
             }
 
-            ViewItemClickType.ACTIVITY_SCORE.name -> {
+            ViewItemClickType.ACTIVITY_SCORE -> {
                 trendTitle = "Activity score trend"
             }
 
-            ViewItemClickType.ACTIVE_CALORIES.name -> {
+            ViewItemClickType.ACTIVE_CALORIES -> {
                 trendTitle = "Goal progress trend"
             }
 
-            ViewItemClickType.TOTAL_CALORIES_BURNED.name -> {
+            ViewItemClickType.TOTAL_CALORIES_BURNED -> {
                 trendTitle = "Total calories trend"
             }
 
-            ViewItemClickType.STEPS.name -> {
+            ViewItemClickType.STEPS -> {
                 trendTitle = "Steps trend"
             }
 
-            ViewItemClickType.DISTANCE.name -> {
+            ViewItemClickType.DISTANCE -> {
                 trendTitle = "Distance trend"
+            }
+
+            null -> {
+
             }
         }
         return trendTitle

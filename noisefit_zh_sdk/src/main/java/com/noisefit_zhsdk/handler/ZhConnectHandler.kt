@@ -88,7 +88,7 @@ constructor(val zhApplicationHandler: ZhApplicationHandler) : ConnectionDataActi
                         )
                     ) {
                         ControlBleTools.getInstance().getAutoSportData(null)
-                        ControlBleTools.getInstance().realTimeDataSwitch(false, null)
+                        ControlBleTools.getInstance().realTimeDataSwitch(true, null)
 
                     } else {
                         ControlBleTools.getInstance().realTimeDataSwitch(true, null)
