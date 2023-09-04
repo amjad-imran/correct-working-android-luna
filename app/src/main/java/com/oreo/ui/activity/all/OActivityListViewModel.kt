@@ -160,17 +160,17 @@ constructor(
         val datesSet = HashSet<String>()
 
         activitiesTemp.forEach {
-            it.createdDate ?: return@forEach
+            it.date ?: return@forEach
 
             val date = DateFormats.formatDateTime(
-                it.createdDate, DateFormats.dateFormat3,
+                it.date, DateFormats.dateFormat3,
                 DateFormats.dateFormat6
             )
             if (date.isEmpty()) return@forEach
 
             if (!datesSet.contains(date)) {
                 datesSet.add(date)
-                activityResponse.add(OActivityListModal(isHeader = true, createdDate = date))
+                activityResponse.add(OActivityListModal(isHeader = true, date = date))
             }
 
             activityResponse.add(it.apply {
