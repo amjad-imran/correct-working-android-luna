@@ -37,8 +37,8 @@ class OreoMyDeviceFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //binding.features = mViewModel.localDataStore.getDeviceFeatures()
-        binding.features = DeviceFeatures(shareLogs = 1)
+        binding.features = mViewModel.ringDataStore.getDeviceFeatures()
+        //binding.features = DeviceFeatures(shareLogs = 1)
 
         binding.lifecycleOwner = this
     }
