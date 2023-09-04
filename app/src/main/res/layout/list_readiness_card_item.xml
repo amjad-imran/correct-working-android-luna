@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/ModalStyleReadinessNew"
     android:layout_width="match_parent"
 
@@ -58,8 +59,8 @@
         style="@style/H32"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        tools:text="22"
         android:layout_marginTop="58dp"
-
         app:layout_constraintEnd_toEndOf="@+id/lottieAnimationView"
         app:layout_constraintStart_toStartOf="@+id/lottieAnimationView"
         app:layout_constraintTop_toTopOf="@+id/lottieAnimationView" />
@@ -71,21 +72,22 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimen_8dp"
         android:textColor="@color/white"
+        tools:text="Pay attention"
         app:layout_constraintEnd_toEndOf="@+id/lottieAnimationView"
         app:layout_constraintStart_toStartOf="@+id/lottieAnimationView"
         app:layout_constraintTop_toBottomOf="@+id/tvValue" />
 
     <TextView
         android:id="@+id/tvTodayDesc"
-        style="@style/H6"
+        style="@style/Small"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dimen_16dp"
         android:layout_marginEnd="@dimen/dimen_16dp"
+        android:fontFamily="@font/gilroy_medium"
         android:gravity="center_horizontal"
         android:lineSpacingExtra="8sp"
-        android:textColor="@color/white"
-        android:textSize="12sp"
+        tools:text="sdfsdfsdf sd f sdf sdf\ndfsdfsdf"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

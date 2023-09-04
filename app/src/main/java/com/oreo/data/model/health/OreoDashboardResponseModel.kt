@@ -23,8 +23,9 @@ data class OreoDashboardResponseModel(
 data class ODashboardReadinessModel(
     val readinessScore: Int? = 0,
     val status: String? = "",
-    val nudge: String? = "",
+    val nudges: List<String>? = null,
 )
+
 data class ODashboardActivityScoreModel(
     val activityScore: Int? = 0,
     val trend: Int? = 0,
@@ -42,11 +43,12 @@ data class ODashboardSleepScoreModel(
     val trend: Int? = 0,
     val value: List<Int>? = ArrayList(),
 )
+
 data class ODashboardActivityModel(
     val activityScore: Int? = 0,
     val activeCalories: Int? = 0,
     val status: String? = "",
-    val nudge: String? = "",
+    val nudges: List<String>? = null,
 )
 
 data class ODashboardSleepModel(
