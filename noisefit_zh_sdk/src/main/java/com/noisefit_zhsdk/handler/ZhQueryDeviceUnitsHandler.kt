@@ -1104,10 +1104,11 @@ constructor(
     private fun initLogListener() {
         ControlBleTools.getInstance().deviceLogCallBack = object : DeviceLogCallBack {
             override fun onLogI(tag: String?, msg: String?, p2: String?) {
+                val messageTag = "$tag $msg"
                 FileLogsUtils.saveILogs(
                     noiseFitDevice,
-                    tag ?: "",
-                    msg ?: "",
+                    "$tag $msg",
+                    p2 ?: "",
                     FileLogsUtils.LogType.Watch
                 )
             }
@@ -1115,8 +1116,8 @@ constructor(
             override fun onLogV(tag: String?, msg: String?, p2: String?) {
                 FileLogsUtils.saveWLogs(
                     noiseFitDevice,
-                    tag ?: "",
-                    msg ?: "",
+                    "$tag $msg",
+                    p2 ?: "",
                     FileLogsUtils.LogType.Watch
                 )
             }
@@ -1124,8 +1125,8 @@ constructor(
             override fun onLogE(tag: String?, msg: String?, p2: String?) {
                 FileLogsUtils.saveELogs(
                     noiseFitDevice,
-                    tag ?: "",
-                    msg ?: "",
+                    "$tag $msg",
+                    p2 ?: "",
                     FileLogsUtils.LogType.Watch
                 )
             }
@@ -1133,8 +1134,8 @@ constructor(
             override fun onLogD(tag: String?, msg: String?, p2: String?) {
                 FileLogsUtils.saveDLogs(
                     noiseFitDevice,
-                    tag ?: "",
-                    msg ?: "",
+                    "$tag $msg",
+                    p2 ?: "",
                     FileLogsUtils.LogType.Watch
                 )
             }
@@ -1142,8 +1143,8 @@ constructor(
             override fun onLogW(tag: String?, msg: String?, p2: String?) {
                 FileLogsUtils.saveWLogs(
                     noiseFitDevice,
-                    tag ?: "",
-                    msg ?: "",
+                    "$tag $msg",
+                    p2 ?: "",
                     FileLogsUtils.LogType.Watch
                 )
             }
