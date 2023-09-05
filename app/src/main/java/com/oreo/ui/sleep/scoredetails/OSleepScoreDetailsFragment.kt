@@ -913,7 +913,7 @@ class OSleepScoreDetailsFragment :
             }
 
             else -> {
-                "Avg in ${DateFormats.getMonth(data.toInt() - 1)} ${
+                "Avg in ${DateFormats.getCompleteMonthName(data.toInt() - 1)} ${
                     mViewModel.getYearFromDate(
                         mViewModel.selectedDate
                     )
