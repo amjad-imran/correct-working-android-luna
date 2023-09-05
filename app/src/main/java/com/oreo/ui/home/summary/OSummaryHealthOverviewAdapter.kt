@@ -217,7 +217,6 @@ class OSummaryHealthOverviewAdapter :
             is OHealthOverview.Activity -> R.layout.list_activity_burn_card_item
 
 
-
             is OHealthOverview.Alerts -> R.layout.list_o_alerts
 
             is OHealthOverview.FitnessOverView -> R.layout.list_health_overview_card_item
@@ -268,7 +267,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 //                binding.tvTodayDesc.visible()
             }
 
-            if (data.data.nudge.isNullOrEmpty()) {
+            if (data.data.nudges.isNullOrEmpty()) {
                 (binding.tvTodayDesc.layoutParams as ConstraintLayout.LayoutParams).apply {
                     topMargin = 24
                     bottomMargin = 0
@@ -278,7 +277,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     topMargin = 24
                     bottomMargin = 26
                 }
-                binding.tvTodayDesc.text = data.data.nudge
+                binding.tvTodayDesc.text = data.data.nudges.first()
             }
 
             if (scoreValue >= 0) {
@@ -393,20 +392,22 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             devicePaired: Boolean
         ) {
             binding.imv.loadImage(binding.imv.context, R.drawable.ic_activity_card_bg1)
-            val scoreValue = data.data.activityScore ?: 0
+            val scoreValue = data.data.activityScore
 
-            if (scoreValue <= 0) {
+            if (scoreValue == null) {
                 binding.tvValue.text = "--"
                 binding.tvStatus.text = "No data"
-                binding.tvTodayDesc.text = ""
             } else {
                 binding.tvValue.text = scoreValue.toString()
                 binding.tvStatus.text = data.data.status
+            }
 
 
-                if (!data.data.nudge.isNullOrEmpty()) {
-                    binding.tvTodayDesc.text = data.data.nudge
-                }
+            if (data.data.nudges.isNullOrEmpty()) {
+                binding.tvTodayDesc.gone()
+            } else {
+                binding.tvTodayDesc.visible()
+                binding.tvTodayDesc.text = data.data.nudges.first()
             }
 
             val caloriesGoalText = "/ ${data.caloriesGoal} kcal"
@@ -418,12 +419,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 "--"
             }
 
-            if (scoreValue >= 0) {
+            if ((scoreValue ?: 0) >= 0) {
                 binding.lottieAnimationView.repeatCount = 0
                 binding.lottieAnimationView.setAnimation(R.raw.lottie_meter_activity)
                 binding.lottieAnimationView.setMaxProgress(
                     MiscUtil.scorePercentCalculator(
-                        scoreValue.toFloat()
+                        (scoreValue ?: 0).toFloat()
                     )
                 )
                 binding.lottieAnimationView.playAnimation()

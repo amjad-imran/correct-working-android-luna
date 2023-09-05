@@ -4,8 +4,12 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.provider.Settings
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.content.FileProvider
+import com.noisefit_commans.utils.CommonConstants
+import java.io.File
 
 
 object ShareUtil {
@@ -123,5 +127,14 @@ object ShareUtil {
         val uri = Uri.fromParts("package", context?.packageName, null)
         intent.data = uri
         context?.startActivity(intent)
+    }
+
+    fun shareFile(context: Context, fileUri: Uri?) {
+        if (fileUri == null) return
+        val share = Intent()
+        share.action = Intent.ACTION_SEND
+        share.type = "application/text"
+        share.putExtra(Intent.EXTRA_STREAM, fileUri)
+        context.startActivity(Intent.createChooser(share, "Share file"))
     }
 }

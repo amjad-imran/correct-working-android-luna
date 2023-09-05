@@ -88,9 +88,6 @@ constructor(
 
         updateAlerts()
 
-
-
-
         getDashboardDataFromServer(true, true)
     }
 
@@ -207,12 +204,11 @@ constructor(
             val userActivities = ArrayList<OHealthOverview>()
 
 
-//            val autoSportCount = userRepository.getSummaryAutoWorkoutCount()
-//            if (autoSportCount > 0) {
-//                userActivities.add(OHealthOverview.AutoSport(autoSportCount))
-//            }
-
-//            userActivities.add(1, OHealthOverview.WAlert(2))
+            val autoSportCount = userRepository.getSummaryAutoWorkoutCount()
+            if (autoSportCount > 0) {
+                userActivities.add(OHealthOverview.AutoSport(autoSportCount))
+            }
+            //userActivities.add(OHealthOverview.AutoSport(2))
 
 
             ringDataStore.setRegisterDay(data.registerDate ?: -1)
@@ -264,6 +260,13 @@ constructor(
             stateReadinessAvgCard.postValue(data.readinessScoreAvg)
 
             summary.healthOverviewData.postValue(userActivities)
+
+            val device = ringDataStore.getRingDevice()
+            stateHeartRateCard.postValue(userRepository.getSummaryHRHealthOverview().apply {
+                if (device == null) {
+                    this?.measureState = TapMeasureState.NO_DEVICE
+                }
+            })
             getRecentWorkoutList()
 
         }
@@ -338,23 +341,22 @@ constructor(
     }
 
     fun handleUnPairState() {
-     /*   val index = summary.healthOverviewData.value?.indexOfFirst {
-            it is OHealthOverview.PairDevice
-        }
+        /*   val index = summary.healthOverviewData.value?.indexOfFirst {
+               it is OHealthOverview.PairDevice
+           }
 
-        val autoSportIndex = summary.healthOverviewData.value?.indexOfFirst {
-            it is OHealthOverview.TodayWorkout
-        }
+           val autoSportIndex = summary.healthOverviewData.value?.indexOfFirst {
+               it is OHealthOverview.TodayWorkout
+           }
 
-        if (autoSportIndex != null && autoSportIndex != -1) {
-            summary.healthOverviewData.value?.removeAt(autoSportIndex)
-        }
-        if (index == -1) {
-            summary.healthOverviewData.value?.add(1, OHealthOverview.PairDevice())
-        }
+           if (autoSportIndex != null && autoSportIndex != -1) {
+               summary.healthOverviewData.value?.removeAt(autoSportIndex)
+           }
+           if (index == -1) {
+               summary.healthOverviewData.value?.add(1, OHealthOverview.PairDevice())
+           }
 
-        summary.healthOverviewData.postValue(summary.healthOverviewData.value)*/
-
+           summary.healthOverviewData.postValue(summary.healthOverviewData.value)*/
 
 
     }
@@ -371,6 +373,7 @@ constructor(
                     stateHeartRateCard.value?.measureState = TapMeasureState.MEASURING
                 } else {
                     stateHeartRateCard.value?.measureState = TapMeasureState.LAST_MEASURED
+                    stateHeartRateCard.value?.lastTime = "Last measured just now"
                 }
                 stateHeartRateCard.value?.value = manualMeasurement.value.toString()
             }

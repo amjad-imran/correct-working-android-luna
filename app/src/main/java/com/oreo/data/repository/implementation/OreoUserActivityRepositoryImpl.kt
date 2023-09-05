@@ -1,5 +1,7 @@
 package com.oreo.data.repository.implementation
 
+import com.github.mikephil.charting.data.CandleEntry
+import com.github.mikephil.charting.data.Entry
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
@@ -446,7 +448,16 @@ class OreoUserActivityRepositoryImpl(
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        return null
+        return OHealthOverview.HeartRate(
+            value = "0",
+            lastTime = "0",
+            candleValue = ArrayList(),
+            lineData = Pair(ArrayList<Entry>(), ArrayList<Int>()),
+            xLabelList = ArrayList(),
+            axisMinimum = 0f,
+            average = 0f,
+            measureState = TapMeasureState.DEFAULT
+        )
     }
 
     override suspend fun addWorkout(request: JsonObject): Flow<Resource<BaseApiResponseData<Any>>> {

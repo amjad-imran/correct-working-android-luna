@@ -89,11 +89,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dimen_8dp"
-        android:layout_marginBottom="-5dp"
+        android:layout_marginTop="2dp"
         android:textColor="@color/white_64"
         android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imvHrMeasure"
+        app:layout_constraintBottom_toBottomOf="@+id/lottieAnimView"
         app:layout_constraintStart_toEndOf="@+id/imvHrMeasure"
+        app:layout_constraintTop_toBottomOf="@+id/tvHeartUnit"
         tools:ignore="SmallSp"
         tools:text="Last measured now" />
 
@@ -103,8 +104,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dimen_8dp"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvHeartUnit"
         app:layout_constraintStart_toEndOf="@+id/imvHrMeasure"
-        app:layout_constraintTop_toTopOf="@+id/imvHrMeasure"
         tools:text="132" />
 
     <TextView
@@ -112,21 +113,23 @@
         style="@style/Tinny"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginBottom="@dimen/dimen_2dp"
+        android:layout_marginStart="8dp"
         android:text="@string/text_bpm_small"
-        app:layout_constraintBottom_toBottomOf="@+id/tvHeartValue"
-        app:layout_constraintStart_toEndOf="@+id/tvHeartValue" />
+        app:layout_constraintBottom_toTopOf="@+id/tvLastMeasure"
+        app:layout_constraintStart_toEndOf="@+id/tvHeartValue"
+        app:layout_constraintTop_toTopOf="@+id/lottieAnimView"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/tvEmptyConnect"
-        style="@style/Tinny"
+        style="@style/Small"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dimen_8dp"
         android:layout_marginEnd="@dimen/dimen_8dp"
+        android:fontFamily="@font/gilroy_medium"
         android:text="@string/text_connect_your_device_to_measure"
-        android:textColor="@color/white_80"
+        android:textColor="@color/white"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/imvHrMeasure"
         app:layout_constraintEnd_toEndOf="parent"

@@ -210,10 +210,9 @@ object DateFormats {
         return df.format(c)
     }
 
-    fun getCurrentYear(): String {
+    fun getDate(timeFormat: SimpleDateFormat): String {
         val c = Calendar.getInstance().time
-        val df = SimpleDateFormat("yyyy", Locale.getDefault())
-        return df.format(c)
+        return timeFormat.format(c)
     }
 
     fun getCurrentMonth(): String {
@@ -1094,7 +1093,7 @@ object DateFormats {
         val formatter = SimpleDateFormat("dd", Locale.getDefault()) // PST`
 
         val firstDay = calendar.firstDayOfWeek
-        calendar.set(Calendar.DAY_OF_WEEK, firstDay)
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
 
         //calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
         val startDate: Date = calendar.time

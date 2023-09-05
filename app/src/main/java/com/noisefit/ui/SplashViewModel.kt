@@ -116,7 +116,34 @@ class SplashViewModel
         }
     }
 
+    fun getDeviceFeatures(colorFitDevice: ColorFitDevice) {
+        viewModelScope.launch {
+            deviceRepository.getDeviceFeature(colorFitDevice.deviceId).collect { resource ->
+                when (resource) {
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            ringDataStore.saveDeviceFeatures(it.deviceFeatures)
+                        }
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+    }
+
     fun checkAppVersion() {
+
+         connectedDevice?.let {
+             val lastFetchTimeStamp = localDataStore.getDeviceFeaturesLastSyncTime()
+             val fetchPeriod = localDataStore.getFeatureIntervalFetchPeriod()
+             if (fetchPeriod != 0) {
+                 if (lastFetchTimeStamp.checkTimeDifferenceMoreThanN(fetchPeriod)) {
+                     getDeviceFeatures(it)
+                 }
+             }
+
+         }
 
         val requestObject = JsonObject().apply {
             addProperty("platform", "android")

@@ -54,7 +54,7 @@ class DeviceRepositoryImpl(
     override suspend fun getDeviceFeature(deviceId: Int): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<DeviceFeatureResponse>>> {
         return safeApiCallFlow(dispatcher) {
             remoteDataSource.getDeviceFeatures(
-                "${BuildConfig.BASE_URL_NEW}/master/devices/features",
+                "${BuildConfig.BASE_URL_NEW}/user_detail/ring/device_features",
                 deviceId,
                 "android"
             )

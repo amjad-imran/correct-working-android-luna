@@ -408,7 +408,7 @@
     <string name="change_profile_picture">Change Profile Picture</string>
     <string name="badges">Badges</string>
     <string name="logout_ques">Logout?</string>
-    <string name="are_you_sure_to_logout_from_your_nnoisefit_account">Are you sure to logout from your\nLuna Ring Account</string>
+    <string name="are_you_sure_to_logout_from_your_nnoisefit_account">Are you sure to logout from your\nLuna Ring Account?</string>
     <string name="delete_account_ques">Delete Account?</string>
     <string name="are_you_sure_want_to_delete_your_noisefit_account_all_your_data_will_be_lost_if_you_delete_your_account">Are you sure want to delete your Luna Ring account? All your data will be lost if you delete your account</string>
     <string name="text_sos">SOS</string>
@@ -556,7 +556,7 @@
     <string name="text_no_upcoming_challenges_title">No challenge available</string>
     <string name="text_progress_avg_day">Progress avg/day</string>
     <string name="text_great_job">Great Job!</string>
-    <string name="text_total_calories">Total calories burned</string>
+    <string name="text_total_calories">Total calories</string>
     <string name="text_progress">Progress</string>
     <string name="text_watchface_transfer">Watch face transfer</string>
     <string name="text_no_widget_found">No Widget Found</string>
@@ -776,7 +776,7 @@
     <string name="text_unpair_device">Unpair Device</string>
     <string name="text_daytime_movement">Daytime movement</string>
     <string name="text_add_a_device">Add a device</string>
-    <string name="text_about_device">About Device</string>
+    <string name="text_about_device">About device</string>
     <string name="text_oreo_battery">Oreo battery</string>
     <string name="text_score_overview">Score Overview</string>
     <string name="text_daily_average_comparison">Daily average comparison</string>
@@ -949,4 +949,6 @@
     <string name="text_privacy_message">Welcome to Luna Ring. You can use this App to manage your ring and view related exercise and health data. We will strictly abide by relevant laws, regulations and privacy policies to protect your personal information. To provide the most basic services, the App needs to be connected to the internet.</string>
     <string name="text_do_you_want_to_reset">Ring is already connected with other device, Do you want to reset?</string>
     <string name="text_thank_u_sharing">Thank you for sharing!</string>
+    <string name="text_wrong_time">Wrong time</string>
+    <string name="text_adjust_date">Adjust date</string>
 </resources>

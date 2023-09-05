@@ -10,15 +10,15 @@ class SharedOSCDViewModel : BaseViewModel() {
     * */
     var selectedTab: Int = 0
     var itemType: String = ""
-    var itemClickType: String = ""
-    var selectedDate:String=""
+    var itemClickType: ViewItemClickType? = null
+    var selectedDate: String = ""
 
 
 }
 
 enum class ClickViewType {
     ACTIVITY_SCORE, GOAL_PROGRESS_DAY, GOAL_PROGRESS_WEEK, GOAL_PROGRESS_MONTH, TOTAL_BURN_DAY,
-    TOTAL_BURN_WEEK, TOTAL_BURN_MONTH, STEP_DAY, SLEEP,ACTIVITY, READINESS, DISTANCE
+    TOTAL_BURN_WEEK, TOTAL_BURN_MONTH, STEP_DAY, SLEEP, ACTIVITY, READINESS, DISTANCE
 }
 
 enum class ViewItemClickType {

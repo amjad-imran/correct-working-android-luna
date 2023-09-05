@@ -47,6 +47,11 @@ constructor(
     var autoWorkoutId: Int? = null
     var movementList: List<Int>? = null
     var preFilledOreoAutoSportData: OreoAutoSportData? = null
+
+
+    var isStartTimeSelected = false
+    var isEndTimeSelected = false
+
     fun convertAutoSport(data: OreoAutoSportData?) {
         if (data == null) {
             return
@@ -154,6 +159,11 @@ constructor(
     }
 
     fun getWorkoutDuration(): Int {
+
+        if(!isStartTimeSelected || !isEndTimeSelected){
+            return 0
+        }
+
         val diffInHours = addWorkout.endHour - addWorkout.startHour
 
         return (diffInHours * 60) + (addWorkout.endMinute - addWorkout.startMinute)

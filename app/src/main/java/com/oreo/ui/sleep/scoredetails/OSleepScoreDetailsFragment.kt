@@ -52,7 +52,7 @@ class OSleepScoreDetailsFragment :
             mViewModel.viewType = it.get(VIEW_TYPE).toString()
         }
         mViewModel.selectedDate = mSharedViewModel.selectedDate
-        mViewModel.itemClickType = mSharedViewModel.itemClickType
+        mViewModel.itemClickType = mSharedViewModel.itemClickType?.name ?: ""
 
         if (mViewModel.viewType?.lowercase() == "sleep")
             mViewModel.getInternalDetailsData()
@@ -210,6 +210,34 @@ class OSleepScoreDetailsFragment :
                         } else {
                             binding.lytTopGraphView.lytLabelValue1.tvUnit.visible()
                             binding.lytTopGraphView.lytLabelValue1.tvUnit.text = "steps"
+                        }
+                        setTopDateLabel(it.date)
+                    }
+
+                    ViewItemClickType.SLEEP_EFFICIENCY.name -> {
+                        binding.lytTopGraphView.lytLabelValue1.root.visible()
+                        binding.lytTopGraphView.lytLabelValue11.root.gone()
+                        binding.lytTopGraphView.lytLabelValue1.tvValue.text =
+                            checkZeroData(it.data.roundToInt())
+                        if (it.data.roundToInt() == 0) {
+                            binding.lytTopGraphView.lytLabelValue1.tvUnit.gone()
+                        } else {
+                            binding.lytTopGraphView.lytLabelValue1.tvUnit.visible()
+                            binding.lytTopGraphView.lytLabelValue1.tvUnit.text = "%"
+                        }
+                        setTopDateLabel(it.date)
+                    }
+
+                    ViewItemClickType.RESPIRATORY_RATE.name -> {
+                        binding.lytTopGraphView.lytLabelValue1.root.visible()
+                        binding.lytTopGraphView.lytLabelValue11.root.gone()
+                        binding.lytTopGraphView.lytLabelValue1.tvValue.text =
+                            checkZeroData(it.data.roundToInt())
+                        if (it.data.roundToInt() == 0) {
+                            binding.lytTopGraphView.lytLabelValue1.tvUnit.gone()
+                        } else {
+                            binding.lytTopGraphView.lytLabelValue1.tvUnit.visible()
+                            binding.lytTopGraphView.lytLabelValue1.tvUnit.text = "/min"
                         }
                         setTopDateLabel(it.date)
                     }
@@ -675,7 +703,7 @@ class OSleepScoreDetailsFragment :
                     } else if (
                         mViewModel.itemClickType == ViewItemClickType.DISTANCE.name
                     ) {
-                        var difference = 0
+                        var difference = 0f
                         todayProgress =
                             trendData.today.value.toLong()
                         yesterdayProgress =
@@ -691,7 +719,9 @@ class OSleepScoreDetailsFragment :
                             binding.lytScoreOverview.tvTrendProg.visible()
                             binding.lytScoreOverview.tvScoreMsg.visible()
                             mViewModel.isProgressEqual = false
-                            difference = todayProgress.toInt() - yesterdayProgress.toInt()
+                            difference = DistanceUtil.convertMeterToKm(todayProgress.toInt())
+                                .toFloat() - DistanceUtil.convertMeterToKm(yesterdayProgress.toInt())
+                                .toFloat()
                             mViewModel.isTodayGreater = true
                         } else if (yesterdayProgress > todayProgress) {
                             binding.lytScoreOverview.tvTrendProg.setCompoundDrawable(R.drawable.ic_trend_down)
@@ -704,19 +734,21 @@ class OSleepScoreDetailsFragment :
                             binding.lytScoreOverview.tvTrendProg.visible()
                             binding.lytScoreOverview.tvScoreMsg.visible()
                             mViewModel.isProgressEqual = false
-                            difference = yesterdayProgress.toInt() - todayProgress.toInt()
+                            difference = DistanceUtil.convertMeterToKm(yesterdayProgress.toInt())
+                                .toFloat() - DistanceUtil.convertMeterToKm(todayProgress.toInt())
+                                .toFloat()
                             mViewModel.isTodayGreater = false
                         } else {
                             binding.lytScoreOverview.tvTrendProg.gone()
                             binding.lytScoreOverview.tvScoreMsg.visible()
                             mViewModel.isProgressEqual = true
                         }
-                        val compPro = "${DistanceUtil.convertMeterToKm(difference)} km"
+                        val compPro = "${String.format("%.1f", difference)} km"
                         binding.lytScoreOverview.tvTrendProg.text = compPro
                     } else if (
                         mViewModel.itemClickType == ViewItemClickType.BODY_TEMPERATURE.name
                     ) {
-                        var difference = 0
+                        var difference = 0f
                         todayProgress =
                             trendData.today.value.toLong()
                         yesterdayProgress =
@@ -732,7 +764,7 @@ class OSleepScoreDetailsFragment :
                             binding.lytScoreOverview.tvTrendProg.visible()
                             binding.lytScoreOverview.tvScoreMsg.visible()
                             mViewModel.isProgressEqual = false
-                            difference = todayProgress.toInt() - yesterdayProgress.toInt()
+                            difference = trendData.today.value - trendData.yesterday.value
                             mViewModel.isTodayGreater = true
                         } else if (yesterdayProgress > todayProgress) {
                             binding.lytScoreOverview.tvTrendProg.setCompoundDrawable(R.drawable.ic_trend_down)
@@ -745,14 +777,14 @@ class OSleepScoreDetailsFragment :
                             binding.lytScoreOverview.tvTrendProg.visible()
                             binding.lytScoreOverview.tvScoreMsg.visible()
                             mViewModel.isProgressEqual = false
-                            difference = yesterdayProgress.toInt() - todayProgress.toInt()
+                            difference = trendData.yesterday.value - trendData.today.value
                             mViewModel.isTodayGreater = false
                         } else {
                             binding.lytScoreOverview.tvTrendProg.gone()
                             binding.lytScoreOverview.tvScoreMsg.visible()
                             mViewModel.isProgressEqual = true
                         }
-                        val compPro = "$difference °F"
+                        val compPro = "${String.format("%.1f", difference)} °F"
                         binding.lytScoreOverview.tvTrendProg.text = compPro
                     } else {
                         tryCatch {
@@ -881,7 +913,11 @@ class OSleepScoreDetailsFragment :
             }
 
             else -> {
-                "${DateFormats.getMonth(data.toInt() - 1)} ${mViewModel.getYearFromDate(mViewModel.selectedDate)}"
+                "Avg in ${DateFormats.getMonth(data.toInt() - 1)} ${
+                    mViewModel.getYearFromDate(
+                        mViewModel.selectedDate
+                    )
+                }"
             }
         }
 
@@ -905,6 +941,14 @@ class OSleepScoreDetailsFragment :
                 when (mViewModel.itemClickType) {
                     ViewItemClickType.ACTIVE_CALORIES.name -> {
                         binding.lytScoreOverview.lytToday.tvScore.text = "${todayTrendValue} kcal"
+                    }
+
+                    ViewItemClickType.SLEEP_EFFICIENCY.name -> {
+                        binding.lytScoreOverview.lytToday.tvScore.text = "${todayTrendValue}%"
+                    }
+
+                    ViewItemClickType.RESPIRATORY_RATE.name -> {
+                        binding.lytScoreOverview.lytToday.tvScore.text = "${todayTrendValue} /min"
                     }
 
                     ViewItemClickType.STEPS.name -> {
@@ -970,6 +1014,16 @@ class OSleepScoreDetailsFragment :
                             "$yesterdayTrendValue kcal"
                     }
 
+                    ViewItemClickType.SLEEP_EFFICIENCY.name -> {
+                        binding.lytScoreOverview.lytYesterday.tvScore.text =
+                            "$yesterdayTrendValue%"
+                    }
+
+                    ViewItemClickType.RESPIRATORY_RATE.name -> {
+                        binding.lytScoreOverview.lytYesterday.tvScore.text =
+                            "$yesterdayTrendValue /min"
+                    }
+
                     ViewItemClickType.STEPS.name -> {
                         binding.lytScoreOverview.lytYesterday.tvScore.text =
                             "$yesterdayTrendValue steps"
@@ -1003,6 +1057,14 @@ class OSleepScoreDetailsFragment :
                 when (mViewModel.itemClickType) {
                     ViewItemClickType.ACTIVE_CALORIES.name -> {
                         binding.lytAllTimeAvg.tvScore.text = "$allTimeTrendValue kcal"
+                    }
+
+                    ViewItemClickType.RESPIRATORY_RATE.name -> {
+                        binding.lytAllTimeAvg.tvScore.text = "$allTimeTrendValue /min"
+                    }
+
+                    ViewItemClickType.SLEEP_EFFICIENCY.name -> {
+                        binding.lytAllTimeAvg.tvScore.text = "$allTimeTrendValue%"
                     }
 
                     ViewItemClickType.STEPS.name -> {
@@ -1039,7 +1101,7 @@ class OSleepScoreDetailsFragment :
             it.result as ArrayList<ResultData>,
             mViewModel.dayType
         )
-        if (isTrendValueUpdate()) {
+        if (getGraphType() == 0) {
             binding.lytTopGraphView.rvTopBarGraph.visible()
             binding.lytTopGraphView.rvTopGraph.gone()
             binding.lytTopGraphView.rvTopBarGraph.updateDataWithMax(
@@ -1162,9 +1224,29 @@ class OSleepScoreDetailsFragment :
         return mViewModel.itemClickType == ViewItemClickType.TOTAL_SLEEP.name ||
                 mViewModel.itemClickType == ViewItemClickType.TIME_IN_BED.name ||
                 mViewModel.itemClickType == ViewItemClickType.STEPS.name ||
+                mViewModel.itemClickType == ViewItemClickType.SLEEP_EFFICIENCY.name ||
+                mViewModel.itemClickType == ViewItemClickType.RESPIRATORY_RATE.name ||
                 mViewModel.itemClickType == ViewItemClickType.DISTANCE.name ||
                 mViewModel.itemClickType == ViewItemClickType.ACTIVE_CALORIES.name ||
                 mViewModel.itemClickType == ViewItemClickType.BODY_TEMPERATURE.name
+    }
+
+    /**
+     * 0-> Bar
+     * 1-> Line
+     */
+    private fun getGraphType(): Int {
+        return if (mViewModel.itemClickType == ViewItemClickType.TOTAL_SLEEP.name ||
+            mViewModel.itemClickType == ViewItemClickType.TIME_IN_BED.name ||
+            mViewModel.itemClickType == ViewItemClickType.STEPS.name ||
+            mViewModel.itemClickType == ViewItemClickType.DISTANCE.name ||
+            mViewModel.itemClickType == ViewItemClickType.ACTIVE_CALORIES.name ||
+            mViewModel.itemClickType == ViewItemClickType.BODY_TEMPERATURE.name
+        ) {
+            0
+        } else {
+            1
+        }
     }
 
     private fun lineGraphScoreColor(): Triple<Int, Int, Int> {
@@ -1363,60 +1445,64 @@ class OSleepScoreDetailsFragment :
     private fun getTrendTitle(): String {
         var trendTitle = ""
         when (mSharedViewModel.itemClickType) {
-            ViewItemClickType.SLEEP_SCORE.name -> {
+            ViewItemClickType.SLEEP_SCORE -> {
                 trendTitle = "Sleep score trend"
             }
 
-            ViewItemClickType.TOTAL_SLEEP.name -> {
+            ViewItemClickType.TOTAL_SLEEP -> {
                 trendTitle = "Total sleep trend"
             }
 
-            ViewItemClickType.SLEEP_EFFICIENCY.name -> {
+            ViewItemClickType.SLEEP_EFFICIENCY -> {
                 trendTitle = "Sleep efficiency trend"
             }
 
-            ViewItemClickType.TIME_IN_BED.name -> {
+            ViewItemClickType.TIME_IN_BED -> {
                 trendTitle = "Time in bed trend"
             }
 
-            ViewItemClickType.RESTING_HR.name -> {
+            ViewItemClickType.RESTING_HR -> {
                 trendTitle = "Resting hr trend"
             }
 
-            ViewItemClickType.READINESS_SCORE.name -> {
+            ViewItemClickType.READINESS_SCORE -> {
                 trendTitle = "Readiness score trend "
             }
 
-            ViewItemClickType.HR_VARIABILITY.name -> {
+            ViewItemClickType.HR_VARIABILITY -> {
                 trendTitle = "Hr variability trend"
             }
 
-            ViewItemClickType.BODY_TEMPERATURE.name -> {
+            ViewItemClickType.BODY_TEMPERATURE -> {
                 trendTitle = "Body temperature trend"
             }
 
-            ViewItemClickType.RESPIRATORY_RATE.name -> {
+            ViewItemClickType.RESPIRATORY_RATE -> {
                 trendTitle = "Respiratory rate trend"
             }
 
-            ViewItemClickType.ACTIVITY_SCORE.name -> {
+            ViewItemClickType.ACTIVITY_SCORE -> {
                 trendTitle = "Activity score trend"
             }
 
-            ViewItemClickType.ACTIVE_CALORIES.name -> {
+            ViewItemClickType.ACTIVE_CALORIES -> {
                 trendTitle = "Goal progress trend"
             }
 
-            ViewItemClickType.TOTAL_CALORIES_BURNED.name -> {
-                trendTitle = "Total calories burned trend"
+            ViewItemClickType.TOTAL_CALORIES_BURNED -> {
+                trendTitle = "Total calories trend"
             }
 
-            ViewItemClickType.STEPS.name -> {
+            ViewItemClickType.STEPS -> {
                 trendTitle = "Steps trend"
             }
 
-            ViewItemClickType.DISTANCE.name -> {
+            ViewItemClickType.DISTANCE -> {
                 trendTitle = "Distance trend"
+            }
+
+            null -> {
+
             }
         }
         return trendTitle

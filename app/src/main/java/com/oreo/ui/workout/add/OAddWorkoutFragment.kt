@@ -86,8 +86,10 @@ class OAddWorkoutFragment :
                 }
 
                 binding.lytWorkout.tvWorkout.text = workout.getFormattedActivityName()
-                setCalories()
-                enableSaveBtn()
+                /*setCalories()
+                enableSaveBtn()*/
+
+                updateCalculatedData()
             }
         }
 
@@ -149,6 +151,8 @@ class OAddWorkoutFragment :
                     viewModel.addWorkout.startMinute = minute
                     setStartTimeBetween()
                 }
+
+                updateCalculatedData()
 
 
             }
@@ -225,6 +229,8 @@ class OAddWorkoutFragment :
                     viewModel.addWorkout.endMinute = minute
                     setEndTimeBetween()
                 }
+
+                updateCalculatedData()
             }
 
             navigate(
@@ -242,7 +248,8 @@ class OAddWorkoutFragment :
                 selectedValue?.let { it1 ->
                     viewModel.addWorkout.intensity = it1
                     setIntensity()
-                    setCalories()
+                    //setCalories()
+                    updateCalculatedData()
                 }
 
             }
@@ -254,6 +261,28 @@ class OAddWorkoutFragment :
                 )
             )
         }
+
+    }
+
+    private fun updateCalculatedData() {
+
+        val duration = viewModel.getWorkoutDuration()
+        if (duration > 0) {
+            viewModel.addWorkout.duration = duration
+            binding.lytCaloriesBurn.tvDurationValue.text = duration.toString()
+        }
+
+        val calories = viewModel.getCaloriesBurnt().roundToInt()
+        viewModel.addWorkout.calories = calories
+        binding.lytCaloriesBurn.tvCalBurnValue.text = if (calories > 0) {
+            "$calories"
+        } else {
+            "--"
+        }
+
+
+
+        enableSaveBtn()
 
     }
 
@@ -282,7 +311,12 @@ class OAddWorkoutFragment :
             viewModel.addWorkout.startHour,
             viewModel.addWorkout.startMinute
         )
+
+        /*if (viewModel.isStartTimeSelected && viewModel.isEndTimeSelected) {
+            setDuration()
+        }*/
         binding.lytStartEnd.lytStartTime.tvTimeValue.text = startTime
+        viewModel.isStartTimeSelected = true
     }
 
     private fun setEndTimeBetween(ignoreDuration: Boolean = true) {
@@ -296,16 +330,16 @@ class OAddWorkoutFragment :
             viewModel.addWorkout.endHour,
             viewModel.addWorkout.endMinute
         )
-        if (ignoreDuration) {
+        /*if (ignoreDuration) {
             setDuration()
-        }
-
+        }*/
+        viewModel.isEndTimeSelected = true
         binding.lytStartEnd.lytEndTime.tvTimeValue.text = endTime
     }
 
     private fun setDuration() {
         val duration = viewModel.getWorkoutDuration()
-        setCalories()
+        //setCalories()
         if (duration > 0) {
             viewModel.addWorkout.duration = duration
             binding.lytCaloriesBurn.tvDurationValue.text = duration.toString()
