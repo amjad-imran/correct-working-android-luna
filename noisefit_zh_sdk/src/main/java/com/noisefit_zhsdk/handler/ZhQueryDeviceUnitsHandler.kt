@@ -1104,7 +1104,6 @@ constructor(
     private fun initLogListener() {
         ControlBleTools.getInstance().deviceLogCallBack = object : DeviceLogCallBack {
             override fun onLogI(tag: String?, msg: String?, p2: String?) {
-                val messageTag = "$tag $msg"
                 FileLogsUtils.saveILogs(
                     noiseFitDevice,
                     "$tag $msg",
