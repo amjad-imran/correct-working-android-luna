@@ -45,7 +45,7 @@ constructor() : FirebaseMessagingService() {
             Dispatchers.IO // no job added i.e + SupervisorJob()
     }
 
-    lateinit var job: Job
+    private var job: Job? = null
 
     override fun onNewToken(token: String) {
         LOGS.d(TAG, "onNewToken event received $token")
@@ -63,7 +63,10 @@ constructor() : FirebaseMessagingService() {
                     message.data.containsKey("source") &&
                     message.data.get("source").equals("Insider")
                 ) {
-                    launchSendNotificationJob(message.notification?.title ?: "",message.notification?.body ?: "")
+                    launchSendNotificationJob(
+                        message.notification?.title ?: "",
+                        message.notification?.body ?: ""
+                    )
                     Insider.Instance.handleFCMNotification(applicationContext, message)
                     return
                 }
@@ -101,7 +104,10 @@ constructor() : FirebaseMessagingService() {
 //                    LOGS.d("NOTIFICATION_TYPE $notificationType ${message.notification?.body} ${message.data[NOTIFICATION_INDEX_EXTRA]}")
                     // not from CleverTap handle yourself or pass to another provider
 
-                    launchSendNotificationJob(message.notification?.title ?: "",message.notification?.body ?: "")
+                    launchSendNotificationJob(
+                        message.notification?.title ?: "",
+                        message.notification?.body ?: ""
+                    )
 
                 }
 //                }
@@ -163,7 +169,7 @@ constructor() : FirebaseMessagingService() {
 
     override fun onDestroy() {
         super.onDestroy()
-        job.cancel()
+        job?.cancel()
     }
 
     companion object {
