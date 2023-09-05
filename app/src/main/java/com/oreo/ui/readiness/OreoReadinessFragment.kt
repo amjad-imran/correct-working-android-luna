@@ -395,7 +395,7 @@ class OreoReadinessFragment :
         binding.lytRScoreData.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
             mSharedViewModel.itemType = ClickViewType.READINESS.name
-            mSharedViewModel.itemClickType = ViewItemClickType.READINESS_SCORE.name
+            mSharedViewModel.itemClickType = ViewItemClickType.READINESS_SCORE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
             })
@@ -403,7 +403,7 @@ class OreoReadinessFragment :
         binding.lytRScoreData.lytSec1.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
             mSharedViewModel.itemType = ClickViewType.READINESS.name
-            mSharedViewModel.itemClickType = ViewItemClickType.RESTING_HR.name
+            mSharedViewModel.itemClickType = ViewItemClickType.RESTING_HR
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
             })
@@ -411,7 +411,7 @@ class OreoReadinessFragment :
         binding.lytRScoreData.lytSec2.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
             mSharedViewModel.itemType = ClickViewType.READINESS.name
-            mSharedViewModel.itemClickType = ViewItemClickType.HR_VARIABILITY.name
+            mSharedViewModel.itemClickType = ViewItemClickType.HR_VARIABILITY
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
             })
@@ -419,7 +419,7 @@ class OreoReadinessFragment :
         binding.lytRScoreData.lytSec3.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
             mSharedViewModel.itemType = ClickViewType.READINESS.name
-            mSharedViewModel.itemClickType = ViewItemClickType.BODY_TEMPERATURE.name
+            mSharedViewModel.itemClickType = ViewItemClickType.BODY_TEMPERATURE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
             })
@@ -427,7 +427,7 @@ class OreoReadinessFragment :
         binding.lytRScoreData.lytSec4.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
             mSharedViewModel.itemType = ClickViewType.READINESS.name
-            mSharedViewModel.itemClickType = ViewItemClickType.RESPIRATORY_RATE.name
+            mSharedViewModel.itemClickType = ViewItemClickType.RESPIRATORY_RATE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
             })
@@ -594,7 +594,7 @@ class OreoReadinessFragment :
 
                 binding.lytRScoreData.lytSec4.lytBpmView.tvValue.text =
                     resData.value.toString()
-                binding.lytRScoreData.lytSec4.lytBpmView.tvUnit.text = "bpm"
+                binding.lytRScoreData.lytSec4.lytBpmView.tvUnit.text = "/min"
                 binding.lytRScoreData.lytSec4.lytBpmView.tvUnit.visible()
             }
         } else {

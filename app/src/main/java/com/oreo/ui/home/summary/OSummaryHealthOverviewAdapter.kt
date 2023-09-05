@@ -267,7 +267,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 //                binding.tvTodayDesc.visible()
             }
 
-            if (data.data.nudge.isNullOrEmpty()) {
+            if (data.data.nudges.isNullOrEmpty()) {
                 (binding.tvTodayDesc.layoutParams as ConstraintLayout.LayoutParams).apply {
                     topMargin = 24
                     bottomMargin = 0
@@ -277,7 +277,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     topMargin = 24
                     bottomMargin = 26
                 }
-                binding.tvTodayDesc.text = data.data.nudge
+                binding.tvTodayDesc.text = data.data.nudges.first()
             }
 
             if (scoreValue >= 0) {
@@ -397,15 +397,17 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             if (scoreValue == null) {
                 binding.tvValue.text = "--"
                 binding.tvStatus.text = "No data"
-                binding.tvTodayDesc.text = ""
             } else {
                 binding.tvValue.text = scoreValue.toString()
                 binding.tvStatus.text = data.data.status
+            }
 
 
-                if (!data.data.nudge.isNullOrEmpty()) {
-                    binding.tvTodayDesc.text = data.data.nudge
-                }
+            if (data.data.nudges.isNullOrEmpty()) {
+                binding.tvTodayDesc.gone()
+            } else {
+                binding.tvTodayDesc.visible()
+                binding.tvTodayDesc.text = data.data.nudges.first()
             }
 
             val caloriesGoalText = "/ ${data.caloriesGoal} kcal"

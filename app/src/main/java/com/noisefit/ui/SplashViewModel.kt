@@ -122,7 +122,7 @@ class SplashViewModel
                 when (resource) {
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            localDataStore.saveDeviceFeatures(it.deviceFeatures)
+                            ringDataStore.saveDeviceFeatures(it.deviceFeatures)
                         }
                     }
 
@@ -134,16 +134,16 @@ class SplashViewModel
 
     fun checkAppVersion() {
 
-       /* connectedDevice?.let {
-            val lastFetchTimeStamp = localDataStore.getDeviceFeaturesLastSyncTime()
-            val fetchPeriod = localDataStore.getFeatureIntervalFetchPeriod()
-            if (fetchPeriod != 0) {
-                if (lastFetchTimeStamp.checkTimeDifferenceMoreThanN(fetchPeriod)) {
-                    getDeviceFeatures(it)
-                }
-            }
+         connectedDevice?.let {
+             val lastFetchTimeStamp = localDataStore.getDeviceFeaturesLastSyncTime()
+             val fetchPeriod = localDataStore.getFeatureIntervalFetchPeriod()
+             if (fetchPeriod != 0) {
+                 if (lastFetchTimeStamp.checkTimeDifferenceMoreThanN(fetchPeriod)) {
+                     getDeviceFeatures(it)
+                 }
+             }
 
-        }*/
+         }
 
         val requestObject = JsonObject().apply {
             addProperty("platform", "android")

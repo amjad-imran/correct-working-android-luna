@@ -348,6 +348,13 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             }
         }
 
+        viewModel.sessionManager.isRingCharging.observe(this) {
+            if (viewModel.sessionManager.connectStateRing.value is ConnectState.ConnectSuccess) {
+                setStateConnected((viewModel.sessionManager.connectStateRing.value as ConnectState.ConnectSuccess).noiseFitDevice)
+            }
+
+        }
+
         viewModel.sessionManager.connectStateRing.observe(this) { connectedState ->
             when (connectedState) {
                 is ConnectState.ConnectFailed -> {

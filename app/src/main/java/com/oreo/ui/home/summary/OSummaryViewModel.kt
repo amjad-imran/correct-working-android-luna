@@ -205,12 +205,11 @@ constructor(
             val userActivities = ArrayList<OHealthOverview>()
 
 
-//            val autoSportCount = userRepository.getSummaryAutoWorkoutCount()
-//            if (autoSportCount > 0) {
-//                userActivities.add(OHealthOverview.AutoSport(autoSportCount))
-//            }
-
-//            userActivities.add(1, OHealthOverview.WAlert(2))
+            val autoSportCount = userRepository.getSummaryAutoWorkoutCount()
+            if (autoSportCount > 0) {
+                userActivities.add(OHealthOverview.AutoSport(autoSportCount))
+            }
+            //userActivities.add(OHealthOverview.AutoSport(2))
 
 
             ringDataStore.setRegisterDay(data.registerDate ?: -1)

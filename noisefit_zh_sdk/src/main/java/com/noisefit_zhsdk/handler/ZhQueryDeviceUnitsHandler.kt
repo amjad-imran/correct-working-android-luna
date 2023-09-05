@@ -53,6 +53,7 @@ import com.zhapp.ble.bean.HeartRateMonitorBean
 import com.zhapp.ble.bean.MusicInfoBean
 import com.zhapp.ble.bean.NotificationSettingsBean
 import com.zhapp.ble.bean.PressureModeBean
+import com.zhapp.ble.bean.RealTimeBean
 import com.zhapp.ble.bean.SchedulerBean
 import com.zhapp.ble.bean.SchoolBean
 import com.zhapp.ble.bean.ScreenDisplayBean
@@ -74,6 +75,7 @@ import com.zhapp.ble.callback.EmergencyContactsCallBack
 import com.zhapp.ble.callback.MicroCallBack
 import com.zhapp.ble.callback.MusicCallBack
 import com.zhapp.ble.callback.QuickReplyCallBack
+import com.zhapp.ble.callback.RealTimeDataCallBack
 import com.zhapp.ble.callback.RequestClassicBleConnectStatusCallBack
 import com.zhapp.ble.callback.SettingMenuCallBack
 import com.zhapp.ble.callback.StockCallBack
@@ -310,9 +312,63 @@ constructor(
         return false
     }
 
+    private val realDataCallback = object : RealTimeDataCallBack {
+        override fun onResult(p0: RealTimeBean?) {
+
+            if (p0 == null) return
+            val chargeStatus = try {
+                p0.batteryInfo.chargeStatus.toInt()
+            } catch (exp: Exception) {
+                2
+            }
+            val capacity = try {
+                p0.batteryInfo.capacity.toIntOrNull()
+            } catch (exp: Exception) {
+                null
+            }
+
+            var isCharging = false
+            if (chargeStatus == 1) {
+                isCharging = true
+            }
+            LOGS.w("Realtime Data battery Info : ${p0.batteryInfo}")
+            if (capacity != null) {
+                testQueryDeviceDataCallback?.onQueryDataReceived(
+                    QueryCallback.BatteryDataObtained(
+                        BatteryData(percentage = capacity, isCharging = isCharging)
+                    )
+                )
+            }
+
+
+            /*if (!colorFitDevice?.deviceType.equals(DeviceType.NOISEFIT_LUNA.deviceType, true)) {
+                p0?.let {
+                    userActivityDataCallbacks?.onUserActivityDataReceived(
+                        UserActivityCallback.RealStepsDataObtained(
+                            dataConverter.parseStepsData(
+                                p0
+                            )
+                        )
+                    )
+                }
+            }*/
+
+        }
+
+        override fun onFail() {
+
+        }
+
+    }
+
+
     override fun attachCallbacks() {
         removeCallbacks()
         initClassicBluetoothStateCallBack()
+
+        CallBackUtils.realTimeDataCallback = realDataCallback
+
+
         /**
          * 设备端处理来电回复回调
          */

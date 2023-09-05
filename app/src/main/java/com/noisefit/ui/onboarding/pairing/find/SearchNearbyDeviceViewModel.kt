@@ -249,7 +249,7 @@ constructor(
 
             colorFitDevice.apply {
                 this.ringInfo =
-                    getRingInfo(scannedDevice.mDeviceRadioBroadcastBean.serialNumber)
+                    getRingInfo(scannedDevice.mDeviceRadioBroadcastBean?.serialNumber)
 
 
             }

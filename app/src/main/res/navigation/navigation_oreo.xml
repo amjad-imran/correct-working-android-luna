@@ -103,6 +103,9 @@
         <argument
             android:name="viewType"
             app:argType="string" />
+        <action
+            android:id="@+id/action_sleepDetailsParentOreo_to_bottomSheetDataMetrics"
+            app:destination="@id/bottomSheetDataMetrics" />
     </fragment>
 
     <fragment
@@ -354,5 +357,13 @@
         android:id="@+id/qrCodeScanFragment"
         android:name="com.oreo.ui.warranty.QrCodeScanFragment"
         android:label="QrCodeScanFragment" />
+    <dialog
+        android:id="@+id/bottomSheetDataMetrics"
+        android:name="com.oreo.ui.sleep.scoredetails.BottomSheetDataMetrics"
+        android:label="BottomSheetDataMetrics" >
+        <argument
+            android:name="metricsType"
+            app:argType="com.oreo.ui.sleep.scoredetails.ViewItemClickType" />
+    </dialog>
 
 </navigation>

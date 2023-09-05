@@ -53,7 +53,7 @@ class OActivityListAdapter(
 //                if (bindingAdapterPosition==0){
 //                    view.findViewById<View>(R.id.include45).gone()
 //                }
-                var date = activity.createdDate
+                var date = activity.date
                 if (date == DateFormats.getCurrentDate(DateFormats.dateFormat6)) {
                     date = "Today’s Workouts"
                 }

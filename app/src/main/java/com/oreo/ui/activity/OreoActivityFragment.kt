@@ -516,7 +516,7 @@ class OreoActivityFragment :
         binding.lytAScoreData.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
             mSharedViewModel.itemType = ClickViewType.ACTIVITY.name
-            mSharedViewModel.itemClickType = ViewItemClickType.ACTIVITY_SCORE.name
+            mSharedViewModel.itemClickType = ViewItemClickType.ACTIVITY_SCORE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "activity")
             })
@@ -524,7 +524,7 @@ class OreoActivityFragment :
         binding.lytAScoreData.lytSec1.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
             mSharedViewModel.itemType = ClickViewType.ACTIVITY.name
-            mSharedViewModel.itemClickType = ViewItemClickType.ACTIVE_CALORIES.name
+            mSharedViewModel.itemClickType = ViewItemClickType.ACTIVE_CALORIES
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "activity")
             })
@@ -532,7 +532,7 @@ class OreoActivityFragment :
         binding.lytAScoreData.lytSec2.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
             mSharedViewModel.itemType = ClickViewType.ACTIVITY.name
-            mSharedViewModel.itemClickType = ViewItemClickType.TOTAL_CALORIES_BURNED.name
+            mSharedViewModel.itemClickType = ViewItemClickType.TOTAL_CALORIES_BURNED
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "activity")
             })
@@ -540,7 +540,7 @@ class OreoActivityFragment :
         binding.lytAScoreData.lytSec3.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
             mSharedViewModel.itemType = ClickViewType.ACTIVITY.name
-            mSharedViewModel.itemClickType = ViewItemClickType.STEPS.name
+            mSharedViewModel.itemClickType = ViewItemClickType.STEPS
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "activity")
             })
@@ -548,7 +548,7 @@ class OreoActivityFragment :
         binding.lytAScoreData.lytSec4.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
             mSharedViewModel.itemType = ClickViewType.ACTIVITY.name
-            mSharedViewModel.itemClickType = ViewItemClickType.DISTANCE.name
+            mSharedViewModel.itemClickType = ViewItemClickType.DISTANCE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "activity")
             })

@@ -32,24 +32,23 @@
             app:layout_constraintTop_toTopOf="@+id/backBtn"
             tools:text="Title" />
 
-        <View
+        <ImageView
             android:id="@+id/view1"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_margin="@dimen/side_margin"
+            tools:src="@drawable/ic_info"
             android:background="@drawable/back_modal_new_round"
-            android:scaleType="centerCrop"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/ivAddFriend"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:visibility="invisible"
-            android:src="@drawable/ic_info"
+            tools:src="@drawable/ic_info"
             app:layout_constraintBottom_toBottomOf="@+id/view1"
             app:layout_constraintEnd_toEndOf="@+id/view1"
             app:layout_constraintStart_toStartOf="@+id/view1"

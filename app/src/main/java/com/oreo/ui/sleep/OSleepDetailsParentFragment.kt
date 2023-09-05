@@ -36,7 +36,13 @@ class OSleepDetailsParentFragment :
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Week"))
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Month"))
         binding.lytToolbar.tvTitle.text = getPageTitle()
-        loadFragment(OSleepScoreDetailsFragment.newInstance("Day", mViewModel.itemType,args.viewType))
+        loadFragment(
+            OSleepScoreDetailsFragment.newInstance(
+                "Day",
+                mViewModel.itemType,
+                args.viewType
+            )
+        )
         mViewModel.selectedTab = 0
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -48,6 +54,7 @@ class OSleepDetailsParentFragment :
                             ClickViewType.SLEEP.name -> {
                                 clickedType = ClickViewType.SLEEP.name
                             }
+
                             ClickViewType.ACTIVITY.name -> {
                                 clickedType = ClickViewType.SLEEP.name
                             }
@@ -88,6 +95,7 @@ class OSleepDetailsParentFragment :
                             ClickViewType.SLEEP.name -> {
                                 clickedViewType = ClickViewType.SLEEP.name
                             }
+
                             ClickViewType.ACTIVITY.name -> {
                                 clickedViewType = ClickViewType.SLEEP.name
                             }
@@ -130,6 +138,7 @@ class OSleepDetailsParentFragment :
                             ClickViewType.ACTIVITY.name -> {
                                 clickedType = ClickViewType.READINESS.name
                             }
+
                             ClickViewType.READINESS.name -> {
                                 clickedType = ClickViewType.READINESS.name
                             }
@@ -179,9 +188,19 @@ class OSleepDetailsParentFragment :
             mViewModel.itemType = ""
             navigateUpSafe()
         }
-        binding.lytToolbar.view1.invisible()
+        binding.lytToolbar.view1.setOnClickListener {
+            mViewModel.itemClickType?.let { type->
+                navigate(
+                    OSleepDetailsParentFragmentDirections.actionSleepDetailsParentOreoToBottomSheetDataMetrics(
+                        type
+                    )
+                )
+            }
+
+        }
+        binding.lytToolbar.view1.visible()
         binding.lytToolbar.ivAddFriend.invisible()
-        binding.lytToolbar.ivAddFriend.loadImage(requireActivity(), R.drawable.ic_info_oreo)
+        binding.lytToolbar.view1.loadImage(requireActivity(), R.drawable.ic_info_oreo)
 
     }
 
@@ -200,61 +219,63 @@ class OSleepDetailsParentFragment :
     private fun getPageTitle(): String {
         var trendTitle = ""
         when (mViewModel.itemClickType) {
-            ViewItemClickType.SLEEP_SCORE.name -> {
+            ViewItemClickType.SLEEP_SCORE -> {
                 trendTitle = "Sleep score"
             }
 
-            ViewItemClickType.TOTAL_SLEEP.name -> {
+            ViewItemClickType.TOTAL_SLEEP -> {
                 trendTitle = "Total sleep"
             }
 
-            ViewItemClickType.SLEEP_EFFICIENCY.name -> {
+            ViewItemClickType.SLEEP_EFFICIENCY -> {
                 trendTitle = "Sleep efficiency"
             }
 
-            ViewItemClickType.TIME_IN_BED.name -> {
+            ViewItemClickType.TIME_IN_BED -> {
                 trendTitle = "Time in bed"
             }
 
-            ViewItemClickType.RESTING_HR.name -> {
+            ViewItemClickType.RESTING_HR -> {
                 trendTitle = "Resting HR"
             }
 
-            ViewItemClickType.READINESS_SCORE.name -> {
+            ViewItemClickType.READINESS_SCORE -> {
                 trendTitle = "Readiness score"
             }
 
-            ViewItemClickType.HR_VARIABILITY.name -> {
+            ViewItemClickType.HR_VARIABILITY -> {
                 trendTitle = "Hr variability"
             }
 
-            ViewItemClickType.BODY_TEMPERATURE.name -> {
+            ViewItemClickType.BODY_TEMPERATURE -> {
                 trendTitle = "Body temperature"
             }
 
-            ViewItemClickType.RESPIRATORY_RATE.name -> {
+            ViewItemClickType.RESPIRATORY_RATE -> {
                 trendTitle = "Respiratory rate"
             }
 
-            ViewItemClickType.ACTIVITY_SCORE.name -> {
+            ViewItemClickType.ACTIVITY_SCORE -> {
                 trendTitle = "Activity score"
             }
 
-            ViewItemClickType.ACTIVE_CALORIES.name -> {
+            ViewItemClickType.ACTIVE_CALORIES -> {
                 trendTitle = "Goal progress"
             }
 
-            ViewItemClickType.TOTAL_CALORIES_BURNED.name -> {
+            ViewItemClickType.TOTAL_CALORIES_BURNED -> {
                 trendTitle = "Total calories"
             }
 
-            ViewItemClickType.STEPS.name -> {
+            ViewItemClickType.STEPS -> {
                 trendTitle = "Steps"
             }
 
-            ViewItemClickType.DISTANCE.name -> {
+            ViewItemClickType.DISTANCE -> {
                 trendTitle = "Distance"
             }
+
+            null -> {}
         }
         return trendTitle
     }
