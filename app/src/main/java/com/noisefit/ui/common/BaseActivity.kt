@@ -172,6 +172,11 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), UIControlle
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        wrongTimeDialog?.dismiss()
+    }
+
 
     private fun displaySnackbar(
         message: String,
@@ -327,8 +332,9 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), UIControlle
 
     }
 
-    private fun showWrongTimeDialog(): AlertDialog {
-        var alert: AlertDialog? = null
+    var wrongTimeDialog : AlertDialog?=null
+
+    private fun showWrongTimeDialog() {
         val builder = MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_rounded)
 
         val layoutCustomAlertBinding: LayoutCustomAlertBinding = DataBindingUtil.inflate(
@@ -337,31 +343,27 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), UIControlle
         )
         layoutCustomAlertBinding.apply {
             val desc =
-                "Your phone date is inaccurate! Adjust your clock and try again\n\n Your phone date and time is: ${
+                "Your phone date is inaccurate! Adjust your clock and try again \n\nYour phone date and time is: ${
                     DateFormats.getDate(DateFormats.dateTimeFormat)
                 }"
             tvTitle.text = getString(R.string.text_wrong_time)
             tvDesc.text = desc
             btnAllow.text = getString(R.string.text_adjust_date)
             btnAllow.setOnClickListener {
-                alert?.dismiss()
-
+                wrongTimeDialog?.dismiss()
                 val intent = Intent(Settings.ACTION_DATE_SETTINGS)
                 startActivity(intent)
-                System.exit(0)
             }
             btnCancel.gone()
 
         }
         builder.setView(layoutCustomAlertBinding.root)
         builder.setCancelable(false)
-        alert = builder.create()
+        wrongTimeDialog = builder.create()
 
         if (!(this as Activity).isFinishing) {
-            alert.show()
+            wrongTimeDialog?.show()
         }
-        return alert
-
     }
 
     private fun showRetryDialog(
