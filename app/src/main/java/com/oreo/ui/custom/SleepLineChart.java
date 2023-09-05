@@ -487,6 +487,7 @@ public class SleepLineChart extends View {
 
                     if (endTextStartPos == 0f) {
                         String text = list.get(list.size() - 1).getIndex();
+                        xTextPaint.setColor(Color.parseColor("#ffffff"));
                         endTextStartPos = mWith - leftWith - xTextPaint.measureText(text);
                     }
 
@@ -499,7 +500,8 @@ public class SleepLineChart extends View {
                         xTextPaint.setColor(Color.parseColor("#ffffff"));
                         canvas.drawText(xText, x, mHeight - bottomWith / 4, xTextPaint);
                     } else {
-                        if (leftTextEndPos < (x - xTextBounds.width() / 2f) && (x + xTextBounds.width() / 2f) < endTextStartPos) {
+                        if (leftTextEndPos < (x - xTextBounds.width())
+                                && (x + xTextBounds.width()) < endTextStartPos) {
                             xTextPaint.setColor(xTextColor & 0x80ffffff);
                             canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 4, xTextPaint);
                         }
