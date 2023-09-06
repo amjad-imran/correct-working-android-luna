@@ -13,6 +13,7 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.graphics.RectF
+import android.util.TypedValue
 import android.widget.TextView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -38,6 +39,12 @@ fun Int?.convertMinuteIntoSeconds(): Int {
 
     return this * 60
 
+}
+
+fun Context.dpToPx(px: Int): Int {
+    return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP, px.toFloat(), this.resources.displayMetrics
+    ).toInt()
 }
 
 fun Long.checkDayDifferenceMoreNMinutes(value: Int): Boolean {
@@ -109,8 +116,9 @@ fun List<Int>.maxWithoutInvalidMovementValues(): Int {
         0
     }
 }
+
 fun List<Int>.maxWithInvalidMovementValues(): Int {
-    val newList = this.filter {it != 255 && it != 5 && it != 4 }
+    val newList = this.filter { it != 255 && it != 5 && it != 4 }
     return if (newList.isNotEmpty()) {
         newList.maxOrNull() ?: 255
     } else {

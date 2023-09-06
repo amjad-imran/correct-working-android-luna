@@ -22,6 +22,7 @@ import com.noisefit.luna.databinding.*
 import com.noisefit.ui.common.calculatePercentage
 import com.noisefit.ui.dashboard.summary.DashboardBannerAction
 import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.common.dpToPx
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.ui.custom.SleepProgressbarView
 import com.noisefit_commans.utils.DateFormats
@@ -269,13 +270,13 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             if (data.data.nudges.isNullOrEmpty()) {
                 (binding.tvTodayDesc.layoutParams as ConstraintLayout.LayoutParams).apply {
-                    topMargin = 24
+                    topMargin = binding.tvTodayDesc.context.dpToPx(24)
                     bottomMargin = 0
                 }
             } else {
                 (binding.tvTodayDesc.layoutParams as ConstraintLayout.LayoutParams).apply {
-                    topMargin = 24
-                    bottomMargin = 26
+                    topMargin = binding.tvTodayDesc.context.dpToPx(24)
+                    bottomMargin = binding.tvTodayDesc.context.dpToPx(26)
                 }
                 binding.tvTodayDesc.text = data.data.nudges.first()
             }
