@@ -252,7 +252,7 @@ public class SleepLineChart extends View {
     }
 
     public void updateDataWithMax(SleepChartModel datas, int maxOffset,
-                                  boolean showHighCircle, boolean showLowCircle, GraphDummyModel dummy) {
+                                  boolean showHighCircle, boolean showLowCircle, GraphDummyModel dummy, Integer averageValue) {
         sleepModel = datas;
         mHasDummyData = dummy.getHasDummyData();
         list.clear();
@@ -290,9 +290,14 @@ public class SleepLineChart extends View {
 //                LOGS.INSTANCE.d("updateDataminValue " + xMax + " " + xMin);
             }
         }
-        if (count > 0) {
-            avgValue = sum / count;
+        if (averageValue == null) {
+            if (count > 0) {
+                avgValue = sum / count;
+            }
+        } else {
+            avgValue = averageValue;
         }
+
 
 //        xMax += maxOffset;
 
@@ -500,7 +505,7 @@ public class SleepLineChart extends View {
                         xTextPaint.setColor(Color.parseColor("#ffffff"));
                         canvas.drawText(xText, x, mHeight - bottomWith / 4, xTextPaint);
                     } else {
-                        if (leftTextEndPos < (x - xTextBounds.width())
+                        if (leftTextEndPos < (x - (xTextBounds.width() / 2f + dip2px(6)))
                                 && (x + xTextBounds.width()) < endTextStartPos) {
                             xTextPaint.setColor(xTextColor & 0x80ffffff);
                             canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 4, xTextPaint);
