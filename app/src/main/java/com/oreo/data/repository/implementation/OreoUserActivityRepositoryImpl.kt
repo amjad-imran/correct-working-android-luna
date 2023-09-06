@@ -1008,6 +1008,8 @@ class OreoUserActivityRepositoryImpl(
     override suspend fun deleteWorkoutFromServer(id: String): Flow<Resource<BaseApiResponse<Any>>> {
         //'https://stage-oreo.gonoise.com/activity/v1/delete_workout/e900fe86-f2d5-422f-be40-9d0d633caa19
         return safeApiCallFlow(dispatcher) {
+            keyValueDataSource.removeDataByType(KeyValueDataType.ACTIVITY)
+            keyValueDataSource.removeDataByType(KeyValueDataType.DASHBOARD)
             val url = "${BuildConfig.OREO_BASE_URL}/activity/v1/delete_workout/$id"
             remoteDataSource.deleteWorkout(url)
         }
