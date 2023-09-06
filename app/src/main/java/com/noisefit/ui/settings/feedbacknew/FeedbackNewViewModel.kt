@@ -63,6 +63,7 @@ class FeedbackNewViewModel @Inject constructor(
     init {
         getLogsPath()
     }
+
     fun getLogsPath() {
         viewModelScope.launch {
             getFileLogs().collect { files ->
@@ -89,6 +90,7 @@ class FeedbackNewViewModel @Inject constructor(
             }
         }
     }
+
     private suspend fun getFileLogs(): Flow<Pair<File?, File?>> {
         return flow {
 
@@ -131,14 +133,16 @@ class FeedbackNewViewModel @Inject constructor(
     }
 
 
-
     fun submitFeedbackWithFile(
         feedback: FeedbackNew
     ) {
 
         feedback.user_id = localDataStore.getUser()?.id
-        feedback.file = appLogFile
-        feedback.watchLogs = watchLogFile
+
+        if (feedback.rating <= 3) {
+            feedback.file = appLogFile
+            feedback.watchLogs = watchLogFile
+        }
 
 
         viewModelScope.launch {
