@@ -39,12 +39,9 @@ class BottomSheetDataMetrics : BaseBottomSheetWithTransparent<BottomSheetDataMet
             }
 
             ViewItemClickType.TOTAL_SLEEP -> {
-                "<h1>Total sleep</h1><p>Sleep is a metric that indicates the quality of your sleep through " +
-                        "the night. This includes light, REM, as well as deep sleep.<br><br>" +
-                        "Adults require between 7 to 9 hours of sleep for optimal performance and overall " +
-                        "well-being. However, this requirement varies among individuals. For instance," +
-                        " younger individuals tend to need more sleep than older individuals.<br><br>" +
-                        "To improve your sleep quality, aim for a consistent bedtime routine and create a conducive sleep environment. Remember, quality sleep is essential for your physical and mental health.<br>" +
+                "<h1>Total sleep</h1><p>Total sleep is a metric that indicates the total number of hours you have slept, including light, REM, and deep sleep.<br><br>" +
+                        "Most adults need between 7 and 9 hours of sleep to perform well and stay healthy, but individual needs may vary.<br><br>" +
+                        "To improve your total sleep score, ensure you are getting enough rest each night. Remember, quality sleep is essential for your overall well-being and productivity.<br>" +
                         "</p>"
             }
 
@@ -146,9 +143,8 @@ class BottomSheetDataMetrics : BaseBottomSheetWithTransparent<BottomSheetDataMet
             }
 
             ViewItemClickType.ACTIVE_CALORIES -> {
-                "<h1>Goal progress</h1><p>The Calorie Goal is a parameter that tracks your active calorie burn while moving and exercising throughout the day. Calculated based on your height, weight, age and gender, the suggested calorie goals are tailored to your needs.<br>" +
-                        "By tracking your progress towards your goal, you can maintain a healthy balance of activity and rest. Completing your suggested calorie goal can be achieved by taking steps and doing workouts.<br>" +
-                        "Keep up with this goal to move towards a healthier you!<br>" +
+                "<h1>Active calories</h1><p>The Luna Ring sets the activity goal for you based on your height, weight, age and gender. You get updated through the day based on the calories you burn while active, including exercise and everyday movements. This gives you an understanding of how close or far you are to your day&rsquo;s activity goal<br><br>" +
+                        "With the Luna ring, you can track your progress and strive towards achieving optimal activity levels for a healthier lifestyle. Keep moving to achieve your goals!<br><br>" +
                         "</p>"
             }
             ViewItemClickType.TOTAL_CALORIES_BURNED -> {
