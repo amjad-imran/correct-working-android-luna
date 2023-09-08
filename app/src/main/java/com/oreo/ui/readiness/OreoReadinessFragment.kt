@@ -695,11 +695,11 @@ class OreoReadinessFragment :
 
         //set data on temperature
         binding.lytTemperature.tvTitle.text = getString(R.string.text_temperature)
-        binding.lytTemperature.tvSubtitle1.text = getString(R.string.text_average)
+        binding.lytTemperature.tvSubtitle1.text = getString(R.string.text_max)
         binding.lytTemperature.tvSubtitle2.gone()
         binding.lytTemperature.divider1.root.invisible()
         if (!it.temperatureBreakUp?.value.isNullOrEmpty()) {
-            binding.lytTemperature.lytSubtitleValue1.tvValue.text = "${it.temperatureBreakUp?.avg}"
+            binding.lytTemperature.lytSubtitleValue1.tvValue.text = "${it.temperatureBreakUp?.max}"
             binding.lytTemperature.lytSubtitleValue1.tvUnit.visible()
             binding.lytTemperature.lytSubtitleValue1.tvUnit.text = "°F"
         } else {
