@@ -7,9 +7,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.CompositePageTransformer
-import androidx.viewpager2.widget.MarginPageTransformer
 import com.github.mikephil.charting.data.CombinedData
 import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.BuildConfig
@@ -132,7 +129,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         binding.contentMain.lytSleepAvg.constraintLayout2.setOnClickListener {
             mSharedViewModel.selectedTab = 0
-            mSharedViewModel.selectedDate=DateFormats.getCurrentDateOreoFormat()
+            mSharedViewModel.selectedDate = DateFormats.getCurrentDateOreoFormat()
             mSharedViewModel.itemType = ClickViewType.SLEEP.name
             mSharedViewModel.itemClickType = ViewItemClickType.SLEEP_SCORE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
@@ -142,7 +139,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         binding.contentMain.lytSleepAvg.constraintLayout.setOnClickListener {
             mSharedViewModel.selectedTab = 0
-            mSharedViewModel.selectedDate=DateFormats.getCurrentDateOreoFormat()
+            mSharedViewModel.selectedDate = DateFormats.getCurrentDateOreoFormat()
             mSharedViewModel.itemType = ClickViewType.ACTIVITY.name
             mSharedViewModel.itemClickType = ViewItemClickType.ACTIVITY_SCORE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
@@ -276,6 +273,10 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 binding.contentMain.lytAlerts.root.gone()
                 return@observe
             }
+            if (it.size == 1) {
+                binding.contentMain.lytAlerts.tabLayout.invisible()
+            } else
+                binding.contentMain.lytAlerts.tabLayout.visible()
             binding.contentMain.lytAlerts.apply {
                 binding.contentMain.lytAlerts.root.visible()
                 val winsAdapter = HomeRecyclerViewHolder.AlertsAdapter(object : AlertClickListener {
