@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import com.noisefit_commans.data.model.DeviceFeatures
 
 data class DeviceFeatureResponse(
-    @SerializedName("device_features") val deviceFeatures: DeviceFeatures
+    @SerializedName("device_features") val deviceFeatures: DeviceFeatures?
 )
 
 data class WatchTokenResponse(
