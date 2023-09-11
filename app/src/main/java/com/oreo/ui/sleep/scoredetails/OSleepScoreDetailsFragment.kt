@@ -218,12 +218,12 @@ class OSleepScoreDetailsFragment :
                         binding.lytTopGraphView.lytLabelValue1.root.visible()
                         binding.lytTopGraphView.lytLabelValue11.root.gone()
                         binding.lytTopGraphView.lytLabelValue1.tvValue.text =
-                            checkZeroData(it.data.roundToInt())
+                            checkZeroData(it.data.roundToInt())+"%"
                         if (it.data.roundToInt() == 0) {
                             binding.lytTopGraphView.lytLabelValue1.tvUnit.gone()
                         } else {
-                            binding.lytTopGraphView.lytLabelValue1.tvUnit.visible()
-                            binding.lytTopGraphView.lytLabelValue1.tvUnit.text = "%"
+                            binding.lytTopGraphView.lytLabelValue1.tvUnit.gone()
+//                            binding.lytTopGraphView.lytLabelValue1.tvUnit.text = "%"
                         }
                         setTopDateLabel(it.date)
                     }
