@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface OreoUserActivityRepository {
 
-    suspend fun getDashboardData(): Flow<Resource<BaseApiResponse<OreoDashboardResponseModel>>>
+    suspend fun getDashboardData(forceRefresh:Boolean): Flow<Resource<BaseApiResponse<OreoDashboardResponseModel>>>
 
     suspend fun getSleepHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoSleepModel>>>>
 

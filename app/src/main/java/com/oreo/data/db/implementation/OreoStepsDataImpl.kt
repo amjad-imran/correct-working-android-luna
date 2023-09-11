@@ -47,7 +47,7 @@ constructor(
             if (existingSteps.totalSteps == stepsData.totalSteps && existingSteps.totalCalories == stepsData.totalCalories
                 && existingSteps.activeCalories == stepsData.activeCalories) {
                 LOGS.d("syncInsertOrUpdate Same steps please ignore this call")
-                return stepsDao.getTodayData(stepsData.date!!)
+                return existingSteps//stepsDao.getTodayData(stepsData.date!!)
             }
             LOGS.d("syncInsertOrUpdate Please update}")
             val syncDate = DateFormats.convertDateTimeToTimeStamp2(

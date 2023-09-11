@@ -10,6 +10,8 @@ import androidx.work.impl.utils.futures.SettableFuture
 import com.google.common.util.concurrent.ListenableFuture
 import com.noisefit.luna.R
 import com.noisefit.data.local.db.CacheResult
+import com.noisefit.data.local.db.abstraction.KeyValueDataSource
+import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
@@ -71,6 +73,7 @@ constructor(
     private val syncRepository: OreoSyncRepository,
     private val userActivityHandler: UserActivityHandler,
     private val watchesSdk: WatchesSDK,
+    private val keyValueDataSource: KeyValueDataSource,
     private val sleepNotificationUtils: SleepNotificationUtils
 ) : ListenableWorker(context, workerParams) {
 
@@ -167,9 +170,10 @@ constructor(
 
                                 }
                                 //TODO uncomment after testing -deepak
-                                /*syncDataScope.launch {
-                                    syncRepository.deleteServerSyncData(userActivities.second)
-                                }*/
+                                syncDataScope.launch {
+                                    syncRepository.markDataSynced(userActivities.second)
+                                    //syncRepository.deleteServerSyncData(userActivities.second)
+                                }
 
                                 //syncRepository.updateHashForLastSyncData(userActivities.first)
 
@@ -207,10 +211,10 @@ constructor(
                                     is Resource.Success -> {
 
                                         //TODO uncomment after testing -deepak
-                                        /* syncDataScope.launch {
+                                         syncDataScope.launch {
                                              syncRepository.deleteSleepServerSyncData(userActivities.second)
                                          }
-                                         syncRepository.updateSleepHashForLastSyncData(userActivities.first)*/
+                                         /*syncRepository.updateSleepHashForLastSyncData(userActivities.first)*/
 
                                         LOGS.d(
                                             TAG,
@@ -233,6 +237,8 @@ constructor(
                 }
 
 
+                removeOfflineUserData()
+
                 ringDataStore.setLastSyncWithServer(DateFormats.getTimeStamp())
                 sessionManager.setShowSyncOfflineData(Event(HealthOverviewDataType.SERVER_SYNC_SUCCESS))
 
@@ -246,6 +252,18 @@ constructor(
         }
 
         return success.invoke()
+    }
+
+    private suspend fun removeOfflineUserData() {
+        arrayListOf(
+            KeyValueDataType.DASHBOARD,
+            KeyValueDataType.SLEEP,
+            KeyValueDataType.ACTIVITY,
+            KeyValueDataType.READINESS
+        ).forEach {
+            keyValueDataSource.removeDataByType(it)
+        }
+
     }
 
 

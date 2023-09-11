@@ -176,7 +176,8 @@ class OWorkoutDetailsFragment :
                 binding.lytHeartRate.lineChart.updateDataWithMax(sleepChart, 5, false,
                     true,  GraphDummyModel(
                         false,40,100
-                    )
+                    ),
+                    null
                 )
             }
         }

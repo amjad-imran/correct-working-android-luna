@@ -84,6 +84,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dimen_16dp"
         android:layout_marginEnd="@dimen/dimen_16dp"
+        android:layout_marginBottom="26dp"
         android:fontFamily="@font/gilroy_medium"
         android:gravity="center_horizontal"
         android:lineSpacingExtra="8sp"

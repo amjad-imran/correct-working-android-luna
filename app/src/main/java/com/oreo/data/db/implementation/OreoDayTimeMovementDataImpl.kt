@@ -1,6 +1,8 @@
 package com.oreo.data.db.implementation
 
 import androidx.room.Transaction
+import com.google.gson.Gson
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.model.DayTimeMovementBreakup
 import com.oreo.data.db.abstaction.OreoDayTimeMovementDataSource
 import com.oreo.data.db.database.OreoDayTimeMovementDao
@@ -25,7 +27,12 @@ constructor(
         if (prevData == null) {
             dayTimeDao.insert(data)
         } else {
-            dayTimeDao.updateViaDate(data.breakUp ?: "", data.date!!)
+
+            val newBreakup = Gson().fromJson<List<Int>>(data.breakUp ?: "")
+            val prevBreakup = Gson().fromJson<List<Int>>(prevData.breakUp ?: "")
+            if (newBreakup.sum() != prevBreakup.sum()) {
+                dayTimeDao.updateViaDate(data.breakUp ?: "", data.date!!, false)
+            }
         }
         return true
     }

@@ -8,6 +8,7 @@ import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.dataConverter.OfflineDataMapper
 import com.noisefit.data.googleFit.GoogleFitDataObservers
 import com.noisefit.data.local.dataStored.abstraction.IOfflineApiResponseStore
+import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.remote.abstraction.DownloadService
 import com.noisefit.data.remote.abstraction.NetworkService
 import com.noisefit.data.repository.LastSyncProvider
@@ -319,7 +320,10 @@ object AppModule {
         stepsDataImpl: OreoStepsDataImpl,
         sleepDataImpl: OreoSleepDataImpl,
         offlineDataMapper: OreoOfflineDataMapper,
-        oreoAutoSportDataImpl: OreoAutoSportDataImpl
+        oreoAutoSportDataImpl: OreoAutoSportDataImpl,
+        keyValueDataSource: KeyValueDataSource,
+        lastSyncProvider: LastSyncProvider,
+        offlineApiStore: IOfflineApiResponseStore
     ): OreoUserActivityRepository =
         OreoUserActivityRepositoryImpl(
             remoteDataSource,
@@ -334,6 +338,9 @@ object AppModule {
             stepsDataImpl,
             oreoAutoSportDataImpl,
             offlineDataMapper,
+            keyValueDataSource,
+            lastSyncProvider,
+            offlineApiStore
         )
 
 

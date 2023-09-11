@@ -40,6 +40,9 @@ import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
 import com.oreo.receiver.workManager.HealthOverviewDataType
+import com.oreo.ui.sleep.scoredetails.ClickViewType
+import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
+import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import com.oreo.ui.workout.add.ADD_WORKOUT_REQUEST_KEY
 import com.oreo.util.graph.OCombineChartUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,6 +56,7 @@ import me.dkzwm.widget.srl.RefreshingListenerAdapter
 class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOBinding::inflate) {
 
     private val mainViewModel: OreoMainViewModel by activityViewModels()
+    private val mSharedViewModel: SharedOSCDViewModel by activityViewModels()
     private val viewModel: OSummaryViewModel by viewModels()
     private val healthOverviewAdapter by lazy {
         OSummaryHealthOverviewAdapter()
@@ -115,6 +119,35 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 navigate(R.id.logsDisplayFragment)
             }
             return@setOnLongClickListener true
+        }
+
+        binding.contentMain.lytReadinessAvg.root.setOnClickListener {
+            mSharedViewModel.selectedTab = 0
+            mSharedViewModel.itemType = ClickViewType.READINESS.name
+            mSharedViewModel.itemClickType = ViewItemClickType.READINESS_SCORE
+            navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
+                putString("viewType", "readiness")
+            })
+        }
+
+        binding.contentMain.lytSleepAvg.constraintLayout2.setOnClickListener {
+            mSharedViewModel.selectedTab = 0
+            mSharedViewModel.selectedDate=DateFormats.getCurrentDateOreoFormat()
+            mSharedViewModel.itemType = ClickViewType.SLEEP.name
+            mSharedViewModel.itemClickType = ViewItemClickType.SLEEP_SCORE
+            navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
+                putString("viewType", "sleep")
+            })
+        }
+
+        binding.contentMain.lytSleepAvg.constraintLayout.setOnClickListener {
+            mSharedViewModel.selectedTab = 0
+            mSharedViewModel.selectedDate=DateFormats.getCurrentDateOreoFormat()
+            mSharedViewModel.itemType = ClickViewType.ACTIVITY.name
+            mSharedViewModel.itemClickType = ViewItemClickType.ACTIVITY_SCORE
+            navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
+                putString("viewType", "activity")
+            })
         }
 
     }
@@ -182,6 +215,15 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 OSummaryHealthOverviewClickEnum.SleepDetailsWorkoutClick -> {
                     mainViewModel.navigateTo(BottomNavOption.SLEEP)
                 }
+
+//                OSummaryHealthOverviewClickEnum.ActivityInternalDetailsWorkoutClick->{
+//                    mSharedViewModel.selectedTab = 0
+//                    mSharedViewModel.itemType = ClickViewType.ACTIVITY.name
+//                    mSharedViewModel.itemClickType = ViewItemClickType.ACTIVITY_SCORE
+//                    navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
+//                        putString("viewType", "activity")
+//                    })
+//                }
             }
         }
 
@@ -282,6 +324,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             }
 
             binding.contentMain.lytReadinessAvg.root.visible()
+
 
             updateReadinessAvgUi(it)
 
@@ -396,7 +439,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         viewModel.sessionManager.showSyncOfflineData.observe(this) {
             it?.getContent()?.let { userActivity ->
                 if (userActivity == HealthOverviewDataType.SERVER_SYNC_SUCCESS) {
-                    viewModel.getDashboardDataFromServer(true, false)
+                    viewModel.getDashboardDataFromServer(true)
                 }
 
             }

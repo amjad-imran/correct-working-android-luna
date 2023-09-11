@@ -30,7 +30,11 @@ constructor(
         if (prevData == null) {
             bodyTemperatureDao.insert(data)
         } else {
-            bodyTemperatureDao.updateViaDate(data.breakUp ?: "", data.date!!,false)
+            val newBreakup = Gson().fromJson<List<Float>>(data.breakUp ?: "")
+            val prevBreakup = Gson().fromJson<List<Float>>(prevData.breakUp ?: "")
+            if (newBreakup.sum() != prevBreakup.sum()) {
+                bodyTemperatureDao.updateViaDate(data.breakUp ?: "", data.date!!, false)
+            }
         }
 
         return true

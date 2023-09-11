@@ -118,6 +118,24 @@ interface NetworkService {
         @Part logs: List<MultipartBody.Part>?
     ): BaseApiResponse<MessageResponse>
 
+    @Multipart
+    @POST
+    suspend fun submitFeedbackFile(
+        @Url url: String,
+        @Part("platform") platform: RequestBody,
+        @Part("mobile_device") mobileDevice: RequestBody,
+        @Part("os_version") osVersion: RequestBody,
+        @Part("app_version") appVersion: RequestBody,
+        @Part("watch_name") watchName: RequestBody,
+        @Part("watch_firmware_version") watchFirmwareVersion: RequestBody,
+        @Part("rating") rating: RequestBody,
+        @Part("problem_type") problem_type: RequestBody,
+        @Part("suggestion") suggestion: RequestBody,
+        @Part("date") date: RequestBody,
+        @Part("user_id") userId: RequestBody,
+        @Part logs: List<MultipartBody.Part>?
+    ): BaseApiResponseData<String>
+
     @POST
     suspend fun submitFeedbackNew(
         @Url url: String, @Body jsonObject: JsonObject
@@ -243,7 +261,7 @@ interface NetworkService {
 
     @POST
     suspend fun checkForUpdates(
-        @Url url:String,
+        @Url url: String,
         @Body requestObject: JsonObject
     ): BaseApiResponseData<UpdateResponse>
 
@@ -280,7 +298,6 @@ interface NetworkService {
         @Url url: String,
         @Body requestObject: OreoUserDataPost
     ): BaseApiResponse<VersionCheckResponse>
-
 
 
     @GET
@@ -480,7 +497,7 @@ interface NetworkService {
 
     @POST
     suspend fun checkWatchTokenExist(
-        @Url url:String,
+        @Url url: String,
         @Body jsonObject: JsonObject
     ): BaseApiResponse<WatchTokenResponse>
 
@@ -708,7 +725,7 @@ interface NetworkService {
     @GET
     suspend fun getRecentWorkoutList(
         @Url url: String,
-        @Query("today") today:Boolean
+        @Query("today") today: Boolean
     ): BaseApiResponse<List<OActivityListModal>>
 
     @GET
@@ -763,10 +780,12 @@ interface NetworkService {
     suspend fun getWorkoutDetails(
         @Url url: String
     ): BaseApiResponse<OWorkoutDetailsResponseModel>
+
     @GET
     suspend fun getHSCategories(
         @Url url: String
     ): BaseApiResponse<List<OHSModel>>
+
     @GET
     suspend fun getHSQAnswer(
         @Url url: String

@@ -8,7 +8,7 @@ interface OreoBloodOxygenDataSource {
         data: OreoBloodOxygenBreakup
     ): Boolean
 
-    suspend fun getTodayData(date: String): List<OreoBloodOxygenBreakup>?
+    suspend fun getTodayData(date: String): OreoBloodOxygenBreakup?
     suspend fun getUnSyncServerData(endDate: Long, isSync: Boolean): List<OreoBloodOxygenBreakup>?
     suspend fun deleteOldData(timeStamp: Long): Int
     suspend fun updateServerSyncData(dataList: List<OreoBloodOxygenBreakup>, timeStamp: Long): Int

@@ -365,6 +365,39 @@ class OreoSyncRepositoryImpl(
 
     }
 
+    override suspend fun markDataSynced(data: OreoUserSyncRawData) {
+        val todayTimeStamp = DateFormats.convertTimeStampToStartOfDay(DateFormats.getTimeStamp())
+        /* val todayTimeStampForSleep = DateFormats.convertTimeStampToPrevious12ofDay(
+             DateFormats.subtractDate(
+                 DateFormats.getTimeStamp(),
+                 1
+             )
+         )
+         LOGS.d("deleteServerSyncData $todayTimeStamp $todayTimeStampForSleep")*/
+
+        data.stepsDataList?.let {
+            stepsDataImpl.updateServerSyncData(it)
+        }
+        data.hrHistoryData?.let {
+            heartRateDataImpl.updateServerSyncData(it, todayTimeStamp)
+        }
+
+        data.stressData?.let {
+            stressDataImpl.updateServerSyncData(it, todayTimeStamp)
+        }
+
+        data.bodyTemperature?.let {
+            bodyTemperatureDataImpl.updateServerSyncData(it, todayTimeStamp)
+        }
+        data.respiratory?.let {
+            respiratoryDataImpl.updateServerSyncData(it, todayTimeStamp)
+        }
+
+        data.boData?.let {
+            bloodOxygenDataImpl.updateServerSyncData(it, todayTimeStamp)
+        }
+    }
+
     override suspend fun deleteServerSyncData(data: OreoUserSyncRawData) {
         val todayTimeStamp = DateFormats.convertTimeStampToStartOfDay(DateFormats.getTimeStamp())
         /* val todayTimeStampForSleep = DateFormats.convertTimeStampToPrevious12ofDay(
@@ -442,7 +475,7 @@ class OreoSyncRepositoryImpl(
         }
 
 
-        var sleepData = offlineDataMapper.convertUnSyncSleepDataListToObjectOreo(
+        val sleepData = offlineDataMapper.convertUnSyncSleepDataListToObjectOreo(
             userSyncRawData.sleepData
         )
 
@@ -514,41 +547,6 @@ class OreoSyncRepositoryImpl(
         } else {
             dayTimeDataList
         }
-
-
-        /* if (encryptUtils.md5(gson.toJson(userSyncRawData.stepsDataList)) == localDatSource.getStepsLastSyncHash() || userSyncRawData.stepsDataList.isNullOrEmpty()) {
-             userSyncRawData.stepsDataList = null
-         }*/
-
-
-        /*if (testModeUtils.saveHrHash()) {
-            if (encryptUtils.md5(gson.toJson(heartRateData)) == localDatSource.getHeartLastSyncHash() || heartRateData.isNullOrEmpty()) {
-                userSyncRawData.hrHistoryData = null
-                heartRateData = null
-            }
-        }*/
-
-
-        /*if (encryptUtils.md5(gson.toJson(stressData)) == localDatSource.getStressLastSyncHash() || stressData.isNullOrEmpty()) {
-            userSyncRawData.stressData = null
-            stressData = null
-        }*/
-
-        /*if (encryptUtils.md5(gson.toJson(bloodOxygenData)) == localDatSource.getBloodOxygenLastSyncHash() || bloodOxygenData.isNullOrEmpty()) {
-            userSyncRawData.boData = null
-            bloodOxygenData = null
-        }*/
-
-        /*if (encryptUtils.md5(gson.toJson(sleepData)) == localDatSource.getSleepLastSyncHash() || sleepData.isNullOrEmpty()) {
-            userSyncRawData.sleepData = null
-            sleepData = null
-        }*/
-
-        /*if (encryptUtils.md5(gson.toJson(bodyTempData)) == localDatSource.getBodyTempSyncHash() || bodyTempData.isNullOrEmpty()) {
-            userSyncRawData.bodyTemperature = null
-            bodyTempData = null
-        }*/
-
 
         return Pair(
             OreoUserSyncActivities(

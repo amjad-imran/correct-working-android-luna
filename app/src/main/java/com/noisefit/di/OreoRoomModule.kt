@@ -4,6 +4,9 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.noisefit.data.local.db.abstraction.KeyValueDataSource
+import com.noisefit.data.local.db.database.KeyValueDao
+import com.noisefit.data.local.db.implementation.KeyValueDataSourceImpl
 import com.oreo.data.db.OreoDataBase
 import com.oreo.data.db.abstaction.OreoBodyTemperatureDataSource
 import com.oreo.data.db.abstaction.OreoDayTimeMovementDataSource
@@ -37,31 +40,49 @@ class OreoRoomModule {
     @Provides
     fun provideDataBase(@ApplicationContext appContext: Context): OreoDataBase {
         return Room.databaseBuilder(appContext, OreoDataBase::class.java, "noisefit-db-oreo")
+            .addMigrations(MIGRATION_1_2)
             .build()
     }
 
-   /* private val MIGRATION_1_2: Migration = object : Migration(1, 2) {
-        override fun migrate(database: SupportSQLiteDatabase) {
-            database.execSQL("ALTER TABLE `sleep_data` ADD COLUMN readiness_score INTEGER")
-        }
+     private val MIGRATION_1_2: Migration = object : Migration(1, 2) {
+         override fun migrate(database: SupportSQLiteDatabase) {
+             database.execSQL(
+                 "CREATE TABLE IF NOT EXISTS `key_value` " +
+                         "(`uId` INTEGER NOT NULL, " +
+                         "`lastSync` INTEGER," +
+                         "`value` TEXT," +
+                         "`type` TEXT," +
+                         "`key` TEXT, PRIMARY KEY(`uId`))"
+             )
+         }
+     }
+
+     /*private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
+         override fun migrate(database: SupportSQLiteDatabase) {
+             database.execSQL(
+                 "CREATE TABLE IF NOT EXISTS `day_time_movement` " +
+                         "(`id` INTEGER NOT NULL, `is_synced` INTEGER NOT NULL,`break_up` TEXT,`is_google_fit_sync` INTEGER  NOT NULL,`date` TEXT, PRIMARY KEY(`id`))"
+             )
+             database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_day_time_movement_date ON  day_time_movement(date)")
+         }
+     }
+
+     private val MIGRATION_3_4: Migration = object : Migration(3, 4) {
+         override fun migrate(database: SupportSQLiteDatabase) {
+             database.execSQL("ALTER TABLE `steps_data` ADD COLUMN active_calories INTEGER")
+
+         }
+     }*/
+
+
+    @Singleton
+    @Provides
+    fun provideKeyValueDataSource(
+        keyValueDao: KeyValueDao,
+    ): KeyValueDataSource {
+        return KeyValueDataSourceImpl(keyValueDao)
     }
 
-    private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
-        override fun migrate(database: SupportSQLiteDatabase) {
-            database.execSQL(
-                "CREATE TABLE IF NOT EXISTS `day_time_movement` " +
-                        "(`id` INTEGER NOT NULL, `is_synced` INTEGER NOT NULL,`break_up` TEXT,`is_google_fit_sync` INTEGER  NOT NULL,`date` TEXT, PRIMARY KEY(`id`))"
-            )
-            database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_day_time_movement_date ON  day_time_movement(date)")
-        }
-    }
-
-    private val MIGRATION_3_4: Migration = object : Migration(3, 4) {
-        override fun migrate(database: SupportSQLiteDatabase) {
-            database.execSQL("ALTER TABLE `steps_data` ADD COLUMN active_calories INTEGER")
-
-        }
-    }*/
 
     @Singleton
     @Provides
@@ -128,6 +149,12 @@ class OreoRoomModule {
     @Provides
     fun providesDayTimeDao(database: OreoDataBase): OreoDayTimeMovementDao {
         return database.dayTimeMovementDao()
+    }
+
+    @Singleton
+    @Provides
+    fun providesKeyValueDao(database: OreoDataBase): KeyValueDao {
+        return database.keyValueDao()
     }
 
     @Singleton

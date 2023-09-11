@@ -15,8 +15,8 @@ interface OreoDayTimeMovementDao : BaseDao<DayTimeMovementBreakup> {
     fun getTodayData(date: String): DayTimeMovementBreakup?
 
 
-    @Query("UPDATE day_time_movement SET break_up = :breakUp  WHERE date = :date")
-    fun updateViaDate(breakUp: String, date: String)
+    @Query("UPDATE day_time_movement SET break_up = :breakUp,is_synced = :is_synced  WHERE date = :date")
+    fun updateViaDate(breakUp: String, date: String, is_synced: Boolean)
 
 
     @Query("Delete FROM day_time_movement where date = :date")

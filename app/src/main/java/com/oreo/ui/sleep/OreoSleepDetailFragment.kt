@@ -149,16 +149,17 @@ class OreoSleepDetailFragment :
             Color.parseColor("#0Dff59da")
         )
         binding.lytHRVariability.lineChart.updateDataWithMax(
-            sleepChart, 20, true, false,  GraphDummyModel(
-                hasDummyData,0,200
-            )
+            sleepChart, 20, true, false, GraphDummyModel(
+                hasDummyData, 0, 200
+            ),
+            hrv?.avg
         )
     }
 
     private fun showHeartRateGraph(
         heartRateList: CommonListDataModel?,
         sleepStartTime: String?,
-        sleepEndTime: String?
+        sleepEndTime: String?,
     ) {
 //        if ((heartRateList?.value?.size ?: 0) <= 1) {
 //            binding.lytHeartRate.lineChart.gone()
@@ -216,8 +217,9 @@ class OreoSleepDetailFragment :
         binding.lytHeartRate.lineChart.updateDataWithMax(
             sleepChart, 20, false, true,
             GraphDummyModel(
-                hasDummyData,40,100
-            )
+                hasDummyData, 40, 100
+            ),
+            heartRateList?.avg
         )
 
     }

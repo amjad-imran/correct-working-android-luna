@@ -25,13 +25,16 @@ constructor(
             return false
         }
 
-
         val prevData = getTodayData(data.date!!)
 
         if (prevData == null) {
             heartRateDao.insert(data)
         } else {
-            heartRateDao.updateViaDate(data.breakUp ?: "", data.date!!, false)
+            val newBreakup = Gson().fromJson<List<Int>>(data.breakUp ?: "")
+            val prevBreakup = Gson().fromJson<List<Int>>(prevData.breakUp ?: "")
+            if (newBreakup.sum() != prevBreakup.sum()) {
+                heartRateDao.updateViaDate(data.breakUp ?: "", data.date!!, false)
+            }
         }
 
         return true

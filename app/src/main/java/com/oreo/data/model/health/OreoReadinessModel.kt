@@ -39,6 +39,7 @@ data class UnitDataModelArray(
 data class UnitDataModelArrayFloat(
     val value: List<Float>?,
     val avg: Float? = null,
+    val max: Float? = null
 )
 
 data class UnitDataModelFloat(val value: Float)

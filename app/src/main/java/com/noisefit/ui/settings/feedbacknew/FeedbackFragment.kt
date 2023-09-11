@@ -97,7 +97,7 @@ class FeedbackFragment : BaseFragment<FragmentFeedback2Binding>(FragmentFeedback
                     .show()
             } else {
                 uiController.hideSoftKeyboard()
-                viewModel.submitFeedbackNew(
+                viewModel.submitFeedbackWithFile(
                     viewModel.provideFeedbackNewData(
                         viewModel.rating,
                         problemType,

@@ -88,7 +88,10 @@ constructor(
 
         updateAlerts()
 
-        getDashboardDataFromServer(true, true)
+
+
+
+        getDashboardDataFromServer(false)
     }
 
     private fun updateAlerts() {
@@ -110,13 +113,11 @@ constructor(
     }
 
 
-    fun getDashboardDataFromServer(forceRefresh: Boolean, hitActivityData: Boolean) {
-        /*if (!summary.healthOverviewData.value.isNullOrEmpty() && !forceRefresh) {
-            summary.healthOverviewData.postValue(summary.healthOverviewData.value)
-            return
-        }*/
+    fun getDashboardDataFromServer(forceRefresh: Boolean) {
+        LOGS.d("FORCE_REFRESH $forceRefresh")
+
         viewModelScope.launch {
-            userRepository.getDashboardData().collect { resource ->
+            userRepository.getDashboardData(forceRefresh).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
@@ -132,7 +133,7 @@ constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        getDashboardDataFromServer(forceRefresh, hitActivityData)
+                                        getDashboardDataFromServer(forceRefresh)
                                     }
 
                                     override fun no() {
@@ -144,7 +145,7 @@ constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            getInitialOfflineData(it, hitActivityData)
+                            getInitialOfflineData(it)
                         }
                     }
                 }
@@ -196,7 +197,7 @@ constructor(
         }"
     }
 
-    private fun getInitialOfflineData(data: OreoDashboardResponseModel, hitActivityData: Boolean) {
+    private fun getInitialOfflineData(data: OreoDashboardResponseModel) {
 
 
         viewModelScope.launch(Dispatchers.IO) {

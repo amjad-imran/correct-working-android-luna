@@ -5,14 +5,29 @@ import com.github.mikephil.charting.data.Entry
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
+import com.noisefit.data.local.dataStored.abstraction.IOfflineApiResponseStore
+import com.noisefit.data.local.db.CacheResult
+import com.noisefit.data.local.db.abstraction.CACHE_CLEAR_DEFAULT
+import com.noisefit.data.local.db.abstraction.KeyValueDataSource
+import com.noisefit.data.local.db.abstraction.KeyValueDataType
+import com.noisefit.data.local.db.fromJson
 import com.noisefit.data.remote.abstraction.NetworkService
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.data.remote.response.Watchface2
+import com.noisefit.data.repository.LastSyncItems
+import com.noisefit.data.repository.LastSyncProvider
 import com.noisefit.data.safeApiCallFlow
+import com.noisefit.data.safeCacheCall
 import com.noisefit.luna.BuildConfig
+import com.noisefit_commans.common.checkDayDifferenceMoreNMinutes
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.model.FriendsData
+import com.noisefit_commans.data.model.KeyValue
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
+import com.noisefit_commans.ui.checkDayDifferenceMoreOne
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.dataConverter.OreoOfflineDataMapper
 import com.oreo.data.db.implementation.*
 import com.oreo.data.model.*
@@ -27,6 +42,8 @@ import com.oreo.ui.TestUserData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
 
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -45,38 +62,509 @@ class OreoUserActivityRepositoryImpl(
     private val stepsDataImpl: OreoStepsDataImpl,
     private val oreoAutoSportDataImpl: OreoAutoSportDataImpl,
     private val offlineDataMapper: OreoOfflineDataMapper,
+    private val keyValueDataSource: KeyValueDataSource,
+    private val lastSyncProvider: LastSyncProvider,
+    private val offlineApiStore: IOfflineApiResponseStore,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : OreoUserActivityRepository {
 
 
     override suspend fun getSleepHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoSleepModel>>>> {
 
-        return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.OREO_BASE_URL}/sleep/v1/get"
-            remoteDataSource.getSleepHistory(url, date)
+        return flow {
+            val type = KeyValueDataType.SLEEP
+            var resultData: List<OreoSleepModel>? = null
+
+
+            val cacheResult = safeCacheCall(Dispatchers.IO) {
+
+                val localData =
+                    keyValueDataSource.getData(date, type)
+                        ?: return@safeCacheCall null
+
+                val lastCallTime = localData.getSafeLastSyncValue()
+
+                val shouldCallApi =
+                    lastCallTime.checkDayDifferenceMoreOne() || lastCallTime.checkDayDifferenceMoreNMinutes(
+                        CACHE_CLEAR_DEFAULT
+                    )
+
+                if (shouldCallApi) {
+                    keyValueDataSource.removeDataByType(KeyValueDataType.SLEEP)
+                    return@safeCacheCall null
+                } else {
+
+                    if (localData.value == null) {
+                        return@safeCacheCall null
+                    }
+
+                    return@safeCacheCall localData.value?.let {
+                        Gson().fromJson<List<OreoSleepModel>>(
+                            it
+                        )
+                    }
+                }
+            }
+
+            cacheResult.collect { resource ->
+                when (resource) {
+                    is CacheResult.Success -> {
+
+                        resource.value?.let {
+                            resultData = it
+                        }
+                    }
+
+                    is CacheResult.GenericError -> {
+
+                    }
+                }
+            }
+
+            if (resultData != null) {
+                emit(
+                    Resource.Success(
+                        BaseApiResponse(
+                            data = resultData,
+                            message = "",
+                        )
+                    )
+                )
+                return@flow
+            }
+
+
+            val serverResult = safeApiCallFlow(dispatcher) {
+                val url = "${BuildConfig.OREO_BASE_URL}/sleep/v1/get"
+                remoteDataSource.getSleepHistory(url, date)
+            }
+
+            serverResult.collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        emit(Resource.GenericError(resource.message, resource.errorCode))
+                    }
+
+                    is Resource.Loading -> {
+                        emit(Resource.Loading(resource.loading))
+                    }
+
+                    is Resource.NetworkError -> {
+                        emit(Resource.NetworkError(resource.response, resource.code))
+                    }
+
+                    is Resource.Success -> {
+
+                        resource.data?.data?.let { response ->
+                            resultData = response
+                        }
+                    }
+                }
+            }
+
+            if (resultData != null) {
+                safeCacheCall(Dispatchers.IO) {
+                    keyValueDataSource.insertData(
+                        KeyValue(
+                            key = date,
+                            value = gson.toJson(resultData),
+                            type = KeyValueDataType.SLEEP.name
+                        )
+                    )
+                }.collect { resource ->
+                    when (resource) {
+                        is CacheResult.Success -> {
+                            emit(
+                                Resource.Success(
+                                    BaseApiResponse(
+                                        data = resultData,
+                                        message = "",
+                                    )
+                                )
+                            )
+                        }
+
+                        is CacheResult.GenericError -> {
+                            emit(Resource.GenericError(message = "Something went wrong", 0))
+                        }
+                    }
+                }
+            }
         }
     }
 
     override suspend fun getReadinessHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoReadinessModel>>>> {
 
-        return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.OREO_BASE_URL}/protean/v1/readiness/get"
-            remoteDataSource.getReadinessHistory(url, date)
+        return flow {
+            val type = KeyValueDataType.READINESS
+            var resultData: List<OreoReadinessModel>? = null
+
+
+            val cacheResult = safeCacheCall(Dispatchers.IO) {
+
+                val localData =
+                    keyValueDataSource.getData(date, type)
+                        ?: return@safeCacheCall null
+
+                val lastCallTime = localData.getSafeLastSyncValue()
+
+                val shouldCallApi =
+                    lastCallTime.checkDayDifferenceMoreOne() || lastCallTime.checkDayDifferenceMoreNMinutes(
+                        CACHE_CLEAR_DEFAULT
+                    )
+
+                if (shouldCallApi) {
+                    keyValueDataSource.removeDataByType(KeyValueDataType.READINESS)
+                    return@safeCacheCall null
+                } else {
+
+                    if (localData.value == null) {
+                        return@safeCacheCall null
+                    }
+
+                    return@safeCacheCall localData.value?.let {
+                        Gson().fromJson<List<OreoReadinessModel>>(
+                            it
+                        )
+                    }
+                }
+            }
+
+            cacheResult.collect { resource ->
+                when (resource) {
+                    is CacheResult.Success -> {
+
+                        resource.value?.let {
+                            resultData = it
+                        }
+                    }
+
+                    is CacheResult.GenericError -> {
+
+                    }
+                }
+            }
+
+            if (resultData != null) {
+                emit(
+                    Resource.Success(
+                        BaseApiResponse(
+                            data = resultData,
+                            message = "",
+                        )
+                    )
+                )
+                return@flow
+            }
+
+
+            val serverResult = safeApiCallFlow(dispatcher) {
+                val url = "${BuildConfig.OREO_BASE_URL}/protean/v1/readiness/get"
+                remoteDataSource.getReadinessHistory(url, date)
+            }
+
+            serverResult.collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        emit(Resource.GenericError(resource.message, resource.errorCode))
+                    }
+
+                    is Resource.Loading -> {
+                        emit(Resource.Loading(resource.loading))
+                    }
+
+                    is Resource.NetworkError -> {
+                        emit(Resource.NetworkError(resource.response, resource.code))
+                    }
+
+                    is Resource.Success -> {
+
+                        resource.data?.data?.let { response ->
+                            resultData = response
+                        }
+                    }
+                }
+            }
+
+            if (resultData != null) {
+                safeCacheCall(Dispatchers.IO) {
+                    keyValueDataSource.insertData(
+                        KeyValue(
+                            key = date,
+                            value = gson.toJson(resultData),
+                            type = KeyValueDataType.READINESS.name
+                        )
+                    )
+                }.collect { resource ->
+                    when (resource) {
+                        is CacheResult.Success -> {
+                            emit(
+                                Resource.Success(
+                                    BaseApiResponse(
+                                        data = resultData,
+                                        message = "",
+                                    )
+                                )
+                            )
+                        }
+
+                        is CacheResult.GenericError -> {
+                            emit(Resource.GenericError(message = "Something went wrong", 0))
+                        }
+                    }
+                }
+            }
         }
     }
 
-    override suspend fun getDashboardData(): Flow<Resource<BaseApiResponse<OreoDashboardResponseModel>>> {
-        return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.OREO_BASE_URL}/protean/v1/dashboard"
-            remoteDataSource.getDashboardData(url)
+    override suspend fun getDashboardData(forceRefresh: Boolean): Flow<Resource<BaseApiResponse<OreoDashboardResponseModel>>> {
+
+        return flow {
+            val type = KeyValueDataType.DASHBOARD
+            var resultData: OreoDashboardResponseModel? = null
+
+
+            val cacheResult = safeCacheCall(Dispatchers.IO) {
+
+                val localData =
+                    keyValueDataSource.getData("", type)
+                        ?: return@safeCacheCall null
+
+                val lastCallTime = localData.getSafeLastSyncValue()
+
+                val shouldCallApi =
+                    lastCallTime.checkDayDifferenceMoreOne() || forceRefresh || lastCallTime.checkDayDifferenceMoreNMinutes(
+                        CACHE_CLEAR_DEFAULT
+                    )
+                LOGS.d("FORCE_REFRESH should call api $shouldCallApi")
+
+
+                if (shouldCallApi) {
+                    keyValueDataSource.removeDataByKey("", KeyValueDataType.DASHBOARD)
+                    return@safeCacheCall null
+                } else {
+
+                    if (localData.value == null) {
+                        return@safeCacheCall null
+                    }
+
+                    return@safeCacheCall localData.value?.let {
+                        Gson().fromJson<OreoDashboardResponseModel>(
+                            it
+                        )
+                    }
+                }
+            }
+
+            cacheResult.collect { resource ->
+                when (resource) {
+                    is CacheResult.Success -> {
+
+                        resource.value?.let {
+                            resultData = it
+                        }
+                    }
+
+                    is CacheResult.GenericError -> {
+
+                    }
+                }
+            }
+
+            if (resultData != null) {
+                emit(
+                    Resource.Success(
+                        BaseApiResponse(
+                            data = resultData,
+                            message = "",
+                        )
+                    )
+                )
+                return@flow
+            }
+
+
+            val serverResult = safeApiCallFlow(dispatcher) {
+                val url = "${BuildConfig.OREO_BASE_URL}/protean/v1/dashboard"
+                remoteDataSource.getDashboardData(url)
+            }
+
+            serverResult.collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        emit(Resource.GenericError(resource.message, resource.errorCode))
+                    }
+
+                    is Resource.Loading -> {
+                        emit(Resource.Loading(resource.loading))
+                    }
+
+                    is Resource.NetworkError -> {
+                        emit(Resource.NetworkError(resource.response, resource.code))
+                    }
+
+                    is Resource.Success -> {
+
+                        resource.data?.data?.let { response ->
+                            resultData = response
+                        }
+                    }
+                }
+            }
+
+            if (resultData != null) {
+                safeCacheCall(Dispatchers.IO) {
+                    keyValueDataSource.insertData(
+                        KeyValue(
+                            key = "",
+                            value = gson.toJson(resultData),
+                            type = KeyValueDataType.DASHBOARD.name
+                        )
+                    )
+                }.collect { resource ->
+                    when (resource) {
+                        is CacheResult.Success -> {
+                            emit(
+                                Resource.Success(
+                                    BaseApiResponse(
+                                        data = resultData,
+                                        message = "",
+                                    )
+                                )
+                            )
+                        }
+
+                        is CacheResult.GenericError -> {
+                            emit(Resource.GenericError(message = "Something went wrong", 0))
+                        }
+                    }
+                }
+            }
         }
     }
 
 
     override suspend fun getActivityHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoActivityModel>>>> {
-        return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.OREO_BASE_URL}/activity/v1/get"
-            remoteDataSource.getActivityHistory(url, date)
+
+        return flow {
+            val type = KeyValueDataType.ACTIVITY
+            var resultData: List<OreoActivityModel>? = null
+
+
+            val cacheResult = safeCacheCall(Dispatchers.IO) {
+
+                val localData =
+                    keyValueDataSource.getData(date, type)
+                        ?: return@safeCacheCall null
+
+                val lastCallTime = localData.getSafeLastSyncValue()
+
+                val shouldCallApi =
+                    lastCallTime.checkDayDifferenceMoreOne() || lastCallTime.checkDayDifferenceMoreNMinutes(
+                        CACHE_CLEAR_DEFAULT
+                    )
+
+                if (shouldCallApi) {
+                    keyValueDataSource.removeDataByType(KeyValueDataType.ACTIVITY)
+                    return@safeCacheCall null
+                } else {
+
+                    if (localData.value == null) {
+                        return@safeCacheCall null
+                    }
+
+                    return@safeCacheCall localData.value?.let {
+                        Gson().fromJson<List<OreoActivityModel>>(
+                            it
+                        )
+                    }
+                }
+            }
+
+            cacheResult.collect { resource ->
+                when (resource) {
+                    is CacheResult.Success -> {
+
+                        resource.value?.let {
+                            resultData = it
+                        }
+                    }
+
+                    is CacheResult.GenericError -> {
+
+                    }
+                }
+            }
+
+            if (resultData != null) {
+                emit(
+                    Resource.Success(
+                        BaseApiResponse(
+                            data = resultData,
+                            message = "",
+                        )
+                    )
+                )
+                return@flow
+            }
+
+
+            val serverResult = safeApiCallFlow(dispatcher) {
+                val url = "${BuildConfig.OREO_BASE_URL}/activity/v1/get"
+                remoteDataSource.getActivityHistory(url, date)
+            }
+
+            serverResult.collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        emit(Resource.GenericError(resource.message, resource.errorCode))
+                    }
+
+                    is Resource.Loading -> {
+                        emit(Resource.Loading(resource.loading))
+                    }
+
+                    is Resource.NetworkError -> {
+                        emit(Resource.NetworkError(resource.response, resource.code))
+                    }
+
+                    is Resource.Success -> {
+
+                        resource.data?.data?.let { response ->
+                            resultData = response
+                        }
+                    }
+                }
+            }
+
+            if (resultData != null) {
+                safeCacheCall(Dispatchers.IO) {
+                    keyValueDataSource.insertData(
+                        KeyValue(
+                            key = date,
+                            value = gson.toJson(resultData),
+                            type = KeyValueDataType.ACTIVITY.name
+                        )
+                    )
+                }.collect { resource ->
+                    when (resource) {
+                        is CacheResult.Success -> {
+                            emit(
+                                Resource.Success(
+                                    BaseApiResponse(
+                                        data = resultData,
+                                        message = "",
+                                    )
+                                )
+                            )
+                        }
+
+                        is CacheResult.GenericError -> {
+                            emit(Resource.GenericError(message = "Something went wrong", 0))
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -463,6 +951,8 @@ class OreoUserActivityRepositoryImpl(
     override suspend fun addWorkout(request: JsonObject): Flow<Resource<BaseApiResponseData<Any>>> {
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.OREO_BASE_URL}/activity/v1/add_workout"
+            keyValueDataSource.removeDataByType(KeyValueDataType.ACTIVITY)
+            keyValueDataSource.removeDataByType(KeyValueDataType.DASHBOARD)
             remoteDataSource.addWorkout(url, request)
         }
     }
@@ -520,6 +1010,8 @@ class OreoUserActivityRepositoryImpl(
     override suspend fun deleteWorkoutFromServer(id: String): Flow<Resource<BaseApiResponse<Any>>> {
         //'https://stage-oreo.gonoise.com/activity/v1/delete_workout/e900fe86-f2d5-422f-be40-9d0d633caa19
         return safeApiCallFlow(dispatcher) {
+            keyValueDataSource.removeDataByType(KeyValueDataType.ACTIVITY)
+            keyValueDataSource.removeDataByType(KeyValueDataType.DASHBOARD)
             val url = "${BuildConfig.OREO_BASE_URL}/activity/v1/delete_workout/$id"
             remoteDataSource.deleteWorkout(url)
         }
@@ -536,9 +1028,126 @@ class OreoUserActivityRepositoryImpl(
     }
 
     override suspend fun getContributorDetailsInfo(contributorType: String): Flow<Resource<BaseApiResponse<OContributorResponseModal>>> {
-        return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.OREO_BASE_URL}/protean/v1/details"
-            remoteDataSource.getContributorsDetails(url, contributorType)
+
+        return flow {
+            val type = KeyValueDataType.CONTRIBUTORS
+            var resultData: OContributorResponseModal? = null
+
+
+            val cacheResult = safeCacheCall(Dispatchers.IO) {
+
+                val localData =
+                    keyValueDataSource.getData(contributorType, type)
+                        ?: return@safeCacheCall null
+
+                val lastCallTime = localData.getSafeLastSyncValue()
+
+                val shouldCallApi =
+                    lastCallTime.checkDayDifferenceMoreOne() || lastCallTime.checkDayDifferenceMoreNMinutes(
+                        CACHE_CLEAR_DEFAULT
+                    )
+
+                if (shouldCallApi) {
+                    keyValueDataSource.removeDataByType(KeyValueDataType.CONTRIBUTORS)
+                    return@safeCacheCall null
+                } else {
+
+                    if (localData.value == null) {
+                        return@safeCacheCall null
+                    }
+
+                    return@safeCacheCall localData.value?.let {
+                        Gson().fromJson<OContributorResponseModal>(
+                            it
+                        )
+                    }
+                }
+            }
+
+            cacheResult.collect { resource ->
+                when (resource) {
+                    is CacheResult.Success -> {
+
+                        resource.value?.let {
+                            resultData = it
+                        }
+                    }
+
+                    is CacheResult.GenericError -> {
+
+                    }
+                }
+            }
+
+            if (resultData != null) {
+                emit(
+                    Resource.Success(
+                        BaseApiResponse(
+                            data = resultData,
+                            message = "",
+                        )
+                    )
+                )
+                return@flow
+            }
+
+
+            val serverResult = safeApiCallFlow(dispatcher) {
+                val url = "${BuildConfig.OREO_BASE_URL}/protean/v1/details"
+                remoteDataSource.getContributorsDetails(url, contributorType)
+            }
+
+            serverResult.collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        emit(Resource.GenericError(resource.message, resource.errorCode))
+                    }
+
+                    is Resource.Loading -> {
+                        emit(Resource.Loading(resource.loading))
+                    }
+
+                    is Resource.NetworkError -> {
+                        emit(Resource.NetworkError(resource.response, resource.code))
+                    }
+
+                    is Resource.Success -> {
+
+                        resource.data?.data?.let { response ->
+                            resultData = response
+                        }
+                    }
+                }
+            }
+
+            if (resultData != null) {
+                safeCacheCall(Dispatchers.IO) {
+                    keyValueDataSource.insertData(
+                        KeyValue(
+                            key = contributorType,
+                            value = gson.toJson(resultData),
+                            type = KeyValueDataType.CONTRIBUTORS.name
+                        )
+                    )
+                }.collect { resource ->
+                    when (resource) {
+                        is CacheResult.Success -> {
+                            emit(
+                                Resource.Success(
+                                    BaseApiResponse(
+                                        data = resultData,
+                                        message = "",
+                                    )
+                                )
+                            )
+                        }
+
+                        is CacheResult.GenericError -> {
+                            emit(Resource.GenericError(message = "Something went wrong", 0))
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -549,17 +1158,219 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
+    private fun shouldCallBannerApi(
+        serverTime: Long,
+        localTime: Long
+    ): Boolean {
+        if (serverTime == 0L) return true
+        if (localTime == 0L) return true
+
+        return localTime < serverTime
+    }
+
+    fun getLocalHelpAndSupportData(removeData: Boolean): List<OHSModel>? {
+        if (removeData) {
+            offlineApiStore.setHelpAndSupportList(null)
+            return ArrayList()
+        }
+        return offlineApiStore.getHelpAndSupportList()
+    }
+
     override suspend fun getHSCategories(): Flow<Resource<BaseApiResponse<List<OHSModel>>>> {
-        return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.BASE_URL_NEW}/core/ring/help_and_support/categories"
-            remoteDataSource.getHSCategories(url)
+        return flow {
+
+            val serverUpdateTimeStamp =
+                lastSyncProvider.getSyncTimeStamp(LastSyncItems.H_AND_SUPPORT_SERVER_UPDATE)
+            val localSyncTime =
+                lastSyncProvider.getSyncTimeStamp(LastSyncItems.HELP_AND_SUPPORT_LIST)
+
+            val shouldCallApi = shouldCallBannerApi(serverUpdateTimeStamp, localSyncTime)
+
+            val resultData = ArrayList<OHSModel>()
+
+            val cacheResult = safeCacheCall(Dispatchers.IO) {
+                getLocalHelpAndSupportData(shouldCallApi)
+            }
+            cacheResult.collect { resource ->
+                when (resource) {
+                    is CacheResult.Success -> {
+
+                        resource.value?.let {
+                            resultData.clear()
+                            resultData.addAll(it)
+                        }
+                    }
+
+                    is CacheResult.GenericError -> {
+
+                    }
+                }
+            }
+
+
+            if (resultData.isNotEmpty()) {
+                emit(Resource.Success(BaseApiResponse(data = resultData, message = "")))
+                return@flow
+            }
+
+            val serverResult = safeApiCallFlow(dispatcher) {
+                val url = "${BuildConfig.BASE_URL_NEW}/core/ring/help_and_support/categories"
+                remoteDataSource.getHSCategories(url)
+            }
+
+
+            serverResult.collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        emit(Resource.GenericError(resource.message, resource.errorCode))
+                    }
+
+                    is Resource.Loading -> {
+                        emit(Resource.Loading(resource.loading))
+                    }
+
+                    is Resource.NetworkError -> {
+                        emit(Resource.NetworkError(resource.response, resource.code))
+                    }
+
+                    is Resource.Success -> {
+
+                        resource.data?.data?.let { response ->
+                            withContext(Dispatchers.IO) {
+                                keyValueDataSource.removeDataByType(KeyValueDataType.H_AND_S)
+                            }
+                            lastSyncProvider.setSyncTimeStamp(LastSyncItems.HELP_AND_SUPPORT_LIST)
+                            resultData.clear()
+                            resultData.addAll(response)
+                        }
+                    }
+                }
+            }
+
+            if (resultData.isNotEmpty()) {
+                safeCacheCall(Dispatchers.IO) {
+                    offlineApiStore.setHelpAndSupportList(resultData)
+                }.collect { resource ->
+                    when (resource) {
+                        is CacheResult.Success -> {
+                            emit(Resource.Success(BaseApiResponse(data = resultData, message = "")))
+                        }
+
+                        is CacheResult.GenericError -> {
+                            emit(Resource.GenericError(message = "Something went wrong", 0))
+                        }
+                    }
+                }
+            }
         }
     }
 
     override suspend fun getHSQAnswer(quesId: String): Flow<Resource<BaseApiResponse<List<OHSQuestionariesResponseModel>>>> {
-        return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.BASE_URL_NEW}/core/ring/help_and_support/answers/${quesId}"
-            remoteDataSource.getHSQAnswer(url)
+        return flow {
+            val resultData = ArrayList<OHSQuestionariesResponseModel>()
+
+            val cacheResult = safeCacheCall(Dispatchers.IO) {
+
+                val localData =
+                    keyValueDataSource.getData(quesId, KeyValueDataType.H_AND_S)
+                        ?: return@safeCacheCall null
+
+                if (localData.value == null) {
+                    return@safeCacheCall null
+                }
+
+                return@safeCacheCall localData.value?.let {
+                    Gson().fromJson<List<OHSQuestionariesResponseModel>>(
+                        it
+                    )
+                }
+            }
+            cacheResult.collect { resource ->
+                when (resource) {
+                    is CacheResult.Success -> {
+
+                        resource.value?.let {
+                            resultData.addAll(it)
+                        }
+                    }
+
+                    is CacheResult.GenericError -> {
+
+                    }
+                }
+            }
+
+
+            if (resultData.isNotEmpty()) {
+                emit(
+                    Resource.Success(
+                        BaseApiResponse(
+                            data = resultData,
+                            message = "",
+                        )
+                    )
+                )
+                return@flow
+            }
+
+            val serverResult = safeApiCallFlow(dispatcher) {
+                val url = "${BuildConfig.BASE_URL_NEW}/core/ring/help_and_support/answers/${quesId}"
+                remoteDataSource.getHSQAnswer(url)
+            }
+
+
+            serverResult.collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        emit(Resource.GenericError(resource.message, resource.errorCode))
+                    }
+
+                    is Resource.Loading -> {
+                        emit(Resource.Loading(resource.loading))
+                    }
+
+                    is Resource.NetworkError -> {
+                        emit(Resource.NetworkError(resource.response, resource.code))
+                    }
+
+                    is Resource.Success -> {
+
+                        resource.data?.data?.let { response ->
+                            resultData.clear()
+                            resultData.addAll(response)
+                        }
+                    }
+                }
+            }
+
+            if (resultData.isNotEmpty()) {
+                safeCacheCall(Dispatchers.IO) {
+                    keyValueDataSource.insertData(
+                        KeyValue(
+                            key = quesId,
+                            value = gson.toJson(resultData),
+                            type = KeyValueDataType.H_AND_S.name
+                        )
+                    )
+                }.collect { resource ->
+                    when (resource) {
+                        is CacheResult.Success -> {
+                            emit(
+                                Resource.Success(
+                                    BaseApiResponse(
+                                        data = resultData,
+                                        message = "",
+                                    )
+                                )
+                            )
+                        }
+
+                        is CacheResult.GenericError -> {
+                            emit(Resource.GenericError(message = "Something went wrong", 0))
+                        }
+                    }
+                }
+            }
         }
     }
 

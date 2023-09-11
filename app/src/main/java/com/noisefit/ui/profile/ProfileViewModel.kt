@@ -137,11 +137,6 @@ constructor(
                                     _logoutSuccess.value = true
                                 }
                             }
-
-
-                            withContext(Dispatchers.IO) {
-                                lastSyncProvider.removeUserDataLastSync()
-                            }
                         }
                     }
                 }
@@ -177,9 +172,6 @@ constructor(
                                     localDataStore.setEndGameValue("")
                                     _logoutSuccess.value = true
                                 }
-                            }
-                            withContext(Dispatchers.IO) {
-                                lastSyncProvider.removeUserDataLastSync()
                             }
                         }
                     }

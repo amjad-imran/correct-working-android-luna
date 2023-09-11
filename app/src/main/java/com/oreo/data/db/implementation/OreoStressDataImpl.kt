@@ -30,7 +30,11 @@ constructor(
         if (prevData == null) {
             stressDao.insert(data)
         } else {
-            stressDao.updateViaDate(data.breakUp ?: "", data.date!!,false)
+            val newBreakup = Gson().fromJson<List<Int>>(data.breakUp ?: "")
+            val prevBreakup = Gson().fromJson<List<Int>>(prevData.breakUp ?: "")
+            if (newBreakup.sum() != prevBreakup.sum()) {
+                stressDao.updateViaDate(data.breakUp ?: "", data.date!!, false)
+            }
         }
 
         return true

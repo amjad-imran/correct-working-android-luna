@@ -119,7 +119,7 @@ constructor(val zhApplicationHandler: ZhApplicationHandler) : ConnectionDataActi
                 }
 
                 BleCommonAttributes.STATE_DISCONNECTED -> {
-                    AppLogs.sendAppLogs("$TAG : disconnected")
+                    AppLogs.sendAppLogs("$TAG :onConnectState disconnected")
 
                     if (!noiseFitDevice?.watchToken.isNullOrEmpty() && !isDisconnect) {
                         return
@@ -226,6 +226,7 @@ constructor(val zhApplicationHandler: ZhApplicationHandler) : ConnectionDataActi
 
         CallBackUtils.requestDeviceBindStateCallBack = RequestDeviceBindStateCallBack { state ->
             LOGS.d("$TAG Bind State $state , isReconnect $isReconnect")
+            AppLogs.sendAppLogs("Bind State $state , isReconnect $isReconnect")
             if (state) {
                 AppLogs.sendAppLogs(LogEvents.Binding, ConnectEvents.Other.apply {
                     comment = "bind reconnect"
@@ -270,6 +271,9 @@ constructor(val zhApplicationHandler: ZhApplicationHandler) : ConnectionDataActi
                     controlBleTools?.disconnect()
                     noiseFitDevice?.let { removeBond(it) }
                     if (!isCallingBind) {
+                        AppLogs.sendAppLogs(
+                            LogEvents.Connect,
+                            ConnectEvents.Failed.apply { comment = "STATE_DISCONNECTED Bind State->$state isReconnect->$isReconnect" })
                         disconnectSuccess()
                     }
                     baseConnectionCallbacks?.onConnect(

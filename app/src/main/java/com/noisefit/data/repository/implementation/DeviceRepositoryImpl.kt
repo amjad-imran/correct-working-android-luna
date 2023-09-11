@@ -17,6 +17,7 @@ import com.noisefit.data.repository.abstraction.DeviceRepository
 import com.noisefit.data.safeApiCallFlow
 import com.noisefit.luna.BuildConfig
 import com.noisefit_commans.data.model.Feedback
+import com.noisefit_commans.data.model.FeedbackNew
 import com.noisefit_commans.data.model.NotificationApp
 import com.noisefit_commans.data.model.warranty.MarketPlace
 import com.noisefit_commans.data.response.*
@@ -569,14 +570,62 @@ class DeviceRepositoryImpl(
 
     }
 
-    override suspend fun submitFeedbackNew(request: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<String>>> {
+    override suspend fun submitFeedbackNew(feedback: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<String>>> {
         val url =
             "${BuildConfig.BASE_URL_NEW}/core/ring/help_and_support/feedback"
         return safeApiCallFlow(dispatcher) {
-            remoteDataSource.submitFeedbackNew(url, request)
+            remoteDataSource.submitFeedbackNew(url, feedback)
         }
     }
 
+    override suspend fun submitFeedbackFile(feedback: FeedbackNew): Flow<Resource<BaseApiResponseData<String>>> {
+
+        val logList = ArrayList<MultipartBody.Part>()
+        if (feedback.file != null) {
+            logList.add(
+                MultipartBody.Part.createFormData(
+                    "logs",
+                    "appLogs.txt"/*feedback.file!!.name*/,
+                    feedback.file!!.asRequestBody("text/plain".toMediaTypeOrNull())
+                )
+            )
+        }
+        if (feedback.watchLogs != null) {
+
+            var filename = feedback.watchLogs?.name
+            if (filename.isNullOrEmpty()) {
+                filename = "watchLogs.txt"
+            }
+            logList.add(
+                MultipartBody.Part.createFormData(
+                    "logs",
+                    filename/*feedback.watchLogs!!.name*/,
+                    feedback.watchLogs!!.asRequestBody("text/plain".toMediaTypeOrNull())
+                )
+            )
+        }
+
+
+        val url =
+            "${BuildConfig.BASE_URL_NEW}/core/ring/help_and_support/log_feedback"
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.submitFeedbackFile(
+                url,
+                platform = feedback.platform.getRequestBody(),
+                mobileDevice = feedback.mobileDevice.getRequestBody(),
+                osVersion = feedback.osVersion.getRequestBody(),
+                appVersion = feedback.appVersion.getRequestBody(),
+                watchName = feedback.watchName.getRequestBody(),
+                watchFirmwareVersion = feedback.watchFirmwareVersion.getRequestBody(),
+                rating = feedback.rating.toString().getRequestBody(),
+                problem_type = feedback.problemType.getRequestBody(),
+                suggestion = feedback.suggestions.getRequestBody(),
+                date = feedback.date.getRequestBody(),
+                userId = feedback.user_id.toString().getRequestBody(),
+                logList
+            )
+        }
+    }
 
     companion object {
         val DEVICE_LIST_SUCCESS = "Device list success"

@@ -12,6 +12,7 @@ import com.noisefit.NoiseFitApplicationMain.Companion.context
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.DeviceRepository
 import com.noisefit.session.SessionManager
+import com.noisefit.watch.SDKWatchType
 import com.noisefit_commans.NoisefitApplication
 import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.BinaryActionCallback
@@ -20,11 +21,17 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.data.model.FeedbackNew
+import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.FileLogsUtils
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import java.io.File
 import java.io.IOException
 import javax.inject.Inject
 
@@ -49,13 +56,134 @@ class FeedbackNewViewModel @Inject constructor(
     val feedbackQuestion: LiveData<ArrayList<FeedbackQuestionaries>> = _feedbackQuestion
     var questionList = ArrayList<FeedbackQuestionaries>()
 
+    var watchLogFile: File? = null
+    var appLogFile: File? = null
 
-    fun getLocalDataStore(): DataStoredInterface {
-        return localDataStore
+
+    init {
+        getLogsPath()
     }
 
-    fun getWatchDataStore(): WatchDataStore {
-        return watchDataStore
+    fun getLogsPath() {
+        viewModelScope.launch {
+            getFileLogs().collect { files ->
+                appLogFile = files.first
+                watchLogFile = files.second
+
+                var hasLogFiles = false
+                if (appLogFile?.exists() == false) {
+                    appLogFile = null
+                } else {
+                    hasLogFiles = true
+                }
+                if (watchLogFile?.exists() == false) {
+                    watchLogFile = null
+                } else {
+                    hasLogFiles = true
+                }
+
+                if (hasLogFiles) {
+                    showAttachLogButton.value = true
+                }
+
+
+            }
+        }
+    }
+
+    private suspend fun getFileLogs(): Flow<Pair<File?, File?>> {
+        return flow {
+
+            val context = NoisefitApplication.context!!
+            var appLogs: File? = null
+            try {
+                appLogs = AppLogs.getFile(context)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+
+            var watchLogs: File? = null
+            try {
+
+                val fileName = watchDataStore.getLogPathName()
+
+                if (FileLogsUtils.checkLogFileExist(
+                        context,
+                        ringDataStore.getRingDevice(),
+                        fileName
+                    ) != null
+                ) {
+
+
+                    watchLogs = FileLogsUtils.getFile(
+                        context,
+                        ringDataStore.getRingDevice(),
+                        fileName
+                    )
+                }
+
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            emit(Pair(appLogs, watchLogs))
+        }
+    }
+
+
+    fun submitFeedbackWithFile(
+        feedback: FeedbackNew
+    ) {
+
+        feedback.user_id = localDataStore.getUser()?.id
+
+        if (feedback.rating <= 3) {
+            feedback.file = appLogFile
+            feedback.watchLogs = watchLogFile
+        }
+
+
+        viewModelScope.launch {
+            deviceRepository.submitFeedbackFile(
+                feedback,
+            ).collect { resource ->
+
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        submitFeedbackNew(
+                                            feedback
+                                        )
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.let {
+                            submittedSuccessfully.postValue(true)
+                        } ?: sendMessage("Something went wrong")
+                    }
+                }
+
+            }
+        }
+
     }
 
     fun submitFeedbackNew(

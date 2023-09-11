@@ -25,6 +25,8 @@ import com.oreo.data.model.SleepChartModel
 import com.oreo.data.model.health.CommonDataModel
 import com.oreo.data.model.health.Nudges
 import com.oreo.data.model.health.OreoReadinessModel
+import com.oreo.data.model.health.UnitDataModelArray
+import com.oreo.data.model.health.UnitDataModelArrayFloat
 import com.oreo.ui.custom.ScrollListener
 import com.oreo.ui.sleep.OreoSleepContributorAdapter
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
@@ -33,6 +35,7 @@ import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.math.roundToInt
 
 
 @AndroidEntryPoint
@@ -124,8 +127,10 @@ class OreoReadinessFragment :
     }
 
 
-    private fun showHeartRateGraph(heartRateData: List<Int>,
-                                   startTime: String, endTime: String) {
+    private fun showHeartRateGraph(
+        heartRateData: UnitDataModelArray?,
+        startTime: String, endTime: String
+    ) {
         /*LOGS.d("showHeartRateGraph $startTime $endTime")
         var hasDummyData = true
         val breakUpData = if (heartRateData.isNullOrEmpty()) {
@@ -143,7 +148,7 @@ class OreoReadinessFragment :
         val seTime: String?
         var breakUpData = ArrayList<Int>()
         var hasDummyData = true
-        if (heartRateData.isNullOrEmpty()) {
+        if (heartRateData?.value.isNullOrEmpty()) {
             breakUpData = mViewModel.getDummyBreakUpDataForTimeDisplay()
             ssTime = null
             seTime = null
@@ -151,7 +156,7 @@ class OreoReadinessFragment :
             hasDummyData = false
             seTime = endTime
             ssTime = startTime
-            breakUpData = heartRateData as ArrayList<Int>
+            breakUpData = heartRateData?.value as ArrayList<Int>
         }
 
 
@@ -188,38 +193,39 @@ class OreoReadinessFragment :
 
         binding.lytHeartRate.lineChart.updateDataWithMax(
             sleepChart, 20,
-            false, true,  GraphDummyModel(
-                hasDummyData,40,100
-            )
+            false, true, GraphDummyModel(
+                hasDummyData, 40, 100
+            ),
+            heartRateData?.avg
         )
 
 
     }
 
     private fun showHeartRateVariabilityGraph(
-        hrvBreakUp: List<Int>,
+        hrvBreakUpData: UnitDataModelArray?,
         startTime: String,
         endTime: String
     ) {
 
-       /* var hasDummyData = true
+        /* var hasDummyData = true
 
-        val breakUpData = if (hrvBreakUp.isNullOrEmpty()) {
-            mViewModel.getDummyBreakUpDataForTimeDisplay()
-        } else{
-            hasDummyData = false
-            hrvBreakUp
-        }
+         val breakUpData = if (hrvBreakUp.isNullOrEmpty()) {
+             mViewModel.getDummyBreakUpDataForTimeDisplay()
+         } else{
+             hasDummyData = false
+             hrvBreakUp
+         }
 
-        val baseHrList = UtilClass.graphBaseInterval(null, null, breakUpData.size)
-*/
+         val baseHrList = UtilClass.graphBaseInterval(null, null, breakUpData.size)
+ */
 
 
         val ssTime: String?
         val seTime: String?
         var breakUpData = ArrayList<Int>()
         var hasDummyData = true
-        if (hrvBreakUp.isNullOrEmpty()) {
+        if (hrvBreakUpData?.value.isNullOrEmpty()) {
             breakUpData = mViewModel.getDummyBreakUpDataForTimeDisplay()
             ssTime = null
             seTime = null
@@ -227,7 +233,7 @@ class OreoReadinessFragment :
             hasDummyData = false
             seTime = endTime
             ssTime = startTime
-            breakUpData = hrvBreakUp as ArrayList<Int>
+            breakUpData = hrvBreakUpData?.value as ArrayList<Int>
         }
 
 
@@ -264,35 +270,36 @@ class OreoReadinessFragment :
 
         binding.lytHRVariability.lineChart.updateDataWithMax(
             sleepChart, 20,
-            true, false,  GraphDummyModel(
-                hasDummyData,0,200
-            )
+            true, false, GraphDummyModel(
+                hasDummyData, 0, 200
+            ),
+            hrvBreakUpData?.avg
         )
 
     }
 
     private fun showTemperatureGraph(
-        temperatureBreakUp: List<Float>?,
+        temperatureBreakUpData: UnitDataModelArrayFloat?,
         startTime: String,
         endTime: String
     ) {
-     /*   var hasDummyData = true
-        val breakUpData = if (temperatureBreakUp.isNullOrEmpty()) {
-            mViewModel.getDummyBreakUpDataForTimeDisplay()
-        } else{
-            hasDummyData = false
-            temperatureBreakUp
+        /*   var hasDummyData = true
+           val breakUpData = if (temperatureBreakUp.isNullOrEmpty()) {
+               mViewModel.getDummyBreakUpDataForTimeDisplay()
+           } else{
+               hasDummyData = false
+               temperatureBreakUp
 
-        }
+           }
 
-        val baseHrList = UtilClass.graphBaseInterval(null, null, breakUpData.size ?: 0)
-*/
+           val baseHrList = UtilClass.graphBaseInterval(null, null, breakUpData.size ?: 0)
+   */
 
         val ssTime: String?
         val seTime: String?
         var breakUpData = ArrayList<Float>()
         var hasDummyData = true
-        if (temperatureBreakUp.isNullOrEmpty()) {
+        if (temperatureBreakUpData?.value.isNullOrEmpty()) {
             breakUpData = mViewModel.getDummyBreakUpDataForTimeDisplayFloat()
             ssTime = null
             seTime = null
@@ -300,7 +307,7 @@ class OreoReadinessFragment :
             hasDummyData = false
             seTime = endTime
             ssTime = startTime
-            breakUpData = temperatureBreakUp as ArrayList<Float>
+            breakUpData = temperatureBreakUpData?.value as ArrayList<Float>
         }
 
         val baseTimeList = UtilClass.graphTwoHoursInterval(
@@ -336,9 +343,10 @@ class OreoReadinessFragment :
 
         binding.lytTemperature.lineChart.updateDataWithMax(
             sleepChart, 20,
-            true, false,  GraphDummyModel(
-                hasDummyData,80,110
-            )
+            true, false, GraphDummyModel(
+                hasDummyData, 80, 110
+            ),
+            null
         )
 
     }
@@ -645,8 +653,10 @@ class OreoReadinessFragment :
             DateFormats.time12Meridian
         )
 
-        showHeartRateGraph(it.hrBreakUp?.value ?: ArrayList(),
-            sleepStartTime, sleepEndTime)
+        showHeartRateGraph(
+            it.hrBreakUp,
+            sleepStartTime, sleepEndTime
+        )
 
 
         //set data on heart rate variability
@@ -679,24 +689,28 @@ class OreoReadinessFragment :
         }
         //todo will change startTime, endTime
         showHeartRateVariabilityGraph(
-            it.hrvBreakUp?.value ?: ArrayList(),
+            it.hrvBreakUp,
             sleepStartTime, sleepEndTime
         )
 
         //set data on temperature
         binding.lytTemperature.tvTitle.text = getString(R.string.text_temperature)
-        binding.lytTemperature.tvSubtitle1.text = getString(R.string.text_average)
+        binding.lytTemperature.tvSubtitle1.text = getString(R.string.text_max)
         binding.lytTemperature.tvSubtitle2.gone()
         binding.lytTemperature.divider1.root.invisible()
         if (!it.temperatureBreakUp?.value.isNullOrEmpty()) {
-            binding.lytTemperature.lytSubtitleValue1.tvValue.text = "${it.temperatureBreakUp?.avg}"
+            binding.lytTemperature.lytSubtitleValue1.tvValue.text = "${it.temperatureBreakUp?.max}"
             binding.lytTemperature.lytSubtitleValue1.tvUnit.visible()
             binding.lytTemperature.lytSubtitleValue1.tvUnit.text = "°F"
         } else {
             temperatureGraphDefaultView()
         }
         //todo will change startTime, endTime
-        showTemperatureGraph(it.temperatureBreakUp?.value ?: ArrayList(), sleepStartTime, sleepEndTime)
+        showTemperatureGraph(
+            it.temperatureBreakUp,
+            sleepStartTime,
+            sleepEndTime
+        )
     }
 
     private fun heartRateDefaultView() {

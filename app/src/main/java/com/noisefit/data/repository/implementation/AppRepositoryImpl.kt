@@ -48,22 +48,4 @@ class AppRepositoryImpl(
 
     }
 
-    private fun shouldCallBannerApi(
-        serverTime: Long,
-        localTime: Long
-    ): Boolean {
-        if (serverTime == 0L) return true
-        if (localTime == 0L) return true
-
-        return localTime < serverTime
-    }
-
-    fun getLocalHelpAndSupportData(removeData: Boolean): List<HelpAndSupportResponse>? {
-        if (removeData) {
-            offlineApiStore.setHelpAndSupportList(null)
-            return ArrayList()
-        }
-        return offlineApiStore.getHelpAndSupportList()
-    }
-
 }

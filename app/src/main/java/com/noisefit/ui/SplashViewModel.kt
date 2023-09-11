@@ -192,6 +192,23 @@ class SplashViewModel
                             localDataStore.saveFeatureIntervalFetchPeriod(it.resetInterval ?: 24)
                             localDataStore.saveHistoryYears(it.calendarYears ?: 2)
 
+                            val helpUpdateTimStamp = if (it.helpUpdate.isNullOrEmpty()) {
+                                0L
+                            } else {
+                                try {
+                                    it.helpUpdate?.toLongOrNull()
+                                } catch (exp: Exception) {
+                                    0L
+                                }
+                            }
+
+                            lastSyncProvider.setSyncTimeStamp(
+                                LastSyncItems.H_AND_SUPPORT_SERVER_UPDATE,
+                                helpUpdateTimStamp ?: 0L
+                            )
+
+
+
                             handleAppVersion(versionCheckResponse = it)
                         } ?: checkAppVersion()
                     }
