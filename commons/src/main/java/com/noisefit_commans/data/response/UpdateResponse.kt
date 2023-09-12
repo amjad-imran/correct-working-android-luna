@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class UpdateResponse(
     @SerializedName("description_chinese")
-    val descriptionChinese: String?=null,
+    val descriptionChinese: String? = null,
     @SerializedName("description_english")
     val descriptionEnglish: String = "",
     @SerializedName("forceUpdate")
@@ -24,7 +24,5 @@ data class UpdateResponse(
     @SerializedName("image_url")
     val imageUrl: String? = null,
     @SerializedName("touch_url")
-    val touchUrl: String?=null,
-    @SerializedName("app_version")
-    val appVersion:String?=null
+    val touchUrl: String? = null
 ):Parcelable

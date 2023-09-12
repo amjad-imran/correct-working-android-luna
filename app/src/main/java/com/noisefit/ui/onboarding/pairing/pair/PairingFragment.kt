@@ -269,7 +269,7 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
                 setUI(PairState.FAILED)
             }
         }*/
-        viewModel.updateInfo.observe(this) {
+        /*viewModel.updateInfo.observe(this) {
             it.getContent()?.let { res ->
 
                 try {
@@ -298,7 +298,7 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
                 } catch (e: Exception) {
                 }
             }
-        }
+        }*/
         viewModel.updateFirmware.observe(this) {
             it.getContent()?.let { file ->
                 val fileUri = Uri.fromFile(file).toString()

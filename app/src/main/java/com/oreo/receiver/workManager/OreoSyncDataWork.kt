@@ -655,11 +655,11 @@ constructor(
             showNotification = true
         }
 
-        if (versionCheckResponse.testMode.equals("1")) {
+        /*if (versionCheckResponse.testMode.equals("1")) {
             localDataStore.setIsTestModeOn(true)
         } else {
             localDataStore.setIsTestModeOn(false)
-        }
+        }*/
         if (showNotification) {
             LOGS.d("handleAppVersion show notification")
             val title = context.getString(R.string.text_update_app)
