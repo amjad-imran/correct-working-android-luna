@@ -285,12 +285,16 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
                             res.url
                         }
                     LOGS.d("Loading File $url")
-                    val fileName = url.split("/").last()
-                    viewModel.downloadFirmware(
-                        url,
-                        requireContext().externalCacheDir!!,
-                        fileName
-                    )
+                    val fileName = url?.split("/")?.last()
+                    if (url != null) {
+                        if (fileName != null) {
+                            viewModel.downloadFirmware(
+                                url,
+                                requireContext().externalCacheDir!!,
+                                fileName
+                            )
+                        }
+                    }
                 } catch (e: Exception) {
                 }
             }

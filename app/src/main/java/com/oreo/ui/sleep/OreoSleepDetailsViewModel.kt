@@ -500,11 +500,14 @@ constructor(
     }
 
     fun getStatusColors(status: String): Int {
-        return if (status.equals("warning", true)) {
+        val color: Int = if (status.equals("warning", true)) {
             R.color.oreo_contributor_warning
+        } else if (status.equals("good", true)) {
+            R.color.distance_arc
         } else {
             R.color.steps_arc
         }
+        return color
     }
 
     fun getHourlySleepBreakup(sleepBreakup: List<SleepHourlyBreakup>?): Pair<ArrayList<SleepData.SleepDataBreakup>, CountCardData> {
