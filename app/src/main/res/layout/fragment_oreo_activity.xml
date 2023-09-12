@@ -19,100 +19,103 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/imageView48"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/activity_back_top"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/back_stick_bottom"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView48" />
+
+        <include
+            android:id="@+id/lytToolbar"
+            layout="@layout/oreo_layout_toolbar_with_2_icons"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.oreo.ui.custom.LineChart
+            android:id="@+id/rvTopGraph"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lytToolbar"
+            lineChart:bgBottomColor="@android:color/transparent"
+            lineChart:bgColor="@android:color/transparent"
+            lineChart:bgLeftColor="@android:color/transparent"
+            lineChart:bgRightColor="@android:color/transparent"
+            lineChart:bgTopColor="@android:color/transparent"
+            lineChart:bottomWith="30dp"
+            lineChart:centerLineColor="@color/white_80"
+            lineChart:centerLineWidth="3dp"
+            lineChart:chartLineColor="@color/activity_chart_line_color"
+            lineChart:chartLineWidth="2dp"
+            lineChart:fillColorEnd="@color/activity_fill_end_color"
+            lineChart:fillColorStart="@color/activity_fill_start_color"
+            lineChart:gridColor="@color/white_12"
+            lineChart:hCount="11"
+            lineChart:innerCircleColor="#bff2ff"
+            lineChart:innerCircleRadius="4dp"
+            lineChart:leftWith="0dp"
+            lineChart:outCircleColor="#ffeeb2"
+            lineChart:outCircleRadius="1dp"
+            lineChart:rightWith="0dp"
+            lineChart:scaleColor="#ff000000"
+            lineChart:scaleLenth="4dp"
+            lineChart:scaleNodeColor="#FFFFFF"
+            lineChart:scaleNodeRadius="6dp"
+            lineChart:showGrid="true"
+            lineChart:topWith="40dp"
+            lineChart:vCount="2"
+            lineChart:xLineColor="#80FFFFFF"
+            lineChart:xMax="130"
+            lineChart:xMin="0"
+            lineChart:xTextColor="#FFFFFF"
+            lineChart:xTextSize="12sp"
+            lineChart:yLineColor="#00FFFFFF"
+            lineChart:yTextSize="12sp" />
 
         <ScrollView
             android:id="@+id/svMain"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="24dp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rvTopGraph"
             tools:visibility="visible">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
-                <ImageView
-                    android:id="@+id/imageView48"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:src="@drawable/activity_back_top"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:background="@drawable/back_stick_bottom"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView48" />
-
-                <include
-                    android:id="@+id/lytToolbar"
-                    layout="@layout/oreo_layout_toolbar_with_2_icons"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <com.oreo.ui.custom.LineChart
-                    android:id="@+id/rvTopGraph"
-                    android:layout_width="match_parent"
-                    android:layout_height="180dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/lytToolbar"
-                    lineChart:bgBottomColor="@android:color/transparent"
-                    lineChart:bgColor="@android:color/transparent"
-                    lineChart:bgLeftColor="@android:color/transparent"
-                    lineChart:bgRightColor="@android:color/transparent"
-                    lineChart:bgTopColor="@android:color/transparent"
-                    lineChart:bottomWith="30dp"
-                    lineChart:centerLineColor="@color/white_80"
-                    lineChart:centerLineWidth="3dp"
-                    lineChart:chartLineColor="@color/activity_chart_line_color"
-                    lineChart:chartLineWidth="2dp"
-                    lineChart:fillColorEnd="@color/activity_fill_end_color"
-                    lineChart:fillColorStart="@color/activity_fill_start_color"
-                    lineChart:gridColor="@color/white_12"
-                    lineChart:hCount="11"
-                    lineChart:innerCircleColor="#bff2ff"
-                    lineChart:innerCircleRadius="4dp"
-                    lineChart:leftWith="0dp"
-                    lineChart:outCircleColor="#ffeeb2"
-                    lineChart:outCircleRadius="1dp"
-                    lineChart:rightWith="0dp"
-                    lineChart:scaleColor="#ff000000"
-                    lineChart:scaleLenth="4dp"
-                    lineChart:scaleNodeColor="#FFFFFF"
-                    lineChart:scaleNodeRadius="6dp"
-                    lineChart:showGrid="true"
-                    lineChart:topWith="40dp"
-                    lineChart:vCount="2"
-                    lineChart:xLineColor="#80FFFFFF"
-                    lineChart:xMax="130"
-                    lineChart:xMin="0"
-                    lineChart:xTextColor="#FFFFFF"
-                    lineChart:xTextSize="12sp"
-                    lineChart:yLineColor="#00FFFFFF"
-                    lineChart:yTextSize="12sp" />
 
                 <include
                     android:id="@+id/lytAScoreData"
                     layout="@layout/oreo_layout_activity_score_subdata"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/side_margin"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="@dimen/side_margin"
-                    app:layout_constraintTop_toBottomOf="@id/rvTopGraph" />
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <include
                     android:id="@+id/divider1"
@@ -120,6 +123,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/lytAScoreData" />
 
                 <include
@@ -127,9 +132,11 @@
                     layout="@layout/oreo_layout_sleep_contributors"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/side_margin"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="24dp"
-                    android:layout_marginEnd="@dimen/side_margin"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/divider1" />
 
                 <include
@@ -138,6 +145,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="24dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/lytAContributor" />
 
                 <include
@@ -145,6 +154,10 @@
                     layout="@layout/oreo_layout_daily_movement"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
                 <include
@@ -153,6 +166,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="24dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/lytDailyMovement" />
 
                 <include

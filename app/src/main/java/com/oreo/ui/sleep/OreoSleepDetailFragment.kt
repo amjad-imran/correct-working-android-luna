@@ -448,6 +448,7 @@ class OreoSleepDetailFragment :
         viewModel.sleepHistoryResponse.observe(this) {
 
             binding.svMain.visible()
+            binding.rvTopGraph.visible()
 
             val topGraphData = viewModel.getPrefixAndSuffixList(it)
             mSharedViewModel.selectedDate = viewModel.dateList[viewModel.dateList.size - 1]
