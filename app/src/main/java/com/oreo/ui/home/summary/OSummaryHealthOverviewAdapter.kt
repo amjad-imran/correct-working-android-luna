@@ -253,7 +253,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             devicePaired: Boolean
         ) {
 
-            binding.imv.loadImage(binding.imv.context, R.drawable.ic_readiness_card_bg1)
+            //binding.imv.loadImage(binding.imv.context, R.drawable.ic_readiness_card_bg1)
 
             val scoreValue = data.data.readinessScore ?: 0
             if (scoreValue == 0) {
@@ -307,7 +307,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             lastPosition: Int,
             devicePaired: Boolean
         ) {
-            binding.imv.loadImage(binding.imv.context, R.drawable.ic_sleep_card_bg1)
+            //binding.imv.loadImage(binding.imv.context, R.drawable.ic_sleep_card_bg1)
             val scoreValue = data.data.sleepScore ?: 0
             if (scoreValue <= 0) {
                 binding.tvSleepStart.text = "Start time"
@@ -392,7 +392,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             lastPosition: Int,
             devicePaired: Boolean
         ) {
-            binding.imv.loadImage(binding.imv.context, R.drawable.ic_activity_card_bg1)
+            //binding.imv.loadImage(binding.imv.context, R.drawable.ic_activity_card_bg1)
             val scoreValue = data.data.activityScore
 
             if (scoreValue == null) {

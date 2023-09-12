@@ -15,6 +15,7 @@
         android:layout_height="0dp"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
+        android:src="@drawable/ic_sleep_card_bg1"
         app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
