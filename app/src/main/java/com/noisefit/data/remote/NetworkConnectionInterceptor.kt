@@ -189,8 +189,8 @@ class NetworkConnectionInterceptor(
             addHeader("epoch-time", System.currentTimeMillis().toString())
 
             userToken?.let {
-//                addHeader("access-token", "Bearer ${userToken.access_token}")
-                addHeader("access-token", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyNTUyMjEsImRldmljZV9pZCI6MSwiaWF0IjoxNjk0NTE1NzcwLCJleHAiOjE2OTQ1MzAxNzB9.o_VytXchVV3XZS6o9xhUvjTiwBxhFz6Yx4WXBHusXSM")
+                addHeader("access-token", "Bearer ${userToken.access_token}")
+//                addHeader("access-token", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyNTUyMjEsImRldmljZV9pZCI6MSwiaWF0IjoxNjk0NTE1NzcwLCJleHAiOjE2OTQ1MzAxNzB9.o_VytXchVV3XZS6o9xhUvjTiwBxhFz6Yx4WXBHusXSM")
             }
             if (request.url.toString().contains("/user_detail/ring/devices", true)) {
                 userToken?.let {
