@@ -168,7 +168,7 @@ class OreoActivityFragment :
 
     private fun updateUi(it: OreoActivityModel) {
         //activity score data
-        binding.lytAScoreData.lytSec1.tvTitle.text = getString(R.string.text_active_calorie)
+        binding.lytAScoreData.lytSec1.tvTitle.text = getString(R.string.text_goal_progress)
         binding.lytAScoreData.lytSec2.tvTitle.text = getString(R.string.text_total_calories)
         binding.lytAScoreData.lytSec3.tvTitle.text = getString(R.string.text_steps)
         binding.lytAScoreData.lytSec4.tvTitle.text = getString(R.string.text_distance)

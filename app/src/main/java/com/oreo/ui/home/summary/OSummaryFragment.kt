@@ -231,7 +231,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         LOGS.d("shouldSync $lastSyncTime -- ${DateFormats.getTimeStamp()}")
         if (kotlin.math.abs(DateFormats.getTimeStamp() - lastSyncTime) > 300000L) {
             binding.lytHeader.tvHeaderStatus.apply {
-                text = context.getString(R.string.text_updating_dot)
+                text = context.getString(R.string.text_syncing_dot)
                 visible()
             }
             syncData()
@@ -366,7 +366,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                         binding.lytHeader.pbSync.progress = syncDataStatus.progress
                         binding.lytHeader.pbSync.visible()
                         binding.lytHeader.tvHeaderStatus.apply {
-                            text = getString(R.string.text_updating_dot)
+                            text = getString(R.string.text_syncing_dot)
                             visible()
                         }
                     }
@@ -376,7 +376,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                         binding.lytHeader.pbSync.progress = syncDataStatus.progress
                         binding.lytHeader.pbSync.visible()
                         binding.lytHeader.tvHeaderStatus.apply {
-                            text = getString(R.string.text_updating_dot)
+                            text = getString(R.string.text_syncing_dot)
                             visible()
                         }
                     }
