@@ -432,11 +432,14 @@ class OreoActivityViewModel @Inject constructor(
     }
 
     fun getStatusColors(status: String?): Int {
-        return if (status.equals("warning", true)) {
+        val color: Int = if (status.equals("warning", true)) {
             R.color.oreo_contributor_warning
+        } else if (status.equals("good", true)) {
+            R.color.distance_arc
         } else {
             R.color.steps_arc
         }
+        return color
     }
 
 
@@ -456,9 +459,9 @@ class OreoActivityViewModel @Inject constructor(
         for (i in originalList.indices step 3) {
             val endIndex = i + 3
             if (endIndex <= originalList.size) {
-                val max = if (includeInvalid){
+                val max = if (includeInvalid) {
                     originalList.subList(i, endIndex).maxWithInvalidMovementValues()
-                }else{
+                } else {
                     originalList.subList(i, endIndex).maxWithoutInvalidMovementValues()
                 }
                 combinedList.add(max)
