@@ -190,7 +190,6 @@ class NetworkConnectionInterceptor(
 
             userToken?.let {
                 addHeader("access-token", "Bearer ${userToken.access_token}")
-//                addHeader("access-token", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyNTQ5OTMsImRldmljZV9pZCI6MSwiaWF0IjoxNjk0MTY2NjIyLCJleHAiOjE2OTQxODEwMjJ9.nJrldyPkaLdYkXA4lfl4st0-YyPYF1E4PUurLYgg6nw")
             }
             if (request.url.toString().contains("/user_detail/ring/devices", true)) {
                 userToken?.let {

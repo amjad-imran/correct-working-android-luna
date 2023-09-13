@@ -261,7 +261,7 @@ class OSleepScoreDetailsFragment :
                             binding.lytTopGraphView.lytLabelValue1.tvUnit.gone()
                         } else {
                             binding.lytTopGraphView.lytLabelValue1.tvUnit.visible()
-                            binding.lytTopGraphView.lytLabelValue1.tvUnit.text = "HR"
+                            binding.lytTopGraphView.lytLabelValue1.tvUnit.text = "bpm"
                         }
                         setTopDateLabel(it.date)
                     }
@@ -810,6 +810,47 @@ class OSleepScoreDetailsFragment :
                         }
                         val compPro = "${String.format("%.1f", difference)} °F"
                         binding.lytScoreOverview.tvTrendProg.text = compPro
+                    } else if (
+                        mViewModel.itemClickType == ViewItemClickType.RESTING_HR.name
+                    ) {
+                        var difference = 0f
+                        todayProgress =
+                            trendData.today.value.toLong()
+                        yesterdayProgress =
+                            trendData.yesterday.value.toLong()
+                        if (todayProgress > yesterdayProgress) {
+                            binding.lytScoreOverview.tvTrendProg.setCompoundDrawable(R.drawable.ic_trend_up_red)
+                            binding.lytScoreOverview.tvTrendProg.setTextColor(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    R.color.color_error
+                                )
+                            )
+                            binding.lytScoreOverview.tvTrendProg.visible()
+                            binding.lytScoreOverview.tvScoreMsg.visible()
+                            mViewModel.isProgressEqual = false
+                            difference = trendData.today.value - trendData.yesterday.value
+                            mViewModel.isTodayGreater = true
+                        } else if (yesterdayProgress > todayProgress) {
+                            binding.lytScoreOverview.tvTrendProg.setCompoundDrawable(R.drawable.ic_trend_down_green)
+                            binding.lytScoreOverview.tvTrendProg.setTextColor(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    R.color.steps_arc
+                                )
+                            )
+                            binding.lytScoreOverview.tvTrendProg.visible()
+                            binding.lytScoreOverview.tvScoreMsg.visible()
+                            mViewModel.isProgressEqual = false
+                            difference = trendData.yesterday.value - trendData.today.value
+                            mViewModel.isTodayGreater = false
+                        } else {
+                            binding.lytScoreOverview.tvTrendProg.gone()
+                            binding.lytScoreOverview.tvScoreMsg.visible()
+                            mViewModel.isProgressEqual = true
+                        }
+                        val compPro = "${difference.toInt()} bpm"
+                        binding.lytScoreOverview.tvTrendProg.text = compPro
                     } else {
                         tryCatch {
                             binding.lytScoreOverview.tvTrendProg.clearDrawables()
@@ -1049,7 +1090,7 @@ class OSleepScoreDetailsFragment :
             if (yesterdayTrendValue != "No data") {
                 when (mViewModel.itemClickType) {
                     ViewItemClickType.RESTING_HR.name -> {
-                        binding.lytScoreOverview.lytToday.tvScore.text =
+                        binding.lytScoreOverview.lytYesterday.tvScore.text =
                             "${yesterdayTrendValue} bpm"
                     }
 
@@ -1100,7 +1141,7 @@ class OSleepScoreDetailsFragment :
             if (allTimeTrendValue != "No data") {
                 when (mViewModel.itemClickType) {
                     ViewItemClickType.RESTING_HR.name -> {
-                        binding.lytScoreOverview.lytToday.tvScore.text = "${allTimeTrendValue} bpm"
+                        binding.lytAllTimeAvg.tvScore.text = "${allTimeTrendValue} bpm"
                     }
 
                     ViewItemClickType.ACTIVE_CALORIES.name -> {
