@@ -16,7 +16,7 @@ class TrendData(
     val allTimeAvg: Float? = null
 )
 
-class ValueData(val value: Float = 0F)
+class ValueData(var value: Float = 0F)
 class Comparison(
     var today: Int?=null,
     var average: Int?=null,
