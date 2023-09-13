@@ -436,8 +436,10 @@ class OreoActivityViewModel @Inject constructor(
             R.color.oreo_contributor_warning
         } else if (status.equals("good", true)) {
             R.color.distance_arc
-        } else {
+        } else if (status.equals("optimal",true)){
             R.color.steps_arc
+        } else {
+            R.color.white
         }
         return color
     }

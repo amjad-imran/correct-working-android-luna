@@ -3,10 +3,8 @@ package com.oreo.ui.readiness
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
-import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.RingDataStore
@@ -555,12 +553,14 @@ constructor(
     }
 
     fun getStatusColors(status: String?): Int {
-        val color:Int= if (status.equals("warning", true)) {
+        val color: Int = if (status.equals("warning", true)) {
             R.color.oreo_contributor_warning
-        } else if (status.equals("good",true)){
+        } else if (status.equals("good", true)) {
             R.color.distance_arc
-        }else {
+        } else if (status.equals("optimal", true)) {
             R.color.steps_arc
+        } else {
+            R.color.white
         }
         return color
     }
@@ -573,6 +573,7 @@ constructor(
         return dummyList
 
     }
+
     fun getDummyBreakUpDataForTimeDisplayFloat(): ArrayList<Float> {
         val dummyList = ArrayList<Float>()
         for (i in 0..287) {
