@@ -274,6 +274,7 @@ class OSCDViewModel @Inject constructor(
         when (itemClickType) {
             ViewItemClickType.ACTIVITY_SCORE.name,
             ViewItemClickType.READINESS_SCORE.name,
+            ViewItemClickType.SLEEP_EFFICIENCY.name,
             ViewItemClickType.SLEEP_SCORE.name -> {
                 max = 100
             }
