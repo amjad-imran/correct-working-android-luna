@@ -830,7 +830,8 @@ class OSleepScoreDetailsFragment :
                                 binding.lytScoreOverview.tvScoreMsg.visible()
                                 mViewModel.isTodayGreater = true
                                 mViewModel.isProgressEqual = false
-                            } else if (yesterdayProgress > todayProgress) {
+                            }
+                            else if (yesterdayProgress > todayProgress) {
                                 val trendDifProgress = yesterdayProgress - todayProgress
 
                                 binding.lytScoreOverview.tvTrendProg.setCompoundDrawable(R.drawable.ic_trend_down)
@@ -847,17 +848,11 @@ class OSleepScoreDetailsFragment :
                                 mViewModel.isTodayGreater = false
                                 mViewModel.isProgressEqual = false
 
-                            } else {
-                                val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
-                                    todayProgress.toInt()
-                                )
-                                val trendDifProgress = if (hour > 0) "$hour hr $minute min"
-                                else
-                                    "$minute min"
+                            }
+                            else {
                                 binding.lytScoreOverview.tvTrendProg.gone()
                                 binding.lytScoreOverview.tvScoreMsg.visible()
                                 mViewModel.isProgressEqual = true
-                                binding.lytScoreOverview.tvTrendProg.text = trendDifProgress
                             }
                         }
                     } else if (
