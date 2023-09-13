@@ -696,6 +696,13 @@ class OreoReadinessFragment :
             sleepStartTime, sleepEndTime
         )
 
+
+        /*showHeartRateVariabilityGraph(
+           mViewModel.generateDummyHrvFilterData(),
+            "10:46 pm", "7:42 am"
+        )*/
+
+
         //set data on temperature
         binding.lytTemperature.tvTitle.text = getString(R.string.text_temperature)
         binding.lytTemperature.tvSubtitle1.text = getString(R.string.text_max)
@@ -715,6 +722,8 @@ class OreoReadinessFragment :
             sleepEndTime
         )
     }
+
+
 
     private fun heartRateDefaultView() {
         binding.lytHeartRate.lytSubtitleValue1.tvUnit.gone()
