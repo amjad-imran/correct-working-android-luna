@@ -359,9 +359,7 @@ public class LineChart extends View {
         if (xMax1 == 100) {
             xMax = xMax1;
         } else {
-            int perOfMax = (xMax * 20) / 100;
-            LOGS.INSTANCE.d("NonZeroValuesBarMax --> " + perOfMax + " ----> " + xMax);
-            xMax += perOfMax;
+            xMax = xMax + 20;
         }
 
 
