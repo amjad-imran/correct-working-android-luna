@@ -77,7 +77,7 @@ constructor(
                     DateFormats.getCurrentDate(DateFormats.dateTimeFormatWithWeekWithoutYear)
                 )
             )
-            val device = ringDataStore.getRingDevice()
+            val device = getDeviceConnected()
             statePairDeviceCard.postValue(device == null)
             stateHeartRateCard.postValue(userRepository.getSummaryHRHealthOverview().apply {
                 if (device == null) {
@@ -98,7 +98,8 @@ constructor(
         val dashAlert = HashMap<AlertType, DashAlert>()
 
         val btState = sessionManager.bluetoothStateDash.value
-        if (btState == false) {
+        val devicePaired = ringDataStore.getRingDevice()
+        if (btState == false && devicePaired != null) {
             dashAlert[AlertType.BLUETOOTH] =
                 DashAlert("Authorize Bluetooth connectivity for Luna", false)
         }
@@ -565,10 +566,13 @@ constructor(
         if (it) {
             stateDashAlerts.value?.remove(AlertType.BLUETOOTH)
         } else {
-            stateDashAlerts.value?.set(
-                AlertType.BLUETOOTH,
-                DashAlert("Authorize Bluetooth connectivity for Luna", false)
-            )
+            val ringDevice = getDeviceConnected()
+            if (ringDevice != null) {
+                stateDashAlerts.value?.set(
+                    AlertType.BLUETOOTH,
+                    DashAlert("Authorize Bluetooth connectivity for Luna", false)
+                )
+            }
         }
         stateDashAlerts.postValue(stateDashAlerts.value)
     }
