@@ -3,6 +3,7 @@ package com.oreo.ui.readiness
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
