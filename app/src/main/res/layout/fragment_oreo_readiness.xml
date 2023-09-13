@@ -8,16 +8,7 @@
         tools:background="@color/black"
         android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/lytEmptyView"
-            layout="@layout/layout_empty_readiness_details"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+
         <ImageView
             android:id="@+id/imageView48"
             android:layout_width="match_parent"
@@ -40,6 +31,7 @@
         <include
             android:id="@+id/lytToolbar"
             layout="@layout/oreo_layout_toolbar_with_2_icons"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -87,6 +79,17 @@
             lineChart:xTextSize="12sp"
             lineChart:yLineColor="#00FFFFFF"
             lineChart:yTextSize="12sp" />
+
+        <include
+            android:id="@+id/lytEmptyView"
+            layout="@layout/layout_empty_readiness_details"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ScrollView
             android:id="@+id/svMain"
