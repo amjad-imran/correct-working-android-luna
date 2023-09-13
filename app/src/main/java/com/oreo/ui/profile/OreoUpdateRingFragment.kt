@@ -79,7 +79,7 @@ class OreoUpdateRingFragment :
             val url = updateInfo.url
 
 
-            if (url.isEmpty()) {
+            if (url.isNullOrEmpty()) {
                 context.showShortToast("Update Failed")
                 return
             }
