@@ -562,6 +562,7 @@ class OreoActivityFragment :
         mViewModel.activityHistoryResponse.observe(this) {
             binding.svMain.visible()
             binding.rvTopGraph.visible()
+            binding.lytToolbar.root.visible()
             val topGraphData = mViewModel.getPrefixAndSuffixList(it)
             mSharedViewModel.selectedDate = mViewModel.dateList[mViewModel.dateList.size - 1]
             binding.rvTopGraph.updateDataWithMax(

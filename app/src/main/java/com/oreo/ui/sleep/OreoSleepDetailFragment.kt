@@ -449,6 +449,7 @@ class OreoSleepDetailFragment :
 
             binding.svMain.visible()
             binding.rvTopGraph.visible()
+            binding.lytToolbar.root.visible()
 
             val topGraphData = viewModel.getPrefixAndSuffixList(it)
             mSharedViewModel.selectedDate = viewModel.dateList[viewModel.dateList.size - 1]
