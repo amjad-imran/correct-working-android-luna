@@ -395,7 +395,7 @@ constructor(
             )
             val leftText: String = if (hour > 0) {
                 "$hour hr $minute min, ${dayData.deepSleep?.valPrcnt ?: 0}%"
-            } else{
+            } else {
                 "$minute min, ${dayData.deepSleep?.valPrcnt ?: 0}%"
             }
             result.add(
@@ -504,8 +504,10 @@ constructor(
             R.color.oreo_contributor_warning
         } else if (status.equals("good", true)) {
             R.color.distance_arc
-        } else {
+        } else if (status.equals("optimal", true)) {
             R.color.steps_arc
+        } else {
+            R.color.white
         }
         return color
     }

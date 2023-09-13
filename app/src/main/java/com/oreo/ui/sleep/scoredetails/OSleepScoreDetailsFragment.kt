@@ -228,8 +228,14 @@ class OSleepScoreDetailsFragment :
                     ViewItemClickType.SLEEP_EFFICIENCY.name -> {
                         binding.lytTopGraphView.lytLabelValue1.root.visible()
                         binding.lytTopGraphView.lytLabelValue11.root.gone()
+                        val dataPoint: String =
+                            if (checkZeroData(it.data.roundToInt()).equals("-")) {
+                                "-"
+                            } else
+                                checkZeroData(it.data.roundToInt())
                         binding.lytTopGraphView.lytLabelValue1.tvValue.text =
-                            checkZeroData(it.data.roundToInt()) + "%"
+                            dataPoint
+
                         if (it.data.roundToInt() == 0) {
                             binding.lytTopGraphView.lytLabelValue1.tvUnit.gone()
                         } else {
@@ -266,6 +272,7 @@ class OSleepScoreDetailsFragment :
                         }
                         setTopDateLabel(it.date)
                     }
+
                     ViewItemClickType.RESTING_HR.name -> {
                         binding.lytTopGraphView.lytLabelValue1.root.visible()
                         binding.lytTopGraphView.lytLabelValue11.root.gone()
@@ -810,6 +817,57 @@ class OSleepScoreDetailsFragment :
                         }
                         val compPro = "${String.format("%.1f", difference)} °F"
                         binding.lytScoreOverview.tvTrendProg.text = compPro
+                    } else if (mViewModel.itemClickType == ViewItemClickType.RESPIRATORY_RATE.name) {
+                        tryCatch {
+                            binding.lytScoreOverview.tvTrendProg.setCompoundDrawable(R.drawable.ic_trend_up)
+                            val tempProgress: Long
+                            todayProgress = trendData.today.value.toLong()
+                            yesterdayProgress = trendData.yesterday.value.toLong()
+                            if (todayProgress > yesterdayProgress) {
+                                val trendDifProgress = todayProgress - yesterdayProgress
+
+                                binding.lytScoreOverview.tvTrendProg.text =
+                                    "$trendDifProgress / min"
+                                binding.lytScoreOverview.tvTrendProg.setTextColor(
+                                    ContextCompat.getColor(
+                                        requireContext(),
+                                        R.color.steps_arc
+                                    )
+                                )
+                                binding.lytScoreOverview.tvTrendProg.visible()
+                                binding.lytScoreOverview.tvScoreMsg.visible()
+                                mViewModel.isTodayGreater = true
+                                mViewModel.isProgressEqual = false
+                            } else if (yesterdayProgress > todayProgress) {
+                                val trendDifProgress = yesterdayProgress - todayProgress
+
+                                binding.lytScoreOverview.tvTrendProg.setCompoundDrawable(R.drawable.ic_trend_down)
+                                binding.lytScoreOverview.tvTrendProg.text =
+                                    "$trendDifProgress / min"
+                                binding.lytScoreOverview.tvTrendProg.setTextColor(
+                                    ContextCompat.getColor(
+                                        requireContext(),
+                                        R.color.errorRed
+                                    )
+                                )
+                                binding.lytScoreOverview.tvTrendProg.visible()
+                                binding.lytScoreOverview.tvScoreMsg.visible()
+                                mViewModel.isTodayGreater = false
+                                mViewModel.isProgressEqual=false
+
+                            } else {
+                                val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
+                                    todayProgress.toInt()
+                                )
+                                val trendDifProgress = if (hour > 0) "$hour hr $minute min"
+                                else
+                                    "$minute min"
+                                binding.lytScoreOverview.tvTrendProg.gone()
+                                binding.lytScoreOverview.tvScoreMsg.visible()
+                                mViewModel.isProgressEqual = true
+                                binding.lytScoreOverview.tvTrendProg.text = trendDifProgress
+                            }
+                        }
                     } else {
                         tryCatch {
                             binding.lytScoreOverview.tvTrendProg.clearDrawables()
@@ -831,9 +889,15 @@ class OSleepScoreDetailsFragment :
                                         R.color.steps_arc
                                     )
                                 )
-                                binding.lytScoreOverview.tvTrendProg.visible()
+                                if (minute == 0) {
+                                    mViewModel.isProgressEqual = true
+                                    binding.lytScoreOverview.tvTrendProg.gone()
+                                } else {
+                                    mViewModel.isProgressEqual = false
+                                    binding.lytScoreOverview.tvTrendProg.visible()
+
+                                }
                                 binding.lytScoreOverview.tvScoreMsg.visible()
-                                mViewModel.isProgressEqual = false
                                 mViewModel.isTodayGreater = true
                             } else if (yesterdayProgress > todayProgress) {
                                 tempProgress = yesterdayProgress - todayProgress
@@ -850,9 +914,15 @@ class OSleepScoreDetailsFragment :
                                         R.color.errorRed
                                     )
                                 )
-                                binding.lytScoreOverview.tvTrendProg.visible()
+                                if (minute == 0) {
+                                    mViewModel.isProgressEqual = true
+                                    binding.lytScoreOverview.tvTrendProg.gone()
+                                } else {
+                                    mViewModel.isProgressEqual = false
+                                    binding.lytScoreOverview.tvTrendProg.visible()
+
+                                }
                                 binding.lytScoreOverview.tvScoreMsg.visible()
-                                mViewModel.isProgressEqual = false
                                 mViewModel.isTodayGreater = false
 
                             } else {
@@ -966,6 +1036,7 @@ class OSleepScoreDetailsFragment :
                     ViewItemClickType.RESTING_HR.name -> {
                         binding.lytScoreOverview.lytToday.tvScore.text = "${todayTrendValue} HR"
                     }
+
                     ViewItemClickType.ACTIVE_CALORIES.name -> {
                         binding.lytScoreOverview.lytToday.tvScore.text = "${todayTrendValue} kcal"
                     }
@@ -1039,6 +1110,7 @@ class OSleepScoreDetailsFragment :
                         binding.lytScoreOverview.lytYesterday.tvScore.text =
                             "$yesterdayTrendValue HR"
                     }
+
                     ViewItemClickType.ACTIVE_CALORIES.name -> {
                         binding.lytScoreOverview.lytYesterday.tvScore.text =
                             "$yesterdayTrendValue kcal"
@@ -1197,9 +1269,11 @@ class OSleepScoreDetailsFragment :
             updateProgressColor(2)
         }*/
         else {
-            binding.lytScoreOverview.lytToday.pbSteps.progress = 100
-            binding.lytScoreOverview.lytYesterday.pbSteps.progress =
-                100
+            if (todayTrendProg > 0) {
+                binding.lytScoreOverview.lytToday.pbSteps.progress = 100
+                binding.lytScoreOverview.lytYesterday.pbSteps.progress =
+                    100
+            }
             /*if (todayTrendProg == allTimeTrendProg) {
                 updateProgressColor(3)
                 if (todayTrendProg == 0) {
@@ -1265,7 +1339,7 @@ class OSleepScoreDetailsFragment :
                 mViewModel.itemClickType == ViewItemClickType.RESPIRATORY_RATE.name ||
                 mViewModel.itemClickType == ViewItemClickType.DISTANCE.name ||
                 mViewModel.itemClickType == ViewItemClickType.ACTIVE_CALORIES.name ||
-                mViewModel.itemClickType == ViewItemClickType.BODY_TEMPERATURE.name||
+                mViewModel.itemClickType == ViewItemClickType.BODY_TEMPERATURE.name ||
                 mViewModel.itemClickType == ViewItemClickType.RESTING_HR.name
     }
 
