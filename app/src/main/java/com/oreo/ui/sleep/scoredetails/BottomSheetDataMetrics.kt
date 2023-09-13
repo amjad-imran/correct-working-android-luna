@@ -143,7 +143,7 @@ class BottomSheetDataMetrics : BaseBottomSheetWithTransparent<BottomSheetDataMet
             }
 
             ViewItemClickType.ACTIVE_CALORIES -> {
-                "<h1>Active calories</h1><p>The Luna Ring sets the activity goal for you based on your height, weight, age and gender. You get updated through the day based on the calories you burn while active, including exercise and everyday movements. This gives you an understanding of how close or far you are to your day&rsquo;s activity goal<br><br>" +
+                "<h1>Goal progress</h1><p>The Luna Ring sets the activity goal for you based on your height, weight, age and gender. You get updated through the day based on the calories you burn while active, including exercise and everyday movements. This gives you an understanding of how close or far you are to your day&rsquo;s activity goal<br><br>" +
                         "With the Luna ring, you can track your progress and strive towards achieving optimal activity levels for a healthier lifestyle. Keep moving to achieve your goals!<br><br>" +
                         "</p>"
             }

@@ -756,7 +756,7 @@
     <string name="text_lowest_hr">Lowest HR</string>
     <string name="text_readiness">Readiness</string>
     <string name="text_activity_o">Activity</string>
-    <string name="text_active_calorie">Active calories</string>
+    <string name="text_active_calorie">Goal progress</string>
     <string name="text_sleep_score_o">Sleep score</string>
     <string name="text_readiness_score_o">Readiness score</string>
     <string name="text_from_last_week">from last week</string>
@@ -936,7 +936,7 @@
     <string name="text_you_will_see_your_readiness_score_after_first_sleep_analysis">You will see your readiness score after first sleep analysis</string>
     <string name="text_you_will_see_your_activity_score_after_wearing_the_ring">You will see your activity score after wearing the ring</string>
     <string name="text_connecting_dot">Connecting..</string>
-    <string name="text_updating_dot">Updating..</string>
+    <string name="text_updating_dot">Syncing..</string>
     <string name="text_seven_day_avg">7 day avg</string>
     <string name="text_found_what_you_re_looking_for">Found what you’re looking for?</string>
     <string name="text_still_got_questions_talk_to_an_expert">Still got questions?</string>

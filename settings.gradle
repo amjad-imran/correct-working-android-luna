@@ -19,7 +19,7 @@ dependencyResolutionManagement {
         maven {url "https://mobilesdk.useinsider.com/android"}
     }
 }
-rootProject.name = "NoiseFit"
+rootProject.name = "LunaRing"
 include ':app'
 include ':commons'
 include ':noisefit_nav_plus'
