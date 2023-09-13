@@ -810,6 +810,56 @@ class OSleepScoreDetailsFragment :
                         }
                         val compPro = "${String.format("%.1f", difference)} °F"
                         binding.lytScoreOverview.tvTrendProg.text = compPro
+                    } else if (mViewModel.itemClickType == ViewItemClickType.RESPIRATORY_RATE.name) {
+                        tryCatch {
+                            binding.lytScoreOverview.tvTrendProg.setCompoundDrawable(R.drawable.ic_trend_up)
+                            todayProgress = trendData.today.value.toLong()
+                            yesterdayProgress = trendData.yesterday.value.toLong()
+                            if (todayProgress > yesterdayProgress) {
+                                val trendDifProgress = todayProgress - yesterdayProgress
+
+                                binding.lytScoreOverview.tvTrendProg.text =
+                                    "$trendDifProgress / min"
+                                binding.lytScoreOverview.tvTrendProg.setTextColor(
+                                    ContextCompat.getColor(
+                                        requireContext(),
+                                        R.color.steps_arc
+                                    )
+                                )
+                                binding.lytScoreOverview.tvTrendProg.visible()
+                                binding.lytScoreOverview.tvScoreMsg.visible()
+                                mViewModel.isTodayGreater = true
+                                mViewModel.isProgressEqual = false
+                            } else if (yesterdayProgress > todayProgress) {
+                                val trendDifProgress = yesterdayProgress - todayProgress
+
+                                binding.lytScoreOverview.tvTrendProg.setCompoundDrawable(R.drawable.ic_trend_down)
+                                binding.lytScoreOverview.tvTrendProg.text =
+                                    "$trendDifProgress / min"
+                                binding.lytScoreOverview.tvTrendProg.setTextColor(
+                                    ContextCompat.getColor(
+                                        requireContext(),
+                                        R.color.errorRed
+                                    )
+                                )
+                                binding.lytScoreOverview.tvTrendProg.visible()
+                                binding.lytScoreOverview.tvScoreMsg.visible()
+                                mViewModel.isTodayGreater = false
+                                mViewModel.isProgressEqual = false
+
+                            } else {
+                                val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
+                                    todayProgress.toInt()
+                                )
+                                val trendDifProgress = if (hour > 0) "$hour hr $minute min"
+                                else
+                                    "$minute min"
+                                binding.lytScoreOverview.tvTrendProg.gone()
+                                binding.lytScoreOverview.tvScoreMsg.visible()
+                                mViewModel.isProgressEqual = true
+                                binding.lytScoreOverview.tvTrendProg.text = trendDifProgress
+                            }
+                        }
                     } else if (
                         mViewModel.itemClickType == ViewItemClickType.RESTING_HR.name
                     ) {

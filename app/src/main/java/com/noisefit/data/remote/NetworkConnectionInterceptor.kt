@@ -190,7 +190,7 @@ class NetworkConnectionInterceptor(
 
             userToken?.let {
                 addHeader("access-token", "Bearer ${userToken.access_token}")
-            }
+               }
             if (request.url.toString().contains("/user_detail/ring/devices", true)) {
                 userToken?.let {
                     addHeader("refresh-token", "Bearer ${userToken.refresh_token}")
