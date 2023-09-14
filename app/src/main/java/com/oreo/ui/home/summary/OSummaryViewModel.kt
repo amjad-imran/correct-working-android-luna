@@ -219,6 +219,20 @@ constructor(
 
             userActivities.add(OHealthOverview.SleepWaiting)
 
+            data.activity?.let {
+                val caloriesGoal = summary.user?.userGoals?.caloriesGoal ?: 0
+                userActivities.add(OHealthOverview.ActivityMinimal(data.activity, caloriesGoal))
+            }
+
+            data.sleep?.let {
+                userActivities.add(
+                    OHealthOverview.SleepMinimal(
+                        data.sleep,
+                        makeSleepArray(data.sleep)
+                    )
+                )
+            }
+
 
 
             if (isMorningTime()) {

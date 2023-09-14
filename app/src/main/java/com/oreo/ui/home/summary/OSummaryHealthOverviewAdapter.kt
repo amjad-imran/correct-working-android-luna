@@ -36,6 +36,7 @@ import com.oreo.data.model.TapMeasureState
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.util.graph.OCombineChartUtils
 import java.lang.Math.abs
+import java.lang.StringBuilder
 
 sealed class OSummaryHealthOverviewClickEnum {
     object SleepDetailsWorkoutClick : OSummaryHealthOverviewClickEnum()
@@ -96,6 +97,14 @@ class OSummaryHealthOverviewAdapter :
                 )
             )
 
+            R.layout.list_sleep_minimal_item -> HomeRecyclerViewHolder.SleepMinimalViewHolder(
+                ListSleepMinimalItemBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
             R.layout.list_sleep_waiting_card_item -> HomeRecyclerViewHolder.SleepWaitingViewHolder(
                 ListSleepWaitingCardItemBinding.inflate(
                     LayoutInflater.from(parent.context),
@@ -106,6 +115,14 @@ class OSummaryHealthOverviewAdapter :
 
             R.layout.list_activity_burn_card_item -> HomeRecyclerViewHolder.ActivityViewHolder(
                 ListActivityBurnCardItemBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
+            R.layout.list_activity_minimal_item -> HomeRecyclerViewHolder.ActivityMinimalViewHolder(
+                ListActivityMinimalItemBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
@@ -174,6 +191,13 @@ class OSummaryHealthOverviewAdapter :
                 devicePaired
             )
 
+            is HomeRecyclerViewHolder.ActivityMinimalViewHolder -> holder.bind(
+                items[position] as OHealthOverview.ActivityMinimal,
+                position,
+                lastPosition,
+                devicePaired
+            )
+
             is HomeRecyclerViewHolder.ReadinessScoreViewHolder -> holder.bind(
                 items[position] as OHealthOverview.ReadinessScore,
                 position,
@@ -197,6 +221,13 @@ class OSummaryHealthOverviewAdapter :
 
             is HomeRecyclerViewHolder.SleepViewHolder -> holder.bind(
                 items[position] as OHealthOverview.Sleep,
+                position,
+                lastPosition,
+                devicePaired
+            )
+
+            is HomeRecyclerViewHolder.SleepMinimalViewHolder -> holder.bind(
+                items[position] as OHealthOverview.SleepMinimal,
                 position,
                 lastPosition,
                 devicePaired
@@ -226,6 +257,7 @@ class OSummaryHealthOverviewAdapter :
             is OHealthOverview.Readiness -> R.layout.list_readiness_card_item
             is OHealthOverview.Sleep -> R.layout.list_sleep_card_item
             is OHealthOverview.SleepWaiting -> R.layout.list_sleep_waiting_card_item
+            is OHealthOverview.ActivityMinimal -> R.layout.list_activity_minimal_item
             is OHealthOverview.Activity -> R.layout.list_activity_burn_card_item
 
 
@@ -246,6 +278,7 @@ class OSummaryHealthOverviewAdapter :
             is OHealthOverview.PairDevice -> R.layout.list_o_pair_device
             is OHealthOverview.AutoSport -> R.layout.list_o_w_alert_card_item
             is OHealthOverview.Dummy -> R.layout.oreo_dummy_view
+            is OHealthOverview.SleepMinimal -> R.layout.list_sleep_minimal_item
         }
     }
 }
@@ -318,6 +351,56 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
         }
     }
+
+    class SleepMinimalViewHolder(private val binding: ListSleepMinimalItemBinding) :
+        HomeRecyclerViewHolder(binding) {
+        fun bind(
+            data: OHealthOverview.SleepMinimal,
+            position: Int,
+            lastPosition: Int,
+            devicePaired: Boolean
+        ) {
+
+            val scoreValue = data.data.sleepScore ?: 0
+
+            val sleepTime = StringBuilder()
+            sleepTime.append(
+                DateFormats.formatDate(
+                    data.sleepArray.firstOrNull()?.startTime,
+                    DateFormats.dateTimeFormat5,
+                    DateFormats.time12Meridian
+                )
+            )
+            sleepTime.append(" - ")
+            sleepTime.append(
+                DateFormats.formatDate(
+                    data.sleepArray.lastOrNull()?.endTime,
+                    DateFormats.dateTimeFormat5,
+                    DateFormats.time12Meridian
+                )
+            )
+            binding.tvSleepStartEndTime.text = sleepTime.toString()
+            binding.tvSleepScore.text = scoreValue.toString()
+            binding.tvSleepStatus.text = data.data.status
+            binding.tvLowestHr.text = if (data.data.lowestHr == null) {
+                "--"
+            } else {
+                data.data.lowestHr.toString() + " bpm"
+            }
+
+            val (hourTimeInBed, minuteTimeInBed) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
+                data.data.totalSleep ?: 0
+            )
+
+            binding.tvSleepTime.text = if (hourTimeInBed == 0) {
+                "$minuteTimeInBed min"
+            } else {
+                "$hourTimeInBed hr $minuteTimeInBed min"
+            }
+
+        }
+    }
+
 
     class SleepViewHolder(private val binding: ListSleepCardItemBinding) :
         HomeRecyclerViewHolder(binding) {
@@ -401,6 +484,26 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.SleepDetailsWorkoutClick)
             }
+        }
+    }
+
+    class ActivityMinimalViewHolder(private val binding: ListActivityMinimalItemBinding) :
+        HomeRecyclerViewHolder(binding) {
+        fun bind(
+            data: OHealthOverview.ActivityMinimal,
+            position: Int,
+            lastPosition: Int,
+            devicePaired: Boolean
+        ) {
+
+            binding.tvCurrentCalories.text = if ((data.data.activeCalories ?: 0) > 0) {
+                data.data.activeCalories.toString()
+            } else {
+                "--"
+            }
+
+            binding.tvTotalCalories.text = "${data.caloriesGoal}"
+
         }
     }
 
