@@ -327,13 +327,15 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     data.data.totalSleep ?: 0
                 )
 
+                LOGS.w("TIME_TEST ${data.sleepArray.first().startTime}   ${data.sleepArray.last().endTime}")
+
                 binding.tvSleepStart.text = DateFormats.formatDate(
-                    data.sleepArray.first().startTime,
+                    data.startTime,
                     DateFormats.dateTimeFormat5,
                     DateFormats.time12Meridian
                 )
                 binding.tvSleepEnd.text = DateFormats.formatDate(
-                    data.sleepArray.last().endTime,
+                    data.endTime,
                     DateFormats.dateTimeFormat5,
                     DateFormats.time12Meridian
                 )

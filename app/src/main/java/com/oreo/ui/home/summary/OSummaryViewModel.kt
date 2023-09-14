@@ -2,7 +2,9 @@ package com.oreo.ui.home.summary
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.noisefit.data.local.db.CacheResult
+import com.noisefit.data.local.db.fromJson
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
@@ -225,7 +227,9 @@ constructor(
                         userActivities.add(
                             OHealthOverview.Sleep(
                                 data.sleep,
-                                makeSleepArray(data.sleep)
+                                makeSleepArray(data.sleep),
+                                data.sleep.sleepStage.firstOrNull()?.startTime ?: "",
+                                data.sleep.sleepStage.lastOrNull()?.endTime ?: ""
                             )
                         )
                     }
@@ -250,7 +254,9 @@ constructor(
                         userActivities.add(
                             OHealthOverview.Sleep(
                                 data.sleep,
-                                makeSleepArray(data.sleep)
+                                makeSleepArray(data.sleep),
+                                data.sleep.sleepStage.firstOrNull()?.startTime ?: "",
+                                data.sleep.sleepStage.lastOrNull()?.endTime ?: ""
                             )
                         )
                     }

@@ -36,7 +36,9 @@ sealed class OHealthOverview {
 
     class Sleep(
         val data: ODashboardSleepModel,
-        val sleepArray: ArrayList<SleepData.SleepDataBreakup> = ArrayList()
+        val sleepArray: ArrayList<SleepData.SleepDataBreakup> = ArrayList(),
+        val startTime: String,
+        val endTime: String
     ) : OHealthOverview()
 
     class Activity(
