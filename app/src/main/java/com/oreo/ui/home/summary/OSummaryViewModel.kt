@@ -96,7 +96,7 @@ constructor(
         getDashboardDataFromServer(false)
     }
 
-    private fun updateAlerts() {
+    fun updateAlerts() {
         val dashAlert = HashMap<AlertType, DashAlert>()
 
         val btState = sessionManager.bluetoothStateDash.value
