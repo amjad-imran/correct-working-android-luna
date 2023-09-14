@@ -58,6 +58,9 @@ class OActivityListAdapter(
                     date = "Today’s Workouts"
                 }
                 view.findViewById<TextView>(R.id.tvDate).text = date
+            }
+            else if (itemViewType == RecentActivityViewType.TODAY_EMPTY_VIEW.type) {
+
             } else {
                 when (mode) {
                     ItemPos.TOP -> {
@@ -150,6 +153,10 @@ class OActivityListAdapter(
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_o_activity_list_header, parent, false)
             return ViewHolder(view = view)
+        } else if (viewType == RecentActivityViewType.TODAY_EMPTY_VIEW.type) {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.layout_workout_history_today_empty_view, parent, false)
+            return ViewHolder(view = view)
         } else {
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_o_activity_list_detail, parent, false)
@@ -211,6 +218,8 @@ class OActivityListAdapter(
     override fun getItemViewType(position: Int): Int {
         return if (mDataSet[position].isHeader) {
             RecentActivityViewType.HEADER.type
+        } else if (mDataSet[position].isTodayEmptyView) {
+            RecentActivityViewType.TODAY_EMPTY_VIEW.type
         } else {
             RecentActivityViewType.DATA.type
         }
@@ -223,7 +232,7 @@ class OActivityListAdapter(
 }
 
 enum class RecentActivityViewType(val type: Int) {
-    HEADER(0), DATA(1)
+    HEADER(0), DATA(1), TODAY_EMPTY_VIEW(2)
 }
 
 interface OActivityListInteraction {
