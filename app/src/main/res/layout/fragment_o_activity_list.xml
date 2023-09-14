@@ -16,6 +16,24 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <include
+            android:id="@+id/lytEmptyView"
+            layout="@layout/layout_workout_history_empty_view"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lytToolbar" />
+
+        <include
+            android:id="@+id/lytTodayEmpty"
+            layout="@layout/layout_workout_history_today_empty_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lytToolbar" />
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv"
@@ -25,7 +43,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lytToolbar"
+            app:layout_constraintTop_toBottomOf="@+id/lytTodayEmpty"
             tools:itemCount="3" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

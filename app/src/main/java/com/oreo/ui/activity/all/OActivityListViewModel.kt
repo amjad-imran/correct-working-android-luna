@@ -10,10 +10,8 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
-
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -64,13 +62,14 @@ constructor(
                     is Resource.NetworkError -> {
                         if (currentPage == 1) {
                             setApiErrors(resource.response.apply {
-                                (this.uiComponentType as UIComponentType.RetryApiDialog).callback = object : BinaryActionCallback {
-                                    override fun yes() {
-                                        fetchActivityFromServer()
-                                    }
+                                (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                    object : BinaryActionCallback {
+                                        override fun yes() {
+                                            fetchActivityFromServer()
+                                        }
 
-                                    override fun no() {}
-                                }
+                                        override fun no() {}
+                                    }
                             })
                         } else {
                             sendMessage("Error Connecting to internet")
@@ -173,6 +172,7 @@ constructor(
                 activityResponse.add(OActivityListModal(isHeader = true, date = date))
             }
 
+
             activityResponse.add(it.apply {
                 isHeader = false
             })
@@ -181,7 +181,6 @@ constructor(
         _activities.postValue(activityResponse)
 
     }
-
 
 
     fun resetPaginationState() {
