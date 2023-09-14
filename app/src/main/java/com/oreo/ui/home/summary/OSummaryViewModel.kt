@@ -213,6 +213,14 @@ constructor(
 
 
             ringDataStore.setRegisterDay(data.registerDate ?: -1)
+
+
+
+
+            userActivities.add(OHealthOverview.SleepWaiting)
+
+
+
             if (isMorningTime()) {
                 if (data.registerDate != 0) {
                     data.readiness?.let {

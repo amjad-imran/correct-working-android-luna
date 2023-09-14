@@ -190,7 +190,7 @@ class NetworkConnectionInterceptor(
 
             userToken?.let {
                 addHeader("access-token", "Bearer ${userToken.access_token}")
-//                addHeader("access-token", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyNTQ5OTMsImRldmljZV9pZCI6MSwiaWF0IjoxNjk0NTkwODQ3LCJleHAiOjE2OTQ2MDUyNDd9.uSstcIECOB2xQ0jg0h56tkjOzBVtwBpxTpwoXh3N0IM")
+                //addHeader("access-token", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMjAwNzk5LCJkZXZpY2VfaWQiOjEsImlhdCI6MTY5NDY1MjQ0OCwiZXhwIjoxNjk0NjY2ODQ4fQ.bUSvjkSl_f8_Bo8RAJcEWIFqa2ajBFdeQGGsVbsnmok")
             }
             if (request.url.toString().contains("/user_detail/ring/devices", true)) {
                 userToken?.let {

@@ -96,6 +96,14 @@ class OSummaryHealthOverviewAdapter :
                 )
             )
 
+            R.layout.list_sleep_waiting_card_item -> HomeRecyclerViewHolder.SleepWaitingViewHolder(
+                ListSleepWaitingCardItemBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
             R.layout.list_activity_burn_card_item -> HomeRecyclerViewHolder.ActivityViewHolder(
                 ListActivityBurnCardItemBinding.inflate(
                     LayoutInflater.from(parent.context),
@@ -194,6 +202,8 @@ class OSummaryHealthOverviewAdapter :
                 devicePaired
             )
 
+            is HomeRecyclerViewHolder.SleepWaitingViewHolder -> holder.bind()
+
 
             is HomeRecyclerViewHolder.OreoBatteryPercentViewHolder -> holder.bind(
 
@@ -215,6 +225,7 @@ class OSummaryHealthOverviewAdapter :
         return when (items[position]) {
             is OHealthOverview.Readiness -> R.layout.list_readiness_card_item
             is OHealthOverview.Sleep -> R.layout.list_sleep_card_item
+            is OHealthOverview.SleepWaiting -> R.layout.list_sleep_waiting_card_item
             is OHealthOverview.Activity -> R.layout.list_activity_burn_card_item
 
 
@@ -296,6 +307,15 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.ReadinessDetailsWorkoutClick)
             }
+        }
+    }
+
+
+    class SleepWaitingViewHolder(private val binding: ListSleepWaitingCardItemBinding) :
+        HomeRecyclerViewHolder(binding) {
+        fun bind(
+        ) {
+
         }
     }
 

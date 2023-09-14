@@ -952,4 +952,5 @@
     <string name="text_thank_u_sharing">Thank you for sharing!</string>
     <string name="text_wrong_time">Wrong time</string>
     <string name="text_adjust_date">Adjust date</string>
+    <string name="text_waiting_for_your_sleep_data">Waiting for your sleep data..</string>
 </resources>
