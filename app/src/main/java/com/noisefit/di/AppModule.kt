@@ -127,9 +127,10 @@ object AppModule {
     fun providerAuthenticationRepository(
         remoteDataSource: NetworkService,
 //        cleverTapAPI: CleverTapAPI?,
+        keyValueDataSource: KeyValueDataSource,
         localDataSource: DataStoredInterface
     ): AuthenticationRepository =
-        AuthenticationRepositoryImpl(remoteDataSource, localDataSource /*cleverTapAPI*/)
+        AuthenticationRepositoryImpl(remoteDataSource, localDataSource ,keyValueDataSource/*cleverTapAPI*/)
 
     @Singleton
     @Provides

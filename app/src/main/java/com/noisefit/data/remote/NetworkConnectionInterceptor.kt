@@ -7,6 +7,8 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import com.noisefit.data.local.db.abstraction.KeyValueDataSource
+import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.remote.NetworkErrors.WRONG_CLIENT_TIME_ERROR
 import com.noisefit.data.remote.abstraction.TokenRefreshApi
 import com.noisefit.data.remote.base.Resource
@@ -25,7 +27,9 @@ import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.LOGS
 import com.useinsider.insider.Insider
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Request
@@ -46,6 +50,7 @@ class NetworkConnectionInterceptor(
     private val localDataStore: DataStoredInterface,
     private val ringDataStore: RingDataStore,
     private val watchesSdk: WatchesSDK,
+    private val keyValueDataSource: KeyValueDataSource,
     private val tokenRefreshApi: TokenRefreshApi,
 ) : Interceptor {
 
@@ -68,6 +73,9 @@ class NetworkConnectionInterceptor(
         localDataStore.deleteFcmToken()
         localDataStore.setWarrantyStatus(-1)
 
+        GlobalScope.launch(Dispatchers.IO) {
+            removeOfflineUserData()
+        }
 
         Handler(Looper.getMainLooper()).post {
             appContext.showShortToast(appContext.getString(R.string.text_session_expired))
@@ -80,6 +88,17 @@ class NetworkConnectionInterceptor(
         appContext.startActivity(OnBoardActivity.getStartIntent(appContext, true).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         })
+    }
+    private suspend fun removeOfflineUserData() {
+        arrayListOf(
+            KeyValueDataType.DASHBOARD,
+            KeyValueDataType.SLEEP,
+            KeyValueDataType.ACTIVITY,
+            KeyValueDataType.READINESS
+        ).forEach {
+            keyValueDataSource.removeDataByType(it)
+        }
+
     }
 
     override fun intercept(chain: Interceptor.Chain): Response {

@@ -2,6 +2,8 @@ package com.noisefit.data.repository.implementation
 
 //import com.clevertap.android.sdk.CleverTapAPI
 import com.google.gson.JsonObject
+import com.noisefit.data.local.db.abstraction.KeyValueDataSource
+import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit_commans.data.model.User
 import com.noisefit.luna.BuildConfig
 import com.noisefit.data.remote.abstraction.NetworkService
@@ -15,13 +17,16 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.utils.AppLogs
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 
 class AuthenticationRepositoryImpl(
     private val remoteDataSource: NetworkService,
     private val localDataSource: DataStoredInterface,
 //    private val cleverTapAPI: CleverTapAPI?,
+    private val keyValueDataSource: KeyValueDataSource,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : AuthenticationRepository {
 
@@ -77,6 +82,11 @@ class AuthenticationRepositoryImpl(
                     localDataSource.updateUserProfile(user.userInfo)
                 }*//*
             }*/
+
+            GlobalScope.launch(Dispatchers.IO) {
+                removeOfflineUserData()
+            }
+
             localDataSource.setVerifyMobileNumberStatus(false)
             localDataSource.setUserDataSynced(false)
             localDataSource.deleteUserInfo()
@@ -90,6 +100,18 @@ class AuthenticationRepositoryImpl(
             localDataSource.setLastWinsCount(-1)
             emit(true)
         }
+    }
+
+    private suspend fun removeOfflineUserData() {
+        arrayListOf(
+            KeyValueDataType.DASHBOARD,
+            KeyValueDataType.SLEEP,
+            KeyValueDataType.ACTIVITY,
+            KeyValueDataType.READINESS
+        ).forEach {
+            keyValueDataSource.removeDataByType(it)
+        }
+
     }
 
     override suspend fun resetPassword(jsonObject: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<MessageResponse>>> {
