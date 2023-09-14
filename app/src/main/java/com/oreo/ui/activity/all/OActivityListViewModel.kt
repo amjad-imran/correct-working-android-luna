@@ -9,6 +9,7 @@ import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
@@ -27,6 +28,7 @@ constructor(
     val sessionManager: SessionManager,
     var dataUnitConverter: DataUnitConverter,
     val localDataStore: DataStoredInterface,
+    val ringDataStore: RingDataStore,
     private val userRepository: OreoUserActivityRepository,
 ) : BaseViewModel() {
 
@@ -165,13 +167,19 @@ constructor(
                 it.date, DateFormats.dateFormat3,
                 DateFormats.dateFormat6
             )
+            val compDate = DateFormats.formatDateTime(
+                DateFormats.getCurrentDateOreoFormat(), DateFormats.dateFormat3,
+                DateFormats.dateFormat6
+            )
             if (date.isEmpty()) return@forEach
 
             if (!datesSet.contains(date)) {
                 datesSet.add(date)
-                activityResponse.add(OActivityListModal(isHeader = true, date = date))
-            }
+                var isTodayShown=false
+                isTodayShown = !datesSet.contains(compDate)
 
+                activityResponse.add(OActivityListModal(isHeader = true, date = date, isTodayEmptyView = isTodayShown))
+            }
 
             activityResponse.add(it.apply {
                 isHeader = false
