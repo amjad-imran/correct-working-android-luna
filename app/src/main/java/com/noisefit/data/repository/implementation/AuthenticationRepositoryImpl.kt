@@ -15,6 +15,7 @@ import com.noisefit.data.repository.abstraction.AuthenticationRepository
 import com.noisefit.data.safeApiCallFlow
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.utils.AppLogs
+import com.oreo.data.db.OreoDataBase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -27,6 +28,7 @@ class AuthenticationRepositoryImpl(
     private val localDataSource: DataStoredInterface,
 //    private val cleverTapAPI: CleverTapAPI?,
     private val keyValueDataSource: KeyValueDataSource,
+    private val database: OreoDataBase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : AuthenticationRepository {
 
@@ -110,6 +112,7 @@ class AuthenticationRepositoryImpl(
             KeyValueDataType.READINESS
         ).forEach {
             keyValueDataSource.removeDataByType(it)
+            database.clearAllTables()
         }
 
     }

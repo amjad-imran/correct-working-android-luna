@@ -25,6 +25,7 @@ import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.db.OreoDataBase
 import com.useinsider.insider.Insider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -51,6 +52,7 @@ class NetworkConnectionInterceptor(
     private val ringDataStore: RingDataStore,
     private val watchesSdk: WatchesSDK,
     private val keyValueDataSource: KeyValueDataSource,
+    private val database: OreoDataBase,
     private val tokenRefreshApi: TokenRefreshApi,
 ) : Interceptor {
 
@@ -97,6 +99,7 @@ class NetworkConnectionInterceptor(
             KeyValueDataType.READINESS
         ).forEach {
             keyValueDataSource.removeDataByType(it)
+            database.clearAllTables()
         }
 
     }
