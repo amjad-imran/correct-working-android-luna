@@ -102,8 +102,10 @@ constructor(
         val btState = sessionManager.bluetoothStateDash.value
         val devicePaired = ringDataStore.getRingDevice()
         if (btState == false && devicePaired != null) {
-            dashAlert[AlertType.BLUETOOTH] =
-                DashAlert("Authorize Bluetooth connectivity for Luna", false)
+            if (sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
+                dashAlert[AlertType.BLUETOOTH] =
+                    DashAlert("Authorize Bluetooth connectivity for Luna", false)
+            }
         }
 
         if (sessionManager.forceOtaResponseRing != null) {
@@ -574,10 +576,14 @@ constructor(
         } else {
             val ringDevice = getDeviceConnected()
             if (ringDevice != null) {
-                stateDashAlerts.value?.set(
-                    AlertType.BLUETOOTH,
-                    DashAlert("Authorize Bluetooth connectivity for Luna", false)
-                )
+                if (sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
+                    stateDashAlerts.value?.set(
+                        AlertType.BLUETOOTH,
+                        DashAlert("Authorize Bluetooth connectivity for Luna", false)
+                    )
+                } else {
+                    stateDashAlerts.value?.remove(AlertType.BLUETOOTH)
+                }
             }
         }
         stateDashAlerts.postValue(stateDashAlerts.value)
