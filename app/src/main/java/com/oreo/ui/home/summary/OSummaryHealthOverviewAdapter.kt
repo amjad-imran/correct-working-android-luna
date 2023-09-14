@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -146,6 +147,14 @@ class OSummaryHealthOverviewAdapter :
                 )
             )
 
+            R.layout.list_readiness_minimal_card_item -> HomeRecyclerViewHolder.ReadinessMinimalViewHolder(
+                ListReadinessMinimalCardItemBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
             R.layout.list_oreo_battery_percent_item -> HomeRecyclerViewHolder.OreoBatteryPercentViewHolder(
                 ListOreoBatteryPercentItemBinding.inflate(
                     LayoutInflater.from(parent.context),
@@ -200,6 +209,13 @@ class OSummaryHealthOverviewAdapter :
 
             is HomeRecyclerViewHolder.ReadinessScoreViewHolder -> holder.bind(
                 items[position] as OHealthOverview.ReadinessScore,
+                position,
+                lastPosition,
+                devicePaired
+            )
+
+            is HomeRecyclerViewHolder.ReadinessMinimalViewHolder -> holder.bind(
+                items[position] as OHealthOverview.ReadinessMinimal,
                 position,
                 lastPosition,
                 devicePaired
@@ -279,6 +295,7 @@ class OSummaryHealthOverviewAdapter :
             is OHealthOverview.AutoSport -> R.layout.list_o_w_alert_card_item
             is OHealthOverview.Dummy -> R.layout.oreo_dummy_view
             is OHealthOverview.SleepMinimal -> R.layout.list_sleep_minimal_item
+            is OHealthOverview.ReadinessMinimal -> R.layout.list_readiness_minimal_card_item
         }
     }
 }
@@ -287,6 +304,28 @@ class OSummaryHealthOverviewAdapter :
 sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(binding.root) {
 
     var itemClickListener: ((type: OSummaryHealthOverviewClickEnum) -> Unit)? = null
+
+    class ReadinessMinimalViewHolder(private val binding: ListReadinessMinimalCardItemBinding) :
+        HomeRecyclerViewHolder(binding) {
+        fun bind(
+            data: OHealthOverview.ReadinessMinimal,
+            position: Int,
+            lastPosition: Int,
+            devicePaired: Boolean
+        ) {
+            val scoreValue = data.data.readinessScore ?: 0
+
+            binding.tvScore.text = scoreValue.toString()
+            binding.tvScoreValue.text = data.data.status
+
+            if (data.data.nudges.isNullOrEmpty()) {
+                binding.tvNudge.text = ""
+            } else {
+                binding.tvNudge.text = data.data.nudges.first()
+            }
+
+        }
+    }
 
     class ReadinessViewHolder(private val binding: ListReadinessCardItemBinding) :
         HomeRecyclerViewHolder(binding) {
@@ -501,6 +540,17 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             } else {
                 "--"
             }
+
+            val percent = (50 / data.caloriesGoal.toFloat()) * 100
+            LOGS.d("PERCENT $percent")
+
+            binding.pbCurrent.layoutParams = binding.pbCurrent.layoutParams.apply {
+                (this as LinearLayout.LayoutParams).weight = percent
+            }
+            binding.pbTotal.layoutParams = binding.pbTotal.layoutParams.apply {
+                (this as LinearLayout.LayoutParams).weight = (100 - percent)
+            }
+            binding.pbCurrent.progress = (data.data.activeCalories ?: 0) * 2//For 50 kcal only, change accordingly
 
             binding.tvTotalCalories.text = "${data.caloriesGoal}"
 

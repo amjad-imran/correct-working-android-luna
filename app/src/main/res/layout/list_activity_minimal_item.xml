@@ -82,6 +82,7 @@
             android:layout_width="0dp"
             android:layout_height="4dp"
             android:layout_weight="1"
+            app:indicatorColor="#8ed3f1"
             app:trackColor="#3dffffff"
             app:trackCornerRadius="2dp"
             app:trackThickness="4dp" />
@@ -93,11 +94,10 @@
             android:layout_height="4dp"
             android:layout_weight="3"
             app:trackColor="#3dffffff"
+            app:indicatorColor="#8ed3f1"
             android:layout_marginStart="4dp"
             app:trackCornerRadius="2dp"
-            app:trackThickness="4dp"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="187dp" />
+            app:trackThickness="4dp" />
 
 
     </LinearLayout>

@@ -233,6 +233,10 @@ constructor(
                 )
             }
 
+            data.readiness?.let {
+                userActivities.add(OHealthOverview.ReadinessMinimal(data.readiness))
+            }
+
 
 
             if (isMorningTime()) {

@@ -34,6 +34,10 @@ sealed class OHealthOverview {
         val data: ODashboardReadinessModel
     ) : OHealthOverview()
 
+    class ReadinessMinimal(
+        val data: ODashboardReadinessModel
+    ) : OHealthOverview()
+
     class Sleep(
         val data: ODashboardSleepModel,
         val sleepArray: ArrayList<SleepData.SleepDataBreakup> = ArrayList()
