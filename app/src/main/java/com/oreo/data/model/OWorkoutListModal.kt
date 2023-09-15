@@ -26,7 +26,6 @@ data class OWorkoutListModal(
 @Parcelize
 data class OActivityListModal(
     @Transient var isHeader: Boolean = false,
-    @Transient var isTodayEmptyView: Boolean = false,
     @SerializedName("date") var date: String? = null,
     @SerializedName("id") val id: String? = null,
     @SerializedName("duration") val duration: Long? = null,

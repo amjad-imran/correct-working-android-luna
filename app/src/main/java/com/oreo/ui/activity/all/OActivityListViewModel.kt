@@ -13,6 +13,7 @@ import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.Event
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,6 +35,7 @@ constructor(
 
     private val _activities = MutableLiveData<List<OActivityListModal>>()
     val activities: LiveData<List<OActivityListModal>> = _activities
+    val emptyActivities = MutableLiveData<Event<Boolean>>()
 
     private val _sessionStartAvailable = MutableLiveData<Boolean>()
     val sessionStartAvailable: LiveData<Boolean> = _sessionStartAvailable
@@ -81,7 +83,6 @@ constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             if (it.isNotEmpty()) {
-
                                 formatDataSetPagination(it)
                                 currentPage++
 
@@ -89,6 +90,20 @@ constructor(
                                 fetchActivityFromServer()*/
                             } else {
                                 isLastPage = true
+                                val activitiesTemp = if (_activities.value == null) {
+                                    it
+                                } else {
+                                    val act = _activities.value as ArrayList
+                                    act.clear()
+                                    act.addAll(it)
+                                    act
+                                }
+                                if (activitiesTemp.isEmpty()) {
+                                    emptyActivities.postValue(Event(true))
+                                }
+                                else{
+                                    emptyActivities.postValue(Event(false))
+                                }
                             }
 
                         }
@@ -151,11 +166,11 @@ constructor(
             activities
         } else {
             val act = _activities.value as ArrayList
+            act.clear()
             act.addAll(activities)
             act
         }
         //_activities.postValue(activitiesTemp)
-
         val activityResponse = ArrayList<OActivityListModal>()
 
         val datesSet = HashSet<String>()
@@ -167,20 +182,13 @@ constructor(
                 it.date, DateFormats.dateFormat3,
                 DateFormats.dateFormat6
             )
-            val compDate = DateFormats.formatDateTime(
-                DateFormats.getCurrentDateOreoFormat(), DateFormats.dateFormat3,
-                DateFormats.dateFormat6
-            )
+
             if (date.isEmpty()) return@forEach
 
             if (!datesSet.contains(date)) {
                 datesSet.add(date)
-                var isTodayShown=false
-                isTodayShown = !datesSet.contains(compDate)
-
-                activityResponse.add(OActivityListModal(isHeader = true, date = date, isTodayEmptyView = isTodayShown))
+                activityResponse.add(OActivityListModal(isHeader = true, date = date))
             }
-
             activityResponse.add(it.apply {
                 isHeader = false
             })

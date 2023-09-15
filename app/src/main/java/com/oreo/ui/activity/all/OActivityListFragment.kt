@@ -30,11 +30,12 @@ class OActivityListFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setRecycler()
-        if (viewModel.activities.value.isNullOrEmpty()) {
-            viewModel.fetchActivityFromServer()
-        }
+//        if (viewModel.activities.value.isNullOrEmpty()) {
+        viewModel.fetchActivityFromServer()
+//        }
 
     }
+
 
     override fun initListener() {
         binding.lytTodayEmpty.btnAddWorkout.setOnClickListener {
@@ -59,8 +60,8 @@ class OActivityListFragment :
                     if (adapter.itemCount == 0 || adapter.itemCount == 1) {
                         binding.rv.gone()
                     }
+                    handleTodayEmptyView()
                 }
-
             }
         }
         binding.lytToolbar.apply {
@@ -110,15 +111,24 @@ class OActivityListFragment :
 
     override fun subscribeObservers() {
         viewModel.activities.observe(this) {
+
             adapter.setDataSet(it)
-            if (it.isEmpty()) {
-                binding.lytEmptyView.root.visible()
-                binding.rv.gone()
-            } else {
-                binding.lytEmptyView.root.gone()
-                binding.rv.visible()
-            }
+            binding.lytEmptyView.root.gone()
+            binding.rv.visible()
             handleTodayEmptyView()
+        }
+
+        viewModel.emptyActivities.observe(this) {
+            it?.getContent()?.let {
+                if (it) {
+                    binding.lytEmptyView.root.visible()
+                    binding.rv.gone()
+
+                } else {
+                    binding.lytEmptyView.root.gone()
+                    binding.rv.visible()
+                }
+            }
         }
 
 

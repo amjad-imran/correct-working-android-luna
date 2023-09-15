@@ -217,7 +217,9 @@ class OActivityListAdapter(
     }
 
     fun setDataSet(dataSet: List<OActivityListModal>) {
-        mDataSet = dataSet as ArrayList<OActivityListModal>
+        mDataSet.clear()
+        mDataSet.addAll(dataSet as ArrayList<OActivityListModal>)
+
         notifyDataSetChanged()
     }
 
@@ -225,11 +227,13 @@ class OActivityListAdapter(
         var isShow = false
         if (mDataSet.isEmpty())
             isShow = false
+        val datesSet = HashSet<String>()
         mDataSet.forEach {
-            if (it.isTodayEmptyView) {
-                isShow = true
-                return@forEach
-            }
+                it.date?.let { it1 -> datesSet.add(it1) }
+                isShow = !datesSet.contains(
+                        DateFormats.getCurrentDateOreoFormat()
+                )
+
 
         }
         return isShow
