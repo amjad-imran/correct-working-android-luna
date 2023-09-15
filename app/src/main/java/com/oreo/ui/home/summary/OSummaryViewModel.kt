@@ -213,6 +213,32 @@ constructor(
 
 
             ringDataStore.setRegisterDay(data.registerDate ?: -1)
+
+
+
+
+            userActivities.add(OHealthOverview.SleepWaiting)
+
+            data.activity?.let {
+                val caloriesGoal = summary.user?.userGoals?.caloriesGoal ?: 0
+                userActivities.add(OHealthOverview.ActivityMinimal(data.activity, caloriesGoal))
+            }
+
+            data.sleep?.let {
+                userActivities.add(
+                    OHealthOverview.SleepMinimal(
+                        data.sleep,
+                        makeSleepArray(data.sleep)
+                    )
+                )
+            }
+
+            data.readiness?.let {
+                userActivities.add(OHealthOverview.ReadinessMinimal(data.readiness))
+            }
+
+
+
             if (isMorningTime()) {
                 if (data.registerDate != 0) {
                     data.readiness?.let {

@@ -34,9 +34,24 @@ sealed class OHealthOverview {
         val data: ODashboardReadinessModel
     ) : OHealthOverview()
 
+    class ReadinessMinimal(
+        val data: ODashboardReadinessModel
+    ) : OHealthOverview()
+
     class Sleep(
         val data: ODashboardSleepModel,
         val sleepArray: ArrayList<SleepData.SleepDataBreakup> = ArrayList()
+    ) : OHealthOverview()
+
+    class SleepMinimal(
+        val data: ODashboardSleepModel,
+        val sleepArray: ArrayList<SleepData.SleepDataBreakup> = ArrayList()
+    ) : OHealthOverview()
+
+    object SleepWaiting : OHealthOverview()
+    class ActivityMinimal(
+        val data: ODashboardActivityModel,
+        val caloriesGoal: Int
     ) : OHealthOverview()
 
     class Activity(

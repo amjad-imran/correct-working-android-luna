@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/ModalStyleReadinessNew"
+    android:layout_width="match_parent"
+
+    android:layout_height="wrap_content"
+    android:layout_marginTop="24dp">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/image_readiness_minimal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp" />
+
+    <TextView
+        android:id="@+id/textView63"
+        style="@style/H5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/text_readiness"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvScore"
+        style="@style/H5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:textSize="32sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView63"
+        tools:text="52" />
+
+    <TextView
+        android:id="@+id/tvScoreValue"
+        style="@style/Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/gilroy_medium"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tvScore"
+        app:layout_constraintStart_toEndOf="@+id/tvScore"
+        tools:text="Good" />
+
+    <TextView
+        android:id="@+id/tvDayStatus"
+        style="@style/H6"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvScore"
+        android:text="@string/tex_ready_for_the_day" />
+
+    <TextView
+        android:id="@+id/tvNudge"
+        style="@style/Small"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/gilroy_medium"
+        android:textColor="#ccffffff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDayStatus"
+        tools:text="Your sleep index was excellent yesterday and your readiness score is in great shape. You might want to push a little more today." />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

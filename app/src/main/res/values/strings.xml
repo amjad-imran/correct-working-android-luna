@@ -952,7 +952,10 @@
     <string name="text_thank_u_sharing">Thank you for sharing!</string>
     <string name="text_wrong_time">Wrong time</string>
     <string name="text_adjust_date">Adjust date</string>
+    <string name="text_waiting_for_your_sleep_data">Waiting for your sleep data..</string>
     <string name="text_you_haven_t_recorded_any_workouts_yet_exercise_improves_focus_and_energy_levels">You haven’t recorded any workouts yet. Exercise improves focus and energy levels</string>
     <string name="text_looks_like_you_haven_t_recorded_any_workouts_today_regular_workouts_improve_focus_and_energy_levels">Looks like you haven’t recorded any workouts today, regular workouts improve focus, and energy levels</string>
     <string name="text_today_s_workouts">Today’s Workouts</string>
+    <string name="text_act_score_message">Your activity score will appear on burning 50 kcal</string>
+    <string name="tex_ready_for_the_day">Ready for the day</string>
 </resources>
