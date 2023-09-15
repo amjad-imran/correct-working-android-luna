@@ -2,7 +2,9 @@ package com.oreo.ui.home.summary
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.noisefit.data.local.db.CacheResult
+import com.noisefit.data.local.db.fromJson
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
@@ -215,31 +217,147 @@ constructor(
             ringDataStore.setRegisterDay(data.registerDate ?: -1)
 
 
+            LOGS.w("RESPONSE___ ${Gson().toJson(data)}")
 
 
-            userActivities.add(OHealthOverview.SleepWaiting)
+            when (getDaySlot()) {
+                1 -> {
 
-            data.activity?.let {
-                val caloriesGoal = summary.user?.userGoals?.caloriesGoal ?: 0
-                userActivities.add(OHealthOverview.ActivityMinimal(data.activity, caloriesGoal))
+                    //sleep
+                    if(data.sleep?.sleepScore != null){
+                        if(data.registerDate!=0){
+                            data.readiness?.let {
+                                userActivities.add(OHealthOverview.Readiness(data.readiness))
+                            }
+                            userActivities.add(
+                                OHealthOverview.Sleep(
+                                    data.sleep,
+                                    makeSleepArray(data.sleep)
+                                )
+                            )
+                        }
+                    }else{
+                        userActivities.add(OHealthOverview.SleepWaiting)
+                    }
+
+                    //Activity
+                    if(data.activity?.activeCalories != null){
+                        val activeCalories = data.activity.activeCalories
+                        if (activeCalories in 1..49) {
+                            val caloriesGoal = summary.user?.userGoals?.caloriesGoal ?: 0
+                            userActivities.add(
+                                OHealthOverview.ActivityMinimal(
+                                    data.activity,
+                                    caloriesGoal
+                                )
+                            )
+                        } else if(activeCalories >= 50) {
+                            val caloriesGoal = summary.user?.userGoals?.caloriesGoal ?: 0
+                            userActivities.add(
+                                OHealthOverview.Activity(
+                                    data.activity,
+                                    caloriesGoal
+                                )
+                            )
+                        } else { }
+                    }
+                }
+
+                2 -> {
+                    if(data.registerDate!=0){
+                        data.readiness?.let {
+                            userActivities.add(OHealthOverview.Readiness(data.readiness))
+                        }
+
+                        data.sleep?.let {
+                            userActivities.add(
+                                OHealthOverview.Sleep(
+                                    data.sleep,
+                                    makeSleepArray(data.sleep)
+                                )
+                            )
+                        }
+                    }
+
+                    data.activity?.let {
+
+                        val activeCalories = data.activity.activeCalories?:0
+                        if (activeCalories in 0..49) {
+                            val caloriesGoal = summary.user?.userGoals?.caloriesGoal ?: 0
+                            userActivities.add(
+                                OHealthOverview.ActivityMinimal(
+                                    data.activity,
+                                    caloriesGoal
+                                )
+                            )
+                        } else {
+                            val caloriesGoal = summary.user?.userGoals?.caloriesGoal ?: 0
+                            userActivities.add(
+                                OHealthOverview.Activity(
+                                    data.activity,
+                                    caloriesGoal
+                                )
+                            )
+                        }
+                    }
+
+
+
+                }
+
+                else -> {
+                    data.activity?.let {
+
+                        val activeCalories = data.activity.activeCalories?:0
+                        if (activeCalories in 0..49) {
+                            val caloriesGoal = summary.user?.userGoals?.caloriesGoal ?: 0
+                            userActivities.add(
+                                OHealthOverview.ActivityMinimal(
+                                    data.activity,
+                                    caloriesGoal
+                                )
+                            )
+                        } else {
+                            val caloriesGoal = summary.user?.userGoals?.caloriesGoal ?: 0
+                            userActivities.add(
+                                OHealthOverview.Activity(
+                                    data.activity,
+                                    caloriesGoal
+                                )
+                            )
+                        }
+                    }
+
+                    if(data.registerDate!=0){
+                        if(data.sleep?.sleepScore != null){
+                            data.readiness?.let {
+                                userActivities.add(OHealthOverview.ReadinessMinimal(data.readiness))
+                            }
+                            userActivities.add(
+                                OHealthOverview.SleepMinimal(
+                                    data.sleep,
+                                    makeSleepArray(data.sleep)
+                                )
+                            )
+                        }else{
+                            data.readiness?.let {
+                                userActivities.add(OHealthOverview.Readiness(data.readiness))
+                            }
+                            data.sleep?.let {
+                                userActivities.add(
+                                    OHealthOverview.Sleep(
+                                        data.sleep,
+                                        makeSleepArray(data.sleep)
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
             }
 
-            data.sleep?.let {
-                userActivities.add(
-                    OHealthOverview.SleepMinimal(
-                        data.sleep,
-                        makeSleepArray(data.sleep)
-                    )
-                )
-            }
 
-            data.readiness?.let {
-                userActivities.add(OHealthOverview.ReadinessMinimal(data.readiness))
-            }
-
-
-
-            if (isMorningTime()) {
+           /* if (isMorningTime()) {
                 if (data.registerDate != 0) {
                     data.readiness?.let {
                         userActivities.add(OHealthOverview.Readiness(data.readiness))
@@ -281,7 +399,7 @@ constructor(
                     }
                 }
 
-            }
+            }*/
 
             stateSleepAvgCard.postValue(Pair(data.sleepScoreAvg, data.activityScoreAvg))
             stateReadinessAvgCard.postValue(data.readinessScoreAvg)
@@ -532,6 +650,24 @@ constructor(
             return true
         }
         return false
+    }
+
+
+    /**
+     * Return day slots
+     * 1->00:00 - 08:00
+     * 2->08:00 - 12:000
+     * 3->12:00 - 24:00
+     */
+    private fun getDaySlot(): Int {
+        val currentTime = DateFormats.getTimeFormat()
+        return if (DateFormats.isTimeBetween(currentTime, "00:00", "07:59")) {
+            1
+        } else if (DateFormats.isTimeBetween(currentTime, "08:00", "11:59")) {
+            2
+        } else {
+            3
+        }
     }
 
     private fun getGreetingMessage(): String {

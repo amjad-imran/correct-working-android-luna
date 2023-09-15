@@ -155,14 +155,6 @@ class OSummaryHealthOverviewAdapter :
                 )
             )
 
-            R.layout.list_oreo_battery_percent_item -> HomeRecyclerViewHolder.OreoBatteryPercentViewHolder(
-                ListOreoBatteryPercentItemBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
-            )
-
 
             R.layout.list_o_w_alert_card_item -> HomeRecyclerViewHolder.AutoSportViewHolder(
                 ListOWAlertCardItemBinding.inflate(
@@ -252,11 +244,6 @@ class OSummaryHealthOverviewAdapter :
             is HomeRecyclerViewHolder.SleepWaitingViewHolder -> holder.bind()
 
 
-            is HomeRecyclerViewHolder.OreoBatteryPercentViewHolder -> holder.bind(
-
-            )
-
-
             is HomeRecyclerViewHolder.AutoSportViewHolder -> holder.bind(
                 items[position] as OHealthOverview.AutoSport,
                 position,
@@ -270,32 +257,24 @@ class OSummaryHealthOverviewAdapter :
 
     override fun getItemViewType(position: Int): Int {
         return when (items[position]) {
+
+            is OHealthOverview.ReadinessMinimal -> R.layout.list_readiness_minimal_card_item
             is OHealthOverview.Readiness -> R.layout.list_readiness_card_item
-            is OHealthOverview.Sleep -> R.layout.list_sleep_card_item
+            is OHealthOverview.ReadinessScore -> R.layout.list_readiness_score_card_item
+
+
             is OHealthOverview.SleepWaiting -> R.layout.list_sleep_waiting_card_item
+            is OHealthOverview.SleepMinimal -> R.layout.list_sleep_minimal_item
+            is OHealthOverview.Sleep -> R.layout.list_sleep_card_item
+            is OHealthOverview.SleepActivityScore -> R.layout.list_sleep_activity_card_item
+
+
             is OHealthOverview.ActivityMinimal -> R.layout.list_activity_minimal_item
             is OHealthOverview.Activity -> R.layout.list_activity_burn_card_item
 
 
-            is OHealthOverview.Alerts -> R.layout.list_o_alerts
-
-            is OHealthOverview.FitnessOverView -> R.layout.list_health_overview_card_item
-
-            is OHealthOverview.HeartRate -> R.layout.list_heart_rate_card_item
-
-            is OHealthOverview.OreoBattery -> R.layout.list_oreo_battery_percent_item
-            is OHealthOverview.ReadinessScore -> R.layout.list_readiness_score_card_item
-
-
-            is OHealthOverview.SleepActivityScore -> R.layout.list_sleep_activity_card_item
-
-            is OHealthOverview.TodayWorkout -> R.layout.oreo_layout_recent_activity
-            is OHealthOverview.Header -> R.layout.list_o_header_card_item
-            is OHealthOverview.PairDevice -> R.layout.list_o_pair_device
             is OHealthOverview.AutoSport -> R.layout.list_o_w_alert_card_item
-            is OHealthOverview.Dummy -> R.layout.oreo_dummy_view
-            is OHealthOverview.SleepMinimal -> R.layout.list_sleep_minimal_item
-            is OHealthOverview.ReadinessMinimal -> R.layout.list_readiness_minimal_card_item
+            is OHealthOverview.HeartRate -> 0
         }
     }
 }
@@ -322,6 +301,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.tvNudge.text = ""
             } else {
                 binding.tvNudge.text = data.data.nudges.first()
+            }
+
+            binding.root.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.ReadinessDetailsWorkoutClick)
             }
 
         }
@@ -435,6 +418,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 "$minuteTimeInBed min"
             } else {
                 "$hourTimeInBed hr $minuteTimeInBed min"
+            }
+
+            binding.root.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.SleepDetailsWorkoutClick)
             }
 
         }
@@ -553,6 +540,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.pbCurrent.progress = (data.data.activeCalories ?: 0) * 2//For 50 kcal only, change accordingly
 
             binding.tvTotalCalories.text = "${data.caloriesGoal}"
+
+            binding.root.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.ActivityDetailsWorkoutClick)
+            }
 
         }
     }
@@ -826,16 +817,6 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.root.setOnClickListener {
                 //   itemClickListener?.invoke(it, data, position)
             }
-        }
-    }
-
-    class OreoBatteryPercentViewHolder(private val binding: ListOreoBatteryPercentItemBinding) :
-        HomeRecyclerViewHolder(binding) {
-        fun bind(
-
-        ) {
-
-
         }
     }
 

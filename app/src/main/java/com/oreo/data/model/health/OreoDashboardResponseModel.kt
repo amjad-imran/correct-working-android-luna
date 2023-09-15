@@ -21,40 +21,40 @@ data class OreoDashboardResponseModel(
     )
 
 data class ODashboardReadinessModel(
-    val readinessScore: Int? = 0,
+    val readinessScore: Int? = null,
     val status: String? = "",
     val nudges: List<String>? = null,
 )
 
 data class ODashboardActivityScoreModel(
-    val activityScore: Int? = 0,
-    val trend: Int? = 0,
+    val activityScore: Int? = null,
+    val trend: Int? = null,
     val value: List<Int>? = ArrayList(),
 )
 
 data class ODashboardReadinessScoreModel(
-    val readinessScore: Int? = 0,
-    val trend: Int? = 0,
+    val readinessScore: Int? = null,
+    val trend: Int? = null,
     val value: List<Int>? = ArrayList(),
 )
 
 data class ODashboardSleepScoreModel(
-    val sleepScore: Int? = 0,
-    val trend: Int? = 0,
+    val sleepScore: Int? = null,
+    val trend: Int? = null,
     val value: List<Int>? = ArrayList(),
 )
 
 data class ODashboardActivityModel(
-    val activityScore: Int? = 0,
-    val activeCalories: Int? = 0,
+    val activityScore: Int? = null,
+    val activeCalories: Int? = null,
     val status: String? = "",
     val nudges: List<String>? = null,
 )
 
 data class ODashboardSleepModel(
-    val sleepScore: Int? = 0,
-    val totalSleep: Int? = 0,
-    val lowestHr: Int? = 0,
+    val sleepScore: Int? = null,
+    val totalSleep: Int? = null,
+    val lowestHr: Int? = null,
     val sleepStage: ArrayList<ODashboardSleepStageModel> = ArrayList(),
     val status: String? = "",
     @SerializedName("start_time")
@@ -64,7 +64,7 @@ data class ODashboardSleepModel(
 )
 
 data class ODashboardSleepStageModel(
-    val duration: Int? = 0,
+    val duration: Int? = null,
     @SerializedName("start_time")
     val startTime: String? = "",
     @SerializedName("end_time")
