@@ -10,6 +10,8 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOActivityListBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.visible
 import com.oreo.data.model.OActivityListModal
 import com.oreo.ui.workout.details.DELETE_WORKOUT_REQUEST_KEY
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,13 +30,26 @@ class OActivityListFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setRecycler()
-        if(viewModel.activities.value.isNullOrEmpty()){
-            viewModel.fetchActivityFromServer()
-        }
+//        if (viewModel.activities.value.isNullOrEmpty()) {
+        viewModel.fetchActivityFromServer()
+//        }
 
     }
 
+
     override fun initListener() {
+        binding.lytTodayEmpty.btnAddWorkout.setOnClickListener {
+            navigate(R.id.addWorkoutFragment)
+        }
+        binding.lytTodayEmpty.view1.setOnClickListener {
+            navigate(R.id.addWorkoutFragment)
+        }
+        binding.lytEmptyView.btnAddWorkout.setOnClickListener {
+            navigate(R.id.addWorkoutFragment)
+        }
+        binding.lytEmptyView.view1.setOnClickListener {
+            navigate(R.id.addWorkoutFragment)
+        }
 
         setFragmentResultListener(DELETE_WORKOUT_REQUEST_KEY) { _, bundle ->
             val allow = bundle.getBoolean("allow")
@@ -45,8 +60,8 @@ class OActivityListFragment :
                     if (adapter.itemCount == 0 || adapter.itemCount == 1) {
                         binding.rv.gone()
                     }
+                    handleTodayEmptyView()
                 }
-
             }
         }
         binding.lytToolbar.apply {
@@ -89,46 +104,65 @@ class OActivityListFragment :
     private fun setRecycler() {
         binding.rv.layoutManager = LinearLayoutManager(context)
         binding.rv.adapter = adapter
-        adapter.connectedDevice = viewModel.sessionManager.connectedDeviceRing.value?.deviceType ?: ""
+        adapter.connectedDevice =
+            viewModel.sessionManager.connectedDeviceRing.value?.deviceType ?: ""
         adapter.unitsSystem = viewModel.localDataStore.getUnit()
     }
 
     override fun subscribeObservers() {
         viewModel.activities.observe(this) {
+
             adapter.setDataSet(it)
-//            if (it.isEmpty()) {
-//
-//                binding.tvNoActivities.visible()
-//                binding.header.textViewTitle.visible()
-//                binding.header.textViewTitle.text = getString(R.string.text_activity)
-//            } else {
-//                binding.tvNoActivities.gone()
-//                /* binding.tvToolbarText.text = DateFormats.formatDateTime(
-//                     viewModel.activitiesDates.first(),
-//                     DateFormats.dateFormat2,
-//                     DateFormats.dateFormat4
-//                 )*/
-//                binding.header.textViewTitle.visible()
-//            }
+            binding.lytEmptyView.root.gone()
+            binding.rv.visible()
+            handleTodayEmptyView()
+        }
+
+        viewModel.emptyActivities.observe(this) {
+            it?.getContent()?.let {
+                if (it) {
+                    binding.lytEmptyView.root.visible()
+                    binding.rv.gone()
+
+                } else {
+                    binding.lytEmptyView.root.gone()
+                    binding.rv.visible()
+                }
+            }
         }
 
 
+        viewModel.getMessages().observe(this) {
+            it.getContent()?.let { message ->
+                context.showShortToast(message)
+            }
+        }
 
-//        viewModel.getLoading().observe(this) {
-//            if (it) {
-//                if (!binding.srActivity.isRefreshing) {
-//                    binding.srActivity.isRefreshing = true
-//                }
-//            } else {
-//                binding.srActivity.isRefreshing = false
-//            }
-//        }
+
+        viewModel.getLoading().observe(this) {
+            if (it) {
+                binding.progressBar1.root.visible()
+            } else {
+                binding.progressBar1.root.gone()
+            }
+        }
 
         viewModel.getApiErrors().observe(this) {
             it?.getContent()?.let { response ->
                 uiController.onApiErrorReceived(response)
             }
         }
+    }
+
+    private fun handleTodayEmptyView() {
+        if (adapter.isShowTodayEmptyView()) {
+            if (viewModel.ringDataStore.getRingDevice() != null) {
+                binding.lytTodayEmpty.root.visible()
+            } else {
+                binding.lytTodayEmpty.root.gone()
+            }
+        } else
+            binding.lytTodayEmpty.root.gone()
     }
 
 //    private val dismissRunnable = Runnable {
