@@ -4,23 +4,21 @@ package com.oreo.ui.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
+import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoActivityBinding
-import com.noisefit.ui.common.OverlapDecoration
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.getColor
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.showShortToast
@@ -40,7 +38,6 @@ import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Random
 
 
 @AndroidEntryPoint
@@ -285,27 +282,154 @@ class OreoActivityFragment :
         mActivityAdapter.setData(mViewModel.getContributorsData(it) as ArrayList<Contributors>)
 
         //handle daily movement views
-        handleMovementViews(it)
+//        handleMovementViews(it)
+        handleMovementNewViews(it)
         updateWorkoutUI(it.workout)
     }
 
 
     private fun returnMovementProgress(value: Int, total: Int): Pair<Int, String> {
         val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(value.times(15))
-        val leftText = "$hour h $minute min"
+        val leftText: String = if (hour > 0)
+            if (minute > 0)
+                "$hour h $minute min"
+            else
+                "$hour h"
+        else if (minute > 0) {
+            "$minute min"
+        } else {
+            "-"
+        }
         var progress = (value.toFloat() / total).times(100).toInt()
 
         if (progress == 0) {
-            progress = 1
+            progress = 0
         }
 
         return Pair(progress, leftText)
 
     }
 
+    private fun handleMovementNewViews(it: OreoActivityModel) {
+        val movementList = it.daytimeMovement?.movement
+
+        val newList = mViewModel.getCombinedMovementData(movementList, false)
+        val newListInvalid = mViewModel.getCombinedMovementData(movementList, true)
+
+        var highMovValue = 0
+        var medMovValue = 0
+        var lowMovValue = 0
+        var inactiveMovValue = 0
+        if (movementList?.isNotEmpty() == true) {
+            newListInvalid.forEachIndexed { index, data ->
+                when (data) {
+                    0 -> {
+                        inactiveMovValue++
+                    }
+
+                    1 -> {
+                        lowMovValue++
+                    }
+
+                    2 -> {
+                        medMovValue++
+                    }
+
+                    3 -> {
+                        highMovValue++
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+
+        binding.lytDailyMovement.movementChart.setData(newList)
+
+        //mDayMovementAdapter.setData(newList)
+
+
+        val totalValue = highMovValue + medMovValue + lowMovValue + inactiveMovValue
+
+        val (highProgress, highRemark) = returnMovementProgress(highMovValue, totalValue)
+        val (medProgress, medRemark) = returnMovementProgress(medMovValue, totalValue)
+        val (lowProgress, lowRemark) = returnMovementProgress(lowMovValue, totalValue)
+        val (inactiveProgress, inactiveRemark) = returnMovementProgress(
+            inactiveMovValue, totalValue
+        )
+        //for high value
+        binding.lytDailyMovement.lytDMHigh.pbCurrent.layoutParams =
+            binding.lytDailyMovement.lytDMHigh.pbCurrent.layoutParams.apply {
+                (this as LinearLayout.LayoutParams).weight = calculateWeightPercent(highProgress)
+            }
+        binding.lytDailyMovement.lytDMHigh.pbCurrent.progress = highProgress
+        binding.lytDailyMovement.lytDMHigh.pbCurrent.setIndicatorColor(R.color.high_color.getColor())
+        binding.lytDailyMovement.lytDMHigh.tvStageName.text = getString(R.string.text_high)
+        binding.lytDailyMovement.lytDMHigh.tvDuration.text = highRemark
+        if (calculateWeightPercent(highProgress) > 0)
+            binding.lytDailyMovement.lytDMHigh.pbCurrent.visible()
+        else
+            binding.lytDailyMovement.lytDMHigh.pbCurrent.gone()
+
+        //for med value
+        binding.lytDailyMovement.lytDMMed.pbCurrent.layoutParams =
+            binding.lytDailyMovement.lytDMMed.pbCurrent.layoutParams.apply {
+                (this as LinearLayout.LayoutParams).weight = calculateWeightPercent(medProgress)
+            }
+        binding.lytDailyMovement.lytDMMed.pbCurrent.progress = medProgress
+        binding.lytDailyMovement.lytDMMed.pbCurrent.setIndicatorColor(R.color.medium_movement.getColor())
+        binding.lytDailyMovement.lytDMMed.tvStageName.text = getString(R.string.text_medium)
+        binding.lytDailyMovement.lytDMMed.tvDuration.text = medRemark
+        if (calculateWeightPercent(medProgress) > 0)
+            binding.lytDailyMovement.lytDMMed.pbCurrent.visible()
+        else
+            binding.lytDailyMovement.lytDMMed.pbCurrent.gone()
+
+
+        //for low value
+        binding.lytDailyMovement.lytDMLow.pbCurrent.layoutParams =
+            binding.lytDailyMovement.lytDMLow.pbCurrent.layoutParams.apply {
+                (this as LinearLayout.LayoutParams).weight = calculateWeightPercent(lowProgress)
+            }
+        binding.lytDailyMovement.lytDMLow.pbCurrent.progress = lowProgress
+        binding.lytDailyMovement.lytDMLow.pbCurrent.setIndicatorColor(R.color.low_movement.getColor())
+        binding.lytDailyMovement.lytDMLow.tvStageName.text = getString(R.string.text_low)
+        binding.lytDailyMovement.lytDMLow.tvDuration.text = lowRemark
+        if (calculateWeightPercent(lowProgress) > 0)
+            binding.lytDailyMovement.lytDMLow.pbCurrent.visible()
+        else
+            binding.lytDailyMovement.lytDMLow.pbCurrent.gone()
+
+
+        //for inactive value
+        binding.lytDailyMovement.lytDMInactive.pbCurrent.layoutParams =
+            binding.lytDailyMovement.lytDMInactive.pbCurrent.layoutParams.apply {
+                (this as LinearLayout.LayoutParams).weight =
+                    calculateWeightPercent(inactiveProgress)
+            }
+        binding.lytDailyMovement.lytDMInactive.pbCurrent.progress = inactiveProgress
+        binding.lytDailyMovement.lytDMInactive.pbCurrent.setIndicatorColor(R.color.inactive_movement.getColor())
+        binding.lytDailyMovement.lytDMInactive.tvStageName.text = getString(R.string.text_inactive)
+        binding.lytDailyMovement.lytDMInactive.tvDuration.text = inactiveRemark
+        if (calculateWeightPercent(inactiveProgress) > 0)
+            binding.lytDailyMovement.lytDMInactive.pbCurrent.visible()
+        else
+            binding.lytDailyMovement.lytDMInactive.pbCurrent.gone()
+
+
+    }
+
+    private fun calculateWeightPercent(progress: Int): Float {
+        val progressPercent: Float = if (progress >= 42) {
+            42F
+        } else {
+            progress.toFloat()
+        }
+        return progressPercent
+    }
 
     private fun handleMovementViews(it: OreoActivityModel) {
-        binding.lytDailyMovement.lytDMHigh.tvTitle.text = getString(R.string.text_high_movement)
+//        binding.lytDailyMovement.lytDMHigh.tvTitle.text = getString(R.string.text_high_movement)
 
         val movementList = it.daytimeMovement?.movement
 
@@ -355,7 +479,7 @@ class OreoActivityFragment :
         )
 
 
-        binding.lytDailyMovement.lytDMHigh.pbSteps.progress = highProgress
+        /*binding.lytDailyMovement.lytDMHigh.pbSteps.progress = highProgress
         binding.lytDailyMovement.lytDMHigh.tvRemark.text = highRemark
         binding.lytDailyMovement.lytDMHigh.pbSteps.setIndicatorColor(
             ContextCompat.getColor(requireContext(), R.color.low_movement)
@@ -377,9 +501,8 @@ class OreoActivityFragment :
         binding.lytDailyMovement.lytDMInactive.tvRemark.text = inactiveRemark
         binding.lytDailyMovement.lytDMInactive.pbSteps.setIndicatorColor(
             ContextCompat.getColor(requireContext(), R.color.inactive_movement)
-        )
+        )*/
     }
-
 
 
     private fun distanceDefaultView() {
@@ -424,12 +547,12 @@ class OreoActivityFragment :
             adapter = mWorkoutAdapter
         }
 
-       /* binding.lytDailyMovement.rvMovements.apply {
-            layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            addItemDecoration(OverlapDecoration(dpToPx(-29, this.context).toInt()))
-            adapter = mDayMovementAdapter
-        }*/
+        /* binding.lytDailyMovement.rvMovements.apply {
+             layoutManager =
+                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+             addItemDecoration(OverlapDecoration(dpToPx(-29, this.context).toInt()))
+             adapter = mDayMovementAdapter
+         }*/
 
 
     }
@@ -480,7 +603,6 @@ class OreoActivityFragment :
     }
 
     override fun initListener() {
-
 
 
         binding.lytEmptyView.bGoToSettings.setOnClickListener {

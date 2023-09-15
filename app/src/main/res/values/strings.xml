@@ -958,4 +958,5 @@
     <string name="text_today_s_workouts">Today’s Workouts</string>
     <string name="text_act_score_message">Your activity score will appear on burning 50 kcal</string>
     <string name="tex_ready_for_the_day">Ready for the day</string>
+    <string name="text_summary">Summary</string>
 </resources>
