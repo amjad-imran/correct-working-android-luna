@@ -359,7 +359,7 @@ public class LineChart extends View {
         if (xMax1 == 100) {
             xMax = xMax1;
         } else {
-            xMax = xMax + 20;
+            xMax = xMax + 5;
         }
 
 
