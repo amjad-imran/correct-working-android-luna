@@ -7,82 +7,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-
-        <ImageView
-            android:id="@+id/imageView48"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:src="@drawable/sleep_back_top"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/back_stick_bottom"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView48" />
-
-
-        <include
-            android:id="@+id/lytToolbar"
-            layout="@layout/oreo_layout_toolbar_with_2_icons"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.oreo.ui.custom.LineChart
-            android:id="@+id/rvTopGraph"
-            android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lytToolbar"
-            lineChart:bgBottomColor="@android:color/transparent"
-            lineChart:bgColor="@android:color/transparent"
-            lineChart:bgLeftColor="@android:color/transparent"
-            lineChart:bgRightColor="@android:color/transparent"
-            lineChart:bgTopColor="@android:color/transparent"
-            lineChart:bottomWith="30dp"
-            lineChart:centerLineColor="@color/white_80"
-            lineChart:centerLineWidth="3dp"
-            lineChart:chartLineColor="@color/sleep_chart_line_color"
-            lineChart:chartLineWidth="2dp"
-            lineChart:fillColorEnd="@color/sleep_fill_end_color"
-            lineChart:fillColorStart="@color/sleep_fill_start_color"
-
-            lineChart:gridColor="@color/white_12"
-            lineChart:hCount="11"
-            lineChart:innerCircleColor="#e9d4ff"
-            lineChart:innerCircleRadius="4dp"
-            lineChart:leftWith="0dp"
-            lineChart:outCircleColor="#66aa5bff"
-            lineChart:outCircleRadius="1dp"
-            lineChart:rightWith="0dp"
-            lineChart:scaleColor="#ff000000"
-            lineChart:scaleLenth="4dp"
-            lineChart:scaleNodeColor="#FFFFFF"
-            lineChart:scaleNodeRadius="6dp"
-            lineChart:showGrid="true"
-            lineChart:topWith="40dp"
-
-            lineChart:vCount="2"
-            lineChart:xLineColor="#80FFFFFF"
-            lineChart:xMax="130"
-            lineChart:xMin="0"
-            lineChart:xTextColor="#FFFFFF"
-            lineChart:xTextSize="12sp"
-            lineChart:yLineColor="#00FFFFFF"
-            lineChart:yTextSize="12sp"
-            tools:visibility="visible" />
-
         <include
             android:id="@+id/lytEmptyView"
             layout="@layout/layout_empty_sleep_details"
@@ -99,13 +23,12 @@
             android:id="@+id/svMain"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="24dp"
             android:visibility="gone"
+            tools:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rvTopGraph"
-            tools:visibility="visible">
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -115,16 +38,89 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/lytToolbar">
 
+
+                <ImageView
+                    android:id="@+id/imageView48"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/sleep_back_top"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/back_stick_bottom"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView48" />
+
+                <include
+                    android:id="@+id/lytToolbar"
+                    layout="@layout/oreo_layout_toolbar_with_2_icons"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.oreo.ui.custom.LineChart
+                    android:id="@+id/rvTopGraph"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lytToolbar"
+                    lineChart:bgBottomColor="@android:color/transparent"
+                    lineChart:bgColor="@android:color/transparent"
+                    lineChart:bgLeftColor="@android:color/transparent"
+                    lineChart:bgRightColor="@android:color/transparent"
+                    lineChart:bgTopColor="@android:color/transparent"
+                    lineChart:bottomWith="30dp"
+                    lineChart:centerLineColor="@color/white_80"
+                    lineChart:centerLineWidth="3dp"
+                    lineChart:chartLineColor="@color/sleep_chart_line_color"
+                    lineChart:chartLineWidth="2dp"
+                    lineChart:fillColorEnd="@color/sleep_fill_end_color"
+
+                    lineChart:fillColorStart="@color/sleep_fill_start_color"
+                    lineChart:gridColor="@color/white_12"
+                    lineChart:hCount="11"
+                    lineChart:innerCircleColor="#e9d4ff"
+                    lineChart:innerCircleRadius="4dp"
+                    lineChart:leftWith="0dp"
+                    lineChart:outCircleColor="#66aa5bff"
+                    lineChart:outCircleRadius="1dp"
+                    lineChart:rightWith="0dp"
+                    lineChart:scaleColor="#ff000000"
+                    lineChart:scaleLenth="4dp"
+                    lineChart:scaleNodeColor="#FFFFFF"
+                    lineChart:scaleNodeRadius="6dp"
+                    lineChart:showGrid="true"
+
+                    lineChart:topWith="40dp"
+                    lineChart:vCount="2"
+                    lineChart:xLineColor="#80FFFFFF"
+                    lineChart:xMax="130"
+                    lineChart:xMin="0"
+                    lineChart:xTextColor="#FFFFFF"
+                    lineChart:xTextSize="12sp"
+                    lineChart:yLineColor="#00FFFFFF"
+                    lineChart:yTextSize="12sp" />
+
+
                 <include
                     android:id="@+id/lytSleepScore"
                     layout="@layout/oreo_layout_sleep_score_subdata"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/side_margin"
+                    android:layout_marginTop="24dp"
                     android:layout_marginEnd="@dimen/side_margin"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@id/rvTopGraph" />
 
                 <include
                     android:id="@+id/divider11"
