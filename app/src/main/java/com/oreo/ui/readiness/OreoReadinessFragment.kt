@@ -192,7 +192,7 @@ class OreoReadinessFragment :
 
 
         binding.lytHeartRate.lineChart.updateDataWithMax(
-            sleepChart, 20,
+            sleepChart, 5,
             false, true, GraphDummyModel(
                 hasDummyData, 40, 100
             ),
@@ -269,7 +269,7 @@ class OreoReadinessFragment :
         )
 
         binding.lytHRVariability.lineChart.updateDataWithMax(
-            sleepChart, 20,
+            sleepChart, 5,
             true, false, GraphDummyModel(
                 hasDummyData, 0, 200
             ),
@@ -342,7 +342,7 @@ class OreoReadinessFragment :
 
 
         binding.lytTemperature.lineChart.updateDataWithMax(
-            sleepChart, 20,
+            sleepChart, 5,
             true, false, GraphDummyModel(
                 hasDummyData, 80, 110
             ),
