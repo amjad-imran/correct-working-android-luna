@@ -7,6 +7,8 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import com.noisefit.data.local.db.abstraction.KeyValueDataSource
+import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.remote.NetworkErrors.WRONG_CLIENT_TIME_ERROR
 import com.noisefit.data.remote.abstraction.TokenRefreshApi
 import com.noisefit.data.remote.base.Resource
@@ -23,9 +25,12 @@ import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.db.OreoDataBase
 import com.useinsider.insider.Insider
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Request
@@ -46,6 +51,8 @@ class NetworkConnectionInterceptor(
     private val localDataStore: DataStoredInterface,
     private val ringDataStore: RingDataStore,
     private val watchesSdk: WatchesSDK,
+    private val keyValueDataSource: KeyValueDataSource,
+    private val database: OreoDataBase,
     private val tokenRefreshApi: TokenRefreshApi,
 ) : Interceptor {
 
@@ -68,6 +75,9 @@ class NetworkConnectionInterceptor(
         localDataStore.deleteFcmToken()
         localDataStore.setWarrantyStatus(-1)
 
+        GlobalScope.launch(Dispatchers.IO) {
+            removeOfflineUserData()
+        }
 
         Handler(Looper.getMainLooper()).post {
             appContext.showShortToast(appContext.getString(R.string.text_session_expired))
@@ -80,6 +90,18 @@ class NetworkConnectionInterceptor(
         appContext.startActivity(OnBoardActivity.getStartIntent(appContext, true).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         })
+    }
+    private suspend fun removeOfflineUserData() {
+        arrayListOf(
+            KeyValueDataType.DASHBOARD,
+            KeyValueDataType.SLEEP,
+            KeyValueDataType.ACTIVITY,
+            KeyValueDataType.READINESS
+        ).forEach {
+            keyValueDataSource.removeDataByType(it)
+            database.clearAllTables()
+        }
+
     }
 
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -190,8 +212,7 @@ class NetworkConnectionInterceptor(
 
             userToken?.let {
                 addHeader("access-token", "Bearer ${userToken.access_token}")
-                //addHeader("access-token", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMjAwNzk5LCJkZXZpY2VfaWQiOjEsImlhdCI6MTY5NDY1MjQ0OCwiZXhwIjoxNjk0NjY2ODQ4fQ.bUSvjkSl_f8_Bo8RAJcEWIFqa2ajBFdeQGGsVbsnmok")
-            }
+               }
             if (request.url.toString().contains("/user_detail/ring/devices", true)) {
                 userToken?.let {
                     addHeader("refresh-token", "Bearer ${userToken.refresh_token}")

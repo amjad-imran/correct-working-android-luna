@@ -334,7 +334,8 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
 
         viewModel.sessionManager.bluetoothStateDash.observe(this) {
-            viewModel.updateBluetoothStateInList(it)
+            viewModel.updateAlerts()
+            //viewModel.updateBluetoothStateInList(it)
         }
 
 
@@ -403,10 +404,13 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             when (connectedState) {
                 is ConnectState.ConnectFailed -> {
                     setConnectingState(true)
+                    viewModel.updateAlerts()
                 }
 
                 is ConnectState.Connecting -> {
                     setConnectingState(true)
+                    viewModel.updateAlerts()
+
                 }
 
                 is ConnectState.ConnectSuccess -> {
@@ -414,11 +418,14 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                     shouldSync()
                     setStateConnected(connectedState.noiseFitDevice)
                     viewModel.checkBatteryPercentage()
+                    viewModel.updateAlerts()
+
                 }
 
                 is ConnectState.UnPaired -> {
                     viewModel.handleUnPairState()
                     viewModel.updateDeviceConnectedStatus()
+                    viewModel.updateAlerts()
                 }
 
                 else -> {}
@@ -861,6 +868,10 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             binding.lytHeader.batteryStatus.invisible()
             binding.lytHeader.lottieAnimView.visible()
             binding.lytHeader.oreoStatus.visible()
+            binding.lytHeader.oreoStatus.loadImage(
+                requireContext(),
+                R.drawable.ic_ring_default_silver
+            )
         }
 
     }

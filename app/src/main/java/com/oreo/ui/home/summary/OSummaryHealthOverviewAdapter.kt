@@ -457,12 +457,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 )
 
                 binding.tvSleepStart.text = DateFormats.formatDate(
-                    data.sleepArray.first().startTime,
+                    data.startTime,
                     DateFormats.dateTimeFormat5,
                     DateFormats.time12Meridian
                 )
                 binding.tvSleepEnd.text = DateFormats.formatDate(
-                    data.sleepArray.last().endTime,
+                    data.endTime,
                     DateFormats.dateTimeFormat5,
                     DateFormats.time12Meridian
                 )

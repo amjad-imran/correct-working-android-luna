@@ -79,7 +79,7 @@ constructor(
                     DateFormats.getCurrentDate(DateFormats.dateTimeFormatWithWeekWithoutYear)
                 )
             )
-            val device = ringDataStore.getRingDevice()
+            val device = getDeviceConnected()
             statePairDeviceCard.postValue(device == null)
             stateHeartRateCard.postValue(userRepository.getSummaryHRHealthOverview().apply {
                 if (device == null) {
@@ -96,13 +96,16 @@ constructor(
         getDashboardDataFromServer(false)
     }
 
-    private fun updateAlerts() {
+    fun updateAlerts() {
         val dashAlert = HashMap<AlertType, DashAlert>()
 
         val btState = sessionManager.bluetoothStateDash.value
-        if (btState == false) {
-            dashAlert[AlertType.BLUETOOTH] =
-                DashAlert("Authorize Bluetooth connectivity for Luna", false)
+        val devicePaired = ringDataStore.getRingDevice()
+        if (btState == false && devicePaired != null) {
+            if (sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
+                dashAlert[AlertType.BLUETOOTH] =
+                    DashAlert("Authorize Bluetooth connectivity for Luna", false)
+            }
         }
 
         if (sessionManager.forceOtaResponseRing != null) {
@@ -232,7 +235,9 @@ constructor(
                             userActivities.add(
                                 OHealthOverview.Sleep(
                                     data.sleep,
-                                    makeSleepArray(data.sleep)
+                                    makeSleepArray(data.sleep),
+                                    data.sleep.sleepStage.firstOrNull()?.startTime ?: "",
+                                    data.sleep.sleepStage.lastOrNull()?.endTime ?: ""
                                 )
                             )
                         }
@@ -273,7 +278,9 @@ constructor(
                             userActivities.add(
                                 OHealthOverview.Sleep(
                                     data.sleep,
-                                    makeSleepArray(data.sleep)
+                                    makeSleepArray(data.sleep),
+                                    data.sleep.sleepStage.firstOrNull()?.startTime ?: "",
+                                    data.sleep.sleepStage.lastOrNull()?.endTime ?: ""
                                 )
                             )
                         }
@@ -347,7 +354,9 @@ constructor(
                                 userActivities.add(
                                     OHealthOverview.Sleep(
                                         data.sleep,
-                                        makeSleepArray(data.sleep)
+                                        makeSleepArray(data.sleep),
+                                        data.sleep.sleepStage.firstOrNull()?.startTime ?: "",
+                                        data.sleep.sleepStage.lastOrNull()?.endTime ?: ""
                                     )
                                 )
                             }
@@ -368,7 +377,9 @@ constructor(
                         userActivities.add(
                             OHealthOverview.Sleep(
                                 data.sleep,
-                                makeSleepArray(data.sleep)
+                                makeSleepArray(data.sleep),
+                                data.sleep.sleepStage.firstOrNull()?.startTime ?: "",
+                                data.sleep.sleepStage.lastOrNull()?.endTime ?: ""
                             )
                         )
                     }
@@ -393,7 +404,9 @@ constructor(
                         userActivities.add(
                             OHealthOverview.Sleep(
                                 data.sleep,
-                                makeSleepArray(data.sleep)
+                                makeSleepArray(data.sleep),
+                                data.sleep.sleepStage.firstOrNull()?.startTime ?: "",
+                                data.sleep.sleepStage.lastOrNull()?.endTime ?: ""
                             )
                         )
                     }
@@ -727,10 +740,17 @@ constructor(
         if (it) {
             stateDashAlerts.value?.remove(AlertType.BLUETOOTH)
         } else {
-            stateDashAlerts.value?.set(
-                AlertType.BLUETOOTH,
-                DashAlert("Authorize Bluetooth connectivity for Luna", false)
-            )
+            val ringDevice = getDeviceConnected()
+            if (ringDevice != null) {
+                if (sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
+                    stateDashAlerts.value?.set(
+                        AlertType.BLUETOOTH,
+                        DashAlert("Authorize Bluetooth connectivity for Luna", false)
+                    )
+                } else {
+                    stateDashAlerts.value?.remove(AlertType.BLUETOOTH)
+                }
+            }
         }
         stateDashAlerts.postValue(stateDashAlerts.value)
     }
