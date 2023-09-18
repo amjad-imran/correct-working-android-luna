@@ -402,6 +402,7 @@ class OreoSleepDetailFragment :
         binding.lytSSAnalysis.lytNightMovement.root.gone()
         binding.lytSSAnalysis.view1.gone()
         binding.lytSSAnalysis.rvSleepStage.gone()
+        binding.lytSSAnalysis.tvSummaryTitle.gone()
         binding.lytSSAnalysis.viewUp.gone()
         binding.lytSSAnalysis.ivUp.gone()
 
@@ -413,6 +414,7 @@ class OreoSleepDetailFragment :
             binding.lytSSAnalysis.ivUp.visible()
             binding.lytSSAnalysis.viewDown.gone()
             binding.lytSSAnalysis.ivDown.gone()
+            binding.lytSSAnalysis.tvSummaryTitle.visible()
         }
         binding.lytSSAnalysis.viewUp.setOnClickListener {
             binding.lytSSAnalysis.lytNightMovement.root.gone()
@@ -422,6 +424,7 @@ class OreoSleepDetailFragment :
             binding.lytSSAnalysis.ivUp.gone()
             binding.lytSSAnalysis.viewDown.visible()
             binding.lytSSAnalysis.ivDown.visible()
+            binding.lytSSAnalysis.tvSummaryTitle.gone()
         }
     }
 

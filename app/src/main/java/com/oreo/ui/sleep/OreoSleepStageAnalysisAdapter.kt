@@ -61,12 +61,7 @@ class OreoSleepStageAnalysisAdapter :
     }
 
     private fun calculateWeightPercent(progress: Int): Float {
-        val progressPercent: Float = if (progress >= 42) {
-            42F
-        } else {
-            progress.toFloat()
-        }
-        return progressPercent
+        return (progress.toFloat() / 100).times(42)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

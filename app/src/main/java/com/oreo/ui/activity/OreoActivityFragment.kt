@@ -18,7 +18,6 @@ import com.noisefit.luna.databinding.FragmentOreoActivityBinding
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.ui.getColor
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.showShortToast
@@ -357,6 +356,7 @@ class OreoActivityFragment :
         val (inactiveProgress, inactiveRemark) = returnMovementProgress(
             inactiveMovValue, totalValue
         )
+
         //for high value
         binding.lytDailyMovement.lytDMHigh.view1.layoutParams =
             binding.lytDailyMovement.lytDMHigh.view1.layoutParams.apply {
@@ -370,7 +370,7 @@ class OreoActivityFragment :
                     100 - calculateWeightPercent(highProgress)
             }
 
-        binding.lytDailyMovement.lytDMHigh.view1.setBackgroundResource(R.drawable.low_bar_with_round_edge)
+        binding.lytDailyMovement.lytDMHigh.view1.setBackgroundResource(R.drawable.high_bar_with_round_edge)
         binding.lytDailyMovement.lytDMHigh.tvStageName.text = getString(R.string.text_high)
         binding.lytDailyMovement.lytDMHigh.tvDuration.text = highRemark
         if (calculateWeightPercent(highProgress) > 0)
@@ -391,7 +391,7 @@ class OreoActivityFragment :
                     100 - calculateWeightPercent(medProgress)
             }
 
-        binding.lytDailyMovement.lytDMMed.view1.setBackgroundResource(R.drawable.low_bar_with_round_edge)
+        binding.lytDailyMovement.lytDMMed.view1.setBackgroundResource(R.drawable.med_bar_with_round_edge)
         binding.lytDailyMovement.lytDMMed.tvStageName.text = getString(R.string.text_medium)
         binding.lytDailyMovement.lytDMMed.tvDuration.text = medRemark
         if (calculateWeightPercent(medProgress) > 0)
@@ -448,12 +448,7 @@ class OreoActivityFragment :
     }
 
     private fun calculateWeightPercent(progress: Int): Float {
-        val progressPercent: Float = if (progress >= 42) {
-            42F
-        } else {
-            progress.toFloat()
-        }
-        return progressPercent
+        return (progress.toFloat() / 100).times(42)
     }
 
     private fun handleMovementViews(it: OreoActivityModel) {
