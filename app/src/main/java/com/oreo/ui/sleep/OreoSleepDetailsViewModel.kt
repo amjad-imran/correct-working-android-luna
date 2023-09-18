@@ -208,7 +208,7 @@ constructor(
             SleepStageAnalysis(
                 "Awake",
                 dayData.awake?.value ?: -1,
-                dayData.awake?.valPrcnt ?: 1,
+                dayData.awake?.valPrcnt ?: 0,
                 SleepType.AWAKE
             )
         )
@@ -216,7 +216,7 @@ constructor(
             SleepStageAnalysis(
                 "REM",
                 dayData.remSleep?.value ?: -1,
-                dayData.remSleep?.valPrcnt ?: 1,
+                dayData.remSleep?.valPrcnt ?: 0,
                 SleepType.REM
             )
         )
@@ -224,7 +224,7 @@ constructor(
             SleepStageAnalysis(
                 "Light",
                 dayData.lightSleep?.value ?: -1,
-                dayData.lightSleep?.valPrcnt ?: 1,
+                dayData.lightSleep?.valPrcnt ?: 0,
                 SleepType.LIGHT
             )
         )
@@ -232,7 +232,7 @@ constructor(
             SleepStageAnalysis(
                 "Deep",
                 dayData.deepSleep?.value ?: -1,
-                dayData.deepSleep?.valPrcnt ?: 1,
+                dayData.deepSleep?.valPrcnt ?: 0,
                 SleepType.DEEP
             )
         )
