@@ -75,7 +75,7 @@
 
         <include
             android:id="@+id/lytDMHigh"
-            layout="@layout/layout_stage_analysis_new"
+            layout="@layout/layout_daliy_activity_analysis_new"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/side_margin"
@@ -86,7 +86,7 @@
 
         <include
             android:id="@+id/lytDMMed"
-            layout="@layout/layout_stage_analysis_new"
+            layout="@layout/layout_daliy_activity_analysis_new"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -97,7 +97,7 @@
 
         <include
             android:id="@+id/lytDMLow"
-            layout="@layout/layout_stage_analysis_new"
+            layout="@layout/layout_daliy_activity_analysis_new"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -108,7 +108,7 @@
 
         <include
             android:id="@+id/lytDMInactive"
-            layout="@layout/layout_stage_analysis_new"
+            layout="@layout/layout_daliy_activity_analysis_new"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

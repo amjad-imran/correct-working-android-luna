@@ -358,63 +358,91 @@ class OreoActivityFragment :
             inactiveMovValue, totalValue
         )
         //for high value
-        binding.lytDailyMovement.lytDMHigh.pbCurrent.layoutParams =
-            binding.lytDailyMovement.lytDMHigh.pbCurrent.layoutParams.apply {
-                (this as LinearLayout.LayoutParams).weight = calculateWeightPercent(highProgress)
+        binding.lytDailyMovement.lytDMHigh.view1.layoutParams =
+            binding.lytDailyMovement.lytDMHigh.view1.layoutParams.apply {
+                (this as LinearLayout.LayoutParams).weight =
+                    calculateWeightPercent(highProgress)
             }
-        binding.lytDailyMovement.lytDMHigh.pbCurrent.progress = highProgress
-        binding.lytDailyMovement.lytDMHigh.pbCurrent.setIndicatorColor(R.color.high_color.getColor())
+        binding.lytDailyMovement.lytDMHigh.lytChildContainer.layoutParams =
+            binding.lytDailyMovement.lytDMHigh.lytChildContainer.layoutParams.apply {
+
+                (this as LinearLayout.LayoutParams).weight =
+                    100 - calculateWeightPercent(highProgress)
+            }
+
+        binding.lytDailyMovement.lytDMHigh.view1.setBackgroundResource(R.drawable.low_bar_with_round_edge)
         binding.lytDailyMovement.lytDMHigh.tvStageName.text = getString(R.string.text_high)
         binding.lytDailyMovement.lytDMHigh.tvDuration.text = highRemark
         if (calculateWeightPercent(highProgress) > 0)
-            binding.lytDailyMovement.lytDMHigh.pbCurrent.visible()
+            binding.lytDailyMovement.lytDMHigh.view1.visible()
         else
-            binding.lytDailyMovement.lytDMHigh.pbCurrent.gone()
+            binding.lytDailyMovement.lytDMHigh.view1.gone()
 
         //for med value
-        binding.lytDailyMovement.lytDMMed.pbCurrent.layoutParams =
-            binding.lytDailyMovement.lytDMMed.pbCurrent.layoutParams.apply {
-                (this as LinearLayout.LayoutParams).weight = calculateWeightPercent(medProgress)
+        binding.lytDailyMovement.lytDMMed.view1.layoutParams =
+            binding.lytDailyMovement.lytDMMed.view1.layoutParams.apply {
+                (this as LinearLayout.LayoutParams).weight =
+                    calculateWeightPercent(medProgress)
             }
-        binding.lytDailyMovement.lytDMMed.pbCurrent.progress = medProgress
-        binding.lytDailyMovement.lytDMMed.pbCurrent.setIndicatorColor(R.color.medium_movement.getColor())
+        binding.lytDailyMovement.lytDMMed.lytChildContainer.layoutParams =
+            binding.lytDailyMovement.lytDMMed.lytChildContainer.layoutParams.apply {
+
+                (this as LinearLayout.LayoutParams).weight =
+                    100 - calculateWeightPercent(medProgress)
+            }
+
+        binding.lytDailyMovement.lytDMMed.view1.setBackgroundResource(R.drawable.low_bar_with_round_edge)
         binding.lytDailyMovement.lytDMMed.tvStageName.text = getString(R.string.text_medium)
         binding.lytDailyMovement.lytDMMed.tvDuration.text = medRemark
         if (calculateWeightPercent(medProgress) > 0)
-            binding.lytDailyMovement.lytDMMed.pbCurrent.visible()
+            binding.lytDailyMovement.lytDMMed.view1.visible()
         else
-            binding.lytDailyMovement.lytDMMed.pbCurrent.gone()
+            binding.lytDailyMovement.lytDMMed.view1.gone()
 
 
         //for low value
-        binding.lytDailyMovement.lytDMLow.pbCurrent.layoutParams =
-            binding.lytDailyMovement.lytDMLow.pbCurrent.layoutParams.apply {
-                (this as LinearLayout.LayoutParams).weight = calculateWeightPercent(lowProgress)
+        binding.lytDailyMovement.lytDMLow.view1.layoutParams =
+            binding.lytDailyMovement.lytDMLow.view1.layoutParams.apply {
+                (this as LinearLayout.LayoutParams).weight =
+                    calculateWeightPercent(lowProgress)
             }
-        binding.lytDailyMovement.lytDMLow.pbCurrent.progress = lowProgress
-        binding.lytDailyMovement.lytDMLow.pbCurrent.setIndicatorColor(R.color.low_movement.getColor())
+        binding.lytDailyMovement.lytDMLow.lytChildContainer.layoutParams =
+            binding.lytDailyMovement.lytDMLow.lytChildContainer.layoutParams.apply {
+
+                (this as LinearLayout.LayoutParams).weight =
+                    100 - calculateWeightPercent(lowProgress)
+            }
+
+        binding.lytDailyMovement.lytDMLow.view1.setBackgroundResource(R.drawable.low_bar_with_round_edge)
+
         binding.lytDailyMovement.lytDMLow.tvStageName.text = getString(R.string.text_low)
         binding.lytDailyMovement.lytDMLow.tvDuration.text = lowRemark
         if (calculateWeightPercent(lowProgress) > 0)
-            binding.lytDailyMovement.lytDMLow.pbCurrent.visible()
+            binding.lytDailyMovement.lytDMLow.view1.visible()
         else
-            binding.lytDailyMovement.lytDMLow.pbCurrent.gone()
+            binding.lytDailyMovement.lytDMLow.view1.gone()
 
 
         //for inactive value
-        binding.lytDailyMovement.lytDMInactive.pbCurrent.layoutParams =
-            binding.lytDailyMovement.lytDMInactive.pbCurrent.layoutParams.apply {
+        binding.lytDailyMovement.lytDMInactive.view1.layoutParams =
+            binding.lytDailyMovement.lytDMInactive.view1.layoutParams.apply {
                 (this as LinearLayout.LayoutParams).weight =
                     calculateWeightPercent(inactiveProgress)
             }
-        binding.lytDailyMovement.lytDMInactive.pbCurrent.progress = inactiveProgress
-        binding.lytDailyMovement.lytDMInactive.pbCurrent.setIndicatorColor(R.color.inactive_movement.getColor())
+        binding.lytDailyMovement.lytDMInactive.lytChildContainer.layoutParams =
+            binding.lytDailyMovement.lytDMInactive.lytChildContainer.layoutParams.apply {
+
+                (this as LinearLayout.LayoutParams).weight =
+                    100 - calculateWeightPercent(inactiveProgress)
+            }
+
+        binding.lytDailyMovement.lytDMInactive.view1.setBackgroundResource(R.drawable.inactive_bar_with_round_edge)
         binding.lytDailyMovement.lytDMInactive.tvStageName.text = getString(R.string.text_inactive)
         binding.lytDailyMovement.lytDMInactive.tvDuration.text = inactiveRemark
         if (calculateWeightPercent(inactiveProgress) > 0)
-            binding.lytDailyMovement.lytDMInactive.pbCurrent.visible()
+            binding.lytDailyMovement.lytDMInactive.view1.visible()
         else
-            binding.lytDailyMovement.lytDMInactive.pbCurrent.gone()
+            binding.lytDailyMovement.lytDMInactive.view1.gone()
 
 
     }
