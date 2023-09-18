@@ -235,7 +235,9 @@ constructor(
                             userActivities.add(
                                 OHealthOverview.Sleep(
                                     data.sleep,
-                                    makeSleepArray(data.sleep)
+                                    makeSleepArray(data.sleep),
+                                    data.sleep.sleepStage.firstOrNull()?.startTime ?: "",
+                                    data.sleep.sleepStage.lastOrNull()?.endTime ?: ""
                                 )
                             )
                         }
@@ -276,7 +278,9 @@ constructor(
                             userActivities.add(
                                 OHealthOverview.Sleep(
                                     data.sleep,
-                                    makeSleepArray(data.sleep)
+                                    makeSleepArray(data.sleep),
+                                    data.sleep.sleepStage.firstOrNull()?.startTime ?: "",
+                                    data.sleep.sleepStage.lastOrNull()?.endTime ?: ""
                                 )
                             )
                         }
@@ -350,7 +354,9 @@ constructor(
                                 userActivities.add(
                                     OHealthOverview.Sleep(
                                         data.sleep,
-                                        makeSleepArray(data.sleep)
+                                        makeSleepArray(data.sleep),
+                                        data.sleep.sleepStage.firstOrNull()?.startTime ?: "",
+                                        data.sleep.sleepStage.lastOrNull()?.endTime ?: ""
                                     )
                                 )
                             }
