@@ -27,6 +27,7 @@ import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataActions
 import com.noisefit_commans.utils.EncryptUtils
 import com.oreo.data.dataConverter.OreoOfflineDataMapper
 import com.oreo.data.dataConverter.OreoOnlineDataMapper
+import com.oreo.data.db.OreoDataBase
 import com.oreo.data.db.implementation.OreoAutoSportDataImpl
 import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
@@ -127,9 +128,11 @@ object AppModule {
     fun providerAuthenticationRepository(
         remoteDataSource: NetworkService,
 //        cleverTapAPI: CleverTapAPI?,
+        keyValueDataSource: KeyValueDataSource,
+        database: OreoDataBase,
         localDataSource: DataStoredInterface
     ): AuthenticationRepository =
-        AuthenticationRepositoryImpl(remoteDataSource, localDataSource /*cleverTapAPI*/)
+        AuthenticationRepositoryImpl(remoteDataSource, localDataSource ,keyValueDataSource,database/*cleverTapAPI*/)
 
     @Singleton
     @Provides

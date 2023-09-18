@@ -1,6 +1,7 @@
 package com.noisefit.di
 
 import android.content.Context
+import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.luna.BuildConfig
 import com.noisefit.data.remote.NetworkConnectionInterceptor
 import com.noisefit.data.remote.NetworkConnectionInterceptorShop
@@ -11,6 +12,7 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit.data.repository.abstraction.AuthenticationRepository
 import com.noisefit.watch.WatchesSDK
 import com.noisefit_commans.data.local.abstraction.RingDataStore
+import com.oreo.data.db.OreoDataBase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -143,6 +145,8 @@ object NetworkModule {
         ringDataStore: RingDataStore,
         lastSyncProvider: LastSyncProvider,
         watchesSdk: WatchesSDK,
+        keyValueDataSource: KeyValueDataSource,
+        database: OreoDataBase,
         tokenService: TokenRefreshApi,
     ): NetworkConnectionInterceptor =
         NetworkConnectionInterceptor(
@@ -151,6 +155,8 @@ object NetworkModule {
             localDataStore,
             ringDataStore,
             watchesSdk,
+            keyValueDataSource,
+            database,
             tokenService
         )
 
