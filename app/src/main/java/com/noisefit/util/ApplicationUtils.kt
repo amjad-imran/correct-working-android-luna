@@ -273,17 +273,28 @@ object ApplicationUtils {
                 .build()
 
 
-            val work =
+            /*val work =
                 PeriodicWorkRequest.Builder(OreoSyncDataWork::class.java, 60, TimeUnit.MINUTES)
                     .addTag(uniqueId)
                     .setConstraints(constraints)
-                    .build()
-
-            WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+                    .build()*/
+            /*WorkManager.getInstance(context).enqueueUniquePeriodicWork(
                 uniqueId,
                 ExistingPeriodicWorkPolicy.KEEP,
                 work
 
+            )*/
+
+            val work =
+                OneTimeWorkRequest.Builder(OreoSyncDataWork::class.java)
+                    .addTag(uniqueId)
+                    .setConstraints(constraints)
+                    .build()
+
+            WorkManager.getInstance(context).enqueueUniqueWork(
+                uniqueId,
+                ExistingWorkPolicy.KEEP,
+                work
             )
             return true
         }
