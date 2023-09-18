@@ -24,30 +24,31 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginEnd="@dimen/side_margin"
-            android:visibility="invisible"
             android:gravity="center"
             android:src="@drawable/ic_arrow_right_cal"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@id/tvTitle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tvTitle"
             tools:ignore="ContentDescription" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lytGraph"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_margin="@dimen/side_margin"
-            android:id="@+id/lytGraph"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTitle">
 
             <FrameLayout
                 android:id="@+id/flSleepGraph"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="20dp"/>
+                android:layout_marginBottom="20dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
         <include
             android:id="@+id/divider2"
             layout="@layout/layout_divider"
@@ -56,22 +57,24 @@
             android:layout_marginTop="16dp"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/lytGraph" />
+
         <View
+            android:id="@+id/viewDown"
             android:layout_width="72dp"
             android:layout_height="20dp"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider2"
-            android:id="@+id/viewDown"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
         <ImageView
+            android:id="@+id/ivDown"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_arrow_down"
-            android:id="@+id/ivDown"
-            app:layout_constraintStart_toStartOf="@id/viewDown"
-            app:layout_constraintTop_toTopOf="@id/viewDown"
             app:layout_constraintBottom_toBottomOf="@id/viewDown"
             app:layout_constraintEnd_toEndOf="@id/viewDown"
+            app:layout_constraintStart_toStartOf="@id/viewDown"
+            app:layout_constraintTop_toTopOf="@id/viewDown"
             app:tint="@color/white" />
 
         <include
@@ -84,48 +87,59 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/viewDown" />
 
+        <TextView
+            android:id="@+id/tvSummaryTitle"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="24dp"
+            android:text="@string/text_summary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lytNightMovement" />
+
         <View
             android:id="@+id/view1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/back_modal_new"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lytNightMovement" />
+            app:layout_constraintTop_toBottomOf="@id/tvSummaryTitle" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvSleepStage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:layout_marginStart="@dimen/side_margin"
-            android:layout_marginEnd="@dimen/side_margin"
             android:nestedScrollingEnabled="false"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="@id/view1"
             app:layout_constraintStart_toStartOf="@id/view1"
             app:layout_constraintTop_toTopOf="@id/view1"
             tools:itemCount="4"
-            tools:listitem="@layout/oreo_item_sleep_stage_layout" />
+            tools:listitem="@layout/layout_updated_sleep_stage_analysis" />
+
         <View
+            android:id="@+id/viewUp"
             android:layout_width="72dp"
             android:layout_height="20dp"
             android:layout_marginTop="24dp"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rvSleepStage"
-            android:id="@+id/viewUp"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rvSleepStage" />
+
         <ImageView
+            android:id="@+id/ivUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_arrow_down"
             android:rotation="180"
-            android:id="@+id/ivUp"
-            app:layout_constraintStart_toStartOf="@id/viewUp"
-            app:layout_constraintTop_toTopOf="@id/viewUp"
+            android:src="@drawable/ic_arrow_down"
             app:layout_constraintBottom_toBottomOf="@id/viewUp"
             app:layout_constraintEnd_toEndOf="@id/viewUp"
+            app:layout_constraintStart_toStartOf="@id/viewUp"
+            app:layout_constraintTop_toTopOf="@id/viewUp"
             app:tint="@color/white" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
