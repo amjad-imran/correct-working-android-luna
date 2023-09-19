@@ -129,6 +129,7 @@ class OActivityListFragment :
                     binding.rv.visible()
                 }
             }
+            handleTodayEmptyView()
         }
 
 
