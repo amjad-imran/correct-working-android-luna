@@ -216,7 +216,7 @@ constructor(
             SleepStageAnalysis(
                 "REM",
                 dayData.remSleep?.value ?: -1,
-                dayData.remSleep?.valPrcnt ?: 0,
+                dayData.remSleep?.value_percentage ?: 0,
                 SleepType.REM
             )
         )
@@ -232,7 +232,7 @@ constructor(
             SleepStageAnalysis(
                 "Deep",
                 dayData.deepSleep?.value ?: -1,
-                dayData.deepSleep?.valPrcnt ?: 0,
+                dayData.deepSleep?.value_percentage ?: 0,
                 SleepType.DEEP
             )
         )
