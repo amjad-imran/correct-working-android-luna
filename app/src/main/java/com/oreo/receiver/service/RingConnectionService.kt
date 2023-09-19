@@ -414,7 +414,7 @@ constructor() : LifecycleService() {
         if (hasRequiredBluetoothPermission()) {
             checkValidateConnection()
             LOGS.d(TAG, "Inside setConnection")
-            startForceConnectionTimer(20000)
+            startForceConnectionTimer(60 * 1000)
         } else {
             stopServiceAndShowNotification()
         }
@@ -895,9 +895,20 @@ constructor() : LifecycleService() {
         LOGS.d(TAG, "Info Fetch Difference $difference")
         if (difference > fetchTime * 1000L || sessionManager.batterPercent.value == 0) {
             LOGS.d(TAG, "Info Fetch Difference ask for battery")
-            queryHandler.getQueryActions(colorFitDevice)?.queryBatteryPower()
-            queryHandler.getQueryActions(colorFitDevice)?.queryFirmwareVersion()
-            ringDataStore.setLastInfoFetchTime(DateFormats.getTimeStamp())
+            GlobalScope.launch(Dispatchers.IO) {
+                val isRunning =
+                    ApplicationUtils.isOreoSyncDataWorkerRunning(this@RingConnectionService)
+
+                LOGS.w("queryWatchInfo $fetchTime isOreoSyncDataWorkerRunning $isRunning")
+                if (isRunning) {
+                    return@launch
+                }
+                queryHandler.getQueryActions(colorFitDevice)?.queryBatteryPower()
+                queryHandler.getQueryActions(colorFitDevice)?.queryFirmwareVersion()
+                ringDataStore.setLastInfoFetchTime(DateFormats.getTimeStamp())
+            }
+
+
         }
     }
 

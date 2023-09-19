@@ -21,6 +21,8 @@ constructor(
 
     var checkBluetooth = MutableLiveData<Event<Boolean>>()
 
+    var forceSyncData = MutableLiveData<Event<Boolean>>()
+
     var bottomNavigation = MutableLiveData<Event<BottomNavOption>>()
     fun navigateTo(option: BottomNavOption) {
         bottomNavigation.postValue(Event(option))

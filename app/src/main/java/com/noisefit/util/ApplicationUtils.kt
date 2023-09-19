@@ -4,15 +4,8 @@ package com.noisefit.util
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityManager
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.ComponentName
-import android.content.ContentResolver
 import android.content.Context
-import android.content.Context.ALARM_SERVICE
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.PointF
 import android.location.Address
 import android.location.LocationManager
 import android.net.ConnectivityManager
@@ -20,20 +13,15 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
-import android.provider.Settings
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import android.widget.ImageView
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.util.Preconditions.checkArgument
 import androidx.work.*
-import com.google.gson.Gson
-import com.hookedonplay.decoviewlib.charts.SeriesItem
 import com.noisefit.luna.BuildConfig
 import com.noisefit.NoiseFitApplicationMain
-import com.noisefit.luna.R
 import com.noisefit.receiver.workManager.*
 import com.noisefit_commans.common.roundToNearestDecimalFlooor
-import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.models.*
 import com.noisefit_commans.utils.AppConstants
 import com.noisefit_commans.ui.loadCircleCacheWithProgress
@@ -42,11 +30,8 @@ import com.noisefit_commans.ui.loadImageCacheWithProgress
 import com.noisefit_commans.ui.loadImageWCacheWithProgress
 import com.noisefit.watch.WatchForm
 import com.noisefit_commans.data.response.NplLeague
-import com.noisefit_commans.models.DiyCustomWatchFace
 import com.noisefit_commans.models.SleepType
-import com.noisefit_commans.models.TaskEnums
 import com.noisefit_commans.models.Units
-import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.LOGS
 import com.oreo.receiver.workManager.OreoSyncDataWork
 import java.text.ParseException
@@ -262,10 +247,15 @@ object ApplicationUtils {
         WorkManager.getInstance(context).cancelAllWork()
     }
 
+    suspend fun isOreoSyncDataWorkerRunning(context: Context): Boolean {
+        val uniqueId = getUniqueRingSyncDataWorkName()
+        return isWorkScheduled(uniqueId, context)
+    }
+
     suspend fun startOreoSyncScheduler(context: Context): Boolean {
         val uniqueId = getUniqueRingSyncDataWorkName()
         val isWorkScheduled = isWorkScheduled(uniqueId, context)
-        LOGS.d("SyncDataWork: inside startOreoSyncScheduler $uniqueId isWorkScheduled $isWorkScheduled")
+        LOGS.w("SyncDataWork: inside startOreoSyncScheduler $uniqueId isWorkScheduled $isWorkScheduled")
         if (!isWorkScheduled) {
 
             WorkManager.getInstance(context).cancelUniqueWork(uniqueId)
@@ -670,11 +660,12 @@ object ApplicationUtils {
         val weightValue: Float
         val finalValue: Float
 
-        val heightValue: Float = if (unitTypeHeight.lowercase() == HeightUnitSystem.METRIC.type.lowercase()) {
-            height.div(100)
-        } else {
-            height.times(0.02).toFloat()
-        }
+        val heightValue: Float =
+            if (unitTypeHeight.lowercase() == HeightUnitSystem.METRIC.type.lowercase()) {
+                height.div(100)
+            } else {
+                height.times(0.02).toFloat()
+            }
 
         weightValue = if (unitTypeWeight.lowercase() == WeightUnitSystem.METRIC.type.lowercase()) {
             weight
@@ -760,8 +751,7 @@ object ApplicationUtils {
                 defValue2 = 9.5634F
                 defValue3 = 1.8496F
                 defValue4 = 4.6756F
-            }
-            else {
+            } else {
                 defValue1 = 66.473F
                 defValue2 = 13.7516F
                 defValue3 = 5.0033F

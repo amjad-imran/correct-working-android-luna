@@ -31,6 +31,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.share.ShareUtil
 import dagger.hilt.android.AndroidEntryPoint
@@ -319,7 +320,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     override fun onResume() {
         super.onResume()
         navController?.addOnDestinationChangedListener(navListener)
-
+        viewModel.forceSyncData.postValue(Event(true))
         viewModel.ringDataStore.getRingDevice()?.let {
             if (viewModel.sessionManager.connectStateRing.value == null) {
                 viewModel.sessionManager.setConnectStateRing(ConnectState.Connecting(it))

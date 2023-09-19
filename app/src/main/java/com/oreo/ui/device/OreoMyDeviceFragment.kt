@@ -27,8 +27,12 @@ import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.FileLogsUtils
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.share.ShareUtil
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class OreoMyDeviceFragment :
@@ -167,7 +171,7 @@ class OreoMyDeviceFragment :
 
                 is ConnectState.ConnectSuccess -> {
                     setStateConnected(connectedState.noiseFitDevice)
-                    mViewModel.sessionManager.sendQueryAction(QueryAction.QueryBatteryPower)
+                    getBatteryInfo()
                 }
 
                 is ConnectState.UnPaired -> {
@@ -185,6 +189,20 @@ class OreoMyDeviceFragment :
                 else -> {}
             }
 
+        }
+    }
+
+    private fun getBatteryInfo() {
+        GlobalScope.launch(Dispatchers.IO) {
+            context?.let {
+                val isWorkerRunning = ApplicationUtils.isOreoSyncDataWorkerRunning(it)
+                LOGS.w("getBatteryInfo isOreoSyncDataWorkerRunning $isWorkerRunning")
+                if (isWorkerRunning) {
+                    return@launch
+                }
+
+                mViewModel.sessionManager.sendQueryAction(QueryAction.QueryBatteryPower)
+            }
         }
     }
 
