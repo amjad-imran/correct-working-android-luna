@@ -216,7 +216,7 @@ constructor(
             SleepStageAnalysis(
                 "REM",
                 dayData.remSleep?.value ?: -1,
-                dayData.remSleep?.valPrcnt ?: 0,
+                dayData.remSleep?.value_percentage ?: 0,
                 SleepType.REM
             )
         )
@@ -232,7 +232,7 @@ constructor(
             SleepStageAnalysis(
                 "Deep",
                 dayData.deepSleep?.value ?: -1,
-                dayData.deepSleep?.valPrcnt ?: 0,
+                dayData.deepSleep?.value_percentage ?: 0,
                 SleepType.DEEP
             )
         )
@@ -361,9 +361,9 @@ constructor(
                 dayData.remSleep!!.value ?: 0
             )
             val leftText: String = if (hour > 0) {
-                "$hour hr $minute min, ${dayData.remSleep?.valPrcnt ?: 0}%"
+                "$hour hr $minute min"
             } else {
-                "$minute min, ${dayData.remSleep?.valPrcnt ?: 0}%"
+                "$minute min"
             }
             result.add(
                 Contributors(
@@ -394,9 +394,9 @@ constructor(
                 dayData.deepSleep?.value ?: 0
             )
             val leftText: String = if (hour > 0) {
-                "$hour hr $minute min, ${dayData.deepSleep?.valPrcnt ?: 0}%"
+                "$hour hr $minute min"
             } else {
-                "$minute min, ${dayData.deepSleep?.valPrcnt ?: 0}%"
+                "$minute min"
             }
             result.add(
                 Contributors(

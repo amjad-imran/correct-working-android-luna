@@ -56,6 +56,7 @@ data class CommonListDataModel(
 data class CommonDataModel(
     val value: Int?,
     val valPrcnt: Int?,
+    val value_percentage: Int?,//for deep and rem sleep in stage analysis
     val text: String,
     val status: String,//"warning/good"
 )
