@@ -51,7 +51,7 @@ import kotlin.concurrent.schedule
 import kotlin.coroutines.CoroutineContext
 
 
-private const val SyncingTimeOut: Long = 40000
+private const val SyncingTimeOut: Long = 60000
 private const val SyncWithServerTime: Long = 10800000 //10800000
 
 //255 - no value

@@ -229,7 +229,10 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     private fun shouldSync() {
         val lastSyncTime = viewModel.sessionManager.getLastSyncTime() ?: 0L
         LOGS.d("shouldSync $lastSyncTime -- ${DateFormats.getTimeStamp()}")
-        if (kotlin.math.abs(DateFormats.getTimeStamp() - lastSyncTime) > 60 * 60 * 1000L) {
+
+        val shouldSync = mainViewModel.forceSyncData.value?.getContent() ?: false
+
+        if (shouldSync || kotlin.math.abs(DateFormats.getTimeStamp() - lastSyncTime) > 60 * 60 * 1000L) {
             binding.lytHeader.tvHeaderStatus.apply {
                 text = context.getString(R.string.text_syncing_dot)
                 visible()
@@ -240,10 +243,13 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
     override fun subscribeObservers() {
 
-        mainViewModel.forceSyncData.observe(this){
-            it.getContent()?.let {
-                syncData()
+        mainViewModel.forceSyncData.observe(this) {
+            if (viewModel.sessionManager.connectStateRing.value is ConnectState.ConnectSuccess) {
+                it.getContent()?.let {
+                    syncData()
+                }
             }
+
         }
 
         viewModel.stateHeaderCard.observe(this) {
@@ -421,11 +427,10 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
                 is ConnectState.ConnectSuccess -> {
                     setConnectingState(false)
-                    shouldSync()
                     setStateConnected(connectedState.noiseFitDevice)
                     viewModel.checkBatteryPercentage()
                     viewModel.updateAlerts()
-
+                    shouldSync()
                 }
 
                 is ConnectState.UnPaired -> {
@@ -866,11 +871,6 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             stateBluetoothOff()
         } else {
 
-            binding.lytHeader.tvHeaderStatus.apply {
-                text = context.getString(R.string.text_connecting_dot)
-                visible()
-            }
-
             binding.lytHeader.batteryStatus.invisible()
             binding.lytHeader.lottieAnimView.visible()
             binding.lytHeader.oreoStatus.visible()
@@ -888,9 +888,6 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         binding.lytHeader.lottieAnimView.gone()
         binding.lytHeader.oreoStatus.visible()
 
-        if (binding.lytHeader.tvHeaderStatus.text.equals(getString(R.string.text_connecting_dot))) {
-            binding.lytHeader.tvHeaderStatus.gone()
-        }
 
         val batteryPercentage = viewModel.watchDataStore.getBatteryPercentRing()
         binding.lytHeader.batteryStatus.progress = batteryPercentage
