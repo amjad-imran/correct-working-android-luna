@@ -397,7 +397,7 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
                 connect(colorFitDevice)
             } else {
                 Handler(Looper.getMainLooper()).post {
-                    context.showShortToast("Reconnecting..")
+                    context.showShortToast("Reconnecting...")
                 }
                 reconnect(colorFitDevice, true)
             }
@@ -479,7 +479,7 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
                                     viewModel.removeWatchTokenFromServer(colorFitDevice.address)
                                     colorFitDevice.watchToken = ""
                                     Handler(Looper.getMainLooper()).post {
-                                        context.showShortToast("Connecting..")
+                                        context.showShortToast("Connecting...")
                                     }
                                     connect(colorFitDevice)
                                 }

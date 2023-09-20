@@ -789,7 +789,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
                 lytHeartRate.tvEmptyConnect.apply {
                     setTextColor(resources.getColor(R.color.white))
-                    text = "Measuring.."
+                    text = "Measuring..."
                 }
             }
 
