@@ -80,7 +80,7 @@ object DateFormats {
     val dateTimeFormatWithWeekInit = SimpleDateFormat("EEEE, dd MMM yyyy", defaultLocale)
 
     @SuppressLint("ConstantLocale")
-    val dateTimeFormatWithWeekWithoutYear = SimpleDateFormat("EEEE, dd MMM", defaultLocale)
+    val dateTimeFormatWithWeekWithoutYear = SimpleDateFormat("EEEE, dd MMMM", defaultLocale)
     val dateTimeFormatWithWeekWithoutYearShort = SimpleDateFormat("EEE, dd MMMM", defaultLocale)
 
     @SuppressLint("ConstantLocale")

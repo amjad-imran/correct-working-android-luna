@@ -39,16 +39,36 @@ class OActivityListFragment :
 
     override fun initListener() {
         binding.lytTodayEmpty.btnAddWorkout.setOnClickListener {
-            navigate(R.id.addWorkoutFragment)
+            if (viewModel.ringDataStore.getRingDevice() != null) {
+                navigate(R.id.addWorkoutFragment)
+            } else {
+                requireContext().showShortToast("Please connect your ring to add a workout")
+            }
+
         }
         binding.lytTodayEmpty.view1.setOnClickListener {
-            navigate(R.id.addWorkoutFragment)
+            if (viewModel.ringDataStore.getRingDevice() != null) {
+                navigate(R.id.addWorkoutFragment)
+            } else {
+                requireContext().showShortToast("Please connect your ring to add a workout")
+            }
+
         }
         binding.lytEmptyView.btnAddWorkout.setOnClickListener {
-            navigate(R.id.addWorkoutFragment)
+            if (viewModel.ringDataStore.getRingDevice() != null) {
+                navigate(R.id.addWorkoutFragment)
+            } else {
+                requireContext().showShortToast("Please connect your ring to add a workout")
+            }
+
         }
         binding.lytEmptyView.view1.setOnClickListener {
-            navigate(R.id.addWorkoutFragment)
+            if (viewModel.ringDataStore.getRingDevice() != null) {
+                navigate(R.id.addWorkoutFragment)
+            } else {
+                requireContext().showShortToast("Please connect your ring to add a workout")
+            }
+
         }
 
         setFragmentResultListener(DELETE_WORKOUT_REQUEST_KEY) { _, bundle ->
@@ -157,11 +177,7 @@ class OActivityListFragment :
 
     private fun handleTodayEmptyView() {
         if (adapter.isShowTodayEmptyView()) {
-            if (viewModel.ringDataStore.getRingDevice() != null) {
-                binding.lytTodayEmpty.root.visible()
-            } else {
-                binding.lytTodayEmpty.root.gone()
-            }
+            binding.lytTodayEmpty.root.visible()
         } else
             binding.lytTodayEmpty.root.gone()
     }

@@ -710,17 +710,17 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         })
 
 
-        if (viewModel.ringDataStore.getRingDevice() != null) {
-            lytWorkouts.viewAddWorkout.visible()
-            lytWorkouts.root.visible()
-        } else {
-            lytWorkouts.viewAddWorkout.gone()
-            if (workouts.isNullOrEmpty()) {
-                lytWorkouts.root.gone()
-            } else {
-                lytWorkouts.root.visible()
-            }
-        }
+//        if (viewModel.ringDataStore.getRingDevice() != null) {
+//            lytWorkouts.viewAddWorkout.visible()
+//            lytWorkouts.root.visible()
+//        } else {
+//            lytWorkouts.viewAddWorkout.gone()
+//            if (workouts.isNullOrEmpty()) {
+//                lytWorkouts.root.gone()
+//            } else {
+//                lytWorkouts.root.visible()
+//            }
+//        }
 
 
         lytWorkouts.rvWorkouts.apply {
@@ -728,7 +728,11 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         }
         adapter1.setData(workouts ?: ArrayList())
         lytWorkouts.viewAddWorkout.setOnClickListener {
-            navigate(R.id.addWorkoutFragment)
+            if (viewModel.ringDataStore.getRingDevice() != null) {
+                navigate(R.id.addWorkoutFragment)
+            } else {
+                requireContext().showShortToast("Please connect your ring to add a workout")
+            }
         }
 
         lytWorkouts.ivViewAll.setOnClickListener {
