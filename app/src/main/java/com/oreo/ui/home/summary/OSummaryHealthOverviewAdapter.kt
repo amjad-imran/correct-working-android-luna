@@ -388,7 +388,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             val sleepTime = StringBuilder()
             sleepTime.append(
                 DateFormats.formatDate(
-                    data.sleepArray.firstOrNull()?.startTime,
+                    data.data.startTime,
                     DateFormats.dateTimeFormat5,
                     DateFormats.time12Meridian
                 )
@@ -396,7 +396,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             sleepTime.append(" - ")
             sleepTime.append(
                 DateFormats.formatDate(
-                    data.sleepArray.lastOrNull()?.endTime,
+                    data.data.endTime,
                     DateFormats.dateTimeFormat5,
                     DateFormats.time12Meridian
                 )
