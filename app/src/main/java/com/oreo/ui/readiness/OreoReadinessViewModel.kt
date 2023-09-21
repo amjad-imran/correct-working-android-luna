@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
+import com.noisefit_commans.common.averageWithoutZero
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.RingDataStore
@@ -23,6 +25,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.oreo.data.model.health.UnitDataModelArray
 import com.noisefit_commans.utils.LOGS
+import kotlin.math.roundToInt
 
 
 @HiltViewModel
@@ -136,166 +139,6 @@ constructor(
 
         }
 
-
-    }
-
-    fun generateDummyHrvFilterData(): UnitDataModelArray {
-        val rawList = arrayListOf<Int>(
-            78,
-            77,
-            71,
-            71,
-            69,
-            69,
-            68,
-            66,
-            66,
-            65,
-            150,
-            60,
-            6,
-            0,
-            0,
-            0,
-            67,
-            83,
-            77,
-            79,
-            72,
-            71,
-            71,
-            69,
-            67,
-            67,
-            67,
-            70,
-            68,
-            65,
-            66,
-            63,
-            65,
-            66,
-            66,
-            180,
-            68,
-            62,
-            71,
-            72,
-            69,
-            81,
-            81,
-            67,
-            68,
-            81,
-            69,
-            67,
-            65,
-            65,
-            69,
-            67,
-            66,
-            64,
-            64,
-            70,
-            67,
-            69,
-            66,
-            69,
-            82,
-            65,
-            65,
-            66,
-            72,
-            69,
-            73,
-            66,
-            65,
-            65,
-            67,
-            65,
-            64,
-            65,
-            63,
-            64,
-            63,
-            61,
-            85,
-            66,
-            66,
-            61,
-            78,
-            63,
-            68,
-            68,
-            68,
-            68,
-            69,
-            65,
-            67,
-            67,
-            66,
-            70,
-            67,
-            68,
-            68,
-            76,
-            68,
-            74,
-            64,
-            85,
-            69,
-            71,
-            67,
-            77,
-            70,
-            170,
-            90
-        )
-
-        val newList = performHrvFiltering(
-            rawList
-        )
-
-        return UnitDataModelArray(
-            value = rawList,
-            avg = 0,
-            low = 0,
-            max = 0
-        )
-    }
-
-    fun performHrvFiltering(inputArray: List<Int>): List<Int> {
-
-        val resultArray = ArrayList<Int>()
-
-        val stringBuilder = StringBuilder()
-
-        inputArray.forEachIndexed { index, i ->
-
-            val firstNo = if (index == 0) {
-                (inputArray[1] + inputArray[2]) / 2
-            } else {
-                inputArray[index - 1]
-            }
-            val secondNo = i
-            val thirdNo = if (index == (inputArray.size - 1)) {
-                (inputArray[(inputArray.size - 1) - 1] + inputArray[(inputArray.size - 2) - 1]) / 2
-            } else {
-                inputArray[index + 1]
-            }
-
-            resultArray.add((firstNo + secondNo + thirdNo) / 3)
-            stringBuilder.append("${inputArray[index]} -> ${resultArray[index]}\n")
-            //LOGS.w("performHrvFiltering ${inputArray[index]} -> ${resultArray[index]}")
-
-        }
-
-        LOGS.w("performHrvFiltering $stringBuilder")
-
-        LOGS.d("performHrvFiltering  input array ${Gson().toJson(inputArray)}")
-        LOGS.d("performHrvFiltering  new array ${Gson().toJson(resultArray)}")
-
-        return resultArray
 
     }
 
