@@ -1385,16 +1385,15 @@ class OSleepScoreDetailsFragment :
      * 1-> Line
      */
     private fun getGraphType(): Int {
-        return if (mViewModel.itemClickType == ViewItemClickType.TOTAL_SLEEP.name ||
-            mViewModel.itemClickType == ViewItemClickType.TIME_IN_BED.name ||
-            mViewModel.itemClickType == ViewItemClickType.STEPS.name ||
-            mViewModel.itemClickType == ViewItemClickType.DISTANCE.name ||
-            mViewModel.itemClickType == ViewItemClickType.ACTIVE_CALORIES.name ||
-            mViewModel.itemClickType == ViewItemClickType.BODY_TEMPERATURE.name
+        return if (mViewModel.itemClickType == ViewItemClickType.SLEEP_SCORE.name ||
+            mViewModel.itemClickType == ViewItemClickType.ACTIVITY_SCORE.name ||
+            mViewModel.itemClickType == ViewItemClickType.READINESS_SCORE.name ||
+            mViewModel.itemClickType == ViewItemClickType.RESPIRATORY_RATE.name ||
+            mViewModel.itemClickType == ViewItemClickType.RESTING_HR.name
         ) {
-            0
-        } else {
             1
+        } else {
+            0
         }
     }
 
