@@ -224,6 +224,26 @@ constructor(
 
 
             when (getDaySlot()) {
+                0->{
+                    //sleep
+                    if(data.sleep?.sleepScore != null){
+                        if(data.registerDate!=0){
+                            data.readiness?.let {
+                                userActivities.add(OHealthOverview.Readiness(data.readiness))
+                            }
+                            userActivities.add(
+                                OHealthOverview.Sleep(
+                                    data.sleep,
+                                    makeSleepArray(data.sleep),
+                                    data.sleep.sleepStage.firstOrNull()?.startTime ?: "",
+                                    data.sleep.sleepStage.lastOrNull()?.endTime ?: ""
+                                )
+                            )
+                        }
+                    }else{
+                        userActivities.add(OHealthOverview.SleepWaiting)
+                    }
+                }
                 1 -> {
 
                     //sleep
@@ -674,9 +694,11 @@ constructor(
      */
     private fun getDaySlot(): Int {
         val currentTime = DateFormats.getTimeFormat()
-        return if (DateFormats.isTimeBetween(currentTime, "00:00", "07:59")) {
+        return if (DateFormats.isTimeBetween(currentTime, "00:00", "03:59")) {
+            0
+        } else if (DateFormats.isTimeBetween(currentTime, "04:00", "07:59")) {
             1
-        } else if (DateFormats.isTimeBetween(currentTime, "08:00", "11:59")) {
+        }else if (DateFormats.isTimeBetween(currentTime, "08:00", "11:59")) {
             2
         } else {
             3
