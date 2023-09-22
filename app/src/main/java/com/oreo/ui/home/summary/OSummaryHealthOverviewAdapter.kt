@@ -404,10 +404,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.tvSleepStartEndTime.text = sleepTime.toString()
             binding.tvSleepScore.text = scoreValue.toString()
             binding.tvSleepStatus.text = data.data.status
-            binding.tvLowestHr.text = if (data.data.lowestHr == null) {
+            binding.tvLowestHr.text = if (data.data.restingHr == null) {
                 "--"
             } else {
-                data.data.lowestHr.toString() + " bpm"
+                data.data.restingHr.toString() + " bpm"
             }
 
             val (hourTimeInBed, minuteTimeInBed) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
@@ -467,10 +467,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     DateFormats.time12Meridian
                 )
 
-                binding.tvHrValue.text = if (data.data.lowestHr == null) {
+                binding.tvHrValue.text = if (data.data.restingHr == null) {
                     "--"
                 } else {
-                    data.data.lowestHr.toString()
+                    data.data.restingHr.toString()
                 }
 
                 binding.tvSleepHour.text = hourTimeInBed.toString()

@@ -462,6 +462,8 @@ class OreoSleepDetailFragment :
                 topGraphData.second
             )
             viewModel.getContributorInfo()
+
+
         }
 
         viewModel.daySleepData.observe(this) {
@@ -574,8 +576,7 @@ class OreoSleepDetailFragment :
                 binding.lytSleepScore.lytTimeInBed.lytHrMn.tvMinute.text = "$minuteTimeInBed"
 
                 totalTimeInBedDataView()
-            }
-            else {
+            } else {
                 totalTimeInBedDefaultView()
             }
 
@@ -602,8 +603,7 @@ class OreoSleepDetailFragment :
                 restingHrDefaultView()
             }
 
-        }
-        else {
+        } else {
             if (viewModel.ringDataStore.getRegisterDay() == 0) {
                 binding.lytSleepScore.lytSleepAvg.emptyText.text =
                     getString(R.string.text_you_will_see_your_sleep_score_after_your_first_sleep_analysis)
@@ -675,8 +675,7 @@ class OreoSleepDetailFragment :
                 binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
                 binding.lytHeartRate.lytSubtitleValue1.tvUnit.gone()
             }
-        }
-        else {
+        } else {
             binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
             binding.lytHeartRate.lytSubtitleValue2.tvValue.text = "-"
             binding.lytHeartRate.lytSubtitleValue2.tvUnit.gone()
@@ -720,8 +719,7 @@ class OreoSleepDetailFragment :
                 binding.lytHRVariability.lytSubtitleValue2.tvValue.text = "-"
                 binding.lytHRVariability.lytSubtitleValue2.tvUnit.gone()
             }
-        }
-        else {
+        } else {
 //            binding.lytHRVariability.lineChart.gone()
             binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "-"
             binding.lytHRVariability.lytSubtitleValue2.tvValue.text = "-"
