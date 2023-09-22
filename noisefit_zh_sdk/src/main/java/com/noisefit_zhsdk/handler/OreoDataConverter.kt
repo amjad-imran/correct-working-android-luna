@@ -530,13 +530,13 @@ constructor(
         val stressData = OreoStressDataBreakup()
         stressData.date = DateFormats.dateFormat3.format(startDayTimeStamp)
 
-        stressData.breakUp = gson.toJson(bean.pressureData)
-        //val averageOutData = geAveragedOutHrvData(bean.pressureData)
-        //stressData.breakUp = gson.toJson(averageOutData)
+        //stressData.breakUp = gson.toJson(bean.pressureData)
+        val averageOutData = getAveragedOutHrvData(bean.pressureData)
+        stressData.breakUp = gson.toJson(averageOutData)
         return stressData
     }
 
-    private fun geAveragedOutHrvData(pressureData: MutableList<Int>): List<Int> {
+    private fun getAveragedOutHrvData(pressureData: MutableList<Int>): List<Int> {
         val filteredData = ArrayList<Int>()
 
         filteredData.addAll(algoAvgLastThreeZeroValues(pressureData))
