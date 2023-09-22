@@ -54,7 +54,8 @@ data class ODashboardActivityModel(
 data class ODashboardSleepModel(
     val sleepScore: Int? = null,
     val totalSleep: Int? = null,
-    val lowestHr: Int? = null,
+    @SerializedName("resting_hr")
+    val restingHr: Int? = null,
     val sleepStage: ArrayList<ODashboardSleepStageModel> = ArrayList(),
     val status: String? = "",
     @SerializedName("start_time")

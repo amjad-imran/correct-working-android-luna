@@ -222,7 +222,7 @@ constructor(
                     totalRem = sleepData.remCount,
                     sleepScore = sleepData.sleepScore,
                     sleepEfficiency = sleepData.sleepEfficiency,
-                    restingHr = sleepOverlayData.hrBreakup.minWithoutZero(),
+                    restingHr = sleepOverlayData.hrBreakup.averageWithoutZero(),
                     sleepLatency = sleepData.sleepLatency,
                     hrBreakup = sleepOverlayData.hrBreakup,
                     hrvBreakup = sleepOverlayData.stressBreakup,
