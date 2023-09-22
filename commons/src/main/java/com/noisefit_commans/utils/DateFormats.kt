@@ -210,6 +210,14 @@ object DateFormats {
         return df.format(c)
     }
 
+    fun getYesterdayDate(): String {
+        val c = Calendar.getInstance().apply {
+            add(Calendar.DAY_OF_YEAR, -1)
+        }.time
+
+        return dateFormat3.format(c)
+    }
+
     fun getDate(timeFormat: SimpleDateFormat): String {
         val c = Calendar.getInstance().time
         return timeFormat.format(c)
@@ -545,6 +553,7 @@ object DateFormats {
             }
         }
     }
+
     fun getCompleteMonthName(month: Int): String {
 
         when (month) {

@@ -533,13 +533,25 @@ constructor(
         //stressData.breakUp = gson.toJson(bean.pressureData)
         val averageOutData = getAveragedOutHrvData(bean.pressureData)
         stressData.breakUp = gson.toJson(averageOutData)
+
+        /*val lastDayDate = DateFormats.getYesterdayDate()
+        LOGS.w("lastDayDate $lastDayDate")
+
+        if (lastDayDate.equals(stressData.date, true)) {
+            val avgData = averageOutData.averageWithoutZero()
+            AppLogs.sendAppLogs("Saving last day average data :$avgData for ${stressData.date}")
+            watchDataStore.setLastSavedAverageHrv(avgData)
+        }*/
+
         return stressData
     }
 
     private fun getAveragedOutHrvData(pressureData: MutableList<Int>): List<Int> {
         val filteredData = ArrayList<Int>()
 
-        filteredData.addAll(algoAvgLastThreeZeroValues(pressureData))
+        val lastSavedHrv = watchDataStore.getLastSavedAverageHrv()
+
+        filteredData.addAll(algoAvgLastThreeZeroValues(pressureData, lastSavedHrv))
 
         val stringBuilder = StringBuilder()
 
@@ -553,7 +565,7 @@ constructor(
         return filteredData
     }
 
-    private fun algoAvgLastThreeZeroValues(response: List<Int>, lastAvgValue: Int=0): List<Int> {
+    private fun algoAvgLastThreeZeroValues(response: List<Int>, lastAvgValue: Int = 0): List<Int> {
         val filteredData = ArrayList<Int>()
 
         response.forEachIndexed { index, value ->

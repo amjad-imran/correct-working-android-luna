@@ -44,6 +44,7 @@ private const val UPDATE_OTA_TIMESTAMP = "UPDATE_OTA_TIMESTAMP"
 private const val WATCH_MAPS_LAT_LONG = "WATCH_MAPS_LAT_LONG"
 private const val DEFAULT_VALUE = "DEFAULT_VALUE"
 private const val SERIAL_NO = "SERIAL_NO"
+private const val AVERAGE_LAST_DAY_HRV = "AVERAGE_LAST_DAY_HRV"
 
 private const val CHARGING_NOTIFICATION = "CHARGING_NOTIFICATION"
 
@@ -60,6 +61,16 @@ constructor(
     private val gson: Gson,
     private val mPrefs: SharedPreferences
 ) : WatchDataStore {
+
+    override fun getLastSavedAverageHrv(): Int {
+        return mPrefs.getInt(AVERAGE_LAST_DAY_HRV, 0)
+    }
+
+    override fun setLastSavedAverageHrv(value: Int) {
+        mPrefs.edit()
+            ?.putInt(AVERAGE_LAST_DAY_HRV, value)
+            ?.commit()
+    }
 
     override fun resetChargingNotificationData() {
         mPrefs.edit().remove(CHARGING_NOTIFICATION).commit()
