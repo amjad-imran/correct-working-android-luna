@@ -11,7 +11,7 @@ interface OreoDayTimeMovementDataSource {
 
     suspend fun getTodayDayTimeMovement(date: String): String?
     suspend fun getUnSyncServerData(endDate: Long, isSync: Boolean): List<DayTimeMovementBreakup>?
-    suspend fun deleteOldData(timeStamp: Long): Int
+    suspend fun deleteOldData(days: Int): Int
     suspend fun updateServerSyncData(dataList: List<DayTimeMovementBreakup>, timeStamp: Long): Int
     suspend fun checkHalfSyncData()
 }

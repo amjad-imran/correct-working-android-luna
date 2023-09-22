@@ -224,11 +224,12 @@ class OreoReadinessFragment :
         val ssTime: String?
         val seTime: String?
         var breakUpData = ArrayList<Int>()
-        var hasDummyData = true
+        var hasDummyData = false
         if (hrvBreakUpData?.value.isNullOrEmpty()) {
             breakUpData = mViewModel.getDummyBreakUpDataForTimeDisplay()
             ssTime = null
             seTime = null
+            hasDummyData = true
         } else {
             hasDummyData = false
             seTime = endTime

@@ -85,8 +85,8 @@ constructor(
         return stepsDao.getUnSyncServerData(isSync)
     }
 
-    override suspend fun deleteOldData(timeStamp: Long): Int {
-        return stepsDao.deleteOlderData(timeStamp)
+    override suspend fun deleteOldData(days: Int): Int {
+        return stepsDao.deleteOlderData(days)
     }
 
     override suspend fun updateServerSyncData(dataList: List<OreoStepsData>): Int {

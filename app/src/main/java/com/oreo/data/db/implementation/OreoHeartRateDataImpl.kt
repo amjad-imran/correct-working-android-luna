@@ -49,9 +49,8 @@ constructor(
         return heartRateDao.getTodayData(date)
     }
 
-    override suspend fun deleteOldData(timeStamp: Long): Int {
-        //return heartRateDao.deleteOlderData(timeStamp)
-        return 1
+    override suspend fun deleteOldData(days: Int): Int {
+        return heartRateDao.deleteOlderData(days)
     }
 
     override suspend fun updateServerSyncData(dataList: List<OreoHeartRate>, timeStamp: Long): Int {

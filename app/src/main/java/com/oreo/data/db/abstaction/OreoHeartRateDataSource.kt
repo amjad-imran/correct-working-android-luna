@@ -11,7 +11,7 @@ interface OreoHeartRateDataSource {
 
     suspend fun getTodayData(date: String): OreoHeartRate?
     suspend fun getUnSyncServerData(endDate: Long, isSync: Boolean): List<OreoHeartRate>?
-    suspend fun deleteOldData(timeStamp: Long): Int
+    suspend fun deleteOldData(days: Int): Int
     suspend fun updateServerSyncData(dataList: List<OreoHeartRate>, timeStamp: Long): Int
     suspend fun checkHalfSyncData()
 

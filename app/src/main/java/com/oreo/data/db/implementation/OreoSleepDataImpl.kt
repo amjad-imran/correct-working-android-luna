@@ -58,8 +58,8 @@ constructor(
 
     }
 
-    override suspend fun deleteOldData(timeStamp: Long): Int {
-        return sleepDao.deleteOlderData(timeStamp)
+    override suspend fun deleteOldData(days: Int): Int {
+        return sleepDao.deleteOlderData(days)
     }
 
     override suspend fun updateServerSyncData(dataList: List<OreoSleepData>, timeStamp: Long): Int {

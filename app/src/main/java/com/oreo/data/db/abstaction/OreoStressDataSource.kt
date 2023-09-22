@@ -11,7 +11,7 @@ interface OreoStressDataSource {
 
     suspend fun getTodayData(date: String): OreoStressDataBreakup?
     suspend fun getUnSyncServerData(endDate: Long, isSync: Boolean): List<OreoStressDataBreakup>?
-    suspend fun deleteOldData(timeStamp: Long): Int
+    suspend fun deleteOldData(days: Int): Int
     suspend fun updateServerSyncData(dataList: List<OreoStressDataBreakup>, timeStamp: Long): Int
     suspend fun checkHalfSyncData()
 
