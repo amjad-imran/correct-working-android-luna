@@ -28,4 +28,6 @@ interface OreoDayTimeMovementDao : BaseDao<DayTimeMovementBreakup> {
     @Query("SELECT * FROM day_time_movement where is_synced = :is_synced")
     fun getServerUnSyncData(is_synced: Boolean): List<DayTimeMovementBreakup>?
 
+    @Query("DELETE FROM day_time_movement WHERE date <= date('now', '-' || :day || ' days')")
+    fun deleteOlderData(day: Int): Int
 }

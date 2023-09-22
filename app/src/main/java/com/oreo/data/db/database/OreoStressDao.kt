@@ -22,4 +22,6 @@ interface OreoStressDao : BaseDao<OreoStressDataBreakup> {
     @Query("UPDATE stress_data SET is_synced = :is_synced WHERE id IN (:ids)")
     fun updateServerUnSyncStatus(ids: List<Int>, is_synced: Boolean): Int
 
+    @Query("DELETE FROM stress_data WHERE date <= date('now', '-' || :day || ' days')")
+    fun deleteOlderData(day: Int): Int
 }

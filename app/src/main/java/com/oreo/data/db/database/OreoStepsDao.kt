@@ -48,8 +48,8 @@ interface OreoStepsDao : BaseDao<OreoStepsData> {
 
 //Between :startDate  And :endDate
 
-    @Query("DELETE from steps_data where sync_date <= :timeStamp")
-    fun deleteOlderData(timeStamp: Long): Int
+    @Query("DELETE FROM steps_data WHERE date <= date('now', '-' || :day || ' days')")
+    fun deleteOlderData(day: Int): Int
 
 
     @Query("UPDATE steps_data SET is_synced = :is_synced WHERE id IN (:ids)")

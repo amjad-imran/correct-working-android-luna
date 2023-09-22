@@ -28,6 +28,7 @@ import com.noisefit_commans.utils.EncryptUtils
 import com.oreo.data.dataConverter.OreoOfflineDataMapper
 import com.oreo.data.dataConverter.OreoOnlineDataMapper
 import com.oreo.data.db.OreoDataBase
+import com.oreo.data.db.abstaction.OreoHeartRateDataSource
 import com.oreo.data.db.implementation.OreoAutoSportDataImpl
 import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
@@ -132,20 +133,37 @@ object AppModule {
         database: OreoDataBase,
         localDataSource: DataStoredInterface
     ): AuthenticationRepository =
-        AuthenticationRepositoryImpl(remoteDataSource, localDataSource ,keyValueDataSource,database/*cleverTapAPI*/)
+        AuthenticationRepositoryImpl(
+            remoteDataSource,
+            localDataSource,
+            keyValueDataSource,
+            database/*cleverTapAPI*/
+        )
 
     @Singleton
     @Provides
     fun providerAppRepository(
         remoteDataSource: NetworkService,
-        lastSyncProvider: LastSyncProvider,
-        offlineApiStore: IOfflineApiResponseStore,
+        heartRateDataSource: OreoHeartRateDataImpl,
+        stepsDataSource: OreoStepsDataImpl,
+        stressDataSource: OreoStressDataImpl,
+        bloodOxygenDataSource: OreoBloodOxygenDataImpl,
+        tempDataSource: OreoBodyTemperatureDataImpl,
+        respDataSource: OreoRespiratoryDataImpl,
+        sleepDataSource: OreoSleepDataImpl,
+        dayTimeMovementDataSource: OreoDayTimeMovementDataImpl,
         gson: Gson
     ): AppRepository =
         AppRepositoryImpl(
             remoteDataSource,
-            lastSyncProvider,
-            offlineApiStore,
+            heartRateDataSource,
+            stepsDataSource,
+            stressDataSource,
+            bloodOxygenDataSource,
+            tempDataSource,
+            respDataSource,
+            sleepDataSource,
+            dayTimeMovementDataSource,
             gson
         )
 

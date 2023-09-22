@@ -9,6 +9,6 @@ interface OreoStepsDataSource {
     suspend fun getTodayData(date: String): OreoStepsData?
     suspend fun syncInsertOrUpdate(stepsData: OreoStepsData): OreoStepsData?
     suspend fun getUnSyncServerData(endDate: Long, isSync: Boolean): List<OreoStepsData>?
-    suspend fun deleteOldData(timeStamp: Long): Int
+    suspend fun deleteOldData(days: Int): Int
     suspend fun updateServerSyncData(dataList: List<OreoStepsData>): Int
 }

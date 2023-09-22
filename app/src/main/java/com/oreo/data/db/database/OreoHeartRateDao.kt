@@ -29,4 +29,7 @@ interface OreoHeartRateDao : BaseDao<OreoHeartRate> {
     @Query("UPDATE heart_rate SET is_synced = :is_synced WHERE id IN (:ids)")
     fun updateServerUnSyncStatus(ids: List<Int>, is_synced: Boolean): Int
 
+    @Query("DELETE FROM heart_rate WHERE date <= date('now', '-' || :day || ' days')")
+    fun deleteOlderData(day: Int): Int
+
 }
