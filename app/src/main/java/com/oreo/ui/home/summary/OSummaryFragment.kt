@@ -230,7 +230,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         val lastSyncTime = viewModel.sessionManager.getLastSyncTime() ?: 0L
         LOGS.d("shouldSync $lastSyncTime -- ${DateFormats.getTimeStamp()}")
 
-        val shouldSync = mainViewModel.forceSyncData.value?.getContent() ?: false
+        val shouldSync = viewModel.sessionManager.forceSyncData.value?.getContent() ?: false
 
         if (shouldSync || kotlin.math.abs(DateFormats.getTimeStamp() - lastSyncTime) > 60 * 60 * 1000L) {
             binding.lytHeader.tvHeaderStatus.apply {
@@ -243,7 +243,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
     override fun subscribeObservers() {
 
-        mainViewModel.forceSyncData.observe(this) {
+        viewModel.sessionManager.forceSyncData.observe(this) {
             if (viewModel.sessionManager.connectStateRing.value is ConnectState.ConnectSuccess) {
                 it.getContent()?.let {
                     syncData()

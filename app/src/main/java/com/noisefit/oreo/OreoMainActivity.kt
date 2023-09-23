@@ -320,7 +320,6 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     override fun onResume() {
         super.onResume()
         navController?.addOnDestinationChangedListener(navListener)
-        viewModel.forceSyncData.postValue(Event(true))
         viewModel.ringDataStore.getRingDevice()?.let {
             if (viewModel.sessionManager.connectStateRing.value == null) {
                 viewModel.sessionManager.setConnectStateRing(ConnectState.Connecting(it))

@@ -48,6 +48,7 @@ constructor(
 
     var forceSyncDataWithServer: Boolean = false
 
+    var forceSyncData = MutableLiveData<Event<Boolean>>()
 
 //    //    var clevertap: CleverTapAPI? = null
 //    var insiderAppEventWithoutParams: Insider? = null
