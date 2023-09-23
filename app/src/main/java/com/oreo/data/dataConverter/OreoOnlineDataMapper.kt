@@ -146,9 +146,9 @@ constructor(
     private suspend fun getSleepOverlayData(sleepData: OreoSleepData): SleepOverlayData/*SleepOverlayData*/ {
         var offSet = 0
         val midnightTime = "23:59"
-        val startTime = sleepData.sleepArray!![0].startTime!!
+        val startTime = sleepData.startTime!!
         val timeIn24Hour =
-            DateFormats.formatTimeInto24HoursValue(startTime, DateFormats.dateTimeFormat5).toInt()
+            DateFormats.formatTimeInto24HoursValue(startTime, DateFormats.dateTimeFormat6).toInt()
 
 
         if (timeIn24Hour in 18..23) {
@@ -228,7 +228,7 @@ constructor(
                     hrvBreakup = sleepOverlayData.stressBreakup,
                     respBreakup = sleepOverlayData.respBreakup,
                     tempBreakup = sleepOverlayData.tempBreakup,
-                    avgResp = sleepOverlayData.respBreakup.average().roundToInt() ?: 0,
+                    avgResp = if(sleepOverlayData.respBreakup.isEmpty()) 0 else sleepOverlayData.respBreakup.average().roundToInt() ?: 0,
                     maxTemp = sleepOverlayData.tempBreakup.maxOrNull() ?: 0f,
                     avgHrv = sleepOverlayData.stressBreakup.averageWithoutZero(),
                     readinessScore = sleepData.readinessScore ?: 0

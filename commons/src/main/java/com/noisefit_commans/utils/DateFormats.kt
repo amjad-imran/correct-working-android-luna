@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit
 object DateFormats {
     val defaultLocale = Locale.ENGLISH
 
-    private const val PastSyncData = 4
+    private const val PastSyncData = 7
     private const val TAG = "DateFormats"
 
     @SuppressLint("ConstantLocale")
@@ -987,7 +987,7 @@ object DateFormats {
     }
 
     fun convertDateTimeToTimeStamp3(dateTime: String): Long {
-        return dateTimeFormat5.parse(dateTime).time
+        return dateTimeFormat6.parse(dateTime).time
 
     }
 
