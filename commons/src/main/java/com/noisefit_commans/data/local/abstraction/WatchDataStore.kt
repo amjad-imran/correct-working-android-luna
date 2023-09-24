@@ -101,6 +101,9 @@ interface WatchDataStore {
 
     fun setChargingNotificationShown(level: ChargingNotificationLevel)
     fun getChargingNotificationsShown(): HashMap<String, Boolean>
+
+    fun getLastSavedAverageHrv(): Int
+    fun setLastSavedAverageHrv(value: Int)
 }
 
 enum class ChargingNotificationLevel {

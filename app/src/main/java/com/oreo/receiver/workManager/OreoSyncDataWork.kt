@@ -8,11 +8,11 @@ import androidx.work.ListenableWorker
 import androidx.work.WorkerParameters
 import androidx.work.impl.utils.futures.SettableFuture
 import com.google.common.util.concurrent.ListenableFuture
-import com.noisefit.luna.R
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
 import com.noisefit.util.moveToServer.SleepNotificationUtils
@@ -47,11 +47,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import java.util.Calendar
 import java.util.Timer
+import java.util.TimerTask
 import kotlin.concurrent.schedule
 import kotlin.coroutines.CoroutineContext
 
 
-private const val SyncingTimeOut: Long = 40000
+private const val SyncingTimeOut: Long = 30000
 private const val SyncWithServerTime: Long = 10800000 //10800000
 
 //255 - no value
@@ -90,7 +91,7 @@ constructor(
     lateinit var job: Job
 
     private var lastTimeStamp: Long = 0
-
+    var timer: TimerTask? = null
     private fun shouldSync(): Boolean {
         LOGS.d(TAG, "shouldSync() ${sessionManager.forceSyncDataWithServer}")
         if (sessionManager.forceSyncDataWithServer) {
@@ -211,10 +212,10 @@ constructor(
                                     is Resource.Success -> {
 
                                         //TODO uncomment after testing -deepak
-                                         syncDataScope.launch {
-                                             syncRepository.deleteSleepServerSyncData(userActivities.second)
-                                         }
-                                         /*syncRepository.updateSleepHashForLastSyncData(userActivities.first)*/
+                                        syncDataScope.launch {
+                                            syncRepository.deleteSleepServerSyncData(userActivities.second)
+                                        }
+                                        /*syncRepository.updateSleepHashForLastSyncData(userActivities.first)*/
 
                                         LOGS.d(
                                             TAG,
@@ -284,7 +285,7 @@ constructor(
         }
 
 
-        val timer = Timer("DelayConnection", false).schedule(SyncingTimeOut) {
+        timer = Timer("DelayConnection", false).schedule(SyncingTimeOut) {
 //            sessionManager.logAppEvent(FunnelEvents.SyncEvents.Syncing_Completed.name, eventProperty)
             //syncTime()
             if (isDataReceived) {
@@ -586,12 +587,33 @@ constructor(
 
                         is UserActivityCallback.UserDataSyncUpdated -> {
                             if (userActivityCallback.syncStatus is SyncEvents.Success) {
-                                timer.cancel()
+                                timer?.cancel()
                                 returnSuccess(success)
 
                                 AppLogs.sendAppLogs("RING SYNC TIME => ${System.currentTimeMillis() - lastTimeStamp}")
 
+                            } else if (userActivityCallback.syncStatus is SyncEvents.Started) {
+                                val total =
+                                    (userActivityCallback.syncStatus as SyncEvents.Started).total
+                                timer?.cancel()
+                                val syncTime =
+                                    if (total < 20)
+                                        30 * 1000L
+                                    else if (total in 20..49)
+                                        60 * 1000L
+                                    else
+                                        90 * 1000L
+                                timer = Timer("DelayConnection", false).schedule(syncTime) {
+                                    //syncTime()
+                                    if (isDataReceived) {
+                                        return@schedule returnSuccess(success)
+                                    } else {
+                                        return@schedule returnSuccess(failed)
+                                    }
+                                }
+
                             }
+
                             sessionManager.setSyncCompletedState(Event(userActivityCallback.syncStatus))
                         }
 
@@ -655,11 +677,11 @@ constructor(
             showNotification = true
         }
 
-        if (versionCheckResponse.testMode.equals("1")) {
+        /*if (versionCheckResponse.testMode.equals("1")) {
             localDataStore.setIsTestModeOn(true)
         } else {
             localDataStore.setIsTestModeOn(false)
-        }
+        }*/
         if (showNotification) {
             LOGS.d("handleAppVersion show notification")
             val title = context.getString(R.string.text_update_app)

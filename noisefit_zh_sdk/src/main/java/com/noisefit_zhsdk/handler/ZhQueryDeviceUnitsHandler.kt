@@ -574,6 +574,10 @@ constructor(
             override fun onVibrationResult(model: Int) {
             }
 
+            override fun onVibrationDurationResult(p0: Int) {
+
+            }
+
             override fun onPowerSavingResult(isOpen: Boolean) {
             }
 

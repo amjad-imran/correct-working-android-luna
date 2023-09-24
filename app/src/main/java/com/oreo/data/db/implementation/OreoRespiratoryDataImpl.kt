@@ -50,9 +50,8 @@ constructor(
         return respiratoryDao.getServerUnSyncData(isSync)
     }
 
-    override suspend fun deleteOldData(timeStamp: Long): Int {
-        //return bloodOxygenDao.deleteOlderData(timeStamp)
-        return 1
+    override suspend fun deleteOldData(days: Int): Int {
+        return respiratoryDao.deleteOlderData(days)
     }
 
     override suspend fun updateServerSyncData(

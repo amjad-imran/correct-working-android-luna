@@ -51,9 +51,8 @@ constructor(
         return bodyTemperatureDao.getServerUnSyncData(isSync)
     }
 
-    override suspend fun deleteOldData(timeStamp: Long): Int {
-        //return bodyTemperatureDao.deleteOlderData(timeStamp)
-        return 0
+    override suspend fun deleteOldData(days: Int): Int {
+        return bodyTemperatureDao.deleteOlderData(days)
     }
 
     override suspend fun updateServerSyncData(

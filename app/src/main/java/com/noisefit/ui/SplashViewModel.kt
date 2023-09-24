@@ -27,6 +27,7 @@ import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DateFormats.checkTimeDifferenceMoreThanN
+import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.GlobalScope
@@ -190,7 +191,7 @@ class SplashViewModel
                             }
 
                             localDataStore.saveFeatureIntervalFetchPeriod(it.resetInterval ?: 24)
-                            localDataStore.saveHistoryYears(it.calendarYears ?: 2)
+                            //localDataStore.saveHistoryYears(it.calendarYears ?: 2)
 
                             val helpUpdateTimStamp = if (it.helpUpdate.isNullOrEmpty()) {
                                 0L

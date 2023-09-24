@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
+import com.noisefit_commans.common.averageWithoutZero
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -22,6 +23,10 @@ import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.oreo.data.model.health.UnitDataModelArray
+import com.noisefit_commans.utils.LOGS
+import kotlin.math.roundToInt
+
 
 @HiltViewModel
 class OreoReadinessViewModel
@@ -555,11 +560,16 @@ constructor(
     }
 
     fun getStatusColors(status: String?): Int {
-        return if (status.equals("warning", true)) {
+        val color: Int = if (status.equals("warning", true)) {
             R.color.oreo_contributor_warning
-        } else {
+        } else if (status.equals("good", true)) {
+            R.color.distance_arc
+        } else if (status.equals("optimal", true)) {
             R.color.steps_arc
+        } else {
+            R.color.white
         }
+        return color
     }
 
     fun getDummyBreakUpDataForTimeDisplay(): ArrayList<Int> {
@@ -570,6 +580,7 @@ constructor(
         return dummyList
 
     }
+
     fun getDummyBreakUpDataForTimeDisplayFloat(): ArrayList<Float> {
         val dummyList = ArrayList<Float>()
         for (i in 0..287) {

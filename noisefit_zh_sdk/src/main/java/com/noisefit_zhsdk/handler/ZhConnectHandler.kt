@@ -273,7 +273,10 @@ constructor(val zhApplicationHandler: ZhApplicationHandler) : ConnectionDataActi
                     if (!isCallingBind) {
                         AppLogs.sendAppLogs(
                             LogEvents.Connect,
-                            ConnectEvents.Failed.apply { comment = "STATE_DISCONNECTED Bind State->$state isReconnect->$isReconnect" })
+                            ConnectEvents.Failed.apply {
+                                comment =
+                                    "STATE_DISCONNECTED Bind State->$state isReconnect->$isReconnect"
+                            })
                         disconnectSuccess()
                     }
                     baseConnectionCallbacks?.onConnect(
@@ -396,7 +399,7 @@ constructor(val zhApplicationHandler: ZhApplicationHandler) : ConnectionDataActi
                 }
                 LOGS.d("onBatteryInfo $capacity $chargeStatus $isCharging")
 
-                if (isCharging) {
+                if (isCharging || capacity == 100) {
 
                     controlBleTools?.unbindDevice(object : SendCmdStateListener() {
                         override fun onState(state: SendCmdState) {

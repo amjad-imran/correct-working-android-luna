@@ -31,4 +31,6 @@ interface OreoRespiratoryDao : BaseDao<OreoRespiratoryData> {
     @Query("UPDATE respiratory SET is_synced = :is_synced WHERE id IN (:ids)")
     fun updateServerUnSyncStatus(ids: List<Int>, is_synced: Boolean): Int
 
+    @Query("DELETE FROM respiratory WHERE date <= date('now', '-' || :day || ' days')")
+    fun deleteOlderData(day: Int): Int
 }

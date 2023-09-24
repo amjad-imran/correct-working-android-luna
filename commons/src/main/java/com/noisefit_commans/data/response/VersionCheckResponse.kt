@@ -16,15 +16,9 @@ data class VersionCheckResponse(
     val currentVersion: Int? = null,
     @SerializedName("reset_interval")
     val resetInterval: Int? = 24,
-    val calendarYears: Int? = 2,
-    val bannerTime: String? = null,
-    val summaryUpdate: String? = null,
-    val workoutImageUpdate: String? = null,
     val helpUpdate: String? = null,
     @SerializedName("description")
     val description: String? = null,
-    @SerializedName("testMode")
-    val testMode: String? = null,
     @SerializedName("otaResponse")
     val otaResponse: UpdateResponse? = null
 ) : Parcelable

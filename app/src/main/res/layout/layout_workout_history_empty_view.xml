@@ -1,0 +1,52 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tvEmptyMsg"
+            style="@style/H5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="96dp"
+            android:layout_marginEnd="60dp"
+            android:gravity="center_horizontal"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:text="@string/text_you_haven_t_recorded_any_workouts_yet_exercise_improves_focus_and_energy_levels"
+            android:textColor="@color/white_64"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/view1"
+            android:layout_width="170dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:theme="@style/PrimaryButtonStyle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvEmptyMsg" />
+
+        <TextView
+            android:id="@+id/btnAddWorkout"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical"
+            android:text="@string/text_add_a_workout"
+            app:layout_constraintBottom_toBottomOf="@id/view1"
+            app:layout_constraintEnd_toEndOf="@id/view1"
+            app:layout_constraintStart_toStartOf="@id/view1"
+            app:layout_constraintTop_toTopOf="@id/view1"
+            app:drawableStartCompat="@drawable/ic_add" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

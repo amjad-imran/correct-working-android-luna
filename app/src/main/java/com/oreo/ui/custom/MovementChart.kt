@@ -128,9 +128,11 @@ class MovementChart(context: Context, attrs: AttributeSet?) : View(context, attr
     private fun setTime(canvas: Canvas, position: Int, currentXPos: Float) {
         val value = when (position) {
             0 -> "12 am"
-            23 -> "6 am"
+            15 -> "4 am"
+            31 -> "8 am"
             47 -> "12 pm"
-            71 -> "6 pm"
+            63 -> "4 pm"
+            79 -> "8 pm"
             95 -> "12 am"
             else -> null
         }

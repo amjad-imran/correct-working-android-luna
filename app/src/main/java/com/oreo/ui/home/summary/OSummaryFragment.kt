@@ -229,9 +229,12 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     private fun shouldSync() {
         val lastSyncTime = viewModel.sessionManager.getLastSyncTime() ?: 0L
         LOGS.d("shouldSync $lastSyncTime -- ${DateFormats.getTimeStamp()}")
-        if (kotlin.math.abs(DateFormats.getTimeStamp() - lastSyncTime) > 300000L) {
+
+        val shouldSync = viewModel.sessionManager.forceSyncData.value?.getContent() ?: false
+
+        if (shouldSync || kotlin.math.abs(DateFormats.getTimeStamp() - lastSyncTime) > 60 * 60 * 1000L) {
             binding.lytHeader.tvHeaderStatus.apply {
-                text = context.getString(R.string.text_updating_dot)
+                text = context.getString(R.string.text_syncing_dot)
                 visible()
             }
             syncData()
@@ -239,6 +242,15 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     }
 
     override fun subscribeObservers() {
+
+        viewModel.sessionManager.forceSyncData.observe(this) {
+            if (viewModel.sessionManager.connectStateRing.value is ConnectState.ConnectSuccess) {
+                it.getContent()?.let {
+                    syncData()
+                }
+            }
+
+        }
 
         viewModel.stateHeaderCard.observe(this) {
             binding.contentMain.lytHeader.apply {
@@ -367,7 +379,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                         binding.lytHeader.pbSync.progress = syncDataStatus.progress
                         binding.lytHeader.pbSync.visible()
                         binding.lytHeader.tvHeaderStatus.apply {
-                            text = getString(R.string.text_updating_dot)
+                            text = getString(R.string.text_syncing_dot)
                             visible()
                         }
                     }
@@ -377,7 +389,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                         binding.lytHeader.pbSync.progress = syncDataStatus.progress
                         binding.lytHeader.pbSync.visible()
                         binding.lytHeader.tvHeaderStatus.apply {
-                            text = getString(R.string.text_updating_dot)
+                            text = getString(R.string.text_syncing_dot)
                             visible()
                         }
                     }
@@ -415,11 +427,10 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
                 is ConnectState.ConnectSuccess -> {
                     setConnectingState(false)
-                    shouldSync()
                     setStateConnected(connectedState.noiseFitDevice)
                     viewModel.checkBatteryPercentage()
                     viewModel.updateAlerts()
-
+                    shouldSync()
                 }
 
                 is ConnectState.UnPaired -> {
@@ -699,17 +710,17 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         })
 
 
-        if (viewModel.ringDataStore.getRingDevice() != null) {
-            lytWorkouts.viewAddWorkout.visible()
-            lytWorkouts.root.visible()
-        } else {
-            lytWorkouts.viewAddWorkout.gone()
-            if (workouts.isNullOrEmpty()) {
-                lytWorkouts.root.gone()
-            } else {
-                lytWorkouts.root.visible()
-            }
-        }
+//        if (viewModel.ringDataStore.getRingDevice() != null) {
+//            lytWorkouts.viewAddWorkout.visible()
+//            lytWorkouts.root.visible()
+//        } else {
+//            lytWorkouts.viewAddWorkout.gone()
+//            if (workouts.isNullOrEmpty()) {
+//                lytWorkouts.root.gone()
+//            } else {
+//                lytWorkouts.root.visible()
+//            }
+//        }
 
 
         lytWorkouts.rvWorkouts.apply {
@@ -717,7 +728,11 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         }
         adapter1.setData(workouts ?: ArrayList())
         lytWorkouts.viewAddWorkout.setOnClickListener {
-            navigate(R.id.addWorkoutFragment)
+            if (viewModel.ringDataStore.getRingDevice() != null) {
+                navigate(R.id.addWorkoutFragment)
+            } else {
+                requireContext().showShortToast("Please connect your ring to add a workout")
+            }
         }
 
         lytWorkouts.ivViewAll.setOnClickListener {
@@ -774,7 +789,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
                 lytHeartRate.tvEmptyConnect.apply {
                     setTextColor(resources.getColor(R.color.white))
-                    text = "Measuring.."
+                    text = "Measuring..."
                 }
             }
 
@@ -860,11 +875,6 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             stateBluetoothOff()
         } else {
 
-            binding.lytHeader.tvHeaderStatus.apply {
-                text = context.getString(R.string.text_connecting_dot)
-                visible()
-            }
-
             binding.lytHeader.batteryStatus.invisible()
             binding.lytHeader.lottieAnimView.visible()
             binding.lytHeader.oreoStatus.visible()
@@ -882,9 +892,6 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         binding.lytHeader.lottieAnimView.gone()
         binding.lytHeader.oreoStatus.visible()
 
-        if (binding.lytHeader.tvHeaderStatus.text.equals(getString(R.string.text_connecting_dot))) {
-            binding.lytHeader.tvHeaderStatus.gone()
-        }
 
         val batteryPercentage = viewModel.watchDataStore.getBatteryPercentRing()
         binding.lytHeader.batteryStatus.progress = batteryPercentage

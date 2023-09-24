@@ -14,7 +14,7 @@ interface OreoBodyTemperatureDataSource {
         endDate: Long, isSync: Boolean
     ): List<OreoBodyTemperatureBreakup>?
 
-    suspend fun deleteOldData(timeStamp: Long): Int
+    suspend fun deleteOldData(days: Int): Int
     suspend fun updateServerSyncData(
         dataList: List<OreoBodyTemperatureBreakup>, timeStamp: Long
     ): Int

@@ -10,27 +10,15 @@ import com.oreo.data.model.health.ODashboardSleepModel
 
 sealed class OHealthOverview {
 
-    class Header(
-        val greeting: String,
-        val date: String
-    ) : OHealthOverview()
-
-    class Alerts(
-        val alertList: HashMap<AlertType, DashAlert>
-    ) : OHealthOverview()
-
-    class PairDevice() : OHealthOverview()
-
     class AutoSport(
         val count: Int
     ) : OHealthOverview()
 
-
-    class Dummy(
-        var value: String,
+    class Readiness(
+        val data: ODashboardReadinessModel
     ) : OHealthOverview()
 
-    class Readiness(
+    class ReadinessMinimal(
         val data: ODashboardReadinessModel
     ) : OHealthOverview()
 
@@ -39,6 +27,17 @@ sealed class OHealthOverview {
         val sleepArray: ArrayList<SleepData.SleepDataBreakup> = ArrayList(),
         val startTime: String,
         val endTime: String
+    ) : OHealthOverview()
+
+    class SleepMinimal(
+        val data: ODashboardSleepModel,
+        val sleepArray: ArrayList<SleepData.SleepDataBreakup> = ArrayList()
+    ) : OHealthOverview()
+
+    object SleepWaiting : OHealthOverview()
+    class ActivityMinimal(
+        val data: ODashboardActivityModel,
+        val caloriesGoal: Int
     ) : OHealthOverview()
 
     class Activity(
@@ -73,21 +72,8 @@ sealed class OHealthOverview {
         val value: List<ChartModel>? = ArrayList()
     ) : OHealthOverview()
 
-    class FitnessOverView(
-        val value: String,
 
-        ) : OHealthOverview()
 
-    class TodayWorkout(
-        var value: String,
-        var isRingConnected: Boolean,
-        var listData: List<OActivityListModal>
-    ) : OHealthOverview()
-
-    class OreoBattery(
-        val value: String,
-
-        ) : OHealthOverview()
 }
 
 data class DashAlert(

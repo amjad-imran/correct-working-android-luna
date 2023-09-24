@@ -269,7 +269,7 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
                 setUI(PairState.FAILED)
             }
         }*/
-       /* viewModel.updateInfo.observe(this) {
+        /*viewModel.updateInfo.observe(this) {
             it.getContent()?.let { res ->
 
                 try {
@@ -285,12 +285,16 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
                             res.url
                         }
                     LOGS.d("Loading File $url")
-                    val fileName = url.split("/").last()
-                    viewModel.downloadFirmware(
-                        url,
-                        requireContext().externalCacheDir!!,
-                        fileName
-                    )
+                    val fileName = url?.split("/")?.last()
+                    if (url != null) {
+                        if (fileName != null) {
+                            viewModel.downloadFirmware(
+                                url,
+                                requireContext().externalCacheDir!!,
+                                fileName
+                            )
+                        }
+                    }
                 } catch (e: Exception) {
                 }
             }
@@ -393,7 +397,7 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
                 connect(colorFitDevice)
             } else {
                 Handler(Looper.getMainLooper()).post {
-                    context.showShortToast("Reconnecting..")
+                    context.showShortToast("Reconnecting...")
                 }
                 reconnect(colorFitDevice, true)
             }
@@ -475,7 +479,7 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
                                     viewModel.removeWatchTokenFromServer(colorFitDevice.address)
                                     colorFitDevice.watchToken = ""
                                     Handler(Looper.getMainLooper()).post {
-                                        context.showShortToast("Connecting..")
+                                        context.showShortToast("Connecting...")
                                     }
                                     connect(colorFitDevice)
                                 }

@@ -192,7 +192,7 @@ class OreoReadinessFragment :
 
 
         binding.lytHeartRate.lineChart.updateDataWithMax(
-            sleepChart, 20,
+            sleepChart, 5,
             false, true, GraphDummyModel(
                 hasDummyData, 40, 100
             ),
@@ -224,11 +224,12 @@ class OreoReadinessFragment :
         val ssTime: String?
         val seTime: String?
         var breakUpData = ArrayList<Int>()
-        var hasDummyData = true
+        var hasDummyData = false
         if (hrvBreakUpData?.value.isNullOrEmpty()) {
             breakUpData = mViewModel.getDummyBreakUpDataForTimeDisplay()
             ssTime = null
             seTime = null
+            hasDummyData = true
         } else {
             hasDummyData = false
             seTime = endTime
@@ -269,7 +270,7 @@ class OreoReadinessFragment :
         )
 
         binding.lytHRVariability.lineChart.updateDataWithMax(
-            sleepChart, 20,
+            sleepChart, 5,
             true, false, GraphDummyModel(
                 hasDummyData, 0, 200
             ),
@@ -342,7 +343,7 @@ class OreoReadinessFragment :
 
 
         binding.lytTemperature.lineChart.updateDataWithMax(
-            sleepChart, 20,
+            sleepChart, 5,
             true, false, GraphDummyModel(
                 hasDummyData, 80, 110
             ),
@@ -447,6 +448,9 @@ class OreoReadinessFragment :
     override fun subscribeObservers() {
         mViewModel.readinessHistoryResponse.observe(this) {
             binding.svMain.visible()
+            binding.rvTopGraph.visible()
+            binding.lytToolbar.root.visible()
+
             val topGraphData = mViewModel.getPrefixAndSuffixList(it)
             mSharedViewModel.selectedDate = mViewModel.dateList[mViewModel.dateList.size - 1]
             binding.rvTopGraph.updateDataWithMax(
@@ -693,6 +697,13 @@ class OreoReadinessFragment :
             sleepStartTime, sleepEndTime
         )
 
+
+        /*showHeartRateVariabilityGraph(
+           mViewModel.generateDummyHrvFilterData(),
+            "10:46 pm", "7:42 am"
+        )*/
+
+
         //set data on temperature
         binding.lytTemperature.tvTitle.text = getString(R.string.text_temperature)
         binding.lytTemperature.tvSubtitle1.text = getString(R.string.text_max)
@@ -712,6 +723,8 @@ class OreoReadinessFragment :
             sleepEndTime
         )
     }
+
+
 
     private fun heartRateDefaultView() {
         binding.lytHeartRate.lytSubtitleValue1.tvUnit.gone()

@@ -149,7 +149,7 @@ class OreoSleepDetailFragment :
             Color.parseColor("#0Dff59da")
         )
         binding.lytHRVariability.lineChart.updateDataWithMax(
-            sleepChart, 20, true, false, GraphDummyModel(
+            sleepChart, 5, true, false, GraphDummyModel(
                 hasDummyData, 0, 200
             ),
             hrv?.avg
@@ -215,7 +215,7 @@ class OreoSleepDetailFragment :
         )
 
         binding.lytHeartRate.lineChart.updateDataWithMax(
-            sleepChart, 20, false, true,
+            sleepChart, 5, false, true,
             GraphDummyModel(
                 hasDummyData, 40, 100
             ),
@@ -402,6 +402,7 @@ class OreoSleepDetailFragment :
         binding.lytSSAnalysis.lytNightMovement.root.gone()
         binding.lytSSAnalysis.view1.gone()
         binding.lytSSAnalysis.rvSleepStage.gone()
+        binding.lytSSAnalysis.tvSummaryTitle.gone()
         binding.lytSSAnalysis.viewUp.gone()
         binding.lytSSAnalysis.ivUp.gone()
 
@@ -413,6 +414,7 @@ class OreoSleepDetailFragment :
             binding.lytSSAnalysis.ivUp.visible()
             binding.lytSSAnalysis.viewDown.gone()
             binding.lytSSAnalysis.ivDown.gone()
+            binding.lytSSAnalysis.tvSummaryTitle.visible()
         }
         binding.lytSSAnalysis.viewUp.setOnClickListener {
             binding.lytSSAnalysis.lytNightMovement.root.gone()
@@ -422,6 +424,7 @@ class OreoSleepDetailFragment :
             binding.lytSSAnalysis.ivUp.gone()
             binding.lytSSAnalysis.viewDown.visible()
             binding.lytSSAnalysis.ivDown.visible()
+            binding.lytSSAnalysis.tvSummaryTitle.gone()
         }
     }
 
@@ -448,6 +451,8 @@ class OreoSleepDetailFragment :
         viewModel.sleepHistoryResponse.observe(this) {
 
             binding.svMain.visible()
+            binding.rvTopGraph.visible()
+            binding.lytToolbar.root.visible()
 
             val topGraphData = viewModel.getPrefixAndSuffixList(it)
             mSharedViewModel.selectedDate = viewModel.dateList[viewModel.dateList.size - 1]
@@ -457,6 +462,8 @@ class OreoSleepDetailFragment :
                 topGraphData.second
             )
             viewModel.getContributorInfo()
+
+
         }
 
         viewModel.daySleepData.observe(this) {

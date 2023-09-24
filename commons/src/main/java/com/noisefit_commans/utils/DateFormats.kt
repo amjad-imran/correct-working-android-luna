@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit
 object DateFormats {
     val defaultLocale = Locale.ENGLISH
 
-    private const val PastSyncData = 4
+    private const val PastSyncData = 7
     private const val TAG = "DateFormats"
 
     @SuppressLint("ConstantLocale")
@@ -80,7 +80,7 @@ object DateFormats {
     val dateTimeFormatWithWeekInit = SimpleDateFormat("EEEE, dd MMM yyyy", defaultLocale)
 
     @SuppressLint("ConstantLocale")
-    val dateTimeFormatWithWeekWithoutYear = SimpleDateFormat("EEEE, dd MMM", defaultLocale)
+    val dateTimeFormatWithWeekWithoutYear = SimpleDateFormat("EEEE, dd MMMM", defaultLocale)
     val dateTimeFormatWithWeekWithoutYearShort = SimpleDateFormat("EEE, dd MMMM", defaultLocale)
 
     @SuppressLint("ConstantLocale")
@@ -208,6 +208,14 @@ object DateFormats {
         val c = Calendar.getInstance().time
         val df = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
         return df.format(c)
+    }
+
+    fun getYesterdayDate(): String {
+        val c = Calendar.getInstance().apply {
+            add(Calendar.DAY_OF_YEAR, -1)
+        }.time
+
+        return dateFormat3.format(c)
     }
 
     fun getDate(timeFormat: SimpleDateFormat): String {
@@ -545,6 +553,7 @@ object DateFormats {
             }
         }
     }
+
     fun getCompleteMonthName(month: Int): String {
 
         when (month) {
@@ -978,7 +987,7 @@ object DateFormats {
     }
 
     fun convertDateTimeToTimeStamp3(dateTime: String): Long {
-        return dateTimeFormat5.parse(dateTime).time
+        return dateTimeFormat6.parse(dateTime).time
 
     }
 

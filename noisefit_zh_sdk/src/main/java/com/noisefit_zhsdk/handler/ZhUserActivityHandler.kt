@@ -123,7 +123,7 @@ constructor(
 
 
         CallBackUtils.fitnessDataCallBack = fitnessDataCallBack
-//        CallBackUtils.autoSportDataCallBack = autoSportsCallback
+        CallBackUtils.autoSportDataCallBack = autoSportsCallback
         CallBackUtils.setSportCallBack(object : SportCallBack {
             override fun onDevSportInfo(data: DevSportInfoBean) {
                 LOGS.d(TAG, "onDevSportInfo $data")
@@ -432,40 +432,40 @@ constructor(
         }
     }
 
-//    private val autoSportsCallback: AutoSportDataCallBack = AutoSportDataCallBack { p0 ->
-//
-//        //[{"autoSportDuration":340,"autoSportIntensity":0,"autoSportKcal":5,"autoSportStartTime":1690863212,"autoSportSteps":601,"autoSportType":1,"hrData":[]}]
-//
-//        /*val dataList = ArrayList<OreoAutoSportData>()
-//        val timestamp = 1690863212 * 1000L
-//        dataList.add(OreoAutoSportData(0,false,false,3400,0,5,timestamp,601,"running",null))
-//        dataList.add(OreoAutoSportData(0,false,false,1400,1,15,1690692397000,1201,"walking",null))
-//        dataList.add(OreoAutoSportData(0,false,false,1000,0,25,1690778797000,1901,"other",null))
-//        dataList.add(OreoAutoSportData(0,false,false,1400,1,5,1690778797000,61,"running",null))
-//        dataList.add(OreoAutoSportData(0,false,false,1300,0,120,1690865197000,600,"running",null))
-//        dataList.add(OreoAutoSportData(0,false,false,1800,2,500,1690958797000,6010,"running",null))
-//
-//
-//        userActivityDataCallbacks?.onUserActivityDataReceived(
-//            UserActivityCallback.AutoSportDataObtained(
-//                dataList
-//            )
-//        )*/
-//
-//        LOGS.d(TAG, "onAutoSportData ${Gson().toJson(p0)}")
-//
-//        AppLogs.sendAppLogs("onAutoSportData Sync data complete ${Gson().toJson(p0)}")
-//        colorFitDevice?.let {
-//            userActivityDataCallbacks?.onUserActivityDataReceived(
-//                UserActivityCallback.AutoSportDataObtained(
-//                    dataConverter.parseAutoSport(
-//                        p0,
-//                        it
-//                    )
-//                )
-//            )
-//        }
-//    }
+    private val autoSportsCallback: AutoSportDataCallBack = AutoSportDataCallBack { p0 ->
+
+        //[{"autoSportDuration":340,"autoSportIntensity":0,"autoSportKcal":5,"autoSportStartTime":1690863212,"autoSportSteps":601,"autoSportType":1,"hrData":[]}]
+
+        /*val dataList = ArrayList<OreoAutoSportData>()
+        val timestamp = 1690863212 * 1000L
+        dataList.add(OreoAutoSportData(0,false,false,3400,0,5,timestamp,601,"running",null))
+        dataList.add(OreoAutoSportData(0,false,false,1400,1,15,1690692397000,1201,"walking",null))
+        dataList.add(OreoAutoSportData(0,false,false,1000,0,25,1690778797000,1901,"other",null))
+        dataList.add(OreoAutoSportData(0,false,false,1400,1,5,1690778797000,61,"running",null))
+        dataList.add(OreoAutoSportData(0,false,false,1300,0,120,1690865197000,600,"running",null))
+        dataList.add(OreoAutoSportData(0,false,false,1800,2,500,1690958797000,6010,"running",null))
+
+
+        userActivityDataCallbacks?.onUserActivityDataReceived(
+            UserActivityCallback.AutoSportDataObtained(
+                dataList
+            )
+        )*/
+
+        LOGS.d(TAG, "onAutoSportData ${Gson().toJson(p0)}")
+
+        AppLogs.sendAppLogs("onAutoSportData Sync data complete ${Gson().toJson(p0)}")
+        /*colorFitDevice?.let {
+            userActivityDataCallbacks?.onUserActivityDataReceived(
+                UserActivityCallback.AutoSportDataObtained(
+                    dataConverter.parseAutoSport(
+                        p0,
+                        it
+                    )
+                )
+            )
+        }*/
+    }
 
 
 

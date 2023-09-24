@@ -31,6 +31,8 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.share.ShareUtil
 import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderEffectBlur
@@ -235,6 +237,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 ShareUtil.openPlayStore(this@OreoMainActivity, "com.noisefit.luna")
             }
         }
+
         navController?.navigate(R.id.appUpdateBottomSheet, Bundle().apply {
             putParcelable("versonResponse", it)
         })
@@ -317,7 +320,6 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     override fun onResume() {
         super.onResume()
         navController?.addOnDestinationChangedListener(navListener)
-
         viewModel.ringDataStore.getRingDevice()?.let {
             if (viewModel.sessionManager.connectStateRing.value == null) {
                 viewModel.sessionManager.setConnectStateRing(ConnectState.Connecting(it))

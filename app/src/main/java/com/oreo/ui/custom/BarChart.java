@@ -206,11 +206,15 @@ public class BarChart extends View {
         ChartModel item;
         int sum = 0;
         int count = 0;
+        int noneZeroValueCount = 0;
+
         for (int i = 0; i < datas.size(); i++) {
             item = datas.get(i);
             if (item.getValue() == 0) {
                 continue;
             }
+            noneZeroValueCount += 1;
+
             isDistanceGraph = datas.get(i).isDistanceGraph();
 //            noneZeroValueCount += 1;
 
@@ -225,8 +229,13 @@ public class BarChart extends View {
             sum += item.getValue();
             count += 1;
         }
-        if (count != 0) {
-            avgValue = sum / count;
+
+        if (noneZeroValueCount <= datas.size() / 2) {
+            avgValue = 0;
+        } else {
+            if (count != 0) {
+                avgValue = sum / count;
+            }
         }
 
         if (xMax1 == 100) {

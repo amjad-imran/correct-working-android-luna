@@ -52,9 +52,8 @@ constructor(
         return stressDao.getServerUnSyncData(isSync)
     }
 
-    override suspend fun deleteOldData(timeStamp: Long): Int {
-        return 1
-        //return stressDao.deleteOlderData(timeStamp)
+    override suspend fun deleteOldData(days: Int): Int {
+        return stressDao.deleteOlderData(days)
     }
 
     override suspend fun updateServerSyncData(

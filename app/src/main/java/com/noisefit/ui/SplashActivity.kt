@@ -41,6 +41,7 @@ import com.noisefit.util.notif.NotificationEventsClass.NOTIFICATION_BUNDLE_TYPE
 import com.noisefit.util.notif.NotificationEventsClass.NOTIFICATION_INDEX_EXTRA
 import com.noisefit.util.notif.NotificationEventsClass.NOTIFICATION_LINK
 import com.noisefit.util.notif.NotificationEventsClass.NOTIFICATION_TYPE_EXTRA
+import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -65,6 +66,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
         handleBackgroundNotifications(intent)
 
         if (viewModel.connectedDevice != null) {
+            viewModel.sessionManager.forceSyncData.postValue(Event(true))
             checkPermissionAndStartService()
         } else {
             startOnBoardFlow()

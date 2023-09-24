@@ -217,8 +217,34 @@ class OActivityListAdapter(
     }
 
     fun setDataSet(dataSet: List<OActivityListModal>) {
-        mDataSet = dataSet as ArrayList<OActivityListModal>
+        mDataSet.clear()
+        mDataSet.addAll(dataSet as ArrayList<OActivityListModal>)
+
         notifyDataSetChanged()
+    }
+
+    fun isShowTodayEmptyView(): Boolean {
+        var isShow = false
+        if (mDataSet.isEmpty())
+            isShow = false
+        val datesSet = HashSet<String>()
+        mDataSet.forEach {
+            it.date?.let { it1 -> datesSet.add(it1) }
+            if (!datesSet.contains(
+                    DateFormats.getCurrentDateOreoFormat()
+                )
+            ) {
+                if (it.id != null)
+                    isShow = true
+                else
+                    isShow = false
+            } else {
+                isShow = false
+            }
+
+
+        }
+        return isShow
     }
 }
 

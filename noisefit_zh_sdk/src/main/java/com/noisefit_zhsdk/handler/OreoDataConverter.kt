@@ -3,6 +3,8 @@ package com.noisefit_zhsdk.handler
 import android.content.Context
 import android.location.Geocoder
 import com.google.gson.Gson
+import com.noisefit_commans.common.averageWithoutZero
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.common.handleCaloriesData
 import com.noisefit_commans.common.handleHrData
 import com.noisefit_commans.common.upTo1Decimal
@@ -19,7 +21,6 @@ import com.noisefit_commans.data.model.OreoStepsData
 import com.noisefit_commans.data.model.OreoStressDataBreakup
 import com.noisefit_commans.enums.ApplicationType
 import com.noisefit_commans.models.AlarmsList
-import com.noisefit_commans.models.BloodOxygenBreakup
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.Contact
 import com.noisefit_commans.models.DeviceType
@@ -27,15 +28,14 @@ import com.noisefit_commans.models.DoNotDisturb
 import com.noisefit_commans.models.ManualMeasureType
 import com.noisefit_commans.models.ReminderList
 import com.noisefit_commans.models.SedentaryData
-import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.models.SleepMovementType
 import com.noisefit_commans.models.SleepType
 import com.noisefit_commans.models.SportsModeListGPS
 import com.noisefit_commans.models.SportsModeResponse
-import com.noisefit_commans.models.StressDataBreakup
 import com.noisefit_commans.models.Widget
 import com.noisefit_commans.models.WorldClockList
 import com.noisefit_commans.utils.AppConversionUtils
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.zhapp.ble.bean.ActiveMeasureParamsBean
@@ -49,9 +49,6 @@ import com.zhapp.ble.bean.DailyBean
 import com.zhapp.ble.bean.DevSportInfoBean
 import com.zhapp.ble.bean.DoNotDisturbModeBean
 import com.zhapp.ble.bean.EventInfoBean
-import com.zhapp.ble.bean.OfflineBloodOxygenBean
-import com.zhapp.ble.bean.OfflinePressureDataBean
-import com.zhapp.ble.bean.OfflineTemperatureDataBean
 import com.zhapp.ble.bean.OverallDayMovementData
 import com.zhapp.ble.bean.PressureModeBean
 import com.zhapp.ble.bean.RingSleepResultBean
@@ -63,6 +60,7 @@ import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.util.Calendar
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 class OreoDataConverter
 @Inject
@@ -531,8 +529,92 @@ constructor(
 
         val stressData = OreoStressDataBreakup()
         stressData.date = DateFormats.dateFormat3.format(startDayTimeStamp)
-        stressData.breakUp = gson.toJson(bean.pressureData)
+
+        //stressData.breakUp = gson.toJson(bean.pressureData)
+        val averageOutData = getAveragedOutHrvData(bean.pressureData)
+        stressData.breakUp = gson.toJson(averageOutData)
+
+        /*val lastDayDate = DateFormats.getYesterdayDate()
+        LOGS.w("lastDayDate $lastDayDate")
+
+        if (lastDayDate.equals(stressData.date, true)) {
+            val avgData = averageOutData.averageWithoutZero()
+            AppLogs.sendAppLogs("Saving last day average data :$avgData for ${stressData.date}")
+            watchDataStore.setLastSavedAverageHrv(avgData)
+        }*/
+
         return stressData
+    }
+
+    private fun getAveragedOutHrvData(pressureData: MutableList<Int>): List<Int> {
+        val filteredData = ArrayList<Int>()
+
+        val lastSavedHrv = watchDataStore.getLastSavedAverageHrv()
+
+        filteredData.addAll(algoAvgLastThreeZeroValues(pressureData, lastSavedHrv))
+
+        val stringBuilder = StringBuilder()
+
+        filteredData.forEachIndexed { index, i ->
+
+            stringBuilder.append("${pressureData[index]} -> $i\n")
+        }
+        //LOGS.w("filtered_data -> $stringBuilder")
+        AppLogs.sendAppLogs("geAveragedOutHrvData -> $stringBuilder")
+
+        return filteredData
+    }
+
+    private fun algoAvgLastThreeZeroValues(response: List<Int>, lastAvgValue: Int = 0): List<Int> {
+        val filteredData = ArrayList<Int>()
+
+        response.forEachIndexed { index, value ->
+            if (index in 0..2) {
+                if (value > 120) {//120 is max value
+                    filteredData.add(lastAvgValue)//replace with last day average hrv if available
+                } else {
+                    filteredData.add(value)
+                }
+            } else {
+                if (value > 0) {
+                    val lastValueFilteredData = filteredData[index - 1]
+
+                    if (value >= (lastValueFilteredData * 1.5) && lastValueFilteredData > 0) {
+                        val result = getLastThreeNonZeroValues(filteredData, index)
+                        if (result == -1) {
+                            filteredData.add(value)
+                        } else {
+                            filteredData.add(result)
+                        }
+                    } else {
+                        filteredData.add(value)
+                    }
+                } else {
+                    filteredData.add(value)
+                }
+            }
+        }
+        return filteredData
+    }
+
+    private fun getLastThreeNonZeroValues(arr: List<Int>, currentPosition: Int): Int {
+        val result = mutableListOf<Int>()
+        var count = 0
+        var index = currentPosition
+        try {
+            while (count < 3 && index > 0) {
+                val value = arr[index - 1]
+                if (value != 0) {
+                    result.add(value)
+                    count++
+                }
+                index--
+            }
+            return (1.2f * result.averageWithoutZero()).roundToInt()
+        } catch (exp: Exception) {
+            exp.printStackTrace()
+            return -1
+        }
     }
 
     fun parseRespiratoryData(bean: TodayRespiratoryRateData): OreoRespiratoryData {

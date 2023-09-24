@@ -12,7 +12,7 @@ interface OreoSleepDataSource {
     suspend fun getServerUnSyncData(): List<OreoSleepData>?
 
     suspend fun getUnSyncServerData(endDate: Long, isSync: Boolean): List<OreoSleepData>?
-    suspend fun deleteOldData(timeStamp: Long): Int
+    suspend fun deleteOldData(days: Int): Int
     suspend fun updateServerSyncData(dataList: List<OreoSleepData>, timeStamp: Long): Int
     suspend fun setHealthScore(score: Int, date: String)
 }

@@ -208,7 +208,7 @@ constructor(
             SleepStageAnalysis(
                 "Awake",
                 dayData.awake?.value ?: -1,
-                dayData.awake?.valPrcnt ?: 1,
+                dayData.awake?.valPrcnt ?: 0,
                 SleepType.AWAKE
             )
         )
@@ -216,7 +216,7 @@ constructor(
             SleepStageAnalysis(
                 "REM",
                 dayData.remSleep?.value ?: -1,
-                dayData.remSleep?.valPrcnt ?: 1,
+                dayData.remSleep?.value_percentage ?: 0,
                 SleepType.REM
             )
         )
@@ -224,7 +224,7 @@ constructor(
             SleepStageAnalysis(
                 "Light",
                 dayData.lightSleep?.value ?: -1,
-                dayData.lightSleep?.valPrcnt ?: 1,
+                dayData.lightSleep?.valPrcnt ?: 0,
                 SleepType.LIGHT
             )
         )
@@ -232,7 +232,7 @@ constructor(
             SleepStageAnalysis(
                 "Deep",
                 dayData.deepSleep?.value ?: -1,
-                dayData.deepSleep?.valPrcnt ?: 1,
+                dayData.deepSleep?.value_percentage ?: 0,
                 SleepType.DEEP
             )
         )
@@ -361,9 +361,9 @@ constructor(
                 dayData.remSleep!!.value ?: 0
             )
             val leftText: String = if (hour > 0) {
-                "$hour hr $minute min, ${dayData.remSleep?.valPrcnt ?: 0}%"
+                "$hour hr $minute min"
             } else {
-                "$minute min, ${dayData.remSleep?.valPrcnt ?: 0}%"
+                "$minute min"
             }
             result.add(
                 Contributors(
@@ -394,9 +394,9 @@ constructor(
                 dayData.deepSleep?.value ?: 0
             )
             val leftText: String = if (hour > 0) {
-                "$hour hr $minute min, ${dayData.deepSleep?.valPrcnt ?: 0}%"
-            } else{
-                "$minute min, ${dayData.deepSleep?.valPrcnt ?: 0}%"
+                "$hour hr $minute min"
+            } else {
+                "$minute min"
             }
             result.add(
                 Contributors(
@@ -500,11 +500,16 @@ constructor(
     }
 
     fun getStatusColors(status: String): Int {
-        return if (status.equals("warning", true)) {
+        val color: Int = if (status.equals("warning", true)) {
             R.color.oreo_contributor_warning
-        } else {
+        } else if (status.equals("good", true)) {
+            R.color.distance_arc
+        } else if (status.equals("optimal", true)) {
             R.color.steps_arc
+        } else {
+            R.color.white
         }
+        return color
     }
 
     fun getHourlySleepBreakup(sleepBreakup: List<SleepHourlyBreakup>?): Pair<ArrayList<SleepData.SleepDataBreakup>, CountCardData> {

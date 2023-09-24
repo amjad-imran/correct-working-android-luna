@@ -31,4 +31,6 @@ interface OreoBloodOxygenDao : BaseDao<OreoBloodOxygenBreakup> {
     @Query("UPDATE blood_oxygen SET is_synced = :is_synced WHERE id IN (:ids)")
     fun updateServerUnSyncStatus(ids: List<Int>, is_synced: Boolean): Int
 
+    @Query("DELETE FROM blood_oxygen WHERE date <= date('now', '-' || :day || ' days')")
+    fun deleteOlderData(day: Int): Int
 }
