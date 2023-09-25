@@ -401,6 +401,15 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                         binding.lytHeader.pbSync.gone()
                         resetSwipeLoadingAnim()
                     }
+
+                    SyncEvents.ServerSyncStarted -> {
+                        binding.progressBar.root.visible()
+                    }
+
+                    SyncEvents.ServerSyncSuccess -> {
+                        binding.progressBar.root.gone()
+                        viewModel.getDashboardDataFromServer(true)
+                    }
                 }
             }
         }
@@ -455,14 +464,14 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             }
         }
 
-        viewModel.sessionManager.showSyncOfflineData.observe(this) {
+       /* viewModel.sessionManager.showSyncOfflineData.observe(this) {
             it?.getContent()?.let { userActivity ->
                 if (userActivity == HealthOverviewDataType.SERVER_SYNC_SUCCESS) {
                     viewModel.getDashboardDataFromServer(true)
                 }
 
             }
-        }
+        }*/
         viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->
                 context.showShortToast(message)
