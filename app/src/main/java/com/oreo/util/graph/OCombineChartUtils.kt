@@ -72,6 +72,7 @@ object OCombineChartUtils {
                 labelPosition = LimitLine.LimitLabelPosition.RIGHT_BOTTOM
 
             }
+            chart.axisRight.removeAllLimitLines()
             chart.axisRight.addLimitLine(nameLimitLine)
         }
         val xAxis = chart.xAxis
