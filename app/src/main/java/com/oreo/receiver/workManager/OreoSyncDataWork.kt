@@ -2,6 +2,7 @@ package com.oreo.receiver.workManager
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Looper
 import androidx.hilt.work.HiltWorker
 import androidx.work.ForegroundInfo
 import androidx.work.ListenableWorker
@@ -48,6 +49,7 @@ import kotlinx.coroutines.supervisorScope
 import java.util.Calendar
 import java.util.Timer
 import java.util.TimerTask
+import java.util.logging.Handler
 import kotlin.concurrent.schedule
 import kotlin.coroutines.CoroutineContext
 
@@ -306,11 +308,13 @@ constructor(
                     when (userActivityCallback) {
                         is UserActivityCallback.StepsDataObtainedOreo -> {
                             LOGS.d("OreoSyncDataWork: ${userActivityCallback.stepsData}")
-                            job = syncDataScope.launch {
+                            AppLogs.sendAppLogs("SAVING_STEPS_DATA Started")
+                            syncDataScope.launch {
                                 syncRepository.saveStepsData(userActivityCallback.stepsData)
                                     .collect { resource ->
                                         when (resource) {
                                             is CacheResult.Success -> {
+                                                AppLogs.sendAppLogs("SAVING_STEPS_DATA Success")
                                                 LOGS.d(
                                                     TAG,
                                                     "OreoSyncDataWork: steps ${resource.value}"
@@ -338,7 +342,7 @@ constructor(
 
                         is UserActivityCallback.HeartHistoryObtainedOreo -> {
 //                            LOGS.d("OreoSyncDataWork: ${Gson().toJson(userActivityCallback.heartRateData)}")
-                            job = syncDataScope.launch {
+                            syncDataScope.launch {
                                 syncRepository.saveHeartRateData(userActivityCallback.heartRateData)
                                     .collect { resource ->
                                         when (resource) {
@@ -369,7 +373,7 @@ constructor(
                         }
 
                         is UserActivityCallback.HealthScoreObtainedOreo -> {
-                            job = syncDataScope.launch {
+                            syncDataScope.launch {
                                 syncRepository.saveHealthScoreData(
                                     userActivityCallback.score,
                                     userActivityCallback.date
@@ -399,7 +403,7 @@ constructor(
 
                         is UserActivityCallback.SleepDataObtainedOreo -> {
                             //      LOGS.d("OreoSyncDataWork: sleep data ${Gson().toJson(userActivityCallback.sleepData)}")
-                            job = syncDataScope.launch {
+                            syncDataScope.launch {
                                 syncRepository.saveSleepData(userActivityCallback.sleepData)
                                     .collect { resource ->
                                         when (resource) {
@@ -432,7 +436,7 @@ constructor(
                         }
 
                         is UserActivityCallback.OreoBloodOxygenObtained -> {
-                            job = syncDataScope.launch {
+                            syncDataScope.launch {
                                 syncRepository.saveBloodOxygenData(userActivityCallback.bloodOxygen)
                                     .collect { resource ->
                                         when (resource) {
@@ -459,7 +463,7 @@ constructor(
                         }
 
                         is UserActivityCallback.OreoRingDayTimeMovementObtained -> {
-                            job = syncDataScope.launch {
+                            syncDataScope.launch {
                                 syncRepository.saveDayTimeMovementData(userActivityCallback.dayTimeMovement)
                                     .collect { resource ->
                                         when (resource) {
@@ -486,7 +490,7 @@ constructor(
                         }
 
                         is UserActivityCallback.OreoRespiratoryDataObtained -> {
-                            job = syncDataScope.launch {
+                            syncDataScope.launch {
                                 syncRepository.saveRespiratoryData(userActivityCallback.respiratoryData)
                                     .collect { resource ->
                                         when (resource) {
@@ -515,7 +519,7 @@ constructor(
 
                         is UserActivityCallback.StressDataObtainedOreo -> {
 //                            LOGS.d("OreoSyncDataWork: ${userActivityCallback.stressData}")
-                            job = syncDataScope.launch {
+                            syncDataScope.launch {
                                 syncRepository.saveStressData(userActivityCallback.stressData)
                                     .collect { resource ->
                                         when (resource) {
@@ -552,7 +556,7 @@ constructor(
                                 "OreoSyncDataWork:::: BodyTemperatureObtained"
                             )
 //                            LOGS.d("OreoSyncDataWork: ${userActivityCallback.stressData}")
-                            job = syncDataScope.launch {
+                            syncDataScope.launch {
                                 syncRepository.saveBodyTemperatureData(userActivityCallback.bodyTemperatureBreakupData)
                                     .collect { resource ->
                                         when (resource) {
@@ -588,9 +592,11 @@ constructor(
                         is UserActivityCallback.UserDataSyncUpdated -> {
                             if (userActivityCallback.syncStatus is SyncEvents.Success) {
                                 timer?.cancel()
-                                returnSuccess(success)
 
                                 AppLogs.sendAppLogs("RING SYNC TIME => ${System.currentTimeMillis() - lastTimeStamp}")
+                                android.os.Handler(Looper.getMainLooper()).postDelayed({
+                                    returnSuccess(success)
+                                },1000)
 
                             } else if (userActivityCallback.syncStatus is SyncEvents.Started) {
                                 val total =
