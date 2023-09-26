@@ -40,7 +40,8 @@ class OSleepDetailsParentFragment :
             OSleepScoreDetailsFragment.newInstance(
                 "Day",
                 mViewModel.itemType,
-                args.viewType
+                args.viewType,
+                args.date
             )
         )
         mViewModel.selectedTab = 0
@@ -81,7 +82,8 @@ class OSleepDetailsParentFragment :
                             OSleepScoreDetailsFragment.newInstance(
                                 "Day",
                                 clickedType,
-                                args.viewType
+                                args.viewType,
+                                args.date
                             )
                         )
 
@@ -122,7 +124,8 @@ class OSleepDetailsParentFragment :
                             OSleepScoreDetailsFragment.newInstance(
                                 "Week",
                                 clickedViewType,
-                                args.viewType
+                                args.viewType,
+                                args.date
                             )
                         )
                     }
@@ -161,7 +164,7 @@ class OSleepDetailsParentFragment :
                         loadFragment(
                             OSleepScoreDetailsFragment.newInstance(
                                 "Month",
-                                clickedType, args.viewType
+                                clickedType, args.viewType, args.date
                             )
                         )
 
@@ -189,7 +192,7 @@ class OSleepDetailsParentFragment :
             navigateUpSafe()
         }
         binding.lytToolbar.view1.setOnClickListener {
-            mViewModel.itemClickType?.let { type->
+            mViewModel.itemClickType?.let { type ->
                 navigate(
                     OSleepDetailsParentFragmentDirections.actionSleepDetailsParentOreoToBottomSheetDataMetrics(
                         type

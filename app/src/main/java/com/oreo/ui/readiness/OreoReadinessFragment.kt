@@ -369,11 +369,13 @@ class OreoReadinessFragment :
                 val data: Intent? = result.data
 
                 val selectedDate = data?.getStringExtra("selected_date")
+                mViewModel.selectedMasterDate = selectedDate
+                mViewModel.selectedDate = selectedDate
                 LOGS.d("Selected Date  :${selectedDate}")
                 mViewModel.getReadinessDetailsData(selectedDate)
-                if (selectedDate != null) {
+                /*if (selectedDate != null) {
                     mViewModel.updateSelectedDate(selectedDate)
-                }
+                }*/
 
             }
         }
@@ -395,7 +397,7 @@ class OreoReadinessFragment :
                 HistoryCalendarActivity.getStartIntent(
                     requireContext(),
                     mViewModel.readinessHistoryResponse.value?.lastOrNull()?.date
-                        ?: mSharedViewModel.selectedDate,
+                        ?: mViewModel.selectedMasterDate,
                     "ring"
                 )
             )
@@ -407,6 +409,7 @@ class OreoReadinessFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.READINESS_SCORE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
+                putString("date", mViewModel.selectedDate)
             })
         }
         binding.lytRScoreData.lytSec1.root.setOnClickListener {
@@ -415,6 +418,7 @@ class OreoReadinessFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.RESTING_HR
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
+                putString("date", mViewModel.selectedDate)
             })
         }
         binding.lytRScoreData.lytSec2.root.setOnClickListener {
@@ -423,6 +427,7 @@ class OreoReadinessFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.HR_VARIABILITY
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
+                putString("date", mViewModel.selectedDate)
             })
         }
         binding.lytRScoreData.lytSec3.root.setOnClickListener {
@@ -431,6 +436,7 @@ class OreoReadinessFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.BODY_TEMPERATURE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
+                putString("date", mViewModel.selectedDate)
             })
         }
         binding.lytRScoreData.lytSec4.root.setOnClickListener {
@@ -439,6 +445,7 @@ class OreoReadinessFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.RESPIRATORY_RATE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
+                putString("date", mViewModel.selectedDate)
             })
         }
 
@@ -452,11 +459,30 @@ class OreoReadinessFragment :
             binding.lytToolbar.root.visible()
 
             val topGraphData = mViewModel.getPrefixAndSuffixList(it)
-            mSharedViewModel.selectedDate = mViewModel.dateList[mViewModel.dateList.size - 1]
+            //mSharedViewModel.selectedDate = mViewModel.dateList[mViewModel.dateList.size - 1]
+            var moveToPos = -1
+
+
+            LOGS.d("moveToPosition date initia ${mViewModel.selectedDate}")
+
+            if (mViewModel.selectedDate != null) {
+                val index = it?.indexOfFirst { data ->
+                    data.date.equals(mViewModel.selectedDate, true)
+                }
+                if (index != null) {
+
+                    moveToPos =  15 + (15-index-1)
+                    LOGS.d("moveToPosition date ${mViewModel.selectedDate}")
+                    //binding.rvTopGraph.moveToPosition(15 + (15-index-1))
+                }
+
+            }
+
             binding.rvTopGraph.updateDataWithMax(
                 topGraphData.first,
                 topGraphData.third,
-                topGraphData.second
+                topGraphData.second,
+                moveToPos
             )
             setScrollDate()
             mViewModel.getContributorInfo()
@@ -785,8 +811,14 @@ class OreoReadinessFragment :
 
 
     override fun onPositionSelected(position: Int, chartModel: ChartModel?) {
-        mSharedViewModel.selectedDate = chartModel?.date!!
-        chartModel.date?.let { mViewModel.updateSelectedDate(it) }
+
+        if (mViewModel.selectedDate == chartModel?.date!!) {
+            return
+        }
+        //mSharedViewModel.selectedDate = chartModel.date!!
+        LOGS.w("moveToPosition onPositionSelected ${chartModel.date}")
+        mViewModel.selectedDate = chartModel.date!!
+        mViewModel.updateSelectedDate()
 
 
     }

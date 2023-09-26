@@ -11,7 +11,6 @@ class SharedOSCDViewModel : BaseViewModel() {
     var selectedTab: Int = 0
     var itemType: String = ""
     var itemClickType: ViewItemClickType? = null
-    var selectedDate: String = ""
 
 
 }

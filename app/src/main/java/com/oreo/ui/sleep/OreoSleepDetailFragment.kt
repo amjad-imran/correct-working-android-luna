@@ -301,7 +301,9 @@ class OreoSleepDetailFragment :
                 val data: Intent? = result.data
 
                 val selectedDate = data?.getStringExtra("selected_date")
-                LOGS.d("Selected Date  :${selectedDate}")
+                viewModel.selectedMasterDate = selectedDate
+                viewModel.selectedDate = selectedDate
+                LOGS.d("moveToPosition Selected Date  :${selectedDate}")
 
 //                if (viewModel.graphInterval.value == GraphInterval.DAY) {
 //                    selectedDate?.let {
@@ -318,10 +320,8 @@ class OreoSleepDetailFragment :
 //                }
 //                viewModel.getSleepData()
 
-                viewModel.getSleepDetailsData(selectedDate)
-                if (selectedDate != null) {
-                    viewModel.updateSelectedDate(selectedDate)
-                }
+                viewModel.getSleepDetailsData()
+                //viewModel.updateSelectedDate()
 
             }
         }
@@ -345,7 +345,7 @@ class OreoSleepDetailFragment :
                 HistoryCalendarActivity.getStartIntent(
                     requireContext(),
                     viewModel.sleepHistoryResponse.value?.lastOrNull()?.date
-                        ?: mSharedViewModel.selectedDate,
+                        ?: viewModel.selectedMasterDate,
                     "ring"
                 )
             )
@@ -363,6 +363,7 @@ class OreoSleepDetailFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.SLEEP_SCORE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
+                putString("date", viewModel.selectedDate)
             })
         }
         binding.lytSleepScore.lytTotalSleep.root.setOnClickListener {
@@ -371,6 +372,7 @@ class OreoSleepDetailFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.TOTAL_SLEEP
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
+                putString("date", viewModel.selectedDate)
             })
         }
         binding.lytSleepScore.lytTimeInBed.root.setOnClickListener {
@@ -379,6 +381,7 @@ class OreoSleepDetailFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.TIME_IN_BED
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
+                putString("date", viewModel.selectedDate)
             })
         }
         binding.lytSleepScore.lytSleepEfficiency.root.setOnClickListener {
@@ -387,6 +390,7 @@ class OreoSleepDetailFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.SLEEP_EFFICIENCY
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
+                putString("date", viewModel.selectedDate)
             })
         }
         binding.lytSleepScore.lytRestHr.root.setOnClickListener {
@@ -395,6 +399,7 @@ class OreoSleepDetailFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.RESTING_HR
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
+                putString("date", viewModel.selectedDate)
             })
         }
 
@@ -455,12 +460,31 @@ class OreoSleepDetailFragment :
             binding.lytToolbar.root.visible()
 
             val topGraphData = viewModel.getPrefixAndSuffixList(it)
-            mSharedViewModel.selectedDate = viewModel.dateList[viewModel.dateList.size - 1]
+            //mSharedViewModel.selectedDate = viewModel.selectedDate?:viewModel.dateList[viewModel.dateList.size - 1]
+            var moveToPos = -1
+
+
+            LOGS.d("moveToPosition date initia ${viewModel.selectedDate}")
+
+            if (viewModel.selectedDate != null) {
+                val index = it?.indexOfFirst { data ->
+                    data.date.equals(viewModel.selectedDate, true)
+                }
+                if (index != null) {
+
+                    moveToPos =  15 + (15-index-1)
+                    LOGS.d("moveToPosition date ${viewModel.selectedDate}")
+                    //binding.rvTopGraph.moveToPosition(15 + (15-index-1))
+                }
+
+            }
             binding.rvTopGraph.updateDataWithMax(
                 topGraphData.first,
                 topGraphData.third,
-                topGraphData.second
+                topGraphData.second,
+                moveToPos
             )
+
             viewModel.getContributorInfo()
 
 
@@ -812,11 +836,13 @@ class OreoSleepDetailFragment :
 
 
     override fun onPositionSelected(position: Int, chartModel: ChartModel?) {
-        if (mSharedViewModel.selectedDate == chartModel?.date!!) {
+        if (viewModel.selectedDate == chartModel?.date!!) {
             return
         }
-        mSharedViewModel.selectedDate = chartModel.date!!
-        chartModel.date?.let { viewModel.updateSelectedDate(it) }
+        //mSharedViewModel.selectedDate = chartModel.date!!
+        LOGS.w("moveToPosition onPositionSelected ${chartModel.date}")
+        viewModel.selectedDate = chartModel.date!!
+        viewModel.updateSelectedDate()
 
     }
 
