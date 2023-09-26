@@ -4,6 +4,8 @@ sealed class SyncEvents {
     data class Started(val progress: Int, val total: Int) : SyncEvents()
     data class InProgress(val progress: Int, val total: Int) : SyncEvents()
     data class Success(val progress: Int, val total: Int) : SyncEvents()
+    object ServerSyncStarted : SyncEvents()
+    object ServerSyncSuccess : SyncEvents()
     object Failed : SyncEvents()
 }
 

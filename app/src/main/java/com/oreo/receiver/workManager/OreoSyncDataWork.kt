@@ -2,6 +2,7 @@ package com.oreo.receiver.workManager
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Looper
 import androidx.hilt.work.HiltWorker
 import androidx.work.ForegroundInfo
 import androidx.work.ListenableWorker
@@ -48,6 +49,7 @@ import kotlinx.coroutines.supervisorScope
 import java.util.Calendar
 import java.util.Timer
 import java.util.TimerTask
+import java.util.logging.Handler
 import kotlin.concurrent.schedule
 import kotlin.coroutines.CoroutineContext
 
@@ -111,24 +113,27 @@ constructor(
         sessionManager.setShowSyncOfflineData(Event(HealthOverviewDataType.ALL))
         if (localDataStore.getUserToken() == null) {
             LOGS.d(TAG, "OreoSyncDataWork: user is not logged in!!")
+            AppLogs.sendAppLogs("OreoSyncDataWork: user is not logged in!!")
             return success.invoke()
         }
 
         if (!ApplicationUtils.isInternetConnected()) {
             LOGS.d(TAG, "OreoSyncDataWork: No Internet Access!!")
+            AppLogs.sendAppLogs("OreoSyncDataWork: No Internet Access!!, Sync to server failed")
             return success.invoke()
         }
 
-        if (!shouldSync()) {
+        /*if (!shouldSync()) {
             LOGS.d(
                 TAG, "OreoSyncDataWork: No time to sync(die)" +
                         "current timestamp: ${DateFormats.getTimeStamp()} " +
                         "last Sync at: ${ringDataStore.getLastSyncTimeStamp()}!!"
             )
             return success.invoke()
-        }
+        }*/
 
         //sessionManager.logAppEvent(FunnelEvents.SyncEvents.Sync_Start_Uploading_Data.name, eventProperty)
+        sessionManager.setSyncCompletedState(Event(SyncEvents.ServerSyncStarted))
         syncDataScope.launch {
             LOGS.d(TAG, "OreoSyncDataWork: Sync start")
             supervisorScope {
@@ -150,6 +155,7 @@ constructor(
                             is Resource.GenericError -> {
 //                                sessionManager.logAppEvent(FunnelEvents.SyncEvents.Sync_Error_Uploading_Data.name, eventProperty)
                                 LOGS.d(TAG, "OreoSyncDataWork: combinedData1 " + resource.message)
+                                AppLogs.sendAppLogs("OreoSyncDataWork postDataToServer GenericError ${resource.message}")
                             }
 
                             is Resource.Loading -> {
@@ -159,6 +165,8 @@ constructor(
                             is Resource.NetworkError -> {
 //                                sessionManager.logAppEvent(FunnelEvents.SyncEvents.Sync_Error_Uploading_Data.name, eventProperty)
                                 LOGS.d(TAG, "OreoSyncDataWork: combinedData1 " + resource.response)
+                                AppLogs.sendAppLogs("OreoSyncDataWork postDataToServer NetworkError ${resource.response}")
+
                             }
 
                             is Resource.Success -> {
@@ -191,6 +199,7 @@ constructor(
                             ?.collect { resource ->
                                 when (resource) {
                                     is Resource.GenericError -> {
+                                        AppLogs.sendAppLogs("OreoSyncDataWork postSleepHistoryData GenericError ${resource.message}")
 
                                         LOGS.d(
                                             TAG,
@@ -203,6 +212,7 @@ constructor(
                                     }
 
                                     is Resource.NetworkError -> {
+                                        AppLogs.sendAppLogs("OreoSyncDataWork postSleepHistoryData NetworkError ${resource.response}")
                                         LOGS.d(
                                             TAG,
                                             "OreoSyncDataWork: sleep " + resource.response
@@ -239,9 +249,11 @@ constructor(
 
 
                 removeOfflineUserData()
+                AppLogs.sendAppLogs("OreoSyncDataWork Server sync success")
 
                 ringDataStore.setLastSyncWithServer(DateFormats.getTimeStamp())
-                sessionManager.setShowSyncOfflineData(Event(HealthOverviewDataType.SERVER_SYNC_SUCCESS))
+                sessionManager.setSyncCompletedState(Event(SyncEvents.ServerSyncSuccess))
+                //sessionManager.setShowSyncOfflineData(Event(HealthOverviewDataType.SERVER_SYNC_SUCCESS))
 
                 if (::job.isInitialized) {
                     job.cancel()
@@ -288,6 +300,7 @@ constructor(
         timer = Timer("DelayConnection", false).schedule(SyncingTimeOut) {
 //            sessionManager.logAppEvent(FunnelEvents.SyncEvents.Syncing_Completed.name, eventProperty)
             //syncTime()
+            AppLogs.sendAppLogs("OreoSyncDataWork timer time out SyncingTimeOut : $SyncingTimeOut  isDataReceived: $isDataReceived")
             if (isDataReceived) {
                 return@schedule returnSuccess(success)
             } else {
@@ -306,11 +319,13 @@ constructor(
                     when (userActivityCallback) {
                         is UserActivityCallback.StepsDataObtainedOreo -> {
                             LOGS.d("OreoSyncDataWork: ${userActivityCallback.stepsData}")
-                            job = syncDataScope.launch {
+                            AppLogs.sendAppLogs("SAVING_STEPS_DATA Started")
+                            syncDataScope.launch {
                                 syncRepository.saveStepsData(userActivityCallback.stepsData)
                                     .collect { resource ->
                                         when (resource) {
                                             is CacheResult.Success -> {
+                                                AppLogs.sendAppLogs("SAVING_STEPS_DATA Success")
                                                 LOGS.d(
                                                     TAG,
                                                     "OreoSyncDataWork: steps ${resource.value}"
@@ -338,7 +353,7 @@ constructor(
 
                         is UserActivityCallback.HeartHistoryObtainedOreo -> {
 //                            LOGS.d("OreoSyncDataWork: ${Gson().toJson(userActivityCallback.heartRateData)}")
-                            job = syncDataScope.launch {
+                            syncDataScope.launch {
                                 syncRepository.saveHeartRateData(userActivityCallback.heartRateData)
                                     .collect { resource ->
                                         when (resource) {
@@ -369,7 +384,7 @@ constructor(
                         }
 
                         is UserActivityCallback.HealthScoreObtainedOreo -> {
-                            job = syncDataScope.launch {
+                            syncDataScope.launch {
                                 syncRepository.saveHealthScoreData(
                                     userActivityCallback.score,
                                     userActivityCallback.date
@@ -399,7 +414,7 @@ constructor(
 
                         is UserActivityCallback.SleepDataObtainedOreo -> {
                             //      LOGS.d("OreoSyncDataWork: sleep data ${Gson().toJson(userActivityCallback.sleepData)}")
-                            job = syncDataScope.launch {
+                            syncDataScope.launch {
                                 syncRepository.saveSleepData(userActivityCallback.sleepData)
                                     .collect { resource ->
                                         when (resource) {
@@ -432,7 +447,7 @@ constructor(
                         }
 
                         is UserActivityCallback.OreoBloodOxygenObtained -> {
-                            job = syncDataScope.launch {
+                            syncDataScope.launch {
                                 syncRepository.saveBloodOxygenData(userActivityCallback.bloodOxygen)
                                     .collect { resource ->
                                         when (resource) {
@@ -459,7 +474,7 @@ constructor(
                         }
 
                         is UserActivityCallback.OreoRingDayTimeMovementObtained -> {
-                            job = syncDataScope.launch {
+                            syncDataScope.launch {
                                 syncRepository.saveDayTimeMovementData(userActivityCallback.dayTimeMovement)
                                     .collect { resource ->
                                         when (resource) {
@@ -486,7 +501,7 @@ constructor(
                         }
 
                         is UserActivityCallback.OreoRespiratoryDataObtained -> {
-                            job = syncDataScope.launch {
+                            syncDataScope.launch {
                                 syncRepository.saveRespiratoryData(userActivityCallback.respiratoryData)
                                     .collect { resource ->
                                         when (resource) {
@@ -515,7 +530,7 @@ constructor(
 
                         is UserActivityCallback.StressDataObtainedOreo -> {
 //                            LOGS.d("OreoSyncDataWork: ${userActivityCallback.stressData}")
-                            job = syncDataScope.launch {
+                            syncDataScope.launch {
                                 syncRepository.saveStressData(userActivityCallback.stressData)
                                     .collect { resource ->
                                         when (resource) {
@@ -552,7 +567,7 @@ constructor(
                                 "OreoSyncDataWork:::: BodyTemperatureObtained"
                             )
 //                            LOGS.d("OreoSyncDataWork: ${userActivityCallback.stressData}")
-                            job = syncDataScope.launch {
+                            syncDataScope.launch {
                                 syncRepository.saveBodyTemperatureData(userActivityCallback.bodyTemperatureBreakupData)
                                     .collect { resource ->
                                         when (resource) {
@@ -588,9 +603,12 @@ constructor(
                         is UserActivityCallback.UserDataSyncUpdated -> {
                             if (userActivityCallback.syncStatus is SyncEvents.Success) {
                                 timer?.cancel()
-                                returnSuccess(success)
 
                                 AppLogs.sendAppLogs("RING SYNC TIME => ${System.currentTimeMillis() - lastTimeStamp}")
+                                android.os.Handler(Looper.getMainLooper()).postDelayed({
+                                    sessionManager.setSyncCompletedState(Event(userActivityCallback.syncStatus))
+                                    returnSuccess(success)
+                                }, 1000)
 
                             } else if (userActivityCallback.syncStatus is SyncEvents.Started) {
                                 val total =
@@ -605,16 +623,18 @@ constructor(
                                         90 * 1000L
                                 timer = Timer("DelayConnection", false).schedule(syncTime) {
                                     //syncTime()
+                                    AppLogs.sendAppLogs("OreoSyncDataWork inner timer time out SyncingTimeOut : $SyncingTimeOut  isDataReceived: $isDataReceived")
                                     if (isDataReceived) {
                                         return@schedule returnSuccess(success)
                                     } else {
                                         return@schedule returnSuccess(failed)
                                     }
                                 }
-
+                                sessionManager.setSyncCompletedState(Event(userActivityCallback.syncStatus))
+                            } else {
+                                sessionManager.setSyncCompletedState(Event(userActivityCallback.syncStatus))
                             }
 
-                            sessionManager.setSyncCompletedState(Event(userActivityCallback.syncStatus))
                         }
 
                         else -> {}

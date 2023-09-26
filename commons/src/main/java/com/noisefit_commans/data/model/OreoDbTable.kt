@@ -148,14 +148,23 @@ data class OreoSleepData(
         @SerializedName("start_date") var startDate: String? = null,
         @SerializedName("end_date") var endDate: String? = null,
         @SerializedName("duration") var duration: Int = 0
-    )
+    ) {
+        override fun toString(): String {
+            return "OreoSleepDataBreakup(startTime=$startTime, endTime=$endTime, hourOfTheDay=$hourOfTheDay, sleepType='$sleepType', date=$date, startDate=$startDate, endDate=$endDate, duration=$duration)"
+        }
+    }
 
     class OreoSleepMovementDataBreakup(
         @SerializedName("start_time") var startTime: String? = null,
         @SerializedName("end_time") var endTime: String? = null,
         @SerializedName("movement_type") var movementType: String,
         @SerializedName("duration") var duration: Int = 0
-    )
+
+    ) {
+        override fun toString(): String {
+            return "OreoSleepMovementDataBreakup(startTime=$startTime, endTime=$endTime, movementType='$movementType', duration=$duration)"
+        }
+    }
 }
 
 @Entity(tableName = "google_fit")

@@ -424,7 +424,7 @@ class OreoActivityFragment :
 
 
         //for inactive value
-        binding.lytDailyMovement.lytDMInactive.view1.layoutParams =
+       /* binding.lytDailyMovement.lytDMInactive.view1.layoutParams =
             binding.lytDailyMovement.lytDMInactive.view1.layoutParams.apply {
                 (this as LinearLayout.LayoutParams).weight =
                     calculateWeightPercent(inactiveProgress)
@@ -442,7 +442,7 @@ class OreoActivityFragment :
         if (calculateWeightPercent(inactiveProgress) > 0)
             binding.lytDailyMovement.lytDMInactive.view1.visible()
         else
-            binding.lytDailyMovement.lytDMInactive.view1.gone()
+            binding.lytDailyMovement.lytDMInactive.view1.gone()*/
 
 
     }

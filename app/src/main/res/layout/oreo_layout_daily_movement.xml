@@ -111,6 +111,7 @@
             layout="@layout/layout_daliy_activity_analysis_new"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginTop="16dp"
             android:layout_marginStart="@dimen/side_margin"
             android:layout_marginEnd="@dimen/side_margin"

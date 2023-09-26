@@ -6,6 +6,7 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.data.CombinedData
 import com.google.android.material.tabs.TabLayoutMediator
@@ -18,6 +19,7 @@ import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.constants.SyncEvents
+import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseFragment
@@ -44,6 +46,7 @@ import com.oreo.ui.workout.add.ADD_WORKOUT_REQUEST_KEY
 import com.oreo.util.graph.OCombineChartUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.dkzwm.widget.srl.RefreshingListenerAdapter
@@ -232,7 +235,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         val shouldSync = viewModel.sessionManager.forceSyncData.value?.getContent() ?: false
 
-        if (shouldSync || kotlin.math.abs(DateFormats.getTimeStamp() - lastSyncTime) > 60 * 60 * 1000L) {
+        if (shouldSync || kotlin.math.abs(DateFormats.getTimeStamp() - lastSyncTime) > 2 * 60 * 60 * 1000L) {
             binding.lytHeader.tvHeaderStatus.apply {
                 text = context.getString(R.string.text_syncing_dot)
                 visible()
@@ -401,6 +404,15 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                         binding.lytHeader.pbSync.gone()
                         resetSwipeLoadingAnim()
                     }
+
+                    SyncEvents.ServerSyncStarted -> {
+                        binding.progressBar.root.visible()
+                    }
+
+                    SyncEvents.ServerSyncSuccess -> {
+                        binding.progressBar.root.gone()
+                        viewModel.getDashboardDataFromServer(true)
+                    }
                 }
             }
         }
@@ -455,14 +467,14 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             }
         }
 
-        viewModel.sessionManager.showSyncOfflineData.observe(this) {
-            it?.getContent()?.let { userActivity ->
-                if (userActivity == HealthOverviewDataType.SERVER_SYNC_SUCCESS) {
-                    viewModel.getDashboardDataFromServer(true)
-                }
+        /* viewModel.sessionManager.showSyncOfflineData.observe(this) {
+             it?.getContent()?.let { userActivity ->
+                 if (userActivity == HealthOverviewDataType.SERVER_SYNC_SUCCESS) {
+                     viewModel.getDashboardDataFromServer(true)
+                 }
 
-            }
-        }
+             }
+         }*/
         viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->
                 context.showShortToast(message)
@@ -850,7 +862,20 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 return@setOnClickListener
             }
 
-            viewModel.measureHr(true)
+            viewModel.viewModelScope.launch(Dispatchers.IO) {
+                context?.let {
+                    val isWorkerRunning = ApplicationUtils.isOreoSyncDataWorkerRunning(it)
+                    LOGS.w("imvHrMeasure isOreoSyncDataWorkerRunning $isWorkerRunning")
+                    if (isWorkerRunning) {
+                        viewModel.stateHeartRateCard.postValue(viewModel.stateHeartRateCard.value?.apply {
+                            this.measureState = TapMeasureState.ERROR
+                        })
+                        return@launch
+                    }
+                    viewModel.measureHr(true)
+                }
+            }
+
             return@setOnClickListener
         }
     }
