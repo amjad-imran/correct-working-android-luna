@@ -1610,7 +1610,7 @@ class OSleepScoreDetailsFragment :
             }
 
             ViewItemClickType.RESTING_HR -> {
-                trendTitle = "Resting HR trend"
+                trendTitle = "Average HR trend"
             }
 
             ViewItemClickType.READINESS_SCORE -> {

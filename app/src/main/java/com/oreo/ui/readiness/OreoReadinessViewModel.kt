@@ -464,7 +464,7 @@ constructor(
 
             result.add(
                 Contributors(
-                    title = "Resting HR",
+                    title = "Average HR",
                     leftText = dayData.restingHrBalance.text,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -475,7 +475,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Resting HR",
+                    title = "Average HR",
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
