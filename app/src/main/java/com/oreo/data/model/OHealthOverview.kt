@@ -10,6 +10,13 @@ import com.oreo.data.model.health.ODashboardSleepModel
 
 sealed class OHealthOverview {
 
+
+    object InfoRingWelcome : OHealthOverview()
+    object InfoRingCare : OHealthOverview()
+    data class InfoVideo(val type: VideoInfoType, val title: String, val message: String) :
+        OHealthOverview()
+
+
     class AutoSport(
         val count: Int
     ) : OHealthOverview()
@@ -73,7 +80,6 @@ sealed class OHealthOverview {
     ) : OHealthOverview()
 
 
-
 }
 
 data class DashAlert(
@@ -84,6 +90,10 @@ data class DashAlert(
 
 enum class AlertType {
     BLUETOOTH, OTA_UPDATE, DEFAULT
+}
+
+enum class VideoInfoType {
+    SLEEP, READINESS, ACTIVITY
 }
 
 enum class TapMeasureState {

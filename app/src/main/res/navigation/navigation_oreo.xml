@@ -365,5 +365,21 @@
             android:name="metricsType"
             app:argType="com.oreo.ui.sleep.scoredetails.ViewItemClickType" />
     </dialog>
+    <fragment
+        android:id="@+id/ringCareFragment"
+        android:name="com.oreo.ui.info.RingCareFragment"
+        android:label="RingCareFragment" />
+    <fragment
+        android:id="@+id/ringWelcomeFragment"
+        android:name="com.oreo.ui.info.RingWelcomeFragment"
+        android:label="RingWelcomeFragment" />
+    <fragment
+        android:id="@+id/ringInfoPlayerFragment"
+        android:name="com.oreo.ui.info.RingInfoPlayerFragment"
+        android:label="RingInfoPlayerFragment" >
+        <argument
+            android:name="videoUrl"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

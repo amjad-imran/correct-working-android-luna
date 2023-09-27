@@ -224,6 +224,21 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 //                        putString("viewType", "activity")
 //                    })
 //                }
+                is OSummaryHealthOverviewClickEnum.VideoInfoClicked -> {
+                    navigate(R.id.ringInfoPlayerFragment,Bundle().apply {
+                        this.putString("videoUrl","https://uat-feeds-cdn.gonoise.com/feeds/staging/posts/admin/video/1694417718449_yt1s.com%20-%20%20How%20to%20Download%20YouTube%20Video_144p.3gp")
+                    })
+
+                }
+
+                OSummaryHealthOverviewClickEnum.TextRingCareClicked -> {
+                    navigate(R.id.ringCareFragment)
+
+                }
+
+                OSummaryHealthOverviewClickEnum.TextWelcomeRingClicked -> {
+                    navigate(R.id.ringWelcomeFragment)
+                }
             }
         }
 

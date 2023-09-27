@@ -69,6 +69,23 @@ class OreoUserActivityRepositoryImpl(
 ) : OreoUserActivityRepository {
 
 
+    override suspend fun getRingCareData(): Flow<Resource<BaseApiResponse<List<RingCare>>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${BuildConfig.BASE_URL_NEW}/luna/protean/v1/details?type=care_ring"
+            remoteDataSource.getRingCareData(url)
+        }
+    }
+
+    override suspend fun getWelcomeRingData(): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${BuildConfig.BASE_URL_NEW}/luna/protean/v1/details?type=welcome_ring"
+            remoteDataSource.getRingWelcomeData(url)
+        }
+    }
+
+
     override suspend fun getSleepHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoSleepModel>>>> {
 
         return flow {
@@ -316,6 +333,7 @@ class OreoUserActivityRepositoryImpl(
             }
         }
     }
+
 
     override suspend fun getDashboardData(forceRefresh: Boolean): Flow<Resource<BaseApiResponse<OreoDashboardResponseModel>>> {
 

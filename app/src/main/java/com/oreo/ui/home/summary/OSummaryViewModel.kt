@@ -27,6 +27,7 @@ import com.oreo.data.model.DashAlert
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.TapMeasureState
+import com.oreo.data.model.VideoInfoType
 import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepModel
@@ -215,6 +216,12 @@ constructor(
                 userActivities.add(OHealthOverview.AutoSport(autoSportCount))
             }
             //userActivities.add(OHealthOverview.AutoSport(2))
+
+            userActivities.add(OHealthOverview.InfoRingWelcome)
+            userActivities.add(OHealthOverview.InfoRingCare)
+            userActivities.add(OHealthOverview.InfoVideo(VideoInfoType.SLEEP,"",""))
+            userActivities.add(OHealthOverview.InfoVideo(VideoInfoType.READINESS,"",""))
+            userActivities.add(OHealthOverview.InfoVideo(VideoInfoType.ACTIVITY,"",""))
 
 
             ringDataStore.setRegisterDay(data.registerDate ?: -1)

@@ -958,4 +958,10 @@
     <string name="text_act_score_message">Your activity score will appear on burning 50 kcal</string>
     <string name="tex_ready_for_the_day">Ready for the day</string>
     <string name="text_summary">Summary</string>
+    <string name="text_caring_for_your_ring">Caring for your ring</string>
+    <string name="text_ring_care_message">Treating your Luna the best you can</string>
+    <string name="text_welcome_to_luna">Welcome to Luna</string>
+    <string name="text_understanding_your_body_starts_here">Understanding your body starts here</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
