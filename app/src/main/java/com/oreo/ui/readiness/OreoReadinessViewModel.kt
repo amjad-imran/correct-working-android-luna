@@ -314,7 +314,7 @@ constructor(
         descriptionList.add(contributorInfo.value?.activityBalance ?: "")
         descriptionList.add(contributorInfo.value?.hrvBalance ?: "")
         descriptionList.add(contributorInfo.value?.restingHr ?: "")
-        descriptionList.add(contributorInfo.value?.heartRate ?: "")
+        //descriptionList.add(contributorInfo.value?.heartRate ?: "")
         descriptionList.add(contributorInfo.value?.recoveryIndex ?: "")
         return descriptionList
     }
@@ -494,7 +494,7 @@ constructor(
             )
         }
 
-        if (dayData?.hrReserve != null) {
+       /* if (dayData?.hrReserve != null) {
             val (textColor, barColor, background) = getContributorsColors(dayData.hrReserve.status)
 
             result.add(
@@ -518,7 +518,7 @@ constructor(
                     backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
                 )
             )
-        }
+        }*/
 
         if (dayData?.recoveryIndex != null) {
             val (textColor, barColor, background) = getContributorsColors(dayData.recoveryIndex.status)
