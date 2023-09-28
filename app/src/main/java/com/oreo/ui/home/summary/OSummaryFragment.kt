@@ -356,13 +356,13 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         viewModel.deviceConnected.observe(this) { connected ->
             if (!connected) {
-                binding.lytHeader.ivExclamation.visible()
+                binding.lytHeader.ivExclamation.gone()
                 binding.lytHeader.batteryStatus.invisible()
                 binding.lytHeader.lottieAnimView.gone()
                 binding.lytHeader.oreoStatus.visible()
                 binding.lytHeader.oreoStatus.loadImage(
                     requireContext(),
-                    R.drawable.ic_ring_default_silver
+                    R.drawable.ic_ring_not_connected
                 )
             }
         }
@@ -888,7 +888,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         binding.lytHeader.oreoStatus.loadImage(
             requireContext(),
-            R.drawable.ic_luna_state_bt_off
+            R.drawable.ic_ring_bluetooth_off
         )
         binding.lytHeader.oreoStatus.setBackgroundResource(R.drawable.back_modal_new_round)
     }
@@ -905,7 +905,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             binding.lytHeader.oreoStatus.visible()
             binding.lytHeader.oreoStatus.loadImage(
                 requireContext(),
-                R.drawable.ic_ring_default_silver
+                R.drawable.ic_ring_default_silver_new
             )
         }
 
@@ -921,9 +921,13 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         val batteryPercentage = viewModel.watchDataStore.getBatteryPercentRing()
         binding.lytHeader.batteryStatus.progress = batteryPercentage
         if (batteryPercentage < 20) {
-            binding.lytHeader.oreoStatus.setBackgroundResource(R.drawable.back_modal_red_circle)
+            binding.lytHeader.oreoStatus.loadImage(
+                requireContext(),
+                R.drawable.ic_ring_low_battery
+            )
             binding.lytHeader.batteryStatus.setIndicatorColor(resources.getColor(R.color.color_error))
-        } else {
+        }
+        else {
             binding.lytHeader.oreoStatus.setBackgroundResource(R.drawable.back_modal_new_round)
             binding.lytHeader.batteryStatus.setIndicatorColor(resources.getColor(R.color.white))
         }
@@ -931,12 +935,12 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         if (viewModel.sessionManager.isRingCharging.value == true) {
             binding.lytHeader.oreoStatus.loadImage(
                 requireContext(),
-                R.drawable.ic_luna_state_charge
+                R.drawable.ic_ring_charging
             )
         } else {
             binding.lytHeader.oreoStatus.loadImage(
                 requireContext(),
-                R.drawable.ic_ring_default_silver
+                R.drawable.ic_ring_default_silver_new
             )
         }
     }
