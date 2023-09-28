@@ -127,26 +127,27 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             mSharedViewModel.itemClickType = ViewItemClickType.READINESS_SCORE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
+                putString("date", DateFormats.getCurrentDateOreoFormat())
             })
         }
 
         binding.contentMain.lytSleepAvg.constraintLayout2.setOnClickListener {
             mSharedViewModel.selectedTab = 0
-            mSharedViewModel.selectedDate = DateFormats.getCurrentDateOreoFormat()
             mSharedViewModel.itemType = ClickViewType.SLEEP.name
             mSharedViewModel.itemClickType = ViewItemClickType.SLEEP_SCORE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
+                putString("date", DateFormats.getCurrentDateOreoFormat())
             })
         }
 
         binding.contentMain.lytSleepAvg.constraintLayout.setOnClickListener {
             mSharedViewModel.selectedTab = 0
-            mSharedViewModel.selectedDate = DateFormats.getCurrentDateOreoFormat()
             mSharedViewModel.itemType = ClickViewType.ACTIVITY.name
             mSharedViewModel.itemClickType = ViewItemClickType.ACTIVITY_SCORE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "activity")
+                putString("date", DateFormats.getCurrentDateOreoFormat())
             })
         }
 

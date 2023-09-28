@@ -32,6 +32,9 @@ class OreoActivityViewModel @Inject constructor(
     val ringDataStore: RingDataStore
 ) : BaseViewModel() {
 
+    var selectedMasterDate: String? = null
+    var selectedDate: String? = null
+
 
     private val _activityHistoryResponse = MutableLiveData<List<OreoActivityModel>>()
     val activityHistoryResponse: LiveData<List<OreoActivityModel>> = _activityHistoryResponse
@@ -42,7 +45,9 @@ class OreoActivityViewModel @Inject constructor(
 
     private val _contributorInfo = MutableLiveData<OContributorResponseModal>()
     private val contributorInfo: LiveData<OContributorResponseModal> = _contributorInfo
-
+    init {
+        selectedMasterDate = DateFormats.getCurrentDateOreoFormat()
+    }
 
     fun getContributorInfo() {
         viewModelScope.launch {
@@ -95,13 +100,20 @@ class OreoActivityViewModel @Inject constructor(
         return datesArray
     }
 
-    fun updateSelectedDate(date: String) {
+    fun updateSelectedDate() {
+
         val dayData = _activityHistoryResponse.value?.firstOrNull() {
-            it.date.equals(date, false)
+            it.date.equals(selectedDate, false)
         }
         if (dayData != null) {
-            LOGS.d("handleMovementViewshandleMovementViews-dayActivityData 2")
-            _dayActivityData.postValue(dayData!!)
+            _dayActivityData.postValue(dayData)
+        }else{
+            _activityHistoryResponse.value?.lastOrNull()?.let { data ->
+                LOGS.w("moveToPosition selected Date new $selectedDate")
+                selectedDate = data.date
+                LOGS.w("moveToPosition selected Date new set $selectedDate")
+                _dayActivityData.postValue(data)
+            }
         }
     }
 
@@ -184,7 +196,7 @@ class OreoActivityViewModel @Inject constructor(
     fun getActivityDetailsData(date: String? = null) {
         viewModelScope.launch {
             userActivityRepository.getActivityHistory(
-                date ?: DateFormats.getCurrentDateOreoFormat()
+                selectedMasterDate ?: DateFormats.getCurrentDateOreoFormat()
             ).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
@@ -213,12 +225,9 @@ class OreoActivityViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            _activityHistoryResponse.postValue(it.reversed())
+                            _activityHistoryResponse.value = (it.reversed())
 
-                            it.firstOrNull()?.let { data ->
-                                LOGS.d("handleMovementViewshandleMovementViews-dayActivityData 1")
-                                _dayActivityData.postValue(data)
-                            }
+                            updateSelectedDate()
                         }
                     }
                 }
