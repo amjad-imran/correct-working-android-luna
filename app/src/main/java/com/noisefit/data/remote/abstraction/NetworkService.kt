@@ -478,12 +478,12 @@ interface NetworkService {
     @GET
     suspend fun getRingCareData(
         @Url string: String,
-    ): BaseApiResponse<List<RingCare>>
+    ): BaseApiResponse<RingCareResponse>
 
     @GET
     suspend fun getRingWelcomeData(
         @Url string: String,
-    ): BaseApiResponse<Any>
+    ): BaseApiResponse<RingWelcome>
 
     @GET
     suspend fun getCityList(

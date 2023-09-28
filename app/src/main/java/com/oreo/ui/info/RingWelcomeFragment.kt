@@ -12,26 +12,26 @@ import com.noisefit.luna.databinding.FragmentRingCareBinding
 import com.noisefit.luna.databinding.FragmentRingWelcomeBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.loadImageWithCache
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class RingWelcomeFragment : BaseFragment<FragmentRingWelcomeBinding>(FragmentRingWelcomeBinding::inflate) {
+class RingWelcomeFragment :
+    BaseFragment<FragmentRingWelcomeBinding>(FragmentRingWelcomeBinding::inflate) {
 
     val viewModel: RingCareViewModel by viewModels()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.toolbar.tvTitle.text = "Welcome to Luna"
 
         viewModel.getWelcomeRingData()
 
 
     }
-
-
 
 
     override fun initListener() {
@@ -63,6 +63,15 @@ class RingWelcomeFragment : BaseFragment<FragmentRingWelcomeBinding>(FragmentRin
     }
 
     override fun subscribeObservers() {
+        viewModel.ringWelcome.observe(this) {
+            binding.toolbar.tvTitle.text = it.title
+
+            val joinedData = it.content.joinToString(separator = "\n\n")
+
+            binding.tvContent.text = joinedData
+            binding.ivMain.loadImageWithCache(binding.ivMain.context, it.url)
+
+        }
 
     }
 

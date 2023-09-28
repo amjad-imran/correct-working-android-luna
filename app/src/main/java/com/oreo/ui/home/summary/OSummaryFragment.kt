@@ -19,6 +19,7 @@ import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.constants.SyncEvents
+import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.models.ColorFitDevice
@@ -35,6 +36,7 @@ import com.oreo.data.model.AlertType
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.TapMeasureState
+import com.oreo.data.model.VideoInfoType
 import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
@@ -59,6 +61,9 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     private val mSharedViewModel: SharedOSCDViewModel by activityViewModels()
     private val viewModel: OSummaryViewModel by viewModels()
     private val healthOverviewAdapter by lazy {
+        OSummaryHealthOverviewAdapter()
+    }
+    private val viewedCardsAdapter by lazy {
         OSummaryHealthOverviewAdapter()
     }
 
@@ -163,6 +168,28 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             adapter = healthOverviewAdapter
         }
 
+        binding.contentMain.rvViewedCards.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = viewedCardsAdapter
+        }
+
+        viewedCardsAdapter.itemClickListener = { type ->
+            when (type) {
+                OSummaryHealthOverviewClickEnum.TextRingCareClicked -> {
+                    navigate(R.id.ringCareFragment)
+                }
+
+                is OSummaryHealthOverviewClickEnum.VideoInfoClicked -> {
+                    navigate(R.id.ringInfoPlayerFragment, Bundle().apply {
+                        this.putString("videoUrl", type.videoUrl)
+                    })
+                }
+
+                else -> {}
+            }
+
+        }
+
         healthOverviewAdapter.itemClickListener = { type ->
             when (type) {
 
@@ -225,18 +252,26 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 //                    })
 //                }
                 is OSummaryHealthOverviewClickEnum.VideoInfoClicked -> {
-                    navigate(R.id.ringInfoPlayerFragment,Bundle().apply {
-                        this.putString("videoUrl","https://uat-feeds-cdn.gonoise.com/feeds/staging/posts/admin/video/1694417718449_yt1s.com%20-%20%20How%20to%20Download%20YouTube%20Video_144p.3gp")
+                    navigate(R.id.ringInfoPlayerFragment, Bundle().apply {
+                        this.putString("videoUrl", type.videoUrl)
                     })
-
+                    viewModel.localDataStore.setDashCardClickState(
+                        when (type.type) {
+                            VideoInfoType.SLEEP -> DashInfoCard.SLEEP
+                            VideoInfoType.READINESS -> DashInfoCard.READINESS
+                            VideoInfoType.ACTIVITY -> DashInfoCard.ACTIVITY
+                        }, true
+                    )
                 }
 
                 OSummaryHealthOverviewClickEnum.TextRingCareClicked -> {
+                    viewModel.localDataStore.setDashCardClickState(DashInfoCard.CARE, true)
                     navigate(R.id.ringCareFragment)
 
                 }
 
                 OSummaryHealthOverviewClickEnum.TextWelcomeRingClicked -> {
+                    viewModel.localDataStore.setDashCardClickState(DashInfoCard.WELCOME, true)
                     navigate(R.id.ringWelcomeFragment)
                 }
             }
@@ -479,6 +514,13 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 healthOverviewAdapter.refreshPosition = viewModel.summary.refreshPosition
                 healthOverviewAdapter.items = it
                 healthOverviewAdapter.refreshPosition = null
+            }
+        }
+
+        viewModel.summary.viewedCardsData.observe(this) {
+            it?.let {
+                viewedCardsAdapter.refreshPosition = null
+                viewedCardsAdapter.items = it
             }
         }
 

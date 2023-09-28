@@ -7,6 +7,7 @@ import com.oreo.data.model.OHealthOverview
 
 data class OSummary(
     val healthOverviewData: MutableLiveData<ArrayList<OHealthOverview>> = MutableLiveData<ArrayList<OHealthOverview>>(),
+    val viewedCardsData: MutableLiveData<ArrayList<OHealthOverview>> = MutableLiveData<ArrayList<OHealthOverview>>(),
     var unit: Units = Units.METRIC,
     var bodyTemp: Units = Units.METRIC,
     var user: User? = null,

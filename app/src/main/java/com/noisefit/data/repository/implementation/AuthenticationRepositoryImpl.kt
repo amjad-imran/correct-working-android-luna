@@ -92,6 +92,7 @@ class AuthenticationRepositoryImpl(
             localDataSource.setVerifyMobileNumberStatus(false)
             localDataSource.setUserDataSynced(false)
             localDataSource.deleteUserInfo()
+            localDataSource.clearDashCardClickState()
             localDataSource.deleteUserToken()
             localDataSource.deleteFcmToken()
             localDataSource.setUserLocationMapped(false)

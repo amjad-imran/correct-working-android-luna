@@ -7,6 +7,7 @@ import com.google.gson.reflect.TypeToken
 import com.noisefit.data.remote.response.CatWiseWatchFacesItem
 import com.noisefit.data.remote.response.WatchFaceCustomListResponse
 import com.noisefit_commans.constants.WatchInfoGlobals
+import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.enums.ServiceState
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.DashboardBanner
@@ -186,6 +187,7 @@ private const val SHOW_REVIEW_POP_UP = "SHOW_REVIEW_POP_UP"
 private const val PAIR_DEVICE_TYPE = "PAIR_DEVICE_TYPE"
 private const val WF_RATING_KEY = "WF_RATING_KEY"
 private const val TOKEN_LAST_UPDATE = "TOKEN_LAST_UPDATE"
+private const val DASH_CARD_CLICK_STATE = "DASH_CARD_CLICK_STATE"
 
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -195,6 +197,28 @@ class DataStoredImpl
 @Inject constructor(
     private val gson: Gson, private val mPrefs: SharedPreferences
 ) : DataStoredInterface {
+
+    override fun getDashCardClickState(): HashMap<DashInfoCard, Boolean> {
+        val data = mPrefs.getString(DASH_CARD_CLICK_STATE, null)
+            ?: return HashMap<DashInfoCard, Boolean>().apply {
+                this[DashInfoCard.ACTIVITY] = false
+                this[DashInfoCard.READINESS] = false
+                this[DashInfoCard.SLEEP] = false
+                this[DashInfoCard.CARE] = false
+                this[DashInfoCard.WELCOME] = false
+            }
+        return Gson().fromJson<HashMap<DashInfoCard, Boolean>>(data)
+    }
+
+    override fun clearDashCardClickState() {
+        mPrefs.edit()?.remove(DASH_CARD_CLICK_STATE)?.apply()
+    }
+
+    override fun setDashCardClickState(type: DashInfoCard, boolean: Boolean) {
+        val lastData = getDashCardClickState()
+        lastData[type] = boolean
+        mPrefs.edit()?.putString(DASH_CARD_CLICK_STATE, gson.toJson(lastData))?.commit()
+    }
 
     override fun isPreviouslyPaired(): Boolean {
         return mPrefs.getBoolean(IS_PREVIOUSLY_PAIRED, false)

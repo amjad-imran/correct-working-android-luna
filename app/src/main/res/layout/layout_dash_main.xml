@@ -65,6 +65,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_24dp" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvViewedCards"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
         <include
             android:id="@+id/lytDummy"
             layout="@layout/oreo_dummy_view"

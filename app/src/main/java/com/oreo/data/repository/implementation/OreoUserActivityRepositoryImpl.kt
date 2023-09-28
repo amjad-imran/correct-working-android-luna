@@ -69,7 +69,7 @@ class OreoUserActivityRepositoryImpl(
 ) : OreoUserActivityRepository {
 
 
-    override suspend fun getRingCareData(): Flow<Resource<BaseApiResponse<List<RingCare>>>> {
+    override suspend fun getRingCareData(): Flow<Resource<BaseApiResponse<RingCareResponse>>> {
         return safeApiCallFlow(dispatcher) {
             val url =
                 "${BuildConfig.BASE_URL_NEW}/luna/protean/v1/details?type=care_ring"
@@ -77,7 +77,7 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
-    override suspend fun getWelcomeRingData(): Flow<Resource<BaseApiResponse<Any>>> {
+    override suspend fun getWelcomeRingData(): Flow<Resource<BaseApiResponse<RingWelcome>>> {
         return safeApiCallFlow(dispatcher) {
             val url =
                 "${BuildConfig.BASE_URL_NEW}/luna/protean/v1/details?type=welcome_ring"

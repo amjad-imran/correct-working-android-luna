@@ -7,6 +7,7 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.data.model.RingCare
+import com.oreo.data.model.RingWelcome
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -19,6 +20,7 @@ constructor(
 ) : BaseViewModel() {
 
     val ringCarePoints = MutableLiveData<List<RingCare>>()
+    val ringWelcome = MutableLiveData<RingWelcome>()
 
 
     fun getRingCareData() {
@@ -52,7 +54,7 @@ constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            ringCarePoints.postValue(it)
+                            ringCarePoints.postValue(it.care)
                         }
                     }
                 }
@@ -91,7 +93,7 @@ constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-
+                            ringWelcome.postValue(it)
                         }
                     }
                 }

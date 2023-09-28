@@ -1,27 +1,15 @@
 package com.oreo.ui.home.summary
 
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import androidx.viewpager2.widget.CompositePageTransformer
-import androidx.viewpager2.widget.MarginPageTransformer
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
-import com.github.mikephil.charting.data.CombinedData
-import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.*
 import com.noisefit.ui.common.calculatePercentage
-import com.noisefit.ui.dashboard.summary.DashboardBannerAction
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.dpToPx
 import com.noisefit_commans.ui.*
@@ -31,13 +19,8 @@ import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MiscUtil
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.DashAlert
-import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
-import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.VideoInfoType
-import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
-import com.oreo.util.graph.OCombineChartUtils
-import java.lang.Math.abs
 import java.lang.StringBuilder
 
 sealed class OSummaryHealthOverviewClickEnum {
@@ -46,7 +29,8 @@ sealed class OSummaryHealthOverviewClickEnum {
     object ReadinessDetailsWorkoutClick : OSummaryHealthOverviewClickEnum()
     object TextWelcomeRingClicked : OSummaryHealthOverviewClickEnum()
     object TextRingCareClicked : OSummaryHealthOverviewClickEnum()
-    data class VideoInfoClicked(val type: VideoInfoType) : OSummaryHealthOverviewClickEnum()
+    data class VideoInfoClicked(val type: VideoInfoType, val videoUrl: String) :
+        OSummaryHealthOverviewClickEnum()
 
 
     object AutoSportsDelete : OSummaryHealthOverviewClickEnum()
@@ -68,13 +52,7 @@ class OSummaryHealthOverviewAdapter :
         set(value) {
             try {
                 field = value
-                if (refreshPosition != null) {
-                    if (refreshPosition != -1) {
-                        notifyItemChanged(refreshPosition!!)
-                    } else {
-                        notifyDataSetChanged()
-                    }
-                }
+                notifyDataSetChanged()
             } catch (exp: Exception) {
                 exp.printStackTrace()
             }
@@ -213,8 +191,8 @@ class OSummaryHealthOverviewAdapter :
     override fun onBindViewHolder(holder: HomeRecyclerViewHolder, position: Int) {
         holder.itemClickListener = itemClickListener
         when (holder) {
-            is HomeRecyclerViewHolder.InfoWelcomeCardViewHolder -> holder.bind()
-            is HomeRecyclerViewHolder.InfoRingCareViewHolder -> holder.bind()
+            is HomeRecyclerViewHolder.InfoWelcomeCardViewHolder -> holder.bind(items[position] as OHealthOverview.InfoRingWelcome)
+            is HomeRecyclerViewHolder.InfoRingCareViewHolder -> holder.bind(items[position] as OHealthOverview.InfoRingCare)
             is HomeRecyclerViewHolder.InfoVideoCardViewHolder -> holder.bind(
                 items[position] as OHealthOverview.InfoVideo,
             )
@@ -311,8 +289,8 @@ class OSummaryHealthOverviewAdapter :
             is OHealthOverview.AutoSport -> R.layout.list_o_w_alert_card_item
             is OHealthOverview.HeartRate -> 0
             is OHealthOverview.InfoVideo -> R.layout.list_video_info_card
-            OHealthOverview.InfoRingCare -> R.layout.list_ring_care
-            OHealthOverview.InfoRingWelcome -> R.layout.list_welcome_card
+            is OHealthOverview.InfoRingCare -> R.layout.list_ring_care
+            is OHealthOverview.InfoRingWelcome -> R.layout.list_welcome_card
         }
     }
 }
@@ -328,8 +306,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             data: OHealthOverview.InfoVideo,
         ) {
 
-            binding.tvTitle.text = data.title
-            binding.tvMessage.text = data.message
+            binding.tvTitle.text = data.data.title
+            binding.tvMessage.text = data.data.time
 
 
             binding.ivBack.loadImage(
@@ -342,7 +320,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             )
 
             binding.root.setOnClickListener {
-                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.VideoInfoClicked(data.type))
+                itemClickListener?.invoke(
+                    OSummaryHealthOverviewClickEnum.VideoInfoClicked(
+                        data.type,
+                        data.data.url
+                    )
+                )
             }
 
         }
@@ -350,7 +333,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
     class InfoWelcomeCardViewHolder(private val binding: ListWelcomeCardBinding) :
         HomeRecyclerViewHolder(binding) {
-        fun bind() {
+        fun bind(data: OHealthOverview.InfoRingWelcome) {
+
+            binding.tvTitle.text = data.data.title
+            binding.tvMessage.text = data.data.content
 
 
             binding.root.setOnClickListener {
@@ -362,8 +348,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
     class InfoRingCareViewHolder(private val binding: ListRingCareBinding) :
         HomeRecyclerViewHolder(binding) {
-        fun bind() {
-
+        fun bind(data: OHealthOverview.InfoRingCare) {
+            binding.tvTitle.text = data.data.title
+            binding.tvMessage.text = data.data.content
 
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.TextRingCareClicked)

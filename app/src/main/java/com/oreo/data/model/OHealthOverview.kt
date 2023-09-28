@@ -3,6 +3,8 @@ package com.oreo.data.model
 import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.data.Entry
 import com.noisefit_commans.models.SleepData
+import com.oreo.data.model.health.InfoTextData
+import com.oreo.data.model.health.InfoVideoData
 import com.oreo.data.model.health.ODashboardActivityModel
 import com.oreo.data.model.health.ODashboardReadinessModel
 import com.oreo.data.model.health.ODashboardSleepModel
@@ -11,9 +13,9 @@ import com.oreo.data.model.health.ODashboardSleepModel
 sealed class OHealthOverview {
 
 
-    object InfoRingWelcome : OHealthOverview()
-    object InfoRingCare : OHealthOverview()
-    data class InfoVideo(val type: VideoInfoType, val title: String, val message: String) :
+    data class InfoRingWelcome(val data: InfoTextData) : OHealthOverview()
+    data class InfoRingCare(val data: InfoTextData) : OHealthOverview()
+    data class InfoVideo(val type: VideoInfoType, val data: InfoVideoData) :
         OHealthOverview()
 
 
