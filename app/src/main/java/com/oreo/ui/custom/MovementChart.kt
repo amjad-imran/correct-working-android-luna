@@ -12,6 +12,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 
 class MovementChart(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     private val xTextPaint = Paint()
@@ -178,15 +179,18 @@ class MovementChart(context: Context, attrs: AttributeSet?) : View(context, attr
 
 
     fun setData(list: List<Int>) {
+        LOGS.w("MovementChart data set ${list.size}")
         dataList.clear()
         dataList.addAll(list)
         invalidate()
+        requestLayout()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         val width = (dataList.size * lineWidth) + (dataList.size * lineSpacing)
         setMeasuredDimension(width.toInt(), viewHeight)
+
     }
 
     fun dpToPx(px: Int): Float {
