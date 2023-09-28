@@ -613,7 +613,7 @@ class OreoActivityFragment :
             binding.lytWorkouts.tvEmptyMsg.visible()
         }
 
-        if (mViewModel.selectedMasterDate == DateFormats.getCurrentDateOreoFormat()) {
+        if (mViewModel.selectedDate == DateFormats.getCurrentDateOreoFormat()) {
             if (mViewModel.ringDataStore.getRingDevice() != null) {
                 binding.lytWorkouts.viewAddWorkout.visible()
             } else {
