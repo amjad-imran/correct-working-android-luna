@@ -8,28 +8,30 @@
         android:layout_height="match_parent">
 
 
-        <com.google.android.material.imageview.ShapeableImageView
+        <!--<com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivBackGround"
-            android:layout_width="58dp"
-            android:layout_height="58dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="@drawable/back_modal_new_round"
-            android:scaleType="centerCrop"
             app:layout_constraintBottom_toTopOf="@+id/tvMsg"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
             app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
-
+-->
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_ring_default_silver"
-            app:layout_constraintBottom_toBottomOf="@+id/ivBackGround"
-            app:layout_constraintEnd_toEndOf="@+id/ivBackGround"
-            app:layout_constraintStart_toStartOf="@+id/ivBackGround"
-            app:layout_constraintTop_toTopOf="@+id/ivBackGround" />
+            android:id="@+id/imageView1"
+            android:src="@drawable/ic_ring_not_connected_40"
+            app:layout_constraintBottom_toTopOf="@+id/tvMsg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
         <TextView
             android:id="@+id/tvMsg"
@@ -44,7 +46,7 @@
             app:layout_constraintBottom_toTopOf="@+id/textView45"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivBackGround" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView1" />
 
         <TextView
             android:id="@+id/textView45"

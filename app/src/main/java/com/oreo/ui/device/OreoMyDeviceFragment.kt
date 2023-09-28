@@ -265,7 +265,7 @@ class OreoMyDeviceFragment :
 
                 ivRingImage.loadImage(
                     requireContext(),
-                    R.drawable.ic_ring_default_silver
+                    R.drawable.ic_ring_default_new
                 )
                 tvRingName.text = noiseFitDevice?.bluetoothName
                 tvBattery.setTextColor(resources.getColor(R.color.oreo_contributor_warning))
@@ -282,7 +282,7 @@ class OreoMyDeviceFragment :
             batteryStatus.gone()
             ivRingImage.loadImage(
                 requireContext(),
-                R.drawable.ic_luna_state_bt_off,
+                R.drawable.ic_ring_bluetooth_off_40,
             )
             tvBattery.setTextColor(resources.getColor(R.color.oreo_contributor_warning))
             tvRingName.text = noiseFitDevice?.bluetoothName
@@ -299,10 +299,9 @@ class OreoMyDeviceFragment :
         val lastSyncText = "Synced : ${lastSync ?: getString(R.string.text_not_yet_syncyed)}"
         binding.lytDeviceConnected.apply {
 
-            ivRingImage.loadWatchImage(
+            ivRingImage.loadImage(
                 requireContext(),
-                noiseFitDevice.ringInfo?.image ?: "",
-                R.drawable.ic_ring_default_silver
+                R.drawable.ic_ring_default_new
             )
             tvRingName.text = noiseFitDevice.bluetoothName
 
