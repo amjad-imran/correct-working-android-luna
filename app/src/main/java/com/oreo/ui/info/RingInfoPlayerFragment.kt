@@ -1,6 +1,7 @@
 package com.oreo.ui.info
 
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.SeekParameters
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentRingCareBinding
 import com.noisefit.luna.databinding.FragmentRingInfoPlayerBinding
@@ -71,12 +73,32 @@ class RingInfoPlayerFragment :
                     navArgs.videoUrl
                 )
             )
+
         player?.setMediaItem(mediaItem)
         player?.prepare()
     }
 
 
     override fun initListener() {
+
+        binding.ivBack10.setOnClickListener {
+            player?.let {
+                val newPos = it.currentPosition - 10000
+                if (newPos > 0) {
+                    it.seekTo(newPos)
+                } else {
+                    it.seekTo(0)
+                }
+            }
+        }
+        binding.ivForward10.setOnClickListener {
+            player?.let {
+                val newPos = it.currentPosition + 10000
+                if (newPos < it.duration) {
+                    it.seekTo(newPos)
+                }
+            }
+        }
 
         binding.toolbar.backBtn.setOnClickListener {
             navigateUpSafe()
@@ -97,6 +119,26 @@ class RingInfoPlayerFragment :
                 player?.play()
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (Build.VERSION.SDK_INT >= 24) {
+            releasePlayer()
+        }
+    }
+
+    private fun releasePlayer() {
+        player?.run {
+            release()
+        }
+        player = null
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.ivPlay.setImageResource(R.drawable.ic_play_info)
+        player?.pause()
     }
 
     override fun subscribeObservers() {

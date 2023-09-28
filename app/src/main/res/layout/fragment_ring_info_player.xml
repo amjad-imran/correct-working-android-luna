@@ -20,8 +20,8 @@
             android:id="@+id/videoPlayer"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:auto_show="false"
-            app:controller_layout_id="@layout/custom_player_controller_view"
+            app:auto_show="true"
+            app:controller_layout_id="@layout/custom_player_controller_view_info"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -63,50 +63,12 @@
             app:layout_constraintStart_toEndOf="@+id/ivPlay"
             app:layout_constraintTop_toTopOf="@+id/ivPlay" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/lytBottomContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/videoPlayer">
-
-
-            <com.google.android.exoplayer2.ui.DefaultTimeBar
-                android:id="@id/exo_progress"
-                android:layout_width="0dp"
-                android:layout_height="3dp"
-                app:layout_constraintBottom_toBottomOf="@id/exo_duration"
-                app:layout_constraintEnd_toStartOf="@id/exo_duration"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/exo_duration"
-                app:played_color="@color/accent_color_purple"
-                app:unplayed_color="@android:color/black" />
-
-
-            <TextView
-                android:id="@id/exo_duration"
-                style="@style/Small"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="24dp"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
-                android:textColor="@android:color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="34:56" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/groupControls"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="ivBack10,ivPlay,ivForward10,lytBottomContainer" />
+            app:constraint_referenced_ids="ivBack10,ivPlay,ivForward10" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
