@@ -427,6 +427,7 @@ public class SleepLineChart extends View {
         int firstPosition = 0;
 
         int lastPosition = list.size();
+        float leftTextEndPos = 0f;
         float endTextStartPos = 0f;
 
         ChartModel current, next;
@@ -491,21 +492,31 @@ public class SleepLineChart extends View {
 
 
                     if (endTextStartPos == 0f) {
-                        String text = list.get(list.size() - 1).getIndex();
+                        String text = list.get(0).getIndex();
                         xTextPaint.setColor(Color.parseColor("#ffffff"));
-                        endTextStartPos = mWith - leftWith - xTextPaint.measureText(text);
+                        if(text!=null){
+                            endTextStartPos = mWith - leftWith - xTextPaint.measureText(text);
+                        }else {
+                            endTextStartPos = mWith - leftWith - xTextPaint.measureText("00:00 am");
+                        }
+                    }
+
+                    if(leftTextEndPos==0f){
+                        String lastText = list.get(list.size()-1).getIndex();
+                        xTextPaint.setColor(Color.parseColor("#ffffff"));
+                        leftTextEndPos = leftWith+ xTextPaint.measureText(lastText);
                     }
 
 
                     if (i == 0) {
                         xTextPaint.setColor(Color.parseColor("#ffffff"));
                         canvas.drawText(xText, x - xTextBounds.width(), mHeight - bottomWith / 4, xTextPaint);
-                        leftTextEndPos = xTextPaint.measureText(xText);
+                        //leftTextEndPos = xTextPaint.measureText(xText);
                     } else if (i == list.size() - 1) {
                         xTextPaint.setColor(Color.parseColor("#ffffff"));
                         canvas.drawText(xText, x, mHeight - bottomWith / 4, xTextPaint);
                     } else {
-                        if (leftTextEndPos < (x - (xTextBounds.width() / 2f + dip2px(6)))
+                        if (leftTextEndPos < (x - (xTextBounds.width() / 2f) - dip2px(6))
                                 && (x + xTextBounds.width()) < endTextStartPos) {
                             xTextPaint.setColor(xTextColor & 0x80ffffff);
                             canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 4, xTextPaint);
