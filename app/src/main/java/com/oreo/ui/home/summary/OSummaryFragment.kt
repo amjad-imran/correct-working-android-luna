@@ -1047,6 +1047,11 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         super.onResume()
         viewModel.initData()
 
+        if (viewModel.isDeviceConnected()) {
+            shouldSync()
+        }
+
+
 //        viewModel.getRecentWorkoutList()
     }
 
