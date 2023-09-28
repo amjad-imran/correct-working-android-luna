@@ -31,6 +31,7 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.OActivityListModal
@@ -40,7 +41,6 @@ import com.oreo.data.model.VideoInfoType
 import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
-import com.oreo.receiver.workManager.HealthOverviewDataType
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
@@ -48,7 +48,6 @@ import com.oreo.ui.workout.add.ADD_WORKOUT_REQUEST_KEY
 import com.oreo.util.graph.OCombineChartUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.dkzwm.widget.srl.RefreshingListenerAdapter
@@ -80,11 +79,13 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         }
 
         binding.lytHeader.batteryStatus.setOnClickListener {
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_DEVICE_CAPSULE_CLICK)
             mainViewModel.navigateTo(BottomNavOption.MY_DEVICE)
         }
 
 
         binding.lytHeader.profileView1.setOnClickListener {
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HAMBURGER_CLICK)
             navigate(R.id.OMyProfileFragment)
         }
 
@@ -100,10 +101,12 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         binding.swipeToRefresh.setOnRefreshListener(object : RefreshingListenerAdapter() {
             override fun onRefreshing() {
                 super.onRefreshing()
+                val pairStatus: String
 
                 LOGS.d("SyncDataWork: starting job")
                 if (!viewModel.isDeviceConnected()) {
                     binding.swipeToRefresh.refreshComplete()
+                    pairStatus = "unpaired"
                     return
                 }
 
@@ -111,7 +114,19 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                     binding.swipeToRefresh.refreshComplete()
                     return
                 }
+                pairStatus = "paired"
+//                viewModel.sessionManager.logFirebaseEvent(
+//                    FirebaseLunaAppEvents.LUNA_ACTIVITY_SYNC_MANUAL,
+//                    HashMap<String, Any>().apply {
+//                        this["operating_system"] = "Android"
+//                        this["device_pairing_status"] = pairStatus
+//                    })
 
+                logFirebaseAppEvent(FirebaseLunaAppEvents.LUNA_ACTIVITY_SYNC_MANUAL,
+                    HashMap<String, Any>().apply {
+                        this["operating_system"] = "Android"
+                        this["device_pairing_status"] = pairStatus
+                    })
                 binding.layoutRefresh.textSyncingData.visible()
                 binding.swipeToRefresh.refreshComplete()
 
@@ -132,27 +147,31 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             mSharedViewModel.itemClickType = ViewItemClickType.READINESS_SCORE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
+                putString("date", DateFormats.getCurrentDateOreoFormat())
             })
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_READINESS_SCORE_CLICK)
         }
 
         binding.contentMain.lytSleepAvg.constraintLayout2.setOnClickListener {
             mSharedViewModel.selectedTab = 0
-            mSharedViewModel.selectedDate = DateFormats.getCurrentDateOreoFormat()
             mSharedViewModel.itemType = ClickViewType.SLEEP.name
             mSharedViewModel.itemClickType = ViewItemClickType.SLEEP_SCORE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
+                putString("date", DateFormats.getCurrentDateOreoFormat())
             })
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_SLEEP_SCORE_CLICK)
         }
 
         binding.contentMain.lytSleepAvg.constraintLayout.setOnClickListener {
             mSharedViewModel.selectedTab = 0
-            mSharedViewModel.selectedDate = DateFormats.getCurrentDateOreoFormat()
             mSharedViewModel.itemType = ClickViewType.ACTIVITY.name
             mSharedViewModel.itemClickType = ViewItemClickType.ACTIVITY_SCORE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "activity")
+                putString("date", DateFormats.getCurrentDateOreoFormat())
             })
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_ACTIVITY_SCORE_CLICK)
         }
 
     }
@@ -233,14 +252,17 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
                 OSummaryHealthOverviewClickEnum.ActivityDetailsWorkoutClick -> {
                     mainViewModel.navigateTo(BottomNavOption.ACTIVITY)
+                    mainViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_ACTIVITY_CLICK)
                 }
 
                 OSummaryHealthOverviewClickEnum.ReadinessDetailsWorkoutClick -> {
                     mainViewModel.navigateTo(BottomNavOption.READINESS)
+                    mainViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_READINESS_CLICK)
                 }
 
                 OSummaryHealthOverviewClickEnum.SleepDetailsWorkoutClick -> {
                     mainViewModel.navigateTo(BottomNavOption.SLEEP)
+                    mainViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_SLEEP_CLICK)
                 }
 
 //                OSummaryHealthOverviewClickEnum.ActivityInternalDetailsWorkoutClick->{
@@ -802,9 +824,12 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             } else {
                 requireContext().showShortToast("Please connect your ring to add a workout")
             }
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_ADD_WORKOUT_CLICK)
+
         }
 
         lytWorkouts.ivViewAll.setOnClickListener {
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_WORKOUTS_ENTRY_CLICK)
             navigate(R.id.oActivityListFragment)
         }
 
@@ -911,6 +936,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         lytHeartRate.imvHrMeasure.setOnClickListener {
 
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_HR_REFRESH_CLICK)
             if (data.measureState == TapMeasureState.MEASURING || data.measureState == TapMeasureState.NO_DEVICE) {
                 return@setOnClickListener
             }
@@ -1020,5 +1046,9 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 //        viewModel.getRecentWorkoutList()
     }
 
+
+    private fun logFirebaseAppEvent(eventName: String, params: HashMap<String, Any>) {
+        viewModel.sessionManager.logFirebaseEvent(eventName, params)
+    }
 
 }

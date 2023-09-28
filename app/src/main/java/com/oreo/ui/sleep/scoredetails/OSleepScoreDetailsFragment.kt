@@ -19,6 +19,8 @@ import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DistanceUtil
+import com.noisefit_commans.utils.FirebaseLunaAppEvents
+import com.noisefit_commans.utils.MiscUtil
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Comparison
 import com.oreo.data.model.OInternalPageResponseModal
@@ -30,6 +32,7 @@ import kotlin.math.roundToInt
 private const val DAY_TYPE = "DAY_TYPE"
 private const val ITEM_TYPE = "ITEM_TYPE"
 private const val VIEW_TYPE = "VIEW_TYPE"
+private const val DATE = "DATE"
 
 @AndroidEntryPoint
 class OSleepScoreDetailsFragment :
@@ -39,12 +42,13 @@ class OSleepScoreDetailsFragment :
     private val mSharedViewModel: SharedOSCDViewModel by activityViewModels()
 
     companion object {
-        fun newInstance(dayType: String, itemType: String, viewType: String) =
+        fun newInstance(dayType: String, itemType: String, viewType: String, date: String) =
             OSleepScoreDetailsFragment().apply {
                 arguments = Bundle().apply {
                     putString(DAY_TYPE, dayType)
                     putString(ITEM_TYPE, itemType)
                     putString(VIEW_TYPE, viewType)
+                    putString(DATE, date)
                 }
             }
     }
@@ -52,12 +56,13 @@ class OSleepScoreDetailsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
-            mViewModel.itemType = it.get(ITEM_TYPE).toString()
-            mViewModel.dayType = it.get(DAY_TYPE).toString()
-            mViewModel.viewType = it.get(VIEW_TYPE).toString()
+            mViewModel.itemType = it.getString(ITEM_TYPE).toString()
+            mViewModel.dayType = it.getString(DAY_TYPE).toString()
+            mViewModel.viewType = it.getString(VIEW_TYPE).toString()
+            mViewModel.selectedDate = it.getString(DATE)
         }
-        mViewModel.selectedDate = mSharedViewModel.selectedDate
         mViewModel.itemClickType = mSharedViewModel.itemClickType?.name ?: ""
+
 
         if (mViewModel.viewType?.lowercase() == "sleep")
             mViewModel.getInternalDetailsData()
@@ -92,6 +97,11 @@ class OSleepScoreDetailsFragment :
                         binding.lytTopGraphView.lytLabelValue2.root.gone()
                     }
                 }
+                mViewModel.sessionManager.logFirebaseEvent("${mViewModel.itemClickType?.let {
+                    MiscUtil.addUnderscore(
+                        it
+                    )
+                }}_" + FirebaseLunaAppEvents.DAY_CLICK)
 
             }
 
@@ -119,6 +129,11 @@ class OSleepScoreDetailsFragment :
                         binding.lytTopGraphView.lytLabelValue2.root.gone()
                     }
                 }
+                mViewModel.sessionManager.logFirebaseEvent("${mViewModel.itemClickType?.let {
+                    MiscUtil.addUnderscore(
+                        it
+                    )
+                }}_" + FirebaseLunaAppEvents.WEEK_CLICK)
             }
 
             else -> {
@@ -145,7 +160,11 @@ class OSleepScoreDetailsFragment :
                         binding.lytTopGraphView.lytLabelValue2.root.gone()
                     }
                 }
-
+                mViewModel.sessionManager.logFirebaseEvent("${mViewModel.itemClickType?.let {
+                    MiscUtil.addUnderscore(
+                        it
+                    )
+                }}_" + FirebaseLunaAppEvents.MONTH_CLICK)
             }
         }
     }
@@ -836,8 +855,7 @@ class OSleepScoreDetailsFragment :
                                 binding.lytScoreOverview.tvScoreMsg.visible()
                                 mViewModel.isTodayGreater = true
                                 mViewModel.isProgressEqual = false
-                            }
-                            else if (yesterdayProgress > todayProgress) {
+                            } else if (yesterdayProgress > todayProgress) {
                                 val trendDifProgress = yesterdayProgress - todayProgress
 
                                 binding.lytScoreOverview.tvTrendProg.setCompoundDrawable(R.drawable.ic_trend_down)
@@ -854,8 +872,7 @@ class OSleepScoreDetailsFragment :
                                 mViewModel.isTodayGreater = false
                                 mViewModel.isProgressEqual = false
 
-                            }
-                            else {
+                            } else {
                                 binding.lytScoreOverview.tvTrendProg.gone()
                                 binding.lytScoreOverview.tvScoreMsg.visible()
                                 mViewModel.isProgressEqual = true
@@ -1035,7 +1052,7 @@ class OSleepScoreDetailsFragment :
             }
 
             "week" -> {
-                val year = mSharedViewModel.selectedDate.substring(0, 4)
+                val year = mViewModel.selectedDate?.substring(0, 4) ?: ""
                 "Avg from ${DateFormats.getStartAndEndWeek(data.toInt(), year.toInt())}"
             }
 

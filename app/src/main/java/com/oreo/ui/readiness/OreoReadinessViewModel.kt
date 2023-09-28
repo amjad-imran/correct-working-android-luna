@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.common.averageWithoutZero
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.BinaryActionCallback
@@ -34,7 +35,11 @@ class OreoReadinessViewModel
 constructor(
     val userActivityRepository: OreoUserActivityRepository,
     val ringDataStore: RingDataStore,
+    val sessionManager: SessionManager
 ) : BaseViewModel() {
+
+    var selectedMasterDate: String? = null
+    var selectedDate: String? = null
 
 
     private val _readinessData = MutableLiveData<TestDataModel>()
@@ -49,7 +54,9 @@ constructor(
 
     private val _contributorInfo = MutableLiveData<OContributorResponseModal>()
     private val contributorInfo: LiveData<OContributorResponseModal> = _contributorInfo
-
+    init {
+        selectedMasterDate = DateFormats.getCurrentDateOreoFormat()
+    }
 
     fun getContributorInfo() {
         viewModelScope.launch {
@@ -97,7 +104,7 @@ constructor(
     fun getReadinessDetailsData(date: String? = null) {
         viewModelScope.launch {
             userActivityRepository.getReadinessHistory(
-                date ?: DateFormats.getCurrentDateOreoFormat()
+                selectedMasterDate ?: DateFormats.getCurrentDateOreoFormat()
             ).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
@@ -126,12 +133,8 @@ constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-
-                            _readinessHistoryResponse.postValue(it.reversed())
-
-                            it.firstOrNull()?.let { data ->
-                                _dayReadinessData.postValue(data)
-                            }
+                            _readinessHistoryResponse.value = (it.reversed())
+                            updateSelectedDate()
                         }
                     }
                 }
@@ -264,12 +267,20 @@ constructor(
     }
 
 
-    fun updateSelectedDate(date: String) {
+    fun updateSelectedDate() {
+
         val dayData = _readinessHistoryResponse.value?.firstOrNull() {
-            it.date.equals(date, false)
+            it.date.equals(selectedDate, false)
         }
         if (dayData != null) {
             _dayReadinessData.postValue(dayData)
+        }else{
+            _readinessHistoryResponse.value?.lastOrNull()?.let { data ->
+                LOGS.w("moveToPosition selected Date new $selectedDate")
+                selectedDate = data.date
+                LOGS.w("moveToPosition selected Date new set $selectedDate")
+                _dayReadinessData.postValue(data)
+            }
         }
     }
 

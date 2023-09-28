@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
+import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.averageWithoutZero
 import com.noisefit_commans.data.BinaryActionCallback
@@ -18,6 +19,7 @@ import com.noisefit_commans.models.SleepMovementType
 import com.noisefit_commans.models.SleepType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.OContributorResponseModal
@@ -35,7 +37,11 @@ class OreoSleepDetailsViewModel
 constructor(
     val userActivityRepository: OreoUserActivityRepository,
     val ringDataStore: RingDataStore,
+    val sessionManager: SessionManager
 ) : BaseViewModel() {
+
+    var selectedMasterDate: String? = null
+    var selectedDate: String? = null
 
     private val _sleepHistoryResponse = MutableLiveData<List<OreoSleepModel>>()
     val sleepHistoryResponse: LiveData<List<OreoSleepModel>> = _sleepHistoryResponse
@@ -48,6 +54,11 @@ constructor(
 
 
     var dateList = ArrayList<String>()
+
+    init {
+        selectedMasterDate = DateFormats.getCurrentDateOreoFormat()
+    }
+
     fun getPrefixAndSuffixList(dataList: List<OreoSleepModel>): Triple<ArrayList<ChartModel>, ArrayList<ChartModel>, ArrayList<ChartModel>> {
         dataList.reversed()
 
@@ -114,10 +125,11 @@ constructor(
 
     }
 
-    fun getSleepDetailsData(date: String? = null) {
+
+    fun getSleepDetailsData() {
         viewModelScope.launch {
             userActivityRepository.getSleepHistory(
-                date ?: DateFormats.getCurrentDateOreoFormat()
+                selectedMasterDate ?: DateFormats.getCurrentDateOreoFormat()
             ).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
@@ -134,7 +146,7 @@ constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        getSleepDetailsData(date)
+                                        getSleepDetailsData()
                                     }
 
                                     override fun no() {
@@ -147,10 +159,14 @@ constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
 
-                            _sleepHistoryResponse.postValue(it.reversed())
-                            it.firstOrNull()?.let { data ->
-                                _daySleepData.postValue(data)
-                            }
+                            _sleepHistoryResponse.value = (it.reversed())
+                           /* if (selectedDate == null) {
+                                it.firstOrNull()?.let { data ->
+                                    selectedDate = data.date
+                                }
+                            }*/
+
+                            updateSelectedDate()
                         }
                     }
                 }
@@ -587,12 +603,20 @@ constructor(
         return Pair(sleepArray, countCData)
     }
 
-    fun updateSelectedDate(date: String) {
+    fun updateSelectedDate() {
+
         val dayData = _sleepHistoryResponse.value?.firstOrNull() {
-            it.date.equals(date, false)
+            it.date.equals(selectedDate, false)
         }
         if (dayData != null) {
-            _daySleepData.postValue(dayData!!)
+            _daySleepData.postValue(dayData)
+        }else{
+            _sleepHistoryResponse.value?.lastOrNull()?.let { data ->
+                LOGS.w("moveToPosition selected Date new $selectedDate")
+                selectedDate = data.date
+                LOGS.w("moveToPosition selected Date new set $selectedDate")
+                _daySleepData.postValue(data)
+            }
         }
     }
 

@@ -13,7 +13,6 @@ import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
-import com.noisefit_commans.data.model.DeviceFeatures
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.models.ColorFitDevice
@@ -27,6 +26,7 @@ import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.FileLogsUtils
+import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.share.ShareUtil
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,6 +57,7 @@ class OreoMyDeviceFragment :
             } else {
                 context.showShortToast("No logs")
             }
+            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_MYDEVICES_SHARE + "_APP_LOGS_CLICK")
         }
 
         binding.rowShareRingLogs.setOnClickListener {
@@ -67,6 +68,7 @@ class OreoMyDeviceFragment :
             } else {
                 context.showShortToast("No logs")
             }
+            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_MYDEVICES_SHARE + "_RING_LOGS_CLICK")
         }
 
         binding.btnReset.setOnClickListener {
@@ -80,6 +82,7 @@ class OreoMyDeviceFragment :
         }
 
         binding.rowAboutDevice.setOnClickListener {
+            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_MYDEVICES_ABOUT_CLICK)
             navigate(R.id.OAboutDeviceFragment)
         }
         binding.rowGoogleFit.setOnClickListener {
@@ -100,6 +103,7 @@ class OreoMyDeviceFragment :
                     showForceUnPairDialog()
                 }
             }
+            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_MYDEVICES_UNPAIR_CLICK)
 
             navigate(R.id.unpairBottomDialogFragment)
 

@@ -9,6 +9,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.oreo.data.model.OHSModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -19,6 +20,7 @@ class OHelpAndSupportFragment :
     private val mAdapter: OHealthSupportAdapter by lazy {
         OHealthSupportAdapter(object : OHealthSupportAdapter.OHSClickListener {
             override fun onItemClickListener(id: String, title: String) {
+                mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SUPPORT + "_${title}_CLICK")
                 navigate(R.id.oreoHSQuestionFragment, Bundle().apply {
                     putString("title", title)
                     putString("id", id)

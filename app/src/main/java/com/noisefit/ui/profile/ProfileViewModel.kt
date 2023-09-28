@@ -1,5 +1,6 @@
 package com.noisefit.ui.profile
 
+import android.text.TextUtils
 import android.util.DisplayMetrics
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
@@ -22,6 +23,7 @@ import com.noisefit.watch.ConnectionHandler
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.models.HeightUnitSystem
 import com.noisefit_commans.models.Units
+import com.noisefit_commans.utils.BuildUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -243,6 +245,34 @@ constructor(
             }
         }
 
+    }
+
+    fun getDeviceName(): String {
+
+        val manufacturer: String = BuildUtils.getDeviceManufacturer()
+        val model: String = BuildUtils.getDeviceModel()
+        return if (model.startsWith(manufacturer)) {
+            capitalize(model)
+        } else capitalize(manufacturer) + " " + model
+    }
+    private fun capitalize(str: String): String {
+        if (TextUtils.isEmpty(str)) {
+            return str
+        }
+        val arr = str.toCharArray()
+        var capitalizeNext = true
+        val phrase = StringBuilder()
+        for (c in arr) {
+            if (capitalizeNext && Character.isLetter(c)) {
+                phrase.append(c.uppercaseChar())
+                capitalizeNext = false
+                continue
+            } else if (Character.isWhitespace(c)) {
+                capitalizeNext = true
+            }
+            phrase.append(c)
+        }
+        return phrase.toString()
     }
 
 

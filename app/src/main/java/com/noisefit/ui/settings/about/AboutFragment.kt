@@ -1,17 +1,24 @@
 package com.noisefit.ui.settings.about
 
 import android.annotation.SuppressLint
+import android.os.Bundle
+import androidx.fragment.app.viewModels
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAboutBinding
-import com.noisefit_commans.ui.BaseFragment
 import com.noisefit.ui.web.WebViewActivity
+import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.AppConstants
+import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class AboutFragment : BaseFragment<FragmentAboutBinding>(FragmentAboutBinding::inflate) {
-
+    private val viewModel: AboutViewModel by viewModels()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 
     @SuppressLint("SetTextI18n")
     override fun initListener() {
@@ -21,6 +28,7 @@ class AboutFragment : BaseFragment<FragmentAboutBinding>(FragmentAboutBinding::i
             navigateUpSafe()
         }
         binding.rowTermsCondition.setOnClickListener {
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ABOUT_TERMS_CONDITIONS_CLICK)
             startActivity(
                 WebViewActivity.getStartIntent(
                     requireActivity(),
@@ -30,6 +38,7 @@ class AboutFragment : BaseFragment<FragmentAboutBinding>(FragmentAboutBinding::i
             )
         }
         binding.rowPrivacyPolicy.setOnClickListener {
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ABOUT_PRIVACY_POLICY_CLICK)
             startActivity(
                 WebViewActivity.getStartIntent(
                     requireActivity(),
@@ -39,7 +48,8 @@ class AboutFragment : BaseFragment<FragmentAboutBinding>(FragmentAboutBinding::i
             )
         }
         binding.rowCheckForUpdate.setOnClickListener {
-            ShareUtil.openPlayStore(requireContext(),"com.noisefit.luna")
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ABOUT_CHECK_UPDATE_CLICK)
+            ShareUtil.openPlayStore(requireContext(), "com.noisefit.luna")
         }
     }
 

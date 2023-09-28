@@ -1,8 +1,13 @@
 package com.oreo.ui.sleep.scoredetails
 
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class SharedOSCDViewModel : BaseViewModel() {
+@HiltViewModel
+class SharedOSCDViewModel @Inject constructor(val sessionManager: SessionManager) :
+    BaseViewModel() {
     /*
     * 0-Day
     * 1-Week
@@ -11,7 +16,6 @@ class SharedOSCDViewModel : BaseViewModel() {
     var selectedTab: Int = 0
     var itemType: String = ""
     var itemClickType: ViewItemClickType? = null
-    var selectedDate: String = ""
 
 
 }

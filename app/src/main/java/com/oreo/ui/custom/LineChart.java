@@ -367,7 +367,7 @@ public class LineChart extends View {
         postInvalidate();
     }
 
-    public void updateDataWithMax(List<ChartModel> datas, List<ChartModel> prefixList, List<ChartModel> suffixList) {
+    public void updateDataWithMax(List<ChartModel> datas, List<ChartModel> prefixList, List<ChartModel> suffixList,Integer currentPos) {
 
         list.clear();
         list.addAll(prefixList);
@@ -419,6 +419,9 @@ public class LineChart extends View {
 //        }
 
         xMax = 120;
+        if(currentPos!=-1){
+            moveToPosition(currentPos);
+        }
 
         postInvalidate();
     }
@@ -490,6 +493,24 @@ public class LineChart extends View {
         this.onChartScrollChangedListener = listener;
     }
 
+    public void moveToPosition(int position) {
+        LOGS.INSTANCE.w("moveToPosition "+position +"     "+list.size());
+        if (position < 0 || position >= list.size()) {
+            // Invalid position, do nothing or handle the error as needed
+            return;
+        }
+
+        // Calculate the offset based on the desired position
+        float desiredOffset = position * unitHLenth;
+        float desiredIndicatorOffset = position * indicatorUnitLength;
+
+        // Set the offset and indicator offset to move to the desired position
+        offSet = desiredOffset;
+        indicatorOffSet = desiredIndicatorOffset;
+
+        // Trigger a redraw of the view to reflect the new position
+        //invalidate();
+    }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -512,8 +533,9 @@ public class LineChart extends View {
         selectedLinePath.lineTo(leftWith + (mWith - leftWith - rightWith) / 2f, topWith + unitHLenth / 5f);
         selectedLinePath.lineTo(leftWith + (mWith - leftWith - rightWith) / 2f + unitHLenth / 5f, topWith);
         selectedLinePath.lineTo(leftWith + (mWith - leftWith - rightWith) / 2f + 2 * unitHLenth, topWith);
+        LOGS.INSTANCE.w("moveToPosition onSizeChanged");
 
-        callBack(true);
+        //callBack(true);
 
     }
 
@@ -761,6 +783,7 @@ public class LineChart extends View {
                 break;
             case MotionEvent.ACTION_MOVE:
                 moveOffSet = event.getX() - xDown;
+                LOGS.INSTANCE.w("moveToPosition MotionEvent.ACTION_MOVE");
                 callBack(true);
                 invalidate();
                 break;
@@ -768,6 +791,7 @@ public class LineChart extends View {
                 offSet += event.getX() - xDown;
                 resetData();
                 setToUnit();
+                LOGS.INSTANCE.w("moveToPosition MotionEvent.ACTION_UP");
                 callBack(true);
                 invalidate();
                 break;
@@ -798,7 +822,6 @@ public class LineChart extends View {
         if (scrollPosition == tempPosition) {
             return;
         }
-
 
 
         scrollPosition = tempPosition;

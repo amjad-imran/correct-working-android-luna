@@ -103,6 +103,9 @@
         <argument
             android:name="viewType"
             app:argType="string" />
+        <argument
+            android:name="date"
+            app:argType="string" />
         <action
             android:id="@+id/action_sleepDetailsParentOreo_to_bottomSheetDataMetrics"
             app:destination="@id/bottomSheetDataMetrics" />

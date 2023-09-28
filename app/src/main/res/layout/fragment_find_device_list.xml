@@ -178,7 +178,7 @@
                     android:paddingStart="24dp"
                     android:paddingEnd="24dp"
                     android:text="@string/text_pair_later"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:textAllCaps="false"
                     android:textSize="12sp"
                     app:backgroundTint="@null"

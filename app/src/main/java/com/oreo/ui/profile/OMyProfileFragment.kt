@@ -14,6 +14,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -46,6 +47,7 @@ class OMyProfileFragment :
 
     override fun initListener() {
         binding.rowAbout.setOnClickListener {
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ABOUT_CLICK)
             navigate(R.id.aboutFragment)
         }
         binding.backBtn.setOnClickListener {
@@ -62,6 +64,7 @@ class OMyProfileFragment :
 //            )
 //        }
         binding.rowFeedBack.setOnClickListener {
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_RATE_US_CLICK)
             navigate(R.id.rateUsOreo)
         }
 
@@ -71,6 +74,7 @@ class OMyProfileFragment :
 //        }
 
         binding.llMyProfile.setOnClickListener {
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_YOUR_PROFILE_CLICK)
             goToProfile()
         }
         binding.tvName.setOnClickListener {
@@ -79,6 +83,12 @@ class OMyProfileFragment :
         }
 
         binding.rowHelp.setOnClickListener {
+            viewModel.sessionManager.logFirebaseEvent(
+                FirebaseLunaAppEvents.LUNA_HELP_SUPPORT_CLICK,
+                HashMap<String, Any>().apply {
+                    this["operating_system"] = "Android"
+                    this["mobile_manufacturer"] = viewModel.getDeviceName()
+                })
             navigate(R.id.oreoHelpAndSupportFragment)
         }
 
@@ -90,6 +100,7 @@ class OMyProfileFragment :
                     viewModel.logoutUser()
                 }
             }
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HAMBURGER_LOGOUT_CLICK)
             navigate(
                 R.id.logoutBottomSheet2
             )

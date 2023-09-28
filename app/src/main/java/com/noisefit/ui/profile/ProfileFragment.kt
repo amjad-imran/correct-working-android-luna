@@ -12,6 +12,7 @@ import com.noisefit.ui.onboarding.OnBoardActivity
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.InsiderAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -42,7 +43,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
         binding.tvEdit.setOnClickListener {
 
 
-            viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.ACCOUNT_MYPROFILE_EDIT_CLICK)
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_PROFILE_EDIT_CLICK)
             navigate(R.id.navigation_profile_edit)
         }
 
