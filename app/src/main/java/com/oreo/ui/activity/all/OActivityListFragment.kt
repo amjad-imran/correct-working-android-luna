@@ -12,6 +12,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.oreo.data.model.OActivityListModal
 import com.oreo.ui.workout.details.DELETE_WORKOUT_REQUEST_KEY
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,6 +30,7 @@ class OActivityListFragment :
     private val viewModel: OActivityListViewModel by viewModels()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_WORKOUT_LIST_PAGE_VISIT)
         setRecycler()
 //        if (viewModel.activities.value.isNullOrEmpty()) {
         viewModel.fetchActivityFromServer()

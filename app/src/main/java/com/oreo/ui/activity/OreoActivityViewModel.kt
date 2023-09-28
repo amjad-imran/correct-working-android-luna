@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
+import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.averageWithoutZero
 import com.noisefit_commans.common.maxWithInvalidMovementValues
@@ -29,7 +30,8 @@ import javax.inject.Inject
 class OreoActivityViewModel @Inject constructor(
     private val userActivityRepository: OreoUserActivityRepository,
     val localDataStore: DataStoredInterface,
-    val ringDataStore: RingDataStore
+    val ringDataStore: RingDataStore,
+    val sessionManager: SessionManager
 ) : BaseViewModel() {
 
     var selectedMasterDate: String? = null

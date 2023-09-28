@@ -17,6 +17,7 @@ import com.noisefit.luna.databinding.FragmentOreoReadinessBinding
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
@@ -70,6 +71,7 @@ class OreoReadinessFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_PAGE_VISIT)
         setRecycler()
 
 
@@ -393,6 +395,8 @@ class OreoReadinessFragment :
         binding.lytToolbar.backBtn.invisible()
 
         binding.lytToolbar.view1.setOnClickListener {
+
+            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_DATE_RANGE_CLICK)
             resultLauncher.launch(
                 HistoryCalendarActivity.getStartIntent(
                     requireContext(),
@@ -411,6 +415,7 @@ class OreoReadinessFragment :
                 putString("viewType", "readiness")
                 putString("date", mViewModel.selectedDate)
             })
+            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_READINESS_SCORE_CLICK)
         }
         binding.lytRScoreData.lytSec1.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -420,6 +425,8 @@ class OreoReadinessFragment :
                 putString("viewType", "readiness")
                 putString("date", mViewModel.selectedDate)
             })
+            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_RESTING_HR_CLICK)
+
         }
         binding.lytRScoreData.lytSec2.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -429,6 +436,7 @@ class OreoReadinessFragment :
                 putString("viewType", "readiness")
                 putString("date", mViewModel.selectedDate)
             })
+            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_HR_VARIABILITY_CLICK)
         }
         binding.lytRScoreData.lytSec3.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -438,6 +446,7 @@ class OreoReadinessFragment :
                 putString("viewType", "readiness")
                 putString("date", mViewModel.selectedDate)
             })
+            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_BODY_TEMP_CLICK)
         }
         binding.lytRScoreData.lytSec4.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -447,6 +456,7 @@ class OreoReadinessFragment :
                 putString("viewType", "readiness")
                 putString("date", mViewModel.selectedDate)
             })
+            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_RESPIRATORY_RATE_CLICK)
         }
 
 

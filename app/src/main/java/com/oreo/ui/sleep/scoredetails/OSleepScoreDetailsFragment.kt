@@ -19,6 +19,8 @@ import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DistanceUtil
+import com.noisefit_commans.utils.FirebaseLunaAppEvents
+import com.noisefit_commans.utils.MiscUtil
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Comparison
 import com.oreo.data.model.OInternalPageResponseModal
@@ -61,6 +63,7 @@ class OSleepScoreDetailsFragment :
         }
         mViewModel.itemClickType = mSharedViewModel.itemClickType?.name ?: ""
 
+
         if (mViewModel.viewType?.lowercase() == "sleep")
             mViewModel.getInternalDetailsData()
         else if (mViewModel.viewType?.lowercase() == "activity")
@@ -94,6 +97,11 @@ class OSleepScoreDetailsFragment :
                         binding.lytTopGraphView.lytLabelValue2.root.gone()
                     }
                 }
+                mViewModel.sessionManager.logFirebaseEvent("${mViewModel.itemClickType?.let {
+                    MiscUtil.addUnderscore(
+                        it
+                    )
+                }}_" + FirebaseLunaAppEvents.DAY_CLICK)
 
             }
 
@@ -121,6 +129,11 @@ class OSleepScoreDetailsFragment :
                         binding.lytTopGraphView.lytLabelValue2.root.gone()
                     }
                 }
+                mViewModel.sessionManager.logFirebaseEvent("${mViewModel.itemClickType?.let {
+                    MiscUtil.addUnderscore(
+                        it
+                    )
+                }}_" + FirebaseLunaAppEvents.WEEK_CLICK)
             }
 
             else -> {
@@ -147,7 +160,11 @@ class OSleepScoreDetailsFragment :
                         binding.lytTopGraphView.lytLabelValue2.root.gone()
                     }
                 }
-
+                mViewModel.sessionManager.logFirebaseEvent("${mViewModel.itemClickType?.let {
+                    MiscUtil.addUnderscore(
+                        it
+                    )
+                }}_" + FirebaseLunaAppEvents.MONTH_CLICK)
             }
         }
     }
@@ -838,8 +855,7 @@ class OSleepScoreDetailsFragment :
                                 binding.lytScoreOverview.tvScoreMsg.visible()
                                 mViewModel.isTodayGreater = true
                                 mViewModel.isProgressEqual = false
-                            }
-                            else if (yesterdayProgress > todayProgress) {
+                            } else if (yesterdayProgress > todayProgress) {
                                 val trendDifProgress = yesterdayProgress - todayProgress
 
                                 binding.lytScoreOverview.tvTrendProg.setCompoundDrawable(R.drawable.ic_trend_down)
@@ -856,8 +872,7 @@ class OSleepScoreDetailsFragment :
                                 mViewModel.isTodayGreater = false
                                 mViewModel.isProgressEqual = false
 
-                            }
-                            else {
+                            } else {
                                 binding.lytScoreOverview.tvTrendProg.gone()
                                 binding.lytScoreOverview.tvScoreMsg.visible()
                                 mViewModel.isProgressEqual = true
@@ -1037,7 +1052,7 @@ class OSleepScoreDetailsFragment :
             }
 
             "week" -> {
-                val year = mViewModel.selectedDate?.substring(0, 4)?:""
+                val year = mViewModel.selectedDate?.substring(0, 4) ?: ""
                 "Avg from ${DateFormats.getStartAndEndWeek(data.toInt(), year.toInt())}"
             }
 

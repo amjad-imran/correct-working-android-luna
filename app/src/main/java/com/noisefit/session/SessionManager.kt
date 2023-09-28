@@ -2,9 +2,12 @@ package com.noisefit.session
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.ktx.Firebase
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.ui.friends.location.search.SearchStateType
+import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
@@ -21,6 +24,7 @@ import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.SportsModeRequest
 import com.noisefit_commans.models.UserLocation
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope
@@ -206,7 +210,6 @@ constructor(
     }
 
 
-
     fun setSportsModeRequest(sportsModeRequest: SportsModeRequest?) {
         GlobalScope.launch(Main) {
             _sportsModeRequest.value = sportsModeRequest
@@ -309,10 +312,16 @@ constructor(
     }
 
 
-    private fun logFirebaseEvent(eventName: String, data: HashMap<String, Any>) {
-//        val newEventName = eventName.lowercase().replace(" ", "_")
-//        Firebase.analytics.logEvent(newEventName, ApplicationUtils.convertMapToBundle(data))
-//        LOGS.d("LOGS_FIREBASE_EVENT $newEventName ")
+    fun logFirebaseEvent(eventName: String) {
+        val newEventName = eventName.lowercase().replace(" ", "_")
+        Firebase.analytics.logEvent(newEventName, null)
+        LOGS.d("LOGS_FIREBASE_EVENT $newEventName ")
+    }
+
+    fun logFirebaseEvent(eventName: String, data: HashMap<String, Any>) {
+        val newEventName = eventName.lowercase().replace(" ", "_")
+        Firebase.analytics.logEvent(newEventName, ApplicationUtils.convertMapToBundle(data))
+        LOGS.d("LOGS_FIREBASE_EVENT $newEventName ")
     }
 
     fun logEvent(eventName: String, status: String) {

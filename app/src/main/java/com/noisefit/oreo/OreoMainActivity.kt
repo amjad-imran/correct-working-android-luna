@@ -32,6 +32,7 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.share.ShareUtil
 import dagger.hilt.android.AndroidEntryPoint
@@ -375,6 +376,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     navController?.popBackStack(R.id.navigation_oreo_home, true)
                     navController?.navigate(R.id.navigation_oreo_home)
                 }
+
+                viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_FOOTER_HOME_CLICK)
             }
 
             BottomNavOption.SLEEP -> {
@@ -389,6 +392,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     navController?.popBackStack(R.id.navigation_oreo_sleep, true)
                     navController?.navigate(R.id.navigation_oreo_sleep)
                 }
+                viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_FOOTER_SLEEP_CLICK)
+
             }
 
             BottomNavOption.READINESS -> {
@@ -402,6 +407,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     navController?.popBackStack(R.id.navigation_oreo_readiness, true)
                     navController?.navigate(R.id.navigation_oreo_readiness)
                 }
+                viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_FOOTER_READINESS_CLICK)
+
             }
 
             BottomNavOption.ACTIVITY -> {
@@ -416,6 +423,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     navController?.popBackStack(R.id.navigation_oreo_workouts, true)
                     navController?.navigate(R.id.navigation_oreo_workouts)
                 }
+                viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_FOOTER_ACTIVITY_CLICK)
             }
 
             BottomNavOption.MY_DEVICE -> {
@@ -430,6 +438,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     navController?.popBackStack(R.id.navigation_oreo_my_device, true)
                     navController?.navigate(R.id.navigation_oreo_my_device)
                 }
+                viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_FOOTER_MYDEVICE_CLICK)
             }
         }
 

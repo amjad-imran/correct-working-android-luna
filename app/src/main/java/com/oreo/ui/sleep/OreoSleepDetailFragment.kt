@@ -21,6 +21,7 @@ import com.noisefit_commans.ui.*
 import com.noisefit_commans.ui.custom.NightTimeGraphViewOreo
 import com.noisefit_commans.ui.custom.SleepGraphViewOreo
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
@@ -75,6 +76,7 @@ class OreoSleepDetailFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //sleepDayGraphView = SleepGraphViewOreo(requireContext())
+        viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_PAGE_VISIT)
         setRecycler()
 
         if (viewModel.ringDataStore.isSleepWalkAroundShown()) {
@@ -341,6 +343,8 @@ class OreoSleepDetailFragment :
 
 
         binding.lytToolbar.view1.setOnClickListener {
+
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_DATE_RANGE_CLICK)
             resultLauncher.launch(
                 HistoryCalendarActivity.getStartIntent(
                     requireContext(),
@@ -365,6 +369,7 @@ class OreoSleepDetailFragment :
                 putString("viewType", "sleep")
                 putString("date", viewModel.selectedDate)
             })
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_SLEEP_SCORE_CLICK)
         }
         binding.lytSleepScore.lytTotalSleep.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -374,6 +379,8 @@ class OreoSleepDetailFragment :
                 putString("viewType", "sleep")
                 putString("date", viewModel.selectedDate)
             })
+
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_TOTAL_SLEEP_CLICK)
         }
         binding.lytSleepScore.lytTimeInBed.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -383,6 +390,8 @@ class OreoSleepDetailFragment :
                 putString("viewType", "sleep")
                 putString("date", viewModel.selectedDate)
             })
+
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_BED_TIME_CLICK)
         }
         binding.lytSleepScore.lytSleepEfficiency.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -392,6 +401,8 @@ class OreoSleepDetailFragment :
                 putString("viewType", "sleep")
                 putString("date", viewModel.selectedDate)
             })
+
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_SLEEP_EFFICIENCY_CLICK)
         }
         binding.lytSleepScore.lytRestHr.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -401,6 +412,8 @@ class OreoSleepDetailFragment :
                 putString("viewType", "sleep")
                 putString("date", viewModel.selectedDate)
             })
+
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_RESTING_HR_CLICK)
         }
 
         //night time see/saw
@@ -420,6 +433,9 @@ class OreoSleepDetailFragment :
             binding.lytSSAnalysis.viewDown.gone()
             binding.lytSSAnalysis.ivDown.gone()
             binding.lytSSAnalysis.tvSummaryTitle.visible()
+
+
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_STAGE_ANALYSIS_EXPAND_CLICK)
         }
         binding.lytSSAnalysis.viewUp.setOnClickListener {
             binding.lytSSAnalysis.lytNightMovement.root.gone()
@@ -430,6 +446,8 @@ class OreoSleepDetailFragment :
             binding.lytSSAnalysis.viewDown.visible()
             binding.lytSSAnalysis.ivDown.visible()
             binding.lytSSAnalysis.tvSummaryTitle.gone()
+
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_STAGE_ANALYSIS_COMPRESS_CLICK)
         }
     }
 
@@ -472,7 +490,7 @@ class OreoSleepDetailFragment :
                 }
                 if (index != null) {
 
-                    moveToPos =  15 + (15-index-1)
+                    moveToPos = 15 + (15 - index - 1)
                     LOGS.d("moveToPosition date ${viewModel.selectedDate}")
                     //binding.rvTopGraph.moveToPosition(15 + (15-index-1))
                 }
