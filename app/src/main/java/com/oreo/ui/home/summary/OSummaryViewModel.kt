@@ -495,6 +495,14 @@ constructor(
                 }
             }
 
+            data.welcome?.activity_media?.let {
+                if (cardClickState[DashInfoCard.ACTIVITY] == false) {
+                    userActivities.add(OHealthOverview.InfoVideo(VideoInfoType.ACTIVITY, it))
+                } else {
+                    viewedCardsData.add(OHealthOverview.InfoVideo(VideoInfoType.ACTIVITY, it))
+                }
+            }
+
             data.welcome?.readiness_media?.let {
                 if (cardClickState[DashInfoCard.READINESS] == false) {
                     userActivities.add(OHealthOverview.InfoVideo(VideoInfoType.READINESS, it))
@@ -503,13 +511,7 @@ constructor(
                 }
             }
 
-            data.welcome?.activity_media?.let {
-                if (cardClickState[DashInfoCard.ACTIVITY] == false) {
-                    userActivities.add(OHealthOverview.InfoVideo(VideoInfoType.ACTIVITY, it))
-                } else {
-                    viewedCardsData.add(OHealthOverview.InfoVideo(VideoInfoType.ACTIVITY, it))
-                }
-            }
+
         }
     }
 

@@ -9,6 +9,7 @@
         <TextView
             android:id="@+id/tvHour"
             style="@style/H3"
+            android:textSize="22sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
@@ -30,6 +31,7 @@
             android:id="@+id/tvMinute"
             style="@style/H3"
             android:layout_width="wrap_content"
+            android:textSize="22sp"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
             app:layout_constraintBaseline_toBaselineOf="@id/tvHour"
