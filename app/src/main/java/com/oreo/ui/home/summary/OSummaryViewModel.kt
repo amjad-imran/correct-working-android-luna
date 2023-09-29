@@ -464,7 +464,7 @@ constructor(
     ) {
         val registerDays = (data.registerDate ?: 0)
 
-        if (registerDays <= 7) {
+        if (registerDays < 7) {
 
             if (registerDays == 0) {
                 data.welcome?.welcome?.let {
