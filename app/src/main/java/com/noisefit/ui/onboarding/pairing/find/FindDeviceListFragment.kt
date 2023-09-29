@@ -30,6 +30,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.noisefit.data.repository.abstraction.IBluetoothScan
+import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.DialogUnsupportedDeviceBinding
 import com.noisefit.luna.databinding.FragmentFindDeviceListBinding
@@ -350,6 +351,10 @@ class FindDeviceListFragment :
             }
 
         }
+        if (BuildConfig.DEBUG) {
+            binding.bPairLater.visible()
+        } else
+            binding.bPairLater.gone()
 
         binding.bPairLater.setOnClickListener {
             pairLater()
