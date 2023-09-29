@@ -7,6 +7,8 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import java.lang.Math.abs
 import java.lang.Math.floor
+import java.util.Calendar
+import java.util.Date
 import java.util.concurrent.TimeUnit
 import kotlin.math.ceil
 
@@ -76,7 +78,7 @@ object UtilClass {
                     val startHour = startArray[0].toInt()
                     val startMinute = startArray[1].toInt()
                     LOGS.d("getDetectedWorkoutMovementList start:: $startHour $startMinute ")
-                    start = (startHour * 12) + (startMinute/5)
+                    start = (startHour * 12) + (startMinute / 5)
                 }
                 val endTime = DateFormats.addMinuteToTimeStamp(
                     data.startTime,
@@ -88,7 +90,7 @@ object UtilClass {
                     val endArray = endTimeText.split(":")
                     val endHour = endArray[0].toInt()
                     val endMinute = endArray[1].toInt()
-                    end = (endHour * 12) + (endMinute/5)
+                    end = (endHour * 12) + (endMinute / 5)
                     LOGS.d("getDetectedWorkoutMovementList end:: $endHour $endMinute ")
                 }
 
@@ -158,9 +160,11 @@ object UtilClass {
             "6" -> {
                 "6 am"
             }
+
             "8" -> {
                 "8 am"
             }
+
             "10" -> {
                 "10 am"
             }
@@ -200,6 +204,92 @@ object UtilClass {
 
         }
 
+    }
+
+
+    fun getXAxisPoints(
+        startTime: String?,
+        endTime: String?,
+        dataSize: Int
+    ): HashMap<Int, String> {
+
+        val hm = HashMap<Int, String>()
+        if (startTime == null || endTime == null) {
+            hm[0] = getHour(0)
+            hm[71] = getHour(71)
+            hm[143] = getHour(143)
+            hm[215] = getHour(215)
+            hm[287] = getHour(287)
+            return hm
+        }
+
+        //3 points
+        if (dataSize <= 36) {
+            val center = dataSize / 2
+            val centerTime = getCenterTime(
+                DateFormats.dateTimeFormat5.parse(startTime),
+                DateFormats.dateTimeFormat5.parse(endTime)
+            )
+
+            hm[0] = DateFormats.formatDate(
+                startTime,
+                DateFormats.dateTimeFormat5,
+                DateFormats.time12Meridian
+            )
+            hm[center] = DateFormats.time12Meridian.format(centerTime).lowercase()
+            hm[dataSize - 1] = DateFormats.formatDate(
+                endTime,
+                DateFormats.dateTimeFormat5,
+                DateFormats.time12Meridian
+            )
+        }
+        //5 points
+
+        val center = dataSize / 2
+        val centerLeft = center / 2
+
+        val centerTime = getCenterTime(
+            DateFormats.dateTimeFormat5.parse(startTime),
+            DateFormats.dateTimeFormat5.parse(endTime)
+        )
+        val centerLeftTime = getCenterTime(
+            DateFormats.dateTimeFormat5.parse(startTime),
+            centerTime
+        )
+        val centerRightTime = getCenterTime(
+            centerTime,
+            DateFormats.dateTimeFormat5.parse(endTime)
+        )
+
+        hm[0] = DateFormats.formatDate(
+            startTime,
+            DateFormats.dateTimeFormat5,
+            DateFormats.time12Meridian
+        )
+        hm[centerLeft] = DateFormats.time12Meridian.format(centerLeftTime).lowercase()
+        hm[center] = DateFormats.time12Meridian.format(centerTime).lowercase()
+        hm[center + centerLeft] = DateFormats.time12Meridian.format(centerRightTime).lowercase()
+        hm[dataSize - 1] = DateFormats.formatDate(
+            endTime,
+            DateFormats.dateTimeFormat5,
+            DateFormats.time12Meridian
+        )
+
+        return hm
+
+    }
+
+    private fun getCenterTime(
+        startTime: Date,
+        endTime: Date
+    ): Date {
+        val timeRange = endTime.time - startTime.time
+        val singleDuration = timeRange / 2
+
+        val centerTime = startTime.time + singleDuration
+        val calendar = Calendar.getInstance()
+        calendar.time = Date(centerTime)
+        return Date(calendar.timeInMillis)
     }
 
     fun graphTwoHoursInterval(
@@ -411,7 +501,7 @@ object UtilClass {
         val originalEndMin = endTimeFull[1].toInt()
         var endMin = originalEndMin
         endMin = (5 * (ceil(abs(endMin.toDouble() / 5)))).toInt()
-        val endTimeOffset = endHr * 12 + (endMin/ 5)
+        val endTimeOffset = endHr * 12 + (endMin / 5)
         val nearestEnd = getNearest4Number(endHr) - 4
         val nearestEndTimeOffset = nearestEnd * 12
 
