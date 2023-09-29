@@ -13,13 +13,16 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoSleepDetailBinding
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.ui.custom.NightTimeGraphViewOreo
 import com.noisefit_commans.ui.custom.SleepGraphViewOreo
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
@@ -122,8 +125,11 @@ class OreoSleepDetailFragment :
             breakUpData = hrv?.value as ArrayList<Int>
         }
 
-        val baseTimeList =
-            UtilClass.graphTwoHoursInterval(ssTime, seTime, breakUpData.size ?: 288)
+       /* val baseTimeList =
+            UtilClass.graphTwoHoursInterval(ssTime, seTime, breakUpData.size ?: 288)*/
+
+        val baseTimeListNew =
+            UtilClass.getXAxisPoints(ssTime, seTime, breakUpData.size ?: 288)
 
         binding.lytHRVariability.lineChart.visible()
         val sleepChart = SleepChartModel()
@@ -138,12 +144,14 @@ class OreoSleepDetailFragment :
             }
 
             chartModel.value = value
-            chartModel.index = baseTimeList[index]
+            chartModel.index = baseTimeListNew[index]//baseTimeList[index]
             chartModel.date = ""
             chartList.add(chartModel)
         }
 
         sleepChart.list = chartList
+
+        AppLogs.sendAppLogs("lineChart ${Gson().toJson(sleepChart)}")
 
         binding.lytHRVariability.lineChart.updateGraphColor(
             Color.parseColor("#ff80e3"),
@@ -183,11 +191,13 @@ class OreoSleepDetailFragment :
         }
 
 
-        val baseTimeList = UtilClass.graphTwoHoursInterval(
+       /* val baseTimeList = UtilClass.graphTwoHoursInterval(
             ssTime,
             seTime,
             breakUpData.size ?: 288
-        )
+        )*/
+        val baseTimeListNew =
+            UtilClass.getXAxisPoints(ssTime, seTime, breakUpData.size ?: 288)
 
         // LOGS.d("dsakjdsalkjsladjlksdajldsajldsajl ${heartRateList?.value?.size} ${Gson().toJson(baseTimeList)}")
 
@@ -204,7 +214,7 @@ class OreoSleepDetailFragment :
 
 
             chartModel.value = value
-            chartModel.index = baseTimeList[index]
+            chartModel.index = baseTimeListNew[index]
             chartList.add(chartModel)
         }
 
@@ -673,16 +683,16 @@ class OreoSleepDetailFragment :
         binding.lytSSAnalysis.lytNightMovement.tvTitle.text =
             getString(R.string.text_night_time_movement)
 
-        val sleepStartTime = DateFormats.formatDate(
+        val sleepStartTime =dayData.hourly_breakup?.first()?.start_time /*DateFormats.formatDate(
             dayData.hourly_breakup?.first()?.start_time,
             DateFormats.dateTimeFormat5,
             DateFormats.time12Meridian
-        )
-        val sleepEndTime = DateFormats.formatDate(
+        )*/
+        val sleepEndTime =  dayData.hourly_breakup?.last()?.end_time/*DateFormats.formatDate(
             dayData.hourly_breakup?.last()?.end_time,
             DateFormats.dateTimeFormat5,
             DateFormats.time12Meridian
-        )
+        )*/
         //heart rate
         binding.lytHeartRate.tvTitle.text = getString(R.string.text_heart_rate)
         binding.lytHeartRate.tvSubtitle1.text = getString(R.string.text_lowest_hr)

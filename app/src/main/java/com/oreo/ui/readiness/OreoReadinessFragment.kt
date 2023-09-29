@@ -162,11 +162,14 @@ class OreoReadinessFragment :
         }
 
 
-        val baseTimeList = UtilClass.graphTwoHoursInterval(
+      /*  val baseTimeList = UtilClass.graphTwoHoursInterval(
             ssTime,
             seTime,
             breakUpData.size ?: 288
-        )
+        )*/
+
+        val baseTimeListNew =
+            UtilClass.getXAxisPoints(ssTime, seTime, breakUpData.size ?: 288)
 
         binding.lytHeartRate.lineChart.visible()
         val sleepChart = SleepChartModel()
@@ -180,7 +183,7 @@ class OreoReadinessFragment :
             }
 
             chartModel.value = value
-            chartModel.index = baseTimeList[index]
+            chartModel.index = baseTimeListNew[index]
             chartList.add(chartModel)
         }
 
@@ -240,11 +243,14 @@ class OreoReadinessFragment :
         }
 
 
-        val baseTimeList = UtilClass.graphTwoHoursInterval(
+      /*  val baseTimeList = UtilClass.graphTwoHoursInterval(
             ssTime,
             seTime,
             breakUpData.size ?: 288
-        )
+        )*/
+
+        val baseTimeListNew =
+            UtilClass.getXAxisPoints(ssTime, seTime, breakUpData.size ?: 288)
 
         binding.lytHRVariability.lineChart.visible()
         val sleepChart = SleepChartModel()
@@ -259,7 +265,7 @@ class OreoReadinessFragment :
             }
 
             chartModel.value = value
-            chartModel.index = baseTimeList[index]
+            chartModel.index = baseTimeListNew[index]
             chartList.add(chartModel)
         }
 
@@ -313,11 +319,13 @@ class OreoReadinessFragment :
             breakUpData = temperatureBreakUpData?.value as ArrayList<Float>
         }
 
-        val baseTimeList = UtilClass.graphTwoHoursInterval(
+       /* val baseTimeList = UtilClass.graphTwoHoursInterval(
             ssTime,
             seTime,
             breakUpData.size ?: 288
-        )
+        )*/
+        val baseTimeListNew =
+            UtilClass.getXAxisPoints(ssTime, seTime, breakUpData.size ?: 288)
 
         binding.lytTemperature.lineChart.visible()
         val chartList = ArrayList<ChartModel>()
@@ -331,7 +339,7 @@ class OreoReadinessFragment :
             }
 
             chartModel.value = value.toInt()
-            chartModel.index = baseTimeList[index]
+            chartModel.index = baseTimeListNew[index]
             chartList.add(chartModel)
         }
 
@@ -682,16 +690,16 @@ class OreoReadinessFragment :
             heartRateDefaultView()
         }
         //todo will change startTime, endTime
-        val sleepStartTime = DateFormats.formatDate(
+        val sleepStartTime = it.start_time/*DateFormats.formatDate(
             it.start_time,
             DateFormats.dateTimeFormat5,
             DateFormats.time12Meridian
-        )
-        val sleepEndTime = DateFormats.formatDate(
+        )*/
+        val sleepEndTime = it.end_time/*DateFormats.formatDate(
             it.end_time,
             DateFormats.dateTimeFormat5,
             DateFormats.time12Meridian
-        )
+        )*/
 
         showHeartRateGraph(
             it.hrBreakUp,
