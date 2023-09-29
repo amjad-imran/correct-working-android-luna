@@ -40,7 +40,7 @@ constructor(
     private val oreoHeartRateDataImpl: OreoHeartRateDataImpl,
 ) {
 
-    fun convertDataToPost(userSyncActivities: OreoUserSyncActivities): OreoUserDataPost? {
+    suspend fun convertDataToPost(userSyncActivities: OreoUserSyncActivities): OreoUserDataPost? {
         val combinedData = OreoUserDataPost()
 
         val steps =
@@ -51,6 +51,9 @@ constructor(
         val bodyTemperature = parseBodyTemperature(userSyncActivities.bodyTemperature)
         val respiratory = parseRespiratoryData(userSyncActivities.respiratory)
 
+        val sleeps = parseSleepDataOreo(
+            userSyncActivities.sleepData
+        )
 
         combinedData.activities = steps
         combinedData.stress = stress
@@ -58,6 +61,7 @@ constructor(
         combinedData.bloodOxygen = bloodOxygen
         combinedData.bodyTemperature = bodyTemperature
         combinedData.respiratory = respiratory
+        combinedData.sleeps = sleeps
 
         if (steps == null && stress == null && heartRateHistory == null
             && bloodOxygen == null && bodyTemperature == null && respiratory == null
