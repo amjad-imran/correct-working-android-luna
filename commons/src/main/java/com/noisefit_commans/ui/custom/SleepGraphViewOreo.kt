@@ -6,6 +6,7 @@ import android.graphics.*
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import com.noisefit_commans.R
 import com.noisefit_commans.data.model.CountCardData
 import com.noisefit_commans.models.SleepData
@@ -582,6 +583,8 @@ class SleepGraphViewOreo(var mContext: Context) : View(
 //        toolTipTextPaint.color = ContextCompat.getColor(mContext, R.color.blood_oxygen_color)
 //        toolTipTextPaint.textSize = pxFromDp(mContext, 10f)
 //        toolTipTextPaint.textAlign = Paint.Align.CENTER
+        val fontGilroy = ResourcesCompat.getFont(this.context, R.font.gilroy_medium)
+
         mPaint = Paint()
         mPaint.isAntiAlias = true
         mPaint.style = Paint.Style.STROKE
@@ -592,15 +595,20 @@ class SleepGraphViewOreo(var mContext: Context) : View(
         mPaint2.style = Paint.Style.STROKE
         mPaint2.color = ContextCompat.getColor(mContext, R.color.sleep_graph_line)
         mPaint2.strokeWidth = pxFromDp(mContext, 2f)
+
         mTextPaint = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
         mTextPaint.color = ContextCompat.getColor(mContext, R.color.white_64)
         mTextPaint.textSize = pxFromDp(mContext, 10f)
+        mTextPaint.setTypeface(fontGilroy)
+
         outerPaint = Paint()
         outerPaint.style = Paint.Style.FILL
         outerPaint.color = Color.TRANSPARENT
 
+
         mTextPaintEdge = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
         mTextPaintEdge.color = ContextCompat.getColor(mContext, R.color.white)
+        mTextPaintEdge.setTypeface(fontGilroy)
         mTextPaintEdge.textSize = pxFromDp(mContext, 10f)
 
     }

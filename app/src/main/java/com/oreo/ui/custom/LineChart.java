@@ -522,7 +522,7 @@ public class LineChart extends View {
         offSet = prefixCount * unitHLenth;
 
         if (titleWidth == 0) {
-            indicatorUnitLength = mWith / 3f;
+            indicatorUnitLength = mWith / 2f;
         } else {
             indicatorUnitLength = titleWidth;
         }

@@ -16,7 +16,6 @@
             android:text="@string/text_select_workout_type"
             android:layout_marginTop="16dp"
             android:textColor="#eeeeee"
-            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
