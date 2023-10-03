@@ -40,6 +40,7 @@ import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalTime
 import javax.inject.Inject
 
 
@@ -787,5 +788,16 @@ constructor(
             return true
         }
         return lastTimeStamp.checkDayDifferenceMoreOne()
+    }
+
+    fun shouldSyncLogsAfter12(): Boolean {
+        val dayDifferenceGreaterThan1 = shouldSendLogs()
+        if(!dayDifferenceGreaterThan1) return false
+
+        val currentTime = LocalTime.now()
+        val targetTime = LocalTime.of(12, 0)
+
+        return currentTime.isAfter(targetTime)
+
     }
 }

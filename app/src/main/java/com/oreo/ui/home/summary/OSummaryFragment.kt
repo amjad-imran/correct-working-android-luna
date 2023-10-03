@@ -980,6 +980,18 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         if (viewModel.isDeviceConnected()) {
             shouldSync()
+
+            val logsSync = viewModel.shouldSyncLogsAfter12()
+            if(logsSync){
+                context?.let {
+                    FeedbackSubmitService.startService(
+                        it,
+                        "",
+                        "Auto logs -Android",
+                        viewModel.ringDataStore.getRingDevice()?.deviceId
+                    )
+                }
+            }
         }
 
 
