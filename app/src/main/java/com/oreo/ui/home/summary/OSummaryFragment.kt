@@ -78,11 +78,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             mainViewModel.navigateTo(BottomNavOption.MY_DEVICE)
         }
         binding.contentMain.lytHeartRate.bInfo.setOnClickListener {
-            viewModel.stateHeartRateCard.value?.infoContent?.let { content ->
-                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
-                    this.putString("infoData", content)
-                })
-            }
+            viewModel.getContributorInfo("hr")
         }
 
 
@@ -129,36 +125,15 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         }
 
         binding.contentMain.lytReadinessAvg.root.setOnClickListener {
-            mSharedViewModel.selectedTab = 0
-            mSharedViewModel.itemType = ClickViewType.READINESS.name
-            mSharedViewModel.itemClickType = ViewItemClickType.READINESS_SCORE
-            navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
-                putString("viewType", "readiness")
-                putString("infoData", viewModel.readinessScoreInfo)
-                putString("date", DateFormats.getCurrentDateOreoFormat())
-            })
+            viewModel.getContributorInfo("readiness")
         }
 
         binding.contentMain.lytSleepAvg.constraintLayout2.setOnClickListener {
-            mSharedViewModel.selectedTab = 0
-            mSharedViewModel.itemType = ClickViewType.SLEEP.name
-            mSharedViewModel.itemClickType = ViewItemClickType.SLEEP_SCORE
-            navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
-                putString("viewType", "sleep")
-                putString("infoData", viewModel.sleepScoreInfo)
-                putString("date", DateFormats.getCurrentDateOreoFormat())
-            })
+            viewModel.getContributorInfo("sleep")
         }
 
         binding.contentMain.lytSleepAvg.constraintLayout.setOnClickListener {
-            mSharedViewModel.selectedTab = 0
-            mSharedViewModel.itemType = ClickViewType.ACTIVITY.name
-            mSharedViewModel.itemClickType = ViewItemClickType.ACTIVITY_SCORE
-            navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
-                putString("viewType", "activity")
-                putString("infoData", viewModel.activityScoreInfo)
-                putString("date", DateFormats.getCurrentDateOreoFormat())
-            })
+            viewModel.getContributorInfo("activity")
         }
 
     }
@@ -256,6 +231,52 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     }
 
     override fun subscribeObservers() {
+
+        viewModel.hrInfo.observe(this){
+            it.getContent()?.let {
+                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                    this.putString("infoData", it)
+                })
+            }
+        }
+
+        viewModel.activityScoreInfo.observe(this){
+            it.getContent()?.let {
+                mSharedViewModel.selectedTab = 0
+                mSharedViewModel.itemType = ClickViewType.ACTIVITY.name
+                mSharedViewModel.itemClickType = ViewItemClickType.ACTIVITY_SCORE
+                navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
+                    putString("viewType", "activity")
+                    putString("infoData", it)
+                    putString("date", DateFormats.getCurrentDateOreoFormat())
+                })
+            }
+        }
+
+        viewModel.readinessScoreInfo.observe(this){
+            it.getContent()?.let {
+                mSharedViewModel.selectedTab = 0
+                mSharedViewModel.itemType = ClickViewType.READINESS.name
+                mSharedViewModel.itemClickType = ViewItemClickType.READINESS_SCORE
+                navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
+                    putString("viewType", "readiness")
+                    putString("infoData", it)
+                    putString("date", DateFormats.getCurrentDateOreoFormat())
+                })
+            }
+        }
+        viewModel.sleepScoreInfo.observe(this){
+            it.getContent()?.let {
+                mSharedViewModel.selectedTab = 0
+                mSharedViewModel.itemType = ClickViewType.SLEEP.name
+                mSharedViewModel.itemClickType = ViewItemClickType.SLEEP_SCORE
+                navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
+                    putString("viewType", "sleep")
+                    putString("infoData", it)
+                    putString("date", DateFormats.getCurrentDateOreoFormat())
+                })
+            }
+        }
 
         viewModel.sessionManager.forceSyncData.observe(this) {
             if (viewModel.sessionManager.connectStateRing.value is ConnectState.ConnectSuccess) {

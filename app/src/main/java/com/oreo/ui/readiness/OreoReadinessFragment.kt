@@ -396,7 +396,7 @@ class OreoReadinessFragment :
             }
         }
         binding.lytTemperature.bInfo.setOnClickListener {
-            mViewModel.contributorInfo.value?.temp_graph?.let { content ->
+            mViewModel.contributorInfo.value?.temperature_graph?.let { content ->
                 navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
                     this.putString("infoData", content)
                 })

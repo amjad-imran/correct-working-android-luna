@@ -53,8 +53,7 @@ sealed class OHealthOverview {
         val xLabelList: ArrayList<String> = ArrayList(),
         val axisMinimum: Float,
         val average: Float,
-        var measureState: TapMeasureState = TapMeasureState.DEFAULT,
-        var infoContent: String? = null
+        var measureState: TapMeasureState = TapMeasureState.DEFAULT
     ) : OHealthOverview()
 
     class SleepActivityScore(
