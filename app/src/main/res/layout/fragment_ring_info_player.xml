@@ -13,15 +13,12 @@
             android:id="@+id/videoPlayer"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:auto_show="true"
-            app:controller_layout_id="@layout/custom_player_controller_view_info"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:resize_mode="fit"
-            app:show_timeout="10000"
-            app:use_controller="true" />
+            app:use_controller="false" />
 
         <include
             android:id="@+id/toolbar"
@@ -74,12 +71,51 @@
             app:layout_constraintStart_toEndOf="@+id/ivPlay"
             app:layout_constraintTop_toTopOf="@+id/ivPlay" />
 
+        <androidx.appcompat.widget.AppCompatSeekBar
+            android:id="@+id/progressBarVideoWithoutThumb"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:thumb="@null"
+            android:visibility="gone"
+            android:progressTint="#88b0ff"
+            android:progressBackgroundTint="#1effffff"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible" />
+
+        <androidx.appcompat.widget.AppCompatSeekBar
+            android:id="@+id/progressBarVideo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:progressTint="#88b0ff"
+            android:progressBackgroundTint="#1effffff"
+            app:layout_constraintBottom_toBottomOf="@+id/tvVideoDuration"
+            app:layout_constraintEnd_toStartOf="@+id/tvVideoDuration"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvVideoDuration" />
+
+        <TextView
+            android:id="@+id/tvVideoDuration"
+            style="@style/Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="24dp"
+            android:fontFamily="@font/gilroy_medium"
+            android:textColor="@color/white_80"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="13:20" />
+
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/groupControls"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="ivBack10,ivPlay,ivForward10,toolbar" />
+            app:constraint_referenced_ids="ivBack10,ivPlay,ivForward10,progressBarVideo,toolbar,tvVideoDuration" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
