@@ -25,10 +25,12 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:layout_constraintTop_toTopOf="parent"
             app:resize_mode="fit"
-            app:show_timeout="2000"
+            app:show_timeout="10000"
             app:use_controller="true" />
+
+
 
         <ImageView
             android:id="@+id/ivBack10"
@@ -52,6 +54,15 @@
             app:layout_constraintEnd_toEndOf="@id/videoPlayer"
             app:layout_constraintStart_toStartOf="@id/videoPlayer"
             app:layout_constraintTop_toTopOf="@id/videoPlayer" />
+        <ProgressBar
+            android:id="@+id/pbLoading"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/ivForward10"
@@ -68,7 +79,7 @@
             android:id="@+id/groupControls"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="ivBack10,ivPlay,ivForward10" />
+            app:constraint_referenced_ids="ivBack10,ivPlay,ivForward10,toolbar" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

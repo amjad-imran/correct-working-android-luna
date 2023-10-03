@@ -50,10 +50,13 @@ class RingInfoPlayerFragment :
             }
         }
 
+
+
+
         player = ExoPlayer.Builder(binding.videoPlayer.context).build()
             .also { exoPlayer ->
                 binding.videoPlayer.player = exoPlayer
-                exoPlayer.playWhenReady = false
+                exoPlayer.playWhenReady = true
                 exoPlayer.addListener(object : Player.Listener {
                     override fun onPlaybackStateChanged(playbackState: Int) {
                         //do some code
@@ -61,8 +64,16 @@ class RingInfoPlayerFragment :
                             exoPlayer.seekTo(0)
                             exoPlayer.pause()
                             binding.groupControls.visible()
+                            binding.pbLoading.gone()
                             binding.ivPlay.visible()
                             binding.ivPlay.setImageResource(R.drawable.ic_play_info)
+                        }else if(playbackState==ExoPlayer.STATE_BUFFERING){
+                            binding.groupControls.gone()
+                            binding.pbLoading.visible()
+                        }else if(playbackState==ExoPlayer.STATE_READY){
+                            binding.ivPlay.setImageResource(R.drawable.ic_pause_info)
+                            binding.groupControls.gone()
+                            binding.pbLoading.gone()
                         }
                     }
                 })
@@ -73,7 +84,6 @@ class RingInfoPlayerFragment :
                     navArgs.videoUrl
                 )
             )
-
         player?.setMediaItem(mediaItem)
         player?.prepare()
     }
