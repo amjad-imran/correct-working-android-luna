@@ -363,6 +363,7 @@ class OreoSleepDetailFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.SLEEP_SCORE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
+                putString("infoData", viewModel.contributorInfo.value?.sleep_score)
                 putString("date", viewModel.selectedDate)
             })
         }
@@ -372,6 +373,7 @@ class OreoSleepDetailFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.TOTAL_SLEEP
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
+                putString("infoData", viewModel.contributorInfo.value?.totalSleep)
                 putString("date", viewModel.selectedDate)
             })
         }
@@ -381,6 +383,7 @@ class OreoSleepDetailFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.TIME_IN_BED
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
+                putString("infoData", viewModel.contributorInfo.value?.time_in_bed)
                 putString("date", viewModel.selectedDate)
             })
         }
@@ -390,6 +393,7 @@ class OreoSleepDetailFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.SLEEP_EFFICIENCY
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
+                putString("infoData", viewModel.contributorInfo.value?.efficiency)
                 putString("date", viewModel.selectedDate)
             })
         }
@@ -399,6 +403,7 @@ class OreoSleepDetailFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.RESTING_HR
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
+                putString("infoData", viewModel.contributorInfo.value?.restingHr)
                 putString("date", viewModel.selectedDate)
             })
         }

@@ -9,6 +9,8 @@ data class OContributorResponseModal(
     val restfulness: String? = null,
     @SerializedName("rem_sleep")
     val remSleep: String? = null,
+    val sleep_score: String? = null,
+    val time_in_bed: String? = null,
     @SerializedName("deep_sleep")
     val deepSleep: String? = null,
     val latency: String? = null,
