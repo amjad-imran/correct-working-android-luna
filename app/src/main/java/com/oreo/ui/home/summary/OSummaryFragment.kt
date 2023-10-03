@@ -15,6 +15,8 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSummaryOBinding
 import com.noisefit.oreo.BottomNavOption
 import com.noisefit.oreo.OreoMainViewModel
+import com.noisefit.receiver.service.FeedbackSubmitService
+import com.noisefit.receiver.service.ProblemType
 import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
@@ -413,6 +415,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                     SyncEvents.ServerSyncSuccess -> {
                         binding.progressBar.root.gone()
                         viewModel.getDashboardDataFromServer(true)
+                        sendLogs()
                     }
                 }
             }
@@ -504,6 +507,20 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         }
 
 
+    }
+
+    private fun sendLogs() {
+        val shouldSendLogs = viewModel.shouldSendLogs()
+        if(shouldSendLogs){
+            context?.let {
+                FeedbackSubmitService.startService(
+                    it,
+                    "",
+                    "Auto logs -Android",
+                    viewModel.ringDataStore.getRingDevice()?.deviceId
+                )
+            }
+        }
     }
 
     private fun handleAlertClick(alertType: AlertType) {

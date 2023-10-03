@@ -63,6 +63,9 @@ abstract class BaseFragment<VB : ViewBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        _binding?.let {
+            LOGS.w("FRAGMENT_OPEN ${this.javaClass.simpleName}")
+        }
         subscribeObservers()
         initListener()
     }

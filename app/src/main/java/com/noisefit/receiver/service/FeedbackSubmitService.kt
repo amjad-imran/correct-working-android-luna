@@ -152,6 +152,10 @@ constructor() : LifecycleService() {
                 when (resource) {
                     is Resource.Success -> {
                         resource.data?.let {
+
+
+                            ringDataStore.saveAutoLogsTimeStamp()
+
                             /*if (problemType.equals(ProblemType.WATCHFACE_TRANSFER.name, true)) {
                                 lastSyncProvider.setSyncTimeStamp(LastSyncItems.WATCHFACE_FEEDBACK)
                             } else if (problemType.equals(ProblemType.PAIRING.name, true)) {

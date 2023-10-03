@@ -6,6 +6,8 @@ import com.google.gson.Gson
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.local.db.fromJson
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.receiver.service.FeedbackSubmitService
+import com.noisefit.receiver.service.ProblemType
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -19,6 +21,7 @@ import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.ManualMeasureType
 import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.ui.checkDayDifferenceMoreOne
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.AlertType
@@ -224,10 +227,10 @@ constructor(
 
 
             when (getDaySlot()) {
-                0->{
+                0 -> {
                     //sleep
-                    if(data.sleep?.sleepScore != null){
-                        if(data.registerDate!=0){
+                    if (data.sleep?.sleepScore != null) {
+                        if (data.registerDate != 0) {
                             data.readiness?.let {
                                 userActivities.add(OHealthOverview.Readiness(data.readiness))
                             }
@@ -240,15 +243,16 @@ constructor(
                                 )
                             )
                         }
-                    }else{
+                    } else {
                         userActivities.add(OHealthOverview.SleepWaiting)
                     }
                 }
+
                 1 -> {
 
                     //sleep
-                    if(data.sleep?.sleepScore != null){
-                        if(data.registerDate!=0){
+                    if (data.sleep?.sleepScore != null) {
+                        if (data.registerDate != 0) {
                             data.readiness?.let {
                                 userActivities.add(OHealthOverview.Readiness(data.readiness))
                             }
@@ -261,12 +265,12 @@ constructor(
                                 )
                             )
                         }
-                    }else{
+                    } else {
                         userActivities.add(OHealthOverview.SleepWaiting)
                     }
 
                     //Activity
-                    if(data.activity?.activeCalories != null){
+                    if (data.activity?.activeCalories != null) {
                         val activeCalories = data.activity.activeCalories
                         if (activeCalories in 1..49) {
                             val caloriesGoal = summary.user?.userGoals?.caloriesGoal ?: 0
@@ -276,7 +280,7 @@ constructor(
                                     caloriesGoal
                                 )
                             )
-                        } else if(activeCalories >= 50) {
+                        } else if (activeCalories >= 50) {
                             val caloriesGoal = summary.user?.userGoals?.caloriesGoal ?: 0
                             userActivities.add(
                                 OHealthOverview.Activity(
@@ -284,12 +288,13 @@ constructor(
                                     caloriesGoal
                                 )
                             )
-                        } else { }
+                        } else {
+                        }
                     }
                 }
 
                 2 -> {
-                    if(data.registerDate!=0){
+                    if (data.registerDate != 0) {
                         data.readiness?.let {
                             userActivities.add(OHealthOverview.Readiness(data.readiness))
                         }
@@ -308,7 +313,7 @@ constructor(
 
                     data.activity?.let {
 
-                        val activeCalories = data.activity.activeCalories?:0
+                        val activeCalories = data.activity.activeCalories ?: 0
                         if (activeCalories in 0..49) {
                             val caloriesGoal = summary.user?.userGoals?.caloriesGoal ?: 0
                             userActivities.add(
@@ -327,7 +332,6 @@ constructor(
                             )
                         }
                     }
-
 
 
                 }
@@ -335,7 +339,7 @@ constructor(
                 else -> {
                     data.activity?.let {
 
-                        val activeCalories = data.activity.activeCalories?:0
+                        val activeCalories = data.activity.activeCalories ?: 0
                         if (activeCalories in 0..49) {
                             val caloriesGoal = summary.user?.userGoals?.caloriesGoal ?: 0
                             userActivities.add(
@@ -355,8 +359,8 @@ constructor(
                         }
                     }
 
-                    if(data.registerDate!=0){
-                        if(data.sleep?.sleepScore != null){
+                    if (data.registerDate != 0) {
+                        if (data.sleep?.sleepScore != null) {
                             data.readiness?.let {
                                 userActivities.add(OHealthOverview.ReadinessMinimal(data.readiness))
                             }
@@ -366,7 +370,7 @@ constructor(
                                     makeSleepArray(data.sleep)
                                 )
                             )
-                        }else{
+                        } else {
                             data.readiness?.let {
                                 userActivities.add(OHealthOverview.Readiness(data.readiness))
                             }
@@ -386,53 +390,53 @@ constructor(
             }
 
 
-           /* if (isMorningTime()) {
-                if (data.registerDate != 0) {
-                    data.readiness?.let {
-                        userActivities.add(OHealthOverview.Readiness(data.readiness))
-                    }
+            /* if (isMorningTime()) {
+                 if (data.registerDate != 0) {
+                     data.readiness?.let {
+                         userActivities.add(OHealthOverview.Readiness(data.readiness))
+                     }
 
 
-                    data.sleep?.let {
-                        userActivities.add(
-                            OHealthOverview.Sleep(
-                                data.sleep,
-                                makeSleepArray(data.sleep),
-                                data.sleep.sleepStage.firstOrNull()?.startTime ?: "",
-                                data.sleep.sleepStage.lastOrNull()?.endTime ?: ""
-                            )
-                        )
-                    }
-                }
+                     data.sleep?.let {
+                         userActivities.add(
+                             OHealthOverview.Sleep(
+                                 data.sleep,
+                                 makeSleepArray(data.sleep),
+                                 data.sleep.sleepStage.firstOrNull()?.startTime ?: "",
+                                 data.sleep.sleepStage.lastOrNull()?.endTime ?: ""
+                             )
+                         )
+                     }
+                 }
 
-                data.activity?.let {
-                    val caloriesGoal = summary.user?.userGoals?.caloriesGoal ?: 0
-                    userActivities.add(OHealthOverview.Activity(data.activity, caloriesGoal))
-                }
-            } else {
+                 data.activity?.let {
+                     val caloriesGoal = summary.user?.userGoals?.caloriesGoal ?: 0
+                     userActivities.add(OHealthOverview.Activity(data.activity, caloriesGoal))
+                 }
+             } else {
 
-                data.activity?.let {
-                    val caloriesGoal = summary.user?.userGoals?.caloriesGoal ?: 0
-                    userActivities.add(OHealthOverview.Activity(data.activity, caloriesGoal))
-                }
+                 data.activity?.let {
+                     val caloriesGoal = summary.user?.userGoals?.caloriesGoal ?: 0
+                     userActivities.add(OHealthOverview.Activity(data.activity, caloriesGoal))
+                 }
 
-                if (data.registerDate != 0) {
-                    data.readiness?.let {
-                        userActivities.add(OHealthOverview.Readiness(data.readiness))
-                    }
-                    data.sleep?.let {
-                        userActivities.add(
-                            OHealthOverview.Sleep(
-                                data.sleep,
-                                makeSleepArray(data.sleep),
-                                data.sleep.sleepStage.firstOrNull()?.startTime ?: "",
-                                data.sleep.sleepStage.lastOrNull()?.endTime ?: ""
-                            )
-                        )
-                    }
-                }
+                 if (data.registerDate != 0) {
+                     data.readiness?.let {
+                         userActivities.add(OHealthOverview.Readiness(data.readiness))
+                     }
+                     data.sleep?.let {
+                         userActivities.add(
+                             OHealthOverview.Sleep(
+                                 data.sleep,
+                                 makeSleepArray(data.sleep),
+                                 data.sleep.sleepStage.firstOrNull()?.startTime ?: "",
+                                 data.sleep.sleepStage.lastOrNull()?.endTime ?: ""
+                             )
+                         )
+                     }
+                 }
 
-            }*/
+             }*/
 
             stateSleepAvgCard.postValue(Pair(data.sleepScoreAvg, data.activityScoreAvg))
             stateReadinessAvgCard.postValue(data.readinessScoreAvg)
@@ -698,7 +702,7 @@ constructor(
             0
         } else if (DateFormats.isTimeBetween(currentTime, "04:00", "07:59")) {
             1
-        }else if (DateFormats.isTimeBetween(currentTime, "08:00", "11:59")) {
+        } else if (DateFormats.isTimeBetween(currentTime, "08:00", "11:59")) {
             2
         } else {
             3
@@ -775,5 +779,13 @@ constructor(
             }
         }
         stateDashAlerts.postValue(stateDashAlerts.value)
+    }
+
+    fun shouldSendLogs(): Boolean {
+        val lastTimeStamp = ringDataStore.getAutoLogsTimeStamp()
+        if (lastTimeStamp == 0L) {
+            return true
+        }
+        return lastTimeStamp.checkDayDifferenceMoreOne()
     }
 }
