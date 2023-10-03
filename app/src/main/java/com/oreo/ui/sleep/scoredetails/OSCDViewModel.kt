@@ -35,6 +35,7 @@ class OSCDViewModel @Inject constructor(
     var itemType: String? = null
     var itemClickType: String? = null
     var selectedDate: String? = null
+    var infoData: String? = null
     var isProgressEqual: Boolean = false
     var trendDifferenceProgress: Int = 0
 

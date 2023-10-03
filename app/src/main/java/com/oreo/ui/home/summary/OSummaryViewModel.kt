@@ -62,6 +62,10 @@ constructor(
     val stateReadinessAvgCard = MutableLiveData<ODashboardReadinessScoreModel?>()
     val stateWorkouts = MutableLiveData<List<OActivityListModal>>()
 
+    var sleepScoreInfo: String? = null
+    var readinessScoreInfo: String? = null
+    var activityScoreInfo: String? = null
+
 
     var summary = OSummary()
 
@@ -82,6 +86,7 @@ constructor(
             val device = getDeviceConnected()
             statePairDeviceCard.postValue(device == null)
             stateHeartRateCard.postValue(userRepository.getSummaryHRHealthOverview().apply {
+                this?.infoContent = ""
                 if (device == null) {
                     this?.measureState = TapMeasureState.NO_DEVICE
                 }
@@ -208,6 +213,9 @@ constructor(
         viewModelScope.launch(Dispatchers.IO) {
 
             val userActivities = ArrayList<OHealthOverview>()
+            sleepScoreInfo = data.sleep_score
+            readinessScoreInfo = data.readiness_score
+            activityScoreInfo = data.activity_score
 
 
             val autoSportCount = userRepository.getSummaryAutoWorkoutCount()
@@ -224,10 +232,10 @@ constructor(
 
 
             when (getDaySlot()) {
-                0->{
+                0 -> {
                     //sleep
-                    if(data.sleep?.sleepScore != null){
-                        if(data.registerDate!=0){
+                    if (data.sleep?.sleepScore != null) {
+                        if (data.registerDate != 0) {
                             data.readiness?.let {
                                 userActivities.add(OHealthOverview.Readiness(data.readiness))
                             }
@@ -240,15 +248,16 @@ constructor(
                                 )
                             )
                         }
-                    }else{
+                    } else {
                         userActivities.add(OHealthOverview.SleepWaiting)
                     }
                 }
+
                 1 -> {
 
                     //sleep
-                    if(data.sleep?.sleepScore != null){
-                        if(data.registerDate!=0){
+                    if (data.sleep?.sleepScore != null) {
+                        if (data.registerDate != 0) {
                             data.readiness?.let {
                                 userActivities.add(OHealthOverview.Readiness(data.readiness))
                             }
@@ -261,12 +270,12 @@ constructor(
                                 )
                             )
                         }
-                    }else{
+                    } else {
                         userActivities.add(OHealthOverview.SleepWaiting)
                     }
 
                     //Activity
-                    if(data.activity?.activeCalories != null){
+                    if (data.activity?.activeCalories != null) {
                         val activeCalories = data.activity.activeCalories
                         if (activeCalories in 1..49) {
                             val caloriesGoal = summary.user?.userGoals?.caloriesGoal ?: 0
@@ -276,7 +285,7 @@ constructor(
                                     caloriesGoal
                                 )
                             )
-                        } else if(activeCalories >= 50) {
+                        } else if (activeCalories >= 50) {
                             val caloriesGoal = summary.user?.userGoals?.caloriesGoal ?: 0
                             userActivities.add(
                                 OHealthOverview.Activity(
@@ -284,12 +293,13 @@ constructor(
                                     caloriesGoal
                                 )
                             )
-                        } else { }
+                        } else {
+                        }
                     }
                 }
 
                 2 -> {
-                    if(data.registerDate!=0){
+                    if (data.registerDate != 0) {
                         data.readiness?.let {
                             userActivities.add(OHealthOverview.Readiness(data.readiness))
                         }
@@ -308,7 +318,7 @@ constructor(
 
                     data.activity?.let {
 
-                        val activeCalories = data.activity.activeCalories?:0
+                        val activeCalories = data.activity.activeCalories ?: 0
                         if (activeCalories in 0..49) {
                             val caloriesGoal = summary.user?.userGoals?.caloriesGoal ?: 0
                             userActivities.add(
@@ -327,7 +337,6 @@ constructor(
                             )
                         }
                     }
-
 
 
                 }
@@ -335,7 +344,7 @@ constructor(
                 else -> {
                     data.activity?.let {
 
-                        val activeCalories = data.activity.activeCalories?:0
+                        val activeCalories = data.activity.activeCalories ?: 0
                         if (activeCalories in 0..49) {
                             val caloriesGoal = summary.user?.userGoals?.caloriesGoal ?: 0
                             userActivities.add(
@@ -355,8 +364,8 @@ constructor(
                         }
                     }
 
-                    if(data.registerDate!=0){
-                        if(data.sleep?.sleepScore != null){
+                    if (data.registerDate != 0) {
+                        if (data.sleep?.sleepScore != null) {
                             data.readiness?.let {
                                 userActivities.add(OHealthOverview.ReadinessMinimal(data.readiness))
                             }
@@ -366,7 +375,7 @@ constructor(
                                     makeSleepArray(data.sleep)
                                 )
                             )
-                        }else{
+                        } else {
                             data.readiness?.let {
                                 userActivities.add(OHealthOverview.Readiness(data.readiness))
                             }
@@ -386,53 +395,53 @@ constructor(
             }
 
 
-           /* if (isMorningTime()) {
-                if (data.registerDate != 0) {
-                    data.readiness?.let {
-                        userActivities.add(OHealthOverview.Readiness(data.readiness))
-                    }
+            /* if (isMorningTime()) {
+                 if (data.registerDate != 0) {
+                     data.readiness?.let {
+                         userActivities.add(OHealthOverview.Readiness(data.readiness))
+                     }
 
 
-                    data.sleep?.let {
-                        userActivities.add(
-                            OHealthOverview.Sleep(
-                                data.sleep,
-                                makeSleepArray(data.sleep),
-                                data.sleep.sleepStage.firstOrNull()?.startTime ?: "",
-                                data.sleep.sleepStage.lastOrNull()?.endTime ?: ""
-                            )
-                        )
-                    }
-                }
+                     data.sleep?.let {
+                         userActivities.add(
+                             OHealthOverview.Sleep(
+                                 data.sleep,
+                                 makeSleepArray(data.sleep),
+                                 data.sleep.sleepStage.firstOrNull()?.startTime ?: "",
+                                 data.sleep.sleepStage.lastOrNull()?.endTime ?: ""
+                             )
+                         )
+                     }
+                 }
 
-                data.activity?.let {
-                    val caloriesGoal = summary.user?.userGoals?.caloriesGoal ?: 0
-                    userActivities.add(OHealthOverview.Activity(data.activity, caloriesGoal))
-                }
-            } else {
+                 data.activity?.let {
+                     val caloriesGoal = summary.user?.userGoals?.caloriesGoal ?: 0
+                     userActivities.add(OHealthOverview.Activity(data.activity, caloriesGoal))
+                 }
+             } else {
 
-                data.activity?.let {
-                    val caloriesGoal = summary.user?.userGoals?.caloriesGoal ?: 0
-                    userActivities.add(OHealthOverview.Activity(data.activity, caloriesGoal))
-                }
+                 data.activity?.let {
+                     val caloriesGoal = summary.user?.userGoals?.caloriesGoal ?: 0
+                     userActivities.add(OHealthOverview.Activity(data.activity, caloriesGoal))
+                 }
 
-                if (data.registerDate != 0) {
-                    data.readiness?.let {
-                        userActivities.add(OHealthOverview.Readiness(data.readiness))
-                    }
-                    data.sleep?.let {
-                        userActivities.add(
-                            OHealthOverview.Sleep(
-                                data.sleep,
-                                makeSleepArray(data.sleep),
-                                data.sleep.sleepStage.firstOrNull()?.startTime ?: "",
-                                data.sleep.sleepStage.lastOrNull()?.endTime ?: ""
-                            )
-                        )
-                    }
-                }
+                 if (data.registerDate != 0) {
+                     data.readiness?.let {
+                         userActivities.add(OHealthOverview.Readiness(data.readiness))
+                     }
+                     data.sleep?.let {
+                         userActivities.add(
+                             OHealthOverview.Sleep(
+                                 data.sleep,
+                                 makeSleepArray(data.sleep),
+                                 data.sleep.sleepStage.firstOrNull()?.startTime ?: "",
+                                 data.sleep.sleepStage.lastOrNull()?.endTime ?: ""
+                             )
+                         )
+                     }
+                 }
 
-            }*/
+             }*/
 
             stateSleepAvgCard.postValue(Pair(data.sleepScoreAvg, data.activityScoreAvg))
             stateReadinessAvgCard.postValue(data.readinessScoreAvg)
@@ -441,6 +450,7 @@ constructor(
 
             val device = ringDataStore.getRingDevice()
             stateHeartRateCard.postValue(userRepository.getSummaryHRHealthOverview().apply {
+                this?.infoContent = data.hr_graph_dash
                 if (device == null) {
                     this?.measureState = TapMeasureState.NO_DEVICE
                 }
@@ -698,7 +708,7 @@ constructor(
             0
         } else if (DateFormats.isTimeBetween(currentTime, "04:00", "07:59")) {
             1
-        }else if (DateFormats.isTimeBetween(currentTime, "08:00", "11:59")) {
+        } else if (DateFormats.isTimeBetween(currentTime, "08:00", "11:59")) {
             2
         } else {
             3

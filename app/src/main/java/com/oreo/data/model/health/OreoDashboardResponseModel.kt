@@ -3,6 +3,10 @@ package com.oreo.data.model.health
 import com.google.gson.annotations.SerializedName
 
 data class OreoDashboardResponseModel(
+    val hr_graph_dash: String? = null,
+    val sleep_score: String? = null,
+    val readiness_score: String? = null,
+    val activity_score: String? = null,
     @SerializedName("sleep")
     val sleep: ODashboardSleepModel? = null,
     @SerializedName("readiness")

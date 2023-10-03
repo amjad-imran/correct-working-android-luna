@@ -104,6 +104,10 @@
             android:name="viewType"
             app:argType="string" />
         <argument
+            android:name="infoData"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
             android:name="date"
             app:argType="string" />
         <action
@@ -365,8 +369,8 @@
         android:name="com.oreo.ui.sleep.scoredetails.BottomSheetDataMetrics"
         android:label="BottomSheetDataMetrics" >
         <argument
-            android:name="metricsType"
-            app:argType="com.oreo.ui.sleep.scoredetails.ViewItemClickType" />
+            android:name="infoData"
+            app:argType="string"/>
     </dialog>
 
 </navigation>

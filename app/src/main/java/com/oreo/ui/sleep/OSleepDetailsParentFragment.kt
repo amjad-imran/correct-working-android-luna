@@ -192,13 +192,14 @@ class OSleepDetailsParentFragment :
             navigateUpSafe()
         }
         binding.lytToolbar.view1.setOnClickListener {
-            mViewModel.itemClickType?.let { type ->
+            args.infoData?.let{data->
                 navigate(
                     OSleepDetailsParentFragmentDirections.actionSleepDetailsParentOreoToBottomSheetDataMetrics(
-                        type
+                        data
                     )
                 )
             }
+
 
         }
         binding.lytToolbar.view1.visible()

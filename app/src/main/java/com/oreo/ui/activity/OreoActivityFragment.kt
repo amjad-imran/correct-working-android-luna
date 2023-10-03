@@ -666,6 +666,7 @@ class OreoActivityFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.ACTIVITY_SCORE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "activity")
+                putString("infoData", mViewModel.contributorInfo.value?.activity_score)
                 putString("date", mViewModel.selectedDate)
             })
         }
@@ -675,6 +676,7 @@ class OreoActivityFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.ACTIVE_CALORIES
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "activity")
+                putString("infoData", mViewModel.contributorInfo.value?.activity_goal)
                 putString("date", mViewModel.selectedDate)
             })
         }
@@ -684,6 +686,7 @@ class OreoActivityFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.TOTAL_CALORIES_BURNED
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "activity")
+                putString("infoData", mViewModel.contributorInfo.value?.total_calories)
                 putString("date", mViewModel.selectedDate)
             })
         }
@@ -693,6 +696,7 @@ class OreoActivityFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.STEPS
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "activity")
+                putString("infoData", mViewModel.contributorInfo.value?.steps)
                 putString("date", mViewModel.selectedDate)
             })
         }
@@ -702,6 +706,7 @@ class OreoActivityFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.DISTANCE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "activity")
+                putString("infoData", mViewModel.contributorInfo.value?.distance)
                 putString("date", mViewModel.selectedDate)
             })
         }

@@ -333,6 +333,21 @@ class OreoSleepDetailFragment :
         binding.lytToolbar.ivAddFriend.visible()
         binding.lytToolbar.ivAddFriend.setImageResource(R.drawable.ic_calenders)
 
+        binding.lytHeartRate.bInfo.setOnClickListener {
+            viewModel.contributorInfo.value?.hr_graph?.let { content ->
+                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                    this.putString("infoData", content)
+                })
+            }
+        }
+        binding.lytHRVariability.bInfo.setOnClickListener {
+            viewModel.contributorInfo.value?.hrv_graph?.let { content ->
+                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                    this.putString("infoData", content)
+                })
+            }
+        }
+
         binding.lytEmptyView.bGoToSettings.setOnClickListener {
             showWalkAround(false)
             viewModel.ringDataStore.setSleepWalkAroundShown(true)
@@ -477,7 +492,7 @@ class OreoSleepDetailFragment :
                 }
                 if (index != null) {
 
-                    moveToPos =  15 + (15-index-1)
+                    moveToPos = 15 + (15 - index - 1)
                     LOGS.d("moveToPosition date ${viewModel.selectedDate}")
                     //binding.rvTopGraph.moveToPosition(15 + (15-index-1))
                 }

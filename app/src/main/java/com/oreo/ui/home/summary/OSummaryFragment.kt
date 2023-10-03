@@ -77,6 +77,13 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         binding.lytHeader.batteryStatus.setOnClickListener {
             mainViewModel.navigateTo(BottomNavOption.MY_DEVICE)
         }
+        binding.contentMain.lytHeartRate.bInfo.setOnClickListener {
+            viewModel.stateHeartRateCard.value?.infoContent?.let { content ->
+                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                    this.putString("infoData", content)
+                })
+            }
+        }
 
 
         binding.lytHeader.profileView1.setOnClickListener {
@@ -127,6 +134,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             mSharedViewModel.itemClickType = ViewItemClickType.READINESS_SCORE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
+                putString("infoData", viewModel.readinessScoreInfo)
                 putString("date", DateFormats.getCurrentDateOreoFormat())
             })
         }
@@ -137,6 +145,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             mSharedViewModel.itemClickType = ViewItemClickType.SLEEP_SCORE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
+                putString("infoData", viewModel.sleepScoreInfo)
                 putString("date", DateFormats.getCurrentDateOreoFormat())
             })
         }
@@ -147,6 +156,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             mSharedViewModel.itemClickType = ViewItemClickType.ACTIVITY_SCORE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "activity")
+                putString("infoData", viewModel.activityScoreInfo)
                 putString("date", DateFormats.getCurrentDateOreoFormat())
             })
         }

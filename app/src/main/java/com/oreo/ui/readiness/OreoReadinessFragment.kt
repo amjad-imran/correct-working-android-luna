@@ -381,6 +381,29 @@ class OreoReadinessFragment :
         }
 
     override fun initListener() {
+        binding.lytHeartRate.bInfo.setOnClickListener {
+            mViewModel.contributorInfo.value?.hr_graph?.let { content ->
+                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                    this.putString("infoData", content)
+                })
+            }
+        }
+        binding.lytHRVariability.bInfo.setOnClickListener {
+            mViewModel.contributorInfo.value?.hrv_graph?.let { content ->
+                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                    this.putString("infoData", content)
+                })
+            }
+        }
+        binding.lytTemperature.bInfo.setOnClickListener {
+            mViewModel.contributorInfo.value?.temp_graph?.let { content ->
+                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                    this.putString("infoData", content)
+                })
+            }
+        }
+
+
         binding.lytEmptyView.bGoToSettings.setOnClickListener {
             showWalkAround(false)
             mViewModel.ringDataStore.setReadinessWalkAroundShown(true)
@@ -409,6 +432,7 @@ class OreoReadinessFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.READINESS_SCORE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
+                putString("infoData", mViewModel.contributorInfo.value?.readiness_score)
                 putString("date", mViewModel.selectedDate)
             })
         }
@@ -418,6 +442,7 @@ class OreoReadinessFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.RESTING_HR
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
+                putString("infoData", mViewModel.contributorInfo.value?.restingHr)
                 putString("date", mViewModel.selectedDate)
             })
         }
@@ -427,6 +452,7 @@ class OreoReadinessFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.HR_VARIABILITY
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
+                putString("infoData", mViewModel.contributorInfo.value?.hr_variability)
                 putString("date", mViewModel.selectedDate)
             })
         }
@@ -436,6 +462,7 @@ class OreoReadinessFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.BODY_TEMPERATURE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
+                putString("infoData", mViewModel.contributorInfo.value?.skin_temperature)
                 putString("date", mViewModel.selectedDate)
             })
         }
@@ -445,6 +472,7 @@ class OreoReadinessFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.RESPIRATORY_RATE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
+                putString("infoData", mViewModel.contributorInfo.value?.respiratory_rate)
                 putString("date", mViewModel.selectedDate)
             })
         }
