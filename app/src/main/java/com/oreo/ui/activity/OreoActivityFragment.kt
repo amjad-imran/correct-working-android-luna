@@ -686,7 +686,7 @@ class OreoActivityFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.TOTAL_CALORIES_BURNED
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "activity")
-                putString("infoData", mViewModel.contributorInfo.value?.total_calories)
+                putString("infoData", mViewModel.contributorInfo.value?.total_burn)
                 putString("date", mViewModel.selectedDate)
             })
         }
