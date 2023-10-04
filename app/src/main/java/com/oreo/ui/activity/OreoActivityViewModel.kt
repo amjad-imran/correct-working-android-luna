@@ -46,7 +46,7 @@ class OreoActivityViewModel @Inject constructor(
 
 
     private val _contributorInfo = MutableLiveData<OContributorResponseModal>()
-    private val contributorInfo: LiveData<OContributorResponseModal> = _contributorInfo
+    val contributorInfo: LiveData<OContributorResponseModal> = _contributorInfo
     init {
         selectedMasterDate = DateFormats.getCurrentDateOreoFormat()
     }

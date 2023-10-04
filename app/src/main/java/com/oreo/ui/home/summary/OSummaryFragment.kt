@@ -82,6 +82,9 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_DEVICE_CAPSULE_CLICK)
             mainViewModel.navigateTo(BottomNavOption.MY_DEVICE)
         }
+        binding.contentMain.lytHeartRate.bInfo.setOnClickListener {
+            viewModel.getContributorInfo("hr")
+        }
 
 
         binding.lytHeader.profileView1.setOnClickListener {
@@ -142,36 +145,19 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         }
 
         binding.contentMain.lytReadinessAvg.root.setOnClickListener {
-            mSharedViewModel.selectedTab = 0
-            mSharedViewModel.itemType = ClickViewType.READINESS.name
-            mSharedViewModel.itemClickType = ViewItemClickType.READINESS_SCORE
-            navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
-                putString("viewType", "readiness")
-                putString("date", DateFormats.getCurrentDateOreoFormat())
-            })
             viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_READINESS_SCORE_CLICK)
+            viewModel.getContributorInfo("readiness")
         }
 
         binding.contentMain.lytSleepAvg.constraintLayout2.setOnClickListener {
-            mSharedViewModel.selectedTab = 0
-            mSharedViewModel.itemType = ClickViewType.SLEEP.name
-            mSharedViewModel.itemClickType = ViewItemClickType.SLEEP_SCORE
-            navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
-                putString("viewType", "sleep")
-                putString("date", DateFormats.getCurrentDateOreoFormat())
-            })
             viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_SLEEP_SCORE_CLICK)
+            viewModel.getContributorInfo("sleep")
+
         }
 
         binding.contentMain.lytSleepAvg.constraintLayout.setOnClickListener {
-            mSharedViewModel.selectedTab = 0
-            mSharedViewModel.itemType = ClickViewType.ACTIVITY.name
-            mSharedViewModel.itemClickType = ViewItemClickType.ACTIVITY_SCORE
-            navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
-                putString("viewType", "activity")
-                putString("date", DateFormats.getCurrentDateOreoFormat())
-            })
             viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_ACTIVITY_SCORE_CLICK)
+            viewModel.getContributorInfo("activity")
         }
 
     }
@@ -317,6 +303,52 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     }
 
     override fun subscribeObservers() {
+
+        viewModel.hrInfo.observe(this){
+            it.getContent()?.let {
+                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                    this.putString("infoData", it)
+                })
+            }
+        }
+
+        viewModel.activityScoreInfo.observe(this){
+            it.getContent()?.let {
+                mSharedViewModel.selectedTab = 0
+                mSharedViewModel.itemType = ClickViewType.ACTIVITY.name
+                mSharedViewModel.itemClickType = ViewItemClickType.ACTIVITY_SCORE
+                navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
+                    putString("viewType", "activity")
+                    putString("infoData", it)
+                    putString("date", DateFormats.getCurrentDateOreoFormat())
+                })
+            }
+        }
+
+        viewModel.readinessScoreInfo.observe(this){
+            it.getContent()?.let {
+                mSharedViewModel.selectedTab = 0
+                mSharedViewModel.itemType = ClickViewType.READINESS.name
+                mSharedViewModel.itemClickType = ViewItemClickType.READINESS_SCORE
+                navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
+                    putString("viewType", "readiness")
+                    putString("infoData", it)
+                    putString("date", DateFormats.getCurrentDateOreoFormat())
+                })
+            }
+        }
+        viewModel.sleepScoreInfo.observe(this){
+            it.getContent()?.let {
+                mSharedViewModel.selectedTab = 0
+                mSharedViewModel.itemType = ClickViewType.SLEEP.name
+                mSharedViewModel.itemClickType = ViewItemClickType.SLEEP_SCORE
+                navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
+                    putString("viewType", "sleep")
+                    putString("infoData", it)
+                    putString("date", DateFormats.getCurrentDateOreoFormat())
+                })
+            }
+        }
 
         viewModel.sessionManager.forceSyncData.observe(this) {
             if (viewModel.sessionManager.connectStateRing.value is ConnectState.ConnectSuccess) {

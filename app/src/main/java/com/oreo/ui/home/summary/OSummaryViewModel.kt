@@ -1,5 +1,6 @@
 package com.oreo.ui.home.summary
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
@@ -21,11 +22,13 @@ import com.noisefit_commans.models.ManualMeasureType
 import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.DashAlert
 import com.oreo.data.model.OActivityListModal
+import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.VideoInfoType
@@ -50,6 +53,7 @@ constructor(
     val sessionManager: SessionManager,
     val localDataStore: DataStoredInterface,
     val ringDataStore: RingDataStore,
+    val userActivityRepository: OreoUserActivityRepository,
     private val syncRepository: OreoSyncRepository,
     val userRepository: OreoUserActivityRepository,
 ) : BaseViewModel() {
@@ -63,6 +67,12 @@ constructor(
         MutableLiveData<Pair<ODashboardSleepScoreModel?, ODashboardActivityScoreModel?>>()
     val stateReadinessAvgCard = MutableLiveData<ODashboardReadinessScoreModel?>()
     val stateWorkouts = MutableLiveData<List<OActivityListModal>>()
+    var contributorInfo: OContributorResponseModal? = null
+
+    val hrInfo = MutableLiveData<Event<String>>()
+    var sleepScoreInfo = MutableLiveData<Event<String>>()
+    var readinessScoreInfo = MutableLiveData<Event<String>>()
+    var activityScoreInfo = MutableLiveData<Event<String>>()
 
 
     var summary = OSummary()
@@ -211,7 +221,6 @@ constructor(
 
             val userActivities = ArrayList<OHealthOverview>()
             val viewedCardsData = ArrayList<OHealthOverview>()
-
 
             val autoSportCount = userRepository.getSummaryAutoWorkoutCount()
             if (autoSportCount > 0) {
@@ -841,4 +850,66 @@ constructor(
         }
         stateDashAlerts.postValue(stateDashAlerts.value)
     }
+
+    /**
+     *hr,sleep,activity,readiness
+     */
+    fun getContributorInfo(callerName: String) {
+        if (contributorInfo != null) {
+            when(callerName){
+                "hr"->hrInfo.postValue(Event(contributorInfo!!.hr_graph))
+                "sleep"->sleepScoreInfo.postValue(Event(contributorInfo!!.sleep_score))
+                "activity"->activityScoreInfo.postValue(Event(contributorInfo!!.activity_score))
+                "readiness"->readinessScoreInfo.postValue(Event(contributorInfo!!.readiness_score))
+            }
+            return
+        }
+
+        viewModelScope.launch {
+            userActivityRepository.getContributorDetailsInfo(
+                "dashboard"
+            ).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        getContributorInfo(callerName)
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            contributorInfo = it
+                            when(callerName){
+                                "hr"->hrInfo.postValue(Event(contributorInfo!!.hr_graph))
+                                "sleep"->sleepScoreInfo.postValue(Event(contributorInfo!!.sleep_score))
+                                "activity"->activityScoreInfo.postValue(Event(contributorInfo!!.activity_score))
+                                "readiness"->readinessScoreInfo.postValue(Event(contributorInfo!!.readiness_score))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+    }
+
 }

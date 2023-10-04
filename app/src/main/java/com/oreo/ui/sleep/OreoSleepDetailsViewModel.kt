@@ -176,6 +176,10 @@ constructor(
 
     }
 
+    fun getInfoValueByKey(type:String){
+
+    }
+
     fun getContributorInfo() {
         viewModelScope.launch {
             userActivityRepository.getContributorDetailsInfo(

@@ -197,10 +197,10 @@ class OSleepDetailsParentFragment :
         }
         binding.lytToolbar.view1.setOnClickListener {
             mViewModel.sessionManager.logFirebaseEvent("${mViewModel.itemClickType}_" + FirebaseLunaAppEvents.INFO_CLICK)
-            mViewModel.itemClickType?.let { type ->
+            args.infoData?.let{data->
                 navigate(
                     OSleepDetailsParentFragmentDirections.actionSleepDetailsParentOreoToBottomSheetDataMetrics(
-                        type
+                        data
                     )
                 )
             }

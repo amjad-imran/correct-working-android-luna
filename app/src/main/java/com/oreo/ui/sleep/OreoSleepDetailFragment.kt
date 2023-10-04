@@ -345,6 +345,21 @@ class OreoSleepDetailFragment :
         binding.lytToolbar.ivAddFriend.visible()
         binding.lytToolbar.ivAddFriend.setImageResource(R.drawable.ic_calenders)
 
+        binding.lytHeartRate.bInfo.setOnClickListener {
+            viewModel.contributorInfo.value?.hr_graph?.let { content ->
+                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                    this.putString("infoData", content)
+                })
+            }
+        }
+        binding.lytHRVariability.bInfo.setOnClickListener {
+            viewModel.contributorInfo.value?.hrv_graph?.let { content ->
+                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                    this.putString("infoData", content)
+                })
+            }
+        }
+
         binding.lytEmptyView.bGoToSettings.setOnClickListener {
             showWalkAround(false)
             viewModel.ringDataStore.setSleepWalkAroundShown(true)
@@ -377,6 +392,7 @@ class OreoSleepDetailFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.SLEEP_SCORE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
+                putString("infoData", viewModel.contributorInfo.value?.sleep_score)
                 putString("date", viewModel.selectedDate)
             })
             viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_SLEEP_SCORE_CLICK)
@@ -387,6 +403,7 @@ class OreoSleepDetailFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.TOTAL_SLEEP
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
+                putString("infoData", viewModel.contributorInfo.value?.totalSleep)
                 putString("date", viewModel.selectedDate)
             })
 
@@ -398,6 +415,7 @@ class OreoSleepDetailFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.TIME_IN_BED
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
+                putString("infoData", viewModel.contributorInfo.value?.time_in_bed)
                 putString("date", viewModel.selectedDate)
             })
 
@@ -409,6 +427,7 @@ class OreoSleepDetailFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.SLEEP_EFFICIENCY
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
+                putString("infoData", viewModel.contributorInfo.value?.efficiency)
                 putString("date", viewModel.selectedDate)
             })
 
@@ -420,6 +439,7 @@ class OreoSleepDetailFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.RESTING_HR
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
+                putString("infoData", viewModel.contributorInfo.value?.restingHr)
                 putString("date", viewModel.selectedDate)
             })
 
