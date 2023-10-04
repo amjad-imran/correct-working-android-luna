@@ -177,7 +177,7 @@ class OWorkoutDetailsFragment :
                     true,  GraphDummyModel(
                         false,40,100
                     ),
-                    null
+                    it.hrAvg
                 )
             }
         }

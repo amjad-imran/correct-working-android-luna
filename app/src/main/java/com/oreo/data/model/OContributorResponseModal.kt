@@ -16,7 +16,7 @@ data class OContributorResponseModal(
     val respiration: String? = null,//check
     val activity_score: String? = null,//check
     val active_calories: String? = null,//check
-    val total_burn: String? = null,//check
+    val total_calories: String? = null,//check
     val hr_graph: String? = null,//check
     val hrv_graph: String? = null,//check
     val temp_graph: String? = null,//check

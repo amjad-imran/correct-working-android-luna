@@ -699,7 +699,7 @@ class OreoActivityFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.TOTAL_CALORIES_BURNED
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "activity")
-                putString("infoData", mViewModel.contributorInfo.value?.total_burn)
+                putString("infoData", mViewModel.contributorInfo.value?.total_calories)
                 putString("date", mViewModel.selectedDate)
             })
             mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ACTIVITY_TOTAL_CALORIES_CLICK)
