@@ -455,7 +455,7 @@ class OreoReadinessFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.RESTING_HR
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
-                putString("infoData", mViewModel.contributorInfo.value?.restingHr)
+                putString("infoData", mViewModel.contributorInfo.value?.resting_hr)
                 putString("date", mViewModel.selectedDate)
             })
             mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_RESTING_HR_CLICK)
@@ -467,7 +467,7 @@ class OreoReadinessFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.HR_VARIABILITY
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
-                putString("infoData", mViewModel.contributorInfo.value?.heart_rate_variability)
+                putString("infoData", mViewModel.contributorInfo.value?.hrv)
                 putString("date", mViewModel.selectedDate)
             })
             mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_HR_VARIABILITY_CLICK)
@@ -478,7 +478,7 @@ class OreoReadinessFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.BODY_TEMPERATURE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
-                putString("infoData", mViewModel.contributorInfo.value?.skin_temperature)
+                putString("infoData", mViewModel.contributorInfo.value?.temperature)
                 putString("date", mViewModel.selectedDate)
             })
             mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_BODY_TEMP_CLICK)
@@ -489,7 +489,7 @@ class OreoReadinessFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.RESPIRATORY_RATE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
-                putString("infoData", mViewModel.contributorInfo.value?.respiratory_rate)
+                putString("infoData", mViewModel.contributorInfo.value?.respiration)
                 putString("date", mViewModel.selectedDate)
             })
             mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_RESPIRATORY_RATE_CLICK)

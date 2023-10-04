@@ -427,7 +427,7 @@ class OreoSleepDetailFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.SLEEP_EFFICIENCY
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
-                putString("infoData", viewModel.contributorInfo.value?.efficiency)
+                putString("infoData", viewModel.contributorInfo.value?.sleep_efficiency)
                 putString("date", viewModel.selectedDate)
             })
 
@@ -439,7 +439,7 @@ class OreoSleepDetailFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.RESTING_HR
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
-                putString("infoData", viewModel.contributorInfo.value?.average_hr)
+                putString("infoData", viewModel.contributorInfo.value?.resting_hr)
                 putString("date", viewModel.selectedDate)
             })
 

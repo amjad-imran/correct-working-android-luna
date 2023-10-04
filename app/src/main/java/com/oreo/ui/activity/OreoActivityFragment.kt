@@ -688,7 +688,7 @@ class OreoActivityFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.ACTIVE_CALORIES
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "activity")
-                putString("infoData", mViewModel.contributorInfo.value?.activity_goal)
+                putString("infoData", mViewModel.contributorInfo.value?.active_calories)
                 putString("date", mViewModel.selectedDate)
             })
             mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ACTIVITY_GOAL_PROGRESS_CLICK)
@@ -710,7 +710,7 @@ class OreoActivityFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.STEPS
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "activity")
-                putString("infoData", mViewModel.contributorInfo.value?.steps)
+                putString("infoData", mViewModel.contributorInfo.value?.total_steps)
                 putString("date", mViewModel.selectedDate)
             })
             mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ACTIVITY_ACTIVITY_SCORE_CLICK)
@@ -721,7 +721,7 @@ class OreoActivityFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.DISTANCE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "activity")
-                putString("infoData", mViewModel.contributorInfo.value?.distance)
+                putString("infoData", mViewModel.contributorInfo.value?.total_distance)
                 putString("date", mViewModel.selectedDate)
             })
             mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ACTIVITY_DISTANCE_CLICK)

@@ -641,7 +641,7 @@ constructor(
     fun getParsedDescriptionData(): ArrayList<String> {
         val descriptionList = ArrayList<String>()
         descriptionList.add(contributorInfo.value?.totalSleep ?: "")
-        descriptionList.add(contributorInfo.value?.efficiency ?: "")
+        descriptionList.add(contributorInfo.value?.sleep_efficiency ?: "")
         descriptionList.add(contributorInfo.value?.restfulness ?: "")
         descriptionList.add(contributorInfo.value?.remSleep ?: "")
         descriptionList.add(contributorInfo.value?.deepSleep ?: "")
