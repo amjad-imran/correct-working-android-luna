@@ -23,7 +23,7 @@ class ConnectRingFragment :
                             R.raw.video_put_on_charge
                 )
             )
-            setOnPreparedListener { mp -> mp.isLooping = false }
+            setOnPreparedListener { mp -> mp.isLooping = true }
             start()
         }
     }
