@@ -188,7 +188,7 @@ class OreoActivityViewModel @Inject constructor(
         val descriptionList = ArrayList<String>()
         descriptionList.add(contributorInfo.value?.stayActive ?: "")
         descriptionList.add(contributorInfo.value?.moveEveryHour ?: "")
-        descriptionList.add(contributorInfo.value?.caloriesGoal ?: "")
+        descriptionList.add(contributorInfo.value?.active_calories ?: "")
         descriptionList.add(contributorInfo.value?.trainingFrequency ?: "")
         descriptionList.add(contributorInfo.value?.trainingVolume ?: "")
         return descriptionList

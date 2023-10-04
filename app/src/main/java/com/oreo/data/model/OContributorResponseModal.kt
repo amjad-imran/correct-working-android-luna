@@ -36,8 +36,6 @@ data class OContributorResponseModal(
     val trainingFrequency: String? = null,
     @SerializedName("training_volume")
     val trainingVolume: String? = null,
-    @SerializedName("calories_goal")
-    val caloriesGoal: String? = null,
     @SerializedName("yesterday_sleep_duration")
     val yesterdaySleepDuration: String? = null,
     @SerializedName("sleep_balance")
