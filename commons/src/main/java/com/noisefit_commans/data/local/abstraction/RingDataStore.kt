@@ -42,4 +42,7 @@ interface RingDataStore {
 
     fun setManualMeasurementValue(data: ManualMeasurement)
     fun getManualMeasurementValue(): ManualMeasurement?
+
+    fun saveAutoLogsTimeStamp()
+    fun getAutoLogsTimeStamp(): Long
 }

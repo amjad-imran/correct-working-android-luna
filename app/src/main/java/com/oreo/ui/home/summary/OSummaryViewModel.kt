@@ -7,6 +7,8 @@ import com.google.gson.Gson
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.local.db.fromJson
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.receiver.service.FeedbackSubmitService
+import com.noisefit.receiver.service.ProblemType
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -21,6 +23,7 @@ import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.ManualMeasureType
 import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.ui.checkDayDifferenceMoreOne
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
@@ -42,6 +45,7 @@ import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalTime
 import javax.inject.Inject
 
 
@@ -909,6 +913,24 @@ constructor(
             }
         }
 
+
+    }
+    fun shouldSendLogs(): Boolean {
+        val lastTimeStamp = ringDataStore.getAutoLogsTimeStamp()
+        if (lastTimeStamp == 0L) {
+            return true
+        }
+        return lastTimeStamp.checkDayDifferenceMoreOne()
+    }
+
+    fun shouldSyncLogsAfter12(): Boolean {
+        val dayDifferenceGreaterThan1 = shouldSendLogs()
+        if(!dayDifferenceGreaterThan1) return false
+
+        val currentTime = LocalTime.now()
+        val targetTime = LocalTime.of(12, 0)
+
+        return currentTime.isAfter(targetTime)
 
     }
 

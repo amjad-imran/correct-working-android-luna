@@ -14,6 +14,7 @@ import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
+import com.noisefit_commans.data.model.FeedbackNew
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.FileLogsUtils
@@ -134,24 +135,26 @@ constructor() : LifecycleService() {
         val feedback =
             provideFeedbackData(
                 problemType,
-                comment,
-                ArrayList<Uri>(),
-                appLogFile,
-                watchLogFile
+                comment
             )
 
         feedback.user_id = localDataStore.getUser()?.id
+        feedback.file = appLogFile
+        feedback.watchLogs = watchLogFile
 
         scope.launch {
-            deviceRepository.submitFeedback(
-                feedback,
-                if (deviceId == -1) null else deviceId
+            deviceRepository.submitFeedbackFile(
+                feedback
             ).collect { resource ->
 
 
                 when (resource) {
                     is Resource.Success -> {
                         resource.data?.let {
+
+
+                            ringDataStore.saveAutoLogsTimeStamp()
+
                             /*if (problemType.equals(ProblemType.WATCHFACE_TRANSFER.name, true)) {
                                 lastSyncProvider.setSyncTimeStamp(LastSyncItems.WATCHFACE_FEEDBACK)
                             } else if (problemType.equals(ProblemType.PAIRING.name, true)) {
@@ -177,10 +180,7 @@ constructor() : LifecycleService() {
     fun provideFeedbackData(
         problemType: String,
         comment: String,
-        screenShortList: List<Uri>,
-        file: File?,
-        watchLogs: File?
-    ): Feedback {
+    ): FeedbackNew {
         val packageInfo = NoisefitApplication.context!!.packageManager.getPackageInfo(
             NoisefitApplication.context!!.packageName,
             0
@@ -203,19 +203,17 @@ constructor() : LifecycleService() {
 
 
         LOGS.d("connectedDevice $watchName")
-        return Feedback(
+        return FeedbackNew(
             platform,
             mobileDevice,
             osVersion,
             appVersion,
             watchName,
             watchFirmwareVersion,
+            0,
             problemType,
             comment,
-            DateFormats.getTodaysDateString(9),
-            screenShortList,
-            file,
-            watchLogs
+            DateFormats.getTodaysDateString(9)
         )
     }
 

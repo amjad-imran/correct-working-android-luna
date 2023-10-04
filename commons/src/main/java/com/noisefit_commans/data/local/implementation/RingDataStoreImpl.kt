@@ -17,6 +17,7 @@ private const val DEVICE_TOKEN = "device_token"
 private const val DEVICE_FEATURES = "device_features"
 private const val LAST_SYNC_WITH_SERVER = "LAST_SYNC_WITH_SERVER"
 private const val LAST_SYNC = "LAST_SYNC"
+private const val LAST_SYNC_LOGS = "LAST_SYNC_LOGS"
 
 private const val REGISTER_DAY_KEY = "REGISTER_DAY_KEY"
 private const val SLEEP_WALKAROUND_KEY = "SLEEP_WALKAROUND_KEY"
@@ -135,5 +136,11 @@ class RingDataStoreImpl
         mPrefs.edit()?.putLong(LAST_SYNC, timeStamp)?.commit()
     }
 
+    override fun saveAutoLogsTimeStamp() {
+        mPrefs.edit()?.putLong(LAST_SYNC_LOGS, DateFormats.getTimeStamp())?.apply()
+    }
 
+    override fun getAutoLogsTimeStamp(): Long {
+        return mPrefs.getLong(LAST_SYNC_LOGS,0L)
+    }
 }
