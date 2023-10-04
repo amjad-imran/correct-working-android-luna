@@ -22,6 +22,7 @@ data class OContributorResponseModal(
     val temp_graph: String? = null,//check
     val steps: String? = null,//check
     val distance: String? = null,//check
+    val daytime_movement: String? = null,//check
     val time_in_bed: String? = null,
     @SerializedName("deep_sleep")
     val deepSleep: String? = null,
@@ -49,6 +50,7 @@ data class OContributorResponseModal(
     val hrvBalance: String? = null,
     @SerializedName("resting_hr")
     val restingHr: String? = null,//check
+    val average_hr: String? = null,//check
     @SerializedName("heart_rate")
     val heartRate: String? = null,
     @SerializedName("recovery_index")

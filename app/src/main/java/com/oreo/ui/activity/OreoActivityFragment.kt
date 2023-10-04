@@ -631,6 +631,14 @@ class OreoActivityFragment :
 
     override fun initListener() {
 
+        binding.lytDailyMovement.bInfo.setOnClickListener {
+            mViewModel.contributorInfo.value?.daytime_movement?.let {
+                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                    this.putString("infoData", it)
+                })
+            }
+        }
+
 
         binding.lytEmptyView.bGoToSettings.setOnClickListener {
             mViewModel.ringDataStore.setActivityWalkAroundShown(true)
