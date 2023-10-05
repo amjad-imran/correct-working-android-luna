@@ -36,6 +36,9 @@ class OActivityListAdapter(
         } catch (exp: ArrayIndexOutOfBoundsException) {
             exp.printStackTrace()
             //CASE : when Swap is in progress
+        } catch (exp: IndexOutOfBoundsException) {
+            exp.printStackTrace()
+            //CASE : when Swap is in progress
         }
 
     }
