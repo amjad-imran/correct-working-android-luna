@@ -110,8 +110,8 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
     override fun initListener() {
         binding.btnPairingIssue.setOnClickListener {
             navigate(R.id.oreoHSQuestionFragment, Bundle().apply {
-                putString("title", "Ring bluetooth scanning issues")
-                putString("id", "7")
+                putString("title", "Get Started")
+                putString("id", "1")
             })
 
         }
