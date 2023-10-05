@@ -242,9 +242,8 @@ class NetworkConnectionInterceptor(
 
                 addHeader("device-id", it.deviceId.toString())
                 addHeader("device-type", it.deviceType.toString())
-                addHeader("serial-no", sNo)
-                addHeader("battery-percent", watchDataStore.getBatteryPercentRing().toString())
-                addHeader("firmware-version", fwVersion?:"")
+                addHeader("bt-pc", watchDataStore.getBatteryPercentRing().toString())
+                addHeader("fv", fwVersion?:"")
             }
             addHeader("wearable-type", "ring")
 
