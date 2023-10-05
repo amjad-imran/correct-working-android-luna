@@ -12,6 +12,7 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit.data.repository.abstraction.AuthenticationRepository
 import com.noisefit.watch.WatchesSDK
 import com.noisefit_commans.data.local.abstraction.RingDataStore
+import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.oreo.data.db.OreoDataBase
 import dagger.Module
 import dagger.Provides
@@ -143,6 +144,7 @@ object NetworkModule {
         @ApplicationContext appContext: Context,
         localDataStore: DataStoredInterface,
         ringDataStore: RingDataStore,
+        watchDataStore: WatchDataStore,
         lastSyncProvider: LastSyncProvider,
         watchesSdk: WatchesSDK,
         keyValueDataSource: KeyValueDataSource,
@@ -154,6 +156,7 @@ object NetworkModule {
             lastSyncProvider,
             localDataStore,
             ringDataStore,
+            watchDataStore,
             watchesSdk,
             keyValueDataSource,
             database,

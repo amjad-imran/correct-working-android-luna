@@ -457,7 +457,7 @@ constructor(
                         deviceInfoBean.equipmentNumber.toIntOrNull() ?: 0
 
                     testQueryDeviceDataCallback?.onQueryDataReceived(
-                        QueryCallback.FirmwareVersionObtained(DeviceFirmware(version = WatchInfoGlobals.firmwareVersion))
+                        QueryCallback.FirmwareVersionObtained(DeviceFirmware(version = WatchInfoGlobals.firmwareVersionRing))
                     )
                 } else {
                     WatchInfoGlobals.firmwareVersion = deviceInfoBean.firmwareVersion
