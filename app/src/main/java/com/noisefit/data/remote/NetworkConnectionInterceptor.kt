@@ -18,8 +18,10 @@ import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.ui.onboarding.OnBoardActivity
 import com.noisefit.watch.WatchesSDK
+import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
+import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.data.model.Token
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.ui.showShortToast
@@ -50,6 +52,7 @@ class NetworkConnectionInterceptor(
     private val lastSyncProvider: LastSyncProvider,
     private val localDataStore: DataStoredInterface,
     private val ringDataStore: RingDataStore,
+    private val watchDataStore: WatchDataStore,
     private val watchesSdk: WatchesSDK,
     private val keyValueDataSource: KeyValueDataSource,
     private val database: OreoDataBase,
@@ -224,8 +227,23 @@ class NetworkConnectionInterceptor(
                 addHeader("device-external-id", it)
             }
             device?.let {
+                val sNo = if (it.ringInfo?.serialNoRaw.isNullOrEmpty()) {
+                    val sNo = watchDataStore.getSerialNo()
+                    sNo ?: ""
+                } else {
+                    it.ringInfo?.serialNoRaw ?: ""
+                }
+
+                val fwVersion = if(WatchInfoGlobals.firmwareVersionRing.isNullOrEmpty()){
+                    watchDataStore.getFirmwareVersion()
+                }else{
+                    WatchInfoGlobals.firmwareVersionRing
+                }
+
                 addHeader("device-id", it.deviceId.toString())
                 addHeader("device-type", it.deviceType.toString())
+                addHeader("serial-no", sNo)
+                addHeader("firmware-version", fwVersion?:"")
             }
             addHeader("wearable-type", "ring")
 

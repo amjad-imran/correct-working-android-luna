@@ -380,7 +380,7 @@ constructor(
     }
 
     override fun updateFirmwareVersion(firmwareVersion: String) {
-        mPrefs.edit()?.putString(FIRMWARE_VERSION, firmwareVersion)?.commit()
+        mPrefs.edit()?.putString(FIRMWARE_VERSION, firmwareVersion)?.apply()
     }
 
 

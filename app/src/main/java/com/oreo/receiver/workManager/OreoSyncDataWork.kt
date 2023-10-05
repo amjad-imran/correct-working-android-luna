@@ -181,6 +181,8 @@ constructor(
                                 //TODO uncomment after testing -deepak
                                 syncDataScope.launch {
                                     syncRepository.markDataSynced(userActivities.second)
+                                    syncRepository.deleteSleepServerSyncData(userActivities.second)
+
                                     //syncRepository.deleteServerSyncData(userActivities.second)
                                 }
 
@@ -192,7 +194,7 @@ constructor(
                     }
                 }
 
-                val call2 = if (!userActivities.first.sleepData.isNullOrEmpty()) {
+                /*val call2 = if (!userActivities.first.sleepData.isNullOrEmpty()) {
                     async {
 
                         syncRepository.postSleepHistoryData(userActivities.first)
@@ -225,7 +227,7 @@ constructor(
                                         syncDataScope.launch {
                                             syncRepository.deleteSleepServerSyncData(userActivities.second)
                                         }
-                                        /*syncRepository.updateSleepHashForLastSyncData(userActivities.first)*/
+                                        *//*syncRepository.updateSleepHashForLastSyncData(userActivities.first)*//*
 
                                         LOGS.d(
                                             TAG,
@@ -235,14 +237,14 @@ constructor(
                                 }
                             }
                     }
-                } else null
+                } else null*/
 
 
 
 
                 try {
                     call1.await()
-                    call2?.await()
+                    //call2?.await()
                 } catch (e: Exception) {
 
                 }
