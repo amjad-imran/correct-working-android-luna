@@ -432,7 +432,7 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
 
 
 
-                            viewModel.shouldSendPairingFailLogs {
+                            /*viewModel.shouldSendPairingFailLogs {
                                 if (it) {
                                     context?.let { context ->
                                         val comment = "Failed ${colorFitDevice.bluetoothName}"
@@ -444,7 +444,7 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
                                         )
                                     }
                                 }
-                            }
+                            }*/
 
                         }
 
