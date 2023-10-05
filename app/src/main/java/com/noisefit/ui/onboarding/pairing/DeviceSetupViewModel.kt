@@ -41,6 +41,7 @@ constructor(
             addProperty("address", device.address)
             addProperty("device_id", device.deviceId)
             addProperty("rssi", device.rssi)
+            addProperty("serial_no", device.ringInfo?.serialNoRaw ?: "")
             if (device.watchToken.isNotEmpty()) {
                 addProperty("ring_token", device.watchToken)
             }
