@@ -31,8 +31,10 @@ class OActivityListAdapter(
 
     fun removeItem(position: Int) {
         try {
-            mDataSet.removeAt(position)
-            notifyItemRemoved(position)
+            if (mDataSet.size >= position + 1) {
+                mDataSet.removeAt(position)
+                notifyItemRemoved(position)
+            }
         } catch (exp: ArrayIndexOutOfBoundsException) {
             exp.printStackTrace()
             //CASE : when Swap is in progress
