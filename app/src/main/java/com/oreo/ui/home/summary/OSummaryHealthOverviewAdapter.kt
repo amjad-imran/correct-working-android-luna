@@ -1,27 +1,15 @@
 package com.oreo.ui.home.summary
 
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import androidx.viewpager2.widget.CompositePageTransformer
-import androidx.viewpager2.widget.MarginPageTransformer
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
-import com.github.mikephil.charting.data.CombinedData
-import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.*
 import com.noisefit.ui.common.calculatePercentage
-import com.noisefit.ui.dashboard.summary.DashboardBannerAction
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.dpToPx
 import com.noisefit_commans.ui.*
@@ -31,18 +19,18 @@ import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MiscUtil
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.DashAlert
-import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
-import com.oreo.data.model.TapMeasureState
-import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
-import com.oreo.util.graph.OCombineChartUtils
-import java.lang.Math.abs
+import com.oreo.data.model.VideoInfoType
 import java.lang.StringBuilder
 
 sealed class OSummaryHealthOverviewClickEnum {
     object SleepDetailsWorkoutClick : OSummaryHealthOverviewClickEnum()
     object ActivityDetailsWorkoutClick : OSummaryHealthOverviewClickEnum()
     object ReadinessDetailsWorkoutClick : OSummaryHealthOverviewClickEnum()
+    object TextWelcomeRingClicked : OSummaryHealthOverviewClickEnum()
+    object TextRingCareClicked : OSummaryHealthOverviewClickEnum()
+    data class VideoInfoClicked(val type: VideoInfoType, val videoUrl: String) :
+        OSummaryHealthOverviewClickEnum()
 
 
     object AutoSportsDelete : OSummaryHealthOverviewClickEnum()
@@ -64,13 +52,7 @@ class OSummaryHealthOverviewAdapter :
         set(value) {
             try {
                 field = value
-                if (refreshPosition != null) {
-                    if (refreshPosition != -1) {
-                        notifyItemChanged(refreshPosition!!)
-                    } else {
-                        notifyDataSetChanged()
-                    }
-                }
+                notifyDataSetChanged()
             } catch (exp: Exception) {
                 exp.printStackTrace()
             }
@@ -82,6 +64,30 @@ class OSummaryHealthOverviewAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeRecyclerViewHolder {
         return when (viewType) {
+            R.layout.list_video_info_card -> HomeRecyclerViewHolder.InfoVideoCardViewHolder(
+                ListVideoInfoCardBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
+            R.layout.list_welcome_card -> HomeRecyclerViewHolder.InfoWelcomeCardViewHolder(
+                ListWelcomeCardBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
+            R.layout.list_ring_care -> HomeRecyclerViewHolder.InfoRingCareViewHolder(
+                ListRingCareBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
             R.layout.list_readiness_card_item -> HomeRecyclerViewHolder.ReadinessViewHolder(
                 ListReadinessCardItemBinding.inflate(
                     LayoutInflater.from(parent.context),
@@ -185,6 +191,13 @@ class OSummaryHealthOverviewAdapter :
     override fun onBindViewHolder(holder: HomeRecyclerViewHolder, position: Int) {
         holder.itemClickListener = itemClickListener
         when (holder) {
+            is HomeRecyclerViewHolder.InfoWelcomeCardViewHolder -> holder.bind(items[position] as OHealthOverview.InfoRingWelcome)
+            is HomeRecyclerViewHolder.InfoRingCareViewHolder -> holder.bind(items[position] as OHealthOverview.InfoRingCare)
+            is HomeRecyclerViewHolder.InfoVideoCardViewHolder -> holder.bind(
+                items[position] as OHealthOverview.InfoVideo,
+            )
+
+
             is HomeRecyclerViewHolder.ActivityViewHolder -> holder.bind(
                 items[position] as OHealthOverview.Activity,
                 position,
@@ -275,6 +288,9 @@ class OSummaryHealthOverviewAdapter :
 
             is OHealthOverview.AutoSport -> R.layout.list_o_w_alert_card_item
             is OHealthOverview.HeartRate -> 0
+            is OHealthOverview.InfoVideo -> R.layout.list_video_info_card
+            is OHealthOverview.InfoRingCare -> R.layout.list_ring_care
+            is OHealthOverview.InfoRingWelcome -> R.layout.list_welcome_card
         }
     }
 }
@@ -283,6 +299,65 @@ class OSummaryHealthOverviewAdapter :
 sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(binding.root) {
 
     var itemClickListener: ((type: OSummaryHealthOverviewClickEnum) -> Unit)? = null
+
+    class InfoVideoCardViewHolder(private val binding: ListVideoInfoCardBinding) :
+        HomeRecyclerViewHolder(binding) {
+        fun bind(
+            data: OHealthOverview.InfoVideo,
+        ) {
+
+            binding.tvTitle.text = data.data.title
+            binding.tvMessage.text = data.data.time
+
+
+            binding.ivBack.loadImage(
+                binding.ivBack.context,
+                when (data.type) {
+                    VideoInfoType.SLEEP -> R.drawable.back_info_sleep
+                    VideoInfoType.READINESS -> R.drawable.back_info_readiness
+                    VideoInfoType.ACTIVITY -> R.drawable.back_info_activity
+                }
+            )
+
+            binding.root.setOnClickListener {
+                itemClickListener?.invoke(
+                    OSummaryHealthOverviewClickEnum.VideoInfoClicked(
+                        data.type,
+                        data.data.url
+                    )
+                )
+            }
+
+        }
+    }
+
+    class InfoWelcomeCardViewHolder(private val binding: ListWelcomeCardBinding) :
+        HomeRecyclerViewHolder(binding) {
+        fun bind(data: OHealthOverview.InfoRingWelcome) {
+
+            binding.tvTitle.text = data.data.title
+            binding.tvMessage.text = data.data.content
+
+
+            binding.root.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.TextWelcomeRingClicked)
+            }
+
+        }
+    }
+
+    class InfoRingCareViewHolder(private val binding: ListRingCareBinding) :
+        HomeRecyclerViewHolder(binding) {
+        fun bind(data: OHealthOverview.InfoRingCare) {
+            binding.tvTitle.text = data.data.title
+            binding.tvMessage.text = data.data.content
+
+            binding.root.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.TextRingCareClicked)
+            }
+
+        }
+    }
 
     class ReadinessMinimalViewHolder(private val binding: ListReadinessMinimalCardItemBinding) :
         HomeRecyclerViewHolder(binding) {
@@ -537,7 +612,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.pbTotal.layoutParams = binding.pbTotal.layoutParams.apply {
                 (this as LinearLayout.LayoutParams).weight = (100 - percent)
             }
-            binding.pbCurrent.progress = (data.data.activeCalories ?: 0) * 2//For 50 kcal only, change accordingly
+            binding.pbCurrent.progress =
+                (data.data.activeCalories ?: 0) * 2//For 50 kcal only, change accordingly
 
             binding.tvTotalCalories.text = "${data.caloriesGoal}"
 

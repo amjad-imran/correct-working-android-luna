@@ -24,6 +24,7 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DistanceUtil
+import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
@@ -93,6 +94,7 @@ class OreoActivityFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_PAGE_VISIT)
         setRecyclerView()
 
 
@@ -424,25 +426,25 @@ class OreoActivityFragment :
 
 
         //for inactive value
-       /* binding.lytDailyMovement.lytDMInactive.view1.layoutParams =
-            binding.lytDailyMovement.lytDMInactive.view1.layoutParams.apply {
-                (this as LinearLayout.LayoutParams).weight =
-                    calculateWeightPercent(inactiveProgress)
-            }
-        binding.lytDailyMovement.lytDMInactive.lytChildContainer.layoutParams =
-            binding.lytDailyMovement.lytDMInactive.lytChildContainer.layoutParams.apply {
+        /* binding.lytDailyMovement.lytDMInactive.view1.layoutParams =
+             binding.lytDailyMovement.lytDMInactive.view1.layoutParams.apply {
+                 (this as LinearLayout.LayoutParams).weight =
+                     calculateWeightPercent(inactiveProgress)
+             }
+         binding.lytDailyMovement.lytDMInactive.lytChildContainer.layoutParams =
+             binding.lytDailyMovement.lytDMInactive.lytChildContainer.layoutParams.apply {
 
-                (this as LinearLayout.LayoutParams).weight =
-                    100 - calculateWeightPercent(inactiveProgress)
-            }
+                 (this as LinearLayout.LayoutParams).weight =
+                     100 - calculateWeightPercent(inactiveProgress)
+             }
 
-        binding.lytDailyMovement.lytDMInactive.view1.setBackgroundResource(R.drawable.inactive_bar_with_round_edge)
-        binding.lytDailyMovement.lytDMInactive.tvStageName.text = getString(R.string.text_inactive)
-        binding.lytDailyMovement.lytDMInactive.tvDuration.text = inactiveRemark
-        if (calculateWeightPercent(inactiveProgress) > 0)
-            binding.lytDailyMovement.lytDMInactive.view1.visible()
-        else
-            binding.lytDailyMovement.lytDMInactive.view1.gone()*/
+         binding.lytDailyMovement.lytDMInactive.view1.setBackgroundResource(R.drawable.inactive_bar_with_round_edge)
+         binding.lytDailyMovement.lytDMInactive.tvStageName.text = getString(R.string.text_inactive)
+         binding.lytDailyMovement.lytDMInactive.tvDuration.text = inactiveRemark
+         if (calculateWeightPercent(inactiveProgress) > 0)
+             binding.lytDailyMovement.lytDMInactive.view1.visible()
+         else
+             binding.lytDailyMovement.lytDMInactive.view1.gone()*/
 
 
     }
@@ -611,7 +613,7 @@ class OreoActivityFragment :
             binding.lytWorkouts.tvEmptyMsg.visible()
         }
 
-        if (mViewModel.selectedMasterDate == DateFormats.getCurrentDateOreoFormat()) {
+        if (mViewModel.selectedDate == DateFormats.getCurrentDateOreoFormat()) {
             if (mViewModel.ringDataStore.getRingDevice() != null) {
                 binding.lytWorkouts.viewAddWorkout.visible()
             } else {
@@ -628,6 +630,14 @@ class OreoActivityFragment :
     }
 
     override fun initListener() {
+
+        binding.lytDailyMovement.bInfo.setOnClickListener {
+            mViewModel.contributorInfo.value?.daytime_movement?.let {
+                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                    this.putString("infoData", it)
+                })
+            }
+        }
 
 
         binding.lytEmptyView.bGoToSettings.setOnClickListener {
@@ -653,6 +663,7 @@ class OreoActivityFragment :
         }
 
         binding.lytWorkouts.viewAddWorkout.setOnClickListener {
+            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ACTIVITY_ADD_WORKOUT_CLICK)
             navigate(R.id.addWorkoutFragment)
         }
 
@@ -666,8 +677,10 @@ class OreoActivityFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.ACTIVITY_SCORE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "activity")
+                putString("infoData", mViewModel.contributorInfo.value?.activity_score)
                 putString("date", mViewModel.selectedDate)
             })
+            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ACTIVITY_ACTIVITY_SCORE_CLICK)
         }
         binding.lytAScoreData.lytSec1.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -675,8 +688,10 @@ class OreoActivityFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.ACTIVE_CALORIES
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "activity")
+                putString("infoData", mViewModel.contributorInfo.value?.active_calories)
                 putString("date", mViewModel.selectedDate)
             })
+            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ACTIVITY_GOAL_PROGRESS_CLICK)
         }
         binding.lytAScoreData.lytSec2.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -684,8 +699,10 @@ class OreoActivityFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.TOTAL_CALORIES_BURNED
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "activity")
+                putString("infoData", mViewModel.contributorInfo.value?.total_calories)
                 putString("date", mViewModel.selectedDate)
             })
+            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ACTIVITY_TOTAL_CALORIES_CLICK)
         }
         binding.lytAScoreData.lytSec3.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -693,8 +710,10 @@ class OreoActivityFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.STEPS
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "activity")
+                putString("infoData", mViewModel.contributorInfo.value?.total_steps)
                 putString("date", mViewModel.selectedDate)
             })
+            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ACTIVITY_ACTIVITY_SCORE_CLICK)
         }
         binding.lytAScoreData.lytSec4.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -702,8 +721,10 @@ class OreoActivityFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.DISTANCE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "activity")
+                putString("infoData", mViewModel.contributorInfo.value?.total_distance)
                 putString("date", mViewModel.selectedDate)
             })
+            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ACTIVITY_DISTANCE_CLICK)
         }
 
 
@@ -729,14 +750,14 @@ class OreoActivityFragment :
                 }
                 if (index != null) {
 
-                    moveToPos =  15 + (15-index-1)
+                    moveToPos = 15 + (15 - index - 1)
                     LOGS.d("moveToPosition date ${mViewModel.selectedDate}")
                     //binding.rvTopGraph.moveToPosition(15 + (15-index-1))
                 }
 
             }
             binding.rvTopGraph.updateDataWithMax(
-                topGraphData.first, topGraphData.third, topGraphData.second,moveToPos
+                topGraphData.first, topGraphData.third, topGraphData.second, moveToPos
             )
             mViewModel.getContributorInfo()
         }

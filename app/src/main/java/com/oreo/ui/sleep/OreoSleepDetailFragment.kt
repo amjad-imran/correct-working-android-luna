@@ -13,14 +13,18 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoSleepDetailBinding
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.ui.custom.NightTimeGraphViewOreo
 import com.noisefit_commans.ui.custom.SleepGraphViewOreo
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
@@ -75,6 +79,7 @@ class OreoSleepDetailFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //sleepDayGraphView = SleepGraphViewOreo(requireContext())
+        viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_PAGE_VISIT)
         setRecycler()
 
         if (viewModel.ringDataStore.isSleepWalkAroundShown()) {
@@ -120,8 +125,11 @@ class OreoSleepDetailFragment :
             breakUpData = hrv?.value as ArrayList<Int>
         }
 
-        val baseTimeList =
-            UtilClass.graphTwoHoursInterval(ssTime, seTime, breakUpData.size ?: 288)
+       /* val baseTimeList =
+            UtilClass.graphTwoHoursInterval(ssTime, seTime, breakUpData.size ?: 288)*/
+
+        val baseTimeListNew =
+            UtilClass.getXAxisPoints(ssTime, seTime, breakUpData.size ?: 288)
 
         binding.lytHRVariability.lineChart.visible()
         val sleepChart = SleepChartModel()
@@ -136,12 +144,14 @@ class OreoSleepDetailFragment :
             }
 
             chartModel.value = value
-            chartModel.index = baseTimeList[index]
+            chartModel.index = baseTimeListNew[index]//baseTimeList[index]
             chartModel.date = ""
             chartList.add(chartModel)
         }
 
         sleepChart.list = chartList
+
+        AppLogs.sendAppLogs("lineChart ${Gson().toJson(sleepChart)}")
 
         binding.lytHRVariability.lineChart.updateGraphColor(
             Color.parseColor("#ff80e3"),
@@ -181,11 +191,13 @@ class OreoSleepDetailFragment :
         }
 
 
-        val baseTimeList = UtilClass.graphTwoHoursInterval(
+       /* val baseTimeList = UtilClass.graphTwoHoursInterval(
             ssTime,
             seTime,
             breakUpData.size ?: 288
-        )
+        )*/
+        val baseTimeListNew =
+            UtilClass.getXAxisPoints(ssTime, seTime, breakUpData.size ?: 288)
 
         // LOGS.d("dsakjdsalkjsladjlksdajldsajldsajl ${heartRateList?.value?.size} ${Gson().toJson(baseTimeList)}")
 
@@ -202,7 +214,7 @@ class OreoSleepDetailFragment :
 
 
             chartModel.value = value
-            chartModel.index = baseTimeList[index]
+            chartModel.index = baseTimeListNew[index]
             chartList.add(chartModel)
         }
 
@@ -333,6 +345,21 @@ class OreoSleepDetailFragment :
         binding.lytToolbar.ivAddFriend.visible()
         binding.lytToolbar.ivAddFriend.setImageResource(R.drawable.ic_calenders)
 
+        binding.lytHeartRate.bInfo.setOnClickListener {
+            viewModel.contributorInfo.value?.hr_graph?.let { content ->
+                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                    this.putString("infoData", content)
+                })
+            }
+        }
+        binding.lytHRVariability.bInfo.setOnClickListener {
+            viewModel.contributorInfo.value?.hrv_graph?.let { content ->
+                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                    this.putString("infoData", content)
+                })
+            }
+        }
+
         binding.lytEmptyView.bGoToSettings.setOnClickListener {
             showWalkAround(false)
             viewModel.ringDataStore.setSleepWalkAroundShown(true)
@@ -341,6 +368,8 @@ class OreoSleepDetailFragment :
 
 
         binding.lytToolbar.view1.setOnClickListener {
+
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_DATE_RANGE_CLICK)
             resultLauncher.launch(
                 HistoryCalendarActivity.getStartIntent(
                     requireContext(),
@@ -363,8 +392,10 @@ class OreoSleepDetailFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.SLEEP_SCORE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
+                putString("infoData", viewModel.contributorInfo.value?.sleep_score)
                 putString("date", viewModel.selectedDate)
             })
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_SLEEP_SCORE_CLICK)
         }
         binding.lytSleepScore.lytTotalSleep.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -372,8 +403,11 @@ class OreoSleepDetailFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.TOTAL_SLEEP
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
+                putString("infoData", viewModel.contributorInfo.value?.totalSleep)
                 putString("date", viewModel.selectedDate)
             })
+
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_TOTAL_SLEEP_CLICK)
         }
         binding.lytSleepScore.lytTimeInBed.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -381,8 +415,11 @@ class OreoSleepDetailFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.TIME_IN_BED
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
+                putString("infoData", viewModel.contributorInfo.value?.time_in_bed)
                 putString("date", viewModel.selectedDate)
             })
+
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_BED_TIME_CLICK)
         }
         binding.lytSleepScore.lytSleepEfficiency.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -390,8 +427,11 @@ class OreoSleepDetailFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.SLEEP_EFFICIENCY
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
+                putString("infoData", viewModel.contributorInfo.value?.sleep_efficiency)
                 putString("date", viewModel.selectedDate)
             })
+
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_SLEEP_EFFICIENCY_CLICK)
         }
         binding.lytSleepScore.lytRestHr.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -399,8 +439,11 @@ class OreoSleepDetailFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.RESTING_HR
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
+                putString("infoData", viewModel.contributorInfo.value?.resting_hr)
                 putString("date", viewModel.selectedDate)
             })
+
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_RESTING_HR_CLICK)
         }
 
         //night time see/saw
@@ -420,6 +463,9 @@ class OreoSleepDetailFragment :
             binding.lytSSAnalysis.viewDown.gone()
             binding.lytSSAnalysis.ivDown.gone()
             binding.lytSSAnalysis.tvSummaryTitle.visible()
+
+
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_STAGE_ANALYSIS_EXPAND_CLICK)
         }
         binding.lytSSAnalysis.viewUp.setOnClickListener {
             binding.lytSSAnalysis.lytNightMovement.root.gone()
@@ -430,6 +476,8 @@ class OreoSleepDetailFragment :
             binding.lytSSAnalysis.viewDown.visible()
             binding.lytSSAnalysis.ivDown.visible()
             binding.lytSSAnalysis.tvSummaryTitle.gone()
+
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_STAGE_ANALYSIS_COMPRESS_CLICK)
         }
     }
 
@@ -472,7 +520,7 @@ class OreoSleepDetailFragment :
                 }
                 if (index != null) {
 
-                    moveToPos =  15 + (15-index-1)
+                    moveToPos = 15 + (15 - index - 1)
                     LOGS.d("moveToPosition date ${viewModel.selectedDate}")
                     //binding.rvTopGraph.moveToPosition(15 + (15-index-1))
                 }
@@ -552,7 +600,7 @@ class OreoSleepDetailFragment :
         binding.lytSleepScore.lytSleepAvg.tvTitle.text = getString(R.string.text_sleep_score_o)
         binding.lytSleepScore.lytTotalSleep.tvTitle.text = getString(R.string.text_total_sleep)
         binding.lytSleepScore.lytTimeInBed.tvTitle.text = getString(R.string.text_time_in_bed)
-        binding.lytSleepScore.lytRestHr.tvTitle.text = "Resting HR"
+        binding.lytSleepScore.lytRestHr.tvTitle.text = "Average HR"
         binding.lytSleepScore.lytSleepEfficiency.tvTitle.text =
             getString(R.string.text_sleep_efficiency)
         setSleepBannerViewPager(dayData.nudges)
@@ -655,16 +703,16 @@ class OreoSleepDetailFragment :
         binding.lytSSAnalysis.lytNightMovement.tvTitle.text =
             getString(R.string.text_night_time_movement)
 
-        val sleepStartTime = DateFormats.formatDate(
+        val sleepStartTime =dayData.hourly_breakup?.first()?.start_time /*DateFormats.formatDate(
             dayData.hourly_breakup?.first()?.start_time,
             DateFormats.dateTimeFormat5,
             DateFormats.time12Meridian
-        )
-        val sleepEndTime = DateFormats.formatDate(
+        )*/
+        val sleepEndTime =  dayData.hourly_breakup?.last()?.end_time/*DateFormats.formatDate(
             dayData.hourly_breakup?.last()?.end_time,
             DateFormats.dateTimeFormat5,
             DateFormats.time12Meridian
-        )
+        )*/
         //heart rate
         binding.lytHeartRate.tvTitle.text = getString(R.string.text_heart_rate)
         binding.lytHeartRate.tvSubtitle1.text = getString(R.string.text_lowest_hr)

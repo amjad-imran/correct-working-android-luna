@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.Entry
 import com.google.gson.Gson
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -23,7 +24,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OSCDViewModel @Inject constructor(
-    val userActivityRepository: OreoUserActivityRepository
+    val userActivityRepository: OreoUserActivityRepository,
+    val sessionManager: SessionManager
 ) : BaseViewModel() {
 
 
@@ -35,6 +37,7 @@ class OSCDViewModel @Inject constructor(
     var itemType: String? = null
     var itemClickType: String? = null
     var selectedDate: String? = null
+    var infoData: String? = null
     var isProgressEqual: Boolean = false
     var trendDifferenceProgress: Int = 0
 

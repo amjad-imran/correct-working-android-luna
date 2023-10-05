@@ -104,6 +104,10 @@
             android:name="viewType"
             app:argType="string" />
         <argument
+            android:name="infoData"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
             android:name="date"
             app:argType="string" />
         <action
@@ -365,8 +369,24 @@
         android:name="com.oreo.ui.sleep.scoredetails.BottomSheetDataMetrics"
         android:label="BottomSheetDataMetrics" >
         <argument
-            android:name="metricsType"
-            app:argType="com.oreo.ui.sleep.scoredetails.ViewItemClickType" />
+            android:name="infoData"
+            app:argType="string"/>
     </dialog>
+    <fragment
+        android:id="@+id/ringCareFragment"
+        android:name="com.oreo.ui.info.RingCareFragment"
+        android:label="RingCareFragment" />
+    <fragment
+        android:id="@+id/ringWelcomeFragment"
+        android:name="com.oreo.ui.info.RingWelcomeFragment"
+        android:label="RingWelcomeFragment" />
+    <fragment
+        android:id="@+id/ringInfoPlayerFragment"
+        android:name="com.oreo.ui.info.RingInfoPlayerFragment"
+        android:label="RingInfoPlayerFragment" >
+        <argument
+            android:name="videoUrl"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

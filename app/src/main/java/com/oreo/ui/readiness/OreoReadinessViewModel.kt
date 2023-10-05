@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.common.averageWithoutZero
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.BinaryActionCallback
@@ -34,6 +35,7 @@ class OreoReadinessViewModel
 constructor(
     val userActivityRepository: OreoUserActivityRepository,
     val ringDataStore: RingDataStore,
+    val sessionManager: SessionManager
 ) : BaseViewModel() {
 
     var selectedMasterDate: String? = null
@@ -51,7 +53,7 @@ constructor(
     val dayReadinessData: LiveData<OreoReadinessModel> = _dayReadinessData
 
     private val _contributorInfo = MutableLiveData<OContributorResponseModal>()
-    private val contributorInfo: LiveData<OContributorResponseModal> = _contributorInfo
+    val contributorInfo: LiveData<OContributorResponseModal> = _contributorInfo
     init {
         selectedMasterDate = DateFormats.getCurrentDateOreoFormat()
     }
@@ -313,7 +315,7 @@ constructor(
         descriptionList.add(contributorInfo.value?.yesterdayActivity ?: "")
         descriptionList.add(contributorInfo.value?.activityBalance ?: "")
         descriptionList.add(contributorInfo.value?.hrvBalance ?: "")
-        descriptionList.add(contributorInfo.value?.restingHr ?: "")
+        descriptionList.add(contributorInfo.value?.resting_hr ?: "")
         //descriptionList.add(contributorInfo.value?.heartRate ?: "")
         descriptionList.add(contributorInfo.value?.recoveryIndex ?: "")
         return descriptionList
@@ -473,7 +475,7 @@ constructor(
 
             result.add(
                 Contributors(
-                    title = "Resting HR",
+                    title = "Average HR",
                     leftText = dayData.restingHrBalance.text,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -484,7 +486,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Resting HR",
+                    title = "Average HR",
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,

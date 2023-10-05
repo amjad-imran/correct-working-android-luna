@@ -20,6 +20,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.RingSerialNoParser
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,6 +36,7 @@ class OAboutDeviceFragment :
 
     @Inject
     lateinit var watchDataStore: WatchDataStore
+
 
     private val updateViewModel: CheckForUpdatesViewModel by activityViewModels()
 
@@ -114,9 +116,11 @@ class OAboutDeviceFragment :
             navigateUpSafe()
         }
         binding.btnCheckForUpdates.setOnClickListener {
+            updateViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ABOUTDEVICE_UPDATE_CLICK)
             updateViewModel.checkForUpdates(false)
         }
         binding.btnCopyMac.setOnClickListener {
+            updateViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ABOUTDEVICE_COPY_MAC_CLICK)
             connectedDevice?.address?.copyToClipBoard()
         }
     }

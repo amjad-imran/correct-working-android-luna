@@ -16,14 +16,21 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOAddWorkoutBinding
 import com.noisefit.ui.common.bottomSheet.TIME_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
-import com.noisefit_commans.ui.*
+import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.disable
+import com.noisefit_commans.ui.enable
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.CandleChartModel
 import com.oreo.data.model.OWorkoutListModal
 import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
+import java.util.Calendar
 import kotlin.math.roundToInt
 
 const val ADD_WORKOUT_REQUEST_KEY = "ADD_WORKOUT_REQUEST_KEY"
@@ -47,6 +54,7 @@ class OAddWorkoutFragment :
             }
 
             tvSave.setOnClickListener {
+                viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ADD_WORKOUT_SAVE_CLICK)
                 viewModel.addWorkout()
             }
 
@@ -88,6 +96,7 @@ class OAddWorkoutFragment :
                 binding.lytWorkout.tvWorkout.text = workout.getFormattedActivityName()
                 /*setCalories()
                 enableSaveBtn()*/
+                viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ADD_WORKOUT + "_${workout.activityType}_CLICK")
 
                 updateCalculatedData()
             }
@@ -105,6 +114,7 @@ class OAddWorkoutFragment :
 
 
         binding.lytStartEnd.lytStartTime.root.setOnClickListener {
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ADD_WORKOUT_START_TIME_CLICK)
 
             setFragmentResultListener(TIME_REQUEST_KEY) { _, bundle ->
                 val hourOfDay = bundle.getInt("hour")
@@ -168,6 +178,7 @@ class OAddWorkoutFragment :
         }
         binding.lytStartEnd.lytEndTime.root.setOnClickListener {
 
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ADD_WORKOUT_END_TIME_CLICK)
             if (binding.lytStartEnd.lytStartTime.tvTimeValue.text == getString(R.string.text_enter)) {
                 context.showShortToast(getString(R.string.text_select_start_time_first))
                 return@setOnClickListener
@@ -243,12 +254,14 @@ class OAddWorkoutFragment :
             )
         }
         binding.lytIntensity.root.setOnClickListener {
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ADD_WORKOUT_INTENSITY_CLICK)
             setFragmentResultListener(VALUE_REQUEST_KEY) { _, bundle ->
                 val selectedValue = bundle.getString("selectedValue")
                 selectedValue?.let { it1 ->
                     viewModel.addWorkout.intensity = it1
                     setIntensity()
                     //setCalories()
+                    viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_WORKOUT_INTENSITY + "_${it1}_CLICK")
                     updateCalculatedData()
                 }
 

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -30,7 +31,8 @@ class OAddWorkoutViewModel
 constructor(
     private val userActivityRepository: OreoUserActivityRepository,
     private val localDatSource: DataStoredInterface,
-    private val syncRepository: OreoSyncRepository
+    private val syncRepository: OreoSyncRepository,
+    val sessionManager: SessionManager
 ) : BaseViewModel() {
 
     val minimumWorkoutTime = 10

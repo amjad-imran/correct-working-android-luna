@@ -15,6 +15,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface OreoUserActivityRepository {
 
+    suspend fun getRingCareData(): Flow<Resource<BaseApiResponse<RingCareResponse>>>
+    suspend fun getWelcomeRingData(): Flow<Resource<BaseApiResponse<RingWelcome>>>
+
     suspend fun getDashboardData(forceRefresh:Boolean): Flow<Resource<BaseApiResponse<OreoDashboardResponseModel>>>
 
     suspend fun getSleepHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoSleepModel>>>>

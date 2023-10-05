@@ -224,6 +224,24 @@ object ApplicationUtils {
         }
     }
 
+    /** value in seconds
+     * Returns HH:MM:SS
+     */
+    fun getFormattedVideoDurationFromSeconds(value: Int): String {
+        if (value == 0) {
+            return "00:00"
+        } else {
+            val hours: Int = value / 3600
+            val minutes: Int = (value % 3600) / 60
+            val seconds = value % 60;
+
+            if (hours != 0) {
+                return String.format("%02d:%02d:%02d", hours, minutes, seconds)
+            }
+            return String.format("%02d:%02d", minutes, seconds)
+        }
+    }
+
     fun setRescueWorkManager(context: Context) {
         val request = OneTimeWorkRequestBuilder<RescueServiceInBgWorker>()
             .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)

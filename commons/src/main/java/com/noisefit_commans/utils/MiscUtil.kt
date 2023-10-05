@@ -10,15 +10,19 @@ object MiscUtil {
             "light" -> {
                 SleepType.LIGHT
             }
+
             "deep" -> {
                 SleepType.DEEP
             }
+
             "awake" -> {
                 SleepType.AWAKE
             }
+
             "rem" -> {
                 SleepType.REM
             }
+
             else -> {
                 return SleepType.SOBER
             }
@@ -39,10 +43,15 @@ object MiscUtil {
         return Pair(hour, min)
 
     }
+
     fun scorePercentCalculator(scoreValue: Float): Float {
         //after debug found .68 is max progress value for this anim file
         return .68.toFloat().times(scoreValue).div(100)
 
+    }
+
+    fun addUnderscore(itemName: String): String {
+        return itemName.lowercase().replace(" ", "_")
     }
 
 

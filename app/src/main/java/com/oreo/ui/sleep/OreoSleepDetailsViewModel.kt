@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
+import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.averageWithoutZero
 import com.noisefit_commans.data.BinaryActionCallback
@@ -36,6 +37,7 @@ class OreoSleepDetailsViewModel
 constructor(
     val userActivityRepository: OreoUserActivityRepository,
     val ringDataStore: RingDataStore,
+    val sessionManager: SessionManager
 ) : BaseViewModel() {
 
     var selectedMasterDate: String? = null
@@ -171,6 +173,10 @@ constructor(
             }
         }
 
+
+    }
+
+    fun getInfoValueByKey(type:String){
 
     }
 
@@ -635,7 +641,7 @@ constructor(
     fun getParsedDescriptionData(): ArrayList<String> {
         val descriptionList = ArrayList<String>()
         descriptionList.add(contributorInfo.value?.totalSleep ?: "")
-        descriptionList.add(contributorInfo.value?.efficiency ?: "")
+        descriptionList.add(contributorInfo.value?.sleep_efficiency ?: "")
         descriptionList.add(contributorInfo.value?.restfulness ?: "")
         descriptionList.add(contributorInfo.value?.remSleep ?: "")
         descriptionList.add(contributorInfo.value?.deepSleep ?: "")

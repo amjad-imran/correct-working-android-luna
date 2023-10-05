@@ -13,7 +13,9 @@ import com.noisefit.luna.databinding.FragmentFeedback2Binding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.share.ShareUtil
+import com.noisefit_commans.utils.FirebaseLunaAppEvents
+import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MiscUtil
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -40,6 +42,7 @@ class FeedbackFragment : BaseFragment<FragmentFeedback2Binding>(FragmentFeedback
 
         binding.lvAnimFirst.setOnClickListener {
             viewModel.rating = 1
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_RATEUS_RATING + "_${1}_CLICK")
             hideViews(1)
 
             handleEmoji(1)
@@ -47,6 +50,7 @@ class FeedbackFragment : BaseFragment<FragmentFeedback2Binding>(FragmentFeedback
         }
         binding.lvAnimSecond.setOnClickListener {
             viewModel.rating = 2
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_RATEUS_RATING + "_${2}_CLICK")
             hideViews(1)
 
             handleEmoji(2)
@@ -54,6 +58,7 @@ class FeedbackFragment : BaseFragment<FragmentFeedback2Binding>(FragmentFeedback
         }
         binding.lvAnimThird.setOnClickListener {
             viewModel.rating = 3
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_RATEUS_RATING + "_${3}_CLICK")
             hideViews(1)
 
             handleEmoji(3)
@@ -62,6 +67,7 @@ class FeedbackFragment : BaseFragment<FragmentFeedback2Binding>(FragmentFeedback
         }
         binding.lvAnimFourth.setOnClickListener {
             viewModel.rating = 4
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_RATEUS_RATING + "_${4}_CLICK")
             hideViews(1)
 
             handleEmoji(4)
@@ -69,6 +75,7 @@ class FeedbackFragment : BaseFragment<FragmentFeedback2Binding>(FragmentFeedback
         }
         binding.lvAnimFifth.setOnClickListener {
             viewModel.rating = 5
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_RATEUS_RATING + "_${5}_CLICK")
             hideViews(1)
 
             handleEmoji(5)
@@ -77,12 +84,12 @@ class FeedbackFragment : BaseFragment<FragmentFeedback2Binding>(FragmentFeedback
         binding.layoutToolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }
+
         binding.bAcceptContinue.setOnClickListener {
             val appSuggestion = binding.lytProblemDescription.appSuggestionEtv.text.toString()
 
             val ids: List<Int> = binding.lytChipView.chipsPrograms.checkedChipIds
-            if (viewModel.problemTypeList.isNotEmpty())
-                viewModel.problemTypeList.clear()
+            if (viewModel.problemTypeList.isNotEmpty()) viewModel.problemTypeList.clear()
             for (id in ids) {
                 val chip: Chip = binding.lytChipView.chipsPrograms.findViewById(id)
                 viewModel.problemTypeList.add(chip.text.toString())
@@ -93,15 +100,17 @@ class FeedbackFragment : BaseFragment<FragmentFeedback2Binding>(FragmentFeedback
                     requireContext(),
                     getString(R.string.please_choose_one_problem_validation_msg),
                     Toast.LENGTH_SHORT
-                )
-                    .show()
+                ).show()
             } else {
                 uiController.hideSoftKeyboard()
+                viewModel.sessionManager.logFirebaseEvent(
+                    FirebaseLunaAppEvents.LUNA_RATEUS_SUBMIT_CLICK,
+                    HashMap<String, Any>().apply {
+                        this["star_rating"] = viewModel.rating
+                    })
                 viewModel.submitFeedbackWithFile(
                     viewModel.provideFeedbackNewData(
-                        viewModel.rating,
-                        problemType,
-                        appSuggestion.replace("\\s+".toRegex(), " ")
+                        viewModel.rating, problemType, appSuggestion.replace("\\s+".toRegex(), " ")
                     )
                 )
             }
@@ -118,6 +127,7 @@ class FeedbackFragment : BaseFragment<FragmentFeedback2Binding>(FragmentFeedback
                 binding.lvAnimFourth.setImageResource(R.drawable.ic_star_border)
                 binding.lvAnimFifth.setImageResource(R.drawable.ic_star_border)
             }
+
             2 -> {
                 binding.lvAnimSecond.setImageResource(R.drawable.ic_star)
                 binding.lvAnimFirst.setImageResource(R.drawable.ic_star)
@@ -125,6 +135,7 @@ class FeedbackFragment : BaseFragment<FragmentFeedback2Binding>(FragmentFeedback
                 binding.lvAnimFourth.setImageResource(R.drawable.ic_star_border)
                 binding.lvAnimFifth.setImageResource(R.drawable.ic_star_border)
             }
+
             3 -> {
                 binding.lvAnimThird.setImageResource(R.drawable.ic_star)
                 binding.lvAnimFirst.setImageResource(R.drawable.ic_star)
@@ -132,6 +143,7 @@ class FeedbackFragment : BaseFragment<FragmentFeedback2Binding>(FragmentFeedback
                 binding.lvAnimFourth.setImageResource(R.drawable.ic_star_border)
                 binding.lvAnimFifth.setImageResource(R.drawable.ic_star_border)
             }
+
             4 -> {
                 binding.lvAnimFourth.setImageResource(R.drawable.ic_star)
                 binding.lvAnimFirst.setImageResource(R.drawable.ic_star)
@@ -139,6 +151,7 @@ class FeedbackFragment : BaseFragment<FragmentFeedback2Binding>(FragmentFeedback
                 binding.lvAnimThird.setImageResource(R.drawable.ic_star)
                 binding.lvAnimFifth.setImageResource(R.drawable.ic_star_border)
             }
+
             5 -> {
                 binding.lvAnimFifth.setImageResource(R.drawable.ic_star)
                 binding.lvAnimFirst.setImageResource(R.drawable.ic_star)
@@ -183,22 +196,22 @@ class FeedbackFragment : BaseFragment<FragmentFeedback2Binding>(FragmentFeedback
         viewModel.submittedSuccessfully.observe(this) {
             if (it) {
 //                if (viewModel.rating == 4 || viewModel.rating == 5) {
-                     setFragmentResultListener(RATE_NOW) { key, bundle ->
-                        val isSelected = bundle.getBoolean("isSelected")
-                        if (isSelected) {
+                setFragmentResultListener(RATE_NOW) { key, bundle ->
+                    val isSelected = bundle.getBoolean("isSelected")
+                    if (isSelected) {
 //                            ShareUtil.openPlayStore(requireContext(), "com.noisefit.luna")
-                            navigateUpSafe()
-                        }
+                        navigateUpSafe()
                     }
+                }
 //                    setFragmentResultListener(LATER) { key, bundle ->
 //                        val isSelected = bundle.getBoolean("isSelected")
 //                        if (isSelected) {
 //                            navigateUpSafe()
 //                        }
 //                    }
-                    navigate(R.id.rateNowBottomSheet,Bundle().apply {
-                        putString("cameFrom","feedback")
-                    })
+                navigate(R.id.rateNowBottomSheet, Bundle().apply {
+                    putString("cameFrom", "feedback")
+                })
 //                } else {
 //                    uiController.onDisplayError(getString(R.string.text_feedback_successful))
 //                    navigateUpSafe()
@@ -213,13 +226,12 @@ class FeedbackFragment : BaseFragment<FragmentFeedback2Binding>(FragmentFeedback
         }
     }
 
-    val callback: OnBackPressedCallback =
-        object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
+    val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
 
-                navigateUpSafe()
-            }
+            navigateUpSafe()
         }
+    }
 
     fun setCategoryChips(category: List<String>?) {
         binding.lytChipView.chipsPrograms.removeAllViews()
@@ -229,11 +241,18 @@ class FeedbackFragment : BaseFragment<FragmentFeedback2Binding>(FragmentFeedback
                     layoutInflater.inflate(R.layout.item_chip_feedback, null, false) as Chip
                 mChip.text = item
                 val paddingDp = TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP, 10F,
-                    resources.displayMetrics
+                    TypedValue.COMPLEX_UNIT_DIP, 10F, resources.displayMetrics
                 )
                 mChip.setPadding(paddingDp.toInt(), 0, paddingDp.toInt(), 0)
+                mChip.setOnCheckedChangeListener { compoundButton, isChecked ->
+                    if (isChecked) {
+                        LOGS.d("Checked Chips ${mChip.text}")
+                        val name = MiscUtil.addUnderscore(mChip.text.toString())
+                        viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_RATEUS_FEEDBACK + "_${name}_SELECT")
+                    }
+                }
                 binding.lytChipView.chipsPrograms.addView(mChip)
+
             }
         }
     }

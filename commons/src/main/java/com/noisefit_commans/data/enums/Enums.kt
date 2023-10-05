@@ -3,6 +3,10 @@ package com.noisefit_commans.data.enums
 import com.noisefit_commans.models.Units
 import com.noisefit_commans.utils.DateFormats
 
+enum class DashInfoCard {
+    WELCOME, CARE, SLEEP, ACTIVITY, READINESS
+}
+
 enum class SleepExtraType {
     HeartRate,
     StressLevel,
@@ -41,6 +45,6 @@ enum class Actions {
 }
 
 
-enum class GraphType{
-    HR,HRV,SLEEP,ACTIVITY
+enum class GraphType {
+    HR, HRV, SLEEP, ACTIVITY
 }

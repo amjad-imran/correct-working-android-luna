@@ -3,6 +3,7 @@ package com.noisefit_commans.data.local.abstraction
 
 import com.noisefit.data.remote.response.CatWiseWatchFacesItem
 import com.noisefit.data.remote.response.WatchFaceCustomListResponse
+import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.enums.ServiceState
 import com.noisefit_commans.data.model.*
 import com.noisefit_commans.data.model.matches.Matches
@@ -399,5 +400,9 @@ interface DataStoredInterface {
 
     fun isPreviouslyPaired(): Boolean
     fun setPreviouslyPaired()
+
+    fun getDashCardClickState(): HashMap<DashInfoCard, Boolean>
+    fun clearDashCardClickState()
+    fun setDashCardClickState(type: DashInfoCard, boolean: Boolean)
 
 }

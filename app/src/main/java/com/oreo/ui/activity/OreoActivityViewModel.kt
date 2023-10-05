@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
+import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.averageWithoutZero
 import com.noisefit_commans.common.maxWithInvalidMovementValues
@@ -29,7 +30,8 @@ import javax.inject.Inject
 class OreoActivityViewModel @Inject constructor(
     private val userActivityRepository: OreoUserActivityRepository,
     val localDataStore: DataStoredInterface,
-    val ringDataStore: RingDataStore
+    val ringDataStore: RingDataStore,
+    val sessionManager: SessionManager
 ) : BaseViewModel() {
 
     var selectedMasterDate: String? = null
@@ -44,7 +46,7 @@ class OreoActivityViewModel @Inject constructor(
 
 
     private val _contributorInfo = MutableLiveData<OContributorResponseModal>()
-    private val contributorInfo: LiveData<OContributorResponseModal> = _contributorInfo
+    val contributorInfo: LiveData<OContributorResponseModal> = _contributorInfo
     init {
         selectedMasterDate = DateFormats.getCurrentDateOreoFormat()
     }
@@ -186,7 +188,7 @@ class OreoActivityViewModel @Inject constructor(
         val descriptionList = ArrayList<String>()
         descriptionList.add(contributorInfo.value?.stayActive ?: "")
         descriptionList.add(contributorInfo.value?.moveEveryHour ?: "")
-        descriptionList.add(contributorInfo.value?.caloriesGoal ?: "")
+        descriptionList.add(contributorInfo.value?.active_calories ?: "")
         descriptionList.add(contributorInfo.value?.trainingFrequency ?: "")
         descriptionList.add(contributorInfo.value?.trainingVolume ?: "")
         return descriptionList

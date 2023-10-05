@@ -15,21 +15,19 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import com.noisefit.luna.R
 import com.noisefit.data.local.AppStaticData
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentProfileEditBinding
 import com.noisefit.ui.common.bottomSheet.DATE_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
 import com.noisefit.ui.friends.profile.InterestSharedViewModel
 import com.noisefit.ui.profile.BottomSheetImagePicker.Companion.IMAGE_PICKER_RESULT
-import com.noisefit_commans.data.model.Interest
 import com.noisefit_commans.data.model.User
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.models.DeviceUnits
 import com.noisefit_commans.models.Gender
 import com.noisefit_commans.models.UserLocation
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.ui.displayToast
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadProfileEditImage
 import com.noisefit_commans.ui.showShortToast
@@ -37,6 +35,7 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.CommonConstants
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit_commans.utils.LOGS
 import com.yalantis.ucrop.UCrop
@@ -174,7 +173,7 @@ class ProfileEditFragment :
                 return@setOnClickListener
             }
 
-
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_PROFILE_SAVE_CLICK)
             viewModel.updateUserProfile()
         }
         binding.backBtn.setOnClickListener {
@@ -194,6 +193,7 @@ class ProfileEditFragment :
                 }
 
             }
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_PROFILE_NAME_EDIT_CLICK)
             navigate(
                 ProfileEditFragmentDirections.actionProfileEditFragmentToNameUpdateBottomSheet(
                     viewModel.userName.value
@@ -209,6 +209,7 @@ class ProfileEditFragment :
                 }
 
             }
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_PROFILE_GENDER_EDIT_CLICK)
             navigate(
                 ProfileEditFragmentDirections.actionProfileEditFragmentToValueSelectorBottomSheet(
                     viewModel.getGenderValue(),
@@ -227,6 +228,7 @@ class ProfileEditFragment :
                 viewModel.setDob(year, month, date)
                 setDob()
             }
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_PROFILE_DOB_EDIT_CLICK)
             navigate(
                 ProfileEditFragmentDirections.actionProfileEditFragmentToDateBottomSheet(
                     getString(R.string.dob),
@@ -254,6 +256,7 @@ class ProfileEditFragment :
 
 
             }
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_PROFILE_HEIGHT_EDIT_CLICK)
             navigate(
                 ProfileEditFragmentDirections.actionProfileEditFragmentToValueSelectorBottomSheet(
                     viewModel.getHeight(),
@@ -278,6 +281,7 @@ class ProfileEditFragment :
 
 
             }
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_PROFILE_WEIGHT_EDIT_CLICK)
             navigate(
                 ProfileEditFragmentDirections.actionProfileEditFragmentToValueSelectorBottomSheet(
                     viewModel.getWeight(),
@@ -320,7 +324,6 @@ class ProfileEditFragment :
     private fun updateName() {
         binding.tvNameValue.text = viewModel.userName.value
     }
-
 
 
     private fun logProfileEvent(user: User) {

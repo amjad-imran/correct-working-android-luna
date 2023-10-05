@@ -3,12 +3,21 @@ package com.oreo.data.model
 import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.data.Entry
 import com.noisefit_commans.models.SleepData
+import com.oreo.data.model.health.InfoTextData
+import com.oreo.data.model.health.InfoVideoData
 import com.oreo.data.model.health.ODashboardActivityModel
 import com.oreo.data.model.health.ODashboardReadinessModel
 import com.oreo.data.model.health.ODashboardSleepModel
 
 
 sealed class OHealthOverview {
+
+
+    data class InfoRingWelcome(val data: InfoTextData) : OHealthOverview()
+    data class InfoRingCare(val data: InfoTextData) : OHealthOverview()
+    data class InfoVideo(val type: VideoInfoType, val data: InfoVideoData) :
+        OHealthOverview()
+
 
     class AutoSport(
         val count: Int
@@ -73,7 +82,6 @@ sealed class OHealthOverview {
     ) : OHealthOverview()
 
 
-
 }
 
 data class DashAlert(
@@ -84,6 +92,10 @@ data class DashAlert(
 
 enum class AlertType {
     BLUETOOTH, OTA_UPDATE, DEFAULT
+}
+
+enum class VideoInfoType {
+    SLEEP, READINESS, ACTIVITY
 }
 
 enum class TapMeasureState {

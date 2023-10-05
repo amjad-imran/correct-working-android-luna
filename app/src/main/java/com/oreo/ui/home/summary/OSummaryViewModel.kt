@@ -1,5 +1,6 @@
 package com.oreo.ui.home.summary
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
@@ -11,6 +12,7 @@ import com.noisefit.receiver.service.ProblemType
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
@@ -23,13 +25,16 @@ import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.ui.checkDayDifferenceMoreOne
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.DashAlert
 import com.oreo.data.model.OActivityListModal
+import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.TapMeasureState
+import com.oreo.data.model.VideoInfoType
 import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepModel
@@ -52,6 +57,7 @@ constructor(
     val sessionManager: SessionManager,
     val localDataStore: DataStoredInterface,
     val ringDataStore: RingDataStore,
+    val userActivityRepository: OreoUserActivityRepository,
     private val syncRepository: OreoSyncRepository,
     val userRepository: OreoUserActivityRepository,
 ) : BaseViewModel() {
@@ -65,6 +71,12 @@ constructor(
         MutableLiveData<Pair<ODashboardSleepScoreModel?, ODashboardActivityScoreModel?>>()
     val stateReadinessAvgCard = MutableLiveData<ODashboardReadinessScoreModel?>()
     val stateWorkouts = MutableLiveData<List<OActivityListModal>>()
+    var contributorInfo: OContributorResponseModal? = null
+
+    val hrInfo = MutableLiveData<Event<String>>()
+    var sleepScoreInfo = MutableLiveData<Event<String>>()
+    var readinessScoreInfo = MutableLiveData<Event<String>>()
+    var activityScoreInfo = MutableLiveData<Event<String>>()
 
 
     var summary = OSummary()
@@ -212,7 +224,7 @@ constructor(
         viewModelScope.launch(Dispatchers.IO) {
 
             val userActivities = ArrayList<OHealthOverview>()
-
+            val viewedCardsData = ArrayList<OHealthOverview>()
 
             val autoSportCount = userRepository.getSummaryAutoWorkoutCount()
             if (autoSportCount > 0) {
@@ -225,6 +237,8 @@ constructor(
 
 
             LOGS.w("RESPONSE___ ${Gson().toJson(data)}")
+
+            handleInfoCards(data,userActivities,viewedCardsData)
 
 
             when (getDaySlot()) {
@@ -442,6 +456,7 @@ constructor(
             stateSleepAvgCard.postValue(Pair(data.sleepScoreAvg, data.activityScoreAvg))
             stateReadinessAvgCard.postValue(data.readinessScoreAvg)
 
+            summary.viewedCardsData.postValue(viewedCardsData)
             summary.healthOverviewData.postValue(userActivities)
 
             val device = ringDataStore.getRingDevice()
@@ -451,6 +466,64 @@ constructor(
                 }
             })
             getRecentWorkoutList()
+
+        }
+    }
+
+    private fun handleInfoCards(
+        data: OreoDashboardResponseModel,
+        userActivities: ArrayList<OHealthOverview>,
+        viewedCardsData: ArrayList<OHealthOverview>,
+    ) {
+        val registerDays = (data.registerDate ?: 0)
+
+        if (registerDays < 7) {
+
+            if (registerDays == 0) {
+                data.welcome?.welcome?.let {
+                    userActivities.add(OHealthOverview.InfoRingWelcome(it))
+                }
+            }
+
+            val cardClickState = localDataStore.getDashCardClickState()
+
+            data.welcome?.care?.let {
+                if (registerDays > 0) {
+                    viewedCardsData.add(OHealthOverview.InfoRingCare(it))
+                } else {
+                    if (cardClickState[DashInfoCard.CARE] == false) {
+                        userActivities.add(OHealthOverview.InfoRingCare(it))
+                    } else {
+                        viewedCardsData.add(OHealthOverview.InfoRingCare(it))
+                    }
+                }
+
+            }
+
+            data.welcome?.sleep_media?.let {
+                if (cardClickState[DashInfoCard.SLEEP] == false) {
+                    userActivities.add(OHealthOverview.InfoVideo(VideoInfoType.SLEEP, it))
+                } else {
+                    viewedCardsData.add(OHealthOverview.InfoVideo(VideoInfoType.SLEEP, it))
+                }
+            }
+
+            data.welcome?.activity_media?.let {
+                if (cardClickState[DashInfoCard.ACTIVITY] == false) {
+                    userActivities.add(OHealthOverview.InfoVideo(VideoInfoType.ACTIVITY, it))
+                } else {
+                    viewedCardsData.add(OHealthOverview.InfoVideo(VideoInfoType.ACTIVITY, it))
+                }
+            }
+
+            data.welcome?.readiness_media?.let {
+                if (cardClickState[DashInfoCard.READINESS] == false) {
+                    userActivities.add(OHealthOverview.InfoVideo(VideoInfoType.READINESS, it))
+                } else {
+                    viewedCardsData.add(OHealthOverview.InfoVideo(VideoInfoType.READINESS, it))
+                }
+            }
+
 
         }
     }
@@ -782,6 +855,66 @@ constructor(
         stateDashAlerts.postValue(stateDashAlerts.value)
     }
 
+    /**
+     *hr,sleep,activity,readiness
+     */
+    fun getContributorInfo(callerName: String) {
+        if (contributorInfo != null) {
+            when(callerName){
+                "hr"->hrInfo.postValue(Event(contributorInfo!!.hr_graph))
+                "sleep"->sleepScoreInfo.postValue(Event(contributorInfo!!.sleep_score))
+                "activity"->activityScoreInfo.postValue(Event(contributorInfo!!.activity_score))
+                "readiness"->readinessScoreInfo.postValue(Event(contributorInfo!!.readiness_score))
+            }
+            return
+        }
+
+        viewModelScope.launch {
+            userActivityRepository.getContributorDetailsInfo(
+                "dashboard"
+            ).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        getContributorInfo(callerName)
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            contributorInfo = it
+                            when(callerName){
+                                "hr"->hrInfo.postValue(Event(contributorInfo!!.hr_graph))
+                                "sleep"->sleepScoreInfo.postValue(Event(contributorInfo!!.sleep_score))
+                                "activity"->activityScoreInfo.postValue(Event(contributorInfo!!.activity_score))
+                                "readiness"->readinessScoreInfo.postValue(Event(contributorInfo!!.readiness_score))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+    }
     fun shouldSendLogs(): Boolean {
         val lastTimeStamp = ringDataStore.getAutoLogsTimeStamp()
         if (lastTimeStamp == 0L) {
@@ -800,4 +933,5 @@ constructor(
         return currentTime.isAfter(targetTime)
 
     }
+
 }

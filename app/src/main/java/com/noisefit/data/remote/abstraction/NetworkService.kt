@@ -476,6 +476,16 @@ interface NetworkService {
     ): BaseApiResponse<List<StateData>>
 
     @GET
+    suspend fun getRingCareData(
+        @Url string: String,
+    ): BaseApiResponse<RingCareResponse>
+
+    @GET
+    suspend fun getRingWelcomeData(
+        @Url string: String,
+    ): BaseApiResponse<RingWelcome>
+
+    @GET
     suspend fun getCityList(
         @Url string: String,
     ): BaseApiResponse<List<CityData>>

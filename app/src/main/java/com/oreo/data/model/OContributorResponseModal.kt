@@ -5,10 +5,25 @@ import com.google.gson.annotations.SerializedName
 data class OContributorResponseModal(
     @SerializedName("total_sleep")
     val totalSleep: String? = null,
-    val efficiency: String? = null,
+    val sleep_efficiency: String? = null,
     val restfulness: String? = null,
     @SerializedName("rem_sleep")
     val remSleep: String? = null,
+    val sleep_score: String? = null,
+    val readiness_score: String? = null,//check
+    val hrv: String? = null,//check
+    val temperature: String? = null,//check
+    val respiration: String? = null,//check
+    val activity_score: String? = null,//check
+    val active_calories: String? = null,//check
+    val total_calories: String? = null,//check
+    val hr_graph: String? = null,//check
+    val hrv_graph: String? = null,//check
+    val temp_graph: String? = null,//check
+    val total_steps: String? = null,//check
+    val total_distance: String? = null,//check
+    val daytime_movement: String? = null,//check
+    val time_in_bed: String? = null,
     @SerializedName("deep_sleep")
     val deepSleep: String? = null,
     val latency: String? = null,
@@ -21,8 +36,6 @@ data class OContributorResponseModal(
     val trainingFrequency: String? = null,
     @SerializedName("training_volume")
     val trainingVolume: String? = null,
-    @SerializedName("calories_goal")
-    val caloriesGoal: String? = null,
     @SerializedName("yesterday_sleep_duration")
     val yesterdaySleepDuration: String? = null,
     @SerializedName("sleep_balance")
@@ -33,8 +46,7 @@ data class OContributorResponseModal(
     val activityBalance: String? = null,
     @SerializedName("hrv_balance")
     val hrvBalance: String? = null,
-    @SerializedName("resting_hr")
-    val restingHr: String? = null,
+    val resting_hr: String? = null,//check
     @SerializedName("heart_rate")
     val heartRate: String? = null,
     @SerializedName("recovery_index")

@@ -17,8 +17,18 @@ data class OreoDashboardResponseModel(
     val readinessScoreAvg: ODashboardReadinessScoreModel? = null,
     @SerializedName("registerDate")
     val registerDate: Int? = null,
-
+    val welcome: WelcomeData? = null,
     )
+
+data class InfoTextData(val title: String, val content: String)
+data class InfoVideoData(val url: String, val time: String, val title: String)
+data class WelcomeData(
+    val care: InfoTextData,
+    val welcome: InfoTextData,
+    val readiness_media: InfoVideoData,
+    val sleep_media: InfoVideoData,
+    val activity_media: InfoVideoData,
+)
 
 data class ODashboardReadinessModel(
     val readinessScore: Int? = null,

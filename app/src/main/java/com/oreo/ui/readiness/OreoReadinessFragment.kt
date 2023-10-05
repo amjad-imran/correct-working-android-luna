@@ -17,6 +17,7 @@ import com.noisefit.luna.databinding.FragmentOreoReadinessBinding
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
@@ -70,6 +71,7 @@ class OreoReadinessFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_PAGE_VISIT)
         setRecycler()
 
 
@@ -160,11 +162,14 @@ class OreoReadinessFragment :
         }
 
 
-        val baseTimeList = UtilClass.graphTwoHoursInterval(
+      /*  val baseTimeList = UtilClass.graphTwoHoursInterval(
             ssTime,
             seTime,
             breakUpData.size ?: 288
-        )
+        )*/
+
+        val baseTimeListNew =
+            UtilClass.getXAxisPoints(ssTime, seTime, breakUpData.size ?: 288)
 
         binding.lytHeartRate.lineChart.visible()
         val sleepChart = SleepChartModel()
@@ -178,7 +183,7 @@ class OreoReadinessFragment :
             }
 
             chartModel.value = value
-            chartModel.index = baseTimeList[index]
+            chartModel.index = baseTimeListNew[index]
             chartList.add(chartModel)
         }
 
@@ -238,11 +243,14 @@ class OreoReadinessFragment :
         }
 
 
-        val baseTimeList = UtilClass.graphTwoHoursInterval(
+      /*  val baseTimeList = UtilClass.graphTwoHoursInterval(
             ssTime,
             seTime,
             breakUpData.size ?: 288
-        )
+        )*/
+
+        val baseTimeListNew =
+            UtilClass.getXAxisPoints(ssTime, seTime, breakUpData.size ?: 288)
 
         binding.lytHRVariability.lineChart.visible()
         val sleepChart = SleepChartModel()
@@ -257,7 +265,7 @@ class OreoReadinessFragment :
             }
 
             chartModel.value = value
-            chartModel.index = baseTimeList[index]
+            chartModel.index = baseTimeListNew[index]
             chartList.add(chartModel)
         }
 
@@ -311,11 +319,13 @@ class OreoReadinessFragment :
             breakUpData = temperatureBreakUpData?.value as ArrayList<Float>
         }
 
-        val baseTimeList = UtilClass.graphTwoHoursInterval(
+       /* val baseTimeList = UtilClass.graphTwoHoursInterval(
             ssTime,
             seTime,
             breakUpData.size ?: 288
-        )
+        )*/
+        val baseTimeListNew =
+            UtilClass.getXAxisPoints(ssTime, seTime, breakUpData.size ?: 288)
 
         binding.lytTemperature.lineChart.visible()
         val chartList = ArrayList<ChartModel>()
@@ -329,7 +339,7 @@ class OreoReadinessFragment :
             }
 
             chartModel.value = value.toInt()
-            chartModel.index = baseTimeList[index]
+            chartModel.index = baseTimeListNew[index]
             chartList.add(chartModel)
         }
 
@@ -381,6 +391,29 @@ class OreoReadinessFragment :
         }
 
     override fun initListener() {
+        binding.lytHeartRate.bInfo.setOnClickListener {
+            mViewModel.contributorInfo.value?.hr_graph?.let { content ->
+                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                    this.putString("infoData", content)
+                })
+            }
+        }
+        binding.lytHRVariability.bInfo.setOnClickListener {
+            mViewModel.contributorInfo.value?.hrv_graph?.let { content ->
+                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                    this.putString("infoData", content)
+                })
+            }
+        }
+        binding.lytTemperature.bInfo.setOnClickListener {
+            mViewModel.contributorInfo.value?.temp_graph?.let { content ->
+                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                    this.putString("infoData", content)
+                })
+            }
+        }
+
+
         binding.lytEmptyView.bGoToSettings.setOnClickListener {
             showWalkAround(false)
             mViewModel.ringDataStore.setReadinessWalkAroundShown(true)
@@ -393,6 +426,8 @@ class OreoReadinessFragment :
         binding.lytToolbar.backBtn.invisible()
 
         binding.lytToolbar.view1.setOnClickListener {
+
+            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_DATE_RANGE_CLICK)
             resultLauncher.launch(
                 HistoryCalendarActivity.getStartIntent(
                     requireContext(),
@@ -409,8 +444,10 @@ class OreoReadinessFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.READINESS_SCORE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
+                putString("infoData", mViewModel.contributorInfo.value?.readiness_score)
                 putString("date", mViewModel.selectedDate)
             })
+            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_READINESS_SCORE_CLICK)
         }
         binding.lytRScoreData.lytSec1.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -418,8 +455,11 @@ class OreoReadinessFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.RESTING_HR
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
+                putString("infoData", mViewModel.contributorInfo.value?.resting_hr)
                 putString("date", mViewModel.selectedDate)
             })
+            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_RESTING_HR_CLICK)
+
         }
         binding.lytRScoreData.lytSec2.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -427,8 +467,10 @@ class OreoReadinessFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.HR_VARIABILITY
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
+                putString("infoData", mViewModel.contributorInfo.value?.hrv)
                 putString("date", mViewModel.selectedDate)
             })
+            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_HR_VARIABILITY_CLICK)
         }
         binding.lytRScoreData.lytSec3.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -436,8 +478,10 @@ class OreoReadinessFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.BODY_TEMPERATURE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
+                putString("infoData", mViewModel.contributorInfo.value?.temperature)
                 putString("date", mViewModel.selectedDate)
             })
+            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_BODY_TEMP_CLICK)
         }
         binding.lytRScoreData.lytSec4.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -445,8 +489,10 @@ class OreoReadinessFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.RESPIRATORY_RATE
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
+                putString("infoData", mViewModel.contributorInfo.value?.respiration)
                 putString("date", mViewModel.selectedDate)
             })
+            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_RESPIRATORY_RATE_CLICK)
         }
 
 
@@ -672,16 +718,16 @@ class OreoReadinessFragment :
             heartRateDefaultView()
         }
         //todo will change startTime, endTime
-        val sleepStartTime = DateFormats.formatDate(
+        val sleepStartTime = it.start_time/*DateFormats.formatDate(
             it.start_time,
             DateFormats.dateTimeFormat5,
             DateFormats.time12Meridian
-        )
-        val sleepEndTime = DateFormats.formatDate(
+        )*/
+        val sleepEndTime = it.end_time/*DateFormats.formatDate(
             it.end_time,
             DateFormats.dateTimeFormat5,
             DateFormats.time12Meridian
-        )
+        )*/
 
         showHeartRateGraph(
             it.hrBreakUp,

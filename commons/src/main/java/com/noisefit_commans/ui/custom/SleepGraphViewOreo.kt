@@ -6,6 +6,7 @@ import android.graphics.*
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import com.noisefit_commans.R
 import com.noisefit_commans.data.model.CountCardData
 import com.noisefit_commans.models.SleepData
@@ -423,7 +424,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                     start = end
                 }
             }
-        }else{
+        } else {
             canvas.drawText(
                 "12 am",
                 0f,
@@ -462,41 +463,51 @@ class SleepGraphViewOreo(var mContext: Context) : View(
 
 
                 val midTime = getCenterTime(startTime, endTime)
-                val midLeftTIme = getCenterTime(startTime, midTime.first)
-                val midRightTIme = getCenterTime(midTime.first, endTime)
+                val midLeftTIme = getCenterTime(startTime, midTime)
+                val midRightTIme = getCenterTime(midTime, endTime)
 
                 val center = (width - endPadding) / 2
 
-                /* canvas.drawText(
-                        DateFormats.timeFormat2.format(midLeftTIme.first),
-                        center / 2,
-                        sectionHeight * 5,
-                        mTextPaint
-                    )*/
-
-                val offset = eachSecondsWidth * midTime.second
-                LOGS.d("OFFSET $offset")
-
+                val textWidth1 = mTextPaint.measureText(
+                    DateFormats.time12Meridian.format(midLeftTIme).lowercase()
+                )
                 canvas.drawText(
-                    DateFormats.timeFormat2.format(midTime.first).lowercase(),
-                    center - offset,
+                    DateFormats.time12Meridian.format(midLeftTIme).lowercase(),
+                    center / 2 - textWidth1 / 2,
                     sectionHeight * 5 - pxFromDp(context, 5.0f),
                     mTextPaint
                 )
-                /*canvas.drawText(
-                        DateFormats.timeFormat2.format(midRightTIme.first),
-                        center + (center / 2),
-                        sectionHeight * 5,
-                        mTextPaint
-                    )*/
+
+
+                val textWidthCenter =
+                    mTextPaint.measureText(DateFormats.time12Meridian.format(midTime).lowercase())
+
+                canvas.drawText(
+                    DateFormats.time12Meridian.format(midTime).lowercase(),
+                    center - textWidthCenter / 2,
+                    sectionHeight * 5 - pxFromDp(context, 5.0f),
+                    mTextPaint
+                )
+                val textWidth2 = mTextPaint.measureText(
+                    DateFormats.time12Meridian.format(midRightTIme).lowercase()
+                )
+                canvas.drawText(
+                    DateFormats.time12Meridian.format(midRightTIme).lowercase(),
+                    center + (center / 2) - textWidth2 / 2,
+                    sectionHeight * 5 - pxFromDp(context, 5.0f),
+                    mTextPaint
+                )
 
             } else {
                 val midTime = getCenterTime(startTime, endTime)
-                val center = (width - pxFromDp(mContext, 45f) - endPadding) / 2
+                val center = (width - endPadding) / 2
+
+                val textWidthCenter =
+                    mTextPaint.measureText(DateFormats.time12Meridian.format(midTime).lowercase())
 
                 canvas.drawText(
-                    DateFormats.timeFormat2.format(midTime.first).lowercase(),
-                    center,
+                    DateFormats.time12Meridian.format(midTime).lowercase(),
+                    center - textWidthCenter / 2,
                     sectionHeight * 5 - pxFromDp(context, 5.0f),
                     mTextPaint
                 )
@@ -508,7 +519,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
     private fun getCenterTime(
         startTime: Date,
         endTime: Date
-    ): Pair<Date, Int> {
+    ): Date {
         val timeRange = endTime.time - startTime.time
         val singleDuration = timeRange / 2
 
@@ -516,15 +527,15 @@ class SleepGraphViewOreo(var mContext: Context) : View(
         val calendar = Calendar.getInstance()
         calendar.time = Date(centerTime)
 
-        val minutes = calendar.get(Calendar.MINUTE)
-        val seconds = calendar.get(Calendar.SECOND)
+        /* val minutes = calendar.get(Calendar.MINUTE)
+         val seconds = calendar.get(Calendar.SECOND)
 
-        val totalSeconds = (minutes * 60) + seconds
+         val totalSeconds = (minutes * 60) + seconds
 
-        calendar.set(Calendar.MINUTE, 0)
-        calendar.set(Calendar.SECOND, 0)
+         calendar.set(Calendar.MINUTE, 0)
+         calendar.set(Calendar.SECOND, 0)*/
 
-        return Pair(Date(calendar.timeInMillis), totalSeconds)
+        return Date(calendar.timeInMillis)
 
     }
 
@@ -572,6 +583,8 @@ class SleepGraphViewOreo(var mContext: Context) : View(
 //        toolTipTextPaint.color = ContextCompat.getColor(mContext, R.color.blood_oxygen_color)
 //        toolTipTextPaint.textSize = pxFromDp(mContext, 10f)
 //        toolTipTextPaint.textAlign = Paint.Align.CENTER
+        val fontGilroy = ResourcesCompat.getFont(this.context, R.font.gilroy_medium)
+
         mPaint = Paint()
         mPaint.isAntiAlias = true
         mPaint.style = Paint.Style.STROKE
@@ -582,15 +595,20 @@ class SleepGraphViewOreo(var mContext: Context) : View(
         mPaint2.style = Paint.Style.STROKE
         mPaint2.color = ContextCompat.getColor(mContext, R.color.sleep_graph_line)
         mPaint2.strokeWidth = pxFromDp(mContext, 2f)
+
         mTextPaint = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
         mTextPaint.color = ContextCompat.getColor(mContext, R.color.white_64)
         mTextPaint.textSize = pxFromDp(mContext, 10f)
+        mTextPaint.setTypeface(fontGilroy)
+
         outerPaint = Paint()
         outerPaint.style = Paint.Style.FILL
         outerPaint.color = Color.TRANSPARENT
 
+
         mTextPaintEdge = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
         mTextPaintEdge.color = ContextCompat.getColor(mContext, R.color.white)
+        mTextPaintEdge.setTypeface(fontGilroy)
         mTextPaintEdge.textSize = pxFromDp(mContext, 10f)
 
     }

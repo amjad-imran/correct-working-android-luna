@@ -15,6 +15,7 @@
             android:layout_height="40dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="22dp"
+            android:src="@drawable/ic_ring_not_connected"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
