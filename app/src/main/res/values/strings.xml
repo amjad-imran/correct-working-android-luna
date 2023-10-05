@@ -334,7 +334,7 @@
     <string name="text_steps">Steps</string>
     <string name="text_distance">Distance</string>
     <string name="text_kcal">kcal</string>
-    <string name="text_mins">mins</string>
+    <string name="text_mins">min</string>
     <string name="text_no_data_recorded">No data recorded</string>
     <string name="text_health_overview">Health overview</string>
     <string name="text_average">Average</string>
@@ -832,7 +832,7 @@
     <string name="text_avg">Avg</string>
     <string name="text_distance_split">Distance split</string>
     <string name="text_time_km">Time/km</string>
-    <string name="text_hr">Hr</string>
+    <string name="text_hr">hr</string>
     <string name="text_pace">Pace</string>
     <string name="text_set_your_target_calorie_goal">Set your target calorie goal</string>
     <string name="text_account_already_exists">Account already exists?</string>
