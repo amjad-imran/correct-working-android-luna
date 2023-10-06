@@ -66,17 +66,19 @@ constructor(
         addWorkout.calories = data.calories
         addWorkout.intensity = getIntensity(data.intensity ?: 0)
         addWorkout.steps = data.steps
+        addWorkout.date = DateFormats.convertTimestampToDate(endTime, DateFormats.dateFormat3)
         activityType = data.type
 
         tryCatch {
-            val startTime =   DateFormats.convertTimestampToDate(data.startTime, DateFormats.timeFormat)
-            if(startTime.isNotEmpty()){
+            val startTime =
+                DateFormats.convertTimestampToDate(data.startTime, DateFormats.timeFormat)
+            if (startTime.isNotEmpty()) {
                 val startArray = startTime.split(":")
                 addWorkout.startHour = startArray[0].toInt()
                 addWorkout.startMinute = startArray[1].toInt()
             }
-            val endTimeText =   DateFormats.convertTimestampToDate(endTime, DateFormats.timeFormat)
-            if(endTimeText.isNotEmpty()){
+            val endTimeText = DateFormats.convertTimestampToDate(endTime, DateFormats.timeFormat)
+            if (endTimeText.isNotEmpty()) {
                 val endArray = endTimeText.split(":")
                 addWorkout.endHour = endArray[0].toInt()
                 addWorkout.endMinute = endArray[1].toInt()
@@ -97,6 +99,18 @@ constructor(
                 this.addProperty("duration", addWorkout.duration)
                 this.addProperty("calories", addWorkout.calories)
                 this.addProperty("activity_type", type)
+
+                val isAuto = autoSport.value != null
+
+                if (isAuto) {
+                    this.addProperty("type", "auto")
+                    this.addProperty("date", addWorkout.date)
+                } else {
+                    this.addProperty("type", "manual")
+                }
+
+
+
                 this.addProperty("start_time", addWorkout.startTimeIn24H)
                 this.addProperty("steps", addWorkout.steps)
                 this.addProperty("end_time", addWorkout.endTimeIn24H)
@@ -162,7 +176,7 @@ constructor(
 
     fun getWorkoutDuration(): Int {
 
-        if(!isStartTimeSelected || !isEndTimeSelected){
+        if (!isStartTimeSelected || !isEndTimeSelected) {
             return 0
         }
 
