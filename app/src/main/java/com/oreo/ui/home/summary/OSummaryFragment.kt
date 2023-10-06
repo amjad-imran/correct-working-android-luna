@@ -306,7 +306,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
     override fun subscribeObservers() {
 
-        viewModel.hrInfo.observe(this){
+        viewModel.hrInfo.observe(this) {
             it.getContent()?.let {
                 navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
                     this.putString("infoData", it)
@@ -314,7 +314,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             }
         }
 
-        viewModel.activityScoreInfo.observe(this){
+        viewModel.activityScoreInfo.observe(this) {
             it.getContent()?.let {
                 mSharedViewModel.selectedTab = 0
                 mSharedViewModel.itemType = ClickViewType.ACTIVITY.name
@@ -327,7 +327,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             }
         }
 
-        viewModel.readinessScoreInfo.observe(this){
+        viewModel.readinessScoreInfo.observe(this) {
             it.getContent()?.let {
                 mSharedViewModel.selectedTab = 0
                 mSharedViewModel.itemType = ClickViewType.READINESS.name
@@ -339,7 +339,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 })
             }
         }
-        viewModel.sleepScoreInfo.observe(this){
+        viewModel.sleepScoreInfo.observe(this) {
             it.getContent()?.let {
                 mSharedViewModel.selectedTab = 0
                 mSharedViewModel.itemType = ClickViewType.SLEEP.name
@@ -621,13 +621,10 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
     private fun sendLogs() {
         val shouldSendLogs = viewModel.shouldSendLogs()
-        if(shouldSendLogs){
+        if (shouldSendLogs) {
             context?.let {
                 FeedbackSubmitService.startService(
-                    it,
-                    "",
-                    "Auto logs -Android",
-                    viewModel.ringDataStore.getRingDevice()?.deviceId
+                    it
                 )
             }
         }
@@ -1058,8 +1055,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 R.drawable.ic_ring_low_battery
             )
             binding.lytHeader.batteryStatus.setIndicatorColor(resources.getColor(R.color.color_error))
-        }
-        else {
+        } else {
             binding.lytHeader.oreoStatus.setBackgroundResource(R.drawable.back_modal_new_round)
             binding.lytHeader.batteryStatus.setIndicatorColor(resources.getColor(R.color.white))
         }
@@ -1100,13 +1096,10 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             shouldSync()
 
             val logsSync = viewModel.shouldSyncLogsAfter12()
-            if(logsSync){
+            if (logsSync) {
                 context?.let {
                     FeedbackSubmitService.startService(
-                        it,
-                        "",
-                        "Auto logs -Android",
-                        viewModel.ringDataStore.getRingDevice()?.deviceId
+                        it
                     )
                 }
             }

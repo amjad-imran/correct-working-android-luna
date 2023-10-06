@@ -2,10 +2,8 @@ package com.noisefit.receiver.service
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import androidx.lifecycle.LifecycleService
-import com.noisefit_commans.data.model.Feedback
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.LastSyncProvider
 import com.noisefit.data.repository.abstraction.DeviceRepository
@@ -27,7 +25,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import java.io.File
-import java.util.ArrayList
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -56,29 +53,16 @@ constructor() : LifecycleService() {
     companion object {
         fun startService(
             context: Context,
-            problemType: String,
-            comment: String,
-            deviceId: Int? = null
         ) {
-            context.startService(Intent(context, FeedbackSubmitService::class.java).apply {
-                this.putExtra("problemType", problemType)
-                this.putExtra("comment", comment)
-                this.putExtra("deviceId", deviceId)
-            })
+            context.startService(Intent(context, FeedbackSubmitService::class.java))
         }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val problemType = intent?.getStringExtra("problemType")
-        val comment = intent?.getStringExtra("comment")
-        val deviceId = intent?.getIntExtra("deviceId", -1)
-
 
         scope.launch {
             getFileLogs().collect { files ->
-
-                sendFeedback(files.first, files.second, problemType ?: "", comment ?: "", deviceId)
-
+                sendFeedback(files.first, files.second)
             }
         }
 
@@ -126,25 +110,12 @@ constructor() : LifecycleService() {
 
     private fun sendFeedback(
         appLogFile: File?,
-        watchLogFile: File?,
-        problemType: String,
-        comment: String,
-        deviceId: Int? = null
+        watchLogFile: File?
     ) {
 
-        val feedback =
-            provideFeedbackData(
-                problemType,
-                comment
-            )
-
-        feedback.user_id = localDataStore.getUser()?.id
-        feedback.file = appLogFile
-        feedback.watchLogs = watchLogFile
-
         scope.launch {
-            deviceRepository.submitFeedbackFile(
-                feedback
+            deviceRepository.periodicFeedbackFile(
+                appLogFile, watchLogFile
             ).collect { resource ->
 
 
