@@ -178,7 +178,7 @@ class OreoActivityFragment :
             binding.lytAScoreData.lytScore.tvValue.visible()
             if (scoreData.value != null) {
                 if (scoreData.value == 0) {
-                    if (it.steps != 0) {
+                    if (it.activeCalories != 0) {
                         setActivityScore(scoreData)
                     } else {
                         binding.lytAScoreData.lytScore.tvValue.text = "-"
