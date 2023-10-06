@@ -146,7 +146,12 @@ class PairDeviceViewModel @Inject constructor(
             addProperty("address", device.address)
             addProperty("device_id", device.deviceId)
             addProperty("rssi", device.rssi)
-            addProperty("serial_no", device.ringInfo?.serialNoRaw ?: "")
+
+            device.ringInfo?.let {
+                addProperty("serial_no", it.serialNoRaw ?: "")
+                addProperty("color", it.color?.lowercase() ?: "")
+                addProperty("size", it.size ?: -1)
+            }
             if (device.watchToken.isNotEmpty()) {
                 addProperty("ring_token", device.watchToken)
             }
