@@ -62,9 +62,9 @@ class AppUpdateBottomSheet : BaseBottomSheetWithTransparent<LayoutAppUpdateBotto
             binding.btnAllow.visible()
             binding.btnRemindLater.gone()
             isForceUpdate = true
-            binding.btnAllow.setBackgroundResource(R.drawable.btn_primary_highlight_selector)
+            //binding.btnAllow.setBackgroundResource(R.drawable.btn_primary_highlight_selector)
         } else {
-            binding.btnAllow.setBackgroundResource(R.drawable.btn_primary_bg_selector)
+            //binding.btnAllow.setBackgroundResource(R.drawable.btn_primary_bg_selector)
         }
 
         binding.btnRemindLater.setOnClickListener {
