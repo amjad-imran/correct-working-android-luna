@@ -62,9 +62,9 @@ class AppUpdateBottomSheet : BaseBottomSheetWithTransparent<LayoutAppUpdateBotto
             binding.btnAllow.visible()
             binding.btnRemindLater.gone()
             isForceUpdate = true
-            binding.btnAllow.setBackgroundResource(R.drawable.btn_primary_highlight_selector)
+            //binding.btnAllow.setBackgroundResource(R.drawable.btn_primary_highlight_selector)
         } else {
-            binding.btnAllow.setBackgroundResource(R.drawable.btn_primary_bg_selector)
+            //binding.btnAllow.setBackgroundResource(R.drawable.btn_primary_bg_selector)
         }
 
         binding.btnRemindLater.setOnClickListener {
@@ -83,11 +83,11 @@ class AppUpdateBottomSheet : BaseBottomSheetWithTransparent<LayoutAppUpdateBotto
         val maintenanceMsg =
             getString(R.string.text_noisefit_is_currently_under_maintenance) + " " + getString(R.string.text_please_check_back_again_later)
         binding.tvDesc.text = maintenanceMsg
-        binding.btnAllow.gone()
-        binding.btnRemindLater.text = "Ok"
-        binding.btnRemindLater.visible()
+        binding.btnAllow.visible()
+        binding.btnRemindLater.gone()
+        binding.btnAllow.text = "Ok"
         isMaintenanceMode = true
-        binding.btnRemindLater.setOnClickListener {
+        binding.btnAllow.setOnClickListener {
             requireActivity().supportFragmentManager.setFragmentResult(
                 APP_EXIT,
                 bundleOf("isSelected" to true)

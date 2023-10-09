@@ -272,6 +272,7 @@ constructor(
     fun sendUserActivityAction(action: UserActivityAction) {
         GlobalScope.launch(Main) {
             _userActivityAction.value = action
+            _userActivityAction.value = UserActivityAction.Default()
         }
     }
 
