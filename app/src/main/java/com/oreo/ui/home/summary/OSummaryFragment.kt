@@ -518,7 +518,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                     SyncEvents.ServerSyncSuccess -> {
                         binding.progressBar.root.gone()
                         viewModel.getDashboardDataFromServer(true)
-                        sendLogs()
+                        //sendLogs()
                     }
                 }
             }
@@ -1095,7 +1095,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         if (viewModel.isDeviceConnected()) {
             shouldSync()
 
-            val logsSync = viewModel.shouldSyncLogsAfter12()
+            val logsSync = viewModel.shouldSyncAutoLogs()
             if (logsSync) {
                 context?.let {
                     FeedbackSubmitService.startService(
