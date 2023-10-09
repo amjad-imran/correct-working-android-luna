@@ -23,6 +23,7 @@ sealed class UserActivityAction {
     class OnMusicEventChanged(val event: String) : UserActivityAction()
     object OpenGmailApp : UserActivityAction()
     class SetSpo2Measurement(val status:Boolean) : UserActivityAction()
+    class Default() : UserActivityAction()
 
     class SetWeatherData(val weatherDataList: List<WeatherData>) :
         UserActivityAction()
