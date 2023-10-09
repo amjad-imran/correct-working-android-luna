@@ -1052,7 +1052,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         val batteryPercentage = viewModel.watchDataStore.getBatteryPercentRing()
         binding.lytHeader.batteryStatus.progress = batteryPercentage
-        if (batteryPercentage < 20) {
+        if (batteryPercentage <= 20) {
             binding.lytHeader.oreoStatus.loadImage(
                 requireContext(),
                 R.drawable.ic_ring_low_battery
