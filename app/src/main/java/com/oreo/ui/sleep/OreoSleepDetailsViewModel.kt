@@ -303,7 +303,7 @@ constructor(
                 "$minute min"
             result.add(
                 Contributors(
-                    title = "Total sleep",
+                    title = "Sleep duration",
                     leftText = leftText,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -314,7 +314,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Total sleep",
+                    title = "Sleep duration",
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_sleep_bar_color,
