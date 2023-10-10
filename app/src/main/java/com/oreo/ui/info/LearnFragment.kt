@@ -36,6 +36,7 @@ class LearnFragment : BaseFragment<FragmentLearnBinding>(FragmentLearnBinding::i
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.include29.tvTitle.text = "Learn more"
 
         setRecycler()
     }
@@ -48,7 +49,9 @@ class LearnFragment : BaseFragment<FragmentLearnBinding>(FragmentLearnBinding::i
     }
 
     override fun initListener() {
-
+        binding.include29.backBtn.setOnClickListener {
+            navigateUpSafe()
+        }
     }
 
     override fun subscribeObservers() {
