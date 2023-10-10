@@ -761,6 +761,11 @@ interface NetworkService {
     ): BaseApiResponse<OInternalPageResponseModal>
 
     @GET
+    suspend fun getLearnData(
+        @Url url: String
+    ): BaseApiResponse<List<LearnModel>>
+
+    @GET
     suspend fun getReadinessInternalPagesData(
         @Url url: String,
         @Query("date") selectDate: String,

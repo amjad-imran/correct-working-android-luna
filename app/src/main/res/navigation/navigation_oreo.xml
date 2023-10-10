@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_oreo"
     app:startDestination="@id/navigation_oreo_home">
 
@@ -403,5 +404,9 @@
         android:id="@+id/restartBottomDialogFragment"
         android:name="com.noisefit.ui.myDevice.RestartBottomDialogFragment"
         android:label="RestartBottomDialogFragment" />
+    <fragment
+        android:id="@+id/learnFragment"
+        android:name="com.oreo.ui.info.LearnFragment"
+        android:label="fragment_learn"/>
 
 </navigation>

@@ -334,6 +334,14 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
+    override suspend fun getLearnData(): Flow<Resource<BaseApiResponse<List<LearnModel>>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${BuildConfig.OREO_BASE_URL}/protean/v1/learn-more"
+            remoteDataSource.getLearnData(url)
+        }
+    }
+
 
     override suspend fun getDashboardData(forceRefresh: Boolean): Flow<Resource<BaseApiResponse<OreoDashboardResponseModel>>> {
 
