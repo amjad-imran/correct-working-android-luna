@@ -578,6 +578,43 @@ class DeviceRepositoryImpl(
         }
     }
 
+    override suspend fun periodicFeedbackFile(appLogs: File?,
+                                                ringLogs: File?): Flow<Resource<BaseApiResponseData<Any>>> {
+        var appLog: MultipartBody.Part? = null
+        var ringLog: MultipartBody.Part? = null
+        if (appLogs != null) {
+            appLog = MultipartBody.Part.createFormData(
+                "app_logs",
+                "appLogs.txt"/*feedback.file!!.name*/,
+                appLogs.asRequestBody("text/plain".toMediaTypeOrNull())
+            )
+        }
+        if (ringLogs != null) {
+            var filename = ringLogs.name
+            if (filename.isNullOrEmpty()) {
+                filename = "ringLogs.txt"
+            }
+
+            ringLog = MultipartBody.Part.createFormData(
+                "ring_logs",
+                filename/*feedback.watchLogs!!.name*/,
+                ringLogs.asRequestBody("text/plain".toMediaTypeOrNull())
+            )
+
+        }
+
+
+        val url =
+            "${BuildConfig.BASE_URL_NEW}/logging/upload_logs"
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.periodicFeedbackFile(
+                url,
+                appLog,
+                ringLog
+            )
+        }
+    }
+
     override suspend fun submitFeedbackFile(feedback: FeedbackNew): Flow<Resource<BaseApiResponseData<String>>> {
 
         val logList = ArrayList<MultipartBody.Part>()
