@@ -414,7 +414,7 @@ constructor() : LifecycleService() {
         if (hasRequiredBluetoothPermission()) {
             checkValidateConnection()
             LOGS.d(TAG, "Inside setConnection")
-            startForceConnectionTimer(60 * 1000)
+            startForceConnectionTimer(10 * 60 * 1000)
         } else {
             stopServiceAndShowNotification()
         }
