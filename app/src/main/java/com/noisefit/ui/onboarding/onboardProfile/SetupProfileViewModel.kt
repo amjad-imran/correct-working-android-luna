@@ -47,20 +47,20 @@ val DefaultMonth = 5
 val DefaultYear = 2000
 
 const val DefaultHeightInCm = 170
-const val MinHeightInCm = 115
-const val MaxHeightInCm = 200
+const val MinHeightInCm = 100
+const val MaxHeightInCm = 220
 
 const val DefaultHeightInInches = 67
-const val MinHeightInInches = 45
-const val MaxHeightInInches = 79
+const val MinHeightInInches = 40
+const val MaxHeightInInches = 86
 
 const val DefaultWeightInKg = 65
-const val MinWeightInKg = 25
-const val MaxWeightInKg = 250
+const val MinWeightInKg = 10
+const val MaxWeightInKg = 150
 
 const val DefaultWeightInLbs = 143
-const val MinWeightInLbs = 55
-const val MaxWeightInLbs = 551
+const val MinWeightInLbs = 22
+const val MaxWeightInLbs = 330
 
 
 const val DefaultStepsGoal = 5000
