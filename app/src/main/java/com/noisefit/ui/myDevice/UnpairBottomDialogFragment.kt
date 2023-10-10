@@ -67,7 +67,11 @@ class UnpairBottomDialogFragment :
         binding.btnAllow.setOnClickListener {
 
             if (!sessionManager.isDeviceConnected()) {
-                context.showShortToast(getString(R.string.text_device_not_connected_forcefully))
+                navigateUpSafe()
+                setFragmentResult(
+                    UNPAIR_REQUEST_KEY,
+                    bundleOf("ring_not_connected" to true)
+                )
                 return@setOnClickListener
             }
 
@@ -79,7 +83,7 @@ class UnpairBottomDialogFragment :
             )
         }
 
-        binding.btnAllow.setOnLongClickListener {
+       /* binding.btnAllow.setOnLongClickListener {
             if (connectedDevice != null) {
 
                 setFragmentResult(
@@ -91,7 +95,7 @@ class UnpairBottomDialogFragment :
 
 
             true
-        }
+        }*/
         binding.btnCancel.setOnClickListener {
             navigateUpSafe()
         }

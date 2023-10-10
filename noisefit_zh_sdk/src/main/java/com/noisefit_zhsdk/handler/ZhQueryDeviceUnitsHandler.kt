@@ -177,6 +177,10 @@ constructor(
 
     }
 
+    override fun restartDevice() {
+        ControlBleTools.getInstance().restartByProduction()
+    }
+
     override fun resetTrigger() {
         ControlBleTools.getInstance().unbindDeviceWaitConfirmation(object : SendCmdStateListener() {
             override fun onState(state: SendCmdState) {

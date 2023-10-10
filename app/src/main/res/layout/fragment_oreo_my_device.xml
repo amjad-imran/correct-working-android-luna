@@ -19,8 +19,7 @@
             android:id="@+id/svMain"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/btnUnpair"
+            app:layout_constraintBottom_toTopOf="@+id/btnSoftReset"
             app:layout_constraintTop_toTopOf="parent">
 
 
@@ -127,6 +126,14 @@
         </ScrollView>
 
         <Button
+            android:id="@+id/btnSoftReset"
+            style="@style/TextButtonStyle2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_soft_reset"
+            app:layout_constraintBottom_toTopOf="@+id/btnUnpair"
+            app:layout_constraintStart_toStartOf="@+id/btnUnpair" />
+        <Button
             android:id="@+id/btnUnpair"
             style="@style/TextButtonStyle2"
             android:layout_width="wrap_content"
@@ -136,21 +143,6 @@
             android:text="@string/text_unpair_device"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
-            android:id="@+id/btnReset"
-            style="@style/TextButtonStyle2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="28dp"
-            android:text="Test tap reset"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/btnUnpair"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/btnUnpair"
-            app:layout_constraintVertical_bias="0.0"
-            tools:visibility="visible" />
 
         <include
             android:id="@+id/progressBar"

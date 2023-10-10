@@ -388,5 +388,20 @@
             android:name="videoUrl"
             app:argType="string" />
     </fragment>
+    <dialog
+        android:id="@+id/unpairDeviceNotConnectedFragment"
+        android:name="com.noisefit.ui.myDevice.UnpairDeviceNotConnectedFragment"
+        android:label="UnpairDeviceNotConnectedFragment" >
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="message"
+            app:argType="string" />
+    </dialog>
+    <dialog
+        android:id="@+id/restartBottomDialogFragment"
+        android:name="com.noisefit.ui.myDevice.RestartBottomDialogFragment"
+        android:label="RestartBottomDialogFragment" />
 
 </navigation>

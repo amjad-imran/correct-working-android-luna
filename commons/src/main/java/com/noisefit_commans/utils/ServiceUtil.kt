@@ -18,6 +18,9 @@ object ServiceUtil {
             QueryAction.ResetTrigger -> {
                 queryAction.resetTrigger()
             }
+            QueryAction.RestartDevice -> {
+                queryAction.restartDevice()
+            }
             QueryAction.GetContactList -> {
                 queryAction.getContactList()
             }

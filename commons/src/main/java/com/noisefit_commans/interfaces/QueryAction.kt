@@ -8,6 +8,7 @@ sealed class QueryAction {
     class QueryFirmwareUpgrade() : QueryAction()
     class QueryFirmwareUpgradeNew(colorFitDevice: ColorFitDevice) : QueryAction()
     object QueryBatteryPower : QueryAction()
+    object RestartDevice : QueryAction()
     object ResetTrigger : QueryAction()
     object GetUserInfo : QueryAction()
     object GetAlarms : QueryAction()
