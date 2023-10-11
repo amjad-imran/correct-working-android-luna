@@ -21,11 +21,18 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.IOException
+import java.nio.channels.FileChannel
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class FeedbackSubmitService @Inject
@@ -114,14 +121,29 @@ constructor() : LifecycleService() {
     ) {
 
         scope.launch {
+
+            val tempAppLogFile = async(Dispatchers.IO) { createTempAppLogFile("tempAppLogs", appLogFile) }
+            val tempRingLogFile = async { createTempAppLogFile("tempRingLogs", watchLogFile) }
+
+
             deviceRepository.periodicFeedbackFile(
-                appLogFile, watchLogFile
+                tempAppLogFile.await(), tempRingLogFile.await()
             ).collect { resource ->
 
 
                 when (resource) {
                     is Resource.Success -> {
                         resource.data?.let {
+
+                            val appFile = tempAppLogFile.await()
+                            val ringFile = tempRingLogFile.await()
+                            if(appFile?.exists()==true){
+                                appFile.delete()
+                            }
+
+                            if(ringFile?.exists()==true){
+                                ringFile.delete()
+                            }
 
 
                             ringDataStore.saveAutoLogsTimeStamp()
@@ -140,6 +162,40 @@ constructor() : LifecycleService() {
                 }
 
             }
+        }
+    }
+
+    private suspend fun createTempAppLogFile(fileName: String, originalFile: File?): File? {
+        if (originalFile == null) {
+            return null
+        }
+        if (!originalFile.exists()) {
+            return null
+        }
+
+        val file = File.createTempFile(fileName, ".txt", cacheDir);
+        try {
+            var sourceChannel: FileChannel? = null
+            var destChannel: FileChannel? = null
+
+            try {
+                sourceChannel = withContext(Dispatchers.IO) {
+                    FileInputStream(originalFile).channel
+                }
+                destChannel = withContext(Dispatchers.IO) {
+                    FileOutputStream(file).channel
+                }
+                withContext(Dispatchers.IO) {
+                    sourceChannel.transferTo(0, sourceChannel.size(), destChannel)
+                }
+            } finally {
+                sourceChannel?.close()
+                destChannel?.close()
+            }
+            return file
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return null
         }
     }
 
