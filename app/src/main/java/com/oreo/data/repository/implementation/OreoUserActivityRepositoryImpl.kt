@@ -335,10 +335,129 @@ class OreoUserActivityRepositoryImpl(
     }
 
     override suspend fun getLearnData(): Flow<Resource<BaseApiResponse<List<LearnModel>>>> {
-        return safeApiCallFlow(dispatcher) {
-            val url =
-                "${BuildConfig.OREO_BASE_URL}/protean/v1/learn-more"
-            remoteDataSource.getLearnData(url)
+
+        return flow {
+            val type = KeyValueDataType.LEARN
+            var resultData = ArrayList<LearnModel>()
+
+
+            val cacheResult = safeCacheCall(Dispatchers.IO) {
+
+                val localData =
+                    keyValueDataSource.getData("", type)
+                        ?: return@safeCacheCall null
+
+                val lastCallTime = localData.getSafeLastSyncValue()
+
+                val shouldCallApi =
+                    lastCallTime.checkDayDifferenceMoreOne()
+                LOGS.d("FORCE_REFRESH should call api $shouldCallApi")
+
+
+                if (shouldCallApi) {
+                    keyValueDataSource.removeDataByKey("", KeyValueDataType.LEARN)
+                    return@safeCacheCall null
+                } else {
+
+                    if (localData.value == null) {
+                        return@safeCacheCall null
+                    }
+
+                    return@safeCacheCall localData.value?.let {
+                        Gson().fromJson<List<LearnModel>>(
+                            it
+                        )
+                    }
+                }
+            }
+
+            cacheResult.collect { resource ->
+                when (resource) {
+                    is CacheResult.Success -> {
+
+                        resource.value?.let {
+                            resultData.clear()
+                            resultData.addAll(it)
+                        }
+                    }
+
+                    is CacheResult.GenericError -> {
+
+                    }
+                }
+            }
+
+            if (resultData.isNotEmpty()) {
+                emit(
+                    Resource.Success(
+                        BaseApiResponse(
+                            data = resultData,
+                            message = "",
+                        )
+                    )
+                )
+                return@flow
+            }
+
+
+            val serverResult = safeApiCallFlow(dispatcher) {
+                val url =
+                    "${BuildConfig.OREO_BASE_URL}/protean/v1/learn-more"
+                remoteDataSource.getLearnData(url)
+            }
+
+            serverResult.collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        emit(Resource.GenericError(resource.message, resource.errorCode))
+                    }
+
+                    is Resource.Loading -> {
+                        emit(Resource.Loading(resource.loading))
+                    }
+
+                    is Resource.NetworkError -> {
+                        emit(Resource.NetworkError(resource.response, resource.code))
+                    }
+
+                    is Resource.Success -> {
+
+                        resource.data?.data?.let { response ->
+                            resultData.clear()
+                            resultData.addAll(response)
+                        }
+                    }
+                }
+            }
+
+            if (resultData.isNotEmpty()) {
+                safeCacheCall(Dispatchers.IO) {
+                    keyValueDataSource.insertData(
+                        KeyValue(
+                            key = "",
+                            value = gson.toJson(resultData),
+                            type = KeyValueDataType.LEARN.name
+                        )
+                    )
+                }.collect { resource ->
+                    when (resource) {
+                        is CacheResult.Success -> {
+                            emit(
+                                Resource.Success(
+                                    BaseApiResponse(
+                                        data = resultData,
+                                        message = "",
+                                    )
+                                )
+                            )
+                        }
+
+                        is CacheResult.GenericError -> {
+                            emit(Resource.GenericError(message = "Something went wrong", 0))
+                        }
+                    }
+                }
+            }
         }
     }
 
