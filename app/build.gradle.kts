@@ -271,6 +271,9 @@ dependencies {
     implementation("com.intuit.sdp:sdp-android:1.1.0")
     implementation("androidx.test:core-ktx:1.4.0")
 
+    implementation("com.google.android.gms:play-services-fitness:21.1.0")
+
+
     kapt(Hilt.compiler)
     kapt(Hilt.hiltCompiler)
 
