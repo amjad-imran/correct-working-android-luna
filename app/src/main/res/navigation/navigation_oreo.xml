@@ -408,5 +408,9 @@
         android:id="@+id/learnFragment"
         android:name="com.oreo.ui.info.LearnFragment"
         android:label="fragment_learn"/>
+    <fragment
+        android:id="@+id/ringBatteryChargeFragment"
+        android:name="com.oreo.ui.info.RingBatteryChargeFragment"
+        android:label="RingBatteryChargeFragment" />
 
 </navigation>

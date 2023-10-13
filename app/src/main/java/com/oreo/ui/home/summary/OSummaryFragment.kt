@@ -16,13 +16,11 @@ import com.noisefit.luna.databinding.FragmentSummaryOBinding
 import com.noisefit.oreo.BottomNavOption
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.receiver.service.FeedbackSubmitService
-import com.noisefit.receiver.service.ProblemType
 import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.data.enums.DashInfoCard
-import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseFragment
@@ -75,6 +73,10 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     }
 
     override fun initListener() {
+        binding.contentMain.lytChargeRing.root.setOnClickListener {
+            navigate(R.id.ringBatteryChargeFragment)
+            viewModel.setRingBatteryInfoState()
+        }
 
         binding.contentMain.lytPairDevice.btnPairDevice.setOnClickListener {
             startActivity(PairDeviceActivity.getStartIntent(requireContext(), true))
@@ -306,7 +308,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
     override fun subscribeObservers() {
 
-        viewModel.hrInfo.observe(this){
+        viewModel.hrInfo.observe(this) {
             it.getContent()?.let {
                 navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
                     this.putString("infoData", it)
@@ -314,7 +316,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             }
         }
 
-        viewModel.activityScoreInfo.observe(this){
+        viewModel.activityScoreInfo.observe(this) {
             it.getContent()?.let {
                 mSharedViewModel.selectedTab = 0
                 mSharedViewModel.itemType = ClickViewType.ACTIVITY.name
@@ -327,7 +329,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             }
         }
 
-        viewModel.readinessScoreInfo.observe(this){
+        viewModel.readinessScoreInfo.observe(this) {
             it.getContent()?.let {
                 mSharedViewModel.selectedTab = 0
                 mSharedViewModel.itemType = ClickViewType.READINESS.name
@@ -339,7 +341,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 })
             }
         }
-        viewModel.sleepScoreInfo.observe(this){
+        viewModel.sleepScoreInfo.observe(this) {
             it.getContent()?.let {
                 mSharedViewModel.selectedTab = 0
                 mSharedViewModel.itemType = ClickViewType.SLEEP.name
@@ -385,6 +387,18 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 } else {
                     this.root.gone()
                 }
+            }
+        }
+
+        viewModel.stateDashRingBattery.observe(this) {
+            if (it.first) {
+                binding.contentMain.lytChargeRing.root.visible()
+                binding.contentMain.lytChargeRing.imageView3.loadImage(
+                    requireContext(),
+                    it.second?.ringInfo?.image2
+                )
+            } else {
+                binding.contentMain.lytChargeRing.root.gone()
             }
         }
 
@@ -621,7 +635,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
     private fun sendLogs() {
         val shouldSendLogs = viewModel.shouldSendLogs()
-        if(shouldSendLogs){
+        if (shouldSendLogs) {
             context?.let {
                 FeedbackSubmitService.startService(
                     it,
@@ -1058,8 +1072,11 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 R.drawable.ic_ring_low_battery
             )
             binding.lytHeader.batteryStatus.setIndicatorColor(resources.getColor(R.color.color_error))
-        }
-        else {
+
+
+            viewModel.handleBatteryAlert(noiseFitDevice)
+
+        } else {
             binding.lytHeader.oreoStatus.setBackgroundResource(R.drawable.back_modal_new_round)
             binding.lytHeader.batteryStatus.setIndicatorColor(resources.getColor(R.color.white))
         }
@@ -1100,7 +1117,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             shouldSync()
 
             val logsSync = viewModel.shouldSyncLogsAfter12()
-            if(logsSync){
+            if (logsSync) {
                 context?.let {
                     FeedbackSubmitService.startService(
                         it,

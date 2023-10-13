@@ -93,6 +93,7 @@ class AuthenticationRepositoryImpl(
             localDataSource.setUserDataSynced(false)
             localDataSource.deleteUserInfo()
             localDataSource.clearDashCardClickState()
+            localDataSource.clearUserLogoutData()
             localDataSource.deleteUserToken()
             localDataSource.deleteFcmToken()
             localDataSource.setUserLocationMapped(false)

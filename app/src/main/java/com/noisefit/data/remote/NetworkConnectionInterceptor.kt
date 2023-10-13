@@ -74,6 +74,7 @@ class NetworkConnectionInterceptor(
         localDataStore.setVerifyMobileNumberStatus(false)
         localDataStore.setUserDataSynced(false)
         localDataStore.deleteUserInfo()
+        localDataStore.clearUserLogoutData()
         localDataStore.clearDashCardClickState()
         localDataStore.deleteUserToken()
         localDataStore.deleteFcmToken()

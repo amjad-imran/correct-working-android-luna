@@ -1,14 +1,10 @@
 package com.oreo.ui.home.summary
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.noisefit.data.local.db.CacheResult
-import com.noisefit.data.local.db.fromJson
 import com.noisefit.data.remote.base.Resource
-import com.noisefit.receiver.service.FeedbackSubmitService
-import com.noisefit.receiver.service.ProblemType
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -67,6 +63,8 @@ constructor(
     val stateHeartRateCard = MutableLiveData<OHealthOverview.HeartRate?>()
     val statePairDeviceCard = MutableLiveData<Boolean>()
     val stateDashAlerts = MutableLiveData<HashMap<AlertType, DashAlert>>()
+    val stateDashRingBattery = MutableLiveData<Pair<Boolean, ColorFitDevice?>>()
+
     val stateSleepAvgCard =
         MutableLiveData<Pair<ODashboardSleepScoreModel?, ODashboardActivityScoreModel?>>()
     val stateReadinessAvgCard = MutableLiveData<ODashboardReadinessScoreModel?>()
@@ -238,7 +236,7 @@ constructor(
 
             LOGS.w("RESPONSE___ ${Gson().toJson(data)}")
 
-            handleInfoCards(data,userActivities,viewedCardsData)
+            handleInfoCards(data, userActivities, viewedCardsData)
 
 
             when (getDaySlot()) {
@@ -860,11 +858,11 @@ constructor(
      */
     fun getContributorInfo(callerName: String) {
         if (contributorInfo != null) {
-            when(callerName){
-                "hr"->hrInfo.postValue(Event(contributorInfo!!.hr_graph))
-                "sleep"->sleepScoreInfo.postValue(Event(contributorInfo!!.sleep_score))
-                "activity"->activityScoreInfo.postValue(Event(contributorInfo!!.activity_score))
-                "readiness"->readinessScoreInfo.postValue(Event(contributorInfo!!.readiness_score))
+            when (callerName) {
+                "hr" -> hrInfo.postValue(Event(contributorInfo!!.hr_graph))
+                "sleep" -> sleepScoreInfo.postValue(Event(contributorInfo!!.sleep_score))
+                "activity" -> activityScoreInfo.postValue(Event(contributorInfo!!.activity_score))
+                "readiness" -> readinessScoreInfo.postValue(Event(contributorInfo!!.readiness_score))
             }
             return
         }
@@ -901,11 +899,11 @@ constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             contributorInfo = it
-                            when(callerName){
-                                "hr"->hrInfo.postValue(Event(contributorInfo!!.hr_graph))
-                                "sleep"->sleepScoreInfo.postValue(Event(contributorInfo!!.sleep_score))
-                                "activity"->activityScoreInfo.postValue(Event(contributorInfo!!.activity_score))
-                                "readiness"->readinessScoreInfo.postValue(Event(contributorInfo!!.readiness_score))
+                            when (callerName) {
+                                "hr" -> hrInfo.postValue(Event(contributorInfo!!.hr_graph))
+                                "sleep" -> sleepScoreInfo.postValue(Event(contributorInfo!!.sleep_score))
+                                "activity" -> activityScoreInfo.postValue(Event(contributorInfo!!.activity_score))
+                                "readiness" -> readinessScoreInfo.postValue(Event(contributorInfo!!.readiness_score))
                             }
                         }
                     }
@@ -915,6 +913,7 @@ constructor(
 
 
     }
+
     fun shouldSendLogs(): Boolean {
         val lastTimeStamp = ringDataStore.getAutoLogsTimeStamp()
         if (lastTimeStamp == 0L) {
@@ -925,13 +924,31 @@ constructor(
 
     fun shouldSyncLogsAfter12(): Boolean {
         val dayDifferenceGreaterThan1 = shouldSendLogs()
-        if(!dayDifferenceGreaterThan1) return false
+        if (!dayDifferenceGreaterThan1) return false
 
         val currentTime = LocalTime.now()
         val targetTime = LocalTime.of(12, 0)
 
         return currentTime.isAfter(targetTime)
 
+    }
+
+    fun handleBatteryAlert(noiseFitDevice: ColorFitDevice) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val isAlertShown = localDataStore.getIsBatteryAlertShown()
+            if (!isAlertShown) {
+                stateDashRingBattery.postValue(Pair(true, noiseFitDevice))
+            } else {
+                stateDashRingBattery.postValue(Pair(false, null))
+            }
+        }
+    }
+
+    fun setRingBatteryInfoState() {
+        stateDashRingBattery.postValue(Pair(false, null))
+        viewModelScope.launch(Dispatchers.IO) {
+            localDataStore.setBatteryAlertShown()
+        }
     }
 
 }

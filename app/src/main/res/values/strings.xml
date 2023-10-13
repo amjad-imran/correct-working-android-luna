@@ -966,4 +966,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="text_soft_reset">Soft reset</string>
+    <string name="text_charge_your_ring">Charge your ring</string>
+    <string name="text_ring_charge_below_20">Battery below 20%. Charge it before bedtime for uninterrupted insights.</string>
+    <string name="charge_point1">To place the ring on the dock charger, align the white marker on the ring with the small bump on the dock charger.</string>
+    <string name="charge_point2">Once the ring is placed correctly, the charging will begin which is indicated by the breathing white light on the Noise symbol.</string>
+    <string name="charge_point3">Once the ring is completely charged the breathing light will turn to a solid white state.</string>
 </resources>
