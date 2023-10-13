@@ -27,7 +27,6 @@ class DetectWorkoutFragment :
     private val oreoAutoSportData = ArrayList<OreoAutoSportData>()
 
 
-
     private val detectWorkoutAdapter: DetectWorkoutAdapter by lazy {
         DetectWorkoutAdapter(object : DetectWorkoutListener {
             override fun onIdentifyWorkout(data: OreoAutoSportData, position: Int) {
@@ -47,9 +46,8 @@ class DetectWorkoutFragment :
                     val updated = bundle.getBoolean("allow")
 
                     if (updated) {
-                        viewModel.deleteAutoSport(data.id)
-                        detectWorkoutAdapter.removeItem(position)
-                        detectWorkoutFragmentListener?.onDismissWorkout(data, viewModel.dayKey)
+                        viewModel.deleteAutoSport(data.id,position)
+
                     }
                 }
 
@@ -79,6 +77,13 @@ class DetectWorkoutFragment :
     }
 
     override fun subscribeObservers() {
+
+        viewModel.workoutDeleted.observe(this) {
+            it.getContent()?.let {data->
+                detectWorkoutAdapter.removeItem(data.second)
+                detectWorkoutFragmentListener?.onDismissWorkout(data.first, viewModel.dayKey)
+            }
+        }
 
         viewModel.dayTimeMovementList.observe(this) {
             it?.let {
@@ -185,5 +190,5 @@ class DetectWorkoutFragment :
 
 interface DetectWorkoutFragmentListener {
     fun onIdentifyWorkout(data: OreoAutoSportData, key: String, movementList: List<Int>?)
-    fun onDismissWorkout(data: OreoAutoSportData, key: String)
+    fun onDismissWorkout(id: Int, key: String)
 }

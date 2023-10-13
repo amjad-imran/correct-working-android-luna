@@ -12,6 +12,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOWorkoutDetailsBinding
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.*
+import com.noisefit_commans.ui.custom.WorkoutIntensityGraphOreo
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.GraphDummyModel
@@ -20,6 +21,7 @@ import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.model.SleepChartModel
 import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
 
 const val DELETE_WORKOUT_REQUEST_KEY = "DELETE_WORKOUT_REQUEST_KEY"
 
@@ -143,9 +145,7 @@ class OWorkoutDetailsFragment :
             if (!it.hrArray.isNullOrEmpty()) {
                 binding.lytHeartRate.lineChart.visible()
                 val baseDataList = UtilClass.graphTwoHourBaseInterval(
-                    it.startTime.clearAmPm(),
-                    it.endTime,
-                    it.hrArray.size
+                    it.startTime.clearAmPm(), it.endTime, it.hrArray.size
                 )
 
 
@@ -173,11 +173,10 @@ class OWorkoutDetailsFragment :
                     Color.parseColor("#00ff3358")
                 )
 
-                binding.lytHeartRate.lineChart.updateDataWithMax(sleepChart, 5, false,
-                    true,  GraphDummyModel(
-                        false,40,100
-                    ),
-                    it.hrAvg
+                binding.lytHeartRate.lineChart.updateDataWithMax(
+                    sleepChart, 5, false, true, GraphDummyModel(
+                        false, 40, 100
+                    ), it.hrAvg
                 )
             }
         }
@@ -189,22 +188,156 @@ class OWorkoutDetailsFragment :
         binding.rvActivityDetails.visible()
         binding.lytActivityItem.root.visible()
         binding.lytActivityItem.tvActivityDate.text = DateFormats.formatActivityDate(it.date)
-        binding.lytActivityItem.tvTime.text = DateFormats.getActivityDisplayDates(it.startTime,it.endTime)
+        binding.lytActivityItem.tvTime.text =
+            DateFormats.getActivityDisplayDates(it.startTime, it.endTime)
 
         binding.lytActivityItem.ivWorkoutImage.loadImage(
-            requireContext(),
-            it.iconUrl
+            requireContext(), it.iconUrl
         )
         prepareDataForActivity(it)
+
+
+        setMovementGraph(
+            it.movement, DateFormats.convert24HourTo12(
+                it.startTime, SimpleDateFormat("HH:mm:ss", DateFormats.defaultLocale)
+            ), DateFormats.convert24HourTo12(
+                it.endTime, SimpleDateFormat(
+                    "HH:mm:ss", DateFormats.defaultLocale
+                )
+            )
+        )
+
+       /* setMovementGraph(
+            arrayListOf(0, 1, 2, 3, 2, 2, 1, 2), "12:03 pm","12:06 pm"
+        )*/
     }
+
+    private fun setMovementGraph(movementList: List<Int>?, startTime: String, endTime: String) {
+        if (movementList == null) return
+
+        binding.lytIntensity.root.visible()
+
+        val sleepDayGraphView = WorkoutIntensityGraphOreo(requireContext())
+        binding.lytIntensity.graphView.removeAllViews()
+        binding.lytIntensity.graphView.addView(sleepDayGraphView)
+
+        sleepDayGraphView.init(false)
+
+
+        sleepDayGraphView.setData(
+            movementList,
+            mViewModel.getXAxisList(movementList, startTime, endTime)
+        )
+
+        sleepDayGraphView.invalidate()
+
+
+        /*   binding.lytIntensity.root.visible()
+         *//*  val topIndexList =
+            UtilClass.getDetectedWorkoutMovement(viewModel.preFilledOreoAutoSportData!!)*//*
+        val baseHrList = UtilClass.graphBaseInterval(startTime, endTime, movementList.size)
+
+        //LOGS.d("setMovementGraph ${Gson().toJson(topIndexList)}")
+        val candleChartModelList: MutableList<CandleChartModel> =
+            java.util.ArrayList<CandleChartModel>()
+        movementList.forEachIndexed { index, data ->
+
+            val chartModel = CandleChartModel()
+
+            chartModel.bottomLineText = baseHrList[index]
+            //chartModel.identifyText = topIndexList[index].toString()
+            when (data) {
+                1 -> {
+
+                    chartModel.length =
+                        (binding.lytIntensity.candleChart.max * 0.4).toInt()
+
+                    chartModel.type = CandleChartModel.Type.LOW
+                    chartModel.color = if (chartModel.identifyText == "null") {
+                        Color.parseColor("#3d3d3d")
+                    } else if (chartModel.identifyText != "ignore") {
+                        chartModel.length =
+                            (binding.lytIntensity.candleChart.max * 1.2).toInt()
+                        Color.parseColor("#ffffff")
+
+                    } else {
+                        Color.parseColor("#4cffd230")
+                    }
+                }
+
+                2 -> {
+
+                    chartModel.length =
+                        (binding.lytIntensity.candleChart.max * 0.6).toInt()
+
+
+                    chartModel.color = if (chartModel.identifyText == "null") {
+                        Color.parseColor("#3d3d3d")
+                    } else if (chartModel.identifyText != "ignore") {
+                        chartModel.length =
+                            (binding.lytIntensity.candleChart.max * 1.2).toInt()
+                        Color.parseColor("#ffffff")
+
+                    } else {
+                        Color.parseColor("#ffd230")
+                    }
+                    chartModel.type = CandleChartModel.Type.MEDIUM
+                }
+
+                3, 4 -> {
+
+                    chartModel.length =
+                        (binding.lytIntensity.candleChart.max * 0.8).toInt()
+
+                    chartModel.color = if (chartModel.identifyText == "null") {
+                        Color.parseColor("#3d3d3d")
+                    } else if (chartModel.identifyText != "ignore") {
+                        chartModel.length =
+                            (binding.lytIntensity.candleChart.max * 1.2).toInt()
+                        Color.parseColor("#ffffff")
+
+                    } else {
+                        Color.parseColor("#ffffff")
+                    }
+
+
+                    chartModel.type = CandleChartModel.Type.HIGH
+                }
+
+                else -> {
+                    chartModel.length =
+                        (binding.lytIntensity.candleChart.max * 0.2).toInt()
+
+                    chartModel.color = if (chartModel.identifyText == "null") {
+
+                        Color.parseColor("#3d3d3d")
+
+                    } else if (chartModel.identifyText != "ignore") {
+                        chartModel.length =
+                            (binding.lytIntensity.candleChart.max * 1.2).toInt()
+                        Color.parseColor("#ffffff")
+
+                    } else {
+                        Color.parseColor("#4c4c4c")
+                    }
+
+                    chartModel.type = CandleChartModel.Type.INACTIVE
+
+                }
+            }
+            chartModel.value = data
+            candleChartModelList.add(chartModel)
+        }
+        binding.lytIntensity.candleChart.updateData(candleChartModelList)*/
+
+    }
+
 
     private fun prepareDataForActivity(it: OWorkoutDetailsResponseModel) {
         val activityList = ArrayList<OWDActivityData>()
         activityList.add(
             OWDActivityData(
-                "Duration",
-                ApplicationUtils.getActivityDurationFormat2(it.duration),
-                ""
+                "Duration", ApplicationUtils.getActivityDurationFormat2(it.duration), ""
             )
         )
         if (it.calories != null && it.calories > 0) {

@@ -8,6 +8,7 @@ import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.ui.getParseList
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.Event
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +31,7 @@ constructor(
 
     private val _dayTimeMovementList = MutableLiveData<List<Int>>()
     val dayTimeMovementList: LiveData<List<Int>> = _dayTimeMovementList
+    val workoutDeleted = MutableLiveData<Event<Pair<Int,Int>>>()
 
 
     fun getNotAcceptingData() {
@@ -97,13 +99,13 @@ constructor(
         }
     }
 
-    fun deleteAutoSport(id: Int) {
+
+    fun deleteAutoSport(id: Int,position:Int) {
         viewModelScope.launch(Dispatchers.IO) {
             syncRepository.deleteAutoWorkoutData(id).collect { resource ->
                 when (resource) {
                     is CacheResult.Success -> {
-
-
+                        workoutDeleted.postValue(Event(Pair(id,position)))
                     }
 
                     is CacheResult.GenericError -> {

@@ -1094,6 +1094,13 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
     override fun onResume() {
         super.onResume()
+
+        /*navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
+            putString("workoutId", "b7f56ac0-a463-47dc-838f-85dae7fa07d2")
+            putInt("position", 0)
+            putString("workoutName", "Test")
+        })*/
+
         viewModel.initData()
 
         if (viewModel.isDeviceConnected()) {

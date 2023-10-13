@@ -20,17 +20,16 @@ class DetectWorkoutListFragment :
     private val viewModel: DetectWorkoutViewModel by viewModels()
 
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (viewModel.oreoAutoSportData.value?.second.isNullOrEmpty()) {
-            viewModel.getNotAcceptingData()
-        }
 
     }
 
-
+    override fun onResume() {
+        super.onResume()
+        viewModel.getNotAcceptingData()
+    }
 
 
     override fun initListener() {
@@ -56,19 +55,27 @@ class DetectWorkoutListFragment :
                         key: String,
                         movementList: List<Int>?
                     ) {
-                        navigate(DetectWorkoutListFragmentDirections.actionDetectWorkoutListFragmentToAddWorkoutFragment().setMovementList(movementList?.toIntArray()).setAutoSport(data))
+                        navigate(
+                            DetectWorkoutListFragmentDirections.actionDetectWorkoutListFragmentToAddWorkoutFragment()
+                                .setMovementList(movementList?.toIntArray()).setAutoSport(data)
+                        )
 
                     }
 
-                    override fun onDismissWorkout(data: OreoAutoSportData, key: String) {
+                    override fun onDismissWorkout(id: Int, key: String) {
 
                         val remainingDataList = pairData.second[key]
-                        val index = remainingDataList?.indexOfFirst { it.id == data.id }
+                        val index = remainingDataList?.indexOfFirst { it.id == id }
                         val titleIndex = pairData.first.indexOfFirst { it == key }
                         if (index != null && index != -1) {
                             remainingDataList.removeAt(index)
                         }
                         pairData.second[key] = remainingDataList!!
+
+                        if (remainingDataList.isEmpty()) {
+                            viewModel.getNotAcceptingData()
+                        }
+
 
 //                        if (remainingDataList.isEmpty()) {
 //                            pairData.first.removeAt(titleIndex)
@@ -90,7 +97,7 @@ class DetectWorkoutListFragment :
         binding.vpFriends.isUserInputEnabled = true
         binding.vpFriends.offscreenPageLimit = 1
         binding.vpFriends.adapter = pagerAdapter
-        binding.vpFriends.setCurrentItem(pairData.first.size,false)
+        binding.vpFriends.setCurrentItem(pairData.first.size, false)
         TabLayoutMediator(binding.tabLayout, binding.vpFriends) { tab, position ->
             tab.text = pairData.first[position]
         }.attach()
@@ -100,7 +107,12 @@ class DetectWorkoutListFragment :
     override fun subscribeObservers() {
 
         viewModel.oreoAutoSportData.observe(this) {
+
             it?.let {
+                if (it.first.isEmpty()) {
+                    navigateUpSafe()
+                    return@observe
+                }
                 setViewPager(it)
             }
         }

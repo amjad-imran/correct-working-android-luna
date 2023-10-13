@@ -532,7 +532,8 @@ constructor(
         return color
     }
 
-    fun getHourlySleepBreakup(sleepBreakup: List<SleepHourlyBreakup>?): Pair<ArrayList<SleepData.SleepDataBreakup>, CountCardData> {
+    fun getHourlySleepBreakup(sleepBreakup: List<SleepHourlyBreakup>?):
+            Pair<ArrayList<SleepData.SleepDataBreakup>, CountCardData> {
         val countCData = CountCardData(
             type = "Sleep",
             imageSourceId = 0,

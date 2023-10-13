@@ -48,10 +48,9 @@
             android:id="@+id/constraintLayout3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_8dp"
-            app:layout_constraintEnd_toStartOf="@+id/constraintLayout4"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/include29"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/ivWorkout"
             app:layout_constraintStart_toStartOf="@+id/tvTitle"
             app:layout_constraintTop_toBottomOf="@+id/tvTitle">
 
@@ -60,32 +59,33 @@
                 style="@style/Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <include
-                layout="@layout/layout_line_separator"
-                android:layout_width="1dp"
-                android:layout_height="0dp"
-                android:layout_marginEnd="@dimen/dimen_12dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="12:16 am" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <include
+            android:id="@+id/include29"
+            layout="@layout/layout_line_separator"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/constraintLayout3"
+            app:layout_constraintEnd_toStartOf="@+id/constraintLayout4"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/constraintLayout3"
+            app:layout_constraintTop_toTopOf="@+id/constraintLayout3" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_8dp"
-            app:layout_constraintEnd_toStartOf="@+id/constraintLayout6"
+            app:layout_constraintEnd_toStartOf="@+id/include31"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/constraintLayout3"
-            app:layout_constraintTop_toBottomOf="@+id/tvTitle">
+            app:layout_constraintStart_toEndOf="@+id/include29"
+            app:layout_constraintTop_toTopOf="@+id/constraintLayout3">
 
 
             <ImageView
@@ -103,32 +103,35 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dimen_4dp"
-
                 app:layout_constraintBottom_toBottomOf="parent"
-
                 app:layout_constraintStart_toEndOf="@+id/img1"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="30 mins" />
 
-            <include
-                layout="@layout/layout_line_separator"
-                android:layout_width="1dp"
-                android:layout_height="0dp"
-                android:layout_marginEnd="@dimen/dimen_12dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <include
+            android:id="@+id/include31"
+            layout="@layout/layout_line_separator"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/constraintLayout4"
+            app:layout_constraintEnd_toStartOf="@+id/constraintLayout6"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/constraintLayout4"
+            app:layout_constraintTop_toTopOf="@+id/constraintLayout4" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout6"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_8dp"
-            app:layout_constraintEnd_toEndOf="@+id/tvTitle"
-            app:layout_constraintEnd_toStartOf="@+id/btnCancel"
+            android:layout_marginEnd="26dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/constraintLayout4"
-            app:layout_constraintTop_toBottomOf="@+id/tvTitle">
+            app:layout_constraintStart_toEndOf="@+id/include31"
+            app:layout_constraintTop_toTopOf="@+id/constraintLayout3">
 
 
             <ImageView
@@ -149,7 +152,8 @@
                 android:layout_marginStart="@dimen/dimen_4dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/img2"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="500 kcal" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button

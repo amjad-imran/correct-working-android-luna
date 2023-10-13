@@ -109,8 +109,6 @@ constructor(
                     this.addProperty("type", "manual")
                 }
 
-
-
                 this.addProperty("start_time", addWorkout.startTimeIn24H)
                 this.addProperty("steps", addWorkout.steps)
                 this.addProperty("end_time", addWorkout.endTimeIn24H)

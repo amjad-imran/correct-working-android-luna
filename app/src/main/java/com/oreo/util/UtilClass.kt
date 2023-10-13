@@ -535,7 +535,7 @@ object UtilClass {
     }
 
 
-    private fun getNearest4Number(number: Int): Int {
+     fun getNearest4Number(number: Int): Int {
         when (number) {
             in 0..3 -> {
                 return 4

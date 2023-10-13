@@ -1914,6 +1914,19 @@ object DateFormats {
             ""
         }
     }
+
+    fun convert24hourTo12(startTime: String?, endTime: String?): String {
+        if (startTime.isNullOrEmpty() || endTime.isNullOrEmpty()) return ""
+        return try {
+            val inputFormat = SimpleDateFormat("HH:mm:ss", defaultLocale)
+            val outputFormat = SimpleDateFormat("hh:mm a", defaultLocale)
+            val start = inputFormat.parse(startTime)
+            val end = inputFormat.parse(endTime)
+            "${outputFormat.format(start)} - ${outputFormat.format(end)}"
+        } catch (exp: Exception) {
+            ""
+        }
+    }
 }
 
 
