@@ -198,6 +198,7 @@ class OWorkoutDetailsFragment :
 
 
         setMovementGraph(
+            it.intensity,
             it.movement, DateFormats.convert24HourTo12(
                 it.startTime, SimpleDateFormat("HH:mm:ss", DateFormats.defaultLocale)
             ), DateFormats.convert24HourTo12(
@@ -212,10 +213,17 @@ class OWorkoutDetailsFragment :
         )*/
     }
 
-    private fun setMovementGraph(movementList: List<Int>?, startTime: String, endTime: String) {
+    private fun setMovementGraph(
+        intensity: String?,
+        movementList: List<Int>?,
+        startTime: String,
+        endTime: String
+    ) {
         if (movementList == null) return
 
+        binding.divider1.root.visible()
         binding.lytIntensity.root.visible()
+        binding.lytIntensity.tvIntensityType.text = intensity
 
         val sleepDayGraphView = WorkoutIntensityGraphOreo(requireContext())
         binding.lytIntensity.graphView.removeAllViews()
@@ -223,113 +231,12 @@ class OWorkoutDetailsFragment :
 
         sleepDayGraphView.init(false)
 
-
         sleepDayGraphView.setData(
             movementList,
             mViewModel.getXAxisList(movementList, startTime, endTime)
         )
 
         sleepDayGraphView.invalidate()
-
-
-        /*   binding.lytIntensity.root.visible()
-         *//*  val topIndexList =
-            UtilClass.getDetectedWorkoutMovement(viewModel.preFilledOreoAutoSportData!!)*//*
-        val baseHrList = UtilClass.graphBaseInterval(startTime, endTime, movementList.size)
-
-        //LOGS.d("setMovementGraph ${Gson().toJson(topIndexList)}")
-        val candleChartModelList: MutableList<CandleChartModel> =
-            java.util.ArrayList<CandleChartModel>()
-        movementList.forEachIndexed { index, data ->
-
-            val chartModel = CandleChartModel()
-
-            chartModel.bottomLineText = baseHrList[index]
-            //chartModel.identifyText = topIndexList[index].toString()
-            when (data) {
-                1 -> {
-
-                    chartModel.length =
-                        (binding.lytIntensity.candleChart.max * 0.4).toInt()
-
-                    chartModel.type = CandleChartModel.Type.LOW
-                    chartModel.color = if (chartModel.identifyText == "null") {
-                        Color.parseColor("#3d3d3d")
-                    } else if (chartModel.identifyText != "ignore") {
-                        chartModel.length =
-                            (binding.lytIntensity.candleChart.max * 1.2).toInt()
-                        Color.parseColor("#ffffff")
-
-                    } else {
-                        Color.parseColor("#4cffd230")
-                    }
-                }
-
-                2 -> {
-
-                    chartModel.length =
-                        (binding.lytIntensity.candleChart.max * 0.6).toInt()
-
-
-                    chartModel.color = if (chartModel.identifyText == "null") {
-                        Color.parseColor("#3d3d3d")
-                    } else if (chartModel.identifyText != "ignore") {
-                        chartModel.length =
-                            (binding.lytIntensity.candleChart.max * 1.2).toInt()
-                        Color.parseColor("#ffffff")
-
-                    } else {
-                        Color.parseColor("#ffd230")
-                    }
-                    chartModel.type = CandleChartModel.Type.MEDIUM
-                }
-
-                3, 4 -> {
-
-                    chartModel.length =
-                        (binding.lytIntensity.candleChart.max * 0.8).toInt()
-
-                    chartModel.color = if (chartModel.identifyText == "null") {
-                        Color.parseColor("#3d3d3d")
-                    } else if (chartModel.identifyText != "ignore") {
-                        chartModel.length =
-                            (binding.lytIntensity.candleChart.max * 1.2).toInt()
-                        Color.parseColor("#ffffff")
-
-                    } else {
-                        Color.parseColor("#ffffff")
-                    }
-
-
-                    chartModel.type = CandleChartModel.Type.HIGH
-                }
-
-                else -> {
-                    chartModel.length =
-                        (binding.lytIntensity.candleChart.max * 0.2).toInt()
-
-                    chartModel.color = if (chartModel.identifyText == "null") {
-
-                        Color.parseColor("#3d3d3d")
-
-                    } else if (chartModel.identifyText != "ignore") {
-                        chartModel.length =
-                            (binding.lytIntensity.candleChart.max * 1.2).toInt()
-                        Color.parseColor("#ffffff")
-
-                    } else {
-                        Color.parseColor("#4c4c4c")
-                    }
-
-                    chartModel.type = CandleChartModel.Type.INACTIVE
-
-                }
-            }
-            chartModel.value = data
-            candleChartModelList.add(chartModel)
-        }
-        binding.lytIntensity.candleChart.updateData(candleChartModelList)*/
-
     }
 
 

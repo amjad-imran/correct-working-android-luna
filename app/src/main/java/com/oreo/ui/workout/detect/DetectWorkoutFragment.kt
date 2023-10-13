@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentDetectWorkoutBinding
 import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.DateFormats
@@ -127,7 +129,7 @@ class DetectWorkoutFragment :
 
                     chartModel.length =
                         (binding.candleChart.max * 0.4).toInt()
-                    chartModel.color = Color.parseColor("#4cffd230")
+                    chartModel.color = Color.parseColor("#8088d6eb")
                     chartModel.type = CandleChartModel.Type.LOW
 
                 }
@@ -136,7 +138,7 @@ class DetectWorkoutFragment :
 
                     chartModel.length =
                         (binding.candleChart.max * 0.6).toInt()
-                    chartModel.color = Color.parseColor("#ffd230")
+                    chartModel.color = Color.parseColor("#88d6eb")
                     chartModel.type = CandleChartModel.Type.MEDIUM
                 }
 
@@ -152,7 +154,7 @@ class DetectWorkoutFragment :
                 else -> {
                     chartModel.length =
                         (binding.candleChart.max * 0.2).toInt()
-                    chartModel.color = Color.parseColor("#4c4c4c")
+                    chartModel.color = Color.parseColor("#3d3d3d")
                     chartModel.type = CandleChartModel.Type.INACTIVE
 
                 }

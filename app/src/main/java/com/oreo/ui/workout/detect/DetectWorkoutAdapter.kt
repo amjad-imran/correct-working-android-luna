@@ -49,7 +49,7 @@ class DetectWorkoutAdapter(val detectWorkoutListener: DetectWorkoutListener) :
                 binding.tvStart.text = time
             }
 
-            binding.tvTitle.text = resultData.type
+            binding.tvTitle.text = resultData.type?.replaceFirstChar { if (it.isLowerCase()) it.titlecase(DateFormats.defaultLocale) else it.toString() }
             binding.btnCancel.setOnClickListener {
                 detectWorkoutListener.onDismissWorkout(resultData, bindingAdapterPosition)
             }

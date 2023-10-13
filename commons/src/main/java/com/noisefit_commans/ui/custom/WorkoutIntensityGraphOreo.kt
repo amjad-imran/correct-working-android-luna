@@ -108,14 +108,6 @@ class WorkoutIntensityGraphOreo(var mContext: Context) : View(
             if (totalDuration != 0) {
                 val eachSecondsWidth = (width.toFloat() - endPadding) / (totalDuration * 2)
 
-                /*  drawMidPoints(
-                      canvas,
-                      sectionHeight,
-                      eachSecondsWidth,
-                      countCardData?.leftValue,
-                      countCardData?.rightValue
-                  )*/
-
                 var start = 0f
                 var end: Float
                 var top = 0f
@@ -125,7 +117,7 @@ class WorkoutIntensityGraphOreo(var mContext: Context) : View(
                 val sectionWidth = eachSecondsWidth * 5
 
 
-                start = sectionWidth
+                start = sectionWidth/2
                 movementList.forEachIndexed { index, value ->
 
 
@@ -239,103 +231,6 @@ class WorkoutIntensityGraphOreo(var mContext: Context) : View(
 
 
         }
-
-    }
-
-    private fun drawMidPoints(
-        canvas: Canvas,
-        sectionHeight: Float,
-        eachSecondsWidth: Float,
-        startTimeStr: String?,
-        endTimeStr: String?
-    ) {
-        if (startTimeStr == null || endTimeStr == null) return
-
-        tryCatch {
-            val startTime = DateFormats.dateTimeFormat5.parse(startTimeStr)
-            val endTime = DateFormats.dateTimeFormat5.parse(endTimeStr)
-
-
-            val duration = (endTime.time - startTime.time) / 1000
-            LOGS.d("SLEEP_TIME $duration")
-
-            if (duration > 18000) {//5 hour
-
-
-                val midTime = getCenterTime(startTime, endTime)
-                val midLeftTIme = getCenterTime(startTime, midTime)
-                val midRightTIme = getCenterTime(midTime, endTime)
-
-                val center = (width - endPadding) / 2
-
-                val textWidth1 = mTextPaint.measureText(
-                    DateFormats.time12Meridian.format(midLeftTIme).lowercase()
-                )
-                canvas.drawText(
-                    DateFormats.time12Meridian.format(midLeftTIme).lowercase(),
-                    center / 2 - textWidth1 / 2,
-                    sectionHeight * 5 - pxFromDp(context, 5.0f),
-                    mTextPaint
-                )
-
-
-                val textWidthCenter =
-                    mTextPaint.measureText(DateFormats.time12Meridian.format(midTime).lowercase())
-
-                canvas.drawText(
-                    DateFormats.time12Meridian.format(midTime).lowercase(),
-                    center - textWidthCenter / 2,
-                    sectionHeight * 5 - pxFromDp(context, 5.0f),
-                    mTextPaint
-                )
-                val textWidth2 = mTextPaint.measureText(
-                    DateFormats.time12Meridian.format(midRightTIme).lowercase()
-                )
-                canvas.drawText(
-                    DateFormats.time12Meridian.format(midRightTIme).lowercase(),
-                    center + (center / 2) - textWidth2 / 2,
-                    sectionHeight * 5 - pxFromDp(context, 5.0f),
-                    mTextPaint
-                )
-
-            } else {
-                val midTime = getCenterTime(startTime, endTime)
-                val center = (width - endPadding) / 2
-
-                val textWidthCenter =
-                    mTextPaint.measureText(DateFormats.time12Meridian.format(midTime).lowercase())
-
-                canvas.drawText(
-                    DateFormats.time12Meridian.format(midTime).lowercase(),
-                    center - textWidthCenter / 2,
-                    sectionHeight * 5 - pxFromDp(context, 5.0f),
-                    mTextPaint
-                )
-            }
-        }
-    }
-
-
-    private fun getCenterTime(
-        startTime: Date,
-        endTime: Date
-    ): Date {
-        val timeRange = endTime.time - startTime.time
-        val singleDuration = timeRange / 2
-
-        val centerTime = startTime.time + singleDuration
-        val calendar = Calendar.getInstance()
-        calendar.time = Date(centerTime)
-
-        /* val minutes = calendar.get(Calendar.MINUTE)
-         val seconds = calendar.get(Calendar.SECOND)
-
-         val totalSeconds = (minutes * 60) + seconds
-
-         calendar.set(Calendar.MINUTE, 0)
-         calendar.set(Calendar.SECOND, 0)*/
-
-        return Date(calendar.timeInMillis)
 
     }
 
@@ -486,6 +381,6 @@ class WorkoutIntensityGraphOreo(var mContext: Context) : View(
         previousRect = null
         this.isDisable = isDisable
         setPaint()
-        endPadding = pxFromDp(mContext, 48f)
+        endPadding = pxFromDp(mContext, 40f)
     }
 }
