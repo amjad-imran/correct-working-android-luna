@@ -9,8 +9,8 @@ import com.noisefit.data.remote.response.Watchface2
 import com.noisefit_commans.data.model.FeedbackNew
 import com.noisefit_commans.data.response.*
 import com.noisefit_commans.models.Contact
-import com.noisefit_commans.models.WatchFace
 import kotlinx.coroutines.flow.Flow
+import java.io.File
 
 interface DeviceRepository {
     suspend fun getDeviceList(dType: String): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<DeviceListResponse>>>
@@ -77,6 +77,11 @@ interface DeviceRepository {
     suspend fun submitFeedbackNew(
         feedback: JsonObject
     ): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<String>>>
+
+    suspend fun periodicFeedbackFile(
+        appLogs: File?,
+        ringLogs: File?,
+    ): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<Any>>>
 
 
     suspend fun submitFeedbackFile(

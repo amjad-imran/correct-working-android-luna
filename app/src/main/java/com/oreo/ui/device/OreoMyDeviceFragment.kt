@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoMyDeviceBinding
 import com.noisefit.ui.SplashActivity
+import com.noisefit.ui.myDevice.REST_REQUEST_KEY
 import com.noisefit.ui.myDevice.UNPAIR_REQUEST_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
@@ -71,8 +72,21 @@ class OreoMyDeviceFragment :
             mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_MYDEVICES_SHARE + "_RING_LOGS_CLICK")
         }
 
-        binding.btnReset.setOnClickListener {
-            mViewModel.sessionManager.sendQueryAction(QueryAction.ResetTrigger)
+        binding.btnSoftReset.setOnClickListener {
+            setFragmentResultListener(REST_REQUEST_KEY) { _, bundle ->
+                val reset = bundle.getBoolean("reset")
+                val ringNotConnected = bundle.getBoolean("ring_not_connected")
+                if (reset) {
+                    mViewModel.sessionManager.sendQueryAction(QueryAction.RestartDevice)
+                }
+                if (ringNotConnected) {
+                    navigate(R.id.unpairDeviceNotConnectedFragment,Bundle().apply {
+                        this.putString("title","Soft reset failed")
+                        this.putString("message","Ring not connected to Luna App. Please try again later.")
+                    })
+                }
+            }
+            navigate(R.id.restartBottomDialogFragment)
         }
 
 
@@ -95,12 +109,15 @@ class OreoMyDeviceFragment :
         binding.btnUnpair.setOnClickListener {
             setFragmentResultListener(UNPAIR_REQUEST_KEY) { _, bundle ->
                 val unpairDevice = bundle.getBoolean("unpair")
-                val forceUnpair = bundle.getBoolean("force_unpair")
+                val ringNotConnected = bundle.getBoolean("ring_not_connected")
                 if (unpairDevice) {
                     showUnPairDialog()
                 }
-                if (forceUnpair) {
-                    showForceUnPairDialog()
+                if (ringNotConnected) {
+                    navigate(R.id.unpairDeviceNotConnectedFragment,Bundle().apply {
+                        this.putString("title","Ring Unpair Failed")
+                        this.putString("message","Ring not connected to Luna App. Please try again.")
+                    })
                 }
             }
             mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_MYDEVICES_UNPAIR_CLICK)

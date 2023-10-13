@@ -10,6 +10,7 @@ import com.noisefit.data.remote.base.Resource
 import com.noisefit.receiver.service.FeedbackSubmitService
 import com.noisefit.receiver.service.ProblemType
 import com.noisefit.session.SessionManager
+import com.noisefit_commans.common.checkDayDifferenceMoreNMinutes
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.enums.DashInfoCard
@@ -24,6 +25,7 @@ import com.noisefit_commans.models.ManualMeasureType
 import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.ui.checkDayDifferenceMoreOne
+import com.noisefit_commans.ui.checkTimeDifferenceMoreNMinutes
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
@@ -238,7 +240,7 @@ constructor(
 
             LOGS.w("RESPONSE___ ${Gson().toJson(data)}")
 
-            handleInfoCards(data,userActivities,viewedCardsData)
+            handleInfoCards(data, userActivities, viewedCardsData)
 
 
             when (getDaySlot()) {
@@ -860,11 +862,11 @@ constructor(
      */
     fun getContributorInfo(callerName: String) {
         if (contributorInfo != null) {
-            when(callerName){
-                "hr"->hrInfo.postValue(Event(contributorInfo!!.hr_graph))
-                "sleep"->sleepScoreInfo.postValue(Event(contributorInfo!!.sleep_score))
-                "activity"->activityScoreInfo.postValue(Event(contributorInfo!!.activity_score))
-                "readiness"->readinessScoreInfo.postValue(Event(contributorInfo!!.readiness_score))
+            when (callerName) {
+                "hr" -> hrInfo.postValue(Event(contributorInfo!!.hr_graph))
+                "sleep" -> sleepScoreInfo.postValue(Event(contributorInfo!!.sleep_score))
+                "activity" -> activityScoreInfo.postValue(Event(contributorInfo!!.activity_score))
+                "readiness" -> readinessScoreInfo.postValue(Event(contributorInfo!!.readiness_score))
             }
             return
         }
@@ -901,11 +903,11 @@ constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             contributorInfo = it
-                            when(callerName){
-                                "hr"->hrInfo.postValue(Event(contributorInfo!!.hr_graph))
-                                "sleep"->sleepScoreInfo.postValue(Event(contributorInfo!!.sleep_score))
-                                "activity"->activityScoreInfo.postValue(Event(contributorInfo!!.activity_score))
-                                "readiness"->readinessScoreInfo.postValue(Event(contributorInfo!!.readiness_score))
+                            when (callerName) {
+                                "hr" -> hrInfo.postValue(Event(contributorInfo!!.hr_graph))
+                                "sleep" -> sleepScoreInfo.postValue(Event(contributorInfo!!.sleep_score))
+                                "activity" -> activityScoreInfo.postValue(Event(contributorInfo!!.activity_score))
+                                "readiness" -> readinessScoreInfo.postValue(Event(contributorInfo!!.readiness_score))
                             }
                         }
                     }
@@ -915,6 +917,7 @@ constructor(
 
 
     }
+
     fun shouldSendLogs(): Boolean {
         val lastTimeStamp = ringDataStore.getAutoLogsTimeStamp()
         if (lastTimeStamp == 0L) {
@@ -925,13 +928,22 @@ constructor(
 
     fun shouldSyncLogsAfter12(): Boolean {
         val dayDifferenceGreaterThan1 = shouldSendLogs()
-        if(!dayDifferenceGreaterThan1) return false
+        if (!dayDifferenceGreaterThan1) return false
 
         val currentTime = LocalTime.now()
         val targetTime = LocalTime.of(12, 0)
 
         return currentTime.isAfter(targetTime)
 
+    }
+
+    fun shouldSyncAutoLogs(): Boolean {
+        val lastTimeStamp = ringDataStore.getAutoLogsTimeStamp()
+        if (lastTimeStamp == 0L) {
+            ringDataStore.saveAutoLogsTimeStamp()
+            return false
+        }
+        return lastTimeStamp.checkDayDifferenceMoreNMinutes(120)
     }
 
 }

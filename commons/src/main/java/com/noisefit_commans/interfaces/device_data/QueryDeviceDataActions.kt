@@ -17,6 +17,7 @@ abstract class QueryDeviceDataActions() :
     abstract fun getSedentaryData()
 
 
+    open fun restartDevice() {}
     open fun resetTrigger() {}
     open fun getAgpsState() {}
     open fun getAppList() {}

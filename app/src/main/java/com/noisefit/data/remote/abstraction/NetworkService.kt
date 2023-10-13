@@ -120,6 +120,14 @@ interface NetworkService {
 
     @Multipart
     @POST
+    suspend fun periodicFeedbackFile(
+        @Url url: String,
+        @Part appLogs: MultipartBody.Part?,
+        @Part ringLogs: MultipartBody.Part?,
+    ): BaseApiResponseData<Any>
+
+    @Multipart
+    @POST
     suspend fun submitFeedbackFile(
         @Url url: String,
         @Part("platform") platform: RequestBody,
