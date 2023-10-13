@@ -62,6 +62,8 @@ constructor(
     private val mPrefs: SharedPreferences
 ) : WatchDataStore {
 
+
+
     override fun getLastSavedAverageHrv(): Int {
         return mPrefs.getInt(AVERAGE_LAST_DAY_HRV, 0)
     }
