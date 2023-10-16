@@ -135,6 +135,7 @@ constructor(
                             autoWorkoutId?.let {
                                 deleteAutoSport(it)
                             }
+                            sendMessage("Workout Added Successfully")
                             _addWorkoutResponse.postValue(true)
 
                         }
