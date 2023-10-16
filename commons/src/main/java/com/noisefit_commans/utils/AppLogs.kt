@@ -92,7 +92,7 @@ object AppLogs {
             val logDir: File = getFolderPath(it)
             val files = logDir.listFiles() ?: return
             for (file in files) {
-                if (file.sizeInMb > 10) {
+                if (file.sizeInMb > 2) {
                     file.delete()
                 }
             }
