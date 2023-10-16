@@ -102,6 +102,7 @@ class OWorkoutDetailsViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
+                            sendMessage("Workout Deleted")
                             _workoutDeletedResponse.postValue(Event(true))
                         }
                     }

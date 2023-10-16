@@ -188,6 +188,7 @@ private const val PAIR_DEVICE_TYPE = "PAIR_DEVICE_TYPE"
 private const val WF_RATING_KEY = "WF_RATING_KEY"
 private const val TOKEN_LAST_UPDATE = "TOKEN_LAST_UPDATE"
 private const val DASH_CARD_CLICK_STATE = "DASH_CARD_CLICK_STATE"
+private const val BATTERY_DASH_ALERT = "BATTERY_DASH_ALERT"
 
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -197,6 +198,19 @@ class DataStoredImpl
 @Inject constructor(
     private val gson: Gson, private val mPrefs: SharedPreferences
 ) : DataStoredInterface {
+
+    override fun getIsBatteryAlertShown(): Boolean {
+        return mPrefs.getBoolean(BATTERY_DASH_ALERT, false)
+    }
+
+    override fun setBatteryAlertShown() {
+        mPrefs.edit()
+            ?.putBoolean(BATTERY_DASH_ALERT, true)
+            ?.commit()
+    }
+    override fun clearUserLogoutData() {
+        mPrefs.edit()?.remove(BATTERY_DASH_ALERT)?.apply()
+    }
 
     override fun getDashCardClickState(): HashMap<DashInfoCard, Boolean> {
         val data = mPrefs.getString(DASH_CARD_CLICK_STATE, null)

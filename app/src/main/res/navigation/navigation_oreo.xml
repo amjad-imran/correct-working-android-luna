@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_oreo"
     app:startDestination="@id/navigation_oreo_home">
 
@@ -136,7 +137,12 @@
     <dialog
         android:id="@+id/unpairBottomDialogFragment"
         android:name="com.noisefit.ui.myDevice.UnpairBottomDialogFragment"
-        android:label="UnpairBottomDialogFragment" />
+        android:label="UnpairBottomDialogFragment" >
+        <argument
+            android:name="forceUnpair"
+            app:argType="boolean"
+            android:defaultValue="false" />
+    </dialog>
     <dialog
         android:id="@+id/descriptionPopUpBottomDialogFragment"
         android:name="com.oreo.ui.sleep.description.DescriptionBottomDialogFragment"
@@ -403,5 +409,17 @@
         android:id="@+id/restartBottomDialogFragment"
         android:name="com.noisefit.ui.myDevice.RestartBottomDialogFragment"
         android:label="RestartBottomDialogFragment" />
+    <fragment
+        android:id="@+id/learnFragment"
+        android:name="com.oreo.ui.info.LearnFragment"
+        android:label="fragment_learn"/>
+    <fragment
+        android:id="@+id/ringBatteryChargeFragment"
+        android:name="com.oreo.ui.info.RingBatteryChargeFragment"
+        android:label="RingBatteryChargeFragment" />
+    <fragment
+        android:id="@+id/deviceSettingsFragment"
+        android:name="com.oreo.ui.device.DeviceSettingsFragment"
+        android:label="fragment_device_settings"/>
 
 </navigation>

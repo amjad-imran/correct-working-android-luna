@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentRestartBottomDialogBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -40,7 +41,7 @@ class RestartBottomDialogFragment :
         connectedDevice =
             ringDataStore.getRingDevice()
 
-        val title = "Soft reset the ring?"
+        val title = getString(R.string.text_restart_device)
 
         val messageBuilder = ""
 

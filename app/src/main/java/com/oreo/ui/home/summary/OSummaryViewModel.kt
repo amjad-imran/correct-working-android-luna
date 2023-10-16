@@ -1,14 +1,10 @@
 package com.oreo.ui.home.summary
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.noisefit.data.local.db.CacheResult
-import com.noisefit.data.local.db.fromJson
 import com.noisefit.data.remote.base.Resource
-import com.noisefit.receiver.service.FeedbackSubmitService
-import com.noisefit.receiver.service.ProblemType
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.common.checkDayDifferenceMoreNMinutes
 import com.noisefit_commans.data.BinaryActionCallback
@@ -69,6 +65,8 @@ constructor(
     val stateHeartRateCard = MutableLiveData<OHealthOverview.HeartRate?>()
     val statePairDeviceCard = MutableLiveData<Boolean>()
     val stateDashAlerts = MutableLiveData<HashMap<AlertType, DashAlert>>()
+    val stateDashRingBattery = MutableLiveData<Pair<Boolean, ColorFitDevice?>>()
+
     val stateSleepAvgCard =
         MutableLiveData<Pair<ODashboardSleepScoreModel?, ODashboardActivityScoreModel?>>()
     val stateReadinessAvgCard = MutableLiveData<ODashboardReadinessScoreModel?>()
@@ -944,6 +942,24 @@ constructor(
             return false
         }
         return lastTimeStamp.checkDayDifferenceMoreNMinutes(120)
+    }
+
+    fun handleBatteryAlert(noiseFitDevice: ColorFitDevice) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val isAlertShown = localDataStore.getIsBatteryAlertShown()
+            if (!isAlertShown) {
+                stateDashRingBattery.postValue(Pair(true, noiseFitDevice))
+            } else {
+                stateDashRingBattery.postValue(Pair(false, null))
+            }
+        }
+    }
+
+    fun setRingBatteryInfoState() {
+        stateDashRingBattery.postValue(Pair(false, null))
+        viewModelScope.launch(Dispatchers.IO) {
+            localDataStore.setBatteryAlertShown()
+        }
     }
 
 }

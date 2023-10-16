@@ -117,6 +117,14 @@
                         app:image="@drawable/ic_profile_about"
                         app:text="About device" />
 
+                    <com.noisefit_commans.ui.custom.SettingsRow
+                        android:id="@+id/rowSettings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="visible"
+                        app:image="@drawable/ic_ring_device_settings"
+                        app:text="Device settings" />
+
 
                 </LinearLayout>
 
@@ -130,14 +138,17 @@
             style="@style/TextButtonStyle2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:text="@string/text_soft_reset"
             app:layout_constraintBottom_toTopOf="@+id/btnUnpair"
             app:layout_constraintStart_toStartOf="@+id/btnUnpair" />
+
         <Button
             android:id="@+id/btnUnpair"
             style="@style/TextButtonStyle2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginStart="@dimen/side_margin"
             android:layout_marginBottom="100dp"
             android:text="@string/text_unpair_device"

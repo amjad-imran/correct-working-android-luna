@@ -96,6 +96,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/llMyProfile"
                     app:text="@string/text_help_and_support" />
 
+
                 <com.noisefit_commans.ui.custom.SettingsRow
                     android:id="@+id/rowFeedBack"
                     android:layout_width="match_parent"
@@ -106,6 +107,15 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/rowHelp"
                     app:text="@string/text_rate_us" />
+                <com.noisefit_commans.ui.custom.SettingsRow
+                    android:id="@+id/rowLearn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:image="@drawable/ic_learn_more"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rowFeedBack"
+                    app:text="Learn more" />
 
                 <com.noisefit_commans.ui.custom.SettingsRow
                     android:id="@+id/rowAbout"
@@ -115,7 +125,7 @@
                     app:image="@drawable/ic_info_black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/rowFeedBack"
+                    app:layout_constraintTop_toBottomOf="@+id/rowLearn"
                     app:text="@string/text_about" />
 
                 <include

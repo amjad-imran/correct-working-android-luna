@@ -1615,7 +1615,7 @@ class OSleepScoreDetailsFragment :
             }
 
             ViewItemClickType.TOTAL_SLEEP -> {
-                trendTitle = "Total sleep trend"
+                trendTitle = "Sleep duration trend"
             }
 
             ViewItemClickType.SLEEP_EFFICIENCY -> {

@@ -16,13 +16,11 @@ import com.noisefit.luna.databinding.FragmentSummaryOBinding
 import com.noisefit.oreo.BottomNavOption
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.receiver.service.FeedbackSubmitService
-import com.noisefit.receiver.service.ProblemType
 import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.data.enums.DashInfoCard
-import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseFragment
@@ -75,6 +73,10 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     }
 
     override fun initListener() {
+        binding.contentMain.lytChargeRing.root.setOnClickListener {
+            navigate(R.id.ringBatteryChargeFragment)
+            viewModel.setRingBatteryInfoState()
+        }
 
         binding.contentMain.lytPairDevice.btnPairDevice.setOnClickListener {
             startActivity(PairDeviceActivity.getStartIntent(requireContext(), true))
@@ -385,6 +387,18 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 } else {
                     this.root.gone()
                 }
+            }
+        }
+
+        viewModel.stateDashRingBattery.observe(this) {
+            if (it.first) {
+                binding.contentMain.lytChargeRing.root.visible()
+                binding.contentMain.lytChargeRing.imageView3.loadImage(
+                    requireContext(),
+                    it.second?.ringInfo?.image2
+                )
+            } else {
+                binding.contentMain.lytChargeRing.root.gone()
             }
         }
 
@@ -1055,6 +1069,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 R.drawable.ic_ring_low_battery
             )
             binding.lytHeader.batteryStatus.setIndicatorColor(resources.getColor(R.color.color_error))
+            viewModel.handleBatteryAlert(noiseFitDevice)
         } else {
             binding.lytHeader.oreoStatus.setBackgroundResource(R.drawable.back_modal_new_round)
             binding.lytHeader.batteryStatus.setIndicatorColor(resources.getColor(R.color.white))
@@ -1090,13 +1105,6 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
     override fun onResume() {
         super.onResume()
-
-        /*navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
-            putString("workoutId", "b7f56ac0-a463-47dc-838f-85dae7fa07d2")
-            putInt("position", 0)
-            putString("workoutName", "Test")
-        })*/
-
         viewModel.initData()
 
         if (viewModel.isDeviceConnected()) {

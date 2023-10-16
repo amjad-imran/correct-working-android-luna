@@ -21,6 +21,10 @@ interface DataStoredInterface {
     fun updateUserToken(token: Token?)
     fun getUserToken(): Token?
 
+    fun getIsBatteryAlertShown(): Boolean
+    fun setBatteryAlertShown()
+    fun clearUserLogoutData()
+
     @Deprecated("use updateUserToken()")
     fun updateDeviceToken(token: String?)
 

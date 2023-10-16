@@ -52,6 +52,8 @@ class DateBottomSheet : BaseBottomSheetWithTransparent<FragmentDateBottomSheetBi
 
             c.add(Calendar.YEAR, -10)
             binding.datePicker.maxDate = c.timeInMillis
+            c.add(Calendar.YEAR,-89)
+            binding.datePicker.minDate =c.timeInMillis
         } else {
             c.add(Calendar.YEAR, 10)
             binding.datePicker.maxDate = c.timeInMillis
