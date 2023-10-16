@@ -49,6 +49,9 @@ class OreoMyDeviceFragment :
     }
 
     override fun initListener() {
+        binding.rowSettings.setOnClickListener {
+            navigate(R.id.deviceSettingsFragment)
+        }
 
         binding.rowAppLogs.setOnClickListener {
             if (mViewModel.appLogFile?.exists() == true) {
@@ -80,9 +83,12 @@ class OreoMyDeviceFragment :
                     mViewModel.sessionManager.sendQueryAction(QueryAction.RestartDevice)
                 }
                 if (ringNotConnected) {
-                    navigate(R.id.unpairDeviceNotConnectedFragment,Bundle().apply {
-                        this.putString("title","Soft reset failed")
-                        this.putString("message","Ring not connected to Luna App. Please try again later.")
+                    navigate(R.id.unpairDeviceNotConnectedFragment, Bundle().apply {
+                        this.putString("title", "Soft reset failed")
+                        this.putString(
+                            "message",
+                            "Ring not connected to Luna App. Please try again later."
+                        )
                     })
                 }
             }
@@ -114,9 +120,12 @@ class OreoMyDeviceFragment :
                     showUnPairDialog()
                 }
                 if (ringNotConnected) {
-                    navigate(R.id.unpairDeviceNotConnectedFragment,Bundle().apply {
-                        this.putString("title","Ring Unpair Failed")
-                        this.putString("message","Ring not connected to Luna App. Please try again.")
+                    navigate(R.id.unpairDeviceNotConnectedFragment, Bundle().apply {
+                        this.putString("title", "Ring Unpair Failed")
+                        this.putString(
+                            "message",
+                            "Ring not connected to Luna App. Please try again."
+                        )
                     })
                 }
             }
