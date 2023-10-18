@@ -19,10 +19,10 @@
             tools:context=".ui.settings.feature.worldclock.AddClockFragment">
 
             <View
-                android:layout_width="80dp"
+                android:layout_width="40dp"
                 android:layout_height="2dp"
                 android:layout_marginTop="4dp"
-                android:alpha="0.5"
+                android:alpha="0.2"
                 android:background="@drawable/back_bottom_sheet_drag"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
