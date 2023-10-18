@@ -570,6 +570,7 @@ class OAddWorkoutFragment :
                         bundleOf("allow" to true)
 
                     )
+                    context.showShortToast("Workout Added Successfully")
                     navigateUpSafe()
                 }
             }
