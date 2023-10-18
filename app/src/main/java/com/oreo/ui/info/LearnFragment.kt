@@ -27,7 +27,9 @@ class LearnFragment : BaseFragment<FragmentLearnBinding>(FragmentLearnBinding::i
                         this.putString("videoUrl", data.url)
                     })
                 } else {
-                    navigate(R.id.ringCareFragment)
+                    navigate(R.id.ringCareFragment, Bundle().apply {
+                        this.putString("title", data.title)
+                    })
 
                 }
             }

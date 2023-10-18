@@ -28,7 +28,7 @@ sealed class OSummaryHealthOverviewClickEnum {
     object ActivityDetailsWorkoutClick : OSummaryHealthOverviewClickEnum()
     object ReadinessDetailsWorkoutClick : OSummaryHealthOverviewClickEnum()
     object TextWelcomeRingClicked : OSummaryHealthOverviewClickEnum()
-    object TextRingCareClicked : OSummaryHealthOverviewClickEnum()
+    data class TextRingCareClicked(val title:String) : OSummaryHealthOverviewClickEnum()
     data class VideoInfoClicked(val type: VideoInfoType, val videoUrl: String) :
         OSummaryHealthOverviewClickEnum()
 
@@ -353,7 +353,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.tvMessage.text = data.data.content
 
             binding.root.setOnClickListener {
-                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.TextRingCareClicked)
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.TextRingCareClicked(data.data.title))
             }
 
         }

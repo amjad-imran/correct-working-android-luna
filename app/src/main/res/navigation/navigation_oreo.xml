@@ -381,7 +381,11 @@
     <fragment
         android:id="@+id/ringCareFragment"
         android:name="com.oreo.ui.info.RingCareFragment"
-        android:label="RingCareFragment" />
+        android:label="RingCareFragment" >
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/ringWelcomeFragment"
         android:name="com.oreo.ui.info.RingWelcomeFragment"

@@ -185,8 +185,10 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         viewedCardsAdapter.itemClickListener = { type ->
             when (type) {
-                OSummaryHealthOverviewClickEnum.TextRingCareClicked -> {
-                    navigate(R.id.ringCareFragment)
+                is OSummaryHealthOverviewClickEnum.TextRingCareClicked -> {
+                    navigate(R.id.ringCareFragment,Bundle().apply {
+                        this.putString("title",type.title)
+                    })
                 }
 
                 is OSummaryHealthOverviewClickEnum.VideoInfoClicked -> {
@@ -277,9 +279,11 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                     )
                 }
 
-                OSummaryHealthOverviewClickEnum.TextRingCareClicked -> {
+                is OSummaryHealthOverviewClickEnum.TextRingCareClicked -> {
                     viewModel.localDataStore.setDashCardClickState(DashInfoCard.CARE, true)
-                    navigate(R.id.ringCareFragment)
+                    navigate(R.id.ringCareFragment,Bundle().apply {
+                        this.putString("title",type.title)
+                    })
 
                 }
 
