@@ -783,7 +783,7 @@ object ApplicationUtils {
             }
         }
         bmrValue = (defValue1.plus(defValue2.times(weightValue)).plus(defValue3.times(heightValue))
-            .minus(defValue4.times(age))).times(0.3f).toDouble()
+            .minus(defValue4.times(age))).toDouble()
         return roundNearestValue(
             bmrValue.toFloat().roundToNearestDecimalFlooor(bmrValue.toFloat()).toDouble(), 10.0
         )
