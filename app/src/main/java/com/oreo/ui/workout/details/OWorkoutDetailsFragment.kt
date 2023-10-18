@@ -181,7 +181,11 @@ class OWorkoutDetailsFragment :
             }
         }
 
-        if (it.date == DateFormats.getCurrentDate(DateFormats.dateFormat3)) {
+        if (it.date == DateFormats.getCurrentDate(DateFormats.dateFormat3) && !it.type.equals(
+                "auto",
+                true
+            )
+        ) {
             binding.tvEdit.visible()
         }
 
@@ -208,9 +212,9 @@ class OWorkoutDetailsFragment :
             )
         )
 
-       /* setMovementGraph(
-            arrayListOf(0, 1, 2, 3, 2, 2, 1, 2), "12:03 pm","12:06 pm"
-        )*/
+        /* setMovementGraph(
+             arrayListOf(0, 1, 2, 3, 2, 2, 1, 2), "12:03 pm","12:06 pm"
+         )*/
     }
 
     private fun setMovementGraph(

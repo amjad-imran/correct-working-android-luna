@@ -21,6 +21,7 @@ data class OWorkoutDetailsResponseModel(
     val intensity: String? = null,
     @SerializedName("created_date")
     val createdDate: String? = null,
+    val type: String? = null,
     val date: String? = null,
     @SerializedName("hr_avg")
     val hrAvg: Int? = null,
