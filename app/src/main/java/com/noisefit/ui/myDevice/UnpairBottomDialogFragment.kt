@@ -29,6 +29,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 const val UNPAIR_REQUEST_KEY = "UNPAIR_REQUEST_KEY"
+const val NEW_PAIR_REQUEST_KEY = "NEW_PAIR_REQUEST_KEY"
 
 @AndroidEntryPoint
 class UnpairBottomDialogFragment :
@@ -60,27 +61,32 @@ class UnpairBottomDialogFragment :
 
         defValue = "Ring"
 
-        val title = "Are you sure you want to reset?"
+        binding.tvTitle.text =
+            if (navArgs.forceUnpair) "Are you sure you want to pair a new ring?" else "Are you sure you want to reset?"
 
-
-        binding.tvTitle.text = title
-        binding.tvPrivacy.text = "Your ring will be unpaired and all the unsaved data will be lost."
+        binding.tvPrivacy.text =
+            if (navArgs.forceUnpair) "Your ring will be unpaired & all the unsaved data will be lost" else
+                "We advise placing the ring on the charger. Your ring will be unpaired & all the unsaved data will be lost"
         binding.btnAllow.text = "Reset"
+
         binding.btnAllow.setOnClickListener {
 
-            if(navArgs.forceUnpair){
-                mViewModel.sessionManager.forceDisconnect.value = (Event(true))
-                mViewModel.sessionManager.setConnectStateRing(ConnectState.UnPaired())
-
-                navigateUpSafe()
-                setFragmentResult(
-                    UNPAIR_REQUEST_KEY,
-                    bundleOf("unpair" to true)
-                )
-            }
-
-
             if (!sessionManager.isDeviceConnected()) {
+                if(navArgs.forceUnpair){
+
+                    mViewModel.sessionManager.forceDisconnect.value = (Event(true))
+                    mViewModel.sessionManager.setConnectStateRing(ConnectState.UnPaired())
+
+                    navigateUpSafe()
+                    setFragmentResult(
+                        NEW_PAIR_REQUEST_KEY,
+                        bundleOf("unpair" to true)
+                    )
+
+                    return@setOnClickListener
+                }
+
+
                 navigateUpSafe()
                 setFragmentResult(
                     UNPAIR_REQUEST_KEY,
@@ -89,12 +95,6 @@ class UnpairBottomDialogFragment :
                 return@setOnClickListener
             }
 
-            /*navigateUpSafe()
-
-            setFragmentResult(
-                UNPAIR_REQUEST_KEY,
-                bundleOf("unpair" to true)
-            )*/
             binding.viewUnpair.gone()
             binding.viewUnpairing.visible()
 
@@ -127,10 +127,18 @@ class UnpairBottomDialogFragment :
 
                 is ConnectState.UnPaired -> {
                     navigateUpSafe()
-                    setFragmentResult(
-                        UNPAIR_REQUEST_KEY,
-                        bundleOf("unpair" to true)
-                    )
+                    if(navArgs.forceUnpair){
+                        setFragmentResult(
+                            NEW_PAIR_REQUEST_KEY,
+                            bundleOf("unpair" to true)
+                        )
+                    }else{
+                        setFragmentResult(
+                            UNPAIR_REQUEST_KEY,
+                            bundleOf("unpair" to true)
+                        )
+                    }
+
                 }
 
                 else -> {}

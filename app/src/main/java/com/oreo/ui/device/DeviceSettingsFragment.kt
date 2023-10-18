@@ -1,5 +1,6 @@
 package com.oreo.ui.device
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -8,14 +9,18 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentDeviceSettingsBinding
+import com.noisefit.ui.myDevice.NEW_PAIR_REQUEST_KEY
 import com.noisefit.ui.myDevice.REST_REQUEST_KEY
 import com.noisefit.ui.myDevice.UNPAIR_REQUEST_KEY
+import com.noisefit.ui.onboarding.OnBoardActivity
+import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.FirebaseLunaAppEvents
+import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -41,10 +46,9 @@ class DeviceSettingsFragment :
 
         binding.tvRestartDevice.setOnClickListener {
             setFragmentResultListener(REST_REQUEST_KEY) { _, bundle ->
-                val reset = bundle.getBoolean("reset")
+                val restart = bundle.getBoolean("restart")
                 val ringNotConnected = bundle.getBoolean("ring_not_connected")
-                if (reset) {
-                    mViewModel.sessionManager.sendQueryAction(QueryAction.RestartDevice)
+                if (restart) {
                     Handler(Looper.getMainLooper()).post {
                         navigateUpSafe()
                     }
@@ -72,7 +76,7 @@ class DeviceSettingsFragment :
                 }
                 if (ringNotConnected) {
                     navigate(R.id.unpairDeviceNotConnectedFragment, Bundle().apply {
-                        this.putString("title", "Ring Unpair Failed")
+                        this.putString("title", "Ring Reset Failed")
                         this.putString(
                             "message",
                             "Ring not connected to Luna App. Please try again."
@@ -85,28 +89,32 @@ class DeviceSettingsFragment :
             navigate(R.id.unpairBottomDialogFragment)
         }
         binding.tvPairNew.setOnClickListener {
-            setFragmentResultListener(UNPAIR_REQUEST_KEY) { _, bundle ->
+            setFragmentResultListener(NEW_PAIR_REQUEST_KEY) { _, bundle ->
                 val unpairDevice = bundle.getBoolean("unpair")
                 val ringNotConnected = bundle.getBoolean("ring_not_connected")
                 if (unpairDevice) {
-                    Handler(Looper.getMainLooper()).post {
-                        navigateUpSafe()
-                    }
+                    activity?.startActivity(
+                        PairDeviceActivity.getStartIntent(
+                            requireContext(),
+                            true
+                        ).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        })
                 }
-                if (ringNotConnected) {
+                /*if (ringNotConnected) {
                     navigate(R.id.unpairDeviceNotConnectedFragment, Bundle().apply {
-                        this.putString("title", "Ring Unpair Failed")
+                        this.putString("title", "Ring Reset Failed")
                         this.putString(
                             "message",
                             "Ring not connected to Luna App. Please try again."
                         )
                     })
-                }
+                }*/
             }
             mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_MYDEVICES_UNPAIR_CLICK)
 
-            navigate(R.id.unpairBottomDialogFragment,Bundle().apply {
-                this.putBoolean("forceUnpair",true)
+            navigate(R.id.unpairBottomDialogFragment, Bundle().apply {
+                this.putBoolean("forceUnpair", true)
             })
         }
 

@@ -173,7 +173,7 @@ class OreoMyDeviceFragment :
             if (connected) {
                 binding.apply {
                     lytDeviceConnected.root.visible()
-                    btnUnpair.visible()
+                    //btnUnpair.visible()
                     //btnReset.visible()
                     lytPairYourDeviceHeader.root.gone()
                 }
@@ -181,7 +181,7 @@ class OreoMyDeviceFragment :
             } else {
                 binding.apply {
                     lytDeviceConnected.root.gone()
-                    btnUnpair.gone()
+                    //btnUnpair.gone()
                     //btnReset.gone()
 
                     lytPairYourDeviceHeader.root.visible()
