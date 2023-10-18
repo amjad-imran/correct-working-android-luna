@@ -41,6 +41,7 @@ import com.oreo.data.model.VideoInfoType
 import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
+import com.oreo.receiver.workManager.HealthOverviewDataType
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
@@ -307,6 +308,15 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     }
 
     override fun subscribeObservers() {
+
+        viewModel.sessionManager.showSyncOfflineData.observe(viewLifecycleOwner) {
+            it.getContent()?.let { event ->
+                if (event == HealthOverviewDataType.AUTO_WORKOUT) {
+                    viewModel.getDashboardDataFromServer(false)
+                }
+            }
+
+        }
 
         viewModel.hrInfo.observe(this) {
             it.getContent()?.let {

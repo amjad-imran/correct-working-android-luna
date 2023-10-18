@@ -374,6 +374,7 @@ constructor(
             oreoAutoSportData.calories = it.autoSportKcal
             oreoAutoSportData.type = getSportName(it.autoSportType,colorFitDevice)
             oreoAutoSportData.hrData =  gson.toJson(it.hrData)
+            data.add(oreoAutoSportData)
         }
         return data
     }
