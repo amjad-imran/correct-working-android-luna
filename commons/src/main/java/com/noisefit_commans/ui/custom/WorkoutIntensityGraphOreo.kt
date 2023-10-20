@@ -117,7 +117,7 @@ class WorkoutIntensityGraphOreo(var mContext: Context) : View(
                 val sectionWidth = eachSecondsWidth * 5
 
 
-                start = sectionWidth/2
+                start = sectionWidth / 2
                 movementList.forEachIndexed { index, value ->
 
 
@@ -216,7 +216,7 @@ class WorkoutIntensityGraphOreo(var mContext: Context) : View(
                 }
 
                 else -> {
-                    val value = dataSize / 4
+                    val value = if (dataSize < 4) 1 else dataSize / 4
 
                     val isZero = (index % value == 0)
 
