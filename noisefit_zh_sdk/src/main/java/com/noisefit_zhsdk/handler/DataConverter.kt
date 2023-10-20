@@ -128,7 +128,7 @@ constructor(
     private fun getSportName(functionId: Int, noiseFitDevice: ColorFitDevice): String {
         LOGS.d("getSportName $functionId")
         return when (functionId) {
-            3 -> SportActivityName.INDOOR_RUNNING
+            3 -> SportActivityName.RUNNING
             66 -> {
                 when (noiseFitDevice.deviceType) {
                     DeviceType.COLORFIT_PRO_4_ALPHA.deviceType -> {
@@ -139,8 +139,8 @@ constructor(
                     }
                 }
             }
-            2 -> SportActivityName.OUTDOOR_WALKING
-            1 -> SportActivityName.OUTDOOR_RUNNING
+            2 -> SportActivityName.WALKING
+            1 -> SportActivityName.RUNNING
             4 -> SportActivityName.TREKKING
             5 -> SportActivityName.TRAIL_RUNNING
 
@@ -366,7 +366,7 @@ constructor(
         p0?.forEach {
             val oreoAutoSportData = OreoAutoSportData()
             oreoAutoSportData.steps = it.autoSportSteps
-            oreoAutoSportData.startTime = (it.autoSportStartTime * 1000).toLong()
+            oreoAutoSportData.startTime = it.autoSportStartTime * 1000L
             oreoAutoSportData.intensity = it.autoSportIntensity
             oreoAutoSportData.isAccepted = false
             oreoAutoSportData.duration = it.autoSportDuration

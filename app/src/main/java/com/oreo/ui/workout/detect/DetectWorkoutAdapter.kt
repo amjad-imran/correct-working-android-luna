@@ -27,6 +27,8 @@ class DetectWorkoutAdapter(val detectWorkoutListener: DetectWorkoutListener) :
             val calories = "${resultData.calories} kcal"
             binding.tvCalories.text = calories
 
+            binding.tvIntensity.text = getIntensity(resultData.intensity ?: 0)
+
             val time =
                 DateFormats.convertTimestampToDate(resultData.startTime, DateFormats.time12Meridian)
                     .lowercase()
@@ -49,15 +51,33 @@ class DetectWorkoutAdapter(val detectWorkoutListener: DetectWorkoutListener) :
                 binding.tvStart.text = time
             }
 
-            binding.tvTitle.text = resultData.type?.replaceFirstChar { if (it.isLowerCase()) it.titlecase(DateFormats.defaultLocale) else it.toString() }
-            binding.btnCancel.setOnClickListener {
+            binding.tvTitle.text = resultData.type?.replace("_", " ")
+                ?.replaceFirstChar { if (it.isLowerCase()) it.titlecase(DateFormats.defaultLocale) else it.toString() }
+            binding.btnDismiss.setOnClickListener {
                 detectWorkoutListener.onDismissWorkout(resultData, bindingAdapterPosition)
             }
-            binding.btnIdentify.setOnClickListener {
+            binding.btnAdd.setOnClickListener {
                 detectWorkoutListener.onIdentifyWorkout(resultData, bindingAdapterPosition)
             }
         }
     }
+
+    private fun getIntensity(intensity: Int): String {
+        return when (intensity) {
+            0 -> {
+                "Easy"
+            }
+
+            1 -> {
+                "Moderate"
+            }
+
+            else -> {
+                "Hard"
+            }
+        }
+    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
@@ -85,6 +105,7 @@ class DetectWorkoutAdapter(val detectWorkoutListener: DetectWorkoutListener) :
         }
 
     }
+
     fun setData(resultData: List<OreoAutoSportData>) {
         mDataSet.clear()
         mDataSet.addAll(resultData)

@@ -17,6 +17,7 @@ import com.noisefit.oreo.BottomNavOption
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.receiver.service.FeedbackSubmitService
 import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY
+import com.noisefit.ui.common.bottomSheet.DELETE_REQ_REQUEST_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.constants.SyncEvents
@@ -226,20 +227,19 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 }
 
                 is OSummaryHealthOverviewClickEnum.AutoSportsDelete -> {
-                    setFragmentResultListener(ALERT_REQUEST_KEY) { _, bundle ->
+                    setFragmentResultListener(DELETE_REQ_REQUEST_KEY) { _, bundle ->
                         val allow = bundle.getBoolean("allow")
                         if (allow) {
                             viewModel.deleteAllAutoWorkout()
                             viewModel.removeAutoWorkoutCard()
                         }
                     }
-                    navigate(
-                        OSummaryFragmentDirections.actionHomeToAlertTextBottomSheet(
-                            getString(R.string.text_dismiss_activity_title),
-                            getString(R.string.text_dismiss_activity_desc),
-                            "", ""
-                        )
-                    )
+                    navigate(R.id.deleteAllWorkoutBottomSheet,Bundle().apply {
+                        this.putString("title", getString(R.string.text_dismiss_activity_title))
+                        this.putString("description",getString(R.string.text_dismiss_activity_desc))
+                        this.putString("acceptText","")
+                        this.putString("declineText","")
+                    })
                 }
 
 

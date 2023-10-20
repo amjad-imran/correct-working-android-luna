@@ -13,6 +13,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.noisefit_commans.NoisefitApplication
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.data.model.OreoAutoSportData
@@ -34,6 +35,7 @@ import com.noisefit_commans.utils.LogEvents
 import com.noisefit_zhsdk.base.ZhApplicationHandler
 import com.zhapp.ble.ControlBleTools
 import com.zhapp.ble.bean.ActivityDurationBean
+import com.zhapp.ble.bean.AutoSportDataBean
 import com.zhapp.ble.bean.ContinuousBloodOxygenBean
 import com.zhapp.ble.bean.ContinuousHeartRateBean
 import com.zhapp.ble.bean.ContinuousPressureBean
@@ -455,6 +457,8 @@ constructor(
 [{"autoSportDuration":300,"autoSportIntensity":1,"autoSportKcal":1000,"autoSportStartTime":1697609129,"autoSportSteps":1000,"autoSportType":1,"hrData":[]},{"autoSportDuration":600,"autoSportIntensity":2,"autoSportKcal":2000,"autoSportStartTime":1697609129,"autoSportSteps":2000,"autoSportType":2,"hrData":[]},{"autoSportDuration":900,"autoSportIntensity":3,"autoSportKcal":3000,"autoSportStartTime":1697609129,"autoSportSteps":3000,"autoSportType":3,"hrData":[]}]
 
         LOGS.d(TAG, "onAutoSportData ${Gson().toJson(p0)}")*/
+
+        //val dummyData =Gson().fromJson<MutableList<AutoSportDataBean>>("[{\"autoSportDuration\":549,\"autoSportIntensity\":1,\"autoSportKcal\":76,\"autoSportStartTime\":1697782504,\"autoSportSteps\":1090,\"autoSportType\":1,\"hrData\":[]}]")
 
         AppLogs.sendAppLogs("onAutoSportData Sync data complete ${Gson().toJson(p0)}")
         colorFitDevice?.let {

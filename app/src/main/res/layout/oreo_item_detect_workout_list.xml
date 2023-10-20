@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/dimen_24dp"
         style="@style/ModalStyleReadinessNew"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_24dp">
 
         <ImageView
             android:id="@+id/ivWorkout"
@@ -17,16 +17,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
-            android:id="@+id/btnCancel"
-            android:layout_width="wrap_content"
-            android:padding="@dimen/dimen_8dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dimen_8dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/baseline_clear_white_24dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvTitle"
@@ -35,13 +25,36 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dimen_12dp"
             android:layout_marginTop="@dimen/dimen_4dp"
-            android:layout_marginEnd="@dimen/dimen_12dp"
             android:singleLine="true"
             android:textColor="@color/medium_movement"
-            app:layout_constraintEnd_toStartOf="@+id/btnCancel"
             app:layout_constraintStart_toEndOf="@id/ivWorkout"
             app:layout_constraintTop_toTopOf="@id/ivWorkout"
             tools:text="Archery" />
+
+
+        <View
+            android:id="@+id/backIntensity"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="-12dp"
+            android:layout_marginEnd="-12dp"
+            android:background="@drawable/back_modal_intensity"
+            app:layout_constraintBottom_toBottomOf="@+id/tvIntensity"
+            app:layout_constraintEnd_toEndOf="@+id/tvIntensity"
+            app:layout_constraintStart_toStartOf="@+id/tvIntensity"
+            app:layout_constraintTop_toTopOf="@+id/tvIntensity" />
+
+        <TextView
+            android:id="@+id/tvIntensity"
+            style="@style/Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="28dp"
+            android:gravity="center_horizontal"
+            app:layout_constraintBottom_toBottomOf="@+id/tvTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvTitle"
+            tools:text="Moderate" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -157,17 +170,33 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
-            android:id="@+id/btnIdentify"
+            android:id="@+id/btnDismiss"
             style="@style/SecondaryButtonStyle"
             android:layout_width="0dp"
-            android:layout_height="@dimen/dimen_32dp"
-            android:layout_marginTop="@dimen/dimen_20dp"
-            android:layout_marginBottom="@dimen/dimen_16dp"
-            android:text="@string/text_identify_workout"
+            android:layout_height="32dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/text_dismiss"
             app:backgroundTint="@null"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/btnCancel"
-            app:layout_constraintStart_toStartOf="@+id/ivWorkout"
+            app:layout_constraintEnd_toStartOf="@+id/btnAdd"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivWorkout" />
+
+        <Button
+            android:id="@+id/btnAdd"
+            style="@style/PrimaryButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/text_add"
+            app:backgroundTint="@null"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btnDismiss"
+            app:layout_constraintTop_toTopOf="@+id/btnDismiss" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

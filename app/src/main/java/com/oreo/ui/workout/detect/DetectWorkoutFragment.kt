@@ -12,6 +12,9 @@ import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.CandleChartModel
 import com.oreo.util.UtilClass
@@ -32,11 +35,11 @@ class DetectWorkoutFragment :
     private val detectWorkoutAdapter: DetectWorkoutAdapter by lazy {
         DetectWorkoutAdapter(object : DetectWorkoutListener {
             override fun onIdentifyWorkout(data: OreoAutoSportData, position: Int) {
-                detectWorkoutFragmentListener?.onIdentifyWorkout(
-                    data,
-                    viewModel.dayKey,
-                    viewModel.movementList
-                )
+
+
+                viewModel.addWorkout(data, onAddSuccess = {
+                    viewModel.deleteAutoSport(data.id,position)
+                })
             }
 
             override fun onDismissWorkout(data: OreoAutoSportData, position: Int) {
@@ -79,6 +82,26 @@ class DetectWorkoutFragment :
     }
 
     override fun subscribeObservers() {
+
+        viewModel.getLoading().observe(this) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
+            }
+        }
+
+        viewModel.getMessages().observe(this) {
+            it.getContent()?.let { message ->
+                context.showShortToast(message)
+            }
+        }
+
+        viewModel.getApiErrors().observe(this) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
+            }
+        }
 
         viewModel.workoutDeleted.observe(this) {
             it.getContent()?.let {data->

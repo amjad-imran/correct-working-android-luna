@@ -8,8 +8,6 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentDetectWorkoutListBinding
 import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.utils.LOGS
-import com.oreo.ui.activity.OreoDMAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -55,27 +53,17 @@ class DetectWorkoutListFragment :
                         key: String,
                         movementList: List<Int>?
                     ) {
-                        navigate(
+                       /* navigate(
                             DetectWorkoutListFragmentDirections.actionDetectWorkoutListFragmentToAddWorkoutFragment()
                                 .setMovementList(movementList?.toIntArray()).setAutoSport(data)
-                        )
+                        )*/
 
                     }
 
                     override fun onDismissWorkout(id: Int, key: String) {
 
-                        val remainingDataList = pairData.second[key]
-                        val index = remainingDataList?.indexOfFirst { it.id == id }
-                        val titleIndex = pairData.first.indexOfFirst { it == key }
-                        if (index != null && index != -1) {
-                            remainingDataList.removeAt(index)
-                        }
-                        pairData.second[key] = remainingDataList!!
 
-                        if (remainingDataList.isEmpty()) {
-                            viewModel.getNotAcceptingData()
-                        }
-
+                        removeFromList(id, key, pairData)
 
 //                        if (remainingDataList.isEmpty()) {
 //                            pairData.first.removeAt(titleIndex)
@@ -102,6 +90,24 @@ class DetectWorkoutListFragment :
             tab.text = pairData.first[position]
         }.attach()
 
+    }
+
+    fun removeFromList(
+        id: Int,
+        key: String,
+        pairData: Pair<ArrayList<String>, LinkedHashMap<String, ArrayList<OreoAutoSportData>>>
+    ) {
+        val remainingDataList = pairData.second[key]
+        val index = remainingDataList?.indexOfFirst { it.id == id }
+        val titleIndex = pairData.first.indexOfFirst { it == key }
+        if (index != null && index != -1) {
+            remainingDataList.removeAt(index)
+        }
+        pairData.second[key] = remainingDataList!!
+
+        if (remainingDataList.isEmpty()) {
+            viewModel.getNotAcceptingData()
+        }
     }
 
     override fun subscribeObservers() {

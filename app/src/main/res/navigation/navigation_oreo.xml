@@ -425,5 +425,25 @@
         android:id="@+id/deviceSettingsFragment"
         android:name="com.oreo.ui.device.DeviceSettingsFragment"
         android:label="fragment_device_settings"/>
+    <dialog
+        android:id="@+id/deleteAllWorkoutBottomSheet"
+        android:name="com.noisefit.ui.common.bottomSheet.DeleteAllWorkoutBottomSheet"
+        android:label="DeleteAllWorkoutBottomSheet" >
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="description"
+            app:argType="string" />
+
+        <argument
+            android:name="acceptText"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="declineText"
+            app:argType="string"
+            app:nullable="true" />
+    </dialog>
 
 </navigation>
