@@ -128,17 +128,33 @@ constructor(
     private fun getSportName(functionId: Int, noiseFitDevice: ColorFitDevice): String {
         LOGS.d("getSportName $functionId")
         return when (functionId) {
+            1 -> {
+                SportActivityName.WALKING
+            }
+
+            2 -> {
+                SportActivityName.RUNNING
+            }
+
+            else -> {
+                SportActivityName.WALKING
+            }
+        }
+
+       /* return when (functionId) {
             3 -> SportActivityName.RUNNING
             66 -> {
                 when (noiseFitDevice.deviceType) {
                     DeviceType.COLORFIT_PRO_4_ALPHA.deviceType -> {
                         return SportActivityName.INDOOR_RUNNING
                     }
+
                     else -> {
                         SportActivityName.TREADMILL
                     }
                 }
             }
+
             2 -> SportActivityName.WALKING
             1 -> SportActivityName.RUNNING
             4 -> SportActivityName.TREKKING
@@ -260,15 +276,17 @@ constructor(
 
             84 -> {
                 when (noiseFitDevice.deviceType) {
-                    DeviceType.NOISEFIT_ARC.deviceType,DeviceType.NOISEFIT_TWIST.deviceType, DeviceType.NOISEFIT_CURVE.deviceType -> {
+                    DeviceType.NOISEFIT_ARC.deviceType, DeviceType.NOISEFIT_TWIST.deviceType, DeviceType.NOISEFIT_CURVE.deviceType -> {
                         return SportActivityName.CROSS_TRAINING
                     }
+
                     else -> {
                         SportActivityName.CROSS_TRAINING_CROSSFIT
                     }
                 }
 
             }
+
             85 -> SportActivityName.AEROBICS
             86 -> SportActivityName.PHYSICAL_TRAINING
             87 -> SportActivityName.WALL_BALL
@@ -304,22 +322,26 @@ constructor(
                     DeviceType.NOISEFIT_ARC.deviceType, DeviceType.NOISEFIT_TWIST.deviceType, DeviceType.NOISEFIT_CURVE.deviceType -> {
                         return SportActivityName.DOUBLE_BOARD_SKATING
                     }
+
                     else -> {
                         SportActivityName.DOUBLE_BOARD_SKIING
                     }
                 }
             }
+
             131 -> SportActivityName.FREE_EXERCISE
             132 -> {
                 when (noiseFitDevice.deviceType) {
-                    DeviceType.NOISEFIT_ARC.deviceType,DeviceType.NOISEFIT_TWIST.deviceType, DeviceType.NOISEFIT_CURVE.deviceType -> {
+                    DeviceType.NOISEFIT_ARC.deviceType, DeviceType.NOISEFIT_TWIST.deviceType, DeviceType.NOISEFIT_CURVE.deviceType -> {
                         return SportActivityName.PADDLEBOARDS
                     }
+
                     else -> {
                         SportActivityName.PADDLEBOARD_SURFING
                     }
                 }
             }
+
             133 -> SportActivityName.KABADDI
             200 -> SportActivityName.POOL_SWIMMING
             204 -> SportActivityName.TRIATHLON
@@ -329,7 +351,7 @@ constructor(
             138 -> SportActivityName.KHO_KHO
 
             else -> ""
-        }
+        }*/
     }
 
 
@@ -344,7 +366,7 @@ constructor(
     fun convertSleepReminder(data: SleepReminder): com.zhapp.ble.bean.SleepReminder {
         val sReminder = com.zhapp.ble.bean.SleepReminder()
         sReminder.isOn = data.status
-        val settingTimeBean = SettingTimeBean(data.hour,data.minute)
+        val settingTimeBean = SettingTimeBean(data.hour, data.minute)
         sReminder.reminderTime = settingTimeBean
         return sReminder
     }
@@ -361,7 +383,10 @@ constructor(
     }
 
 
-    fun parseAutoSport(p0: MutableList<AutoSportDataBean>?,colorFitDevice: ColorFitDevice): List<OreoAutoSportData> {
+    fun parseAutoSport(
+        p0: MutableList<AutoSportDataBean>?,
+        colorFitDevice: ColorFitDevice
+    ): List<OreoAutoSportData> {
         val data = ArrayList<OreoAutoSportData>()
         p0?.forEach {
             val oreoAutoSportData = OreoAutoSportData()
@@ -372,8 +397,8 @@ constructor(
             oreoAutoSportData.duration = it.autoSportDuration
             oreoAutoSportData.intensity = it.autoSportIntensity
             oreoAutoSportData.calories = it.autoSportKcal
-            oreoAutoSportData.type = getSportName(it.autoSportType,colorFitDevice)
-            oreoAutoSportData.hrData =  gson.toJson(it.hrData)
+            oreoAutoSportData.type = getSportName(it.autoSportType, colorFitDevice)
+            oreoAutoSportData.hrData = gson.toJson(it.hrData)
             data.add(oreoAutoSportData)
         }
         return data
@@ -463,6 +488,7 @@ constructor(
             2, 25, 1, 66, 6, 7, 12, 23, 35, 24 -> {
                 true
             }
+
             else -> {
                 false
             }
@@ -749,6 +775,7 @@ constructor(
         LOGS.d("getStepsData $dailyStepData")
         return dailyStepData
     }
+
     fun parseStepsData(dailyBean: DailyBean): StepsData {
         LOGS.d("getStepsData $dailyBean")
         val dailyStepData = StepsData(
@@ -861,14 +888,14 @@ constructor(
                 calorieData = calorieData.handleCaloriesData(duration)
             )
 
-         //   val timeData = p1.recordGpsTime.split(",")
+            //   val timeData = p1.recordGpsTime.split(",")
 
 //            val gpsDataLinkedList = getGpsMapsData(p1.map_data)
             val gpsParseData = parseGpsMapsData(p1.map_data, p1.recordGpsTime)
 
 
 //            LOGS.d("gpsParseData ${Gson().toJson(gpsParseData)}")
-          //  watchDataStore.getWeatherDataModel(startCalendar.timeInMillis, endCalendar.timeInMillis)
+            //  watchDataStore.getWeatherDataModel(startCalendar.timeInMillis, endCalendar.timeInMillis)
             if (gpsParseData.isEmpty()) {
                 sportsModeResponse.gpsCoordinate = null
             } else {
@@ -953,10 +980,11 @@ constructor(
         try {
             return java.lang.Double.valueOf(s)
         } catch (nfe: NumberFormatException) {
-           return 0.0
+            return 0.0
             // you can throw your custom exception here.
         }
     }
+
     private fun listToJson(value: ArrayList<DoubleArray>) = Gson().toJson(value)
     fun formatNotificationMessage(message: String): String {
         val emoji = "🎥"
