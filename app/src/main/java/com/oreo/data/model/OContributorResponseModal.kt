@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class OContributorResponseModal(
     @SerializedName("total_sleep")
     val totalSleep: String? = null,
+    val sleep_duration: String? = null,
     val sleep_efficiency: String? = null,
     val restfulness: String? = null,
     @SerializedName("rem_sleep")

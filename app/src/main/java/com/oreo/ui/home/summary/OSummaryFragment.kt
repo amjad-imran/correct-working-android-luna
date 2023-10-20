@@ -187,8 +187,8 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         viewedCardsAdapter.itemClickListener = { type ->
             when (type) {
                 is OSummaryHealthOverviewClickEnum.TextRingCareClicked -> {
-                    navigate(R.id.ringCareFragment,Bundle().apply {
-                        this.putString("title",type.title)
+                    navigate(R.id.ringCareFragment, Bundle().apply {
+                        this.putString("title", type.title)
                     })
                 }
 
@@ -234,11 +234,14 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                             viewModel.removeAutoWorkoutCard()
                         }
                     }
-                    navigate(R.id.deleteAllWorkoutBottomSheet,Bundle().apply {
+                    navigate(R.id.deleteAllWorkoutBottomSheet, Bundle().apply {
                         this.putString("title", getString(R.string.text_dismiss_activity_title))
-                        this.putString("description",getString(R.string.text_dismiss_activity_desc))
-                        this.putString("acceptText","")
-                        this.putString("declineText","")
+                        this.putString(
+                            "description",
+                            getString(R.string.text_dismiss_activity_desc)
+                        )
+                        this.putString("acceptText", "")
+                        this.putString("declineText", "")
                     })
                 }
 
@@ -281,8 +284,8 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
                 is OSummaryHealthOverviewClickEnum.TextRingCareClicked -> {
                     viewModel.localDataStore.setDashCardClickState(DashInfoCard.CARE, true)
-                    navigate(R.id.ringCareFragment,Bundle().apply {
-                        this.putString("title",type.title)
+                    navigate(R.id.ringCareFragment, Bundle().apply {
+                        this.putString("title", type.title)
                     })
 
                 }
@@ -1048,6 +1051,12 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             R.drawable.ic_ring_bluetooth_off
         )
         binding.lytHeader.oreoStatus.setBackgroundResource(R.drawable.back_modal_new_round)
+
+        if (viewModel.stateHeartRateCard.value?.measureState == TapMeasureState.MEASURING) {
+            viewModel.stateHeartRateCard.postValue(viewModel.stateHeartRateCard.value.apply {
+                this?.measureState = TapMeasureState.ERROR
+            })
+        }
     }
 
     private fun setConnectingState(connecting: Boolean) {
