@@ -232,7 +232,7 @@ class OSleepDetailsParentFragment :
             }
 
             ViewItemClickType.TOTAL_SLEEP -> {
-                trendTitle = "Sleep duration"
+                trendTitle = "Total sleep"
             }
 
             ViewItemClickType.SLEEP_EFFICIENCY -> {

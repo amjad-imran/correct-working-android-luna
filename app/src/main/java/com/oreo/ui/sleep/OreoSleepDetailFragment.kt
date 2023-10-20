@@ -598,7 +598,7 @@ class OreoSleepDetailFragment :
     private fun updateUi(dayData: OreoSleepModel) {
         //for sleep score
         binding.lytSleepScore.lytSleepAvg.tvTitle.text = getString(R.string.text_sleep_score_o)
-        binding.lytSleepScore.lytTotalSleep.tvTitle.text = getString(R.string.text_sleep_duration)
+        binding.lytSleepScore.lytTotalSleep.tvTitle.text = getString(R.string.text_total_sleep)
         binding.lytSleepScore.lytTimeInBed.tvTitle.text = getString(R.string.text_time_in_bed)
         binding.lytSleepScore.lytRestHr.tvTitle.text = "Average HR"
         binding.lytSleepScore.lytSleepEfficiency.tvTitle.text =
