@@ -616,7 +616,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             }
         }
 
-        navigate(R.id.googleFitTestFragment)
+        //navigate(R.id.googleFitTestFragment)
     }
 
     private fun sendLogs() {
