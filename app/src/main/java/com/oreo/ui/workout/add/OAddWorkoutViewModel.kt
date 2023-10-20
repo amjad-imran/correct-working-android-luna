@@ -35,7 +35,7 @@ constructor(
     val sessionManager: SessionManager
 ) : BaseViewModel() {
 
-    val minimumWorkoutTime = 10
+    val minimumWorkoutTime = 20
     val maxWorkoutTime = 180
 
     var autoSport = MutableLiveData<Boolean>()
