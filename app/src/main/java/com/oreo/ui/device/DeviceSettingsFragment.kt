@@ -58,7 +58,7 @@ class DeviceSettingsFragment :
                         this.putString("title", "Soft reset failed")
                         this.putString(
                             "message",
-                            "Ring not connected to Luna App. Please try again later."
+                            "Your ring is not connected to the app. Please try again."
                         )
                     })
                 }
@@ -76,10 +76,10 @@ class DeviceSettingsFragment :
                 }
                 if (ringNotConnected) {
                     navigate(R.id.unpairDeviceNotConnectedFragment, Bundle().apply {
-                        this.putString("title", "Ring Reset Failed")
+                        this.putString("title", "Ring reset failed")
                         this.putString(
                             "message",
-                            "Ring not connected to Luna App. Please try again."
+                            "Your ring is not connected to the app. Please try again."
                         )
                     })
                 }
