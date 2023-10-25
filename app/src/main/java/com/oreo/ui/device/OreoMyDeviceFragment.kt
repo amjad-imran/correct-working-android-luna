@@ -176,6 +176,7 @@ class OreoMyDeviceFragment :
                     //btnUnpair.visible()
                     //btnReset.visible()
                     lytPairYourDeviceHeader.root.gone()
+                    lytFeatures.visible()
                 }
 
             } else {
@@ -185,6 +186,7 @@ class OreoMyDeviceFragment :
                     //btnReset.gone()
 
                     lytPairYourDeviceHeader.root.visible()
+                    lytFeatures.gone()
                 }
             }
         }
@@ -300,7 +302,7 @@ class OreoMyDeviceFragment :
             }
         }
 
-        binding.lytFeatures.gone()
+        //binding.lytFeatures.gone()
     }
 
     private fun setStateBtOff(noiseFitDevice: ColorFitDevice?) {
