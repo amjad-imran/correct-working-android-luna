@@ -1039,9 +1039,9 @@ object DateFormats {
         return cal.timeInMillis
     }
 
-    fun lastClearDataTimeStamp(): Long {
+    fun lastClearDataTimeStamp(days: Int): Long {
         val currentTimeStamp = getTimeStamp()
-        return convertTimeStampToStartOfDay(subtractDate(currentTimeStamp, PastSyncData))
+        return convertTimeStampToStartOfDay(subtractDate(currentTimeStamp, days))
     }
 
     fun getNDayStartingTimeStamp(): Long {

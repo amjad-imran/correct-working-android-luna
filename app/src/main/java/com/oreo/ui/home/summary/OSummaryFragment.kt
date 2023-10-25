@@ -230,7 +230,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                     setFragmentResultListener(DELETE_REQ_REQUEST_KEY) { _, bundle ->
                         val allow = bundle.getBoolean("allow")
                         if (allow) {
-                            viewModel.deleteAllAutoWorkout()
+                            viewModel.markWorkoutSyncedAll()
                             viewModel.removeAutoWorkoutCard()
                         }
                     }

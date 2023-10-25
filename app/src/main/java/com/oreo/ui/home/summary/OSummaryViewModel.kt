@@ -812,9 +812,9 @@ constructor(
         return false
     }
 
-    fun deleteAllAutoWorkout() {
+    fun markWorkoutSyncedAll() {
         viewModelScope.launch {
-            syncRepository.deleteAllAutoWorkoutData().collect { resource ->
+            syncRepository.markWorkoutSyncedAll().collect { resource ->
                 when (resource) {
                     is CacheResult.Success -> {
 

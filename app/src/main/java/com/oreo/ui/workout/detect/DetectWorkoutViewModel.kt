@@ -125,6 +125,22 @@ constructor(
 
         }
     }
+    fun markWorkoutSynced(id: Int, position: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            syncRepository.markWorkoutSynced(id).collect { resource ->
+                when (resource) {
+                    is CacheResult.Success -> {
+                        workoutDeleted.postValue(Event(Pair(id, position)))
+                    }
+
+                    is CacheResult.GenericError -> {
+
+                    }
+                }
+            }
+
+        }
+    }
 
     private fun getIntensity(intensity: Int): String {
         return when (intensity) {

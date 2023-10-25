@@ -72,7 +72,7 @@ class OreoSyncRepositoryImpl(
         }
     }
 
-    override suspend fun getMovementData(date:String): Flow<CacheResult<String?>> {
+    override suspend fun getMovementData(date: String): Flow<CacheResult<String?>> {
         return safeCacheCall(Dispatchers.IO) {
             dayTimeMovementImpl.getTodayDayTimeMovement(date)
         }
@@ -84,9 +84,9 @@ class OreoSyncRepositoryImpl(
         }
     }
 
-    override suspend fun deleteAllAutoWorkoutData(): Flow<CacheResult<Boolean?>> {
+    override suspend fun markWorkoutSyncedAll(): Flow<CacheResult<Boolean?>> {
         return safeCacheCall(Dispatchers.IO) {
-            oreoAutoSportDataImpl.deleteAllAutoSport()
+            oreoAutoSportDataImpl.markWorkoutSyncedAll()
         }
     }
 
@@ -96,9 +96,21 @@ class OreoSyncRepositoryImpl(
         }
     }
 
+    override suspend fun markWorkoutSynced(id: Int): Flow<CacheResult<Boolean?>> {
+        return safeCacheCall(Dispatchers.IO) {
+            oreoAutoSportDataImpl.markWorkoutSynced(id)
+        }
+    }
+
     override suspend fun saveAutoWorkoutData(data: List<OreoAutoSportData>): Flow<CacheResult<Boolean?>> {
         return safeCacheCall(Dispatchers.IO) {
-            oreoAutoSportDataImpl.insertData(data)
+            data.forEach {
+                val workout = oreoAutoSportDataImpl.getWorkoutByTime(it.startTime)
+                if (workout == null) {
+                    oreoAutoSportDataImpl.insertData(arrayListOf(it))
+                }
+            }
+            true
         }
     }
 

@@ -38,7 +38,7 @@ class DetectWorkoutFragment :
 
 
                 viewModel.addWorkout(data, onAddSuccess = {
-                    viewModel.deleteAutoSport(data.id,position)
+                    viewModel.markWorkoutSynced(data.id,position)
                 })
             }
 
@@ -51,7 +51,7 @@ class DetectWorkoutFragment :
                     val updated = bundle.getBoolean("allow")
 
                     if (updated) {
-                        viewModel.deleteAutoSport(data.id,position)
+                        viewModel.markWorkoutSynced(data.id,position)
 
                     }
                 }

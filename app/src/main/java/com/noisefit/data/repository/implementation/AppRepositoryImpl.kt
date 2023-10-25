@@ -12,6 +12,7 @@ import com.noisefit.data.safeApiCallFlow
 import com.noisefit.data.safeCacheCall
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.db.implementation.OreoAutoSportDataImpl
 import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
 import com.oreo.data.db.implementation.OreoDayTimeMovementDataImpl
@@ -35,6 +36,7 @@ class AppRepositoryImpl(
     private val respDataSource: OreoRespiratoryDataImpl,
     private val sleepDataSource: OreoSleepDataImpl,
     private val dayTimeMovementDataSource: OreoDayTimeMovementDataImpl,
+    private val autoWorkoutDataSource: OreoAutoSportDataImpl,
     private val gson: Gson,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : AppRepository {
@@ -49,7 +51,7 @@ class AppRepositoryImpl(
     }
 
     override suspend fun deleteOldTableData(): Flow<CacheResult<Unit?>> {
-        val timeStamp = DateFormats.lastClearDataTimeStamp()
+        val timeStamp = DateFormats.lastClearDataTimeStamp(DELETE_DB_DAYS)
         LOGS.d("deleteOldTableData $timeStamp")
         return safeCacheCall(dispatcher) { //1642962600747
 
@@ -61,6 +63,7 @@ class AppRepositoryImpl(
             respDataSource.deleteOldData(DELETE_DB_DAYS)
             sleepDataSource.deleteOldData(DELETE_DB_DAYS)
             dayTimeMovementDataSource.deleteOldData(DELETE_DB_DAYS)
+            autoWorkoutDataSource.deleteOldData(timeStamp)
 
 
             LOGS.w("DELETING_OLD_TABLE")

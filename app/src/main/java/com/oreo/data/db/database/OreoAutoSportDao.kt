@@ -11,19 +11,33 @@ import com.noisefit_commans.data.model.OreoAutoSportData
 @Dao
 interface OreoAutoSportDao : BaseDao<OreoAutoSportData> {
 
-    @Query("SELECT * FROM auto_sport where is_accepted = :isAccepted order by startTime DESC")
-    fun getAllNotAcceptingData(isAccepted: Boolean): List<OreoAutoSportData>?
+    @Query("SELECT * FROM auto_sport where is_accepted = :isAccepted AND is_synced=:isSynced order by startTime DESC")
+    fun getAllNotAcceptingData(isAccepted: Boolean, isSynced: Int): List<OreoAutoSportData>?
 //
 //
 //    @Query("UPDATE blood_oxygen SET break_up = :breakUp,is_synced = :is_synced  WHERE date = :date")
 //    fun updateViaDate(breakUp: String, date: String, is_synced: Boolean)
 //
 //
+
+    @Query("SELECT * FROM auto_sport where startTime = :startTime")
+    fun getWorkoutByTime(startTime: Long): OreoAutoSportData?
+
+    @Query("UPDATE auto_sport SET is_synced = :isSynced WHERE id = :id")
+    fun markWorkoutSynced(isSynced: Int, id: Int)
+
+    @Query("UPDATE auto_sport SET is_synced = :isSynced")
+    fun markWorkoutSyncedAll(isSynced: Int)
+
     @Query("Delete FROM auto_sport where id = :id")
     fun deleteAutoSport(id: Int)
 
+
     @Query("Delete FROM auto_sport where  is_accepted = :isAccepted")
     fun deleteAllAutoSport(isAccepted: Boolean)
+
+    @Query("DELETE FROM auto_sport WHERE startTime <= :time")
+    fun deleteOlderData(time: Long): Int
 //
 //    @Query("UPDATE blood_oxygen SET is_google_fit_sync = :is_google_fit_sync WHERE id IN (:ids)")
 //    fun updateGoogleFitStatus(ids: List<Int>, is_google_fit_sync: Boolean)
