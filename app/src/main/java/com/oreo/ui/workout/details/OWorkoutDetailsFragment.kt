@@ -14,6 +14,7 @@ import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.ui.custom.WorkoutIntensityGraphOreo
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.GraphDummyModel
 import com.oreo.data.model.OWDActivityData
@@ -116,78 +117,20 @@ class OWorkoutDetailsFragment :
     @SuppressLint("SetTextI18n")
     private fun updateUi(it: OWorkoutDetailsResponseModel) {
 //        binding.lytIntensity.tvIntensityType.text = it.intensity
-        if ((it.hrLow == null || it.hrLow == 0) && (it.hrAvg == null || it.hrLow == 0)) {
-            binding.lytHeartRate.root.gone()
-            binding.divider2.root.gone()
-        } else {
-            binding.lytHeartRate.root.visible()
-            binding.divider2.root.visible()
-            if (it.hrLow != null) {
-                binding.lytHeartRate.lytSubtitleValue1.tvValue.text = it.hrLow.toString()
-                binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
-                binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
-                binding.lytHeartRate.lytSubtitleValue1.tvValue.visible()
-            } else {
-                binding.lytHeartRate.lytSubtitleValue1.tvValue.gone()
-                binding.lytHeartRate.lytSubtitleValue1.tvUnit.gone()
-            }
-            if (it.hrAvg != null) {
-                binding.lytHeartRate.lytSubtitleValue2.tvValue.text = it.hrAvg.toString()
-                binding.lytHeartRate.lytSubtitleValue2.tvUnit.visible()
-                binding.lytHeartRate.lytSubtitleValue2.tvUnit.visible()
-                binding.lytHeartRate.lytSubtitleValue2.tvUnit.text = "bpm"
-            } else {
-                binding.lytHeartRate.lytSubtitleValue2.tvUnit.gone()
-                binding.lytHeartRate.lytSubtitleValue2.tvUnit.gone()
-            }
 
-
-            if (!it.hrArray.isNullOrEmpty()) {
-                binding.lytHeartRate.lineChart.visible()
-                val baseDataList = UtilClass.graphTwoHourBaseInterval(
-                    it.startTime.clearAmPm(), it.endTime, it.hrArray.size
-                )
-
-
-                val sleepChart = SleepChartModel()
-                val chartList = ArrayList<ChartModel>()
-                it.hrArray.forEachIndexed { index, data ->
-                    val chartModel = ChartModel()
-
-                    var value = data
-                    if (value == 255) {
-                        value = 0
-                    }
-
-
-                    chartModel.index = baseDataList[index]
-                    chartModel.value = value
-                    chartList.add(chartModel)
-                }
-
-                sleepChart.list = chartList
-
-                binding.lytHeartRate.lineChart.updateGraphColor(
-                    Color.parseColor("#ff3358"),
-                    Color.parseColor("#4cff3358"),
-                    Color.parseColor("#00ff3358")
-                )
-
-                binding.lytHeartRate.lineChart.updateDataWithMax(
-                    sleepChart, 5, false, true, GraphDummyModel(
-                        false, 40, 100
-                    ), it.hrAvg
-                )
-            }
-        }
 
         if (it.date == DateFormats.getCurrentDate(DateFormats.dateFormat3) && !it.type.equals(
                 "auto",
+                true
+            ) && !it.type.equals(
+                "apple",
                 true
             )
         ) {
             binding.tvEdit.visible()
         }
+
+
 
         binding.rvActivityDetails.visible()
         binding.lytActivityItem.root.visible()
@@ -200,17 +143,92 @@ class OWorkoutDetailsFragment :
         )
         prepareDataForActivity(it)
 
+        if (it.type.equals("apple", true)) {
+            binding.lytHeartRate.root.gone()
+            binding.divider1.root.visible()
+            binding.lytIntensity.root.gone()
+            binding.divider2.root.gone()
+            binding.tvImportText.visible()
+            binding.tvImportText.text = "Imported from Apple Health"
+        } else {
 
-        setMovementGraph(
-            it.intensity,
-            it.movement, DateFormats.convert24HourTo12(
-                it.startTime, SimpleDateFormat("HH:mm:ss", DateFormats.defaultLocale)
-            ), DateFormats.convert24HourTo12(
-                it.endTime, SimpleDateFormat(
-                    "HH:mm:ss", DateFormats.defaultLocale
+            if ((it.hrLow == null || it.hrLow == 0) && (it.hrAvg == null || it.hrLow == 0)) {
+                binding.lytHeartRate.root.gone()
+                binding.divider2.root.gone()
+            } else {
+                binding.lytHeartRate.root.visible()
+                binding.divider2.root.visible()
+                if (it.hrLow != null) {
+                    binding.lytHeartRate.lytSubtitleValue1.tvValue.text = it.hrLow.toString()
+                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
+                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
+                    binding.lytHeartRate.lytSubtitleValue1.tvValue.visible()
+                } else {
+                    binding.lytHeartRate.lytSubtitleValue1.tvValue.gone()
+                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.gone()
+                }
+                if (it.hrAvg != null) {
+                    binding.lytHeartRate.lytSubtitleValue2.tvValue.text = it.hrAvg.toString()
+                    binding.lytHeartRate.lytSubtitleValue2.tvUnit.visible()
+                    binding.lytHeartRate.lytSubtitleValue2.tvUnit.visible()
+                    binding.lytHeartRate.lytSubtitleValue2.tvUnit.text = "bpm"
+                } else {
+                    binding.lytHeartRate.lytSubtitleValue2.tvUnit.gone()
+                    binding.lytHeartRate.lytSubtitleValue2.tvUnit.gone()
+                }
+
+
+                if (!it.hrArray.isNullOrEmpty()) {
+                    binding.lytHeartRate.lineChart.visible()
+                    val baseDataList = UtilClass.graphTwoHourBaseInterval(
+                        it.startTime.clearAmPm(), it.endTime, it.hrArray.size
+                    )
+
+
+                    val sleepChart = SleepChartModel()
+                    val chartList = ArrayList<ChartModel>()
+                    it.hrArray.forEachIndexed { index, data ->
+                        val chartModel = ChartModel()
+
+                        var value = data
+                        if (value == 255) {
+                            value = 0
+                        }
+
+
+                        chartModel.index = baseDataList[index]
+                        chartModel.value = value
+                        chartList.add(chartModel)
+                    }
+
+                    sleepChart.list = chartList
+
+                    binding.lytHeartRate.lineChart.updateGraphColor(
+                        Color.parseColor("#ff3358"),
+                        Color.parseColor("#4cff3358"),
+                        Color.parseColor("#00ff3358")
+                    )
+
+                    binding.lytHeartRate.lineChart.updateDataWithMax(
+                        sleepChart, 5, false, true, GraphDummyModel(
+                            false, 40, 100
+                        ), it.hrAvg
+                    )
+                }
+            }
+
+            setMovementGraph(
+                it.intensity,
+                it.movement, DateFormats.convert24HourTo12(
+                    it.startTime, SimpleDateFormat("HH:mm:ss", DateFormats.defaultLocale)
+                ), DateFormats.convert24HourTo12(
+                    it.endTime, SimpleDateFormat(
+                        "HH:mm:ss", DateFormats.defaultLocale
+                    )
                 )
             )
-        )
+        }
+
 
         /* setMovementGraph(
              arrayListOf(0, 1, 2, 3, 2, 2, 1, 2), "12:03 pm","12:06 pm"
@@ -227,7 +245,7 @@ class OWorkoutDetailsFragment :
 
         binding.divider1.root.visible()
         binding.lytIntensity.root.visible()
-        binding.lytIntensity.tvIntensityType.text = intensity
+        binding.lytIntensity.tvIntensityType.text = intensity?.capitalizeWords()
 
         val sleepDayGraphView = WorkoutIntensityGraphOreo(requireContext())
         binding.lytIntensity.graphView.removeAllViews()

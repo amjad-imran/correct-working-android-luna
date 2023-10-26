@@ -141,217 +141,217 @@ constructor(
             }
         }
 
-       /* return when (functionId) {
-            3 -> SportActivityName.RUNNING
-            66 -> {
-                when (noiseFitDevice.deviceType) {
-                    DeviceType.COLORFIT_PRO_4_ALPHA.deviceType -> {
-                        return SportActivityName.INDOOR_RUNNING
-                    }
+        /* return when (functionId) {
+             3 -> SportActivityName.RUNNING
+             66 -> {
+                 when (noiseFitDevice.deviceType) {
+                     DeviceType.COLORFIT_PRO_4_ALPHA.deviceType -> {
+                         return SportActivityName.INDOOR_RUNNING
+                     }
 
-                    else -> {
-                        SportActivityName.TREADMILL
-                    }
-                }
-            }
+                     else -> {
+                         SportActivityName.TREADMILL
+                     }
+                 }
+             }
 
-            2 -> SportActivityName.WALKING
-            1 -> SportActivityName.RUNNING
-            4 -> SportActivityName.TREKKING
-            5 -> SportActivityName.TRAIL_RUNNING
+             2 -> SportActivityName.WALKING
+             1 -> SportActivityName.RUNNING
+             4 -> SportActivityName.TREKKING
+             5 -> SportActivityName.TRAIL_RUNNING
 
-            15 -> SportActivityName.HUNTING
-            36 -> SportActivityName.FISHING
-            17 -> SportActivityName.SKATEBOARDING
+             15 -> SportActivityName.HUNTING
+             36 -> SportActivityName.FISHING
+             17 -> SportActivityName.SKATEBOARDING
 
-            102 -> SportActivityName.FENCING
-            56 -> SportActivityName.BOXING
-            59 -> SportActivityName.TAI_CHI
+             102 -> SportActivityName.FENCING
+             56 -> SportActivityName.BOXING
+             59 -> SportActivityName.TAI_CHI
 
-            6 -> SportActivityName.OUTDOOR_CYCLING
-            7 -> SportActivityName.INDOOR_CYCLING
-            14 -> SportActivityName.BMX
+             6 -> SportActivityName.OUTDOOR_CYCLING
+             7 -> SportActivityName.INDOOR_CYCLING
+             14 -> SportActivityName.BMX
 
-            37 -> SportActivityName.CURLING
-            19 -> SportActivityName.OUTDOOR_SKATING
-            38 -> SportActivityName.INDOOR_SKATING
+             37 -> SportActivityName.CURLING
+             19 -> SportActivityName.OUTDOOR_SKATING
+             38 -> SportActivityName.INDOOR_SKATING
 
-            65 -> SportActivityName.ARCHERY
-            20 -> SportActivityName.EQUESTRIAN
-
-
-            39 -> SportActivityName.CRICKET
-            9 -> SportActivityName.BASKETBALL
-            12 -> SportActivityName.BADMINTON
-            13 -> SportActivityName.OUTDOOR_HIKING
-            134 -> SportActivityName.GOLF
-
-            10 -> SportActivityName.FOOTBALL
-
-            47 -> SportActivityName.BALLET
-            49 -> SportActivityName.SQUARE_DANCE
-            53 -> SportActivityName.ZUMBA
-
-            24 -> SportActivityName.MIXED_AEROBICS
-            25 -> SportActivityName.STRENGTH_TRAINING
-            26 -> SportActivityName.STRETCHING
-
-            30 -> SportActivityName.INDOOR_FITNESS
-            34 -> SportActivityName.ELLIPTICAL_MACHINE
-            35 -> SportActivityName.YOGA
-            27 -> SportActivityName.CLIMBING_MACHINE
-
-            29 -> SportActivityName.FLEXIBILITY_TRAINING
-            31 -> SportActivityName.STEPPER
-            32 -> SportActivityName.STEP_TRAINING
-            33 -> SportActivityName.GYMNASTICS
-            8 -> SportActivityName.FREESTYLE
-            23 -> SportActivityName.CORE_TRAINING
-
-            16 -> SportActivityName.SAILING
-            18 -> SportActivityName.ROLLER_SKATING
-            40 -> SportActivityName.BASEBALL
-            41 -> SportActivityName.BOWLING
-            42 -> SportActivityName.SQUASH
-            43 -> SportActivityName.SOFTBALL
-            44 -> SportActivityName.CROQUET
-            45 -> SportActivityName.VOLLEYBALL
-            46 -> SportActivityName.HANDBALL
-            11 -> SportActivityName.PINGPONG
-            48 -> SportActivityName.BELLY_DANCE
-            50 -> SportActivityName.STREET_DANCE
-            51 -> SportActivityName.BALLROOM_DANCING
-            52 -> SportActivityName.DANCE
-
-            55 -> SportActivityName.KARATE
-            57 -> SportActivityName.JUDO
-            58 -> SportActivityName.WRESTLING
-            60 -> SportActivityName.MUAY_THAI
-            61 -> SportActivityName.TAEKWONDO
-            62 -> SportActivityName.MARTIAL_ARTS
-            63 -> SportActivityName.FREE_SPARRING
-            21 -> SportActivityName.POOL_SWIMMING
+             65 -> SportActivityName.ARCHERY
+             20 -> SportActivityName.EQUESTRIAN
 
 
-            122, 203 -> SportActivityName.ROPE_SKIPPING
-            121, 202 -> SportActivityName.ROWING_MACHINE
-            201 -> SportActivityName.OPEN_WATER
+             39 -> SportActivityName.CRICKET
+             9 -> SportActivityName.BASKETBALL
+             12 -> SportActivityName.BADMINTON
+             13 -> SportActivityName.OUTDOOR_HIKING
+             134 -> SportActivityName.GOLF
 
-            123 -> SportActivityName.TRIATHLON
+             10 -> SportActivityName.FOOTBALL
 
-            54 -> SportActivityName.KENDO
-            28 -> SportActivityName.PILATES
-            94 -> SportActivityName.FUNCTIONAL_TRAINING
-            93 -> SportActivityName.SIT_UPS
-            88 -> SportActivityName.DUMBBELL_TRAINING
-            89 -> SportActivityName.BARBELL_TRAINING
-            90 -> SportActivityName.WEIGHTLIFTING
-            64 -> SportActivityName.HIIT
-            91 -> SportActivityName.DEADLIFT
+             47 -> SportActivityName.BALLET
+             49 -> SportActivityName.SQUARE_DANCE
+             53 -> SportActivityName.ZUMBA
 
-            114 -> SportActivityName.DARTS
-            118 -> SportActivityName.FRISBEE
-            117 -> SportActivityName.KITE_FLYING
-            115 -> SportActivityName.TUG_OF_WAR
-            107 -> SportActivityName.SHUTTLECOCK
+             24 -> SportActivityName.MIXED_AEROBICS
+             25 -> SportActivityName.STRENGTH_TRAINING
+             26 -> SportActivityName.STRETCHING
 
-            22 -> SportActivityName.OPEN_WATER
-            67 -> SportActivityName.PADDLE_BOARD
-            68 -> SportActivityName.WATER_POLO
-            69 -> SportActivityName.WATER_SPORTS
-            70 -> SportActivityName.WATER_SKIING
-            71 -> SportActivityName.KAYAKING
-            72 -> SportActivityName.KAYAK_RAFTING
-            73 -> SportActivityName.MOTORBOAT
-            74 -> SportActivityName.FIN_SWIMMING
-            75 -> SportActivityName.DIVING
-            76 -> SportActivityName.SYNCHRONIZED_SWIMMING
-            77 -> SportActivityName.SNORKELING
-            78 -> SportActivityName.KITE_SURFING
-            79 -> SportActivityName.ROCK_CLIMBING
-            80 -> SportActivityName.PARKOUR
-            81 -> SportActivityName.ATV
-            82 -> SportActivityName.PARAGLIDER
-            83 -> SportActivityName.CLIMB_THE_STAIRS
+             30 -> SportActivityName.INDOOR_FITNESS
+             34 -> SportActivityName.ELLIPTICAL_MACHINE
+             35 -> SportActivityName.YOGA
+             27 -> SportActivityName.CLIMBING_MACHINE
 
-            84 -> {
-                when (noiseFitDevice.deviceType) {
-                    DeviceType.NOISEFIT_ARC.deviceType, DeviceType.NOISEFIT_TWIST.deviceType, DeviceType.NOISEFIT_CURVE.deviceType -> {
-                        return SportActivityName.CROSS_TRAINING
-                    }
+             29 -> SportActivityName.FLEXIBILITY_TRAINING
+             31 -> SportActivityName.STEPPER
+             32 -> SportActivityName.STEP_TRAINING
+             33 -> SportActivityName.GYMNASTICS
+             8 -> SportActivityName.FREESTYLE
+             23 -> SportActivityName.CORE_TRAINING
 
-                    else -> {
-                        SportActivityName.CROSS_TRAINING_CROSSFIT
-                    }
-                }
+             16 -> SportActivityName.SAILING
+             18 -> SportActivityName.ROLLER_SKATING
+             40 -> SportActivityName.BASEBALL
+             41 -> SportActivityName.BOWLING
+             42 -> SportActivityName.SQUASH
+             43 -> SportActivityName.SOFTBALL
+             44 -> SportActivityName.CROQUET
+             45 -> SportActivityName.VOLLEYBALL
+             46 -> SportActivityName.HANDBALL
+             11 -> SportActivityName.PINGPONG
+             48 -> SportActivityName.BELLY_DANCE
+             50 -> SportActivityName.STREET_DANCE
+             51 -> SportActivityName.BALLROOM_DANCING
+             52 -> SportActivityName.DANCE
 
-            }
+             55 -> SportActivityName.KARATE
+             57 -> SportActivityName.JUDO
+             58 -> SportActivityName.WRESTLING
+             60 -> SportActivityName.MUAY_THAI
+             61 -> SportActivityName.TAEKWONDO
+             62 -> SportActivityName.MARTIAL_ARTS
+             63 -> SportActivityName.FREE_SPARRING
+             21 -> SportActivityName.POOL_SWIMMING
 
-            85 -> SportActivityName.AEROBICS
-            86 -> SportActivityName.PHYSICAL_TRAINING
-            87 -> SportActivityName.WALL_BALL
-            92 -> SportActivityName.BOBBY_JUMP
-            95 -> SportActivityName.UPPER_LIMB_TRAINING
-            96 -> SportActivityName.LOWER_LIMB_TRAINING
-            97 -> SportActivityName.WAIST_AND_ABDOMEN_TRAINING
-            98 -> SportActivityName.BACK_TRAINING
-            99 -> SportActivityName.NATIONAL_DANCE
-            100 -> SportActivityName.JAZZ_DANCE
-            101 -> SportActivityName.LATIN_DANCE
-            103 -> SportActivityName.RUGBY
-            104 -> SportActivityName.HOCKEY
-            105 -> SportActivityName.TENNIS
-            106 -> SportActivityName.BILLIARDS
-            108 -> SportActivityName.SEPAK_TAKRAW
-            109 -> SportActivityName.SNOW_SPORTS
-            110 -> SportActivityName.SNOWMOBILE
-            111 -> SportActivityName.PUCK
-            112 -> SportActivityName.SNOW_CAR
-            113 -> SportActivityName.SLED
-            116 -> SportActivityName.HULA_HOOP
-            119 -> SportActivityName.TRACK_AND_FIELD
-            120 -> SportActivityName.RACING_CAR
-            124 -> SportActivityName.MOUNTAIN_CYCLING
-            125 -> SportActivityName.KICKBOXING
-            126 -> SportActivityName.SKIING
-            127 -> SportActivityName.CROSS_COUNTRY_SKIING
-            128 -> SportActivityName.SNOWBOARDING
-            129 -> SportActivityName.ALPINE_SKIING
-            130 -> {
-                when (noiseFitDevice.deviceType) {
-                    DeviceType.NOISEFIT_ARC.deviceType, DeviceType.NOISEFIT_TWIST.deviceType, DeviceType.NOISEFIT_CURVE.deviceType -> {
-                        return SportActivityName.DOUBLE_BOARD_SKATING
-                    }
 
-                    else -> {
-                        SportActivityName.DOUBLE_BOARD_SKIING
-                    }
-                }
-            }
+             122, 203 -> SportActivityName.ROPE_SKIPPING
+             121, 202 -> SportActivityName.ROWING_MACHINE
+             201 -> SportActivityName.OPEN_WATER
 
-            131 -> SportActivityName.FREE_EXERCISE
-            132 -> {
-                when (noiseFitDevice.deviceType) {
-                    DeviceType.NOISEFIT_ARC.deviceType, DeviceType.NOISEFIT_TWIST.deviceType, DeviceType.NOISEFIT_CURVE.deviceType -> {
-                        return SportActivityName.PADDLEBOARDS
-                    }
+             123 -> SportActivityName.TRIATHLON
 
-                    else -> {
-                        SportActivityName.PADDLEBOARD_SURFING
-                    }
-                }
-            }
+             54 -> SportActivityName.KENDO
+             28 -> SportActivityName.PILATES
+             94 -> SportActivityName.FUNCTIONAL_TRAINING
+             93 -> SportActivityName.SIT_UPS
+             88 -> SportActivityName.DUMBBELL_TRAINING
+             89 -> SportActivityName.BARBELL_TRAINING
+             90 -> SportActivityName.WEIGHTLIFTING
+             64 -> SportActivityName.HIIT
+             91 -> SportActivityName.DEADLIFT
 
-            133 -> SportActivityName.KABADDI
-            200 -> SportActivityName.POOL_SWIMMING
-            204 -> SportActivityName.TRIATHLON
-            135 -> SportActivityName.INDOOR_WALKING
-            136 -> SportActivityName.TABLE_FOOTBALL
-            137 -> SportActivityName.SEVEN_STONES
-            138 -> SportActivityName.KHO_KHO
+             114 -> SportActivityName.DARTS
+             118 -> SportActivityName.FRISBEE
+             117 -> SportActivityName.KITE_FLYING
+             115 -> SportActivityName.TUG_OF_WAR
+             107 -> SportActivityName.SHUTTLECOCK
 
-            else -> ""
-        }*/
+             22 -> SportActivityName.OPEN_WATER
+             67 -> SportActivityName.PADDLE_BOARD
+             68 -> SportActivityName.WATER_POLO
+             69 -> SportActivityName.WATER_SPORTS
+             70 -> SportActivityName.WATER_SKIING
+             71 -> SportActivityName.KAYAKING
+             72 -> SportActivityName.KAYAK_RAFTING
+             73 -> SportActivityName.MOTORBOAT
+             74 -> SportActivityName.FIN_SWIMMING
+             75 -> SportActivityName.DIVING
+             76 -> SportActivityName.SYNCHRONIZED_SWIMMING
+             77 -> SportActivityName.SNORKELING
+             78 -> SportActivityName.KITE_SURFING
+             79 -> SportActivityName.ROCK_CLIMBING
+             80 -> SportActivityName.PARKOUR
+             81 -> SportActivityName.ATV
+             82 -> SportActivityName.PARAGLIDER
+             83 -> SportActivityName.CLIMB_THE_STAIRS
+
+             84 -> {
+                 when (noiseFitDevice.deviceType) {
+                     DeviceType.NOISEFIT_ARC.deviceType, DeviceType.NOISEFIT_TWIST.deviceType, DeviceType.NOISEFIT_CURVE.deviceType -> {
+                         return SportActivityName.CROSS_TRAINING
+                     }
+
+                     else -> {
+                         SportActivityName.CROSS_TRAINING_CROSSFIT
+                     }
+                 }
+
+             }
+
+             85 -> SportActivityName.AEROBICS
+             86 -> SportActivityName.PHYSICAL_TRAINING
+             87 -> SportActivityName.WALL_BALL
+             92 -> SportActivityName.BOBBY_JUMP
+             95 -> SportActivityName.UPPER_LIMB_TRAINING
+             96 -> SportActivityName.LOWER_LIMB_TRAINING
+             97 -> SportActivityName.WAIST_AND_ABDOMEN_TRAINING
+             98 -> SportActivityName.BACK_TRAINING
+             99 -> SportActivityName.NATIONAL_DANCE
+             100 -> SportActivityName.JAZZ_DANCE
+             101 -> SportActivityName.LATIN_DANCE
+             103 -> SportActivityName.RUGBY
+             104 -> SportActivityName.HOCKEY
+             105 -> SportActivityName.TENNIS
+             106 -> SportActivityName.BILLIARDS
+             108 -> SportActivityName.SEPAK_TAKRAW
+             109 -> SportActivityName.SNOW_SPORTS
+             110 -> SportActivityName.SNOWMOBILE
+             111 -> SportActivityName.PUCK
+             112 -> SportActivityName.SNOW_CAR
+             113 -> SportActivityName.SLED
+             116 -> SportActivityName.HULA_HOOP
+             119 -> SportActivityName.TRACK_AND_FIELD
+             120 -> SportActivityName.RACING_CAR
+             124 -> SportActivityName.MOUNTAIN_CYCLING
+             125 -> SportActivityName.KICKBOXING
+             126 -> SportActivityName.SKIING
+             127 -> SportActivityName.CROSS_COUNTRY_SKIING
+             128 -> SportActivityName.SNOWBOARDING
+             129 -> SportActivityName.ALPINE_SKIING
+             130 -> {
+                 when (noiseFitDevice.deviceType) {
+                     DeviceType.NOISEFIT_ARC.deviceType, DeviceType.NOISEFIT_TWIST.deviceType, DeviceType.NOISEFIT_CURVE.deviceType -> {
+                         return SportActivityName.DOUBLE_BOARD_SKATING
+                     }
+
+                     else -> {
+                         SportActivityName.DOUBLE_BOARD_SKIING
+                     }
+                 }
+             }
+
+             131 -> SportActivityName.FREE_EXERCISE
+             132 -> {
+                 when (noiseFitDevice.deviceType) {
+                     DeviceType.NOISEFIT_ARC.deviceType, DeviceType.NOISEFIT_TWIST.deviceType, DeviceType.NOISEFIT_CURVE.deviceType -> {
+                         return SportActivityName.PADDLEBOARDS
+                     }
+
+                     else -> {
+                         SportActivityName.PADDLEBOARD_SURFING
+                     }
+                 }
+             }
+
+             133 -> SportActivityName.KABADDI
+             200 -> SportActivityName.POOL_SWIMMING
+             204 -> SportActivityName.TRIATHLON
+             135 -> SportActivityName.INDOOR_WALKING
+             136 -> SportActivityName.TABLE_FOOTBALL
+             137 -> SportActivityName.SEVEN_STONES
+             138 -> SportActivityName.KHO_KHO
+
+             else -> ""
+         }*/
     }
 
 
@@ -389,17 +389,19 @@ constructor(
     ): List<OreoAutoSportData> {
         val data = ArrayList<OreoAutoSportData>()
         p0?.forEach {
-            val oreoAutoSportData = OreoAutoSportData()
-            oreoAutoSportData.steps = it.autoSportSteps
-            oreoAutoSportData.startTime = it.autoSportStartTime * 1000L
-            oreoAutoSportData.intensity = it.autoSportIntensity
-            oreoAutoSportData.isAccepted = false
-            oreoAutoSportData.duration = it.autoSportDuration
-            oreoAutoSportData.intensity = it.autoSportIntensity
-            oreoAutoSportData.calories = it.autoSportKcal
-            oreoAutoSportData.type = getSportName(it.autoSportType, colorFitDevice)
-            oreoAutoSportData.hrData = gson.toJson(it.hrData)
-            data.add(oreoAutoSportData)
+            if (it.autoSportType == 1 || it.autoSportType == 2) {
+                val oreoAutoSportData = OreoAutoSportData()
+                oreoAutoSportData.steps = it.autoSportSteps
+                oreoAutoSportData.startTime = it.autoSportStartTime * 1000L
+                oreoAutoSportData.intensity = it.autoSportIntensity
+                oreoAutoSportData.isAccepted = false
+                oreoAutoSportData.duration = it.autoSportDuration
+                oreoAutoSportData.intensity = it.autoSportIntensity
+                oreoAutoSportData.calories = it.autoSportKcal
+                oreoAutoSportData.type = getSportName(it.autoSportType, colorFitDevice)
+                oreoAutoSportData.hrData = gson.toJson(it.hrData)
+                data.add(oreoAutoSportData)
+            }
         }
         return data
     }

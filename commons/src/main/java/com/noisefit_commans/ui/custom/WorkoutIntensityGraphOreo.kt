@@ -112,7 +112,7 @@ class WorkoutIntensityGraphOreo(var mContext: Context) : View(
                 var end: Float
                 var top = 0f
                 val bottom = sectionHeight * 4 - pxFromDp(mContext, 2f)
-                val textY = sectionHeight * 5
+                val textY = sectionHeight * 5 - pxFromDp(mContext,6f)
 
                 val sectionWidth = eachSecondsWidth * 5
 

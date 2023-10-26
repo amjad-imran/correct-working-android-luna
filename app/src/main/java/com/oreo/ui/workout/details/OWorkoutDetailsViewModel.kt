@@ -153,7 +153,7 @@ class OWorkoutDetailsViewModel @Inject constructor(
 
         var index = 0
         while (calendar.before(endTimeCalendar)) {
-            list[index] = DateFormats.timeFormat.format(calendar.time)
+            list[index] = DateFormats.timeFormat12_2.format(calendar.time)
             calendar.add(Calendar.MINUTE, 5)
             index++
         }
@@ -161,9 +161,9 @@ class OWorkoutDetailsViewModel @Inject constructor(
 
         return list
             .apply {
-                this[0] = startTime.lowercase().replace("am", "").replace("pm", "").trim()
+                this[0] = startTime.lowercase()
                 this[movementList.size - 1] =
-                    endTime.lowercase().replace("am", "").replace("pm", "").trim()
+                    endTime.lowercase()
             }
             .toList()
     }

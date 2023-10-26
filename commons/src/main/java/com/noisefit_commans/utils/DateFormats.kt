@@ -103,6 +103,9 @@ object DateFormats {
     @SuppressLint("ConstantLocale")
     val timeFormat12 = SimpleDateFormat("hh:mm a", defaultLocale)
 
+    @SuppressLint("ConstantLocale")
+    val timeFormat12_2 = SimpleDateFormat("hh:mm", defaultLocale)
+
 
     @SuppressLint("ConstantLocale")
     val timeFormatSleepTime = SimpleDateFormat("yyyy-MM-dd HH:mm", defaultLocale)
