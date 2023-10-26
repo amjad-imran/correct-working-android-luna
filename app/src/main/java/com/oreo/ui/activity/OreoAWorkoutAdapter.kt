@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.databinding.OreoItemWorkoutActivityBinding
 import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
 import com.oreo.data.model.OActivityListModal
 
@@ -21,6 +22,8 @@ class OreoAWorkoutAdapter(val mListener:OnItemClickListener) :
 //                binding.divider1.root.invisible()
 //            } else
 //                binding.divider1.root.visible()
+            binding.imageView8.loadImage(binding.imageView8.context, resultData.iconUrl)
+
 
             binding.root.setOnClickListener {
                 mListener.onItemClick(resultData,bindingAdapterPosition)
