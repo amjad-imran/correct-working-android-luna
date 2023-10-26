@@ -43,8 +43,6 @@
                     android:background="@drawable/back_modal_transparent_oreo"
                     android:nestedScrollingEnabled="false"
                     android:orientation="vertical"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

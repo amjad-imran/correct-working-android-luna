@@ -885,7 +885,7 @@
     <string name="text_review">Review</string>
     <string name="text_what_is_this">What is this?</string>
     <string name="text_automatic_activity_detection">Automatic activity detection</string>
-    <string name="text_automatic_activity_detection_desc">Automatic activity detection automatically reports all physical activities detected by your Luna Ring.\nYou can review and verify each detected activity, ensuring accuracy. Confirm to include yours stats in your activity score.</string>
+    <string name="text_automatic_activity_detection_desc">Automatic activity detection automatically reports all physical activities detected by your Luna Ring.\n\nYou can review and verify each detected activity, ensuring accuracy. Confirm to include yours stats in your activity score.</string>
     <string name="text_delete_workout">Delete workout</string>
     <string name="text_this_week">This week</string>
     <string name="text_last_week">Last week</string>

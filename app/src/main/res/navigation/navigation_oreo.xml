@@ -445,5 +445,9 @@
             app:argType="string"
             app:nullable="true" />
     </dialog>
+    <dialog
+        android:id="@+id/aboutAutoWorkoutBottomSheet"
+        android:name="com.oreo.ui.home.summary.AboutAutoWorkoutBottomSheet"
+        android:label="AboutAutoWorkoutBottomSheet" />
 
 </navigation>

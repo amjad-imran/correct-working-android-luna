@@ -207,19 +207,8 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             when (type) {
 
                 is OSummaryHealthOverviewClickEnum.WorkoutAlertWhatisThis -> {
-                    setFragmentResultListener(ALERT_REQUEST_KEY) { _, bundle ->
-                        val allow = bundle.getBoolean("allow")
-                        if (allow) {
 
-                        }
-                    }
-                    navigate(
-                        OSummaryFragmentDirections.actionHomeToAlertTextBottomSheet(
-                            getString(R.string.text_automatic_activity_detection),
-                            getString(R.string.text_automatic_activity_detection_desc),
-                            "", ""
-                        )
-                    )
+                    navigate(R.id.aboutAutoWorkoutBottomSheet)
                 }
 
                 is OSummaryHealthOverviewClickEnum.WorkoutAlertIdentify -> {
