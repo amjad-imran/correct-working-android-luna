@@ -1912,7 +1912,7 @@ object DateFormats {
             val outputFormat = SimpleDateFormat("hh:mm a", defaultLocale)
             val start = inputFormat.parse(startTime)
             val end = inputFormat.parse(endTime)
-            "${outputFormat.format(start)} - ${outputFormat.format(end)}"
+            "${outputFormat.format(start).lowercase()} - ${outputFormat.format(end).lowercase()}"
         } catch (exp: Exception) {
             ""
         }
