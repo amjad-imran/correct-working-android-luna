@@ -13,6 +13,8 @@ import com.noisefit_commans.utils.LOGS
 
 class MovementChartAuto(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     private val xTextPaint = Paint()
+    private val pointCirclePaint = Paint()
+    private val pointsPaint = Paint()
     private val timePaint = Paint()
     private val inactivePaint = Paint()
     private val lowPaint = Paint()
@@ -41,6 +43,16 @@ class MovementChartAuto(context: Context, attrs: AttributeSet?) : View(context, 
         xTextPaint.alpha = 160
         xTextPaint.typeface = fontGilroy
         xTextPaint.isAntiAlias = true
+
+        pointsPaint.apply {
+            textSize = dpToPx(12)
+            color = Color.WHITE
+            xTextPaint.typeface = fontGilroy
+        }
+        pointCirclePaint.apply {
+            color = Color.WHITE
+            alpha = 30
+        }
 
 
         timePaint.color = Color.parseColor("#ffffff")
@@ -121,7 +133,19 @@ class MovementChartAuto(context: Context, attrs: AttributeSet?) : View(context, 
 
 
             if (!workoutList[index].isNullOrEmpty()) {
-                canvas.drawText(workoutList[index]!!, x, barCenter - barHalfHeight - dpToPx(16), xTextPaint)
+                canvas.drawCircle(
+                    x,
+                    barCenter - barHalfHeight - dpToPx(16),
+                    dpToPx(8),
+                    pointCirclePaint
+                )
+                val textWidth = pointsPaint.measureText(workoutList[index]!!)
+                canvas.drawText(
+                    workoutList[index]!!,
+                    x - textWidth / 2,
+                    barCenter - barHalfHeight - dpToPx(12),
+                    pointsPaint
+                )
             }
 
             canvas.drawRoundRect(rectf, dpToPx(2), dpToPx(2), barPaint)

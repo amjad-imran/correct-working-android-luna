@@ -101,7 +101,15 @@ class DetectWorkoutFragment :
         viewModel.workoutDeleted.observe(this) {
             it.getContent()?.let { data ->
                 detectWorkoutAdapter.removeItem(data.second)
+
+                val index = oreoAutoSportData.indexOfFirst { data.first == it.id }
+
+                if (index != -1) {
+                    oreoAutoSportData.removeAt(index)
+                }
+
                 detectWorkoutFragmentListener?.onDismissWorkout(data.first, viewModel.dayKey)
+                getDayTimeData()
             }
         }
 
@@ -119,6 +127,10 @@ class DetectWorkoutFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setAdapter()
+        getDayTimeData()
+    }
+
+    private fun getDayTimeData() {
         if (oreoAutoSportData.isNotEmpty()) {
             val date = DateFormats.convertTimestampToDate(
                 oreoAutoSportData[0].startTime,
@@ -126,61 +138,10 @@ class DetectWorkoutFragment :
             )
             viewModel.getDayTimeMovement(date)
         }
-
-
     }
 
     private fun setData(movementList: List<Int>) {
         viewModel.movementList = movementList
-        /* val topIndexList = UtilClass.getDetectedWorkoutMovementList(oreoAutoSportData)
-         val baseHrList = UtilClass.graphBaseInterval(null, null, movementList.size)
-         val candleChartModelList: MutableList<CandleChartModel> =
-             java.util.ArrayList<CandleChartModel>()*/
-        /*movementList.forEachIndexed { index, data ->
-
-            val chartModel = CandleChartModel()
-
-            chartModel.bottomLineText = baseHrList[index]
-            chartModel.topText = topIndexList[index].toString()
-            when (data) {
-                1 -> {
-
-                    chartModel.length =
-                        (binding.candleChart.max * 0.4).toInt()
-                    chartModel.color = Color.parseColor("#8088d6eb")
-                    chartModel.type = CandleChartModel.Type.LOW
-
-                }
-
-                2 -> {
-
-                    chartModel.length =
-                        (binding.candleChart.max * 0.6).toInt()
-                    chartModel.color = Color.parseColor("#88d6eb")
-                    chartModel.type = CandleChartModel.Type.MEDIUM
-                }
-
-                3, 4 -> {
-
-                    chartModel.length =
-                        (binding.candleChart.max * 0.8).toInt()
-                    chartModel.color = Color.parseColor("#ffffff")
-
-                    chartModel.type = CandleChartModel.Type.HIGH
-                }
-
-                else -> {
-                    chartModel.length =
-                        (binding.candleChart.max * 0.2).toInt()
-                    chartModel.color = Color.parseColor("#3d3d3d")
-                    chartModel.type = CandleChartModel.Type.INACTIVE
-
-                }
-            }
-            chartModel.value = data
-            candleChartModelList.add(chartModel)
-        }*/
-        //binding.candleChart.updateData(candleChartModelList)
 
 
         handleMovementNewViews(movementList)

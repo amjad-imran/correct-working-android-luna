@@ -274,7 +274,8 @@ constructor(
         val list = MutableList<String?>(96) { null }
 
         var counter = 1
-        oreoAutoSportData.forEach {
+
+        oreoAutoSportData.reversed().forEach {
 
             val minutes = minutesSinceMidnight(it.startTime)
             val interval = (minutes / 5) / 3
