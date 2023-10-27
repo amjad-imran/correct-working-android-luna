@@ -69,7 +69,12 @@ class RingWelcomeFragment :
             val joinedData = it.content.joinToString(separator = "\n\n")
 
             binding.tvContent.text = joinedData
-            binding.ivMain.loadImageWithCache(binding.ivMain.context, it.url)
+
+            binding.ivMain.loadImageWithCache(
+                binding.ivMain.context,
+                it.url,
+                R.drawable.placeholder_banner
+            )
 
         }
 
