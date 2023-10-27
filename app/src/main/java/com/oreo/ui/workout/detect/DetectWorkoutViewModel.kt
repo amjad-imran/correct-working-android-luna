@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
+import com.noisefit_commans.common.maxWithoutInvalidMovementValues
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.model.OreoAutoSportData
@@ -14,12 +15,17 @@ import com.noisefit_commans.ui.getParseList
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.OAddWorkout
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.Instant
+import java.time.ZoneId
+import java.time.temporal.ChronoUnit
+import java.util.Calendar
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -125,6 +131,7 @@ constructor(
 
         }
     }
+
     fun markWorkoutSynced(id: Int, position: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             syncRepository.markWorkoutSynced(id).collect { resource ->
@@ -244,6 +251,48 @@ constructor(
                 }
             }
         }
+    }
+
+    fun getCombinedMovementData(
+        originalList: List<Int>?
+    ): List<Int> {
+        if (originalList.isNullOrEmpty()) {
+            return MutableList(96) { 0 }
+        }
+        val combinedList = ArrayList<Int>()
+        for (i in originalList.indices step 3) {
+            val endIndex = i + 3
+            if (endIndex <= originalList.size) {
+                val max = originalList.subList(i, endIndex).maxWithoutInvalidMovementValues()
+                combinedList.add(max)
+            }
+        }
+        return combinedList
+    }
+
+    fun getWorkoutPointsList(oreoAutoSportData: List<OreoAutoSportData>): List<String?> {
+        val list = MutableList<String?>(96) { null }
+
+        var counter = 1
+        oreoAutoSportData.forEach {
+
+            val minutes = minutesSinceMidnight(it.startTime)
+            val interval = (minutes / 5) / 3
+
+            list[interval] = "$counter"
+            counter++
+        }
+
+        return list
+
+    }
+
+    fun minutesSinceMidnight(timestamp: Long): Int {
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = timestamp
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+        return hour * 60 + minute
     }
 
 }
