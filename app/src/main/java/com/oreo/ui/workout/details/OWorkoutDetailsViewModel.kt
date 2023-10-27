@@ -112,6 +112,15 @@ class OWorkoutDetailsViewModel @Inject constructor(
 
     }
 
+    fun getDummyBreakUpDataForTimeDisplay(): ArrayList<Int> {
+        val dummyList = ArrayList<Int>()
+        for (i in 0..287) {
+            dummyList.add(0)
+        }
+        return dummyList
+
+    }
+
     fun getXAxisList(movementList: List<Int>, startTime: String, endTime: String): List<String?> {
 
         val list = arrayOfNulls<String>(movementList.size)

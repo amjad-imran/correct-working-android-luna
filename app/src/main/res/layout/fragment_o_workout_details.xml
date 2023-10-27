@@ -102,7 +102,7 @@
 
                 <include
                     android:id="@+id/lytHeartRate"
-                    layout="@layout/layout_owd_heart_rate_item"
+                    layout="@layout/oreo_layout_sleep_movement"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
