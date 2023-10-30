@@ -973,4 +973,6 @@
     <string name="charge_point3">Once the ring is completely charged the breathing light will turn to a solid white state.</string>
     <string name="text_restart_device">Restart device</string>
     <string name="text_pair_a_new_ring">Pair a new ring</string>
+    <string name="text_active_calories">Active calories</string>
+    <string name="text_inactive_time">Inactive time</string>
 </resources>

@@ -1,6 +1,9 @@
 package com.oreo.util
 
+import android.content.Context
+import android.graphics.PointF
 import com.google.gson.Gson
+import com.hookedonplay.decoviewlib.charts.SeriesItem
 import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
@@ -576,6 +579,28 @@ object UtilClass {
                 return -1
             }
         }
+    }
+
+    fun seriesItemWithoutInset(
+        context: Context, initialValue: Float, maxValue: Float, color: Int, width: Float
+    ): SeriesItem {
+        return SeriesItem.Builder(context.resources.getColor(color, null))
+            .setShowPointWhenEmpty(true)
+            .setRange(0f, maxValue, initialValue).setLineWidth(width).build()
+    }
+    fun seriesItemWithInset(
+        context: Context,
+        initialValue: Float,
+        maxValue: Float,
+        color: Int,
+        inset: Float,
+        width: Float
+    ): SeriesItem {
+
+        return SeriesItem.Builder(context.resources.getColor(color, null))
+            .setInset(PointF(inset, inset))
+            .setShowPointWhenEmpty(true)
+            .setRange(0f, maxValue, initialValue).setLineWidth(width).build()
     }
 
     private fun getNearest2Number(number: Int): Int {
