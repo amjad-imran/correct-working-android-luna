@@ -75,6 +75,14 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     }
 
     override fun initListener() {
+
+        binding.contentMain.lytConnectHelp.tvDesc.setOnClickListener {
+            navigate(R.id.oreoHSQuestionFragment, Bundle().apply {
+                putString("title", "Battery & Charging")
+                putString("id", "6")
+            })
+        }
+
         binding.contentMain.lytChargeRing.root.setOnClickListener {
             navigate(R.id.ringBatteryChargeFragment)
             viewModel.setRingBatteryInfoState()
@@ -393,6 +401,15 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 } else {
                     this.root.gone()
                 }
+            }
+        }
+
+        viewModel.stateConnectHelp.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.contentMain.lytConnectHelp.root.visible()
+            } else {
+                binding.contentMain.lytConnectHelp.root.gone()
+
             }
         }
 

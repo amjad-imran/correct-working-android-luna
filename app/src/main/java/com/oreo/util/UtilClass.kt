@@ -276,7 +276,7 @@ object UtilClass {
             startTime,
             DateFormats.dateTimeFormat5,
             DateFormats.time12Meridian
-        )
+        ).lowercase()
         hm[centerLeft] = DateFormats.time12Meridian.format(centerLeftTime).lowercase()
         hm[center] = DateFormats.time12Meridian.format(centerTime).lowercase()
         hm[center + centerLeft] = DateFormats.time12Meridian.format(centerRightTime).lowercase()
@@ -284,7 +284,7 @@ object UtilClass {
             endTime,
             DateFormats.dateTimeFormat5,
             DateFormats.time12Meridian
-        )
+        ).lowercase()
 
         return hm
 

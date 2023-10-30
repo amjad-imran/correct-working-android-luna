@@ -64,6 +64,7 @@ constructor(
     val stateHeaderCard = MutableLiveData<Pair<String, String>>()//Name,Date
     val stateHeartRateCard = MutableLiveData<OHealthOverview.HeartRate?>()
     val statePairDeviceCard = MutableLiveData<Boolean>()
+    val stateConnectHelp = MutableLiveData<Boolean>()
     val stateDashAlerts = MutableLiveData<HashMap<AlertType, DashAlert>>()
     val stateDashRingBattery = MutableLiveData<Pair<Boolean, ColorFitDevice?>>()
 
