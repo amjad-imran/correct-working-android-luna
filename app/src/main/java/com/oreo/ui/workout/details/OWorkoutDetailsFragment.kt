@@ -153,7 +153,13 @@ class OWorkoutDetailsFragment :
             binding.tvImportText.text = "Imported from Apple Health"
         } else {
 
-            setHrGraph(it.hrArray, it.hrAvg, it.hrLow,"${it.date} ${it.startTime}","${it.date} ${it.endTime}")
+            setHrGraph(
+                it.hrArray,
+                it.hrAvg,
+                it.hrLow,
+                "${it.date} ${it.startTime}",
+                "${it.date} ${it.endTime}"
+            )
 
             /*if ((it.hrLow == null || it.hrLow == 0) && (it.hrAvg == null || it.hrLow == 0)) {
                 binding.lytHeartRate.root.gone()
@@ -310,6 +316,7 @@ class OWorkoutDetailsFragment :
         val seTime: String?
         var breakUpData = ArrayList<Int>()
         var hasDummyData = true
+
         if (heartRateList?.value.isNullOrEmpty()) {
             breakUpData = mViewModel.getDummyBreakUpDataForTimeDisplay()
             ssTime = null
@@ -319,6 +326,11 @@ class OWorkoutDetailsFragment :
             seTime = sleepEndTime
             ssTime = sleepStartTime
             breakUpData = heartRateList?.value as ArrayList<Int>
+
+            val filteredSize = heartRateList.value.filter { it != 0 && it != 255 }
+            if (filteredSize.isEmpty()) {
+                hasDummyData = true
+            }
         }
 
 
