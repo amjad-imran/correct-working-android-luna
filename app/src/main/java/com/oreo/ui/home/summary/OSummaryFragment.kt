@@ -404,12 +404,11 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             }
         }
 
-        viewModel.stateConnectHelp.observe(viewLifecycleOwner) {
+        mainViewModel.stateConnectHelp.observe(viewLifecycleOwner) {
             if (it) {
                 binding.contentMain.lytConnectHelp.root.visible()
             } else {
                 binding.contentMain.lytConnectHelp.root.gone()
-
             }
         }
 
@@ -587,6 +586,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                     viewModel.checkBatteryPercentage()
                     viewModel.updateAlerts()
                     shouldSync()
+                    mainViewModel.onRingConnected()
                 }
 
                 is ConnectState.UnPaired -> {

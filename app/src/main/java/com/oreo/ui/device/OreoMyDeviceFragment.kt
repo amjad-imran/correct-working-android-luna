@@ -2,10 +2,12 @@ package com.oreo.ui.device
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoMyDeviceBinding
+import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.SplashActivity
 import com.noisefit.ui.myDevice.REST_REQUEST_KEY
 import com.noisefit.ui.myDevice.UNPAIR_REQUEST_KEY
@@ -39,6 +41,7 @@ import kotlinx.coroutines.launch
 class OreoMyDeviceFragment :
     BaseFragment<FragmentOreoMyDeviceBinding>(FragmentOreoMyDeviceBinding::inflate) {
     private val mViewModel: OMyDeviceViewModel by viewModels()
+    private val mainViewModel: OreoMainViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -204,6 +207,8 @@ class OreoMyDeviceFragment :
                 is ConnectState.ConnectSuccess -> {
                     setStateConnected(connectedState.noiseFitDevice)
                     getBatteryInfo()
+                    mainViewModel.onRingConnected()
+
                 }
 
                 is ConnectState.UnPaired -> {

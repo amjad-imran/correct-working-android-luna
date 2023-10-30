@@ -326,9 +326,11 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 viewModel.sessionManager.setConnectStateRing(ConnectState.Connecting(it))
                 ApplicationUtils.setRescueWorkManager(this)
             }
+
+            if(viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess){
+                viewModel.startDisconnectTimer()
+            }
         }
-
-
     }
 
     override fun onPause() {

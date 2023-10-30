@@ -1,11 +1,14 @@
 package com.noisefit.oreo
 
+import android.os.CountDownTimer
 import androidx.lifecycle.MutableLiveData
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.AppConstants
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -26,4 +29,32 @@ constructor(
     fun navigateTo(option: BottomNavOption) {
         bottomNavigation.postValue(Event(option))
     }
+
+
+    val stateConnectHelp = MutableLiveData<Boolean>()
+    var timer: CountDownTimer? = null
+
+    fun startDisconnectTimer() {
+        if (timer == null) {
+            timer = object : CountDownTimer(60000L, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    LOGS.w("TIMER running $millisUntilFinished")
+                }
+
+                override fun onFinish() {
+                    timer = null
+                    stateConnectHelp.postValue(true)
+                }
+            }
+            timer?.start()
+        }
+
+    }
+
+    fun onRingConnected() {
+        timer?.cancel()
+        timer = null
+        stateConnectHelp.postValue(false)
+    }
+
 }
