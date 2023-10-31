@@ -14,6 +14,7 @@ import com.noisefit_commans.ui.loadWatchImage
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.PromotionalUtil
 import com.noisefit_commans.models.ColorFitDevice
+import com.noisefit_commans.ui.invisible
 
 
 class NearbyDevicesAdapter(private val listener: NearbyDevicesClickListener?) :
@@ -68,16 +69,8 @@ class NearbyDevicesAdapter(private val listener: NearbyDevicesClickListener?) :
                 listener?.onDeviceClicked(colorFitDevice)
             }
 
-            if (PromotionalUtil.showPromotionalBanner(colorFitDevice)) {
-                binding.ivBg.loadImage(binding.ivBg.context, R.drawable.bg_pulse_scan)
-                binding.ivBg.visible()
-            } else {
-                binding.ivBg.setImageResource(0)
-                binding.ivBg.gone()
-            }
-
             if (bindingAdapterPosition == (mDataSet.size - 1)) {
-                binding.vDivider.gone()
+                binding.vDivider.invisible()
             } else {
                 binding.vDivider.visible()
             }
