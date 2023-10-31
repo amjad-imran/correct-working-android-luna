@@ -1,22 +1,22 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="37dp"
-    android:height="36dp"
-    android:viewportWidth="37"
-    android:viewportHeight="36">
+    android:width="25dp"
+    android:height="24dp"
+    android:viewportWidth="25"
+    android:viewportHeight="24">
   <path
-      android:pathData="M17.673,27a0.72,0.72 0,0 1,-0.72 -0.72V9.72a0.72,0.72 0,0 1,0.72 -0.72h0.72a0.72,0.72 0,0 1,0.72 0.72v16.56a0.72,0.72 0,0 1,-0.72 0.72h-0.72z"
+      android:pathData="M12.682,20a0.64,0.64 0,0 1,-0.64 -0.64V4.64a0.64,0.64 0,0 1,0.64 -0.64h0.64a0.64,0.64 0,0 1,0.64 0.64v14.72a0.64,0.64 0,0 1,-0.64 0.64h-0.64z"
       android:fillColor="#fff"
       android:fillType="evenOdd"/>
   <path
-      android:pathData="M27.033,18.36a0.72,0.72 0,0 1,-0.72 0.72H9.753a0.72,0.72 0,0 1,-0.72 -0.72v-0.72a0.72,0.72 0,0 1,0.72 -0.72h16.56a0.72,0.72 0,0 1,0.72 0.72v0.72z"
+      android:pathData="M21,12.32a0.64,0.64 0,0 1,-0.64 0.64H5.64a0.64,0.64 0,0 1,-0.64 -0.64v-0.64a0.64,0.64 0,0 1,0.64 -0.64h14.72a0.64,0.64 0,0 1,0.64 0.64v0.64z"
       android:fillColor="#fff"
       android:fillType="evenOdd"/>
   <path
-      android:pathData="M24.144,24.619a0.72,0.72 0,0 1,-1.018 0l-11.71,-11.71a0.72,0.72 0,0 1,0 -1.018l0.509,-0.51a0.72,0.72 0,0 1,1.018 0l11.71,11.71a0.72,0.72 0,0 1,0 1.018l-0.51,0.51z"
+      android:pathData="M18.433,17.883a0.64,0.64 0,0 1,-0.905 0L7.12,7.475a0.64,0.64 0,0 1,0 -0.906l0.452,-0.452a0.64,0.64 0,0 1,0.905 0l10.409,10.409a0.64,0.64 0,0 1,0 0.905l-0.453,0.452z"
       android:fillColor="#fff"
       android:fillType="evenOdd"/>
   <path
-      android:pathData="M11.414,24.11a0.72,0.72 0,0 1,0 -1.019l11.71,-11.71a0.72,0.72 0,0 1,1.018 0l0.509,0.51a0.72,0.72 0,0 1,0 1.018l-11.71,11.71a0.72,0.72 0,0 1,-1.018 0l-0.509,-0.51z"
+      android:pathData="M7.118,17.43a0.64,0.64 0,0 1,0 -0.905L17.527,6.117a0.64,0.64 0,0 1,0.905 0l0.453,0.452a0.64,0.64 0,0 1,0 0.905L8.476,17.883a0.64,0.64 0,0 1,-0.905 0l-0.453,-0.453z"
       android:fillColor="#fff"
       android:fillType="evenOdd"/>
 </vector>

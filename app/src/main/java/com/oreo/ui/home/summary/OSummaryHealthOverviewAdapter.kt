@@ -701,12 +701,11 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     .setDuration(1000L).build()
             )
 
-            val inactiveMins = 0
             val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(
-                inactiveMins
+                data.data.inactiveMinutes ?: 0
             )
 
-            if (hour > 0){
+            if (hour > 0) {
                 binding.tvHr.visible()
                 binding.textHr.visible()
                 binding.tvMin.visible()
@@ -714,8 +713,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
                 binding.tvHr.text = "$hour"
                 binding.tvMin.text = "$minute"
-            }
-            else if (minute > 0) {
+            } else if (minute > 0) {
                 binding.tvHr.gone()
                 binding.textHr.gone()
                 binding.tvMin.visible()

@@ -373,6 +373,16 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity_default)
                 binding.navView.ivMyDevice.setImageResource(R.drawable.ic_dash_device_default)
 
+
+                binding.navView.apply {
+                    ivGlowHome.visible()
+                    ivGlowSleep.gone()
+                    ivGlowReadiness.gone()
+                    ivGlowActivity.gone()
+                    ivGlowMyDevice.gone()
+                }
+
+
                 val lastDestination = navController?.currentDestination
                 if (lastDestination?.id != R.id.navigation_oreo_home) {
                     navController?.popBackStack(R.id.navigation_oreo_home, true)
@@ -389,6 +399,14 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity_default)
                 binding.navView.ivMyDevice.setImageResource(R.drawable.ic_dash_device_default)
 
+                binding.navView.apply {
+                    ivGlowHome.gone()
+                    ivGlowSleep.visible()
+                    ivGlowReadiness.gone()
+                    ivGlowActivity.gone()
+                    ivGlowMyDevice.gone()
+                }
+
                 val lastDestination = navController?.currentDestination
                 if (lastDestination?.id != R.id.navigation_oreo_sleep) {
                     navController?.popBackStack(R.id.navigation_oreo_sleep, true)
@@ -404,6 +422,14 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness)
                 binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity_default)
                 binding.navView.ivMyDevice.setImageResource(R.drawable.ic_dash_device_default)
+
+                binding.navView.apply {
+                    ivGlowHome.gone()
+                    ivGlowSleep.gone()
+                    ivGlowReadiness.visible()
+                    ivGlowActivity.gone()
+                    ivGlowMyDevice.gone()
+                }
                 val lastDestination = navController?.currentDestination
                 if (lastDestination?.id != R.id.navigation_oreo_readiness) {
                     navController?.popBackStack(R.id.navigation_oreo_readiness, true)
@@ -419,7 +445,13 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness_default)
                 binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity)
                 binding.navView.ivMyDevice.setImageResource(R.drawable.ic_dash_device_default)
-
+                binding.navView.apply {
+                    ivGlowHome.gone()
+                    ivGlowSleep.gone()
+                    ivGlowReadiness.gone()
+                    ivGlowActivity.visible()
+                    ivGlowMyDevice.gone()
+                }
                 val lastDestination = navController?.currentDestination
                 if (lastDestination?.id != R.id.navigation_oreo_workouts) {
                     navController?.popBackStack(R.id.navigation_oreo_workouts, true)
@@ -434,7 +466,13 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness_default)
                 binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity_default)
                 binding.navView.ivMyDevice.setImageResource(R.drawable.ic_dash_device_selected)
-
+                binding.navView.apply {
+                    ivGlowHome.gone()
+                    ivGlowSleep.gone()
+                    ivGlowReadiness.gone()
+                    ivGlowActivity.gone()
+                    ivGlowMyDevice.visible()
+                }
                 val lastDestination = navController?.currentDestination
                 if (lastDestination?.id != R.id.navigation_oreo_my_device) {
                     navController?.popBackStack(R.id.navigation_oreo_my_device, true)
