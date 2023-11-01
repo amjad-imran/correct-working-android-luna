@@ -14,6 +14,7 @@ import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.OAddWorkout
 import com.oreo.data.model.OWorkoutListModal
@@ -43,6 +44,9 @@ constructor(
     val addWorkoutResponse = _addWorkoutResponse
     private val _oWorkoutListModalResponse = MutableLiveData<List<OWorkoutListModal>>()
     val oWorkoutListModalResponse: LiveData<List<OWorkoutListModal>> = _oWorkoutListModalResponse
+    val updateDefaultWorkout = MutableLiveData<Event<OWorkoutListModal>>()
+
+
     var addWorkout = OAddWorkout()
     var workoutListModal: OWorkoutListModal? = null
     var activityType: String? = null
@@ -53,6 +57,10 @@ constructor(
 
     var isStartTimeSelected = false
     var isEndTimeSelected = false
+
+    init {
+        getWorkoutList(false)
+    }
 
     fun convertAutoSport(data: OreoAutoSportData?) {
         if (data == null) {
@@ -231,7 +239,7 @@ constructor(
         return 0f
     }
 
-    fun getWorkoutList() {
+    fun getWorkoutList(postValue: Boolean) {
         viewModelScope.launch {
 
             userActivityRepository.getWorkoutList().collect { resource ->
@@ -250,7 +258,7 @@ constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        getWorkoutList()
+                                        getWorkoutList(postValue)
                                     }
 
                                     override fun no() {
@@ -262,7 +270,14 @@ constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            _oWorkoutListModalResponse.postValue(it)
+                            if (postValue) {
+                                _oWorkoutListModalResponse.postValue(it)
+                            } else {
+                                val walkingWorkout = it.find { it.activityType.equals("walking",true) }
+                                walkingWorkout?.let { walk->
+                                    updateDefaultWorkout.postValue(Event(walk))
+                                }
+                            }
                         }
                     }
                 }

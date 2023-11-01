@@ -78,6 +78,21 @@ class OAddWorkoutFragment :
         )
     }
 
+    private fun setWorkout(workout: OWorkoutListModal) {
+        viewModel.workoutListModal = workout
+
+        context?.let { ctx ->
+            binding.lytWorkout.ivWorkoutImage.loadImage(ctx, workout.iconUrl)
+        }
+
+        binding.lytWorkout.tvWorkout.text = workout.getFormattedActivityName()
+        /*setCalories()
+        enableSaveBtn()*/
+        viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ADD_WORKOUT + "_${workout.activityType}_CLICK")
+
+        updateCalculatedData()
+    }
+
     override fun initListener() {
 
         setToolbar()
@@ -87,24 +102,13 @@ class OAddWorkoutFragment :
         setFragmentResultListener(SELECT_REQUEST_KEY) { _, bundle ->
             val workout = bundle.getParcelable<OWorkoutListModal>("workout")
             workout?.let {
-                viewModel.workoutListModal = workout
-
-                context?.let { ctx ->
-                    binding.lytWorkout.ivWorkoutImage.loadImage(ctx, workout.iconUrl)
-                }
-
-                binding.lytWorkout.tvWorkout.text = workout.getFormattedActivityName()
-                /*setCalories()
-                enableSaveBtn()*/
-                viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ADD_WORKOUT + "_${workout.activityType}_CLICK")
-
-                updateCalculatedData()
+                setWorkout(it)
             }
         }
 
         binding.lytWorkout.ivDropDown.setOnClickListener {
             if (viewModel.oWorkoutListModalResponse.value.isNullOrEmpty()) {
-                viewModel.getWorkoutList()
+                viewModel.getWorkoutList(true)
             } else {
                 goToSelectWorkout(viewModel.oWorkoutListModalResponse.value!!)
             }
@@ -535,6 +539,37 @@ class OAddWorkoutFragment :
 
 
     override fun subscribeObservers() {
+
+        viewModel.updateDefaultWorkout.observe(viewLifecycleOwner) {
+            it.getContent()?.let {
+
+                //set intensity
+                viewModel.addWorkout.intensity = "Moderate"
+                setIntensity()
+
+                //set start time and end time
+                val calStart = Calendar.getInstance()
+
+                viewModel.addWorkout.endHour = calStart.get(Calendar.HOUR_OF_DAY)
+                viewModel.addWorkout.endMinute = calStart.get(Calendar.MINUTE)
+
+                if (calStart.get(Calendar.HOUR_OF_DAY) == 0) {
+                    calStart.add(Calendar.MINUTE, -calStart.get(Calendar.MINUTE))
+                } else {
+                    calStart.add(Calendar.MINUTE, -60)
+                }
+                viewModel.addWorkout.startHour = calStart.get(Calendar.HOUR_OF_DAY)
+                viewModel.addWorkout.startMinute = calStart.get(Calendar.MINUTE)
+                setStartTimeBetween()
+
+                setEndTimeBetween()
+
+
+                //set workout
+                setWorkout(it)
+            }
+        }
+
         viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->
                 context.showShortToast(message)
