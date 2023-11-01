@@ -4,6 +4,7 @@ import com.noisefit_commans.models.*
 
 sealed class QueryCallback {
 
+    class BatteryAlertObtained(val batteryLevel: Int) : QueryCallback()
     class BatteryDataObtained(val batteryData: BatteryData) : QueryCallback()
     class FirmwareVersionObtained(val deviceFirmware: DeviceFirmware) : QueryCallback()
     object ClickCameraImage : QueryCallback()

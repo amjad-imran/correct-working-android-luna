@@ -35,6 +35,7 @@ import com.noisefit_commans.utils.LogEvents
 import com.noisefit_zhsdk.base.ZhApplicationHandler
 import com.zhapp.ble.ControlBleTools
 import com.zhapp.ble.bean.ActivityDurationBean
+import com.zhapp.ble.bean.AutoActiveSportBean
 import com.zhapp.ble.bean.AutoSportDataBean
 import com.zhapp.ble.bean.ContinuousBloodOxygenBean
 import com.zhapp.ble.bean.ContinuousHeartRateBean
@@ -753,6 +754,13 @@ constructor(
             override fun onRingSleepNAP(p0: MutableList<RingSleepNapBean>?) {
                 LOGS.d(TAG, "onRingSleepNAP : $p0")
                 AppLogs.sendAppLogs("$TRACK_TAG onRingSleepNAP : $p0")
+            }
+
+            override fun onRingAutoActiveSportData(p0: AutoActiveSportBean?) {
+                LOGS.w("SPORTS_DATA $p0")
+
+                AppLogs.sendAppLogs("onRingAutoActiveSportData ${Gson().toJson(p0)}")
+
             }
 
 

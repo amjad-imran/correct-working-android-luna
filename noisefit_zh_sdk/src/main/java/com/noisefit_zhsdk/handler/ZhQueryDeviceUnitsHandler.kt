@@ -45,6 +45,7 @@ import com.zhapp.ble.bean.ClassicBluetoothStateBean
 import com.zhapp.ble.bean.ClockInfoBean
 import com.zhapp.ble.bean.CommonReminderBean
 import com.zhapp.ble.bean.ContinuousBloodOxygenSettingsBean
+import com.zhapp.ble.bean.DeviceBatteryValueBean
 import com.zhapp.ble.bean.DeviceInfoBean
 import com.zhapp.ble.bean.DoNotDisturbModeBean
 import com.zhapp.ble.bean.EventInfoBean
@@ -69,6 +70,7 @@ import com.zhapp.ble.callback.AgpsCallBack
 import com.zhapp.ble.callback.CallBackUtils
 import com.zhapp.ble.callback.CallStateCallBack
 import com.zhapp.ble.callback.ContactCallBack
+import com.zhapp.ble.callback.DeviceBatteryReportingCallBack
 import com.zhapp.ble.callback.DeviceInfoCallBack
 import com.zhapp.ble.callback.DeviceLogCallBack
 import com.zhapp.ble.callback.EmergencyContactsCallBack
@@ -316,6 +318,14 @@ constructor(
         return false
     }
 
+    private val batteryAlertCallback = DeviceBatteryReportingCallBack {
+        testQueryDeviceDataCallback?.onQueryDataReceived(
+            QueryCallback.BatteryAlertObtained(
+                it.deviceBatteryValue
+            )
+        )
+    }
+
     private val realDataCallback = object : RealTimeDataCallBack {
         override fun onResult(p0: RealTimeBean?) {
 
@@ -371,6 +381,7 @@ constructor(
         initClassicBluetoothStateCallBack()
 
         CallBackUtils.realTimeDataCallback = realDataCallback
+        CallBackUtils.setDeviceBatteryReportingCallBack(batteryAlertCallback)
 
 
         /**
