@@ -44,7 +44,12 @@ class OAddWorkoutFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.movementList = args.movementList?.toList()
-        viewModel.convertAutoSport(args.autoSport)
+        if (args.autoSport != null) {
+            viewModel.convertAutoSport(args.autoSport)
+        }
+
+        viewModel.getWorkoutList(false)
+
     }
 
     private fun setToolbar() {
@@ -580,7 +585,7 @@ class OAddWorkoutFragment :
             it?.let {
                 if (it) {
                     setPrefillData()
-                    disableSelection()
+                    //disableSelection()
                 }
             }
         }

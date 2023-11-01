@@ -8,36 +8,26 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimen_24dp">
 
-        <ImageView
-            android:id="@+id/ivWorkout"
-            android:layout_width="@dimen/dimen_48dp"
-            android:layout_height="@dimen/dimen_48dp"
-            android:layout_margin="@dimen/dimen_16dp"
-            android:src="@drawable/ic_o_workout"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
 
         <TextView
             android:id="@+id/tvTitle"
-            style="@style/H6"
+            style="@style/H5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dimen_12dp"
-            android:layout_marginTop="@dimen/dimen_4dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:singleLine="true"
-            android:textColor="@color/medium_movement"
-            app:layout_constraintStart_toEndOf="@id/ivWorkout"
-            app:layout_constraintTop_toTopOf="@id/ivWorkout"
+            android:textColor="#88d6eb"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="Archery" />
-
 
         <View
             android:id="@+id/backIntensity"
             android:layout_width="0dp"
             android:layout_height="20dp"
-            android:layout_marginStart="-12dp"
-            android:layout_marginEnd="-12dp"
+            android:layout_marginStart="-8dp"
+            android:layout_marginEnd="-8dp"
             android:background="@drawable/back_modal_intensity"
             app:layout_constraintBottom_toBottomOf="@+id/tvIntensity"
             app:layout_constraintEnd_toEndOf="@+id/tvIntensity"
@@ -46,25 +36,36 @@
 
         <TextView
             android:id="@+id/tvIntensity"
-            style="@style/Small"
+            style="@style/Tinny"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="28dp"
+            android:textColor="@color/white"
+            android:layout_marginStart="16dp"
             android:gravity="center_horizontal"
             app:layout_constraintBottom_toBottomOf="@+id/tvTitle"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvTitle"
             app:layout_constraintTop_toTopOf="@+id/tvTitle"
             tools:text="Moderate" />
+
+        <ImageView
+            android:id="@+id/ivClose"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:padding="14dp"
+            android:src="@drawable/ic_close_dash_alert"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout3"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="14dp"
             app:layout_constraintEnd_toStartOf="@+id/include29"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/tvTitle"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvTitle">
 
             <TextView
@@ -84,7 +85,7 @@
             layout="@layout/layout_line_separator"
             android:layout_width="1dp"
             android:layout_height="0dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="12dp"
             app:layout_constraintBottom_toBottomOf="@+id/constraintLayout3"
             app:layout_constraintEnd_toStartOf="@+id/constraintLayout4"
             app:layout_constraintHorizontal_bias="0.5"
@@ -93,8 +94,9 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout4"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
             app:layout_constraintEnd_toStartOf="@+id/include31"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/include29"
@@ -129,7 +131,7 @@
             layout="@layout/layout_line_separator"
             android:layout_width="1dp"
             android:layout_height="0dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="12dp"
             app:layout_constraintBottom_toBottomOf="@+id/constraintLayout4"
             app:layout_constraintEnd_toStartOf="@+id/constraintLayout6"
             app:layout_constraintHorizontal_bias="0.5"
@@ -138,11 +140,9 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout6"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="12dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="26dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/include31"
             app:layout_constraintTop_toTopOf="@+id/constraintLayout3">
 
@@ -169,34 +169,37 @@
                 tools:text="500 kcal" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <Button
-            android:id="@+id/btnDismiss"
-            style="@style/SecondaryButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="16dp"
-            android:text="@string/text_dismiss"
-            app:backgroundTint="@null"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnAdd"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivWorkout" />
 
         <Button
             android:id="@+id/btnAdd"
             style="@style/PrimaryButtonStyle"
-            android:layout_width="0dp"
+            android:layout_width="88dp"
             android:layout_height="32dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="16dp"
-            android:text="@string/text_add"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/text_identify"
             app:backgroundTint="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout3" />
+
+
+        <TextView
+            android:id="@+id/btnEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="6dp"
+            android:fontFamily="@font/gilroy_medium"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
+            android:textColor="@color/carolina_blue"
+            android:textSize="12sp"
+            android:textStyle="normal"
+            app:drawableStartCompat="@drawable/ic_edit_auto_workout"
+            app:layout_constraintBottom_toBottomOf="@+id/btnAdd"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/btnDismiss"
-            app:layout_constraintTop_toTopOf="@+id/btnDismiss" />
+            app:layout_constraintTop_toTopOf="@+id/btnAdd"
+            android:text="@string/text_edit" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

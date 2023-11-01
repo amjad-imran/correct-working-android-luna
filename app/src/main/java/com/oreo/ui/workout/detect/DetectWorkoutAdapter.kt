@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.OreoItemDetectWorkoutListBinding
 import com.noisefit_commans.data.model.OreoAutoSportData
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import java.util.concurrent.TimeUnit
 
@@ -51,12 +53,33 @@ class DetectWorkoutAdapter(val detectWorkoutListener: DetectWorkoutListener) :
                 binding.tvStart.text = time
             }
 
-            binding.tvTitle.text = resultData.type?.replace("_", " ")
+            val workoutName = resultData.type?.replace("_", " ")
                 ?.replaceFirstChar { if (it.isLowerCase()) it.titlecase(DateFormats.defaultLocale) else it.toString() }
-            binding.btnDismiss.setOnClickListener {
+
+            binding.tvTitle.text = workoutName
+
+            var isOtherWorkout = false
+            if (workoutName.equals("walking", true) || workoutName.equals("running", true)) {
+                binding.btnEdit.visible()
+                binding.btnAdd.text = "Confirm"
+            } else {
+                binding.btnEdit.gone()
+                binding.btnAdd.text = "Identify"
+                isOtherWorkout = true
+            }
+
+
+            binding.ivClose.setOnClickListener {
                 detectWorkoutListener.onDismissWorkout(resultData, bindingAdapterPosition)
             }
             binding.btnAdd.setOnClickListener {
+                if (isOtherWorkout) {
+                    detectWorkoutListener.onIdentifyWorkout(resultData, bindingAdapterPosition)
+                } else {
+                    detectWorkoutListener.onAddWorkout(resultData, bindingAdapterPosition)
+                }
+            }
+            binding.btnEdit.setOnClickListener {
                 detectWorkoutListener.onIdentifyWorkout(resultData, bindingAdapterPosition)
             }
         }
@@ -114,6 +137,7 @@ class DetectWorkoutAdapter(val detectWorkoutListener: DetectWorkoutListener) :
 }
 
 interface DetectWorkoutListener {
+    fun onAddWorkout(data: OreoAutoSportData, position: Int)
     fun onIdentifyWorkout(data: OreoAutoSportData, position: Int)
     fun onDismissWorkout(data: OreoAutoSportData, position: Int)
 }

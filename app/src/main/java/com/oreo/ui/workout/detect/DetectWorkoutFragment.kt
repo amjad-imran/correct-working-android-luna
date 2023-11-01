@@ -29,12 +29,18 @@ class DetectWorkoutFragment :
 
     private val detectWorkoutAdapter: DetectWorkoutAdapter by lazy {
         DetectWorkoutAdapter(object : DetectWorkoutListener {
-            override fun onIdentifyWorkout(data: OreoAutoSportData, position: Int) {
-
-
+            override fun onAddWorkout(data: OreoAutoSportData, position: Int) {
                 viewModel.addWorkout(data, onAddSuccess = {
                     viewModel.markWorkoutSynced(data.id, position)
                 })
+            }
+            override fun onIdentifyWorkout(data: OreoAutoSportData, position: Int) {
+                detectWorkoutFragmentListener?.onIdentifyWorkout(
+                    data,
+                    viewModel.dayKey,
+                    viewModel.movementList
+                )
+
             }
 
             override fun onDismissWorkout(data: OreoAutoSportData, position: Int) {

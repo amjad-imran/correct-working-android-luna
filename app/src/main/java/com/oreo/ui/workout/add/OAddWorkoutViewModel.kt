@@ -58,9 +58,6 @@ constructor(
     var isStartTimeSelected = false
     var isEndTimeSelected = false
 
-    init {
-        getWorkoutList(false)
-    }
 
     fun convertAutoSport(data: OreoAutoSportData?) {
         if (data == null) {
@@ -75,7 +72,7 @@ constructor(
         addWorkout.intensity = getIntensity(data.intensity ?: 0)
         addWorkout.steps = data.steps
         addWorkout.date = DateFormats.convertTimestampToDate(endTime, DateFormats.dateFormat3)
-        activityType = data.type
+        activityType = "Walking"/*data.type*/
 
         tryCatch {
             val startTime =
@@ -111,7 +108,7 @@ constructor(
                 val isAuto = autoSport.value != null
 
                 if (isAuto) {
-                    this.addProperty("type", "auto")
+                    this.addProperty("type", "automanual")
                     this.addProperty("date", addWorkout.date)
                 } else {
                     this.addProperty("type", "manual")
@@ -273,10 +270,17 @@ constructor(
                             if (postValue) {
                                 _oWorkoutListModalResponse.postValue(it)
                             } else {
-                                val walkingWorkout = it.find { it.activityType.equals("walking",true) }
-                                walkingWorkout?.let { walk->
-                                    updateDefaultWorkout.postValue(Event(walk))
+                                val walkingWorkout =
+                                    it.find { it.activityType.equals("walking", true) }
+                                if (autoSport.value == null) {
+
+                                    walkingWorkout?.let { walk ->
+                                        updateDefaultWorkout.postValue(Event(walk))
+                                    }
+                                }else{
+                                    workoutListModal = walkingWorkout
                                 }
+
                             }
                         }
                     }

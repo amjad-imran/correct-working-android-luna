@@ -53,10 +53,10 @@ class DetectWorkoutListFragment :
                         key: String,
                         movementList: List<Int>?
                     ) {
-                       /* navigate(
+                        navigate(
                             DetectWorkoutListFragmentDirections.actionDetectWorkoutListFragmentToAddWorkoutFragment()
                                 .setMovementList(movementList?.toIntArray()).setAutoSport(data)
-                        )*/
+                        )
 
                     }
 
