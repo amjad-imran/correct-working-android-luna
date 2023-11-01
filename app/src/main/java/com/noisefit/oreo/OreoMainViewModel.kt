@@ -32,10 +32,11 @@ constructor(
 
 
     val stateConnectHelp = MutableLiveData<Boolean>()
+    var isHelpWidgetShown = false
     var timer: CountDownTimer? = null
 
     fun startDisconnectTimer() {
-        if (timer == null) {
+        if (timer == null && !isHelpWidgetShown) {
             timer = object : CountDownTimer(60000L, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
                     LOGS.w("TIMER running $millisUntilFinished")
@@ -43,7 +44,10 @@ constructor(
 
                 override fun onFinish() {
                     timer = null
-                    stateConnectHelp.postValue(true)
+                    if (!isHelpWidgetShown) {
+                        isHelpWidgetShown = true
+                        stateConnectHelp.postValue(true)
+                    }
                 }
             }
             timer?.start()

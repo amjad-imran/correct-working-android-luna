@@ -76,6 +76,10 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
     override fun initListener() {
 
+        binding.contentMain.lytConnectHelp.btnCancel.setOnClickListener {
+            mainViewModel.onRingConnected()
+        }
+
         binding.contentMain.lytConnectHelp.tvDesc.setOnClickListener {
             navigate(R.id.oreoHSQuestionFragment, Bundle().apply {
                 putString("title", "Battery & Charging")

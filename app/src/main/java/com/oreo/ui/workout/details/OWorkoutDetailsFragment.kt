@@ -153,78 +153,15 @@ class OWorkoutDetailsFragment :
             binding.tvImportText.text = "Imported from Apple Health"
         } else {
 
-            setHrGraph(
+            binding.lytHeartRate.root.gone()
+
+            /*setHrGraph(
                 it.hrArray,
                 it.hrAvg,
                 it.hrLow,
                 "${it.date} ${it.startTime}",
                 "${it.date} ${it.endTime}"
-            )
-
-            /*if ((it.hrLow == null || it.hrLow == 0) && (it.hrAvg == null || it.hrLow == 0)) {
-                binding.lytHeartRate.root.gone()
-                binding.divider2.root.gone()
-            } else {
-                binding.lytHeartRate.root.visible()
-                binding.divider2.root.visible()
-                if (it.hrLow != null) {
-                    binding.lytHeartRate.lytSubtitleValue1.tvValue.text = it.hrLow.toString()
-                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
-                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
-                    binding.lytHeartRate.lytSubtitleValue1.tvValue.visible()
-                } else {
-                    binding.lytHeartRate.lytSubtitleValue1.tvValue.gone()
-                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.gone()
-                }
-                if (it.hrAvg != null) {
-                    binding.lytHeartRate.lytSubtitleValue2.tvValue.text = it.hrAvg.toString()
-                    binding.lytHeartRate.lytSubtitleValue2.tvUnit.visible()
-                    binding.lytHeartRate.lytSubtitleValue2.tvUnit.visible()
-                    binding.lytHeartRate.lytSubtitleValue2.tvUnit.text = "bpm"
-                } else {
-                    binding.lytHeartRate.lytSubtitleValue2.tvUnit.gone()
-                    binding.lytHeartRate.lytSubtitleValue2.tvUnit.gone()
-                }
-
-
-                if (!it.hrArray.isNullOrEmpty()) {
-                    binding.lytHeartRate.lineChart.visible()
-                    val baseDataList = UtilClass.graphTwoHourBaseInterval(
-                        it.startTime.clearAmPm(), it.endTime, it.hrArray.size
-                    )
-
-
-                    val sleepChart = SleepChartModel()
-                    val chartList = ArrayList<ChartModel>()
-                    it.hrArray.forEachIndexed { index, data ->
-                        val chartModel = ChartModel()
-
-                        var value = data
-                        if (value == 255) {
-                            value = 0
-                        }
-
-
-                        chartModel.index = baseDataList[index]
-                        chartModel.value = value
-                        chartList.add(chartModel)
-                    }
-
-                    sleepChart.list = chartList
-
-                    binding.lytHeartRate.lineChart.updateGraphColor(
-                        Color.parseColor("#ff3358"),
-                        Color.parseColor("#4cff3358"),
-                        Color.parseColor("#00ff3358")
-                    )
-
-                    binding.lytHeartRate.lineChart.updateDataWithMax(
-                        sleepChart, 5, false, true, GraphDummyModel(
-                            false, 40, 100
-                        ), it.hrAvg
-                    )
-                }
-            }*/
+            )*/
 
             setMovementGraph(
                 it.intensity,
