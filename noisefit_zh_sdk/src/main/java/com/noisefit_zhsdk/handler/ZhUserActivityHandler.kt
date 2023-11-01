@@ -757,7 +757,7 @@ constructor(
             }
 
             override fun onRingAutoActiveSportData(p0: AutoActiveSportBean?) {
-                LOGS.w("SPORTS_DATA $p0")
+                LOGS.w("SPORTS_DATA ${Gson().toJson(p0)}")
 
                 AppLogs.sendAppLogs("onRingAutoActiveSportData ${Gson().toJson(p0)}")
 
