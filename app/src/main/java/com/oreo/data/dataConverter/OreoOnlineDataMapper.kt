@@ -121,7 +121,10 @@ constructor(
             val dayTimeData = dayTimeMovement?.firstOrNull {
                 it.date.equals(stepsData.date)
             }
-            val dayDataBreakup = Gson().fromJson<List<Int>>(dayTimeData?.breakUp ?: "")
+            var dayDataBreakup = Gson().fromJson<List<Int>>(dayTimeData?.breakUp ?: "")
+            if (dayDataBreakup.isNullOrEmpty()) {
+                dayDataBreakup = IntArray(288) { 255 }.toList()
+            }
 
 
             val dayBreakup =
@@ -232,7 +235,8 @@ constructor(
                     hrvBreakup = sleepOverlayData.stressBreakup,
                     respBreakup = sleepOverlayData.respBreakup,
                     tempBreakup = sleepOverlayData.tempBreakup,
-                    avgResp = if(sleepOverlayData.respBreakup.isEmpty()) 0 else sleepOverlayData.respBreakup.average().roundToInt() ?: 0,
+                    avgResp = if (sleepOverlayData.respBreakup.isEmpty()) 0 else sleepOverlayData.respBreakup.average()
+                        .roundToInt() ?: 0,
                     maxTemp = sleepOverlayData.tempBreakup.maxOrNull() ?: 0f,
                     avgHrv = sleepOverlayData.stressBreakup.averageWithoutZero(),
                     readinessScore = sleepData.readinessScore ?: 0
