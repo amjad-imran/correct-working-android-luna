@@ -430,7 +430,7 @@ constructor(
                 if (chargeStatus == 1) {
                     isCharging = true
                 }
-                LOGS.d("onBatteryInfo ${chargeStatus} $isCharging")
+                LOGS.d("onBatteryInfo ${chargeStatus} $isCharging $capacity")
                 testQueryDeviceDataCallback?.onQueryDataReceived(
                     QueryCallback.BatteryDataObtained(
                         BatteryData(percentage = capacity, isCharging = isCharging)

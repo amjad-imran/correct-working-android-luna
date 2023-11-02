@@ -1487,8 +1487,8 @@ constructor() : LifecycleService() {
                          lastBatteryLevel,
                          queryCallback.batteryData.isCharging
                      )
-
-                     watchDataStore.updateBatteryPercentRing(percent)*/
+                     */
+                    watchDataStore.updateBatteryPercentRing(percent)
                 }
 
                 is QueryCallback.FirmwareVersionObtained -> {
