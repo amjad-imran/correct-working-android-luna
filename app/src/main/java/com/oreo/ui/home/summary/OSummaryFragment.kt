@@ -906,13 +906,12 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         }
         adapter1.setData(workouts ?: ArrayList())
         lytWorkouts.viewAddWorkout.setOnClickListener {
-            if (viewModel.ringDataStore.getRingDevice() != null) {
+            if (viewModel.isDeviceConnected()) {
                 navigate(R.id.addWorkoutFragment)
+                viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_ADD_WORKOUT_CLICK)
             } else {
                 requireContext().showShortToast("Please connect your ring to add a workout")
             }
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_ADD_WORKOUT_CLICK)
-
         }
 
         lytWorkouts.ivViewAll.setOnClickListener {

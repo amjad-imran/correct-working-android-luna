@@ -162,7 +162,7 @@ constructor(
 
     private fun deleteAutoSport(id: Int) {
         GlobalScope.launch {
-            syncRepository.deleteAutoWorkoutData(id).collect { resource ->
+            syncRepository.markWorkoutSynced(id).collect { resource ->
                 when (resource) {
                     is CacheResult.GenericError -> {
 

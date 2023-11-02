@@ -41,36 +41,32 @@ class OActivityListFragment :
 
     override fun initListener() {
         binding.lytTodayEmpty.btnAddWorkout.setOnClickListener {
-            if (viewModel.ringDataStore.getRingDevice() != null) {
+            if (viewModel.isDeviceConnected()) {
                 navigate(R.id.addWorkoutFragment)
             } else {
-                requireContext().showShortToast("Please connect your ring to add a workout")
+                context.showShortToast("Please connect your ring to add a workout")
             }
-
         }
         binding.lytTodayEmpty.view1.setOnClickListener {
-            if (viewModel.ringDataStore.getRingDevice() != null) {
+            if (viewModel.isDeviceConnected()) {
                 navigate(R.id.addWorkoutFragment)
             } else {
-                requireContext().showShortToast("Please connect your ring to add a workout")
+                context.showShortToast("Please connect your ring to add a workout")
             }
-
         }
         binding.lytEmptyView.btnAddWorkout.setOnClickListener {
-            if (viewModel.ringDataStore.getRingDevice() != null) {
+            if (viewModel.isDeviceConnected()) {
                 navigate(R.id.addWorkoutFragment)
             } else {
-                requireContext().showShortToast("Please connect your ring to add a workout")
+                context.showShortToast("Please connect your ring to add a workout")
             }
-
         }
         binding.lytEmptyView.view1.setOnClickListener {
-            if (viewModel.ringDataStore.getRingDevice() != null) {
+            if (viewModel.isDeviceConnected()) {
                 navigate(R.id.addWorkoutFragment)
             } else {
-                requireContext().showShortToast("Please connect your ring to add a workout")
+                context.showShortToast("Please connect your ring to add a workout")
             }
-
         }
 
         setFragmentResultListener(DELETE_WORKOUT_REQUEST_KEY) { _, bundle ->
