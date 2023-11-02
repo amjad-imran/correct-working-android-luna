@@ -937,11 +937,16 @@ constructor(
 
     fun shouldSyncAutoLogs(): Boolean {
         val lastTimeStamp = ringDataStore.getAutoLogsTimeStamp()
+        val logSyncInterval = localDataStore.getLogSyncInterval()
+
+        if (logSyncInterval == 0) return false
+
         if (lastTimeStamp == 0L) {
             ringDataStore.saveAutoLogsTimeStamp()
             return false
         }
-        return lastTimeStamp.checkDayDifferenceMoreNMinutes(120)
+
+        return lastTimeStamp.checkDayDifferenceMoreNMinutes(logSyncInterval * 60)
     }
 
     fun handleBatteryAlert(noiseFitDevice: ColorFitDevice) {

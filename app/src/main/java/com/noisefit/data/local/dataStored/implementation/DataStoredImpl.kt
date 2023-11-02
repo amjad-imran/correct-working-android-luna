@@ -100,6 +100,7 @@ private const val NPL_PRIVACY_POLICY_STATUS = "NPL_PRIVACY_POLICY_STATUS_3"
 private const val BODY_TEMP_UNIT = "BODY_TEMP_UNIT"
 private const val BLUETOOTH_ENABLE_DIALOG = "BLUETOOTH_ENABLE_DIALOG1"
 private const val FEATURE_REFETCH_PERIOD = "FEATURE_REFETCH_PERIOD"
+private const val LOGS_SYNC_INTERVAL = "LOGS_SYNC_INTERVAL"
 private const val PERIODIC_DATA_TIMESTAMP = "PERIODIC_DATA_TIMESTAMP"
 private const val STEPS_LAST_SYNC_WITH_SERVER = "STEPS_LAST_SYNC_WITH_SERVER_TIMESTAMP"
 private const val LAST_CLEAR_TABLE_TIMESTAMP = "LAST_CLEAR_TABLE_TIMESTAMP"
@@ -561,6 +562,10 @@ class DataStoredImpl
         return mPrefs.getInt(FEATURE_REFETCH_PERIOD, 24)
     }
 
+    override fun getLogSyncInterval(): Int {
+        return mPrefs.getInt(LOGS_SYNC_INTERVAL, 2)
+    }
+
     override fun getLastStepsSyncWithServer(): Long {
         return mPrefs.getLong(STEPS_LAST_SYNC_WITH_SERVER, 0)
     }
@@ -679,6 +684,10 @@ class DataStoredImpl
 
     override fun saveFeatureIntervalFetchPeriod(resetInterval: Int) {
         mPrefs.edit()?.putInt(FEATURE_REFETCH_PERIOD, resetInterval)?.apply()
+    }
+
+    override fun saveLogSyncInterval(resetInterval: Int) {
+        mPrefs.edit()?.putInt(LOGS_SYNC_INTERVAL, resetInterval)?.apply()
     }
 
     override fun getNotificationMessageClearStatus(): Boolean {

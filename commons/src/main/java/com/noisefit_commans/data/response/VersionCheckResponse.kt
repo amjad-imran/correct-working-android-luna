@@ -16,6 +16,8 @@ data class VersionCheckResponse(
     val currentVersion: Int? = null,
     @SerializedName("reset_interval")
     val resetInterval: Int? = 24,
+    @SerializedName("logs_interval")
+    val logsSyncInterval: Int? = 2,
     val helpUpdate: String? = null,
     @SerializedName("description")
     val description: String? = null,

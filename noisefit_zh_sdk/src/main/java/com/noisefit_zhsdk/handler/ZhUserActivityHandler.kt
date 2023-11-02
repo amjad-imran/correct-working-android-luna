@@ -440,24 +440,24 @@ constructor(
 
         //[{"autoSportDuration":340,"autoSportIntensity":0,"autoSportKcal":5,"autoSportStartTime":1690863212,"autoSportSteps":601,"autoSportType":1,"hrData":[]}]
 
-      /*  val dataList = ArrayList<OreoAutoSportData>()
-        val timestamp = 1690863212 * 1000L
-        dataList.add(OreoAutoSportData(0,false,false,3400,0,5,timestamp,601,"running",null))
-        dataList.add(OreoAutoSportData(0,false,false,1400,1,15,1690692397000,1201,"walking",null))
-        dataList.add(OreoAutoSportData(0,false,false,1000,0,25,1690778797000,1901,"other",null))
-        dataList.add(OreoAutoSportData(0,false,false,1400,1,5,1690778797000,61,"running",null))
-        dataList.add(OreoAutoSportData(0,false,false,1300,0,120,1690865197000,600,"running",null))
-        dataList.add(OreoAutoSportData(0,false,false,1800,2,500,1690958797000,6010,"running",null))
+        /*  val dataList = ArrayList<OreoAutoSportData>()
+          val timestamp = 1690863212 * 1000L
+          dataList.add(OreoAutoSportData(0,false,false,3400,0,5,timestamp,601,"running",null))
+          dataList.add(OreoAutoSportData(0,false,false,1400,1,15,1690692397000,1201,"walking",null))
+          dataList.add(OreoAutoSportData(0,false,false,1000,0,25,1690778797000,1901,"other",null))
+          dataList.add(OreoAutoSportData(0,false,false,1400,1,5,1690778797000,61,"running",null))
+          dataList.add(OreoAutoSportData(0,false,false,1300,0,120,1690865197000,600,"running",null))
+          dataList.add(OreoAutoSportData(0,false,false,1800,2,500,1690958797000,6010,"running",null))
 
 
-        userActivityDataCallbacks?.onUserActivityDataReceived(
-            UserActivityCallback.AutoSportDataObtained(
-                dataList
-            )
-        )
-[{"autoSportDuration":300,"autoSportIntensity":1,"autoSportKcal":1000,"autoSportStartTime":1697609129,"autoSportSteps":1000,"autoSportType":1,"hrData":[]},{"autoSportDuration":600,"autoSportIntensity":2,"autoSportKcal":2000,"autoSportStartTime":1697609129,"autoSportSteps":2000,"autoSportType":2,"hrData":[]},{"autoSportDuration":900,"autoSportIntensity":3,"autoSportKcal":3000,"autoSportStartTime":1697609129,"autoSportSteps":3000,"autoSportType":3,"hrData":[]}]
+          userActivityDataCallbacks?.onUserActivityDataReceived(
+              UserActivityCallback.AutoSportDataObtained(
+                  dataList
+              )
+          )
+  [{"autoSportDuration":300,"autoSportIntensity":1,"autoSportKcal":1000,"autoSportStartTime":1697609129,"autoSportSteps":1000,"autoSportType":1,"hrData":[]},{"autoSportDuration":600,"autoSportIntensity":2,"autoSportKcal":2000,"autoSportStartTime":1697609129,"autoSportSteps":2000,"autoSportType":2,"hrData":[]},{"autoSportDuration":900,"autoSportIntensity":3,"autoSportKcal":3000,"autoSportStartTime":1697609129,"autoSportSteps":3000,"autoSportType":3,"hrData":[]}]
 
-        LOGS.d(TAG, "onAutoSportData ${Gson().toJson(p0)}")*/
+          LOGS.d(TAG, "onAutoSportData ${Gson().toJson(p0)}")*/
 
         //val dummyData =Gson().fromJson<MutableList<AutoSportDataBean>>("[{\"autoSportDuration\":549,\"autoSportIntensity\":1,\"autoSportKcal\":76,\"autoSportStartTime\":1697782504,\"autoSportSteps\":1090,\"autoSportType\":1,\"hrData\":[]}]")
 
@@ -473,8 +473,6 @@ constructor(
             )
         }
     }
-
-
 
 
     //日常数据回调
@@ -760,7 +758,18 @@ constructor(
                 LOGS.w("SPORTS_DATA ${Gson().toJson(p0)}")
 
                 AppLogs.sendAppLogs("onRingAutoActiveSportData ${Gson().toJson(p0)}")
+                if (p0 == null) return
 
+                colorFitDevice?.let {
+                    userActivityDataCallbacks?.onUserActivityDataReceived(
+                        UserActivityCallback.AutoSportDataObtained(
+                            dataConverter.parseAutoSport(
+                                p0,
+                                it
+                            )
+                        )
+                    )
+                }
             }
 
 

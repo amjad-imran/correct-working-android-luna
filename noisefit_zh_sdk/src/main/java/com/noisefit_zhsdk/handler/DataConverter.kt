@@ -34,6 +34,7 @@ import com.noisefit_commans.models.WorldClockList
 import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import com.zhapp.ble.bean.AutoActiveSportBean
 import com.zhapp.ble.bean.AutoSportDataBean
 import com.zhapp.ble.bean.ClockInfoBean
 import com.zhapp.ble.bean.ContactBean
@@ -382,6 +383,27 @@ constructor(
         )
     }
 
+    fun parseAutoSport(
+        data: AutoActiveSportBean,
+        colorFitDevice: ColorFitDevice
+    ): List<OreoAutoSportData> {
+        val result = ArrayList<OreoAutoSportData>()
+
+        data.sportData.forEach {
+            val oreoAutoSportData = OreoAutoSportData()
+            oreoAutoSportData.steps = it.autoActiveSteps
+            oreoAutoSportData.startTime = it.autoActiveStartTime * 1000L
+            oreoAutoSportData.intensity = it.autoActiveSportLevel
+            oreoAutoSportData.isAccepted = false
+            oreoAutoSportData.duration = it.autoActiveDuration
+            oreoAutoSportData.calories = it.autoSctiveKcal
+            oreoAutoSportData.type = getSportName(it.autoActiveSportType, colorFitDevice)
+            result.add(oreoAutoSportData)
+        }
+
+        return result
+    }
+
 
     fun parseAutoSport(
         p0: MutableList<AutoSportDataBean>?,
@@ -395,7 +417,6 @@ constructor(
             oreoAutoSportData.intensity = it.autoSportIntensity
             oreoAutoSportData.isAccepted = false
             oreoAutoSportData.duration = it.autoSportDuration
-            oreoAutoSportData.intensity = it.autoSportIntensity
             oreoAutoSportData.calories = it.autoSportKcal
             oreoAutoSportData.type = getSportName(it.autoSportType, colorFitDevice)
             oreoAutoSportData.hrData = gson.toJson(it.hrData)

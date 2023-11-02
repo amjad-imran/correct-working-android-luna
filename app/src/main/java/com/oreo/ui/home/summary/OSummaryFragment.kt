@@ -411,6 +411,14 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         mainViewModel.stateConnectHelp.observe(viewLifecycleOwner) {
             if (it) {
                 binding.contentMain.lytConnectHelp.root.visible()
+                val logsSync = viewModel.shouldSyncAutoLogs()
+                if (logsSync) {
+                    context?.let { ctx ->
+                        FeedbackSubmitService.startService(
+                            ctx
+                        )
+                    }
+                }
             } else {
                 binding.contentMain.lytConnectHelp.root.gone()
             }
@@ -1141,15 +1149,6 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         if (viewModel.isDeviceConnected()) {
             shouldSync()
-
-            val logsSync = viewModel.shouldSyncAutoLogs()
-            if (logsSync) {
-                context?.let {
-                    FeedbackSubmitService.startService(
-                        it
-                    )
-                }
-            }
         }
 
 

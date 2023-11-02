@@ -169,11 +169,13 @@ interface DataStoredInterface {
      * Save in hours
      */
     fun saveFeatureIntervalFetchPeriod(resetInterval: Int)
+    fun saveLogSyncInterval(resetInterval: Int)
 
     /**
      * Returns value in hours
      */
     fun getFeatureIntervalFetchPeriod(): Int
+    fun getLogSyncInterval(): Int
 
     fun getRandomWatchFaceListSyncTime(): Long
     fun setRandomWatchFaceListSyncTime(timeStamp: Long)
