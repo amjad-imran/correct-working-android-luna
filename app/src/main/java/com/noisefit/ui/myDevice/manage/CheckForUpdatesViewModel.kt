@@ -83,7 +83,8 @@ class CheckForUpdatesViewModel @Inject constructor(
             return
         }
 
-        val deviceType = ringDataSore.getRingDevice()?.deviceType
+        val ringDevice = ringDataSore.getRingDevice()
+        val deviceType = ringDevice?.deviceType
 
         val requestObject = JsonObject().apply {
             addProperty(
@@ -94,6 +95,7 @@ class CheckForUpdatesViewModel @Inject constructor(
                 "firmware_id",
                 WatchInfoGlobals.firmwareDeviceIdRing
             )
+            addProperty("mac", ringDevice?.address)
             addProperty("device_type", deviceType)
             addProperty("platform", "android")
             addProperty("isOTARequired", sessionManager.needDfuUpdate.value?.peekContent() ?: false)

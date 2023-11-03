@@ -157,6 +157,7 @@ class SplashViewModel
                         //addProperty("version", 111)
                         this.addProperty("version", firmware.version)
                         this.addProperty("firmware_id", firmware.firmwareId)
+                        this.addProperty("mac", it.address)
                     }
                     add("deviceDetails", deviceDetailsObj)
                 }
