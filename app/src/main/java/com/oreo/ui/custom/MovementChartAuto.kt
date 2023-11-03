@@ -80,7 +80,7 @@ class MovementChartAuto(context: Context, attrs: AttributeSet?) : View(context, 
 
         var x = 0f
 
-
+        val workoutListSize = workoutList.size
         dataList.forEachIndexed { index, it ->
             val end = x + lineWidth
             var barHalfHeight = 0f
@@ -132,20 +132,23 @@ class MovementChartAuto(context: Context, attrs: AttributeSet?) : View(context, 
             )
 
 
-            if (!workoutList[index].isNullOrEmpty()) {
-                canvas.drawCircle(
-                    x,
-                    barCenter - barHalfHeight - dpToPx(16),
-                    dpToPx(8),
-                    pointCirclePaint
-                )
-                val textWidth = pointsPaint.measureText(workoutList[index]!!)
-                canvas.drawText(
-                    workoutList[index]!!,
-                    x - textWidth / 2,
-                    barCenter - barHalfHeight - dpToPx(12),
-                    pointsPaint
-                )
+
+            if(index<workoutListSize){
+                if (!workoutList[index].isNullOrEmpty()) {
+                    canvas.drawCircle(
+                        x,
+                        barCenter - barHalfHeight - dpToPx(16),
+                        dpToPx(8),
+                        pointCirclePaint
+                    )
+                    val textWidth = pointsPaint.measureText(workoutList[index]!!)
+                    canvas.drawText(
+                        workoutList[index]!!,
+                        x - textWidth / 2,
+                        barCenter - barHalfHeight - dpToPx(12),
+                        pointsPaint
+                    )
+                }
             }
 
             canvas.drawRoundRect(rectf, dpToPx(2), dpToPx(2), barPaint)

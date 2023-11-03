@@ -438,110 +438,18 @@ class OAddWorkoutFragment :
             tvTitle.text = getString(R.string.text_identify_workout)
         }
 
-        setMovementGraph()
-
-    }
-
-    private fun setMovementGraph() {
-        binding.candleChart.visible()
-        val topIndexList =
-            UtilClass.getDetectedWorkoutMovement(viewModel.preFilledOreoAutoSportData!!)
-        val baseHrList = UtilClass.graphBaseInterval(null, null, viewModel.movementList?.size ?: 0)
-        LOGS.d("setMovementGraph ${Gson().toJson(topIndexList)}")
-        val candleChartModelList: MutableList<CandleChartModel> =
-            java.util.ArrayList<CandleChartModel>()
-        viewModel.movementList?.forEachIndexed { index, data ->
-
-            val chartModel = CandleChartModel()
-
-            chartModel.bottomLineText = baseHrList[index]
-            chartModel.identifyText = topIndexList[index].toString()
-            when (data) {
-                1 -> {
-
-                    chartModel.length =
-                        (binding.candleChart.max * 0.4).toInt()
-
-                    chartModel.type = CandleChartModel.Type.LOW
-                    chartModel.color = if (chartModel.identifyText == "null") {
-                        Color.parseColor("#3d3d3d")
-                    } else if (chartModel.identifyText != "ignore") {
-                        chartModel.length =
-                            (binding.candleChart.max * 1.2).toInt()
-                        Color.parseColor("#ffffff")
-
-                    } else {
-                        Color.parseColor("#4cffd230")
-                    }
-                }
-
-                2 -> {
-
-                    chartModel.length =
-                        (binding.candleChart.max * 0.6).toInt()
-
-
-                    chartModel.color = if (chartModel.identifyText == "null") {
-                        Color.parseColor("#3d3d3d")
-                    } else if (chartModel.identifyText != "ignore") {
-                        chartModel.length =
-                            (binding.candleChart.max * 1.2).toInt()
-                        Color.parseColor("#ffffff")
-
-                    } else {
-                        Color.parseColor("#ffd230")
-                    }
-                    chartModel.type = CandleChartModel.Type.MEDIUM
-                }
-
-                3, 4 -> {
-
-                    chartModel.length =
-                        (binding.candleChart.max * 0.8).toInt()
-
-                    chartModel.color = if (chartModel.identifyText == "null") {
-                        Color.parseColor("#3d3d3d")
-                    } else if (chartModel.identifyText != "ignore") {
-                        chartModel.length =
-                            (binding.candleChart.max * 1.2).toInt()
-                        Color.parseColor("#ffffff")
-
-                    } else {
-                        Color.parseColor("#ffffff")
-                    }
-
-
-                    chartModel.type = CandleChartModel.Type.HIGH
-                }
-
-                else -> {
-                    chartModel.length =
-                        (binding.candleChart.max * 0.2).toInt()
-
-                    chartModel.color = if (chartModel.identifyText == "null") {
-
-                        Color.parseColor("#3d3d3d")
-
-                    } else if (chartModel.identifyText != "ignore") {
-                        chartModel.length =
-                            (binding.candleChart.max * 1.2).toInt()
-                        Color.parseColor("#ffffff")
-
-                    } else {
-                        Color.parseColor("#4c4c4c")
-                    }
-
-                    chartModel.type = CandleChartModel.Type.INACTIVE
-
-                }
-            }
-            chartModel.value = data
-            candleChartModelList.add(chartModel)
+        viewModel.movementList?.let {
+            handleMovementNewViews(it)
         }
-        binding.candleChart.updateData(candleChartModelList)
-
     }
 
+    private fun handleMovementNewViews(movementList: List<Int>) {
+        binding.rvMovements.visible()
+
+        val newList = viewModel.getCombinedMovementData(movementList)
+        binding.movementChart.setData(newList, arrayListOf())
+
+    }
 
     override fun subscribeObservers() {
 

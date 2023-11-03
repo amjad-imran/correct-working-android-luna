@@ -455,7 +455,6 @@ constructor(
                   dataList
               )
           )
-  [{"autoSportDuration":300,"autoSportIntensity":1,"autoSportKcal":1000,"autoSportStartTime":1697609129,"autoSportSteps":1000,"autoSportType":1,"hrData":[]},{"autoSportDuration":600,"autoSportIntensity":2,"autoSportKcal":2000,"autoSportStartTime":1697609129,"autoSportSteps":2000,"autoSportType":2,"hrData":[]},{"autoSportDuration":900,"autoSportIntensity":3,"autoSportKcal":3000,"autoSportStartTime":1697609129,"autoSportSteps":3000,"autoSportType":3,"hrData":[]}]
 
           LOGS.d(TAG, "onAutoSportData ${Gson().toJson(p0)}")*/
 
