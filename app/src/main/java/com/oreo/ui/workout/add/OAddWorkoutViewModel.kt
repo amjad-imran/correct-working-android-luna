@@ -93,6 +93,54 @@ constructor(
         autoSport.postValue(true)
     }
 
+    fun isDataSame(): Boolean {
+        if (preFilledOreoAutoSportData == null) return false
+
+        try {
+
+            val isDurationEqual =
+                addWorkout.duration == TimeUnit.SECONDS.toMinutes(preFilledOreoAutoSportData!!.duration.toLong())
+                    .toInt()
+            val isCaloriesEqual = addWorkout.calories == preFilledOreoAutoSportData!!.calories
+            val isIntensityEqual =
+                addWorkout.intensity == getIntensity(preFilledOreoAutoSportData!!.intensity ?: 0)
+
+            var compareStartHour: Int = 0
+            var compareStartMinute: Int = 0
+            val startTime = DateFormats.convertTimestampToDate(
+                preFilledOreoAutoSportData!!.startTime,
+                DateFormats.timeFormat
+            )
+            if (startTime.isNotEmpty()) {
+                val startArray = startTime.split(":")
+                compareStartHour = startArray[0].toInt()
+                compareStartMinute = startArray[1].toInt()
+            }
+            val endTime = DateFormats.addMinuteToTimeStamp(
+                preFilledOreoAutoSportData!!.startTime,
+                addWorkout.duration
+            )
+            var compareEndHour: Int = 0
+            var compareEndMinute: Int = 0
+            val endTimeText = DateFormats.convertTimestampToDate(endTime, DateFormats.timeFormat)
+            if (endTimeText.isNotEmpty()) {
+                val endArray = endTimeText.split(":")
+                compareEndHour = endArray[0].toInt()
+                compareEndMinute = endArray[1].toInt()
+            }
+
+            val isStartTimeEqual =
+                compareStartHour == addWorkout.startHour && compareStartMinute == addWorkout.startMinute
+            val isEndTimeEqual =
+                compareEndHour == addWorkout.endHour && compareEndMinute == addWorkout.endMinute
+
+            return isDurationEqual && isCaloriesEqual && isIntensityEqual && isStartTimeEqual && isEndTimeEqual
+        } catch (exp: Exception) {
+            exp.printStackTrace()
+            return false
+        }
+    }
+
     fun addWorkout() {
 
         val type = if (workoutListModal?.activityType?.isNotEmpty() == true) {
@@ -109,7 +157,7 @@ constructor(
                 val isAuto = autoSport.value != null
 
                 if (isAuto) {
-                    this.addProperty("type", "automanual")
+                    this.addProperty("type", if (isDataSame()) "auto" else "automanual")
                     this.addProperty("date", addWorkout.date)
                 } else {
                     this.addProperty("type", "manual")
@@ -278,7 +326,7 @@ constructor(
                                     walkingWorkout?.let { walk ->
                                         updateDefaultWorkout.postValue(Event(walk))
                                     }
-                                }else{
+                                } else {
                                     workoutListModal = walkingWorkout
                                 }
 
