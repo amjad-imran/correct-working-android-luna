@@ -127,7 +127,7 @@ constructor(
 
 
         CallBackUtils.fitnessDataCallBack = fitnessDataCallBack
-        CallBackUtils.autoSportDataCallBack = autoSportsCallback
+        //CallBackUtils.autoSportDataCallBack = autoSportsCallback
         CallBackUtils.setSportCallBack(object : SportCallBack {
             override fun onDevSportInfo(data: DevSportInfoBean) {
                 LOGS.d(TAG, "onDevSportInfo $data")
@@ -461,7 +461,7 @@ constructor(
         //val dummyData =Gson().fromJson<MutableList<AutoSportDataBean>>("[{\"autoSportDuration\":549,\"autoSportIntensity\":1,\"autoSportKcal\":76,\"autoSportStartTime\":1697782504,\"autoSportSteps\":1090,\"autoSportType\":1,\"hrData\":[]}]")
 
         AppLogs.sendAppLogs("onAutoSportData Sync data complete ${Gson().toJson(p0)}")
-        colorFitDevice?.let {
+        /*colorFitDevice?.let {
             userActivityDataCallbacks?.onUserActivityDataReceived(
                 UserActivityCallback.AutoSportDataObtained(
                     dataConverter.parseAutoSport(
@@ -470,7 +470,7 @@ constructor(
                     )
                 )
             )
-        }
+        }*/
     }
 
 
