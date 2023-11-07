@@ -33,6 +33,8 @@ class GoogleFitTestFragment :
                     signInIntent,
                     22
                 ) // You'll need to handle the result in onActivityResult
+            }else{
+                context.showShortToast("User already signed in ${account.email}")
             }
         }
 
@@ -50,9 +52,10 @@ class GoogleFitTestFragment :
             )
                 .readData(readRequest)
                 .addOnSuccessListener { dataReadResponse: DataReadResponse? ->
-                    LOGS.d("DataSET $dataReadResponse")
+                    LOGS.d("GoogleFitTestFragment","DataSET $dataReadResponse")
                 }
                 .addOnFailureListener { e: Exception? ->
+                    LOGS.w("GoogleFitTestFragment","Failure ${e?.message}")
                     e?.printStackTrace()
                 }
 
