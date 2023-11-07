@@ -87,28 +87,28 @@ class MovementChartAuto(context: Context, attrs: AttributeSet?) : View(context, 
             var barPaint = inactivePaint
             when (it) {
                 0 -> {//inactive
-                    barHalfHeight = dpToPx(6)
+                    barHalfHeight = dpToPx(3)
                     barPaint = inactivePaint
                 }
 
                 1 -> {//low
-                    barHalfHeight = dpToPx(16)
+                    barHalfHeight = dpToPx(8)
                     barPaint = lowPaint
                 }
 
                 2 -> {//medium
-                    barHalfHeight = dpToPx(33)
+                    barHalfHeight = dpToPx(16)
                     barPaint = mediumPaint
                 }
 
                 3 -> {//high
-                    barHalfHeight = dpToPx(50)
+                    barHalfHeight = dpToPx(24)
                     barPaint = highPaint
 
                 }
 
                 else -> {// treat as inactive
-                    barHalfHeight = dpToPx(6)
+                    barHalfHeight = dpToPx(3)
                     barPaint = inactivePaint
                 }
             }
@@ -137,7 +137,7 @@ class MovementChartAuto(context: Context, attrs: AttributeSet?) : View(context, 
                 if (!workoutList[index].isNullOrEmpty()) {
                     canvas.drawCircle(
                         x,
-                        barCenter - barHalfHeight - dpToPx(16),
+                        barCenter - dpToPx(24) - dpToPx(16),
                         dpToPx(8),
                         pointCirclePaint
                     )
@@ -145,7 +145,7 @@ class MovementChartAuto(context: Context, attrs: AttributeSet?) : View(context, 
                     canvas.drawText(
                         workoutList[index]!!,
                         x - textWidth / 2,
-                        barCenter - barHalfHeight - dpToPx(12),
+                        barCenter - dpToPx(24) - dpToPx(12),
                         pointsPaint
                     )
                 }

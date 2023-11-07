@@ -320,7 +320,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         viewModel.sessionManager.showSyncOfflineData.observe(viewLifecycleOwner) {
             it.getContent()?.let { event ->
                 if (event == HealthOverviewDataType.AUTO_WORKOUT) {
-                    viewModel.getDashboardDataFromServer(false)
+                    //viewModel.getDashboardDataFromServer(false)
                 }
             }
 
