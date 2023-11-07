@@ -1,15 +1,21 @@
 package com.noisefit.ui.dashboard.feature.googlefit
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.DataType
+import com.google.android.gms.fitness.data.Field
 import com.google.android.gms.fitness.request.DataReadRequest
 import com.google.android.gms.fitness.result.DataReadResponse
 import com.google.gson.Gson
@@ -49,11 +55,32 @@ class GoogleFitFragment :
     @Inject
     lateinit var sessionManager: SessionManager
 
+    private val TAG = "GoogleFitFragment"
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setGoogleFitSwitchState(localDataStore.isEnableGoogleFit())
 
+        requestPermission()
+
+    }
+
+    private fun requestPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACTIVITY_RECOGNITION
+                )
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(Manifest.permission.ACTIVITY_RECOGNITION),
+                    2233
+                )
+            }
+        }
     }
 
     override fun initListener() {
@@ -253,6 +280,14 @@ class GoogleFitFragment :
     fun readWorkoutData() {
         val readRequest = DataReadRequest.Builder()
             .read(DataType.TYPE_WORKOUT_EXERCISE)
+            /*.aggregate(DataType.TYPE_DISTANCE_DELTA)
+            .aggregate(DataType.TYPE_CALORIES_EXPENDED)
+            .aggregate(DataType.TYPE_HEART_RATE_BPM)
+            .read(DataType.TYPE_WORKOUT_EXERCISE)*/
+            /*.read(DataType.AGGREGATE_MOVE_MINUTES)
+            .read(DataType.TYPE_MOVE_MINUTES)*/
+            /*.enableServerQueries()
+            .bucketByActivitySegment(1, TimeUnit.MINUTES)*/
             .setTimeRange(1696918645, System.currentTimeMillis(), TimeUnit.MILLISECONDS)
             .build()
 
@@ -262,10 +297,30 @@ class GoogleFitFragment :
         )
             .readData(readRequest)
             .addOnSuccessListener { dataReadResponse: DataReadResponse? ->
-                LOGS.d("GoogleFitTestFragment", "DataSET ${Gson().toJson(dataReadResponse)}")
+
+                LOGS.d(TAG, "DataSET ${Gson().toJson(dataReadResponse)}")
+                if(dataReadResponse==null) return@addOnSuccessListener
+
+                for (bucket in dataReadResponse.buckets){
+                    for (data in bucket.dataSets){
+                        for (point in data.dataPoints) {
+                            LOGS.d(TAG,"Found Point ${data.dataPoints}")
+                            when (point.dataType) {
+                                //DataType.TYPE_WORKOUT_EXERCISE ->LOGS.d(TAG,""+point.getValue(Field.FIELD_ACTIVITY).asFloat())
+                                DataType.AGGREGATE_DISTANCE_DELTA   -> LOGS.d(TAG,""+point.getValue(Field.FIELD_DISTANCE).asFloat())
+                                DataType.TYPE_HEART_RATE_BPM        -> LOGS.d(TAG,""+  point.getValue(
+                                Field.FIELD_BPM).asFloat()               )
+                                DataType.TYPE_CALORIES_EXPENDED     -> LOGS.d(  TAG,""+point.getValue(Field.FIELD_CALORIES).asFloat()          )
+                                DataType.TYPE_WORKOUT_EXERCISE      -> LOGS.d( TAG,""+"[${point.getValue(Field.FIELD_EXERCISE).asString()}]   ")
+                                DataType.TYPE_MOVE_MINUTES          -> LOGS.d(TAG,""+ "Move Minutes          $point     ")
+                                DataType.AGGREGATE_MOVE_MINUTES     -> LOGS.d(TAG,""+ "Moving Mins  Count    $point     ")
+                            }
+                        }
+                    }
+                }
             }
             .addOnFailureListener { e: Exception? ->
-                LOGS.w("GoogleFitTestFragment", "Failure ${e?.message}")
+                LOGS.w(TAG, "Failure ${e?.message}")
                 e?.printStackTrace()
             }
     }
