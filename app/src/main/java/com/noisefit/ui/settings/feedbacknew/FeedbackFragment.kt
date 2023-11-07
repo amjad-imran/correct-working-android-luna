@@ -108,7 +108,7 @@ class FeedbackFragment : BaseFragment<FragmentFeedback2Binding>(FragmentFeedback
                     HashMap<String, Any>().apply {
                         this["star_rating"] = viewModel.rating
                     })
-                viewModel.submitFeedbackWithFile(
+                viewModel.submitFeedbackNew(
                     viewModel.provideFeedbackNewData(
                         viewModel.rating, problemType, appSuggestion.replace("\\s+".toRegex(), " ")
                     )
