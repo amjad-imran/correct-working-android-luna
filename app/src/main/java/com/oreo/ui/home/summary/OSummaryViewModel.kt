@@ -376,19 +376,18 @@ constructor(
 
                     if (data.registerDate != 0) {
                         if (data.sleep?.sleepScore != null) {
-                            data.readiness?.let {
-                                userActivities.add(OHealthOverview.ReadinessMinimal(data.readiness))
-                            }
                             userActivities.add(
                                 OHealthOverview.SleepMinimal(
                                     data.sleep,
                                     makeSleepArray(data.sleep)
                                 )
                             )
-                        } else {
+
                             data.readiness?.let {
-                                userActivities.add(OHealthOverview.Readiness(data.readiness))
+                                userActivities.add(OHealthOverview.ReadinessMinimal(data.readiness))
                             }
+
+                        } else {
                             data.sleep?.let {
                                 userActivities.add(
                                     OHealthOverview.Sleep(
@@ -398,6 +397,9 @@ constructor(
                                         data.sleep.sleepStage.lastOrNull()?.endTime ?: ""
                                     )
                                 )
+                            }
+                            data.readiness?.let {
+                                userActivities.add(OHealthOverview.Readiness(data.readiness))
                             }
                         }
                     }
