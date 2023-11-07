@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -279,7 +280,10 @@ class GoogleFitFragment :
 
     fun readWorkoutData() {
         val readRequest = DataReadRequest.Builder()
-            .read(DataType.TYPE_WORKOUT_EXERCISE)
+            .aggregate(DataType.TYPE_STEP_COUNT_DELTA, DataType.AGGREGATE_STEP_COUNT_DELTA)
+            .bucketByTime(8, TimeUnit.DAYS)
+            .enableServerQueries()
+            /*.read(DataType.TYPE_WORKOUT_EXERCISE)*/
             /*.aggregate(DataType.TYPE_DISTANCE_DELTA)
             .aggregate(DataType.TYPE_CALORIES_EXPENDED)
             .aggregate(DataType.TYPE_HEART_RATE_BPM)
@@ -298,8 +302,15 @@ class GoogleFitFragment :
             .readData(readRequest)
             .addOnSuccessListener { dataReadResponse: DataReadResponse? ->
 
-                LOGS.d(TAG, "DataSET ${Gson().toJson(dataReadResponse)}")
+                //LOGS.d(TAG, "DataSET ${Gson().toJson(dataReadResponse)}")
                 if(dataReadResponse==null) return@addOnSuccessListener
+
+                Log.d("TAG_F", "onSuccess: 1 " + dataReadResponse.toString());
+                Log.d("TAG_F", "onSuccess: 1 " + dataReadResponse.getStatus());
+                Log.d("TAG_F", "onSuccess: 1 " + dataReadResponse.getDataSet(DataType.TYPE_STEP_COUNT_DELTA));
+                Log.d("TAG_F", "onSuccess: 1 " + dataReadResponse.getBuckets().get(0));
+                Log.d("TAG_F", "onSuccess: 1 " + dataReadResponse.getBuckets().get(0).getDataSets().size);
+
 
                 for (bucket in dataReadResponse.buckets){
                     for (data in bucket.dataSets){
