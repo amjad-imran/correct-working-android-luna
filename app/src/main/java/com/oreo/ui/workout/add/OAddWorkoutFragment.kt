@@ -303,6 +303,13 @@ class OAddWorkoutFragment :
         }
 
 
+        if(viewModel.preFilledOreoAutoSportData!=null){
+            val highlightedPoints = viewModel.getHighlightedPoints()
+            binding.movementChart.setHighlightedPoints(highlightedPoints)
+
+        }
+
+
 
         enableSaveBtn()
 
@@ -447,7 +454,9 @@ class OAddWorkoutFragment :
         binding.rvMovements.visible()
 
         val newList = viewModel.getCombinedMovementData(movementList)
+        val highlightedPoints = viewModel.getHighlightedPoints()
         binding.movementChart.setData(newList, arrayListOf())
+        binding.movementChart.setHighlightedPoints(highlightedPoints)
 
     }
 

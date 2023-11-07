@@ -356,4 +356,28 @@ constructor(
         }
         return combinedList
     }
+
+    fun getHighlightedPoints(): HashSet<Int> {
+        try {
+            val startMinutes = addWorkout.startHour * 60 + addWorkout.startMinute
+            val endMinutes = addWorkout.endHour * 60 + addWorkout.endMinute
+            var start = startMinutes / 15
+            val end = endMinutes / 15
+
+            LOGS.d("getHighlightedPoints $start $end")
+            return if (start == end) {
+                hashSetOf(start)
+            } else {
+                val result = HashSet<Int>()
+                while (start != end) {
+                    result.add(start)
+                    start++
+                }
+                result
+            }
+
+        } catch (exp: Exception) {
+            return HashSet()
+        }
+    }
 }

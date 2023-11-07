@@ -25,6 +25,7 @@ class MovementChartAuto(context: Context, attrs: AttributeSet?) : View(context, 
     private val numLines = 288
 
     var dataList = ArrayList<Int>()
+    var highlightedIndex = HashSet<Int>()
     var workoutList = ArrayList<String?>()
 
     var viewWidth = 0
@@ -112,6 +113,12 @@ class MovementChartAuto(context: Context, attrs: AttributeSet?) : View(context, 
                     barPaint = inactivePaint
                 }
             }
+            if (highlightedIndex.isNotEmpty()) {
+                if (!highlightedIndex.contains(index)) {
+                    barPaint = inactivePaint
+                }
+            }
+
 
             setTime(canvas, index, x)
 
@@ -133,7 +140,7 @@ class MovementChartAuto(context: Context, attrs: AttributeSet?) : View(context, 
 
 
 
-            if(index<workoutListSize){
+            if (index < workoutListSize) {
                 if (!workoutList[index].isNullOrEmpty()) {
                     canvas.drawCircle(
                         x,
@@ -207,6 +214,13 @@ class MovementChartAuto(context: Context, attrs: AttributeSet?) : View(context, 
                 }
             }
         }
+    }
+
+    fun setHighlightedPoints(points: HashSet<Int>) {
+        highlightedIndex.clear()
+        highlightedIndex.addAll(points)
+        invalidate()
+        requestLayout()
     }
 
 
