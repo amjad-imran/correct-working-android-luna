@@ -15,6 +15,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
+import com.google.android.gms.fitness.data.DataSource
 import com.google.android.gms.fitness.data.DataType
 import com.google.android.gms.fitness.data.Field
 import com.google.android.gms.fitness.request.DataReadRequest
@@ -32,6 +33,9 @@ import com.noisefit_commans.utils.AppConstants
 import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -138,7 +142,8 @@ class GoogleFitFragment :
         binding.lytFeatureTile.llSwitch.invisible()
 
         binding.bRequestData.setOnClickListener {
-            readWorkoutData()
+            //readStepsData()
+        readWorkoutData()
         }
     }
 
@@ -278,12 +283,42 @@ class GoogleFitFragment :
         LOGS.e(message)
     }
 
+    fun readStepsData(){
+        val startTime = LocalDate.now().atStartOfDay(ZoneId.systemDefault())
+        val endTime = LocalDateTime.now().atZone(ZoneId.systemDefault())
+
+        val datasource = DataSource.Builder()
+            .setAppPackageName("com.google.android.gms")
+            .setDataType(DataType.TYPE_STEP_COUNT_DELTA)
+            .setType(DataSource.TYPE_DERIVED)
+            .setStreamName("estimated_steps")
+            .build()
+
+        val request = DataReadRequest.Builder()
+            .aggregate(datasource)
+            .bucketByTime(1, TimeUnit.DAYS)
+            .setTimeRange(startTime.toEpochSecond(), endTime.toEpochSecond(), TimeUnit.SECONDS)
+            .build()
+
+        Fitness.getHistoryClient(requireActivity(), GoogleSignIn.getAccountForExtension(requireActivity(), fitnessOptions))
+            .readData(request)
+            .addOnSuccessListener { response ->
+                val totalSteps = response.buckets
+                    .flatMap { it.dataSets }
+                    .flatMap { it.dataPoints }
+                    .sumBy { it.getValue(Field.FIELD_STEPS).asInt() }
+                LOGS.d(TAG,"Steps $totalSteps")
+
+            }
+
+
+    }
+
     fun readWorkoutData() {
+
+
         val readRequest = DataReadRequest.Builder()
-            .aggregate(DataType.TYPE_STEP_COUNT_DELTA, DataType.AGGREGATE_STEP_COUNT_DELTA)
-            .bucketByTime(8, TimeUnit.DAYS)
-            .enableServerQueries()
-            /*.read(DataType.TYPE_WORKOUT_EXERCISE)*/
+            .read(DataType.TYPE_WORKOUT_EXERCISE)
             /*.aggregate(DataType.TYPE_DISTANCE_DELTA)
             .aggregate(DataType.TYPE_CALORIES_EXPENDED)
             .aggregate(DataType.TYPE_HEART_RATE_BPM)
@@ -305,11 +340,11 @@ class GoogleFitFragment :
                 //LOGS.d(TAG, "DataSET ${Gson().toJson(dataReadResponse)}")
                 if(dataReadResponse==null) return@addOnSuccessListener
 
-                Log.d("TAG_F", "onSuccess: 1 " + dataReadResponse.toString());
+             /*   Log.d("TAG_F", "onSuccess: 1 " + dataReadResponse.toString());
                 Log.d("TAG_F", "onSuccess: 1 " + dataReadResponse.getStatus());
                 Log.d("TAG_F", "onSuccess: 1 " + dataReadResponse.getDataSet(DataType.TYPE_STEP_COUNT_DELTA));
                 Log.d("TAG_F", "onSuccess: 1 " + dataReadResponse.getBuckets().get(0));
-                Log.d("TAG_F", "onSuccess: 1 " + dataReadResponse.getBuckets().get(0).getDataSets().size);
+                Log.d("TAG_F", "onSuccess: 1 " + dataReadResponse.getBuckets().get(0).getDataSets().size);*/
 
 
                 for (bucket in dataReadResponse.buckets){
