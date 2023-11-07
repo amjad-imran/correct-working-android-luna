@@ -9,17 +9,23 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
+import com.google.android.gms.fitness.data.DataType
+import com.google.android.gms.fitness.request.DataReadRequest
+import com.google.android.gms.fitness.result.DataReadResponse
+import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentGoogleFitBinding
 import com.noisefit.session.SessionManager
 import com.noisefit.ui.common.*
 import com.noisefit.ui.web.WebViewActivity
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.utils.AppConstants
 import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 private const val GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 1980
@@ -102,6 +108,10 @@ class GoogleFitFragment :
 
 
         binding.lytFeatureTile.llSwitch.invisible()
+
+        binding.bRequestData.setOnClickListener {
+            readWorkoutData()
+        }
     }
 
 //    private val activityRecognitionPermissionResult = registerForActivityResult(
@@ -135,18 +145,22 @@ class GoogleFitFragment :
                     localDataStore.setGoogleFitStatus(false)
                     GoogleSignIn.getClient(context, googleSignInOptions).signOut()
 
-                    sessionManager.logInsiderAppEvent(InsiderAppEvents.GOOGLE_FIT_CLICK,HashMap<String, Any>().apply {
-                        this["is_enabled"] = false
-                    })
+                    sessionManager.logInsiderAppEvent(
+                        InsiderAppEvents.GOOGLE_FIT_CLICK,
+                        HashMap<String, Any>().apply {
+                            this["is_enabled"] = false
+                        })
                 }
                 .addOnFailureListener { e ->
                     uiController.onDisplayError(getString(R.string.text_google_fit_disable))
                     localDataStore.setGoogleFitStatus(false)
                     setGoogleFitSwitchState(false)
                     GoogleSignIn.getClient(context, googleSignInOptions).signOut()
-                    sessionManager.logInsiderAppEvent(InsiderAppEvents.GOOGLE_FIT_CLICK,HashMap<String, Any>().apply {
-                        this["is_enabled"] = false
-                    })
+                    sessionManager.logInsiderAppEvent(
+                        InsiderAppEvents.GOOGLE_FIT_CLICK,
+                        HashMap<String, Any>().apply {
+                            this["is_enabled"] = false
+                        })
 
                     e.printStackTrace()
                 }
@@ -199,15 +213,18 @@ class GoogleFitFragment :
                 try {
                     localDataStore.setGoogleFitStatus(true)
                     setGoogleFitSwitchState(true)
-                    sessionManager.logInsiderAppEvent(InsiderAppEvents.GOOGLE_FIT_CLICK,HashMap<String,Any>().apply{
-                        this["is_enabled"]=true
-                    })
+                    sessionManager.logInsiderAppEvent(
+                        InsiderAppEvents.GOOGLE_FIT_CLICK,
+                        HashMap<String, Any>().apply {
+                            this["is_enabled"] = true
+                        })
 
                     uiController.onDisplayError(getString(R.string.text_google_fit_enable))
                 } catch (e: Exception) {
                     //Null pointers on view destroyed
                 }
             }
+
             else -> {
                 try {
                     oAuthErrorMsg(requestCode, resultCode)
@@ -231,6 +248,26 @@ class GoogleFitFragment :
             Result code was: $resultCode
         """.trimIndent()
         LOGS.e(message)
+    }
+
+    fun readWorkoutData() {
+        val readRequest = DataReadRequest.Builder()
+            .read(DataType.TYPE_WORKOUT_EXERCISE)
+            .setTimeRange(1696918645, System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+            .build()
+
+        Fitness.getHistoryClient(
+            requireActivity(),
+            googleSignInAccount
+        )
+            .readData(readRequest)
+            .addOnSuccessListener { dataReadResponse: DataReadResponse? ->
+                LOGS.d("GoogleFitTestFragment", "DataSET ${Gson().toJson(dataReadResponse)}")
+            }
+            .addOnFailureListener { e: Exception? ->
+                LOGS.w("GoogleFitTestFragment", "Failure ${e?.message}")
+                e?.printStackTrace()
+            }
     }
 
 

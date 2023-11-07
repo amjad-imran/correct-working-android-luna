@@ -1,10 +1,17 @@
 package com.oreo.ui
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Bundle
+import android.view.View
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.fitness.Fitness
+import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.DataType
 import com.google.android.gms.fitness.request.DataReadRequest
 import com.google.android.gms.fitness.result.DataReadResponse
@@ -17,6 +24,19 @@ import java.util.concurrent.TimeUnit
 
 class GoogleFitTestFragment :
     BaseFragment<FragmentGooglFitTestBinding>(FragmentGooglFitTestBinding::inflate) {
+
+    val TAG = "GoogleFitTestFragment"
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACTIVITY_RECOGNITION)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(),
+                arrayOf(Manifest.permission.ACTIVITY_RECOGNITION),
+                2233)
+        }
+    }
     override fun initListener() {
         binding.bSignIn.setOnClickListener {
             val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -36,6 +56,17 @@ class GoogleFitTestFragment :
             }else{
                 context.showShortToast("User already signed in ${account.email}")
             }
+        }
+
+        binding.bLogout.setOnClickListener {
+            Fitness.getConfigClient(requireContext(),  GoogleSignIn.getAccountForExtension(requireContext(), getFitnessOptions()))
+                .disableFit()
+                .addOnSuccessListener {
+                    LOGS.d(TAG,"Disabled Google Fit")
+                }
+                .addOnFailureListener { e ->
+                    LOGS.d(TAG,"There was an error disabling Google Fit $e")
+                }
         }
 
         binding.bRequest.setOnClickListener {
@@ -61,6 +92,12 @@ class GoogleFitTestFragment :
 
 
         }
+    }
+
+    fun getFitnessOptions(): FitnessOptions {
+        return FitnessOptions.builder()
+            .addDataType(DataType.TYPE_WORKOUT_EXERCISE, FitnessOptions.ACCESS_READ)
+            .build()
     }
 
 
