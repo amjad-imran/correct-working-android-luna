@@ -6,11 +6,15 @@ interface OreoAutoSportDataSource {
 
     suspend fun getAllNotAcceptingData(): List<OreoAutoSportData>?
 
+    suspend fun getWorkoutByTime(timeStamp: Long): OreoAutoSportData?
+
     suspend fun insertData(
         data: List<OreoAutoSportData>
     ): Boolean
 
-    suspend fun deleteAllAutoSport(): Boolean
+    suspend fun markWorkoutSyncedAll(): Boolean
 
     suspend fun deleteAutoSport(id: Int): Boolean
+    suspend fun deleteOldData(time: Long): Boolean
+    suspend fun markWorkoutSynced(id: Int): Boolean
 }

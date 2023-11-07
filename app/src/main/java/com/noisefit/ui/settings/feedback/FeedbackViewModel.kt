@@ -64,12 +64,12 @@ constructor(
 
     init {
 
-        if (watchesSDK.getWatchType() == SDKWatchType.SDK_RYEEX) {
+      /*  if (watchesSDK.getWatchType() == SDKWatchType.SDK_RYEEX) {
             setLoading(true)
             sessionManager.sendQueryAction(QueryAction.GetFirmwareLogs)
         } else {
             getLogsPath()
-        }
+        }*/
 
     }
 

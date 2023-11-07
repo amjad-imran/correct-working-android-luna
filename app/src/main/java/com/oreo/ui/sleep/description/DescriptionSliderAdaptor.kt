@@ -16,7 +16,12 @@ class DescriptionSliderAdaptor : RecyclerView.Adapter<DescriptionSliderAdaptor.V
         fun bind(data: Contributors) {
             binding.lytTopSubItem.tvTitle.text = data.title
             binding.lytTopSubItem.tvRemark.text = data.leftText
-            binding.lytTopSubItem.pbSteps.progress = data.barPercent
+            val progressValue: Int = if (data.barPercent == 0) {
+                1
+            } else {
+                data.barPercent
+            }
+            binding.lytTopSubItem.pbSteps.progress = progressValue
             val progressColor = ContextCompat.getColor(
                 binding.lytTopSubItem.pbSteps.context,
                 data.barColor

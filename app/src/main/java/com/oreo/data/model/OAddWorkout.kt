@@ -9,6 +9,7 @@ data class OAddWorkout(
     var startTimeIn24H: String = "",
     var endTimeIn24H: String = "",
     var intensity: String = "",
+    var date: String? = null,
     @SerializedName("start_hour") var startHour: Int = 0,
     @SerializedName("start_minute") var startMinute: Int = 0,
     @SerializedName("end_hour") var endHour: Int = 23,

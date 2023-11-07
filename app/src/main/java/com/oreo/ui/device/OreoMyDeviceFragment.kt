@@ -2,10 +2,12 @@ package com.oreo.ui.device
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoMyDeviceBinding
+import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.SplashActivity
 import com.noisefit.ui.myDevice.REST_REQUEST_KEY
 import com.noisefit.ui.myDevice.UNPAIR_REQUEST_KEY
@@ -39,6 +41,7 @@ import kotlinx.coroutines.launch
 class OreoMyDeviceFragment :
     BaseFragment<FragmentOreoMyDeviceBinding>(FragmentOreoMyDeviceBinding::inflate) {
     private val mViewModel: OMyDeviceViewModel by viewModels()
+    private val mainViewModel: OreoMainViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,6 +52,9 @@ class OreoMyDeviceFragment :
     }
 
     override fun initListener() {
+        binding.rowSettings.setOnClickListener {
+            navigate(R.id.deviceSettingsFragment)
+        }
 
         binding.rowAppLogs.setOnClickListener {
             if (mViewModel.appLogFile?.exists() == true) {
@@ -80,9 +86,12 @@ class OreoMyDeviceFragment :
                     mViewModel.sessionManager.sendQueryAction(QueryAction.RestartDevice)
                 }
                 if (ringNotConnected) {
-                    navigate(R.id.unpairDeviceNotConnectedFragment,Bundle().apply {
-                        this.putString("title","Soft reset failed")
-                        this.putString("message","Ring not connected to Luna App. Please try again later.")
+                    navigate(R.id.unpairDeviceNotConnectedFragment, Bundle().apply {
+                        this.putString("title", "Soft reset failed")
+                        this.putString(
+                            "message",
+                            "Ring not connected to Luna App. Please try again later."
+                        )
                     })
                 }
             }
@@ -114,9 +123,12 @@ class OreoMyDeviceFragment :
                     showUnPairDialog()
                 }
                 if (ringNotConnected) {
-                    navigate(R.id.unpairDeviceNotConnectedFragment,Bundle().apply {
-                        this.putString("title","Ring Unpair Failed")
-                        this.putString("message","Ring not connected to Luna App. Please try again.")
+                    navigate(R.id.unpairDeviceNotConnectedFragment, Bundle().apply {
+                        this.putString("title", "Ring Unpair Failed")
+                        this.putString(
+                            "message",
+                            "Ring not connected to Luna App. Please try again."
+                        )
                     })
                 }
             }
@@ -164,18 +176,20 @@ class OreoMyDeviceFragment :
             if (connected) {
                 binding.apply {
                     lytDeviceConnected.root.visible()
-                    btnUnpair.visible()
+                    //btnUnpair.visible()
                     //btnReset.visible()
                     lytPairYourDeviceHeader.root.gone()
+                    lytFeatures.visible()
                 }
 
             } else {
                 binding.apply {
                     lytDeviceConnected.root.gone()
-                    btnUnpair.gone()
+                    //btnUnpair.gone()
                     //btnReset.gone()
 
                     lytPairYourDeviceHeader.root.visible()
+                    lytFeatures.gone()
                 }
             }
         }
@@ -193,6 +207,8 @@ class OreoMyDeviceFragment :
                 is ConnectState.ConnectSuccess -> {
                     setStateConnected(connectedState.noiseFitDevice)
                     getBatteryInfo()
+                    mainViewModel.onRingConnected()
+
                 }
 
                 is ConnectState.UnPaired -> {
@@ -291,7 +307,7 @@ class OreoMyDeviceFragment :
             }
         }
 
-        binding.lytFeatures.gone()
+        //binding.lytFeatures.gone()
     }
 
     private fun setStateBtOff(noiseFitDevice: ColorFitDevice?) {

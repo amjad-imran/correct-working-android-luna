@@ -43,8 +43,6 @@
                     android:background="@drawable/back_modal_transparent_oreo"
                     android:nestedScrollingEnabled="false"
                     android:orientation="vertical"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -58,11 +56,28 @@
                     layout="@layout/layout_divider"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:visibility="gone"
                     android:layout_marginTop="24dp"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/rvActivityDetails" />
+                    app:layout_constraintTop_toBottomOf="@id/rvActivityDetails"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/tvImportText"
+                    style="@style/H6"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="24dp"
+                    android:textColor="@color/white_64"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/divider1"
+                    tools:text="Walking Outdoor"
+                    tools:visibility="visible" />
 
                 <include
                     android:id="@+id/lytIntensity"
@@ -87,7 +102,7 @@
 
                 <include
                     android:id="@+id/lytHeartRate"
-                    layout="@layout/layout_owd_heart_rate_item"
+                    layout="@layout/oreo_layout_sleep_movement"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"

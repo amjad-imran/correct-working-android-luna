@@ -152,6 +152,7 @@ object AppModule {
         respDataSource: OreoRespiratoryDataImpl,
         sleepDataSource: OreoSleepDataImpl,
         dayTimeMovementDataSource: OreoDayTimeMovementDataImpl,
+        autoWorkoutDataSource: OreoAutoSportDataImpl,
         gson: Gson
     ): AppRepository =
         AppRepositoryImpl(
@@ -164,6 +165,7 @@ object AppModule {
             respDataSource,
             sleepDataSource,
             dayTimeMovementDataSource,
+            autoWorkoutDataSource,
             gson
         )
 

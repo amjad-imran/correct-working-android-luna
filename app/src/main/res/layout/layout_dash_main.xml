@@ -2,7 +2,8 @@
 
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,6 +19,15 @@
             android:layout_marginTop="24dp" />
 
         <include
+            android:id="@+id/lytConnectHelp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:layout_marginTop="@dimen/dimen_24dp"
+            layout="@layout/layout_trouble_connecting_ring"/>
+
+        <include
             android:id="@+id/lytPairDevice"
             layout="@layout/list_o_pair_device"
             android:layout_width="match_parent"
@@ -31,10 +41,19 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_24dp" />
 
+        <include
+            android:id="@+id/lytChargeRing"
+            layout="@layout/layout_ring_charge_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_24dp"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvHealthData"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
         <include
             android:id="@+id/lytHeartRate"
@@ -68,7 +87,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvViewedCards"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
         <include
             android:id="@+id/lytDummy"

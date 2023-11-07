@@ -16,13 +16,12 @@ import com.noisefit.luna.databinding.FragmentSummaryOBinding
 import com.noisefit.oreo.BottomNavOption
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.receiver.service.FeedbackSubmitService
-import com.noisefit.receiver.service.ProblemType
 import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY
+import com.noisefit.ui.common.bottomSheet.DELETE_REQ_REQUEST_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.data.enums.DashInfoCard
-import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseFragment
@@ -43,6 +42,7 @@ import com.oreo.data.model.VideoInfoType
 import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
+import com.oreo.receiver.workManager.HealthOverviewDataType
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
@@ -75,6 +75,22 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     }
 
     override fun initListener() {
+
+        binding.contentMain.lytConnectHelp.btnCancel.setOnClickListener {
+            mainViewModel.onRingConnected()
+        }
+
+        binding.contentMain.lytConnectHelp.tvDesc.setOnClickListener {
+            navigate(R.id.oreoHSQuestionFragment, Bundle().apply {
+                putString("title", "Battery & Charging")
+                putString("id", "6")
+            })
+        }
+
+        binding.contentMain.lytChargeRing.root.setOnClickListener {
+            navigate(R.id.ringBatteryChargeFragment)
+            viewModel.setRingBatteryInfoState()
+        }
 
         binding.contentMain.lytPairDevice.btnPairDevice.setOnClickListener {
             startActivity(PairDeviceActivity.getStartIntent(requireContext(), true))
@@ -182,8 +198,10 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         viewedCardsAdapter.itemClickListener = { type ->
             when (type) {
-                OSummaryHealthOverviewClickEnum.TextRingCareClicked -> {
-                    navigate(R.id.ringCareFragment)
+                is OSummaryHealthOverviewClickEnum.TextRingCareClicked -> {
+                    navigate(R.id.ringCareFragment, Bundle().apply {
+                        this.putString("title", type.title)
+                    })
                 }
 
                 is OSummaryHealthOverviewClickEnum.VideoInfoClicked -> {
@@ -201,19 +219,8 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             when (type) {
 
                 is OSummaryHealthOverviewClickEnum.WorkoutAlertWhatisThis -> {
-                    setFragmentResultListener(ALERT_REQUEST_KEY) { _, bundle ->
-                        val allow = bundle.getBoolean("allow")
-                        if (allow) {
 
-                        }
-                    }
-                    navigate(
-                        OSummaryFragmentDirections.actionHomeToAlertTextBottomSheet(
-                            getString(R.string.text_automatic_activity_detection),
-                            getString(R.string.text_automatic_activity_detection_desc),
-                            "", ""
-                        )
-                    )
+                    navigate(R.id.aboutAutoWorkoutBottomSheet)
                 }
 
                 is OSummaryHealthOverviewClickEnum.WorkoutAlertIdentify -> {
@@ -221,20 +228,22 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 }
 
                 is OSummaryHealthOverviewClickEnum.AutoSportsDelete -> {
-                    setFragmentResultListener(ALERT_REQUEST_KEY) { _, bundle ->
+                    setFragmentResultListener(DELETE_REQ_REQUEST_KEY) { _, bundle ->
                         val allow = bundle.getBoolean("allow")
                         if (allow) {
-                            viewModel.deleteAllAutoWorkout()
+                            viewModel.markWorkoutSyncedAll()
                             viewModel.removeAutoWorkoutCard()
                         }
                     }
-                    navigate(
-                        OSummaryFragmentDirections.actionHomeToAlertTextBottomSheet(
-                            getString(R.string.text_dismiss_activity_title),
-                            getString(R.string.text_dismiss_activity_desc),
-                            "", ""
+                    navigate(R.id.deleteAllWorkoutBottomSheet, Bundle().apply {
+                        this.putString("title", getString(R.string.text_dismiss_activity_title))
+                        this.putString(
+                            "description",
+                            getString(R.string.text_dismiss_activity_desc)
                         )
-                    )
+                        this.putString("acceptText", "")
+                        this.putString("declineText", "")
+                    })
                 }
 
 
@@ -274,9 +283,11 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                     )
                 }
 
-                OSummaryHealthOverviewClickEnum.TextRingCareClicked -> {
+                is OSummaryHealthOverviewClickEnum.TextRingCareClicked -> {
                     viewModel.localDataStore.setDashCardClickState(DashInfoCard.CARE, true)
-                    navigate(R.id.ringCareFragment)
+                    navigate(R.id.ringCareFragment, Bundle().apply {
+                        this.putString("title", type.title)
+                    })
 
                 }
 
@@ -305,6 +316,15 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     }
 
     override fun subscribeObservers() {
+
+        viewModel.sessionManager.showSyncOfflineData.observe(viewLifecycleOwner) {
+            it.getContent()?.let { event ->
+                if (event == HealthOverviewDataType.AUTO_WORKOUT) {
+                    viewModel.getDashboardDataFromServer(false)
+                }
+            }
+
+        }
 
         viewModel.hrInfo.observe(this) {
             it.getContent()?.let {
@@ -385,6 +405,34 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 } else {
                     this.root.gone()
                 }
+            }
+        }
+
+        mainViewModel.stateConnectHelp.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.contentMain.lytConnectHelp.root.visible()
+                val logsSync = viewModel.shouldSyncAutoLogs()
+                if (logsSync) {
+                    context?.let { ctx ->
+                        FeedbackSubmitService.startService(
+                            ctx
+                        )
+                    }
+                }
+            } else {
+                binding.contentMain.lytConnectHelp.root.gone()
+            }
+        }
+
+        viewModel.stateDashRingBattery.observe(this) {
+            if (it.first) {
+                binding.contentMain.lytChargeRing.root.visible()
+                binding.contentMain.lytChargeRing.imageView3.loadImage(
+                    requireContext(),
+                    it.second?.ringInfo?.image2
+                )
+            } else {
+                binding.contentMain.lytChargeRing.root.gone()
             }
         }
 
@@ -550,6 +598,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                     viewModel.checkBatteryPercentage()
                     viewModel.updateAlerts()
                     shouldSync()
+                    mainViewModel.onRingConnected()
                 }
 
                 is ConnectState.UnPaired -> {
@@ -865,13 +914,12 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         }
         adapter1.setData(workouts ?: ArrayList())
         lytWorkouts.viewAddWorkout.setOnClickListener {
-            if (viewModel.ringDataStore.getRingDevice() != null) {
+            if (viewModel.isDeviceConnected()) {
                 navigate(R.id.addWorkoutFragment)
+                viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_ADD_WORKOUT_CLICK)
             } else {
                 requireContext().showShortToast("Please connect your ring to add a workout")
             }
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_ADD_WORKOUT_CLICK)
-
         }
 
         lytWorkouts.ivViewAll.setOnClickListener {
@@ -1020,6 +1068,12 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             R.drawable.ic_ring_bluetooth_off
         )
         binding.lytHeader.oreoStatus.setBackgroundResource(R.drawable.back_modal_new_round)
+
+        if (viewModel.stateHeartRateCard.value?.measureState == TapMeasureState.MEASURING) {
+            viewModel.stateHeartRateCard.postValue(viewModel.stateHeartRateCard.value.apply {
+                this?.measureState = TapMeasureState.ERROR
+            })
+        }
     }
 
     private fun setConnectingState(connecting: Boolean) {
@@ -1055,6 +1109,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 R.drawable.ic_ring_low_battery
             )
             binding.lytHeader.batteryStatus.setIndicatorColor(resources.getColor(R.color.color_error))
+            viewModel.handleBatteryAlert(noiseFitDevice)
         } else {
             binding.lytHeader.oreoStatus.setBackgroundResource(R.drawable.back_modal_new_round)
             binding.lytHeader.batteryStatus.setIndicatorColor(resources.getColor(R.color.white))
@@ -1094,15 +1149,6 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         if (viewModel.isDeviceConnected()) {
             shouldSync()
-
-            val logsSync = viewModel.shouldSyncAutoLogs()
-            if (logsSync) {
-                context?.let {
-                    FeedbackSubmitService.startService(
-                        it
-                    )
-                }
-            }
         }
 
 

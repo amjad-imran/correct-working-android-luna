@@ -303,7 +303,7 @@ constructor(
                 "$minute min"
             result.add(
                 Contributors(
-                    title = "Total sleep",
+                    title = "Sleep duration",
                     leftText = leftText,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -314,7 +314,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Total sleep",
+                    title = "Sleep duration",
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_sleep_bar_color,
@@ -532,7 +532,8 @@ constructor(
         return color
     }
 
-    fun getHourlySleepBreakup(sleepBreakup: List<SleepHourlyBreakup>?): Pair<ArrayList<SleepData.SleepDataBreakup>, CountCardData> {
+    fun getHourlySleepBreakup(sleepBreakup: List<SleepHourlyBreakup>?):
+            Pair<ArrayList<SleepData.SleepDataBreakup>, CountCardData> {
         val countCData = CountCardData(
             type = "Sleep",
             imageSourceId = 0,
@@ -640,7 +641,7 @@ constructor(
 
     fun getParsedDescriptionData(): ArrayList<String> {
         val descriptionList = ArrayList<String>()
-        descriptionList.add(contributorInfo.value?.totalSleep ?: "")
+        descriptionList.add(contributorInfo.value?.sleep_duration ?: "")
         descriptionList.add(contributorInfo.value?.sleep_efficiency ?: "")
         descriptionList.add(contributorInfo.value?.restfulness ?: "")
         descriptionList.add(contributorInfo.value?.remSleep ?: "")

@@ -23,10 +23,10 @@
 
             <View
                 android:id="@+id/view12"
-                android:layout_width="80dp"
+                android:layout_width="40dp"
                 android:layout_height="2dp"
-                android:layout_marginTop="4dp"
-                android:alpha="0.5"
+                android:layout_marginTop="8dp"
+                android:alpha="0.2"
                 android:background="@drawable/back_bottom_sheet_drag"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -48,10 +48,9 @@
                     android:id="@+id/tvData"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/gilroy_medium"
+                    style="@style/Small"
+                    android:textColor="@color/white_64"
                     android:lineSpacingExtra="8sp"
-                    android:textSize="12sp"
-                    android:textStyle="normal"
                     tools:text="Daytime movement refers to types of physical activity throughout the day, which can be classified into four categories based on their intensity:" />
             </ScrollView>
 

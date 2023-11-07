@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.OreoItemDetectWorkoutListBinding
 import com.noisefit_commans.data.model.OreoAutoSportData
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import java.util.concurrent.TimeUnit
 
@@ -26,6 +28,8 @@ class DetectWorkoutAdapter(val detectWorkoutListener: DetectWorkoutListener) :
             binding.tvMin.text = minutes
             val calories = "${resultData.calories} kcal"
             binding.tvCalories.text = calories
+
+            binding.tvIntensity.text = getIntensity(resultData.intensity ?: 0)
 
             val time =
                 DateFormats.convertTimestampToDate(resultData.startTime, DateFormats.time12Meridian)
@@ -49,15 +53,54 @@ class DetectWorkoutAdapter(val detectWorkoutListener: DetectWorkoutListener) :
                 binding.tvStart.text = time
             }
 
-            binding.tvTitle.text = resultData.type
-            binding.btnCancel.setOnClickListener {
+            val workoutName = resultData.type?.replace("_", " ")
+                ?.replaceFirstChar { if (it.isLowerCase()) it.titlecase(DateFormats.defaultLocale) else it.toString() }
+
+            binding.tvTitle.text = workoutName
+
+            var isOtherWorkout = false
+            if (workoutName.equals("walking", true) || workoutName.equals("running", true)) {
+                binding.btnEdit.visible()
+                binding.btnAdd.text = "Confirm"
+            } else {
+                binding.btnEdit.gone()
+                binding.btnAdd.text = "Identify"
+                isOtherWorkout = true
+            }
+
+
+            binding.ivClose.setOnClickListener {
                 detectWorkoutListener.onDismissWorkout(resultData, bindingAdapterPosition)
             }
-            binding.btnIdentify.setOnClickListener {
+            binding.btnAdd.setOnClickListener {
+                if (isOtherWorkout) {
+                    detectWorkoutListener.onIdentifyWorkout(resultData, bindingAdapterPosition)
+                } else {
+                    detectWorkoutListener.onAddWorkout(resultData, bindingAdapterPosition)
+                }
+            }
+            binding.btnEdit.setOnClickListener {
                 detectWorkoutListener.onIdentifyWorkout(resultData, bindingAdapterPosition)
             }
         }
     }
+
+    private fun getIntensity(intensity: Int): String {
+        return when (intensity) {
+            0 -> {
+                "Easy"
+            }
+
+            1 -> {
+                "Moderate"
+            }
+
+            else -> {
+                "Hard"
+            }
+        }
+    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
@@ -85,6 +128,7 @@ class DetectWorkoutAdapter(val detectWorkoutListener: DetectWorkoutListener) :
         }
 
     }
+
     fun setData(resultData: List<OreoAutoSportData>) {
         mDataSet.clear()
         mDataSet.addAll(resultData)
@@ -93,6 +137,7 @@ class DetectWorkoutAdapter(val detectWorkoutListener: DetectWorkoutListener) :
 }
 
 interface DetectWorkoutListener {
+    fun onAddWorkout(data: OreoAutoSportData, position: Int)
     fun onIdentifyWorkout(data: OreoAutoSportData, position: Int)
     fun onDismissWorkout(data: OreoAutoSportData, position: Int)
 }

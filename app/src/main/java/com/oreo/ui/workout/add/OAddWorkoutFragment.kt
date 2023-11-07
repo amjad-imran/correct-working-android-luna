@@ -44,7 +44,12 @@ class OAddWorkoutFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.movementList = args.movementList?.toList()
-        viewModel.convertAutoSport(args.autoSport)
+        if (args.autoSport != null) {
+            viewModel.convertAutoSport(args.autoSport)
+        }
+
+        viewModel.getWorkoutList(false)
+
     }
 
     private fun setToolbar() {
@@ -78,6 +83,21 @@ class OAddWorkoutFragment :
         )
     }
 
+    private fun setWorkout(workout: OWorkoutListModal) {
+        viewModel.workoutListModal = workout
+
+        context?.let { ctx ->
+            binding.lytWorkout.ivWorkoutImage.loadImage(ctx, workout.iconUrl)
+        }
+
+        binding.lytWorkout.tvWorkout.text = workout.getFormattedActivityName()
+        /*setCalories()
+        enableSaveBtn()*/
+        viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ADD_WORKOUT + "_${workout.activityType}_CLICK")
+
+        updateCalculatedData()
+    }
+
     override fun initListener() {
 
         setToolbar()
@@ -87,24 +107,13 @@ class OAddWorkoutFragment :
         setFragmentResultListener(SELECT_REQUEST_KEY) { _, bundle ->
             val workout = bundle.getParcelable<OWorkoutListModal>("workout")
             workout?.let {
-                viewModel.workoutListModal = workout
-
-                context?.let { ctx ->
-                    binding.lytWorkout.ivWorkoutImage.loadImage(ctx, workout.iconUrl)
-                }
-
-                binding.lytWorkout.tvWorkout.text = workout.getFormattedActivityName()
-                /*setCalories()
-                enableSaveBtn()*/
-                viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ADD_WORKOUT + "_${workout.activityType}_CLICK")
-
-                updateCalculatedData()
+                setWorkout(it)
             }
         }
 
         binding.lytWorkout.ivDropDown.setOnClickListener {
             if (viewModel.oWorkoutListModalResponse.value.isNullOrEmpty()) {
-                viewModel.getWorkoutList()
+                viewModel.getWorkoutList(true)
             } else {
                 goToSelectWorkout(viewModel.oWorkoutListModalResponse.value!!)
             }
@@ -429,112 +438,51 @@ class OAddWorkoutFragment :
             tvTitle.text = getString(R.string.text_identify_workout)
         }
 
-        setMovementGraph()
-
-    }
-
-    private fun setMovementGraph() {
-        binding.candleChart.visible()
-        val topIndexList =
-            UtilClass.getDetectedWorkoutMovement(viewModel.preFilledOreoAutoSportData!!)
-        val baseHrList = UtilClass.graphBaseInterval(null, null, viewModel.movementList?.size ?: 0)
-        LOGS.d("setMovementGraph ${Gson().toJson(topIndexList)}")
-        val candleChartModelList: MutableList<CandleChartModel> =
-            java.util.ArrayList<CandleChartModel>()
-        viewModel.movementList?.forEachIndexed { index, data ->
-
-            val chartModel = CandleChartModel()
-
-            chartModel.bottomLineText = baseHrList[index]
-            chartModel.identifyText = topIndexList[index].toString()
-            when (data) {
-                1 -> {
-
-                    chartModel.length =
-                        (binding.candleChart.max * 0.4).toInt()
-
-                    chartModel.type = CandleChartModel.Type.LOW
-                    chartModel.color = if (chartModel.identifyText == "null") {
-                        Color.parseColor("#3d3d3d")
-                    } else if (chartModel.identifyText != "ignore") {
-                        chartModel.length =
-                            (binding.candleChart.max * 1.2).toInt()
-                        Color.parseColor("#ffffff")
-
-                    } else {
-                        Color.parseColor("#4cffd230")
-                    }
-                }
-
-                2 -> {
-
-                    chartModel.length =
-                        (binding.candleChart.max * 0.6).toInt()
-
-
-                    chartModel.color = if (chartModel.identifyText == "null") {
-                        Color.parseColor("#3d3d3d")
-                    } else if (chartModel.identifyText != "ignore") {
-                        chartModel.length =
-                            (binding.candleChart.max * 1.2).toInt()
-                        Color.parseColor("#ffffff")
-
-                    } else {
-                        Color.parseColor("#ffd230")
-                    }
-                    chartModel.type = CandleChartModel.Type.MEDIUM
-                }
-
-                3, 4 -> {
-
-                    chartModel.length =
-                        (binding.candleChart.max * 0.8).toInt()
-
-                    chartModel.color = if (chartModel.identifyText == "null") {
-                        Color.parseColor("#3d3d3d")
-                    } else if (chartModel.identifyText != "ignore") {
-                        chartModel.length =
-                            (binding.candleChart.max * 1.2).toInt()
-                        Color.parseColor("#ffffff")
-
-                    } else {
-                        Color.parseColor("#ffffff")
-                    }
-
-
-                    chartModel.type = CandleChartModel.Type.HIGH
-                }
-
-                else -> {
-                    chartModel.length =
-                        (binding.candleChart.max * 0.2).toInt()
-
-                    chartModel.color = if (chartModel.identifyText == "null") {
-
-                        Color.parseColor("#3d3d3d")
-
-                    } else if (chartModel.identifyText != "ignore") {
-                        chartModel.length =
-                            (binding.candleChart.max * 1.2).toInt()
-                        Color.parseColor("#ffffff")
-
-                    } else {
-                        Color.parseColor("#4c4c4c")
-                    }
-
-                    chartModel.type = CandleChartModel.Type.INACTIVE
-
-                }
-            }
-            chartModel.value = data
-            candleChartModelList.add(chartModel)
+        viewModel.movementList?.let {
+            handleMovementNewViews(it)
         }
-        binding.candleChart.updateData(candleChartModelList)
-
     }
 
+    private fun handleMovementNewViews(movementList: List<Int>) {
+        binding.rvMovements.visible()
+
+        val newList = viewModel.getCombinedMovementData(movementList)
+        binding.movementChart.setData(newList, arrayListOf())
+
+    }
 
     override fun subscribeObservers() {
+
+        viewModel.updateDefaultWorkout.observe(viewLifecycleOwner) {
+            it.getContent()?.let {
+
+                //set intensity
+                viewModel.addWorkout.intensity = "Moderate"
+                setIntensity()
+
+                //set start time and end time
+                val calStart = Calendar.getInstance()
+
+                viewModel.addWorkout.endHour = calStart.get(Calendar.HOUR_OF_DAY)
+                viewModel.addWorkout.endMinute = calStart.get(Calendar.MINUTE)
+
+                if (calStart.get(Calendar.HOUR_OF_DAY) == 0) {
+                    calStart.add(Calendar.MINUTE, -calStart.get(Calendar.MINUTE))
+                } else {
+                    calStart.add(Calendar.MINUTE, -60)
+                }
+                viewModel.addWorkout.startHour = calStart.get(Calendar.HOUR_OF_DAY)
+                viewModel.addWorkout.startMinute = calStart.get(Calendar.MINUTE)
+                setStartTimeBetween()
+
+                setEndTimeBetween()
+
+
+                //set workout
+                setWorkout(it)
+            }
+        }
+
         viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->
                 context.showShortToast(message)
@@ -545,7 +493,7 @@ class OAddWorkoutFragment :
             it?.let {
                 if (it) {
                     setPrefillData()
-                    disableSelection()
+                    //disableSelection()
                 }
             }
         }
@@ -570,6 +518,7 @@ class OAddWorkoutFragment :
                         bundleOf("allow" to true)
 
                     )
+                    context.showShortToast("Workout Added Successfully")
                     navigateUpSafe()
                 }
             }

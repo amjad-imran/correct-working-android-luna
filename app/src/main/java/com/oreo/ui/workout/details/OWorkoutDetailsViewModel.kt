@@ -7,12 +7,17 @@ import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
+import com.oreo.util.UtilClass
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
 import javax.inject.Inject
+import kotlin.math.ceil
 
 @HiltViewModel
 class OWorkoutDetailsViewModel @Inject constructor(
@@ -97,6 +102,7 @@ class OWorkoutDetailsViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
+                            sendMessage("Workout Deleted")
                             _workoutDeletedResponse.postValue(Event(true))
                         }
                     }
@@ -104,5 +110,70 @@ class OWorkoutDetailsViewModel @Inject constructor(
             }
         }
 
+    }
+
+    fun getDummyBreakUpDataForTimeDisplay(): ArrayList<Int> {
+        val dummyList = ArrayList<Int>()
+        for (i in 0..287) {
+            dummyList.add(0)
+        }
+        return dummyList
+
+    }
+
+    fun getXAxisList(movementList: List<Int>, startTime: String, endTime: String): List<String?> {
+
+        val list = arrayOfNulls<String>(movementList.size)
+
+        val startTimeFull =
+            DateFormats.convertTimeIntoTime(
+                startTime,
+                DateFormats.timeFormat12,
+                DateFormats.timeFormat
+            ).split(":")
+
+
+        val startHr = startTimeFull[0].toInt()
+        val originalStartMin = startTimeFull[1].toInt()
+        var startMin = originalStartMin
+        startMin = (5 * (Math.floor(Math.abs(startMin.toDouble() / 5)))).toInt()
+
+
+        val endTimeFull =
+            DateFormats.convertTimeIntoTime(
+                endTime,
+                DateFormats.timeFormat12,
+                DateFormats.timeFormat
+            ).split(":")
+
+
+        val endHr = endTimeFull[0].toInt()
+
+        val originalEndMin = endTimeFull[1].toInt()
+        var endMin = originalEndMin
+        endMin = (5 * (ceil(Math.abs(endMin.toDouble() / 5)))).toInt()
+
+
+        val calendar = Calendar.getInstance()
+        calendar.time = DateFormats.timeFormat.parse(String.format("%02d:%02d", startHr, startMin))
+        val endTimeCalendar = Calendar.getInstance()
+        endTimeCalendar.time =
+            DateFormats.timeFormat.parse(String.format("%02d:%02d", endHr, endMin))
+
+        var index = 0
+        while (calendar.before(endTimeCalendar)) {
+            list[index] = DateFormats.timeFormat12_2.format(calendar.time)
+            calendar.add(Calendar.MINUTE, 5)
+            index++
+        }
+
+
+        return list
+            .apply {
+                this[0] = startTime.lowercase()
+                this[movementList.size - 1] =
+                    endTime.lowercase()
+            }
+            .toList()
     }
 }

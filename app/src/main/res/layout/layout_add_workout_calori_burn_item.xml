@@ -4,43 +4,38 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/back_modal_transparent_oreo">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/tvDuration"
-            style="@style/Small"
+            style="@style/H6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/side_margin"
             android:text="@string/text_duration"
-            android:layout_marginTop="16dp"
             android:textColor="@color/white_64"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvDurationValue"
-            style="@style/H4"
+            style="@style/H3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/side_margin"
             android:layout_marginTop="@dimen/dimen_8dp"
-
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvDuration"
             tools:text="--" />
 
         <TextView
             android:id="@+id/tvDurationUnit"
-            style="@style/H4"
+            style="@style/H6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-
+            app:layout_constraintBaseline_toBaselineOf="@+id/tvDurationValue"
             app:layout_constraintStart_toEndOf="@id/tvDurationValue"
-            app:layout_constraintTop_toBottomOf="@+id/tvDuration"
             tools:text="min" />
         <include
             android:id="@+id/divider1"
@@ -48,6 +43,7 @@
             android:layout_width="1dp"
             android:layout_height="0dp"
             android:layout_marginTop="16dp"
+            android:visibility="invisible"
             android:layout_marginBottom="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -56,38 +52,33 @@
 
         <TextView
             android:id="@+id/tvCaloriesBurn"
-            style="@style/Small"
+            style="@style/H6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white_64"
             android:layout_marginStart="@dimen/side_margin"
             app:layout_constraintStart_toEndOf="@+id/divider1"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="16dp"
             android:text="@string/text_calories_burnt" />
+
         <TextView
             android:id="@+id/tvCalBurnValue"
-            style="@style/H4"
+            style="@style/H3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="16dp"
             app:layout_constraintStart_toStartOf="@id/tvCaloriesBurn"
             app:layout_constraintTop_toBottomOf="@+id/tvCaloriesBurn"
             tools:text="--" />
 
         <TextView
             android:id="@+id/tvCalBurnUnit"
-            style="@style/H4"
+            style="@style/H6"
             android:layout_width="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="8dp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tvCalBurnValue"
             app:layout_constraintStart_toEndOf="@id/tvCalBurnValue"
-            app:layout_constraintTop_toBottomOf="@+id/tvCaloriesBurn"
             tools:text="kcal" />
 
 

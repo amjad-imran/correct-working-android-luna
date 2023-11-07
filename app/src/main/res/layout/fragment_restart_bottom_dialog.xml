@@ -10,7 +10,7 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/list"
+            android:id="@+id/viewMain"
             style="@style/ModalStyleDialog"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -18,13 +18,14 @@
             android:layout_marginTop="@dimen/dimen_12dp"
             android:layout_marginEnd="@dimen/dimen_12dp"
             android:layout_marginBottom="@dimen/dimen_12dp"
-            tools:listitem="@layout/fragment_privacy_bottom_dialog_list_dialog_item">
+            tools:listitem="@layout/fragment_privacy_bottom_dialog_list_dialog_item"
+            tools:visibility="gone">
 
             <View
-                android:layout_width="80dp"
+                android:layout_width="40dp"
                 android:layout_height="2dp"
-                android:layout_marginTop="4dp"
-                android:alpha="0.5"
+                android:layout_marginTop="8dp"
+                android:alpha="0.2"
                 android:background="@drawable/back_bottom_sheet_drag"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +38,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/side_margin"
                 android:gravity="center"
-                android:textColor="#eeeeee"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -52,8 +52,8 @@
                 android:layout_margin="@dimen/side_margin"
                 android:background="@android:color/transparent"
                 android:gravity="center"
-                android:textColor="#8a8c8e"
                 android:lineSpacingExtra="6sp"
+                android:textColor="#80ffffff"
                 app:layout_constraintEnd_toEndOf="@+id/tvTitle"
                 app:layout_constraintStart_toStartOf="@+id/tvTitle"
                 app:layout_constraintTop_toBottomOf="@+id/tvTitle"
@@ -92,5 +92,48 @@
                 app:layout_constraintStart_toEndOf="@+id/btnCancel"
                 app:layout_constraintTop_toBottomOf="@+id/tvPrivacy" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/viewRestart"
+            style="@style/ModalStyleDialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_12dp"
+            android:layout_marginTop="@dimen/dimen_12dp"
+            android:layout_marginEnd="@dimen/dimen_12dp"
+            android:layout_marginBottom="@dimen/dimen_12dp"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <View
+                android:layout_width="40dp"
+                android:layout_height="2dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:alpha="0.2"
+                android:background="@drawable/back_bottom_sheet_drag"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <View
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="34dp"
+                android:background="@drawable/image_ring" />
+
+            <TextView
+                style="@style/H4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="30dp"
+                android:gravity="center_horizontal"
+                android:text="Restarting" />
+        </LinearLayout>
     </RelativeLayout>
 </layout>

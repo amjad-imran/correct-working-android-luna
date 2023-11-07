@@ -21,11 +21,14 @@ data class OWorkoutDetailsResponseModel(
     val intensity: String? = null,
     @SerializedName("created_date")
     val createdDate: String? = null,
-    val date: String?=null,
+    val type: String? = null,
+    val date: String? = null,
     @SerializedName("hr_avg")
     val hrAvg: Int? = null,
     @SerializedName("hr_low")
     val hrLow: Int? = null,
     @SerializedName("icon_url")
-    val iconUrl: String? = null
+    val iconUrl: String? = null,
+    @SerializedName("daytime_movement")
+    val movement: List<Int>?=null//change key as per server response
 )

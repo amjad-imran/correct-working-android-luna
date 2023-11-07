@@ -11,13 +11,23 @@
         android:background="@drawable/back_modal_transparent_oreo"
         android:layout_height="wrap_content">
 
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/back_modal_new_round"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
 
         <ImageView
             android:id="@+id/imageView8"
             android:layout_width="@dimen/dimen_48dp"
             android:layout_height="@dimen/dimen_48dp"
             android:layout_margin="@dimen/dimen_16dp"
-            android:src="@drawable/ic_o_workout"
+            android:padding="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

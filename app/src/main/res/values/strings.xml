@@ -732,6 +732,7 @@
     <string name="text_allow_contact_access_to_connect_with_your_friends">Allow contact access to connect with your friends</string>
     <string name="text_by_allowing_this_access_information_related_to_your_contact_list">By allowing this access, information related to your contact list, including names and phone numbers will be synced and sent to Noise. We\'ll use your contacts to enable you to connect with your friends, creating a social experience that motivates you to achieve your fitness goals together. Please note that Noise does not collect, store or share any personal information from your contact list. You can disable contact permissions anytime in your device settings. Learn more in our Privacy Policy.</string>
     <string name="text_total_sleep">Total sleep</string>
+    <string name="text_sleep_duration">Sleep duration</string>
     <string name="text_sleep_contributors">Sleep contributors</string>
     <string name="text_time_in_bed">Time in bed</string>
     <string name="text_sleep_efficiency">Sleep efficiency</string>
@@ -884,7 +885,7 @@
     <string name="text_review">Review</string>
     <string name="text_what_is_this">What is this?</string>
     <string name="text_automatic_activity_detection">Automatic activity detection</string>
-    <string name="text_automatic_activity_detection_desc">Automatic activity detection automatically reports all physical activities detected by your Luna Ring.\nYou can review and verify each detected activity, ensuring accuracy. Confirm to include yours stats in your activity score.</string>
+    <string name="text_automatic_activity_detection_desc">Automatic activity detection automatically reports all physical activities detected by your Luna Ring.\n\nYou can review and verify each detected activity, ensuring accuracy. Confirm to include yours stats in your activity score.</string>
     <string name="text_delete_workout">Delete workout</string>
     <string name="text_this_week">This week</string>
     <string name="text_last_week">Last week</string>
@@ -965,4 +966,16 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="text_soft_reset">Soft reset</string>
+    <string name="text_charge_your_ring">Charge your ring</string>
+    <string name="text_ring_charge_below_20">Battery below 20%. Charge it before bedtime for uninterrupted insights.</string>
+    <string name="charge_point1">To place the ring on the dock charger, align the white marker on the ring with the small bump on the dock charger.</string>
+    <string name="charge_point2">Once the ring is placed correctly, the charging will begin which is indicated by the breathing white light on the Noise symbol.</string>
+    <string name="charge_point3">Once the ring is completely charged the breathing light will turn to a solid white state.</string>
+    <string name="text_restart_device">Restart device</string>
+    <string name="text_pair_a_new_ring">Pair a new ring</string>
+    <string name="text_active_calories">Active calories</string>
+    <string name="text_inactive_time">Inactive time</string>
+    <string name="text_trouble_connecting_your_ring">Trouble connecting your ring?</string>
+    <string name="text_get_help">Get help</string>
+    <string name="text_identify">Identify</string>
 </resources>

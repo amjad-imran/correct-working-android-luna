@@ -74,6 +74,33 @@ constructor(
     }
 
     fun handleBatteryNotification(
+        currentBatteryLevel: Int
+    ) {
+
+        if (currentBatteryLevel <= 20) {
+            val message =
+                "Your Luna Ring battery level is $currentBatteryLevel%"
+
+            val notificationShown = watchDataStore.getChargingNotificationsShown()
+
+            val level = when (currentBatteryLevel) {
+                in 0..5 -> ChargingNotificationLevel.LEVEL_5
+                in 6..10 -> ChargingNotificationLevel.LEVEL_10
+                in 11..15 -> ChargingNotificationLevel.LEVEL_15
+                in 16..20 -> ChargingNotificationLevel.LEVEL_20
+                else -> null
+            } ?: return
+
+            if (notificationShown[level.name] == true) {
+                return
+            }
+            //watchDataStore.setChargingNotificationShown(level)
+            pushBatteryNotification(NoiseFitApplicationMain.context!!, TITLE, message, "3")
+        }
+    }
+
+
+    fun handleBatteryNotification(
         currentBatteryLevel: Int,
         lastBatteryLevel: Int,
         isCharging: Boolean

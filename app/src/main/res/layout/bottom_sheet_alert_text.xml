@@ -45,10 +45,11 @@
 
             <TextView
                 android:id="@+id/tvDesc"
-                style="@style/H6"
+                style="@style/Small"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/side_margin"
+                android:textColor="@color/white_64"
                 android:background="@android:color/transparent"
                 android:gravity="center"
                 android:lineSpacingExtra="6sp"

@@ -137,7 +137,12 @@
     <dialog
         android:id="@+id/unpairBottomDialogFragment"
         android:name="com.noisefit.ui.myDevice.UnpairBottomDialogFragment"
-        android:label="UnpairBottomDialogFragment" />
+        android:label="UnpairBottomDialogFragment" >
+        <argument
+            android:name="forceUnpair"
+            app:argType="boolean"
+            android:defaultValue="false" />
+    </dialog>
     <dialog
         android:id="@+id/descriptionPopUpBottomDialogFragment"
         android:name="com.oreo.ui.sleep.description.DescriptionBottomDialogFragment"
@@ -376,7 +381,11 @@
     <fragment
         android:id="@+id/ringCareFragment"
         android:name="com.oreo.ui.info.RingCareFragment"
-        android:label="RingCareFragment" />
+        android:label="RingCareFragment" >
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/ringWelcomeFragment"
         android:name="com.oreo.ui.info.RingWelcomeFragment"
@@ -404,6 +413,42 @@
         android:id="@+id/restartBottomDialogFragment"
         android:name="com.noisefit.ui.myDevice.RestartBottomDialogFragment"
         android:label="RestartBottomDialogFragment" />
+    <fragment
+        android:id="@+id/learnFragment"
+        android:name="com.oreo.ui.info.LearnFragment"
+        android:label="fragment_learn"/>
+    <fragment
+        android:id="@+id/ringBatteryChargeFragment"
+        android:name="com.oreo.ui.info.RingBatteryChargeFragment"
+        android:label="RingBatteryChargeFragment" />
+    <fragment
+        android:id="@+id/deviceSettingsFragment"
+        android:name="com.oreo.ui.device.DeviceSettingsFragment"
+        android:label="fragment_device_settings"/>
+    <dialog
+        android:id="@+id/deleteAllWorkoutBottomSheet"
+        android:name="com.noisefit.ui.common.bottomSheet.DeleteAllWorkoutBottomSheet"
+        android:label="DeleteAllWorkoutBottomSheet" >
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="description"
+            app:argType="string" />
+
+        <argument
+            android:name="acceptText"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="declineText"
+            app:argType="string"
+            app:nullable="true" />
+    </dialog>
+    <dialog
+        android:id="@+id/aboutAutoWorkoutBottomSheet"
+        android:name="com.oreo.ui.home.summary.AboutAutoWorkoutBottomSheet"
+        android:label="AboutAutoWorkoutBottomSheet" />
     <fragment
         android:id="@+id/googleFitTestFragment"
         android:name="com.oreo.ui.GoogleFitTestFragment"

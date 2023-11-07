@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentRingCareBinding
@@ -19,13 +20,14 @@ import dagger.hilt.android.AndroidEntryPoint
 class RingCareFragment : BaseFragment<FragmentRingCareBinding>(FragmentRingCareBinding::inflate) {
 
     val viewModel: RingCareViewModel by viewModels()
+    val navArgs: RingCareFragmentArgs by navArgs()
     private val adapter: RingCareAdapter by lazy {
         RingCareAdapter()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.toolbar.tvTitle.text = "Care for your ring"
+        binding.toolbar.tvTitle.text = navArgs.title
 
         setRecycler()
         viewModel.getRingCareData()
@@ -43,7 +45,7 @@ class RingCareFragment : BaseFragment<FragmentRingCareBinding>(FragmentRingCareB
         binding.toolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }
-        viewModel.ringCarePoints.observe(this){
+        viewModel.ringCarePoints.observe(this) {
             adapter.setDataSet(it)
         }
 

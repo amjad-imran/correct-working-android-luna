@@ -28,6 +28,7 @@
         <TextView
             android:id="@+id/tvEasyTitle"
             style="@style/Small"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
@@ -42,10 +43,10 @@
             style="@style/Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginStart="4dp"
             android:text="@string/text_light_exercise"
             android:textColor="@color/white_64"
-
             app:layout_constraintBottom_toBottomOf="@id/tvEasyTitle"
             app:layout_constraintStart_toEndOf="@id/tvEasyTitle"
             app:layout_constraintTop_toTopOf="@id/tvEasyTitle" />
@@ -55,10 +56,10 @@
             style="@style/Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginStart="32dp"
             android:layout_marginTop="4dp"
             android:text="@string/text_moderate"
-
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvEasyTitle" />
 
@@ -67,10 +68,10 @@
             style="@style/Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginStart="4dp"
             android:text="@string/text_intermediate_exercise"
             android:textColor="@color/white_64"
-
             app:layout_constraintBottom_toBottomOf="@id/tvModerateTitle"
             app:layout_constraintStart_toEndOf="@id/tvModerateTitle"
             app:layout_constraintTop_toTopOf="@id/tvModerateTitle" />
@@ -80,6 +81,7 @@
             style="@style/Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginStart="32dp"
             android:layout_marginBottom="@dimen/dimen_8dp"
             android:layout_marginTop="4dp"
@@ -93,11 +95,10 @@
             style="@style/Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
+            android:visibility="gone"
             android:layout_marginStart="4dp"
             android:text="@string/text_advanced_level_vigorous_exercise"
             android:textColor="@color/white_64"
-
             app:layout_constraintBottom_toBottomOf="@id/tvHardTitle"
             app:layout_constraintStart_toEndOf="@id/tvHardTitle"
             app:layout_constraintTop_toTopOf="@id/tvHardTitle" />

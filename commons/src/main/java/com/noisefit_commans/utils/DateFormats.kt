@@ -103,6 +103,9 @@ object DateFormats {
     @SuppressLint("ConstantLocale")
     val timeFormat12 = SimpleDateFormat("hh:mm a", defaultLocale)
 
+    @SuppressLint("ConstantLocale")
+    val timeFormat12_2 = SimpleDateFormat("hh:mm", defaultLocale)
+
 
     @SuppressLint("ConstantLocale")
     val timeFormatSleepTime = SimpleDateFormat("yyyy-MM-dd HH:mm", defaultLocale)
@@ -1039,9 +1042,9 @@ object DateFormats {
         return cal.timeInMillis
     }
 
-    fun lastClearDataTimeStamp(): Long {
+    fun lastClearDataTimeStamp(days: Int): Long {
         val currentTimeStamp = getTimeStamp()
-        return convertTimeStampToStartOfDay(subtractDate(currentTimeStamp, PastSyncData))
+        return convertTimeStampToStartOfDay(subtractDate(currentTimeStamp, days))
     }
 
     fun getNDayStartingTimeStamp(): Long {
@@ -1903,6 +1906,19 @@ object DateFormats {
     }
 
     fun getActivityDisplayDates(startTime: String?, endTime: String?): String {
+        if (startTime.isNullOrEmpty() || endTime.isNullOrEmpty()) return ""
+        return try {
+            val inputFormat = SimpleDateFormat("HH:mm:ss", defaultLocale)
+            val outputFormat = SimpleDateFormat("hh:mm a", defaultLocale)
+            val start = inputFormat.parse(startTime)
+            val end = inputFormat.parse(endTime)
+            "${outputFormat.format(start).lowercase()} - ${outputFormat.format(end).lowercase()}"
+        } catch (exp: Exception) {
+            ""
+        }
+    }
+
+    fun convert24hourTo12(startTime: String?, endTime: String?): String {
         if (startTime.isNullOrEmpty() || endTime.isNullOrEmpty()) return ""
         return try {
             val inputFormat = SimpleDateFormat("HH:mm:ss", defaultLocale)

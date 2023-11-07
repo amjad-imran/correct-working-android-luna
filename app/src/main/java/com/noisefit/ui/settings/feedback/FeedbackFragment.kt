@@ -188,7 +188,7 @@ class FeedbackFragment : BaseFragment<FragmentFeedbackBinding>(FragmentFeedbackB
         }
 
 
-        viewModel.sessionManager.deviceQueryCallback.observe(this) {
+       /* viewModel.sessionManager.deviceQueryCallback.observe(this) {
             when (it) {
                 is QueryCallback.FirmwareLogObtained -> {
                     viewModel.setLoading(false)
@@ -197,7 +197,7 @@ class FeedbackFragment : BaseFragment<FragmentFeedbackBinding>(FragmentFeedbackB
                 }
                 else -> {}
             }
-        }
+        }*/
 
         viewModel.getApiErrors().observe(this) {
             it?.getContent()?.let { response ->

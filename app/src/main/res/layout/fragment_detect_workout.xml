@@ -6,50 +6,23 @@
     xmlns:lineChart="http://schemas.android.com/apk/res-auto"
     tools:context="com.oreo.ui.workout.detect.DetectWorkoutFragment">
 
-
-    <com.oreo.ui.custom.CandleChart
-        android:id="@+id/candleChart"
+    <HorizontalScrollView
+        android:id="@+id/rvMovements"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="@dimen/dimen_24dp"
-        android:layout_marginStart="@dimen/dimen_16dp"
-        android:layout_marginEnd="@dimen/dimen_16dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/side_margin"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="@dimen/side_margin"
+        app:layout_constraintBottom_toTopOf="@id/lytDMGStatus"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        lineChart:bgBottomColor="@android:color/transparent"
-        lineChart:bgColor="@android:color/transparent"
-        lineChart:bgLeftColor="@android:color/transparent"
-        lineChart:bgRightColor="@android:color/transparent"
-        lineChart:bgTopColor="@android:color/transparent"
-        lineChart:bottomWith="30dp"
-        lineChart:centerLineColor="#80ffffff"
-        lineChart:centerLineWidth="5dp"
-        lineChart:chartLineColor="#C4A9F5"
-        lineChart:chartLineWidth="2dp"
-        lineChart:gridColor="#80FFFFFF"
-        lineChart:hCount="11"
-        lineChart:innerCircleColor="#ffffff"
-        lineChart:innerCircleRadius="4dp"
-        lineChart:leftWith="0dp"
-        lineChart:lineNormalColor="#7B63A7"
-        lineChart:lineSelectColor="#B18DF2"
-        lineChart:rightWith="0dp"
-        lineChart:scaleColor="#ff000000"
-        lineChart:scaleNodeColor="#FFFFFF"
-        lineChart:scaleNodeRadius="6dp"
-        lineChart:showAvgValue="false"
-        lineChart:showGrid="false"
-        lineChart:topWith="24dp"
-        lineChart:vCount="2"
-        lineChart:xLineColor="#80FFFFFF"
-        lineChart:xMax="100"
-        lineChart:xMin="0"
-        lineChart:xTextColor="#a3ffffff"
-        lineChart:xTextSize="12sp"
-        lineChart:yLineColor="#00FFFFFF"
-        lineChart:yTextColor="@android:color/transparent"
-        lineChart:yTextSize="12sp" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.oreo.ui.custom.MovementChartAuto
+            android:id="@+id/movementChart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </HorizontalScrollView>
 
     <include
         android:id="@+id/lytDMGStatus"
@@ -57,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/candleChart" />
+        app:layout_constraintTop_toBottomOf="@id/rvMovements" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv"
@@ -69,6 +42,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/lytDMGStatus" />
+
+    <include
+        android:id="@+id/progressBar"
+        layout="@layout/default_loader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

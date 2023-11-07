@@ -40,7 +40,7 @@
                 android:layout_marginEnd="@dimen/dimen_16dp"
                 android:paddingBottom="@dimen/dimen_16dp"
                 android:text="@string/text_review"
-                android:textColor="@color/medium_movement"
+                android:textColor="@color/carolina_blue"
 
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/btnCancel"
@@ -52,8 +52,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dimen_8dp"
+                android:alpha="0.6"
                 android:background="@android:color/transparent"
-                android:padding="@dimen/dimen_4dp"
+                android:padding="6dp"
                 android:src="@drawable/baseline_clear_white_24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

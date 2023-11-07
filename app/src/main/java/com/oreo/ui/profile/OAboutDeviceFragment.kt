@@ -116,8 +116,13 @@ class OAboutDeviceFragment :
             navigateUpSafe()
         }
         binding.btnCheckForUpdates.setOnClickListener {
-            updateViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ABOUTDEVICE_UPDATE_CLICK)
-            updateViewModel.checkForUpdates(false)
+            if (updateViewModel.sessionManager.isDeviceConnected()) {
+                updateViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ABOUTDEVICE_UPDATE_CLICK)
+                updateViewModel.checkForUpdates(false)
+            }else{
+                context.showShortToast("Ring not connected")
+
+            }
         }
         binding.btnCopyMac.setOnClickListener {
             updateViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ABOUTDEVICE_COPY_MAC_CLICK)

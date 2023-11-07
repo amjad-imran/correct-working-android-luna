@@ -7,6 +7,8 @@ import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import com.hookedonplay.decoviewlib.charts.SeriesItem
+import com.hookedonplay.decoviewlib.events.DecoEvent
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.*
 import com.noisefit.ui.common.calculatePercentage
@@ -21,14 +23,16 @@ import com.oreo.data.model.AlertType
 import com.oreo.data.model.DashAlert
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.VideoInfoType
-import java.lang.StringBuilder
+import com.oreo.util.UtilClass.seriesItemWithInset
+import com.oreo.util.UtilClass.seriesItemWithoutInset
+
 
 sealed class OSummaryHealthOverviewClickEnum {
     object SleepDetailsWorkoutClick : OSummaryHealthOverviewClickEnum()
     object ActivityDetailsWorkoutClick : OSummaryHealthOverviewClickEnum()
     object ReadinessDetailsWorkoutClick : OSummaryHealthOverviewClickEnum()
     object TextWelcomeRingClicked : OSummaryHealthOverviewClickEnum()
-    object TextRingCareClicked : OSummaryHealthOverviewClickEnum()
+    data class TextRingCareClicked(val title: String) : OSummaryHealthOverviewClickEnum()
     data class VideoInfoClicked(val type: VideoInfoType, val videoUrl: String) :
         OSummaryHealthOverviewClickEnum()
 
@@ -128,6 +132,14 @@ class OSummaryHealthOverviewAdapter :
                 )
             )
 
+            R.layout.list_activity_burn_card_item_2 -> HomeRecyclerViewHolder.ActivityViewHolder2(
+                ListActivityBurnCardItem2Binding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
             R.layout.list_activity_minimal_item -> HomeRecyclerViewHolder.ActivityMinimalViewHolder(
                 ListActivityMinimalItemBinding.inflate(
                     LayoutInflater.from(parent.context),
@@ -199,6 +211,13 @@ class OSummaryHealthOverviewAdapter :
 
 
             is HomeRecyclerViewHolder.ActivityViewHolder -> holder.bind(
+                items[position] as OHealthOverview.Activity,
+                position,
+                lastPosition,
+                devicePaired
+            )
+
+            is HomeRecyclerViewHolder.ActivityViewHolder2 -> holder.bind(
                 items[position] as OHealthOverview.Activity,
                 position,
                 lastPosition,
@@ -283,7 +302,7 @@ class OSummaryHealthOverviewAdapter :
 
 
             is OHealthOverview.ActivityMinimal -> R.layout.list_activity_minimal_item
-            is OHealthOverview.Activity -> R.layout.list_activity_burn_card_item
+            is OHealthOverview.Activity -> R.layout.list_activity_burn_card_item_2
 
 
             is OHealthOverview.AutoSport -> R.layout.list_o_w_alert_card_item
@@ -353,7 +372,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.tvMessage.text = data.data.content
 
             binding.root.setOnClickListener {
-                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.TextRingCareClicked)
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.TextRingCareClicked(data.data.title))
             }
 
         }
@@ -621,6 +640,99 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.ActivityDetailsWorkoutClick)
             }
 
+        }
+    }
+
+    class ActivityViewHolder2(private val binding: ListActivityBurnCardItem2Binding) :
+        HomeRecyclerViewHolder(binding) {
+        fun bind(
+            data: OHealthOverview.Activity,
+            position: Int,
+            lastPosition: Int,
+            devicePaired: Boolean
+        ) {
+            val scoreValue = data.data.activityScore
+
+            if (scoreValue == null) {
+                binding.tvActivityScore.text = "--"
+            } else {
+                binding.tvActivityScore.text = scoreValue.toString()
+            }
+
+
+            if (data.data.nudges.isNullOrEmpty()) {
+                binding.tvNudge.gone()
+            } else {
+                binding.tvNudge.visible()
+                binding.tvNudge.text = data.data.nudges.first()
+            }
+
+            val caloriesGoalText = "${data.caloriesGoal}"
+            binding.tvTotalCalories.text = caloriesGoalText
+
+            binding.tvActiveCalories.text = if ((data.data.activeCalories ?: 0) > 0) {
+                data.data.activeCalories.toString()
+            } else {
+                "--"
+            }
+
+            binding.dynamicArcView.configureAngles(180, 0)
+            binding.dynamicArcView.addSeries(
+                seriesItemWithoutInset(
+                    binding.dynamicArcView.context, 100f, 100f, R.color.activity_track_back, 18f
+                )
+            )
+
+            val distanceIndex: Int = binding.dynamicArcView.addSeries(
+                seriesItemWithoutInset(
+                    binding.dynamicArcView.context, 0f, 100f, R.color.activity_arc, 18f
+                )
+            )
+
+            var caloriesPercent =
+                ((data.data.activeCalories ?: 0).toFloat() / data.caloriesGoal.toFloat()) * 100
+
+            if (caloriesPercent > 100) {
+                caloriesPercent = 100f
+            }
+
+            binding.dynamicArcView.addEvent(
+                DecoEvent.Builder(caloriesPercent).setIndex(distanceIndex)
+                    .setDuration(1000L).build()
+            )
+
+            val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(
+                data.data.inactiveMinutes ?: 0
+            )
+
+            if (hour > 0) {
+                binding.tvHr.visible()
+                binding.textHr.visible()
+                binding.tvMin.visible()
+                binding.textMin.visible()
+
+                binding.tvHr.text = "$hour"
+                binding.tvMin.text = "$minute"
+            } else if (minute > 0) {
+                binding.tvHr.gone()
+                binding.textHr.gone()
+                binding.tvMin.visible()
+                binding.textMin.visible()
+
+                binding.tvMin.text = "$minute"
+            } else {
+                binding.tvHr.gone()
+                binding.textHr.gone()
+                binding.tvMin.visible()
+                binding.textMin.gone()
+
+                binding.tvMin.text = "-"
+            }
+
+
+            binding.root.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.ActivityDetailsWorkoutClick)
+            }
         }
     }
 

@@ -361,6 +361,13 @@ fun ImageView.loadImageWithCache(context: Context, url: String?) {
         .diskCacheStrategy(DiskCacheStrategy.ALL)
         .into(this)
 }
+fun ImageView.loadImageWithCache(context: Context, url: String?,placeHolder:Int) {
+    Glide.with(context).load(url)
+        .placeholder(placeHolder)
+        .error(placeHolder)
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
+        .into(this)
+}
 
 fun ImageView.loadProfileEditImage(context: Context, url: String?, default: Int) {
     Glide.with(context).load(url).error(default)

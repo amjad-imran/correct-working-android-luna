@@ -7,9 +7,11 @@ import com.noisefit.luna.databinding.RowActivityDetailBinding
 import com.noisefit.luna.databinding.RowOwdItemBinding
 import com.noisefit.ui.workout.adapter.ActivityDetailAdapter
 import com.noisefit_commans.data.model.DetailData
+import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.visible
 import com.oreo.data.model.OWDActivityData
 
-class OWorkoutDetailslAdapter : RecyclerView.Adapter<OWorkoutDetailslAdapter.ViewHolder> (){
+class OWorkoutDetailslAdapter : RecyclerView.Adapter<OWorkoutDetailslAdapter.ViewHolder>() {
     private var mDataSet = ArrayList<OWDActivityData>()
 
     inner class ViewHolder(val binding: RowOwdItemBinding) :
@@ -19,9 +21,22 @@ class OWorkoutDetailslAdapter : RecyclerView.Adapter<OWorkoutDetailslAdapter.Vie
             binding.tvTitle.text = detailData.title
             binding.tvValue.text = detailData.value
             binding.tvUnitValue.text = detailData.unit
+
+
+            //Change code if workout params added
+            if (bindingAdapterPosition < 2 && itemCount > 2) {
+                binding.viewDivider.root.visible()
+            } else {
+                binding.viewDivider.root.invisible()
+            }
+
         }
     }
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OWorkoutDetailslAdapter.ViewHolder {
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): OWorkoutDetailslAdapter.ViewHolder {
         val binding =
             RowOwdItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
@@ -33,7 +48,7 @@ class OWorkoutDetailslAdapter : RecyclerView.Adapter<OWorkoutDetailslAdapter.Vie
 
     override fun getItemCount() = mDataSet.size
 
-    fun setDataSet(data : List<OWDActivityData>) {
+    fun setDataSet(data: List<OWDActivityData>) {
         mDataSet = data as ArrayList<OWDActivityData>
         notifyDataSetChanged()
     }

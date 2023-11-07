@@ -11,6 +11,8 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
+import com.noisefit_commans.interfaces.connection.ConnectState
+import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
@@ -204,6 +206,20 @@ constructor(
         isLastPage = false
         isActivitiesLoading = false
         _activities.postValue(arrayListOf())
+    }
+
+    fun isDeviceConnected(): Boolean {
+        if (getDeviceConnected() == null) {
+            return false
+        }
+
+        if (sessionManager.connectStateRing.value is ConnectState.ConnectSuccess) {
+            return true
+        }
+        return false
+    }
+    fun getDeviceConnected(): ColorFitDevice? {
+        return ringDataStore.getRingDevice()
     }
 
 }

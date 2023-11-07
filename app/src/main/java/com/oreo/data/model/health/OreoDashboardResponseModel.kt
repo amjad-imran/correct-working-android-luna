@@ -57,6 +57,7 @@ data class ODashboardSleepScoreModel(
 data class ODashboardActivityModel(
     val activityScore: Int? = null,
     val activeCalories: Int? = null,
+    val inactiveMinutes: Int? = null,
     val status: String? = "",
     val nudges: List<String>? = null,
 )

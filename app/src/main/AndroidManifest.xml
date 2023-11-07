@@ -78,7 +78,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="noisefit.page.link"
+                    android:host="lunaringapp.page.link"
                     android:scheme="https" />
             </intent-filter>
         </activity>

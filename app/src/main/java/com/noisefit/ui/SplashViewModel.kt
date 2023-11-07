@@ -157,6 +157,7 @@ class SplashViewModel
                         //addProperty("version", 111)
                         this.addProperty("version", firmware.version)
                         this.addProperty("firmware_id", firmware.firmwareId)
+                        this.addProperty("mac", it.address)
                     }
                     add("deviceDetails", deviceDetailsObj)
                 }
@@ -191,6 +192,7 @@ class SplashViewModel
                             }
 
                             localDataStore.saveFeatureIntervalFetchPeriod(it.resetInterval ?: 24)
+                            localDataStore.saveLogSyncInterval(it.logsSyncInterval ?: 2)
                             //localDataStore.saveHistoryYears(it.calendarYears ?: 2)
 
                             val helpUpdateTimStamp = if (it.helpUpdate.isNullOrEmpty()) {

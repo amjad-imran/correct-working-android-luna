@@ -1,6 +1,9 @@
 package com.oreo.util
 
+import android.content.Context
+import android.graphics.PointF
 import com.google.gson.Gson
+import com.hookedonplay.decoviewlib.charts.SeriesItem
 import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
@@ -110,24 +113,32 @@ object UtilClass {
                 "12 am"
             }
 
-//            47 -> {
-//                "4 am"
-//            }
+            47 -> {
+                "4 am"
+            }
 
             71 -> {
                 "6 am"
+            }
+
+            95 -> {
+                "8 am"
             }
 
             143 -> {
                 "12 pm"
             }
 
-//            191 -> {
-//                "4 pm"
-//            }
+            191 -> {
+                "4 pm"
+            }
 
             215 -> {
                 "6 pm"
+            }
+
+            239 -> {
+                "8 pm"
             }
 
             287 -> {
@@ -265,7 +276,7 @@ object UtilClass {
             startTime,
             DateFormats.dateTimeFormat5,
             DateFormats.time12Meridian
-        )
+        ).lowercase()
         hm[centerLeft] = DateFormats.time12Meridian.format(centerLeftTime).lowercase()
         hm[center] = DateFormats.time12Meridian.format(centerTime).lowercase()
         hm[center + centerLeft] = DateFormats.time12Meridian.format(centerRightTime).lowercase()
@@ -273,7 +284,7 @@ object UtilClass {
             endTime,
             DateFormats.dateTimeFormat5,
             DateFormats.time12Meridian
-        )
+        ).lowercase()
 
         return hm
 
@@ -446,11 +457,13 @@ object UtilClass {
         val hm = HashMap<Int, String>()
         if (startTime == null || endTime == null) {
             hm[0] = getHour(0)
-//            hm[47] = getHour(47)
-            hm[71] = getHour(71)
+            hm[47] = getHour(47)
+            //hm[71] = getHour(71)
+            hm[95] = getHour(95)
             hm[143] = getHour(143)
-//            hm[191] = getHour(191)
-            hm[215] = getHour(215)
+            hm[191] = getHour(191)
+            //hm[215] = getHour(215)
+            hm[239] = getHour(239)
             hm[287] = getHour(287)
             return hm
         }
@@ -535,7 +548,7 @@ object UtilClass {
     }
 
 
-    private fun getNearest4Number(number: Int): Int {
+     fun getNearest4Number(number: Int): Int {
         when (number) {
             in 0..3 -> {
                 return 4
@@ -566,6 +579,28 @@ object UtilClass {
                 return -1
             }
         }
+    }
+
+    fun seriesItemWithoutInset(
+        context: Context, initialValue: Float, maxValue: Float, color: Int, width: Float
+    ): SeriesItem {
+        return SeriesItem.Builder(context.resources.getColor(color, null))
+            .setShowPointWhenEmpty(true)
+            .setRange(0f, maxValue, initialValue).setLineWidth(width).build()
+    }
+    fun seriesItemWithInset(
+        context: Context,
+        initialValue: Float,
+        maxValue: Float,
+        color: Int,
+        inset: Float,
+        width: Float
+    ): SeriesItem {
+
+        return SeriesItem.Builder(context.resources.getColor(color, null))
+            .setInset(PointF(inset, inset))
+            .setShowPointWhenEmpty(true)
+            .setRange(0f, maxValue, initialValue).setLineWidth(width).build()
     }
 
     private fun getNearest2Number(number: Int): Int {

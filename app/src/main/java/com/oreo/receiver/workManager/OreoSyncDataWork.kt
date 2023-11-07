@@ -14,6 +14,7 @@ import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
+import com.noisefit.receiver.service.FeedbackSubmitService
 import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
 import com.noisefit.util.moveToServer.SleepNotificationUtils
@@ -21,6 +22,7 @@ import com.noisefit.util.notif.NotificationUtil
 import com.noisefit.watch.SDKWatchType
 import com.noisefit.watch.UserActivityHandler
 import com.noisefit.watch.WatchesSDK
+import com.noisefit_commans.common.checkDayDifferenceMoreNMinutes
 import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
@@ -249,6 +251,14 @@ constructor(
 
                 }
 
+                val logsSync = shouldSyncAutoLogs()
+                if (logsSync) {
+                    context.let {
+                        FeedbackSubmitService.startService(
+                            it
+                        )
+                    }
+                }
 
                 removeOfflineUserData()
                 AppLogs.sendAppLogs("OreoSyncDataWork Server sync success")
@@ -775,6 +785,19 @@ constructor(
 
 
         return mFuture!!
+    }
+
+    fun shouldSyncAutoLogs(): Boolean {
+        val lastTimeStamp = ringDataStore.getAutoLogsTimeStamp()
+        val logSyncInterval = localDataStore.getLogSyncInterval()
+        if (logSyncInterval == 0) return false
+
+        if (lastTimeStamp == 0L) {
+            ringDataStore.saveAutoLogsTimeStamp()
+            return false
+        }
+
+        return lastTimeStamp.checkDayDifferenceMoreNMinutes(logSyncInterval * 60)
     }
 }
 

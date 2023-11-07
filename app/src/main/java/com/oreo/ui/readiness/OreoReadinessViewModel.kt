@@ -348,7 +348,7 @@ constructor(
             val (textColor, barColor, background) = getContributorsColors(dayData.totalSleep.status)
             result.add(
                 Contributors(
-                    title = "Yesterday's sleep duration",
+                    title = "Sleep duration",
                     leftText = dayData.totalSleep.text,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -359,7 +359,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Yesterday's sleep duration",
+                    title = "Sleep duration",
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,

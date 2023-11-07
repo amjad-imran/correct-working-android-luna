@@ -82,6 +82,10 @@ class OMyProfileFragment :
             goToProfile()
         }
 
+        binding.rowLearn.setOnClickListener {
+            navigate(R.id.learnFragment)
+        }
+
         binding.rowHelp.setOnClickListener {
             viewModel.sessionManager.logFirebaseEvent(
                 FirebaseLunaAppEvents.LUNA_HELP_SUPPORT_CLICK,
