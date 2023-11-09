@@ -449,5 +449,9 @@
         android:id="@+id/aboutAutoWorkoutBottomSheet"
         android:name="com.oreo.ui.home.summary.AboutAutoWorkoutBottomSheet"
         android:label="AboutAutoWorkoutBottomSheet" />
+    <dialog
+        android:id="@+id/myDeviceIntroBottomSheet"
+        android:name="com.oreo.ui.info.BottomSheetMyDeviceIntro"
+        android:label="MyDeviceBottomSheetIntro" />
 
 </navigation>

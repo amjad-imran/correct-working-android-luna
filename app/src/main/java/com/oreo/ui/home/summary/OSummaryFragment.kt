@@ -16,7 +16,6 @@ import com.noisefit.luna.databinding.FragmentSummaryOBinding
 import com.noisefit.oreo.BottomNavOption
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.receiver.service.FeedbackSubmitService
-import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.DELETE_REQ_REQUEST_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
@@ -43,6 +42,7 @@ import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
 import com.oreo.receiver.workManager.HealthOverviewDataType
+import com.oreo.ui.info.CALL_GOT_IT
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
@@ -75,6 +75,10 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     }
 
     override fun initListener() {
+        binding.lytHeader.oreoStatus.setOnClickListener {
+            navigate(R.id.navigation_oreo_my_device)
+
+        }
 
         binding.contentMain.lytConnectHelp.btnCancel.setOnClickListener {
             mainViewModel.onRingConnected()
@@ -176,6 +180,17 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         binding.contentMain.lytSleepAvg.constraintLayout.setOnClickListener {
             viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_ACTIVITY_SCORE_CLICK)
             viewModel.getContributorInfo("activity")
+        }
+
+        //handle device intro
+        if (!mainViewModel.ringDataStore.isShowDeviceIntro()) {
+            setFragmentResultListener(CALL_GOT_IT) { _, bundle ->
+                val isSelected = bundle.getBoolean("isSelected")
+                if (isSelected) {
+                    mainViewModel.ringDataStore.setShowDeviceIntro(true)
+                }
+            }
+            navigate(R.id.myDeviceIntroBottomSheet)
         }
 
     }

@@ -357,6 +357,10 @@ class FindDeviceListFragment :
             binding.bPairLater.gone()*/
 
         binding.bPairLater.setOnClickListener {
+            if (BuildConfig.DEBUG) {
+                binding.bPairLater.visible()
+            } else
+                binding.bPairLater.gone()
             pairLater()
         }
 
