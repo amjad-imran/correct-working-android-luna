@@ -76,7 +76,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
     override fun initListener() {
         binding.lytHeader.oreoStatus.setOnClickListener {
-            navigate(R.id.navigation_oreo_my_device)
+            navigate(R.id.oreo_my_device)
 
         }
 

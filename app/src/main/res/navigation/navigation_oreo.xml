@@ -39,7 +39,7 @@
             app:destination="@id/descriptionPopUpBottomDialogFragment" />
     </fragment>
     <fragment
-        android:id="@+id/navigation_oreo_my_device"
+        android:id="@+id/oreo_my_device"
         android:name="com.oreo.ui.device.OreoMyDeviceFragment"
         android:label="OreoMyDeviceFragment" />
     <fragment

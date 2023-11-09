@@ -22,7 +22,6 @@ import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
-import com.noisefit_commans.ui.loadWatchImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.AppLogs
@@ -52,6 +51,7 @@ class OreoMyDeviceFragment :
     }
 
     override fun initListener() {
+        binding.backBtn.setOnClickListener { navigateUpSafe() }
         binding.rowSettings.setOnClickListener {
             navigate(R.id.deviceSettingsFragment)
         }
