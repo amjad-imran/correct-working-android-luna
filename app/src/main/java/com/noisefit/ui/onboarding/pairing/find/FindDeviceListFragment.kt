@@ -356,14 +356,6 @@ class FindDeviceListFragment :
         } else
             binding.bPairLater.gone()*/
 
-        binding.bPairLater.setOnClickListener {
-            if (BuildConfig.DEBUG) {
-                binding.bPairLater.visible()
-            } else
-                binding.bPairLater.gone()
-            pairLater()
-        }
-
         /*binding.layoutSearchAgain.root.setOnClickListener {
             checkPermissionAndScan()
         }*/
