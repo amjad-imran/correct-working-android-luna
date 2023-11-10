@@ -34,10 +34,6 @@ class OreoActivityViewModel @Inject constructor(
     val sessionManager: SessionManager
 ) : BaseViewModel() {
 
-    var selectedMasterDate: String? = null
-    var selectedDate: String? = null
-
-
     private val _activityHistoryResponse = MutableLiveData<List<OreoActivityModel>>()
     val activityHistoryResponse: LiveData<List<OreoActivityModel>> = _activityHistoryResponse
 
@@ -47,9 +43,7 @@ class OreoActivityViewModel @Inject constructor(
 
     private val _contributorInfo = MutableLiveData<OContributorResponseModal>()
     val contributorInfo: LiveData<OContributorResponseModal> = _contributorInfo
-    init {
-        selectedMasterDate = DateFormats.getCurrentDateOreoFormat()
-    }
+
 
     fun getContributorInfo() {
         viewModelScope.launch {
@@ -102,21 +96,23 @@ class OreoActivityViewModel @Inject constructor(
         return datesArray
     }
 
-    fun updateSelectedDate() {
+    fun updateSelectedDate(selectedDate: String?): String? {
+        var returnSelectedDate: String? = null
 
         val dayData = _activityHistoryResponse.value?.firstOrNull() {
             it.date.equals(selectedDate, false)
         }
         if (dayData != null) {
             _dayActivityData.postValue(dayData)
-        }else{
+        } else {
             _activityHistoryResponse.value?.lastOrNull()?.let { data ->
                 LOGS.w("moveToPosition selected Date new $selectedDate")
-                selectedDate = data.date
+                returnSelectedDate = data.date
                 LOGS.w("moveToPosition selected Date new set $selectedDate")
                 _dayActivityData.postValue(data)
             }
         }
+        return returnSelectedDate
     }
 
     var dateList = ArrayList<String>()
@@ -195,7 +191,7 @@ class OreoActivityViewModel @Inject constructor(
     }
 
 
-    fun getActivityDetailsData(date: String? = null) {
+    fun getActivityDetailsData(selectedMasterDate: String? = null) {
         viewModelScope.launch {
             userActivityRepository.getActivityHistory(
                 selectedMasterDate ?: DateFormats.getCurrentDateOreoFormat()
@@ -215,7 +211,7 @@ class OreoActivityViewModel @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        getActivityDetailsData(date)
+                                        getActivityDetailsData(selectedMasterDate)
                                     }
 
                                     override fun no() {
@@ -229,7 +225,7 @@ class OreoActivityViewModel @Inject constructor(
                         resource.data?.data?.let {
                             _activityHistoryResponse.value = (it.reversed())
 
-                            updateSelectedDate()
+                            //updateSelectedDate()
                         }
                     }
                 }
@@ -447,7 +443,7 @@ class OreoActivityViewModel @Inject constructor(
             R.color.oreo_contributor_warning
         } else if (status.equals("good", true)) {
             R.color.distance_arc
-        } else if (status.equals("optimal",true)){
+        } else if (status.equals("optimal", true)) {
             R.color.steps_arc
         } else {
             R.color.white

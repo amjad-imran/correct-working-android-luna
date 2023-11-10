@@ -17,7 +17,6 @@ import com.noisefit.luna.databinding.FragmentOreoReadinessBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit_commans.ui.*
-import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModel
@@ -37,7 +36,6 @@ import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.math.roundToInt
 
 
 @AndroidEntryPoint
@@ -73,15 +71,13 @@ class OreoReadinessFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mViewModel.selectedMasterDate = mainViewModel.selectedMasterDate
-        mViewModel.selectedDate = mainViewModel.selectedDate
 
         mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_PAGE_VISIT)
         setRecycler()
 
 
         if (mViewModel.ringDataStore.isReadinessWalkAroundShown()) {
-            mViewModel.getReadinessDetailsData()
+            mViewModel.getReadinessDetailsData(mainViewModel.selectedMasterDate)
         } else {
             showWalkAround(true)
         }
@@ -385,8 +381,6 @@ class OreoReadinessFragment :
                 val data: Intent? = result.data
 
                 val selectedDate = data?.getStringExtra("selected_date")
-                mViewModel.selectedMasterDate = selectedDate
-                mViewModel.selectedDate = selectedDate
                 mainViewModel.selectedMasterDate = selectedDate
                 mainViewModel.selectedDate = selectedDate
                 LOGS.d("Selected Date  :${selectedDate}")
@@ -425,7 +419,7 @@ class OreoReadinessFragment :
         binding.lytEmptyView.bGoToSettings.setOnClickListener {
             showWalkAround(false)
             mViewModel.ringDataStore.setReadinessWalkAroundShown(true)
-            mViewModel.getReadinessDetailsData()
+            mViewModel.getReadinessDetailsData(mainViewModel.selectedMasterDate)
         }
         binding.lytToolbar.tvTitle.text = getString(R.string.text_readiness)
         binding.lytToolbar.view1.visible()
@@ -440,7 +434,7 @@ class OreoReadinessFragment :
                 HistoryCalendarActivity.getStartIntent(
                     requireContext(),
                     mViewModel.readinessHistoryResponse.value?.lastOrNull()?.date
-                        ?: mViewModel.selectedMasterDate,
+                        ?: mainViewModel.selectedMasterDate,
                     "ring"
                 )
             )
@@ -453,7 +447,7 @@ class OreoReadinessFragment :
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
                 putString("infoData", mViewModel.contributorInfo.value?.readiness_score)
-                putString("date", mViewModel.selectedDate)
+                putString("date", mainViewModel.selectedDate)
             })
             mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_READINESS_SCORE_CLICK)
         }
@@ -464,7 +458,7 @@ class OreoReadinessFragment :
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
                 putString("infoData", mViewModel.contributorInfo.value?.resting_hr)
-                putString("date", mViewModel.selectedDate)
+                putString("date", mainViewModel.selectedDate)
             })
             mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_RESTING_HR_CLICK)
 
@@ -476,7 +470,7 @@ class OreoReadinessFragment :
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
                 putString("infoData", mViewModel.contributorInfo.value?.hrv)
-                putString("date", mViewModel.selectedDate)
+                putString("date", mainViewModel.selectedDate)
             })
             mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_HR_VARIABILITY_CLICK)
         }
@@ -487,7 +481,7 @@ class OreoReadinessFragment :
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
                 putString("infoData", mViewModel.contributorInfo.value?.temperature)
-                putString("date", mViewModel.selectedDate)
+                putString("date", mainViewModel.selectedDate)
             })
             mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_BODY_TEMP_CLICK)
         }
@@ -498,7 +492,7 @@ class OreoReadinessFragment :
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
                 putString("infoData", mViewModel.contributorInfo.value?.respiration)
-                putString("date", mViewModel.selectedDate)
+                putString("date", mainViewModel.selectedDate)
             })
             mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_RESPIRATORY_RATE_CLICK)
         }
@@ -517,16 +511,16 @@ class OreoReadinessFragment :
             var moveToPos = -1
 
 
-            LOGS.d("moveToPosition date initia ${mViewModel.selectedDate}")
+            LOGS.d("moveToPosition date initia ${mainViewModel.selectedDate}")
 
-            if (mViewModel.selectedDate != null) {
+            if (mainViewModel.selectedDate != null) {
                 val index = it?.indexOfFirst { data ->
-                    data.date.equals(mViewModel.selectedDate, true)
+                    data.date.equals(mainViewModel.selectedDate, true)
                 }
                 if (index != null) {
 
                     moveToPos =  15 + (15-index-1)
-                    LOGS.d("moveToPosition date ${mViewModel.selectedDate}")
+                    LOGS.d("moveToPosition date ${mainViewModel.selectedDate}")
                     //binding.rvTopGraph.moveToPosition(15 + (15-index-1))
                 }
 
@@ -540,6 +534,13 @@ class OreoReadinessFragment :
             )
             setScrollDate()
             mViewModel.getContributorInfo()
+
+            val returnDate = mViewModel.updateSelectedDate(mainViewModel.selectedDate)
+            if (returnDate != null) {
+                mainViewModel.selectedDate = returnDate
+            }
+
+
 
         }
         mViewModel.dayReadinessData.observe(this) {
@@ -866,15 +867,16 @@ class OreoReadinessFragment :
 
     override fun onPositionSelected(position: Int, chartModel: ChartModel?) {
 
-        if (mViewModel.selectedDate == chartModel?.date!!) {
+        if (mainViewModel.selectedDate == chartModel?.date!!) {
             return
         }
         //mSharedViewModel.selectedDate = chartModel.date!!
         LOGS.w("moveToPosition onPositionSelected ${chartModel.date}")
-        mViewModel.selectedDate = chartModel.date!!
         mainViewModel.selectedDate = chartModel.date!!
-        mViewModel.updateSelectedDate()
-
+        val returnDate = mViewModel.updateSelectedDate(mainViewModel.selectedDate)
+        if (returnDate != null) {
+            mainViewModel.selectedDate = returnDate
+        }
 
     }
 

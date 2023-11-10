@@ -814,13 +814,13 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         if (activity.activityScore != null && activity.activityScore >= 0) {
 
             lytSleepAvg.tvActivityScore.text = activity.activityScore.toString()
-            lytSleepAvg.activityLineChart.updateDataWithMaxMin(
+            /*lytSleepAvg.activityLineChart.updateDataWithMaxMin(
                 viewModel.convertIntToChartModel(activity.value),
                 ArrayList(),
                 ArrayList(),
                 20,
                 true
-            )
+            )*/
             lytSleepAvg.tvActAvgThisWeek.gone()
             lytSleepAvg.tvDaysAvg1.visible()
             lytSleepAvg.activityLineChart.visible()

@@ -50,6 +50,8 @@ class OreoSleepDetailFragment :
     private val mainViewModel: OreoMainViewModel by activityViewModels()
     private var sleepDayGraphView: SleepGraphViewOreo? = null
 
+    private val TAG = "OreoSleepDetailFragment"
+
 
     private val mSleepStageAdapter: OreoSleepStageAnalysisAdapter by lazy {
         OreoSleepStageAnalysisAdapter()
@@ -503,7 +505,7 @@ class OreoSleepDetailFragment :
 
 
     override fun subscribeObservers() {
-        viewModel.sleepHistoryResponse.observe(this) {
+        viewModel.sleepHistoryResponse.observe(viewLifecycleOwner) {
 
             binding.svMain.visible()
             binding.groupHeader.visible()
@@ -522,7 +524,7 @@ class OreoSleepDetailFragment :
                 if (index != null) {
 
                     moveToPos = 15 + (15 - index - 1)
-                    LOGS.d("moveToPosition date ${mainViewModel.selectedDate}")
+                    LOGS.w(TAG, "Selected date ${mainViewModel.selectedDate} $moveToPos")
                     //binding.rvTopGraph.moveToPosition(15 + (15-index-1))
                 }
 

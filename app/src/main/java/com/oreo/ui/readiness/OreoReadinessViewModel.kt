@@ -3,12 +3,9 @@ package com.oreo.ui.readiness
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
-import com.noisefit_commans.common.averageWithoutZero
-import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.RingDataStore
@@ -24,9 +21,7 @@ import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import com.oreo.data.model.health.UnitDataModelArray
 import com.noisefit_commans.utils.LOGS
-import kotlin.math.roundToInt
 
 
 @HiltViewModel
@@ -37,9 +32,6 @@ constructor(
     val ringDataStore: RingDataStore,
     val sessionManager: SessionManager
 ) : BaseViewModel() {
-
-    var selectedMasterDate: String? = null
-    var selectedDate: String? = null
 
 
     private val _readinessData = MutableLiveData<TestDataModel>()
@@ -54,6 +46,7 @@ constructor(
 
     private val _contributorInfo = MutableLiveData<OContributorResponseModal>()
     val contributorInfo: LiveData<OContributorResponseModal> = _contributorInfo
+
     init {
         //selectedMasterDate = DateFormats.getCurrentDateOreoFormat()
     }
@@ -101,7 +94,7 @@ constructor(
     }
 
 
-    fun getReadinessDetailsData(date: String? = null) {
+    fun getReadinessDetailsData(selectedMasterDate: String? = null) {
         viewModelScope.launch {
             userActivityRepository.getReadinessHistory(
                 selectedMasterDate ?: DateFormats.getCurrentDateOreoFormat()
@@ -121,7 +114,7 @@ constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        getReadinessDetailsData(date)
+                                        getReadinessDetailsData(selectedMasterDate)
                                     }
 
                                     override fun no() {
@@ -134,7 +127,6 @@ constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             _readinessHistoryResponse.value = (it.reversed())
-                            updateSelectedDate()
                         }
                     }
                 }
@@ -267,21 +259,24 @@ constructor(
     }
 
 
-    fun updateSelectedDate() {
+    fun updateSelectedDate(selectedMasterDate: String?): String? {
+        var returnSelectedDate: String? = null
 
         val dayData = _readinessHistoryResponse.value?.firstOrNull() {
-            it.date.equals(selectedDate, false)
+            it.date.equals(selectedMasterDate, false)
         }
         if (dayData != null) {
             _dayReadinessData.postValue(dayData)
-        }else{
+        } else {
             _readinessHistoryResponse.value?.lastOrNull()?.let { data ->
-                LOGS.w("moveToPosition selected Date new $selectedDate")
-                selectedDate = data.date
-                LOGS.w("moveToPosition selected Date new set $selectedDate")
+                LOGS.w("moveToPosition selected Date new $selectedMasterDate")
+                //selectedDate = data.date
+                returnSelectedDate = data.date
+                LOGS.w("moveToPosition selected Date new set $selectedMasterDate")
                 _dayReadinessData.postValue(data)
             }
         }
+        return returnSelectedDate
     }
 
     fun getBannerDummyData(): ArrayList<Nudges> {
@@ -496,31 +491,31 @@ constructor(
             )
         }
 
-       /* if (dayData?.hrReserve != null) {
-            val (textColor, barColor, background) = getContributorsColors(dayData.hrReserve.status)
+        /* if (dayData?.hrReserve != null) {
+             val (textColor, barColor, background) = getContributorsColors(dayData.hrReserve.status)
 
-            result.add(
-                Contributors(
-                    title = "Heart rate reserve",
-                    leftText = dayData.hrReserve.text,
-                    leftTextColor = textColor,
-                    barColor = barColor,
-                    barPercent = dayData.hrReserve.valPrcnt ?: 0,
-                    backgroundRes = background
-                )
-            )
-        } else {
-            result.add(
-                Contributors(
-                    title = "Heart rate reserve",
-                    leftText = "",
-                    leftTextColor = R.color.white,
-                    barColor = R.color.readiness_progress_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
-                )
-            )
-        }*/
+             result.add(
+                 Contributors(
+                     title = "Heart rate reserve",
+                     leftText = dayData.hrReserve.text,
+                     leftTextColor = textColor,
+                     barColor = barColor,
+                     barPercent = dayData.hrReserve.valPrcnt ?: 0,
+                     backgroundRes = background
+                 )
+             )
+         } else {
+             result.add(
+                 Contributors(
+                     title = "Heart rate reserve",
+                     leftText = "",
+                     leftTextColor = R.color.white,
+                     barColor = R.color.readiness_progress_color,
+                     barPercent = 1,
+                     backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                 )
+             )
+         }*/
 
         if (dayData?.recoveryIndex != null) {
             val (textColor, barColor, background) = getContributorsColors(dayData.recoveryIndex.status)
