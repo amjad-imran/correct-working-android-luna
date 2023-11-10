@@ -16,14 +16,13 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoSleepDetailBinding
+import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit.util.ApplicationUtils
-import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.ui.custom.NightTimeGraphViewOreo
 import com.noisefit_commans.ui.custom.SleepGraphViewOreo
 import com.noisefit_commans.utils.AppLogs
-import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModel
@@ -48,6 +47,7 @@ class OreoSleepDetailFragment :
 
     private val viewModel: OreoSleepDetailsViewModel by viewModels()
     private val mSharedViewModel: SharedOSCDViewModel by activityViewModels()
+    private val mainViewModel: OreoMainViewModel by activityViewModels()
     private var sleepDayGraphView: SleepGraphViewOreo? = null
 
 
@@ -83,7 +83,7 @@ class OreoSleepDetailFragment :
         setRecycler()
 
         if (viewModel.ringDataStore.isSleepWalkAroundShown()) {
-            viewModel.getSleepDetailsData()
+            viewModel.getSleepDetailsData(mainViewModel.selectedMasterDate)
         } else {
             showWalkAround(true)
         }
@@ -94,6 +94,7 @@ class OreoSleepDetailFragment :
         if (show) {
             binding.lytEmptyView.root.visible()
             binding.svMain.gone()
+            binding.groupHeader.gone()
         } else {
             binding.lytEmptyView.root.gone()
         }
@@ -125,8 +126,8 @@ class OreoSleepDetailFragment :
             breakUpData = hrv?.value as ArrayList<Int>
         }
 
-       /* val baseTimeList =
-            UtilClass.graphTwoHoursInterval(ssTime, seTime, breakUpData.size ?: 288)*/
+        /* val baseTimeList =
+             UtilClass.graphTwoHoursInterval(ssTime, seTime, breakUpData.size ?: 288)*/
 
         val baseTimeListNew =
             UtilClass.getXAxisPoints(ssTime, seTime, breakUpData.size ?: 288)
@@ -191,11 +192,11 @@ class OreoSleepDetailFragment :
         }
 
 
-       /* val baseTimeList = UtilClass.graphTwoHoursInterval(
-            ssTime,
-            seTime,
-            breakUpData.size ?: 288
-        )*/
+        /* val baseTimeList = UtilClass.graphTwoHoursInterval(
+             ssTime,
+             seTime,
+             breakUpData.size ?: 288
+         )*/
         val baseTimeListNew =
             UtilClass.getXAxisPoints(ssTime, seTime, breakUpData.size ?: 288)
 
@@ -313,8 +314,9 @@ class OreoSleepDetailFragment :
                 val data: Intent? = result.data
 
                 val selectedDate = data?.getStringExtra("selected_date")
-                viewModel.selectedMasterDate = selectedDate
-                viewModel.selectedDate = selectedDate
+                mainViewModel.selectedMasterDate = selectedDate
+                mainViewModel.selectedDate = selectedDate
+
                 LOGS.d("moveToPosition Selected Date  :${selectedDate}")
 
 //                if (viewModel.graphInterval.value == GraphInterval.DAY) {
@@ -332,7 +334,7 @@ class OreoSleepDetailFragment :
 //                }
 //                viewModel.getSleepData()
 
-                viewModel.getSleepDetailsData()
+                viewModel.getSleepDetailsData(mainViewModel.selectedMasterDate)
                 //viewModel.updateSelectedDate()
 
             }
@@ -363,7 +365,7 @@ class OreoSleepDetailFragment :
         binding.lytEmptyView.bGoToSettings.setOnClickListener {
             showWalkAround(false)
             viewModel.ringDataStore.setSleepWalkAroundShown(true)
-            viewModel.getSleepDetailsData()
+            viewModel.getSleepDetailsData(mainViewModel.selectedMasterDate)
         }
 
 
@@ -374,7 +376,7 @@ class OreoSleepDetailFragment :
                 HistoryCalendarActivity.getStartIntent(
                     requireContext(),
                     viewModel.sleepHistoryResponse.value?.lastOrNull()?.date
-                        ?: viewModel.selectedMasterDate,
+                        ?: mainViewModel.selectedMasterDate,
                     "ring"
                 )
             )
@@ -393,7 +395,7 @@ class OreoSleepDetailFragment :
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
                 putString("infoData", viewModel.contributorInfo.value?.sleep_score)
-                putString("date", viewModel.selectedDate)
+                putString("date", mainViewModel.selectedDate)
             })
             viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_SLEEP_SCORE_CLICK)
         }
@@ -404,7 +406,7 @@ class OreoSleepDetailFragment :
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
                 putString("infoData", viewModel.contributorInfo.value?.totalSleep)
-                putString("date", viewModel.selectedDate)
+                putString("date", mainViewModel.selectedDate)
             })
 
             viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_TOTAL_SLEEP_CLICK)
@@ -416,7 +418,7 @@ class OreoSleepDetailFragment :
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
                 putString("infoData", viewModel.contributorInfo.value?.time_in_bed)
-                putString("date", viewModel.selectedDate)
+                putString("date", mainViewModel.selectedDate)
             })
 
             viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_BED_TIME_CLICK)
@@ -428,7 +430,7 @@ class OreoSleepDetailFragment :
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
                 putString("infoData", viewModel.contributorInfo.value?.sleep_efficiency)
-                putString("date", viewModel.selectedDate)
+                putString("date", mainViewModel.selectedDate)
             })
 
             viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_SLEEP_EFFICIENCY_CLICK)
@@ -440,7 +442,7 @@ class OreoSleepDetailFragment :
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
                 putString("infoData", viewModel.contributorInfo.value?.resting_hr)
-                putString("date", viewModel.selectedDate)
+                putString("date", mainViewModel.selectedDate)
             })
 
             viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_RESTING_HR_CLICK)
@@ -504,24 +506,23 @@ class OreoSleepDetailFragment :
         viewModel.sleepHistoryResponse.observe(this) {
 
             binding.svMain.visible()
-            binding.rvTopGraph.visible()
-            binding.lytToolbar.root.visible()
+            binding.groupHeader.visible()
 
             val topGraphData = viewModel.getPrefixAndSuffixList(it)
             //mSharedViewModel.selectedDate = viewModel.selectedDate?:viewModel.dateList[viewModel.dateList.size - 1]
             var moveToPos = -1
 
 
-            LOGS.d("moveToPosition date initia ${viewModel.selectedDate}")
+            LOGS.d("moveToPosition date initia ${mainViewModel.selectedDate}")
 
-            if (viewModel.selectedDate != null) {
+            if (mainViewModel.selectedDate != null) {
                 val index = it?.indexOfFirst { data ->
-                    data.date.equals(viewModel.selectedDate, true)
+                    data.date.equals(mainViewModel.selectedDate, true)
                 }
                 if (index != null) {
 
                     moveToPos = 15 + (15 - index - 1)
-                    LOGS.d("moveToPosition date ${viewModel.selectedDate}")
+                    LOGS.d("moveToPosition date ${mainViewModel.selectedDate}")
                     //binding.rvTopGraph.moveToPosition(15 + (15-index-1))
                 }
 
@@ -535,7 +536,10 @@ class OreoSleepDetailFragment :
 
             viewModel.getContributorInfo()
 
-
+            val returnDate = viewModel.updateSelectedDate(mainViewModel.selectedDate)
+            if (returnDate != null) {
+                mainViewModel.selectedDate = returnDate
+            }
         }
 
         viewModel.daySleepData.observe(this) {
@@ -703,12 +707,12 @@ class OreoSleepDetailFragment :
         binding.lytSSAnalysis.lytNightMovement.tvTitle.text =
             getString(R.string.text_night_time_movement)
 
-        val sleepStartTime =dayData.hourly_breakup?.first()?.start_time /*DateFormats.formatDate(
+        val sleepStartTime = dayData.hourly_breakup?.first()?.start_time /*DateFormats.formatDate(
             dayData.hourly_breakup?.first()?.start_time,
             DateFormats.dateTimeFormat5,
             DateFormats.time12Meridian
         )*/
-        val sleepEndTime =  dayData.hourly_breakup?.last()?.end_time/*DateFormats.formatDate(
+        val sleepEndTime = dayData.hourly_breakup?.last()?.end_time/*DateFormats.formatDate(
             dayData.hourly_breakup?.last()?.end_time,
             DateFormats.dateTimeFormat5,
             DateFormats.time12Meridian
@@ -884,13 +888,16 @@ class OreoSleepDetailFragment :
 
 
     override fun onPositionSelected(position: Int, chartModel: ChartModel?) {
-        if (viewModel.selectedDate == chartModel?.date!!) {
+        if (mainViewModel.selectedDate == chartModel?.date!!) {
             return
         }
         //mSharedViewModel.selectedDate = chartModel.date!!
         LOGS.w("moveToPosition onPositionSelected ${chartModel.date}")
-        viewModel.selectedDate = chartModel.date!!
-        viewModel.updateSelectedDate()
+        mainViewModel.selectedDate = chartModel.date!!
+        val returnDate = viewModel.updateSelectedDate(mainViewModel.selectedDate)
+        if (returnDate != null) {
+            mainViewModel.selectedDate = returnDate
+        }
 
     }
 

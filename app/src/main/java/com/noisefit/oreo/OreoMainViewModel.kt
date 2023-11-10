@@ -7,6 +7,7 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.AppConstants
+import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,9 +26,20 @@ constructor(
     var checkBluetooth = MutableLiveData<Event<Boolean>>()
 
 
+    //For API
+    var selectedMasterDate: String? = null
+    //Currently highlighted date
+    var selectedDate: String? = null
+
+
     var bottomNavigation = MutableLiveData<Event<BottomNavOption>>()
     fun navigateTo(option: BottomNavOption) {
         bottomNavigation.postValue(Event(option))
+    }
+
+    init {
+        selectedMasterDate = DateFormats.getCurrentDateOreoFormat()
+        selectedDate = DateFormats.getCurrentDateOreoFormat()
     }
 
 

@@ -40,8 +40,6 @@ constructor(
     val sessionManager: SessionManager
 ) : BaseViewModel() {
 
-    var selectedMasterDate: String? = null
-    var selectedDate: String? = null
 
     private val _sleepHistoryResponse = MutableLiveData<List<OreoSleepModel>>()
     val sleepHistoryResponse: LiveData<List<OreoSleepModel>> = _sleepHistoryResponse
@@ -56,7 +54,7 @@ constructor(
     var dateList = ArrayList<String>()
 
     init {
-        selectedMasterDate = DateFormats.getCurrentDateOreoFormat()
+        //selectedMasterDate = DateFormats.getCurrentDateOreoFormat()
     }
 
     fun getPrefixAndSuffixList(dataList: List<OreoSleepModel>): Triple<ArrayList<ChartModel>, ArrayList<ChartModel>, ArrayList<ChartModel>> {
@@ -126,7 +124,7 @@ constructor(
     }
 
 
-    fun getSleepDetailsData() {
+    fun getSleepDetailsData(selectedMasterDate: String?) {
         viewModelScope.launch {
             userActivityRepository.getSleepHistory(
                 selectedMasterDate ?: DateFormats.getCurrentDateOreoFormat()
@@ -146,7 +144,7 @@ constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        getSleepDetailsData()
+                                        getSleepDetailsData(selectedMasterDate)
                                     }
 
                                     override fun no() {
@@ -160,13 +158,12 @@ constructor(
                         resource.data?.data?.let {
 
                             _sleepHistoryResponse.value = (it.reversed())
-                           /* if (selectedDate == null) {
-                                it.firstOrNull()?.let { data ->
-                                    selectedDate = data.date
-                                }
-                            }*/
+                            /* if (selectedDate == null) {
+                                 it.firstOrNull()?.let { data ->
+                                     selectedDate = data.date
+                                 }
+                             }*/
 
-                            updateSelectedDate()
                         }
                     }
                 }
@@ -176,7 +173,7 @@ constructor(
 
     }
 
-    fun getInfoValueByKey(type:String){
+    fun getInfoValueByKey(type: String) {
 
     }
 
@@ -608,21 +605,23 @@ constructor(
         return Pair(sleepArray, countCData)
     }
 
-    fun updateSelectedDate() {
+    fun updateSelectedDate(selectedDate: String?): String? {
+        var returnSelectedDate: String? = null
 
         val dayData = _sleepHistoryResponse.value?.firstOrNull() {
             it.date.equals(selectedDate, false)
         }
         if (dayData != null) {
             _daySleepData.postValue(dayData)
-        }else{
+        } else {
             _sleepHistoryResponse.value?.lastOrNull()?.let { data ->
                 LOGS.w("moveToPosition selected Date new $selectedDate")
-                selectedDate = data.date
+                returnSelectedDate = data.date
                 LOGS.w("moveToPosition selected Date new set $selectedDate")
                 _daySleepData.postValue(data)
             }
         }
+        return returnSelectedDate
     }
 
     fun getAvgValue(it: List<OreoSleepModel>): Int {

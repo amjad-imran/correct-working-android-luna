@@ -55,7 +55,7 @@ constructor(
     private val _contributorInfo = MutableLiveData<OContributorResponseModal>()
     val contributorInfo: LiveData<OContributorResponseModal> = _contributorInfo
     init {
-        selectedMasterDate = DateFormats.getCurrentDateOreoFormat()
+        //selectedMasterDate = DateFormats.getCurrentDateOreoFormat()
     }
 
     fun getContributorInfo() {

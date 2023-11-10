@@ -14,6 +14,7 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoReadinessBinding
+import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.utils.DateFormats
@@ -45,6 +46,7 @@ class OreoReadinessFragment :
     ScrollListener {
     private val mViewModel: OreoReadinessViewModel by viewModels()
     private val mSharedViewModel: SharedOSCDViewModel by activityViewModels()
+    private val mainViewModel: OreoMainViewModel by activityViewModels()
 
 
     private val mReadinessConAdapter: OreoSleepContributorAdapter by lazy {
@@ -71,6 +73,9 @@ class OreoReadinessFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mViewModel.selectedMasterDate = mainViewModel.selectedMasterDate
+        mViewModel.selectedDate = mainViewModel.selectedDate
+
         mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_PAGE_VISIT)
         setRecycler()
 
@@ -87,6 +92,7 @@ class OreoReadinessFragment :
         if (show) {
             binding.lytEmptyView.root.visible()
             binding.svMain.gone()
+            binding.groupHeader.gone()
         } else {
             binding.lytEmptyView.root.gone()
         }
@@ -381,6 +387,8 @@ class OreoReadinessFragment :
                 val selectedDate = data?.getStringExtra("selected_date")
                 mViewModel.selectedMasterDate = selectedDate
                 mViewModel.selectedDate = selectedDate
+                mainViewModel.selectedMasterDate = selectedDate
+                mainViewModel.selectedDate = selectedDate
                 LOGS.d("Selected Date  :${selectedDate}")
                 mViewModel.getReadinessDetailsData(selectedDate)
                 /*if (selectedDate != null) {
@@ -501,7 +509,7 @@ class OreoReadinessFragment :
     override fun subscribeObservers() {
         mViewModel.readinessHistoryResponse.observe(this) {
             binding.svMain.visible()
-            binding.rvTopGraph.visible()
+            binding.groupHeader.visible()
             binding.lytToolbar.root.visible()
 
             val topGraphData = mViewModel.getPrefixAndSuffixList(it)
@@ -864,6 +872,7 @@ class OreoReadinessFragment :
         //mSharedViewModel.selectedDate = chartModel.date!!
         LOGS.w("moveToPosition onPositionSelected ${chartModel.date}")
         mViewModel.selectedDate = chartModel.date!!
+        mainViewModel.selectedDate = chartModel.date!!
         mViewModel.updateSelectedDate()
 
 

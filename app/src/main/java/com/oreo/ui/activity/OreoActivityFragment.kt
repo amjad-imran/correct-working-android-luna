@@ -109,6 +109,7 @@ class OreoActivityFragment :
         if (show) {
             binding.lytEmptyView.root.visible()
             binding.svMain.gone()
+            binding.groupHeader.gone()
         } else {
             binding.lytEmptyView.root.gone()
         }
@@ -734,7 +735,7 @@ class OreoActivityFragment :
 
         mViewModel.activityHistoryResponse.observe(this) {
             binding.svMain.visible()
-            binding.rvTopGraph.visible()
+            binding.groupHeader.visible()
             binding.lytToolbar.root.visible()
             val topGraphData = mViewModel.getPrefixAndSuffixList(it)
             //mSharedViewModel.selectedDate = mViewModel.dateList[mViewModel.dateList.size - 1]
