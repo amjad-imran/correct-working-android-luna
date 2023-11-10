@@ -10,7 +10,6 @@ import android.location.Address
 import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
@@ -18,20 +17,18 @@ import android.widget.ImageView
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.util.Preconditions.checkArgument
 import androidx.work.*
-import com.noisefit.luna.BuildConfig
 import com.noisefit.NoiseFitApplicationMain
+import com.noisefit.luna.BuildConfig
 import com.noisefit.receiver.workManager.*
+import com.noisefit.watch.WatchForm
 import com.noisefit_commans.common.roundToNearestDecimalFlooor
+import com.noisefit_commans.data.response.NplLeague
 import com.noisefit_commans.models.*
-import com.noisefit_commans.utils.AppConstants
 import com.noisefit_commans.ui.loadCircleCacheWithProgress
 import com.noisefit_commans.ui.loadCircleWCacheWithProgress
 import com.noisefit_commans.ui.loadImageCacheWithProgress
 import com.noisefit_commans.ui.loadImageWCacheWithProgress
-import com.noisefit.watch.WatchForm
-import com.noisefit_commans.data.response.NplLeague
-import com.noisefit_commans.models.SleepType
-import com.noisefit_commans.models.Units
+import com.noisefit_commans.utils.AppConstants
 import com.noisefit_commans.utils.LOGS
 import com.oreo.receiver.workManager.OreoSyncDataWork
 import java.text.ParseException
@@ -43,6 +40,7 @@ import kotlin.math.floor
 
 private const val UniqueSyncDataWorkName: String = "SyncDataWork"
 private const val UniqueRingSyncDataWorkName: String = "RingSyncDataWork"
+private const val LOGS_SYNC_WORKER_NAME: String = "LOGS_SYNC_WORKER_NAME"
 private const val UniqueWeatherWorkName: String = "WeatherWork"
 private const val UniqueGoogleSyncDataWorkName: String = "GoogleSyncDataWork"
 private const val UniqueActivitySyncWorkName: String = "ActivitySyncWork"
@@ -308,6 +306,27 @@ object ApplicationUtils {
         }
 
         return false
+    }
+
+
+    fun startFeedbackSubmitWorker(context: Context): Boolean {
+
+        val constraints: Constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val workRequest =
+            OneTimeWorkRequest.Builder(FeedbackSubmitWorker::class.java)
+                .addTag(LOGS_SYNC_WORKER_NAME)
+                .setConstraints(constraints)
+                .build()
+
+        WorkManager.getInstance(context).enqueueUniqueWork(
+            LOGS_SYNC_WORKER_NAME,
+            ExistingWorkPolicy.KEEP,
+            workRequest
+        )
+        return true
     }
 
     private suspend fun isWorkScheduled1(workName: String, context: Context): Boolean {
