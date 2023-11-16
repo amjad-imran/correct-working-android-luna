@@ -9,10 +9,6 @@ import androidx.work.impl.utils.futures.SettableFuture
 import com.google.common.util.concurrent.ListenableFuture
 import com.noisefit.data.dataConverter.OfflineDataMapper
 import com.noisefit.data.googleFit.GoogleFitDataObservers
-
-import com.noisefit.session.SessionManager
-import com.noisefit.watch.UserActivityHandler
-import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.repository.abstraction.OreoSyncRepository
@@ -21,16 +17,14 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
+private const val TAG = "GoogleFitSyncWork"
 @HiltWorker
 class GoogleFitSyncWork
 @AssistedInject
 constructor(
     @Assisted val context: Context,
     @Assisted workerParams: WorkerParameters,
-    private val localDataStore: DataStoredInterface,
-    private val sessionManager: SessionManager,
     private val syncRepository: OreoSyncRepository,
-    private val userActivityHandler: UserActivityHandler,
     private val googleFitDataObservers: GoogleFitDataObservers,
     private val offlineDataMapper: OfflineDataMapper,
 ) : ListenableWorker(context, workerParams) {
@@ -52,24 +46,25 @@ constructor(
     private suspend fun getSyncData(success: () -> Unit, failed: () -> Unit) {
         val todayDate = DateFormats.getTodaysDateString(7)
 
+        LOGS.d("$TAG inside")
         job = syncDataScope.launch {
             supervisorScope {
 
-                val googleFitStepsData =
+                val googleFitSleepData =
                     syncRepository.getGoogleFitSleepUnSyncData(todayDate)
-
+                LOGS.d("$TAG ${googleFitSleepData?.size}")
                 val call1 = async {
-                    googleFitStepsData?.let { sleepDataList ->
+                    googleFitSleepData?.let { sleepDataList ->
                         sleepDataList.forEach { sleepData ->
-                            LOGS.d("google  inside sleep data")
+                            LOGS.d("$TAG google  inside sleep data")
                             val googleSleepData =
                                 offlineDataMapper.convertSleepDataToGoogleFit(sleepData)
-                            LOGS.d("google  inside sleep data 2")
+                            LOGS.d("$TAG google  inside sleep data 2")
                             googleSleepData?.let { sleepDataGoogleFit ->
-                                LOGS.d("google  inside sleep data 3")
+                                LOGS.d("$TAG google  inside sleep data 3")
                                 googleFitDataObservers.insertSleepData(
                                     sleepDataGoogleFit, success = {
-                                        LOGS.d("google success sleep data")
+                                        LOGS.d("$TAG google success sleep data")
                                         job = syncDataScope.launch {
                                             syncRepository.updateGoogleFitUnSyncSleepStatus(
                                                 sleepData
@@ -90,13 +85,24 @@ constructor(
                 }
 
                 val call2 = async {
-                    googleFitDataObservers.getHeightWeight(applicationContext,
+                    googleFitDataObservers.getHeightWeight(
                         success = {
-                            LOGS.d(" ${it.first}")
-                            LOGS.d("${it.first}")
+                            LOGS.d("$TAG ${it.first}")
+                            LOGS.d("$TAG ${it.second}")
                         },
                         failed = {
+                            LOGS.d("$TAG height weight failed")
+                        }
+                    )
+                }
 
+                val call3 = async {
+                    googleFitDataObservers.getWorkoutFromSession(
+                        success = {
+                            LOGS.d("$TAG ${it.size}")
+                        },
+                        failed = {
+                            LOGS.d("$TAG workout failed")
                         }
                     )
                 }
@@ -104,6 +110,7 @@ constructor(
                 try {
                     call1.await()
                     call2.await()
+                    call3.await()
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }

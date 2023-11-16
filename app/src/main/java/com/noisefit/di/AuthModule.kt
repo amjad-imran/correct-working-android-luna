@@ -9,6 +9,7 @@ import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.DataType
 import com.noisefit.data.googleFit.GoogleFitDataObservers
 import com.noisefit.luna.BuildConfig
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,9 +43,10 @@ object AuthModule {
     @Provides
     fun provideGoogleFitDataObservers(
         @ApplicationContext context: Context,
-        googleSignInAccount: GoogleSignInAccount
+        googleSignInAccount: GoogleSignInAccount,
+        localDataStore: DataStoredInterface
     ): GoogleFitDataObservers {
-        return GoogleFitDataObservers(context, googleSignInAccount)
+        return GoogleFitDataObservers(context, googleSignInAccount, localDataStore)
     }
 
 //    @Singleton

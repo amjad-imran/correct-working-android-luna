@@ -64,6 +64,25 @@ data class OreoAutoSportData(
 ) : ColorfitData(), Parcelable
 
 
+//@Entity(
+//    tableName = "google_fit_workout", indices = [Index(value = ["startTime"], unique = true)]
+//)
+//@Parcelize
+//data class GoogleFitWorkoutData(
+//    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+//    @ColumnInfo(name = "is_synced") var isSynced: Boolean = false,
+//    @ColumnInfo(name = "is_accepted") var isAccepted: Boolean = false,
+//    @ColumnInfo(name = "duration") var duration: Int = 0,
+//    @ColumnInfo(name = "intensity") @SerializedName("intensity") var intensity: Int? = null,
+//    @ColumnInfo(name = "calories") @SerializedName("calories") var calories: Int = 0,
+//    @ColumnInfo(name = "startTime") @SerializedName("startTime") var startTime: Long = 0,
+//    @ColumnInfo(name = "steps") @SerializedName("steps") var steps: Int = 0,
+//    @ColumnInfo(name = "type") @SerializedName("type") var type: String? = null,
+//    @ColumnInfo(name = "hr") @SerializedName("hr") var hrData: String? = null,
+//    @SerializedName("date") var date: String? = null
+//) : ColorfitData(), Parcelable
+
+
 
 @Entity(
     tableName = "day_time_movement", indices = [Index(value = ["date"], unique = true)]

@@ -665,7 +665,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             }
         }
 
-        navigate(R.id.googleFitFragmentOreo)
+       // navigate(R.id.googleFitFragmentOreo)
     }
 
     private fun sendLogs() {

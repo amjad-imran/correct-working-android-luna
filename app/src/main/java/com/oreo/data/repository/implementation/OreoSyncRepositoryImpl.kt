@@ -25,7 +25,7 @@ import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.VersionCheckResponse
 import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.models.StepDataGoogleFit
-import com.noisefit_commans.models.SyncGoogleFitData
+
 import com.noisefit_commans.response.SleepBreakup
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats

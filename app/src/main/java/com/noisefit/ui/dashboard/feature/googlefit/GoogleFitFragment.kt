@@ -1,7 +1,6 @@
 package com.noisefit.ui.dashboard.feature.googlefit
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -15,11 +14,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
-import com.google.android.gms.fitness.data.DataPoint
-import com.google.android.gms.fitness.data.DataSet
 import com.google.android.gms.fitness.data.DataSource
 import com.google.android.gms.fitness.data.DataType
-import com.google.android.gms.fitness.data.Field
 import com.noisefit.data.googleFit.GoogleFitDataObservers
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentGoogleFitBinding
@@ -35,8 +31,6 @@ import com.noisefit_commans.utils.AppConstants
 import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Calendar
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 private const val TAG = "GoogleFitFragment"
@@ -177,100 +171,6 @@ class GoogleFitFragment :
             .build()
     }
 
-    private fun insertWeightHeight(context: Context, dataType: DataType, value: Float) {
-
-        val dataSource = provideDataSource("weight", dataType)
-        val startTime = Calendar.getInstance().timeInMillis
-        val dataPoint =
-            DataPoint.builder(dataSource)
-                .setField(Field.FIELD_WEIGHT, value)
-                .setTimeInterval(1, startTime, TimeUnit.MILLISECONDS)
-                .build()
-
-        val dataSet = DataSet.builder(dataSource)
-            .add(dataPoint)
-            .build()
-
-
-        Fitness.getHistoryClient(
-            context,
-            googleSignInAccount
-        ).insertData(dataSet).addOnCompleteListener {
-            if (it.isSuccessful) {
-
-                LOGS.d("$TAG weight success")
-                //emit(GoogleFitResponse(isSuccess))
-
-            } else {
-                LOGS.d("$TAG weight error ${it.exception?.message}")
-                it.exception
-            }
-        }
-
-//        val cal = Calendar.getInstance()
-//        val now = Date()
-//        cal.time = now
-//        val endTime = cal.timeInMillis
-//        cal.add(Calendar.DAY_OF_YEAR, -1)
-//        val startTime = cal.timeInMillis
-//
-//        val weightDataSet = createDataForRequest(
-//            DataType.TYPE_WEIGHT,  // for height, it would be DataType.TYPE_HEIGHT
-//            DataSource.TYPE_RAW.toFloat(),
-//            56,  // weight in kgs
-//            startTime,  // start time
-//            endTime,  // end time
-//            TimeUnit.MINUTES // Time Unit, for example, TimeUnit.MILLISECONDS
-//        )
-//
-//        Fitness.getHistoryClient(
-//            context,
-//            googleSignInAccount
-//        ).insertData(
-//            weightDataSet!!
-//        ).addOnSuccessListener { println("${TAG} success") }
-//            .addOnFailureListener {
-//                println("${TAG} failed ${it.message}")
-//                it.printStackTrace()
-//            }
-
-// Before querying the data, check to see if the insertion succeeded.
-
-// Before querying the data, check to see if the insertion succeeded.
-//        if (!weightInsertStatus.isSuccess) {
-//            LOGS.i(TAG, "There was a problem inserting the dataset.")
-//            return
-//        }
-
-// At this point, the data has been inserted and can be read.
-
-// At this point, the data has been inserted and can be read.
-        LOGS.i(TAG, "Data insert was successful!")
-
-
-//        val startTime = Calendar.getInstance().timeInMillis
-//        val dataSource: DataSource = DataSource.Builder()
-//            .setAppPackageName(context)
-//            .setDataType(dataType)
-//            .setType(DataSource.TYPE_RAW)
-//            .build()
-//        val dataPoint: DataPoint = DataPoint.builder(dataSource)
-//            .setTimeInterval(startTime, startTime, TimeUnit.MILLISECONDS)
-//            .setFloatValues(value)
-//            .build()
-//        val dataSet = DataSet.builder(dataSource)
-//            .add(dataPoint)
-//            .build()
-//        Fitness.getHistoryClient(
-//            context,
-//            googleSignInAccount
-//        ).insertData(dataSet)
-//            .addOnSuccessListener { println("${TAG} success") }
-//            .addOnFailureListener {
-//                println("${TAG} failed ${it.message}")
-//                it.printStackTrace()
-//            }
-    }
 
     private fun logOutFit() {
 
@@ -355,7 +255,7 @@ class GoogleFitFragment :
                 try {
                     localDataStore.setGoogleFitStatus(true)
                     setGoogleFitSwitchState(true)
-                    googleFitDataObservers.saveUserWeightAndHeight(requireContext())
+                    googleFitDataObservers.saveUserWeightAndHeight()
                     sessionManager.logInsiderAppEvent(
                         InsiderAppEvents.GOOGLE_FIT_CLICK,
                         HashMap<String, Any>().apply {

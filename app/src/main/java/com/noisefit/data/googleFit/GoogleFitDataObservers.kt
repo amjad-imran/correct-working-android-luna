@@ -517,7 +517,6 @@ constructor(
 
 
     fun getHeightWeight(
-        context: Context,
         success: (data: Pair<Float, Float>) -> Unit,
         failed: () -> Unit
     ) {
@@ -588,7 +587,7 @@ constructor(
     }
 
 
-    fun saveUserWeightAndHeight(context: Context) {
+    fun saveUserWeightAndHeight() {
         val user = localDataStore.getUser()
         val height = user?.userInfo?.height ?: 0
         val weight = user?.userInfo?.weight ?: 0
@@ -654,7 +653,10 @@ constructor(
     }
 
 
-    private fun readWorkoutFromSession() {
+     fun getWorkoutFromSession(
+        success: (data: ArrayList<WorkoutGoogleFit>) -> Unit,
+        failed: () -> Unit
+    ) {
         val calendar = Calendar.getInstance()
         val endTime = calendar.timeInMillis
         calendar.add(Calendar.WEEK_OF_YEAR, -1) // Set the start time to one week ago
@@ -680,106 +682,91 @@ constructor(
             .readSession(readRequest)
             .addOnSuccessListener { response ->
 
+                val workoutList = ArrayList<WorkoutGoogleFit>()
                 for (session in response.sessions) {
-                    LOGS.i(TAG, "Session details: ${session.name}")
-                    LOGS.i(TAG, "Session details: ${session.identifier}")
-                    LOGS.i(TAG, "Session details: ${session.getActiveTime(TimeUnit.MILLISECONDS)}")
-                    LOGS.i(TAG, "Session details: ${session.getStartTime(TimeUnit.MILLISECONDS)}")
-                    LOGS.i(TAG, "Session details: ${session.getEndTime(TimeUnit.MILLISECONDS)}")
-                    LOGS.i(TAG, "Session details: ${session.appPackageName}")
-                    LOGS.i(TAG, "Session details: ${session.activity}")
+                    val workoutGoogleFit = WorkoutGoogleFit()
+                    workoutGoogleFit.name = session.name
+                    workoutGoogleFit.identifier = session.identifier
+                    workoutGoogleFit.duration = session.getActiveTime(TimeUnit.SECONDS)
+                    workoutGoogleFit.startTime = session.getStartTime(TimeUnit.SECONDS)
+                    workoutGoogleFit.endTime = session.getEndTime(TimeUnit.SECONDS)
+                    workoutGoogleFit.appPackageName = session.appPackageName
+                    workoutGoogleFit.activity = session.activity
+
+                    LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.name}")
+                    LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.identifier}")
+                    LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.getActiveTime(TimeUnit.MILLISECONDS)}")
+                    LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.getStartTime(TimeUnit.MILLISECONDS)}")
+                    LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.getEndTime(TimeUnit.MILLISECONDS)}")
+                    LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.appPackageName}")
+                    LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.activity}")
                     val dataSets = response.getDataSet(session)
                     for (dataSet in dataSets) {
-                        dumpDataSet(dataSet)
+                        for (point in dataSet.dataPoints) {
+                            when (point.dataType) {
+                                DataType.AGGREGATE_DISTANCE_DELTA -> {
+                                    workoutGoogleFit.distance =
+                                        point.getValue(Field.FIELD_DISTANCE).asFloat()
+                                    LOGS.d(
+                                        TAG,
+                                        "distance " + point.getValue(Field.FIELD_DISTANCE).asFloat()
+                                    )
+                                }
+
+                                DataType.TYPE_HEART_RATE_BPM -> LOGS.d(
+                                    TAG, "heart " + point.getValue(
+                                        Field.FIELD_BPM
+                                    ).asFloat()
+                                )
+
+
+                                DataType.TYPE_SPEED -> LOGS.d(
+                                    TAG, "speed " + point
+                                )
+
+                                DataType.TYPE_HEART_POINTS -> LOGS.d(
+                                    TAG, "hr_point " + point
+                                )
+
+
+                                DataType.TYPE_STEP_COUNT_DELTA -> {
+                                    workoutGoogleFit.steps =
+                                        point.getValue(Field.FIELD_STEPS).asInt()
+                                    LOGS.d(
+                                        TAG, "steps " + point.getValue(
+                                            Field.FIELD_STEPS
+                                        ).asInt()
+                                    )
+                                }
+
+                                DataType.TYPE_CALORIES_EXPENDED -> {
+                                    workoutGoogleFit.calories =
+                                        point.getValue(Field.FIELD_CALORIES).asFloat()
+                                    LOGS.d(
+                                        TAG,
+                                        "calories " + point.getValue(Field.FIELD_CALORIES).asFloat()
+                                    )
+                                }
+
+
+                                DataType.AGGREGATE_HEART_POINTS -> LOGS.d(
+                                    TAG,
+                                    "heartPoint " + "[${point}]   "
+                                )
+
+                            }
+
+                        }
                     }
+                    workoutList.add(workoutGoogleFit)
                 }
+
+                success.invoke(workoutList)
             }
             .addOnFailureListener { e ->
+                failed.invoke()
                 LOGS.d(TAG, "Failed to read session ${e.message}")
             }
-
-    }
-
-
-    private fun printData(dataReadResult: DataReadResponse) {
-        // [START parse_read_data_result]
-        // If the DataReadRequest object specified aggregated data, dataReadResult will be returned
-        // as buckets containing DataSets, instead of just DataSets.
-        if (dataReadResult.buckets.isNotEmpty()) {
-            LOGS.i(TAG, "Number of returned buckets of DataSets is: " + dataReadResult.buckets.size)
-            for (bucket in dataReadResult.buckets) {
-                bucket.dataSets.forEach { dumpDataSet(it) }
-            }
-        } else if (dataReadResult.dataSets.isNotEmpty()) {
-            LOGS.i(TAG, "Number of returned DataSets is: " + dataReadResult.dataSets.size)
-            dataReadResult.dataSets.forEach { dumpDataSet(it) }
-        }
-        // [END parse_read_data_result]
-    }
-
-
-    private fun dumpDataSet(dataSet: DataSet) {
-        for (point in dataSet.dataPoints) {
-            when (point.dataType) {
-                DataType.AGGREGATE_DISTANCE_DELTA -> LOGS.d(
-                    TAG,
-                    "distance " + point.getValue(Field.FIELD_DISTANCE).asFloat()
-                )
-
-                DataType.TYPE_HEART_RATE_BPM -> LOGS.d(
-                    TAG, "heart " + point.getValue(
-                        Field.FIELD_BPM
-                    ).asFloat()
-                )
-
-                DataType.TYPE_HEIGHT -> LOGS.d(
-                    TAG, "height " + point.getValue(
-                        Field.FIELD_HEIGHT
-                    ).asFloat()
-                )
-
-                DataType.TYPE_WEIGHT -> LOGS.d(
-                    TAG, "weight " + point.getValue(
-                        Field.FIELD_WEIGHT
-                    ).asFloat()
-                )
-
-
-                DataType.TYPE_SPEED -> LOGS.d(
-                    TAG, "speed " + point
-                )
-
-                DataType.TYPE_HEART_POINTS -> LOGS.d(
-                    TAG, "hr_point " + point
-                )
-
-
-                DataType.TYPE_STEP_COUNT_DELTA -> LOGS.d(
-                    TAG, "steps " + point.getValue(
-                        Field.FIELD_STEPS
-                    ).asInt()
-                )
-
-                DataType.TYPE_CALORIES_EXPENDED -> LOGS.d(
-                    TAG,
-                    "calories " + point.getValue(Field.FIELD_CALORIES).asFloat()
-                )
-
-                DataType.TYPE_WORKOUT_EXERCISE -> LOGS.d(
-                    TAG,
-                    "exercise " + "[${point.getValue(Field.FIELD_EXERCISE).asString()}]   "
-                )
-
-                DataType.AGGREGATE_HEART_POINTS -> LOGS.d(
-                    TAG,
-                    "heartPoint " + "[${point}]   "
-                )
-
-//                DataType.TYPE_MOVE_MINUTES -> LOGS.d(TAG, "Move Minutes $point ")
-                // DataType.AGGREGATE_MOVE_MINUTES -> LOGS.d(TAG, "Moving Mins Count $point ")
-            }
-
-        }
     }
 
 

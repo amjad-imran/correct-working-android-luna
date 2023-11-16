@@ -15,7 +15,7 @@ import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.VersionCheckResponse
 import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.models.StepDataGoogleFit
-import com.noisefit_commans.models.SyncGoogleFitData
+
 import com.noisefit_commans.response.SleepBreakup
 import com.oreo.data.model.OreoUserSyncActivities
 import com.oreo.data.model.OreoUserSyncRawData
