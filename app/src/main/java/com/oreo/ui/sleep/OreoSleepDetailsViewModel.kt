@@ -176,7 +176,7 @@ constructor(
 
     }
 
-    fun getInfoValueByKey(type:String){
+    fun getInfoValueByKey(type: String) {
 
     }
 
@@ -527,7 +527,7 @@ constructor(
         } else if (status.equals("optimal", true)) {
             R.color.steps_arc
         } else {
-            R.color.white
+            R.color.white_12_72
         }
         return color
     }
@@ -615,7 +615,7 @@ constructor(
         }
         if (dayData != null) {
             _daySleepData.postValue(dayData)
-        }else{
+        } else {
             _sleepHistoryResponse.value?.lastOrNull()?.let { data ->
                 LOGS.w("moveToPosition selected Date new $selectedDate")
                 selectedDate = data.date
