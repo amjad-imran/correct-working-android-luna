@@ -79,8 +79,13 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
     override fun initListener() {
         binding.lytHeader.oreoStatus.setOnClickListener {
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_DEVICE_CAPSULE_CLICK)
             navigate(R.id.oreo_my_device)
+        }
 
+        binding.lytHeader.lottieAnimView.setOnClickListener {
+            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_DEVICE_CAPSULE_CLICK)
+            navigate(R.id.oreo_my_device)
         }
 
         binding.contentMain.lytConnectHelp.btnCancel.setOnClickListener {
@@ -105,7 +110,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         binding.lytHeader.batteryStatus.setOnClickListener {
             viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_DEVICE_CAPSULE_CLICK)
-            mainViewModel.navigateTo(BottomNavOption.MY_DEVICE)
+            navigate(R.id.oreo_my_device)
         }
         binding.contentMain.lytHeartRate.bInfo.setOnClickListener {
             viewModel.getContributorInfo("hr")
