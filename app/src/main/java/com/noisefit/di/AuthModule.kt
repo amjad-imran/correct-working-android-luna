@@ -7,8 +7,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.DataType
-import com.noisefit.luna.BuildConfig
 import com.noisefit.data.googleFit.GoogleFitDataObservers
+import com.noisefit.luna.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -68,11 +68,13 @@ object AuthModule {
         return FitnessOptions.builder()
             .accessSleepSessions(FitnessOptions.ACCESS_WRITE)
             .accessActivitySessions(FitnessOptions.ACCESS_WRITE)
-            .addDataType(DataType.TYPE_WORKOUT_EXERCISE, FitnessOptions.ACCESS_READ)
+            .addDataType(DataType.TYPE_WORKOUT_EXERCISE, FitnessOptions.ACCESS_WRITE)
             .addDataType(DataType.TYPE_DISTANCE_DELTA, FitnessOptions.ACCESS_WRITE)
             .addDataType(DataType.TYPE_ACTIVITY_SEGMENT, FitnessOptions.ACCESS_WRITE)
             .addDataType(DataType.TYPE_CALORIES_EXPENDED, FitnessOptions.ACCESS_WRITE)
             .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_WRITE)
+            .addDataType(DataType.TYPE_HEIGHT, FitnessOptions.ACCESS_WRITE)
+            .addDataType(DataType.TYPE_WEIGHT, FitnessOptions.ACCESS_WRITE)
             .addDataType(DataType.TYPE_HEART_RATE_BPM, FitnessOptions.ACCESS_WRITE)
             .build()
 

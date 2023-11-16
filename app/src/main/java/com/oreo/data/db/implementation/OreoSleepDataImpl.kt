@@ -42,6 +42,16 @@ constructor(
 
     }
 
+    override suspend fun getUnSyncGoogleFitData(): List<OreoSleepData>? {
+        return sleepDao.getUnSyncGoogleFitTodayData(false)
+    }
+
+    override suspend fun updateUnSyncGoogleFitData(data: List<OreoSleepData>?) {
+
+    }
+
+
+
     override suspend fun getTodayData(date: String): List<OreoSleepData>? {
         return sleepDao.getTodayData(date)
     }

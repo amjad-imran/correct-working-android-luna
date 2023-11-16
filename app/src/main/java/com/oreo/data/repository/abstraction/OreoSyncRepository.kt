@@ -13,6 +13,7 @@ import com.noisefit_commans.data.model.OreoStepsData
 import com.noisefit_commans.data.model.OreoStressDataBreakup
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.VersionCheckResponse
+import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.models.StepDataGoogleFit
 import com.noisefit_commans.models.SyncGoogleFitData
 import com.noisefit_commans.response.SleepBreakup
@@ -38,6 +39,8 @@ interface OreoSyncRepository {
     suspend fun saveSleepData(data: OreoSleepData): Flow<CacheResult<Boolean?>>
     suspend fun saveHealthScoreData(score: Int, date: String): Flow<CacheResult<Boolean?>>
 
+    suspend fun getGoogleFitSleepUnSyncData(date: String):  List<OreoSleepData>?
+    suspend fun updateGoogleFitSleepUnSyncData(sleepData:  List<OreoSleepData>)
     suspend fun saveStressData(
         data: OreoStressDataBreakup
     ): Flow<CacheResult<Boolean?>>
