@@ -6,6 +6,8 @@ import com.google.gson.Gson
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.session.SessionManager
+import com.noisefit.util.notif.NotificationEventsClass
+import com.noisefit.util.notif.NotificationUtil
 import com.noisefit_commans.common.checkDayDifferenceMoreNMinutes
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -21,7 +23,6 @@ import com.noisefit_commans.models.ManualMeasureType
 import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.ui.checkDayDifferenceMoreOne
-import com.noisefit_commans.ui.checkTimeDifferenceMoreNMinutes
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
@@ -77,6 +78,8 @@ constructor(
     var sleepScoreInfo = MutableLiveData<Event<String>>()
     var readinessScoreInfo = MutableLiveData<Event<String>>()
     var activityScoreInfo = MutableLiveData<Event<String>>()
+
+    val pushNotification = MutableLiveData<Event<PushLocalNotification>>()
 
 
     var summary = OSummary()
@@ -167,9 +170,90 @@ constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             getInitialOfflineData(it)
+                            showNotification(it)
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private fun showNotification(response: OreoDashboardResponseModel) {
+        //Sleep
+        response.sleep?.let {
+            if ((it.sleepScore ?: 0) > 75 && (it.totalSleep ?: 0) >= 25200 && (it.totalSleep
+                    ?: 0) <= 32400
+            ) {
+                val timeStamp = localDataStore.getSleepNotificationTimeStamp()
+
+                if (timeStamp == 0L || timeStamp.checkDayDifferenceMoreOne()) {
+                    pushNotification.postValue(
+                        Event(
+                            PushLocalNotification(
+                                "Title missing",
+                                "You got enough sleep hours today. This helps with higher recovery, cognitive & immune system function",
+                                NotificationEventsClass.LOCAL_SLEEP_NOTIFICATION_KEY
+                            )
+                        )
+                    )
+                    localDataStore.setSleepNotificationTimeStamp()
+                }
+            }
+        }
+
+        response.readiness?.let {
+            val timeStamp = localDataStore.getReadinessNotificationTimeStamp()
+            if (timeStamp == 0L || timeStamp.checkDayDifferenceMoreOne()) {
+                when (it.status?.lowercase()) {
+                    "optimal" -> {
+                        pushNotification.postValue(
+                            Event(
+                                PushLocalNotification(
+                                    "Proceed as planned",
+                                    "Your readiness score is in great shape today. You might want to push a little more towards your cognitive & physical fitness goals",
+                                    NotificationEventsClass.LOCAL_READINESS_NOTIFICATION_KEY
+                                )
+                            )
+                        )
+                    }
+
+                    "good" -> {
+                        pushNotification.postValue(
+                            Event(
+                                PushLocalNotification(
+                                    "Try something fun today",
+                                    "Your readiness score indicates that you are primed for a moderate push today. Dedicate some time for rest and recovery.",
+                                    NotificationEventsClass.LOCAL_READINESS_NOTIFICATION_KEY
+                                )
+                            )
+                        )
+                    }
+
+                    "fair" -> {
+                        pushNotification.postValue(
+                            Event(
+                                PushLocalNotification(
+                                    "Schedule deep breaths",
+                                    "Your readiness score is on the low side but you’ll poll through. So, would you be up for making time for relaxing pauses today?",
+                                    NotificationEventsClass.LOCAL_READINESS_NOTIFICATION_KEY
+                                )
+                            )
+                        )
+                    }
+
+                    "warning" -> {
+                        pushNotification.postValue(
+                            Event(
+                                PushLocalNotification(
+                                    "Go easy",
+                                    "Your readiness score is on the lower side today. It's a good day to have",
+                                    NotificationEventsClass.LOCAL_READINESS_NOTIFICATION_KEY
+                                )
+                            )
+                        )
+                    }
+                }
+                localDataStore.setReadinessNotificationTimeStamp()
             }
         }
     }
@@ -970,3 +1054,5 @@ constructor(
     }
 
 }
+
+data class PushLocalNotification(val title: String, val content: String, val key: String)

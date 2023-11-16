@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.data.CombinedData
 import com.google.android.material.tabs.TabLayoutMediator
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSummaryOBinding
@@ -20,6 +21,8 @@ import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.DELETE_REQ_REQUEST_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
+import com.noisefit.util.notif.NotificationEventsClass
+import com.noisefit.util.notif.NotificationUtil
 import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.interfaces.connection.ConnectState
@@ -315,7 +318,28 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         }
     }
 
+    private fun showLocalNotification(title: String, content: String,key:String) {
+        NotificationUtil.pushNotification(
+            NoiseFitApplicationMain.context!!,
+            title,
+            content,
+            key,
+            "1"
+        )
+    }
+
+
     override fun subscribeObservers() {
+
+
+        viewModel.pushNotification.observe(viewLifecycleOwner){
+            it.getContent()?.let {
+                showLocalNotification(it.title,it.content,it.key)
+            }
+        }
+
+
+
 
         viewModel.sessionManager.showSyncOfflineData.observe(viewLifecycleOwner) {
             it.getContent()?.let { event ->
@@ -814,13 +838,13 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         if (activity.activityScore != null && activity.activityScore >= 0) {
 
             lytSleepAvg.tvActivityScore.text = activity.activityScore.toString()
-            /*lytSleepAvg.activityLineChart.updateDataWithMaxMin(
+            lytSleepAvg.activityLineChart.updateDataWithMaxMin(
                 viewModel.convertIntToChartModel(activity.value),
                 ArrayList(),
                 ArrayList(),
                 20,
                 true
-            )*/
+            )
             lytSleepAvg.tvActAvgThisWeek.gone()
             lytSleepAvg.tvDaysAvg1.visible()
             lytSleepAvg.activityLineChart.visible()

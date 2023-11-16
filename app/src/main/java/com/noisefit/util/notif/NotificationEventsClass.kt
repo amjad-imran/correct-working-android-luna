@@ -44,8 +44,11 @@ object NotificationEventsClass {
 
     const val LOCAL_NOTIFICATION_KEY = "stepgoalnotification"
     const val LOCAL_SLEEP_NOTIFICATION_KEY= "localsleepnotification"
+    const val LOCAL_READINESS_NOTIFICATION_KEY= "LOCAL_READINESS_NOTIFICATION_KEY"
     const val APP_UPDATE_NOTIFICATION_KEY = "appupdatenotification"
     const val APP_RESCUE_NOTIFICATION_KEY = "apprescuenotification"
+
+
 
     const val FIND_PHONE_NOTIFICATION_KEY = "findphonenotification"
 

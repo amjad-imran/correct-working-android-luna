@@ -190,6 +190,8 @@ private const val WF_RATING_KEY = "WF_RATING_KEY"
 private const val TOKEN_LAST_UPDATE = "TOKEN_LAST_UPDATE"
 private const val DASH_CARD_CLICK_STATE = "DASH_CARD_CLICK_STATE"
 private const val BATTERY_DASH_ALERT = "BATTERY_DASH_ALERT"
+private const val SLEEP_NOTIFICATION = "SLEEP_NOTIFICATION"
+private const val READINESS_NOTIFICATION = "READINESS_NOTIFICATION"
 
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -199,6 +201,22 @@ class DataStoredImpl
 @Inject constructor(
     private val gson: Gson, private val mPrefs: SharedPreferences
 ) : DataStoredInterface {
+
+    override fun getReadinessNotificationTimeStamp(): Long {
+        return mPrefs.getLong(READINESS_NOTIFICATION, 0)
+    }
+
+    override fun setReadinessNotificationTimeStamp() {
+        mPrefs.edit()?.putLong(READINESS_NOTIFICATION, System.currentTimeMillis())?.commit()
+    }
+
+    override fun getSleepNotificationTimeStamp(): Long {
+        return mPrefs.getLong(SLEEP_NOTIFICATION, 0)
+    }
+
+    override fun setSleepNotificationTimeStamp() {
+        mPrefs.edit()?.putLong(SLEEP_NOTIFICATION, System.currentTimeMillis())?.commit()
+    }
 
     override fun getIsBatteryAlertShown(): Boolean {
         return mPrefs.getBoolean(BATTERY_DASH_ALERT, false)
