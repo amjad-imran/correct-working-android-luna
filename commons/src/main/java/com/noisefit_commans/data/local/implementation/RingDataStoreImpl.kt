@@ -24,6 +24,7 @@ private const val SLEEP_WALKAROUND_KEY = "SLEEP_WALKAROUND_KEY"
 private const val READINESS_WALKAROUND_KEY = "READINESS_WALKAROUND_KEY"
 private const val ACTIVITY_WALKAROUND_KEY = "ACTIVITY_WALKAROUND_KEY"
 private const val MANUAL_MEASUREMENT_KEY = "MANUAL_MEASUREMENT_KEY"
+private const val DEVICE_INTRO = "DEVICE_INTRO"
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
 
@@ -129,7 +130,10 @@ class RingDataStoreImpl
     }
 
     override fun getManualMeasurementValue(): ManualMeasurement? {
-        return gson.fromJson(mPrefs.getString(MANUAL_MEASUREMENT_KEY, null), ManualMeasurement::class.java)
+        return gson.fromJson(
+            mPrefs.getString(MANUAL_MEASUREMENT_KEY, null),
+            ManualMeasurement::class.java
+        )
     }
 
     override fun saveLastSyncTimeStamp(timeStamp: Long) {
@@ -141,6 +145,14 @@ class RingDataStoreImpl
     }
 
     override fun getAutoLogsTimeStamp(): Long {
-        return mPrefs.getLong(LAST_SYNC_LOGS,0L)
+        return mPrefs.getLong(LAST_SYNC_LOGS, 0L)
+    }
+
+    override fun isShowDeviceIntro(): Boolean {
+        return mPrefs.getBoolean(DEVICE_INTRO, false)
+    }
+
+    override fun setShowDeviceIntro(boolean: Boolean) {
+        mPrefs.edit()?.putBoolean(DEVICE_INTRO, boolean)?.apply()
     }
 }

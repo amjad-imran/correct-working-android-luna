@@ -418,4 +418,6 @@ interface DataStoredInterface {
     fun clearDashCardClickState()
     fun setDashCardClickState(type: DashInfoCard, boolean: Boolean)
 
+
+
 }

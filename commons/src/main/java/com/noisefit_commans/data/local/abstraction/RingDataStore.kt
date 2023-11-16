@@ -45,4 +45,6 @@ interface RingDataStore {
 
     fun saveAutoLogsTimeStamp()
     fun getAutoLogsTimeStamp(): Long
+    fun isShowDeviceIntro():Boolean
+    fun setShowDeviceIntro(boolean: Boolean)
 }

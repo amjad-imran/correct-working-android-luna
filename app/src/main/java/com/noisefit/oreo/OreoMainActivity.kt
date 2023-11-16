@@ -304,7 +304,6 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 R.id.navigation_oreo_home,
                 R.id.navigation_oreo_readiness,
                 R.id.navigation_oreo_workouts,
-                R.id.navigation_oreo_my_device,
                 R.id.navigation_oreo_sleep
                 -> {
                     binding.view27.visible()
@@ -344,8 +343,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 R.id.navigation_oreo_home,
                 R.id.navigation_oreo_readiness,
                 R.id.navigation_oreo_workouts,
-                R.id.navigation_oreo_sleep,
-                R.id.navigation_oreo_my_device -> {
+                R.id.navigation_oreo_sleep -> {
 
                     if (it.currentDestination?.id == R.id.navigation_oreo_home) {
                         finish()
@@ -459,27 +457,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 }
                 viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_FOOTER_ACTIVITY_CLICK)
             }
-
-            BottomNavOption.MY_DEVICE -> {
-                binding.navView.ivHome.setImageResource(R.drawable.ic_dash_summary_default)
-                binding.navView.ivSleep.setImageResource(R.drawable.ic_dash_oreo_sleep_default)
-                binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness_default)
-                binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity_default)
-                binding.navView.ivMyDevice.setImageResource(R.drawable.ic_dash_device_selected)
-                binding.navView.apply {
-                    ivGlowHome.gone()
-                    ivGlowSleep.gone()
-                    ivGlowReadiness.gone()
-                    ivGlowActivity.gone()
-                    ivGlowMyDevice.visible()
-                }
-                val lastDestination = navController?.currentDestination
-                if (lastDestination?.id != R.id.navigation_oreo_my_device) {
-                    navController?.popBackStack(R.id.navigation_oreo_my_device, true)
-                    navController?.navigate(R.id.navigation_oreo_my_device)
-                }
-                viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_FOOTER_MYDEVICE_CLICK)
-            }
+            else -> {}
         }
 
 

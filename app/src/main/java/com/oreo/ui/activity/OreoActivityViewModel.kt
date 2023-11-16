@@ -446,7 +446,7 @@ class OreoActivityViewModel @Inject constructor(
         } else if (status.equals("optimal", true)) {
             R.color.steps_arc
         } else {
-            R.color.white
+            R.color.white_12_72
         }
         return color
     }
