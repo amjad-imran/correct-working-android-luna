@@ -3,6 +3,7 @@ package com.oreo.data.repository.abstraction
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.model.DayTimeMovementBreakup
+import com.noisefit_commans.data.model.GoogleFitWorkoutData
 import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.data.model.OreoBloodOxygenBreakup
 import com.noisefit_commans.data.model.OreoBodyTemperatureBreakup
@@ -13,9 +14,7 @@ import com.noisefit_commans.data.model.OreoStepsData
 import com.noisefit_commans.data.model.OreoStressDataBreakup
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.VersionCheckResponse
-import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.models.StepDataGoogleFit
-
 import com.noisefit_commans.response.SleepBreakup
 import com.oreo.data.model.OreoUserSyncActivities
 import com.oreo.data.model.OreoUserSyncRawData
@@ -104,4 +103,10 @@ interface OreoSyncRepository {
     suspend fun getTodaySleepData(): Flow<CacheResult<OreoSleepData?>>
 
     suspend fun getTodayBodyTemp(): Flow<CacheResult<List<OreoBodyTemperatureBreakup>?>>
+
+    suspend fun saveAndGetGFitWorkout(data: List<GoogleFitWorkoutData>): Flow<CacheResult<List<GoogleFitWorkoutData>?>>
+
+    suspend fun getGFitUnSyncWorkout(): Flow<CacheResult<List<GoogleFitWorkoutData>?>>
+
+    suspend fun updateGFitSyncWorkout(syncData: List<GoogleFitWorkoutData>): Flow<CacheResult<Int?>>
 }

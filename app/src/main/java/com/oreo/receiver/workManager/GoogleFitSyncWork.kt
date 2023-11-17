@@ -9,9 +9,12 @@ import androidx.work.impl.utils.futures.SettableFuture
 import com.google.common.util.concurrent.ListenableFuture
 import com.noisefit.data.dataConverter.OfflineDataMapper
 import com.noisefit.data.googleFit.GoogleFitDataObservers
+import com.noisefit.data.local.db.CacheResult
+import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.repository.abstraction.OreoSyncRepository
+import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.*
@@ -27,6 +30,7 @@ constructor(
     private val syncRepository: OreoSyncRepository,
     private val googleFitDataObservers: GoogleFitDataObservers,
     private val offlineDataMapper: OfflineDataMapper,
+    private val userActivityRepository: OreoUserActivityRepository
 ) : ListenableWorker(context, workerParams) {
 
     private var mFuture: SettableFuture<Result>? = null
@@ -99,6 +103,76 @@ constructor(
                 val call3 = async {
                     googleFitDataObservers.getWorkoutFromSession(
                         success = {
+
+                            LOGS.d("$TAG workout session ${it.size}")
+                            syncDataScope.launch {
+                                syncRepository.saveAndGetGFitWorkout(
+                                    offlineDataMapper.convertWorkoutGoogleFit(
+                                        it
+                                    )
+                                ).collect { resource ->
+                                    when (resource) {
+                                        is CacheResult.Success -> {
+                                            LOGS.d("$TAG workout session offline ${resource.value?.size}")
+                                            if (!resource.value.isNullOrEmpty()) {
+
+                                                syncDataScope.launch {
+                                                    userActivityRepository.addGFitWorkout(
+                                                        offlineDataMapper.convertGFWorkoutIntoJsonArray(
+                                                            resource.value
+                                                        )
+                                                    ).collect { resource1 ->
+                                                        when (resource1) {
+                                                            is Resource.GenericError -> {
+                                                                LOGS.d("$TAG workout session api error")
+                                                            }
+
+                                                            is Resource.Loading -> {
+
+                                                            }
+
+                                                            is Resource.NetworkError -> {
+
+                                                            }
+
+                                                            is Resource.Success -> {
+                                                                LOGS.d("$TAG workout session api success")
+                                                                syncRepository.updateGFitSyncWorkout(
+                                                                    resource.value
+                                                                ).collect { resource2 ->
+                                                                    when (resource2) {
+                                                                        is CacheResult.Success -> {
+                                                                            LOGS.d("$TAG workout session gFit success")
+                                                                        }
+
+                                                                        is CacheResult.GenericError -> {
+                                                                            LOGS.d("$TAG workout session gFit error")
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+
+                                            LOGS.d(
+                                                TAG,
+                                                "OreoSyncDataWork: steps ${resource.value}"
+                                            )
+
+                                        }
+
+                                        is CacheResult.GenericError -> {
+
+                                            LOGS.e(TAG, "OreoSyncDataWork: Error $it")
+
+                                        }
+                                    }
+                                }
+                            }
+
                             LOGS.d("$TAG ${it.size}")
                         },
                         failed = {

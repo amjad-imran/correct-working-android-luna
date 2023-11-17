@@ -49,7 +49,7 @@ data class WorkoutGoogleFit(
     var distance: Float? = null,
     var duration: Long? = null,
     var calories: Float? = null,
-    var heartRate: Float? = null,
+    var heartRate: Int? = null,
     var steps: Int? = null,
     var type: String? = null
 )

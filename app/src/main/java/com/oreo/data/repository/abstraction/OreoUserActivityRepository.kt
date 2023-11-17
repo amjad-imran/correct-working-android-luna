@@ -4,7 +4,17 @@ import com.google.gson.JsonObject
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
-import com.oreo.data.model.*
+import com.oreo.data.model.LearnModel
+import com.oreo.data.model.OActivityListModal
+import com.oreo.data.model.OContributorResponseModal
+import com.oreo.data.model.OHSModel
+import com.oreo.data.model.OHSQuestionariesResponseModel
+import com.oreo.data.model.OHealthOverview
+import com.oreo.data.model.OInternalPageResponseModal
+import com.oreo.data.model.OWorkoutDetailsResponseModel
+import com.oreo.data.model.OWorkoutListModal
+import com.oreo.data.model.RingCareResponse
+import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.health.OreoActivityModel
 import com.oreo.data.model.health.OreoDashboardResponseModel
 import com.oreo.data.model.health.OreoReadinessModel
@@ -12,6 +22,7 @@ import com.oreo.data.model.health.OreoSleepModel
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import com.oreo.ui.TestUserData
 import kotlinx.coroutines.flow.Flow
+import org.json.JSONArray
 
 interface OreoUserActivityRepository {
 
@@ -39,6 +50,7 @@ interface OreoUserActivityRepository {
     ): Pair<ArrayList<OHealthOverview>?, Int?>
 
     suspend fun addWorkout(request: JsonObject): Flow<Resource<BaseApiResponseData<Any>>>
+    suspend fun addGFitWorkout(request: JSONArray): Flow<Resource<BaseApiResponseData<Any>>>
     suspend fun getWorkoutDetails(id: String): Flow<Resource<BaseApiResponse<OWorkoutDetailsResponseModel>>>
 
     suspend fun getWorkoutList(): Flow<Resource<BaseApiResponse<List<OWorkoutListModal>>>>

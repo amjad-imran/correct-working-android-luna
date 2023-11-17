@@ -659,8 +659,8 @@ constructor(
     ) {
         val calendar = Calendar.getInstance()
         val endTime = calendar.timeInMillis
-        calendar.add(Calendar.WEEK_OF_YEAR, -1) // Set the start time to one week ago
-        val startTime = calendar.timeInMillis
+        val startTime = DateFormats.startOfDayTimeStamp()
+         LOGS.d("$TAG $startTime -- $endTime")
         val readRequest = SessionReadRequest.Builder()
             .setTimeInterval(startTime, endTime, TimeUnit.MILLISECONDS)
             .read(DataType.TYPE_WORKOUT_EXERCISE)
@@ -683,7 +683,11 @@ constructor(
             .addOnSuccessListener { response ->
 
                 val workoutList = ArrayList<WorkoutGoogleFit>()
+                LOGS.i(TAG, "GoogleFitSyncWork Session size: ${response.sessions.size}")
                 for (session in response.sessions) {
+                    if(context.packageName == session.appPackageName){
+                        continue
+                    }
                     val workoutGoogleFit = WorkoutGoogleFit()
                     workoutGoogleFit.name = session.name
                     workoutGoogleFit.identifier = session.identifier
@@ -720,14 +724,16 @@ constructor(
                                 )
 
 
-                                DataType.TYPE_SPEED -> LOGS.d(
-                                    TAG, "speed " + point
-                                )
-
-                                DataType.TYPE_HEART_POINTS -> LOGS.d(
-                                    TAG, "hr_point " + point
-                                )
-
+                                DataType.TYPE_SPEED -> {
+//                                    LOGS.d(
+//                                        TAG, "speed " + point
+//                                    )
+                                }
+                                DataType.TYPE_HEART_POINTS -> {
+//                                    LOGS.d(
+//                                        TAG, "hr_point " + point
+//                                    )
+                                }
 
                                 DataType.TYPE_STEP_COUNT_DELTA -> {
                                     workoutGoogleFit.steps =

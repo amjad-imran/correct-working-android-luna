@@ -1,13 +1,16 @@
 package com.noisefit.data.dataConverter
 
+import com.google.gson.JsonObject
 import com.noisefit.watch.SDKWatchType
 import com.noisefit.watch.WatchesSDK
+import com.noisefit_commans.data.model.GoogleFitWorkoutData
 import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.models.DeviceType
-import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.models.SleepDataGoogleFit
+import com.noisefit_commans.models.WorkoutGoogleFit
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import org.json.JSONArray
 import javax.inject.Inject
 
 
@@ -208,4 +211,66 @@ class OfflineDataMapper
         return sleepDateList
     }
 
+
+    fun convertGFWorkoutIntoJsonArray(data: List<GoogleFitWorkoutData>): JSONArray {
+        val jsonArray = JSONArray()
+        data.forEach {
+            val requestObject = JsonObject().apply {
+                this.addProperty("duration", it.duration)
+                this.addProperty("calories", it.calories)
+                this.addProperty("activity_type", it.activity)
+                this.addProperty("type", "google")
+                this.addProperty(
+                    "date",
+                    DateFormats.convertTimestampToDate(
+                        (it.startTime!! * 1000L),
+                        DateFormats.dateFormat3
+                    )
+                )
+                this.addProperty(
+                    "start_time",
+                    DateFormats.convertTimestampToDate(
+                        it.startTime!! * 1000L,
+                        DateFormats.time24WithoutSecond
+                    )
+                )
+                this.addProperty("steps", it.steps)
+                this.addProperty(
+                    "end_time",
+                    DateFormats.convertTimestampToDate(
+                        it.endTime!! * 1000L,
+                        DateFormats.time24WithoutSecond
+                    )
+                )
+                this.addProperty("intensity", "Moderate")
+            }
+            jsonArray.put(requestObject)
+        }
+        return jsonArray
+    }
+
+    fun convertWorkoutGoogleFit(data: List<WorkoutGoogleFit>): List<GoogleFitWorkoutData> {
+        val workoutList = ArrayList<GoogleFitWorkoutData>()
+        data.forEach {
+            workoutList.add(
+                GoogleFitWorkoutData(
+                    0,
+                    false,
+                    it.name,
+                    it.identifier,
+                    it.appPackageName,
+                    it.activity,
+                    it.startTime,
+                    it.endTime,
+                    it.distance,
+                    it.duration,
+                    it.calories,
+                    it.heartRate,
+                    it.steps,
+                    it.type
+                )
+            )
+        }
+        return workoutList
+    }
 }

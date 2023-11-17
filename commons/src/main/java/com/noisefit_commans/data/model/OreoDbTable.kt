@@ -63,24 +63,40 @@ data class OreoAutoSportData(
     @SerializedName("date") var date: String? = null
 ) : ColorfitData(), Parcelable
 
-
-//@Entity(
-//    tableName = "google_fit_workout", indices = [Index(value = ["startTime"], unique = true)]
-//)
-//@Parcelize
-//data class GoogleFitWorkoutData(
-//    @PrimaryKey(autoGenerate = true) var id: Int = 0,
-//    @ColumnInfo(name = "is_synced") var isSynced: Boolean = false,
-//    @ColumnInfo(name = "is_accepted") var isAccepted: Boolean = false,
-//    @ColumnInfo(name = "duration") var duration: Int = 0,
-//    @ColumnInfo(name = "intensity") @SerializedName("intensity") var intensity: Int? = null,
-//    @ColumnInfo(name = "calories") @SerializedName("calories") var calories: Int = 0,
-//    @ColumnInfo(name = "startTime") @SerializedName("startTime") var startTime: Long = 0,
-//    @ColumnInfo(name = "steps") @SerializedName("steps") var steps: Int = 0,
-//    @ColumnInfo(name = "type") @SerializedName("type") var type: String? = null,
-//    @ColumnInfo(name = "hr") @SerializedName("hr") var hrData: String? = null,
-//    @SerializedName("date") var date: String? = null
-//) : ColorfitData(), Parcelable
+/*
+ var name: String? = null,
+    var identifier: String? = null,
+    var appPackageName: String? = null,
+    var activity: String? = null,
+    var startTime: Long? = null,
+    var endTime: Long? = null,
+    var distance: Float? = null,
+    var duration: Long? = null,
+    var calories: Float? = null,
+    var heartRate: Float? = null,
+    var steps: Int? = null,
+    var type: String? = null
+ */
+@Entity(
+    tableName = "google_fit_workout", indices = [Index(value = ["startTime"], unique = true)]
+)
+@Parcelize
+data class GoogleFitWorkoutData(
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    @ColumnInfo(name = "is_synced") var isSynced: Boolean = false,
+    @ColumnInfo(name = "name") var name: String? = null,
+    @ColumnInfo(name = "identifier") var identifier: String? = null,
+    @ColumnInfo(name = "appPackageName") var appPackageName: String? = null,
+    @ColumnInfo(name = "activity") var activity: String? = null,
+    @ColumnInfo(name = "startTime") var startTime: Long? = null,
+    @ColumnInfo(name = "endTime") var endTime: Long? = null,
+    @ColumnInfo(name = "distance") var distance: Float? = null,
+    @ColumnInfo(name = "duration") var duration: Long? = null,
+    @ColumnInfo(name = "calories") var calories: Float? = null,
+    @ColumnInfo(name = "heartRate") var heartRate: Int? = null,
+    @ColumnInfo(name = "steps") var steps: Int? = null,
+    @ColumnInfo(name = "type") var type: String? = null,
+) : ColorfitData(), Parcelable
 
 
 

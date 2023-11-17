@@ -44,6 +44,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
+import org.json.JSONArray
 
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -1099,6 +1100,14 @@ class OreoUserActivityRepositoryImpl(
             keyValueDataSource.removeDataByType(KeyValueDataType.ACTIVITY)
             keyValueDataSource.removeDataByType(KeyValueDataType.DASHBOARD)
             remoteDataSource.addWorkout(url, request)
+        }
+    }
+
+    override suspend fun addGFitWorkout(request: JSONArray): Flow<Resource<BaseApiResponseData<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/activity/v1/add_workout_apple"
+
+            remoteDataSource.addGFitWorkout(url, request)
         }
     }
 
