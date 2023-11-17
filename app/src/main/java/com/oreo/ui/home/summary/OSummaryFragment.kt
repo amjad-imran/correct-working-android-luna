@@ -3,6 +3,7 @@ package com.oreo.ui.home.summary
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -20,7 +21,6 @@ import com.noisefit.receiver.service.FeedbackSubmitService
 import com.noisefit.ui.common.bottomSheet.DELETE_REQ_REQUEST_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
-import com.noisefit.util.notif.NotificationEventsClass
 import com.noisefit.util.notif.NotificationUtil
 import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.data.enums.DashInfoCard
@@ -45,6 +45,8 @@ import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
 import com.oreo.receiver.workManager.HealthOverviewDataType
+import com.oreo.ui.home.summary.paginate.SummaryDataFragment
+import com.oreo.ui.home.summary.paginate.SummaryPagerAdapter
 import com.oreo.ui.info.CALL_GOT_IT
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
@@ -75,6 +77,21 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         super.onViewCreated(view, savedInstanceState)
         setAdapter()
 
+        setViewPager()
+
+    }
+
+    private fun setViewPager() {
+        val adapter = SummaryPagerAdapter(requireActivity(), getFragmentList())
+        binding.viewPagerSummary.adapter = adapter
+    }
+
+    private fun getFragmentList(): List<Fragment> {
+        val fragmentList: MutableList<Fragment> = ArrayList<Fragment>()
+        fragmentList.add(SummaryDataFragment())
+        fragmentList.add(SummaryDataFragment())
+        fragmentList.add(SummaryDataFragment())
+        return fragmentList
     }
 
     override fun initListener() {
@@ -338,7 +355,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         }
     }
 
-    private fun showLocalNotification(title: String, content: String,key:String) {
+    private fun showLocalNotification(title: String, content: String, key: String) {
         NotificationUtil.pushNotification(
             NoiseFitApplicationMain.context!!,
             title,
@@ -352,9 +369,9 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     override fun subscribeObservers() {
 
 
-        viewModel.pushNotification.observe(viewLifecycleOwner){
+        viewModel.pushNotification.observe(viewLifecycleOwner) {
             it.getContent()?.let {
-                showLocalNotification(it.title,it.content,it.key)
+                showLocalNotification(it.title, it.content, it.key)
             }
         }
 
@@ -659,7 +676,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         viewModel.summary.healthOverviewData.observe(this) {
             it?.let {
 
-                binding.contentMain.root.visible()
+                //binding.contentMain.root.visible()
 
                 healthOverviewAdapter.refreshPosition = viewModel.summary.refreshPosition
                 healthOverviewAdapter.items = it

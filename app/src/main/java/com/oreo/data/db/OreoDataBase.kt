@@ -17,6 +17,7 @@ import com.noisefit_commans.data.model.OreoRespiratoryData
 import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.data.model.OreoStepsData
 import com.noisefit_commans.data.model.OreoStressDataBreakup
+import com.noisefit_commans.data.model.UserHealthData
 import com.oreo.data.db.database.OreoAutoSportDao
 import com.oreo.data.db.database.OreoBloodOxygenDao
 import com.oreo.data.db.database.OreoBodyTemperatureDao
@@ -26,13 +27,14 @@ import com.oreo.data.db.database.OreoRespiratoryDao
 import com.oreo.data.db.database.OreoSleepDao
 import com.oreo.data.db.database.OreoStepsDao
 import com.oreo.data.db.database.OreoStressDao
+import com.oreo.data.db.database.OreoUserHealthDataDao
 
 @Database(
     entities = [OreoStepsData::class, OreoHeartRate::class, OreoBloodOxygenBreakup::class,
         OreoBloodPressureData::class, OreoSleepData::class, OreoStressDataBreakup::class, OreoGoogleFitData::class,
         OreoBodyTemperatureBreakup::class, OreoRespiratoryData::class, DayTimeMovementBreakup::class,
-        OreoAutoSportData::class, KeyValue::class],
-    version = 2, exportSchema = false
+        OreoAutoSportData::class, KeyValue::class, UserHealthData::class],
+    version = 3, exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class OreoDataBase : RoomDatabase() {
@@ -46,6 +48,7 @@ abstract class OreoDataBase : RoomDatabase() {
     abstract fun sleepDao(): OreoSleepDao
     abstract fun respiratoryDao(): OreoRespiratoryDao
     abstract fun dayTimeMovementDao(): OreoDayTimeMovementDao
+    abstract fun userHealthDataDao(): OreoUserHealthDataDao
 
     abstract fun keyValueDao(): KeyValueDao
 

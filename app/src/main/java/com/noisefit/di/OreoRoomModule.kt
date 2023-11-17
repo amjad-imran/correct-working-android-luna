@@ -21,10 +21,12 @@ import com.oreo.data.db.database.OreoRespiratoryDao
 import com.oreo.data.db.database.OreoSleepDao
 import com.oreo.data.db.database.OreoStepsDao
 import com.oreo.data.db.database.OreoStressDao
+import com.oreo.data.db.database.OreoUserHealthDataDao
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
 import com.oreo.data.db.implementation.OreoDayTimeMovementDataImpl
 import com.oreo.data.db.implementation.OreoSleepDataImpl
 import com.oreo.data.db.implementation.OreoStepsDataImpl
+import com.oreo.data.db.implementation.OreoUserHealthDataDataImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,6 +43,7 @@ class OreoRoomModule {
     fun provideDataBase(@ApplicationContext appContext: Context): OreoDataBase {
         return Room.databaseBuilder(appContext, OreoDataBase::class.java, "noisefit-db-oreo")
             .addMigrations(MIGRATION_1_2)
+            .addMigrations(MIGRATION_2_3)
             .build()
     }
 
@@ -54,6 +57,22 @@ class OreoRoomModule {
                          "`type` TEXT," +
                          "`key` TEXT, PRIMARY KEY(`uId`))"
              )
+         }
+     }
+
+    private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
+         override fun migrate(database: SupportSQLiteDatabase) {
+             database.execSQL(
+                 "CREATE TABLE IF NOT EXISTS `user_health_data` " +
+                         "(`id` INTEGER NOT NULL, " +
+                         "`dashboard` TEXT," +
+                         "`sleep` TEXT," +
+                         "`activity` TEXT," +
+                         "`readiness` TEXT," +
+                         "`date` TEXT, PRIMARY KEY(`id`))"
+             )
+             database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_user_health_data_date ON  user_health_data(date)")
+
          }
      }
 
@@ -143,6 +162,18 @@ class OreoRoomModule {
     @Provides
     fun providesAutoSportDao(database: OreoDataBase): OreoAutoSportDao {
         return database.oreoAutoSportDao()
+    }
+
+    @Singleton
+    @Provides
+    fun providesUserHealthDataDao(database: OreoDataBase): OreoUserHealthDataDao {
+        return database.userHealthDataDao()
+    }
+
+    @Singleton
+    @Provides
+    fun providesUserHealthDataImpl(userHealthDataDao: OreoUserHealthDataDao): OreoUserHealthDataDataImpl {
+        return OreoUserHealthDataDataImpl(userHealthDataDao)
     }
 
     @Singleton

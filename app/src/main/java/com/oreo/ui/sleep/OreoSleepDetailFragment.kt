@@ -901,6 +901,10 @@ class OreoSleepDetailFragment :
             mainViewModel.selectedDate = returnDate
         }
 
+        if(mainViewModel.shouldLoadMoreData()){
+            context.showShortToast("Load More Data")
+        }
+
     }
 
     override fun onScrolling(position: Int, chartModel: ChartModel?) {

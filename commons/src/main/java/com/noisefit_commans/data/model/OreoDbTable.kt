@@ -76,6 +76,19 @@ data class DayTimeMovementBreakup(
     @SerializedName("date") var date: String? = null
 ) : ColorfitData()
 
+
+@Entity(
+    tableName = "user_health_data", indices = [Index(value = ["date"], unique = true)]
+)
+data class UserHealthData(
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    @ColumnInfo(name = "dashboard") @SerializedName("dashboard") var dashboard: String? = null,
+    @ColumnInfo(name = "sleep") @SerializedName("sleep") var sleep: String? = null,
+    @ColumnInfo(name = "activity") @SerializedName("activity") var activity: String? = null,
+    @ColumnInfo(name = "readiness") @SerializedName("readiness") var readiness: String? = null,
+    @SerializedName("date") var date: String? = null
+) : ColorfitData()
+
 @Entity(tableName = "blood_pressure")
 data class OreoBloodPressureData(
     @PrimaryKey(autoGenerate = true) var id: Int = 0,

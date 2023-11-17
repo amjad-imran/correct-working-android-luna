@@ -2,6 +2,7 @@ package com.oreo.data.repository.abstraction
 
 import com.google.gson.JsonObject
 import com.noisefit.data.remote.base.Resource
+import com.noisefit_commans.data.model.UserHealthData
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
 import com.oreo.data.model.*
@@ -22,6 +23,7 @@ interface OreoUserActivityRepository {
     suspend fun getLearnData(): Flow<Resource<BaseApiResponse<List<LearnModel>>>>
 
     suspend fun getSleepHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoSleepModel>>>>
+    suspend fun getUserHealthData(date: String): Flow<Resource<BaseApiResponse<ServerUserHealthData>>>
 
     suspend fun getActivityHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoActivityModel>>>>
     suspend fun getReadinessHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoReadinessModel>>>>

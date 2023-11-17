@@ -35,13 +35,22 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
 
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPagerSummary"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginEnd="@dimen/side_margin"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lytHeader"/>
+
             <include
                 android:id="@+id/contentMain"
                 layout="@layout/layout_dash_main"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:visibility="gone"
-                tools:visibility="visible"
+                tools:visibility="gone"
                 android:layout_marginStart="@dimen/side_margin"
                 android:layout_marginEnd="@dimen/side_margin"
                 app:layout_constraintBottom_toBottomOf="parent"

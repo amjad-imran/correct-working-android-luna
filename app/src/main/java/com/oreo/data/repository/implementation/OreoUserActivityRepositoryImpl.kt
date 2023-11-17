@@ -23,9 +23,11 @@ import com.noisefit_commans.common.checkDayDifferenceMoreNMinutes
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.FriendsData
 import com.noisefit_commans.data.model.KeyValue
+import com.noisefit_commans.data.model.UserHealthData
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
 import com.noisefit_commans.ui.checkDayDifferenceMoreOne
+import com.noisefit_commans.ui.delay
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.dataConverter.OreoOfflineDataMapper
@@ -83,6 +85,29 @@ class OreoUserActivityRepositoryImpl(
                 "${BuildConfig.BASE_URL_NEW}/luna/protean/v1/details?type=welcome_ring"
             remoteDataSource.getRingWelcomeData(url)
         }
+    }
+
+    override suspend fun getUserHealthData(date: String): Flow<Resource<BaseApiResponse<ServerUserHealthData>>> {
+
+        return flow {
+
+            kotlinx.coroutines.delay(2000)
+            emit(
+                Resource.Success(
+                    BaseApiResponse(
+                        message = "",
+                        data = ServerUserHealthData(
+                            dashboard = null,
+                            sleep = null,
+                            activity = null,
+                            readiness = null
+                        )
+                    )
+                )
+            )
+        }
+
+
     }
 
 
