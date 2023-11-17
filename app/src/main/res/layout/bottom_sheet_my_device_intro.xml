@@ -56,7 +56,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvTitle" />
-            <View
+            <com.google.android.material.imageview.ShapeableImageView
                 android:layout_width="match_parent"
                 android:layout_height="350dp"
                 android:id="@+id/view1"
@@ -66,9 +66,9 @@
                 app:layout_constraintTop_toBottomOf="@id/tvDesc"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:backgroundTint="#4c606e"
-                app:layout_constraintBottom_toTopOf="@id/btnGotIt"
-                android:background="@drawable/back_modal_dialog_10"/>
+                android:src="@drawable/ic_walkthrough_device_image"
+                app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp"
+                app:layout_constraintBottom_toTopOf="@id/btnGotIt"/>
 
 
             <Button
