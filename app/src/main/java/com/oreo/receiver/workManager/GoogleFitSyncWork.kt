@@ -11,7 +11,9 @@ import com.noisefit.data.dataConverter.OfflineDataMapper
 import com.noisefit.data.googleFit.GoogleFitDataObservers
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.DateFormats.checkTimeDifferenceMoreThanN
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
@@ -27,6 +29,7 @@ class GoogleFitSyncWork
 constructor(
     @Assisted val context: Context,
     @Assisted workerParams: WorkerParameters,
+    private val localDataStore: DataStoredInterface,
     private val syncRepository: OreoSyncRepository,
     private val googleFitDataObservers: GoogleFitDataObservers,
     private val offlineDataMapper: OfflineDataMapper,
@@ -49,6 +52,11 @@ constructor(
 
     private suspend fun getSyncData(success: () -> Unit, failed: () -> Unit) {
         val todayDate = DateFormats.getTodaysDateString(7)
+
+        var shouldUserObjectSync = false
+        if (localDataStore.getGFitUserDataLastSyncTime().checkTimeDifferenceMoreThanN(24)) {
+            shouldUserObjectSync = false
+        }
 
         LOGS.d("$TAG inside")
         job = syncDataScope.launch {
@@ -88,16 +96,22 @@ constructor(
 
                 }
 
-                val call2 = async {
-                    googleFitDataObservers.getHeightWeight(
-                        success = {
-                            LOGS.d("$TAG ${it.first}")
-                            LOGS.d("$TAG ${it.second}")
-                        },
-                        failed = {
-                            LOGS.d("$TAG height weight failed")
-                        }
-                    )
+
+                if (shouldUserObjectSync) {
+                    LOGS.d("$TAG height weight failed")
+                    val call2 = async {
+                        googleFitDataObservers.getHeightWeight(
+                            success = {
+                                LOGS.d("$TAG ${it.first}")
+                                LOGS.d("$TAG ${it.second}")
+                                localDataStore.setGFitUserDataLastSyncTime()
+                            },
+                            failed = {
+                                LOGS.d("$TAG height weight failed")
+                            }
+                        )
+                    }
+                    call2.await()
                 }
 
                 val call3 = async {
@@ -183,7 +197,7 @@ constructor(
 
                 try {
                     call1.await()
-                    call2.await()
+
                     call3.await()
                 } catch (e: Exception) {
                     e.printStackTrace()
