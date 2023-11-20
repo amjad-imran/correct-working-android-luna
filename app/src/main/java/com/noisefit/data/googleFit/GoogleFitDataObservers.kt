@@ -14,10 +14,14 @@ import com.google.android.gms.fitness.request.DataReadRequest
 import com.google.android.gms.fitness.request.SessionInsertRequest
 import com.google.android.gms.fitness.request.SessionReadRequest
 import com.google.android.gms.fitness.result.DataReadResponse
+import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.models.*
+import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.DistanceUtil
 import com.noisefit_commans.utils.LOGS
+import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -535,7 +539,7 @@ constructor(
             .addOnSuccessListener { dataReadResponse: DataReadResponse? ->
                 if (dataReadResponse == null) return@addOnSuccessListener
                 printWeightHeightData(dataReadResponse)
-                success.invoke(Pair(weight, height))
+                success.invoke(Pair(weight, DistanceUtil.meterToCentimeter(height)))
             }
             .addOnFailureListener { e: Exception? ->
                 failed.invoke()
@@ -587,30 +591,44 @@ constructor(
     }
 
 
+
     fun saveUserWeightAndHeight() {
+        if (!localDataStore.isEnableGoogleFit()) {
+            LOGS.d("$TAG please enable google fit")
+            return
+        }
         val user = localDataStore.getUser()
-        val height = user?.userInfo?.height ?: 0
+        var height = user?.userInfo?.height?.toFloat() ?: 0f
         val weight = user?.userInfo?.weight ?: 0
 
-        if (weight > 0) {
-            insertUserData(
-                context,
-                "weight",
-                DataType.TYPE_WEIGHT,
-                Field.FIELD_WEIGHT,
-                weight.toFloat()
-            )
-        }
         if (height > 0) {
-            insertUserData(
-                context,
-                "height",
-                DataType.TYPE_HEIGHT,
-                Field.FIELD_HEIGHT,
-                height.toFloat()
-            )
-
+            height = DistanceUtil.centimeterToMeter(height)
         }
+        LOGS.d("$TAG $height -- $weight")
+
+        tryCatch {
+            if (weight > 0) {
+                insertUserData(
+                    context,
+                    "weight",
+                    DataType.TYPE_WEIGHT,
+                    Field.FIELD_WEIGHT,
+                    weight.toFloat()
+                )
+            }
+            if (height > 0) {
+                insertUserData(
+                    context,
+                    "height",
+                    DataType.TYPE_HEIGHT,
+                    Field.FIELD_HEIGHT,
+                    height
+                )
+
+            }
+        }
+
+
     }
 
     private fun insertUserData(
@@ -626,7 +644,7 @@ constructor(
         val dataPoint =
             DataPoint.builder(dataSource)
                 .setField(fieldType, value)
-                .setTimeInterval(1, startTime, TimeUnit.MILLISECONDS)
+                .setTimeInterval(startTime, startTime, TimeUnit.MILLISECONDS)
                 .build()
 
         val dataSet = DataSet.builder(dataSource)
@@ -657,19 +675,21 @@ constructor(
         success: (data: ArrayList<WorkoutGoogleFit>) -> Unit,
         failed: () -> Unit
     ) {
-        val calendar = Calendar.getInstance()
-        val endTime = calendar.timeInMillis
+         val calendar = Calendar.getInstance()
+         val endTime = calendar.timeInMillis
         val startTime = DateFormats.startOfDayTimeStamp()
+//         calendar.add(Calendar.WEEK_OF_YEAR, -1) // Set the start time to one week ago
+//         val startTime = calendar.timeInMillis
          LOGS.d("$TAG $startTime -- $endTime")
-        val readRequest = SessionReadRequest.Builder()
-            .setTimeInterval(startTime, endTime, TimeUnit.MILLISECONDS)
-            .read(DataType.TYPE_WORKOUT_EXERCISE)
-            .read(DataType.TYPE_STEP_COUNT_DELTA)
-            .read(DataType.TYPE_DISTANCE_DELTA)
-            .read(DataType.TYPE_CALORIES_EXPENDED)
-            .read(DataType.TYPE_MOVE_MINUTES)
-            .read(DataType.AGGREGATE_MOVE_MINUTES)
-            .read(DataType.TYPE_HEART_RATE_BPM)
+         val readRequest = SessionReadRequest.Builder()
+             .setTimeInterval(startTime, endTime, TimeUnit.MILLISECONDS)
+             .read(DataType.TYPE_WORKOUT_EXERCISE)
+             .read(DataType.TYPE_STEP_COUNT_DELTA)
+             .read(DataType.TYPE_DISTANCE_DELTA)
+             .read(DataType.TYPE_CALORIES_EXPENDED)
+             .read(DataType.TYPE_MOVE_MINUTES)
+             .read(DataType.AGGREGATE_MOVE_MINUTES)
+             .read(DataType.TYPE_HEART_RATE_BPM)
             .read(DataType.TYPE_SPEED)
             .read(DataType.TYPE_HEART_POINTS)
             .readSessionsFromAllApps()

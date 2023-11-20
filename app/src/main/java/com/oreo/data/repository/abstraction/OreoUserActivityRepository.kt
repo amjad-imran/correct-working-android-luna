@@ -1,5 +1,6 @@
 package com.oreo.data.repository.abstraction
 
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.response.BaseApiResponse
@@ -50,7 +51,7 @@ interface OreoUserActivityRepository {
     ): Pair<ArrayList<OHealthOverview>?, Int?>
 
     suspend fun addWorkout(request: JsonObject): Flow<Resource<BaseApiResponseData<Any>>>
-    suspend fun addGFitWorkout(request: JSONArray): Flow<Resource<BaseApiResponseData<Any>>>
+    suspend fun addGFitWorkout(request: JsonArray): Flow<Resource<BaseApiResponseData<Any>>>
     suspend fun getWorkoutDetails(id: String): Flow<Resource<BaseApiResponse<OWorkoutDetailsResponseModel>>>
 
     suspend fun getWorkoutList(): Flow<Resource<BaseApiResponse<List<OWorkoutListModal>>>>

@@ -30,6 +30,7 @@ import com.oreo.data.model.health.OreoSleepModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.json.JSONArray
+import org.json.JSONObject
 import retrofit2.http.*
 
 
@@ -790,7 +791,7 @@ interface NetworkService {
 
     @POST
     suspend fun addGFitWorkout(
-        @Url url: String, @Body jsonObject: JSONArray
+        @Url url: String, @Body jsonObject: JsonObject
     ): BaseApiResponseData<Any>
 
     @GET

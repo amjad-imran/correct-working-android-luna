@@ -1,5 +1,6 @@
 package com.noisefit.data.dataConverter
 
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.watch.SDKWatchType
 import com.noisefit.watch.WatchesSDK
@@ -212,8 +213,8 @@ class OfflineDataMapper
     }
 
 
-    fun convertGFWorkoutIntoJsonArray(data: List<GoogleFitWorkoutData>): JSONArray {
-        val jsonArray = JSONArray()
+    fun convertGFWorkoutIntoJsonArray(data: List<GoogleFitWorkoutData>): JsonArray {
+        val jsonArray = JsonArray()
         data.forEach {
             val requestObject = JsonObject().apply {
                 this.addProperty("duration", it.duration)
@@ -244,7 +245,7 @@ class OfflineDataMapper
                 )
                 this.addProperty("intensity", "Moderate")
             }
-            jsonArray.put(requestObject)
+            jsonArray.add(requestObject)
         }
         return jsonArray
     }

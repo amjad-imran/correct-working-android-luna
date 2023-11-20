@@ -130,7 +130,7 @@ class ProfileEditFragment :
             ) { _, bundle ->
                 val isSaved = bundle.getBoolean("save")
                 if (isSaved) {
-                    LOGS.d("dsasdkjkdsajlksda")
+
                     setUserLocation()
                 } else {
                     val cityId = bundle.getInt("cityId")
@@ -175,6 +175,8 @@ class ProfileEditFragment :
 
             viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_PROFILE_SAVE_CLICK)
             viewModel.updateUserProfile()
+
+
         }
         binding.backBtn.setOnClickListener {
             navigateUpSafe()
@@ -401,7 +403,7 @@ class ProfileEditFragment :
 
         viewModel.userDetailsUpdated.observe(viewLifecycleOwner) {
             it.getContent()?.let {
-
+                viewModel.googleFitDataObservers.saveUserWeightAndHeight()
                 updateWatchData()
             }
         }
