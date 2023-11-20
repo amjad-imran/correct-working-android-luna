@@ -52,6 +52,7 @@ interface OreoUserActivityRepository {
 
     suspend fun addWorkout(request: JsonObject): Flow<Resource<BaseApiResponseData<Any>>>
     suspend fun addGFitWorkout(request: JsonArray): Flow<Resource<BaseApiResponseData<Any>>>
+    suspend fun syncGoogleFitUserData(request: JsonObject): Flow<Resource<BaseApiResponseData<Any>>>
     suspend fun getWorkoutDetails(id: String): Flow<Resource<BaseApiResponse<OWorkoutDetailsResponseModel>>>
 
     suspend fun getWorkoutList(): Flow<Resource<BaseApiResponse<List<OWorkoutListModal>>>>

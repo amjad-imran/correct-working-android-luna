@@ -55,7 +55,7 @@ constructor(
 
         var shouldUserObjectSync = false
         if (localDataStore.getGFitUserDataLastSyncTime().checkTimeDifferenceMoreThanN(24)) {
-            shouldUserObjectSync = false
+            shouldUserObjectSync = true
         }
 
         LOGS.d("$TAG inside")
@@ -104,7 +104,33 @@ constructor(
                             success = {
                                 LOGS.d("$TAG ${it.first}")
                                 LOGS.d("$TAG ${it.second}")
-                                localDataStore.setGFitUserDataLastSyncTime()
+                                syncDataScope.launch {
+                                    userActivityRepository.syncGoogleFitUserData(
+                                        offlineDataMapper.convertGFUserDataIntoJsonObject(
+                                            it
+                                        )
+                                    ).collect { resource1 ->
+                                        when (resource1) {
+                                            is Resource.GenericError -> {
+                                                LOGS.d("$TAG height weight api error")
+                                            }
+
+                                            is Resource.Loading -> {
+
+                                            }
+
+                                            is Resource.NetworkError -> {
+
+                                            }
+
+                                            is Resource.Success -> {
+                                                LOGS.d("$TAG height weight api success")
+                                                localDataStore.setGFitUserDataLastSyncTime()
+                                            }
+                                        }
+                                    }
+                                }
+
                             },
                             failed = {
                                 LOGS.d("$TAG height weight failed")

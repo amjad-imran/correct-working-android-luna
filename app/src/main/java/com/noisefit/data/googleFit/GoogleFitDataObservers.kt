@@ -538,8 +538,8 @@ constructor(
             .readData(dataReadRequest)
             .addOnSuccessListener { dataReadResponse: DataReadResponse? ->
                 if (dataReadResponse == null) return@addOnSuccessListener
-                printWeightHeightData(dataReadResponse)
-                success.invoke(Pair(weight, DistanceUtil.meterToCentimeter(height)))
+                printHeightWeightData(dataReadResponse)
+                success.invoke(Pair(DistanceUtil.meterToCentimeter(height),weight))
             }
             .addOnFailureListener { e: Exception? ->
                 failed.invoke()
@@ -548,7 +548,7 @@ constructor(
     }
 
 
-    private fun printWeightHeightData(dataReadResult: DataReadResponse) {
+    private fun printHeightWeightData(dataReadResult: DataReadResponse) {
 
         if (dataReadResult.buckets.isNotEmpty()) {
             for (bucket in dataReadResult.buckets) {

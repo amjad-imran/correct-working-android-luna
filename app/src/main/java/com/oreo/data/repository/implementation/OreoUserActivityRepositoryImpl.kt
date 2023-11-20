@@ -1112,13 +1112,18 @@ class OreoUserActivityRepositoryImpl(
             jsonObject.put("workouts",request)
 
             val requestObject = JsonObject().apply {
-//                this.addProperty("caption", caption)
                 this.add("workouts", request)
             }
             remoteDataSource.addGFitWorkout(url, requestObject)
         }
     }
 
+    override suspend fun syncGoogleFitUserData(request: JsonObject): Flow<Resource<BaseApiResponseData<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/protean/v1/sync/healthfit"
+            remoteDataSource.syncGoogleFitUserData(url,request)
+        }
+    }
     override suspend fun getWorkoutList(): Flow<Resource<BaseApiResponse<List<OWorkoutListModal>>>> {
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.OREO_BASE_URL}/activity/v1/workout_list"

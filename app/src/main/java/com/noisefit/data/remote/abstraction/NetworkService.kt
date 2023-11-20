@@ -790,6 +790,11 @@ interface NetworkService {
     ): BaseApiResponseData<Any>
 
     @POST
+    suspend fun syncGoogleFitUserData(
+        @Url url: String, @Body jsonObject: JsonObject
+    ): BaseApiResponseData<Any>
+
+    @POST
     suspend fun addGFitWorkout(
         @Url url: String, @Body jsonObject: JsonObject
     ): BaseApiResponseData<Any>

@@ -11,7 +11,6 @@ import com.noisefit_commans.models.SleepDataGoogleFit
 import com.noisefit_commans.models.WorkoutGoogleFit
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
-import org.json.JSONArray
 import javax.inject.Inject
 
 
@@ -212,6 +211,26 @@ class OfflineDataMapper
         return sleepDateList
     }
 
+    /*
+    "date": "2023-11-02",
+        "height": "1.67",
+        "weight": 67,
+     */
+
+    fun convertGFUserDataIntoJsonObject(data: Pair<Float, Float>): JsonObject {
+        val jsonObject = JsonObject().apply {
+            if (data.first > 0) {
+                this.addProperty("height", data.first.toString())
+            }
+            if (data.second > 0) {
+                this.addProperty("weight", data.second)
+            }
+            this.addProperty("date", DateFormats.getTodaysDateString(9))
+            this.addProperty("source", "google")
+        }
+
+        return jsonObject
+    }
 
     fun convertGFWorkoutIntoJsonArray(data: List<GoogleFitWorkoutData>): JsonArray {
         val jsonArray = JsonArray()
