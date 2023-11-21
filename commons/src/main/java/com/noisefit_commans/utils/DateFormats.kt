@@ -241,6 +241,14 @@ object DateFormats {
         return df.format(c)
     }
 
+    fun getCurrentDateMinusDays(days: Int): String {
+        val cal = Calendar.getInstance()
+        cal.add(Calendar.DATE, -days)
+        val time = cal.time
+        val df = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return df.format(time)
+    }
+
     fun getCurrentDate(dataFormat: SimpleDateFormat): String {
         val c = Calendar.getInstance().time
         return dataFormat.format(c)

@@ -33,17 +33,6 @@ constructor(
     val sessionManager: SessionManager
 ) : BaseViewModel() {
 
-
-    private val _readinessData = MutableLiveData<TestDataModel>()
-    val readinessData: LiveData<TestDataModel>
-        get() = _readinessData
-
-    private val _readinessHistoryResponse = MutableLiveData<List<OreoReadinessModel>>()
-    val readinessHistoryResponse: LiveData<List<OreoReadinessModel>> = _readinessHistoryResponse
-
-    private val _dayReadinessData = MutableLiveData<OreoReadinessModel>()
-    val dayReadinessData: LiveData<OreoReadinessModel> = _dayReadinessData
-
     private val _contributorInfo = MutableLiveData<OContributorResponseModal>()
     val contributorInfo: LiveData<OContributorResponseModal> = _contributorInfo
 
@@ -95,7 +84,9 @@ constructor(
 
 
     fun getReadinessDetailsData(selectedMasterDate: String? = null) {
-        viewModelScope.launch {
+        return
+
+        /*viewModelScope.launch {
             userActivityRepository.getReadinessHistory(
                 selectedMasterDate ?: DateFormats.getCurrentDateOreoFormat()
             ).collect { resource ->
@@ -132,7 +123,7 @@ constructor(
                 }
             }
 
-        }
+        }*/
 
 
     }
@@ -141,7 +132,7 @@ constructor(
     var dateList = ArrayList<String>()
     fun getPrefixAndSuffixList(dataList: List<OreoReadinessModel>):
             Triple<ArrayList<ChartModel>, ArrayList<ChartModel>, ArrayList<ChartModel>> {
-        dataList.reversed()
+        //dataList.reversed()
         val list = java.util.ArrayList<ChartModel>()
         dataList.forEach {
             val chartModel = ChartModel()
@@ -259,7 +250,7 @@ constructor(
     }
 
 
-    fun updateSelectedDate(selectedMasterDate: String?): String? {
+   /* fun updateSelectedDate(selectedMasterDate: String?): String? {
         var returnSelectedDate: String? = null
 
         val dayData = _readinessHistoryResponse.value?.firstOrNull() {
@@ -277,7 +268,7 @@ constructor(
             }
         }
         return returnSelectedDate
-    }
+    }*/
 
     fun getBannerDummyData(): ArrayList<Nudges> {
         val listData = ArrayList<Nudges>()

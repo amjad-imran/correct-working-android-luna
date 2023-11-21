@@ -87,27 +87,18 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
-    override suspend fun getUserHealthData(date: String): Flow<Resource<BaseApiResponse<ServerUserHealthData>>> {
-
-        return flow {
-
-            kotlinx.coroutines.delay(2000)
-            emit(
-                Resource.Success(
-                    BaseApiResponse(
-                        message = "",
-                        data = ServerUserHealthData(
-                            dashboard = null,
-                            sleep = null,
-                            activity = null,
-                            readiness = null
-                        )
-                    )
-                )
-            )
+    /**
+     * @param startDate endDate in format YYYY-MM-dd
+     */
+    override suspend fun getUserHealthData(
+        startDate: String?,
+        endDate: String?
+    ): Flow<Resource<BaseApiResponse<ServerUserHealthResponse>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${BuildConfig.BASE_URL_NEW}/luna/protean/v2/dashboard"
+            remoteDataSource.getUserHealthData(url, startDate, endDate)
         }
-
-
     }
 
 

@@ -42,25 +42,25 @@ constructor(
 ) : BaseViewModel() {
 
 
-    private val _sleepHistoryResponse = MutableLiveData<List<OreoSleepModel>>()
-    val sleepHistoryResponse: LiveData<List<OreoSleepModel>> = _sleepHistoryResponse
+   /* private val _sleepHistoryResponse = MutableLiveData<List<OreoSleepModel>>()
+    val sleepHistoryResponse: LiveData<List<OreoSleepModel>> = _sleepHistoryResponse*/
 
-    private val _daySleepData = MutableLiveData<OreoSleepModel>()
-    val daySleepData: LiveData<OreoSleepModel> = _daySleepData
+    /*private val _daySleepData = MutableLiveData<OreoSleepModel>()
+    val daySleepData: LiveData<OreoSleepModel> = _daySleepData*/
 
     private val _contributorInfo = MutableLiveData<OContributorResponseModal>()
     val contributorInfo: LiveData<OContributorResponseModal> = _contributorInfo
 
 
-    var dateList = ArrayList<String>()
 
     init {
         //selectedMasterDate = DateFormats.getCurrentDateOreoFormat()
     }
 
     fun getPrefixAndSuffixList(dataList: List<OreoSleepModel>): Triple<ArrayList<ChartModel>, ArrayList<ChartModel>, ArrayList<ChartModel>> {
-        dataList.reversed()
+        //dataList.reversed()
 
+        val dateList = ArrayList<String>()
 
         val list = java.util.ArrayList<ChartModel>()
         dataList.forEach {
@@ -83,13 +83,13 @@ constructor(
         }
 
         list.reverse()
-        val lastDateFromList = dataList.last().date
+        val lastDateFromList = dataList.first().date
         val lastDate = DateFormats.subtractDateFormat3(lastDateFromList, 1)!!
         val suffixDatesList = DateFormats.getWeekDaysBetweenDates(
             DateFormats.subtractDateFormat3(lastDate, 14)!!, lastDate,
             DateFormats.dateFormat3, DateFormats.singleWeekDay
         )
-        val currentDateFromList = dataList.first().date
+        val currentDateFromList = dataList.last().date
         val currentDate = DateFormats.addDateFormat3(currentDateFromList, 1)!!
         val prefixDatesList = DateFormats.getWeekDaysBetweenDates(
             currentDate,
@@ -125,8 +125,9 @@ constructor(
     }
 
 
-    fun getSleepDetailsData(selectedMasterDate: String?) {
-        viewModelScope.launch {
+    fun getSleepDetailsData() {
+        return
+        /*viewModelScope.launch {
             userActivityRepository.getSleepHistory(
                 selectedMasterDate ?: DateFormats.getCurrentDateOreoFormat()
             ).collect { resource ->
@@ -159,17 +160,17 @@ constructor(
                         resource.data?.data?.let {
 
                             _sleepHistoryResponse.value = (it.reversed())
-                            /* if (selectedDate == null) {
+                            *//* if (selectedDate == null) {
                                  it.firstOrNull()?.let { data ->
                                      selectedDate = data.date
                                  }
-                             }*/
+                             }*//*
 
                         }
                     }
                 }
             }
-        }
+        }*/
 
 
     }
@@ -606,7 +607,7 @@ constructor(
         return Pair(sleepArray, countCData)
     }
 
-    fun updateSelectedDate(selectedDate: String?): String? {
+    /*fun updateSelectedDate(selectedDate: String?): String? {
         var returnSelectedDate: String? = null
 
         val dayData = _sleepHistoryResponse.value?.firstOrNull() {
@@ -623,7 +624,7 @@ constructor(
             }
         }
         return returnSelectedDate
-    }
+    }*/
 
     fun getAvgValue(it: List<OreoSleepModel>): Int {
         var avgValue = 0

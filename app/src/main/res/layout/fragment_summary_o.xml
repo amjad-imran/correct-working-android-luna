@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
+<!--
     <me.dkzwm.widget.srl.SmoothRefreshLayout
         android:id="@+id/swipeToRefresh"
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
                 layout="@layout/layout_swipe_refresh"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-        </com.noisefit.ui.custom.swipeHeader.srl.extra.header.ClassicHeader>
+        </com.noisefit.ui.custom.swipeHeader.srl.extra.header.ClassicHeader>-->
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -67,6 +67,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </me.dkzwm.widget.srl.SmoothRefreshLayout>
+<!--    </me.dkzwm.widget.srl.SmoothRefreshLayout>-->
 
 </layout>

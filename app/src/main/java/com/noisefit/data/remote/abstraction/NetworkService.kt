@@ -494,6 +494,13 @@ interface NetworkService {
     ): BaseApiResponse<RingWelcome>
 
     @GET
+    suspend fun getUserHealthData(
+        @Url string: String,
+        @Query("start_date") startDate: String?,
+        @Query("end_date") endDate: String?
+    ): BaseApiResponse<ServerUserHealthResponse>
+
+    @GET
     suspend fun getCityList(
         @Url string: String,
     ): BaseApiResponse<List<CityData>>

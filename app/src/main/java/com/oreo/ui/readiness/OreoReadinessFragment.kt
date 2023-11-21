@@ -77,7 +77,7 @@ class OreoReadinessFragment :
 
 
         if (mViewModel.ringDataStore.isReadinessWalkAroundShown()) {
-            mViewModel.getReadinessDetailsData(mainViewModel.selectedMasterDate)
+            mViewModel.getReadinessDetailsData()
         } else {
             showWalkAround(true)
         }
@@ -164,11 +164,11 @@ class OreoReadinessFragment :
         }
 
 
-      /*  val baseTimeList = UtilClass.graphTwoHoursInterval(
-            ssTime,
-            seTime,
-            breakUpData.size ?: 288
-        )*/
+        /*  val baseTimeList = UtilClass.graphTwoHoursInterval(
+              ssTime,
+              seTime,
+              breakUpData.size ?: 288
+          )*/
 
         val baseTimeListNew =
             UtilClass.getXAxisPoints(ssTime, seTime, breakUpData.size ?: 288)
@@ -245,11 +245,11 @@ class OreoReadinessFragment :
         }
 
 
-      /*  val baseTimeList = UtilClass.graphTwoHoursInterval(
-            ssTime,
-            seTime,
-            breakUpData.size ?: 288
-        )*/
+        /*  val baseTimeList = UtilClass.graphTwoHoursInterval(
+              ssTime,
+              seTime,
+              breakUpData.size ?: 288
+          )*/
 
         val baseTimeListNew =
             UtilClass.getXAxisPoints(ssTime, seTime, breakUpData.size ?: 288)
@@ -321,11 +321,11 @@ class OreoReadinessFragment :
             breakUpData = temperatureBreakUpData?.value as ArrayList<Float>
         }
 
-       /* val baseTimeList = UtilClass.graphTwoHoursInterval(
-            ssTime,
-            seTime,
-            breakUpData.size ?: 288
-        )*/
+        /* val baseTimeList = UtilClass.graphTwoHoursInterval(
+             ssTime,
+             seTime,
+             breakUpData.size ?: 288
+         )*/
         val baseTimeListNew =
             UtilClass.getXAxisPoints(ssTime, seTime, breakUpData.size ?: 288)
 
@@ -380,14 +380,17 @@ class OreoReadinessFragment :
             if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
 
-                val selectedDate = data?.getStringExtra("selected_date")
-                mainViewModel.selectedMasterDate = selectedDate
+                val selectedDate =
+                    data?.getStringExtra("selected_date") ?: return@registerForActivityResult
+
+                mainViewModel.mEndDate = selectedDate
+                mainViewModel.mStartDate = mainViewModel.getDatesMinus(selectedDate)
                 mainViewModel.selectedDate = selectedDate
-                LOGS.d("Selected Date  :${selectedDate}")
-                mViewModel.getReadinessDetailsData(selectedDate)
-                /*if (selectedDate != null) {
-                    mViewModel.updateSelectedDate(selectedDate)
-                }*/
+
+                LOGS.d("moveToPosition Selected Date  :${selectedDate}")
+
+                mainViewModel.getUserHealthData(mainViewModel.mStartDate, mainViewModel.mEndDate)
+
 
             }
         }
@@ -419,7 +422,7 @@ class OreoReadinessFragment :
         binding.lytEmptyView.bGoToSettings.setOnClickListener {
             showWalkAround(false)
             mViewModel.ringDataStore.setReadinessWalkAroundShown(true)
-            mViewModel.getReadinessDetailsData(mainViewModel.selectedMasterDate)
+            mViewModel.getReadinessDetailsData()
         }
         binding.lytToolbar.tvTitle.text = getString(R.string.text_readiness)
         binding.lytToolbar.view1.visible()
@@ -430,11 +433,12 @@ class OreoReadinessFragment :
         binding.lytToolbar.view1.setOnClickListener {
 
             mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_DATE_RANGE_CLICK)
+
             resultLauncher.launch(
                 HistoryCalendarActivity.getStartIntent(
                     requireContext(),
-                    mViewModel.readinessHistoryResponse.value?.lastOrNull()?.date
-                        ?: mainViewModel.selectedMasterDate,
+                    /*viewModel.sleepHistoryResponse.value?.lastOrNull()?.date
+                        ?:*/ mainViewModel.mEndDate,
                     "ring"
                 )
             )
@@ -501,7 +505,7 @@ class OreoReadinessFragment :
     }
 
     override fun subscribeObservers() {
-        mViewModel.readinessHistoryResponse.observe(this) {
+        mainViewModel.readinessHistoryResponse.observe(this) {
             binding.svMain.visible()
             binding.groupHeader.visible()
             binding.lytToolbar.root.visible()
@@ -519,7 +523,7 @@ class OreoReadinessFragment :
                 }
                 if (index != null) {
 
-                    moveToPos =  15 + (15-index-1)
+                    moveToPos = 15 + (it.size - index - 1)
                     LOGS.d("moveToPosition date ${mainViewModel.selectedDate}")
                     //binding.rvTopGraph.moveToPosition(15 + (15-index-1))
                 }
@@ -535,15 +539,14 @@ class OreoReadinessFragment :
             setScrollDate()
             mViewModel.getContributorInfo()
 
-            val returnDate = mViewModel.updateSelectedDate(mainViewModel.selectedDate)
+            val returnDate = mainViewModel.updateSelectedDateReadiness(mainViewModel.selectedDate)
             if (returnDate != null) {
                 mainViewModel.selectedDate = returnDate
             }
 
 
-
         }
-        mViewModel.dayReadinessData.observe(this) {
+        mainViewModel.dayReadinessData.observe(this) {
             updateUiRead(it)
         }
 
@@ -806,7 +809,6 @@ class OreoReadinessFragment :
     }
 
 
-
     private fun heartRateDefaultView() {
         binding.lytHeartRate.lytSubtitleValue1.tvUnit.gone()
         binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
@@ -873,9 +875,13 @@ class OreoReadinessFragment :
         //mSharedViewModel.selectedDate = chartModel.date!!
         LOGS.w("moveToPosition onPositionSelected ${chartModel.date}")
         mainViewModel.selectedDate = chartModel.date!!
-        val returnDate = mViewModel.updateSelectedDate(mainViewModel.selectedDate)
+        val returnDate = mainViewModel.updateSelectedDateReadiness(mainViewModel.selectedDate)
         if (returnDate != null) {
             mainViewModel.selectedDate = returnDate
+        }
+
+        if (mainViewModel.shouldLoadMoreData()) {
+            context.showShortToast("Load More Data")
         }
 
     }

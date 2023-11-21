@@ -101,7 +101,7 @@ class OreoActivityFragment :
 
 
         if (mViewModel.ringDataStore.isActivityWalkAroundShown()) {
-            mViewModel.getActivityDetailsData(mainViewModel.selectedMasterDate)
+            mViewModel.getActivityDetailsData()
         } else {
             showWalkAround(true)
         }
@@ -590,14 +590,16 @@ class OreoActivityFragment :
             if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
 
-                val selectedDate = data?.getStringExtra("selected_date")
-                mainViewModel.selectedMasterDate = selectedDate
+                val selectedDate = data?.getStringExtra("selected_date")?: return@registerForActivityResult
+
+                mainViewModel.mEndDate = selectedDate
+                mainViewModel.mStartDate = mainViewModel.getDatesMinus(selectedDate)
                 mainViewModel.selectedDate = selectedDate
-                LOGS.d("Selected Date  :${selectedDate}")
-                mViewModel.getActivityDetailsData(selectedDate)
-                /*if (selectedDate != null) {
-                    mViewModel.updateSelectedDate()
-                }*/
+
+                LOGS.d("moveToPosition Selected Date  :${selectedDate}")
+
+                mainViewModel.getUserHealthData(mainViewModel.mStartDate, mainViewModel.mEndDate)
+
 
             }
         }
@@ -658,8 +660,8 @@ class OreoActivityFragment :
             resultLauncher.launch(
                 HistoryCalendarActivity.getStartIntent(
                     requireContext(),
-                    mViewModel.activityHistoryResponse.value?.lastOrNull()?.date
-                        ?: mainViewModel.selectedMasterDate,
+                    /*viewModel.sleepHistoryResponse.value?.lastOrNull()?.date
+                        ?:*/ mainViewModel.mEndDate,
                     "ring"
                 )
             )
@@ -735,7 +737,7 @@ class OreoActivityFragment :
 
     override fun subscribeObservers() {
 
-        mViewModel.activityHistoryResponse.observe(this) {
+        mainViewModel.activityHistoryResponse.observe(this) {
             binding.svMain.visible()
             binding.groupHeader.visible()
             //binding.lytToolbar.root.visible()
@@ -753,7 +755,7 @@ class OreoActivityFragment :
                 }
                 if (index != null) {
 
-                    moveToPos = 15 + (15 - index - 1)
+                    moveToPos = 15 + (it.size - index - 1)
                     LOGS.d("moveToPosition date ${mainViewModel.selectedDate}")
                     //binding.rvTopGraph.moveToPosition(15 + (15-index-1))
                 }
@@ -764,13 +766,13 @@ class OreoActivityFragment :
             )
             mViewModel.getContributorInfo()
 
-            val returnDate = mViewModel.updateSelectedDate(mainViewModel.selectedDate)
+            val returnDate = mainViewModel.updateSelectedDateActivity(mainViewModel.selectedDate)
             if (returnDate != null) {
                 mainViewModel.selectedDate = returnDate
             }
         }
 
-        mViewModel.dayActivityData.observe(this) {
+        mainViewModel.dayActivityData.observe(this) {
 
             updateUi(it)
         }
@@ -803,9 +805,13 @@ class OreoActivityFragment :
         //mSharedViewModel.selectedDate = chartModel.date!!
         LOGS.w("moveToPosition onPositionSelected ${chartModel.date}")
         mainViewModel.selectedDate = chartModel.date!!
-        val returnDate = mViewModel.updateSelectedDate(mainViewModel.selectedDate)
+        val returnDate = mainViewModel.updateSelectedDateActivity(mainViewModel.selectedDate)
         if (returnDate != null) {
             mainViewModel.selectedDate = returnDate
+        }
+
+        if (mainViewModel.shouldLoadMoreData()) {
+            context.showShortToast("Load More Data")
         }
     }
 

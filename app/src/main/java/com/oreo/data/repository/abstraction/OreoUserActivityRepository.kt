@@ -19,11 +19,14 @@ interface OreoUserActivityRepository {
     suspend fun getRingCareData(): Flow<Resource<BaseApiResponse<RingCareResponse>>>
     suspend fun getWelcomeRingData(): Flow<Resource<BaseApiResponse<RingWelcome>>>
 
-    suspend fun getDashboardData(forceRefresh:Boolean): Flow<Resource<BaseApiResponse<OreoDashboardResponseModel>>>
+    suspend fun getDashboardData(forceRefresh: Boolean): Flow<Resource<BaseApiResponse<OreoDashboardResponseModel>>>
     suspend fun getLearnData(): Flow<Resource<BaseApiResponse<List<LearnModel>>>>
 
     suspend fun getSleepHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoSleepModel>>>>
-    suspend fun getUserHealthData(date: String): Flow<Resource<BaseApiResponse<ServerUserHealthData>>>
+    suspend fun getUserHealthData(
+        startDate: String?=null,
+        endDate: String?=null
+    ): Flow<Resource<BaseApiResponse<ServerUserHealthResponse>>>
 
     suspend fun getActivityHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoActivityModel>>>>
     suspend fun getReadinessHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoReadinessModel>>>>
@@ -75,5 +78,5 @@ interface OreoUserActivityRepository {
 
     suspend fun getContributorDetailsInfo(contributorType: String): Flow<Resource<BaseApiResponse<OContributorResponseModal>>>
     suspend fun getHSCategories(): Flow<Resource<BaseApiResponse<List<OHSModel>>>>
-    suspend fun getHSQAnswer(quesId:String): Flow<Resource<BaseApiResponse<List<OHSQuestionariesResponseModel>>>>
+    suspend fun getHSQAnswer(quesId: String): Flow<Resource<BaseApiResponse<List<OHSQuestionariesResponseModel>>>>
 }

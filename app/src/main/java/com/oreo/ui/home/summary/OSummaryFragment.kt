@@ -147,7 +147,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
             }
         }
-        binding.layoutRefresh.animationView.setAnimation(R.raw.loading_swipe_anim)
+       /* binding.layoutRefresh.animationView.setAnimation(R.raw.loading_swipe_anim)
         binding.swipeToRefresh.setOnRefreshListener(object : RefreshingListenerAdapter() {
             override fun onRefreshing() {
                 super.onRefreshing()
@@ -182,7 +182,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
                 syncData()
             }
-        })
+        })*/
 
         binding.lytHeader.profileView1.setOnLongClickListener {
             if (BuildConfig.DEBUG) {
@@ -221,8 +221,8 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     }
 
     fun resetSwipeLoadingAnim() {
-        binding.layoutRefresh.textSyncingData.gone()
-        binding.swipeToRefresh.refreshComplete()
+       /* binding.layoutRefresh.textSyncingData.gone()
+        binding.swipeToRefresh.refreshComplete()*/
     }
 
     private fun setAdapter() {

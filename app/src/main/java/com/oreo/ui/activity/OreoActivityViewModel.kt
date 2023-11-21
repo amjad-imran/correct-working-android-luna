@@ -34,11 +34,7 @@ class OreoActivityViewModel @Inject constructor(
     val sessionManager: SessionManager
 ) : BaseViewModel() {
 
-    private val _activityHistoryResponse = MutableLiveData<List<OreoActivityModel>>()
-    val activityHistoryResponse: LiveData<List<OreoActivityModel>> = _activityHistoryResponse
 
-    private val _dayActivityData = MutableLiveData<OreoActivityModel>()
-    val dayActivityData: LiveData<OreoActivityModel> = _dayActivityData
 
 
     private val _contributorInfo = MutableLiveData<OContributorResponseModal>()
@@ -96,28 +92,9 @@ class OreoActivityViewModel @Inject constructor(
         return datesArray
     }
 
-    fun updateSelectedDate(selectedDate: String?): String? {
-        var returnSelectedDate: String? = null
-
-        val dayData = _activityHistoryResponse.value?.firstOrNull() {
-            it.date.equals(selectedDate, false)
-        }
-        if (dayData != null) {
-            _dayActivityData.postValue(dayData)
-        } else {
-            _activityHistoryResponse.value?.lastOrNull()?.let { data ->
-                LOGS.w("moveToPosition selected Date new $selectedDate")
-                returnSelectedDate = data.date
-                LOGS.w("moveToPosition selected Date new set $selectedDate")
-                _dayActivityData.postValue(data)
-            }
-        }
-        return returnSelectedDate
-    }
 
     var dateList = ArrayList<String>()
     fun getPrefixAndSuffixList(dataList: List<OreoActivityModel>): Triple<ArrayList<ChartModel>, ArrayList<ChartModel>, ArrayList<ChartModel>> {
-        dataList.reversed()
         val list = java.util.ArrayList<ChartModel>()
         dataList.forEach {
             val chartModel = ChartModel()
@@ -191,8 +168,10 @@ class OreoActivityViewModel @Inject constructor(
     }
 
 
-    fun getActivityDetailsData(selectedMasterDate: String? = null) {
-        viewModelScope.launch {
+    fun getActivityDetailsData() {
+        return
+
+        /*viewModelScope.launch {
             userActivityRepository.getActivityHistory(
                 selectedMasterDate ?: DateFormats.getCurrentDateOreoFormat()
             ).collect { resource ->
@@ -231,7 +210,7 @@ class OreoActivityViewModel @Inject constructor(
                 }
             }
 
-        }
+        }*/
 
 
     }
