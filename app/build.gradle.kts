@@ -81,11 +81,11 @@ android {
             buildConfigField(
                 "String",
                 "GOOGLE_CLIENT_ID",
-                "\"692776363643-ekmmtuuqdjs94hg9rs243rsnjfn08j5r.apps.googleusercontent.com\""
+                "\"159998142649-ms5bv5n4lo887vjsoic66td3gc2bb52b.apps.googleusercontent.com\""
             )
 //            manifestPlaceholders["cleverTapToken"] = "322-4c6"
 //            manifestPlaceholders["cleverTapId"] = "694-RRK-595Z"
-            manifestPlaceholders["google_client_id"] = "AIzaSyAqpPkqIlKRjEceF-oUy3zH4xD6dl4ISZQ"
+            manifestPlaceholders["google_client_id"] = "AIzaSyD-zRQCQPly-EA4jawx6YZRLMprV4bwf9w"
 
             signingConfig = signingConfigs.getByName("release")
 //            isDebuggable = true
@@ -106,11 +106,11 @@ android {
             buildConfigField(
                 "String",
                 "GOOGLE_CLIENT_ID",
-                "\"692776363643-ekmmtuuqdjs94hg9rs243rsnjfn08j5r.apps.googleusercontent.com\""
+                "\"159998142649-ms5bv5n4lo887vjsoic66td3gc2bb52b.apps.googleusercontent.com\""
             )
 //            manifestPlaceholders["cleverTapToken"] = "322-4c690"
 //            manifestPlaceholders["cleverTapId"] = "694-RRK-595Z07087"
-            manifestPlaceholders["google_client_id"] = "AIzaSyAqpPkqIlKRjEceF-oUy3zH4xD6dl4ISZQ"
+            manifestPlaceholders["google_client_id"] = "AIzaSyD-zRQCQPly-EA4jawx6YZRLMprV4bwf9w"
 
             signingConfig = signingConfigs.getByName("debug")
 
@@ -270,6 +270,9 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.intuit.sdp:sdp-android:1.1.0")
     implementation("androidx.test:core-ktx:1.4.0")
+
+    implementation("com.google.android.gms:play-services-fitness:21.1.0")
+
 
     kapt(Hilt.compiler)
     kapt(Hilt.hiltCompiler)

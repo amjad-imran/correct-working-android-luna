@@ -4,8 +4,8 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import com.noisefit.data.googleFit.GoogleFitDataObservers
 import com.noisefit.data.local.AppStaticData
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.AuthenticationRepository
@@ -61,7 +61,8 @@ constructor(
     val localDataStore: DataStoredInterface,
     val userRepository: UserRepository,
     val screenUtils: ScreenUtils,
-    val authenticationRepository: AuthenticationRepository
+    val authenticationRepository: AuthenticationRepository,
+    val googleFitDataObservers: GoogleFitDataObservers
 ) :
     BaseViewModel() {
 

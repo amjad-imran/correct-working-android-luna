@@ -6,7 +6,7 @@ import com.noisefit_commans.models.LocationDataModel
 import com.noisefit_commans.models.Units
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
-import java.util.*
+import java.util.Locale
 import kotlin.math.roundToInt
 
 
@@ -296,5 +296,13 @@ object DistanceUtil {
 
     private fun kmToMeters(km: Double): Long {
         return (km * 1000.0).toLong()
+    }
+
+    fun centimeterToMeter(value: Float): Float {
+        return (value / 100)
+    }
+
+    fun meterToCentimeter(value: Float): Float {
+        return (value * 100)
     }
 }

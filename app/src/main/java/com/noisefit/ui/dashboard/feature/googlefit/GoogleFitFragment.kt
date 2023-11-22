@@ -1,32 +1,47 @@
 package com.noisefit.ui.dashboard.feature.googlefit
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
+import com.google.android.gms.fitness.data.DataSource
+import com.google.android.gms.fitness.data.DataType
+import com.noisefit.data.googleFit.GoogleFitDataObservers
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentGoogleFitBinding
 import com.noisefit.session.SessionManager
-import com.noisefit.ui.common.*
 import com.noisefit.ui.web.WebViewActivity
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
-import com.noisefit_commans.ui.*
+import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.AppConstants
 import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+private const val TAG = "GoogleFitFragment"
 private const val GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 1980
 
 @AndroidEntryPoint
 class GoogleFitFragment :
     BaseFragment<FragmentGoogleFitBinding>(FragmentGoogleFitBinding::inflate) {
+
+    @Inject
+    lateinit var googleFitDataObservers: GoogleFitDataObservers
 
     @Inject
     lateinit var localDataStore: DataStoredInterface
@@ -48,6 +63,25 @@ class GoogleFitFragment :
         super.onViewCreated(view, savedInstanceState)
         setGoogleFitSwitchState(localDataStore.isEnableGoogleFit())
 
+        requestPermission()
+
+    }
+
+    private fun requestPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACTIVITY_RECOGNITION
+                )
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(Manifest.permission.ACTIVITY_RECOGNITION),
+                    2233
+                )
+            }
+        }
     }
 
     override fun initListener() {
@@ -102,6 +136,15 @@ class GoogleFitFragment :
 
 
         binding.lytFeatureTile.llSwitch.invisible()
+
+//        binding.bRequestData.setOnClickListener {
+//            readGoals()
+////            readWorkoutData()
+//            readWorkoutFromSession()
+//            insertWeightHeight(requireContext(), DataType.TYPE_WEIGHT, 170f);//weight in kg
+//            //insertWeightHeight(requireContext(), DataType.TYPE_HEIGHT, 1.75f);//height in meter
+//            getHeightWeight()
+//        }
     }
 
 //    private val activityRecognitionPermissionResult = registerForActivityResult(
@@ -117,6 +160,17 @@ class GoogleFitFragment :
 //            context.showShortToast("Permission Required")
 //        }
 //    }
+
+
+    private fun provideDataSource(streamName: String, dataType: DataType): DataSource {
+        return DataSource.Builder()
+            .setAppPackageName(requireContext().packageName)
+            .setDataType(dataType)
+            .setStreamName(" - $streamName")
+            .setType(DataSource.TYPE_RAW)
+            .build()
+    }
+
 
     private fun logOutFit() {
 
@@ -135,18 +189,22 @@ class GoogleFitFragment :
                     localDataStore.setGoogleFitStatus(false)
                     GoogleSignIn.getClient(context, googleSignInOptions).signOut()
 
-                    sessionManager.logInsiderAppEvent(InsiderAppEvents.GOOGLE_FIT_CLICK,HashMap<String, Any>().apply {
-                        this["is_enabled"] = false
-                    })
+                    sessionManager.logInsiderAppEvent(
+                        InsiderAppEvents.GOOGLE_FIT_CLICK,
+                        HashMap<String, Any>().apply {
+                            this["is_enabled"] = false
+                        })
                 }
                 .addOnFailureListener { e ->
                     uiController.onDisplayError(getString(R.string.text_google_fit_disable))
                     localDataStore.setGoogleFitStatus(false)
                     setGoogleFitSwitchState(false)
                     GoogleSignIn.getClient(context, googleSignInOptions).signOut()
-                    sessionManager.logInsiderAppEvent(InsiderAppEvents.GOOGLE_FIT_CLICK,HashMap<String, Any>().apply {
-                        this["is_enabled"] = false
-                    })
+                    sessionManager.logInsiderAppEvent(
+                        InsiderAppEvents.GOOGLE_FIT_CLICK,
+                        HashMap<String, Any>().apply {
+                            this["is_enabled"] = false
+                        })
 
                     e.printStackTrace()
                 }
@@ -187,9 +245,7 @@ class GoogleFitFragment :
 
     }
 
-    private fun isSignedIn(): Boolean {
-        return GoogleSignIn.getLastSignedInAccount(requireActivity()) != null && oAuthPermissionsApproved()
-    }
+
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -199,15 +255,19 @@ class GoogleFitFragment :
                 try {
                     localDataStore.setGoogleFitStatus(true)
                     setGoogleFitSwitchState(true)
-                    sessionManager.logInsiderAppEvent(InsiderAppEvents.GOOGLE_FIT_CLICK,HashMap<String,Any>().apply{
-                        this["is_enabled"]=true
-                    })
+                    googleFitDataObservers.saveUserWeightAndHeight()
+                    sessionManager.logInsiderAppEvent(
+                        InsiderAppEvents.GOOGLE_FIT_CLICK,
+                        HashMap<String, Any>().apply {
+                            this["is_enabled"] = true
+                        })
 
                     uiController.onDisplayError(getString(R.string.text_google_fit_enable))
                 } catch (e: Exception) {
                     //Null pointers on view destroyed
                 }
             }
+
             else -> {
                 try {
                     oAuthErrorMsg(requestCode, resultCode)
@@ -232,6 +292,62 @@ class GoogleFitFragment :
         """.trimIndent()
         LOGS.e(message)
     }
+
+
+//    private val goalsReadRequest: GoalsReadRequest by lazy {
+//        GoalsReadRequest.Builder()
+//            .addDataType(DataType.TYPE_HEART_POINTS)
+//            .addDataType(DataType.TYPE_STEP_COUNT_DELTA)
+//            .addDataType(DataType.TYPE_DISTANCE_DELTA)
+//
+//            .build()
+//    }
+
+//    private fun readGoals() {
+//        Fitness.getGoalsClient(requireContext(), googleSignInAccount)
+//            .readCurrentGoals(goalsReadRequest)
+//            .addOnSuccessListener { goals ->
+//                // There should be at most one heart points goal currently.
+//                goals.forEach {
+//                    // What is the value of the goal
+//                    val goalValue = it.metricObjective
+//                    LOGS.i(TAG, "Goal value: $goalValue")
+//
+//                    // How is the goal measured?
+//                    LOGS.i(TAG, "Objective: ${it.objective}")
+//
+//                    LOGS.i(TAG, "Objective: ${it.objectiveType}")
+//
+//                    // How often does the goal repeat?
+//                    LOGS.i(TAG, "Recurrence: ${it.recurrence}")
+//                }
+//            }
+//    }
+
+//    private val Goal.objective: String
+//        get() = when (objectiveType) {
+//            OBJECTIVE_TYPE_DURATION ->
+//                "Duration (s): ${durationObjective.getDuration(TimeUnit.SECONDS)}"
+//
+//            OBJECTIVE_TYPE_FREQUENCY ->
+//                "Frequency : ${frequencyObjective.frequency}"
+//
+//            OBJECTIVE_TYPE_METRIC ->
+//                "Metric : ${metricObjective.dataTypeName} - ${metricObjective.value}"
+//
+//            else -> "Unknown objective"
+//        }
+
+//    private val Goal.recurrenceDetails: String
+//        get() = recurrence?.let {
+//            val period = when (it.unit) {
+//                Goal.Recurrence.UNIT_DAY -> "days"
+//                Goal.Recurrence.UNIT_WEEK -> "weeks"
+//                Goal.Recurrence.UNIT_MONTH -> "months"
+//                else -> "Unknown"
+//            }
+//            "Every ${recurrence!!.count} $period"
+//        } ?: "Does not repeat"
 
 
     override fun subscribeObservers() {

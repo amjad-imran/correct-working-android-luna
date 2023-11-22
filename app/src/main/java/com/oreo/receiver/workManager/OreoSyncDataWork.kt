@@ -743,9 +743,9 @@ constructor(
             getSyncData(
                 success = {
 //                    sessionManager.logAppEvent(FunnelEvents.SyncEvents.Sync_Success.name, eventProperty)
-                    if (localDataStore.isEnableGoogleFit()) {//TODO handle google fit sync
+                    if (localDataStore.isEnableGoogleFit()) {
                         syncDataScope.launch {
-                            //ApplicationUtils.startGoogleFitSyncScheduler(context)
+                            ApplicationUtils.startGoogleFitSyncScheduler(context)
                         }
                     }
 
