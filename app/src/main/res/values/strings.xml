@@ -579,13 +579,13 @@
     <string name="text_to_share_your_issue_along_with_screenshots_and_screen_recordings_click_here">If your issue is still not resolved,please share your issue along with screenshots, Click Here</string>
     <string name="text_our_team_will_contact_you_shortly">Our team will contact you shortly.</string>
     <string name="text_was_this_article_helpful">Was this article helpful?</string>
-    <string name="text_write_your_suggestions_here">Write your suggestions here...</string>
+    <string name="text_write_your_suggestions_here">Write your suggestions here…</string>
     <string name="text_connect">Connect</string>
     <string name="text_disconnect">Disconnect</string>
     <string name="text_connection">Connection</string>
     <string name="text_tap_connect_to_log_into_your_google_fit_account_and_authorize_noisefit_access">Tap Connect to log into your Google Fit account and authorize Luna Ring access.</string>
     <string name="text_sync_data">Sync Data</string>
-    <string name="text_once_your_noisefit_and_google_fit_accounts_are_connected_your_workout_and_health_data_including_steps_distance_heart_rate_sleep_will_be_automatically_synced_to_google_fit">Once your Luna Ring and Google fit accounts are connected, your workout and health data (including steps, heart rate, sleep, location) will be automatically synced to Google Fit.</string>
+    <string name="text_once_your_noisefit_and_google_fit_accounts_are_connected_your_workout_and_health_data_including_steps_distance_heart_rate_sleep_will_be_automatically_synced_to_google_fit">Once your Luna Ring and Google fit accounts are connected, your workout and health data (including steps, heart rate, sleep, location, workouts) will be automatically synced to Google Fit.Based on your preference, allow Luna ring app to import and export data from GoogleFit and incorporate it into your activity and readiness scores.</string>
     <string name="text_the_google_fit_app_tracks_your_movements_lets_you_set_goals_and_keeps_track_of_your_progress_to_coach_you_towards_a_healthier_life">The Google Fit app tracks your movements, lets you set goals and keeps track of your progress to coach you towards a healthier life.</string>
     <string name="text_how_satisfied_are_you_with_the_noisefit">How satisfied are you with the Luna Ring?</string>
     <string name="text_raise_complaint">Raise a Complaint</string>

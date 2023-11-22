@@ -10,22 +10,37 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessActivities
 import com.google.android.gms.fitness.data.*
+import com.google.android.gms.fitness.request.DataReadRequest
 import com.google.android.gms.fitness.request.SessionInsertRequest
-import com.google.gson.Gson
+import com.google.android.gms.fitness.request.SessionReadRequest
+import com.google.android.gms.fitness.result.DataReadResponse
+import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.models.*
+import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.DistanceUtil
 import com.noisefit_commans.utils.LOGS
+import kotlinx.coroutines.launch
+import java.util.Calendar
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-private const val NOISE_ACTIVITY = "noise_activity"
-private const val SLEEP_SESSION_NAME = "Noise - Sleep Data"
+private const val LUNA_ACTIVITY = "luna_activity"
+private const val SLEEP_SESSION_NAME = "Luna - Sleep Data"
+
+private const val TAG = "GoogleFitDataObservers"
 
 class GoogleFitDataObservers
-@Inject constructor(
+@Inject
+constructor(
     private val context: Context,
-    private val googleSignInAccount: GoogleSignInAccount
+    private val googleSignInAccount: GoogleSignInAccount,
+    private val localDataStore: DataStoredInterface
 ) {
+
+    private var height = 0f
+    private var weight = 0f
 
     fun hasPermission(context: Context): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -70,7 +85,7 @@ class GoogleFitDataObservers
         val session = Session.Builder()
             .setName(SLEEP_SESSION_NAME)
             .setIdentifier(context.packageName)
-            .setDescription("$NOISE_ACTIVITY sleep data")
+            .setDescription("$LUNA_ACTIVITY sleep data")
             .setStartTime(sleepData.startTime, TimeUnit.MILLISECONDS)
             .setEndTime(sleepData.endTime, TimeUnit.MILLISECONDS)
             .setActivity(FitnessActivities.SLEEP)
@@ -171,7 +186,7 @@ class GoogleFitDataObservers
         return DataSource.Builder()
             .setAppPackageName(context.packageName)
             .setDataType(dataType)
-            .setStreamName("$NOISE_ACTIVITY - $streamName")
+            .setStreamName("$LUNA_ACTIVITY - $streamName")
             .setType(DataSource.TYPE_RAW)
             .build()
     }
@@ -502,6 +517,282 @@ class GoogleFitDataObservers
 
         }
 
+    }
+
+
+    fun getHeightWeight(
+        success: (data: Pair<Float, Float>) -> Unit,
+        failed: () -> Unit
+    ) {
+        val dataReadRequest = DataReadRequest.Builder()
+            .read(DataType.TYPE_WEIGHT)
+            .read(DataType.TYPE_HEIGHT)
+            .setTimeRange(1, Calendar.getInstance().timeInMillis, TimeUnit.MILLISECONDS)
+            .setLimit(1)
+            .build()
+
+        Fitness.getHistoryClient(
+            context,
+            googleSignInAccount
+        )
+            .readData(dataReadRequest)
+            .addOnSuccessListener { dataReadResponse: DataReadResponse? ->
+                if (dataReadResponse == null) return@addOnSuccessListener
+                printHeightWeightData(dataReadResponse)
+                success.invoke(Pair(DistanceUtil.meterToCentimeter(height),weight))
+            }
+            .addOnFailureListener { e: Exception? ->
+                failed.invoke()
+                e?.printStackTrace()
+            }
+    }
+
+
+    private fun printHeightWeightData(dataReadResult: DataReadResponse) {
+
+        if (dataReadResult.buckets.isNotEmpty()) {
+            for (bucket in dataReadResult.buckets) {
+                bucket.dataSets.forEach { dumpWeightHeightDataSet(it) }
+            }
+        } else if (dataReadResult.dataSets.isNotEmpty()) {
+            dataReadResult.dataSets.forEach { dumpWeightHeightDataSet(it) }
+        }
+
+    }
+
+
+    private fun dumpWeightHeightDataSet(dataSet: DataSet) {
+
+        for (point in dataSet.dataPoints) {
+            when (point.dataType) {
+
+                DataType.TYPE_HEIGHT -> {
+                    height = point.getValue(Field.FIELD_HEIGHT).asFloat()
+                    LOGS.d(
+                        TAG, "height " + point.getValue(
+                            Field.FIELD_HEIGHT
+                        ).asFloat()
+                    )
+                }
+
+                DataType.TYPE_WEIGHT -> {
+                    weight = point.getValue(Field.FIELD_WEIGHT).asFloat()
+                    LOGS.d(
+                        TAG, "weight " + point.getValue(
+                            Field.FIELD_WEIGHT
+                        ).asFloat()
+                    )
+                }
+
+            }
+
+        }
+
+    }
+
+
+
+    fun saveUserWeightAndHeight() {
+        if (!localDataStore.isEnableGoogleFit()) {
+            LOGS.d("$TAG please enable google fit")
+            return
+        }
+        val user = localDataStore.getUser()
+        var height = user?.userInfo?.height?.toFloat() ?: 0f
+        val weight = user?.userInfo?.weight ?: 0
+
+        if (height > 0) {
+            height = DistanceUtil.centimeterToMeter(height)
+        }
+        LOGS.d("$TAG $height -- $weight")
+
+        tryCatch {
+            if (weight > 0) {
+                insertUserData(
+                    context,
+                    "weight",
+                    DataType.TYPE_WEIGHT,
+                    Field.FIELD_WEIGHT,
+                    weight.toFloat()
+                )
+            }
+            if (height > 0) {
+                insertUserData(
+                    context,
+                    "height",
+                    DataType.TYPE_HEIGHT,
+                    Field.FIELD_HEIGHT,
+                    height
+                )
+
+            }
+        }
+
+
+    }
+
+    private fun insertUserData(
+        context: Context,
+        streamName: String,
+        dataType: DataType,
+        fieldType: Field,
+        value: Float
+    ) {
+
+        val dataSource = provideDataSource(streamName, dataType)
+        val startTime = Calendar.getInstance().timeInMillis
+        val dataPoint =
+            DataPoint.builder(dataSource)
+                .setField(fieldType, value)
+                .setTimeInterval(startTime, startTime, TimeUnit.MILLISECONDS)
+                .build()
+
+        val dataSet = DataSet.builder(dataSource)
+            .add(dataPoint)
+            .build()
+
+
+        Fitness.getHistoryClient(
+            context,
+            googleSignInAccount
+        ).insertData(dataSet).addOnCompleteListener {
+            if (it.isSuccessful) {
+
+                LOGS.i(TAG, "Data insert was successful!")
+                //emit(GoogleFitResponse(isSuccess))
+
+            } else {
+                LOGS.d("$TAG weight error ${it.exception?.message}")
+                it.exception
+            }
+        }
+
+
+    }
+
+
+     fun getWorkoutFromSession(
+        success: (data: ArrayList<WorkoutGoogleFit>) -> Unit,
+        failed: () -> Unit
+    ) {
+         val calendar = Calendar.getInstance()
+         val endTime = calendar.timeInMillis
+        val startTime = DateFormats.startOfDayTimeStamp()
+//         calendar.add(Calendar.WEEK_OF_YEAR, -1) // Set the start time to one week ago
+//         val startTime = calendar.timeInMillis
+         LOGS.d("$TAG $startTime -- $endTime")
+         val readRequest = SessionReadRequest.Builder()
+             .setTimeInterval(startTime, endTime, TimeUnit.MILLISECONDS)
+             .read(DataType.TYPE_WORKOUT_EXERCISE)
+             .read(DataType.TYPE_STEP_COUNT_DELTA)
+             .read(DataType.TYPE_DISTANCE_DELTA)
+             .read(DataType.TYPE_CALORIES_EXPENDED)
+             .read(DataType.TYPE_MOVE_MINUTES)
+             .read(DataType.AGGREGATE_MOVE_MINUTES)
+             .read(DataType.TYPE_HEART_RATE_BPM)
+            .read(DataType.TYPE_SPEED)
+            .read(DataType.TYPE_HEART_POINTS)
+            .readSessionsFromAllApps()
+            .build()
+
+        Fitness.getSessionsClient(
+            context,
+            googleSignInAccount
+        )
+            .readSession(readRequest)
+            .addOnSuccessListener { response ->
+
+                val workoutList = ArrayList<WorkoutGoogleFit>()
+                LOGS.i(TAG, "GoogleFitSyncWork Session size: ${response.sessions.size}")
+                for (session in response.sessions) {
+                    if(context.packageName == session.appPackageName){
+                        continue
+                    }
+                    val workoutGoogleFit = WorkoutGoogleFit()
+                    workoutGoogleFit.name = session.name
+                    workoutGoogleFit.identifier = session.identifier
+                    workoutGoogleFit.duration = session.getActiveTime(TimeUnit.SECONDS)
+                    workoutGoogleFit.startTime = session.getStartTime(TimeUnit.SECONDS)
+                    workoutGoogleFit.endTime = session.getEndTime(TimeUnit.SECONDS)
+                    workoutGoogleFit.appPackageName = session.appPackageName
+                    workoutGoogleFit.activity = session.activity
+
+                    LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.name}")
+                    LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.identifier}")
+                    LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.getActiveTime(TimeUnit.MILLISECONDS)}")
+                    LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.getStartTime(TimeUnit.MILLISECONDS)}")
+                    LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.getEndTime(TimeUnit.MILLISECONDS)}")
+                    LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.appPackageName}")
+                    LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.activity}")
+                    val dataSets = response.getDataSet(session)
+                    for (dataSet in dataSets) {
+                        for (point in dataSet.dataPoints) {
+                            when (point.dataType) {
+                                DataType.AGGREGATE_DISTANCE_DELTA -> {
+                                    workoutGoogleFit.distance =
+                                        point.getValue(Field.FIELD_DISTANCE).asFloat()
+                                    LOGS.d(
+                                        TAG,
+                                        "distance " + point.getValue(Field.FIELD_DISTANCE).asFloat()
+                                    )
+                                }
+
+                                DataType.TYPE_HEART_RATE_BPM -> LOGS.d(
+                                    TAG, "heart " + point.getValue(
+                                        Field.FIELD_BPM
+                                    ).asFloat()
+                                )
+
+
+                                DataType.TYPE_SPEED -> {
+//                                    LOGS.d(
+//                                        TAG, "speed " + point
+//                                    )
+                                }
+                                DataType.TYPE_HEART_POINTS -> {
+//                                    LOGS.d(
+//                                        TAG, "hr_point " + point
+//                                    )
+                                }
+
+                                DataType.TYPE_STEP_COUNT_DELTA -> {
+                                    workoutGoogleFit.steps =
+                                        point.getValue(Field.FIELD_STEPS).asInt()
+                                    LOGS.d(
+                                        TAG, "steps " + point.getValue(
+                                            Field.FIELD_STEPS
+                                        ).asInt()
+                                    )
+                                }
+
+                                DataType.TYPE_CALORIES_EXPENDED -> {
+                                    workoutGoogleFit.calories =
+                                        point.getValue(Field.FIELD_CALORIES).asFloat()
+                                    LOGS.d(
+                                        TAG,
+                                        "calories " + point.getValue(Field.FIELD_CALORIES).asFloat()
+                                    )
+                                }
+
+
+                                DataType.AGGREGATE_HEART_POINTS -> LOGS.d(
+                                    TAG,
+                                    "heartPoint " + "[${point}]   "
+                                )
+
+                            }
+
+                        }
+                    }
+                    workoutList.add(workoutGoogleFit)
+                }
+
+                success.invoke(workoutList)
+            }
+            .addOnFailureListener { e ->
+                failed.invoke()
+                LOGS.d(TAG, "Failed to read session ${e.message}")
+            }
     }
 
 

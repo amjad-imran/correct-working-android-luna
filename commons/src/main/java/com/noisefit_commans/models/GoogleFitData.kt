@@ -38,10 +38,20 @@ data class StepDataGoogleFit(
     val totalSteps: Int
 )
 
-data class SyncGoogleFitData(
-    var stepDataGoogleFit: StepDataGoogleFit? = null,
-    var heartRateList: List<HeartRate>? = null,
-    var sleepData: List<SleepData>? = null
+
+data class WorkoutGoogleFit(
+    var name: String? = null,
+    var identifier: String? = null,
+    var appPackageName: String? = null,
+    var activity: String? = null,
+    var startTime: Long? = null,
+    var endTime: Long? = null,
+    var distance: Float? = null,
+    var duration: Long? = null,
+    var calories: Float? = null,
+    var heartRate: Int? = null,
+    var steps: Int? = null,
+    var type: String? = null
 )
 
 //{"type":"HEART RATE","count":62,"min_count":0,"max_count":0,"unit":"bpm","time":"2021-05-17T05:31:06.718Z","resting_hr":0}

@@ -449,6 +449,10 @@
         android:id="@+id/aboutAutoWorkoutBottomSheet"
         android:name="com.oreo.ui.home.summary.AboutAutoWorkoutBottomSheet"
         android:label="AboutAutoWorkoutBottomSheet" />
+    <fragment
+        android:id="@+id/googleFitTestFragment"
+        android:name="com.oreo.ui.GoogleFitTestFragment"
+        android:label="fragment_googl_fit_test"/>
     <dialog
         android:id="@+id/myDeviceIntroBottomSheet"
         android:name="com.oreo.ui.info.BottomSheetMyDeviceIntro"
