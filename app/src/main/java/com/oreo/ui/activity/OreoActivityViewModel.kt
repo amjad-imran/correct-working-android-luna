@@ -442,7 +442,7 @@ class OreoActivityViewModel @Inject constructor(
         val color: Int = if (status.equals("warning", true)) {
             R.color.oreo_contributor_warning
         } else if (status.equals("good", true)) {
-            R.color.distance_arc
+            R.color.white_12_72
         } else if (status.equals("optimal", true)) {
             R.color.steps_arc
         } else {
