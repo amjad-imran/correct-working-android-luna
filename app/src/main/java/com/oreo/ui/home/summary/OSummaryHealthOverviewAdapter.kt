@@ -7,15 +7,32 @@ import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.hookedonplay.decoviewlib.charts.SeriesItem
 import com.hookedonplay.decoviewlib.events.DecoEvent
 import com.noisefit.luna.R
-import com.noisefit.luna.databinding.*
+import com.noisefit.luna.databinding.ListActivityBurnCardItem2Binding
+import com.noisefit.luna.databinding.ListActivityBurnCardItemBinding
+import com.noisefit.luna.databinding.ListActivityMinimalItemBinding
+import com.noisefit.luna.databinding.ListOWAlertCardItemBinding
+import com.noisefit.luna.databinding.ListReadinessCardItemBinding
+import com.noisefit.luna.databinding.ListReadinessMinimalCardItemBinding
+import com.noisefit.luna.databinding.ListReadinessScoreCardItemBinding
+import com.noisefit.luna.databinding.ListRingCareBinding
+import com.noisefit.luna.databinding.ListSleepActivityCardItemBinding
+import com.noisefit.luna.databinding.ListSleepCardItemBinding
+import com.noisefit.luna.databinding.ListSleepMinimalItemBinding
+import com.noisefit.luna.databinding.ListSleepWaitingCardItemBinding
+import com.noisefit.luna.databinding.ListVideoInfoCardBinding
+import com.noisefit.luna.databinding.ListWelcomeCardBinding
+import com.noisefit.luna.databinding.RowDashAlertBinding
 import com.noisefit.ui.common.calculatePercentage
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.dpToPx
-import com.noisefit_commans.ui.*
 import com.noisefit_commans.ui.custom.SleepProgressbarView
+import com.noisefit_commans.ui.getColor
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MiscUtil
@@ -23,7 +40,6 @@ import com.oreo.data.model.AlertType
 import com.oreo.data.model.DashAlert
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.VideoInfoType
-import com.oreo.util.UtilClass.seriesItemWithInset
 import com.oreo.util.UtilClass.seriesItemWithoutInset
 
 
@@ -394,7 +410,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             if (data.data.nudges.isNullOrEmpty()) {
                 binding.tvNudge.text = ""
             } else {
-                binding.tvNudge.text = data.data.nudges.first()
+                binding.tvDayStatus.text = data.data.title?.first()
+                binding.tvNudge.text = data.data.nudges?.first()
             }
 
             binding.root.setOnClickListener {
@@ -438,7 +455,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     topMargin = binding.tvTodayDesc.context.dpToPx(24)
                     bottomMargin = binding.tvTodayDesc.context.dpToPx(26)
                 }
-                binding.tvTodayDesc.text = data.data.nudges.first()
+                binding.tvTodayDesc.text = data.data.nudges?.first()
+                binding.tvStatus.text = data.data.title?.first()
             }
 
             if (scoreValue >= 0) {
