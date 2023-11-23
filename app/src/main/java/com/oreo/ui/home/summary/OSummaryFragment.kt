@@ -66,16 +66,10 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     private val mainViewModel: OreoMainViewModel by activityViewModels()
     private val mSharedViewModel: SharedOSCDViewModel by activityViewModels()
     private val viewModel: OSummaryViewModel by viewModels()
-    private val healthOverviewAdapter by lazy {
-        OSummaryHealthOverviewAdapter()
-    }
-    private val viewedCardsAdapter by lazy {
-        OSummaryHealthOverviewAdapter()
-    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setAdapter()
 
         setViewPager()
 
@@ -114,32 +108,11 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             navigate(R.id.oreo_my_device)
         }
 
-        binding.contentMain.lytConnectHelp.btnCancel.setOnClickListener {
-            mainViewModel.onRingConnected()
-        }
 
-        binding.contentMain.lytConnectHelp.tvDesc.setOnClickListener {
-            navigate(R.id.oreoHSQuestionFragment, Bundle().apply {
-                putString("title", "Battery & Charging")
-                putString("id", "6")
-            })
-        }
-
-        binding.contentMain.lytChargeRing.root.setOnClickListener {
-            navigate(R.id.ringBatteryChargeFragment)
-            viewModel.setRingBatteryInfoState()
-        }
-
-        binding.contentMain.lytPairDevice.btnPairDevice.setOnClickListener {
-            startActivity(PairDeviceActivity.getStartIntent(requireContext(), true))
-        }
 
         binding.lytHeader.batteryStatus.setOnClickListener {
             viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_DEVICE_CAPSULE_CLICK)
             navigate(R.id.oreo_my_device)
-        }
-        binding.contentMain.lytHeartRate.bInfo.setOnClickListener {
-            viewModel.getContributorInfo("hr")
         }
 
 
@@ -200,21 +173,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             return@setOnLongClickListener true
         }
 
-        binding.contentMain.lytReadinessAvg.root.setOnClickListener {
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_READINESS_SCORE_CLICK)
-            viewModel.getContributorInfo("readiness")
-        }
 
-        binding.contentMain.lytSleepAvg.constraintLayout2.setOnClickListener {
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_SLEEP_SCORE_CLICK)
-            viewModel.getContributorInfo("sleep")
-
-        }
-
-        binding.contentMain.lytSleepAvg.constraintLayout.setOnClickListener {
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_ACTIVITY_SCORE_CLICK)
-            viewModel.getContributorInfo("activity")
-        }
 
         //handle device intro
         if (!mainViewModel.ringDataStore.isShowDeviceIntro()) {
@@ -234,120 +193,6 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
          binding.swipeToRefresh.refreshComplete()*/
     }
 
-    private fun setAdapter() {
-        binding.contentMain.rvHealthData.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = healthOverviewAdapter
-        }
-
-        binding.contentMain.rvViewedCards.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = viewedCardsAdapter
-        }
-
-        viewedCardsAdapter.itemClickListener = { type ->
-            when (type) {
-                is OSummaryHealthOverviewClickEnum.TextRingCareClicked -> {
-                    navigate(R.id.ringCareFragment, Bundle().apply {
-                        this.putString("title", type.title)
-                    })
-                }
-
-                is OSummaryHealthOverviewClickEnum.VideoInfoClicked -> {
-                    navigate(R.id.ringInfoPlayerFragment, Bundle().apply {
-                        this.putString("videoUrl", type.videoUrl)
-                    })
-                }
-
-                else -> {}
-            }
-
-        }
-
-        healthOverviewAdapter.itemClickListener = { type ->
-            when (type) {
-
-                is OSummaryHealthOverviewClickEnum.WorkoutAlertWhatisThis -> {
-
-                    navigate(R.id.aboutAutoWorkoutBottomSheet)
-                }
-
-                is OSummaryHealthOverviewClickEnum.WorkoutAlertIdentify -> {
-                    navigate(R.id.detectWorkoutListFragment)
-                }
-
-                is OSummaryHealthOverviewClickEnum.AutoSportsDelete -> {
-                    setFragmentResultListener(DELETE_REQ_REQUEST_KEY) { _, bundle ->
-                        val allow = bundle.getBoolean("allow")
-                        if (allow) {
-                            viewModel.markWorkoutSyncedAll()
-                            viewModel.removeAutoWorkoutCard()
-                        }
-                    }
-                    navigate(R.id.deleteAllWorkoutBottomSheet, Bundle().apply {
-                        this.putString("title", getString(R.string.text_dismiss_activity_title))
-                        this.putString(
-                            "description",
-                            getString(R.string.text_dismiss_activity_desc)
-                        )
-                        this.putString("acceptText", "")
-                        this.putString("declineText", "")
-                    })
-                }
-
-
-                OSummaryHealthOverviewClickEnum.ActivityDetailsWorkoutClick -> {
-                    mainViewModel.navigateTo(BottomNavOption.ACTIVITY)
-                    mainViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_ACTIVITY_CLICK)
-                }
-
-                OSummaryHealthOverviewClickEnum.ReadinessDetailsWorkoutClick -> {
-                    mainViewModel.navigateTo(BottomNavOption.READINESS)
-                    mainViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_READINESS_CLICK)
-                }
-
-                OSummaryHealthOverviewClickEnum.SleepDetailsWorkoutClick -> {
-                    mainViewModel.navigateTo(BottomNavOption.SLEEP)
-                    mainViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_SLEEP_CLICK)
-                }
-
-//                OSummaryHealthOverviewClickEnum.ActivityInternalDetailsWorkoutClick->{
-//                    mSharedViewModel.selectedTab = 0
-//                    mSharedViewModel.itemType = ClickViewType.ACTIVITY.name
-//                    mSharedViewModel.itemClickType = ViewItemClickType.ACTIVITY_SCORE
-//                    navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
-//                        putString("viewType", "activity")
-//                    })
-//                }
-                is OSummaryHealthOverviewClickEnum.VideoInfoClicked -> {
-                    navigate(R.id.ringInfoPlayerFragment, Bundle().apply {
-                        this.putString("videoUrl", type.videoUrl)
-                    })
-                    viewModel.localDataStore.setDashCardClickState(
-                        when (type.type) {
-                            VideoInfoType.SLEEP -> DashInfoCard.SLEEP
-                            VideoInfoType.READINESS -> DashInfoCard.READINESS
-                            VideoInfoType.ACTIVITY -> DashInfoCard.ACTIVITY
-                        }, true
-                    )
-                }
-
-                is OSummaryHealthOverviewClickEnum.TextRingCareClicked -> {
-                    viewModel.localDataStore.setDashCardClickState(DashInfoCard.CARE, true)
-                    navigate(R.id.ringCareFragment, Bundle().apply {
-                        this.putString("title", type.title)
-                    })
-
-                }
-
-                OSummaryHealthOverviewClickEnum.TextWelcomeRingClicked -> {
-                    viewModel.localDataStore.setDashCardClickState(DashInfoCard.WELCOME, true)
-                    navigate(R.id.ringWelcomeFragment)
-                }
-            }
-        }
-
-    }
 
     private fun shouldSync() {
         val lastSyncTime = viewModel.sessionManager.getLastSyncTime() ?: 0L
