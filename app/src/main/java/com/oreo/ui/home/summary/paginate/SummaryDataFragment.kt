@@ -2,24 +2,49 @@ package com.oreo.ui.home.summary.paginate
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSummaryDataBinding
 import com.noisefit.oreo.BottomNavOption
+import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.common.bottomSheet.DELETE_REQ_REQUEST_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit_commans.data.enums.DashInfoCard
+import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.oreo.data.model.VideoInfoType
+import com.oreo.data.model.health.OreoDashboardResponseModel
 import com.oreo.ui.home.summary.OSummaryHealthOverviewAdapter
 import com.oreo.ui.home.summary.OSummaryHealthOverviewClickEnum
+import com.oreo.ui.workout.detect.ARG_PARAM1
+import com.oreo.ui.workout.detect.ARG_PARAM2
+import com.oreo.ui.workout.detect.DetectWorkoutFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SummaryDataFragment :
     BaseFragment<FragmentSummaryDataBinding>(FragmentSummaryDataBinding::inflate) {
+
+    private val mainViewModel: OreoMainViewModel by activityViewModels()
+    private val viewModel: SummaryDataViewModel by viewModels()
+    private val ARGS_DATE = "ARGS_DATE"
+
+
+    companion object {
+
+        @JvmStatic
+        fun newInstance(date: String) =
+            SummaryDataFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARGS_DATE, date)
+                }
+            }
+    }
+
 
     private val healthOverviewAdapter by lazy {
         OSummaryHealthOverviewAdapter()
@@ -32,6 +57,24 @@ class SummaryDataFragment :
         super.onViewCreated(view, savedInstanceState)
 
         setAdapter()
+
+
+        val date = arguments?.getString("ARGS_DATE")
+
+        date?.let {
+            mainViewModel.getDashBoardData(it)?.let { dash ->
+                setUi(dash)
+            }
+        }
+    }
+
+    private fun setUi(data: OreoDashboardResponseModel) {
+
+
+        viewModel.parseHealthData(data)
+        healthOverviewAdapter.items = it
+        healthOverviewAdapter.refreshPosition = null
+
     }
 
 
@@ -81,8 +124,8 @@ class SummaryDataFragment :
                     setFragmentResultListener(DELETE_REQ_REQUEST_KEY) { _, bundle ->
                         val allow = bundle.getBoolean("allow")
                         if (allow) {
-                            viewModel.markWorkoutSyncedAll()
-                            viewModel.removeAutoWorkoutCard()
+                            /*viewModel.markWorkoutSyncedAll()
+                            viewModel.removeAutoWorkoutCard()*/
                         }
                     }
                     navigate(R.id.deleteAllWorkoutBottomSheet, Bundle().apply {
@@ -112,38 +155,30 @@ class SummaryDataFragment :
                     mainViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_SLEEP_CLICK)
                 }
 
-//                OSummaryHealthOverviewClickEnum.ActivityInternalDetailsWorkoutClick->{
-//                    mSharedViewModel.selectedTab = 0
-//                    mSharedViewModel.itemType = ClickViewType.ACTIVITY.name
-//                    mSharedViewModel.itemClickType = ViewItemClickType.ACTIVITY_SCORE
-//                    navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
-//                        putString("viewType", "activity")
-//                    })
-//                }
                 is OSummaryHealthOverviewClickEnum.VideoInfoClicked -> {
                     navigate(R.id.ringInfoPlayerFragment, Bundle().apply {
                         this.putString("videoUrl", type.videoUrl)
                     })
-                    viewModel.localDataStore.setDashCardClickState(
-                        when (type.type) {
-                            VideoInfoType.SLEEP -> DashInfoCard.SLEEP
-                            VideoInfoType.READINESS -> DashInfoCard.READINESS
-                            VideoInfoType.ACTIVITY -> DashInfoCard.ACTIVITY
-                        }, true
-                    )
+                    /* viewModel.localDataStore.setDashCardClickState(
+                         when (type.type) {
+                             VideoInfoType.SLEEP -> DashInfoCard.SLEEP
+                             VideoInfoType.READINESS -> DashInfoCard.READINESS
+                             VideoInfoType.ACTIVITY -> DashInfoCard.ACTIVITY
+                         }, true
+                     )*/
                 }
 
                 is OSummaryHealthOverviewClickEnum.TextRingCareClicked -> {
-                    viewModel.localDataStore.setDashCardClickState(DashInfoCard.CARE, true)
+                    /*viewModel.localDataStore.setDashCardClickState(DashInfoCard.CARE, true)
                     navigate(R.id.ringCareFragment, Bundle().apply {
                         this.putString("title", type.title)
-                    })
+                    })*/
 
                 }
 
                 OSummaryHealthOverviewClickEnum.TextWelcomeRingClicked -> {
-                    viewModel.localDataStore.setDashCardClickState(DashInfoCard.WELCOME, true)
-                    navigate(R.id.ringWelcomeFragment)
+                    /* viewModel.localDataStore.setDashCardClickState(DashInfoCard.WELCOME, true)
+                     navigate(R.id.ringWelcomeFragment)*/
                 }
             }
         }
@@ -164,43 +199,43 @@ class SummaryDataFragment :
         }
 
         binding.contentMain.lytChargeRing.root.setOnClickListener {
-            navigate(R.id.ringBatteryChargeFragment)
-            viewModel.setRingBatteryInfoState()
+            /*navigate(R.id.ringBatteryChargeFragment)
+            viewModel.setRingBatteryInfoState()*/
         }
 
         binding.contentMain.lytPairDevice.btnPairDevice.setOnClickListener {
             startActivity(PairDeviceActivity.getStartIntent(requireContext(), true))
         }
         binding.contentMain.lytHeartRate.bInfo.setOnClickListener {
-            viewModel.getContributorInfo("hr")
+            /*viewModel.getContributorInfo("hr")*/
         }
 
         binding.contentMain.lytReadinessAvg.root.setOnClickListener {
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_READINESS_SCORE_CLICK)
-            viewModel.getContributorInfo("readiness")
+            /* viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_READINESS_SCORE_CLICK)
+             viewModel.getContributorInfo("readiness")*/
         }
 
         binding.contentMain.lytSleepAvg.constraintLayout2.setOnClickListener {
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_SLEEP_SCORE_CLICK)
-            viewModel.getContributorInfo("sleep")
+            /*viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_SLEEP_SCORE_CLICK)
+            viewModel.getContributorInfo("sleep")*/
 
         }
 
         binding.contentMain.lytSleepAvg.constraintLayout.setOnClickListener {
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_ACTIVITY_SCORE_CLICK)
-            viewModel.getContributorInfo("activity")
+            /* viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_ACTIVITY_SCORE_CLICK)
+             viewModel.getContributorInfo("activity")*/
         }
 
     }
 
     override fun subscribeObservers() {
-        viewModel.stateHeaderCard.observe(this) {
-            binding.contentMain.lytHeader.apply {
-                this.tvDate.text =
-                    it.second
-                this.tvGreeting.text = it.first
-            }
-        }
+        /* viewModel.stateHeaderCard.observe(this) {
+             binding.contentMain.lytHeader.apply {
+                 this.tvDate.text =
+                     it.second
+                 this.tvGreeting.text = it.first
+             }
+         }*/
 
 
     }

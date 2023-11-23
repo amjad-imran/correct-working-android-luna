@@ -8,9 +8,7 @@
         android:id="@+id/contentMain"
         layout="@layout/layout_dash_main"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="@dimen/side_margin"
-        android:layout_marginEnd="@dimen/side_margin"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

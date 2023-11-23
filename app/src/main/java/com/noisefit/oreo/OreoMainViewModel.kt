@@ -16,6 +16,7 @@ import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.health.OreoActivityModel
+import com.oreo.data.model.health.OreoDashboardResponseModel
 import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.data.model.health.OreoSleepModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
@@ -344,6 +345,10 @@ constructor(
             }
         }
         return returnSelectedDate
+    }
+
+    fun getDashBoardData(date: String): OreoDashboardResponseModel? {
+        return userHealthData[date]?.dashboard
     }
 
 
