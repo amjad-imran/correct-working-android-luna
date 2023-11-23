@@ -17,33 +17,32 @@ import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.DataSource
 import com.google.android.gms.fitness.data.DataType
-import com.google.android.gms.fitness.data.Field
-import com.google.android.gms.fitness.request.DataReadRequest
-import com.google.android.gms.fitness.result.DataReadResponse
-import com.google.gson.Gson
+import com.noisefit.data.googleFit.GoogleFitDataObservers
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentGoogleFitBinding
 import com.noisefit.session.SessionManager
-import com.noisefit.ui.common.*
 import com.noisefit.ui.web.WebViewActivity
-import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
-import com.noisefit_commans.ui.*
+import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.AppConstants
 import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+private const val TAG = "GoogleFitFragment"
 private const val GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 1980
 
 @AndroidEntryPoint
 class GoogleFitFragment :
     BaseFragment<FragmentGoogleFitBinding>(FragmentGoogleFitBinding::inflate) {
+
+    @Inject
+    lateinit var googleFitDataObservers: GoogleFitDataObservers
 
     @Inject
     lateinit var localDataStore: DataStoredInterface
@@ -59,8 +58,6 @@ class GoogleFitFragment :
 
     @Inject
     lateinit var sessionManager: SessionManager
-
-    private val TAG = "GoogleFitFragment"
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -141,10 +138,14 @@ class GoogleFitFragment :
 
         binding.lytFeatureTile.llSwitch.invisible()
 
-        binding.bRequestData.setOnClickListener {
-            //readStepsData()
-        readWorkoutData()
-        }
+//        binding.bRequestData.setOnClickListener {
+//            readGoals()
+////            readWorkoutData()
+//            readWorkoutFromSession()
+//            insertWeightHeight(requireContext(), DataType.TYPE_WEIGHT, 170f);//weight in kg
+//            //insertWeightHeight(requireContext(), DataType.TYPE_HEIGHT, 1.75f);//height in meter
+//            getHeightWeight()
+//        }
     }
 
 //    private val activityRecognitionPermissionResult = registerForActivityResult(
@@ -160,6 +161,17 @@ class GoogleFitFragment :
 //            context.showShortToast("Permission Required")
 //        }
 //    }
+
+
+    private fun provideDataSource(streamName: String, dataType: DataType): DataSource {
+        return DataSource.Builder()
+            .setAppPackageName(requireContext().packageName)
+            .setDataType(dataType)
+            .setStreamName(" - $streamName")
+            .setType(DataSource.TYPE_RAW)
+            .build()
+    }
+
 
     private fun logOutFit() {
 
@@ -234,9 +246,7 @@ class GoogleFitFragment :
 
     }
 
-    private fun isSignedIn(): Boolean {
-        return GoogleSignIn.getLastSignedInAccount(requireActivity()) != null && oAuthPermissionsApproved()
-    }
+
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -246,6 +256,7 @@ class GoogleFitFragment :
                 try {
                     localDataStore.setGoogleFitStatus(true)
                     setGoogleFitSwitchState(true)
+                    googleFitDataObservers.saveUserWeightAndHeight()
                     sessionManager.logInsiderAppEvent(
                         InsiderAppEvents.GOOGLE_FIT_CLICK,
                         HashMap<String, Any>().apply {
@@ -283,93 +294,61 @@ class GoogleFitFragment :
         LOGS.e(message)
     }
 
-    fun readStepsData(){
-        val startTime = LocalDate.now().atStartOfDay(ZoneId.systemDefault())
-        val endTime = LocalDateTime.now().atZone(ZoneId.systemDefault())
 
-        val datasource = DataSource.Builder()
-            .setAppPackageName("com.google.android.gms")
-            .setDataType(DataType.TYPE_STEP_COUNT_DELTA)
-            .setType(DataSource.TYPE_DERIVED)
-            .setStreamName("estimated_steps")
-            .build()
+//    private val goalsReadRequest: GoalsReadRequest by lazy {
+//        GoalsReadRequest.Builder()
+//            .addDataType(DataType.TYPE_HEART_POINTS)
+//            .addDataType(DataType.TYPE_STEP_COUNT_DELTA)
+//            .addDataType(DataType.TYPE_DISTANCE_DELTA)
+//
+//            .build()
+//    }
 
-        val request = DataReadRequest.Builder()
-            .aggregate(datasource)
-            .bucketByTime(1, TimeUnit.DAYS)
-            .setTimeRange(startTime.toEpochSecond(), endTime.toEpochSecond(), TimeUnit.SECONDS)
-            .build()
+//    private fun readGoals() {
+//        Fitness.getGoalsClient(requireContext(), googleSignInAccount)
+//            .readCurrentGoals(goalsReadRequest)
+//            .addOnSuccessListener { goals ->
+//                // There should be at most one heart points goal currently.
+//                goals.forEach {
+//                    // What is the value of the goal
+//                    val goalValue = it.metricObjective
+//                    LOGS.i(TAG, "Goal value: $goalValue")
+//
+//                    // How is the goal measured?
+//                    LOGS.i(TAG, "Objective: ${it.objective}")
+//
+//                    LOGS.i(TAG, "Objective: ${it.objectiveType}")
+//
+//                    // How often does the goal repeat?
+//                    LOGS.i(TAG, "Recurrence: ${it.recurrence}")
+//                }
+//            }
+//    }
 
-        Fitness.getHistoryClient(requireActivity(), GoogleSignIn.getAccountForExtension(requireActivity(), fitnessOptions))
-            .readData(request)
-            .addOnSuccessListener { response ->
-                val totalSteps = response.buckets
-                    .flatMap { it.dataSets }
-                    .flatMap { it.dataPoints }
-                    .sumBy { it.getValue(Field.FIELD_STEPS).asInt() }
-                LOGS.d(TAG,"Steps $totalSteps")
+//    private val Goal.objective: String
+//        get() = when (objectiveType) {
+//            OBJECTIVE_TYPE_DURATION ->
+//                "Duration (s): ${durationObjective.getDuration(TimeUnit.SECONDS)}"
+//
+//            OBJECTIVE_TYPE_FREQUENCY ->
+//                "Frequency : ${frequencyObjective.frequency}"
+//
+//            OBJECTIVE_TYPE_METRIC ->
+//                "Metric : ${metricObjective.dataTypeName} - ${metricObjective.value}"
+//
+//            else -> "Unknown objective"
+//        }
 
-            }
-
-
-    }
-
-    fun readWorkoutData() {
-
-
-        val readRequest = DataReadRequest.Builder()
-            .read(DataType.TYPE_WORKOUT_EXERCISE)
-            /*.aggregate(DataType.TYPE_DISTANCE_DELTA)
-            .aggregate(DataType.TYPE_CALORIES_EXPENDED)
-            .aggregate(DataType.TYPE_HEART_RATE_BPM)
-            .read(DataType.TYPE_WORKOUT_EXERCISE)*/
-            /*.read(DataType.AGGREGATE_MOVE_MINUTES)
-            .read(DataType.TYPE_MOVE_MINUTES)*/
-            /*.enableServerQueries()
-            .bucketByActivitySegment(1, TimeUnit.MINUTES)*/
-            .setTimeRange(1696918645, System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-            .build()
-
-        Fitness.getHistoryClient(
-            requireActivity(),
-            googleSignInAccount
-        )
-            .readData(readRequest)
-            .addOnSuccessListener { dataReadResponse: DataReadResponse? ->
-
-                //LOGS.d(TAG, "DataSET ${Gson().toJson(dataReadResponse)}")
-                if(dataReadResponse==null) return@addOnSuccessListener
-
-             /*   Log.d("TAG_F", "onSuccess: 1 " + dataReadResponse.toString());
-                Log.d("TAG_F", "onSuccess: 1 " + dataReadResponse.getStatus());
-                Log.d("TAG_F", "onSuccess: 1 " + dataReadResponse.getDataSet(DataType.TYPE_STEP_COUNT_DELTA));
-                Log.d("TAG_F", "onSuccess: 1 " + dataReadResponse.getBuckets().get(0));
-                Log.d("TAG_F", "onSuccess: 1 " + dataReadResponse.getBuckets().get(0).getDataSets().size);*/
-
-
-                for (bucket in dataReadResponse.buckets){
-                    for (data in bucket.dataSets){
-                        for (point in data.dataPoints) {
-                            LOGS.d(TAG,"Found Point ${data.dataPoints}")
-                            when (point.dataType) {
-                                //DataType.TYPE_WORKOUT_EXERCISE ->LOGS.d(TAG,""+point.getValue(Field.FIELD_ACTIVITY).asFloat())
-                                DataType.AGGREGATE_DISTANCE_DELTA   -> LOGS.d(TAG,""+point.getValue(Field.FIELD_DISTANCE).asFloat())
-                                DataType.TYPE_HEART_RATE_BPM        -> LOGS.d(TAG,""+  point.getValue(
-                                Field.FIELD_BPM).asFloat()               )
-                                DataType.TYPE_CALORIES_EXPENDED     -> LOGS.d(  TAG,""+point.getValue(Field.FIELD_CALORIES).asFloat()          )
-                                DataType.TYPE_WORKOUT_EXERCISE      -> LOGS.d( TAG,""+"[${point.getValue(Field.FIELD_EXERCISE).asString()}]   ")
-                                DataType.TYPE_MOVE_MINUTES          -> LOGS.d(TAG,""+ "Move Minutes          $point     ")
-                                DataType.AGGREGATE_MOVE_MINUTES     -> LOGS.d(TAG,""+ "Moving Mins  Count    $point     ")
-                            }
-                        }
-                    }
-                }
-            }
-            .addOnFailureListener { e: Exception? ->
-                LOGS.w(TAG, "Failure ${e?.message}")
-                e?.printStackTrace()
-            }
-    }
+//    private val Goal.recurrenceDetails: String
+//        get() = recurrence?.let {
+//            val period = when (it.unit) {
+//                Goal.Recurrence.UNIT_DAY -> "days"
+//                Goal.Recurrence.UNIT_WEEK -> "weeks"
+//                Goal.Recurrence.UNIT_MONTH -> "months"
+//                else -> "Unknown"
+//            }
+//            "Every ${recurrence!!.count} $period"
+//        } ?: "Does not repeat"
 
 
     override fun subscribeObservers() {

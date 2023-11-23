@@ -12,15 +12,9 @@ import com.noisefit.luna.databinding.FragmentDeviceSettingsBinding
 import com.noisefit.ui.myDevice.NEW_PAIR_REQUEST_KEY
 import com.noisefit.ui.myDevice.REST_REQUEST_KEY
 import com.noisefit.ui.myDevice.UNPAIR_REQUEST_KEY
-import com.noisefit.ui.onboarding.OnBoardActivity
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
-import com.noisefit_commans.interfaces.QueryAction
-import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.FirebaseLunaAppEvents
-import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -71,6 +65,7 @@ class DeviceSettingsFragment :
                 val ringNotConnected = bundle.getBoolean("ring_not_connected")
                 if (unpairDevice) {
                     Handler(Looper.getMainLooper()).post {
+                        mViewModel.localDataStore.setGoogleFitStatus(false)
                         navigateUpSafe()
                     }
                 }
@@ -93,6 +88,7 @@ class DeviceSettingsFragment :
                 val unpairDevice = bundle.getBoolean("unpair")
                 val ringNotConnected = bundle.getBoolean("ring_not_connected")
                 if (unpairDevice) {
+                    mViewModel.localDataStore.setGoogleFitStatus(false)
                     activity?.startActivity(
                         PairDeviceActivity.getStartIntent(
                             requireContext(),

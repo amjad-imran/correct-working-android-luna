@@ -50,6 +50,7 @@ import com.oreo.ui.workout.add.ADD_WORKOUT_REQUEST_KEY
 import com.oreo.util.graph.OCombineChartUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.dkzwm.widget.srl.RefreshingListenerAdapter
@@ -71,6 +72,8 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setAdapter()
+
+
 
     }
 
@@ -665,7 +668,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             }
         }
 
-        navigate(R.id.googleFitFragmentOreo)
+       // navigate(R.id.googleFitFragmentOreo)
     }
 
     private fun sendLogs() {

@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import com.noisefit.data.local.db.BaseDao
 import com.noisefit_commans.data.model.OreoSleepData
+import com.noisefit_commans.models.SleepData
 
 @Dao
 interface OreoSleepDao : BaseDao<OreoSleepData> {

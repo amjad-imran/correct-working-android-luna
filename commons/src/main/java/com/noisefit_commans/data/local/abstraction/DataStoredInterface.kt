@@ -411,4 +411,6 @@ interface DataStoredInterface {
     fun clearDashCardClickState()
     fun setDashCardClickState(type: DashInfoCard, boolean: Boolean)
 
+    fun getGFitUserDataLastSyncTime(): Long
+    fun setGFitUserDataLastSyncTime()
 }

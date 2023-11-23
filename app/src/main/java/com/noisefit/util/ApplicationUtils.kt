@@ -10,7 +10,6 @@ import android.location.Address
 import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
@@ -18,21 +17,20 @@ import android.widget.ImageView
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.util.Preconditions.checkArgument
 import androidx.work.*
-import com.noisefit.luna.BuildConfig
 import com.noisefit.NoiseFitApplicationMain
+import com.noisefit.luna.BuildConfig
 import com.noisefit.receiver.workManager.*
+import com.noisefit.watch.WatchForm
 import com.noisefit_commans.common.roundToNearestDecimalFlooor
+import com.noisefit_commans.data.response.NplLeague
 import com.noisefit_commans.models.*
-import com.noisefit_commans.utils.AppConstants
 import com.noisefit_commans.ui.loadCircleCacheWithProgress
 import com.noisefit_commans.ui.loadCircleWCacheWithProgress
 import com.noisefit_commans.ui.loadImageCacheWithProgress
 import com.noisefit_commans.ui.loadImageWCacheWithProgress
-import com.noisefit.watch.WatchForm
-import com.noisefit_commans.data.response.NplLeague
-import com.noisefit_commans.models.SleepType
-import com.noisefit_commans.models.Units
+import com.noisefit_commans.utils.AppConstants
 import com.noisefit_commans.utils.LOGS
+import com.oreo.receiver.workManager.GoogleFitSyncWork
 import com.oreo.receiver.workManager.OreoSyncDataWork
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -268,6 +266,27 @@ object ApplicationUtils {
     suspend fun isOreoSyncDataWorkerRunning(context: Context): Boolean {
         val uniqueId = getUniqueRingSyncDataWorkName()
         return isWorkScheduled(uniqueId, context)
+    }
+
+    suspend fun startGoogleFitSyncScheduler(context: Context): Boolean {
+        val uniqueId = getUniqueGoogleFitWorkName()
+        LOGS.d("SyncDataWork: inside startGoogleFitSyncScheduler ")
+        if (!isWorkScheduled(uniqueId, context)) {
+
+            WorkManager.getInstance(context).cancelUniqueWork(uniqueId)
+            val work =
+                OneTimeWorkRequest.Builder(GoogleFitSyncWork::class.java)
+                    .addTag(uniqueId)
+                    .build()
+            WorkManager.getInstance(context).enqueueUniqueWork(
+                uniqueId,
+                ExistingWorkPolicy.KEEP,
+                work
+            )
+            return true
+        }
+
+        return false
     }
 
     suspend fun startOreoSyncScheduler(context: Context): Boolean {
