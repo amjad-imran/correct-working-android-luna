@@ -84,10 +84,19 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     private fun setViewPager() {
         val adapter = SummaryPagerAdapter(requireActivity(), getFragmentList())
         binding.viewPagerSummary.adapter = adapter
+
+        TabLayoutMediator(binding.tabLayout, binding.viewPagerSummary) { tab, position ->
+            tab.text = "$position"
+        }.attach()
     }
 
     private fun getFragmentList(): List<Fragment> {
         val fragmentList: MutableList<Fragment> = ArrayList<Fragment>()
+        fragmentList.add(SummaryDataFragment())
+        fragmentList.add(SummaryDataFragment())
+        fragmentList.add(SummaryDataFragment())
+        fragmentList.add(SummaryDataFragment())
+        fragmentList.add(SummaryDataFragment())
         fragmentList.add(SummaryDataFragment())
         fragmentList.add(SummaryDataFragment())
         fragmentList.add(SummaryDataFragment())
@@ -147,42 +156,42 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
             }
         }
-       /* binding.layoutRefresh.animationView.setAnimation(R.raw.loading_swipe_anim)
-        binding.swipeToRefresh.setOnRefreshListener(object : RefreshingListenerAdapter() {
-            override fun onRefreshing() {
-                super.onRefreshing()
-                val pairStatus: String
+        /* binding.layoutRefresh.animationView.setAnimation(R.raw.loading_swipe_anim)
+         binding.swipeToRefresh.setOnRefreshListener(object : RefreshingListenerAdapter() {
+             override fun onRefreshing() {
+                 super.onRefreshing()
+                 val pairStatus: String
 
-                LOGS.d("SyncDataWork: starting job")
-                if (!viewModel.isDeviceConnected()) {
-                    binding.swipeToRefresh.refreshComplete()
-                    pairStatus = "unpaired"
-                    return
-                }
+                 LOGS.d("SyncDataWork: starting job")
+                 if (!viewModel.isDeviceConnected()) {
+                     binding.swipeToRefresh.refreshComplete()
+                     pairStatus = "unpaired"
+                     return
+                 }
 
-                if (viewModel.stateHeartRateCard.value?.measureState == TapMeasureState.MEASURING) {
-                    binding.swipeToRefresh.refreshComplete()
-                    return
-                }
-                pairStatus = "paired"
-//                viewModel.sessionManager.logFirebaseEvent(
-//                    FirebaseLunaAppEvents.LUNA_ACTIVITY_SYNC_MANUAL,
-//                    HashMap<String, Any>().apply {
-//                        this["operating_system"] = "Android"
-//                        this["device_pairing_status"] = pairStatus
-//                    })
+                 if (viewModel.stateHeartRateCard.value?.measureState == TapMeasureState.MEASURING) {
+                     binding.swipeToRefresh.refreshComplete()
+                     return
+                 }
+                 pairStatus = "paired"
+ //                viewModel.sessionManager.logFirebaseEvent(
+ //                    FirebaseLunaAppEvents.LUNA_ACTIVITY_SYNC_MANUAL,
+ //                    HashMap<String, Any>().apply {
+ //                        this["operating_system"] = "Android"
+ //                        this["device_pairing_status"] = pairStatus
+ //                    })
 
-                logFirebaseAppEvent(FirebaseLunaAppEvents.LUNA_ACTIVITY_SYNC_MANUAL,
-                    HashMap<String, Any>().apply {
-                        this["operating_system"] = "Android"
-                        this["device_pairing_status"] = pairStatus
-                    })
-                binding.layoutRefresh.textSyncingData.visible()
-                binding.swipeToRefresh.refreshComplete()
+                 logFirebaseAppEvent(FirebaseLunaAppEvents.LUNA_ACTIVITY_SYNC_MANUAL,
+                     HashMap<String, Any>().apply {
+                         this["operating_system"] = "Android"
+                         this["device_pairing_status"] = pairStatus
+                     })
+                 binding.layoutRefresh.textSyncingData.visible()
+                 binding.swipeToRefresh.refreshComplete()
 
-                syncData()
-            }
-        })*/
+                 syncData()
+             }
+         })*/
 
         binding.lytHeader.profileView1.setOnLongClickListener {
             if (BuildConfig.DEBUG) {
@@ -221,8 +230,8 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     }
 
     fun resetSwipeLoadingAnim() {
-       /* binding.layoutRefresh.textSyncingData.gone()
-        binding.swipeToRefresh.refreshComplete()*/
+        /* binding.layoutRefresh.textSyncingData.gone()
+         binding.swipeToRefresh.refreshComplete()*/
     }
 
     private fun setAdapter() {
