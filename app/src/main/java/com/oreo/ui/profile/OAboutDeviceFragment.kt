@@ -14,6 +14,7 @@ import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.interfaces.QueryAction
+import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
@@ -45,8 +46,10 @@ class OAboutDeviceFragment :
     }
     var connectedDevice: ColorFitDevice? = null
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        updateViewModel.mShouldFetchInfo = false
         setUi()
     }
 
@@ -131,6 +134,21 @@ class OAboutDeviceFragment :
     }
 
     override fun subscribeObservers() {
+
+
+        updateViewModel.sessionManager.connectStateRing.observe(this) {
+            when (it) {
+                is ConnectState.ConnectSuccess -> {
+                    if (updateViewModel.mShouldFetchInfo) {
+                        updateViewModel.sessionManager.sendQueryAction(QueryAction.QueryBatteryPower)
+                        updateViewModel.sessionManager.sendQueryAction(QueryAction.QueryFirmwareVersion)
+                        updateViewModel.mShouldFetchInfo = false
+                    }
+                }
+                else -> {}
+            }
+        }
+
 
         updateViewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->

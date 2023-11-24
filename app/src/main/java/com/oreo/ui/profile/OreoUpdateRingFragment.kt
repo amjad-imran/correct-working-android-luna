@@ -210,6 +210,7 @@ class OreoUpdateRingFragment :
                 viewModel.deleteTempFile()
                 viewModel.setUpdateAvailable(false)
                 mShouldFetchInfo = true
+                viewModel.mShouldFetchInfo = true
 
 
             }
