@@ -34,7 +34,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.tabs.TabLayout
+        <!--<com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -42,14 +42,20 @@
             app:tabSelectedTextColor="@color/white"
             app:tabMode="scrollable"
             app:tabTextColor="@color/white_64"
-            app:layout_constraintTop_toBottomOf="@+id/lytHeader" />
+            app:layout_constraintTop_toBottomOf="@+id/lytHeader" />-->
+
+        <include
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/lytHeader"
+            layout="@layout/layout_tabs_dash"/>
+
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPagerSummary"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginStart="@dimen/side_margin"
-            android:layout_marginEnd="@dimen/side_margin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
 

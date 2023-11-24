@@ -9,10 +9,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.data.CombinedData
+import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSummaryDataBinding
 import com.noisefit.oreo.BottomNavOption
 import com.noisefit.oreo.OreoMainViewModel
+import com.noisefit.receiver.service.FeedbackSubmitService
 import com.noisefit.ui.common.bottomSheet.DELETE_REQ_REQUEST_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
@@ -23,15 +25,20 @@ import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.model.AlertType
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
+import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
 import com.oreo.data.model.health.OreoDashboardResponseModel
+import com.oreo.ui.home.summary.AlertClickListener
+import com.oreo.ui.home.summary.HomeRecyclerViewHolder
 import com.oreo.ui.home.summary.OSummaryHealthOverviewAdapter
 import com.oreo.ui.home.summary.OSummaryHealthOverviewClickEnum
 import com.oreo.ui.home.summary.OreoRWorkoutAdapter
@@ -70,9 +77,12 @@ class SummaryDataFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         setAdapter()
 
         val date = arguments?.getString("ARGS_DATE")
+
+        viewModel.isToday = date.equals(mainViewModel.getTodayDate())
 
         date?.let {
             mainViewModel.getDashBoardData(it)?.let { dash ->
@@ -81,9 +91,11 @@ class SummaryDataFragment :
         }
     }
 
-    private fun setUi(data: OreoDashboardResponseModel) {
+    private fun setUi(data: ServerUserHealthData) {
+        if (viewModel.isToday) {
+            viewModel.initTodayData()
+        }
         viewModel.parseHealthData(data)
-
     }
 
 
@@ -234,19 +246,27 @@ class SummaryDataFragment :
 
     override fun subscribeObservers() {
 
-        viewModel.healthOverviewData.observe(this) {
+        viewModel.stateHeaderCard.observe(viewLifecycleOwner) {
+            binding.contentMain.lytHeader.apply {
+                this.tvDate.text =
+                    it.second
+                this.tvGreeting.text = it.first
+            }
+        }
+
+        viewModel.healthOverviewData.observe(viewLifecycleOwner) {
             healthOverviewAdapter.items = it
             healthOverviewAdapter.refreshPosition = null
         }
 
-        viewModel.viewedCardsData.observe(this) {
+        viewModel.viewedCardsData.observe(viewLifecycleOwner) {
             it?.let {
                 viewedCardsAdapter.refreshPosition = null
                 viewedCardsAdapter.items = it
             }
         }
 
-        viewModel.stateReadinessAvgCard.observe(this) {
+        viewModel.stateReadinessAvgCard.observe(viewLifecycleOwner) {
 
             if (it == null) {
                 binding.contentMain.lytReadinessAvg.root.gone()
@@ -260,7 +280,7 @@ class SummaryDataFragment :
 
         }
 
-        viewModel.stateSleepAvgCard.observe(this) {
+        viewModel.stateSleepAvgCard.observe(viewLifecycleOwner) {
 
             if (it == null) {
                 binding.contentMain.lytSleepAvg.root.gone()
@@ -277,16 +297,96 @@ class SummaryDataFragment :
             }
         }
 
+        viewModel.stateHeartRateCard.observe(viewLifecycleOwner) {
+            if (it != null) {
+                setHearRateCardUi(it)
+            }
+        }
 
-        /* viewModel.stateHeaderCard.observe(this) {
-             binding.contentMain.lytHeader.apply {
-                 this.tvDate.text =
-                     it.second
-                 this.tvGreeting.text = it.first
+        viewModel.statePairDeviceCard.observe(this) {
+            binding.contentMain.lytPairDevice.apply {
+                if (it) {
+                    this.root.visible()
+                    this.root.setOnClickListener {
+                        startActivity(PairDeviceActivity.getStartIntent(requireContext(), true))
+                    }
+
+                } else {
+                    this.root.gone()
+                }
+            }
+        }
+
+        mainViewModel.stateConnectHelp.observe(viewLifecycleOwner) {
+             if (it) {
+                 binding.contentMain.lytConnectHelp.root.visible()
+                 val logsSync = mainViewModel.shouldSyncAutoLogs()
+                 if (logsSync) {
+                     context?.let { ctx ->
+                         FeedbackSubmitService.startService(
+                             ctx
+                         )
+                     }
+                 }
+             } else {
+                 binding.contentMain.lytConnectHelp.root.gone()
              }
-         }*/
+        }
 
+        viewModel.stateDashRingBattery.observe(this) {
+            /* if (it.first) {
+                 binding.contentMain.lytChargeRing.root.visible()
+                 binding.contentMain.lytChargeRing.imageView3.loadImage(
+                     requireContext(),
+                     it.second?.ringInfo?.image2
+                 )
+             } else {
+                 binding.contentMain.lytChargeRing.root.gone()
+             }*/
+        }
 
+        viewModel.stateDashAlerts.observe(this) {
+
+            if (it.isNullOrEmpty()) {
+                binding.contentMain.lytAlerts.root.gone()
+                return@observe
+            }
+            if (it.size == 1) {
+                binding.contentMain.lytAlerts.tabLayout.invisible()
+            } else
+                binding.contentMain.lytAlerts.tabLayout.visible()
+            binding.contentMain.lytAlerts.apply {
+                binding.contentMain.lytAlerts.root.visible()
+                val winsAdapter = HomeRecyclerViewHolder.AlertsAdapter(object : AlertClickListener {
+                    override fun onAlertClicked(alertType: AlertType) {
+                        handleAlertClick(alertType)
+                    }
+                })
+                vpAlertSlider.apply {
+                    adapter = winsAdapter
+                }
+                winsAdapter.setDataSet(it)
+
+                TabLayoutMediator(
+                    tabLayout,
+                    vpAlertSlider
+                ) { _, _ -> }.attach()
+            }
+        }
+
+    }
+
+    private fun handleAlertClick(alertType: AlertType) {
+        when (alertType) {
+            AlertType.BLUETOOTH -> {
+                mainViewModel.checkBluetooth.postValue(Event(true))
+            }
+
+            AlertType.DEFAULT -> {}
+            AlertType.OTA_UPDATE -> {
+                navigate(R.id.oreoUpdateRingFragment)
+            }
+        }
     }
 
     private fun updateReadinessAvgUi(data: ODashboardReadinessScoreModel) {
@@ -507,6 +607,7 @@ class SummaryDataFragment :
 
     private fun setHearRateCardUi(data: OHealthOverview.HeartRate) {
         val lytHeartRate = binding.contentMain.lytHeartRate
+        lytHeartRate.root.visible()
         val chart = lytHeartRate.candleChart
 
         OCombineChartUtils.setChart(chart, data.xLabelList, data.axisMinimum, data.average)
@@ -583,6 +684,15 @@ class SummaryDataFragment :
                 }
                 lytHeartRate.tvHeartUnit.text = "Unable to measure"
 
+            }
+
+            TapMeasureState.HIDE -> {
+                lytHeartRate.lottieAnimView.invisible()
+                lytHeartRate.imvHrMeasure.invisible()
+
+                lytHeartRate.groupValue.invisible()
+                lytHeartRate.tvEmptyConnect.gone()
+                lytHeartRate.tvHeartValue.gone()
             }
         }
         if (data.lineData.first.isNotEmpty() && data.lineData.first.size > 1) {

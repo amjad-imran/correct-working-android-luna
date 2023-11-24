@@ -8,16 +8,7 @@ data class OreoDashboardResponseModel(
     @SerializedName("readiness")
     val readiness: ODashboardReadinessModel? = null,
     @SerializedName("activity")
-    val activity: ODashboardActivityModel? = null,
-    @SerializedName("activitityScoreAvg")
-    val activityScoreAvg: ODashboardActivityScoreModel? = null,
-    @SerializedName("sleepScoreAvg")
-    val sleepScoreAvg: ODashboardSleepScoreModel? = null,
-    @SerializedName("readinessScoreAvg")
-    val readinessScoreAvg: ODashboardReadinessScoreModel? = null,
-    @SerializedName("registerDate")
-    val registerDate: Int? = null,
-    val welcome: WelcomeData? = null,
+    val activity: ODashboardActivityModel? = null
     )
 
 data class InfoTextData(val title: String, val content: String)

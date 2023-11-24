@@ -555,6 +555,13 @@ class OreoSleepDetailFragment :
                 binding.progressBar1.root.gone()
             }
         }
+        mainViewModel.getLoading().observe(this) {
+            if (it) {
+                binding.progressBar1.root.visible()
+            } else {
+                binding.progressBar1.root.gone()
+            }
+        }
 
         /*
                 viewModel.sleepHistoryResponse.observe(this) {

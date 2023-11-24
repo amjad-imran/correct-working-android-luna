@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.session.SessionManager
+import com.noisefit_commans.common.checkDayDifferenceMoreNMinutes
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -58,6 +59,10 @@ constructor(
 
     //Currently highlighted date
     var selectedDate: String? = null
+
+    //Dashboard
+    private val _dashboard = MutableLiveData<List<String>>()
+    val dashboard: LiveData<List<String>> = _dashboard
 
 
     //Sleep Data
@@ -162,6 +167,7 @@ constructor(
                             it.data.forEach { data ->
                                 userHealthData[data.date] = data
                             }
+                            _dashboard.value = getDaysList()
 
                             val sleepList = getSleepDataList()
                             _sleepHistoryResponse.value = (sleepList)
@@ -347,8 +353,26 @@ constructor(
         return returnSelectedDate
     }
 
-    fun getDashBoardData(date: String): OreoDashboardResponseModel? {
-        return userHealthData[date]?.dashboard
+    fun getDashBoardData(date: String): ServerUserHealthData? {
+        return userHealthData[date]
+    }
+
+    fun getTodayDate(): String {
+        return DateFormats.getTodaysDateString(10)
+    }
+
+    fun shouldSyncAutoLogs(): Boolean {
+        val lastTimeStamp = ringDataStore.getAutoLogsTimeStamp()
+        val logSyncInterval = localDataStore.getLogSyncInterval()
+
+        if (logSyncInterval == 0) return false
+
+        if (lastTimeStamp == 0L) {
+            ringDataStore.saveAutoLogsTimeStamp()
+            return false
+        }
+
+        return lastTimeStamp.checkDayDifferenceMoreNMinutes(logSyncInterval * 60)
     }
 
 

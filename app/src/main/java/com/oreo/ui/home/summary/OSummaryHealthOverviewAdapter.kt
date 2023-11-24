@@ -588,7 +588,6 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             sleepDayGraphView.setData(data.sleepArray)
 
 
-
             if (scoreValue >= 0) {
                 binding.lottieAnimationView.repeatCount = 0
                 binding.lottieAnimationView.setAnimation(R.raw.lottie_meter_sleep)

@@ -1,29 +1,21 @@
 package com.oreo.ui.home.summary
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.viewModelScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.github.mikephil.charting.data.CombinedData
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSummaryOBinding
-import com.noisefit.oreo.BottomNavOption
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.receiver.service.FeedbackSubmitService
-import com.noisefit.ui.common.bottomSheet.DELETE_REQ_REQUEST_KEY
-import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit.util.notif.NotificationUtil
 import com.noisefit_commans.constants.SyncEvents
-import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseFragment
@@ -33,31 +25,20 @@ import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
-import com.oreo.data.model.AlertType
-import com.oreo.data.model.OActivityListModal
-import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.TapMeasureState
-import com.oreo.data.model.VideoInfoType
-import com.oreo.data.model.health.ODashboardActivityScoreModel
-import com.oreo.data.model.health.ODashboardReadinessScoreModel
-import com.oreo.data.model.health.ODashboardSleepScoreModel
 import com.oreo.receiver.workManager.HealthOverviewDataType
-import com.oreo.ui.home.summary.paginate.SummaryDataFragment
 import com.oreo.ui.home.summary.paginate.SummaryPagerAdapter
 import com.oreo.ui.info.CALL_GOT_IT
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import com.oreo.ui.workout.add.ADD_WORKOUT_REQUEST_KEY
-import com.oreo.util.graph.OCombineChartUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import me.dkzwm.widget.srl.RefreshingListenerAdapter
 
 
 @AndroidEntryPoint
@@ -66,6 +47,10 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     private val mainViewModel: OreoMainViewModel by activityViewModels()
     private val mSharedViewModel: SharedOSCDViewModel by activityViewModels()
     private val viewModel: OSummaryViewModel by viewModels()
+
+    private val pagerAdapter by lazy {
+        SummaryPagerAdapter(requireActivity())
+    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -76,24 +61,66 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     }
 
     private fun setViewPager() {
-        val adapter = SummaryPagerAdapter(requireActivity(), getFragmentList())
-        binding.viewPagerSummary.adapter = adapter
+        binding.viewPagerSummary.adapter = pagerAdapter
+        binding.viewPagerSummary.offscreenPageLimit = 3
 
-        TabLayoutMediator(binding.tabLayout, binding.viewPagerSummary) { tab, position ->
-            tab.text = "$position"
-        }.attach()
+        /* TabLayoutMediator(binding.tabLayout, binding.viewPagerSummary) { tab, position ->
+             tab.text = pagerAdapter.getDate(position)
+         }.attach()*/
+
+        binding.viewPagerSummary.registerOnPageChangeCallback(object : OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+
+                mainViewModel.selectedDate = pagerAdapter.getDate(position)
+                setTabDates(position)
+
+                if (mainViewModel.shouldLoadMoreData()) {
+                    context.showShortToast("Load More Data")
+                }
+            }
+        })
     }
 
-    private fun getFragmentList(): List<Fragment> {
-        val fragmentList: MutableList<Fragment> = ArrayList<Fragment>()
-        fragmentList.add(SummaryDataFragment.newInstance("2023-11-23"))
-        fragmentList.add(SummaryDataFragment.newInstance("2023-11-22"))
-        fragmentList.add(SummaryDataFragment.newInstance("2023-11-21"))
-        fragmentList.add(SummaryDataFragment.newInstance("2023-11-20"))
-        fragmentList.add(SummaryDataFragment.newInstance("2023-11-19"))
-        fragmentList.add(SummaryDataFragment.newInstance("2023-11-18"))
-        fragmentList.add(SummaryDataFragment.newInstance("2023-11-17"))
-        return fragmentList
+    private fun setTabDates(position: Int) {
+        var currentDayText = ""
+        val centerDate = pagerAdapter.getDate(position)
+        if (centerDate.equals(DateFormats.getCurrentDate(DateFormats.dateFormat3))) {
+            currentDayText = "Today, "
+        }
+        binding.tabLayout.tvSelectedDate.text = "$currentDayText${
+            DateFormats.formatDate(
+                centerDate,
+                DateFormats.dateFormat3,
+                DateFormats.dateFormat7
+            )
+        }"
+        val leftDate = pagerAdapter.getDate(position - 1)
+        if (leftDate == null) {
+            binding.tabLayout.tvDateLeft.gone()
+        } else {
+            binding.tabLayout.tvDateLeft.visible()
+            binding.tabLayout.tvDateLeft.text = DateFormats.formatDate(
+                leftDate,
+                DateFormats.dateFormat3,
+                DateFormats.dateFormat7
+            )
+        }
+        val rightDate = pagerAdapter.getDate(position + 1)
+        if (rightDate == null) {
+            binding.tabLayout.tvDateRight.gone()
+        } else {
+            var rightTodayText = ""
+            if (rightDate.equals(DateFormats.getCurrentDate(DateFormats.dateFormat3))) {
+                rightTodayText = "Today, "
+            }
+            binding.tabLayout.tvDateRight.visible()
+            binding.tabLayout.tvDateRight.text = "$rightTodayText${DateFormats.formatDate(
+                rightDate,
+                DateFormats.dateFormat3,
+                DateFormats.dateFormat7
+            )}"
+        }
     }
 
     override fun initListener() {
@@ -219,6 +246,16 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
 
     override fun subscribeObservers() {
+        mainViewModel.dashboard.observe(viewLifecycleOwner) {
+            pagerAdapter.setDataSet(it)
+
+            val pos = pagerAdapter.getPositionForDate(mainViewModel.selectedDate)
+
+            binding.viewPagerSummary.currentItem = pos
+
+            setTabDates(pos)
+
+        }
 
 
         viewModel.pushNotification.observe(viewLifecycleOwner) {
@@ -294,89 +331,15 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         }
 
-        viewModel.stateHeaderCard.observe(this) {
-            /* binding.contentMain.lytHeader.apply {
-                 this.tvDate.text =
-                     it.second
-                 this.tvGreeting.text = it.first
-             }*/
-        }
 
-        viewModel.stateHeartRateCard.observe(this) {
-            /* if (it != null) {
-                 setHearRateCardUi(it)
-             }*/
-        }
-        viewModel.statePairDeviceCard.observe(this) {
-            /*binding.contentMain.lytPairDevice.apply {
-                if (it) {
-                    this.root.visible()
-                    this.root.setOnClickListener {
-                        startActivity(PairDeviceActivity.getStartIntent(requireContext(), true))
-                    }
 
-                } else {
-                    this.root.gone()
-                }
-            }*/
-        }
 
-        mainViewModel.stateConnectHelp.observe(viewLifecycleOwner) {
-            /* if (it) {
-                 binding.contentMain.lytConnectHelp.root.visible()
-                 val logsSync = viewModel.shouldSyncAutoLogs()
-                 if (logsSync) {
-                     context?.let { ctx ->
-                         FeedbackSubmitService.startService(
-                             ctx
-                         )
-                     }
-                 }
-             } else {
-                 binding.contentMain.lytConnectHelp.root.gone()
-             }*/
-        }
 
-        viewModel.stateDashRingBattery.observe(this) {
-            /* if (it.first) {
-                 binding.contentMain.lytChargeRing.root.visible()
-                 binding.contentMain.lytChargeRing.imageView3.loadImage(
-                     requireContext(),
-                     it.second?.ringInfo?.image2
-                 )
-             } else {
-                 binding.contentMain.lytChargeRing.root.gone()
-             }*/
-        }
 
-        viewModel.stateDashAlerts.observe(this) {
 
-            /*if (it.isNullOrEmpty()) {
-                binding.contentMain.lytAlerts.root.gone()
-                return@observe
-            }
-            if (it.size == 1) {
-                binding.contentMain.lytAlerts.tabLayout.invisible()
-            } else
-                binding.contentMain.lytAlerts.tabLayout.visible()
-            binding.contentMain.lytAlerts.apply {
-                binding.contentMain.lytAlerts.root.visible()
-                val winsAdapter = HomeRecyclerViewHolder.AlertsAdapter(object : AlertClickListener {
-                    override fun onAlertClicked(alertType: AlertType) {
-                        handleAlertClick(alertType)
-                    }
-                })
-                vpAlertSlider.apply {
-                    adapter = winsAdapter
-                }
-                winsAdapter.setDataSet(it)
 
-                TabLayoutMediator(
-                    tabLayout,
-                    vpAlertSlider
-                ) { _, _ -> }.attach()
-            }*/
-        }
+
+
 
         viewModel.stateWorkouts.observe(this) {
             //setWorkoutUI(it)
@@ -499,8 +462,6 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         }
 
 
-
-
         /* viewModel.sessionManager.showSyncOfflineData.observe(this) {
              it?.getContent()?.let { userActivity ->
                  if (userActivity == HealthOverviewDataType.SERVER_SYNC_SUCCESS) {
@@ -521,6 +482,13 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             }
         }
         viewModel.getLoading().observe(this) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
+            }
+        }
+        mainViewModel.getLoading().observe(this) {
             if (it) {
                 binding.progressBar.root.visible()
             } else {
@@ -549,20 +517,6 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             }
         }
     }
-
-    private fun handleAlertClick(alertType: AlertType) {
-        when (alertType) {
-            AlertType.BLUETOOTH -> {
-                mainViewModel.checkBluetooth.postValue(Event(true))
-            }
-
-            AlertType.DEFAULT -> {}
-            AlertType.OTA_UPDATE -> {
-                navigate(R.id.oreoUpdateRingFragment)
-            }
-        }
-    }
-
 
 
     private fun stateBluetoothOff() {

@@ -99,5 +99,5 @@ enum class VideoInfoType {
 }
 
 enum class TapMeasureState {
-    NO_DEVICE, LAST_MEASURED, MEASURING, DEFAULT, ERROR
+    NO_DEVICE, LAST_MEASURED, MEASURING, DEFAULT, ERROR, HIDE
 }

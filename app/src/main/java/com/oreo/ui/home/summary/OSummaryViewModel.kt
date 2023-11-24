@@ -305,7 +305,7 @@ constructor(
     private fun getInitialOfflineData(data: OreoDashboardResponseModel) {
 
 
-        viewModelScope.launch(Dispatchers.IO) {
+        /*viewModelScope.launch(Dispatchers.IO) {
 
             val userActivities = ArrayList<OHealthOverview>()
             val viewedCardsData = ArrayList<OHealthOverview>()
@@ -491,7 +491,7 @@ constructor(
             }
 
 
-            /* if (isMorningTime()) {
+            *//* if (isMorningTime()) {
                  if (data.registerDate != 0) {
                      data.readiness?.let {
                          userActivities.add(OHealthOverview.Readiness(data.readiness))
@@ -537,7 +537,7 @@ constructor(
                      }
                  }
 
-             }*/
+             }*//*
 
             stateSleepAvgCard.postValue(Pair(data.sleepScoreAvg, data.activityScoreAvg))
             stateReadinessAvgCard.postValue(data.readinessScoreAvg)
@@ -553,65 +553,7 @@ constructor(
             })
             getRecentWorkoutList()
 
-        }
-    }
-
-    private fun handleInfoCards(
-        data: OreoDashboardResponseModel,
-        userActivities: ArrayList<OHealthOverview>,
-        viewedCardsData: ArrayList<OHealthOverview>,
-    ) {
-        val registerDays = (data.registerDate ?: 0)
-
-        if (registerDays < 7) {
-
-            if (registerDays == 0) {
-                data.welcome?.welcome?.let {
-                    userActivities.add(OHealthOverview.InfoRingWelcome(it))
-                }
-            }
-
-            val cardClickState = localDataStore.getDashCardClickState()
-
-            data.welcome?.care?.let {
-                if (registerDays > 0) {
-                    viewedCardsData.add(OHealthOverview.InfoRingCare(it))
-                } else {
-                    if (cardClickState[DashInfoCard.CARE] == false) {
-                        userActivities.add(OHealthOverview.InfoRingCare(it))
-                    } else {
-                        viewedCardsData.add(OHealthOverview.InfoRingCare(it))
-                    }
-                }
-
-            }
-
-            data.welcome?.sleep_media?.let {
-                if (cardClickState[DashInfoCard.SLEEP] == false) {
-                    userActivities.add(OHealthOverview.InfoVideo(VideoInfoType.SLEEP, it))
-                } else {
-                    viewedCardsData.add(OHealthOverview.InfoVideo(VideoInfoType.SLEEP, it))
-                }
-            }
-
-            data.welcome?.activity_media?.let {
-                if (cardClickState[DashInfoCard.ACTIVITY] == false) {
-                    userActivities.add(OHealthOverview.InfoVideo(VideoInfoType.ACTIVITY, it))
-                } else {
-                    viewedCardsData.add(OHealthOverview.InfoVideo(VideoInfoType.ACTIVITY, it))
-                }
-            }
-
-            data.welcome?.readiness_media?.let {
-                if (cardClickState[DashInfoCard.READINESS] == false) {
-                    userActivities.add(OHealthOverview.InfoVideo(VideoInfoType.READINESS, it))
-                } else {
-                    viewedCardsData.add(OHealthOverview.InfoVideo(VideoInfoType.READINESS, it))
-                }
-            }
-
-
-        }
+        }*/
     }
 
     private fun makeSleepArray(data: ODashboardSleepModel?): ArrayList<SleepData.SleepDataBreakup> {

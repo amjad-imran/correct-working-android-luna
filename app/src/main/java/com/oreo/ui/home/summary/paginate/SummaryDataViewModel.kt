@@ -2,28 +2,36 @@ package com.oreo.ui.home.summary.paginate
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
+import com.github.mikephil.charting.data.CandleEntry
+import com.github.mikephil.charting.data.Entry
+import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
+import com.noisefit_commans.common.maxWithoutZero
+import com.noisefit_commans.common.minWithoutZero
 import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
+import com.noisefit_commans.data.model.User
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.ManualMeasureType
 import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.ui.getColor
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.model.AlertType
 import com.oreo.data.model.ChartModel
+import com.oreo.data.model.DashAlert
 import com.oreo.data.model.OHealthOverview
+import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.VideoInfoType
 import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
-import com.oreo.data.model.health.OreoDashboardResponseModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -40,8 +48,12 @@ constructor(
 ) : BaseViewModel() {
 
 
+    val stateHeaderCard = MutableLiveData<Pair<String, String>>()//Name,Date
     val healthOverviewData = MutableLiveData<ArrayList<OHealthOverview>>()
     val viewedCardsData = MutableLiveData<ArrayList<OHealthOverview>>()
+    val statePairDeviceCard = MutableLiveData<Boolean>()
+    val stateDashRingBattery = MutableLiveData<Pair<Boolean, ColorFitDevice?>>()
+    val stateDashAlerts = MutableLiveData<HashMap<AlertType, DashAlert>>()
 
 
     val stateReadinessAvgCard = MutableLiveData<ODashboardReadinessScoreModel?>()
@@ -49,10 +61,85 @@ constructor(
         MutableLiveData<Pair<ODashboardSleepScoreModel?, ODashboardActivityScoreModel?>>()
     val stateHeartRateCard = MutableLiveData<OHealthOverview.HeartRate?>()
 
+    var isToday = false
 
-    fun parseHealthData(data: OreoDashboardResponseModel) {
+    var user:User?=null
+
+
+    fun initTodayData() {
 
         viewModelScope.launch(Dispatchers.IO) {
+            user = localDataStore.getUser()
+            stateHeaderCard.postValue(
+                Pair(
+                    getGreetingMessageValue(),
+                    DateFormats.getCurrentDate(DateFormats.dateTimeFormatWithWeekWithoutYear)
+                )
+            )
+            val device = getDeviceConnected()
+            statePairDeviceCard.postValue(device == null)
+            stateHeartRateCard.postValue(userRepository.getSummaryHRHealthOverview().apply {
+                if (device == null) {
+                    this?.measureState = TapMeasureState.NO_DEVICE
+                }
+            })
+        }
+
+        updateAlerts()
+    }
+
+    fun getGreetingMessageValue(): String {
+        return "${getGreetingMessage()}, ${
+            user?.getOnlyFirstName()?.trim()?.ifEmpty { "Stranger" }
+        }"
+    }
+
+    private fun getGreetingMessage(): String {
+        val currentTime = DateFormats.getTimeFormat()
+        if (DateFormats.isTimeBetween(currentTime, "04:00", "11:59")) {
+            return "Good morning"
+        } else if (DateFormats.isTimeBetween(currentTime, "12:00", "16:59")) {
+            return "Good afternoon"
+        } else if (DateFormats.isTimeBetween(currentTime, "17:00", "20:59")) {
+            return "Good evening"
+        } else if (DateFormats.isTimeBetween(
+                currentTime, "21:00", "23:59"
+            ) || DateFormats.isTimeBetween(currentTime, "00:00", "03:59")
+        ) {
+            return "Hi"
+        }
+
+        return "Hi"
+    }
+
+
+    fun updateAlerts() {
+        val dashAlert = HashMap<AlertType, DashAlert>()
+
+        val btState = sessionManager.bluetoothStateDash.value
+        val devicePaired = ringDataStore.getRingDevice()
+        if (btState == false && devicePaired != null) {
+            if (sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
+                dashAlert[AlertType.BLUETOOTH] =
+                    DashAlert("Authorize Bluetooth connectivity for Luna", false)
+            }
+        }
+
+        if (sessionManager.forceOtaResponseRing != null) {
+            dashAlert[AlertType.OTA_UPDATE] =
+                DashAlert("Ring firmware update available", false)
+        }
+
+
+        stateDashAlerts.postValue(dashAlert)
+    }
+
+
+    fun parseHealthData(healthData: ServerUserHealthData) {
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val data = healthData.dashboard ?: return@launch
 
             val userActivities = ArrayList<OHealthOverview>()
             val viewedCardsData = ArrayList<OHealthOverview>()
@@ -62,18 +149,19 @@ constructor(
                 userActivities.add(OHealthOverview.AutoSport(autoSportCount))
             }
 
-            ringDataStore.setRegisterDay(data.registerDate ?: -1)
+            if(isToday){
+                ringDataStore.setRegisterDay(healthData.registerDate ?: -1)
+                handleInfoCards(healthData, userActivities, viewedCardsData)
+            }
 
-            LOGS.w("RESPONSE___ ${Gson().toJson(data)}")
 
-            handleInfoCards(data, userActivities, viewedCardsData)
 
 
             when (getDaySlot()) {
                 0 -> {
                     //sleep
                     if (data.sleep?.sleepScore != null) {
-                        if (data.registerDate != 0) {
+                        if (healthData.registerDate != 0) {
                             data.readiness?.let {
                                 userActivities.add(OHealthOverview.Readiness(data.readiness))
                             }
@@ -95,7 +183,7 @@ constructor(
 
                     //sleep
                     if (data.sleep?.sleepScore != null) {
-                        if (data.registerDate != 0) {
+                        if (healthData.registerDate != 0) {
                             data.readiness?.let {
                                 userActivities.add(OHealthOverview.Readiness(data.readiness))
                             }
@@ -137,7 +225,7 @@ constructor(
                 }
 
                 2 -> {
-                    if (data.registerDate != 0) {
+                    if (healthData.registerDate != 0) {
                         data.readiness?.let {
                             userActivities.add(OHealthOverview.Readiness(data.readiness))
                         }
@@ -202,7 +290,7 @@ constructor(
                         }
                     }
 
-                    if (data.registerDate != 0) {
+                    if (healthData.registerDate != 0) {
                         if (data.sleep?.sleepScore != null) {
                             userActivities.add(
                                 OHealthOverview.SleepMinimal(
@@ -234,24 +322,171 @@ constructor(
                 }
             }
 
-            stateSleepAvgCard.postValue(Pair(data.sleepScoreAvg, data.activityScoreAvg))
-            stateReadinessAvgCard.postValue(data.readinessScoreAvg)
+            if (isToday) {
+                stateSleepAvgCard.postValue(Pair(healthData.sleepScoreAvg, healthData.activityScoreAvg))
+                stateReadinessAvgCard.postValue(healthData.readinessScoreAvg)
+            }
 
             this@SummaryDataViewModel.viewedCardsData.postValue(viewedCardsData)
             healthOverviewData.postValue(userActivities)
 
-            val device = ringDataStore.getRingDevice()
-            stateHeartRateCard.postValue(userRepository.getSummaryHRHealthOverview().apply {
-                if (device == null) {
-                    this?.measureState = TapMeasureState.NO_DEVICE
-                }
-            })
-
+            if (isToday) {
+                val device = ringDataStore.getRingDevice()
+                stateHeartRateCard.postValue(userRepository.getSummaryHRHealthOverview().apply {
+                    if (device == null) {
+                        this?.measureState = TapMeasureState.NO_DEVICE
+                    }
+                })
+            } else {
+                stateHeartRateCard.postValue(parseHrData(healthData))
+            }
         }
     }
 
+    private fun parseHrData(data: ServerUserHealthData): OHealthOverview.HeartRate {
+
+        var breakupArray = data.heart?.break_up
+        if (breakupArray.isNullOrEmpty()) {
+            val dummyArray = ArrayList<Int>()
+            for (i in 0..287) {
+                dummyArray.add(0)
+            }
+            breakupArray = dummyArray
+        }
+        val hRWithIntervalList = breakupArray.chunked(6)
+        val lineChartList: ArrayList<Entry> = ArrayList()
+        val candleChartList: ArrayList<CandleEntry> = ArrayList()
+        val lineColorList: ArrayList<Int> = ArrayList()
+        val xLabelList = ArrayList<String>()
+        val avgList = ArrayList<Int>()
+        var overAllMinValue = Int.MAX_VALUE
+        var overAllMaxValue = -1
+        var hrCount = 0
+        var lastHrValue: Pair<Int, Long>? = null//HR value,timer
+
+
+        hRWithIntervalList.forEachIndexed { index, hrList ->
+
+
+            val minValue = hrList.minWithoutZero()
+
+            val maxValue = hrList.maxWithoutZero()
+
+            var min = minValue
+            var max = maxValue
+
+            if (min == 0 && max != 0) {
+                min = max
+            }
+
+            if (max == 0 && min != 0) {
+                max = min
+            }
+
+            val avg = (min + max) / 2
+            if (avg != 0) {
+                if (min < overAllMinValue) {
+                    overAllMinValue = min;
+                }
+                if (max > overAllMaxValue) {
+                    overAllMaxValue = max;
+                }
+                avgList.add(avg)
+
+            }
+
+            hrList.forEachIndexed { index2, value ->
+                if (value != 0) {
+
+                    val indexMillis = ((index * 6) + index2) * 5 * 60L * 1000L
+                    LOGS.w("convertHeartRateOverviewData $index $indexMillis")
+
+                    lastHrValue = Pair(value, indexMillis)
+                }
+            }
+
+            //if any change chunk value then divide 12 by that chunk value to get below correct xlabel list
+            if (index % 2 == 0) {
+                hrCount += 1
+
+            }
+
+
+            xLabelList.add(handleHrFormat(hrCount))
+
+            candleChartList.add(
+                CandleEntry(
+                    index.toFloat(),
+                    max.toFloat(),
+                    min.toFloat(),
+                    max.toFloat(),
+                    min.toFloat()
+                )
+            )
+
+            if (index % 2 == 0) {
+                lineColorList.add(R.color.color_error.getColor())
+            } else {
+                lineColorList.add(R.color.white.getColor())
+            }
+            lineChartList.add(
+                Entry(
+                    index.toFloat(),
+                    avg.toFloat()
+                )
+            )
+        }
+
+        val average = avgList.average().toFloat()
+
+
+
+
+        if (overAllMinValue == Int.MAX_VALUE) {
+            overAllMinValue = 69
+        }
+
+        if (overAllMinValue != 0) {
+            overAllMinValue -= 9
+        }
+
+        val measureState = TapMeasureState.HIDE
+
+
+        return OHealthOverview.HeartRate(
+            "",
+            "",
+            candleChartList,
+            Pair(lineChartList, lineColorList),
+            xLabelList, overAllMinValue.toFloat(), average,
+            measureState
+        )
+    }
+
+    private fun handleHrFormat(time: Int): String {
+
+        if (time == 1 || time == 24) {
+            return "12 am"
+        }
+
+
+        var hour = time
+        var suffix = ""
+        if (hour > 11) {
+            suffix = "pm"
+            if (hour > 12)
+                hour -= 12;
+        } else {
+            suffix = "am"
+            if (hour == 0)
+                hour = 12;
+        }
+        return "$hour $suffix"
+    }
+
+
     private fun handleInfoCards(
-        data: OreoDashboardResponseModel,
+        data: ServerUserHealthData,
         userActivities: ArrayList<OHealthOverview>,
         viewedCardsData: ArrayList<OHealthOverview>,
     ) {

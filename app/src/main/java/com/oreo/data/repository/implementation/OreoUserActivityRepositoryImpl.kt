@@ -1,6 +1,5 @@
 package com.oreo.data.repository.implementation
 
-import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.data.Entry
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -13,7 +12,6 @@ import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.local.db.fromJson
 import com.noisefit.data.remote.abstraction.NetworkService
 import com.noisefit.data.remote.base.Resource
-import com.noisefit.data.remote.response.Watchface2
 import com.noisefit.data.repository.LastSyncItems
 import com.noisefit.data.repository.LastSyncProvider
 import com.noisefit.data.safeApiCallFlow
@@ -21,16 +19,15 @@ import com.noisefit.data.safeCacheCall
 import com.noisefit.luna.BuildConfig
 import com.noisefit_commans.common.checkDayDifferenceMoreNMinutes
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
-import com.noisefit_commans.data.model.FriendsData
 import com.noisefit_commans.data.model.KeyValue
 import com.noisefit_commans.data.model.UserHealthData
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
 import com.noisefit_commans.ui.checkDayDifferenceMoreOne
-import com.noisefit_commans.ui.delay
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.dataConverter.OreoOfflineDataMapper
+import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.db.implementation.*
 import com.oreo.data.model.*
 import com.oreo.data.model.health.OreoActivityModel
@@ -46,6 +43,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
+import org.joda.time.LocalDate
 
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -65,6 +63,7 @@ class OreoUserActivityRepositoryImpl(
     private val oreoAutoSportDataImpl: OreoAutoSportDataImpl,
     private val offlineDataMapper: OreoOfflineDataMapper,
     private val keyValueDataSource: KeyValueDataSource,
+    private val userHealthDataSource: OreoUserHealthDataDataSource,
     private val lastSyncProvider: LastSyncProvider,
     private val offlineApiStore: IOfflineApiResponseStore,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
@@ -87,6 +86,20 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
+    private fun getDaysList(startDate: String?, endDate: String?): List<String> {
+        val dateList = ArrayList<String>()
+        var start: LocalDate = LocalDate.parse(startDate)
+        val end: LocalDate = LocalDate.parse(endDate)
+
+        while (!start.isAfter(end)) {
+            dateList.add(start.toString())
+            start = start.plusDays(1)
+        }
+
+        return dateList
+
+    }
+
     /**
      * @param startDate endDate in format YYYY-MM-dd
      */
@@ -94,10 +107,124 @@ class OreoUserActivityRepositoryImpl(
         startDate: String?,
         endDate: String?
     ): Flow<Resource<BaseApiResponse<ServerUserHealthResponse>>> {
-        return safeApiCallFlow(dispatcher) {
-            val url =
-                "${BuildConfig.BASE_URL_NEW}/luna/protean/v2/dashboard"
-            remoteDataSource.getUserHealthData(url, startDate, endDate)
+
+        return flow {
+
+            var resultData: List<ServerUserHealthData>? = null
+
+
+            val cacheResult = safeCacheCall(Dispatchers.IO) {
+                val datesList = getDaysList(startDate, endDate)
+
+                val localData = ArrayList<ServerUserHealthData>()
+                datesList.forEach {
+                    userHealthDataSource.getDataByDate(it)?.userHealthData?.let { healthData ->
+                        localData.add(
+                            Gson().fromJson<ServerUserHealthData>(
+                                healthData
+                            )
+                        )
+                    }
+                }
+
+                if (localData.size != 7) {
+                    return@safeCacheCall null
+                }
+
+                return@safeCacheCall localData
+
+            }
+
+            cacheResult.collect { resource ->
+                when (resource) {
+                    is CacheResult.Success -> {
+
+                        resource.value?.let {
+                            resultData = it
+                        }
+                    }
+
+                    is CacheResult.GenericError -> {
+
+                    }
+                }
+            }
+
+            if (resultData != null) {
+                emit(
+                    Resource.Success(
+                        BaseApiResponse(
+                            data = ServerUserHealthResponse(
+                                data = resultData!!
+                            ),
+                            message = "",
+                        )
+                    )
+                )
+                return@flow
+            }
+
+            val serverResult = safeApiCallFlow(dispatcher) {
+                val url =
+                    "${BuildConfig.BASE_URL_NEW}/luna/protean/v2/dashboard"
+                remoteDataSource.getUserHealthData(url, startDate, endDate)
+            }
+
+            serverResult.collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        emit(Resource.GenericError(resource.message, resource.errorCode))
+                    }
+
+                    is Resource.Loading -> {
+                        emit(Resource.Loading(resource.loading))
+                    }
+
+                    is Resource.NetworkError -> {
+                        emit(Resource.NetworkError(resource.response, resource.code))
+                    }
+
+                    is Resource.Success -> {
+
+                        resource.data?.data?.let { response ->
+                            resultData = response.data
+                        }
+                    }
+                }
+            }
+
+            if (resultData != null) {
+                safeCacheCall(Dispatchers.IO) {
+
+                    resultData?.forEach {
+                        userHealthDataSource.insertData(
+                            UserHealthData(
+                                userHealthData = gson.toJson(it),
+                                date = it.date
+                            )
+                        )
+                    }
+                }.collect { resource ->
+                    when (resource) {
+                        is CacheResult.Success -> {
+                            emit(
+                                Resource.Success(
+                                    BaseApiResponse(
+                                        data = ServerUserHealthResponse(
+                                            data = resultData!!
+                                        ),
+                                        message = "",
+                                    )
+                                )
+                            )
+                        }
+
+                        is CacheResult.GenericError -> {
+                            emit(Resource.GenericError(message = "Something went wrong", 0))
+                        }
+                    }
+                }
+            }
         }
     }
 
