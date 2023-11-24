@@ -78,8 +78,7 @@ constructor(
     ) {
 
         if (currentBatteryLevel <= 20) {
-            val message =
-                "Your Luna Ring battery level is $currentBatteryLevel%"
+            val message ="Your ring battery is below $currentBatteryLevel%. Please charge your ring to get uninterrupted insights."
 
             val notificationShown = watchDataStore.getChargingNotificationsShown()
 

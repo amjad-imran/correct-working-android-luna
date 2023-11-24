@@ -190,7 +190,7 @@ constructor(
                     pushNotification.postValue(
                         Event(
                             PushLocalNotification(
-                                "Title missing",
+                                "Sleep",
                                 "You got enough sleep hours today. This helps with higher recovery, cognitive & immune system function",
                                 NotificationEventsClass.LOCAL_SLEEP_NOTIFICATION_KEY
                             )
