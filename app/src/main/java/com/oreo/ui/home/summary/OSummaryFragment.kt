@@ -461,9 +461,11 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 val logsSync = viewModel.shouldSyncAutoLogs()
                 if (logsSync) {
                     context?.let { ctx ->
-                        FeedbackSubmitService.startService(
+                        val status = ApplicationUtils.startFeedbackSubmitWorker(ctx)
+
+                       /* FeedbackSubmitService.startService(
                             ctx
-                        )
+                        )*/
                     }
                 }
             } else {

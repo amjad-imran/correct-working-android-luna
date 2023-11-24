@@ -41,6 +41,7 @@ import kotlin.math.floor
 
 private const val UniqueSyncDataWorkName: String = "SyncDataWork"
 private const val UniqueRingSyncDataWorkName: String = "RingSyncDataWork"
+private const val LOGS_SYNC_WORKER_NAME: String = "LOGS_SYNC_WORKER_NAME"
 private const val UniqueWeatherWorkName: String = "WeatherWork"
 private const val UniqueGoogleSyncDataWorkName: String = "GoogleSyncDataWork"
 private const val UniqueActivitySyncWorkName: String = "ActivitySyncWork"
@@ -327,6 +328,27 @@ object ApplicationUtils {
         }
 
         return false
+    }
+
+
+    fun startFeedbackSubmitWorker(context: Context): Boolean {
+
+        val constraints: Constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val workRequest =
+            OneTimeWorkRequest.Builder(FeedbackSubmitWorker::class.java)
+                .addTag(LOGS_SYNC_WORKER_NAME)
+                .setConstraints(constraints)
+                .build()
+
+        WorkManager.getInstance(context).enqueueUniqueWork(
+            LOGS_SYNC_WORKER_NAME,
+            ExistingWorkPolicy.KEEP,
+            workRequest
+        )
+        return true
     }
 
     private suspend fun isWorkScheduled1(workName: String, context: Context): Boolean {
