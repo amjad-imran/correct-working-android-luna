@@ -34,7 +34,7 @@ data class ODashboardReadinessModel(
     val readinessScore: Int? = null,
     val status: String? = "",
     val nudges: List<String>? = null,
-    val title: List<String>? = null,
+    val titles: List<String>? = null,
 )
 
 data class ODashboardActivityScoreModel(

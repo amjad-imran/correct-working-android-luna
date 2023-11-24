@@ -410,8 +410,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             if (data.data.nudges.isNullOrEmpty()) {
                 binding.tvNudge.text = ""
             } else {
-                binding.tvDayStatus.text = data.data.title?.first()
-                binding.tvNudge.text = data.data.nudges?.first()
+                binding.tvDayStatus.text = data.data.titles?.first() ?: ""
+                binding.tvNudge.text = data.data.nudges.first()
             }
 
             binding.root.setOnClickListener {
@@ -456,7 +456,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     bottomMargin = binding.tvTodayDesc.context.dpToPx(26)
                 }
                 binding.tvTodayDesc.text = data.data.nudges?.first()
-                binding.tvStatus.text = data.data.title?.first()
+                binding.tvStatus.text = data.data.titles?.first()?:""
             }
 
             if (scoreValue >= 0) {
