@@ -112,7 +112,7 @@ class WorkoutIntensityGraphOreo(var mContext: Context) : View(
                 var end: Float
                 var top = 0f
                 val bottom = sectionHeight * 4 - pxFromDp(mContext, 2f)
-                val textY = sectionHeight * 5 - pxFromDp(mContext,6f)
+                val textY = sectionHeight * 5 - pxFromDp(mContext, 6f)
 
                 val sectionWidth = eachSecondsWidth * 5
 
@@ -216,15 +216,23 @@ class WorkoutIntensityGraphOreo(var mContext: Context) : View(
                 }
 
                 else -> {
-                    val value = if (dataSize < 4) 1 else dataSize / 4
+                    val value = if (dataSize < 4) 1 else 0
 
-                    val isZero = (index % value == 0)
-
-                    if (isZero) {
+                    if (value == 1) {
                         val text = xAxisList[index] ?: return
                         val width = mTextPaintCenter.measureText(text)
                         val textStart = start + sectionWidth / 2 - width / 2
                         canvas.drawText(text, textStart, textY, mTextPaintCenter)
+                    } else {
+
+                        val center = xAxisList.size / 2
+
+                        if (center == index) {
+                            val text = xAxisList[index] ?: return
+                            val width = mTextPaintCenter.measureText(text)
+                            val textStart = start + sectionWidth / 2 - width / 2
+                            canvas.drawText(text, textStart, textY, mTextPaintCenter)
+                        }
                     }
                 }
             }
