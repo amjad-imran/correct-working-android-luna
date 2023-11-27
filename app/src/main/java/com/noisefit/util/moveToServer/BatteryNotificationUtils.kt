@@ -15,7 +15,7 @@ import com.noisefit_commans.utils.LOGS
 import javax.inject.Inject
 
 private const val TAG = "BatteryNotificationUtils"
-private const val TITLE = "Luna Ring Battery Alert ⚠"
+private const val TITLE = "Luna Ring Battery Alert"
 private const val TITLE_1 = "Luna Ring Battery Alert"
 const val CHARGE_REMINDER = "CHARGING_REMINDER"
 
