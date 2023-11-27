@@ -411,7 +411,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.tvNudge.text = ""
             } else {
                 binding.tvDayStatus.text = data.data.titles?.first() ?: ""
-                binding.tvNudge.text = data.data.nudges.first()
+                binding.tvNudge.text = data.data.nudges?.first()?:""
             }
 
             binding.root.setOnClickListener {
@@ -446,17 +446,19 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             }
 
             if (data.data.nudges.isNullOrEmpty()) {
+                binding.tvTitle.gone()
                 (binding.tvTodayDesc.layoutParams as ConstraintLayout.LayoutParams).apply {
                     topMargin = binding.tvTodayDesc.context.dpToPx(24)
                     bottomMargin = 0
                 }
             } else {
+                binding.tvTitle.visible()
                 (binding.tvTodayDesc.layoutParams as ConstraintLayout.LayoutParams).apply {
-                    topMargin = binding.tvTodayDesc.context.dpToPx(24)
+                    topMargin = binding.tvTodayDesc.context.dpToPx(8)
                     bottomMargin = binding.tvTodayDesc.context.dpToPx(26)
                 }
                 binding.tvTodayDesc.text = data.data.nudges?.first()
-                binding.tvStatus.text = data.data.titles?.first()?:""
+                binding.tvTitle.text = data.data.titles?.first()?:""
             }
 
             if (scoreValue >= 0) {
