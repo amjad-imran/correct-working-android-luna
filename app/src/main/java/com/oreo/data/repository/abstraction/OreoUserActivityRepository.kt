@@ -17,6 +17,7 @@ import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.model.OWorkoutListModal
 import com.oreo.data.model.RingCareResponse
 import com.oreo.data.model.RingWelcome
+import com.oreo.data.model.ServerUserHealthResponse
 import com.oreo.data.model.health.OreoActivityModel
 import com.oreo.data.model.health.OreoDashboardResponseModel
 import com.oreo.data.model.health.OreoReadinessModel

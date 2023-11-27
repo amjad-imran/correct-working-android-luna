@@ -87,7 +87,7 @@ class OreoRoomModule {
 
         }
     }
-    private val MIGRATION_3_4: Migration = object : Migration(2, 3) {
+    private val MIGRATION_3_4: Migration = object : Migration(3, 4) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL(
                 "CREATE TABLE IF NOT EXISTS `user_health_data` " +

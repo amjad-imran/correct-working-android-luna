@@ -321,30 +321,6 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
 
 
-
-        mainViewModel.stateConnectHelp.observe(viewLifecycleOwner) {
-            if (it) {
-                binding.contentMain.lytConnectHelp.root.visible()
-                val logsSync = viewModel.shouldSyncAutoLogs()
-                if (logsSync) {
-                    context?.let { ctx ->
-                        val status = ApplicationUtils.startFeedbackSubmitWorker(ctx)
-
-                       /* FeedbackSubmitService.startService(
-                            ctx
-                        )*/
-                    }
-                }
-            } else {
-                binding.contentMain.lytConnectHelp.root.gone()
-            }
-        }
-
-
-
-
-
-
         viewModel.stateWorkouts.observe(this) {
             //setWorkoutUI(it)
 

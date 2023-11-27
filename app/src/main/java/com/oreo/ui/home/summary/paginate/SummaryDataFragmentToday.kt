@@ -369,9 +369,7 @@ class SummaryDataFragmentToday :
                 val logsSync = mainViewModel.shouldSyncAutoLogs()
                 if (logsSync) {
                     context?.let { ctx ->
-                        FeedbackSubmitService.startService(
-                            ctx
-                        )
+                        val status = ApplicationUtils.startFeedbackSubmitWorker(ctx)
                     }
                 }
             } else {
