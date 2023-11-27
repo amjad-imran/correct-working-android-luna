@@ -70,9 +70,6 @@ class SummaryDataFragment :
     private val healthOverviewAdapter by lazy {
         OSummaryHealthOverviewAdapter()
     }
-    private val viewedCardsAdapter by lazy {
-        OSummaryHealthOverviewAdapter()
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -82,8 +79,6 @@ class SummaryDataFragment :
 
         val date = arguments?.getString("ARGS_DATE")
 
-        viewModel.isToday = date.equals(mainViewModel.getTodayDate())
-
         date?.let {
             mainViewModel.getDashBoardData(it)?.let { dash ->
                 setUi(dash)
@@ -92,70 +87,25 @@ class SummaryDataFragment :
     }
 
     private fun setUi(data: ServerUserHealthData) {
-        if (viewModel.isToday) {
-            viewModel.initTodayData()
-        }
         viewModel.parseHealthData(data)
     }
 
 
     private fun setAdapter() {
-        binding.contentMain.rvHealthData.apply {
+        binding.rvHealthData.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = healthOverviewAdapter
         }
 
-        binding.contentMain.rvViewedCards.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = viewedCardsAdapter
-        }
-
-        viewedCardsAdapter.itemClickListener = { type ->
-            when (type) {
-                is OSummaryHealthOverviewClickEnum.TextRingCareClicked -> {
-                    navigate(R.id.ringCareFragment, Bundle().apply {
-                        this.putString("title", type.title)
-                    })
-                }
-
-                is OSummaryHealthOverviewClickEnum.VideoInfoClicked -> {
-                    navigate(R.id.ringInfoPlayerFragment, Bundle().apply {
-                        this.putString("videoUrl", type.videoUrl)
-                    })
-                }
-
-                else -> {}
-            }
-
-        }
 
         healthOverviewAdapter.itemClickListener = { type ->
             when (type) {
 
-                is OSummaryHealthOverviewClickEnum.WorkoutAlertWhatisThis -> {
+                is OSummaryHealthOverviewClickEnum.WorkoutAlertWhatisThis -> {}
 
-                    navigate(R.id.aboutAutoWorkoutBottomSheet)
-                }
-
-                is OSummaryHealthOverviewClickEnum.WorkoutAlertIdentify -> {
-                    navigate(R.id.detectWorkoutListFragment)
-                }
+                is OSummaryHealthOverviewClickEnum.WorkoutAlertIdentify -> {}
 
                 is OSummaryHealthOverviewClickEnum.AutoSportsDelete -> {
-                    setFragmentResultListener(DELETE_REQ_REQUEST_KEY) { _, bundle ->
-                        val allow = bundle.getBoolean("allow")
-                        if (allow) {/*viewModel.markWorkoutSyncedAll()
-                            viewModel.removeAutoWorkoutCard()*/
-                        }
-                    }
-                    navigate(R.id.deleteAllWorkoutBottomSheet, Bundle().apply {
-                        this.putString("title", getString(R.string.text_dismiss_activity_title))
-                        this.putString(
-                            "description", getString(R.string.text_dismiss_activity_desc)
-                        )
-                        this.putString("acceptText", "")
-                        this.putString("declineText", "")
-                    })
                 }
 
 
@@ -175,26 +125,13 @@ class SummaryDataFragment :
                 }
 
                 is OSummaryHealthOverviewClickEnum.VideoInfoClicked -> {
-                    navigate(R.id.ringInfoPlayerFragment, Bundle().apply {
-                        this.putString("videoUrl", type.videoUrl)
-                    })/* viewModel.localDataStore.setDashCardClickState(
-                         when (type.type) {
-                             VideoInfoType.SLEEP -> DashInfoCard.SLEEP
-                             VideoInfoType.READINESS -> DashInfoCard.READINESS
-                             VideoInfoType.ACTIVITY -> DashInfoCard.ACTIVITY
-                         }, true
-                     )*/
                 }
 
-                is OSummaryHealthOverviewClickEnum.TextRingCareClicked -> {/*viewModel.localDataStore.setDashCardClickState(DashInfoCard.CARE, true)
-                    navigate(R.id.ringCareFragment, Bundle().apply {
-                        this.putString("title", type.title)
-                    })*/
+                is OSummaryHealthOverviewClickEnum.TextRingCareClicked -> {
 
                 }
 
-                OSummaryHealthOverviewClickEnum.TextWelcomeRingClicked -> {/* viewModel.localDataStore.setDashCardClickState(DashInfoCard.WELCOME, true)
-                     navigate(R.id.ringWelcomeFragment)*/
+                OSummaryHealthOverviewClickEnum.TextWelcomeRingClicked -> {
                 }
             }
         }
@@ -203,359 +140,31 @@ class SummaryDataFragment :
 
 
     override fun initListener() {
-        binding.contentMain.lytConnectHelp.btnCancel.setOnClickListener {
-            mainViewModel.onRingConnected()
-        }
 
-        binding.contentMain.lytConnectHelp.tvDesc.setOnClickListener {
-            navigate(R.id.oreoHSQuestionFragment, Bundle().apply {
-                putString("title", "Battery & Charging")
-                putString("id", "6")
-            })
-        }
-
-        binding.contentMain.lytChargeRing.root.setOnClickListener {
-            /*navigate(R.id.ringBatteryChargeFragment)
-            viewModel.setRingBatteryInfoState()*/
-        }
-
-        binding.contentMain.lytPairDevice.btnPairDevice.setOnClickListener {
-            startActivity(PairDeviceActivity.getStartIntent(requireContext(), true))
-        }
-        binding.contentMain.lytHeartRate.bInfo.setOnClickListener {
+        binding.lytHeartRate.bInfo.setOnClickListener {
             /*viewModel.getContributorInfo("hr")*/
         }
-
-        binding.contentMain.lytReadinessAvg.root.setOnClickListener {
-            /* viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_READINESS_SCORE_CLICK)
-             viewModel.getContributorInfo("readiness")*/
-        }
-
-        binding.contentMain.lytSleepAvg.constraintLayout2.setOnClickListener {
-            /*viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_SLEEP_SCORE_CLICK)
-            viewModel.getContributorInfo("sleep")*/
-
-        }
-
-        binding.contentMain.lytSleepAvg.constraintLayout.setOnClickListener {
-            /* viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_ACTIVITY_SCORE_CLICK)
-             viewModel.getContributorInfo("activity")*/
-        }
-
     }
 
     override fun subscribeObservers() {
 
-        viewModel.stateHeaderCard.observe(viewLifecycleOwner) {
-            binding.contentMain.lytHeader.apply {
-                this.tvDate.text =
-                    it.second
-                this.tvGreeting.text = it.first
-            }
-        }
 
         viewModel.healthOverviewData.observe(viewLifecycleOwner) {
             healthOverviewAdapter.items = it
             healthOverviewAdapter.refreshPosition = null
         }
 
-        viewModel.viewedCardsData.observe(viewLifecycleOwner) {
-            it?.let {
-                viewedCardsAdapter.refreshPosition = null
-                viewedCardsAdapter.items = it
-            }
-        }
-
-        viewModel.stateReadinessAvgCard.observe(viewLifecycleOwner) {
-
-            if (it == null) {
-                binding.contentMain.lytReadinessAvg.root.gone()
-                return@observe
-            }
-
-            binding.contentMain.lytReadinessAvg.root.visible()
-
-
-            updateReadinessAvgUi(it)
-
-        }
-
-        viewModel.stateSleepAvgCard.observe(viewLifecycleOwner) {
-
-            if (it == null) {
-                binding.contentMain.lytSleepAvg.root.gone()
-                return@observe
-            }
-
-            if (it.first != null && it.second != null) {
-                binding.contentMain.lytSleepAvg.root.visible()
-
-                updateSleepAvgUi(it)
-
-            } else {
-                binding.contentMain.lytSleepAvg.root.gone()
-            }
-        }
 
         viewModel.stateHeartRateCard.observe(viewLifecycleOwner) {
             if (it != null) {
                 setHearRateCardUi(it)
             }
         }
-
-        viewModel.statePairDeviceCard.observe(this) {
-            binding.contentMain.lytPairDevice.apply {
-                if (it) {
-                    this.root.visible()
-                    this.root.setOnClickListener {
-                        startActivity(PairDeviceActivity.getStartIntent(requireContext(), true))
-                    }
-
-                } else {
-                    this.root.gone()
-                }
-            }
-        }
-
-        mainViewModel.stateConnectHelp.observe(viewLifecycleOwner) {
-             if (it) {
-                 binding.contentMain.lytConnectHelp.root.visible()
-                 val logsSync = mainViewModel.shouldSyncAutoLogs()
-                 if (logsSync) {
-                     context?.let { ctx ->
-                         FeedbackSubmitService.startService(
-                             ctx
-                         )
-                     }
-                 }
-             } else {
-                 binding.contentMain.lytConnectHelp.root.gone()
-             }
-        }
-
-        viewModel.stateDashRingBattery.observe(this) {
-            /* if (it.first) {
-                 binding.contentMain.lytChargeRing.root.visible()
-                 binding.contentMain.lytChargeRing.imageView3.loadImage(
-                     requireContext(),
-                     it.second?.ringInfo?.image2
-                 )
-             } else {
-                 binding.contentMain.lytChargeRing.root.gone()
-             }*/
-        }
-
-        viewModel.stateDashAlerts.observe(this) {
-
-            if (it.isNullOrEmpty()) {
-                binding.contentMain.lytAlerts.root.gone()
-                return@observe
-            }
-            if (it.size == 1) {
-                binding.contentMain.lytAlerts.tabLayout.invisible()
-            } else
-                binding.contentMain.lytAlerts.tabLayout.visible()
-            binding.contentMain.lytAlerts.apply {
-                binding.contentMain.lytAlerts.root.visible()
-                val winsAdapter = HomeRecyclerViewHolder.AlertsAdapter(object : AlertClickListener {
-                    override fun onAlertClicked(alertType: AlertType) {
-                        handleAlertClick(alertType)
-                    }
-                })
-                vpAlertSlider.apply {
-                    adapter = winsAdapter
-                }
-                winsAdapter.setDataSet(it)
-
-                TabLayoutMediator(
-                    tabLayout,
-                    vpAlertSlider
-                ) { _, _ -> }.attach()
-            }
-        }
-
     }
 
-    private fun handleAlertClick(alertType: AlertType) {
-        when (alertType) {
-            AlertType.BLUETOOTH -> {
-                mainViewModel.checkBluetooth.postValue(Event(true))
-            }
-
-            AlertType.DEFAULT -> {}
-            AlertType.OTA_UPDATE -> {
-                navigate(R.id.oreoUpdateRingFragment)
-            }
-        }
-    }
-
-    private fun updateReadinessAvgUi(data: ODashboardReadinessScoreModel) {
-        val lytReadinessAvg = binding.contentMain.lytReadinessAvg
-        if (data.readinessScore != null && data.readinessScore >= 0) {
-            lytReadinessAvg.tvSleepScore.text = data.readinessScore.toString()
-            lytReadinessAvg.tvAvgThisWeek.gone()
-            lytReadinessAvg.tvDaysAvg.visible()
-            lytReadinessAvg.tvSleepScore.visible()
-            lytReadinessAvg.tvEmpty.gone()
-            lytReadinessAvg.lineChart.visible()
-            val trendValue = "${kotlin.math.abs(data.trend ?: 0)}%"
-            if (data.trend != null && data.trend > 0) {
-                lytReadinessAvg.sleepTrendValue.text = trendValue
-                lytReadinessAvg.sleepTrendValue.setTextColor(Color.parseColor("#29cc74"))
-                lytReadinessAvg.sleepTrendImv.loadImage(
-                    lytReadinessAvg.sleepTrendImv.context, R.drawable.ic_trend_up
-                )
-                lytReadinessAvg.sleepTrendImv.visible()
-                lytReadinessAvg.sleepTrendValue.visible()
-                lytReadinessAvg.tvSleepFromLast.visible()
-            } else if (data.trend != null && data.trend < 0) {
-                lytReadinessAvg.sleepTrendValue.text = trendValue
-                lytReadinessAvg.sleepTrendImv.loadImage(
-                    lytReadinessAvg.sleepTrendImv.context, R.drawable.ic_trend_down
-                )
-                lytReadinessAvg.sleepTrendValue.setTextColor(Color.parseColor("#ff5b79"))
-                lytReadinessAvg.sleepTrendImv.visible()
-                lytReadinessAvg.sleepTrendValue.visible()
-                lytReadinessAvg.tvSleepFromLast.visible()
-            } else {
-                lytReadinessAvg.sleepTrendImv.invisible()
-                lytReadinessAvg.sleepTrendValue.invisible()
-                lytReadinessAvg.tvSleepFromLast.invisible()
-            }
-
-
-
-            lytReadinessAvg.lineChart.updateDataWithMaxMin(
-                viewModel.convertIntToChartModel(data.value), ArrayList(), ArrayList(), 20, true
-            )
-        } else {
-
-            lytReadinessAvg.tvAvgThisWeek.visible()
-            lytReadinessAvg.tvSleepScore.text = "--"
-            lytReadinessAvg.tvSleepScore.gone()
-            lytReadinessAvg.tvEmpty.visible()
-            lytReadinessAvg.tvDaysAvg.gone()
-            lytReadinessAvg.lineChart.gone()
-            lytReadinessAvg.sleepTrendImv.gone()
-            lytReadinessAvg.sleepTrendValue.gone()
-            lytReadinessAvg.tvSleepFromLast.gone()
-        }
-    }
-
-    private fun updateSleepAvgUi(data: Pair<ODashboardSleepScoreModel?, ODashboardActivityScoreModel?>) {
-        val lytSleepAvg = binding.contentMain.lytSleepAvg
-
-        val sleep = data.first!!
-        val activity = data.second!!
-
-        if (sleep.sleepScore != null && sleep.sleepScore >= 0) {
-            lytSleepAvg.tvSleepScore.text = sleep.sleepScore.toString()
-            lytSleepAvg.tvAvgThisWeek.gone()
-            lytSleepAvg.tvDaysAvg.visible()
-            lytSleepAvg.sleepLineChart.visible()
-            lytSleepAvg.sleepLine.root.visible()
-            val trendValue = "${kotlin.math.abs(sleep.trend ?: 0)}%"
-            if (sleep.trend != null && sleep.trend > 0) {
-                lytSleepAvg.sleepTrendValue.text = trendValue
-                lytSleepAvg.sleepTrendValue.setTextColor(Color.parseColor("#29cc74"))
-                lytSleepAvg.sleepTrendImv.loadImage(
-                    lytSleepAvg.sleepTrendImv.context, R.drawable.ic_trend_up
-                )
-                lytSleepAvg.sleepTrendImv.visible()
-                lytSleepAvg.sleepTrendValue.visible()
-                lytSleepAvg.tvSleepFromLast.visible()
-            } else if (sleep.trend != null && sleep.trend < 0) {
-                lytSleepAvg.sleepTrendValue.text = trendValue
-                lytSleepAvg.sleepTrendImv.loadImage(
-                    lytSleepAvg.sleepTrendImv.context, R.drawable.ic_trend_down
-                )
-                lytSleepAvg.sleepTrendValue.setTextColor(Color.parseColor("#ff5b79"))
-                lytSleepAvg.sleepTrendImv.visible()
-                lytSleepAvg.sleepTrendValue.visible()
-                lytSleepAvg.tvSleepFromLast.visible()
-            } else {
-                lytSleepAvg.sleepTrendImv.invisible()
-                lytSleepAvg.sleepTrendValue.invisible()
-                lytSleepAvg.tvSleepFromLast.invisible()
-            }
-
-
-            lytSleepAvg.sleepLineChart.updateDataWithMaxMin(
-                viewModel.convertIntToChartModel(sleep.value), ArrayList(), ArrayList(), 20, true
-            )
-        } else {
-
-            lytSleepAvg.tvAvgThisWeek.visible()
-            lytSleepAvg.tvSleepScore.text = "--"
-
-            lytSleepAvg.tvDaysAvg.gone()
-            lytSleepAvg.sleepLineChart.gone()
-            lytSleepAvg.sleepLine.root.gone()
-            lytSleepAvg.sleepTrendImv.gone()
-            lytSleepAvg.sleepTrendValue.gone()
-            lytSleepAvg.tvSleepFromLast.gone()
-        }
-
-        if (activity.activityScore != null && activity.activityScore >= 0) {
-
-            lytSleepAvg.tvActivityScore.text = activity.activityScore.toString()
-            lytSleepAvg.activityLineChart.updateDataWithMaxMin(
-                viewModel.convertIntToChartModel(activity.value), ArrayList(), ArrayList(), 20, true
-            )
-            lytSleepAvg.tvActAvgThisWeek.gone()
-            lytSleepAvg.tvDaysAvg1.visible()
-            lytSleepAvg.activityLineChart.visible()
-            lytSleepAvg.activityLine.root.visible()
-            lytSleepAvg.activityTrendImv.visible()
-            lytSleepAvg.activityTrendValue.visible()
-            lytSleepAvg.tvActivityFrom.visible()
-
-            val trendValue = "${kotlin.math.abs(activity.trend ?: 0)}%"
-            if (activity.trend != null && activity.trend > 0) {
-                lytSleepAvg.activityTrendValue.text = trendValue
-                lytSleepAvg.activityTrendValue.setTextColor(Color.parseColor("#29cc74"))
-                lytSleepAvg.activityTrendImv.loadImage(
-                    lytSleepAvg.sleepTrendImv.context, R.drawable.ic_trend_up
-                )
-                lytSleepAvg.activityTrendImv.visible()
-                lytSleepAvg.activityTrendValue.visible()
-                lytSleepAvg.tvActivityFrom.visible()
-            } else if (activity.trend != null && activity.trend < 0) {
-                lytSleepAvg.activityTrendValue.text = trendValue
-                lytSleepAvg.activityTrendImv.loadImage(
-                    lytSleepAvg.sleepTrendImv.context, R.drawable.ic_trend_down
-                )
-                lytSleepAvg.activityTrendValue.setTextColor(Color.parseColor("#ff5b79"))
-                lytSleepAvg.activityTrendImv.visible()
-                lytSleepAvg.activityTrendValue.visible()
-                lytSleepAvg.tvActivityFrom.visible()
-            } else {
-                lytSleepAvg.activityTrendImv.invisible()
-                lytSleepAvg.activityTrendValue.invisible()
-                lytSleepAvg.tvActivityFrom.invisible()
-            }
-            //                binding.activityLineChart.updateDataWithMax(data.activityValue, ArrayList(), ArrayList())
-        } else {
-            lytSleepAvg.tvActivityScore.text = "--"
-
-
-            lytSleepAvg.tvActAvgThisWeek.visible()
-            lytSleepAvg.tvDaysAvg1.gone()
-            lytSleepAvg.activityLineChart.gone()
-            lytSleepAvg.activityLine.root.gone()
-            lytSleepAvg.activityTrendImv.gone()
-            lytSleepAvg.activityTrendValue.gone()
-            lytSleepAvg.tvActivityFrom.gone()
-        }
-
-
-        binding.root.setOnClickListener {
-            //   itemClickListener?.invoke(it, data, position)
-        }
-    }
 
     private fun setWorkoutUI(workouts: List<OActivityListModal>?) {
-        val lytWorkouts = binding.contentMain.lytWorkouts
+        val lytWorkouts = binding.lytWorkouts
 
         lytWorkouts.tvEmptyMsg.gone()
         lytWorkouts.rvWorkouts.layoutManager = LinearLayoutManager(
@@ -572,31 +181,12 @@ class SummaryDataFragment :
         })
 
 
-        //        if (viewModel.ringDataStore.getRingDevice() != null) {
-        //            lytWorkouts.viewAddWorkout.visible()
-        //            lytWorkouts.root.visible()
-        //        } else {
-        //            lytWorkouts.viewAddWorkout.gone()
-        //            if (workouts.isNullOrEmpty()) {
-        //                lytWorkouts.root.gone()
-        //            } else {
-        //                lytWorkouts.root.visible()
-        //            }
-        //        }
-
-
         lytWorkouts.rvWorkouts.apply {
             adapter = adapter1
         }
         adapter1.setData(workouts ?: ArrayList())
-        lytWorkouts.viewAddWorkout.setOnClickListener {
-            if (viewModel.isDeviceConnected()) {
-                navigate(R.id.addWorkoutFragment)
-                viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_ADD_WORKOUT_CLICK)
-            } else {
-                requireContext().showShortToast("Please connect your ring to add a workout")
-            }
-        }
+
+        lytWorkouts.viewAddWorkout.gone()
 
         lytWorkouts.ivViewAll.setOnClickListener {
             viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_WORKOUTS_ENTRY_CLICK)
@@ -606,7 +196,7 @@ class SummaryDataFragment :
     }
 
     private fun setHearRateCardUi(data: OHealthOverview.HeartRate) {
-        val lytHeartRate = binding.contentMain.lytHeartRate
+        val lytHeartRate = binding.lytHeartRate
         lytHeartRate.root.visible()
         val chart = lytHeartRate.candleChart
 
@@ -614,87 +204,13 @@ class SummaryDataFragment :
 
         val combinedData = CombinedData()
 
+        lytHeartRate.lottieAnimView.invisible()
+        lytHeartRate.imvHrMeasure.invisible()
 
+        lytHeartRate.groupValue.invisible()
+        lytHeartRate.tvEmptyConnect.gone()
+        lytHeartRate.tvHeartValue.gone()
 
-        when (data.measureState) {
-            TapMeasureState.NO_DEVICE -> {
-                lytHeartRate.lottieAnimView.invisible()
-                lytHeartRate.imvHrMeasure.visible()
-
-                lytHeartRate.groupValue.gone()
-                lytHeartRate.tvEmptyConnect.visible()
-                lytHeartRate.tvEmptyConnect.text =
-                    lytHeartRate.tvEmptyConnect.context.getString(R.string.text_connect_your_device_to_measure)
-
-            }
-
-            TapMeasureState.LAST_MEASURED -> {
-                lytHeartRate.lottieAnimView.invisible()
-                lytHeartRate.imvHrMeasure.visible()
-
-                lytHeartRate.groupValue.visible()
-                lytHeartRate.tvEmptyConnect.gone()
-
-                lytHeartRate.tvHeartValue.text = data.value
-                lytHeartRate.tvHeartUnit.text = getString(R.string.text_bpm_small)
-
-                lytHeartRate.tvLastMeasure.apply {
-                    setTextColor(Color.parseColor("#a3ffffff"))
-                    text = data.lastTime
-                }
-
-            }
-
-            TapMeasureState.MEASURING -> {
-                lytHeartRate.lottieAnimView.visible()
-                lytHeartRate.imvHrMeasure.invisible()
-
-                lytHeartRate.groupValue.gone()
-                lytHeartRate.tvEmptyConnect.visible()
-
-                lytHeartRate.tvEmptyConnect.apply {
-                    setTextColor(resources.getColor(R.color.white))
-                    text = "Measuring..."
-                }
-            }
-
-            TapMeasureState.DEFAULT -> {
-                lytHeartRate.lottieAnimView.invisible()
-                lytHeartRate.imvHrMeasure.visible()
-
-                lytHeartRate.groupValue.gone()
-                lytHeartRate.tvEmptyConnect.visible()
-                lytHeartRate.tvEmptyConnect.apply {
-                    setTextColor(Color.parseColor("#88b0ff"))
-                    text = "Tap to measure"
-                }
-            }
-
-            TapMeasureState.ERROR -> {
-                lytHeartRate.lottieAnimView.invisible()
-                lytHeartRate.imvHrMeasure.visible()
-
-                lytHeartRate.groupValue.visible()
-                lytHeartRate.tvEmptyConnect.gone()
-                lytHeartRate.tvHeartValue.gone()
-
-                lytHeartRate.tvLastMeasure.apply {
-                    setTextColor(Color.parseColor("#88b0ff"))
-                    text = "Try again"
-                }
-                lytHeartRate.tvHeartUnit.text = "Unable to measure"
-
-            }
-
-            TapMeasureState.HIDE -> {
-                lytHeartRate.lottieAnimView.invisible()
-                lytHeartRate.imvHrMeasure.invisible()
-
-                lytHeartRate.groupValue.invisible()
-                lytHeartRate.tvEmptyConnect.gone()
-                lytHeartRate.tvHeartValue.gone()
-            }
-        }
         if (data.lineData.first.isNotEmpty() && data.lineData.first.size > 1) {
             combinedData.setData(
                 OCombineChartUtils.generateLineData(
@@ -713,32 +229,5 @@ class SummaryDataFragment :
             chart.invalidate()
         }
 
-        lytHeartRate.imvHrMeasure.setOnClickListener {
-
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_HR_REFRESH_CLICK)
-            if (data.measureState == TapMeasureState.MEASURING || data.measureState == TapMeasureState.NO_DEVICE) {
-                return@setOnClickListener
-            }
-
-            if (viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
-                return@setOnClickListener
-            }
-
-            viewModel.viewModelScope.launch(Dispatchers.IO) {
-                context?.let {
-                    val isWorkerRunning = ApplicationUtils.isOreoSyncDataWorkerRunning(it)
-                    LOGS.w("imvHrMeasure isOreoSyncDataWorkerRunning $isWorkerRunning")
-                    if (isWorkerRunning) {
-                        viewModel.stateHeartRateCard.postValue(viewModel.stateHeartRateCard.value?.apply {
-                            this.measureState = TapMeasureState.ERROR
-                        })
-                        return@launch
-                    }
-                    viewModel.measureHr(true)
-                }
-            }
-
-            return@setOnClickListener
-        }
     }
 }

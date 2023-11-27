@@ -32,6 +32,7 @@ constructor(
         } else {
             userHealthDao.updateViaDate(
                 data.userHealthData,
+                data.todayOtherData,
                 data.date!!
             )
         }
@@ -41,5 +42,9 @@ constructor(
     override suspend fun getDataByDate(date: String): UserHealthData? {
         return userHealthDao.getByDate(date)
 
+    }
+
+    override suspend fun clearAllData() {
+        userHealthDao.clearAllData()
     }
 }

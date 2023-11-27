@@ -6,12 +6,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.session.SessionManager
+import com.noisefit.util.notif.NotificationEventsClass
 import com.noisefit_commans.common.checkDayDifferenceMoreNMinutes
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.ui.checkDayDifferenceMoreOne
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
@@ -21,6 +23,7 @@ import com.oreo.data.model.health.OreoDashboardResponseModel
 import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.data.model.health.OreoSleepModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
+import com.oreo.ui.home.summary.PushLocalNotification
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.joda.time.LocalDate
@@ -40,6 +43,7 @@ constructor(
 ) : BaseViewModel() {
 
 
+    var registerDate: Int = 10
     var checkBluetooth = MutableLiveData<Event<Boolean>>()
 
     //For API
@@ -59,6 +63,9 @@ constructor(
 
     //Currently highlighted date
     var selectedDate: String? = null
+
+    val pushNotification = MutableLiveData<Event<PushLocalNotification>>()
+
 
     //Dashboard
     private val _dashboard = MutableLiveData<List<String>>()
@@ -177,6 +184,10 @@ constructor(
 
                             val activityList = getActivityDataList()
                             _activityHistoryResponse.value = (activityList)
+
+
+                            val todayData = userHealthData[getTodayDate()]
+                            showNotification(todayData?.dashboard)
                         }
                     }
                 }
@@ -228,9 +239,14 @@ constructor(
         return Pair(startDate, endDate)
     }
 
-    fun getDatesMinus(date: String): String {
+    fun getDatesMinus(date: String, minusDays: Int): String {
         val end: LocalDate = LocalDate.parse(date)
-        return end.minusDays(7).toString("yyyy-MM-dd")
+        return end.minusDays(minusDays).toString("yyyy-MM-dd")
+    }
+
+    fun getDatesPlus(date: String, plusDays: Int): String {
+        val end: LocalDate = LocalDate.parse(date)
+        return end.plusDays(plusDays).toString("yyyy-MM-dd")
     }
 
     fun getNextPaginationDates(date: String): Pair<String, String> {
@@ -373,6 +389,100 @@ constructor(
         }
 
         return lastTimeStamp.checkDayDifferenceMoreNMinutes(logSyncInterval * 60)
+    }
+
+    fun testClearLocalHealthData() {
+        viewModelScope.launch {
+            userActivityRepository.clearAllHealthData()
+        }
+    }
+
+    fun onSyncSuccess() {
+        val todayDate = getTodayDate()
+        getUserHealthData(todayDate,todayDate)
+    }
+
+    private fun showNotification(response: OreoDashboardResponseModel?) {
+
+        if (response == null) return
+
+        //Sleep
+        response.sleep?.let {
+            if ((it.sleepScore ?: 0) > 75 && (it.totalSleep ?: 0) >= 25200 && (it.totalSleep
+                    ?: 0) <= 32400
+            ) {
+                val timeStamp = localDataStore.getSleepNotificationTimeStamp()
+
+                if (timeStamp == 0L || timeStamp.checkDayDifferenceMoreOne()) {
+                    pushNotification.postValue(
+                        Event(
+                            PushLocalNotification(
+                                "Title missing",
+                                "You got enough sleep hours today. This helps with higher recovery, cognitive & immune system function",
+                                NotificationEventsClass.LOCAL_SLEEP_NOTIFICATION_KEY
+                            )
+                        )
+                    )
+                    localDataStore.setSleepNotificationTimeStamp()
+                }
+            }
+        }
+
+        response.readiness?.let {
+            val timeStamp = localDataStore.getReadinessNotificationTimeStamp()
+            if (timeStamp == 0L || timeStamp.checkDayDifferenceMoreOne()) {
+                when (it.status?.lowercase()) {
+                    "optimal" -> {
+                        pushNotification.postValue(
+                            Event(
+                                PushLocalNotification(
+                                    "Proceed as planned",
+                                    "Your readiness score is in great shape today. You might want to push a little more towards your cognitive & physical fitness goals",
+                                    NotificationEventsClass.LOCAL_READINESS_NOTIFICATION_KEY
+                                )
+                            )
+                        )
+                    }
+
+                    "good" -> {
+                        pushNotification.postValue(
+                            Event(
+                                PushLocalNotification(
+                                    "Try something fun today",
+                                    "Your readiness score indicates that you are primed for a moderate push today. Dedicate some time for rest and recovery.",
+                                    NotificationEventsClass.LOCAL_READINESS_NOTIFICATION_KEY
+                                )
+                            )
+                        )
+                    }
+
+                    "fair" -> {
+                        pushNotification.postValue(
+                            Event(
+                                PushLocalNotification(
+                                    "Schedule deep breaths",
+                                    "Your readiness score is on the low side but you’ll poll through. So, would you be up for making time for relaxing pauses today?",
+                                    NotificationEventsClass.LOCAL_READINESS_NOTIFICATION_KEY
+                                )
+                            )
+                        )
+                    }
+
+                    "warning" -> {
+                        pushNotification.postValue(
+                            Event(
+                                PushLocalNotification(
+                                    "Go easy",
+                                    "Your readiness score is on the lower side today. It's a good day to have",
+                                    NotificationEventsClass.LOCAL_READINESS_NOTIFICATION_KEY
+                                )
+                            )
+                        )
+                    }
+                }
+                localDataStore.setReadinessNotificationTimeStamp()
+            }
+        }
     }
 
 

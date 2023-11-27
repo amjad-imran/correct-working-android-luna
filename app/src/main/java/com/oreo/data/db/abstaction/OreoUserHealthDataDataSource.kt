@@ -9,6 +9,8 @@ interface OreoUserHealthDataDataSource {
 
     suspend fun getDataByDate(date: String): UserHealthData?
 
+    suspend fun clearAllData()
+
     /*  suspend fun getTodayDayTimeMovement(date: String): String?
       suspend fun getUnSyncServerData(endDate: Long, isSync: Boolean): List<DayTimeMovementBreakup>?
       suspend fun deleteOldData(days: Int): Int

@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ActivityOreoMainBinding
 import com.noisefit.ui.APP_CONTINUE
@@ -22,6 +23,7 @@ import com.noisefit.ui.APP_UPDATE
 import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit.ui.common.BaseActivity
 import com.noisefit.util.ApplicationUtils
+import com.noisefit.util.notif.NotificationUtil
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
@@ -246,6 +248,13 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     override fun observeSubscriber() {
 
+
+        viewModel.pushNotification.observe(this) {
+            it.getContent()?.let {
+                showLocalNotification(it.title, it.content, it.key)
+            }
+        }
+
         viewModel.checkBluetooth.observe(this) {
             it.getContent()?.let {
                 checkBluetooth()
@@ -317,6 +326,17 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             }
         }
 
+
+    private fun showLocalNotification(title: String, content: String, key: String) {
+        NotificationUtil.pushNotification(
+            NoiseFitApplicationMain.context!!,
+            title,
+            content,
+            key,
+            "1"
+        )
+    }
+
     override fun onResume() {
         super.onResume()
         navController?.addOnDestinationChangedListener(navListener)
@@ -326,7 +346,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 ApplicationUtils.setRescueWorkManager(this)
             }
 
-            if(viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess){
+            if (viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
                 viewModel.startDisconnectTimer()
             }
         }
@@ -457,6 +477,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 }
                 viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_FOOTER_ACTIVITY_CLICK)
             }
+
             else -> {}
         }
 

@@ -83,6 +83,7 @@ data class DayTimeMovementBreakup(
 data class UserHealthData(
     @PrimaryKey(autoGenerate = true) var id: Int = 0,
     @ColumnInfo(name = "userHealthData") @SerializedName("userHealthData") var userHealthData: String? = null,
+    @ColumnInfo(name = "todayOtherData") @SerializedName("todayOtherData") var todayOtherData: String? = null,
     @SerializedName("date") var date: String? = null
 ) : ColorfitData()
 

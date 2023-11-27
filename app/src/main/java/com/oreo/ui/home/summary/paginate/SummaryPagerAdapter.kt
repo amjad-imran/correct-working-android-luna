@@ -3,6 +3,7 @@ package com.oreo.ui.home.summary.paginate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.noisefit_commans.utils.DateFormats
 
 
 class SummaryPagerAdapter(fragmentActivity: FragmentActivity) :
@@ -29,7 +30,13 @@ class SummaryPagerAdapter(fragmentActivity: FragmentActivity) :
     }
 
     override fun createFragment(position: Int): Fragment {
-        return (SummaryDataFragment.newInstance(dates[position]))
+        val date = dates[position]
+        val todayDate = DateFormats.getTodaysDateString(10)
+        return if (todayDate.equals(date, true)) {
+            (SummaryDataFragmentToday.newInstance(date))
+        } else {
+            (SummaryDataFragment.newInstance(date))
+        }
     }
 
     override fun getItemCount(): Int {

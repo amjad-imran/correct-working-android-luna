@@ -234,15 +234,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         }
     }
 
-    private fun showLocalNotification(title: String, content: String, key: String) {
-        NotificationUtil.pushNotification(
-            NoiseFitApplicationMain.context!!,
-            title,
-            content,
-            key,
-            "1"
-        )
-    }
+
 
 
     override fun subscribeObservers() {
@@ -251,18 +243,12 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
             val pos = pagerAdapter.getPositionForDate(mainViewModel.selectedDate)
 
-            binding.viewPagerSummary.currentItem = pos
-
+            binding.viewPagerSummary.setCurrentItem(pos,false)
             setTabDates(pos)
 
         }
 
 
-        viewModel.pushNotification.observe(viewLifecycleOwner) {
-            it.getContent()?.let {
-                showLocalNotification(it.title, it.content, it.key)
-            }
-        }
 
 
 
@@ -414,7 +400,8 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
                     SyncEvents.ServerSyncSuccess -> {
                         binding.progressBar.root.gone()
-                        viewModel.getDashboardDataFromServer(true)
+
+                        mainViewModel.onSyncSuccess()
                         //sendLogs()
                     }
                 }
@@ -607,7 +594,6 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
     override fun onResume() {
         super.onResume()
-        viewModel.initData()
 
         if (viewModel.isDeviceConnected()) {
             shouldSync()

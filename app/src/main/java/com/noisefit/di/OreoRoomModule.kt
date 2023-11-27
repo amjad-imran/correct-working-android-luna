@@ -12,6 +12,7 @@ import com.oreo.data.db.abstaction.OreoBodyTemperatureDataSource
 import com.oreo.data.db.abstaction.OreoDayTimeMovementDataSource
 import com.oreo.data.db.abstaction.OreoSleepDataSource
 import com.oreo.data.db.abstaction.OreoStepsDataSource
+import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.db.database.OreoAutoSportDao
 import com.oreo.data.db.database.OreoBloodOxygenDao
 import com.oreo.data.db.database.OreoBodyTemperatureDao
@@ -47,52 +48,60 @@ class OreoRoomModule {
             .build()
     }
 
-     private val MIGRATION_1_2: Migration = object : Migration(1, 2) {
-         override fun migrate(database: SupportSQLiteDatabase) {
-             database.execSQL(
-                 "CREATE TABLE IF NOT EXISTS `key_value` " +
-                         "(`uId` INTEGER NOT NULL, " +
-                         "`lastSync` INTEGER," +
-                         "`value` TEXT," +
-                         "`type` TEXT," +
-                         "`key` TEXT, PRIMARY KEY(`uId`))"
-             )
-         }
-     }
+    private val MIGRATION_1_2: Migration = object : Migration(1, 2) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(
+                "CREATE TABLE IF NOT EXISTS `key_value` " +
+                        "(`uId` INTEGER NOT NULL, " +
+                        "`lastSync` INTEGER," +
+                        "`value` TEXT," +
+                        "`type` TEXT," +
+                        "`key` TEXT, PRIMARY KEY(`uId`))"
+            )
+        }
+    }
 
     private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
-         override fun migrate(database: SupportSQLiteDatabase) {
-             database.execSQL(
-                 "CREATE TABLE IF NOT EXISTS `user_health_data` " +
-                         "(`id` INTEGER NOT NULL, " +
-                         "`dashboard` TEXT," +
-                         "`sleep` TEXT," +
-                         "`activity` TEXT," +
-                         "`readiness` TEXT," +
-                         "`date` TEXT, PRIMARY KEY(`id`))"
-             )
-             database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_user_health_data_date ON  user_health_data(date)")
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(
+                "CREATE TABLE IF NOT EXISTS `user_health_data` " +
+                        "(`id` INTEGER NOT NULL, " +
+                        "`dashboard` TEXT," +
+                        "`sleep` TEXT," +
+                        "`activity` TEXT," +
+                        "`readiness` TEXT," +
+                        "`date` TEXT, PRIMARY KEY(`id`))"
+            )
+            database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_user_health_data_date ON  user_health_data(date)")
 
-         }
-     }
+        }
+    }
 
-     /*private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
-         override fun migrate(database: SupportSQLiteDatabase) {
-             database.execSQL(
-                 "CREATE TABLE IF NOT EXISTS `day_time_movement` " +
-                         "(`id` INTEGER NOT NULL, `is_synced` INTEGER NOT NULL,`break_up` TEXT,`is_google_fit_sync` INTEGER  NOT NULL,`date` TEXT, PRIMARY KEY(`id`))"
-             )
-             database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_day_time_movement_date ON  day_time_movement(date)")
-         }
-     }
+    /*private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(
+                "CREATE TABLE IF NOT EXISTS `day_time_movement` " +
+                        "(`id` INTEGER NOT NULL, `is_synced` INTEGER NOT NULL,`break_up` TEXT,`is_google_fit_sync` INTEGER  NOT NULL,`date` TEXT, PRIMARY KEY(`id`))"
+            )
+            database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_day_time_movement_date ON  day_time_movement(date)")
+        }
+    }
 
-     private val MIGRATION_3_4: Migration = object : Migration(3, 4) {
-         override fun migrate(database: SupportSQLiteDatabase) {
-             database.execSQL("ALTER TABLE `steps_data` ADD COLUMN active_calories INTEGER")
+    private val MIGRATION_3_4: Migration = object : Migration(3, 4) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL("ALTER TABLE `steps_data` ADD COLUMN active_calories INTEGER")
 
-         }
-     }*/
+        }
+    }*/
 
+
+    @Singleton
+    @Provides
+    fun provideUserHealthDataSource(
+        userHealthDao: OreoUserHealthDataDao
+    ): OreoUserHealthDataDataSource {
+        return OreoUserHealthDataDataImpl(userHealthDao)
+    }
 
     @Singleton
     @Provides

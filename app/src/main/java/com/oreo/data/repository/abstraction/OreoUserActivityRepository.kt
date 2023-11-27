@@ -79,4 +79,6 @@ interface OreoUserActivityRepository {
     suspend fun getContributorDetailsInfo(contributorType: String): Flow<Resource<BaseApiResponse<OContributorResponseModal>>>
     suspend fun getHSCategories(): Flow<Resource<BaseApiResponse<List<OHSModel>>>>
     suspend fun getHSQAnswer(quesId: String): Flow<Resource<BaseApiResponse<List<OHSQuestionariesResponseModel>>>>
+
+    suspend fun clearAllHealthData()
 }

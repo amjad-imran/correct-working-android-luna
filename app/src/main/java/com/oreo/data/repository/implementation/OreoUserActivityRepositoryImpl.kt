@@ -40,8 +40,11 @@ import com.oreo.ui.DataType
 import com.oreo.ui.TestUserData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.joda.time.LocalDate
 
@@ -1550,6 +1553,12 @@ class OreoUserActivityRepositoryImpl(
                     }
                 }
             }
+        }
+    }
+
+    override suspend fun clearAllHealthData() {
+        GlobalScope.launch(Dispatchers.IO){
+            userHealthDataSource.clearAllData()
         }
     }
 

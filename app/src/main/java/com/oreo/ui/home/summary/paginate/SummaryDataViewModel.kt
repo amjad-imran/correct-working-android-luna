@@ -48,91 +48,10 @@ constructor(
 ) : BaseViewModel() {
 
 
-    val stateHeaderCard = MutableLiveData<Pair<String, String>>()//Name,Date
     val healthOverviewData = MutableLiveData<ArrayList<OHealthOverview>>()
-    val viewedCardsData = MutableLiveData<ArrayList<OHealthOverview>>()
-    val statePairDeviceCard = MutableLiveData<Boolean>()
-    val stateDashRingBattery = MutableLiveData<Pair<Boolean, ColorFitDevice?>>()
-    val stateDashAlerts = MutableLiveData<HashMap<AlertType, DashAlert>>()
-
-
-    val stateReadinessAvgCard = MutableLiveData<ODashboardReadinessScoreModel?>()
-    val stateSleepAvgCard =
-        MutableLiveData<Pair<ODashboardSleepScoreModel?, ODashboardActivityScoreModel?>>()
     val stateHeartRateCard = MutableLiveData<OHealthOverview.HeartRate?>()
 
-    var isToday = false
-
-    var user:User?=null
-
-
-    fun initTodayData() {
-
-        viewModelScope.launch(Dispatchers.IO) {
-            user = localDataStore.getUser()
-            stateHeaderCard.postValue(
-                Pair(
-                    getGreetingMessageValue(),
-                    DateFormats.getCurrentDate(DateFormats.dateTimeFormatWithWeekWithoutYear)
-                )
-            )
-            val device = getDeviceConnected()
-            statePairDeviceCard.postValue(device == null)
-            stateHeartRateCard.postValue(userRepository.getSummaryHRHealthOverview().apply {
-                if (device == null) {
-                    this?.measureState = TapMeasureState.NO_DEVICE
-                }
-            })
-        }
-
-        updateAlerts()
-    }
-
-    fun getGreetingMessageValue(): String {
-        return "${getGreetingMessage()}, ${
-            user?.getOnlyFirstName()?.trim()?.ifEmpty { "Stranger" }
-        }"
-    }
-
-    private fun getGreetingMessage(): String {
-        val currentTime = DateFormats.getTimeFormat()
-        if (DateFormats.isTimeBetween(currentTime, "04:00", "11:59")) {
-            return "Good morning"
-        } else if (DateFormats.isTimeBetween(currentTime, "12:00", "16:59")) {
-            return "Good afternoon"
-        } else if (DateFormats.isTimeBetween(currentTime, "17:00", "20:59")) {
-            return "Good evening"
-        } else if (DateFormats.isTimeBetween(
-                currentTime, "21:00", "23:59"
-            ) || DateFormats.isTimeBetween(currentTime, "00:00", "03:59")
-        ) {
-            return "Hi"
-        }
-
-        return "Hi"
-    }
-
-
-    fun updateAlerts() {
-        val dashAlert = HashMap<AlertType, DashAlert>()
-
-        val btState = sessionManager.bluetoothStateDash.value
-        val devicePaired = ringDataStore.getRingDevice()
-        if (btState == false && devicePaired != null) {
-            if (sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
-                dashAlert[AlertType.BLUETOOTH] =
-                    DashAlert("Authorize Bluetooth connectivity for Luna", false)
-            }
-        }
-
-        if (sessionManager.forceOtaResponseRing != null) {
-            dashAlert[AlertType.OTA_UPDATE] =
-                DashAlert("Ring firmware update available", false)
-        }
-
-
-        stateDashAlerts.postValue(dashAlert)
-    }
+    var user: User? = null
 
 
     fun parseHealthData(healthData: ServerUserHealthData) {
@@ -142,204 +61,52 @@ constructor(
             val data = healthData.dashboard ?: return@launch
 
             val userActivities = ArrayList<OHealthOverview>()
-            val viewedCardsData = ArrayList<OHealthOverview>()
 
             val autoSportCount = userRepository.getSummaryAutoWorkoutCount()
             if (autoSportCount > 0) {
                 userActivities.add(OHealthOverview.AutoSport(autoSportCount))
             }
 
-            if(isToday){
-                ringDataStore.setRegisterDay(healthData.registerDate ?: -1)
-                handleInfoCards(healthData, userActivities, viewedCardsData)
+            data.readiness?.let {
+                userActivities.add(OHealthOverview.Readiness(data.readiness))
             }
 
+            data.sleep?.let {
+                userActivities.add(
+                    OHealthOverview.Sleep(
+                        data.sleep,
+                        makeSleepArray(data.sleep),
+                        data.sleep.sleepStage.firstOrNull()?.startTime ?: "",
+                        data.sleep.sleepStage.lastOrNull()?.endTime ?: ""
+                    )
+                )
+            }
 
+            data.activity?.let {
 
-
-            when (getDaySlot()) {
-                0 -> {
-                    //sleep
-                    if (data.sleep?.sleepScore != null) {
-                        if (healthData.registerDate != 0) {
-                            data.readiness?.let {
-                                userActivities.add(OHealthOverview.Readiness(data.readiness))
-                            }
-                            userActivities.add(
-                                OHealthOverview.Sleep(
-                                    data.sleep,
-                                    makeSleepArray(data.sleep),
-                                    data.sleep.sleepStage.firstOrNull()?.startTime ?: "",
-                                    data.sleep.sleepStage.lastOrNull()?.endTime ?: ""
-                                )
-                            )
-                        }
-                    } else {
-                        userActivities.add(OHealthOverview.SleepWaiting)
-                    }
-                }
-
-                1 -> {
-
-                    //sleep
-                    if (data.sleep?.sleepScore != null) {
-                        if (healthData.registerDate != 0) {
-                            data.readiness?.let {
-                                userActivities.add(OHealthOverview.Readiness(data.readiness))
-                            }
-                            userActivities.add(
-                                OHealthOverview.Sleep(
-                                    data.sleep,
-                                    makeSleepArray(data.sleep),
-                                    data.sleep.sleepStage.firstOrNull()?.startTime ?: "",
-                                    data.sleep.sleepStage.lastOrNull()?.endTime ?: ""
-                                )
-                            )
-                        }
-                    } else {
-                        userActivities.add(OHealthOverview.SleepWaiting)
-                    }
-
-                    //Activity
-                    if (data.activity?.activeCalories != null) {
-                        val activeCalories = data.activity.activeCalories
-                        if (activeCalories in 1..49) {
-                            val caloriesGoal = 300//summary.user?.userGoals?.caloriesGoal ?: 0
-                            userActivities.add(
-                                OHealthOverview.ActivityMinimal(
-                                    data.activity,
-                                    caloriesGoal
-                                )
-                            )
-                        } else if (activeCalories >= 50) {
-                            val caloriesGoal = 300//summary.user?.userGoals?.caloriesGoal ?: 0
-                            userActivities.add(
-                                OHealthOverview.Activity(
-                                    data.activity,
-                                    caloriesGoal
-                                )
-                            )
-                        } else {
-                        }
-                    }
-                }
-
-                2 -> {
-                    if (healthData.registerDate != 0) {
-                        data.readiness?.let {
-                            userActivities.add(OHealthOverview.Readiness(data.readiness))
-                        }
-
-                        data.sleep?.let {
-                            userActivities.add(
-                                OHealthOverview.Sleep(
-                                    data.sleep,
-                                    makeSleepArray(data.sleep),
-                                    data.sleep.sleepStage.firstOrNull()?.startTime ?: "",
-                                    data.sleep.sleepStage.lastOrNull()?.endTime ?: ""
-                                )
-                            )
-                        }
-                    }
-
-                    data.activity?.let {
-
-                        val activeCalories = data.activity.activeCalories ?: 0
-                        if (activeCalories in 0..49) {
-                            val caloriesGoal = 300// summary.user?.userGoals?.caloriesGoal ?: 0
-                            userActivities.add(
-                                OHealthOverview.ActivityMinimal(
-                                    data.activity,
-                                    caloriesGoal
-                                )
-                            )
-                        } else {
-                            val caloriesGoal = 300// summary.user?.userGoals?.caloriesGoal ?: 0
-                            userActivities.add(
-                                OHealthOverview.Activity(
-                                    data.activity,
-                                    caloriesGoal
-                                )
-                            )
-                        }
-                    }
-
-
-                }
-
-                else -> {
-                    data.activity?.let {
-
-                        val activeCalories = data.activity.activeCalories ?: 0
-                        if (activeCalories in 0..49) {
-                            val caloriesGoal = 300//summary.user?.userGoals?.caloriesGoal ?: 0
-                            userActivities.add(
-                                OHealthOverview.ActivityMinimal(
-                                    data.activity,
-                                    caloriesGoal
-                                )
-                            )
-                        } else {
-                            val caloriesGoal = 300// summary.user?.userGoals?.caloriesGoal ?: 0
-                            userActivities.add(
-                                OHealthOverview.Activity(
-                                    data.activity,
-                                    caloriesGoal
-                                )
-                            )
-                        }
-                    }
-
-                    if (healthData.registerDate != 0) {
-                        if (data.sleep?.sleepScore != null) {
-                            userActivities.add(
-                                OHealthOverview.SleepMinimal(
-                                    data.sleep,
-                                    makeSleepArray(data.sleep)
-                                )
-                            )
-
-                            data.readiness?.let {
-                                userActivities.add(OHealthOverview.ReadinessMinimal(data.readiness))
-                            }
-
-                        } else {
-                            data.sleep?.let {
-                                userActivities.add(
-                                    OHealthOverview.Sleep(
-                                        data.sleep,
-                                        makeSleepArray(data.sleep),
-                                        data.sleep.sleepStage.firstOrNull()?.startTime ?: "",
-                                        data.sleep.sleepStage.lastOrNull()?.endTime ?: ""
-                                    )
-                                )
-                            }
-                            data.readiness?.let {
-                                userActivities.add(OHealthOverview.Readiness(data.readiness))
-                            }
-                        }
-                    }
+                val activeCalories = data.activity.activeCalories ?: 0
+                if (activeCalories in 0..49) {
+                    val caloriesGoal = 300// summary.user?.userGoals?.caloriesGoal ?: 0
+                    userActivities.add(
+                        OHealthOverview.ActivityMinimal(
+                            data.activity,
+                            caloriesGoal
+                        )
+                    )
+                } else {
+                    val caloriesGoal = 300// summary.user?.userGoals?.caloriesGoal ?: 0
+                    userActivities.add(
+                        OHealthOverview.Activity(
+                            data.activity,
+                            caloriesGoal
+                        )
+                    )
                 }
             }
 
-            if (isToday) {
-                stateSleepAvgCard.postValue(Pair(healthData.sleepScoreAvg, healthData.activityScoreAvg))
-                stateReadinessAvgCard.postValue(healthData.readinessScoreAvg)
-            }
-
-            this@SummaryDataViewModel.viewedCardsData.postValue(viewedCardsData)
             healthOverviewData.postValue(userActivities)
 
-            if (isToday) {
-                val device = ringDataStore.getRingDevice()
-                stateHeartRateCard.postValue(userRepository.getSummaryHRHealthOverview().apply {
-                    if (device == null) {
-                        this?.measureState = TapMeasureState.NO_DEVICE
-                    }
-                })
-            } else {
-                stateHeartRateCard.postValue(parseHrData(healthData))
-            }
+            stateHeartRateCard.postValue(parseHrData(healthData))
         }
     }
 
@@ -484,85 +251,6 @@ constructor(
         return "$hour $suffix"
     }
 
-
-    private fun handleInfoCards(
-        data: ServerUserHealthData,
-        userActivities: ArrayList<OHealthOverview>,
-        viewedCardsData: ArrayList<OHealthOverview>,
-    ) {
-        val registerDays = (data.registerDate ?: 0)
-
-        if (registerDays < 7) {
-
-            if (registerDays == 0) {
-                data.welcome?.welcome?.let {
-                    userActivities.add(OHealthOverview.InfoRingWelcome(it))
-                }
-            }
-
-            val cardClickState = localDataStore.getDashCardClickState()
-
-            data.welcome?.care?.let {
-                if (registerDays > 0) {
-                    viewedCardsData.add(OHealthOverview.InfoRingCare(it))
-                } else {
-                    if (cardClickState[DashInfoCard.CARE] == false) {
-                        userActivities.add(OHealthOverview.InfoRingCare(it))
-                    } else {
-                        viewedCardsData.add(OHealthOverview.InfoRingCare(it))
-                    }
-                }
-
-            }
-
-            data.welcome?.sleep_media?.let {
-                if (cardClickState[DashInfoCard.SLEEP] == false) {
-                    userActivities.add(OHealthOverview.InfoVideo(VideoInfoType.SLEEP, it))
-                } else {
-                    viewedCardsData.add(OHealthOverview.InfoVideo(VideoInfoType.SLEEP, it))
-                }
-            }
-
-            data.welcome?.activity_media?.let {
-                if (cardClickState[DashInfoCard.ACTIVITY] == false) {
-                    userActivities.add(OHealthOverview.InfoVideo(VideoInfoType.ACTIVITY, it))
-                } else {
-                    viewedCardsData.add(OHealthOverview.InfoVideo(VideoInfoType.ACTIVITY, it))
-                }
-            }
-
-            data.welcome?.readiness_media?.let {
-                if (cardClickState[DashInfoCard.READINESS] == false) {
-                    userActivities.add(OHealthOverview.InfoVideo(VideoInfoType.READINESS, it))
-                } else {
-                    viewedCardsData.add(OHealthOverview.InfoVideo(VideoInfoType.READINESS, it))
-                }
-            }
-
-
-        }
-    }
-
-
-    /**
-     * Return day slots
-     * 1->00:00 - 08:00
-     * 2->08:00 - 12:000
-     * 3->12:00 - 24:00
-     */
-    private fun getDaySlot(): Int {
-        val currentTime = DateFormats.getTimeFormat()
-        return if (DateFormats.isTimeBetween(currentTime, "00:00", "03:59")) {
-            0
-        } else if (DateFormats.isTimeBetween(currentTime, "04:00", "07:59")) {
-            1
-        } else if (DateFormats.isTimeBetween(currentTime, "08:00", "11:59")) {
-            2
-        } else {
-            3
-        }
-    }
-
     private fun makeSleepArray(data: ODashboardSleepModel?): ArrayList<SleepData.SleepDataBreakup> {
         val sleepArray: ArrayList<SleepData.SleepDataBreakup> = ArrayList()
 
@@ -620,56 +308,5 @@ constructor(
 
         return sleepArray
     }
-
-    fun convertIntToChartModel(data: List<Int>?): ArrayList<ChartModel> {
-        val list = ArrayList<ChartModel>()
-        val chartModel1 = ChartModel()
-        chartModel1.date = ""
-        chartModel1.index = ""
-        chartModel1.value = 0
-        list.add(chartModel1)
-        data?.forEach {
-            val chartModel = ChartModel()
-            var value = it
-            if (value < 0) {
-                value = 0
-            }
-            chartModel.value = value//(10..100).random()
-            chartModel.date = ""
-            chartModel.index = ""
-            list.add(chartModel)
-        }
-
-        return list
-    }
-
-    fun isDeviceConnected(): Boolean {
-        if (getDeviceConnected() == null) {
-            return false
-        }
-
-        if (sessionManager.connectStateRing.value is ConnectState.ConnectSuccess) {
-            return true
-        }
-        return false
-    }
-
-    fun getDeviceConnected(): ColorFitDevice? {
-        return ringDataStore.getRingDevice()
-    }
-
-    fun measureHr(status: Boolean) {
-        stateHeartRateCard.value?.measureState = TapMeasureState.MEASURING
-        stateHeartRateCard.postValue(stateHeartRateCard.value)
-
-
-        sessionManager.sendUpdateQueryAction(
-            UpdateDeviceAction.SetManualMeasurement(
-                ManualMeasureType.HEART_RATE, status
-            )
-        )
-
-    }
-
 
 }

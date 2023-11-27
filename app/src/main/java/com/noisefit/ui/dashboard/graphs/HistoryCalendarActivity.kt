@@ -84,7 +84,7 @@ class HistoryCalendarActivity : BaseActivity<ActivityHistoryCalendarBinding>() {
                 selectedDate,
                 DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH)
             )
-            if (deviceType == "watch") {
+           /* if (deviceType == "watch") {
                 selectedPreviousDates = arrayListOf(
                     parsedDate.minusDays(1),
                     parsedDate.minusDays(2),
@@ -110,7 +110,7 @@ class HistoryCalendarActivity : BaseActivity<ActivityHistoryCalendarBinding>() {
                 parsedDate.minusDays(12),
                 parsedDate.minusDays(13),
                     parsedDate.minusDays(14)
-            )
+            )*/
 
             parsedDate
         }
