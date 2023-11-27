@@ -10,12 +10,9 @@ interface OreoUserHealthDataDao : BaseDao<UserHealthData> {
     @Query("SELECT * FROM user_health_data where date = :date")
     fun getByDate(date: String): UserHealthData?
 
-    @Query("UPDATE user_health_data SET dashboard = :dashboard,sleep = :sleep,activity = :activity,readiness = :readiness  WHERE date = :date")
+    @Query("UPDATE user_health_data SET userHealthData = :userHealthData WHERE date = :date")
     fun updateViaDate(
-        dashboard: String?,
-        sleep: String?,
-        activity: String?,
-        readiness: String?,
+        userHealthData: String?,
         date: String
     )
 

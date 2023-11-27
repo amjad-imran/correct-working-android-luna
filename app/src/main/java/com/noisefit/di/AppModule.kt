@@ -29,6 +29,7 @@ import com.oreo.data.dataConverter.OreoOfflineDataMapper
 import com.oreo.data.dataConverter.OreoOnlineDataMapper
 import com.oreo.data.db.OreoDataBase
 import com.oreo.data.db.abstaction.OreoHeartRateDataSource
+import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.db.implementation.OreoAutoSportDataImpl
 import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
@@ -346,6 +347,7 @@ object AppModule {
         oreoAutoSportDataImpl: OreoAutoSportDataImpl,
         keyValueDataSource: KeyValueDataSource,
         lastSyncProvider: LastSyncProvider,
+        userHealthDataSource: OreoUserHealthDataDataSource,
         offlineApiStore: IOfflineApiResponseStore
     ): OreoUserActivityRepository =
         OreoUserActivityRepositoryImpl(
@@ -362,6 +364,7 @@ object AppModule {
             oreoAutoSportDataImpl,
             offlineDataMapper,
             keyValueDataSource,
+            userHealthDataSource,
             lastSyncProvider,
             offlineApiStore
         )

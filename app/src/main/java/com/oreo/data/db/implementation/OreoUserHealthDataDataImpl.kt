@@ -31,10 +31,7 @@ constructor(
             userHealthDao.insert(data)
         } else {
             userHealthDao.updateViaDate(
-                data.dashboard,
-                data.sleep,
-                data.activity,
-                data.readiness,
+                data.userHealthData,
                 data.date!!
             )
         }
