@@ -319,7 +319,7 @@ constructor(
     }
 
     private val batteryAlertCallback = DeviceBatteryReportingCallBack {
-        if (it.deviceBatteryValue == 20 || it.deviceBatteryValue == 15 || it.deviceBatteryValue == 10 || it.deviceBatteryValue == 5) {
+        if (it.deviceBatteryValue <= 20) {
             testQueryDeviceDataCallback?.onQueryDataReceived(
                 QueryCallback.BatteryAlertObtained(
                     it.deviceBatteryValue

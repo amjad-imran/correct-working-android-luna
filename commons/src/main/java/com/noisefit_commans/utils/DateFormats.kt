@@ -114,6 +114,9 @@ object DateFormats {
     val timeWithSecond = SimpleDateFormat("HH:mm:ss", defaultLocale)
 
     @SuppressLint("ConstantLocale")
+    val time24WithoutSecond = SimpleDateFormat("HH:mm", defaultLocale)
+
+    @SuppressLint("ConstantLocale")
     val dateTimeFormatWfTranser = SimpleDateFormat(" dd-MM-yy HH:mm:ss", defaultLocale)
 
     @SuppressLint("ConstantLocale")

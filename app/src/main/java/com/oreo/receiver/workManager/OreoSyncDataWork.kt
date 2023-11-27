@@ -44,10 +44,12 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
+import kotlinx.coroutines.withContext
 import java.util.Calendar
 import java.util.Timer
 import java.util.TimerTask
@@ -253,11 +255,14 @@ constructor(
 
                 val logsSync = shouldSyncAutoLogs()
                 if (logsSync) {
-                    context.let {
+                    val status = ApplicationUtils.startFeedbackSubmitWorker(context)
+
+
+                   /* context.let {
                         FeedbackSubmitService.startService(
                             it
                         )
-                    }
+                    }*/
                 }
 
                 removeOfflineUserData()
@@ -743,9 +748,9 @@ constructor(
             getSyncData(
                 success = {
 //                    sessionManager.logAppEvent(FunnelEvents.SyncEvents.Sync_Success.name, eventProperty)
-                    if (localDataStore.isEnableGoogleFit()) {//TODO handle google fit sync
+                    if (localDataStore.isEnableGoogleFit()) {
                         syncDataScope.launch {
-                            //ApplicationUtils.startGoogleFitSyncScheduler(context)
+                            ApplicationUtils.startGoogleFitSyncScheduler(context)
                         }
                     }
 

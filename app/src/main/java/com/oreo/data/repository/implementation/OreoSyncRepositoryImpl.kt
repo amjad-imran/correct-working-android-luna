@@ -13,6 +13,7 @@ import com.noisefit.util.TestModeUtils
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.DayTimeMovementBreakup
+import com.noisefit_commans.data.model.GoogleFitWorkoutData
 import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.data.model.OreoBloodOxygenBreakup
 import com.noisefit_commans.data.model.OreoBodyTemperatureBreakup
@@ -23,7 +24,9 @@ import com.noisefit_commans.data.model.OreoStepsData
 import com.noisefit_commans.data.model.OreoStressDataBreakup
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.VersionCheckResponse
+import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.models.StepDataGoogleFit
+
 import com.noisefit_commans.response.SleepBreakup
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
@@ -33,6 +36,7 @@ import com.oreo.data.db.implementation.OreoAutoSportDataImpl
 import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
 import com.oreo.data.db.implementation.OreoDayTimeMovementDataImpl
+import com.oreo.data.db.implementation.OreoGFitWorkoutDataImpl
 import com.oreo.data.db.implementation.OreoHeartRateDataImpl
 import com.oreo.data.db.implementation.OreoRespiratoryDataImpl
 import com.oreo.data.db.implementation.OreoSleepDataImpl
@@ -63,6 +67,7 @@ class OreoSyncRepositoryImpl(
     private val lastSyncProvider: LastSyncProvider,
     private val testModeUtils: TestModeUtils,
     private val oreoAutoSportDataImpl: OreoAutoSportDataImpl,
+    private val oreoGFitWorkoutDataImpl: OreoGFitWorkoutDataImpl,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : OreoSyncRepository {
 
@@ -143,6 +148,14 @@ class OreoSyncRepositoryImpl(
             )
             return@safeCacheCall true
         }
+    }
+
+    override suspend fun getGoogleFitSleepUnSyncData(date: String):  List<OreoSleepData>? {
+        return sleepDataImpl.getUnSyncGoogleFitData()
+    }
+
+    override suspend fun updateGoogleFitSleepUnSyncData(sleepData: List<OreoSleepData>) {
+        sleepDataImpl.updateUnSyncGoogleFitData(sleepData)
     }
 
     override suspend fun saveStressData(
@@ -357,13 +370,32 @@ class OreoSyncRepositoryImpl(
 
 
     override suspend fun getTodayBodyTemp(): Flow<CacheResult<List<OreoBodyTemperatureBreakup>?>> {
-        val todayDate = DateFormats.getTodaysDateString(7)
+     //   val todayDate = DateFormats.getTodaysDateString(7)
         return safeCacheCall(dispatcher) {
             null //TODO implement
             //bodyTemperatureDataImpl.getTodayData(todayDate)
         }
     }
 
+
+    override suspend fun saveAndGetGFitWorkout(data: List<GoogleFitWorkoutData>): Flow<CacheResult<List<GoogleFitWorkoutData>?>> {
+        return safeCacheCall(dispatcher) {
+            oreoGFitWorkoutDataImpl.saveWorkout(data)
+        }
+    }
+
+
+    override suspend fun getGFitUnSyncWorkout(): Flow<CacheResult<List<GoogleFitWorkoutData>?>> {
+        return safeCacheCall(dispatcher) {
+            oreoGFitWorkoutDataImpl.getUnSyncWorkout()
+        }
+    }
+
+    override suspend fun updateGFitSyncWorkout(syncData: List<GoogleFitWorkoutData>): Flow<CacheResult<Int?>> {
+        return safeCacheCall(dispatcher) {
+            oreoGFitWorkoutDataImpl.updateServerSyncData(syncData)
+        }
+    }
     override suspend fun deleteSleepServerSyncData(data: OreoUserSyncRawData) {
         val todayTimeStampForSleep = DateFormats.convertTimeStampToPrevious12ofDay(
             DateFormats.subtractDate(

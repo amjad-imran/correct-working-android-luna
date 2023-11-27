@@ -2,6 +2,7 @@ package com.oreo.data.repository.implementation
 
 import com.github.mikephil.charting.data.Entry
 import com.google.gson.Gson
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import com.noisefit.data.local.dataStored.abstraction.IOfflineApiResponseStore
@@ -46,6 +47,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONArray
+import org.json.JSONObject
 import org.joda.time.LocalDate
 
 
@@ -1248,6 +1251,25 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
+    override suspend fun addGFitWorkout(request: JsonArray): Flow<Resource<BaseApiResponseData<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/activity/v1/add_workout_apple"
+            val jsonObject = JSONObject()
+            jsonObject.put("workouts",request)
+
+            val requestObject = JsonObject().apply {
+                this.add("workouts", request)
+            }
+            remoteDataSource.addGFitWorkout(url, requestObject)
+        }
+    }
+
+    override suspend fun syncGoogleFitUserData(request: JsonObject): Flow<Resource<BaseApiResponseData<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/protean/v1/sync/healthfit"
+            remoteDataSource.syncGoogleFitUserData(url,request)
+        }
+    }
     override suspend fun getWorkoutList(): Flow<Resource<BaseApiResponse<List<OWorkoutListModal>>>> {
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.OREO_BASE_URL}/activity/v1/workout_list"

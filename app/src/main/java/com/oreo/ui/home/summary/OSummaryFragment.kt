@@ -37,6 +37,7 @@ import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import com.oreo.ui.workout.add.ADD_WORKOUT_REQUEST_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -321,6 +322,23 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
 
 
+        mainViewModel.stateConnectHelp.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.contentMain.lytConnectHelp.root.visible()
+                val logsSync = viewModel.shouldSyncAutoLogs()
+                if (logsSync) {
+                    context?.let { ctx ->
+                        val status = ApplicationUtils.startFeedbackSubmitWorker(ctx)
+
+                       /* FeedbackSubmitService.startService(
+                            ctx
+                        )*/
+                    }
+                }
+            } else {
+                binding.contentMain.lytConnectHelp.root.gone()
+            }
+        }
 
 
 

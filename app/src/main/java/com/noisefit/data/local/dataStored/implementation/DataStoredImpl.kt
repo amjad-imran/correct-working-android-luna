@@ -193,6 +193,7 @@ private const val BATTERY_DASH_ALERT = "BATTERY_DASH_ALERT"
 private const val SLEEP_NOTIFICATION = "SLEEP_NOTIFICATION"
 private const val READINESS_NOTIFICATION = "READINESS_NOTIFICATION"
 
+private const val GFIT_USER_SYNC_KEY = "GFIT_USER_SYNC_KEY"
 
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
@@ -251,6 +252,14 @@ class DataStoredImpl
         val lastData = getDashCardClickState()
         lastData[type] = boolean
         mPrefs.edit()?.putString(DASH_CARD_CLICK_STATE, gson.toJson(lastData))?.commit()
+    }
+
+    override fun getGFitUserDataLastSyncTime(): Long {
+        return mPrefs.getLong(GFIT_USER_SYNC_KEY, 0)
+    }
+
+    override fun setGFitUserDataLastSyncTime() {
+        mPrefs.edit()?.putLong(GFIT_USER_SYNC_KEY, System.currentTimeMillis())?.apply()
     }
 
     override fun isPreviouslyPaired(): Boolean {

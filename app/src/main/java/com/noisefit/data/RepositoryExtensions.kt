@@ -63,7 +63,7 @@ suspend fun <T> safeApiCallFlow(
                 }
                 is HttpException -> {
                     val code = throwable.code()
-                    if(code==502){
+                    if(code in 500 until 599){
                         emit(networkError(NETWORK_ERROR, null))
                     }else{
                         val errorResponse = convertErrorBody(throwable)
