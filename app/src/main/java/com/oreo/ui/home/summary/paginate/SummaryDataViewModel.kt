@@ -164,10 +164,7 @@ constructor(
 
             hrList.forEachIndexed { index2, value ->
                 if (value != 0) {
-
                     val indexMillis = ((index * 6) + index2) * 5 * 60L * 1000L
-                    LOGS.w("convertHeartRateOverviewData $index $indexMillis")
-
                     lastHrValue = Pair(value, indexMillis)
                 }
             }
