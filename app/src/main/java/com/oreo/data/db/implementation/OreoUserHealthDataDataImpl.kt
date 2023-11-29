@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.model.DayTimeMovementBreakup
 import com.noisefit_commans.data.model.UserHealthData
+import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.db.abstaction.OreoDayTimeMovementDataSource
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.db.database.OreoDayTimeMovementDao
@@ -32,7 +33,7 @@ constructor(
         } else {
             userHealthDao.updateViaDate(
                 data.userHealthData,
-                data.todayOtherData,
+                data.trendData,
                 data.date!!
             )
         }
@@ -52,5 +53,10 @@ constructor(
         dates.forEach {
             userHealthDao.clearByDate(it)
         }
+    }
+
+    override fun getTodayTrend(): String? {
+        val date = DateFormats.getTodaysDateString(10)
+        return userHealthDao.getTodayTrend(date)
     }
 }

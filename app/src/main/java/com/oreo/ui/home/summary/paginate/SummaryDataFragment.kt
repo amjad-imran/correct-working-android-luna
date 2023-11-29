@@ -61,6 +61,8 @@ class SummaryDataFragment :
 
     private val ARGS_DATE = "ARGS_DATE"
 
+    private val TAG = "SummaryDataFragment"
+
 
     companion object {
 
@@ -84,11 +86,28 @@ class SummaryDataFragment :
         setAdapter()
 
         val date = arguments?.getString("ARGS_DATE")
+        viewModel.date = date
         LOGS.d("CREATED_WITH_DATE $date")
 
-        date?.let {
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        loadData()
+        mainViewModel.dataReload.observe(viewLifecycleOwner) {
+            it.getContent()?.let {
+                LOGS.d(TAG,"data reload")
+                loadData()
+            }
+        }
+    }
+
+    private fun loadData() {
+        viewModel.date?.let {
             mainViewModel.getDashBoardData(it)?.let { dash ->
-                setUi(dash)
+                setUi(dash.first)
             }
         }
     }

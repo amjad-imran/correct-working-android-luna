@@ -55,6 +55,7 @@ constructor(
 ) : BaseViewModel() {
 
 
+    var date: String? = null
     val healthOverviewData = MutableLiveData<ArrayList<OHealthOverview>>()
     val stateHeartRateCard = MutableLiveData<OHealthOverview.HeartRate?>()
 

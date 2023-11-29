@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
 
 
 class SummaryPagerAdapter(fragmentActivity: FragmentActivity) :
@@ -53,5 +54,9 @@ class SummaryPagerAdapter(fragmentActivity: FragmentActivity) :
             return dates.size - 1
         }
         return index
+    }
+
+    fun reloadPos(currentPos: Int) {
+        notifyDataSetChanged()
     }
 }

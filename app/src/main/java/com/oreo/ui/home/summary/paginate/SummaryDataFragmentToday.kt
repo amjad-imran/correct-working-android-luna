@@ -36,6 +36,7 @@ import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.TapMeasureState
+import com.oreo.data.model.TrendsData
 import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
@@ -63,6 +64,7 @@ class SummaryDataFragmentToday :
     private val mSharedViewModel: SharedOSCDViewModel by activityViewModels()
 
     private val ARGS_DATE = "ARGS_DATE"
+    private val TAG = "SummaryDataFragment"
 
 
     companion object {
@@ -90,21 +92,40 @@ class SummaryDataFragmentToday :
         setAdapter()
 
         val date = arguments?.getString("ARGS_DATE")
+        viewModel.date = date
         viewModel.registerDate = mainViewModel.registerDate
 
 
         LOGS.d("CREATED_WITH_DATE $date")
+        LOGS.d(TAG,"Today onCreate Called")
+    }
 
-        date?.let {
-            mainViewModel.getDashBoardData(it)?.let { dash ->
-                setUi(dash)
+    override fun onResume() {
+        super.onResume()
+        LOGS.d(TAG,"Today onResume called")
+
+        loadData()
+
+        mainViewModel.dataReload.observe(viewLifecycleOwner) {
+            it.getContent()?.let {
+                LOGS.d(TAG,"Today data reload")
+                loadData()
             }
         }
     }
 
-    private fun setUi(data: ServerUserHealthData) {
+    fun loadData(){
+        LOGS.d(TAG,"Today Load data")
+        viewModel.date?.let {
+            mainViewModel.getDashBoardData(it)?.let { dash ->
+                setUi(dash.first, dash.second)
+            }
+        }
+    }
+
+    private fun setUi(data: ServerUserHealthData, trendsData: TrendsData?) {
         viewModel.initTodayData()
-        viewModel.parseHealthData(data)
+        viewModel.parseHealthData(data, trendsData)
     }
 
 
@@ -361,6 +382,7 @@ class SummaryDataFragmentToday :
                 this.tvDate.text =
                     it.second
                 this.tvGreeting.text = it.first
+                this.root.visible()
             }
         }
 

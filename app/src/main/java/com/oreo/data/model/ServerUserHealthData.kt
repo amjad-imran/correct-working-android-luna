@@ -14,17 +14,20 @@ import com.oreo.data.model.health.WelcomeData
 
 data class ServerUserHealthResponse(
     val data: List<ServerUserHealthData>,
+    val trends: TrendsData? = null,
+    @SerializedName("register_date")
+    val registerDate: Int? = null,
+) : ColorfitData()
 
+data class TrendsData(
     @SerializedName("activitityScoreAvg")
     val activityScoreAvg: ODashboardActivityScoreModel? = null,
-    @SerializedName("sleepScoreAvg")
-    val sleepScoreAvg: ODashboardSleepScoreModel? = null,
     @SerializedName("readinessScoreAvg")
     val readinessScoreAvg: ODashboardReadinessScoreModel? = null,
-    @SerializedName("registerDate")
-    val registerDate: Int? = null,
-    val welcome: WelcomeData? = null,
-) : ColorfitData()
+    @SerializedName("sleepScoreAvg")
+    val sleepScoreAvg: ODashboardSleepScoreModel? = null,
+    val welcome: WelcomeData? = null
+)
 
 data class ServerUserHealthData(
     val date: String,//YYYY-MM-dd
@@ -35,8 +38,8 @@ data class ServerUserHealthData(
     var heart: DataBreakup? = null,
 
 
-)
+    )
 
 data class DataBreakup(
-    val break_up:List<Int>
+    val break_up: List<Int>
 )

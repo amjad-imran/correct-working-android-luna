@@ -150,14 +150,14 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             navigate(R.id.OMyProfileFragment)
         }
 
-       /* setFragmentResultListener(ADD_WORKOUT_REQUEST_KEY) { _, bundle ->
-            val allow = bundle.getBoolean("allow")
+        /* setFragmentResultListener(ADD_WORKOUT_REQUEST_KEY) { _, bundle ->
+             val allow = bundle.getBoolean("allow")
 
-            if (allow) {
-                viewModel.getRecentWorkoutList()
+             if (allow) {
+                 viewModel.getRecentWorkoutList()
 
-            }
-        }*/
+             }
+         }*/
         /* binding.layoutRefresh.animationView.setAnimation(R.raw.loading_swipe_anim)
          binding.swipeToRefresh.setOnRefreshListener(object : RefreshingListenerAdapter() {
              override fun onRefreshing() {

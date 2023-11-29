@@ -10,10 +10,10 @@ interface OreoUserHealthDataDao : BaseDao<UserHealthData> {
     @Query("SELECT * FROM user_health_data where date = :date")
     fun getByDate(date: String): UserHealthData?
 
-    @Query("UPDATE user_health_data SET userHealthData = :userHealthData,todayOtherData = :todayOtherData WHERE date = :date")
+    @Query("UPDATE user_health_data SET userHealthData = :userHealthData,trendData = :trendData WHERE date = :date")
     fun updateViaDate(
         userHealthData: String?,
-        todayOtherData: String?,
+        trendData: String?,
         date: String
     )
 
@@ -22,6 +22,10 @@ interface OreoUserHealthDataDao : BaseDao<UserHealthData> {
 
     @Query("Delete FROM user_health_data WHERE date=:date")
     fun clearByDate(date:String)
+
+
+    @Query("SELECT trendData FROM user_health_data where date = :date")
+    fun getTodayTrend(date: String): String?
 
     /*@Query("Delete FROM day_time_movement where date = :date")
     fun deleteTodayData(date: String)

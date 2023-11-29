@@ -33,6 +33,7 @@ import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.TapMeasureState
+import com.oreo.data.model.TrendsData
 import com.oreo.data.model.VideoInfoType
 import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
@@ -54,6 +55,8 @@ constructor(
     val userActivityRepository: OreoUserActivityRepository
 ) : BaseViewModel() {
 
+
+    var date: String?=null
 
     val stateHeaderCard = MutableLiveData<Pair<String, String>>()//Name,Date
     val healthOverviewData = MutableLiveData<ArrayList<OHealthOverview>>()
@@ -158,7 +161,7 @@ constructor(
     }
 
 
-    fun parseHealthData(healthData: ServerUserHealthData) {
+    fun parseHealthData(healthData: ServerUserHealthData, trendsData: TrendsData?) {
 
         viewModelScope.launch(Dispatchers.IO) {
 
@@ -175,7 +178,7 @@ constructor(
             }
 
             ringDataStore.setRegisterDay(registerDate ?: -1)
-            handleInfoCards(healthData, userActivities, viewedCardsData)
+            handleInfoCards(healthData, trendsData, userActivities, viewedCardsData)
 
 
 
@@ -345,14 +348,13 @@ constructor(
                 }
             }
 
-            //TODO uncomment
-            /* stateSleepAvgCard.postValue(
-                 Pair(
-                     healthData.sleepScoreAvg,
-                     healthData.activityScoreAvg
-                 )
-             )
-             stateReadinessAvgCard.postValue(healthData.readinessScoreAvg)*/
+            stateSleepAvgCard.postValue(
+                Pair(
+                    trendsData?.sleepScoreAvg,
+                    trendsData?.activityScoreAvg
+                )
+            )
+            stateReadinessAvgCard.postValue(trendsData?.readinessScoreAvg)
 
             this@SummaryDataViewModelToday.viewedCardsData.postValue(viewedCardsData)
             healthOverviewData.postValue(userActivities)
@@ -393,6 +395,7 @@ constructor(
 
     private fun handleInfoCards(
         data: ServerUserHealthData,
+        trendsData: TrendsData?,
         userActivities: ArrayList<OHealthOverview>,
         viewedCardsData: ArrayList<OHealthOverview>,
     ) {
@@ -400,51 +403,50 @@ constructor(
 
         if (registerDays < 7) {
 
-//TODO uncomment
-            /* if (registerDays == 0) {
-                 data.welcome?.welcome?.let {
-                     userActivities.add(OHealthOverview.InfoRingWelcome(it))
-                 }
-             }
+            if (registerDays == 0) {
+                trendsData?.welcome?.welcome?.let {
+                    userActivities.add(OHealthOverview.InfoRingWelcome(it))
+                }
+            }
 
-             val cardClickState = localDataStore.getDashCardClickState()
+            val cardClickState = localDataStore.getDashCardClickState()
 
-             data.welcome?.care?.let {
-                 if (registerDays > 0) {
-                     viewedCardsData.add(OHealthOverview.InfoRingCare(it))
-                 } else {
-                     if (cardClickState[DashInfoCard.CARE] == false) {
-                         userActivities.add(OHealthOverview.InfoRingCare(it))
-                     } else {
-                         viewedCardsData.add(OHealthOverview.InfoRingCare(it))
-                     }
-                 }
+            trendsData?.welcome?.care?.let {
+                if (registerDays > 0) {
+                    viewedCardsData.add(OHealthOverview.InfoRingCare(it))
+                } else {
+                    if (cardClickState[DashInfoCard.CARE] == false) {
+                        userActivities.add(OHealthOverview.InfoRingCare(it))
+                    } else {
+                        viewedCardsData.add(OHealthOverview.InfoRingCare(it))
+                    }
+                }
 
-             }
+            }
 
-             data.welcome?.sleep_media?.let {
-                 if (cardClickState[DashInfoCard.SLEEP] == false) {
-                     userActivities.add(OHealthOverview.InfoVideo(VideoInfoType.SLEEP, it))
-                 } else {
-                     viewedCardsData.add(OHealthOverview.InfoVideo(VideoInfoType.SLEEP, it))
-                 }
-             }
+            trendsData?.welcome?.sleep_media?.let {
+                if (cardClickState[DashInfoCard.SLEEP] == false) {
+                    userActivities.add(OHealthOverview.InfoVideo(VideoInfoType.SLEEP, it))
+                } else {
+                    viewedCardsData.add(OHealthOverview.InfoVideo(VideoInfoType.SLEEP, it))
+                }
+            }
 
-             data.welcome?.activity_media?.let {
-                 if (cardClickState[DashInfoCard.ACTIVITY] == false) {
-                     userActivities.add(OHealthOverview.InfoVideo(VideoInfoType.ACTIVITY, it))
-                 } else {
-                     viewedCardsData.add(OHealthOverview.InfoVideo(VideoInfoType.ACTIVITY, it))
-                 }
-             }
+            trendsData?.welcome?.activity_media?.let {
+                if (cardClickState[DashInfoCard.ACTIVITY] == false) {
+                    userActivities.add(OHealthOverview.InfoVideo(VideoInfoType.ACTIVITY, it))
+                } else {
+                    viewedCardsData.add(OHealthOverview.InfoVideo(VideoInfoType.ACTIVITY, it))
+                }
+            }
 
-             data.welcome?.readiness_media?.let {
-                 if (cardClickState[DashInfoCard.READINESS] == false) {
-                     userActivities.add(OHealthOverview.InfoVideo(VideoInfoType.READINESS, it))
-                 } else {
-                     viewedCardsData.add(OHealthOverview.InfoVideo(VideoInfoType.READINESS, it))
-                 }
-             }*/
+            trendsData?.welcome?.readiness_media?.let {
+                if (cardClickState[DashInfoCard.READINESS] == false) {
+                    userActivities.add(OHealthOverview.InfoVideo(VideoInfoType.READINESS, it))
+                } else {
+                    viewedCardsData.add(OHealthOverview.InfoVideo(VideoInfoType.READINESS, it))
+                }
+            }
 
 
         }

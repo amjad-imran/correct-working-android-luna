@@ -18,6 +18,7 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ServerUserHealthData
+import com.oreo.data.model.TrendsData
 import com.oreo.data.model.health.OreoActivityModel
 import com.oreo.data.model.health.OreoDashboardResponseModel
 import com.oreo.data.model.health.OreoReadinessModel
@@ -48,7 +49,8 @@ constructor(
 
 
     val userHealthData = HashMap<String, ServerUserHealthData?>()
-    val userDataAdded = MutableLiveData<Event<Boolean>>()
+    var trendsData: TrendsData? = null
+    val dataReload = MutableLiveData<Event<Boolean>>()
 
     var bottomNavigation = MutableLiveData<Event<BottomNavOption>>()
     fun navigateTo(option: BottomNavOption) {
@@ -170,6 +172,10 @@ constructor(
                             it.data.forEach { data ->
                                 userHealthData[data.date] = data
                             }
+                            if (it.trends != null) {
+                                trendsData = it.trends
+                            }
+
                             _dashboard.value = getDaysList()
 
                             val sleepList = getSleepDataList()
@@ -184,6 +190,9 @@ constructor(
 
                             val todayData = userHealthData[getTodayDate()]
                             showNotification(todayData?.dashboard)
+
+                            dataReload.value = Event(true)
+
                         }
                     }
                 }
@@ -217,7 +226,7 @@ constructor(
             )
         ) {
             val (newStartDate, newEndDate) = getNextPaginationDates(mEndDate!!)
-            if(newStartDate==null && newEndDate==null) return false
+            if (newStartDate == null && newEndDate == null) return false
             mEndDate = newEndDate
             getUserHealthData(newStartDate, newEndDate)
             return true
@@ -253,10 +262,10 @@ constructor(
         val startDateObj = start.plusDays(1)//.toString("yyyy-MM-dd")
         var endDateObj = start.plusDays(7)//.toString("yyyy-MM-dd")
 
-        if(startDateObj>todayDate){
-            return Pair(null,null)
+        if (startDateObj > todayDate) {
+            return Pair(null, null)
         }
-        if(endDateObj>todayDate){
+        if (endDateObj > todayDate) {
             endDateObj = todayDate
         }
 
@@ -377,8 +386,9 @@ constructor(
         return returnSelectedDate
     }
 
-    fun getDashBoardData(date: String): ServerUserHealthData? {
-        return userHealthData[date]
+    fun getDashBoardData(date: String): Pair<ServerUserHealthData, TrendsData?>? {
+        val dayData = userHealthData[date] ?: return null
+        return Pair(dayData, trendsData)
     }
 
     fun getTodayDate(): String {
@@ -407,7 +417,7 @@ constructor(
 
     fun onSyncSuccess() {
         val todayDate = getTodayDate()
-        getUserHealthData(todayDate,todayDate)
+        getUserHealthData(todayDate, todayDate)
     }
 
     private fun showNotification(response: OreoDashboardResponseModel?) {
