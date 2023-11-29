@@ -20,6 +20,9 @@ interface OreoUserHealthDataDao : BaseDao<UserHealthData> {
     @Query("Delete FROM user_health_data")
     fun clearAllData()
 
+    @Query("Delete FROM user_health_data WHERE date=:date")
+    fun clearByDate(date:String)
+
     /*@Query("Delete FROM day_time_movement where date = :date")
     fun deleteTodayData(date: String)
 

@@ -28,6 +28,7 @@ import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.DashAlert
+import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
@@ -68,6 +69,7 @@ constructor(
     var readinessScoreInfo = MutableLiveData<Event<String>>()
     var activityScoreInfo = MutableLiveData<Event<String>>()
 
+    val stateWorkouts = MutableLiveData<List<OActivityListModal>>()
 
 
     val stateReadinessAvgCard = MutableLiveData<ODashboardReadinessScoreModel?>()
@@ -162,6 +164,8 @@ constructor(
 
             val data = healthData.dashboard ?: return@launch
 
+            data.activity?.activeCalories = healthData.activity?.activeCalories
+
             val userActivities = ArrayList<OHealthOverview>()
             val viewedCardsData = ArrayList<OHealthOverview>()
 
@@ -221,9 +225,9 @@ constructor(
 
                     //Activity
                     if (data.activity?.activeCalories != null) {
-                        val activeCalories = data.activity.activeCalories
+                        val activeCalories = data.activity.activeCalories ?: 0
                         if (activeCalories in 1..49) {
-                            val caloriesGoal = 300//summary.user?.userGoals?.caloriesGoal ?: 0
+                            val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
                             userActivities.add(
                                 OHealthOverview.ActivityMinimal(
                                     data.activity,
@@ -231,7 +235,7 @@ constructor(
                                 )
                             )
                         } else if (activeCalories >= 50) {
-                            val caloriesGoal = 300//summary.user?.userGoals?.caloriesGoal ?: 0
+                            val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
                             userActivities.add(
                                 OHealthOverview.Activity(
                                     data.activity,
@@ -265,7 +269,7 @@ constructor(
 
                         val activeCalories = data.activity.activeCalories ?: 0
                         if (activeCalories in 0..49) {
-                            val caloriesGoal = 300// summary.user?.userGoals?.caloriesGoal ?: 0
+                            val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
                             userActivities.add(
                                 OHealthOverview.ActivityMinimal(
                                     data.activity,
@@ -273,7 +277,7 @@ constructor(
                                 )
                             )
                         } else {
-                            val caloriesGoal = 300// summary.user?.userGoals?.caloriesGoal ?: 0
+                            val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
                             userActivities.add(
                                 OHealthOverview.Activity(
                                     data.activity,
@@ -291,7 +295,7 @@ constructor(
 
                         val activeCalories = data.activity.activeCalories ?: 0
                         if (activeCalories in 0..49) {
-                            val caloriesGoal = 300//summary.user?.userGoals?.caloriesGoal ?: 0
+                            val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
                             userActivities.add(
                                 OHealthOverview.ActivityMinimal(
                                     data.activity,
@@ -299,7 +303,7 @@ constructor(
                                 )
                             )
                         } else {
-                            val caloriesGoal = 300// summary.user?.userGoals?.caloriesGoal ?: 0
+                            val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
                             userActivities.add(
                                 OHealthOverview.Activity(
                                     data.activity,
@@ -359,6 +363,8 @@ constructor(
                     this?.measureState = TapMeasureState.NO_DEVICE
                 }
             })
+
+            stateWorkouts.postValue(healthData.activity?.workout ?: ArrayList())
 
         }
     }

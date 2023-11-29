@@ -62,16 +62,13 @@ constructor(
 ) : BaseViewModel() {
 
 
-    val stateHeaderCard = MutableLiveData<Pair<String, String>>()//Name,Date
     val stateHeartRateCard = MutableLiveData<OHealthOverview.HeartRate?>()
-    val statePairDeviceCard = MutableLiveData<Boolean>()
     val stateDashAlerts = MutableLiveData<HashMap<AlertType, DashAlert>>()
     val stateDashRingBattery = MutableLiveData<Pair<Boolean, ColorFitDevice?>>()
 
     val stateSleepAvgCard =
         MutableLiveData<Pair<ODashboardSleepScoreModel?, ODashboardActivityScoreModel?>>()
     val stateReadinessAvgCard = MutableLiveData<ODashboardReadinessScoreModel?>()
-    val stateWorkouts = MutableLiveData<List<OActivityListModal>>()
     var contributorInfo: OContributorResponseModal? = null
 
     val hrInfo = MutableLiveData<Event<String>>()
@@ -224,7 +221,7 @@ constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let { workoutList ->
 
-                            stateWorkouts.postValue(workoutList)
+                            //stateWorkouts.postValue(workoutList)
 
 
                             /*  val index = summary.healthOverviewData.value?.indexOfFirst {

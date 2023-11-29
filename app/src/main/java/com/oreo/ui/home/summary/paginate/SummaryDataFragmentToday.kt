@@ -27,6 +27,7 @@ import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
@@ -44,6 +45,9 @@ import com.oreo.ui.home.summary.HomeRecyclerViewHolder
 import com.oreo.ui.home.summary.OSummaryHealthOverviewAdapter
 import com.oreo.ui.home.summary.OSummaryHealthOverviewClickEnum
 import com.oreo.ui.home.summary.OreoRWorkoutAdapter
+import com.oreo.ui.sleep.scoredetails.ClickViewType
+import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
+import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import com.oreo.util.graph.OCombineChartUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -56,6 +60,8 @@ class SummaryDataFragmentToday :
 
     private val mainViewModel: OreoMainViewModel by activityViewModels()
     private val viewModel: SummaryDataViewModelToday by viewModels()
+    private val mSharedViewModel: SharedOSCDViewModel by activityViewModels()
+
     private val ARGS_DATE = "ARGS_DATE"
 
 
@@ -85,6 +91,9 @@ class SummaryDataFragmentToday :
 
         val date = arguments?.getString("ARGS_DATE")
         viewModel.registerDate = mainViewModel.registerDate
+
+
+        LOGS.d("CREATED_WITH_DATE $date")
 
         date?.let {
             mainViewModel.getDashBoardData(it)?.let { dash ->
@@ -292,6 +301,61 @@ class SummaryDataFragmentToday :
 
     override fun subscribeObservers() {
 
+        viewModel.sessionManager.bluetoothStateDash.observe(this) {
+            viewModel.updateAlerts()
+            //viewModel.updateBluetoothStateInList(it)
+        }
+
+        viewModel.stateWorkouts.observe(this) {
+            setWorkoutUI(it)
+        }
+
+        viewModel.hrInfo.observe(this) {
+            it.getContent()?.let {
+                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                    this.putString("infoData", it)
+                })
+            }
+        }
+
+        viewModel.activityScoreInfo.observe(this) {
+            it.getContent()?.let {
+                mSharedViewModel.selectedTab = 0
+                mSharedViewModel.itemType = ClickViewType.ACTIVITY.name
+                mSharedViewModel.itemClickType = ViewItemClickType.ACTIVITY_SCORE
+                navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
+                    putString("viewType", "activity")
+                    putString("infoData", it)
+                    putString("date", DateFormats.getCurrentDateOreoFormat())
+                })
+            }
+        }
+
+        viewModel.readinessScoreInfo.observe(this) {
+            it.getContent()?.let {
+                mSharedViewModel.selectedTab = 0
+                mSharedViewModel.itemType = ClickViewType.READINESS.name
+                mSharedViewModel.itemClickType = ViewItemClickType.READINESS_SCORE
+                navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
+                    putString("viewType", "readiness")
+                    putString("infoData", it)
+                    putString("date", DateFormats.getCurrentDateOreoFormat())
+                })
+            }
+        }
+        viewModel.sleepScoreInfo.observe(this) {
+            it.getContent()?.let {
+                mSharedViewModel.selectedTab = 0
+                mSharedViewModel.itemType = ClickViewType.SLEEP.name
+                mSharedViewModel.itemClickType = ViewItemClickType.SLEEP_SCORE
+                navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
+                    putString("viewType", "sleep")
+                    putString("infoData", it)
+                    putString("date", DateFormats.getCurrentDateOreoFormat())
+                })
+            }
+        }
+
         viewModel.stateHeaderCard.observe(viewLifecycleOwner) {
             binding.contentMain.lytHeader.apply {
                 this.tvDate.text =
@@ -378,15 +442,15 @@ class SummaryDataFragmentToday :
         }
 
         viewModel.stateDashRingBattery.observe(this) {
-            /* if (it.first) {
-                 binding.contentMain.lytChargeRing.root.visible()
-                 binding.contentMain.lytChargeRing.imageView3.loadImage(
-                     requireContext(),
-                     it.second?.ringInfo?.image2
-                 )
-             } else {
-                 binding.contentMain.lytChargeRing.root.gone()
-             }*/
+            if (it.first) {
+                binding.contentMain.lytChargeRing.root.visible()
+                binding.contentMain.lytChargeRing.imageView3.loadImage(
+                    requireContext(),
+                    it.second?.ringInfo?.image2
+                )
+            } else {
+                binding.contentMain.lytChargeRing.root.gone()
+            }
         }
 
         viewModel.stateDashAlerts.observe(this) {
@@ -416,6 +480,29 @@ class SummaryDataFragmentToday :
                     vpAlertSlider
                 ) { _, _ -> }.attach()
             }
+        }
+
+        viewModel.sessionManager.connectStateRing.observe(this) { connectedState ->
+            when (connectedState) {
+                is ConnectState.ConnectFailed -> {
+                    viewModel.updateAlerts()
+                }
+
+                is ConnectState.Connecting -> {
+                    viewModel.updateAlerts()
+                }
+
+                is ConnectState.ConnectSuccess -> {
+                    viewModel.updateAlerts()
+                }
+
+                is ConnectState.UnPaired -> {
+                    viewModel.updateAlerts()
+                }
+
+                else -> {}
+            }
+
         }
 
     }
@@ -600,6 +687,7 @@ class SummaryDataFragmentToday :
 
     private fun setWorkoutUI(workouts: List<OActivityListModal>?) {
         val lytWorkouts = binding.contentMain.lytWorkouts
+        lytWorkouts.root.visible()
 
         lytWorkouts.tvEmptyMsg.gone()
         lytWorkouts.rvWorkouts.layoutManager = LinearLayoutManager(

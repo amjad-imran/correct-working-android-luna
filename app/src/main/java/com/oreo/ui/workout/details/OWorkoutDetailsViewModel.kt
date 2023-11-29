@@ -9,6 +9,7 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
+import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.util.UtilClass
@@ -21,7 +22,8 @@ import kotlin.math.ceil
 
 @HiltViewModel
 class OWorkoutDetailsViewModel @Inject constructor(
-    val userActivityRepository: OreoUserActivityRepository
+    val userActivityRepository: OreoUserActivityRepository,
+    private val userHealthDataDataSource: OreoUserHealthDataDataSource
 ) : BaseViewModel() {
 
     var position: Int = -1
@@ -103,6 +105,13 @@ class OWorkoutDetailsViewModel @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             sendMessage("Workout Deleted")
+                            userHealthDataDataSource.clearDataByDates(
+                                listOf(
+                                    DateFormats.getTodaysDateString(
+                                        10
+                                    )
+                                )
+                            )
                             _workoutDeletedResponse.postValue(Event(true))
                         }
                     }

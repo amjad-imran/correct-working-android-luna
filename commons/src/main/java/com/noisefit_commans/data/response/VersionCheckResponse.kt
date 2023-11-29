@@ -6,6 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class VersionCheckResponse(
+    val dates: List<String>? = null,
     @SerializedName("upgrade_type")
     val upgradeType: String? = null,
     @SerializedName("maintenance_mode")

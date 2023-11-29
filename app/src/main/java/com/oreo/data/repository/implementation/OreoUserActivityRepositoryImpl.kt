@@ -235,7 +235,7 @@ class OreoUserActivityRepositoryImpl(
     }
 
 
-    override suspend fun getSleepHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoSleepModel>>>> {
+   /* override suspend fun getSleepHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoSleepModel>>>> {
 
         return flow {
             val type = KeyValueDataType.SLEEP
@@ -357,9 +357,9 @@ class OreoUserActivityRepositoryImpl(
                 }
             }
         }
-    }
+    }*/
 
-    override suspend fun getReadinessHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoReadinessModel>>>> {
+    /*override suspend fun getReadinessHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoReadinessModel>>>> {
 
         return flow {
             val type = KeyValueDataType.READINESS
@@ -481,7 +481,7 @@ class OreoUserActivityRepositoryImpl(
                 }
             }
         }
-    }
+    }*/
 
     override suspend fun getLearnData(): Flow<Resource<BaseApiResponse<List<LearnModel>>>> {
 
@@ -611,7 +611,7 @@ class OreoUserActivityRepositoryImpl(
     }
 
 
-    override suspend fun getDashboardData(forceRefresh: Boolean): Flow<Resource<BaseApiResponse<OreoDashboardResponseModel>>> {
+   /* override suspend fun getDashboardData(forceRefresh: Boolean): Flow<Resource<BaseApiResponse<OreoDashboardResponseModel>>> {
 
         return flow {
             val type = KeyValueDataType.DASHBOARD
@@ -735,10 +735,10 @@ class OreoUserActivityRepositoryImpl(
                 }
             }
         }
-    }
+    }*/
 
 
-    override suspend fun getActivityHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoActivityModel>>>> {
+  /*  override suspend fun getActivityHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoActivityModel>>>> {
 
         return flow {
             val type = KeyValueDataType.ACTIVITY
@@ -860,7 +860,7 @@ class OreoUserActivityRepositoryImpl(
                 }
             }
         }
-    }
+    }*/
 
     override suspend fun getHealthOverview(
         healthOverviewDataType: HealthOverviewDataType,
@@ -1245,8 +1245,10 @@ class OreoUserActivityRepositoryImpl(
     override suspend fun addWorkout(request: JsonObject): Flow<Resource<BaseApiResponseData<Any>>> {
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.OREO_BASE_URL}/activity/v1/add_workout"
-            keyValueDataSource.removeDataByType(KeyValueDataType.ACTIVITY)
-            keyValueDataSource.removeDataByType(KeyValueDataType.DASHBOARD)
+           /* keyValueDataSource.removeDataByType(KeyValueDataType.ACTIVITY)
+            keyValueDataSource.removeDataByType(KeyValueDataType.DASHBOARD)*/
+
+            //todo clear data based on dates
             remoteDataSource.addWorkout(url, request)
         }
     }
@@ -1323,8 +1325,9 @@ class OreoUserActivityRepositoryImpl(
     override suspend fun deleteWorkoutFromServer(id: String): Flow<Resource<BaseApiResponse<Any>>> {
         //'https://stage-oreo.gonoise.com/activity/v1/delete_workout/e900fe86-f2d5-422f-be40-9d0d633caa19
         return safeApiCallFlow(dispatcher) {
-            keyValueDataSource.removeDataByType(KeyValueDataType.ACTIVITY)
-            keyValueDataSource.removeDataByType(KeyValueDataType.DASHBOARD)
+            /*keyValueDataSource.removeDataByType(KeyValueDataType.ACTIVITY)
+            keyValueDataSource.removeDataByType(KeyValueDataType.DASHBOARD)*/
+            //todo clear data base on dates
             val url = "${BuildConfig.OREO_BASE_URL}/activity/v1/delete_workout/$id"
             remoteDataSource.deleteWorkout(url)
         }

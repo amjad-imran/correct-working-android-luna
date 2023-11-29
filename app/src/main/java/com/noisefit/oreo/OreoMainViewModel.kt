@@ -46,9 +46,6 @@ constructor(
     var registerDate: Int = 10
     var checkBluetooth = MutableLiveData<Event<Boolean>>()
 
-    //For API
-    var selectedMasterDate: String? = null
-
 
     val userHealthData = HashMap<String, ServerUserHealthData?>()
     val userDataAdded = MutableLiveData<Event<Boolean>>()
@@ -94,7 +91,6 @@ constructor(
 
 
     init {
-        selectedMasterDate = DateFormats.getCurrentDateOreoFormat()
 
         mEndDate = DateFormats.getCurrentDateOreoFormat()
         mStartDate = DateFormats.getCurrentDateMinusDays(6)
@@ -221,6 +217,7 @@ constructor(
             )
         ) {
             val (newStartDate, newEndDate) = getNextPaginationDates(mEndDate!!)
+            if(newStartDate==null && newEndDate==null) return false
             mEndDate = newEndDate
             getUserHealthData(newStartDate, newEndDate)
             return true
@@ -249,13 +246,21 @@ constructor(
         return end.plusDays(plusDays).toString("yyyy-MM-dd")
     }
 
-    fun getNextPaginationDates(date: String): Pair<String, String> {
+    fun getNextPaginationDates(date: String): Pair<String?, String?> {
         val start: LocalDate = LocalDate.parse(date)
+        val todayDate = LocalDate.now()
 
-        val startDate = start.plusDays(1).toString("yyyy-MM-dd")
-        val endDate = start.plusDays(7).toString("yyyy-MM-dd")
+        val startDateObj = start.plusDays(1)//.toString("yyyy-MM-dd")
+        var endDateObj = start.plusDays(7)//.toString("yyyy-MM-dd")
 
-        return Pair(startDate, endDate)
+        if(startDateObj>todayDate){
+            return Pair(null,null)
+        }
+        if(endDateObj>todayDate){
+            endDateObj = todayDate
+        }
+
+        return Pair(startDateObj.toString("yyyy-MM-dd"), endDateObj.toString("yyyy-MM-dd"))
     }
 
     private fun getSleepDataList(): List<OreoSleepModel> {
@@ -306,6 +311,9 @@ constructor(
             dateList.add(start.toString())
             start = start.plusDays(1)
         }
+
+
+        LOGS.w("Setting_data $mStartDate - $mEndDate")
 
         return dateList
 

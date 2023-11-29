@@ -438,7 +438,7 @@ class OreoReadinessFragment :
                 HistoryCalendarActivity.getStartIntent(
                     requireContext(),
                     /*viewModel.sleepHistoryResponse.value?.lastOrNull()?.date
-                        ?:*/ mainViewModel.mEndDate,
+                        ?:*/mainViewModel.selectedDate,
                     "ring"
                 )
             )
@@ -881,7 +881,7 @@ class OreoReadinessFragment :
         }
 
         if (mainViewModel.shouldLoadMoreData()) {
-            context.showShortToast("Load More Data")
+            LOGS.w("Loading more data")
         }
 
     }

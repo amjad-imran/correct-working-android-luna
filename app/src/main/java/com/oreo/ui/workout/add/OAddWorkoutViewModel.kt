@@ -17,6 +17,7 @@ import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.OAddWorkout
 import com.oreo.data.model.OWorkoutListModal
 import com.oreo.data.repository.abstraction.OreoSyncRepository
@@ -34,6 +35,7 @@ constructor(
     private val userActivityRepository: OreoUserActivityRepository,
     private val localDatSource: DataStoredInterface,
     private val syncRepository: OreoSyncRepository,
+    private val userHealthDataDataSource: OreoUserHealthDataDataSource,
     val sessionManager: SessionManager
 ) : BaseViewModel() {
 
@@ -201,6 +203,15 @@ constructor(
                             autoWorkoutId?.let {
                                 deleteAutoSport(it)
                             }
+
+                            val isAuto = autoSport.value != null
+                            val date = if (isAuto) {
+                                addWorkout.date ?: DateFormats.getTodaysDateString(10)
+                            } else {
+                                DateFormats.getTodaysDateString(10)
+                            }
+                            userHealthDataDataSource.clearDataByDates(listOf(date))
+
                             _addWorkoutResponse.postValue(true)
                         }
                     }

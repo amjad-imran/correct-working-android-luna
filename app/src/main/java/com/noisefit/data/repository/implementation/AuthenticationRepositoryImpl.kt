@@ -107,16 +107,7 @@ class AuthenticationRepositoryImpl(
     }
 
     private suspend fun removeOfflineUserData() {
-        arrayListOf(
-            KeyValueDataType.DASHBOARD,
-            KeyValueDataType.SLEEP,
-            KeyValueDataType.ACTIVITY,
-            KeyValueDataType.READINESS
-        ).forEach {
-            keyValueDataSource.removeDataByType(it)
-            database.clearAllTables()
-        }
-
+        database.clearAllTables()
     }
 
     override suspend fun resetPassword(jsonObject: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<MessageResponse>>> {

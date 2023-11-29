@@ -25,6 +25,7 @@ import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
@@ -42,6 +43,9 @@ import com.oreo.ui.home.summary.HomeRecyclerViewHolder
 import com.oreo.ui.home.summary.OSummaryHealthOverviewAdapter
 import com.oreo.ui.home.summary.OSummaryHealthOverviewClickEnum
 import com.oreo.ui.home.summary.OreoRWorkoutAdapter
+import com.oreo.ui.sleep.scoredetails.ClickViewType
+import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
+import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import com.oreo.util.graph.OCombineChartUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -53,6 +57,8 @@ class SummaryDataFragment :
 
     private val mainViewModel: OreoMainViewModel by activityViewModels()
     private val viewModel: SummaryDataViewModel by viewModels()
+    private val mSharedViewModel: SharedOSCDViewModel by activityViewModels()
+
     private val ARGS_DATE = "ARGS_DATE"
 
 
@@ -78,6 +84,7 @@ class SummaryDataFragment :
         setAdapter()
 
         val date = arguments?.getString("ARGS_DATE")
+        LOGS.d("CREATED_WITH_DATE $date")
 
         date?.let {
             mainViewModel.getDashBoardData(it)?.let { dash ->
@@ -142,11 +149,57 @@ class SummaryDataFragment :
     override fun initListener() {
 
         binding.lytHeartRate.bInfo.setOnClickListener {
-            /*viewModel.getContributorInfo("hr")*/
+            viewModel.getContributorInfo("hr")
         }
     }
 
     override fun subscribeObservers() {
+
+        viewModel.hrInfo.observe(this) {
+            it.getContent()?.let {
+                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                    this.putString("infoData", it)
+                })
+            }
+        }
+
+        viewModel.activityScoreInfo.observe(this) {
+            it.getContent()?.let {
+                mSharedViewModel.selectedTab = 0
+                mSharedViewModel.itemType = ClickViewType.ACTIVITY.name
+                mSharedViewModel.itemClickType = ViewItemClickType.ACTIVITY_SCORE
+                navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
+                    putString("viewType", "activity")
+                    putString("infoData", it)
+                    putString("date", DateFormats.getCurrentDateOreoFormat())
+                })
+            }
+        }
+
+        viewModel.readinessScoreInfo.observe(this) {
+            it.getContent()?.let {
+                mSharedViewModel.selectedTab = 0
+                mSharedViewModel.itemType = ClickViewType.READINESS.name
+                mSharedViewModel.itemClickType = ViewItemClickType.READINESS_SCORE
+                navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
+                    putString("viewType", "readiness")
+                    putString("infoData", it)
+                    putString("date", DateFormats.getCurrentDateOreoFormat())
+                })
+            }
+        }
+        viewModel.sleepScoreInfo.observe(this) {
+            it.getContent()?.let {
+                mSharedViewModel.selectedTab = 0
+                mSharedViewModel.itemType = ClickViewType.SLEEP.name
+                mSharedViewModel.itemClickType = ViewItemClickType.SLEEP_SCORE
+                navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
+                    putString("viewType", "sleep")
+                    putString("infoData", it)
+                    putString("date", DateFormats.getCurrentDateOreoFormat())
+                })
+            }
+        }
 
 
         viewModel.healthOverviewData.observe(viewLifecycleOwner) {
@@ -160,13 +213,28 @@ class SummaryDataFragment :
                 setHearRateCardUi(it)
             }
         }
+
+        viewModel.stateWorkouts.observe(this) {
+            setWorkoutUI(it)
+        }
     }
 
 
     private fun setWorkoutUI(workouts: List<OActivityListModal>?) {
         val lytWorkouts = binding.lytWorkouts
+        lytWorkouts.root.visible()
 
-        lytWorkouts.tvEmptyMsg.gone()
+
+        lytWorkouts.textView66.text = "Workouts"
+        if(workouts.isNullOrEmpty()){
+            lytWorkouts.tvEmptyMsg.text = getString(R.string.text_you_haven_t_added_any_workouts_for_this_day)
+            lytWorkouts.tvEmptyMsg.visible()
+        }else{
+            lytWorkouts.tvEmptyMsg.gone()
+        }
+
+        lytWorkouts.viewAddWorkout.gone()
+
         lytWorkouts.rvWorkouts.layoutManager = LinearLayoutManager(
             lytWorkouts.rvWorkouts.context, LinearLayoutManager.VERTICAL, false
         )
@@ -186,7 +254,6 @@ class SummaryDataFragment :
         }
         adapter1.setData(workouts ?: ArrayList())
 
-        lytWorkouts.viewAddWorkout.gone()
 
         lytWorkouts.ivViewAll.setOnClickListener {
             viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_WORKOUTS_ENTRY_CLICK)
@@ -204,10 +271,10 @@ class SummaryDataFragment :
 
         val combinedData = CombinedData()
 
-        lytHeartRate.lottieAnimView.invisible()
-        lytHeartRate.imvHrMeasure.invisible()
+        lytHeartRate.lottieAnimView.gone()
+        lytHeartRate.imvHrMeasure.gone()
 
-        lytHeartRate.groupValue.invisible()
+        lytHeartRate.groupValue.gone()
         lytHeartRate.tvEmptyConnect.gone()
         lytHeartRate.tvHeartValue.gone()
 

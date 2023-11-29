@@ -39,6 +39,7 @@ import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -81,6 +82,7 @@ constructor(
     private val userActivityHandler: UserActivityHandler,
     private val watchesSdk: WatchesSDK,
     private val keyValueDataSource: KeyValueDataSource,
+    private val userHealthDataDataSource: OreoUserHealthDataDataSource,
     private val sleepNotificationUtils: SleepNotificationUtils
 ) : ListenableWorker(context, workerParams) {
 
@@ -178,17 +180,23 @@ constructor(
 //                                sessionManager.logAppEvent(FunnelEvents.SyncEvents.Sync_Completed_Uploading_Data.name, eventProperty)
 //                                sessionManager.logAppEvent(FunnelEvents.SyncEvents.Sync_Completed.name, eventProperty)
 //                                localDataStore.setLastStepsSyncWithServer(DateFormats.getTimeStamp())
+                                var datesToRemove: List<String>? = null
                                 resource.data?.data?.let {
                                     handleAppVersion(context, it)
-
+                                    datesToRemove = it.dates
                                 }
-                                //TODO uncomment after testing -deepak
                                 syncDataScope.launch {
                                     syncRepository.markDataSynced(userActivities.second)
                                     syncRepository.deleteSleepServerSyncData(userActivities.second)
 
+
+                                    datesToRemove?.let {
+                                        userHealthDataDataSource.clearDataByDates(it)
+                                    }
                                     //syncRepository.deleteServerSyncData(userActivities.second)
                                 }
+
+                                AppLogs.sendAppLogs("OreoSyncDataWork Server sync success")
 
                                 //syncRepository.updateHashForLastSyncData(userActivities.first)
 
@@ -197,54 +205,6 @@ constructor(
                         }
                     }
                 }
-
-                /*val call2 = if (!userActivities.first.sleepData.isNullOrEmpty()) {
-                    async {
-
-                        syncRepository.postSleepHistoryData(userActivities.first)
-                            ?.collect { resource ->
-                                when (resource) {
-                                    is Resource.GenericError -> {
-                                        AppLogs.sendAppLogs("OreoSyncDataWork postSleepHistoryData GenericError ${resource.message}")
-
-                                        LOGS.d(
-                                            TAG,
-                                            "OreoSyncDataWork: sleep " + resource.message
-                                        )
-                                    }
-
-                                    is Resource.Loading -> {
-
-                                    }
-
-                                    is Resource.NetworkError -> {
-                                        AppLogs.sendAppLogs("OreoSyncDataWork postSleepHistoryData NetworkError ${resource.response}")
-                                        LOGS.d(
-                                            TAG,
-                                            "OreoSyncDataWork: sleep " + resource.response
-                                        )
-                                    }
-
-                                    is Resource.Success -> {
-
-                                        //TODO uncomment after testing -deepak
-                                        syncDataScope.launch {
-                                            syncRepository.deleteSleepServerSyncData(userActivities.second)
-                                        }
-                                        *//*syncRepository.updateSleepHashForLastSyncData(userActivities.first)*//*
-
-                                        LOGS.d(
-                                            TAG,
-                                            "OreoSyncDataWork::: sleep " + resource.data
-                                        )
-                                    }
-                                }
-                            }
-                    }
-                } else null*/
-
-
-
 
                 try {
                     call1.await()
@@ -256,17 +216,9 @@ constructor(
                 val logsSync = shouldSyncAutoLogs()
                 if (logsSync) {
                     val status = ApplicationUtils.startFeedbackSubmitWorker(context)
-
-
-                   /* context.let {
-                        FeedbackSubmitService.startService(
-                            it
-                        )
-                    }*/
                 }
 
-                removeOfflineUserData()
-                AppLogs.sendAppLogs("OreoSyncDataWork Server sync success")
+                AppLogs.sendAppLogs("OreoSyncDataWork server call complete")
 
                 ringDataStore.setLastSyncWithServer(DateFormats.getTimeStamp())
                 sessionManager.setSyncCompletedState(Event(SyncEvents.ServerSyncSuccess))
@@ -282,18 +234,6 @@ constructor(
         }
 
         return success.invoke()
-    }
-
-    private suspend fun removeOfflineUserData() {
-        arrayListOf(
-            KeyValueDataType.DASHBOARD,
-            KeyValueDataType.SLEEP,
-            KeyValueDataType.ACTIVITY,
-            KeyValueDataType.READINESS
-        ).forEach {
-            keyValueDataSource.removeDataByType(it)
-        }
-
     }
 
 

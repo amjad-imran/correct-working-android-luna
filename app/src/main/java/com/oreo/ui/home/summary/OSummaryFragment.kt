@@ -46,12 +46,9 @@ import kotlinx.coroutines.withContext
 class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOBinding::inflate) {
 
     private val mainViewModel: OreoMainViewModel by activityViewModels()
-    private val mSharedViewModel: SharedOSCDViewModel by activityViewModels()
     private val viewModel: OSummaryViewModel by viewModels()
 
-    private val pagerAdapter by lazy {
-        SummaryPagerAdapter(requireActivity())
-    }
+    private var pagerAdapter: SummaryPagerAdapter? = null
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -62,8 +59,11 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     }
 
     private fun setViewPager() {
-        binding.viewPagerSummary.adapter = pagerAdapter
-        binding.viewPagerSummary.offscreenPageLimit = 3
+        activity?.let {
+            pagerAdapter = SummaryPagerAdapter(it)
+            binding.viewPagerSummary.adapter = pagerAdapter
+            binding.viewPagerSummary.offscreenPageLimit = 1
+        }
 
         /* TabLayoutMediator(binding.tabLayout, binding.viewPagerSummary) { tab, position ->
              tab.text = pagerAdapter.getDate(position)
@@ -73,11 +73,11 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
 
-                mainViewModel.selectedDate = pagerAdapter.getDate(position)
+                mainViewModel.selectedDate = pagerAdapter?.getDate(position)
                 setTabDates(position)
 
                 if (mainViewModel.shouldLoadMoreData()) {
-                    context.showShortToast("Load More Data")
+                    LOGS.w("Loading more data")
                 }
             }
         })
@@ -85,7 +85,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
     private fun setTabDates(position: Int) {
         var currentDayText = ""
-        val centerDate = pagerAdapter.getDate(position)
+        val centerDate = pagerAdapter?.getDate(position)
         if (centerDate.equals(DateFormats.getCurrentDate(DateFormats.dateFormat3))) {
             currentDayText = "Today, "
         }
@@ -96,7 +96,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 DateFormats.dateFormat7
             )
         }"
-        val leftDate = pagerAdapter.getDate(position - 1)
+        val leftDate = pagerAdapter?.getDate(position - 1)
         if (leftDate == null) {
             binding.tabLayout.tvDateLeft.gone()
         } else {
@@ -107,7 +107,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 DateFormats.dateFormat7
             )
         }
-        val rightDate = pagerAdapter.getDate(position + 1)
+        val rightDate = pagerAdapter?.getDate(position + 1)
         if (rightDate == null) {
             binding.tabLayout.tvDateRight.gone()
         } else {
@@ -116,11 +116,13 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 rightTodayText = "Today, "
             }
             binding.tabLayout.tvDateRight.visible()
-            binding.tabLayout.tvDateRight.text = "$rightTodayText${DateFormats.formatDate(
-                rightDate,
-                DateFormats.dateFormat3,
-                DateFormats.dateFormat7
-            )}"
+            binding.tabLayout.tvDateRight.text = "$rightTodayText${
+                DateFormats.formatDate(
+                    rightDate,
+                    DateFormats.dateFormat3,
+                    DateFormats.dateFormat7
+                )
+            }"
         }
     }
 
@@ -148,14 +150,14 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             navigate(R.id.OMyProfileFragment)
         }
 
-        setFragmentResultListener(ADD_WORKOUT_REQUEST_KEY) { _, bundle ->
+       /* setFragmentResultListener(ADD_WORKOUT_REQUEST_KEY) { _, bundle ->
             val allow = bundle.getBoolean("allow")
 
             if (allow) {
                 viewModel.getRecentWorkoutList()
 
             }
-        }
+        }*/
         /* binding.layoutRefresh.animationView.setAnimation(R.raw.loading_swipe_anim)
          binding.swipeToRefresh.setOnRefreshListener(object : RefreshingListenerAdapter() {
              override fun onRefreshing() {
@@ -236,15 +238,14 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     }
 
 
-
-
     override fun subscribeObservers() {
         mainViewModel.dashboard.observe(viewLifecycleOwner) {
-            pagerAdapter.setDataSet(it)
+            LOGS.w("Setting_data size ${it.size}")
+            pagerAdapter?.setDataSet(it)
 
-            val pos = pagerAdapter.getPositionForDate(mainViewModel.selectedDate)
+            val pos = pagerAdapter?.getPositionForDate(mainViewModel.selectedDate) ?: (it.size - 1)
 
-            binding.viewPagerSummary.setCurrentItem(pos,false)
+            binding.viewPagerSummary.setCurrentItem(pos, false)
             setTabDates(pos)
 
         }
@@ -263,51 +264,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         }
 
-        viewModel.hrInfo.observe(this) {
-            it.getContent()?.let {
-                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
-                    this.putString("infoData", it)
-                })
-            }
-        }
 
-        viewModel.activityScoreInfo.observe(this) {
-            it.getContent()?.let {
-                mSharedViewModel.selectedTab = 0
-                mSharedViewModel.itemType = ClickViewType.ACTIVITY.name
-                mSharedViewModel.itemClickType = ViewItemClickType.ACTIVITY_SCORE
-                navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
-                    putString("viewType", "activity")
-                    putString("infoData", it)
-                    putString("date", DateFormats.getCurrentDateOreoFormat())
-                })
-            }
-        }
-
-        viewModel.readinessScoreInfo.observe(this) {
-            it.getContent()?.let {
-                mSharedViewModel.selectedTab = 0
-                mSharedViewModel.itemType = ClickViewType.READINESS.name
-                mSharedViewModel.itemClickType = ViewItemClickType.READINESS_SCORE
-                navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
-                    putString("viewType", "readiness")
-                    putString("infoData", it)
-                    putString("date", DateFormats.getCurrentDateOreoFormat())
-                })
-            }
-        }
-        viewModel.sleepScoreInfo.observe(this) {
-            it.getContent()?.let {
-                mSharedViewModel.selectedTab = 0
-                mSharedViewModel.itemType = ClickViewType.SLEEP.name
-                mSharedViewModel.itemClickType = ViewItemClickType.SLEEP_SCORE
-                navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
-                    putString("viewType", "sleep")
-                    putString("infoData", it)
-                    putString("date", DateFormats.getCurrentDateOreoFormat())
-                })
-            }
-        }
 
         viewModel.sessionManager.forceSyncData.observe(this) {
             if (viewModel.sessionManager.connectStateRing.value is ConnectState.ConnectSuccess) {
@@ -321,20 +278,14 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
 
 
-        viewModel.stateWorkouts.observe(this) {
-            //setWorkoutUI(it)
-
-        }
 
 
 
 
 
 
-        viewModel.sessionManager.bluetoothStateDash.observe(this) {
-            viewModel.updateAlerts()
-            //viewModel.updateBluetoothStateInList(it)
-        }
+
+
 
 
         viewModel.deviceConnected.observe(this) { connected ->
@@ -592,7 +543,6 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         if (viewModel.isDeviceConnected()) {
             shouldSync()
         }
-
 
 //        viewModel.getRecentWorkoutList()
     }

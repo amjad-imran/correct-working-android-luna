@@ -4,10 +4,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.data.Entry
+import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.common.maxWithoutZero
 import com.noisefit_commans.common.minWithoutZero
+import com.noisefit_commans.data.BinaryActionCallback
+import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
@@ -20,10 +23,13 @@ import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.ui.getColor
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.DashAlert
+import com.oreo.data.model.OActivityListModal
+import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.TapMeasureState
@@ -44,12 +50,22 @@ constructor(
     val userRepository: OreoUserActivityRepository,
     val ringDataStore: RingDataStore,
     val localDataStore: DataStoredInterface,
-    val sessionManager: SessionManager
+    val sessionManager: SessionManager,
+    val userActivityRepository: OreoUserActivityRepository
 ) : BaseViewModel() {
 
 
     val healthOverviewData = MutableLiveData<ArrayList<OHealthOverview>>()
     val stateHeartRateCard = MutableLiveData<OHealthOverview.HeartRate?>()
+
+    val stateWorkouts = MutableLiveData<List<OActivityListModal>>()
+
+
+    var contributorInfo: OContributorResponseModal? = null
+    val hrInfo = MutableLiveData<Event<String>>()
+    var sleepScoreInfo = MutableLiveData<Event<String>>()
+    var readinessScoreInfo = MutableLiveData<Event<String>>()
+    var activityScoreInfo = MutableLiveData<Event<String>>()
 
     var user: User? = null
 
@@ -107,6 +123,9 @@ constructor(
             healthOverviewData.postValue(userActivities)
 
             stateHeartRateCard.postValue(parseHrData(healthData))
+
+            stateWorkouts.postValue(healthData.activity?.workout ?: ArrayList())
+
         }
     }
 
@@ -304,6 +323,68 @@ constructor(
 
 
         return sleepArray
+    }
+
+
+    /**
+     *hr,sleep,activity,readiness
+     */
+    fun getContributorInfo(callerName: String) {
+        if (contributorInfo != null) {
+            when (callerName) {
+                "hr" -> hrInfo.postValue(Event(contributorInfo!!.hr_graph))
+                "sleep" -> sleepScoreInfo.postValue(Event(contributorInfo!!.sleep_score))
+                "activity" -> activityScoreInfo.postValue(Event(contributorInfo!!.activity_score))
+                "readiness" -> readinessScoreInfo.postValue(Event(contributorInfo!!.readiness_score))
+            }
+            return
+        }
+
+        viewModelScope.launch {
+            userActivityRepository.getContributorDetailsInfo(
+                "dashboard"
+            ).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        getContributorInfo(callerName)
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            contributorInfo = it
+                            when (callerName) {
+                                "hr" -> hrInfo.postValue(Event(contributorInfo!!.hr_graph))
+                                "sleep" -> sleepScoreInfo.postValue(Event(contributorInfo!!.sleep_score))
+                                "activity" -> activityScoreInfo.postValue(Event(contributorInfo!!.activity_score))
+                                "readiness" -> readinessScoreInfo.postValue(Event(contributorInfo!!.readiness_score))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
     }
 
 }

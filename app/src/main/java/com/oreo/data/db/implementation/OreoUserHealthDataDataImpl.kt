@@ -47,4 +47,10 @@ constructor(
     override suspend fun clearAllData() {
         userHealthDao.clearAllData()
     }
+
+    override suspend fun clearDataByDates(dates: List<String>) {
+        dates.forEach {
+            userHealthDao.clearByDate(it)
+        }
+    }
 }
