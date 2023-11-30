@@ -451,6 +451,7 @@ constructor(
             if (timeStamp == 0L || timeStamp.checkDayDifferenceMoreOne()) {
                 when (it.status?.lowercase()) {
                     "optimal" -> {
+                        localDataStore.setReadinessNotificationTimeStamp()
                         pushNotification.postValue(
                             Event(
                                 PushLocalNotification(
@@ -463,6 +464,7 @@ constructor(
                     }
 
                     "good" -> {
+                        localDataStore.setReadinessNotificationTimeStamp()
                         pushNotification.postValue(
                             Event(
                                 PushLocalNotification(
@@ -475,6 +477,7 @@ constructor(
                     }
 
                     "fair" -> {
+                        localDataStore.setReadinessNotificationTimeStamp()
                         pushNotification.postValue(
                             Event(
                                 PushLocalNotification(
@@ -487,6 +490,7 @@ constructor(
                     }
 
                     "warning" -> {
+                        localDataStore.setReadinessNotificationTimeStamp()
                         pushNotification.postValue(
                             Event(
                                 PushLocalNotification(
@@ -498,7 +502,6 @@ constructor(
                         )
                     }
                 }
-                localDataStore.setReadinessNotificationTimeStamp()
             }
         }
     }
