@@ -97,25 +97,29 @@ class SummaryDataFragmentToday :
 
 
         LOGS.d("CREATED_WITH_DATE $date")
-        LOGS.d(TAG,"Today onCreate Called")
+        LOGS.d(TAG, "Today onCreate Called")
     }
 
     override fun onResume() {
         super.onResume()
-        LOGS.d(TAG,"Today onResume called")
+        LOGS.d(TAG, "Today onResume called")
 
         loadData()
 
         mainViewModel.dataReload.observe(viewLifecycleOwner) {
+            val content = it.peekContent() ?: ArrayList()
+            val hasData = content.contains(viewModel.date)
+            if (!hasData) return@observe
+
             it.getContent()?.let {
-                LOGS.d(TAG,"Today data reload")
+                LOGS.d(TAG, "Today data reload")
                 loadData()
             }
         }
     }
 
-    fun loadData(){
-        LOGS.d(TAG,"Today Load data")
+    fun loadData() {
+        LOGS.d(TAG, "Today Load data")
         viewModel.date?.let {
             mainViewModel.getDashBoardData(it)?.let { dash ->
                 setUi(dash.first, dash.second)
@@ -172,10 +176,14 @@ class SummaryDataFragmentToday :
                 }
 
                 is OSummaryHealthOverviewClickEnum.AutoSportsDelete -> {
-                    setFragmentResultListener(DELETE_REQ_REQUEST_KEY) { _, bundle ->
+                    requireActivity().supportFragmentManager.setFragmentResultListener(
+                        DELETE_REQ_REQUEST_KEY,
+                        viewLifecycleOwner
+                    ) { _, bundle ->
                         val allow = bundle.getBoolean("allow")
-                        if (allow) {/*viewModel.markWorkoutSyncedAll()
-                            viewModel.removeAutoWorkoutCard()*/
+                        if (allow) {
+                            viewModel.markWorkoutSyncedAll()
+                            viewModel.removeAutoWorkoutCard()
                         }
                     }
                     navigate(R.id.deleteAllWorkoutBottomSheet, Bundle().apply {

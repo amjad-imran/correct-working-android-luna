@@ -79,11 +79,6 @@ constructor(
 
             val userActivities = ArrayList<OHealthOverview>()
 
-            val autoSportCount = userRepository.getSummaryAutoWorkoutCount()
-            if (autoSportCount > 0) {
-                userActivities.add(OHealthOverview.AutoSport(autoSportCount))
-            }
-
             data.readiness?.let {
                 userActivities.add(OHealthOverview.Readiness(data.readiness))
             }

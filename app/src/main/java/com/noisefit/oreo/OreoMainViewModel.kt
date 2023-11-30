@@ -50,7 +50,7 @@ constructor(
 
     val userHealthData = HashMap<String, ServerUserHealthData?>()
     var trendsData: TrendsData? = null
-    val dataReload = MutableLiveData<Event<Boolean>>()
+    val dataReload = MutableLiveData<Event<List<String>>>()
 
     var bottomNavigation = MutableLiveData<Event<BottomNavOption>>()
     fun navigateTo(option: BottomNavOption) {
@@ -191,7 +191,7 @@ constructor(
                             val todayData = userHealthData[getTodayDate()]
                             showNotification(todayData?.dashboard)
 
-                            dataReload.value = Event(true)
+                            dataReload.value = Event(getDaysList(startDate, endDate))
 
                         }
                     }
@@ -324,6 +324,20 @@ constructor(
 
         LOGS.w("Setting_data $mStartDate - $mEndDate")
 
+        return dateList
+
+    }
+
+    private fun getDaysList(startDate: String?, endDate: String?): List<String> {
+        if (startDate == null || endDate == null) return ArrayList()
+        val dateList = ArrayList<String>()
+        var start: LocalDate = LocalDate.parse(startDate)
+        val end: LocalDate = LocalDate.parse(endDate)
+
+        while (!start.isAfter(end)) {
+            dateList.add(start.toString())
+            start = start.plusDays(1)
+        }
         return dateList
 
     }

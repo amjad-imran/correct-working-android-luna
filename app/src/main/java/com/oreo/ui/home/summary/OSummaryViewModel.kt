@@ -2,16 +2,11 @@ package com.oreo.ui.home.summary
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
-import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.session.SessionManager
-import com.noisefit.util.notif.NotificationEventsClass
-import com.noisefit.util.notif.NotificationUtil
 import com.noisefit_commans.common.checkDayDifferenceMoreNMinutes
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
-import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
@@ -20,26 +15,18 @@ import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.ManualMeasureType
-import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.ui.checkDayDifferenceMoreOne
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.AlertType
-import com.oreo.data.model.ChartModel
 import com.oreo.data.model.DashAlert
-import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.TapMeasureState
-import com.oreo.data.model.VideoInfoType
 import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
-import com.oreo.data.model.health.ODashboardSleepModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
-import com.oreo.data.model.health.OreoDashboardResponseModel
-import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -57,7 +44,6 @@ constructor(
     val localDataStore: DataStoredInterface,
     val ringDataStore: RingDataStore,
     val userActivityRepository: OreoUserActivityRepository,
-    private val syncRepository: OreoSyncRepository,
     val userRepository: OreoUserActivityRepository,
 ) : BaseViewModel() {
 
@@ -75,7 +61,6 @@ constructor(
     var sleepScoreInfo = MutableLiveData<Event<String>>()
     var readinessScoreInfo = MutableLiveData<Event<String>>()
     var activityScoreInfo = MutableLiveData<Event<String>>()
-
 
 
     var summary = OSummary()
@@ -107,15 +92,6 @@ constructor(
 
 
 
-    fun removeAutoWorkoutCard() {
-        val index = summary.healthOverviewData.value?.indexOfFirst {
-            it is OHealthOverview.AutoSport
-        }
-        if (index != null && index != -1) {
-            summary.healthOverviewData.value?.removeAt(index)
-            summary.healthOverviewData.postValue(summary.healthOverviewData.value)
-        }
-    }
 
     fun handleUnPairState() {
         /*   val index = summary.healthOverviewData.value?.indexOfFirst {
@@ -333,21 +309,6 @@ constructor(
         return false
     }
 
-    fun markWorkoutSyncedAll() {
-        viewModelScope.launch {
-            syncRepository.markWorkoutSyncedAll().collect { resource ->
-                when (resource) {
-                    is CacheResult.Success -> {
-
-                    }
-
-                    is CacheResult.GenericError -> {
-
-                    }
-                }
-            }
-        }
-    }
 
     fun getDeviceConnected(): ColorFitDevice? {
         return ringDataStore.getRingDevice()

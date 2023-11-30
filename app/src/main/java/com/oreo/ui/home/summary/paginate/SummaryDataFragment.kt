@@ -1,45 +1,24 @@
 package com.oreo.ui.home.summary.paginate
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.data.CombinedData
-import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSummaryDataBinding
 import com.noisefit.oreo.BottomNavOption
 import com.noisefit.oreo.OreoMainViewModel
-import com.noisefit.receiver.service.FeedbackSubmitService
-import com.noisefit.ui.common.bottomSheet.DELETE_REQ_REQUEST_KEY
-import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
-import com.noisefit.util.ApplicationUtils
-import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.invisible
-import com.noisefit_commans.ui.loadImage
-import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
-import com.oreo.data.model.AlertType
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
-import com.oreo.data.model.TapMeasureState
-import com.oreo.data.model.health.ODashboardActivityScoreModel
-import com.oreo.data.model.health.ODashboardReadinessScoreModel
-import com.oreo.data.model.health.ODashboardSleepScoreModel
-import com.oreo.data.model.health.OreoDashboardResponseModel
-import com.oreo.ui.home.summary.AlertClickListener
-import com.oreo.ui.home.summary.HomeRecyclerViewHolder
 import com.oreo.ui.home.summary.OSummaryHealthOverviewAdapter
 import com.oreo.ui.home.summary.OSummaryHealthOverviewClickEnum
 import com.oreo.ui.home.summary.OreoRWorkoutAdapter
@@ -48,8 +27,6 @@ import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import com.oreo.util.graph.OCombineChartUtils
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SummaryDataFragment :
@@ -98,7 +75,7 @@ class SummaryDataFragment :
         loadData()
         mainViewModel.dataReload.observe(viewLifecycleOwner) {
             it.getContent()?.let {
-                LOGS.d(TAG,"data reload")
+                LOGS.d(TAG, "data reload")
                 loadData()
             }
         }
@@ -245,10 +222,11 @@ class SummaryDataFragment :
 
 
         lytWorkouts.textView66.text = "Workouts"
-        if(workouts.isNullOrEmpty()){
-            lytWorkouts.tvEmptyMsg.text = getString(R.string.text_you_haven_t_added_any_workouts_for_this_day)
+        if (workouts.isNullOrEmpty()) {
+            lytWorkouts.tvEmptyMsg.text =
+                getString(R.string.text_you_haven_t_added_any_workouts_for_this_day)
             lytWorkouts.tvEmptyMsg.visible()
-        }else{
+        } else {
             lytWorkouts.tvEmptyMsg.gone()
         }
 

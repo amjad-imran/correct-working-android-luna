@@ -58,7 +58,7 @@ class DeleteAllWorkoutBottomSheet :
 
     override fun initListener() {
         binding.btnAllow.setOnClickListener {
-            setFragmentResult(
+            requireActivity().supportFragmentManager.setFragmentResult(
                 DELETE_REQ_REQUEST_KEY,
                 bundleOf("allow" to true)
             )

@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.data.Entry
+import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
@@ -39,6 +40,7 @@ import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
+import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -52,11 +54,12 @@ constructor(
     val ringDataStore: RingDataStore,
     val localDataStore: DataStoredInterface,
     val sessionManager: SessionManager,
+    private val syncRepository: OreoSyncRepository,
     val userActivityRepository: OreoUserActivityRepository
 ) : BaseViewModel() {
 
 
-    var date: String?=null
+    var date: String? = null
 
     val stateHeaderCard = MutableLiveData<Pair<String, String>>()//Name,Date
     val healthOverviewData = MutableLiveData<ArrayList<OHealthOverview>>()
@@ -640,6 +643,32 @@ constructor(
         }
 
 
+    }
+
+    fun markWorkoutSyncedAll() {
+        viewModelScope.launch {
+            syncRepository.markWorkoutSyncedAll().collect { resource ->
+                when (resource) {
+                    is CacheResult.Success -> {
+
+                    }
+
+                    is CacheResult.GenericError -> {
+
+                    }
+                }
+            }
+        }
+    }
+
+    fun removeAutoWorkoutCard() {
+        val index = healthOverviewData.value?.indexOfFirst {
+            it is OHealthOverview.AutoSport
+        }
+        if (index != null && index != -1) {
+            healthOverviewData.value?.removeAt(index)
+            healthOverviewData.postValue(healthOverviewData.value)
+        }
     }
 
 
