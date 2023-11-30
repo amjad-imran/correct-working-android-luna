@@ -19,6 +19,7 @@ data class OContributorResponseModal(
     val active_calories: String? = null,//check
     val total_calories: String? = null,//check
     val hr_graph: String? = null,//check
+    val night_time_movements: String? = null,//check
     val hrv_graph: String? = null,//check
     val temp_graph: String? = null,//check
     val total_steps: String? = null,//check

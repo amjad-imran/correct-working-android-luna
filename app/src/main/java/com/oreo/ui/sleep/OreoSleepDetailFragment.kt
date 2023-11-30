@@ -349,6 +349,15 @@ class OreoSleepDetailFragment :
         binding.lytToolbar.ivAddFriend.visible()
         binding.lytToolbar.ivAddFriend.setImageResource(R.drawable.ic_calenders)
 
+
+        binding.lytSSAnalysis.lytNightMovement.bInfo.setOnClickListener {
+            viewModel.contributorInfo.value?.night_time_movements?.let { content ->
+                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                    this.putString("infoData", content)
+                })
+            }
+        }
+
         binding.lytHeartRate.bInfo.setOnClickListener {
             viewModel.contributorInfo.value?.hr_graph?.let { content ->
                 navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
