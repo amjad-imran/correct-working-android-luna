@@ -22,6 +22,7 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.to12HourFormat
 import com.oreo.data.db.abstaction.OreoBodyTemperatureDataSource
+import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
 import com.oreo.data.db.implementation.OreoHeartRateDataImpl
 import com.oreo.data.db.implementation.OreoRespiratoryDataImpl
@@ -37,6 +38,7 @@ constructor(
     private val stressDataImpl: OreoStressDataImpl,
     private val respiratoryData: OreoRespiratoryDataImpl,
     private val temperatureData: OreoBodyTemperatureDataSource,
+    private val bloodOxygenDataImpl: OreoBloodOxygenDataImpl,
     private val oreoHeartRateDataImpl: OreoHeartRateDataImpl,
 ) {
 
@@ -172,9 +174,10 @@ constructor(
             oreoHeartRateDataImpl.getHeartRateBetweenTimeStamp(sleepStartTime, sleepEndTime)
         val hrv = stressDataImpl.getStressBetweenTimeStamp(sleepStartTime, sleepEndTime)
         val resp = respiratoryData.getDataBetweenTimeStamp(sleepStartTime, sleepEndTime)
+        val spo2Breakup = bloodOxygenDataImpl.getDataBetweenTimeStamp(sleepStartTime, sleepEndTime)
         val temp = temperatureData.getDataBetweenTimeStamp(sleepStartTime, sleepEndTime)
 
-        return SleepOverlayData(hrData, hrv, resp, temp)
+        return SleepOverlayData(hrData, hrv, resp, temp, spo2Breakup)
     }
 
 
@@ -235,6 +238,9 @@ constructor(
                     hrvBreakup = sleepOverlayData.stressBreakup,
                     respBreakup = sleepOverlayData.respBreakup,
                     tempBreakup = sleepOverlayData.tempBreakup,
+                    oxyBreakup = sleepOverlayData.spo2Breakup,
+                    avgOxy = if (sleepOverlayData.spo2Breakup.isEmpty()) 0 else sleepOverlayData.spo2Breakup.average()
+                        .roundToInt() ?: 0,
                     avgResp = if (sleepOverlayData.respBreakup.isEmpty()) 0 else sleepOverlayData.respBreakup.average()
                         .roundToInt() ?: 0,
                     maxTemp = sleepOverlayData.tempBreakup.maxOrNull() ?: 0f,

@@ -74,11 +74,13 @@ object AppModule {
         respiratoryDataImpl: OreoRespiratoryDataImpl,
         temperatureDataImpl: OreoBodyTemperatureDataImpl,
         oreoHeartRateDataImpl: OreoHeartRateDataImpl,
+        oreoBloodOxygenDataImpl: OreoBloodOxygenDataImpl,
     ): OreoOnlineDataMapper {
         return OreoOnlineDataMapper(
             stressDataImpl,
             respiratoryDataImpl,
             temperatureDataImpl,
+            oreoBloodOxygenDataImpl,
             oreoHeartRateDataImpl
         )
     }

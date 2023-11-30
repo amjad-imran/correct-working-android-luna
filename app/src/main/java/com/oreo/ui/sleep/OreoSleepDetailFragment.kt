@@ -103,6 +103,84 @@ class OreoSleepDetailFragment :
         }
     }
 
+    private fun showBloodOxygenGraph(
+        oxy: CommonListDataModel?,
+        sleepStartTime: String?,
+        sleepEndTime: String?
+    ) {
+
+        if ((oxy?.avg ?: 0) < 95) {
+             binding.divider6.root.gone()
+             binding.lytBloodOxygenGraph.root.gone()
+             return
+         }
+        binding.divider6.root.visible()
+        binding.lytBloodOxygenGraph.apply {
+            root.visible()
+            tvTitle.text = getString(R.string.text_spo2)
+            tvSubtitle1.text = getString(R.string.text_average)
+            tvSubtitle2.gone()
+            lytSubtitleValue1.tvValue.text = (oxy?.avg ?: 0).toString()
+            lytSubtitleValue1.tvUnit.gone()
+            lytSubtitleValue2.root.gone()
+        }
+
+        val ssTime: String?
+        val seTime: String?
+        var breakUpData = ArrayList<Int>()
+        var hasDummyData = true
+        if (oxy?.value.isNullOrEmpty()) {
+            breakUpData = viewModel.getDummyBreakUpDataForTimeDisplay()
+            ssTime = null
+            seTime = null
+        } else {
+            hasDummyData = false
+            seTime = sleepEndTime
+            ssTime = sleepStartTime
+            breakUpData = oxy?.value as ArrayList<Int>
+        }
+
+        /* val baseTimeList =
+             UtilClass.graphTwoHoursInterval(ssTime, seTime, breakUpData.size ?: 288)*/
+
+        val baseTimeListNew =
+            UtilClass.getXAxisPoints(ssTime, seTime, breakUpData.size ?: 288)
+
+        binding.lytBloodOxygenGraph.lineChart.visible()
+        val sleepChart = SleepChartModel()
+        val chartList: MutableList<ChartModel> = java.util.ArrayList()
+
+        breakUpData.forEachIndexed { index, it ->
+            val chartModel = ChartModel()
+
+            var value = it
+            if (value == 255) {
+                value = 0
+            }
+
+            chartModel.value = value
+            chartModel.index = baseTimeListNew[index]//baseTimeList[index]
+            chartModel.date = ""
+            chartList.add(chartModel)
+        }
+
+        sleepChart.list = chartList
+
+        //AppLogs.sendAppLogs("lineChart ${Gson().toJson(sleepChart)}")
+
+        binding.lytBloodOxygenGraph.lineChart.updateGraphColor(
+            Color.parseColor("#77dfe5"),
+            Color.parseColor("#77dfe5"),
+            Color.parseColor("#0025f2ff")
+        )
+        binding.lytBloodOxygenGraph.lineChart.updateDataWithMax(
+            sleepChart, 5, true, false, GraphDummyModel(
+                hasDummyData, 0, 200
+            ),
+            oxy?.avg
+        )
+    }
+
     private fun showHeartRateVariabilityGraph(
         hrv: CommonListDataModel?,
         sleepStartTime: String?,
@@ -169,6 +247,7 @@ class OreoSleepDetailFragment :
             hrv?.avg
         )
     }
+
 
     private fun showHeartRateGraph(
         heartRateList: CommonListDataModel?,
@@ -319,8 +398,8 @@ class OreoSleepDetailFragment :
                 val selectedDate =
                     data?.getStringExtra("selected_date") ?: return@registerForActivityResult
 
-                mainViewModel.mEndDate = mainViewModel.getDatesPlus(selectedDate,3)
-                mainViewModel.mStartDate = mainViewModel.getDatesMinus(selectedDate,3)
+                mainViewModel.mEndDate = mainViewModel.getDatesPlus(selectedDate, 3)
+                mainViewModel.mStartDate = mainViewModel.getDatesMinus(selectedDate, 3)
                 mainViewModel.selectedDate = selectedDate
 
                 LOGS.d("moveToPosition Selected Date  :${selectedDate}")
@@ -346,6 +425,13 @@ class OreoSleepDetailFragment :
         }
         binding.lytHRVariability.bInfo.setOnClickListener {
             viewModel.contributorInfo.value?.hrv_graph?.let { content ->
+                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                    this.putString("infoData", content)
+                })
+            }
+        }
+        binding.lytBloodOxygenGraph.bInfo.setOnClickListener {
+            viewModel.contributorInfo.value?.oxy_graph?.let { content ->
                 navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
                     this.putString("infoData", content)
                 })
@@ -806,6 +892,7 @@ class OreoSleepDetailFragment :
             binding.lytHRVariability.lytSubtitleValue1.tvUnit.gone()
         }
         showHeartRateVariabilityGraph(dayData.hrv, sleepStartTime, sleepEndTime)
+        showBloodOxygenGraph(dayData.oxy, sleepStartTime, sleepEndTime)
 
         mSleepStageAdapter.setData(viewModel.getStepAnalysisData(dayData))
         initSleepAnalysisGraph(dayData.hourly_breakup)

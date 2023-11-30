@@ -203,12 +203,31 @@
                         app:layout_constraintTop_toBottomOf="@id/divider4" />
 
                     <include
-                        android:id="@+id/divider5"
+                        android:id="@+id/divider6"
                         layout="@layout/layout_divider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginTop="24dp"
                         app:layout_constraintTop_toBottomOf="@id/lytHRVariability" />
+
+                    <include
+                        android:id="@+id/lytBloodOxygenGraph"
+                        layout="@layout/oreo_layout_sleep_movement"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/divider6"
+                        tools:visibility="visible" />
+
+                    <include
+                        android:id="@+id/divider5"
+                        layout="@layout/layout_divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="24dp"
+                        app:layout_constraintTop_toBottomOf="@id/lytBloodOxygenGraph" />
 
                     <View
                         android:id="@+id/dummyView"
@@ -226,10 +245,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                tools:visibility="visible"
-                app:constraint_referenced_ids="imageView48,lytToolbar,rvTopGraph" />
+                app:constraint_referenced_ids="imageView48,lytToolbar,rvTopGraph"
+                tools:visibility="visible" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
         <include
             android:id="@+id/progressBar1"
             layout="@layout/default_loader"
@@ -240,6 +260,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <include
             android:id="@+id/lytEmptyView"
             layout="@layout/layout_empty_sleep_details"

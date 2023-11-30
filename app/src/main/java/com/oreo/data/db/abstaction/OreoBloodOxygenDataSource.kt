@@ -12,5 +12,6 @@ interface OreoBloodOxygenDataSource {
     suspend fun getUnSyncServerData(endDate: Long, isSync: Boolean): List<OreoBloodOxygenBreakup>?
     suspend fun deleteOldData(days: Int): Int
     suspend fun updateServerSyncData(dataList: List<OreoBloodOxygenBreakup>, timeStamp: Long): Int
+    suspend fun getDataBetweenTimeStamp(startTimeStamp: Long, endTimeStamp: Long): List<Int>
     suspend fun checkHalfSyncData()
 }
