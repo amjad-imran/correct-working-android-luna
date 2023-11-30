@@ -14,6 +14,7 @@ import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.interfaces.QueryAction
+import com.noisefit_commans.interfaces.QueryCallback
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseFragment
@@ -143,6 +144,17 @@ class OAboutDeviceFragment :
                         updateViewModel.sessionManager.sendQueryAction(QueryAction.QueryBatteryPower)
                         updateViewModel.sessionManager.sendQueryAction(QueryAction.QueryFirmwareVersion)
                         updateViewModel.mShouldFetchInfo = false
+                    }
+                }
+                else -> {}
+            }
+        }
+
+        updateViewModel.sessionManager.deviceQueryCallback.observe(viewLifecycleOwner) {
+            when (it) {
+                is QueryCallback.FirmwareVersionObtained -> {
+                    connectedDevice?.let {
+                        adapter.setDataSet(generateData(it))
                     }
                 }
                 else -> {}

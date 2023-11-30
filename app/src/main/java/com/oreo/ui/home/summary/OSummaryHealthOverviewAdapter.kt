@@ -447,6 +447,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             if (data.data.nudges.isNullOrEmpty()) {
                 binding.tvTitle.gone()
+                binding.tvTodayDesc.text =""
                 (binding.tvTodayDesc.layoutParams as ConstraintLayout.LayoutParams).apply {
                     topMargin = binding.tvTodayDesc.context.dpToPx(24)
                     bottomMargin = 0

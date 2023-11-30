@@ -59,7 +59,7 @@ import kotlin.concurrent.schedule
 import kotlin.coroutines.CoroutineContext
 
 
-private const val SyncingTimeOut: Long = 30000
+private const val SyncingTimeOut: Long = 40000
 private const val SyncWithServerTime: Long = 10800000 //10800000
 
 //255 - no value
@@ -573,14 +573,14 @@ constructor(
                                 timer?.cancel()
                                 val syncTime =
                                     if (total < 20)
-                                        30 * 1000L
+                                        40 * 1000L
                                     else if (total in 20..49)
-                                        60 * 1000L
+                                        70 * 1000L
                                     else
-                                        90 * 1000L
+                                        100 * 1000L
                                 timer = Timer("DelayConnection", false).schedule(syncTime) {
                                     //syncTime()
-                                    AppLogs.sendAppLogs("OreoSyncDataWork inner timer time out SyncingTimeOut : $SyncingTimeOut  isDataReceived: $isDataReceived")
+                                    AppLogs.sendAppLogs("OreoSyncDataWork inner timer time out SyncingTimeOut : $syncTime  isDataReceived: $isDataReceived")
                                     if (isDataReceived) {
                                         return@schedule returnSuccess(success)
                                     } else {
