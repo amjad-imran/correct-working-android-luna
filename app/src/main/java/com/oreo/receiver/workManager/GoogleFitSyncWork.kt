@@ -7,9 +7,11 @@ import androidx.work.ListenableWorker
 import androidx.work.WorkerParameters
 import androidx.work.impl.utils.futures.SettableFuture
 import com.google.common.util.concurrent.ListenableFuture
+import com.google.gson.Gson
 import com.noisefit.data.dataConverter.OfflineDataMapper
 import com.noisefit.data.googleFit.GoogleFitDataObservers
 import com.noisefit.data.local.db.CacheResult
+import com.noisefit.data.local.db.fromJson
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.utils.DateFormats
@@ -72,6 +74,7 @@ constructor(
                             val googleSleepData =
                                 offlineDataMapper.convertSleepDataToGoogleFit(sleepData)
                             LOGS.d("$TAG google  inside sleep data 2")
+                            LOGS.d("GOOGLE_SLEEP_DATA ${Gson().toJson(googleSleepData)}")
                             googleSleepData?.let { sleepDataGoogleFit ->
                                 LOGS.d("$TAG google  inside sleep data 3")
                                 googleFitDataObservers.insertSleepData(

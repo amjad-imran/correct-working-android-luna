@@ -29,23 +29,23 @@ class OfflineDataMapper
         val googleFitSleepBreakUpList = ArrayList<SleepDataGoogleFit.SleepDataBreakup>()
         var offSet = 0
         val midnightTime = "23:59"
-        val startTime = sleepData.sleepArray!![0].startTime!!
+        val startTime = sleepData.startTime!!.split(" ")[1]
 
         if (DateFormats.isTimeBefore(startTime, midnightTime)) {
             offSet = 1
         }
         LOGS.d("DATACONVERTER time $startTime $midnightTime $offSet")
-        val sleepStartDate = DateFormats.subtractDate(sleepData.date!!, offSet)!!
+        val sleepStartDate = DateFormats.subtractDate(sleepData.startTime!!, offSet)!!
         LOGS.d("DATACONVERTER sleepStartDate $sleepStartDate")
         val sleepStartTime = DateFormats.convertDateTimeToTimeStamp(sleepStartDate, startTime)
         LOGS.d("DATACONVERTER sleepStartTime $sleepStartTime")
         sleepData.sleepArray!!.forEach { sleepDataBreakup ->
             var breakUpStartTime =
-                DateFormats.convertDateTimeToTimeStamp(sleepStartDate, sleepDataBreakup.startTime!!)
+                DateFormats.convertDateTimeToTimeStamp(sleepDataBreakup.startTime!!)
             var breakupEndTime = 0L
             if (sleepStartTime <= breakUpStartTime) {
                 breakupEndTime =
-                    DateFormats.addMinuteToTimeStamp(breakUpStartTime, sleepDataBreakup.duration)
+                    DateFormats.addSecondToTimeStamp(breakUpStartTime, sleepDataBreakup.duration)
                 LOGS.d(
                     "DATACONVERTER SAME DAY $breakUpStartTime $breakupEndTime ${
                         DateFormats.convertTimestampToDate(
@@ -66,7 +66,7 @@ class OfflineDataMapper
                         sleepDataBreakup.startTime!!
                     )
                 breakupEndTime =
-                    DateFormats.addMinuteToTimeStamp(breakUpStartTime, sleepDataBreakup.duration)
+                    DateFormats.addSecondToTimeStamp(breakUpStartTime, sleepDataBreakup.duration)
                 LOGS.d(
                     "DATACONVERTER Different DAY ${sleepDataBreakup.endTime} ${sleepDataBreakup.startTime} $breakUpStartTime $breakupEndTime ${
                         DateFormats.convertTimestampToDate(
