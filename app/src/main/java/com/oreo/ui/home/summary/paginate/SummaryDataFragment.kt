@@ -64,6 +64,7 @@ class SummaryDataFragment :
 
         val date = arguments?.getString("ARGS_DATE")
         viewModel.date = date
+        viewModel.user = mainViewModel.user
         LOGS.d("CREATED_WITH_DATE $date")
 
 

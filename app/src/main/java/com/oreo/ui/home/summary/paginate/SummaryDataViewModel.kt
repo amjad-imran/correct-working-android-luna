@@ -98,7 +98,7 @@ constructor(
 
                 val activeCalories = data.activity.activeCalories ?: 0
                 if (activeCalories in 0..49) {
-                    val caloriesGoal = 300// summary.user?.userGoals?.caloriesGoal ?: 0
+                    val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
                     userActivities.add(
                         OHealthOverview.ActivityMinimal(
                             data.activity,
@@ -106,7 +106,7 @@ constructor(
                         )
                     )
                 } else {
-                    val caloriesGoal = 300// summary.user?.userGoals?.caloriesGoal ?: 0
+                    val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
                     userActivities.add(
                         OHealthOverview.Activity(
                             data.activity,

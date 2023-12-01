@@ -246,6 +246,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             val pos = pagerAdapter?.getPositionForDate(mainViewModel.selectedDate) ?: (it.size - 1)
 
             binding.viewPagerSummary.setCurrentItem(pos, false)
+            binding.tabLayout.root.visible()
             setTabDates(pos)
 
         }
@@ -420,13 +421,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 binding.progressBar.root.gone()
             }
         }
-        mainViewModel.getLoading().observe(this) {
-            if (it) {
-                binding.progressBar.root.visible()
-            } else {
-                binding.progressBar.root.gone()
-            }
-        }
+
         viewModel.sessionManager.manualMeasurementValue.observe(this) {
             it.getContent()?.let {
                 if (it) {

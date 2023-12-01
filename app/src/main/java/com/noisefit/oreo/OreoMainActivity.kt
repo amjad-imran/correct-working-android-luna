@@ -247,7 +247,25 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
     override fun observeSubscriber() {
+        viewModel.getLoading().observe(this) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
+            }
+        }
 
+        viewModel.getMessages().observe(this) {
+            it.getContent()?.let { message ->
+                showShortToast(message)
+            }
+        }
+
+        viewModel.getApiErrors().observe(this) {
+            it?.getContent()?.let { response ->
+                onApiErrorReceived(response)
+            }
+        }
 
         viewModel.pushNotification.observe(this) {
             it.getContent()?.let {
@@ -350,6 +368,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 viewModel.startDisconnectTimer()
             }
         }
+
     }
 
     override fun onPause() {

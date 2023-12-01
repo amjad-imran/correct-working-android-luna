@@ -48,6 +48,8 @@
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:visibility="visible"
             app:layout_constraintTop_toBottomOf="@+id/lytHeader"
             layout="@layout/layout_tabs_dash"/>
 

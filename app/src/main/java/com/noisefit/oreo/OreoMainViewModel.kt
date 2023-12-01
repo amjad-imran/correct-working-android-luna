@@ -12,6 +12,7 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
+import com.noisefit_commans.data.model.User
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.ui.checkDayDifferenceMoreOne
 import com.noisefit_commans.utils.DateFormats
@@ -46,6 +47,8 @@ constructor(
 
     var registerDate: Int = 10
     var checkBluetooth = MutableLiveData<Event<Boolean>>()
+
+    var user: User? = null
 
 
     val userHealthData = HashMap<String, ServerUserHealthData?>()
@@ -97,6 +100,7 @@ constructor(
         mEndDate = DateFormats.getCurrentDateOreoFormat()
         mStartDate = DateFormats.getCurrentDateMinusDays(6)
         selectedDate = DateFormats.getCurrentDateOreoFormat()
+        user = localDataStore.getUser()
 
         getUserHealthData(mStartDate, mEndDate)
     }
