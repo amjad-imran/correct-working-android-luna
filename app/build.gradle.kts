@@ -81,11 +81,11 @@ android {
             buildConfigField(
                 "String",
                 "GOOGLE_CLIENT_ID",
-                "\"692776363643-ekmmtuuqdjs94hg9rs243rsnjfn08j5r.apps.googleusercontent.com\""
+                "\"159998142649-h616h07i88lilgc45cv1rbengmv07ias.apps.googleusercontent.com\""
             )
 //            manifestPlaceholders["cleverTapToken"] = "322-4c6"
 //            manifestPlaceholders["cleverTapId"] = "694-RRK-595Z"
-            manifestPlaceholders["google_client_id"] = "AIzaSyAqpPkqIlKRjEceF-oUy3zH4xD6dl4ISZQ"
+            manifestPlaceholders["google_client_id"] = "AIzaSyD-zRQCQPly-EA4jawx6YZRLMprV4bwf9w"
 
             signingConfig = signingConfigs.getByName("release")
 //            isDebuggable = true
@@ -106,11 +106,11 @@ android {
             buildConfigField(
                 "String",
                 "GOOGLE_CLIENT_ID",
-                "\"692776363643-ekmmtuuqdjs94hg9rs243rsnjfn08j5r.apps.googleusercontent.com\""
+                "\"159998142649-h616h07i88lilgc45cv1rbengmv07ias.apps.googleusercontent.com\""
             )
 //            manifestPlaceholders["cleverTapToken"] = "322-4c690"
 //            manifestPlaceholders["cleverTapId"] = "694-RRK-595Z07087"
-            manifestPlaceholders["google_client_id"] = "AIzaSyAqpPkqIlKRjEceF-oUy3zH4xD6dl4ISZQ"
+            manifestPlaceholders["google_client_id"] = "AIzaSyD-zRQCQPly-EA4jawx6YZRLMprV4bwf9w"
 
             signingConfig = signingConfigs.getByName("debug")
 
