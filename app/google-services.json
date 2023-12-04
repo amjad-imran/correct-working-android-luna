@@ -7,14 +7,38 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:159998142649:android:4ad365dd7ddf4e99839368",
+        "mobilesdk_app_id": "1:159998142649:android:8529adf2da56fc7f839368",
         "android_client_info": {
-          "package_name": "com.noisefit.luna.dev"
+          "package_name": "com.noisefit.luna"
         }
       },
       "oauth_client": [
         {
-          "client_id": "159998142649-ms5bv5n4lo887vjsoic66td3gc2bb52b.apps.googleusercontent.com",
+          "client_id": "159998142649-8k19kdaoot4i6gi5824o6uc1ntsqhosd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.noisefit.luna",
+            "certificate_hash": "0a2d98e86fe548dbdcdfb1fca40c69ac6ba78b28"
+          }
+        },
+        {
+          "client_id": "159998142649-9pbosm7hl7p53o22kcu7e88419201us4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.noisefit.luna",
+            "certificate_hash": "5d405386ae97d8a6c42a5aca707063f97e8f9883"
+          }
+        },
+        {
+          "client_id": "159998142649-ml4dlrtjneiu9pnjmppsa47leml9j13s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.noisefit.luna",
+            "certificate_hash": "b1af3a0bf998aeede1a8716a539e5a59da1d86d6"
+          }
+        },
+        {
+          "client_id": "159998142649-h616h07i88lilgc45cv1rbengmv07ias.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,7 +51,52 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "159998142649-ms5bv5n4lo887vjsoic66td3gc2bb52b.apps.googleusercontent.com",
+              "client_id": "159998142649-h616h07i88lilgc45cv1rbengmv07ias.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "159998142649-dfnj7rvajs1cghskh0oh3pc99f2d697u.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.noisefit.luna",
+                "app_store_id": "6456215977"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:159998142649:android:4ad365dd7ddf4e99839368",
+        "android_client_info": {
+          "package_name": "com.noisefit.luna.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "159998142649-h1cuch49k35tm6jrtb2nqkmdhcu8oj3e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.noisefit.luna.dev",
+            "certificate_hash": "185e94512570b5f4a32b1be37d64aff802e3cbc9"
+          }
+        },
+        {
+          "client_id": "159998142649-h616h07i88lilgc45cv1rbengmv07ias.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-zRQCQPly-EA4jawx6YZRLMprV4bwf9w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "159998142649-h616h07i88lilgc45cv1rbengmv07ias.apps.googleusercontent.com",
               "client_type": 3
             },
             {

@@ -81,7 +81,7 @@ android {
             buildConfigField(
                 "String",
                 "GOOGLE_CLIENT_ID",
-                "\"159998142649-ms5bv5n4lo887vjsoic66td3gc2bb52b.apps.googleusercontent.com\""
+                "\"159998142649-h616h07i88lilgc45cv1rbengmv07ias.apps.googleusercontent.com\""
             )
 //            manifestPlaceholders["cleverTapToken"] = "322-4c6"
 //            manifestPlaceholders["cleverTapId"] = "694-RRK-595Z"
@@ -106,7 +106,7 @@ android {
             buildConfigField(
                 "String",
                 "GOOGLE_CLIENT_ID",
-                "\"159998142649-ms5bv5n4lo887vjsoic66td3gc2bb52b.apps.googleusercontent.com\""
+                "\"159998142649-h616h07i88lilgc45cv1rbengmv07ias.apps.googleusercontent.com\""
             )
 //            manifestPlaceholders["cleverTapToken"] = "322-4c690"
 //            manifestPlaceholders["cleverTapId"] = "694-RRK-595Z07087"
