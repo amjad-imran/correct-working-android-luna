@@ -329,7 +329,10 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             if(viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess){
                 viewModel.startDisconnectTimer()
             }
+
         }
+        viewModel.shouldResetMasterDates()
+
     }
 
     override fun onPause() {

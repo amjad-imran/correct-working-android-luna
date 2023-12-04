@@ -28,6 +28,8 @@ constructor(
 
     //For API
     var selectedMasterDate: String? = null
+    var dateSetOn: String? = null
+
     //Currently highlighted date
     var selectedDate: String? = null
 
@@ -38,8 +40,19 @@ constructor(
     }
 
     init {
+        resetMasterDates()
+    }
+
+    fun shouldResetMasterDates() {
+        val todayDate = DateFormats.getCurrentDateOreoFormat()
+        if (todayDate.equals(dateSetOn, true)) return
+        resetMasterDates()
+    }
+
+    fun resetMasterDates() {
         selectedMasterDate = DateFormats.getCurrentDateOreoFormat()
         selectedDate = DateFormats.getCurrentDateOreoFormat()
+        dateSetOn = DateFormats.getCurrentDateOreoFormat()
     }
 
 

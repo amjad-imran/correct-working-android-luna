@@ -593,6 +593,7 @@ class OreoActivityFragment :
                 val selectedDate = data?.getStringExtra("selected_date")
                 mainViewModel.selectedMasterDate = selectedDate
                 mainViewModel.selectedDate = selectedDate
+                mainViewModel.dateSetOn = DateFormats.getCurrentDateOreoFormat()
                 LOGS.d("Selected Date  :${selectedDate}")
                 mViewModel.getActivityDetailsData(selectedDate)
                 /*if (selectedDate != null) {
