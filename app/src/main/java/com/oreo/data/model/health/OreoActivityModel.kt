@@ -6,6 +6,7 @@ import com.oreo.data.model.OActivityListModal
 data class OreoActivityModel(
     val date: String,//YYYY-MM-DD,
     val activityScore: ActivityScore? = null,
+    val dash_nudge: List<Nudges>? = null,
     val activeCalories: Int? = null,
     val totalCalories: Int? = null,
     val steps: Int? = null,

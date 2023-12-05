@@ -410,8 +410,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             if (data.data.nudges.isNullOrEmpty()) {
                 binding.tvNudge.text = ""
             } else {
-                binding.tvDayStatus.text = data.data.titles?.first() ?: ""
-                binding.tvNudge.text = data.data.nudges?.first()?:""
+                val nudge = data.data.nudges.firstOrNull()
+                binding.tvDayStatus.text = nudge?.label ?: ""
+                binding.tvNudge.text = nudge?.message ?: ""
             }
 
             binding.root.setOnClickListener {
@@ -447,7 +448,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             if (data.data.nudges.isNullOrEmpty()) {
                 binding.tvTitle.gone()
-                binding.tvTodayDesc.text =""
+                binding.tvTodayDesc.text = ""
                 (binding.tvTodayDesc.layoutParams as ConstraintLayout.LayoutParams).apply {
                     topMargin = binding.tvTodayDesc.context.dpToPx(24)
                     bottomMargin = 0
@@ -458,8 +459,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     topMargin = binding.tvTodayDesc.context.dpToPx(8)
                     bottomMargin = binding.tvTodayDesc.context.dpToPx(26)
                 }
-                binding.tvTodayDesc.text = data.data.nudges?.first()
-                binding.tvTitle.text = data.data.titles?.first()?:""
+                val nudge = data.data.nudges.firstOrNull()
+                binding.tvTodayDesc.text = nudge?.message ?: ""
+                binding.tvTitle.text = nudge?.label ?: ""
             }
 
             if (scoreValue >= 0) {
@@ -684,7 +686,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.tvNudge.gone()
             } else {
                 binding.tvNudge.visible()
-                binding.tvNudge.text = data.data.nudges.first()
+                binding.tvNudge.text = data.data.nudges.firstOrNull()?.label ?: ""
             }
 
             val caloriesGoalText = "${data.caloriesGoal}"
@@ -780,7 +782,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.tvTodayDesc.gone()
             } else {
                 binding.tvTodayDesc.visible()
-                binding.tvTodayDesc.text = data.data.nudges.first()
+                binding.tvTodayDesc.text = data.data.nudges.firstOrNull()?.label ?: ""
             }
 
             val caloriesGoalText = "/ ${data.caloriesGoal} kcal"

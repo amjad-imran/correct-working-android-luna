@@ -201,6 +201,7 @@ class OreoUserActivityRepositoryImpl(
                     is Resource.Success -> {
 
                         resource.data?.data?.let { response ->
+
                             resultData = response.data
                             resultTrendsData = response.trends
                         }

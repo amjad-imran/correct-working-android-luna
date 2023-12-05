@@ -193,7 +193,7 @@ constructor(
 
 
                             val todayData = userHealthData[getTodayDate()]
-                            showNotification(todayData?.dashboard)
+                            showNotification(todayData)
 
                             dataReload.value = Event(getDaysList(startDate, endDate))
 
@@ -438,13 +438,13 @@ constructor(
         getUserHealthData(todayDate, todayDate)
     }
 
-    private fun showNotification(response: OreoDashboardResponseModel?) {
+    private fun showNotification(response: ServerUserHealthData?) {
 
-        if (response == null) return
+        if (response?.sleep == null) return
 
         //Sleep
         response.sleep?.let {
-            if ((it.sleepScore ?: 0) > 75 && (it.totalSleep ?: 0) >= 25200 && (it.totalSleep
+            if ((it.sleepScore?.value ?: 0) > 75 && (it.totalSleep?.value ?: 0) >= 25200 && (it.totalSleep?.value
                     ?: 0) <= 32400
             ) {
                 val timeStamp = localDataStore.getSleepNotificationTimeStamp()
@@ -467,7 +467,7 @@ constructor(
         response.readiness?.let {
             val timeStamp = localDataStore.getReadinessNotificationTimeStamp()
             if (timeStamp == 0L || timeStamp.checkDayDifferenceMoreOne()) {
-                when (it.status?.lowercase()) {
+                when (it.readinessScore?.status?.lowercase()) {
                     "optimal" -> {
                         localDataStore.setReadinessNotificationTimeStamp()
                         pushNotification.postValue(

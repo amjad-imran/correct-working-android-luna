@@ -25,6 +25,7 @@ import com.noisefit_commans.ui.getColor
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.DashAlert
@@ -34,10 +35,13 @@ import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.VideoInfoType
+import com.oreo.data.model.health.ODashboardActivityModel
 import com.oreo.data.model.health.ODashboardActivityScoreModel
+import com.oreo.data.model.health.ODashboardReadinessModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
+import com.oreo.data.model.health.SleepHourlyBreakup
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -75,33 +79,54 @@ constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            val data = healthData.dashboard ?: return@launch
 
             val userActivities = ArrayList<OHealthOverview>()
 
-            data.readiness?.let {
-                userActivities.add(OHealthOverview.Readiness(data.readiness))
-            }
-
-            data.sleep?.let {
+            healthData.readiness?.let {
                 userActivities.add(
-                    OHealthOverview.Sleep(
-                        data.sleep,
-                        makeSleepArray(data.sleep),
-                        data.sleep.sleepStage.firstOrNull()?.startTime ?: "",
-                        data.sleep.sleepStage.lastOrNull()?.endTime ?: ""
+                    OHealthOverview.Readiness(
+                        ODashboardReadinessModel(
+                            readinessScore = it.readinessScore?.value,
+                            status = it.readinessScore?.status?.capitalizeWords(),
+                            nudges = it.dashNudges
+                        )
                     )
                 )
             }
 
-            data.activity?.let {
+            healthData.sleep?.let {
+                userActivities.add(
+                    OHealthOverview.Sleep(
+                        ODashboardSleepModel(
+                            sleepScore = it.sleepScore?.value,
+                            totalSleep = it.totalSleep?.value,
+                            restingHr =  healthData.sleep?.restingHr?.value,
+                            sleepStage = it.hourly_breakup?:ArrayList(),
+                            status = it.sleepScore?.status?.capitalizeWords(),
+                            startTime = "",
+                            endTime = ""
+                        ),
+                        makeSleepArray(it.hourly_breakup),
+                        it.hourly_breakup?.firstOrNull()?.start_time ?: "",
+                        it.hourly_breakup?.lastOrNull()?.end_time ?: ""
+                    )
+                )
+            }
 
-                val activeCalories = data.activity.activeCalories ?: 0
+            healthData.activity?.let {
+
+                val activeCalories = it.activeCalories ?: 0
                 if (activeCalories in 0..49) {
                     val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
                     userActivities.add(
                         OHealthOverview.ActivityMinimal(
-                            data.activity,
+                            ODashboardActivityModel(
+                                activityScore = it.activityScore?.value,
+                                activeCalories = activeCalories,
+                                inactiveMinutes = it.activityContributors?.stayActive?.value,
+                                status = it.activityScore?.level?.capitalizeWords(),
+                                nudges = it.dash_nudge
+                            ),
                             caloriesGoal
                         )
                     )
@@ -109,7 +134,13 @@ constructor(
                     val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
                     userActivities.add(
                         OHealthOverview.Activity(
-                            data.activity,
+                            ODashboardActivityModel(
+                                activityScore = it.activityScore?.value,
+                                activeCalories = activeCalories,
+                                inactiveMinutes = it.activityContributors?.stayActive?.value,
+                                status = it.activityScore?.level?.capitalizeWords(),
+                                nudges = it.dash_nudge
+                            ),
                             caloriesGoal
                         )
                     )
@@ -263,17 +294,17 @@ constructor(
         return "$hour $suffix"
     }
 
-    private fun makeSleepArray(data: ODashboardSleepModel?): ArrayList<SleepData.SleepDataBreakup> {
+    private fun makeSleepArray(data: List<SleepHourlyBreakup>?): ArrayList<SleepData.SleepDataBreakup> {
         val sleepArray: ArrayList<SleepData.SleepDataBreakup> = ArrayList()
 
-        if (data == null) {
+        if (data.isNullOrEmpty()) {
             return sleepArray
         }
 
         var duration = 0
 
-        data.sleepStage.forEachIndexed { index, data1 ->
-            val type = data1.sleepType
+        data.forEachIndexed { index, data1 ->
+            val type = data1.sleep_type
 
 
             if (type?.lowercase() == "awake") {
@@ -281,8 +312,8 @@ constructor(
 
                     sleepArray.add(
                         SleepData.SleepDataBreakup(
-                            startTime = data1.startTime,
-                            endTime = data1.endTime,
+                            startTime = data1.start_time,
+                            endTime = data1.end_time,
                             sleepType = "DEEP",
                             duration = duration
                         )
@@ -291,8 +322,8 @@ constructor(
                 }
                 sleepArray.add(
                     SleepData.SleepDataBreakup(
-                        startTime = data1.startTime,
-                        endTime = data1.endTime,
+                        startTime = data1.start_time,
+                        endTime = data1.end_time,
                         sleepType = "AWAKE",
                         duration = data1.duration ?: 0
                     )
@@ -301,12 +332,12 @@ constructor(
                 duration += (data1.duration?.toInt()) ?: 0
             }
 
-            if (index == data.sleepStage.size - 1 && duration != 0) {
+            if (index == data.size - 1 && duration != 0) {
 
                 sleepArray.add(
                     SleepData.SleepDataBreakup(
-                        startTime = data1.startTime,
-                        endTime = data1.endTime,
+                        startTime = data1.start_time,
+                        endTime = data1.end_time,
                         sleepType = "DEEP",
                         duration = duration
                     )

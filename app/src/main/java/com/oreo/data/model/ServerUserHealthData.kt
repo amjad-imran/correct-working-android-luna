@@ -31,7 +31,6 @@ data class TrendsData(
 
 data class ServerUserHealthData(
     val date: String,//YYYY-MM-dd
-    var dashboard: OreoDashboardResponseModel? = null,
     var sleep: OreoSleepModel? = null,
     var activity: OreoActivityModel? = null,
     var readiness: OreoReadinessModel? = null,

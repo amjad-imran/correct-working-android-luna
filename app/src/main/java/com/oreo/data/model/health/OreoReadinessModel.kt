@@ -11,6 +11,8 @@ data class OreoReadinessModel(
     val restingHr: UnitDataModel? = null,
     val totalSleep: CommonDataModel? = null,
     val nudges: List<Nudges>?,
+    @SerializedName("dash_nudges")
+    val dashNudges: List<Nudges>?,
     val sleepBalance: CommonDataModel? = null,
     val recoveryIndex: CommonDataModel? = null,
     @SerializedName("activity_score")
