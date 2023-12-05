@@ -50,6 +50,7 @@ import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 import org.joda.time.LocalDate
+import java.util.Date
 
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -120,32 +121,63 @@ class OreoUserActivityRepositoryImpl(
             val todayDate = DateFormats.getTodaysDateString(10)
             var resultTrendsData: TrendsData? = null
 
+            var apiStartDate: String? = startDate
+            var apiEndDate: String? = endDate
+
             val cacheResult = safeCacheCall(Dispatchers.IO) {
-                val datesList = getDaysList(startDate, endDate)
 
-                val localData = ArrayList<ServerUserHealthData>()
-                datesList.forEach {
-                    userHealthDataSource.getDataByDate(it)?.userHealthData?.let { healthData ->
-                        localData.add(
-                            Gson().fromJson<ServerUserHealthData>(
-                                healthData
-                            )
-                        )
+
+                if (startDate.equals(endDate) && endDate.equals(todayDate)) {
+                    val dateList = getDaysList(DateFormats.getCurrentDateMinusDays(6), todayDate)
+
+                    val dates = ArrayList<LocalDate>()
+
+                    dateList.forEach {
+                        val data = userHealthDataSource.getDataByDate(it)
+                        if (data == null) {
+                            dates.add(LocalDate.parse(it))
+                        }
                     }
-                }
+                    LOGS.d("dates____ ${dates}")
 
-                if (localData.size != 7) {
+                    if (dates.isEmpty()) {
+                        apiStartDate = todayDate
+                        apiEndDate = todayDate
+
+                    } else {
+                        val minDate = dates.stream().min(LocalDate::compareTo)
+                            .get()
+                        apiStartDate = minDate.toString()
+                        apiEndDate = todayDate
+
+                    }
                     return@safeCacheCall null
+
+                } else {
+                    apiStartDate = startDate
+                    apiEndDate = endDate
+                    val datesList = getDaysList(startDate, endDate)
+
+                    val localData = ArrayList<ServerUserHealthData>()
+                    datesList.forEach {
+                        userHealthDataSource.getDataByDate(it)?.userHealthData?.let { healthData ->
+                            localData.add(
+                                Gson().fromJson<ServerUserHealthData>(
+                                    healthData
+                                )
+                            )
+                        }
+                    }
+
+                    if (localData.size != 7) {
+                        return@safeCacheCall null
+                    }
+
+                    userHealthDataSource.getTodayTrend()?.let {
+                        resultTrendsData = Gson().fromJson<TrendsData>(it)
+                    }
+                    return@safeCacheCall localData
                 }
-
-                userHealthDataSource.getTodayTrend()?.let {
-                    resultTrendsData = Gson().fromJson<TrendsData>(it)
-                }
-
-
-
-                return@safeCacheCall localData
-
             }
 
             cacheResult.collect { resource ->
@@ -181,7 +213,7 @@ class OreoUserActivityRepositoryImpl(
             val serverResult = safeApiCallFlow(dispatcher) {
                 val url =
                     "${BuildConfig.BASE_URL_NEW}/luna/protean/v2/dashboard"
-                remoteDataSource.getUserHealthData(url, startDate, endDate)
+                remoteDataSource.getUserHealthData(url, apiStartDate, apiEndDate)
             }
 
             serverResult.collect { resource ->
@@ -213,7 +245,7 @@ class OreoUserActivityRepositoryImpl(
                 safeCacheCall(Dispatchers.IO) {
 
                     resultData?.forEach {
-                        val trendData = if (it.date.equals(todayDate,true)) {
+                        val trendData = if (it.date.equals(todayDate, true)) {
                             gson.toJson(resultTrendsData)
                         } else {
                             null
