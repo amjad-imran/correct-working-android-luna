@@ -23,6 +23,7 @@ import com.oreo.data.model.OWorkoutListModal
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
@@ -150,7 +151,7 @@ constructor(
         } else {
             activityType
         }
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val requestObject = JsonObject().apply {
                 this.addProperty("duration", addWorkout.duration)
                 this.addProperty("calories", addWorkout.calories)

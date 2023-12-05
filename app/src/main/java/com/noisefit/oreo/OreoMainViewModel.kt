@@ -433,7 +433,7 @@ constructor(
         }
     }
 
-    fun onSyncSuccess() {
+    fun reloadTodaysData() {
         val todayDate = getTodayDate()
         getUserHealthData(todayDate, todayDate)
     }

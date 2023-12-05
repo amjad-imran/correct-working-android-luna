@@ -5,11 +5,13 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOWorkoutDetailsBinding
+import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.ui.custom.WorkoutIntensityGraphOreo
@@ -33,6 +35,8 @@ class OWorkoutDetailsFragment :
 
     private val mViewModel: OWorkoutDetailsViewModel by viewModels()
     private val args: OWorkoutDetailsFragmentArgs by navArgs()
+    private val mainViewModel: OreoMainViewModel by activityViewModels()
+
     private val mAdapter: OWorkoutDetailslAdapter by lazy {
         OWorkoutDetailslAdapter()
     }
@@ -92,6 +96,8 @@ class OWorkoutDetailsFragment :
 
         mViewModel.workoutDeletedResponse.observe(this) {
             it?.getContent()?.let { response ->
+                mainViewModel.reloadTodaysData()
+
                 setFragmentResult(
                     DELETE_WORKOUT_REQUEST_KEY,
                     bundleOf("allow" to true, "position" to mViewModel.position)

@@ -347,7 +347,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                     SyncEvents.ServerSyncSuccess -> {
                         binding.progressBar.root.gone()
 
-                        mainViewModel.onSyncSuccess()
+                        mainViewModel.reloadTodaysData()
                         //sendLogs()
                     }
                 }

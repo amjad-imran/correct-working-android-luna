@@ -2,10 +2,12 @@ package com.oreo.ui.workout.detect
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentDetectWorkoutBinding
+import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY
 import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.ui.BaseFragment
@@ -25,15 +27,19 @@ class DetectWorkoutFragment :
     private val viewModel: DetectWorkoutViewModel by viewModels()
     private var detectWorkoutFragmentListener: DetectWorkoutFragmentListener? = null
     private val oreoAutoSportData = ArrayList<OreoAutoSportData>()
+    private val mainViewModel: OreoMainViewModel by activityViewModels()
+    var isWorkoutAdded = false
 
 
     private val detectWorkoutAdapter: DetectWorkoutAdapter by lazy {
         DetectWorkoutAdapter(object : DetectWorkoutListener {
             override fun onAddWorkout(data: OreoAutoSportData, position: Int) {
                 viewModel.addWorkout(data, onAddSuccess = {
+                    isWorkoutAdded = true
                     viewModel.markWorkoutSynced(data.id, position)
                 })
             }
+
             override fun onIdentifyWorkout(data: OreoAutoSportData, position: Int) {
                 detectWorkoutFragmentListener?.onIdentifyWorkout(
                     data,
@@ -66,6 +72,13 @@ class DetectWorkoutFragment :
             }
 
         })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        if (isWorkoutAdded) {
+            mainViewModel.reloadTodaysData()
+        }
     }
 
 

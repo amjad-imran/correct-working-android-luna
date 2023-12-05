@@ -14,6 +14,7 @@ import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.util.UtilClass
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -73,7 +74,7 @@ class OWorkoutDetailsViewModel @Inject constructor(
     }
 
     fun deleteWorkout(workoutId: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             userActivityRepository.deleteWorkoutFromServer(
                 workoutId
             ).collect { resource ->

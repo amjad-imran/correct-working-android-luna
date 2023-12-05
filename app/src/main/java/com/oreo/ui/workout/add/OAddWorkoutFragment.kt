@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -14,6 +15,7 @@ import com.google.gson.Gson
 import com.noisefit.data.local.AppStaticData
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOAddWorkoutBinding
+import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.common.bottomSheet.TIME_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
 import com.noisefit_commans.ui.BaseFragment
@@ -40,6 +42,8 @@ class OAddWorkoutFragment :
     BaseFragment<FragmentOAddWorkoutBinding>(FragmentOAddWorkoutBinding::inflate) {
     private val viewModel: OAddWorkoutViewModel by viewModels()
     private val args: OAddWorkoutFragmentArgs by navArgs()
+    private val mainViewModel: OreoMainViewModel by activityViewModels()
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -521,6 +525,7 @@ class OAddWorkoutFragment :
         viewModel.addWorkoutResponse.observe(this) {
             it?.let {
                 if (it) {
+                    mainViewModel.reloadTodaysData()
 
                     setFragmentResult(
                         ADD_WORKOUT_REQUEST_KEY,
