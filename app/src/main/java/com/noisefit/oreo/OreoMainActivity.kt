@@ -498,7 +498,6 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 }
                 viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_FOOTER_ACTIVITY_CLICK)
             }
-
             else -> {}
         }
 
