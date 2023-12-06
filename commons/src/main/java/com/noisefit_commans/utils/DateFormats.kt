@@ -1140,10 +1140,11 @@ object DateFormats {
             val date1 = timeFormat.parse(time)
             val date2 = timeFormat.parse(startTime)
             val date3 = timeFormat.parse(endTime)
-            LOGS.d("currentTime $date1 $date2 $date3")
+            LOGS.d("TIME_TEST","isTimeBetween $date1 $date2 $date3")
             return (date1.after(date2) && date1.before(date3)) ||
                     (date1.equals(date2) || date1.equals(date3))
         } catch (e: ParseException) {
+            LOGS.d("TIME_TEST","isTimeBetween ${e.message}")
             e.printStackTrace()
         }
         return false

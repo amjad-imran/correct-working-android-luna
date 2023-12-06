@@ -34,6 +34,7 @@ class SummaryPagerAdapter(fragmentActivity: FragmentActivity) :
         val date = dates[position]
         val todayDate = DateFormats.getTodaysDateString(10)
         return if (todayDate.equals(date, true)) {
+            LOGS.d("SUMMART_TODAY createFragment today")
             (SummaryDataFragmentToday.newInstance(date))
         } else {
             (SummaryDataFragment.newInstance(date))

@@ -129,6 +129,7 @@ constructor(
 
     private fun getGreetingMessage(): String {
         val currentTime = DateFormats.getTimeFormat()
+        LOGS.d("TIME_TEST","currentTime $currentTime")
         if (DateFormats.isTimeBetween(currentTime, "04:00", "11:59")) {
             return "Good morning"
         } else if (DateFormats.isTimeBetween(currentTime, "12:00", "16:59")) {
@@ -206,8 +207,10 @@ constructor(
             )
 
 
+            val daySlot = getDaySlot()
+            LOGS.d("TIME_TEST","daySlot $daySlot")
 
-            when (getDaySlot()) {
+            when (daySlot) {
                 0 -> {
                     //sleep
                     if (healthData.sleep?.sleepScore != null) {
@@ -485,6 +488,9 @@ constructor(
      */
     private fun getDaySlot(): Int {
         val currentTime = DateFormats.getTimeFormat()
+
+        LOGS.d("TIME_TEST","currentTime getDaySLot $currentTime")
+
         return if (DateFormats.isTimeBetween(currentTime, "00:00", "03:59")) {
             0
         } else if (DateFormats.isTimeBetween(currentTime, "04:00", "07:59")) {

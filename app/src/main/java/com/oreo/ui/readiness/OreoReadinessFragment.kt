@@ -382,11 +382,7 @@ class OreoReadinessFragment :
 
                 val selectedDate =
                     data?.getStringExtra("selected_date") ?: return@registerForActivityResult
-
-                mainViewModel.mEndDate = mainViewModel.getDatesPlus(selectedDate,3)
-                mainViewModel.mStartDate = mainViewModel.getDatesMinus(selectedDate,3)
-                mainViewModel.selectedDate = selectedDate
-
+                mainViewModel.onCalendarDateSelected(selectedDate)
                 LOGS.d("moveToPosition Selected Date  :${selectedDate}")
 
                 mainViewModel.getUserHealthData(mainViewModel.mStartDate, mainViewModel.mEndDate)

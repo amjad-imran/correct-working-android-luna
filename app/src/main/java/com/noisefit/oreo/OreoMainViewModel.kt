@@ -69,6 +69,7 @@ constructor(
     var selectedDate: String? = null
 
     val pushNotification = MutableLiveData<Event<PushLocalNotification>>()
+    var isFetchRequestOnGoing = false
 
 
     //Dashboard
@@ -139,6 +140,7 @@ constructor(
     }
 
     fun getUserHealthData(startDate: String?, endDate: String?) {
+        isFetchRequestOnGoing = true
         viewModelScope.launch {
             userActivityRepository.getUserHealthData(
                 startDate,
@@ -147,6 +149,7 @@ constructor(
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
+                        isFetchRequestOnGoing = false
                     }
 
                     is Resource.Loading -> {
@@ -170,6 +173,7 @@ constructor(
                                     }
                                 }
                         })
+                        isFetchRequestOnGoing = false
                     }
 
                     is Resource.Success -> {
@@ -198,6 +202,7 @@ constructor(
                             showNotification(todayData)
 
                             dataReload.value = Event(getDaysList(startDate, endDate))
+                            isFetchRequestOnGoing = false
 
                         }
                     }
@@ -209,11 +214,14 @@ constructor(
     }
 
     fun shouldLoadMoreData(): Boolean {
+
+        if (isFetchRequestOnGoing) return false
+
         if (sleepHistoryResponse.value.isNullOrEmpty()) return false
 
         if (sleepHistoryResponse.value!!.size < 2) return false
 
-        if ((sleepHistoryResponse.value!![1]).date.equals(selectedDate)) {
+        if ((sleepHistoryResponse.value!![1]).date.equals(selectedDate) || (sleepHistoryResponse.value!![0]).date.equals(selectedDate)) {
 
             val (newStartDate, newEndDate) = getPreviousPaginationDates(mStartDate!!)
             if (newStartDate == null && newEndDate == null) return false
@@ -251,7 +259,7 @@ constructor(
         val endDate = start.minusDays(1)
 
         val startingCalDate = LocalDate.parse("2023-08-01")
-        if(startDate<startingCalDate){
+        if (startDate < startingCalDate) {
             return Pair(null, null)
 
         }

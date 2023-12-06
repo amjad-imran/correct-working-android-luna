@@ -98,6 +98,8 @@ class SummaryDataFragmentToday :
 
     override fun onResume() {
         super.onResume()
+
+        LOGS.d("SUMMART_TODAY on resume")
         LOGS.d(TAG, "Today onResume called")
 
         loadData()
