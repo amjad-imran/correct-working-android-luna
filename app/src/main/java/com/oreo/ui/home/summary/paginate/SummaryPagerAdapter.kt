@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import java.lang.Exception
 
 
 class SummaryPagerAdapter(fragmentActivity: FragmentActivity) :
@@ -23,9 +24,13 @@ class SummaryPagerAdapter(fragmentActivity: FragmentActivity) :
             return null
         }
 
-        return if (position < dates.size) {
-            dates[position]
-        } else {
+        return try {
+            if (position < dates.size) {
+                dates[position]
+            } else {
+                null
+            }
+        } catch (exp: Exception) {
             null
         }
     }

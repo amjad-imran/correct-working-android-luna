@@ -502,6 +502,9 @@ class OreoReadinessFragment :
 
     override fun subscribeObservers() {
         mainViewModel.readinessHistoryResponse.observe(this) {
+
+            if(it.isNullOrEmpty()) return@observe
+
             binding.svMain.visible()
             binding.groupHeader.visible()
             binding.lytToolbar.root.visible()

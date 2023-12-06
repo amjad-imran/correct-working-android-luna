@@ -736,6 +736,8 @@ class OreoActivityFragment :
     override fun subscribeObservers() {
 
         mainViewModel.activityHistoryResponse.observe(this) {
+            if(it.isNullOrEmpty()) return@observe
+
             binding.svMain.visible()
             binding.groupHeader.visible()
             //binding.lytToolbar.root.visible()

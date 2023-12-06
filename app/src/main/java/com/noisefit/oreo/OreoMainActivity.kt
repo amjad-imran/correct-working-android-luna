@@ -369,6 +369,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             }
         }
 
+        viewModel.shouldResetMasterDates()
+
     }
 
     override fun onPause() {

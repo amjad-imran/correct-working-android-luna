@@ -593,6 +593,8 @@ class OreoSleepDetailFragment :
     override fun subscribeObservers() {
         mainViewModel.sleepHistoryResponse.observe(viewLifecycleOwner) {
 
+            if(it.isNullOrEmpty()) return@observe
+
 
             binding.svMain.visible()
             binding.groupHeader.visible()

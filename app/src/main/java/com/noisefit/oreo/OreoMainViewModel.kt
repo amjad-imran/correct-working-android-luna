@@ -27,6 +27,7 @@ import com.oreo.data.model.health.OreoSleepModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.ui.home.summary.PushLocalNotification
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.selects.select
 import org.joda.time.Days
@@ -67,6 +68,8 @@ constructor(
 
     //Currently highlighted date
     var selectedDate: String? = null
+    var dateSetOn: String? = null
+
 
     val pushNotification = MutableLiveData<Event<PushLocalNotification>>()
     var isFetchRequestOnGoing = false
@@ -99,13 +102,36 @@ constructor(
 
 
     init {
+        viewModelScope.launch(Dispatchers.IO) {
+            user = localDataStore.getUser()
+            resetMasterDates()
+        }
+    }
 
+    private fun resetMasterDates() {
         mEndDate = DateFormats.getCurrentDateOreoFormat()
         mStartDate = DateFormats.getCurrentDateMinusDays(6)
         selectedDate = DateFormats.getCurrentDateOreoFormat()
-        user = localDataStore.getUser()
-
+        dateSetOn = DateFormats.getCurrentDateOreoFormat()
         getUserHealthData(mStartDate, mEndDate)
+    }
+
+    fun shouldResetMasterDates() {
+        val todayDate = DateFormats.getCurrentDateOreoFormat()
+        if (todayDate.equals(dateSetOn, true)) return
+        resetHealthCacheData()
+        resetMasterDates()
+    }
+
+    private fun resetHealthCacheData() {
+        userHealthData.clear()
+        trendsData = null
+        _dashboard.value = ArrayList()
+        _sleepHistoryResponse.value = ArrayList()
+        _readinessHistoryResponse.value = ArrayList()
+        _activityHistoryResponse.value = ArrayList()
+        isFetchRequestOnGoing = false
+
     }
 
 
@@ -221,7 +247,10 @@ constructor(
 
         if (sleepHistoryResponse.value!!.size < 2) return false
 
-        if ((sleepHistoryResponse.value!![1]).date.equals(selectedDate) || (sleepHistoryResponse.value!![0]).date.equals(selectedDate)) {
+        if ((sleepHistoryResponse.value!![1]).date.equals(selectedDate) || (sleepHistoryResponse.value!![0]).date.equals(
+                selectedDate
+            )
+        ) {
 
             val (newStartDate, newEndDate) = getPreviousPaginationDates(mStartDate!!)
             if (newStartDate == null && newEndDate == null) return false
@@ -543,6 +572,7 @@ constructor(
     }
 
     fun onCalendarDateSelected(selectedDate: String) {
+
         val todayDate = LocalDate.now()
         val startingDate = LocalDate.parse("2023-08-01")
         val selectedDateLocal = LocalDate.parse(selectedDate)
@@ -593,6 +623,7 @@ constructor(
         mEndDate = getDatesPlus(selectedDate, plusDays)
         mStartDate = getDatesMinus(selectedDate, minusDays)
         this.selectedDate = selectedDate
+        dateSetOn = DateFormats.getCurrentDateOreoFormat()
     }
 
 
