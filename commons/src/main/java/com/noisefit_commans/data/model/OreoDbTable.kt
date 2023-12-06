@@ -77,6 +77,7 @@ data class OreoAutoSportData(
     var steps: Int? = null,
     var type: String? = null
  */
+/*
 @Entity(
     tableName = "google_fit_workout", indices = [Index(value = ["startTime"], unique = true)]
 )
@@ -97,6 +98,7 @@ data class GoogleFitWorkoutData(
     @ColumnInfo(name = "steps") var steps: Int? = null,
     @ColumnInfo(name = "type") var type: String? = null,
 ) : ColorfitData(), Parcelable
+*/
 
 
 

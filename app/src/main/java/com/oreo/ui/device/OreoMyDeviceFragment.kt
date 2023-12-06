@@ -108,9 +108,9 @@ class OreoMyDeviceFragment :
             mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_MYDEVICES_ABOUT_CLICK)
             navigate(R.id.OAboutDeviceFragment)
         }
-        binding.rowGoogleFit.setOnClickListener {
+      /*  binding.rowGoogleFit.setOnClickListener {
             navigate(R.id.googleFitFragmentOreo)
-        }
+        }*/
 
         binding.rowWarrantyRegistration.setOnClickListener {
             //navigate(R.id.warrantyFragmentOreo)

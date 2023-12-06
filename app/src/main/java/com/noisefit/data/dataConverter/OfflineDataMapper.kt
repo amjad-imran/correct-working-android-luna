@@ -4,7 +4,6 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.watch.SDKWatchType
 import com.noisefit.watch.WatchesSDK
-import com.noisefit_commans.data.model.GoogleFitWorkoutData
 import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.models.DeviceType
 import com.noisefit_commans.models.SleepDataGoogleFit
@@ -232,7 +231,7 @@ class OfflineDataMapper
         return jsonObject
     }
 
-    fun convertGFWorkoutIntoJsonArray(data: List<GoogleFitWorkoutData>): JsonArray {
+    /*fun convertGFWorkoutIntoJsonArray(data: List<GoogleFitWorkoutData>): JsonArray {
         val jsonArray = JsonArray()
         data.forEach {
             val requestObject = JsonObject().apply {
@@ -292,5 +291,5 @@ class OfflineDataMapper
             )
         }
         return workoutList
-    }
+    }*/
 }

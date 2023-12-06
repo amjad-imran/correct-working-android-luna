@@ -30,7 +30,6 @@ import com.noisefit_commans.ui.loadImageCacheWithProgress
 import com.noisefit_commans.ui.loadImageWCacheWithProgress
 import com.noisefit_commans.utils.AppConstants
 import com.noisefit_commans.utils.LOGS
-import com.oreo.receiver.workManager.GoogleFitSyncWork
 import com.oreo.receiver.workManager.OreoSyncDataWork
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -269,7 +268,7 @@ object ApplicationUtils {
         return isWorkScheduled(uniqueId, context)
     }
 
-    suspend fun startGoogleFitSyncScheduler(context: Context): Boolean {
+   /* suspend fun startGoogleFitSyncScheduler(context: Context): Boolean {
         val uniqueId = getUniqueGoogleFitWorkName()
         LOGS.d("SyncDataWork: inside startGoogleFitSyncScheduler ")
         if (!isWorkScheduled(uniqueId, context)) {
@@ -288,7 +287,7 @@ object ApplicationUtils {
         }
 
         return false
-    }
+    }*/
 
     suspend fun startOreoSyncScheduler(context: Context): Boolean {
         val uniqueId = getUniqueRingSyncDataWorkName()
