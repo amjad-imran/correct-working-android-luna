@@ -117,8 +117,10 @@ class HistoryCalendarActivity : BaseActivity<ActivityHistoryCalendarBinding>() {
 
         val daysOfWeek = daysOfWeekFromLocale()
 
+        val startMonth = YearMonth.of(2023,8)
+
         binding.calendar.setup(
-            currentMonth.minusYears(localDataStore.getHistoryYears().toLong()),
+            startMonth,
             currentMonth.plusMonths(0), daysOfWeek.first()
         )
 

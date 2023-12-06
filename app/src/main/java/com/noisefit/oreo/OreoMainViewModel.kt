@@ -28,6 +28,8 @@ import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.ui.home.summary.PushLocalNotification
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.selects.select
+import org.joda.time.Days
 import org.joda.time.LocalDate
 import javax.inject.Inject
 
@@ -214,6 +216,8 @@ constructor(
         if ((sleepHistoryResponse.value!![1]).date.equals(selectedDate)) {
 
             val (newStartDate, newEndDate) = getPreviousPaginationDates(mStartDate!!)
+            if (newStartDate == null && newEndDate == null) return false
+
             mStartDate = newStartDate
 
             getUserHealthData(newStartDate, newEndDate)
@@ -240,13 +244,18 @@ constructor(
         return false
     }
 
-    fun getPreviousPaginationDates(date: String): Pair<String, String> {
+    fun getPreviousPaginationDates(date: String): Pair<String?, String?> {
         val start: LocalDate = LocalDate.parse(date)
 
-        val startDate = start.minusDays(7).toString("yyyy-MM-dd")
-        val endDate = start.minusDays(1).toString("yyyy-MM-dd")
+        val startDate = start.minusDays(7)
+        val endDate = start.minusDays(1)
 
-        return Pair(startDate, endDate)
+        val startingCalDate = LocalDate.parse("2023-08-01")
+        if(startDate<startingCalDate){
+            return Pair(null, null)
+
+        }
+        return Pair(startDate.toString("yyyy-MM-dd"), endDate.toString("yyyy-MM-dd"))
     }
 
     fun getDatesMinus(date: String, minusDays: Int): String {
@@ -444,7 +453,8 @@ constructor(
 
         //Sleep
         response.sleep?.let {
-            if ((it.sleepScore?.value ?: 0) > 75 && (it.totalSleep?.value ?: 0) >= 25200 && (it.totalSleep?.value
+            if ((it.sleepScore?.value ?: 0) > 75 && (it.totalSleep?.value
+                    ?: 0) >= 25200 && (it.totalSleep?.value
                     ?: 0) <= 32400
             ) {
                 val timeStamp = localDataStore.getSleepNotificationTimeStamp()
@@ -522,6 +532,59 @@ constructor(
                 }
             }
         }
+    }
+
+    fun onCalendarDateSelected(selectedDate: String) {
+        val todayDate = LocalDate.now()
+        val startingDate = LocalDate.parse("2023-08-01")
+        val selectedDateLocal = LocalDate.parse(selectedDate)
+
+
+        val difference = Days.daysBetween(selectedDateLocal, todayDate).days
+        LOGS.d("onCalendarDateSelected $difference")
+
+        var plusDays = 3
+        var minusDays = 3
+        when (difference) {
+            0 -> {
+                plusDays = 0
+                minusDays = 6
+            }
+
+            1 -> {
+                plusDays = 1
+                minusDays = 5
+            }
+
+            2 -> {
+                plusDays = 2
+                minusDays = 4
+            }
+        }
+
+        when (Days.daysBetween(startingDate, selectedDateLocal).days) {
+            0 -> {
+                plusDays = 6
+                minusDays = 0
+            }
+
+            1 -> {
+                plusDays = 5
+                minusDays = 1
+            }
+
+            2 -> {
+                plusDays = 4
+                minusDays = 2
+            }
+        }
+
+
+
+
+        mEndDate = getDatesPlus(selectedDate, plusDays)
+        mStartDate = getDatesMinus(selectedDate, minusDays)
+        this.selectedDate = selectedDate
     }
 
 
