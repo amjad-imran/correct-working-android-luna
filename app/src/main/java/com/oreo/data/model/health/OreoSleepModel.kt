@@ -1,6 +1,7 @@
 package com.oreo.data.model.health
 
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 data class OreoSleepModel(
@@ -20,6 +21,7 @@ data class OreoSleepModel(
     var hr: CommonListDataModel? = null,
     var hrv: CommonListDataModel? = null,
     var oxy: CommonListDataModel? = null,
+    @SerializedName("int_nudges")
     val nudges: List<Nudges>?,
     var hourly_breakup: List<SleepHourlyBreakup>? = null,
     var night_time_movement: List<SleepMovementBreakup>? = null,

@@ -11,6 +11,7 @@ data class OreoActivityModel(
     val totalCalories: Int? = null,
     val steps: Int? = null,
     val distance: Int? = null,
+    @SerializedName("int_nudges")
     val nudges: List<Nudges>?,
     val activityContributors: ActivityContributor? = null,
     val daytimeMovement: DayTimeMovement? = null,
