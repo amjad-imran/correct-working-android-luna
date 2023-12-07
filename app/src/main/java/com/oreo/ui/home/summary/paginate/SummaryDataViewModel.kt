@@ -83,51 +83,57 @@ constructor(
             val userActivities = ArrayList<OHealthOverview>()
 
             healthData.readiness?.let {
-                userActivities.add(
-                    OHealthOverview.Readiness(
-                        ODashboardReadinessModel(
-                            readinessScore = it.readinessScore?.value,
-                            status = it.readinessScore?.status?.capitalizeWords(),
-                            nudges = it.dashNudges
+                if (it.readinessScore?.value != null) {
+                    userActivities.add(
+                        OHealthOverview.Readiness(
+                            ODashboardReadinessModel(
+                                readinessScore = it.readinessScore?.value,
+                                status = it.readinessScore?.status?.capitalizeWords(),
+                                nudges = it.dashNudges
+                            )
                         )
                     )
-                )
+                }
             }
 
             healthData.sleep?.let {
-                userActivities.add(
-                    OHealthOverview.Sleep(
-                        ODashboardSleepModel(
-                            sleepScore = it.sleepScore?.value,
-                            totalSleep = it.totalSleep?.value,
-                            restingHr = healthData.sleep?.restingHr?.value,
-                            sleepStage = it.hourly_breakup ?: ArrayList(),
-                            status = it.sleepScore?.status?.capitalizeWords(),
-                            startTime = "",
-                            endTime = ""
-                        ),
-                        makeSleepArray(it.hourly_breakup),
-                        it.hourly_breakup?.firstOrNull()?.start_time ?: "",
-                        it.hourly_breakup?.lastOrNull()?.end_time ?: ""
+                if (it.sleepScore?.value != null) {
+                    userActivities.add(
+                        OHealthOverview.Sleep(
+                            ODashboardSleepModel(
+                                sleepScore = it.sleepScore?.value,
+                                totalSleep = it.totalSleep?.value,
+                                restingHr = healthData.sleep?.restingHr?.value,
+                                sleepStage = it.hourly_breakup ?: ArrayList(),
+                                status = it.sleepScore?.status?.capitalizeWords(),
+                                startTime = "",
+                                endTime = ""
+                            ),
+                            makeSleepArray(it.hourly_breakup),
+                            it.hourly_breakup?.firstOrNull()?.start_time ?: "",
+                            it.hourly_breakup?.lastOrNull()?.end_time ?: ""
+                        )
                     )
-                )
+                }
+
             }
 
             healthData.activity?.let {
-
-                val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
-                userActivities.add(
-                    OHealthOverview.Activity(
-                        ODashboardActivityModel(
-                            activityScore = it.activityScore?.value,
-                            activeCalories =  it.activeCalories ?: 0,
-                            inactiveMinutes = it.activityContributors?.stayActive?.value,
-                            status = it.activityScore?.level?.capitalizeWords(),
-                            nudges = it.dash_nudge
-                        ),
-                        caloriesGoal
+                if (it.activityScore?.value != null) {
+                    val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
+                    userActivities.add(
+                        OHealthOverview.Activity(
+                            ODashboardActivityModel(
+                                activityScore = it.activityScore?.value,
+                                activeCalories = it.activeCalories ?: 0,
+                                inactiveMinutes = it.activityContributors?.stayActive?.value,
+                                status = it.activityScore?.level?.capitalizeWords(),
+                                nudges = it.dash_nudge
+                            ),
+                            caloriesGoal
+                        )
                     )
-                )
+                }
             }
 
             healthOverviewData.postValue(userActivities)
