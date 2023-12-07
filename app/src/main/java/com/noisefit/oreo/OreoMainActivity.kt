@@ -116,7 +116,10 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
     override fun initListener() {
-
+        binding.layoutRetry.btnRetry.setOnClickListener {
+            binding.layoutRetry.root.gone()
+            viewModel.getUserHealthData(viewModel.mStartDate, viewModel.mEndDate)
+        }
     }
 
     fun checkBluetooth() {
@@ -263,7 +266,11 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         viewModel.getApiErrors().observe(this) {
             it?.getContent()?.let { response ->
-                onApiErrorReceived(response)
+                if (viewModel.userHealthData.isEmpty()) {
+                    binding.layoutRetry.root.visible()
+                } else {
+                    onApiErrorReceived(response)
+                }
             }
         }
 
@@ -498,6 +505,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 }
                 viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_FOOTER_ACTIVITY_CLICK)
             }
+
             else -> {}
         }
 

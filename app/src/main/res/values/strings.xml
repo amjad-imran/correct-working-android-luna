@@ -981,4 +981,6 @@
     <string name="text_identify">Identify</string>
     <string name="text_device_has_a_new_location">Device has a new location!</string>
     <string name="text_device_intro_msg"><![CDATA[Now find all your device details & settings in the quick access corner]]></string>
+    <string name="text_something_went_wrong_please_try_again">Something went wrong. Please try again</string>
+    <string name="text_retry">Retry</string>
 </resources>
