@@ -328,6 +328,16 @@ class SummaryDataFragmentToday :
 
     override fun subscribeObservers() {
 
+
+        viewModel.sessionManager.manualMeasurementValue.observe(this) {
+            it.getContent()?.let {
+                if (it) {
+                    viewModel.updateManualValue()
+                }
+
+            }
+        }
+
         viewModel.sessionManager.bluetoothStateDash.observe(this) {
             viewModel.updateAlerts()
             //viewModel.updateBluetoothStateInList(it)

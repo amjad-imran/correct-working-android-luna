@@ -129,7 +129,7 @@ constructor(
 
     private fun getGreetingMessage(): String {
         val currentTime = DateFormats.getTimeFormat()
-        LOGS.d("TIME_TEST","currentTime $currentTime")
+        LOGS.d("TIME_TEST", "currentTime $currentTime")
         if (DateFormats.isTimeBetween(currentTime, "04:00", "11:59")) {
             return "Good morning"
         } else if (DateFormats.isTimeBetween(currentTime, "12:00", "16:59")) {
@@ -193,7 +193,7 @@ constructor(
                 sleepScore = healthData.sleep?.sleepScore?.value,
                 totalSleep = healthData.sleep?.totalSleep?.value,
                 restingHr = healthData.sleep?.restingHr?.value,
-                sleepStage = healthData.sleep?.hourly_breakup?:ArrayList(),
+                sleepStage = healthData.sleep?.hourly_breakup ?: ArrayList(),
                 status = healthData.sleep?.sleepScore?.status?.capitalizeWords(),
                 startTime = "",
                 endTime = ""
@@ -208,7 +208,7 @@ constructor(
 
 
             val daySlot = getDaySlot()
-            LOGS.d("TIME_TEST","daySlot $daySlot")
+            LOGS.d("TIME_TEST", "daySlot $daySlot")
 
             when (daySlot) {
                 0 -> {
@@ -222,7 +222,8 @@ constructor(
                                 OHealthOverview.Sleep(
                                     sleepModel,
                                     makeSleepArray(healthData.sleep?.hourly_breakup),
-                                    healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time ?: "",
+                                    healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time
+                                        ?: "",
                                     healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time ?: ""
                                 )
                             )
@@ -244,7 +245,8 @@ constructor(
                                 OHealthOverview.Sleep(
                                     sleepModel,
                                     makeSleepArray(healthData.sleep?.hourly_breakup),
-                                    healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time ?: "",
+                                    healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time
+                                        ?: "",
                                     healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time ?: ""
                                 )
                             )
@@ -288,7 +290,8 @@ constructor(
                                 OHealthOverview.Sleep(
                                     sleepModel,
                                     makeSleepArray(healthData.sleep?.hourly_breakup),
-                                    healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time ?: "",
+                                    healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time
+                                        ?: "",
                                     healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time ?: ""
                                 )
                             )
@@ -362,8 +365,10 @@ constructor(
                                     OHealthOverview.Sleep(
                                         sleepModel,
                                         makeSleepArray(healthData.sleep?.hourly_breakup),
-                                        healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time ?: "",
-                                        healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time ?: ""
+                                        healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time
+                                            ?: "",
+                                        healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time
+                                            ?: ""
                                     )
                                 )
                             }
@@ -489,7 +494,7 @@ constructor(
     private fun getDaySlot(): Int {
         val currentTime = DateFormats.getTimeFormat()
 
-        LOGS.d("TIME_TEST","currentTime getDaySLot $currentTime")
+        LOGS.d("TIME_TEST", "currentTime getDaySLot $currentTime")
 
         return if (DateFormats.isTimeBetween(currentTime, "00:00", "03:59")) {
             0
@@ -609,6 +614,26 @@ constructor(
             )
         )
 
+    }
+
+    fun updateManualValue() {
+        val manualMeasurement = ringDataStore.getManualMeasurementValue()
+        if (manualMeasurement != null && manualMeasurement.manualMeasureType == ManualMeasureType.HEART_RATE) {
+
+
+            if (manualMeasurement.isError) {
+                stateHeartRateCard.value?.measureState = TapMeasureState.ERROR
+            } else {
+                if (manualMeasurement.isMeasuring) {
+                    stateHeartRateCard.value?.measureState = TapMeasureState.MEASURING
+                } else {
+                    stateHeartRateCard.value?.measureState = TapMeasureState.LAST_MEASURED
+                    stateHeartRateCard.value?.lastTime = "Last measured just now"
+                }
+                stateHeartRateCard.value?.value = manualMeasurement.value.toString()
+            }
+            stateHeartRateCard.postValue(stateHeartRateCard.value)
+        }
     }
 
 

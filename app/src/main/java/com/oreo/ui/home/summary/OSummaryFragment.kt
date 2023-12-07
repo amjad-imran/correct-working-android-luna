@@ -439,14 +439,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             }
         }
 
-        viewModel.sessionManager.manualMeasurementValue.observe(this) {
-            it.getContent()?.let {
-                if (it) {
-                    viewModel.updateManualValue()
-                }
 
-            }
-        }
 
 
     }

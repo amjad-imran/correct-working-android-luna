@@ -114,56 +114,6 @@ constructor(
 
     }
 
-    fun updateManualValue() {
-        val manualMeasurement = ringDataStore.getManualMeasurementValue()
-        if (manualMeasurement != null && manualMeasurement.manualMeasureType == ManualMeasureType.HEART_RATE) {
-
-
-            if (manualMeasurement.isError) {
-                stateHeartRateCard.value?.measureState = TapMeasureState.ERROR
-            } else {
-                if (manualMeasurement.isMeasuring) {
-                    stateHeartRateCard.value?.measureState = TapMeasureState.MEASURING
-                } else {
-                    stateHeartRateCard.value?.measureState = TapMeasureState.LAST_MEASURED
-                    stateHeartRateCard.value?.lastTime = "Last measured just now"
-                }
-                stateHeartRateCard.value?.value = manualMeasurement.value.toString()
-            }
-            stateHeartRateCard.postValue(stateHeartRateCard.value)
-
-
-            /*    val index = summary.healthOverviewData.value?.indexOfFirst {
-                    it is OHealthOverview.HeartRate
-                }
-                if (index != null) {
-                    LOGS.d("dsasddsadsdads ${manualMeasurement.isError} ${manualMeasurement.isMeasuring}")
-                    val data = summary.healthOverviewData.value!![index] as OHealthOverview.HeartRate
-
-                    if (manualMeasurement.isError) {
-                        *//*data.errorMessage = "Unable to measure, try again"
-                    data.value = "0"
-                    data.isMeasuring = false*//*
-
-                    data.measureState = TapMeasureState.ERROR
-                } else {
-
-                    if (manualMeasurement.isMeasuring) {
-                        data.measureState = TapMeasureState.MEASURING
-                    } else {
-                        data.measureState = TapMeasureState.LAST_MEASURED
-                    }
-
-                    //data.lastTime = "Last measure now"
-                    *//*data.errorMessage = null
-                    data.isMeasuring = manualMeasurement.isMeasuring*//*
-                    data.value = manualMeasurement.value.toString()
-                }
-                summary.refreshPosition = index
-                summary.healthOverviewData.postValue(summary.healthOverviewData.value)
-            }*/
-        }
-    }
 
 
     fun getRecentWorkoutList() {
@@ -237,19 +187,6 @@ constructor(
 
     fun checkBatteryPercentage() {
         sessionManager.sendQueryAction(QueryAction.QueryBatteryPower)
-    }
-
-    fun measureHr(status: Boolean) {
-        stateHeartRateCard.value?.measureState = TapMeasureState.MEASURING
-        stateHeartRateCard.postValue(stateHeartRateCard.value)
-
-
-        sessionManager.sendUpdateQueryAction(
-            UpdateDeviceAction.SetManualMeasurement(
-                ManualMeasureType.HEART_RATE, status
-            )
-        )
-
     }
 
     private fun isMorningTime(): Boolean {
