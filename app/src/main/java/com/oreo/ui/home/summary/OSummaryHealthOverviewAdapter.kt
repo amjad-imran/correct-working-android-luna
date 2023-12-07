@@ -686,7 +686,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.tvNudge.gone()
             } else {
                 binding.tvNudge.visible()
-                binding.tvNudge.text = data.data.nudges.firstOrNull()?.label ?: ""
+                binding.tvNudge.text = data.data.nudges.firstOrNull()?.message ?: ""
             }
 
             val caloriesGoalText = "${data.caloriesGoal}"
@@ -782,7 +782,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.tvTodayDesc.gone()
             } else {
                 binding.tvTodayDesc.visible()
-                binding.tvTodayDesc.text = data.data.nudges.firstOrNull()?.label ?: ""
+                binding.tvTodayDesc.text = data.data.nudges.firstOrNull()?.message ?: ""
             }
 
             val caloriesGoalText = "/ ${data.caloriesGoal} kcal"
