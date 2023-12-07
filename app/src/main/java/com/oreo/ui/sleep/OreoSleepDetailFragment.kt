@@ -121,7 +121,7 @@ class OreoSleepDetailFragment :
             tvTitle.text = getString(R.string.text_spo2)
             tvSubtitle1.text = getString(R.string.text_average)
             tvSubtitle2.gone()
-            lytSubtitleValue1.tvValue.text = (oxy?.avg ?: 0).toString()
+            lytSubtitleValue1.tvValue.text = (oxy?.avg ?: 0).toString()+" %"
             lytSubtitleValue1.tvUnit.gone()
             lytSubtitleValue2.root.gone()
         }
