@@ -100,8 +100,8 @@ constructor(
                         ODashboardSleepModel(
                             sleepScore = it.sleepScore?.value,
                             totalSleep = it.totalSleep?.value,
-                            restingHr =  healthData.sleep?.restingHr?.value,
-                            sleepStage = it.hourly_breakup?:ArrayList(),
+                            restingHr = healthData.sleep?.restingHr?.value,
+                            sleepStage = it.hourly_breakup ?: ArrayList(),
                             status = it.sleepScore?.status?.capitalizeWords(),
                             startTime = "",
                             endTime = ""
@@ -115,36 +115,19 @@ constructor(
 
             healthData.activity?.let {
 
-                val activeCalories = it.activeCalories ?: 0
-                if (activeCalories in 0..49) {
-                    val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
-                    userActivities.add(
-                        OHealthOverview.ActivityMinimal(
-                            ODashboardActivityModel(
-                                activityScore = it.activityScore?.value,
-                                activeCalories = activeCalories,
-                                inactiveMinutes = it.activityContributors?.stayActive?.value,
-                                status = it.activityScore?.level?.capitalizeWords(),
-                                nudges = it.dash_nudge
-                            ),
-                            caloriesGoal
-                        )
+                val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
+                userActivities.add(
+                    OHealthOverview.Activity(
+                        ODashboardActivityModel(
+                            activityScore = it.activityScore?.value,
+                            activeCalories =  it.activeCalories ?: 0,
+                            inactiveMinutes = it.activityContributors?.stayActive?.value,
+                            status = it.activityScore?.level?.capitalizeWords(),
+                            nudges = it.dash_nudge
+                        ),
+                        caloriesGoal
                     )
-                } else {
-                    val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
-                    userActivities.add(
-                        OHealthOverview.Activity(
-                            ODashboardActivityModel(
-                                activityScore = it.activityScore?.value,
-                                activeCalories = activeCalories,
-                                inactiveMinutes = it.activityContributors?.stayActive?.value,
-                                status = it.activityScore?.level?.capitalizeWords(),
-                                nudges = it.dash_nudge
-                            ),
-                            caloriesGoal
-                        )
-                    )
-                }
+                )
             }
 
             healthOverviewData.postValue(userActivities)

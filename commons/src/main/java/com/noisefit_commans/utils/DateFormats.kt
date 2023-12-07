@@ -47,6 +47,7 @@ object DateFormats {
 
     @SuppressLint("ConstantLocale")
     val dateFormat7 = SimpleDateFormat("dd MMM", defaultLocale)
+    val dateFormat7Week = SimpleDateFormat("EEE, dd MMM", defaultLocale)
 
     @SuppressLint("ConstantLocale")
     val dateTimeFormatWithoutZone = SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", defaultLocale)

@@ -90,11 +90,19 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             currentDayText = "Today, "
         }
         binding.tabLayout.tvSelectedDate.text = "$currentDayText${
-            DateFormats.formatDate(
-                centerDate,
-                DateFormats.dateFormat3,
-                DateFormats.dateFormat7
-            )
+            if (currentDayText.isEmpty()) {
+                DateFormats.formatDate(
+                    centerDate,
+                    DateFormats.dateFormat3,
+                    DateFormats.dateFormat7Week
+                )
+            } else {
+                DateFormats.formatDate(
+                    centerDate,
+                    DateFormats.dateFormat3,
+                    DateFormats.dateFormat7
+                )
+            }
         }"
         val leftDate = pagerAdapter?.getDate(position - 1)
         if (leftDate == null) {
@@ -104,7 +112,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             binding.tabLayout.tvDateLeft.text = DateFormats.formatDate(
                 leftDate,
                 DateFormats.dateFormat3,
-                DateFormats.dateFormat7
+                DateFormats.dateFormat7Week
             )
         }
         val rightDate = pagerAdapter?.getDate(position + 1)
@@ -117,11 +125,20 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             }
             binding.tabLayout.tvDateRight.visible()
             binding.tabLayout.tvDateRight.text = "$rightTodayText${
-                DateFormats.formatDate(
-                    rightDate,
-                    DateFormats.dateFormat3,
-                    DateFormats.dateFormat7
-                )
+                if (rightTodayText.isEmpty()) {
+                    DateFormats.formatDate(
+                        rightDate,
+                        DateFormats.dateFormat3,
+                        DateFormats.dateFormat7Week
+                    )
+                } else {
+
+                    DateFormats.formatDate(
+                        rightDate,
+                        DateFormats.dateFormat3,
+                        DateFormats.dateFormat7
+                    )
+                }
             }"
         }
     }
