@@ -111,10 +111,10 @@ class OreoSleepDetailFragment :
     ) {
 
         if ((oxy?.avg ?: 0) < 95) {
-             binding.divider6.root.gone()
-             binding.lytBloodOxygenGraph.root.gone()
-             return
-         }
+            binding.divider6.root.gone()
+            binding.lytBloodOxygenGraph.root.gone()
+            return
+        }
         binding.divider6.root.visible()
         binding.lytBloodOxygenGraph.apply {
             root.visible()
@@ -145,7 +145,7 @@ class OreoSleepDetailFragment :
              UtilClass.graphTwoHoursInterval(ssTime, seTime, breakUpData.size ?: 288)*/
 
         val baseTimeListNew =
-            UtilClass.getXAxisPoints(ssTime, seTime, breakUpData.size ?: 288)
+            UtilClass.getXAxisPoints15Mins(ssTime, seTime, breakUpData.size ?: 96)
 
         binding.lytBloodOxygenGraph.lineChart.visible()
         val sleepChart = SleepChartModel()
@@ -594,7 +594,7 @@ class OreoSleepDetailFragment :
     override fun subscribeObservers() {
         mainViewModel.sleepHistoryResponse.observe(viewLifecycleOwner) {
 
-            if(it.isNullOrEmpty()) return@observe
+            if (it.isNullOrEmpty()) return@observe
 
 
             binding.svMain.visible()
@@ -902,6 +902,7 @@ class OreoSleepDetailFragment :
             binding.lytHRVariability.lytSubtitleValue1.tvUnit.gone()
         }
         showHeartRateVariabilityGraph(dayData.hrv, sleepStartTime, sleepEndTime)
+
         showBloodOxygenGraph(dayData.oxy, sleepStartTime, sleepEndTime)
 
         mSleepStageAdapter.setData(viewModel.getStepAnalysisData(dayData))

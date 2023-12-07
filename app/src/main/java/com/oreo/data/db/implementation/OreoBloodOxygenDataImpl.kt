@@ -57,8 +57,8 @@ constructor(
                 DateFormats.getDayElapsedMinutesFromTimeStamp(startTimeStamp)
             val day2Minutes = DateFormats.getDayElapsedMinutesFromTimeStamp(endTimeStamp)
             if (day1Minutes == null || day2Minutes == null) return ArrayList()
-            val day1MinutesCeil = 5 * (floor(abs(day1Minutes.toDouble() / 5)))
-            val day2MinutesCeil = 5 * (ceil(abs(day2Minutes.toDouble() / 5)))
+            val day1MinutesCeil = 15 * (floor(abs(day1Minutes.toDouble() / 15)))
+            val day2MinutesCeil = 15 * (ceil(abs(day2Minutes.toDouble() / 15)))
 
             return extractDataByStartTimeEndTime(day1Data, day1MinutesCeil, day2MinutesCeil)
         } else {
@@ -72,8 +72,8 @@ constructor(
 
             if (day1Minutes == null || day2Minutes == null) return ArrayList()
 
-            val day1MinutesCeil = 5 * (floor(abs(day1Minutes.toDouble() / 5)))
-            val day2MinutesCeil = 5 * (ceil(abs(day2Minutes.toDouble() / 5)))
+            val day1MinutesCeil = 15 * (floor(abs(day1Minutes.toDouble() / 15)))
+            val day2MinutesCeil = 15 * (ceil(abs(day2Minutes.toDouble() / 15)))
 
 
             val day1List = extractDataByStartTime(day1Data, day1MinutesCeil)
@@ -85,27 +85,27 @@ constructor(
     }
 
     private fun extractDataByStartTime(dayData: OreoBloodOxygenBreakup, dayStartMinutes: Double): List<Int> {
-        var startPos = (dayStartMinutes / 5 - 1).toInt()
+        var startPos = (dayStartMinutes / 15 - 1).toInt()
         val breakupArray = Gson().fromJson<List<Int>>(dayData.breakUp ?: "")
         if (startPos < 0) {
             startPos = 0
         }
-        if (breakupArray.size != 288) {
+        if (breakupArray.size != 96) {
             val currentSize = breakupArray.size
             breakupArray.toMutableList()
-            for (i in currentSize until 288) {
+            for (i in currentSize until 96) {
                 (breakupArray as ArrayList<Int>).add(0)
             }
         }
         return breakupArray.subList(startPos, 288)
     }
     private fun extractDataByEndTime(day2Data: OreoBloodOxygenBreakup, day2MinutesCeil: Double): List<Int> {
-        val endPos = (day2MinutesCeil / 5).toInt()
+        val endPos = (day2MinutesCeil / 15).toInt()
         val breakupArray = Gson().fromJson<List<Int>>(day2Data.breakUp ?: "")
-        if (breakupArray.size != 288) {
+        if (breakupArray.size != 96) {
             val currentSize = breakupArray.size
             breakupArray.toMutableList()
-            for (i in currentSize until 288) {
+            for (i in currentSize until 96) {
                 (breakupArray as ArrayList<Int>).add(0)
             }
         }
@@ -119,16 +119,16 @@ constructor(
         dayStartMinutes: Double,
         day2MinutesCeil: Double
     ): List<Int> {
-        var startPos = (dayStartMinutes / 5 - 1).toInt()
-        val endPos = (day2MinutesCeil / 5).toInt()
+        var startPos = (dayStartMinutes / 15 - 1).toInt()
+        val endPos = (day2MinutesCeil / 15).toInt()
         if (startPos < 0) {
             startPos = 0
         }
         val breakupArray = Gson().fromJson<List<Int>>(dayData.breakUp ?: "")
-        if (breakupArray.size != 288) {
+        if (breakupArray.size != 96) {
             val currentSize = breakupArray.size
             breakupArray.toMutableList()
-            for (i in currentSize until 288) {
+            for (i in currentSize until 96) {
                 (breakupArray as ArrayList<Int>).add(0)
             }
         }
