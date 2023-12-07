@@ -269,6 +269,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 if (viewModel.userHealthData.isEmpty()) {
                     binding.layoutRetry.root.visible()
                 } else {
+                    binding.layoutRetry.root.gone()
                     onApiErrorReceived(response)
                 }
             }
