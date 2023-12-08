@@ -57,6 +57,7 @@ constructor(
     val userHealthData = HashMap<String, ServerUserHealthData?>()
     var trendsData: TrendsData? = null
     val dataReload = MutableLiveData<Event<List<String>>>()
+    val dashTodayReload = MutableLiveData<Event<Boolean>>()
 
     var bottomNavigation = MutableLiveData<Event<BottomNavOption>>()
     fun navigateTo(option: BottomNavOption) {
@@ -227,7 +228,14 @@ constructor(
                             val todayData = userHealthData[getTodayDate()]
                             showNotification(todayData)
 
-                            dataReload.value = Event(getDaysList(startDate, endDate))
+                            val reloadDays = getDaysList(startDate, endDate)
+                            dataReload.value = Event(reloadDays)
+
+                            if (reloadDays.contains(DateFormats.getTodaysDateString(10))) {
+                                dashTodayReload.value = Event(true)
+                            }
+
+
                             isFetchRequestOnGoing = false
 
                         }

@@ -370,7 +370,7 @@ class OreoSleepDetailFragment :
             binding.lytSleepScore.lytSleepScoreBanner.vpBannerSlider
         ) { _, _ -> }.attach()
 
-        if (fragments.size > 0) {
+        if (fragments.size > 1) {
             binding.lytSleepScore.lytSleepScoreBanner.tabLayout.visible()
         } else {
             binding.lytSleepScore.lytSleepScoreBanner.tabLayout.invisible()

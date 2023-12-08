@@ -128,7 +128,7 @@ constructor(
                                 activeCalories = it?.activeCalories ?: 0,
                                 inactiveMinutes = it?.activityContributors?.stayActive?.value,
                                 status = it?.activityScore?.level?.capitalizeWords(),
-                                nudges = it?.dash_nudge
+                                nudges = it?.dash_nudges
                             ),
                             caloriesGoal
                         )

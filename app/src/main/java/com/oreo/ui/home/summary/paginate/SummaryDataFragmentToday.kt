@@ -113,16 +113,7 @@ class SummaryDataFragmentToday :
 
         loadData()
 
-        mainViewModel.dataReload.observe(viewLifecycleOwner) {
-            val content = it.peekContent() ?: ArrayList()
-            val hasData = content.contains(viewModel.date)
-            if (!hasData) return@observe
 
-            it.getContent()?.let {
-                LOGS.d(TAG, "Today data reload")
-                loadData()
-            }
-        }
     }
 
     fun loadData() {
@@ -337,6 +328,12 @@ class SummaryDataFragmentToday :
 
     override fun subscribeObservers() {
 
+        mainViewModel.dashTodayReload.observe(viewLifecycleOwner) {
+            it.getContent()?.let {
+                LOGS.d(TAG, "Today data reload")
+                loadData()
+            }
+        }
 
         viewModel.sessionManager.manualMeasurementValue.observe(viewLifecycleOwner) {
             it.getContent()?.let {

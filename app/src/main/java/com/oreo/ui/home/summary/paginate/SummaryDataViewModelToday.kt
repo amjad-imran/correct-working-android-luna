@@ -203,7 +203,7 @@ constructor(
                 activeCalories = healthData.activity?.activeCalories ?: 0,
                 inactiveMinutes = healthData.activity?.activityContributors?.stayActive?.value,
                 status = healthData.activity?.activityScore?.level?.capitalizeWords(),
-                nudges = healthData.activity?.dash_nudge
+                nudges = healthData.activity?.dash_nudges
             )
 
 

@@ -144,7 +144,7 @@ class OreoActivityFragment :
             binding.lytAScoreData.lytAScoreBanner.vpBannerSlider
         ) { _, _ -> }.attach()
 
-        if (fragments.size > 0) {
+        if (fragments.size > 1) {
             binding.lytAScoreData.lytAScoreBanner.tabLayout.visible()
         } else {
             binding.lytAScoreData.lytAScoreBanner.tabLayout.invisible()

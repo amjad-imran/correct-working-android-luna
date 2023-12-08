@@ -124,7 +124,7 @@ class OreoReadinessFragment :
             binding.lytRScoreData.lytAScoreBanner.vpBannerSlider
         ) { _, _ -> }.attach()
 
-        if (fragments.size > 0) {
+        if (fragments.size > 1) {
             binding.lytRScoreData.lytAScoreBanner.tabLayout.visible()
         } else {
             binding.lytRScoreData.lytAScoreBanner.tabLayout.invisible()
