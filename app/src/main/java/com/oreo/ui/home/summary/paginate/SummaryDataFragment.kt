@@ -66,6 +66,7 @@ class SummaryDataFragment :
         viewModel.date = date
         viewModel.user = mainViewModel.user
         LOGS.d("CREATED_WITH_DATE $date")
+        loadData()
 
 
     }
@@ -73,7 +74,6 @@ class SummaryDataFragment :
     override fun onResume() {
         super.onResume()
 
-        loadData()
         mainViewModel.dataReload.observe(viewLifecycleOwner) {
             it.getContent()?.let {
                 LOGS.d(TAG, "data reload")

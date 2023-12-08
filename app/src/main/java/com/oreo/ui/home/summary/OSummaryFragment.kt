@@ -59,11 +59,10 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     }
 
     private fun setViewPager() {
-        activity?.let {
-            pagerAdapter = SummaryPagerAdapter(it)
-            binding.viewPagerSummary.adapter = pagerAdapter
-            binding.viewPagerSummary.offscreenPageLimit = 1
-        }
+
+        pagerAdapter = SummaryPagerAdapter(this)
+        binding.viewPagerSummary.adapter = pagerAdapter
+        binding.viewPagerSummary.offscreenPageLimit = 1
 
         /* TabLayoutMediator(binding.tabLayout, binding.viewPagerSummary) { tab, position ->
              tab.text = pagerAdapter.getDate(position)
@@ -382,12 +381,10 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             when (connectedState) {
                 is ConnectState.ConnectFailed -> {
                     setConnectingState(true)
-                    viewModel.updateAlerts()
                 }
 
                 is ConnectState.Connecting -> {
                     setConnectingState(true)
-                    viewModel.updateAlerts()
 
                 }
 
@@ -395,7 +392,6 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                     setConnectingState(false)
                     setStateConnected(connectedState.noiseFitDevice)
                     viewModel.checkBatteryPercentage()
-                    viewModel.updateAlerts()
                     shouldSync()
                     mainViewModel.onRingConnected()
                 }
@@ -403,7 +399,6 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 is ConnectState.UnPaired -> {
                     viewModel.handleUnPairState()
                     viewModel.updateDeviceConnectedStatus()
-                    viewModel.updateAlerts()
                 }
 
                 else -> {}
@@ -440,8 +435,6 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         }
 
 
-
-
     }
 
     private fun sendLogs() {
@@ -468,11 +461,6 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         )
         binding.lytHeader.oreoStatus.setBackgroundResource(R.drawable.back_modal_new_round)
 
-        if (viewModel.stateHeartRateCard.value?.measureState == TapMeasureState.MEASURING) {
-            viewModel.stateHeartRateCard.postValue(viewModel.stateHeartRateCard.value.apply {
-                this?.measureState = TapMeasureState.ERROR
-            })
-        }
     }
 
     private fun setConnectingState(connecting: Boolean) {

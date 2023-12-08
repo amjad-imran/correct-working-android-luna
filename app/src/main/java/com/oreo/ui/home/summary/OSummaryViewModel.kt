@@ -48,47 +48,15 @@ constructor(
 ) : BaseViewModel() {
 
 
-    val stateHeartRateCard = MutableLiveData<OHealthOverview.HeartRate?>()
-    val stateDashAlerts = MutableLiveData<HashMap<AlertType, DashAlert>>()
     val stateDashRingBattery = MutableLiveData<Pair<Boolean, ColorFitDevice?>>()
 
-    val stateSleepAvgCard =
-        MutableLiveData<Pair<ODashboardSleepScoreModel?, ODashboardActivityScoreModel?>>()
-    val stateReadinessAvgCard = MutableLiveData<ODashboardReadinessScoreModel?>()
     var contributorInfo: OContributorResponseModal? = null
-
-    val hrInfo = MutableLiveData<Event<String>>()
-    var sleepScoreInfo = MutableLiveData<Event<String>>()
-    var readinessScoreInfo = MutableLiveData<Event<String>>()
-    var activityScoreInfo = MutableLiveData<Event<String>>()
-
 
     var summary = OSummary()
 
     private var _deviceConnected: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
     var deviceConnected = _deviceConnected
 
-
-    fun updateAlerts() {
-        val dashAlert = HashMap<AlertType, DashAlert>()
-
-        val btState = sessionManager.bluetoothStateDash.value
-        val devicePaired = ringDataStore.getRingDevice()
-        if (btState == false && devicePaired != null) {
-            if (sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
-                dashAlert[AlertType.BLUETOOTH] =
-                    DashAlert("Authorize Bluetooth connectivity for Luna", false)
-            }
-        }
-
-        if (sessionManager.forceOtaResponseRing != null) {
-            dashAlert[AlertType.OTA_UPDATE] =
-                DashAlert("Ring firmware update available", false)
-        }
-
-
-        stateDashAlerts.postValue(dashAlert)
-    }
 
 
 
@@ -115,125 +83,10 @@ constructor(
     }
 
 
-
-    fun getRecentWorkoutList() {
-        viewModelScope.launch {
-            userRepository.getRecentWorkoutList(true).collect { resource ->
-                when (resource) {
-                    is Resource.GenericError -> {
-                        sendMessage(resource.message)
-                    }
-
-                    is Resource.Loading -> {
-//                        setLoading(resource.loading)
-                    }
-
-                    is Resource.NetworkError -> {
-                        setApiErrors(resource.response.apply {
-                            this.uiComponentType as UIComponentType.RetryApiDialog
-                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
-                                object : BinaryActionCallback {
-                                    override fun yes() {
-                                        getRecentWorkoutList()
-                                    }
-
-                                    override fun no() {
-
-                                    }
-                                }
-                        })
-                    }
-
-                    is Resource.Success -> {
-                        resource.data?.data?.let { workoutList ->
-
-                            //stateWorkouts.postValue(workoutList)
-
-
-                            /*  val index = summary.healthOverviewData.value?.indexOfFirst {
-                                  it is OHealthOverview.TodayWorkout
-                              }
-                              val isRingConnected = ringDataStore.getRingDevice() != null
-
-                              if (index != null && index != -1) {
-                                  val data =
-                                      summary.healthOverviewData.value!![index] as OHealthOverview.TodayWorkout
-                                  data.value = "1"
-                                  data.listData = workoutList
-                                  data.isRingConnected = isRingConnected
-                                  summary.healthOverviewData.postValue(summary.healthOverviewData.value)
-                              } else {
-
-                                  if (isRingConnected || workoutList.isNotEmpty()) {
-                                      summary.healthOverviewData.value?.add(
-                                          OHealthOverview.TodayWorkout(
-                                              "1",
-                                              isRingConnected,
-                                              workoutList
-                                          )
-                                      )
-                                      summary.healthOverviewData.postValue(summary.healthOverviewData.value)
-                                  }
-                              }*/
-                        }
-                    }
-                }
-            }
-        }
-
-
-    }
-
-
     fun checkBatteryPercentage() {
         sessionManager.sendQueryAction(QueryAction.QueryBatteryPower)
     }
 
-    private fun isMorningTime(): Boolean {
-        val currentTime = DateFormats.getTimeFormat()
-        if (DateFormats.isTimeBetween(currentTime, "06:00", "12:00")) {
-            return true
-        }
-        return false
-    }
-
-
-    /**
-     * Return day slots
-     * 1->00:00 - 08:00
-     * 2->08:00 - 12:000
-     * 3->12:00 - 24:00
-     */
-    private fun getDaySlot(): Int {
-        val currentTime = DateFormats.getTimeFormat()
-        return if (DateFormats.isTimeBetween(currentTime, "00:00", "03:59")) {
-            0
-        } else if (DateFormats.isTimeBetween(currentTime, "04:00", "07:59")) {
-            1
-        } else if (DateFormats.isTimeBetween(currentTime, "08:00", "11:59")) {
-            2
-        } else {
-            3
-        }
-    }
-
-    private fun getGreetingMessage(): String {
-        val currentTime = DateFormats.getTimeFormat()
-        if (DateFormats.isTimeBetween(currentTime, "04:00", "11:59")) {
-            return "Good morning"
-        } else if (DateFormats.isTimeBetween(currentTime, "12:00", "16:59")) {
-            return "Good afternoon"
-        } else if (DateFormats.isTimeBetween(currentTime, "17:00", "20:59")) {
-            return "Good evening"
-        } else if (DateFormats.isTimeBetween(
-                currentTime, "21:00", "23:59"
-            ) || DateFormats.isTimeBetween(currentTime, "00:00", "03:59")
-        ) {
-            return "Hi"
-        }
-
-        return "Hi"
-    }
 
     fun isDeviceConnected(): Boolean {
         if (getDeviceConnected() == null) {
@@ -253,25 +106,6 @@ constructor(
 
     fun updateDeviceConnectedStatus() {
         _deviceConnected.value = (ringDataStore.getRingDevice() != null)
-    }
-
-    fun updateBluetoothStateInList(it: Boolean) {
-        if (it) {
-            stateDashAlerts.value?.remove(AlertType.BLUETOOTH)
-        } else {
-            val ringDevice = getDeviceConnected()
-            if (ringDevice != null) {
-                if (sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
-                    stateDashAlerts.value?.set(
-                        AlertType.BLUETOOTH,
-                        DashAlert("Authorize Bluetooth connectivity for Luna", false)
-                    )
-                } else {
-                    stateDashAlerts.value?.remove(AlertType.BLUETOOTH)
-                }
-            }
-        }
-        stateDashAlerts.postValue(stateDashAlerts.value)
     }
 
 
@@ -316,13 +150,6 @@ constructor(
             } else {
                 stateDashRingBattery.postValue(Pair(false, null))
             }
-        }
-    }
-
-    fun setRingBatteryInfoState() {
-        stateDashRingBattery.postValue(Pair(false, null))
-        viewModelScope.launch(Dispatchers.IO) {
-            localDataStore.setBatteryAlertShown()
         }
     }
 

@@ -579,7 +579,7 @@ public class LineChart extends View {
             canvas.drawPath(selectedLinePath, bgTopSelectedPaint);
             bgTopSelectedPaint.setStyle(Paint.Style.STROKE);
             bgTopSelectedPaint.setColor(Color.WHITE);
-            bgTopSelectedPaint.setStrokeWidth(dip2px(2));
+            bgTopSelectedPaint.setStrokeWidth(dip2px(1));
             canvas.drawPath(selectedLinePath, bgTopSelectedPaint);
         }
     }

@@ -29,7 +29,9 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DateFormats.checkTimeDifferenceMoreThanN
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -44,6 +46,7 @@ class SplashViewModel
     private val applicationHandler: ApplicationHandler,
     private val appRepository: AppRepository,
     private val deviceRepository: DeviceRepository,
+    private val userHealthDataDataSource: OreoUserHealthDataDataSource,
     val sessionManager: SessionManager,
     private val firebaseCrashlyticsUtils: FirebaseCrashlyticsUtils
 ) : BaseViewModel() {
@@ -193,6 +196,9 @@ class SplashViewModel
 
                             localDataStore.saveFeatureIntervalFetchPeriod(it.resetInterval ?: 24)
                             localDataStore.saveLogSyncInterval(it.logsSyncInterval ?: 2)
+
+                            handleUserHealthCache(it.cacheVersion ?: 1)
+
                             //localDataStore.saveHistoryYears(it.calendarYears ?: 2)
 
                             val helpUpdateTimStamp = if (it.helpUpdate.isNullOrEmpty()) {
@@ -219,6 +225,17 @@ class SplashViewModel
             }
         }
 
+    }
+
+    private fun handleUserHealthCache(cacheVersion: Int) {
+        GlobalScope.launch(Dispatchers.IO) {
+            val storedCacheVersion = localDataStore.getUserHealthCacheVersion()
+            if (storedCacheVersion != cacheVersion) {
+                AppLogs.sendAppLogs("App User health cache cleared User:$cacheVersion Server:$cacheVersion")
+                userHealthDataDataSource.clearAllData()
+                localDataStore.setUserHealthCacheVersion(cacheVersion)
+            }
+        }
     }
 
     private fun handleAppVersion(versionCheckResponse: VersionCheckResponse) {

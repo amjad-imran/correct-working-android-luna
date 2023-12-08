@@ -3,6 +3,7 @@ package com.oreo.ui.home.summary.paginate
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
@@ -59,16 +60,19 @@ class SummaryDataFragmentToday :
     private val viewModel: SummaryDataViewModelToday by viewModels()
     private val mSharedViewModel: SharedOSCDViewModel by activityViewModels()
 
-    private val ARGS_DATE = "ARGS_DATE"
     private val TAG = "SummaryDataFragment"
 
 
     companion object {
 
+        private val ARGS_DATE = "ARGS_DATE"
+
         @JvmStatic
-        fun newInstance(date: String) = SummaryDataFragmentToday().apply {
-            arguments = Bundle().apply {
-                putString(ARGS_DATE, date)
+        fun newInstance(date: String): Fragment {
+            return SummaryDataFragmentToday().apply {
+                arguments = Bundle().apply {
+                    putString(ARGS_DATE, date)
+                }
             }
         }
     }
@@ -87,13 +91,18 @@ class SummaryDataFragmentToday :
 
         setAdapter()
 
-        val date = arguments?.getString("ARGS_DATE")
+        val date = arguments?.getString(ARGS_DATE)
         viewModel.date = date
         viewModel.registerDate = mainViewModel.registerDate
 
 
         LOGS.d("CREATED_WITH_DATE $date")
         LOGS.d(TAG, "Today onCreate Called")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        LOGS.d(TAG, "Today onDestroyView called")
     }
 
     override fun onResume() {
@@ -329,7 +338,7 @@ class SummaryDataFragmentToday :
     override fun subscribeObservers() {
 
 
-        viewModel.sessionManager.manualMeasurementValue.observe(this) {
+        viewModel.sessionManager.manualMeasurementValue.observe(viewLifecycleOwner) {
             it.getContent()?.let {
                 if (it) {
                     viewModel.updateManualValue()
@@ -338,16 +347,16 @@ class SummaryDataFragmentToday :
             }
         }
 
-        viewModel.sessionManager.bluetoothStateDash.observe(this) {
+        viewModel.sessionManager.bluetoothStateDash.observe(viewLifecycleOwner) {
             viewModel.updateAlerts()
             //viewModel.updateBluetoothStateInList(it)
         }
 
-        viewModel.stateWorkouts.observe(this) {
+        viewModel.stateWorkouts.observe(viewLifecycleOwner) {
             setWorkoutUI(it)
         }
 
-        viewModel.hrInfo.observe(this) {
+        viewModel.hrInfo.observe(viewLifecycleOwner) {
             it.getContent()?.let {
                 navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
                     this.putString("infoData", it)
@@ -355,7 +364,7 @@ class SummaryDataFragmentToday :
             }
         }
 
-        viewModel.activityScoreInfo.observe(this) {
+        viewModel.activityScoreInfo.observe(viewLifecycleOwner) {
             it.getContent()?.let {
                 mSharedViewModel.selectedTab = 0
                 mSharedViewModel.itemType = ClickViewType.ACTIVITY.name
@@ -368,7 +377,7 @@ class SummaryDataFragmentToday :
             }
         }
 
-        viewModel.readinessScoreInfo.observe(this) {
+        viewModel.readinessScoreInfo.observe(viewLifecycleOwner) {
             it.getContent()?.let {
                 mSharedViewModel.selectedTab = 0
                 mSharedViewModel.itemType = ClickViewType.READINESS.name
@@ -380,7 +389,7 @@ class SummaryDataFragmentToday :
                 })
             }
         }
-        viewModel.sleepScoreInfo.observe(this) {
+        viewModel.sleepScoreInfo.observe(viewLifecycleOwner) {
             it.getContent()?.let {
                 mSharedViewModel.selectedTab = 0
                 mSharedViewModel.itemType = ClickViewType.SLEEP.name
@@ -393,14 +402,14 @@ class SummaryDataFragmentToday :
             }
         }
 
-        viewModel.stateHeaderCard.observe(viewLifecycleOwner) {
+        /*viewModel.stateHeaderCard.observe(viewLifecycleOwner) {
             binding.contentMain.lytHeader.apply {
                 this.tvDate.text =
                     it.second
                 this.tvGreeting.text = it.first
                 this.root.visible()
             }
-        }
+        }*/
 
         viewModel.healthOverviewData.observe(viewLifecycleOwner) {
             healthOverviewAdapter.items = it
@@ -451,7 +460,7 @@ class SummaryDataFragmentToday :
             }
         }
 
-        viewModel.statePairDeviceCard.observe(this) {
+        viewModel.statePairDeviceCard.observe(viewLifecycleOwner) {
             binding.contentMain.lytPairDevice.apply {
                 if (it) {
                     this.root.visible()
@@ -479,7 +488,7 @@ class SummaryDataFragmentToday :
             }
         }
 
-        viewModel.stateDashRingBattery.observe(this) {
+        viewModel.stateDashRingBattery.observe(viewLifecycleOwner) {
             if (it.first) {
                 binding.contentMain.lytChargeRing.root.visible()
                 binding.contentMain.lytChargeRing.imageView3.loadImage(
@@ -491,7 +500,7 @@ class SummaryDataFragmentToday :
             }
         }
 
-        viewModel.stateDashAlerts.observe(this) {
+        viewModel.stateDashAlerts.observe(viewLifecycleOwner) {
 
             if (it.isNullOrEmpty()) {
                 binding.contentMain.lytAlerts.root.gone()
@@ -520,7 +529,7 @@ class SummaryDataFragmentToday :
             }
         }
 
-        viewModel.sessionManager.connectStateRing.observe(this) { connectedState ->
+        viewModel.sessionManager.connectStateRing.observe(viewLifecycleOwner) { connectedState ->
             when (connectedState) {
                 is ConnectState.ConnectFailed -> {
                     viewModel.updateAlerts()

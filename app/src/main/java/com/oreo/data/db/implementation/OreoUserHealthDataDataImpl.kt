@@ -45,8 +45,9 @@ constructor(
 
     }
 
-    override suspend fun clearAllData() {
+    override suspend fun clearAllData() :Boolean{
         userHealthDao.clearAllData()
+        return true
     }
 
     override suspend fun clearDataByDates(dates: List<String>) {

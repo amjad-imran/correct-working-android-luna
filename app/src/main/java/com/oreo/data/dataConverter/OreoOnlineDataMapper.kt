@@ -239,8 +239,7 @@ constructor(
                     respBreakup = sleepOverlayData.respBreakup,
                     tempBreakup = sleepOverlayData.tempBreakup,
                     oxyBreakup = sleepOverlayData.spo2Breakup,
-                    avgOxy = if (sleepOverlayData.spo2Breakup.isEmpty()) 0 else sleepOverlayData.spo2Breakup.average()
-                        .roundToInt() ?: 0,
+                    avgOxy = if (sleepOverlayData.spo2Breakup.isEmpty()) 0 else sleepOverlayData.spo2Breakup.averageWithoutZero(),
                     avgResp = if (sleepOverlayData.respBreakup.isEmpty()) 0 else sleepOverlayData.respBreakup.average()
                         .roundToInt() ?: 0,
                     maxTemp = sleepOverlayData.tempBreakup.maxOrNull() ?: 0f,

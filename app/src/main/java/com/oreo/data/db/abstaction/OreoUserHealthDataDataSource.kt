@@ -9,7 +9,7 @@ interface OreoUserHealthDataDataSource {
 
     suspend fun getDataByDate(date: String): UserHealthData?
 
-    suspend fun clearAllData()
+    suspend fun clearAllData(): Boolean
 
     suspend fun clearDataByDates(dates: List<String>)
 

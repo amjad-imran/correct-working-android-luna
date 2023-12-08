@@ -8,7 +8,7 @@ import com.noisefit_commans.utils.LOGS
 import java.lang.Exception
 
 
-class SummaryPagerAdapter(fragmentActivity: FragmentActivity) :
+class SummaryPagerAdapter(fragmentActivity: Fragment) :
     FragmentStateAdapter(fragmentActivity) {
     private var dates = ArrayList<String>()
 

@@ -1138,9 +1138,9 @@ object DateFormats {
     //11.28 04.00 11.59
     fun isTimeBetween(time: String, startTime: String, endTime: String): Boolean {
         try {
-            val date1 = timeFormat.parse(time)
-            val date2 = timeFormat.parse(startTime)
-            val date3 = timeFormat.parse(endTime)
+            val date1 = SimpleDateFormat("HH:mm", defaultLocale).parse(time)
+            val date2 = SimpleDateFormat("HH:mm", defaultLocale).parse(startTime)
+            val date3 = SimpleDateFormat("HH:mm", defaultLocale).parse(endTime)
             LOGS.d("TIME_TEST","isTimeBetween $date1 $date2 $date3")
             return (date1.after(date2) && date1.before(date3)) ||
                     (date1.equals(date2) || date1.equals(date3))

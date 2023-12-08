@@ -103,12 +103,12 @@ constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             user = localDataStore.getUser()
-            stateHeaderCard.postValue(
+            /*stateHeaderCard.postValue(
                 Pair(
                     getGreetingMessageValue(),
                     DateFormats.getCurrentDate(DateFormats.dateTimeFormatWithWeekWithoutYear)
                 )
-            )
+            )*/
             val device = getDeviceConnected()
             statePairDeviceCard.postValue(device == null)
             stateHeartRateCard.postValue(userRepository.getSummaryHRHealthOverview().apply {

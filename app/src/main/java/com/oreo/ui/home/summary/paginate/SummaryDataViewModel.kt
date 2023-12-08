@@ -82,53 +82,53 @@ constructor(
 
             val userActivities = ArrayList<OHealthOverview>()
 
-            healthData.readiness?.let {
-                if (it.readinessScore?.value != null) {
+            healthData.readiness.let {
+                if ((it?.readinessScore?.value ?: 0) > 0) {
                     userActivities.add(
                         OHealthOverview.Readiness(
                             ODashboardReadinessModel(
-                                readinessScore = it.readinessScore?.value,
-                                status = it.readinessScore?.status?.capitalizeWords(),
-                                nudges = it.dashNudges
+                                readinessScore = it?.readinessScore?.value,
+                                status = it?.readinessScore?.status?.capitalizeWords(),
+                                nudges = it?.dashNudges
                             )
                         )
                     )
                 }
             }
 
-            healthData.sleep?.let {
-                if (it.sleepScore?.value != null) {
+            healthData.sleep.let {
+                if ((it?.sleepScore?.value ?: 0) > 0) {
                     userActivities.add(
                         OHealthOverview.Sleep(
                             ODashboardSleepModel(
-                                sleepScore = it.sleepScore?.value,
-                                totalSleep = it.totalSleep?.value,
+                                sleepScore = it?.sleepScore?.value,
+                                totalSleep = it?.totalSleep?.value,
                                 restingHr = healthData.sleep?.restingHr?.value,
-                                sleepStage = it.hourly_breakup ?: ArrayList(),
-                                status = it.sleepScore?.status?.capitalizeWords(),
+                                sleepStage = it?.hourly_breakup ?: ArrayList(),
+                                status = it?.sleepScore?.status?.capitalizeWords(),
                                 startTime = "",
                                 endTime = ""
                             ),
-                            makeSleepArray(it.hourly_breakup),
-                            it.hourly_breakup?.firstOrNull()?.start_time ?: "",
-                            it.hourly_breakup?.lastOrNull()?.end_time ?: ""
+                            makeSleepArray(it?.hourly_breakup),
+                            it?.hourly_breakup?.firstOrNull()?.start_time ?: "",
+                            it?.hourly_breakup?.lastOrNull()?.end_time ?: ""
                         )
                     )
                 }
 
             }
 
-            healthData.activity?.let {
-                if (it.activityScore?.value != null) {
+            healthData.activity.let {
+                if ((it?.activityScore?.value ?: 0) > 0) {
                     val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
                     userActivities.add(
                         OHealthOverview.Activity(
                             ODashboardActivityModel(
-                                activityScore = it.activityScore?.value,
-                                activeCalories = it.activeCalories ?: 0,
-                                inactiveMinutes = it.activityContributors?.stayActive?.value,
-                                status = it.activityScore?.level?.capitalizeWords(),
-                                nudges = it.dash_nudge
+                                activityScore = it?.activityScore?.value,
+                                activeCalories = it?.activeCalories ?: 0,
+                                inactiveMinutes = it?.activityContributors?.stayActive?.value,
+                                status = it?.activityScore?.level?.capitalizeWords(),
+                                nudges = it?.dash_nudge
                             ),
                             caloriesGoal
                         )

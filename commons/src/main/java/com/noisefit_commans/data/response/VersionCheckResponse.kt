@@ -22,6 +22,8 @@ data class VersionCheckResponse(
     val helpUpdate: String? = null,
     @SerializedName("description")
     val description: String? = null,
+    @SerializedName("cache_ver")
+    val cacheVersion: Int? = 1,
     @SerializedName("otaResponse")
     val otaResponse: UpdateResponse? = null
 ) : Parcelable

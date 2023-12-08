@@ -19,10 +19,10 @@ import com.noisefit_commans.models.WatchFace
 
 interface DataStoredInterface {
 
-    fun getSleepNotificationTimeStamp():Long
+    fun getSleepNotificationTimeStamp(): Long
     fun setSleepNotificationTimeStamp()
 
-    fun getReadinessNotificationTimeStamp():Long
+    fun getReadinessNotificationTimeStamp(): Long
     fun setReadinessNotificationTimeStamp()
 
     fun updateUserToken(token: Token?)
@@ -420,4 +420,7 @@ interface DataStoredInterface {
 
     fun getGFitUserDataLastSyncTime(): Long
     fun setGFitUserDataLastSyncTime()
+
+    fun getUserHealthCacheVersion(): Int
+    fun setUserHealthCacheVersion(version: Int)
 }
