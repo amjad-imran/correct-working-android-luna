@@ -275,7 +275,12 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             }
         }
 
-        viewModel.pushNotification.observe(this) {
+        viewModel.pushNotificationSleep.observe(this) {
+            it.getContent()?.let {
+                showLocalNotification(it.title, it.content, it.key)
+            }
+        }
+        viewModel.pushNotificationReadiness.observe(this) {
             it.getContent()?.let {
                 showLocalNotification(it.title, it.content, it.key)
             }

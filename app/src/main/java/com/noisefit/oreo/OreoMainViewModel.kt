@@ -72,7 +72,8 @@ constructor(
     var dateSetOn: String? = null
 
 
-    val pushNotification = MutableLiveData<Event<PushLocalNotification>>()
+    val pushNotificationSleep = MutableLiveData<Event<PushLocalNotification>>()
+    val pushNotificationReadiness = MutableLiveData<Event<PushLocalNotification>>()
     var isFetchRequestOnGoing = false
 
 
@@ -505,7 +506,7 @@ constructor(
                 val timeStamp = localDataStore.getSleepNotificationTimeStamp()
 
                 if (timeStamp == 0L || timeStamp.checkDayDifferenceMoreOne()) {
-                    pushNotification.postValue(
+                    pushNotificationSleep.postValue(
                         Event(
                             PushLocalNotification(
                                 "Good sleep last night",
@@ -524,7 +525,7 @@ constructor(
             if (timeStamp == 0L || timeStamp.checkDayDifferenceMoreOne()) {
                 val nudge = it.dashNudges?.firstOrNull()
                 if (it.readinessScore?.value != null && nudge != null) {
-                    pushNotification.postValue(
+                    pushNotificationReadiness.postValue(
                         Event(
                             PushLocalNotification(
                                 nudge.label,
