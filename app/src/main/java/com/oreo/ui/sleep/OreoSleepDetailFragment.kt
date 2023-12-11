@@ -903,7 +903,7 @@ class OreoSleepDetailFragment :
         }
         showHeartRateVariabilityGraph(dayData.hrv, sleepStartTime, sleepEndTime)
 
-        showBloodOxygenGraph(dayData.oxy, sleepStartTime, sleepEndTime)
+        //showBloodOxygenGraph(dayData.oxy, sleepStartTime, sleepEndTime)
 
         mSleepStageAdapter.setData(viewModel.getStepAnalysisData(dayData))
         initSleepAnalysisGraph(dayData.hourly_breakup)
