@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="400dp">
 
     <TextView
         android:id="@+id/tvDateLeft"
@@ -33,12 +33,12 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Today, 6th Mar" />
 
-    <ImageView
+    <View
         android:id="@+id/view29"
         android:layout_width="138dp"
-        android:layout_height="wrap_content"
+        android:layout_height="2dp"
         android:layout_marginTop="4dp"
-        android:src="@drawable/image_tab_selected_dash"
+        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
