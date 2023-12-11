@@ -145,7 +145,7 @@ constructor(
             supervisorScope {
                 val userActivities = syncRepository.getUnSyncUserActivities()
 
-                syncRepository.getTodaySleepData().collect { resource ->
+                /*syncRepository.getTodaySleepData().collect { resource ->
                     when (resource) {
                         is CacheResult.Success -> {
                             sleepNotificationUtils.handleSleepData(resource.value)
@@ -153,7 +153,7 @@ constructor(
 
                         else -> {}
                     }
-                }
+                }*/
 
                 val call1 = async {
                     syncRepository.postDataToServer(userActivities.first)?.collect { resource ->
