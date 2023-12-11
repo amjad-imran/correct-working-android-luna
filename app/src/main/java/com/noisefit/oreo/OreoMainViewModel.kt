@@ -522,58 +522,18 @@ constructor(
         response.readiness?.let {
             val timeStamp = localDataStore.getReadinessNotificationTimeStamp()
             if (timeStamp == 0L || timeStamp.checkDayDifferenceMoreOne()) {
-                when (it.readinessScore?.status?.lowercase()) {
-                    "optimal" -> {
-                        localDataStore.setReadinessNotificationTimeStamp()
-                        pushNotification.postValue(
-                            Event(
-                                PushLocalNotification(
-                                    "Proceed as planned",
-                                    "Your readiness score is in great shape today. You might want to push a little more towards your cognitive & physical fitness goals",
-                                    NotificationEventsClass.LOCAL_READINESS_NOTIFICATION_KEY
-                                )
+                val nudge = it.dashNudges?.firstOrNull()
+                if (it.readinessScore?.value != null && nudge != null) {
+                    pushNotification.postValue(
+                        Event(
+                            PushLocalNotification(
+                                nudge.label,
+                                nudge.message,
+                                NotificationEventsClass.LOCAL_READINESS_NOTIFICATION_KEY
                             )
                         )
-                    }
-
-                    "good" -> {
-                        localDataStore.setReadinessNotificationTimeStamp()
-                        pushNotification.postValue(
-                            Event(
-                                PushLocalNotification(
-                                    "Try something fun today",
-                                    "Your readiness score indicates that you are primed for a moderate push today. Dedicate some time for rest and recovery.",
-                                    NotificationEventsClass.LOCAL_READINESS_NOTIFICATION_KEY
-                                )
-                            )
-                        )
-                    }
-
-                    "fair" -> {
-                        localDataStore.setReadinessNotificationTimeStamp()
-                        pushNotification.postValue(
-                            Event(
-                                PushLocalNotification(
-                                    "Schedule deep breaths",
-                                    "Your readiness score is on the low side but you’ll poll through. So, would you be up for making time for relaxing pauses today?",
-                                    NotificationEventsClass.LOCAL_READINESS_NOTIFICATION_KEY
-                                )
-                            )
-                        )
-                    }
-
-                    "warning" -> {
-                        localDataStore.setReadinessNotificationTimeStamp()
-                        pushNotification.postValue(
-                            Event(
-                                PushLocalNotification(
-                                    "Go easy",
-                                    "Your readiness score is on the lower side today. It's a good day to have",
-                                    NotificationEventsClass.LOCAL_READINESS_NOTIFICATION_KEY
-                                )
-                            )
-                        )
-                    }
+                    )
+                    localDataStore.setReadinessNotificationTimeStamp()
                 }
             }
         }
