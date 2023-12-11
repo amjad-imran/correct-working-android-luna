@@ -2,6 +2,7 @@ package com.oreo.ui.home.summary
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.size
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -143,6 +144,21 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     }
 
     override fun initListener() {
+        binding.tabLayout.tvDateLeft.setOnClickListener {
+            val currentItem = binding.viewPagerSummary.currentItem
+            if (currentItem == 0) return@setOnClickListener
+            binding.viewPagerSummary.setCurrentItem((currentItem - 1), true)
+        }
+        binding.tabLayout.tvDateRight.setOnClickListener {
+            if (pagerAdapter == null) return@setOnClickListener
+            val currentItem = binding.viewPagerSummary.currentItem
+            if (currentItem == (pagerAdapter!!.itemCount - 1)) {
+                return@setOnClickListener
+            }
+            binding.viewPagerSummary.setCurrentItem((currentItem + 1), true)
+        }
+
+
         binding.lytHeader.oreoStatus.setOnClickListener {
             viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_DEVICE_CAPSULE_CLICK)
             navigate(R.id.oreo_my_device)

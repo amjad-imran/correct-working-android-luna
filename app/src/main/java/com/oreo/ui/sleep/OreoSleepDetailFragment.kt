@@ -452,11 +452,11 @@ class OreoSleepDetailFragment :
             viewModel.getSleepDetailsData()
         }
 
-        binding.lytToolbar.view1.setOnLongClickListener {
+        /*binding.lytToolbar.view1.setOnLongClickListener {
             mainViewModel.testClearLocalHealthData()
             context.showShortToast("Cleared")
             return@setOnLongClickListener true
-        }
+        }*/
 
         binding.lytToolbar.view1.setOnClickListener {
 
