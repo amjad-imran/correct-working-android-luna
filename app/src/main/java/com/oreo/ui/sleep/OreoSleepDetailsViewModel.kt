@@ -70,12 +70,20 @@ constructor(
             if (it.date == DateFormats.getCurrentDate(DateFormats.dateFormat3)) {
                 currentDayText = "Today, "
             }
-            val formattedDate = DateFormats.formatDate(
-                it.date,
-                DateFormats.dateFormat3,
-                DateFormats.dateFormat7
-            )
-            chartModel.formattedDate = "$currentDayText $formattedDate"
+            val formattedDate = if(currentDayText.isEmpty()){
+                DateFormats.formatDate(
+                    it.date,
+                    DateFormats.dateFormat3,
+                    DateFormats.dateFormat7Week
+                )
+            }else{
+                DateFormats.formatDate(
+                    it.date,
+                    DateFormats.dateFormat3,
+                    DateFormats.dateFormat7
+                )
+            }
+            chartModel.formattedDate = "$currentDayText$formattedDate"
             chartModel.index = DateFormats.formatWeek(it.date)
             chartModel.value = it.sleepScore?.value ?: 0
             list.add(chartModel)
