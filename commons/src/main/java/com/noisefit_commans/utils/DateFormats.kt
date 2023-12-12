@@ -652,6 +652,51 @@ object DateFormats {
         }
     }
 
+    val mWeek = SimpleDateFormat("EEE", defaultLocale)
+    val mDay = SimpleDateFormat("dd", defaultLocale)
+    val mMonth = SimpleDateFormat("MMM", defaultLocale)
+
+    fun getOrdinalDate(
+        dateInput: String?,
+        currentFormat: SimpleDateFormat
+    ): String {
+        return try {
+            if (dateInput.isNullOrEmpty()) return ""
+            val date = currentFormat.parse(dateInput) ?: return ""
+            val week = mWeek.format(date)
+            val day = mDay.format(date)
+            val month = mMonth.format(date)
+            return "$week, $day${getDayOfMonthSuffix(day.toInt())} $month"
+        } catch (exp: Exception) {
+            ""
+        }
+    }
+    fun getOrdinalDateToday(
+        dateInput: String?,
+        currentFormat: SimpleDateFormat
+    ): String {
+        return try {
+            if (dateInput.isNullOrEmpty()) return ""
+            val date = currentFormat.parse(dateInput) ?: return ""
+            val day = mDay.format(date)
+            val month = mMonth.format(date)
+            return "$day${getDayOfMonthSuffix(day.toInt())} $month"
+        } catch (exp: Exception) {
+            ""
+        }
+    }
+
+    fun getDayOfMonthSuffix(n: Int): String {
+        return if (n >= 11 && n <= 13) {
+            "th"
+        } else when (n % 10) {
+            1 -> "st"
+            2 -> "nd"
+            3 -> "rd"
+            else -> "th"
+        }
+    }
+
     fun formatWeek(dateInput: String?): String {
         return try {
             if (dateInput.isNullOrEmpty()) return ""
@@ -1141,11 +1186,11 @@ object DateFormats {
             val date1 = SimpleDateFormat("HH:mm", defaultLocale).parse(time)
             val date2 = SimpleDateFormat("HH:mm", defaultLocale).parse(startTime)
             val date3 = SimpleDateFormat("HH:mm", defaultLocale).parse(endTime)
-            LOGS.d("TIME_TEST","isTimeBetween $date1 $date2 $date3")
+            LOGS.d("TIME_TEST", "isTimeBetween $date1 $date2 $date3")
             return (date1.after(date2) && date1.before(date3)) ||
                     (date1.equals(date2) || date1.equals(date3))
         } catch (e: ParseException) {
-            LOGS.d("TIME_TEST","isTimeBetween ${e.message}")
+            LOGS.d("TIME_TEST", "isTimeBetween ${e.message}")
             e.printStackTrace()
         }
         return false

@@ -104,16 +104,14 @@ class OreoActivityViewModel @Inject constructor(
             }
 
             val formattedDate = if(currentDayText.isEmpty()){
-                DateFormats.formatDate(
+                DateFormats.getOrdinalDate(
                     it.date,
                     DateFormats.dateFormat3,
-                    DateFormats.dateFormat7Week
                 )
             }else{
-                DateFormats.formatDate(
+                DateFormats.getOrdinalDateToday(
                     it.date,
                     DateFormats.dateFormat3,
-                    DateFormats.dateFormat7
                 )
             }
             chartModel.formattedDate = "$currentDayText$formattedDate"

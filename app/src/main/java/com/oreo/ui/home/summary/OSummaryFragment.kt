@@ -41,6 +41,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
 
 
 @AndroidEntryPoint
@@ -89,18 +90,17 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         if (centerDate.equals(DateFormats.getCurrentDate(DateFormats.dateFormat3))) {
             currentDayText = "Today, "
         }
+        LocalDate.MAX
         binding.tabLayout.tvSelectedDate.text = "$currentDayText${
             if (currentDayText.isEmpty()) {
-                DateFormats.formatDate(
+                DateFormats.getOrdinalDate(
                     centerDate,
-                    DateFormats.dateFormat3,
-                    DateFormats.dateFormat7Week
+                    DateFormats.dateFormat3
                 )
             } else {
-                DateFormats.formatDate(
+                DateFormats.getOrdinalDateToday(
                     centerDate,
                     DateFormats.dateFormat3,
-                    DateFormats.dateFormat7
                 )
             }
         }"
@@ -109,10 +109,9 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             binding.tabLayout.tvDateLeft.gone()
         } else {
             binding.tabLayout.tvDateLeft.visible()
-            binding.tabLayout.tvDateLeft.text = DateFormats.formatDate(
+            binding.tabLayout.tvDateLeft.text = DateFormats.getOrdinalDate(
                 leftDate,
                 DateFormats.dateFormat3,
-                DateFormats.dateFormat7Week
             )
         }
         val rightDate = pagerAdapter?.getDate(position + 1)
@@ -126,17 +125,15 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             binding.tabLayout.tvDateRight.visible()
             binding.tabLayout.tvDateRight.text = "$rightTodayText${
                 if (rightTodayText.isEmpty()) {
-                    DateFormats.formatDate(
+                    DateFormats.getOrdinalDate(
                         rightDate,
                         DateFormats.dateFormat3,
-                        DateFormats.dateFormat7Week
                     )
                 } else {
 
-                    DateFormats.formatDate(
+                    DateFormats.getOrdinalDateToday(
                         rightDate,
                         DateFormats.dateFormat3,
-                        DateFormats.dateFormat7
                     )
                 }
             }"
