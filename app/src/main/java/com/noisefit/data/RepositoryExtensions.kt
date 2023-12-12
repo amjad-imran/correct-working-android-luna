@@ -49,9 +49,11 @@ suspend fun <T> safeApiCallFlow(
                     val code = 408 // timeout error code
                     emit(networkError(NETWORK_ERROR_TIMEOUT, code))
                 }
+
                 is ProtocolException -> {
                     emit(networkError(NETWORK_ERROR_205, 205))
                 }
+
                 is IOException -> {
                     val message = throwable.message
                     if (message == WRONG_CLIENT_TIME_ERROR) {
@@ -61,11 +63,12 @@ suspend fun <T> safeApiCallFlow(
                     }
 
                 }
+
                 is HttpException -> {
                     val code = throwable.code()
-                    if(code in 500 until 599){
+                    if (code in 500 until 599) {
                         emit(networkError(NETWORK_ERROR, null))
-                    }else{
+                    } else if (code != 403) {
                         val errorResponse = convertErrorBody(throwable)
                         emit(genericError(errorResponse, code))
                     }
@@ -102,6 +105,7 @@ suspend fun <T> safeCacheCall(
                     emit(CacheResult.GenericError(CACHE_ERROR_TIMEOUT))
 
                 }
+
                 else -> {
                     emit(CacheResult.GenericError(CACHE_ERROR_UNKNOWN))
                 }
