@@ -756,6 +756,18 @@ constructor(
             override fun onRingAutoActiveSportData(p0: AutoActiveSportBean?) {
                 LOGS.w("SPORTS_DATA ${Gson().toJson(p0)}")
 
+
+                /*val dataList = ArrayList<OreoAutoSportData>()
+                dataList.add(OreoAutoSportData(0,false,false,3400,0,5,1702360506000,601,"running",null))
+                dataList.add(OreoAutoSportData(0,false,false,1400,1,15,1702288506000,1201,"walking",null))
+
+
+                userActivityDataCallbacks?.onUserActivityDataReceived(
+                    UserActivityCallback.AutoSportDataObtained(
+                        dataList
+                    )
+                )*/
+
                 AppLogs.sendAppLogs("onRingAutoActiveSportData ${Gson().toJson(p0)}")
                 if (p0 == null) return
 

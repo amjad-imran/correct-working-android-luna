@@ -15,6 +15,7 @@ import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.util.UtilClass
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -113,6 +114,8 @@ class OWorkoutDetailsViewModel @Inject constructor(
                                     )
                                 )
                             )
+                            delay(100)
+
                             _workoutDeletedResponse.postValue(Event(true))
                         }
                     }

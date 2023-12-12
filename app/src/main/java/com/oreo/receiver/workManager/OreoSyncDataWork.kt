@@ -48,6 +48,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.withContext
@@ -192,6 +193,7 @@ constructor(
 
                                     datesToRemove?.let {
                                         userHealthDataDataSource.clearDataByDates(it)
+                                        delay(100)
                                     }
                                     //syncRepository.deleteServerSyncData(userActivities.second)
                                 }

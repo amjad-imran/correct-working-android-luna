@@ -22,6 +22,7 @@ import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.ZoneId
@@ -251,6 +252,7 @@ constructor(
                             addWorkout.date?.let {
                                 userHealthDataDataSource.clearDataByDates(listOf(it))
                             }
+                            delay(100)
 
                             onAddSuccess.invoke()
                         }

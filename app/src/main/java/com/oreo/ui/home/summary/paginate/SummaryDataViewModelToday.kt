@@ -195,8 +195,8 @@ constructor(
                 restingHr = healthData.sleep?.restingHr?.value,
                 sleepStage = healthData.sleep?.hourly_breakup ?: ArrayList(),
                 status = healthData.sleep?.sleepScore?.status?.capitalizeWords(),
-                startTime = "",
-                endTime = ""
+                startTime = healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time ?: "",
+                endTime = healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time ?: ""
             )
             val activityModal = ODashboardActivityModel(
                 activityScore = healthData.activity?.activityScore?.value,

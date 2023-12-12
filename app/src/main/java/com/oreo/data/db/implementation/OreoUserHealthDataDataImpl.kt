@@ -11,6 +11,9 @@ import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.db.database.OreoDayTimeMovementDao
 import com.oreo.data.db.database.OreoRespiratoryDao
 import com.oreo.data.db.database.OreoUserHealthDataDao
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -51,8 +54,10 @@ constructor(
     }
 
     override suspend fun clearDataByDates(dates: List<String>) {
-        dates.forEach {
-            userHealthDao.clearByDate(it)
+        CoroutineScope(Dispatchers.IO).launch {
+            dates.forEach {
+                userHealthDao.clearByDate(it)
+            }
         }
     }
 

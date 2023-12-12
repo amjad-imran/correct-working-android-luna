@@ -25,6 +25,7 @@ import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -212,6 +213,8 @@ constructor(
                                 DateFormats.getTodaysDateString(10)
                             }
                             userHealthDataDataSource.clearDataByDates(listOf(date))
+                            delay(100)
+
 
                             _addWorkoutResponse.postValue(true)
                         }
