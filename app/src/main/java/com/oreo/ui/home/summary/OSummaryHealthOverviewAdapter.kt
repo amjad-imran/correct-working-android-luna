@@ -698,6 +698,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 "--"
             }
 
+            binding.dynamicArcView.deleteAll()
+
             binding.dynamicArcView.configureAngles(180, 0)
             binding.dynamicArcView.addSeries(
                 seriesItemWithoutInset(
