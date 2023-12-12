@@ -11,21 +11,22 @@ data class OContributorResponseModal(
     @SerializedName("rem_sleep")
     val remSleep: String? = null,
     val sleep_score: String? = null,
-    val readiness_score: String? = null,//check
-    val hrv: String? = null,//check
-    val temperature: String? = null,//check
-    val respiration: String? = null,//check
-    val activity_score: String? = null,//check
-    val active_calories: String? = null,//check
-    val total_calories: String? = null,//check
-    val hr_graph: String? = null,//check
-    val oxy_graph: String? = null,//check
-    val night_time_movements: String? = null,//check
-    val hrv_graph: String? = null,//check
-    val temp_graph: String? = null,//check
-    val total_steps: String? = null,//check
-    val total_distance: String? = null,//check
-    val daytime_movement: String? = null,//check
+    val readiness_score: String? = null,
+    val hrv: String? = null,
+    val temperature: String? = null,
+    val respiration: String? = null,
+    val activity_score: String? = null,
+    val active_calories: String? = null,
+    val calories_goal: String? = null,
+    val total_calories: String? = null,
+    val hr_graph: String? = null,
+    val oxy_graph: String? = null,
+    val night_time_movements: String? = null,
+    val hrv_graph: String? = null,
+    val temp_graph: String? = null,
+    val total_steps: String? = null,
+    val total_distance: String? = null,
+    val daytime_movement: String? = null,
     val time_in_bed: String? = null,
     @SerializedName("deep_sleep")
     val deepSleep: String? = null,
@@ -49,7 +50,7 @@ data class OContributorResponseModal(
     val activityBalance: String? = null,
     @SerializedName("hrv_balance")
     val hrvBalance: String? = null,
-    val resting_hr: String? = null,//check
+    val resting_hr: String? = null,
     @SerializedName("heart_rate")
     val heartRate: String? = null,
     @SerializedName("recovery_index")
