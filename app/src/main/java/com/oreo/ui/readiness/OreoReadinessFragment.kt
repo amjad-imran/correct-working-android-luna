@@ -479,11 +479,14 @@ class OreoReadinessFragment :
             mSharedViewModel.selectedTab = 0
             mSharedViewModel.itemType = ClickViewType.READINESS.name
             mSharedViewModel.itemClickType = ViewItemClickType.BODY_TEMPERATURE
-            navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
+          /*  navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
                 putString("infoData", mViewModel.contributorInfo.value?.temperature)
                 putString("date", mainViewModel.selectedDate)
-            })
+            })*/
+
+            navigate(R.id.bodyTempScoreDetailFragment)
+
             mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_BODY_TEMP_CLICK)
         }
         binding.lytRScoreData.lytSec4.root.setOnClickListener {
@@ -504,7 +507,7 @@ class OreoReadinessFragment :
     override fun subscribeObservers() {
         mainViewModel.readinessHistoryResponse.observe(this) {
 
-            if(it.isNullOrEmpty()) return@observe
+            if (it.isNullOrEmpty()) return@observe
 
             binding.svMain.visible()
             binding.groupHeader.visible()

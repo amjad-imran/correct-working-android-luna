@@ -137,11 +137,11 @@
     <dialog
         android:id="@+id/unpairBottomDialogFragment"
         android:name="com.noisefit.ui.myDevice.UnpairBottomDialogFragment"
-        android:label="UnpairBottomDialogFragment" >
+        android:label="UnpairBottomDialogFragment">
         <argument
             android:name="forceUnpair"
-            app:argType="boolean"
-            android:defaultValue="false" />
+            android:defaultValue="false"
+            app:argType="boolean" />
     </dialog>
     <dialog
         android:id="@+id/descriptionPopUpBottomDialogFragment"
@@ -373,15 +373,15 @@
     <dialog
         android:id="@+id/bottomSheetDataMetrics"
         android:name="com.oreo.ui.sleep.scoredetails.BottomSheetDataMetrics"
-        android:label="BottomSheetDataMetrics" >
+        android:label="BottomSheetDataMetrics">
         <argument
             android:name="infoData"
-            app:argType="string"/>
+            app:argType="string" />
     </dialog>
     <fragment
         android:id="@+id/ringCareFragment"
         android:name="com.oreo.ui.info.RingCareFragment"
-        android:label="RingCareFragment" >
+        android:label="RingCareFragment">
         <argument
             android:name="title"
             app:argType="string" />
@@ -393,7 +393,7 @@
     <fragment
         android:id="@+id/ringInfoPlayerFragment"
         android:name="com.oreo.ui.info.RingInfoPlayerFragment"
-        android:label="RingInfoPlayerFragment" >
+        android:label="RingInfoPlayerFragment">
         <argument
             android:name="videoUrl"
             app:argType="string" />
@@ -401,7 +401,7 @@
     <dialog
         android:id="@+id/unpairDeviceNotConnectedFragment"
         android:name="com.noisefit.ui.myDevice.UnpairDeviceNotConnectedFragment"
-        android:label="UnpairDeviceNotConnectedFragment" >
+        android:label="UnpairDeviceNotConnectedFragment">
         <argument
             android:name="title"
             app:argType="string" />
@@ -416,7 +416,7 @@
     <fragment
         android:id="@+id/learnFragment"
         android:name="com.oreo.ui.info.LearnFragment"
-        android:label="fragment_learn"/>
+        android:label="fragment_learn" />
     <fragment
         android:id="@+id/ringBatteryChargeFragment"
         android:name="com.oreo.ui.info.RingBatteryChargeFragment"
@@ -424,11 +424,11 @@
     <fragment
         android:id="@+id/deviceSettingsFragment"
         android:name="com.oreo.ui.device.DeviceSettingsFragment"
-        android:label="fragment_device_settings"/>
+        android:label="fragment_device_settings" />
     <dialog
         android:id="@+id/deleteAllWorkoutBottomSheet"
         android:name="com.noisefit.ui.common.bottomSheet.DeleteAllWorkoutBottomSheet"
-        android:label="DeleteAllWorkoutBottomSheet" >
+        android:label="DeleteAllWorkoutBottomSheet">
         <argument
             android:name="title"
             app:argType="string" />
@@ -452,10 +452,14 @@
     <fragment
         android:id="@+id/googleFitTestFragment"
         android:name="com.oreo.ui.GoogleFitTestFragment"
-        android:label="fragment_googl_fit_test"/>
+        android:label="fragment_googl_fit_test" />
     <dialog
         android:id="@+id/myDeviceIntroBottomSheet"
         android:name="com.oreo.ui.info.BottomSheetMyDeviceIntro"
         android:label="MyDeviceBottomSheetIntro" />
+    <fragment
+        android:id="@+id/bodyTempScoreDetailFragment"
+        android:name="com.oreo.ui.sleep.BodyTempScoreDetailFragment"
+        android:label="fragment_body_temp_score_detail" />
 
 </navigation>

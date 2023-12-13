@@ -264,7 +264,7 @@ class OSCDViewModel @Inject constructor(
                 }
 
                 else -> {
-                    chartModel.value = it.data.toInt()
+                    chartModel.value = arrayListOf<Int>(90,91,92,93,94,95,96,97,98,99,100).random()//it.data.toInt()//TODO remove after testing
                 }
             }
 
