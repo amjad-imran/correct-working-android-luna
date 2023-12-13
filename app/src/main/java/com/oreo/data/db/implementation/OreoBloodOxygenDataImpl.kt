@@ -97,7 +97,7 @@ constructor(
                 (breakupArray as ArrayList<Int>).add(0)
             }
         }
-        return breakupArray.subList(startPos, 288)
+        return breakupArray.subList(startPos, 96)
     }
     private fun extractDataByEndTime(day2Data: OreoBloodOxygenBreakup, day2MinutesCeil: Double): List<Int> {
         val endPos = (day2MinutesCeil / 15).toInt()
