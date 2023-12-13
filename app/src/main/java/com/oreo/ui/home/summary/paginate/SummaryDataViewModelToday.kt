@@ -379,7 +379,6 @@ constructor(
                     }
                 }
             }
-
             stateSleepAvgCard.postValue(
                 Pair(
                     trendsData?.sleepScoreAvg,

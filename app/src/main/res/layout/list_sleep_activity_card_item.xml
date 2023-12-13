@@ -9,7 +9,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
-        style="@style/ModalStyleReadinessNew"
+        style="@style/ModalStyleTransparentOreo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/dimen_8dp"
@@ -59,21 +59,6 @@
             tools:visibility="visible" />
 
         <TextView
-            android:id="@+id/tvAvgThisWeek"
-            style="@style/H6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_4dp"
-            android:layout_marginBottom="@dimen/dimen_16dp"
-            android:text="@string/text_avg_this_week"
-            android:textColor="@color/white_50"
-            android:textSize="12sp"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tvSleepScore"
-            app:layout_constraintTop_toBottomOf="@+id/tvSleepScore" />
-
-        <TextView
             android:id="@+id/tvDaysAvg"
             style="@style/H6"
             android:layout_width="wrap_content"
@@ -82,17 +67,14 @@
             android:text="@string/text_seven_day_avg"
             android:textColor="@color/white_50"
             android:textSize="12sp"
-            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/tvSleepScore"
-            app:layout_constraintTop_toBottomOf="@+id/tvSleepScore"
-            tools:visibility="visible" />
+            app:layout_constraintTop_toBottomOf="@+id/tvSleepScore" />
 
         <com.oreo.ui.custom.LineChart
             android:id="@+id/sleepLineChart"
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:layout_margin="@dimen/dimen_16dp"
-            android:visibility="gone"
             app:alwaysShowCircle="false"
             app:bgBottomColor="@android:color/transparent"
             app:bgColor="@android:color/transparent"
@@ -154,6 +136,7 @@
             android:layout_marginBottom="@dimen/dimen_16dp"
             android:src="@drawable/ic_trend_up"
             android:visibility="gone"
+            tools:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sleepLine" />
@@ -167,6 +150,7 @@
             android:textColor="@color/steps_arc"
             android:textSize="12sp"
             android:visibility="gone"
+            tools:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/sleepTrendImv"
             app:layout_constraintStart_toEndOf="@+id/sleepTrendImv"
             app:layout_constraintTop_toTopOf="@+id/sleepTrendImv" />
@@ -181,6 +165,7 @@
             android:textColor="@color/white_48"
             android:textSize="12sp"
             android:visibility="gone"
+            tools:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/sleepTrendImv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/sleepTrendValue"
@@ -190,7 +175,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
-        style="@style/ModalStyleReadinessNew"
+        style="@style/ModalStyleTransparentOreo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dimen_8dp"
@@ -234,23 +219,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_18dp"
-
+            tools:text="22"
             app:layout_constraintStart_toStartOf="@+id/textView1"
             app:layout_constraintTop_toBottomOf="@+id/textView1" />
 
-        <TextView
-            android:id="@+id/tvActAvgThisWeek"
-            style="@style/H6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_4dp"
-            android:layout_marginBottom="@dimen/dimen_16dp"
-            android:text="@string/text_avg_this_week"
-            android:textColor="@color/white_50"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tvActivityScore"
-            app:layout_constraintTop_toBottomOf="@+id/tvActivityScore" />
+
 
         <TextView
             android:id="@+id/tvDaysAvg1"
@@ -272,7 +245,6 @@
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:layout_margin="@dimen/dimen_16dp"
-            android:visibility="gone"
             app:alwaysShowCircle="false"
             app:bgBottomColor="@android:color/transparent"
             app:bgColor="@android:color/transparent"
@@ -322,6 +294,7 @@
             android:layout_height="1dp"
             android:layout_marginTop="@dimen/dimen_12dp"
             android:visibility="gone"
+            tools:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/activityLineChart" />
@@ -334,6 +307,7 @@
             android:layout_marginTop="@dimen/dimen_12dp"
             android:layout_marginBottom="@dimen/dimen_16dp"
             android:src="@drawable/ic_trend_up"
+            tools:visibility="visible"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -347,6 +321,7 @@
             android:layout_marginStart="@dimen/dimen_4dp"
             android:textColor="@color/steps_arc"
             android:textSize="12sp"
+            tools:visibility="visible"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/activityTrendImv"
             app:layout_constraintStart_toEndOf="@+id/activityTrendImv"
@@ -363,6 +338,7 @@
             android:textColor="@color/white_48"
             android:textSize="12sp"
             android:visibility="gone"
+            tools:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/activityTrendImv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/activityTrendValue"

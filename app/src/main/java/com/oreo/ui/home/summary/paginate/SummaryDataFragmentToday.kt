@@ -441,7 +441,7 @@ class SummaryDataFragmentToday :
                 return@observe
             }
 
-            if (it.first != null && it.second != null) {
+            if (it.first != null || it.second != null) {
                 binding.contentMain.lytSleepAvg.root.visible()
 
                 updateSleepAvgUi(it)
@@ -568,10 +568,8 @@ class SummaryDataFragmentToday :
         val lytReadinessAvg = binding.contentMain.lytReadinessAvg
         if (data.readinessScore != null && data.readinessScore >= 0) {
             lytReadinessAvg.tvSleepScore.text = data.readinessScore.toString()
-            lytReadinessAvg.tvAvgThisWeek.gone()
             lytReadinessAvg.tvDaysAvg.visible()
             lytReadinessAvg.tvSleepScore.visible()
-            lytReadinessAvg.tvEmpty.gone()
             lytReadinessAvg.lineChart.visible()
             val trendValue = "${kotlin.math.abs(data.trend ?: 0)}%"
             if (data.trend != null && data.trend > 0) {
@@ -604,16 +602,16 @@ class SummaryDataFragmentToday :
                 viewModel.convertIntToChartModel(data.value), ArrayList(), ArrayList(), 20, true
             )
         } else {
+            lytReadinessAvg.lineChart.updateDataWithMaxMin(
+                viewModel.convertIntToChartModel(arrayListOf(0,0,0,0,0,0,0)), ArrayList(), ArrayList(), 20, true
+            )
 
-            lytReadinessAvg.tvAvgThisWeek.visible()
-            lytReadinessAvg.tvSleepScore.text = "--"
             lytReadinessAvg.tvSleepScore.gone()
-            lytReadinessAvg.tvEmpty.visible()
-            lytReadinessAvg.tvDaysAvg.gone()
-            lytReadinessAvg.lineChart.gone()
-            lytReadinessAvg.sleepTrendImv.gone()
-            lytReadinessAvg.sleepTrendValue.gone()
-            lytReadinessAvg.tvSleepFromLast.gone()
+            lytReadinessAvg.tvDaysAvg.invisible()
+            lytReadinessAvg.lineChart.visible()
+            lytReadinessAvg.sleepTrendImv.invisible()
+            lytReadinessAvg.sleepTrendValue.invisible()
+            lytReadinessAvg.tvSleepFromLast.invisible()
         }
     }
 
@@ -624,8 +622,8 @@ class SummaryDataFragmentToday :
         val activity = data.second!!
 
         if (sleep.sleepScore != null && sleep.sleepScore >= 0) {
+            lytSleepAvg.tvSleepScore.visible()
             lytSleepAvg.tvSleepScore.text = sleep.sleepScore.toString()
-            lytSleepAvg.tvAvgThisWeek.gone()
             lytSleepAvg.tvDaysAvg.visible()
             lytSleepAvg.sleepLineChart.visible()
             lytSleepAvg.sleepLine.root.visible()
@@ -659,16 +657,16 @@ class SummaryDataFragmentToday :
                 viewModel.convertIntToChartModel(sleep.value), ArrayList(), ArrayList(), 20, true
             )
         } else {
+            lytSleepAvg.sleepLineChart.updateDataWithMaxMin(
+                viewModel.convertIntToChartModel(arrayListOf(0,0,0,0,0,0,0)), ArrayList(), ArrayList(), 20, true
+            )
 
-            lytSleepAvg.tvAvgThisWeek.visible()
-            lytSleepAvg.tvSleepScore.text = "--"
-
-            lytSleepAvg.tvDaysAvg.gone()
-            lytSleepAvg.sleepLineChart.gone()
-            lytSleepAvg.sleepLine.root.gone()
-            lytSleepAvg.sleepTrendImv.gone()
-            lytSleepAvg.sleepTrendValue.gone()
-            lytSleepAvg.tvSleepFromLast.gone()
+            lytSleepAvg.tvSleepScore.invisible()
+            lytSleepAvg.tvDaysAvg.invisible()
+            lytSleepAvg.sleepTrendImv.invisible()
+            lytSleepAvg.sleepTrendValue.invisible()
+            lytSleepAvg.tvSleepFromLast.invisible()
+            lytSleepAvg.sleepLine.root.invisible()
         }
 
         if (activity.activityScore != null && activity.activityScore >= 0) {
@@ -677,7 +675,6 @@ class SummaryDataFragmentToday :
             lytSleepAvg.activityLineChart.updateDataWithMaxMin(
                 viewModel.convertIntToChartModel(activity.value), ArrayList(), ArrayList(), 20, true
             )
-            lytSleepAvg.tvActAvgThisWeek.gone()
             lytSleepAvg.tvDaysAvg1.visible()
             lytSleepAvg.activityLineChart.visible()
             lytSleepAvg.activityLine.root.visible()
@@ -711,16 +708,17 @@ class SummaryDataFragmentToday :
             }
             //                binding.activityLineChart.updateDataWithMax(data.activityValue, ArrayList(), ArrayList())
         } else {
-            lytSleepAvg.tvActivityScore.text = "--"
+            lytSleepAvg.tvActivityScore.invisible()
+            lytSleepAvg.activityLineChart.updateDataWithMaxMin(
+                viewModel.convertIntToChartModel(arrayListOf(0,0,0,0,0,0,0)), ArrayList(), ArrayList(), 20, true
+            )
 
-
-            lytSleepAvg.tvActAvgThisWeek.visible()
-            lytSleepAvg.tvDaysAvg1.gone()
-            lytSleepAvg.activityLineChart.gone()
-            lytSleepAvg.activityLine.root.gone()
-            lytSleepAvg.activityTrendImv.gone()
-            lytSleepAvg.activityTrendValue.gone()
-            lytSleepAvg.tvActivityFrom.gone()
+            lytSleepAvg.tvDaysAvg1.invisible()
+            //lytSleepAvg.activityLineChart.gone()
+            lytSleepAvg.activityLine.root.invisible()
+            lytSleepAvg.activityTrendImv.invisible()
+            lytSleepAvg.activityTrendValue.invisible()
+            lytSleepAvg.tvActivityFrom.invisible()
         }
 
 
