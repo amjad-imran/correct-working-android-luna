@@ -48,7 +48,7 @@ constructor(
 ) : BaseViewModel() {
 
 
-    var registerDate: Int = 10
+    var registerDate: Int = -1
     var checkBluetooth = MutableLiveData<Event<Boolean>>()
 
     var user: User? = null
@@ -206,6 +206,8 @@ constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
+
+                            registerDate = it.registerDate ?: -1
 
                             it.data.forEach { data ->
                                 userHealthData[data.date] = data

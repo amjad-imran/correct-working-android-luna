@@ -88,7 +88,7 @@ constructor(
     val stateHeartRateCard = MutableLiveData<OHealthOverview.HeartRate?>()
 
     var user: User? = null
-    var registerDate: Int = 0
+    var registerDate: Int = -1
 
 
     fun setRingBatteryInfoState() {
@@ -181,7 +181,9 @@ constructor(
                 userActivities.add(OHealthOverview.AutoSport(autoSportCount))
             }
 
-            ringDataStore.setRegisterDay(registerDate ?: -1)
+            if(registerDate!=-1){
+                ringDataStore.setRegisterDay(registerDate ?: -1)
+            }
             handleInfoCards(healthData, trendsData, userActivities, viewedCardsData)
 
             val readinessModel = ODashboardReadinessModel(
@@ -432,6 +434,7 @@ constructor(
         viewedCardsData: ArrayList<OHealthOverview>,
     ) {
         val registerDays = (registerDate ?: 0)
+        if(registerDays==-1) return
 
         if (registerDays < 7) {
 
