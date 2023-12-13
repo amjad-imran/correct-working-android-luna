@@ -24,6 +24,7 @@ import com.noisefit.watch.UserActivityHandler
 import com.noisefit.watch.WatchesSDK
 import com.noisefit_commans.common.checkDayDifferenceMoreNMinutes
 import com.noisefit_commans.constants.SyncEvents
+import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.response.VersionCheckResponse
@@ -35,6 +36,7 @@ import com.noisefit_commans.interfaces.data.UserActivityDataActions
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.models.TimeFormat
 import com.noisefit_commans.models.TimeFormats
+import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
@@ -172,8 +174,11 @@ constructor(
                             is Resource.NetworkError -> {
 //                                sessionManager.logAppEvent(FunnelEvents.SyncEvents.Sync_Error_Uploading_Data.name, eventProperty)
                                 LOGS.d(TAG, "OreoSyncDataWork: combinedData1 " + resource.response)
-                                AppLogs.sendAppLogs("OreoSyncDataWork postDataToServer NetworkError ${resource.response}")
-
+                                tryCatch {
+                                    val dialog =
+                                        resource.response.uiComponentType as UIComponentType.RetryApiDialog
+                                    AppLogs.sendAppLogs("OreoSyncDataWork postDataToServer NetworkError ${dialog.message}")
+                                }
                             }
 
                             is Resource.Success -> {
