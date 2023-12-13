@@ -110,7 +110,6 @@ class SummaryDataFragmentToday :
 
         LOGS.d("SUMMART_TODAY on resume")
         LOGS.d(TAG, "Today onResume called")
-        viewModel.registerDate = mainViewModel.registerDate
         loadData()
 
 
@@ -120,6 +119,7 @@ class SummaryDataFragmentToday :
         LOGS.d(TAG, "Today Load data")
         viewModel.date?.let {
             mainViewModel.getDashBoardData(it)?.let { dash ->
+                viewModel.registerDate = mainViewModel.registerDate
                 setUi(dash.first, dash.second)
             }
         }

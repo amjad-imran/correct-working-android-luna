@@ -181,9 +181,7 @@ constructor(
                 userActivities.add(OHealthOverview.AutoSport(autoSportCount))
             }
 
-            if(registerDate!=-1){
-                ringDataStore.setRegisterDay(registerDate ?: -1)
-            }
+
             handleInfoCards(healthData, trendsData, userActivities, viewedCardsData)
 
             val readinessModel = ODashboardReadinessModel(
