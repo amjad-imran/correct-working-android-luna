@@ -460,6 +460,16 @@
     <fragment
         android:id="@+id/bodyTempScoreDetailFragment"
         android:name="com.oreo.ui.sleep.BodyTempScoreDetailFragment"
-        android:label="fragment_body_temp_score_detail" />
+        android:label="fragment_body_temp_score_detail" >
+        <argument
+            android:name="date"
+            app:argType="string" />
+        <argument
+            android:name="infoData"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_bodyTempScoreDetailFragment_to_bottomSheetDataMetrics"
+            app:destination="@id/bottomSheetDataMetrics" />
+    </fragment>
 
 </navigation>

@@ -312,7 +312,6 @@ class OSCDViewModel @Inject constructor(
 
     fun getPrefixAndSuffixListTemp(
         dataList: ArrayList<ResultData>,
-        dayType: String?
     ): Triple<Pair<ArrayList<ChartModel>, Int>, ArrayList<ChartModel>, ArrayList<ChartModel>> {
         dataList.reversed()
         val list = java.util.ArrayList<ChartModel>()
@@ -322,53 +321,18 @@ class OSCDViewModel @Inject constructor(
 
             val chartModel = ChartModel()
             chartModel.date = it.date
-            chartModel.index = DateFormats.parseDate(it.date,DateFormats.dateFormat3,DateFormats.dateFormatDay)
+            chartModel.index =
+                DateFormats.parseDate(it.date, DateFormats.dateFormat3, DateFormats.dateFormatDay)
 
 
-            when (itemClickType) {
-                ViewItemClickType.TOTAL_SLEEP.name,
-                ViewItemClickType.TIME_IN_BED.name -> {
-                    val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
-                        it.data.toInt()
-                    )
-                    chartModel.value = hour
-                }
-
-                ViewItemClickType.DISTANCE.name -> {
-                    chartModel.isDistanceGraph = true
-                    chartModel.value = it.data.toInt()
-                }
-
-                else -> {
-                    val dummyData =
-                        arrayListOf<Int>(-1, -2, -3, -4, -5, -6, 0, 1, 2, 3, 4, 5, 6).random()
-                    LOGS.d("DUMMY_DATA $dummyData")
-                    chartModel.value = dummyData//it.data.toInt()//TODO remove after testing
-                }
-            }
-
-
-
+            chartModel.valueFloat = it.deviation ?: 0.0f
 
             list.add(chartModel)
         }
 
-        when (itemClickType) {
-            ViewItemClickType.ACTIVITY_SCORE.name,
-            ViewItemClickType.READINESS_SCORE.name,
-            ViewItemClickType.SLEEP_EFFICIENCY.name,
-            ViewItemClickType.SLEEP_SCORE.name -> {
-                max = 100
-            }
-
-            else -> {
-
-            }
-        }
-
 
         val suffix = java.util.ArrayList<ChartModel>()
-        for (i in 1..14) {
+        for (i in 1..15) {
             val chartModel = ChartModel()
             chartModel.index = ""
             chartModel.value = 0
@@ -377,12 +341,13 @@ class OSCDViewModel @Inject constructor(
         }
 
         val prefix = java.util.ArrayList<ChartModel>()
-        val chartModel = ChartModel()
-        chartModel.index = ""
-        chartModel.value = 0
-        chartModel.date = ""
-        prefix.add(chartModel)
-
+        for (i in 1..15) {
+            val chartModel = ChartModel()
+            chartModel.index = ""
+            chartModel.value = 0
+            chartModel.date = ""
+            prefix.add(chartModel)
+        }
         return Triple(Pair(list, max), suffix, prefix)
     }
 

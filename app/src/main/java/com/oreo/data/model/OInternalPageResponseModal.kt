@@ -9,11 +9,12 @@ class OInternalPageResponseModal(
     val comparision: Comparison? = null
 )
 
-class ResultData(val date: String, val data: Float)
+class ResultData(val date: String, val data: Float,val deviation: Float?=null)
 class TrendData(
     val today: ValueData? = null,
     val yesterday: ValueData? = null,
-    val allTimeAvg: Float? = null
+    val allTimeAvg: Float? = null,
+    val base: Float? = null
 )
 
 class ValueData(var value: Float = 0F)

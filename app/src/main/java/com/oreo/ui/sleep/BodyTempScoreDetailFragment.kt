@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentBodyTempScoreDetailBinding
 import com.noisefit.util.ApplicationUtils
@@ -11,9 +12,14 @@ import com.noisefit_commans.common.clearDrawables
 import com.noisefit_commans.common.setCompoundDrawable
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DistanceUtil
+import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.OInternalPageResponseModal
 import com.oreo.data.model.ResultData
@@ -30,22 +36,57 @@ class BodyTempScoreDetailFragment :
     ScrollListener {
 
     private val mViewModel: OSCDViewModel by viewModels()
+    private val args :BodyTempScoreDetailFragmentArgs by navArgs()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.toolbar.tvTitle.text = "Body temperature"
+        binding.toolbar.backBtn.setOnClickListener {
+            navigateUpSafe()
+        }
+        binding.toolbar.view1.setOnClickListener {
+            mViewModel.sessionManager.logFirebaseEvent("${mViewModel.itemClickType}_" + FirebaseLunaAppEvents.INFO_CLICK)
+             args.infoData?.let{data->
+                 navigate(
+                     BodyTempScoreDetailFragmentDirections.actionBodyTempScoreDetailFragmentToBottomSheetDataMetrics(
+                         data
+                     )
+                 )
+             }
+        }
+        binding.toolbar.view1.visible()
+        binding.toolbar.ivAddFriend.invisible()
+        binding.toolbar.view1.loadImage(requireActivity(), R.drawable.ic_info_oreo)
+
+
         mViewModel.dayType = "Day"
-        mViewModel.selectedDate = "2023-12-14"//TODO change
+        mViewModel.selectedDate = args.date
         mViewModel.itemClickType = ViewItemClickType.AVG_TEMP.name
 
         mViewModel.getReadinessInternalDetailsData()
     }
 
     private fun initUi(it: OInternalPageResponseModal) {
+
+        val firstData = it.result?.firstOrNull()
+
+        firstData?.let {
+            binding.tvAvgOn.text = "Avg on ${
+                DateFormats.parseDate(
+                    it.date,
+                    DateFormats.dateFormat3,
+                    DateFormats.dateFormat7
+                )
+            }"
+            binding.tvDeviationValue.text = "${it.deviation}°"
+        }
+        binding.tvBaseline.text = "${if (it.trendData?.base == null) "-" else it.trendData.base}°"
+
+
         val topGraphData = mViewModel.getPrefixAndSuffixListTemp(
             it.result as ArrayList<ResultData>,
-            mViewModel.dayType
         )
         binding.rvTopBarGraph.updateDataWithMax(
             topGraphData.first.first,
@@ -62,6 +103,7 @@ class BodyTempScoreDetailFragment :
         trendYesterdayTitle = getString(R.string.text_yesterday)
 
         binding.lytScoreOverview.tvTitle.text = "Body temperature trend"
+        handleShowTrendCompareProgress(it)
 
         trendScoreMsg = if (mViewModel.isProgressEqual)
             "same as yesterday"
@@ -77,7 +119,6 @@ class BodyTempScoreDetailFragment :
         binding.lytScoreOverview.lytYesterday.tvToday.text = trendYesterdayTitle
         binding.lytScoreOverview.tvScoreMsg.text = trendScoreMsg
 
-        handleShowTrendCompareProgress(it)
         bindDataOnUi(it)
     }
 
@@ -94,44 +135,8 @@ class BodyTempScoreDetailFragment :
             todayTrendProg = it.trendData.today.value.roundToInt()
         }
         if (todayTrendValue != "No data") {
-            when (mViewModel.itemClickType) {
-                ViewItemClickType.RESTING_HR.name -> {
-                    binding.lytScoreOverview.lytToday.tvScore.text = "${todayTrendValue} bpm"
-                }
-
-                ViewItemClickType.ACTIVE_CALORIES.name -> {
-                    binding.lytScoreOverview.lytToday.tvScore.text = "${todayTrendValue} kcal"
-                }
-
-                ViewItemClickType.SLEEP_EFFICIENCY.name -> {
-                    binding.lytScoreOverview.lytToday.tvScore.text = "${todayTrendValue}%"
-                }
-
-                ViewItemClickType.RESPIRATORY_RATE.name -> {
-                    binding.lytScoreOverview.lytToday.tvScore.text = "${todayTrendValue} / min"
-                }
-
-                ViewItemClickType.STEPS.name -> {
-                    binding.lytScoreOverview.lytToday.tvScore.text = "${todayTrendValue} steps"
-                }
-
-                ViewItemClickType.DISTANCE.name -> {
-                    binding.lytScoreOverview.lytToday.tvScore.text =
-                        "${DistanceUtil.convertMeterToKm(todayTrendValue.toInt())} km"
-                }
-
-                ViewItemClickType.BODY_TEMPERATURE.name -> {
-                    binding.lytScoreOverview.lytToday.tvScore.text =
-                        "${it.trendData?.today?.value.toString()} °F"
-                }
-
-                else -> {
-                    val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
-                        todayTrendValue.toFloat().roundToInt()
-                    )
-                    binding.lytScoreOverview.lytToday.tvScore.text = "$hour hr $minute min"
-                }
-            }
+            binding.lytScoreOverview.lytToday.tvScore.text =
+                "${it.trendData?.today?.value.toString()} °F"
         } else {
             binding.lytScoreOverview.lytToday.tvScore.text = todayTrendValue
         }
@@ -148,61 +153,82 @@ class BodyTempScoreDetailFragment :
             yesterdayTrendProg = it.trendData.yesterday.value.roundToInt()
         }
 
-        //allTimeAvg
-        val allTimeTrendValue: String =
-            if (it.trendData?.allTimeAvg == null || it.trendData.allTimeAvg.toInt() == 0) {
-                "No data"
-            } else {
-                it.trendData.allTimeAvg.toFloat().roundToInt().toString()
-            }
-
 
         if (yesterdayTrendValue != "No data") {
-            when (mViewModel.itemClickType) {
-                ViewItemClickType.RESTING_HR.name -> {
-                    binding.lytScoreOverview.lytYesterday.tvScore.text =
-                        "${yesterdayTrendValue} bpm"
-                }
-
-                ViewItemClickType.ACTIVE_CALORIES.name -> {
-                    binding.lytScoreOverview.lytYesterday.tvScore.text =
-                        "$yesterdayTrendValue kcal"
-                }
-
-                ViewItemClickType.SLEEP_EFFICIENCY.name -> {
-                    binding.lytScoreOverview.lytYesterday.tvScore.text =
-                        "$yesterdayTrendValue%"
-                }
-
-                ViewItemClickType.RESPIRATORY_RATE.name -> {
-                    binding.lytScoreOverview.lytYesterday.tvScore.text =
-                        "$yesterdayTrendValue / min"
-                }
-
-                ViewItemClickType.STEPS.name -> {
-                    binding.lytScoreOverview.lytYesterday.tvScore.text =
-                        "$yesterdayTrendValue steps"
-                }
-
-                ViewItemClickType.DISTANCE.name -> {
-                    binding.lytScoreOverview.lytYesterday.tvScore.text =
-                        "${DistanceUtil.convertMeterToKm(yesterdayTrendValue.toInt())} km"
-                }
-
-                ViewItemClickType.BODY_TEMPERATURE.name -> {
-                    binding.lytScoreOverview.lytYesterday.tvScore.text =
-                        "${it.trendData?.yesterday?.value.toString()} °F"
-                }
-
-                else -> {
-                    val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
-                        yesterdayTrendValue.toFloat().roundToInt()
-                    )
-                    binding.lytScoreOverview.lytYesterday.tvScore.text = "$hour hr $minute min"
-                }
-            }
+            binding.lytScoreOverview.lytYesterday.tvScore.text =
+                "${it.trendData?.yesterday?.value.toString()} °F"
         } else
             binding.lytScoreOverview.lytYesterday.tvScore.text = yesterdayTrendValue
+
+
+        if (todayTrendProg > yesterdayTrendProg) {
+            binding.lytScoreOverview.lytToday.pbSteps.progress = 100
+            updateProgressColor(0)
+            val showYesPer = yesterdayTrendProg.toFloat().times(100).div(todayTrendProg).toInt()
+            mViewModel.setTrendData(100 - showYesPer)
+            binding.lytScoreOverview.lytYesterday.pbSteps.progress = showYesPer
+
+        } else if (yesterdayTrendProg > todayTrendProg) {
+            binding.lytScoreOverview.lytYesterday.pbSteps.progress = 100
+            updateProgressColor(1)
+            val showTodayPer = todayTrendProg.toFloat().times(100).div(yesterdayTrendProg).toInt()
+            mViewModel.setTrendData(100 - showTodayPer)
+            binding.lytScoreOverview.lytToday.pbSteps.progress = showTodayPer
+        } else {
+            if (todayTrendProg > 0) {
+                binding.lytScoreOverview.lytToday.pbSteps.progress = 100
+                binding.lytScoreOverview.lytYesterday.pbSteps.progress =
+                    100
+            }
+
+        }
+
+    }
+
+    private fun updateProgressColor(type: Int) {
+        val todayColor: Int
+        val yesterdayColor: Int
+        when (type) {
+            0 -> {
+                todayColor = returnColor().first
+                yesterdayColor = returnColor().second
+            }
+
+            1 -> {
+                todayColor = returnColor().first
+                yesterdayColor = returnColor().second
+            }
+
+            2 -> {
+                todayColor = returnColor().first
+                yesterdayColor = returnColor().second
+            }
+
+            else -> {
+                todayColor = returnColor().first
+                yesterdayColor = returnColor().second
+            }
+        }
+        binding.lytScoreOverview.lytToday.pbSteps.setIndicatorColor(
+            todayColor
+        )
+        binding.lytScoreOverview.lytYesterday.pbSteps.setIndicatorColor(
+            yesterdayColor
+        )
+    }
+
+    private fun returnColor(): Pair<Int, Int> {
+
+        val todayColor: Int = ContextCompat.getColor(
+            requireContext(),
+            R.color.readiness_progress_color
+        )
+        val yesterdayColor: Int = ContextCompat.getColor(
+            requireContext(),
+            R.color.readiness_progress_color_50
+        )
+        return Pair(todayColor, yesterdayColor)
+
 
     }
 
@@ -213,6 +239,21 @@ class BodyTempScoreDetailFragment :
     }
 
     override fun subscribeObservers() {
+
+        mViewModel.getApiErrors().observe(this) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
+            }
+        }
+
+        mViewModel.getLoading().observe(this) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
+            }
+        }
+
         mViewModel.internalDetailsData.observe(viewLifecycleOwner) {
             if (it != null) {
                 initUi(it)
@@ -220,25 +261,19 @@ class BodyTempScoreDetailFragment :
         }
     }
 
-    private fun barGraphScoreColor(): Pair<Int, Int> {
-        var normalColor: Int = 0
-        var selectedColor: Int = 0
-
-        normalColor = ContextCompat.getColor(
-            requireContext(),
-            R.color.readiness_un_selected_bar_color
-        )
-        selectedColor = ContextCompat.getColor(
-            requireContext(),
-            R.color.readiness_selected_bar_color
-        )
-
-        return Pair(normalColor, selectedColor)
-
-    }
-
     override fun onPositionSelected(position: Int, chartModel: ChartModel?) {
-
+        chartModel?.date?.let {
+            if(it.isNotEmpty()){
+                binding.tvAvgOn.text = "Avg on ${
+                    DateFormats.parseDate(
+                        it,
+                        DateFormats.dateFormat3,
+                        DateFormats.dateFormat7
+                    )
+                }"
+                binding.tvDeviationValue.text = "${chartModel.valueFloat}°"
+            }
+        }
     }
 
     override fun onScrolling(position: Int, chartModel: ChartModel?) {

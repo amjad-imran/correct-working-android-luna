@@ -479,13 +479,16 @@ class OreoReadinessFragment :
             mSharedViewModel.selectedTab = 0
             mSharedViewModel.itemType = ClickViewType.READINESS.name
             mSharedViewModel.itemClickType = ViewItemClickType.BODY_TEMPERATURE
-          /*  navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
-                putString("viewType", "readiness")
-                putString("infoData", mViewModel.contributorInfo.value?.temperature)
-                putString("date", mainViewModel.selectedDate)
-            })*/
+            /*  navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
+                  putString("viewType", "readiness")
+                  putString("infoData", mViewModel.contributorInfo.value?.temperature)
+                  putString("date", mainViewModel.selectedDate)
+              })*/
 
-            navigate(R.id.bodyTempScoreDetailFragment)
+            navigate(R.id.bodyTempScoreDetailFragment, Bundle().apply {
+                putString("date", mainViewModel.selectedDate)
+                putString("infoData", mViewModel.contributorInfo.value?.avg_temp?:"")
+            })
 
             mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_BODY_TEMP_CLICK)
         }

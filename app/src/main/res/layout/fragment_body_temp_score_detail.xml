@@ -8,9 +8,10 @@
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/layout_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        layout="@layout/oreo_layout_toolbar_with_2_icons"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvAvgOn"
@@ -57,6 +58,7 @@
 
 
     <TextView
+        android:id="@+id/tvBaseline"
         style="@style/H2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -65,6 +67,15 @@
         app:layout_constraintStart_toStartOf="@+id/guideline5"
         app:layout_constraintTop_toBottomOf="@+id/textView90"
         tools:text="98.5°" />
+
+    <TextView
+        style="@style/H6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:text="F"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tvBaseline"
+        app:layout_constraintStart_toEndOf="@+id/tvBaseline" />
 
     <com.oreo.ui.custom.BarChartTemp
         android:id="@+id/rvTopBarGraph"
@@ -113,15 +124,15 @@
 
     <include
         android:id="@+id/divider1"
-        android:visibility="gone"
-        tools:visibility="visible"
         layout="@layout/layout_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="21dp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rvTopBarGraph" />
+        app:layout_constraintTop_toBottomOf="@+id/rvTopBarGraph"
+        tools:visibility="visible" />
 
     <include
         android:id="@+id/lytScoreOverview"
@@ -141,6 +152,17 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
+
+    <include
+        android:id="@+id/progressBar"
+        layout="@layout/default_loader"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
