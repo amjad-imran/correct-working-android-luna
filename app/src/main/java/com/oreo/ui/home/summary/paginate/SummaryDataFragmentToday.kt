@@ -35,6 +35,7 @@ import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TrendsData
+import com.oreo.data.model.VideoInfoType
 import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
@@ -93,7 +94,6 @@ class SummaryDataFragmentToday :
 
         val date = arguments?.getString(ARGS_DATE)
         viewModel.date = date
-        viewModel.registerDate = mainViewModel.registerDate
 
 
         LOGS.d("CREATED_WITH_DATE $date")
@@ -110,7 +110,6 @@ class SummaryDataFragmentToday :
 
         LOGS.d("SUMMART_TODAY on resume")
         LOGS.d(TAG, "Today onResume called")
-
         loadData()
 
 
@@ -120,6 +119,7 @@ class SummaryDataFragmentToday :
         LOGS.d(TAG, "Today Load data")
         viewModel.date?.let {
             mainViewModel.getDashBoardData(it)?.let { dash ->
+                viewModel.registerDate = mainViewModel.registerDate
                 setUi(dash.first, dash.second)
             }
         }
@@ -213,13 +213,14 @@ class SummaryDataFragmentToday :
                 is OSummaryHealthOverviewClickEnum.VideoInfoClicked -> {
                     navigate(R.id.ringInfoPlayerFragment, Bundle().apply {
                         this.putString("videoUrl", type.videoUrl)
-                    })/* viewModel.localDataStore.setDashCardClickState(
+                    })
+                    viewModel.localDataStore.setDashCardClickState(
                          when (type.type) {
                              VideoInfoType.SLEEP -> DashInfoCard.SLEEP
                              VideoInfoType.READINESS -> DashInfoCard.READINESS
                              VideoInfoType.ACTIVITY -> DashInfoCard.ACTIVITY
                          }, true
-                     )*/
+                     )
                 }
 
                 is OSummaryHealthOverviewClickEnum.TextRingCareClicked -> {

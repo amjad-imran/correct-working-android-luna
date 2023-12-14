@@ -44,7 +44,7 @@ class OreoRoomModule {
     fun provideDataBase(@ApplicationContext appContext: Context): OreoDataBase {
         return Room.databaseBuilder(appContext, OreoDataBase::class.java, "noisefit-db-oreo")
             .addMigrations(MIGRATION_1_2)
-            .addMigrations(MIGRATION_2_3)
+            .addMigrations(MIGRATION_2_4)
             /*.addMigrations(MIGRATION_3_4)*/
             .build()
     }
@@ -85,7 +85,7 @@ class OreoRoomModule {
 
         }
     }*/
-    private val MIGRATION_2_3: Migration = object : Migration(3, 4) {
+    private val MIGRATION_2_4: Migration = object : Migration(2, 4) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL(
                 "CREATE TABLE IF NOT EXISTS `user_health_data` " +
