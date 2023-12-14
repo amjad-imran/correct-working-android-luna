@@ -1,19 +1,79 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:lineChart="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:lineChart="http://schemas.android.com/apk/res-auto"
     tools:context="com.oreo.ui.sleep.BodyTempScoreDetailFragment">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/layout_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tvAvgOn"
+        style="@style/H6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:textColor="@color/steel_grey"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        tools:text="Avg on 23 Apr" />
+
+    <TextView
+        android:id="@+id/tvDeviationValue"
+        style="@style/H2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textSize="22sp"
+        app:layout_constraintStart_toStartOf="@+id/tvAvgOn"
+        app:layout_constraintTop_toBottomOf="@+id/tvAvgOn"
+        tools:text="-0.4°" />
+
+    <TextView
+        style="@style/H6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:text="F"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tvDeviationValue"
+        app:layout_constraintStart_toEndOf="@+id/tvDeviationValue" />
+
+    <TextView
+        android:id="@+id/textView90"
+        style="@style/H6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/text_your_baseline"
+        android:textColor="@color/steel_grey"
+        app:layout_constraintStart_toStartOf="@+id/guideline5"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+
+    <TextView
+        style="@style/H2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textSize="22sp"
+        app:layout_constraintStart_toStartOf="@+id/guideline5"
+        app:layout_constraintTop_toBottomOf="@+id/textView90"
+        tools:text="98.5°" />
 
     <com.oreo.ui.custom.BarChartTemp
         android:id="@+id/rvTopBarGraph"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDeviationValue"
         lineChart:bgBottomColor="@android:color/transparent"
         lineChart:bgColor="@android:color/transparent"
         lineChart:bgLeftColor="@android:color/transparent"
@@ -25,7 +85,7 @@
         lineChart:chartLineColor="#ffffff"
         lineChart:chartLineWidth="4dp"
         lineChart:gridColor="@color/white_12"
-        lineChart:hCount="11"
+        lineChart:hCount="14"
         lineChart:innerCircleColor="#ffffff"
         lineChart:innerCircleRadius="4dp"
         lineChart:leftWith="0dp"
@@ -49,7 +109,38 @@
         lineChart:xTextColor="#FFFFFF"
         lineChart:xTextSize="12sp"
         lineChart:yLineColor="#00FFFFFF"
-        lineChart:yTextSize="12sp" />
+        lineChart:yTextSize="10sp" />
+
+    <include
+        android:id="@+id/divider1"
+        android:visibility="gone"
+        tools:visibility="visible"
+        layout="@layout/layout_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="21dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rvTopBarGraph" />
+
+    <include
+        android:id="@+id/lytScoreOverview"
+        layout="@layout/layout_oscd_score_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/side_margin"
+        android:layout_marginTop="31dp"
+        android:layout_marginEnd="@dimen/side_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider1" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

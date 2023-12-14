@@ -282,6 +282,9 @@ class OSleepDetailsParentFragment :
             ViewItemClickType.DISTANCE -> {
                 trendTitle = "Distance"
             }
+            ViewItemClickType.AVG_TEMP -> {
+                trendTitle = "Body temperature"
+            }
 
             null -> {}
         }

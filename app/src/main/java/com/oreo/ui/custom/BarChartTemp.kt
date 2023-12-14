@@ -13,8 +13,10 @@ import android.view.MotionEvent
 import android.view.View
 import com.noisefit.luna.R
 import com.noisefit_commans.utils.DistanceUtil.convertMeterToKm
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.LOGS.d
 import com.oreo.data.model.ChartModel
+import com.oreo.ui.activity.dpToPx
 
 class BarChartTemp : View {
     private var bgColor = 0
@@ -35,6 +37,7 @@ class BarChartTemp : View {
     private var bottomWith = 0f
     private var topWith = 0f
     private var xTextSize = 0f
+    private var yTextSize = 0f
     private var bgPaint: Paint? = null
     private var bgLeftPaint: Paint? = null
     private var bgRightPaint: Paint? = null
@@ -44,17 +47,23 @@ class BarChartTemp : View {
     private var bgBottomPaint: Paint? = null
     private var showSelectedIndicator = true
     private var xTextPaint: Paint? = null
+    private var yAxisPaint: Paint? = null
     private var gridPaint: Paint? = null
     private var baseAxisPaint: Paint? = null
     private var hAxisPaint: Paint? = null
     private var centerLinePaint: Paint? = null
     private var centerLineColor = 0
-    private var lineNormalColor = 0
     private var lineSelectColor = 0
     private var centerLineWidth = 0f
     private var chartLinePaint: Paint? = null
     private var rectF: RectF? = null
     private var onChartScrollChangedListener: ScrollListener? = null
+
+    private var topPaint: Paint? = null
+    private var bottomPaint: Paint? = null
+    private var topSelectedPaint: Paint? = null
+    private var bottomSelectedPaint: Paint? = null
+
 
     //    private Path path = new Path();
     //    private Path fillPath = new Path();
@@ -106,6 +115,7 @@ class BarChartTemp : View {
         max = ta.getInt(R.styleable.BarChart_xMax, 10)
         xMin = ta.getInt(R.styleable.BarChart_xMin, 0)
         xTextSize = ta.getDimension(R.styleable.BarChart_xTextSize, 8f)
+        yTextSize = ta.getDimension(R.styleable.BarChart_yTextSize, 10f)
         leftWith = ta.getDimension(R.styleable.BarChart_leftWith, 16f)
         rightWith = ta.getDimension(R.styleable.BarChart_rightWith, 8f)
         bottomWith = ta.getDimension(R.styleable.BarChart_bottomWith, 16f)
@@ -114,7 +124,6 @@ class BarChartTemp : View {
         chartLineWidth = ta.getDimension(R.styleable.BarChart_chartLineWidth, 10f)
         centerLineWidth = ta.getDimension(R.styleable.BarChart_centerLineWidth, 10f)
         centerLineColor = ta.getColor(R.styleable.BarChart_centerLineColor, -0x1000000)
-        lineNormalColor = ta.getColor(R.styleable.BarChart_lineNormalColor, -0x7f000001)
         lineSelectColor = ta.getColor(R.styleable.BarChart_lineSelectColor, 0x00000000)
         titleWidth = ta.getDimension(R.styleable.BarChart_titleWidth, 0f)
         showSelectedIndicator = ta.getBoolean(R.styleable.BarChart_showSelectedIndicator, true)
@@ -135,9 +144,18 @@ class BarChartTemp : View {
         bgTopSelectedPaint = Paint()
         bgBottomPaint = Paint()
         bgBottomPaint?.color = bgBottomColor
-        xTextPaint = Paint()
-        xTextPaint?.textSize = xTextSize
-        xTextPaint?.isAntiAlias = true
+
+        xTextPaint = Paint().apply {
+            textSize = xTextSize
+            isAntiAlias = true
+        }
+        yAxisPaint = Paint().apply {
+            color = Color.parseColor("#FFFFFF")
+            textSize = yTextSize
+            isAntiAlias = true
+            alpha = 64
+        }
+
         gridPaint = Paint()
         gridPaint?.color = gridColor
         baseAxisPaint = Paint().apply {
@@ -164,12 +182,25 @@ class BarChartTemp : View {
         chartLinePaint?.style = Paint.Style.STROKE
         rectF = RectF()
         xTextBounds = Rect()
+
+
+        topPaint = Paint().apply {
+            color = Color.parseColor("#832139")
+        }
+        topSelectedPaint = Paint().apply {
+            color = Color.parseColor("#ff3358")
+        }
+        bottomPaint = Paint().apply {
+            color = Color.parseColor("#546691")
+        }
+        bottomSelectedPaint = Paint().apply {
+            color = Color.parseColor("#88a5ef")
+        }
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         drawBg(canvas)
-        drawTop(canvas)
         drawBottom(canvas)
         drawContent(canvas)
         drawRight(canvas)
@@ -177,8 +208,7 @@ class BarChartTemp : View {
     }
 
     fun updateDataWithMax(
-        datas: List<ChartModel>, prefixList: List<ChartModel>, suffixList: List<ChartModel>,
-        xMax1: Int, lineNormalColor: Int, lineSelectColor: Int
+        datas: List<ChartModel>, prefixList: List<ChartModel>, suffixList: List<ChartModel>
     ) {
         list?.clear()
         list?.addAll(prefixList)
@@ -218,16 +248,7 @@ class BarChartTemp : View {
                 avgValue = sum / count
             }
         }
-        if (xMax1 == 100) {
-            max = xMax1
-        } else {
-            val perOfMax = max * 20 / 100
-            d("NonZeroValuesBarMax = $perOfMax")
-            max += perOfMax
-        }
-        d("NonZeroValuesBarMax = " + max)
-        this.lineNormalColor = lineNormalColor
-        this.lineSelectColor = lineSelectColor
+        max = 3
         postInvalidate()
     }
 
@@ -272,6 +293,7 @@ class BarChartTemp : View {
         canvas.drawRect(0f, 0f, mWith.toFloat(), mHeight.toFloat(), bgPaint!!)
 
         val centerY = ((mHeight - bottomWith) / 2)
+
         canvas.drawLine(
             0f,
             centerY,
@@ -327,19 +349,6 @@ class BarChartTemp : View {
 
     }
 
-    private fun drawTop(canvas: Canvas) {
-        if (showSelectedIndicator) {
-            canvas.drawRect(0f, 0f, mWith.toFloat(), topWith, bgTopPaint!!)
-            bgTopSelectedPaint?.style = Paint.Style.FILL
-            bgTopSelectedPaint?.color = bgTopColor
-            canvas.drawPath(selectedLinePath, bgTopSelectedPaint!!)
-            bgTopSelectedPaint?.style = Paint.Style.STROKE
-            bgTopSelectedPaint?.color = Color.WHITE
-            bgTopSelectedPaint?.strokeWidth = dip2px(2f).toFloat()
-            canvas.drawPath(selectedLinePath, bgTopSelectedPaint!!)
-        }
-    }
-
     private fun drawRight(canvas: Canvas) {
         canvas.drawRect(mWith - rightWith, 0f, mWith.toFloat(), mHeight.toFloat(), bgRightPaint!!)
     }
@@ -352,66 +361,73 @@ class BarChartTemp : View {
             mHeight.toFloat(),
             bgBottomPaint!!
         )
-        //        canvas.drawLine(leftWith, mHeight - bottomWith, mWith - rightWith, mHeight - bottomWith,
-//                xLinePaint);
     }
 
     private fun drawLeft(canvas: Canvas) {
         canvas.drawRect(0f, 0f, leftWith, mHeight.toFloat(), bgLeftPaint!!)
         maxValue = max
-        minValue = 0
-        val maxStr: String
-        val avgStr: String
-        if (isDistanceGraph) {
-            maxStr = convertMeterToKm(maxValue)
-            avgStr = convertMeterToKm(avgValue)
-        } else {
-            maxStr = maxValue.toString()
-            avgStr = avgValue.toString()
-        }
-        val minStr = minValue.toString()
-        xTextPaint?.color = xTextColor and -0x7f000001
-        val max = mHeight - bottomWith - max * (mHeight - topWith - bottomWith) / (max - xMin)
-        canvas.drawLine(leftWith, max, mWith.toFloat(), max, gridPaint!!)
-        xTextPaint?.getTextBounds(maxStr, 0, maxStr.length, xTextBounds)
+        minValue = -3
+
+
+        //y axis
+        val centerY = ((mHeight - bottomWith) / 2)
+
+        val sectionHeight = centerY / 4
+        val offset = dip2px(4f)
+
+        val yTextStart = mWith - dip2px(24f).toFloat()
+
         canvas.drawText(
-            maxStr,
-            mWith - rightWith - xTextBounds!!.width() + dip2px(10f),
-            max + xTextBounds!!.height() / 2f + dip2px(10f),
-            xTextPaint!!
+            "+3.0",
+            yTextStart,
+            sectionHeight * 1 - offset,
+            yAxisPaint!!
         )
-        val min = mHeight - bottomWith - 0 * (mHeight - topWith - bottomWith) / (this.max - xMin)
-        canvas.drawLine(leftWith, min, mWith.toFloat(), min, gridPaint!!)
-        xTextPaint?.getTextBounds(maxStr, 0, maxStr.length, xTextBounds)
         canvas.drawText(
-            minStr,
-            mWith - rightWith + dip2px(10f),
-            min + xTextBounds!!.height() / 2f - dip2px(10f),
-            xTextPaint!!
+            "+2.0",
+            yTextStart,
+            sectionHeight * 2 - offset,
+            yAxisPaint!!
         )
-        val avg =
-            mHeight - bottomWith - avgValue * (mHeight - topWith - bottomWith) / (this.max - xMin)
-        if (avgValue > 0) {
-            canvas.drawLine(leftWith, avg, mWith.toFloat(), avg, centerLinePaint!!)
-        }
-        if (showAvgValueText && avgValue > 0) {
-            xTextPaint?.getTextBounds(avgStr, 0, avgStr.length, xTextBounds)
-            canvas.drawText(
-                avgStr,
-                leftWith + dip2px(5f),
-                avg - xTextBounds!!.height(),
-                xTextPaint!!
-            )
-        }
+        canvas.drawText(
+            "+1.0",
+            yTextStart,
+            sectionHeight * 3 - offset,
+            yAxisPaint!!
+        )
+
+        canvas.drawText(
+            "+0.0",
+            yTextStart,
+            centerY - offset,
+            yAxisPaint!!
+        )
+
+        canvas.drawText(
+            "-1.0",
+            yTextStart,
+            centerY + sectionHeight * 1 - offset,
+            yAxisPaint!!
+        )
+        canvas.drawText(
+            "-2.0",
+            yTextStart,
+            centerY + sectionHeight * 2 - offset,
+            yAxisPaint!!
+        )
+        canvas.drawText(
+            "-3.0",
+            yTextStart,
+            centerY + sectionHeight * 3 - offset,
+            yAxisPaint!!
+        )
     }
 
     private fun drawContent(canvas: Canvas) {
-//        float unitVLenth = (mHeight - topWith - bottomWith) / vCount;
-//        drawGrid(canvas, unitVLenth);
         if (null == list || list.size <= 0) {
             return
         }
-        //        float unitHLenth = (mWith - leftWith - rightWith) / hCount;
+
         var firstPosition = 0
         val tempOffset = offSet + moveOffSet
         if (tempOffset > (mWith - leftWith - rightWith) / 2 + unitHLenth) {
@@ -419,28 +435,69 @@ class BarChartTemp : View {
         }
         val lastPosition = Math.min(firstPosition + hCount + 2, list.size)
         var current: ChartModel
+        val centerY = ((mHeight - bottomWith) / 2)
+
         for (i in firstPosition until lastPosition) {
             current = list[i]
             val x =
                 offSet + moveOffSet + (mWith - leftWith - rightWith) / 2 + leftWith - i * unitHLenth
-            val y =
-                mHeight - bottomWith - current.value * (mHeight - topWith - bottomWith) / (max - xMin)
-
-            val centerY = ((mHeight - bottomWith) / 2)
-
 
             if (current.value > 0) {
-                rectF?.left = x - chartLineWidth / 2f
-                rectF?.top = y
-                rectF?.right = x + chartLineWidth / 2f
-                rectF?.bottom = mHeight - bottomWith - chartLineWidth / 2f
-                chartLinePaint?.color = lineNormalColor
-                canvas.drawRoundRect(
-                    rectF!!,
-                    chartLineWidth / 2f,
-                    chartLineWidth / 2f,
-                    chartLinePaint!!
+                val convertedVal = if (current.value > 4) {
+                    4
+                } else {
+                    current.value
+                }
+
+                val top = ((convertedVal * 25).toFloat() / 100) * centerY
+
+                val rectTop = RectF().apply {
+                    left = x - chartLineWidth / 2f
+                    this.top = centerY - top
+                    right = x + chartLineWidth / 2f
+                    bottom = centerY
+                }
+
+                val radius = chartLineWidth / 2f
+                val corners = floatArrayOf(
+                    radius, radius,   // Top left radius in px
+                    radius, radius,   // Top right radius in px
+                    0f, 0f,     // Bottom right radius in px
+                    0f, 0f      // Bottom left radius in px
                 )
+
+                val path = Path()
+                path.addRoundRect(rectTop, corners, Path.Direction.CW)
+                canvas.drawPath(path, topPaint!!)
+
+            } else if (current.value < 0) {
+                val convertedVal = if (current.value < -4) {
+                    -4
+                } else {
+                    current.value
+                }
+
+                val bottom = ((convertedVal * -25).toFloat() / 100) * centerY
+
+                val rectBottom = RectF().apply {
+                    left = x - chartLineWidth / 2f
+                    this.top = centerY
+                    right = x + chartLineWidth / 2f
+                    this.bottom = centerY + bottom
+                }
+
+
+                val radius = chartLineWidth / 2f
+                val corners = floatArrayOf(
+                    0f, 0f,   // Top left radius in px
+                    0f, 0f,   // Top right radius in px
+                    radius, radius,     // Bottom right radius in px
+                    radius, radius      // Bottom left radius in px
+                )
+
+                val path = Path()
+                path.addRoundRect(rectBottom, corners, Path.Direction.CW)
+                canvas.drawPath(path, bottomPaint!!)
             }
             val xText = list[i].index ?: ""
             xTextPaint?.getTextBounds(xText, 0, xText.length, xTextBounds)
@@ -451,36 +508,13 @@ class BarChartTemp : View {
                 mHeight - bottomWith / 3,
                 xTextPaint!!
             )
-            if (showSelectedIndicator) {
-                val title = list[i].date ?: ""
-                val xInd =
-                    indicatorOffSet + moveOffSet * list.size * indicatorUnitLength / (list.size * unitHLenth) + (mWith - leftWith - rightWith) / 2 + leftWith - i * indicatorUnitLength
-                xTextPaint?.getTextBounds(title, 0, title.length, xTextBounds)
-                canvas.drawText(
-                    title,
-                    xInd - xTextBounds!!.width() / 2f,
-                    topWith / 2 + xTextBounds!!.height() / 2f,
-                    xTextPaint!!
-                )
-            }
         }
         if (offSet + moveOffSet < 0 || offSet + moveOffSet > (list.size - 1) * unitHLenth) {
             return
         }
         val position = Math.round((offSet + moveOffSet) / unitHLenth)
         val x = (mWith - leftWith - rightWith) / 2 + leftWith
-        val y: Float
-        val temp = (offSet + moveOffSet) % unitHLenth
-        val y1 =
-            mHeight - bottomWith - list[position].value * (mHeight - topWith - bottomWith) / (max - xMin)
-        y = if (moveOffSet == 0f || offSet + moveOffSet == (list.size - 1) * unitHLenth) {
-            y1
-        } else {
-            val y2 =
-                mHeight - bottomWith - list[position + 1].value * (mHeight - topWith - bottomWith) / (max - xMin)
-            y1 + temp * (y2 - y1) / unitHLenth
-        }
-        //        canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint);
+
         if (moveOffSet == 0f) {
             val xText = list[position].index ?: ""
             xTextPaint?.color = xTextColor
@@ -491,30 +525,63 @@ class BarChartTemp : View {
                 mHeight - bottomWith / 3,
                 xTextPaint!!
             )
-            if (showSelectedIndicator) {
-                val title = list[position].date ?: ""
-                val xInd =
-                    indicatorOffSet + moveOffSet * list.size * indicatorUnitLength / (list.size * unitHLenth) + (mWith - leftWith - rightWith) / 2 + leftWith - position * indicatorUnitLength
-                xTextPaint?.getTextBounds(title, 0, title!!.length, xTextBounds)
-                canvas.drawText(
-                    title,
-                    xInd - xTextBounds!!.width() / 2f,
-                    topWith / 2 + xTextBounds!!.height() / 2f,
-                    xTextPaint!!
-                )
-            }
+
             if (list[position].value > 0) {
-                rectF?.left = x - chartLineWidth / 2f
-                rectF?.top = y
-                rectF?.right = x + chartLineWidth / 2f
-                rectF?.bottom = mHeight - bottomWith - chartLineWidth / 2f
-                chartLinePaint?.color = lineSelectColor
-                canvas.drawRoundRect(
-                    rectF!!,
-                    chartLineWidth / 2f,
-                    chartLineWidth / 2f,
-                    chartLinePaint!!
+                val convertedVal = if (list[position].value > 4) {
+                    4
+                } else {
+                    list[position].value
+                }
+
+                val top = ((convertedVal * 25).toFloat() / 100) * centerY
+
+                val rectTop = RectF().apply {
+                    left = x - chartLineWidth / 2f
+                    this.top = centerY - top
+                    right = x + chartLineWidth / 2f
+                    bottom = centerY//mHeight - bottomWith - chartLineWidth / 2f
+                }
+
+                val radius = chartLineWidth / 2f
+                val corners = floatArrayOf(
+                    radius, radius,   // Top left radius in px
+                    radius, radius,   // Top right radius in px
+                    0f, 0f,     // Bottom right radius in px
+                    0f, 0f      // Bottom left radius in px
                 )
+
+                val path = Path()
+                path.addRoundRect(rectTop, corners, Path.Direction.CW)
+                canvas.drawPath(path, topSelectedPaint!!)
+
+            } else if (list[position].value < 0) {
+                val convertedVal = if (list[position].value < -4) {
+                    -4
+                } else {
+                    list[position].value
+                }
+
+                val bottom = ((convertedVal * -25).toFloat() / 100) * centerY
+
+                val rectBottom = RectF().apply {
+                    left = x - chartLineWidth / 2f
+                    this.top = centerY
+                    right = x + chartLineWidth / 2f
+                    this.bottom = centerY + bottom//mHeight - bottomWith - chartLineWidth / 2f
+                }
+
+
+                val radius = chartLineWidth / 2f
+                val corners = floatArrayOf(
+                    0f, 0f,   // Top left radius in px
+                    0f, 0f,   // Top right radius in px
+                    radius, radius,     // Bottom right radius in px
+                    radius, radius      // Bottom left radius in px
+                )
+
+                val path = Path()
+                path.addRoundRect(rectBottom, corners, Path.Direction.CW)
+                canvas.drawPath(path, bottomSelectedPaint!!)
             }
         }
     }

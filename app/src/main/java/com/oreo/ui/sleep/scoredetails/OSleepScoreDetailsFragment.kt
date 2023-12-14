@@ -1669,6 +1669,10 @@ class OSleepScoreDetailsFragment :
             null -> {
 
             }
+
+            ViewItemClickType.AVG_TEMP -> {
+                trendTitle = "Body temperature trend"
+            }
         }
         return trendTitle
     }
