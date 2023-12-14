@@ -156,242 +156,53 @@ class BodyTempScoreDetailFragment :
                 it.trendData.allTimeAvg.toFloat().roundToInt().toString()
             }
 
-//        var allTimeTrendProg: Int =
-//            if (it.trendData?.allTimeAvg == null || it.trendData.allTimeAvg.toInt() == 0) {
-//                0
-//            } else
-//                it.trendData.allTimeAvg.toFloat().roundToInt()
 
-
-        if (isTrendValueUpdate()
-        ) {
-            if (yesterdayTrendValue != "No data") {
-                when (mViewModel.itemClickType) {
-                    ViewItemClickType.RESTING_HR.name -> {
-                        binding.lytScoreOverview.lytYesterday.tvScore.text =
-                            "${yesterdayTrendValue} bpm"
-                    }
-
-                    ViewItemClickType.ACTIVE_CALORIES.name -> {
-                        binding.lytScoreOverview.lytYesterday.tvScore.text =
-                            "$yesterdayTrendValue kcal"
-                    }
-
-                    ViewItemClickType.SLEEP_EFFICIENCY.name -> {
-                        binding.lytScoreOverview.lytYesterday.tvScore.text =
-                            "$yesterdayTrendValue%"
-                    }
-
-                    ViewItemClickType.RESPIRATORY_RATE.name -> {
-                        binding.lytScoreOverview.lytYesterday.tvScore.text =
-                            "$yesterdayTrendValue / min"
-                    }
-
-                    ViewItemClickType.STEPS.name -> {
-                        binding.lytScoreOverview.lytYesterday.tvScore.text =
-                            "$yesterdayTrendValue steps"
-                    }
-
-                    ViewItemClickType.DISTANCE.name -> {
-                        binding.lytScoreOverview.lytYesterday.tvScore.text =
-                            "${DistanceUtil.convertMeterToKm(yesterdayTrendValue.toInt())} km"
-                    }
-
-                    ViewItemClickType.BODY_TEMPERATURE.name -> {
-                        binding.lytScoreOverview.lytYesterday.tvScore.text =
-                            "${it.trendData?.yesterday?.value.toString()} °F"
-                    }
-
-                    else -> {
-                        val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
-                            yesterdayTrendValue.toFloat().roundToInt()
-                        )
-                        binding.lytScoreOverview.lytYesterday.tvScore.text = "$hour hr $minute min"
-                    }
+        if (yesterdayTrendValue != "No data") {
+            when (mViewModel.itemClickType) {
+                ViewItemClickType.RESTING_HR.name -> {
+                    binding.lytScoreOverview.lytYesterday.tvScore.text =
+                        "${yesterdayTrendValue} bpm"
                 }
-            } else
-                binding.lytScoreOverview.lytYesterday.tvScore.text = yesterdayTrendValue
-        } else {
+
+                ViewItemClickType.ACTIVE_CALORIES.name -> {
+                    binding.lytScoreOverview.lytYesterday.tvScore.text =
+                        "$yesterdayTrendValue kcal"
+                }
+
+                ViewItemClickType.SLEEP_EFFICIENCY.name -> {
+                    binding.lytScoreOverview.lytYesterday.tvScore.text =
+                        "$yesterdayTrendValue%"
+                }
+
+                ViewItemClickType.RESPIRATORY_RATE.name -> {
+                    binding.lytScoreOverview.lytYesterday.tvScore.text =
+                        "$yesterdayTrendValue / min"
+                }
+
+                ViewItemClickType.STEPS.name -> {
+                    binding.lytScoreOverview.lytYesterday.tvScore.text =
+                        "$yesterdayTrendValue steps"
+                }
+
+                ViewItemClickType.DISTANCE.name -> {
+                    binding.lytScoreOverview.lytYesterday.tvScore.text =
+                        "${DistanceUtil.convertMeterToKm(yesterdayTrendValue.toInt())} km"
+                }
+
+                ViewItemClickType.BODY_TEMPERATURE.name -> {
+                    binding.lytScoreOverview.lytYesterday.tvScore.text =
+                        "${it.trendData?.yesterday?.value.toString()} °F"
+                }
+
+                else -> {
+                    val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
+                        yesterdayTrendValue.toFloat().roundToInt()
+                    )
+                    binding.lytScoreOverview.lytYesterday.tvScore.text = "$hour hr $minute min"
+                }
+            }
+        } else
             binding.lytScoreOverview.lytYesterday.tvScore.text = yesterdayTrendValue
-        }
-
-        /*if (isTrendValueUpdate()) {
-            if (allTimeTrendValue != "No data") {
-                when (mViewModel.itemClickType) {
-                    ViewItemClickType.RESTING_HR.name -> {
-                        binding.lytAllTimeAvg.tvScore.text = "${allTimeTrendValue} bpm"
-                    }
-
-                    ViewItemClickType.ACTIVE_CALORIES.name -> {
-                        binding.lytAllTimeAvg.tvScore.text = "$allTimeTrendValue kcal"
-                    }
-
-                    ViewItemClickType.RESPIRATORY_RATE.name -> {
-                        binding.lytAllTimeAvg.tvScore.text = "$allTimeTrendValue / min"
-                    }
-
-                    ViewItemClickType.SLEEP_EFFICIENCY.name -> {
-                        binding.lytAllTimeAvg.tvScore.text = "$allTimeTrendValue%"
-                    }
-
-                    ViewItemClickType.STEPS.name -> {
-                        binding.lytAllTimeAvg.tvScore.text = "$allTimeTrendValue steps"
-                    }
-
-                    ViewItemClickType.DISTANCE.name -> {
-                        binding.lytAllTimeAvg.tvScore.text =
-                            "${DistanceUtil.convertMeterToKm(allTimeTrendValue.toInt())} km"
-                    }
-
-                    ViewItemClickType.BODY_TEMPERATURE.name -> {
-                        binding.lytAllTimeAvg.tvScore.text =
-                            "${it.trendData?.allTimeAvg.toString()} °F"
-                    }
-
-                    else -> {
-                        val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
-                            allTimeTrendValue.toInt()
-                        )
-                        binding.lytAllTimeAvg.tvScore.text = "$hour hr $minute min"
-                    }
-                }
-            } else
-                binding.lytAllTimeAvg.tvScore.text = allTimeTrendValue
-
-        } else {
-            binding.lytAllTimeAvg.tvScore.text = allTimeTrendValue
-        }*/
-
-
-        //show top graph
-        val topGraphData = mViewModel.getPrefixAndSuffixList(
-            it.result as ArrayList<ResultData>,
-            mViewModel.dayType
-        )
-        if (getGraphType() == 0) {
-            binding.lytTopGraphView.rvTopBarGraph.visible()
-            binding.lytTopGraphView.rvTopGraph.gone()
-            binding.lytTopGraphView.rvTopBarGraph.updateDataWithMax(
-                topGraphData.first.first,
-                topGraphData.third,
-                topGraphData.second,
-                topGraphData.first.second,
-                barGraphScoreColor().first,
-                barGraphScoreColor().second
-
-            )
-        } else {
-            binding.lytTopGraphView.rvTopBarGraph.gone()
-            binding.lytTopGraphView.rvTopGraph.visible()
-            binding.lytTopGraphView.rvTopGraph.updateDataWithMax(
-                topGraphData.first.first,
-                topGraphData.third,
-                topGraphData.second,
-                topGraphData.first.second,
-                lineGraphScoreColor().first,
-                lineGraphScoreColor().second,
-                lineGraphScoreColor().third
-
-            )
-        }
-        mViewModel.topDateLastScrollPosition = it.result.size - 1
-
-        if (todayTrendProg > yesterdayTrendProg) {
-            binding.lytScoreOverview.lytToday.pbSteps.progress = 100
-            updateProgressColor(0)
-            val showYesPer = yesterdayTrendProg.toFloat().times(100).div(todayTrendProg).toInt()
-//            val showAllPer = allTimeTrendProg.toFloat().times(100).div(todayTrendProg).toInt()
-            mViewModel.setTrendData(100 - showYesPer)
-            binding.lytScoreOverview.lytYesterday.pbSteps.progress = showYesPer
-//            binding.lytAllTimeAvg.pbSteps.progress = showAllPer
-
-        } else if (yesterdayTrendProg > todayTrendProg /*&& yesterdayTrendProg > allTimeTrendProg*/) {
-            binding.lytScoreOverview.lytYesterday.pbSteps.progress = 100
-            updateProgressColor(1)
-            val showTodayPer = todayTrendProg.toFloat().times(100).div(yesterdayTrendProg).toInt()
-//            val showAllPer = allTimeTrendProg.toFloat().times(100).div(yesterdayTrendProg).toInt()
-            mViewModel.setTrendData(100 - showTodayPer)
-            binding.lytScoreOverview.lytToday.pbSteps.progress = showTodayPer
-//            binding.lytAllTimeAvg.pbSteps.progress = showAllPer
-        }
-        /*else if (allTimeTrendProg > todayTrendProg && allTimeTrendProg > yesterdayTrendProg) {
-            binding.lytAllTimeAvg.pbSteps.progress = 100
-            val showTodayPer = todayTrendProg.toFloat().times(100).div(allTimeTrendProg).toInt()
-            val showYesPer = yesterdayTrendProg.toFloat().times(100).div(allTimeTrendProg).toInt()
-
-            if (todayTrendProg > yesterdayTrendProg) {
-                val yPercent = yesterdayTrendProg.toFloat().times(100).div(todayTrendProg).toInt()
-                mViewModel.setTrendData(100 - yPercent)
-                mViewModel.isTodayGreater = true
-            } else {
-                val tPercent =
-                    todayTrendProg.toFloat().times(100).div(yesterdayTrendProg).toInt()
-                mViewModel.setTrendData(100 - tPercent)
-                mViewModel.isTodayGreater = false
-            }
-            binding.lytScoreOverview.lytYesterday.pbSteps.progress = showYesPer
-            binding.lytScoreOverview.lytToday.pbSteps.progress = showTodayPer
-            updateProgressColor(2)
-        }*/
-        else {
-            if (todayTrendProg > 0) {
-                binding.lytScoreOverview.lytToday.pbSteps.progress = 100
-                binding.lytScoreOverview.lytYesterday.pbSteps.progress =
-                    100
-            }
-            /*if (todayTrendProg == allTimeTrendProg) {
-                updateProgressColor(3)
-                if (todayTrendProg == 0) {
-                    binding.lytScoreOverview.lytToday.pbSteps.progress = 1
-                    binding.lytScoreOverview.lytYesterday.pbSteps.progress =
-                        1
-                    binding.lytAllTimeAvg.pbSteps.progress =
-                        1
-                } else {
-                    binding.lytScoreOverview.lytToday.pbSteps.progress = 100
-                    binding.lytScoreOverview.lytYesterday.pbSteps.progress =
-                        100
-                    binding.lytAllTimeAvg.pbSteps.progress =
-                        100
-                }
-            }
-            else {
-                if (todayTrendProg > 0) {
-                    mViewModel.isProgressEqual = true
-                    updateProgressColor(3)
-                    binding.lytScoreOverview.lytToday.pbSteps.progress = 100
-                    binding.lytScoreOverview.lytYesterday.pbSteps.progress =
-                        100
-                    binding.lytAllTimeAvg.pbSteps.progress =
-                        allTimeTrendProg.toFloat().times(100).div(todayTrendProg).toInt()
-                } else {
-                    updateProgressColor(3)
-                    binding.lytScoreOverview.lytToday.pbSteps.progress = 0
-                    binding.lytScoreOverview.lytYesterday.pbSteps.progress =
-                        0
-                    binding.lytAllTimeAvg.pbSteps.progress =
-                        allTimeTrendProg.toFloat().times(100).div(todayTrendProg).toInt()
-
-                }
-            }*/
-        }
-        /*else if (yesterdayTrendProg == allTimeTrendProg) {
-                updateProgressColor(3)
-                binding.lytScoreOverview.lytToday.pbSteps.progress =
-                    todayTrendProg.toFloat().times(100).div(yesterdayTrendProg).toInt()
-                binding.lytScoreOverview.lytYesterday.pbSteps.progress =
-                    100
-                binding.lytAllTimeAvg.pbSteps.progress = 100
-
-            } else if (todayTrendProg == allTimeTrendProg) {
-                updateProgressColor(3)
-                binding.lytScoreOverview.lytToday.pbSteps.progress = 100
-                binding.lytScoreOverview.lytYesterday.pbSteps.progress =
-                    yesterdayTrendProg.toFloat().times(100).div(todayTrendProg).toInt()
-                binding.lytAllTimeAvg.pbSteps.progress =
-                    100
-            }*/
-
 
     }
 
