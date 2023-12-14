@@ -71,6 +71,7 @@ constructor(
     val statePairDeviceCard = MutableLiveData<Boolean>()
     val stateDashRingBattery = MutableLiveData<Pair<Boolean, ColorFitDevice?>>()
     val stateDashAlerts = MutableLiveData<HashMap<AlertType, DashAlert>>()
+    val stateGoogleFitCard = MutableLiveData<Boolean>()
 
 
     var contributorInfo: OContributorResponseModal? = null

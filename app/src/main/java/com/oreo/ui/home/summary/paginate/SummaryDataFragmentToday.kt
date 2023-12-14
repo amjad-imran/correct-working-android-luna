@@ -215,12 +215,12 @@ class SummaryDataFragmentToday :
                         this.putString("videoUrl", type.videoUrl)
                     })
                     viewModel.localDataStore.setDashCardClickState(
-                         when (type.type) {
-                             VideoInfoType.SLEEP -> DashInfoCard.SLEEP
-                             VideoInfoType.READINESS -> DashInfoCard.READINESS
-                             VideoInfoType.ACTIVITY -> DashInfoCard.ACTIVITY
-                         }, true
-                     )
+                        when (type.type) {
+                            VideoInfoType.SLEEP -> DashInfoCard.SLEEP
+                            VideoInfoType.READINESS -> DashInfoCard.READINESS
+                            VideoInfoType.ACTIVITY -> DashInfoCard.ACTIVITY
+                        }, true
+                    )
                 }
 
                 is OSummaryHealthOverviewClickEnum.TextRingCareClicked -> {
@@ -421,6 +421,14 @@ class SummaryDataFragmentToday :
             }
         }
 
+        viewModel.stateGoogleFitCard.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.contentMain.lytGoogleFit.root.visible()
+            } else {
+                binding.contentMain.lytGoogleFit.root.gone()
+            }
+        }
+
         viewModel.stateReadinessAvgCard.observe(viewLifecycleOwner) {
 
             if (it == null) {
@@ -604,7 +612,11 @@ class SummaryDataFragmentToday :
             )
         } else {
             lytReadinessAvg.lineChart.updateDataWithMaxMin(
-                viewModel.convertIntToChartModel(arrayListOf(0,0,0,0,0,0,0)), ArrayList(), ArrayList(), 20, true
+                viewModel.convertIntToChartModel(arrayListOf(0, 0, 0, 0, 0, 0, 0)),
+                ArrayList(),
+                ArrayList(),
+                20,
+                true
             )
 
             lytReadinessAvg.tvSleepScore.gone()
@@ -659,7 +671,11 @@ class SummaryDataFragmentToday :
             )
         } else {
             lytSleepAvg.sleepLineChart.updateDataWithMaxMin(
-                viewModel.convertIntToChartModel(arrayListOf(0,0,0,0,0,0,0)), ArrayList(), ArrayList(), 20, true
+                viewModel.convertIntToChartModel(arrayListOf(0, 0, 0, 0, 0, 0, 0)),
+                ArrayList(),
+                ArrayList(),
+                20,
+                true
             )
 
             lytSleepAvg.tvSleepScore.invisible()
@@ -711,7 +727,11 @@ class SummaryDataFragmentToday :
         } else {
             lytSleepAvg.tvActivityScore.invisible()
             lytSleepAvg.activityLineChart.updateDataWithMaxMin(
-                viewModel.convertIntToChartModel(arrayListOf(0,0,0,0,0,0,0)), ArrayList(), ArrayList(), 20, true
+                viewModel.convertIntToChartModel(arrayListOf(0, 0, 0, 0, 0, 0, 0)),
+                ArrayList(),
+                ArrayList(),
+                20,
+                true
             )
 
             lytSleepAvg.tvDaysAvg1.invisible()
