@@ -73,7 +73,7 @@ class BodyTempScoreDetailFragment :
         val firstData = it.result?.firstOrNull()
 
         firstData?.let {
-            binding.tvAvgOn.text = "Avg on ${
+            binding.tvAvgOn.text = "Deviation on ${
                 DateFormats.parseDate(
                     it.date,
                     DateFormats.dateFormat3,
@@ -264,7 +264,7 @@ class BodyTempScoreDetailFragment :
     override fun onPositionSelected(position: Int, chartModel: ChartModel?) {
         chartModel?.date?.let {
             if(it.isNotEmpty()){
-                binding.tvAvgOn.text = "Avg on ${
+                binding.tvAvgOn.text = "Deviation on ${
                     DateFormats.parseDate(
                         it,
                         DateFormats.dateFormat3,
