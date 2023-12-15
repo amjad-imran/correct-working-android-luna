@@ -90,10 +90,8 @@ class OreoRoomModule {
             database.execSQL(
                 "CREATE TABLE IF NOT EXISTS `user_health_data` " +
                         "(`id` INTEGER NOT NULL, " +
-                        "`dashboard` TEXT," +
-                        "`sleep` TEXT," +
-                        "`activity` TEXT," +
-                        "`readiness` TEXT," +
+                        "`trendData` TEXT," +
+                        "`userHealthData` TEXT," +
                         "`date` TEXT, PRIMARY KEY(`id`))"
             )
             database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_user_health_data_date ON  user_health_data(date)")
