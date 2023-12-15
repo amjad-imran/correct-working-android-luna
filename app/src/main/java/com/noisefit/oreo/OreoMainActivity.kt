@@ -22,6 +22,7 @@ import com.noisefit.ui.APP_EXIT
 import com.noisefit.ui.APP_UPDATE
 import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit.ui.common.BaseActivity
+import com.noisefit.ui.onboarding.FirebaseUpdateViewModel
 import com.noisefit.util.ApplicationUtils
 import com.noisefit.util.notif.NotificationUtil
 import com.noisefit_commans.data.BinaryActionCallback
@@ -50,6 +51,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     private val btAdapter by lazy {
         BluetoothAdapter.getDefaultAdapter()
     }
+    private val firebaseViewModel: FirebaseUpdateViewModel by viewModels()
+
     private val REQUEST_ENABLE_BT = 133
 
     companion object {
@@ -71,7 +74,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         viewModel.sessionManager.getPairedState()
         checkBluetooth()
-
+        firebaseViewModel.generateToken()
     }
 
     private fun setBlur() {
