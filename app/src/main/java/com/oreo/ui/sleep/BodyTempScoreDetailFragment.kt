@@ -19,7 +19,7 @@ import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DistanceUtil
-import com.noisefit_commans.utils.FirebaseLunaAppEvents
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.OInternalPageResponseModal
 import com.oreo.data.model.ResultData
@@ -47,7 +47,7 @@ class BodyTempScoreDetailFragment :
             navigateUpSafe()
         }
         binding.toolbar.view1.setOnClickListener {
-            mViewModel.sessionManager.logFirebaseEvent("${mViewModel.itemClickType}_" + FirebaseLunaAppEvents.INFO_CLICK)
+            mViewModel.sessionManager.logMoEngageAppEvent("${mViewModel.itemClickType}_" + MoEngageLunaAppEvents.info_click)
              args.infoData?.let{data->
                  navigate(
                      BodyTempScoreDetailFragmentDirections.actionBodyTempScoreDetailFragmentToBottomSheetDataMetrics(

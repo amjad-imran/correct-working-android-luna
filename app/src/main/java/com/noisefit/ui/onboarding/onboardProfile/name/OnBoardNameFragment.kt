@@ -12,7 +12,7 @@ import com.noisefit_commans.ui.afterTextChanged
 import com.noisefit_commans.ui.disable
 import com.noisefit_commans.ui.enable
 import com.noisefit.ui.onboarding.onboardProfile.SetupProfileViewModel
-import com.noisefit_commans.utils.InsiderAppEvents
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -31,7 +31,7 @@ class OnBoardNameFragment :
 //
 //            }
 //        }
-        viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.ACCOUNT_SET_UP_STARTED)
+        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_land_on_enter_name_page)
         binding.lytOnBoardProgress.apply {
             pgBr.progress = 20
             tvCount.text = getString(R.string.text_1)
@@ -85,7 +85,7 @@ class OnBoardNameFragment :
         if (viewModel.userName.value?.isNotEmpty() == true) {
 
             viewModel.saveUserInfoLocally()
-            viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.CONTINUE_ENTER_NAME_CLICK)
+//            viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.CONTINUE_ENTER_NAME_CLICK)
             navigate(R.id.onBoardDobFragment)
         }
     }

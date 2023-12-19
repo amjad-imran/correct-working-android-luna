@@ -16,10 +16,14 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoReadinessBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
-import com.noisefit_commans.ui.*
-import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.FirebaseLunaAppEvents
+import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageAppEventParams
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.GraphDummyModel
@@ -72,8 +76,6 @@ class OreoReadinessFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_PAGE_VISIT)
         setRecycler()
 
 
@@ -429,7 +431,7 @@ class OreoReadinessFragment :
 
         binding.lytToolbar.view1.setOnClickListener {
 
-            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_DATE_RANGE_CLICK)
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_date_range_click)
 
             resultLauncher.launch(
                 HistoryCalendarActivity.getStartIntent(
@@ -450,7 +452,7 @@ class OreoReadinessFragment :
                 putString("infoData", mViewModel.contributorInfo.value?.readiness_score)
                 putString("date", mainViewModel.selectedDate)
             })
-            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_READINESS_SCORE_CLICK)
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_readiness_score_click)
         }
         binding.lytRScoreData.lytSec1.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -461,7 +463,7 @@ class OreoReadinessFragment :
                 putString("infoData", mViewModel.contributorInfo.value?.resting_hr)
                 putString("date", mainViewModel.selectedDate)
             })
-            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_RESTING_HR_CLICK)
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_resting_hr_click)
 
         }
         binding.lytRScoreData.lytSec2.root.setOnClickListener {
@@ -473,7 +475,7 @@ class OreoReadinessFragment :
                 putString("infoData", mViewModel.contributorInfo.value?.hrv)
                 putString("date", mainViewModel.selectedDate)
             })
-            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_HR_VARIABILITY_CLICK)
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_hr_variability_click)
         }
         binding.lytRScoreData.lytSec3.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -487,10 +489,10 @@ class OreoReadinessFragment :
 
             navigate(R.id.bodyTempScoreDetailFragment, Bundle().apply {
                 putString("date", mainViewModel.selectedDate)
-                putString("infoData", mViewModel.contributorInfo.value?.avg_temp?:"")
+                putString("infoData", mViewModel.contributorInfo.value?.avg_temp ?: "")
             })
 
-            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_BODY_TEMP_CLICK)
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_body_temp_click)
         }
         binding.lytRScoreData.lytSec4.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -501,7 +503,7 @@ class OreoReadinessFragment :
                 putString("infoData", mViewModel.contributorInfo.value?.respiration)
                 putString("date", mainViewModel.selectedDate)
             })
-            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_RESPIRATORY_RATE_CLICK)
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_respiratory_rate_click)
         }
 
 
@@ -591,6 +593,11 @@ class OreoReadinessFragment :
         } else {
             binding.lytRScoreData.lytScore.tvQuality.gone()
         }
+        mViewModel.sessionManager.logMoEngageAppEvent(
+            MoEngageLunaAppEvents.luna_readiness_page_visit,
+            HashMap<String, Any>().apply {
+                this[MoEngageAppEventParams.status] = readinessData.status ?: ""
+            })
     }
 
     private fun updateUiRead(it: OreoReadinessModel) {

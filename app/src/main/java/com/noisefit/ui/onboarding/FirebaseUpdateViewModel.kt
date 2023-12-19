@@ -5,6 +5,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.JsonObject
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UserRepository
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.LOGS
@@ -16,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class FirebaseUpdateViewModel @Inject constructor(
     private val localDataStore: DataStoredInterface,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    val sessionManager: SessionManager
 ) : BaseViewModel() {
 
     fun generateToken() {

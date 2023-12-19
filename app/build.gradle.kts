@@ -342,6 +342,14 @@ dependencies {
     androidTestImplementation(InstrumentTest.archCore)
     androidTestImplementation(InstrumentTest.hiltTesting)
     implementation(Test.androidxTestRunner)
+    //moengage
+    implementation(moengage.core)
+    implementation(moengage.inapp)
+    implementation(moengage.pushAmpPlus)
+    implementation(moengage.pushKit)
+    implementation(moengage.pushAmp)
+    implementation(moengage.geofence)
+    implementation(moengage.inboxCore)
 
 
 }

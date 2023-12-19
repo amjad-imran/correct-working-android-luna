@@ -19,8 +19,8 @@ import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DistanceUtil
-import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.MiscUtil
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Comparison
 import com.oreo.data.model.OInternalPageResponseModal
@@ -97,11 +97,15 @@ class OSleepScoreDetailsFragment :
                         binding.lytTopGraphView.lytLabelValue2.root.gone()
                     }
                 }
-                mViewModel.sessionManager.logFirebaseEvent("${mViewModel.itemClickType?.let {
-                    MiscUtil.addUnderscore(
-                        it
-                    )
-                }}_" + FirebaseLunaAppEvents.DAY_CLICK)
+                mViewModel.sessionManager.logMoEngageAppEvent(
+                    "${
+                        mViewModel.itemClickType?.let {
+                            MiscUtil.addUnderscore(
+                                it
+                            )
+                        }
+                    }_" + MoEngageLunaAppEvents.day_click
+                )
 
             }
 
@@ -129,11 +133,15 @@ class OSleepScoreDetailsFragment :
                         binding.lytTopGraphView.lytLabelValue2.root.gone()
                     }
                 }
-                mViewModel.sessionManager.logFirebaseEvent("${mViewModel.itemClickType?.let {
-                    MiscUtil.addUnderscore(
-                        it
-                    )
-                }}_" + FirebaseLunaAppEvents.WEEK_CLICK)
+                mViewModel.sessionManager.logMoEngageAppEvent(
+                    "${
+                        mViewModel.itemClickType?.let {
+                            MiscUtil.addUnderscore(
+                                it
+                            )
+                        }
+                    }_" + MoEngageLunaAppEvents.week_click
+                )
             }
 
             else -> {
@@ -160,11 +168,15 @@ class OSleepScoreDetailsFragment :
                         binding.lytTopGraphView.lytLabelValue2.root.gone()
                     }
                 }
-                mViewModel.sessionManager.logFirebaseEvent("${mViewModel.itemClickType?.let {
-                    MiscUtil.addUnderscore(
-                        it
-                    )
-                }}_" + FirebaseLunaAppEvents.MONTH_CLICK)
+                mViewModel.sessionManager.logMoEngageAppEvent(
+                    "${
+                        mViewModel.itemClickType?.let {
+                            MiscUtil.addUnderscore(
+                                it
+                            )
+                        }
+                    }_" + MoEngageLunaAppEvents.month_click
+                )
             }
         }
     }

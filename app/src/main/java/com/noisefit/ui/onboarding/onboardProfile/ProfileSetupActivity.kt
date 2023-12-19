@@ -11,6 +11,7 @@ import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit.ui.common.BaseActivity
 import com.noisefit_commans.ui.playAnimation
 import com.noisefit.ui.onboarding.FirebaseUpdateViewModel
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,6 +28,7 @@ class ProfileSetupActivity : BaseActivity<ActivityProfileSetupBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        firebaseViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_land_on_set_up_profile_page_visit)
         firebaseViewModel.generateToken()
 
     }

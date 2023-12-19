@@ -28,8 +28,9 @@ import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.FileLogsUtils
-import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageAppEventParams
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -64,7 +65,7 @@ class OreoMyDeviceFragment :
             } else {
                 context.showShortToast("No logs")
             }
-            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_MYDEVICES_SHARE + "_APP_LOGS_CLICK")
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_mydevices_logs_click)
         }
 
         binding.rowShareRingLogs.setOnClickListener {
@@ -75,7 +76,11 @@ class OreoMyDeviceFragment :
             } else {
                 context.showShortToast("No logs")
             }
-            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_MYDEVICES_SHARE + "_RING_LOGS_CLICK")
+            mViewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.luna_mydevices_share_logs_click,
+                HashMap<String, Any>().apply {
+                    this[MoEngageAppEventParams.star_rating] = "luna"
+                })
         }
 
         binding.btnSoftReset.setOnClickListener {
@@ -105,12 +110,12 @@ class OreoMyDeviceFragment :
         }
 
         binding.rowAboutDevice.setOnClickListener {
-            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_MYDEVICES_ABOUT_CLICK)
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_mydevices_about_click)
             navigate(R.id.OAboutDeviceFragment)
         }
-      /*  binding.rowGoogleFit.setOnClickListener {
-            navigate(R.id.googleFitFragmentOreo)
-        }*/
+        /*  binding.rowGoogleFit.setOnClickListener {
+              navigate(R.id.googleFitFragmentOreo)
+          }*/
 
         binding.rowWarrantyRegistration.setOnClickListener {
             //navigate(R.id.warrantyFragmentOreo)
@@ -132,7 +137,7 @@ class OreoMyDeviceFragment :
                     })
                 }
             }
-            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_MYDEVICES_UNPAIR_CLICK)
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_mydevices_unpair_click)
 
             navigate(R.id.unpairBottomDialogFragment)
 

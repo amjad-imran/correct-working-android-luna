@@ -6,12 +6,19 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentEmailOtpBinding
-import com.noisefit.ui.common.*
 import com.noisefit.ui.onboarding.onboardProfile.ProfileSetupActivity
 import com.noisefit.ui.onboarding.pairing.DeviceSetupActivity
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
-import com.noisefit_commans.ui.*
-import com.noisefit_commans.utils.InsiderAppEvents
+import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.afterTextChanged
+import com.noisefit_commans.ui.disable
+import com.noisefit_commans.ui.enable
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.isValidOTP
+import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,7 +31,7 @@ class EmailOtpFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.useOtp = true
         super.onViewCreated(view, savedInstanceState)
-        viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.LAND_ON_ENTER_OTP_PAGE_VISIT)
+        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_land_on_enter_otp_page_visit)
         if (args.mode == EmailMode.VERIFY) {
             binding.btnUsePassword.gone()
         } else {
@@ -91,7 +98,7 @@ class EmailOtpFragment :
                 )
             }
 
-            viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.CONTINUE_OTP_CLICK)
+//            viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.CONTINUE_OTP_CLICK)
         }
 
         binding.etOtp.afterTextChanged {
@@ -139,10 +146,10 @@ class EmailOtpFragment :
         viewModel.getMessages().observe(viewLifecycleOwner) {
             it.getContent()?.let { message ->
                 context?.showShortToast(message)
-                if (!message.lowercase().equals("Otp Verified ".lowercase(), true))
+                /*if (!message.lowercase().equals("Otp Verified ".lowercase(), true))
                     viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.OTP_VERIFICATION_FAILED)
                 else
-                    viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.REGISTRATION_OTP_VERIFIED_SUCCESSFULLY)
+                    viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.REGISTRATION_OTP_VERIFIED_SUCCESSFULLY)*/
             }
         }
 

@@ -27,8 +27,9 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
-import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageAppEventParams
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
@@ -197,17 +198,17 @@ class SummaryDataFragmentToday :
 
                 OSummaryHealthOverviewClickEnum.ActivityDetailsWorkoutClick -> {
                     mainViewModel.navigateTo(BottomNavOption.ACTIVITY)
-                    mainViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_ACTIVITY_CLICK)
+                    mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_activity_click)
                 }
 
                 OSummaryHealthOverviewClickEnum.ReadinessDetailsWorkoutClick -> {
                     mainViewModel.navigateTo(BottomNavOption.READINESS)
-                    mainViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_READINESS_CLICK)
+                    mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_readiness_click)
                 }
 
                 OSummaryHealthOverviewClickEnum.SleepDetailsWorkoutClick -> {
                     mainViewModel.navigateTo(BottomNavOption.SLEEP)
-                    mainViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_SLEEP_CLICK)
+                    mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_sleep_click)
                 }
 
                 is OSummaryHealthOverviewClickEnum.VideoInfoClicked -> {
@@ -261,11 +262,12 @@ class SummaryDataFragmentToday :
             }
             pairStatus = "paired"
 
-            logFirebaseAppEvent(FirebaseLunaAppEvents.LUNA_ACTIVITY_SYNC_MANUAL,
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_sync_manual,
                 HashMap<String, Any>().apply {
-                    this["operating_system"] = "Android"
-                    this["device_pairing_status"] = pairStatus
+                    this[MoEngageAppEventParams.operating_system] = "Android"
+                    this[MoEngageAppEventParams.device_pairing_status] = pairStatus
                 })
+
 
             syncData()
 
@@ -295,18 +297,18 @@ class SummaryDataFragmentToday :
         }
 
         binding.contentMain.lytReadinessAvg.root.setOnClickListener {
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_READINESS_SCORE_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_readiness_score_click)
             viewModel.getContributorInfo("readiness")
         }
 
         binding.contentMain.lytSleepAvg.constraintLayout2.setOnClickListener {
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_SLEEP_SCORE_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_sleep_score_click)
             viewModel.getContributorInfo("sleep")
 
         }
 
         binding.contentMain.lytSleepAvg.constraintLayout.setOnClickListener {
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_ACTIVITY_SCORE_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_activity_score_click)
             viewModel.getContributorInfo("activity")
         }
 
@@ -787,14 +789,14 @@ class SummaryDataFragmentToday :
         lytWorkouts.viewAddWorkout.setOnClickListener {
             if (viewModel.isDeviceConnected()) {
                 navigate(R.id.addWorkoutFragment)
-                viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_ADD_WORKOUT_CLICK)
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_add_workout_click)
             } else {
                 requireContext().showShortToast("Please connect your ring to add a workout")
             }
         }
 
         lytWorkouts.ivViewAll.setOnClickListener {
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_WORKOUTS_ENTRY_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_workouts_entry_click)
             navigate(R.id.oActivityListFragment)
         }
 
@@ -910,7 +912,7 @@ class SummaryDataFragmentToday :
 
         lytHeartRate.imvHrMeasure.setOnClickListener {
 
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_HR_REFRESH_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_hr_refresh_click)
             if (data.measureState == TapMeasureState.MEASURING || data.measureState == TapMeasureState.NO_DEVICE) {
                 return@setOnClickListener
             }

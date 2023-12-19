@@ -1,10 +1,14 @@
 package com.noisefit.session
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ktx.Firebase
+import com.moengage.core.Properties
+import com.moengage.core.analytics.MoEAnalyticsHelper
+import com.moengage.core.model.UserGender
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.ui.friends.location.search.SearchStateType
 import com.noisefit.util.ApplicationUtils
@@ -21,14 +25,19 @@ import com.noisefit_commans.interfaces.data.UserActivityCallback
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
 import com.noisefit_commans.models.ColorFitDevice
+import com.noisefit_commans.models.Gender
 import com.noisefit_commans.models.SportsModeRequest
 import com.noisefit_commans.models.UserLocation
+import com.noisefit_commans.ui.tryCatch
+import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.receiver.workManager.HealthOverviewDataType
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -39,7 +48,8 @@ class SessionManager
 constructor(
     private val localDataStore: DataStoredInterface,
     private val ringDataStore: RingDataStore,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    @ApplicationContext private val context: Context
 ) {
 
     companion object {
@@ -332,6 +342,119 @@ constructor(
 //                this["status"] = status
 //            })
     }
+
+    //todo attribute key will update, once received from product side
+    fun addUserAttributeToMoEngage(isLogin: Boolean, data: HashMap<String, Any>) {
+        val firebaseInstance = Firebase.analytics
+        data.forEach { (key, value) ->
+            when (value) {
+                is String -> {
+                    if (key.equals("name", true)) {
+                        MoEAnalyticsHelper.setFirstName(context, value)
+                        firebaseInstance.setUserProperty(key, value)
+                    } else if (key.equals("gender", true)) {
+                        if (value.lowercase() == Gender.MALE.name.lowercase())
+                            MoEAnalyticsHelper.setGender(context, UserGender.MALE)
+                        else if (value.lowercase() == Gender.FEMALE.name.lowercase())
+                            MoEAnalyticsHelper.setGender(context, UserGender.FEMALE)
+                        else
+                            MoEAnalyticsHelper.setGender(context, UserGender.OTHER)
+                    } else if (key.equals("dob", true) && !value.equals("null", true)) {
+                        tryCatch {
+                            firebaseInstance.setUserProperty(key, value)
+                            MoEAnalyticsHelper.setBirthDate(
+                                context, DateFormats.getDateFormatFromString2(
+                                    value
+                                )!!
+                            )
+
+                        }
+
+                    } else if (key.equals("home_page_visit", true)) {
+                        firebaseInstance.logEvent(key, null)
+                        MoEAnalyticsHelper.trackEvent(context, key, Properties())
+                    } else {
+                        MoEAnalyticsHelper.setUserAttribute(context, key, value)
+                        firebaseInstance.setUserProperty(key, value)
+                    }
+                }
+
+                is Int -> {
+                    MoEAnalyticsHelper.setUserAttribute(context, key, value)
+                }
+
+                is Double -> {
+                    MoEAnalyticsHelper.setUserAttribute(context, key, value)
+                }
+
+                is Boolean -> {
+                    MoEAnalyticsHelper.setUserAttribute(context, key, value)
+                }
+
+                else -> {
+                    MoEAnalyticsHelper.setUserAttribute(context, key, value)
+                }
+
+            }
+        }
+        if (isLogin) {
+//            Instance.setGDPRConsent(true)
+//            insiderUserData.setEmailOptin(true)
+//            insiderUserData.setSMSOptin(true)
+            //identifiers
+            val user = localDataStore.getUser()
+            MoEAnalyticsHelper.setUniqueId(context, user?.id.toString())
+            MoEAnalyticsHelper.setEmailId(context, user?.email.toString())
+            if (!user?.mobile.isNullOrEmpty()) {
+                val phoneNumber: String = "+91" + user?.mobile.toString()
+                MoEAnalyticsHelper.setMobileNumber(context, phoneNumber.trim())
+            }
+
+        }
+
+    }
+
+    fun logMoEngageAppEvent(eventName: String) {
+        val newEventName = eventName.lowercase().replace(" ", "_")
+        MoEAnalyticsHelper.trackEvent(context, newEventName, Properties())
+        LOGS.d("LOGS_MO_ENGAGE_EVENT $newEventName")
+        Firebase.analytics.logEvent(newEventName, null)
+        // LOGS.d("LOGS_FIREBASE_EVENT $newEventName ")
+    }
+
+    fun logMoEngageAppEvent(eventName: String, data: HashMap<String, Any>) {
+        val newEventName = eventName.lowercase().replace(" ", "_")
+        val properties = Properties()
+        data.forEach { (key, value) ->
+            val key1 = key.lowercase().replace(" ", "_")
+            when (value) {
+                is String -> {
+                    properties.addAttribute(key1, value)
+                }
+
+                is Double -> {
+                    properties.addAttribute(key1, value)
+                }
+
+                is Boolean -> {
+                    properties.addAttribute(key1, value)
+                }
+
+                is Int -> {
+                    properties.addAttribute(key1, value)
+                }
+
+                is Date -> {
+                    properties.addAttribute(key1, value)
+                }
+
+
+            }
+        }
+        MoEAnalyticsHelper.trackEvent(context, newEventName, properties)
+        Firebase.analytics.logEvent(newEventName, ApplicationUtils.convertMapToBundle(data))
+    }
+
 
     fun logInsiderAppEvent(eventName: String) {
 //        insiderAppEventWithoutParams = Instance

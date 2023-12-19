@@ -9,7 +9,8 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.FirebaseLunaAppEvents
+import com.noisefit_commans.utils.MoEngageAppEventParams
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.OHSModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,7 +21,11 @@ class OHelpAndSupportFragment :
     private val mAdapter: OHealthSupportAdapter by lazy {
         OHealthSupportAdapter(object : OHealthSupportAdapter.OHSClickListener {
             override fun onItemClickListener(id: String, title: String) {
-                mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SUPPORT + "_${title}_CLICK")
+                mViewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.luna_support_option_click,
+                    HashMap<String, Any>().apply {
+                        this[MoEngageAppEventParams.option_title] = title
+                    })
                 navigate(R.id.oreoHSQuestionFragment, Bundle().apply {
                     putString("title", title)
                     putString("id", id)

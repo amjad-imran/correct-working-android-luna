@@ -25,8 +25,9 @@ import com.noisefit_commans.ui.custom.NightTimeGraphViewOreo
 import com.noisefit_commans.ui.custom.SleepGraphViewOreo
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageAppEventParams
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.GraphDummyModel
@@ -83,7 +84,6 @@ class OreoSleepDetailFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //sleepDayGraphView = SleepGraphViewOreo(requireContext())
-        viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_PAGE_VISIT)
         setRecycler()
 
         if (viewModel.ringDataStore.isSleepWalkAroundShown()) {
@@ -460,7 +460,7 @@ class OreoSleepDetailFragment :
 
         binding.lytToolbar.view1.setOnClickListener {
 
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_DATE_RANGE_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_sleep_date_range_click)
             resultLauncher.launch(
                 HistoryCalendarActivity.getStartIntent(
                     requireContext(),
@@ -486,7 +486,7 @@ class OreoSleepDetailFragment :
                 putString("infoData", viewModel.contributorInfo.value?.sleep_score)
                 putString("date", mainViewModel.selectedDate)
             })
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_SLEEP_SCORE_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_sleep_sleep_score_click)
         }
         binding.lytSleepScore.lytTotalSleep.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -498,7 +498,7 @@ class OreoSleepDetailFragment :
                 putString("date", mainViewModel.selectedDate)
             })
 
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_TOTAL_SLEEP_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_sleep_total_sleep_click)
         }
         binding.lytSleepScore.lytTimeInBed.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -510,7 +510,7 @@ class OreoSleepDetailFragment :
                 putString("date", mainViewModel.selectedDate)
             })
 
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_BED_TIME_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_sleep_bed_time_click)
         }
         binding.lytSleepScore.lytSleepEfficiency.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -522,7 +522,7 @@ class OreoSleepDetailFragment :
                 putString("date", mainViewModel.selectedDate)
             })
 
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_SLEEP_EFFICIENCY_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_sleep_sleep_efficiency_click)
         }
         binding.lytSleepScore.lytRestHr.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -534,7 +534,7 @@ class OreoSleepDetailFragment :
                 putString("date", mainViewModel.selectedDate)
             })
 
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_RESTING_HR_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_sleep_resting_hr_click)
         }
 
         //night time see/saw
@@ -556,7 +556,7 @@ class OreoSleepDetailFragment :
             binding.lytSSAnalysis.tvSummaryTitle.visible()
 
 
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_STAGE_ANALYSIS_EXPAND_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_sleep_stage_analysis_expand_click)
         }
         binding.lytSSAnalysis.viewUp.setOnClickListener {
             binding.lytSSAnalysis.lytNightMovement.root.gone()
@@ -568,7 +568,7 @@ class OreoSleepDetailFragment :
             binding.lytSSAnalysis.ivDown.visible()
             binding.lytSSAnalysis.tvSummaryTitle.gone()
 
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_STAGE_ANALYSIS_COMPRESS_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_sleep_stage_analysis_compress_click)
         }
     }
 
@@ -696,6 +696,9 @@ class OreoSleepDetailFragment :
         binding.lytSleepScore.lytSleepAvg.tvQuality.setTextColor(statusColor)
         binding.lytSleepScore.lytSleepAvg.tvQuality.text = sleepScoreData.text
         binding.lytSleepScore.lytSleepAvg.tvQuality.visible()
+        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_sleep_page_visit,HashMap<String, Any>().apply {
+            this[MoEngageAppEventParams.status]=sleepScoreData.status
+        })
     }
 
     private fun updateUi(dayData: OreoSleepModel) {

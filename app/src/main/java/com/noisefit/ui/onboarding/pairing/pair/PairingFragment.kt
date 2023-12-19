@@ -88,6 +88,7 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
 
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
 
+
         initUi(args.colorFitDevice)
         startPairing()
         initListener()
@@ -156,6 +157,7 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
             }
         }
         binding.btnStart.setOnClickListener {
+            sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_successful_registration_done)
             handlePairState()
         }
     }

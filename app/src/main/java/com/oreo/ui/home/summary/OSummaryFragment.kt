@@ -2,20 +2,16 @@ package com.oreo.ui.home.summary
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.size
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
-import com.google.android.material.tabs.TabLayoutMediator
-import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSummaryOBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.receiver.service.FeedbackSubmitService
 import com.noisefit.util.ApplicationUtils
-import com.noisefit.util.notif.NotificationUtil
 import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.models.ColorFitDevice
@@ -26,19 +22,14 @@ import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
-import com.oreo.data.model.TapMeasureState
+import com.noisefit_commans.utils.MoEngageAppEventParams
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import com.oreo.ui.home.summary.paginate.SummaryPagerAdapter
 import com.oreo.ui.info.CALL_GOT_IT
-import com.oreo.ui.sleep.scoredetails.ClickViewType
-import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
-import com.oreo.ui.sleep.scoredetails.ViewItemClickType
-import com.oreo.ui.workout.add.ADD_WORKOUT_REQUEST_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
@@ -55,7 +46,12 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        mainViewModel.sessionManager.logMoEngageAppEvent(
+            MoEngageLunaAppEvents.luna_homepage_visit,
+            HashMap<String, Any>().apply {
+                this[MoEngageAppEventParams.operating_system] = "Android"
+                this[MoEngageAppEventParams.device_pairing_status] = viewModel.isDeviceConnected()
+            })
         setViewPager()
 
     }
@@ -157,25 +153,25 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
 
         binding.lytHeader.oreoStatus.setOnClickListener {
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_DEVICE_CAPSULE_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_device_capsule_click)
             navigate(R.id.oreo_my_device)
         }
 
         binding.lytHeader.lottieAnimView.setOnClickListener {
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_DEVICE_CAPSULE_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_device_capsule_click)
             navigate(R.id.oreo_my_device)
         }
 
 
 
         binding.lytHeader.batteryStatus.setOnClickListener {
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_DEVICE_CAPSULE_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_device_capsule_click)
             navigate(R.id.oreo_my_device)
         }
 
 
         binding.lytHeader.profileView1.setOnClickListener {
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HAMBURGER_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_hamburger_click)
             navigate(R.id.OMyProfileFragment)
         }
 

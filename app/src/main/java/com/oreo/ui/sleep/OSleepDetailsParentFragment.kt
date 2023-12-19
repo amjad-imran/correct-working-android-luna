@@ -14,7 +14,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.FirebaseLunaAppEvents
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.OSleepScoreDetailsFragment
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
@@ -196,7 +196,7 @@ class OSleepDetailsParentFragment :
             navigateUpSafe()
         }
         binding.lytToolbar.view1.setOnClickListener {
-            mViewModel.sessionManager.logFirebaseEvent("${mViewModel.itemClickType}_" + FirebaseLunaAppEvents.INFO_CLICK)
+            mViewModel.sessionManager.logMoEngageAppEvent("${mViewModel.itemClickType}_" + MoEngageLunaAppEvents.info_click)
             args.infoData?.let{data->
                 navigate(
                     OSleepDetailsParentFragmentDirections.actionSleepDetailsParentOreoToBottomSheetDataMetrics(

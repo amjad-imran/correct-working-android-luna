@@ -19,8 +19,8 @@ import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -84,7 +84,7 @@ class DeviceSettingsFragment :
                     })
                 }
             }
-            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_MYDEVICES_UNPAIR_CLICK)
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_mydevices_unpair_click)
 
             navigate(R.id.unpairBottomDialogFragment)
         }
@@ -111,7 +111,7 @@ class DeviceSettingsFragment :
                     })
                 }*/
             }
-            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_MYDEVICES_UNPAIR_CLICK)
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_mydevices_unpair_click)
 
             navigate(R.id.unpairBottomDialogFragment, Bundle().apply {
                 this.putBoolean("forceUnpair", true)

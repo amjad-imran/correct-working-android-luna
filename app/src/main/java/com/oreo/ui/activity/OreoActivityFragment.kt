@@ -25,8 +25,9 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DistanceUtil
-import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageAppEventParams
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.OActivityListModal
@@ -96,7 +97,6 @@ class OreoActivityFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_PAGE_VISIT)
         setRecyclerView()
 
 
@@ -165,6 +165,11 @@ class OreoActivityFragment :
         } else {
             binding.lytAScoreData.lytScore.tvQuality.gone()
         }
+        mViewModel.sessionManager.logMoEngageAppEvent(
+            MoEngageLunaAppEvents.luna_activity_page_visit,
+            HashMap<String, Any>().apply {
+                this[MoEngageAppEventParams.status] = scoreData.status ?: ""
+            })
     }
 
     private fun updateUi(it: OreoActivityModel) {
@@ -590,7 +595,8 @@ class OreoActivityFragment :
             if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
 
-                val selectedDate = data?.getStringExtra("selected_date")?: return@registerForActivityResult
+                val selectedDate =
+                    data?.getStringExtra("selected_date") ?: return@registerForActivityResult
 
                 mainViewModel.onCalendarDateSelected(selectedDate)
 
@@ -666,7 +672,7 @@ class OreoActivityFragment :
         }
 
         binding.lytWorkouts.viewAddWorkout.setOnClickListener {
-            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ACTIVITY_ADD_WORKOUT_CLICK)
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_add_workout_click)
             navigate(R.id.addWorkoutFragment)
         }
 
@@ -683,7 +689,7 @@ class OreoActivityFragment :
                 putString("infoData", mViewModel.contributorInfo.value?.activity_score)
                 putString("date", mainViewModel.selectedDate)
             })
-            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ACTIVITY_ACTIVITY_SCORE_CLICK)
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_activity_score_click)
         }
         binding.lytAScoreData.lytSec1.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -694,7 +700,7 @@ class OreoActivityFragment :
                 putString("infoData", mViewModel.contributorInfo.value?.active_calories)
                 putString("date", mainViewModel.selectedDate)
             })
-            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ACTIVITY_GOAL_PROGRESS_CLICK)
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_goal_progress_click)
         }
         binding.lytAScoreData.lytSec2.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -705,7 +711,7 @@ class OreoActivityFragment :
                 putString("infoData", mViewModel.contributorInfo.value?.total_calories)
                 putString("date", mainViewModel.selectedDate)
             })
-            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ACTIVITY_TOTAL_CALORIES_CLICK)
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_total_calories_click)
         }
         binding.lytAScoreData.lytSec3.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -716,7 +722,7 @@ class OreoActivityFragment :
                 putString("infoData", mViewModel.contributorInfo.value?.total_steps)
                 putString("date", mainViewModel.selectedDate)
             })
-            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ACTIVITY_ACTIVITY_SCORE_CLICK)
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_activity_score_click)
         }
         binding.lytAScoreData.lytSec4.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -727,7 +733,7 @@ class OreoActivityFragment :
                 putString("infoData", mViewModel.contributorInfo.value?.total_distance)
                 putString("date", mainViewModel.selectedDate)
             })
-            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ACTIVITY_DISTANCE_CLICK)
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_distance_click)
         }
 
 
@@ -736,7 +742,7 @@ class OreoActivityFragment :
     override fun subscribeObservers() {
 
         mainViewModel.activityHistoryResponse.observe(this) {
-            if(it.isNullOrEmpty()) return@observe
+            if (it.isNullOrEmpty()) return@observe
 
             binding.svMain.visible()
             binding.groupHeader.visible()
