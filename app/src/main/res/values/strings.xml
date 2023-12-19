@@ -314,7 +314,7 @@
     <string name="text_pairing_unsuccess">Pairing unsuccessful</string>
     <string name="text_pairing_success">Pairing successful</string>
     <string name="text_permission_denial_bluetooth">Luna Ring app requires Bluetooth permission on your phone to search and connect devices.</string>
-    <string name="text_permission_denial_alarm">Luna Ring app requires Alarm permission to maintain your watch connectivity with your app.</string>
+    <string name="text_permission_denial_alarm">Luna Ring app requires Alarm permission to maintain your ring connectivity with your app.</string>
     <string name="text_permission_denial_near_by_device_bluetooth">Luna Ring app requires Nearby Device permission on your phone to search and connect devices.</string>
     <string name="text_permission_noisefit_permission_requires">Luna Ring app requires some permissions on your phone to provide you a better experience. Please click on this notification and allow them.</string>
 
@@ -344,7 +344,7 @@
     <string name="text_resting_hr">Average HR</string>
     <string name="route">Route</string>
     <string name="heart_rate_zone">Heart rate zone</string>
-    <string name="there_might_be_a_little_bit_of_inaccuracy_in_the_data_based_on_the_watch_performance">There might be a little bit of inaccuracy in the data based on the watch performance</string>
+    <string name="there_might_be_a_little_bit_of_inaccuracy_in_the_data_based_on_the_watch_performance">There might be a little bit of inaccuracy in the data based on the ring performance</string>
     <string name="give_feedback">GIVE FEEDBACK</string>
     <string name="maximum">Maximum</string>
     <string name="text_highlights">Highlights</string>
@@ -416,16 +416,16 @@
     <string name="text_emergency_contact">Emergency contact</string>
     <string name="text_app_notifications">App notifications</string>
     <string name="allow_notifications_from_other_applications_in_your_phone_act">Allow notifications from applications on your phone. Don’t worry, we won’t collect any data.</string>
-    <string name="text_select_the_apps_for_which_you_want_to_get_notifications_on_your_watch">Select the apps for which you want to get notifications on your watch.</string>
+    <string name="text_select_the_apps_for_which_you_want_to_get_notifications_on_your_watch">Select the apps for which you want to get notifications on your ring.</string>
     <string name="text_enabled">Enabled</string>
-    <string name="text_sos_top_desc">Allow your watch to make a call to your emergency contact when you tap it 5 times</string>
+    <string name="text_sos_top_desc">Allow your ring to make a call to your emergency contact when you tap it 5 times</string>
     <string name="text_disabled">Disabled</string>
     <string name="text_edit_dashboard_about">Select the data points you want to see on the summary page. You have to select at least 3 data to be displayed on the summary page.</string>
     <string name="text_no_reminders_found">No reminders found</string>
     <string name="text_label_name">Label name</string>
     <string name="text_download_and_install">Download and install</string>
     <string name="text_what_s_new_in_the_update">What’s new in this update?</string>
-    <string name="text_watch_is_up_to_date">Your watch is up to date</string>
+    <string name="text_watch_is_up_to_date">Your ring is up to date</string>
     <string name="text_updating">Updating…</string>
     <string name="text_no_watch_update_logs">No log available</string>
     <string name="text_no_alarms_found">No alarms found</string>
@@ -434,7 +434,7 @@
     <string name="text_alarms">Alarms</string>
     <string name="text_reminders">Reminders</string>
     <string name="text_my_badges">My badges</string>
-    <string name="text_sports_rec_desc">Allow your watch to detect the activity automatically without initiating the activity manually. The device will identify your running or walking state automatically.</string>
+    <string name="text_sports_rec_desc">Allow your ring to detect the activity automatically without initiating the activity manually. The device will identify your running or walking state automatically.</string>
     <string name="text_leave_challenge_message">Are you sure you want to leave ‘%s’? All your challenge progress and data will be cleared</string>
     <string name="text_feedback_hint">Add your comment here</string>
     <string name="text_explore_message">Participate in ongoing challenges and view your progress in your challenges.</string>
@@ -489,7 +489,7 @@
     <string name="text_invite">Invite</string>
     <string name="text_invite_via">Invite Via</string>
     <string name="text_start">Start</string>
-    <string name="text_start_session_message">Start your preferred workout directly from the Luna Ring App. Your watch will start recording the data once the workout is started</string>
+    <string name="text_start_session_message">Start your preferred workout directly from the Luna Ring App. Your ring will start recording the data once the workout is started</string>
     <string name="text_search_your_workout">Search your workout</string>
     <string name="text_start_workout">Start Workout</string>
     <string name="text_password_please">Password, please</string>
@@ -564,8 +564,8 @@
     <string name="text_no_app_found">No App Found</string>
     <string name="text_widget_selection">Widget Sorting</string>
     <string name="text_app_selection">App Sorting</string>
-    <string name="text_selected_widgets_will_be_shown_on_the_your_device_from_where_you_can_quickly_start_your_app">Select the widgets you want to display on the shortcut menu of your watch.</string>
-    <string name="text_when_the_phone_screen_is_off_or_locked_notifications_will_be_send_to_watch">When the phone screen is off or locked, notifications will be send to watch.</string>
+    <string name="text_selected_widgets_will_be_shown_on_the_your_device_from_where_you_can_quickly_start_your_app">Select the widgets you want to display on the shortcut menu of your ring.</string>
+    <string name="text_when_the_phone_screen_is_off_or_locked_notifications_will_be_send_to_watch">When the phone screen is off or locked, notifications will be send to ring.</string>
     <string name="text_smart_notifications">Smart notifications</string>
     <string name="text_my_performance">My performance</string>
     <string name="text_join_a_challenge">Join a challenge</string>
@@ -589,14 +589,14 @@
     <string name="text_the_google_fit_app_tracks_your_movements_lets_you_set_goals_and_keeps_track_of_your_progress_to_coach_you_towards_a_healthier_life">The Google Fit app tracks your movements, lets you set goals and keeps track of your progress to coach you towards a healthier life.</string>
     <string name="text_how_satisfied_are_you_with_the_noisefit">How satisfied are you with the Luna Ring?</string>
     <string name="text_raise_complaint">Raise a Complaint</string>
-    <string name="text_complete_your_watch_setup">Complete your watch setup</string>
+    <string name="text_complete_your_watch_setup">Complete your ring setup</string>
     <string name="text_how_we_handle_data_privacy">How we handle data privacy?</string>
     <string name="text_download">Download</string>
     <string name="text_supported_application">Supported Application</string>
     <string name="text_update_qr_payment">Update UPI QR code</string>
     <string name="text_enter_your_problem_description_here">Enter your problem description here…</string>
     <string name="text_select_picture">Select Picture</string>
-    <string name="text_please_download_your_payment_receiving_qr_code_from_your_app_gpay_phonepe_paytm_bharatpe_more_and_select_the_qr_code_using_button_above_to_add_it_to_your_watch"><![CDATA[Please download your payment receiving QR code from your App (GPay, PhonePe, Paytm, BharatPe & more)\n\nAnd Select the QR code using button above to add it to your watch.]]></string>
+    <string name="text_please_download_your_payment_receiving_qr_code_from_your_app_gpay_phonepe_paytm_bharatpe_more_and_select_the_qr_code_using_button_above_to_add_it_to_your_watch"><![CDATA[Please download your payment receiving QR code from your App (GPay, PhonePe, Paytm, BharatPe & more)\n\nAnd Select the QR code using button above to add it to your ring.]]></string>
     <string name="text_add_friends">Add Friends</string>
     <string name="text_location">Location</string>
     <string name="text_interests">Interests</string>
