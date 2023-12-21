@@ -38,6 +38,7 @@ import com.noisefit_commans.utils.Event
 
 import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageAppEventAttributes
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
@@ -347,21 +348,15 @@ class ProfileEditFragment :
             } else {
                 "Other"
             }
-        viewModel.sessionManager.addUserAttributeToInsider(true,
+        viewModel.sessionManager.addUserAttributeToMoEngage(true,
             HashMap<String, Any>().apply
             {
-                this["name"] = user.firstName.toString()
-                this["gender"] = gender
-                this["age"] = user.userInfo?.age ?: 0
-                this["dob"] = user.userInfo?.dob.toString()
-                this["step_goal"] = user.userGoals?.stepGoal ?: 0
-                this["sleep_goal"] = user.userGoals?.sleepGoal ?: 8
-                this["distance_goal"] = user.userGoals?.distanceGoal ?: 0
-                this["calories_goal"] = user.userGoals?.caloriesGoal ?: 0
-                this["unit_type"] = user.userGoals?.unitSystem ?: 0
-                this["height"] = user.userInfo?.height ?: 0
-                this["weight"] = user.userInfo?.weight ?: 0
-                this["personality_type"] = viewModel.getEndGameValue(user.endGame)
+                this[MoEngageAppEventAttributes.name] = user.firstName.toString()
+                this[MoEngageAppEventAttributes.gender] = gender
+                this[MoEngageAppEventAttributes.age] = user.userInfo?.age ?: 0
+                this[MoEngageAppEventAttributes.dob] = user.userInfo?.dob.toString()
+                this[MoEngageAppEventAttributes.height] = user.userInfo?.height ?: 0
+                this[MoEngageAppEventAttributes.weight] = user.userInfo?.weight ?: 0
             })
     }
 

@@ -1,6 +1,7 @@
 package com.oreo.ui.sleep.scoredetails
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
@@ -71,6 +72,7 @@ class OSleepScoreDetailsFragment :
         else
             mViewModel.getReadinessInternalDetailsData()
         viewUpdate()
+        Log.d("SLEEPDETAIL", mViewModel.itemType.toString())
     }
 
     private fun viewUpdate() {

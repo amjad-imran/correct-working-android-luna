@@ -809,11 +809,11 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
 
 
         val arr = arrayOf(deviceData.bluetoothName)
-        sessionManager.addUserAttributeToInsider(false, HashMap<String, Any>().apply {
-            this["pair_device_watchname"] = deviceData.bluetoothName.toString()
-            this["pair_device_mac_address"] = deviceData.address.toString()
-            this["pair_device_firmware_number"] = ""
-            this["paired_devices_list"] = arr
+        sessionManager.addUserAttributeToMoEngage(false, HashMap<String, Any>().apply {
+            this[MoEngageAppEventAttributes.pair_device_name] = deviceData.bluetoothName.toString()
+            this[MoEngageAppEventAttributes.pair_device_mac_address] = deviceData.address.toString()
+            this[MoEngageAppEventAttributes.pair_device_firmware_number] = ""
+            this[MoEngageAppEventAttributes.paired_devices_list] = arr
         })
 
 
@@ -833,10 +833,10 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
 
 
 
-        sessionManager.addUserAttributeToInsider(false, HashMap<String, Any>().apply {
-            this["pair_device_watchname"] = deviceData.bluetoothName.toString()
-            this["pair_device_mac_address"] = deviceData.address.toString()
-            this["pair_device_firmware_number"] = deviceData.deviceId.toString()
+        sessionManager.addUserAttributeToMoEngage(false, HashMap<String, Any>().apply {
+            this[MoEngageAppEventAttributes.pair_device_name] = deviceData.bluetoothName.toString()
+            this[MoEngageAppEventAttributes.pair_device_mac_address] = deviceData.address.toString()
+            this[MoEngageAppEventAttributes.pair_device_firmware_number] = deviceData.deviceId.toString()
         })
 
     }

@@ -102,7 +102,10 @@ class OMyProfileFragment :
             setFragmentResultListener(LOGOUT_KEY) { key, bundle ->
                 val isSelected = bundle.getBoolean("isSelected")
                 if (isSelected) {
+                    viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_myprofile_logout_allow_click)
                     viewModel.logoutUser()
+                } else {
+                    viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_myprofile_logout_cancel_click)
                 }
             }
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_hamburger_logout_click)

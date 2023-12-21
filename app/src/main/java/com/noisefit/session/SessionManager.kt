@@ -343,7 +343,6 @@ constructor(
 //            })
     }
 
-    //todo attribute key will update, once received from product side
     fun addUserAttributeToMoEngage(isLogin: Boolean, data: HashMap<String, Any>) {
         val firebaseInstance = Firebase.analytics
         data.forEach { (key, value) ->
@@ -500,80 +499,6 @@ constructor(
 //
 //        Firebase.analytics.logEvent(newEventName, ApplicationUtils.convertMapToBundle(data))
         //LOGS.d("LOGS_FIREBASE_EVENT_HAS_PARAMS $newEventName ")
-    }
-
-    fun addUserAttributeToInsider(isLogin: Boolean, data: HashMap<String, Any>) {
-//        val insiderUserData = Instance.currentUser
-//        val firebaseInstance = Firebase.analytics
-//        data.forEach { (key, value) ->
-//            when (value) {
-//                is String -> {
-//                    if (key.equals("name", true)) {
-//                        insiderUserData.setName(value)
-//                        firebaseInstance.setUserProperty(key, value)
-//
-//                    } else if (key.equals("gender", true)) {
-//                        if (value.lowercase() == Gender.MALE.name.lowercase())
-//                            insiderUserData.setGender(InsiderGender.MALE)
-//                        else if (value.lowercase() == Gender.FEMALE.name.lowercase())
-//                            insiderUserData.setGender(InsiderGender.FEMALE)
-//                        else
-//                            insiderUserData.setGender(InsiderGender.OTHER)
-//                    } else if (key.equals("dob", true) && !value.equals("null", true)) {
-//                        tryCatch {
-//                            firebaseInstance.setUserProperty(key, value)
-//                            insiderUserData.setBirthday(
-//                                DateFormats.getDateFormatFromString2(
-//                                    value
-//                                )
-//                            )
-//                            firebaseInstance.setUserProperty(key, value)
-//                        }
-//
-//                    } else if (key.equals("home_page_visit", true)) {
-//                        Instance.visitHomePage()
-//                        firebaseInstance.logEvent(key, null)
-//                    } else {
-//                        insiderUserData?.setCustomAttributeWithString(key, value)
-//                        firebaseInstance.setUserProperty(key, value)
-//                    }
-//
-//
-//                }
-//
-//                is Int -> {
-//                    if (key.equals("age", true)) {
-//                        insiderUserData.setAge(value)
-//                    } else
-//                        insiderUserData?.setCustomAttributeWithInt(key, value)
-//                }
-//
-//                is Double -> {
-//                    insiderUserData?.setCustomAttributeWithDouble(key, value)
-//                }
-//
-//                is Boolean -> {
-//                    insiderUserData?.setCustomAttributeWithBoolean(key, value)
-//                }
-//
-//            }
-//        }
-//        if (isLogin) {
-//            Instance.setGDPRConsent(true)
-//            insiderUserData.setEmailOptin(true)
-//            insiderUserData.setSMSOptin(true)
-//            //identifiers
-//            val user = localDataStore.getUser()
-//            val identifiers = InsiderIdentifiers()
-//            identifiers.addUserID(user?.id.toString())
-//            identifiers.addEmail(user?.email.toString())
-//            if (!user?.mobile.isNullOrEmpty()) {
-//                val phoneNumber: String = "+91" + user?.mobile.toString()
-//                identifiers.addPhoneNumber(phoneNumber.trim())
-//            }
-//            insiderUserData.login(identifiers)
-//        }
-
     }
 
     fun reloadNotification(event: Event<Boolean>) {

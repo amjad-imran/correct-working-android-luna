@@ -7,24 +7,18 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentBodyTempScoreDetailBinding
-import com.noisefit.util.ApplicationUtils
-import com.noisefit_commans.common.clearDrawables
 import com.noisefit_commans.common.setCompoundDrawable
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
-import com.noisefit_commans.ui.showShortToast
-import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.DistanceUtil
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.OInternalPageResponseModal
 import com.oreo.data.model.ResultData
 import com.oreo.ui.custom.ScrollListener
-import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.OSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,25 +30,26 @@ class BodyTempScoreDetailFragment :
     ScrollListener {
 
     private val mViewModel: OSCDViewModel by viewModels()
-    private val args :BodyTempScoreDetailFragmentArgs by navArgs()
+    private val args: BodyTempScoreDetailFragmentArgs by navArgs()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_body_temp_page_visit)
 
         binding.toolbar.tvTitle.text = "Body temperature"
         binding.toolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }
         binding.toolbar.view1.setOnClickListener {
-            mViewModel.sessionManager.logMoEngageAppEvent("${mViewModel.itemClickType}_" + MoEngageLunaAppEvents.info_click)
-             args.infoData?.let{data->
-                 navigate(
-                     BodyTempScoreDetailFragmentDirections.actionBodyTempScoreDetailFragmentToBottomSheetDataMetrics(
-                         data
-                     )
-                 )
-             }
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_body_temp_info_click)
+            args.infoData?.let { data ->
+                navigate(
+                    BodyTempScoreDetailFragmentDirections.actionBodyTempScoreDetailFragmentToBottomSheetDataMetrics(
+                        data
+                    )
+                )
+            }
         }
         binding.toolbar.view1.visible()
         binding.toolbar.ivAddFriend.invisible()
@@ -263,7 +258,7 @@ class BodyTempScoreDetailFragment :
 
     override fun onPositionSelected(position: Int, chartModel: ChartModel?) {
         chartModel?.date?.let {
-            if(it.isNotEmpty()){
+            if (it.isNotEmpty()) {
                 binding.tvAvgOn.text = "Deviation on ${
                     DateFormats.parseDate(
                         it,

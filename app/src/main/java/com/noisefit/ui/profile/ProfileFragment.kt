@@ -12,7 +12,6 @@ import com.noisefit.ui.onboarding.OnBoardActivity
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -51,11 +50,13 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(FragmentProfileBind
             setFragmentResultListener(DELETE_KEY) { key, bundle ->
                 val isSelected = bundle.getBoolean("isSelected")
                 if (isSelected) {
-                    viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.ACCOUNT_MY_PROFILE_DELETE_ACCOUNT_CLICK)
+                    viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_myprofile_delete_allow_click)
                     viewModel.deleteUser()
+                } else {
+                    viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_myprofile_delete_cancel_click)
                 }
             }
-
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_myprofile_page_delete_account_click)
             navigate(R.id.deleteAccountBottomSheet)
         }
 
