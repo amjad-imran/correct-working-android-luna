@@ -654,7 +654,7 @@ object DateFormats {
     }
 
     val mWeek = SimpleDateFormat("EEE", defaultLocale)
-    val mDay = SimpleDateFormat("dd", defaultLocale)
+    val mDay = SimpleDateFormat("d", defaultLocale)
     val mMonth = SimpleDateFormat("MMM", defaultLocale)
 
     fun getOrdinalDate(
