@@ -26,6 +26,7 @@ data class OContributorResponseModal(
     val hrv_graph: String? = null,
     val temp_graph: String? = null,
     val total_steps: String? = null,
+    val sleep_regularity: String? = null,
     val total_distance: String? = null,
     val daytime_movement: String? = null,
     val time_in_bed: String? = null,

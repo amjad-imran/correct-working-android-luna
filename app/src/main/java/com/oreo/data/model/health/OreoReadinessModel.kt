@@ -18,6 +18,13 @@ data class OreoReadinessModel(
     val recoveryIndex: CommonDataModel? = null,
     @SerializedName("activity_score")
     val activityScore: CommonDataModel? = null,
+    @SerializedName("sleep_score")
+    val sleepScore: CommonDataModel? = null,
+    @SerializedName("sleep_regularity")
+    val sleepRegularity: CommonDataModel? = null,
+    @SerializedName("body_temp")
+    val bodyTemp: CommonDataModel? = null,
+
     val activityBalance: CommonDataModel? = null,
     val restingHrBalance: CommonDataModel? = null,
     val hrReserve: CommonDataModel? = null,
