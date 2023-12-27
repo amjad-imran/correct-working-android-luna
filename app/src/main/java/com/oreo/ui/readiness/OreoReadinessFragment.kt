@@ -681,12 +681,12 @@ class OreoReadinessFragment :
             hrVariabilityDefaultView()
         }
         //temperature
-        if (it.temperature != null) {
+        if (it.avg_temp != null) {
             binding.lytRScoreData.lytSec3.lytHrMn.root.gone()
             binding.lytRScoreData.lytSec3.tvPercentValue.visible()
             binding.lytRScoreData.lytSec3.lytBpmView.root.gone()
             binding.lytRScoreData.lytSec3.tvPercentValue.text =
-                "${it.temperature?.value} °F"
+                "${it.avg_temp?.deviation} °F"
         } else {
             temperatureDefaultView()
         }
