@@ -228,8 +228,8 @@ constructor(
                             _activityHistoryResponse.value = (activityList)
 
 
-                            val todayData = userHealthData[getTodayDate()]
-                            showNotification(todayData)
+                            /*val todayData = userHealthData[getTodayDate()]
+                            showNotification(todayData)*/
 
                             val reloadDays = getDaysList(startDate, endDate)
                             dataReload.value = Event(reloadDays)
