@@ -16,15 +16,14 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoSleepDetailBinding
-import com.noisefit.oreo.HEALTH_DATA_PAGINATION_DAYS
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.common.averageIntWithoutZeroFloat
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.ui.custom.NightTimeGraphViewOreo
 import com.noisefit_commans.ui.custom.SleepGraphViewOreo
 import com.noisefit_commans.utils.AppLogs
-import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
@@ -41,6 +40,7 @@ import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
+import java.math.BigDecimal
 
 
 @AndroidEntryPoint
@@ -104,6 +104,27 @@ class OreoSleepDetailFragment :
         }
     }
 
+    private fun showAverageBloodOxygen(
+        oxy: CommonListDataModel?
+    ) {
+        val avgValue = oxy?.value?.averageIntWithoutZeroFloat()
+        if (avgValue == null || avgValue == 0.0f) {
+            binding.lytAverageBloodOxygen.root.gone()
+            return
+        }
+        if (avgValue < 95) {
+            binding.lytAverageBloodOxygen.root.visible()
+            binding.lytAverageBloodOxygen.tvAvgValue.text = "<95"
+            return
+        }
+
+        binding.lytAverageBloodOxygen.root.visible()
+        val number = BigDecimal(avgValue.toDouble())
+        binding.lytAverageBloodOxygen.tvAvgValue.text = number.stripTrailingZeros().toPlainString()
+
+
+    }
+
     private fun showBloodOxygenGraph(
         oxy: CommonListDataModel?,
         sleepStartTime: String?,
@@ -121,7 +142,7 @@ class OreoSleepDetailFragment :
             tvTitle.text = getString(R.string.text_spo2)
             tvSubtitle1.text = getString(R.string.text_average)
             tvSubtitle2.gone()
-            lytSubtitleValue1.tvValue.text = (oxy?.avg ?: 0).toString()+" %"
+            lytSubtitleValue1.tvValue.text = (oxy?.avg ?: 0).toString() + " %"
             lytSubtitleValue1.tvUnit.gone()
             lytSubtitleValue2.root.gone()
         }
@@ -445,6 +466,13 @@ class OreoSleepDetailFragment :
                 })
             }
         }
+        binding.lytAverageBloodOxygen.bInfo.setOnClickListener {
+            viewModel.contributorInfo.value?.oxy_graph?.let { content ->
+                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                    this.putString("infoData", content)
+                })
+            }
+        }
 
         binding.lytEmptyView.bGoToSettings.setOnClickListener {
             showWalkAround(false)
@@ -696,9 +724,11 @@ class OreoSleepDetailFragment :
         binding.lytSleepScore.lytSleepAvg.tvQuality.setTextColor(statusColor)
         binding.lytSleepScore.lytSleepAvg.tvQuality.text = sleepScoreData.text
         binding.lytSleepScore.lytSleepAvg.tvQuality.visible()
-        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_sleep_page_visit,HashMap<String, Any>().apply {
-            this[MoEngageAppEventParams.status]=sleepScoreData.status
-        })
+        viewModel.sessionManager.logMoEngageAppEvent(
+            MoEngageLunaAppEvents.luna_sleep_page_visit,
+            HashMap<String, Any>().apply {
+                this[MoEngageAppEventParams.status] = sleepScoreData.status
+            })
     }
 
     private fun updateUi(dayData: OreoSleepModel) {
@@ -907,6 +937,8 @@ class OreoSleepDetailFragment :
         showHeartRateVariabilityGraph(dayData.hrv, sleepStartTime, sleepEndTime)
 
         //showBloodOxygenGraph(dayData.oxy, sleepStartTime, sleepEndTime)
+
+        showAverageBloodOxygen(dayData.oxy)
 
         mSleepStageAdapter.setData(viewModel.getStepAnalysisData(dayData))
         initSleepAnalysisGraph(dayData.hourly_breakup)

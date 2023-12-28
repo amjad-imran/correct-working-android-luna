@@ -89,6 +89,14 @@ fun List<Float>.averageWithoutZeroFloat(): Float {
         0.0f
     }
 }
+fun List<Int>.averageIntWithoutZeroFloat(): Float {
+    val newList = this.filter { it != 0 && it != 255 }
+    return if (newList.isNotEmpty()) {
+        newList.average().toFloat()
+    } else {
+        0.0f
+    }
+}
 
 fun List<Int>.minWithoutZero(): Int {
     val newList = this.filter { it != 0 && it != 255 }

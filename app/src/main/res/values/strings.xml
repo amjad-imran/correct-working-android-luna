@@ -987,4 +987,5 @@
     <string name="text_turn_on_google_fit_sync">Turn on Google Fit sync</string>
     <string name="text_enable_google_fit_access">Enable Google Fit access</string>
     <string name="text_allow_google_fit_message">Allow Luna Ring to connect to Google Fit app for data sharing to improve your daily scores.</string>
+    <string name="text_average_oxygen_saturation">Average oxygen saturation</string>
 </resources>
