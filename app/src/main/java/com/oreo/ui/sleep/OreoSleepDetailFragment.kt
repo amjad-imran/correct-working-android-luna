@@ -107,20 +107,17 @@ class OreoSleepDetailFragment :
     private fun showAverageBloodOxygen(
         oxy: CommonListDataModel?
     ) {
-        val avgValue = oxy?.value?.averageIntWithoutZeroFloat()
-        if (avgValue == null || avgValue == 0.0f) {
+        if ((oxy?.avg ?: 0) == 0) {
             binding.lytAverageBloodOxygen.root.gone()
             return
         }
-        if (avgValue < 95) {
+        if ((oxy?.avg ?: 0) < 95) {
             binding.lytAverageBloodOxygen.root.visible()
             binding.lytAverageBloodOxygen.tvAvgValue.text = "<95"
             return
         }
-
         binding.lytAverageBloodOxygen.root.visible()
-        val number = BigDecimal(avgValue.toDouble())
-        binding.lytAverageBloodOxygen.tvAvgValue.text = number.stripTrailingZeros().toPlainString()
+        binding.lytAverageBloodOxygen.tvAvgValue.text = (oxy?.avg ?: 0).toString()
 
 
     }
