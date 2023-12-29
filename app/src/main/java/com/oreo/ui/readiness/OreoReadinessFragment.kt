@@ -688,7 +688,20 @@ class OreoReadinessFragment :
             binding.lytRScoreData.lytSec3.tvPercentValue.text =
                 "${it.avg_temp?.deviation} °F"
         } else {
-            temperatureDefaultView()
+            if ((it.temperature?.value ?: 0) != 0) {
+                val baselineAvg = 98.6f
+                val todayAvg = it.temperature?.value ?: baselineAvg
+                val deviation = todayAvg - baselineAvg
+
+                binding.lytRScoreData.lytSec3.lytHrMn.root.gone()
+                binding.lytRScoreData.lytSec3.tvPercentValue.visible()
+                binding.lytRScoreData.lytSec3.lytBpmView.root.gone()
+                binding.lytRScoreData.lytSec3.tvPercentValue.text =
+                    String.format("%.1f °F", deviation)
+
+            } else {
+                temperatureDefaultView()
+            }
         }
 
         //respiration
