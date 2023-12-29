@@ -48,6 +48,7 @@
         tools:text="96.5" />
 
     <TextView
+        android:id="@+id/textView94"
         style="@style/H5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -57,6 +58,20 @@
         android:textColor="@color/white_64"
         app:layout_constraintBottom_toBottomOf="@+id/tvAvgValue"
         app:layout_constraintStart_toEndOf="@+id/tvAvgValue" />
+
+    <TextView
+        android:id="@+id/tvNudge"
+        style="@style/H6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#8fffffff"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="@dimen/side_margin"
+        android:layout_marginEnd="@dimen/side_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvAvgValue"
+        tools:text="Allow yourself sufficient time for recovery by taking it slow. Consider a nap?" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

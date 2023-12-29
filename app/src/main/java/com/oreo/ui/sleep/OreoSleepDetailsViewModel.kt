@@ -23,6 +23,7 @@ import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.OContributorResponseModal
+import com.oreo.data.model.health.CommonListDataModel
 import com.oreo.data.model.health.OreoSleepModel
 import com.oreo.data.model.health.SleepHourlyBreakup
 import com.oreo.data.model.health.SleepMovementBreakup
@@ -31,6 +32,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.abs
 
 @HiltViewModel
 class OreoSleepDetailsViewModel
@@ -42,15 +44,14 @@ constructor(
 ) : BaseViewModel() {
 
 
-   /* private val _sleepHistoryResponse = MutableLiveData<List<OreoSleepModel>>()
-    val sleepHistoryResponse: LiveData<List<OreoSleepModel>> = _sleepHistoryResponse*/
+    /* private val _sleepHistoryResponse = MutableLiveData<List<OreoSleepModel>>()
+     val sleepHistoryResponse: LiveData<List<OreoSleepModel>> = _sleepHistoryResponse*/
 
     /*private val _daySleepData = MutableLiveData<OreoSleepModel>()
     val daySleepData: LiveData<OreoSleepModel> = _daySleepData*/
 
     private val _contributorInfo = MutableLiveData<OContributorResponseModal>()
     val contributorInfo: LiveData<OContributorResponseModal> = _contributorInfo
-
 
 
     init {
@@ -70,12 +71,12 @@ constructor(
             if (it.date == DateFormats.getCurrentDate(DateFormats.dateFormat3)) {
                 currentDayText = "Today, "
             }
-            val formattedDate = if(currentDayText.isEmpty()){
+            val formattedDate = if (currentDayText.isEmpty()) {
                 DateFormats.getOrdinalDate(
                     it.date,
                     DateFormats.dateFormat3
                 )
-            }else{
+            } else {
                 DateFormats.getOrdinalDateToday(
                     it.date,
                     DateFormats.dateFormat3,
@@ -667,6 +668,27 @@ constructor(
         }
         return dummyList
 
+    }
+
+    fun getBloodOxygenNudge(oxy: CommonListDataModel?): String {
+        val avg = oxy?.avg
+        if (avg == null || avg == 0) return ""
+
+        var count = 0
+        oxy.value.forEach {
+            if (it != 0 && it != 255) {
+                val diff = abs(it - avg)
+                if (diff >= 3) {
+                    count++
+                }
+            }
+        }
+
+        return when (count) {
+            in 0..2 -> "Your blood oxygen levels have shown consistency, indicating no breathing disturbances during sleep."
+            in 3..5 -> "Your blood oxygen levels had some variations. This may be because of occasional breathing disturbances during sleep."
+            else -> "Your blood oxygen levels had several variations. This may be because of significant breathing disturbances during sleep."
+        }
     }
 
 
