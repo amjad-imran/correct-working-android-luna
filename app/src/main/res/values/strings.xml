@@ -978,4 +978,5 @@
     <string name="text_trouble_connecting_your_ring">Trouble connecting your ring?</string>
     <string name="text_get_help">Get help</string>
     <string name="text_identify">Identify</string>
+    <string name="text_sleep_score">Sleep score</string>
 </resources>
