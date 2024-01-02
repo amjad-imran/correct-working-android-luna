@@ -1,10 +1,10 @@
 package com.oreo.ui.home.summary
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.hookedonplay.decoviewlib.events.DecoEvent
@@ -12,12 +12,11 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ListActivityBurnCardItem2Binding
 import com.noisefit.luna.databinding.ListActivityBurnCardItemBinding
 import com.noisefit.luna.databinding.ListActivityMinimalItemBinding
+import com.noisefit.luna.databinding.ListDashNapBinding
 import com.noisefit.luna.databinding.ListOWAlertCardItemBinding
 import com.noisefit.luna.databinding.ListReadinessCardItemBinding
 import com.noisefit.luna.databinding.ListReadinessMinimalCardItemBinding
-import com.noisefit.luna.databinding.ListReadinessScoreCardItemBinding
 import com.noisefit.luna.databinding.ListRingCareBinding
-import com.noisefit.luna.databinding.ListSleepActivityCardItemBinding
 import com.noisefit.luna.databinding.ListSleepCardItemBinding
 import com.noisefit.luna.databinding.ListSleepMinimalItemBinding
 import com.noisefit.luna.databinding.ListSleepWaitingCardItemBinding
@@ -84,6 +83,14 @@ class OSummaryHealthOverviewAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeRecyclerViewHolder {
         return when (viewType) {
+            R.layout.list_dash_nap -> HomeRecyclerViewHolder.NapWidgetCardViewHolder(
+                ListDashNapBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
             R.layout.list_video_info_card -> HomeRecyclerViewHolder.InfoVideoCardViewHolder(
                 ListVideoInfoCardBinding.inflate(
                     LayoutInflater.from(parent.context),
@@ -202,6 +209,7 @@ class OSummaryHealthOverviewAdapter :
     override fun onBindViewHolder(holder: HomeRecyclerViewHolder, position: Int) {
         holder.itemClickListener = itemClickListener
         when (holder) {
+            is HomeRecyclerViewHolder.NapWidgetCardViewHolder -> holder.bind(items[position] as OHealthOverview.NapDashCard)
             is HomeRecyclerViewHolder.InfoWelcomeCardViewHolder -> holder.bind(items[position] as OHealthOverview.InfoRingWelcome)
             is HomeRecyclerViewHolder.InfoRingCareViewHolder -> holder.bind(items[position] as OHealthOverview.InfoRingCare)
             is HomeRecyclerViewHolder.InfoVideoCardViewHolder -> holder.bind(
@@ -295,6 +303,7 @@ class OSummaryHealthOverviewAdapter :
             is OHealthOverview.InfoVideo -> R.layout.list_video_info_card
             is OHealthOverview.InfoRingCare -> R.layout.list_ring_care
             is OHealthOverview.InfoRingWelcome -> R.layout.list_welcome_card
+            is OHealthOverview.NapDashCard -> R.layout.list_dash_nap
         }
     }
 }
@@ -303,6 +312,27 @@ class OSummaryHealthOverviewAdapter :
 sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(binding.root) {
 
     var itemClickListener: ((type: OSummaryHealthOverviewClickEnum) -> Unit)? = null
+
+    class NapWidgetCardViewHolder(private val binding: ListDashNapBinding) :
+        HomeRecyclerViewHolder(binding) {
+        fun bind(
+            data: OHealthOverview.NapDashCard,
+        ) {
+
+            binding.rvNap.layoutManager = LinearLayoutManager(binding.rvNap.context)
+            binding.rvNap.adapter = DashNapAdapter(data.napList)
+
+
+            /* binding.root.setOnClickListener {
+                 itemClickListener?.invoke(
+                     OSummaryHealthOverviewClickEnum.VideoInfoClicked(
+                         data.type,
+                         data.data.url
+                     )
+                 )
+             }*/
+        }
+    }
 
     class InfoVideoCardViewHolder(private val binding: ListVideoInfoCardBinding) :
         HomeRecyclerViewHolder(binding) {

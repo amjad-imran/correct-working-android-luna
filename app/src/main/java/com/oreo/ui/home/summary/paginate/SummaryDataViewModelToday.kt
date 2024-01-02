@@ -207,6 +207,8 @@ constructor(
                 nudges = healthData.activity?.dash_nudges
             )
 
+            val nap = listOf<String>("Nap1, Nap2")
+
 
             val daySlot = getDaySlot()
             LOGS.d("TIME_TEST", "daySlot $daySlot")
@@ -237,6 +239,9 @@ constructor(
                     } else {
                         userActivities.add(OHealthOverview.SleepWaiting)
                     }
+                    if (nap.isNotEmpty()) {
+                        userActivities.add(OHealthOverview.NapDashCard(nap))
+                    }
                 }
 
                 1 -> {
@@ -265,6 +270,10 @@ constructor(
                     } else {
                         userActivities.add(OHealthOverview.SleepWaiting)
                     }
+                    if (nap.isNotEmpty()) {
+                        userActivities.add(OHealthOverview.NapDashCard(nap))
+                    }
+
 
                     //Activity
                     if ((healthData.activity?.activeCalories ?: 0) > 0) {
@@ -312,6 +321,9 @@ constructor(
                                 )
                             }
                         }
+                    }
+                    if (nap.isNotEmpty()) {
+                        userActivities.add(OHealthOverview.NapDashCard(nap))
                     }
 
                     if ((healthData.activity?.activeCalories ?: 0) > 0) {
@@ -372,6 +384,9 @@ constructor(
                                     )
                                 )
                             }
+                            if (nap.isNotEmpty()) {
+                                userActivities.add(OHealthOverview.NapDashCard(nap))
+                            }
 
                             if ((readinessModel.readinessScore ?: 0) > 0) {
 
@@ -398,6 +413,9 @@ constructor(
                                         )
                                     )
                                 }
+                            }
+                            if (nap.isNotEmpty()) {
+                                userActivities.add(OHealthOverview.NapDashCard(nap))
                             }
                             if ((readinessModel.readinessScore ?: 0) > 0) {
                                 healthData.readiness?.let {
