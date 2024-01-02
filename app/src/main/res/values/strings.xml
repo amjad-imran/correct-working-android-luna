@@ -979,4 +979,5 @@
     <string name="text_get_help">Get help</string>
     <string name="text_identify">Identify</string>
     <string name="text_sleep_score">Sleep score</string>
+    <string name="text_nap_details">Nap details</string>
 </resources>
