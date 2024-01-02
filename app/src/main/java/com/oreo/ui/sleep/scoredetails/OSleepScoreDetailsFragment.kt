@@ -20,6 +20,7 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DistanceUtil
 import com.noisefit_commans.utils.FirebaseLunaAppEvents
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MiscUtil
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Comparison
@@ -97,11 +98,15 @@ class OSleepScoreDetailsFragment :
                         binding.lytTopGraphView.lytLabelValue2.root.gone()
                     }
                 }
-                mViewModel.sessionManager.logFirebaseEvent("${mViewModel.itemClickType?.let {
-                    MiscUtil.addUnderscore(
-                        it
-                    )
-                }}_" + FirebaseLunaAppEvents.DAY_CLICK)
+                mViewModel.sessionManager.logFirebaseEvent(
+                    "${
+                        mViewModel.itemClickType?.let {
+                            MiscUtil.addUnderscore(
+                                it
+                            )
+                        }
+                    }_" + FirebaseLunaAppEvents.DAY_CLICK
+                )
 
             }
 
@@ -129,11 +134,15 @@ class OSleepScoreDetailsFragment :
                         binding.lytTopGraphView.lytLabelValue2.root.gone()
                     }
                 }
-                mViewModel.sessionManager.logFirebaseEvent("${mViewModel.itemClickType?.let {
-                    MiscUtil.addUnderscore(
-                        it
-                    )
-                }}_" + FirebaseLunaAppEvents.WEEK_CLICK)
+                mViewModel.sessionManager.logFirebaseEvent(
+                    "${
+                        mViewModel.itemClickType?.let {
+                            MiscUtil.addUnderscore(
+                                it
+                            )
+                        }
+                    }_" + FirebaseLunaAppEvents.WEEK_CLICK
+                )
             }
 
             else -> {
@@ -160,11 +169,15 @@ class OSleepScoreDetailsFragment :
                         binding.lytTopGraphView.lytLabelValue2.root.gone()
                     }
                 }
-                mViewModel.sessionManager.logFirebaseEvent("${mViewModel.itemClickType?.let {
-                    MiscUtil.addUnderscore(
-                        it
-                    )
-                }}_" + FirebaseLunaAppEvents.MONTH_CLICK)
+                mViewModel.sessionManager.logFirebaseEvent(
+                    "${
+                        mViewModel.itemClickType?.let {
+                            MiscUtil.addUnderscore(
+                                it
+                            )
+                        }
+                    }_" + FirebaseLunaAppEvents.MONTH_CLICK
+                )
             }
         }
     }
@@ -241,7 +254,7 @@ class OSleepScoreDetailsFragment :
                             binding.lytTopGraphView.lytLabelValue1.tvUnit.visible()
                             binding.lytTopGraphView.lytLabelValue1.tvUnit.text = "steps"
                         }
-                        setTopDateLabel(it.date)
+                        setTopDateLabel(it.date, it.year)
                     }
 
                     ViewItemClickType.SLEEP_EFFICIENCY.name -> {
@@ -260,7 +273,7 @@ class OSleepScoreDetailsFragment :
                             binding.lytTopGraphView.lytLabelValue1.tvUnit.gone()
 //                            binding.lytTopGraphView.lytLabelValue1.tvUnit.text = "%"
                         }
-                        setTopDateLabel(it.date)
+                        setTopDateLabel(it.date, it.year)
                     }
 
                     ViewItemClickType.RESPIRATORY_RATE.name -> {
@@ -274,7 +287,7 @@ class OSleepScoreDetailsFragment :
                             binding.lytTopGraphView.lytLabelValue1.tvUnit.visible()
                             binding.lytTopGraphView.lytLabelValue1.tvUnit.text = "/ min"
                         }
-                        setTopDateLabel(it.date)
+                        setTopDateLabel(it.date, it.year)
                     }
 
                     ViewItemClickType.RESTING_HR.name -> {
@@ -288,7 +301,7 @@ class OSleepScoreDetailsFragment :
                             binding.lytTopGraphView.lytLabelValue1.tvUnit.visible()
                             binding.lytTopGraphView.lytLabelValue1.tvUnit.text = "bpm"
                         }
-                        setTopDateLabel(it.date)
+                        setTopDateLabel(it.date, it.year)
                     }
 
                     ViewItemClickType.ACTIVE_CALORIES.name -> {
@@ -302,7 +315,7 @@ class OSleepScoreDetailsFragment :
                             binding.lytTopGraphView.lytLabelValue1.tvUnit.visible()
                             binding.lytTopGraphView.lytLabelValue1.tvUnit.text = "kcal"
                         }
-                        setTopDateLabel(it.date)
+                        setTopDateLabel(it.date, it.year)
                     }
 
                     ViewItemClickType.DISTANCE.name -> {
@@ -317,7 +330,7 @@ class OSleepScoreDetailsFragment :
                             binding.lytTopGraphView.lytLabelValue1.tvUnit.visible()
                             binding.lytTopGraphView.lytLabelValue1.tvUnit.text = "km"
                         }
-                        setTopDateLabel(it.date)
+                        setTopDateLabel(it.date, it.year)
                     }
 
                     ViewItemClickType.BODY_TEMPERATURE.name -> {
@@ -332,7 +345,7 @@ class OSleepScoreDetailsFragment :
                             binding.lytTopGraphView.lytLabelValue1.tvUnit.visible()
                             binding.lytTopGraphView.lytLabelValue1.tvUnit.text = "°F"
                         }
-                        setTopDateLabel(it.date)
+                        setTopDateLabel(it.date, it.year)
                     }
 
                     else -> {
@@ -368,7 +381,7 @@ class OSleepScoreDetailsFragment :
                                 binding.lytTopGraphView.lytLabelValue11.tvHourUnit.invisible()
                             }
                         }
-                        setTopDateLabel(it.date)
+                        setTopDateLabel(it.date, it.year)
                     }
                 }
             } else {
@@ -376,7 +389,7 @@ class OSleepScoreDetailsFragment :
                 binding.lytTopGraphView.lytLabelValue11.root.gone()
                 binding.lytTopGraphView.lytLabelValue1.tvValue.text =
                     checkZeroData(it.data.roundToInt())
-                setTopDateLabel(it.date)
+                setTopDateLabel(it.date, it.year)
             }
 
         }
@@ -1041,7 +1054,7 @@ class OSleepScoreDetailsFragment :
 //            binding.lytScoreOverview.tvTrendProg.text = "${mViewModel.trendDiff.value} %"
 //    }
 
-    private fun setTopDateLabel(data: String, dateRange: String = "") {
+    private fun setTopDateLabel(data: String, year: String? = null) {
         val dateRangeValue: String = when (mViewModel.dayType?.lowercase()) {
             "day" -> {
                 DateFormats.getConvertToDateFormat(
@@ -1052,16 +1065,14 @@ class OSleepScoreDetailsFragment :
             }
 
             "week" -> {
-                val year = mViewModel.selectedDate?.substring(0, 4) ?: ""
-                "Avg from ${DateFormats.getStartAndEndWeek(data.toInt(), year.toInt())}"
+                val yearVal = year ?: (mViewModel.selectedDate?.substring(0, 4) ?: "")
+                LOGS.d("sdfsdfsdf ${mViewModel.selectedDate} $yearVal")
+                "Avg from ${DateFormats.getStartAndEndWeek(data.toInt(), yearVal.toInt())}"
             }
 
             else -> {
-                "Avg in ${DateFormats.getCompleteMonthName(data.toInt() - 1)} ${
-                    mViewModel.getYearFromDate(
-                        mViewModel.selectedDate
-                    )
-                }"
+                val yearVal = year ?: (mViewModel.selectedDate?.substring(0, 4) ?: "")
+                "Avg in ${DateFormats.getCompleteMonthName(data.toInt() - 1)} $yearVal"
             }
         }
 
