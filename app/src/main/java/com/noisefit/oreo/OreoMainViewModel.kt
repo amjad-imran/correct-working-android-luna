@@ -13,6 +13,8 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.User
+import com.noisefit_commans.interfaces.connection.ConnectState
+import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.ui.checkDayDifferenceMoreOne
 import com.noisefit_commans.utils.DateFormats
@@ -595,6 +597,20 @@ constructor(
         mStartDate = getDatesMinus(selectedDate, minusDays)
         this.selectedDate = selectedDate
         dateSetOn = DateFormats.getCurrentDateOreoFormat()
+    }
+
+    fun isDeviceConnected(): Boolean {
+        if (getDeviceConnected() == null) {
+            return false
+        }
+
+        if (sessionManager.connectStateRing.value is ConnectState.ConnectSuccess) {
+            return true
+        }
+        return false
+    }
+    fun getDeviceConnected(): ColorFitDevice? {
+        return ringDataStore.getRingDevice()
     }
 
 

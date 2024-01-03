@@ -465,5 +465,9 @@
         android:id="@+id/addWorkoutSelectorFragment"
         android:name="com.oreo.ui.recordworkout.AddWorkoutSelectorFragment"
         android:label="fragment_add_workout_selctor" />
+    <fragment
+        android:id="@+id/selectWorkoutFragment"
+        android:name="com.oreo.ui.recordworkout.SelectWorkoutFragment"
+        android:label="fragment_select_workout"/>
 
 </navigation>

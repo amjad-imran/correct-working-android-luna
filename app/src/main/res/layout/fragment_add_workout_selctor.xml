@@ -21,7 +21,7 @@
         android:layout_width="196dp"
         android:layout_height="56dp"
         android:layout_marginEnd="24dp"
-        android:gravity="center"
+        android:gravity="center_vertical|end"
         android:paddingEnd="52dp"
         android:text="@string/text_add_workout"
         app:layout_constraintBottom_toTopOf="@+id/tvRecordWorkout"
@@ -52,7 +52,7 @@
         android:layout_width="196dp"
         android:layout_height="56dp"
         android:layout_marginEnd="24dp"
-        android:gravity="center"
+        android:gravity="center_vertical|end"
         android:paddingEnd="52dp"
         android:text="@string/text_record_workout"
         app:layout_constraintBottom_toTopOf="@+id/ivWorkoutClose"
@@ -75,8 +75,9 @@
         android:layout_height="48dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="80dp"
-        android:padding="12dp"
+        android:padding="8dp"
         android:src="@drawable/ic_add_workout_close"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

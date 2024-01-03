@@ -1,13 +1,155 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.oreo.ui.recordworkout.RecordWorkoutFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <ImageView
+        android:id="@+id/imageView25"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:padding="14dp"
+        android:src="@drawable/ic_add_workout_close"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/tvWorkoutTitle"
+        style="@style/H4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView25"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView25"
+        tools:text="Outdoor run" />
+
+    <ImageView
+        android:id="@+id/oreoStatus"
+        android:layout_width="@dimen/dimen_32dp"
+        android:layout_height="@dimen/dimen_32dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/back_modal_new_round"
+        android:src="@drawable/ic_ring_default_silver_new"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView25"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView25" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/batteryStatus"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:indeterminate="false"
+        android:visibility="gone"
+        app:indicatorSize="@dimen/dimen_32dp"
+        app:layout_constraintBottom_toBottomOf="@+id/oreoStatus"
+        app:layout_constraintEnd_toEndOf="@+id/oreoStatus"
+        app:layout_constraintStart_toStartOf="@+id/oreoStatus"
+        app:layout_constraintTop_toTopOf="@+id/oreoStatus"
+        app:trackColor="#1effffff"
+        app:trackThickness="1dp" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieAnimView"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/oreoStatus"
+        app:layout_constraintEnd_toEndOf="@+id/oreoStatus"
+        app:layout_constraintStart_toStartOf="@+id/oreoStatus"
+        app:layout_constraintTop_toTopOf="@+id/oreoStatus"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/raw_anim_ring_sync" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ivWorkout"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="94dp"
+        android:background="@drawable/back_modal_new_round"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvWorkoutTitle"
+        app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+
+    <ImageView
+        android:id="@+id/ivWorkoutImage"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:padding="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivWorkout"
+        app:layout_constraintEnd_toEndOf="@+id/ivWorkout"
+        app:layout_constraintStart_toStartOf="@+id/ivWorkout"
+        app:layout_constraintTop_toTopOf="@+id/ivWorkout"
+        tools:src="@drawable/ic_o_workout" />
+
+
+    <TextView
+        android:id="@+id/tvTimer"
+        style="@style/H32"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:textSize="64sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivWorkout"
+        tools:text="00:00" />
+
+    <TextView
+        style="@style/H5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/gilroy_medium"
+        android:textColor="@color/white_12_72"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTimer"
+        tools:text="Duration" />
+
+    <include
+        android:id="@+id/lytRingConnecting"
+        layout="@layout/layout_record_workout_ring_connecting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="24dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/tvStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/tvStart"
+        style="@style/H6"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="12dp"
+        android:gravity="center"
+        android:text="Start"
+        app:layout_constraintBottom_toTopOf="@+id/tvEnd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tvEnd"
+        style="@style/H6"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        android:text="End"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
