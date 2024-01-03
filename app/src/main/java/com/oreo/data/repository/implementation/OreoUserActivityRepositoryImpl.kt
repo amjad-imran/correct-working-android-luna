@@ -30,12 +30,30 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.dataConverter.OreoOfflineDataMapper
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
-import com.oreo.data.db.implementation.*
-import com.oreo.data.model.*
-import com.oreo.data.model.health.OreoActivityModel
-import com.oreo.data.model.health.OreoDashboardResponseModel
-import com.oreo.data.model.health.OreoReadinessModel
-import com.oreo.data.model.health.OreoSleepModel
+import com.oreo.data.db.implementation.OreoAutoSportDataImpl
+import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
+import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
+import com.oreo.data.db.implementation.OreoHeartRateDataImpl
+import com.oreo.data.db.implementation.OreoRespiratoryDataImpl
+import com.oreo.data.db.implementation.OreoSleepDataImpl
+import com.oreo.data.db.implementation.OreoStepsDataImpl
+import com.oreo.data.db.implementation.OreoStressDataImpl
+import com.oreo.data.model.LearnModel
+import com.oreo.data.model.OActivityListModal
+import com.oreo.data.model.OContributorResponseModal
+import com.oreo.data.model.OHSModel
+import com.oreo.data.model.OHSQuestionariesResponseModel
+import com.oreo.data.model.OHealthOverview
+import com.oreo.data.model.OInternalPageResponseModal
+import com.oreo.data.model.OWorkoutDetailsResponseModel
+import com.oreo.data.model.OWorkoutListModal
+import com.oreo.data.model.OreoNapDetailsDataModel
+import com.oreo.data.model.RingCareResponse
+import com.oreo.data.model.RingWelcome
+import com.oreo.data.model.ServerUserHealthData
+import com.oreo.data.model.ServerUserHealthResponse
+import com.oreo.data.model.TapMeasureState
+import com.oreo.data.model.TrendsData
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import com.oreo.ui.DataType
@@ -43,15 +61,12 @@ import com.oreo.ui.TestUserData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.json.JSONArray
-import org.json.JSONObject
 import org.joda.time.LocalDate
-import java.util.Date
+import org.json.JSONObject
 
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -1752,6 +1767,14 @@ class OreoUserActivityRepositoryImpl(
                     }
                 }
             }
+        }
+    }
+
+    override suspend fun getUserNapData(): Flow<Resource<BaseApiResponse<OreoNapDetailsDataModel>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${BuildConfig.OREO_BASE_URL}/activity/v1/workout_detail/"//todo end point will change later
+            remoteDataSource.getUserNapDetailsData(url)
         }
     }
 

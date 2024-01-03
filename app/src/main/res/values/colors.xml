@@ -171,4 +171,8 @@
     <color name="activity_arc">#8ed3f1</color>
     <color name="color_workout">#88d6eb</color>
     <color name="steel_grey">#8a8c8e</color>
+    <color name="nap_sleep_grad_start">#ddc5ff</color>
+    <color name="nap_sleep_grad_end">#a665ff</color>
+    <color name="nap_readiness_grad_start">#ffd6c5</color>
+    <color name="nap_readiness_grad_end">#f18f67</color>
 </resources>

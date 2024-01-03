@@ -832,6 +832,10 @@ interface NetworkService {
     suspend fun getHSQAnswer(
         @Url url: String
     ): BaseApiResponse<List<OHSQuestionariesResponseModel>>
+    @GET
+    suspend fun getUserNapDetailsData(
+        @Url url: String
+    ): BaseApiResponse<OreoNapDetailsDataModel>
     /**
      * ---------------------------------------------------------------------------------
      *                                Oreo Services End

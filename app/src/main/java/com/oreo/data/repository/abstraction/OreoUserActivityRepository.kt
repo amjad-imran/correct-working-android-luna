@@ -3,7 +3,6 @@ package com.oreo.data.repository.abstraction
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.remote.base.Resource
-import com.noisefit_commans.data.model.UserHealthData
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
 import com.oreo.data.model.LearnModel
@@ -15,30 +14,26 @@ import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.OInternalPageResponseModal
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.model.OWorkoutListModal
+import com.oreo.data.model.OreoNapDetailsDataModel
 import com.oreo.data.model.RingCareResponse
 import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthResponse
-import com.oreo.data.model.health.OreoActivityModel
-import com.oreo.data.model.health.OreoDashboardResponseModel
-import com.oreo.data.model.health.OreoReadinessModel
-import com.oreo.data.model.health.OreoSleepModel
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import com.oreo.ui.TestUserData
 import kotlinx.coroutines.flow.Flow
-import org.json.JSONArray
 
 interface OreoUserActivityRepository {
 
     suspend fun getRingCareData(): Flow<Resource<BaseApiResponse<RingCareResponse>>>
     suspend fun getWelcomeRingData(): Flow<Resource<BaseApiResponse<RingWelcome>>>
 
-//    suspend fun getDashboardData(forceRefresh: Boolean): Flow<Resource<BaseApiResponse<OreoDashboardResponseModel>>>
+    //    suspend fun getDashboardData(forceRefresh: Boolean): Flow<Resource<BaseApiResponse<OreoDashboardResponseModel>>>
     suspend fun getLearnData(): Flow<Resource<BaseApiResponse<List<LearnModel>>>>
 
-//    suspend fun getSleepHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoSleepModel>>>>
+    //    suspend fun getSleepHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoSleepModel>>>>
     suspend fun getUserHealthData(
-        startDate: String?=null,
-        endDate: String?=null
+        startDate: String? = null,
+        endDate: String? = null
     ): Flow<Resource<BaseApiResponse<ServerUserHealthResponse>>>
 
 //    suspend fun getActivityHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoActivityModel>>>>
@@ -96,4 +91,7 @@ interface OreoUserActivityRepository {
     suspend fun getHSQAnswer(quesId: String): Flow<Resource<BaseApiResponse<List<OHSQuestionariesResponseModel>>>>
 
     suspend fun clearAllHealthData()
+
+    suspend fun getUserNapData(
+    ): Flow<Resource<BaseApiResponse<OreoNapDetailsDataModel>>>
 }

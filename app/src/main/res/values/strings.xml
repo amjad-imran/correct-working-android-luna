@@ -990,4 +990,6 @@
     <string name="text_average_oxygen_saturation">Average oxygen saturation</string>
     <string name="text_sleep_score">Sleep score</string>
     <string name="text_nap_details">Nap details</string>
+    <string name="text_impact_on_scores">Impact on scores</string>
+    <string name="text_nap">Nap</string>
 </resources>

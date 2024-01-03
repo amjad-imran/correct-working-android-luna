@@ -14,7 +14,7 @@
             android:layout_marginStart="@dimen/side_margin"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Impact on scores" />
+            android:text="@string/text_impact_on_scores" />
 
         <ImageView
             android:id="@+id/imageView1"
