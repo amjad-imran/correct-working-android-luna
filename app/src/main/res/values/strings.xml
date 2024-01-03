@@ -984,4 +984,6 @@
     <string name="text_something_went_wrong_please_try_again">Something went wrong. Please try again</string>
     <string name="text_retry">Retry</string>
     <string name="text_average_oxygen_saturation">Average oxygen saturation</string>
+    <string name="text_add_workout">Add workout</string>
+    <string name="text_record_workout">Record workout</string>
 </resources>

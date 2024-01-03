@@ -123,6 +123,10 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             binding.layoutRetry.root.gone()
             viewModel.getUserHealthData(viewModel.mStartDate, viewModel.mEndDate)
         }
+
+        binding.btnAddWorkout.setOnClickListener {
+            navController?.navigate(R.id.addWorkoutSelectorFragment)
+        }
     }
 
     fun checkBluetooth() {

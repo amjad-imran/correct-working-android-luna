@@ -457,5 +457,13 @@
         android:id="@+id/myDeviceIntroBottomSheet"
         android:name="com.oreo.ui.info.BottomSheetMyDeviceIntro"
         android:label="MyDeviceBottomSheetIntro" />
+    <fragment
+        android:id="@+id/recordWorkoutFragment"
+        android:name="com.oreo.ui.recordworkout.RecordWorkoutFragment"
+        android:label="fragment_record_workout" />
+    <fragment
+        android:id="@+id/addWorkoutSelectorFragment"
+        android:name="com.oreo.ui.recordworkout.AddWorkoutSelectorFragment"
+        android:label="fragment_add_workout_selctor" />
 
 </navigation>

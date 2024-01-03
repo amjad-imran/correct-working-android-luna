@@ -1,0 +1,82 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#cc030f1d"
+    tools:context="com.oreo.ui.recordworkout.AddWorkoutSelectorFragment">
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/back_modal_new"
+        app:layout_constraintBottom_toBottomOf="@+id/tvRecordWorkout"
+        app:layout_constraintEnd_toEndOf="@+id/tvAddWorkout"
+        app:layout_constraintStart_toStartOf="@+id/tvAddWorkout"
+        app:layout_constraintTop_toTopOf="@+id/tvAddWorkout" />
+
+    <TextView
+        android:id="@+id/tvAddWorkout"
+        style="@style/H5"
+        android:layout_width="196dp"
+        android:layout_height="56dp"
+        android:layout_marginEnd="24dp"
+        android:gravity="center"
+        android:paddingEnd="52dp"
+        android:text="@string/text_add_workout"
+        app:layout_constraintBottom_toTopOf="@+id/tvRecordWorkout"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="12dp"
+        android:src="@drawable/ic_add_workout_calorie"
+        app:layout_constraintBottom_toBottomOf="@+id/tvAddWorkout"
+        app:layout_constraintEnd_toEndOf="@+id/tvAddWorkout"
+        app:layout_constraintTop_toTopOf="@+id/tvAddWorkout" />
+
+
+    <include
+        layout="@layout/layout_divider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        app:layout_constraintEnd_toEndOf="@+id/tvAddWorkout"
+        app:layout_constraintStart_toStartOf="@+id/tvAddWorkout"
+        app:layout_constraintTop_toBottomOf="@+id/tvAddWorkout" />
+
+    <TextView
+        android:id="@+id/tvRecordWorkout"
+        style="@style/H5"
+        android:layout_width="196dp"
+        android:layout_height="56dp"
+        android:layout_marginEnd="24dp"
+        android:gravity="center"
+        android:paddingEnd="52dp"
+        android:text="@string/text_record_workout"
+        app:layout_constraintBottom_toTopOf="@+id/ivWorkoutClose"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/imageView24"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="12dp"
+        android:src="@drawable/ic_record_workout_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/tvRecordWorkout"
+        app:layout_constraintEnd_toEndOf="@+id/tvRecordWorkout"
+        app:layout_constraintTop_toTopOf="@+id/tvRecordWorkout" />
+
+    <ImageView
+        android:id="@+id/ivWorkoutClose"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="80dp"
+        android:padding="12dp"
+        android:src="@drawable/ic_add_workout_close"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
