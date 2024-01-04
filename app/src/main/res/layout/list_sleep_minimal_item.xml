@@ -142,6 +142,17 @@
         app:layout_constraintStart_toEndOf="@+id/view20"
         app:layout_constraintTop_toBottomOf="@+id/textView72"
         tools:text="59 bpm" />
+    <include
+        android:id="@+id/lytNapLabel"
+        layout="@layout/layout_nap_dash_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginEnd="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvSleepScore"
+        app:layout_constraintBottom_toBottomOf="@id/tvSleepScore"
+        tools:visibility="visible" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -176,4 +176,6 @@
     <color name="nap_readiness_grad_start">#ffd6c5</color>
     <color name="nap_readiness_grad_end">#f18f67</color>
     <color name="lavender">#c5a8ed</color>
+    <color name="nap_dash_sleep_score">#e1caff</color>
+    <color name="nap_dash_readiness_score">#ffddc9</color>
 </resources>
