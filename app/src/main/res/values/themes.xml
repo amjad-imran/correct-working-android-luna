@@ -252,6 +252,9 @@
     <style name="ShapeAppearanceOverlay.App.CornerSize20dp" parent="">
         <item name="cornerSize">20dp</item>
     </style>
+    <style name="ShapeAppearanceOverlay.App.CornerSize28dp" parent="">
+        <item name="cornerSize">28dp</item>
+    </style>
 
     <style name="ShapeAppearanceOverlay.App.CornerSize10dp" parent="">
         <item name="cornerSize">10dp</item>

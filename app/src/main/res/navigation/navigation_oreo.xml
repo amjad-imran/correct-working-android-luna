@@ -474,5 +474,15 @@
         android:id="@+id/napDetails"
         android:name="com.oreo.ui.sleep.nap.ONapDetailsFragment"
         android:label="fragment_nap_details" />
+    <dialog
+        android:id="@+id/bottomSheetNapScore"
+        android:name="com.oreo.ui.sleep.nap.OBottomSheetNapScore"
+        android:label="nap_score_bottomsheet" >
+        <argument
+            android:name="napScoreData"
+            android:defaultValue="@null"
+            app:argType="com.oreo.data.model.SlideUpNapScoreDataModel"
+            app:nullable="true" />
+    </dialog>
 
 </navigation>
