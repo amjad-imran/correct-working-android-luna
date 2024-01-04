@@ -15,6 +15,7 @@ data class OContributorResponseModal(
     val hrv: String? = null,
     val avg_temp: String? = null,
     val temperature: String? = null,
+    val temp_balance: String? = null,
     val respiration: String? = null,
     val activity_score: String? = null,
     val active_calories: String? = null,

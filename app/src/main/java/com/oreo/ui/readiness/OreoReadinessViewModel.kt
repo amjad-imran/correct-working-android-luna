@@ -140,12 +140,12 @@ constructor(
             if (it.date == DateFormats.getCurrentDate(DateFormats.dateFormat3)) {
                 currentDayText = "Today, "
             }
-            val formattedDate = if(currentDayText.isEmpty()){
+            val formattedDate = if (currentDayText.isEmpty()) {
                 DateFormats.getOrdinalDate(
                     it.date,
                     DateFormats.dateFormat3,
                 )
-            }else{
+            } else {
                 DateFormats.getOrdinalDateToday(
                     it.date,
                     DateFormats.dateFormat3,
@@ -257,27 +257,36 @@ constructor(
     }
 
 
-    private fun getParsedDescriptionData(): ArrayList<String> {
+    private fun getParsedDescriptionData(contriVersion: Int): ArrayList<String> {
         val descriptionList = ArrayList<String>()
-        descriptionList.add(contributorInfo.value?.sleep_score ?: "")
-        descriptionList.add(contributorInfo.value?.yesterdayActivity ?: "")
-        descriptionList.add(contributorInfo.value?.recoveryIndex ?: "")
-        descriptionList.add(contributorInfo.value?.sleep_regularity ?: "")
-        descriptionList.add(contributorInfo.value?.sleepBalance ?: "")
-        descriptionList.add(contributorInfo.value?.resting_hr ?: "")
-        descriptionList.add(contributorInfo.value?.activityBalance ?: "")
-        descriptionList.add(contributorInfo.value?.hrvBalance ?: "")
-        descriptionList.add(contributorInfo.value?.temperature ?: "")
-
-        //descriptionList.add(contributorInfo.value?.yesterdaySleepDuration ?: "")
-        //descriptionList.add(contributorInfo.value?.heartRate ?: "")
-
+        if (contriVersion >= 2) {
+            descriptionList.add(contributorInfo.value?.sleep_score ?: "")
+            descriptionList.add(contributorInfo.value?.yesterdayActivity ?: "")
+            descriptionList.add(contributorInfo.value?.recoveryIndex ?: "")
+            descriptionList.add(contributorInfo.value?.sleep_regularity ?: "")
+            descriptionList.add(contributorInfo.value?.sleepBalance ?: "")
+            descriptionList.add(contributorInfo.value?.resting_hr ?: "")
+            descriptionList.add(contributorInfo.value?.activityBalance ?: "")
+            descriptionList.add(contributorInfo.value?.hrvBalance ?: "")
+            descriptionList.add(contributorInfo.value?.temp_balance ?: "")
+        } else {
+            descriptionList.add(contributorInfo.value?.yesterdaySleepDuration ?: "")
+            descriptionList.add(contributorInfo.value?.sleepBalance ?: "")
+            descriptionList.add(contributorInfo.value?.yesterdayActivity ?: "")
+            descriptionList.add(contributorInfo.value?.activityBalance ?: "")
+            descriptionList.add(contributorInfo.value?.hrvBalance ?: "")
+            descriptionList.add(contributorInfo.value?.resting_hr ?: "")
+            descriptionList.add(contributorInfo.value?.recoveryIndex ?: "")
+        }
         return descriptionList
     }
 
-    fun prepareDataForDescriptionArray(resultData: java.util.ArrayList<Contributors>): ArrayList<Contributors> {
+    fun prepareDataForDescriptionArray(
+        resultData: java.util.ArrayList<Contributors>,
+        contriVersion: Int
+    ): ArrayList<Contributors> {
         val contList = ArrayList<Contributors>()
-        val desList = getParsedDescriptionData()
+        val desList = getParsedDescriptionData(contriVersion)
         for (i in resultData.indices) {
             val ctList = resultData[i]
             val child = Contributors(
@@ -295,7 +304,15 @@ constructor(
         return contList
     }
 
-    fun getContributorsData(dayData: OreoReadinessModel?): List<Contributors> {
+    fun getContributorsData(dayData: OreoReadinessModel?, contriVersion: Int): List<Contributors> {
+        return if (contriVersion >= 2) {
+            getContributorsDataVersion2(dayData)
+        } else {
+            getContributorsDataVersion1(dayData)
+        }
+    }
+
+    fun getContributorsDataVersion2(dayData: OreoReadinessModel?): List<Contributors> {
         val result = ArrayList<Contributors>()
 
         //Sleep score
@@ -331,7 +348,7 @@ constructor(
 
             result.add(
                 Contributors(
-                    title = "Yesterday's activity",
+                    title = "Activity Score",
                     leftText = dayData.activityScore.text,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -342,7 +359,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Yesterday's activity",
+                    title = "Activity Score",
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
@@ -433,30 +450,30 @@ constructor(
 
         //Average HR
         if (dayData?.restingHrBalance != null) {
-           val (textColor, barColor, background) = getContributorsColors(dayData.restingHrBalance.status)
+            val (textColor, barColor, background) = getContributorsColors(dayData.restingHrBalance.status)
 
-           result.add(
-               Contributors(
-                   title = "Average HR",
-                   leftText = dayData.restingHrBalance.text,
-                   leftTextColor = textColor,
-                   barColor = barColor,
-                   barPercent = dayData.restingHrBalance.valPrcnt ?: 0,
-                   backgroundRes = background
-               )
-           )
-       } else {
-           result.add(
-               Contributors(
-                   title = "Average HR",
-                   leftText = "",
-                   leftTextColor = R.color.white,
-                   barColor = R.color.readiness_progress_color,
-                   barPercent = 1,
-                   backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
-               )
-           )
-       }
+            result.add(
+                Contributors(
+                    title = "Average HR",
+                    leftText = dayData.restingHrBalance.text,
+                    leftTextColor = textColor,
+                    barColor = barColor,
+                    barPercent = dayData.restingHrBalance.valPrcnt ?: 0,
+                    backgroundRes = background
+                )
+            )
+        } else {
+            result.add(
+                Contributors(
+                    title = "Average HR",
+                    leftText = "",
+                    leftTextColor = R.color.white,
+                    barColor = R.color.readiness_progress_color,
+                    barPercent = 1,
+                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                )
+            )
+        }
 
         //Activity balance
         if (dayData?.activityBalance != null) {
@@ -513,15 +530,15 @@ constructor(
 
 
         //Body Temperature
-        if (dayData?.bodyTemp != null) {
-            val (textColor, barColor, background) = getContributorsColors(dayData.bodyTemp.status)
+        if (dayData?.tempBalance != null) {
+            val (textColor, barColor, background) = getContributorsColors(dayData.tempBalance.status)
             result.add(
                 Contributors(
                     title = "Body temperature",
-                    leftText = dayData.bodyTemp.text,
+                    leftText = dayData.tempBalance.text,
                     leftTextColor = textColor,
                     barColor = barColor,
-                    barPercent = dayData.bodyTemp.valPrcnt ?: 0,
+                    barPercent = dayData.tempBalance.valPrcnt ?: 0,
                     backgroundRes = background
                 )
             )
@@ -537,10 +554,13 @@ constructor(
                 )
             )
         }
-
         return result
+    }
 
-       /* if (dayData?.totalSleep != null) {
+    private fun getContributorsDataVersion1(dayData: OreoReadinessModel?): List<Contributors> {
+        val result = ArrayList<Contributors>()
+
+        if (dayData?.totalSleep != null) {
             val (textColor, barColor, background) = getContributorsColors(dayData.totalSleep.status)
             result.add(
                 Contributors(
@@ -563,48 +583,165 @@ constructor(
                     backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
                 )
             )
-        }*/
+        }
+        if (dayData?.sleepBalance != null) {
+            val (textColor, barColor, background) = getContributorsColors(dayData.sleepBalance.status)
+            result.add(
+                Contributors(
+                    title = "Sleep balance",
+                    leftText = dayData.sleepBalance.text,
+                    leftTextColor = textColor,
+                    barColor = barColor,
+                    barPercent = dayData.sleepBalance.valPrcnt ?: 0,
+                    backgroundRes = background
+                )
+            )
+        } else {
+            result.add(
+                Contributors(
+                    title = "Sleep balance",
+                    leftText = "",
+                    leftTextColor = R.color.white,
+                    barColor = R.color.readiness_progress_color,
+                    barPercent = 1,
+                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                )
+            )
+        }
+
+        if (dayData?.activityScore != null) {
+            val (textColor, barColor, background) = getContributorsColors(dayData.activityScore.status)
+
+            result.add(
+                Contributors(
+                    title = "Yesterday's activity",
+                    leftText = dayData.activityScore.text,
+                    leftTextColor = textColor,
+                    barColor = barColor,
+                    barPercent = dayData.activityScore.value ?: 0,
+                    backgroundRes = background
+                )
+            )
+        } else {
+            result.add(
+                Contributors(
+                    title = "Yesterday's activity",
+                    leftText = "",
+                    leftTextColor = R.color.white,
+                    barColor = R.color.readiness_progress_color,
+                    barPercent = 1,
+                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                )
+            )
+        }
+
+        if (dayData?.activityBalance != null) {
+            val (textColor, barColor, background) = getContributorsColors(dayData.activityBalance.status)
+
+            result.add(
+                Contributors(
+                    title = "Activity balance",
+                    leftText = dayData.activityBalance.text,
+                    leftTextColor = textColor,
+                    barColor = barColor,
+                    barPercent = dayData.activityBalance.valPrcnt ?: 0,
+                    backgroundRes = background
+                )
+            )
+        } else {
+            result.add(
+                Contributors(
+                    title = "Activity balance",
+                    leftText = "",
+                    leftTextColor = R.color.white,
+                    barColor = R.color.readiness_progress_color,
+                    barPercent = 1,
+                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                )
+            )
+        }
+
+        if (dayData?.hrvBalance != null) {
+            val (textColor, barColor, background) = getContributorsColors(dayData.hrvBalance.status)
+            result.add(
+                Contributors(
+                    title = "HRV balance",
+                    leftText = dayData.hrvBalance.text,
+                    leftTextColor = textColor,
+                    barColor = barColor,
+                    barPercent = dayData.hrvBalance.valPrcnt ?: 0,
+                    backgroundRes = background
+                )
+            )
+        } else {
+            result.add(
+                Contributors(
+                    title = "HRV balance",
+                    leftText = "",
+                    leftTextColor = R.color.white,
+                    barColor = R.color.readiness_progress_color,
+                    barPercent = 1,
+                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                )
+            )
+        }
+
+        if (dayData?.restingHrBalance != null) {
+            val (textColor, barColor, background) = getContributorsColors(dayData.restingHrBalance.status)
+
+            result.add(
+                Contributors(
+                    title = "Average HR",
+                    leftText = dayData.restingHrBalance.text,
+                    leftTextColor = textColor,
+                    barColor = barColor,
+                    barPercent = dayData.restingHrBalance.valPrcnt ?: 0,
+                    backgroundRes = background
+                )
+            )
+        } else {
+            result.add(
+                Contributors(
+                    title = "Average HR",
+                    leftText = "",
+                    leftTextColor = R.color.white,
+                    barColor = R.color.readiness_progress_color,
+                    barPercent = 1,
+                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                )
+            )
+        }
+
+        if (dayData?.recoveryIndex != null) {
+            val (textColor, barColor, background) = getContributorsColors(dayData.recoveryIndex.status)
+
+            result.add(
+                Contributors(
+                    title = "Recovery index",
+                    leftText = dayData.recoveryIndex.text,
+                    leftTextColor = textColor,
+                    barColor = barColor,
+                    barPercent = dayData.recoveryIndex.valPrcnt ?: 0,
+                    backgroundRes = background
+                )
+            )
+        } else {
+            result.add(
+                Contributors(
+                    title = "Recovery index",
+                    leftText = "",
+                    leftTextColor = R.color.white,
+                    barColor = R.color.readiness_progress_color,
+                    barPercent = 1,
+                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                )
+            )
+        }
 
 
 
 
-
-
-
-
-
-
-        /* if (dayData?.hrReserve != null) {
-             val (textColor, barColor, background) = getContributorsColors(dayData.hrReserve.status)
-
-             result.add(
-                 Contributors(
-                     title = "Heart rate reserve",
-                     leftText = dayData.hrReserve.text,
-                     leftTextColor = textColor,
-                     barColor = barColor,
-                     barPercent = dayData.hrReserve.valPrcnt ?: 0,
-                     backgroundRes = background
-                 )
-             )
-         } else {
-             result.add(
-                 Contributors(
-                     title = "Heart rate reserve",
-                     leftText = "",
-                     leftTextColor = R.color.white,
-                     barColor = R.color.readiness_progress_color,
-                     barPercent = 1,
-                     backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
-                 )
-             )
-         }*/
-
-
-
-
-
-
+        return result
     }
 
     private fun getContributorsColors(status: String): Triple<Int, Int, Int> {

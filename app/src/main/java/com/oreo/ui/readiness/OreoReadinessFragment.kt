@@ -55,17 +55,19 @@ class OreoReadinessFragment :
     private val mReadinessConAdapter: OreoSleepContributorAdapter by lazy {
         OreoSleepContributorAdapter(object :
             OreoSleepContributorAdapter.ContributorItemClickListener {
-            override fun onItemClick(resultData: ArrayList<Contributors>, position: Int) {
-//                if (resultData[position].barPercent > 0) {
-                openContributorBottomSheet(resultData, position)
-//                }
+            override fun onItemClick(
+                resultData: ArrayList<Contributors>,
+                position: Int,
+                version: Int
+            ) {
+                openContributorBottomSheet(resultData, position, version)
             }
 
         })
     }
 
-    private fun openContributorBottomSheet(resultData: ArrayList<Contributors>, position: Int) {
-        val descList = mViewModel.prepareDataForDescriptionArray(resultData)
+    private fun openContributorBottomSheet(resultData: ArrayList<Contributors>, position: Int,contriVer:Int) {
+        val descList = mViewModel.prepareDataForDescriptionArray(resultData,contriVer)
         navigate(
             OreoReadinessFragmentDirections.actionNavigationReadinessDetailsFragToDescriptionPopUpBottomDialogFragment(
                 position, descList.toTypedArray(), resultData[position].title
@@ -725,7 +727,11 @@ class OreoReadinessFragment :
 
         //readiness contributor
         binding.lytRContributor.tvTitle.text = getString(R.string.text_readiness_contributor)
-        mReadinessConAdapter.setData(mViewModel.getContributorsData(it))
+        val contriVersion = it.contriVersion ?: 1
+        mReadinessConAdapter.setData(
+            mViewModel.getContributorsData(it, contriVersion),
+            contriVersion
+        )
 
         //set data on heart rate
         binding.lytHeartRate.tvTitle.text = getString(R.string.text_heart_rate)

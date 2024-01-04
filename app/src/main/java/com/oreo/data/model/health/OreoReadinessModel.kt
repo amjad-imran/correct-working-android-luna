@@ -25,6 +25,11 @@ data class OreoReadinessModel(
     @SerializedName("body_temp")
     val bodyTemp: CommonDataModel? = null,
 
+    val tempBalance: CommonDataModel? = null,
+
+    @SerializedName("contri_ver")
+    val contriVersion: Int? = null,//1-> show 7 contributors, 2-> show 9 contributors
+
     val activityBalance: CommonDataModel? = null,
     val restingHrBalance: CommonDataModel? = null,
     val hrReserve: CommonDataModel? = null,
