@@ -325,7 +325,7 @@ constructor(
                     leftText = dayData.sleepScore.text,
                     leftTextColor = textColor,
                     barColor = barColor,
-                    barPercent = dayData.sleepScore.value ?: 0,
+                    barPercent = dayData.sleepScore.valPrcnt ?: 0,
                     backgroundRes = background
                 )
             )
@@ -352,7 +352,7 @@ constructor(
                     leftText = dayData.activityScore.text,
                     leftTextColor = textColor,
                     barColor = barColor,
-                    barPercent = dayData.activityScore.value ?: 0,
+                    barPercent = dayData.activityScore.valPrcnt ?: 0,
                     backgroundRes = background
                 )
             )
@@ -618,7 +618,7 @@ constructor(
                     leftText = dayData.activityScore.text,
                     leftTextColor = textColor,
                     barColor = barColor,
-                    barPercent = dayData.activityScore.value ?: 0,
+                    barPercent = dayData.activityScore.valPrcnt ?: 0,
                     backgroundRes = background
                 )
             )
