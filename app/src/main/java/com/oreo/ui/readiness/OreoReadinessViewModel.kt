@@ -614,7 +614,7 @@ constructor(
 
             result.add(
                 Contributors(
-                    title = "Yesterday's activity",
+                    title = "Activity Score",
                     leftText = dayData.activityScore.text,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -625,7 +625,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Yesterday's activity",
+                    title = "Activity Score",
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,

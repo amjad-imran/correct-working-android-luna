@@ -66,8 +66,12 @@ class OreoReadinessFragment :
         })
     }
 
-    private fun openContributorBottomSheet(resultData: ArrayList<Contributors>, position: Int,contriVer:Int) {
-        val descList = mViewModel.prepareDataForDescriptionArray(resultData,contriVer)
+    private fun openContributorBottomSheet(
+        resultData: ArrayList<Contributors>,
+        position: Int,
+        contriVer: Int
+    ) {
+        val descList = mViewModel.prepareDataForDescriptionArray(resultData, contriVer)
         navigate(
             OreoReadinessFragmentDirections.actionNavigationReadinessDetailsFragToDescriptionPopUpBottomDialogFragment(
                 position, descList.toTypedArray(), resultData[position].title
@@ -683,15 +687,18 @@ class OreoReadinessFragment :
             hrVariabilityDefaultView()
         }
         //temperature
-        if (it.avg_temp != null) {
+        if (it.avg_temp?.value != null) {
             binding.lytRScoreData.lytSec3.lytHrMn.root.gone()
             binding.lytRScoreData.lytSec3.tvPercentValue.visible()
             binding.lytRScoreData.lytSec3.lytBpmView.root.gone()
+            val baselineAvg = mainViewModel.temperatureBaseLine ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE
+            val deviation = it.avg_temp.value - baselineAvg
+
             binding.lytRScoreData.lytSec3.tvPercentValue.text =
-                "${it.avg_temp?.deviation} °F"
+                String.format("%.1f °F", deviation)
         } else {
             if ((it.temperature?.value ?: 0) != 0) {
-                val baselineAvg = 98.6f
+                val baselineAvg = mainViewModel.temperatureBaseLine ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE
                 val todayAvg = it.temperature?.value ?: baselineAvg
                 val deviation = todayAvg - baselineAvg
 
@@ -727,7 +734,7 @@ class OreoReadinessFragment :
 
         //readiness contributor
         binding.lytRContributor.tvTitle.text = getString(R.string.text_readiness_contributor)
-        val contriVersion = it.contriVersion ?: 1
+        val contriVersion = it.contriVersion ?: 2
         mReadinessConAdapter.setData(
             mViewModel.getContributorsData(it, contriVersion),
             contriVersion
