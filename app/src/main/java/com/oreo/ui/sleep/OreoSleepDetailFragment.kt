@@ -269,6 +269,28 @@ class OreoSleepDetailFragment :
         )
     }
 
+    private fun showAverageBloodOxygen(
+        oxy: CommonListDataModel?
+    ) {
+        if ((oxy?.avg ?: 0) == 0) {
+            binding.lytAverageBloodOxygen.root.gone()
+            return
+        }
+
+        binding.lytAverageBloodOxygen.tvNudge.text = viewModel.getBloodOxygenNudge(oxy)
+
+        if ((oxy?.avg ?: 0) < 95) {
+            binding.lytAverageBloodOxygen.root.visible()
+            binding.lytAverageBloodOxygen.tvAvgValue.text = "<95"
+            return
+        }
+        binding.lytAverageBloodOxygen.root.visible()
+        binding.lytAverageBloodOxygen.tvAvgValue.text = (oxy?.avg ?: 0).toString()
+
+
+
+    }
+
 
     private fun showHeartRateGraph(
         heartRateList: CommonListDataModel?,
@@ -465,6 +487,14 @@ class OreoSleepDetailFragment :
                 })
             }
         }
+        binding.lytAverageBloodOxygen.bInfo.setOnClickListener {
+            viewModel.contributorInfo.value?.oxy_graph?.let { content ->
+                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                    this.putString("infoData", content)
+                })
+            }
+        }
+
         binding.lytAverageBloodOxygen.bInfo.setOnClickListener {
             viewModel.contributorInfo.value?.oxy_graph?.let { content ->
                 navigate(R.id.bottomSheetDataMetrics, Bundle().apply {

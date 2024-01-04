@@ -289,6 +289,11 @@ object ApplicationUtils {
         return false
     }*/
 
+    fun stopOreSyncScheduler(context: Context){
+        val uniqueId = getUniqueRingSyncDataWorkName()
+        WorkManager.getInstance(context).cancelUniqueWork(uniqueId)
+    }
+
     suspend fun startOreoSyncScheduler(context: Context): Boolean {
         val uniqueId = getUniqueRingSyncDataWorkName()
         val isWorkScheduled = isWorkScheduled(uniqueId, context)
