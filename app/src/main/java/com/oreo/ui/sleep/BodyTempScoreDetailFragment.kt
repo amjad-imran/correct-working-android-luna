@@ -83,6 +83,8 @@ class BodyTempScoreDetailFragment :
         val topGraphData = mViewModel.getPrefixAndSuffixListTemp(
             it.result as ArrayList<ResultData>,
         )
+        /*val topGraphData = mViewModel.getPrefixAndSuffixListTempDummy(
+        )*/
         binding.rvTopBarGraph.updateDataWithMax(
             topGraphData.first.first,
             topGraphData.third,

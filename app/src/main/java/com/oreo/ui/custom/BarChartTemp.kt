@@ -19,6 +19,8 @@ import com.noisefit_commans.utils.LOGS.d
 import com.oreo.data.model.ChartModel
 import com.oreo.ui.activity.dpToPx
 import java.util.logging.Handler
+import kotlin.math.abs
+import kotlin.math.min
 
 class BarChartTemp : View {
     private var bgColor = 0
@@ -32,7 +34,7 @@ class BarChartTemp : View {
     private var chartLineWidth = 10f
     private var gridColor = 0
     private var hCount = 0
-    var max = 0
+    var max = 0.0f
     private var xMin = 0
     private var leftWith = 0f
     private var rightWith = 0f
@@ -84,8 +86,6 @@ class BarChartTemp : View {
     private var prefixCount = 0
     private var suffixCount = 0
     private var titleWidth = 0f
-    private var maxValue = 0
-    private var minValue = 0
 
     constructor(context: Context?) : super(context) {
         initPaint()
@@ -98,9 +98,7 @@ class BarChartTemp : View {
     }
 
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
-        context,
-        attrs,
-        defStyleAttr
+        context, attrs, defStyleAttr
     ) {
         init(attrs)
         //        updateData();
@@ -116,7 +114,7 @@ class BarChartTemp : View {
         xTextColor = ta.getColor(R.styleable.BarChart_xTextColor, -0x1000000)
         gridColor = ta.getColor(R.styleable.BarChart_gridColor, -0xff01)
         hCount = ta.getInt(R.styleable.BarChart_hCount, 5)
-        max = ta.getInt(R.styleable.BarChart_xMax, 10)
+        //max = ta.getInt(R.styleable.BarChart_xMax, 10)
         xMin = ta.getInt(R.styleable.BarChart_xMin, 0)
         xTextSize = ta.getDimension(R.styleable.BarChart_xTextSize, 8f)
         yTextSize = ta.getDimension(R.styleable.BarChart_yTextSize, 10f)
@@ -238,24 +236,19 @@ class BarChartTemp : View {
         }
         indicatorOffSet = prefixCount * indicatorUnitLength
         selectedLinePath.moveTo(
-            leftWith + (mWith - leftWith - rightWith) / 2f - 2 * unitHLenth,
-            topWith
+            leftWith + (mWith - leftWith - rightWith) / 2f - 2 * unitHLenth, topWith
         )
         selectedLinePath.lineTo(
-            leftWith + (mWith - leftWith - rightWith) / 2f - unitHLenth / 5f,
-            topWith
+            leftWith + (mWith - leftWith - rightWith) / 2f - unitHLenth / 5f, topWith
         )
         selectedLinePath.lineTo(
-            leftWith + (mWith - leftWith - rightWith) / 2f,
-            topWith + unitHLenth / 5f
+            leftWith + (mWith - leftWith - rightWith) / 2f, topWith + unitHLenth / 5f
         )
         selectedLinePath.lineTo(
-            leftWith + (mWith - leftWith - rightWith) / 2f + unitHLenth / 5f,
-            topWith
+            leftWith + (mWith - leftWith - rightWith) / 2f + unitHLenth / 5f, topWith
         )
         selectedLinePath.lineTo(
-            leftWith + (mWith - leftWith - rightWith) / 2f + 2 * unitHLenth,
-            topWith
+            leftWith + (mWith - leftWith - rightWith) / 2f + 2 * unitHLenth, topWith
         )
     }
 
@@ -263,37 +256,25 @@ class BarChartTemp : View {
         canvas.drawRect(0f, 0f, mWith.toFloat(), mHeight.toFloat(), bgPaint!!)
         canvas.drawLine(0f, 0f, mWith.toFloat(), 0f, verticalLineColor!!)
 
+
         val centerY = ((mHeight - bottomWith) / 2)
 
         canvas.drawLine(
-            0f,
-            centerY,
-            mWith.toFloat(),
-            centerY,
-            baseAxisPaint!!
+            0f, centerY, mWith.toFloat(), centerY, baseAxisPaint!!
         )
-        val sectionHeight = centerY / 4
+        val sectionHeight = centerY / 5
 
         canvas.drawLine(
-            0f,
-            sectionHeight * 1,
-            mWith.toFloat(),
-            sectionHeight * 1,
-            hAxisPaint!!
+            0f, sectionHeight * 1, mWith.toFloat(), sectionHeight * 1, hAxisPaint!!
         )
         canvas.drawLine(
-            0f,
-            sectionHeight * 2,
-            mWith.toFloat(),
-            sectionHeight * 2,
-            hAxisPaint!!
+            0f, sectionHeight * 2, mWith.toFloat(), sectionHeight * 2, hAxisPaint!!
         )
         canvas.drawLine(
-            0f,
-            sectionHeight * 3,
-            mWith.toFloat(),
-            sectionHeight * 3,
-            hAxisPaint!!
+            0f, sectionHeight * 3, mWith.toFloat(), sectionHeight * 3, hAxisPaint!!
+        )
+        canvas.drawLine(
+            0f, sectionHeight * 4, mWith.toFloat(), sectionHeight * 4, hAxisPaint!!
         )
         canvas.drawLine(
             0f,
@@ -315,6 +296,13 @@ class BarChartTemp : View {
             mWith.toFloat(),
             centerY + sectionHeight * 3,
             hAxisPaint!!
+        )
+        canvas.drawLine(
+            0f,
+            centerY + sectionHeight * 4,
+            mWith.toFloat(),
+            centerY + sectionHeight * 4,
+            gridPaint!!
         )
 
 
@@ -326,71 +314,59 @@ class BarChartTemp : View {
 
     private fun drawBottom(canvas: Canvas) {
         canvas.drawRect(
-            0f,
-            mHeight - bottomWith,
-            mWith.toFloat(),
-            mHeight.toFloat(),
-            bgBottomPaint!!
+            0f, mHeight - bottomWith, mWith.toFloat(), mHeight.toFloat(), bgBottomPaint!!
         )
     }
 
     private fun drawLeft(canvas: Canvas) {
         canvas.drawRect(0f, 0f, leftWith, mHeight.toFloat(), bgLeftPaint!!)
-        maxValue = max
-        minValue = -3
 
 
         //y axis
         val centerY = ((mHeight - bottomWith) / 2)
 
-        val sectionHeight = centerY / 4
+        val sectionHeight = centerY / 5
         val offset = dip2px(4f)
+        val yGap = max.toFloat() / 4
+        var yTop = max.toFloat()
 
-        val yTextStart = mWith - dip2px(24f).toFloat()
-
-        canvas.drawText(
-            "+3.0",
-            yTextStart,
-            sectionHeight * 1 - offset,
-            yAxisPaint!!
-        )
-        canvas.drawText(
-            "+2.0",
-            yTextStart,
-            sectionHeight * 2 - offset,
-            yAxisPaint!!
-        )
-        canvas.drawText(
-            "+1.0",
-            yTextStart,
-            sectionHeight * 3 - offset,
-            yAxisPaint!!
-        )
+        val yTextStart = mWith - dip2px(32f).toFloat()
 
         canvas.drawText(
-            "+0.0",
-            yTextStart,
-            centerY - offset,
-            yAxisPaint!!
+            "+$yTop", yTextStart, sectionHeight * 1 - offset, yAxisPaint!!
+        )
+        yTop -= yGap
+        canvas.drawText(
+            "+$yTop", yTextStart, sectionHeight * 2 - offset, yAxisPaint!!
+        )
+        yTop -= yGap
+        canvas.drawText(
+            "+$yTop", yTextStart, sectionHeight * 3 - offset, yAxisPaint!!
+        )
+        yTop -= yGap
+        canvas.drawText(
+            "+$yTop", yTextStart, sectionHeight * 4 - offset, yAxisPaint!!
+        )
+        yTop = 0.0f
+        canvas.drawText(
+            "+0.0", yTextStart, centerY - offset, yAxisPaint!!
+        )
+        yTop -= yGap
+        canvas.drawText(
+            "$yTop", yTextStart, centerY + sectionHeight * 1 - offset, yAxisPaint!!
+        )
+        yTop -= yGap
+        canvas.drawText(
+            "$yTop", yTextStart, centerY + sectionHeight * 2 - offset, yAxisPaint!!
+        )
+        yTop -= yGap
+        canvas.drawText(
+            "$yTop", yTextStart, centerY + sectionHeight * 3 - offset, yAxisPaint!!
         )
 
+        yTop -= yGap
         canvas.drawText(
-            "-1.0",
-            yTextStart,
-            centerY + sectionHeight * 1 - offset,
-            yAxisPaint!!
-        )
-        canvas.drawText(
-            "-2.0",
-            yTextStart,
-            centerY + sectionHeight * 2 - offset,
-            yAxisPaint!!
-        )
-        canvas.drawText(
-            "-3.0",
-            yTextStart,
-            centerY + sectionHeight * 3 - offset,
-            yAxisPaint!!
+            "$yTop", yTextStart, centerY + sectionHeight * 4 - offset, yAxisPaint!!
         )
     }
 
@@ -403,10 +379,20 @@ class BarChartTemp : View {
         list?.addAll(suffixList)
         prefixCount = prefixList.size
         suffixCount = suffixList.size
-        max = 3
+        max = getMaxValue(datas)
         setToUnit()
 
         postInvalidate()
+    }
+
+    fun getMaxValue(datas: List<ChartModel>): Float {
+        var max = 3.0f
+        datas.forEach {
+            if (abs(it.valueFloat) > max) {
+                max = 5.0f
+            }
+        }
+        return max
     }
 
     private fun drawContent(canvas: Canvas) {
@@ -428,17 +414,31 @@ class BarChartTemp : View {
             val x =
                 offSet + moveOffSet + (mWith - leftWith - rightWith) / 2 + leftWith - i * unitHLenth
 
+            val blockHeight = centerY / 5
 
-            canvas.drawLine(x, 0f, x, (mHeight - bottomWith), verticalLineColor!!)
+            canvas.drawLine(x, 0f, x, (mHeight - bottomWith - blockHeight), verticalLineColor!!)
 
             if (current.valueFloat > 0) {
-                val convertedVal = if (current.valueFloat > 4) {
-                    4.0f
+                val convertedVal = if (max == 3.0f) {
+                    if (current.valueFloat > 3) {
+                        3.0f
+                    } else {
+                        current.valueFloat
+                    }
+                } else if (max == 5.0f) {
+                    if (current.valueFloat > 5) {
+                        5.0f
+                    } else {
+                        current.valueFloat
+                    }
                 } else {
                     current.valueFloat
                 }
 
-                val top = ((convertedVal * 25) / 100) * centerY
+                val percent = (convertedVal / max)
+                val convertedHeight = (4.0f / 5.0f) * centerY
+
+                val top = percent * convertedHeight
 
                 val rectTop = RectF().apply {
                     left = x - chartLineWidth / 2f
@@ -460,19 +460,32 @@ class BarChartTemp : View {
                 canvas.drawPath(path, topPaint!!)
 
             } else if (current.valueFloat < 0) {
-                val convertedVal = if (current.valueFloat < -4) {
-                    -4.0f
+                val convertedVal = if (max == 3.0f) {
+                    if (current.valueFloat < -3) {
+                        -3.0f
+                    } else {
+                        current.valueFloat
+                    }
+                } else if (max == 5.0f) {
+                    if (current.valueFloat < -5) {
+                        -5.0f
+                    } else {
+                        current.valueFloat
+                    }
                 } else {
                     current.valueFloat
                 }
 
-                val bottom = ((convertedVal * -25) / 100) * centerY
+                val percent = (convertedVal / max)
+                val convertedHeight = (4.0f / 5.0f) * centerY
+
+                val bottom = percent * convertedHeight
 
                 val rectBottom = RectF().apply {
                     left = x - chartLineWidth / 2f
                     this.top = centerY
                     right = x + chartLineWidth / 2f
-                    this.bottom = centerY + bottom
+                    this.bottom = centerY - bottom
                 }
 
 
@@ -498,10 +511,7 @@ class BarChartTemp : View {
             xTextPaint?.getTextBounds(xText, 0, xText.length, xTextBounds)
             xTextPaint?.color = xTextColor and -0x7f000001
             canvas.drawText(
-                xText,
-                x - xTextBounds!!.width() / 2f,
-                mHeight - bottomWith / 3,
-                xTextPaint!!
+                xText, x - xTextBounds!!.width() / 2f, mHeight - bottomWith, xTextPaint!!
             )
         }
         if (offSet + moveOffSet < 0 || offSet + moveOffSet > (list.size - 1) * unitHLenth) {
@@ -515,20 +525,33 @@ class BarChartTemp : View {
             xTextPaint?.color = xTextColor
             xTextPaint?.getTextBounds(xText, 0, xText.length, xTextBounds)
             canvas.drawText(
-                xText,
-                x - xTextBounds!!.width() / 2f,
-                mHeight - bottomWith / 3,
-                xTextPaint!!
+                xText, x - xTextBounds!!.width() / 2f, mHeight - bottomWith, xTextPaint!!
             )
 
             if (list[position].valueFloat > 0) {
-                val convertedVal = if (list[position].valueFloat > 4) {
-                    4.0f
+
+                val convertedVal = if (max == 3.0f) {
+                    if (list[position].valueFloat > 3) {
+                        3.0f
+                    } else {
+                        list[position].valueFloat
+                    }
+                } else if (max == 5.0f) {
+                    if (list[position].valueFloat > 5) {
+                        5.0f
+                    } else {
+                        list[position].valueFloat
+                    }
                 } else {
                     list[position].valueFloat
                 }
 
-                val top = ((convertedVal * 25) / 100) * centerY
+                val percent = (convertedVal / max)
+                val convertedHeight = (4.0f / 5.0f) * centerY
+
+                val top = percent * convertedHeight
+
+                //val top = ((convertedVal * 20) / 100) * centerY
 
                 val rectTop = RectF().apply {
                     left = x - chartLineWidth / 2f
@@ -550,19 +573,33 @@ class BarChartTemp : View {
                 canvas.drawPath(path, topSelectedPaint!!)
 
             } else if (list[position].valueFloat < 0) {
-                val convertedVal = if (list[position].valueFloat < -4) {
-                    -4.0f
+                val convertedVal = if (max == 3.0f) {
+                    if (list[position].valueFloat < -3) {
+                        -3.0f
+                    } else {
+                        list[position].valueFloat
+                    }
+                } else if (max == 5.0f) {
+                    if (list[position].valueFloat < -5) {
+                        -5.0f
+                    } else {
+                        list[position].valueFloat
+                    }
                 } else {
                     list[position].valueFloat
                 }
 
-                val bottom = ((convertedVal * -25) / 100) * centerY
+                val percent = (convertedVal / max)
+                val convertedHeight = (4.0f / 5.0f) * centerY
+
+                val bottom = percent * convertedHeight
+
 
                 val rectBottom = RectF().apply {
                     left = x - chartLineWidth / 2f
                     this.top = centerY
                     right = x + chartLineWidth / 2f
-                    this.bottom = centerY + bottom//mHeight - bottomWith - chartLineWidth / 2f
+                    this.bottom = centerY - bottom//mHeight - bottomWith - chartLineWidth / 2f
                 }
 
 
