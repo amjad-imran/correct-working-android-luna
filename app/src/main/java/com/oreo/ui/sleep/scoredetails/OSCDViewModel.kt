@@ -264,10 +264,7 @@ class OSCDViewModel @Inject constructor(
                 }
 
                 else -> {
-                    val dummyData =
-                        arrayListOf<Int>(-1, -2, -3, -4, -5, -6, 0, 1, 2, 3, 4, 5, 6).random()
-                    LOGS.d("DUMMY_DATA $dummyData")
-                    chartModel.value = dummyData//it.data.toInt()//TODO remove after testing
+                    chartModel.value = it.data.toInt()
                 }
             }
 
