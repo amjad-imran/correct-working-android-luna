@@ -123,33 +123,34 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:visibility="visible" />
 
-    <TextView
+    <Button
         android:id="@+id/tvStart"
-        style="@style/H6"
+        style="@style/PrimaryButtonStyle"
         android:layout_width="0dp"
-        android:layout_height="40dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="12dp"
         android:gravity="center"
         android:text="Start"
+        app:backgroundTint="@null"
         app:layout_constraintBottom_toTopOf="@+id/tvEnd"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
+    <Button
         android:id="@+id/tvEnd"
-        style="@style/H6"
+        style="@style/RecordWorkPrimaryButtonStyleHighlight"
         android:layout_width="0dp"
-        android:layout_height="40dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="12dp"
         android:gravity="center"
         android:text="End"
+        app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
