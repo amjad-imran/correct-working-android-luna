@@ -460,7 +460,11 @@
     <fragment
         android:id="@+id/recordWorkoutFragment"
         android:name="com.oreo.ui.recordworkout.RecordWorkoutFragment"
-        android:label="fragment_record_workout" />
+        android:label="fragment_record_workout" >
+        <argument
+            android:name="workout"
+            app:argType="com.oreo.data.model.OWorkoutListModal" />
+    </fragment>
     <fragment
         android:id="@+id/addWorkoutSelectorFragment"
         android:name="com.oreo.ui.recordworkout.AddWorkoutSelectorFragment"

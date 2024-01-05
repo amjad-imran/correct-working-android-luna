@@ -27,7 +27,7 @@ constructor(
     fun getWorkoutList() {
         viewModelScope.launch {
 
-            userActivityRepository.getWorkoutList().collect { resource ->
+            userActivityRepository.getWorkoutListRecord().collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)

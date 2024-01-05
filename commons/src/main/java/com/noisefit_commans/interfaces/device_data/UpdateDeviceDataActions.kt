@@ -90,6 +90,9 @@ abstract class UpdateDeviceDataActions() :
     open fun setQuickEyeMovementSwitch(status: Boolean) {}
 
     open fun closeFindPhoneFromWatch(status: Boolean) {}
+    open fun startWorkout(sportType: Int, sportStartTime: Long) {}
+    open fun updateOngoingWorkout(sportType: Int, sportTimeStamp: Long, action: Int) {}
+
     abstract fun setDevice(device: ColorFitDevice)
     open fun setContactList(contactList: List<Contact>) {}
 

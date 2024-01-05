@@ -6,7 +6,7 @@
     tools:context="com.oreo.ui.recordworkout.RecordWorkoutFragment">
 
     <ImageView
-        android:id="@+id/imageView25"
+        android:id="@+id/ivCross"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:padding="14dp"
@@ -19,10 +19,10 @@
         style="@style/H4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView25"
+        app:layout_constraintBottom_toBottomOf="@+id/ivCross"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView25"
+        app:layout_constraintTop_toTopOf="@+id/ivCross"
         tools:text="Outdoor run" />
 
     <ImageView
@@ -32,9 +32,9 @@
         android:layout_marginEnd="16dp"
         android:background="@drawable/back_modal_new_round"
         android:src="@drawable/ic_ring_default_silver_new"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView25"
+        app:layout_constraintBottom_toBottomOf="@+id/ivCross"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView25" />
+        app:layout_constraintTop_toTopOf="@+id/ivCross" />
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/batteryStatus"
@@ -49,19 +49,6 @@
         app:layout_constraintTop_toTopOf="@+id/oreoStatus"
         app:trackColor="#1effffff"
         app:trackThickness="1dp" />
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lottieAnimView"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/oreoStatus"
-        app:layout_constraintEnd_toEndOf="@+id/oreoStatus"
-        app:layout_constraintStart_toStartOf="@+id/oreoStatus"
-        app:layout_constraintTop_toTopOf="@+id/oreoStatus"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:lottie_rawRes="@raw/raw_anim_ring_sync" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ivWorkout"
@@ -78,7 +65,7 @@
         android:id="@+id/ivWorkoutImage"
         android:layout_width="72dp"
         android:layout_height="72dp"
-        android:padding="4dp"
+        android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/ivWorkout"
         app:layout_constraintEnd_toEndOf="@+id/ivWorkout"
         app:layout_constraintStart_toStartOf="@+id/ivWorkout"
@@ -118,39 +105,44 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginBottom="24dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/tvStart"
+        app:layout_constraintBottom_toTopOf="@+id/btnStartWorkout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:visibility="visible" />
 
     <Button
-        android:id="@+id/tvStart"
+        android:id="@+id/btnStartWorkout"
         style="@style/PrimaryButtonStyle"
         android:layout_width="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="12dp"
         android:gravity="center"
-        android:text="Start"
+        android:text="@string/text_start"
         app:backgroundTint="@null"
-        app:layout_constraintBottom_toTopOf="@+id/tvEnd"
+        app:layout_constraintBottom_toTopOf="@+id/btnEndWorkout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/tvEnd"
+        android:id="@+id/btnEndWorkout"
         style="@style/RecordWorkPrimaryButtonStyleHighlight"
         android:layout_width="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="12dp"
         android:gravity="center"
-        android:text="End"
+        android:text="@string/text_end"
         app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupRingStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="oreoStatus,batteryStatus" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

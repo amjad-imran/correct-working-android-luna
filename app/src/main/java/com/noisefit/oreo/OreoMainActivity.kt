@@ -5,14 +5,13 @@ import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.setFragmentResultListener
+import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.noisefit.NoiseFitApplicationMain
@@ -21,29 +20,23 @@ import com.noisefit.luna.databinding.ActivityOreoMainBinding
 import com.noisefit.ui.APP_CONTINUE
 import com.noisefit.ui.APP_EXIT
 import com.noisefit.ui.APP_UPDATE
-import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit.ui.common.BaseActivity
 import com.noisefit.ui.onboarding.FirebaseUpdateViewModel
-import com.noisefit.ui.profile.NAME_REQUEST_KEY
 import com.noisefit.util.ApplicationUtils
 import com.noisefit.util.notif.NotificationUtil
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.response.VersionCheckResponse
+import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.visible
-import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.showShortToast
-import com.noisefit_commans.utils.Event
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.FirebaseLunaAppEvents
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.share.ShareUtil
 import com.oreo.data.model.OWorkoutListModal
-import com.oreo.ui.recordworkout.ADD_WORKOUT_SELECTOR
 import com.oreo.ui.recordworkout.SELECT_RECORD_WORKOUT
-import com.oreo.ui.workout.add.SELECT_REQUEST_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderEffectBlur
 import eightbitlab.com.blurview.RenderScriptBlur
@@ -78,10 +71,28 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         navController = findNavController(com.noisefit.luna.R.id.o_nav_host_fragment)
         setNavViewListeners()
         setBlur()
+        setBlurAddCta()
 
         viewModel.sessionManager.getPairedState()
         checkBluetooth()
         firebaseViewModel.generateToken()
+    }
+
+    private fun setBlurAddCta() {
+        val radius = 20f;
+        val decorView = window.decorView;
+        val rootView = binding.container
+        val windowBackground = decorView.background
+
+        val blurAlgo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            RenderEffectBlur()
+        } else {
+            RenderScriptBlur(this)
+        }
+
+        binding.blurViewSelector.setupWith(rootView, blurAlgo)
+            .setFrameClearDrawable(windowBackground) // Optional
+            .setBlurRadius(radius)
     }
 
     private fun setBlur() {
@@ -96,6 +107,11 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             RenderScriptBlur(this)
         }
         binding.blurView.setupWith(rootView, blurAlgo) // or RenderEffectBlur
+            .setFrameClearDrawable(windowBackground) // Optional
+            .setBlurRadius(radius)
+
+
+        binding.blurViewSelector.setupWith(rootView, blurAlgo)
             .setFrameClearDrawable(windowBackground) // Optional
             .setBlurRadius(radius)
     }
@@ -130,7 +146,10 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         supportFragmentManager.setFragmentResultListener(SELECT_RECORD_WORKOUT, this) { _, bundle ->
             val workout = bundle.getParcelable<OWorkoutListModal>("workout")
             workout?.let {
-                navController?.navigate(R.id.recordWorkoutFragment)
+                navController?.navigate(
+                    R.id.recordWorkoutFragment,
+                    bundleOf("workout" to it)
+                )
             }
         }
 
@@ -140,25 +159,35 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             viewModel.getUserHealthData(viewModel.mStartDate, viewModel.mEndDate)
         }
 
-        binding.btnAddWorkout.setOnClickListener {
-            supportFragmentManager.setFragmentResultListener(
-                ADD_WORKOUT_SELECTOR,
-                this
-            ) { _, bundle ->
-                val selected = bundle.getString("selected")
-                if (selected.equals("addWorkout", true)) {
-                    if (viewModel.isDeviceConnected()) {
-                        navController?.navigate(R.id.addWorkoutFragment)
-                    } else {
-                        showShortToast("Please connect your ring to add a workout")
-                    }
-                } else if (selected.equals("recordWorkout", true)) {
-                    //TODO add ring connection related dialogs
-                    navController?.navigate(R.id.selectWorkoutFragment)
-                }
+        binding.lytAddWorkoutSelector.tvAddWorkout.setOnClickListener {
+            showAddWorkoutCta()
+            binding.blurViewSelector.gone()
+            if (viewModel.isDeviceConnected()) {
+                navController?.navigate(R.id.addWorkoutFragment)
+            } else {
+                showShortToast("Please connect your ring to add a workout")
             }
-            navController?.navigate(R.id.addWorkoutSelectorFragment)
         }
+        binding.lytAddWorkoutSelector.ivWorkoutClose.setOnClickListener {
+            showAddWorkoutCta()
+            binding.blurViewSelector.gone()
+        }
+
+        binding.lytAddWorkoutSelector.tvRecordWorkout.setOnClickListener {
+            showAddWorkoutCta()
+            binding.blurViewSelector.gone()
+            //TODO add ring connection related dialogs
+            navController?.navigate(R.id.selectWorkoutFragment)
+        }
+
+        binding.btnAddWorkout.setOnClickListener {
+            binding.btnAddWorkout.gone()
+            binding.blurViewSelector.visible()
+        }
+    }
+
+    fun showAddWorkoutCta() {
+        binding.btnAddWorkout.visible()
     }
 
     fun checkBluetooth() {

@@ -61,6 +61,7 @@ interface OreoUserActivityRepository {
     suspend fun syncGoogleFitUserData(request: JsonObject): Flow<Resource<BaseApiResponseData<Any>>>
     suspend fun getWorkoutDetails(id: String): Flow<Resource<BaseApiResponse<OWorkoutDetailsResponseModel>>>
 
+    suspend fun getWorkoutListRecord(): Flow<Resource<BaseApiResponse<List<OWorkoutListModal>>>>
     suspend fun getWorkoutList(): Flow<Resource<BaseApiResponse<List<OWorkoutListModal>>>>
     suspend fun getRecentWorkoutList(isToday: Boolean): Flow<Resource<BaseApiResponse<List<OActivityListModal>>>>
 

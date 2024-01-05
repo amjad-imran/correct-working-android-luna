@@ -81,6 +81,8 @@ import com.zhapp.ble.bean.DoNotDisturbModeBean
 import com.zhapp.ble.bean.EmergencyContactBean
 import com.zhapp.ble.bean.EventInfoBean
 import com.zhapp.ble.bean.HeartRateMonitorBean
+import com.zhapp.ble.bean.RingSportStatusBean
+import com.zhapp.ble.bean.SendRingSportStatusBean
 import com.zhapp.ble.bean.SettingTimeBean
 import com.zhapp.ble.bean.StockInfoBean
 import com.zhapp.ble.bean.TimeBean
@@ -91,8 +93,10 @@ import com.zhapp.ble.callback.ActiveMeasureCallBack
 import com.zhapp.ble.callback.CallBackUtils
 import com.zhapp.ble.callback.DeviceLargeFileStatusListener
 import com.zhapp.ble.callback.DeviceWatchFaceFileStatusListener
+import com.zhapp.ble.callback.RingSportCallBack
 import com.zhapp.ble.callback.UploadBigDataListener
 import com.zhapp.ble.callback.WatchFaceInstallCallBack
+import com.zhapp.ble.parsing.ParsingStateManager
 import com.zhapp.ble.parsing.ParsingStateManager.SendCmdStateListener
 import com.zhapp.ble.parsing.SendCmdState
 import java.io.File
@@ -146,7 +150,7 @@ constructor(
 
     override fun attachCallbacks() {
         CallBackUtils.watchFaceInstallCallBack =  watchFaceInstallCallBack
-
+        CallBackUtils.ringSportCallBack = ringSportCallback
 
     }
 
@@ -284,6 +288,161 @@ constructor(
                     }
                 }
             })
+    }
+
+    override fun startWorkout(sportType: Int, sportStartTime: Long) {
+        val bean = SendRingSportStatusBean(
+            sportType,
+            RingSportCallBack.RingSportStatus.SPORT_STATUS_START.status,
+            sportStartTime
+        )
+        ControlBleTools.getInstance()
+            .sendRingSportStatus(bean, object : ParsingStateManager.SendCmdStateListener() {
+                override fun onState(state: SendCmdState?) {
+                    when (state) {
+                        SendCmdState.SUCCEED -> {
+                            testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                                UpdateDeviceDataCallback.WorkoutStartState(true)
+                            )
+                        }
+
+                        else -> {
+                            testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                                UpdateDeviceDataCallback.WorkoutStartState(false,"Failed")
+                            )
+                        }
+                    }
+                }
+            })
+    }
+
+    /**
+     * @param action 2->Pause. 3-> Resume 4->Stop
+     *
+     */
+    override fun updateOngoingWorkout(sportType: Int, sportTimeStamp: Long, action: Int) {
+
+        val status = when (action) {
+            2 -> RingSportCallBack.RingSportStatus.SPORT_STATUS_PAUSE.status
+            3 -> RingSportCallBack.RingSportStatus.SPORT_STATUS_RESUME.status
+
+            else -> RingSportCallBack.RingSportStatus.SPORT_STATUS_END.status
+        }
+
+        val bean = SendRingSportStatusBean(sportType, status, sportTimeStamp)
+        ControlBleTools.getInstance().sendRingSportStatus(bean, object : SendCmdStateListener() {
+            override fun onState(state: SendCmdState?) {
+                when (state) {
+                    SendCmdState.SUCCEED -> {
+                        when (action) {
+                            2 -> {
+                                testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                                    UpdateDeviceDataCallback.WorkoutPaused(true)
+                                )
+                            }
+
+                            3 -> {
+                                testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                                    UpdateDeviceDataCallback.WorkoutResumed(true)
+                                )
+                            }
+
+                            4 -> {
+                                testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                                    UpdateDeviceDataCallback.WorkoutStopped(true)
+                                )
+                            }
+                        }
+                    }
+
+                    else -> {
+                        when (action) {
+                            2 -> {
+                                testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                                    UpdateDeviceDataCallback.WorkoutPaused(false)
+                                )
+                            }
+
+                            3 -> {
+                                testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                                    UpdateDeviceDataCallback.WorkoutResumed(false)
+                                )
+                            }
+
+                            4 -> {
+                                testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                                    UpdateDeviceDataCallback.WorkoutStopped(false)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        })
+
+    }
+
+    private val ringSportCallback = object : RingSportCallBack {
+        override fun onRingSportStatus(bean: RingSportStatusBean?) {
+            LOGS.d(TAG, "onRingSportStatus ${Gson().toJson(bean)}")
+            if (bean == null) return
+
+            if (bean.startResult != RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_NONE.result) {
+                when (bean.startResult) {
+                    RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_LOW_POWER.result -> {
+                        UpdateDeviceDataCallback.WorkoutStartState(false,"Low Battery")
+                    }
+
+                    RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_UN_WEAR.result -> {
+                        UpdateDeviceDataCallback.WorkoutStartState(false,"Device not worn")
+                    }
+
+                    RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_CHARGING.result -> {
+                        UpdateDeviceDataCallback.WorkoutStartState(false,"Ring on Charging")
+
+                    }
+                }
+            }
+
+            if (bean.sportStatus == RingSportCallBack.RingSportStatus.SPORT_STATUS_END.status) {
+                if (bean.endReason != RingSportCallBack.RingSportEndReason.SPORT_END_REASON_NONE.reason) {
+                    when (bean.endReason) {
+                        RingSportCallBack.RingSportEndReason.SPORT_END_REASON_LOW_POWER.reason -> {
+                            UpdateDeviceDataCallback.WorkoutStartState(false,"Low Battery")
+                        }
+
+                        RingSportCallBack.RingSportEndReason.SPORT_END_REASON_TIMEOUT.reason -> {
+                            UpdateDeviceDataCallback.WorkoutStartState(false,"Exercise 8 hours timeout")
+                        }
+
+                        RingSportCallBack.RingSportEndReason.SPORT_END_REASON_NO_MEMORY.reason -> {
+                            UpdateDeviceDataCallback.WorkoutStartState(false,"Insufficient device memory")
+                        }
+                    }
+                }
+
+                if (bean.isSportNoSync) {
+                    ControlBleTools.getInstance()
+                        .getFitnessSportIdsData(object : SendCmdStateListener(null) {
+                            override fun onState(state: SendCmdState) {
+                            }
+                        })
+                }
+            }
+
+            /*testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                UpdateDeviceDataCallback.OngoingWorkoutData(
+                    WorkoutData(
+                        steps = p0?.steps,
+                        calories = p0?.calories,
+                        sportLevel = p0?.sportLevel,
+                        distance = p0?.distance,
+                        heartRate = p0?.heartRate
+                    )
+                )
+            )*/
+        }
+
     }
 
     override fun closeFindPhoneFromWatch(status: Boolean) {

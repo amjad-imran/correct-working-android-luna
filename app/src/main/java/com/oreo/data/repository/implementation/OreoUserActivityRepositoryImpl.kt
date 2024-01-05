@@ -1331,6 +1331,13 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
+    override suspend fun getWorkoutListRecord(): Flow<Resource<BaseApiResponse<List<OWorkoutListModal>>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/activity/v1/record_workout_list"
+            remoteDataSource.getWorkoutList(url)
+        }
+    }
+
     override suspend fun getWorkoutList(): Flow<Resource<BaseApiResponse<List<OWorkoutListModal>>>> {
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.OREO_BASE_URL}/activity/v1/workout_list"

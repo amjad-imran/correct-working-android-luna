@@ -5,6 +5,12 @@ import com.noisefit_commans.models.*
 
 sealed class UpdateDeviceDataCallback {
 
+    class WorkoutStartState(val success: Boolean, val errorMessage: String? = null) : UpdateDeviceDataCallback()
+
+    class WorkoutPaused(val success: Boolean) : UpdateDeviceDataCallback()
+    class WorkoutResumed(val success: Boolean) : UpdateDeviceDataCallback()
+    class WorkoutStopped(val success: Boolean) : UpdateDeviceDataCallback()
+
     class AlarmUpdated(val success: Boolean) : UpdateDeviceDataCallback()
     class LanguageUpdated(val success: Boolean) : UpdateDeviceDataCallback()
     class WatchFaceUpdated(val success: Boolean) : UpdateDeviceDataCallback()
