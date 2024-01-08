@@ -17,12 +17,14 @@ import com.noisefit_commans.data.model.OreoRespiratoryData
 import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.data.model.OreoStepsData
 import com.noisefit_commans.data.model.OreoStressDataBreakup
+import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.data.model.UserHealthData
 import com.oreo.data.db.database.OreoAutoSportDao
 import com.oreo.data.db.database.OreoBloodOxygenDao
 import com.oreo.data.db.database.OreoBodyTemperatureDao
 import com.oreo.data.db.database.OreoDayTimeMovementDao
 import com.oreo.data.db.database.OreoHeartRateDao
+import com.oreo.data.db.database.OreoRecordedWorkoutDao
 import com.oreo.data.db.database.OreoRespiratoryDao
 import com.oreo.data.db.database.OreoSleepDao
 import com.oreo.data.db.database.OreoStepsDao
@@ -33,14 +35,15 @@ import com.oreo.data.db.database.OreoUserHealthDataDao
     entities = [OreoStepsData::class, OreoHeartRate::class, OreoBloodOxygenBreakup::class,
         OreoBloodPressureData::class, OreoSleepData::class, OreoStressDataBreakup::class, OreoGoogleFitData::class,
         OreoBodyTemperatureBreakup::class, OreoRespiratoryData::class, DayTimeMovementBreakup::class,
-        OreoAutoSportData::class, KeyValue::class,UserHealthData::class],
-    version = 4, exportSchema = false
+        OreoAutoSportData::class, RecordedWorkoutData::class, KeyValue::class,UserHealthData::class],
+    version = 5, exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class OreoDataBase : RoomDatabase() {
     //abstract fun sportEventDao(): SportEventDao
     abstract fun stepsDao(): OreoStepsDao
     abstract fun oreoAutoSportDao(): OreoAutoSportDao
+    abstract fun oreoRecordedWorkoutDap(): OreoRecordedWorkoutDao
     abstract fun heartDao(): OreoHeartRateDao
     abstract fun stressDao(): OreoStressDao
     abstract fun bodyTemperatureDao(): OreoBodyTemperatureDao

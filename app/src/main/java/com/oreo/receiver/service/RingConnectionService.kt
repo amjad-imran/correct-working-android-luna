@@ -21,7 +21,10 @@ import android.os.Message
 import android.os.SystemClock
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.crashlytics.internal.model.CrashlyticsReport
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
 import com.noisefit.luna.R
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.local.db.CacheResult
@@ -44,11 +47,14 @@ import com.noisefit.watch.UserActivityHandler
 import com.noisefit.watch.WatchesSDK
 import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.constants.WatchInfoGlobals
+import com.noisefit_commans.data.BinaryActionCallback
+import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.enums.Actions
 import com.noisefit_commans.data.enums.ServiceState
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
+import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.data.model.User
 import com.noisefit_commans.interfaces.IQueryDataCallback
 import com.noisefit_commans.interfaces.QueryCallback
@@ -68,6 +74,7 @@ import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.DeviceFirmware
 import com.noisefit_commans.models.DeviceUnits
+import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.models.StepsData
 import com.noisefit_commans.models.TimeFormat
 import com.noisefit_commans.models.TimeFormats
@@ -86,6 +93,7 @@ import com.noisefit_commans.utils.ServiceUtil
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.db.OreoDataBase
 import com.oreo.data.repository.abstraction.OreoSyncRepository
+import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -136,6 +144,9 @@ constructor() : LifecycleService() {
     lateinit var syncRepository: OreoSyncRepository
 
     @Inject
+    lateinit var userActivityRepository: OreoUserActivityRepository
+
+    @Inject
     lateinit var firebaseCrashlyticsUtils: FirebaseCrashlyticsUtils
 
     @Inject
@@ -159,9 +170,6 @@ constructor() : LifecycleService() {
     @Inject
     lateinit var userActivityHandler: UserActivityHandler
 
-
-    @Inject
-    lateinit var userRepository: UserRepository
 
     @Inject
     lateinit var callHandler: CallHandler
@@ -1045,10 +1053,6 @@ constructor() : LifecycleService() {
                         LOGS.d(TAG, "SportsModeStatusChange " + it.stepsData)
                     }
 
-                    is UserActivityCallback.RingUserWorkoutData -> {
-                        showShortToast(it.data)
-                    }
-
                     is UserActivityCallback.AutoSportDataObtained -> {
                         LOGS.d(TAG, "SyncDataWork: onAutoSportData inside")
 
@@ -1139,6 +1143,13 @@ constructor() : LifecycleService() {
 
                     }
 
+                    is UserActivityCallback.RingUserWorkoutData -> {
+                        if (it.data.isNotEmpty()) {
+                            showShortToast(it.data.toString())
+                            saveAndSyncWorkouts(it.data)
+                        }
+                    }
+
                     is UserActivityCallback.SportsModeDataObtainedGPS -> {
                         LOGS.d(TAG, "SportsModeDataObtainedGPS RingConnectionService")
                         LOGS.d(
@@ -1148,7 +1159,8 @@ constructor() : LifecycleService() {
                         )
                         if (!it.sportsModeResponse.activities.isNullOrEmpty()) {
 
-                            it.sportsModeResponse.activities?.forEach { act ->
+
+                            /*it.sportsModeResponse.activities?.forEach { act ->
                                 val startTime = DateFormats.formatActivityTime6(act.time)
                                 var endTime = "0"
                                 if (act.duration != null && act.time != null) {
@@ -1167,17 +1179,9 @@ constructor() : LifecycleService() {
                                 } else
                                     act.activityType.toString()
 
-                                sessionManager.logInsiderAppEvent(
-                                    InsiderAppEvents.ACTIVITY_SYNC,
-                                    HashMap<String, Any>().apply {
-                                        this["activity_name"] = activityName
-                                        this["activity_starttime"] = startTime
-                                        this["activity_endtime"] = endTime
-                                        this["activity_duration"] = act.duration.toString()
-                                        this["activity_caloriesburnt"] = act.calories.toString()
-                                    }
-                                )
-                            }
+
+
+                            }*/
                         }
                     }
 
@@ -1207,6 +1211,67 @@ constructor() : LifecycleService() {
             it.getContent()?.let {
 
                 onDisconnectSuccess()
+            }
+        }
+    }
+
+    private fun saveAndSyncWorkouts(workouts: List<RecordedWorkoutData>) {
+        GlobalScope.launch(Dispatchers.IO) {
+            syncRepository.saveRecordedWorkouts(workouts)
+                .collect { resource ->
+                    when (resource) {
+                        is CacheResult.Success -> {
+
+                            //syncWorkoutsToServer()
+
+                        }
+
+                        is CacheResult.GenericError -> {
+
+                        }
+                    }
+                }
+        }
+    }
+
+    private fun syncWorkoutsToServer(workouts: List<RecordedWorkoutData>) {
+        GlobalScope.launch(Dispatchers.IO) {
+
+            val reqObj = JsonObject()
+
+            val jsonArray = JsonArray()
+            workouts.forEach { workout ->
+                jsonArray.add(JsonObject(
+                ).apply {
+                    this.addProperty("duration", workout.duration)
+                    this.addProperty("calories", workout.calories)
+                    this.addProperty("activity_type", "")
+                    this.addProperty("start_time", "")
+                    this.addProperty("end_time", "")
+                    this.addProperty("intensity", workout.intensityList)
+                    this.addProperty("intensity_value", "")
+                    this.addProperty("hr_value", workout.hrData)
+                    this.addProperty("steps", "")
+                    this.addProperty("type", "userworkout")
+                    this.addProperty("date", "")
+                })
+
+            }
+            reqObj.add("workouts", jsonArray)
+
+            userActivityRepository.addRecordedWorkout(
+                reqObj
+            ).collect { resource ->
+                when (resource) {
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+
+                        }
+                    }
+
+                    else -> {}
+                }
             }
         }
     }

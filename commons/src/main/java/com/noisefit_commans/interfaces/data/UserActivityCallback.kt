@@ -10,6 +10,7 @@ import com.noisefit_commans.data.model.OreoRespiratoryData
 import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.data.model.OreoStepsData
 import com.noisefit_commans.data.model.OreoStressDataBreakup
+import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.models.BloodOxygenBreakup
 import com.noisefit_commans.models.BloodPressureData
 import com.noisefit_commans.models.BodyTemperatureBreakup
@@ -64,6 +65,6 @@ sealed class UserActivityCallback {
         UserActivityCallback()
 
     class SportsModeDataSyncSuccess() : UserActivityCallback()
-    class RingUserWorkoutData(val data:String) : UserActivityCallback()
+    class RingUserWorkoutData(val data:List<RecordedWorkoutData>) : UserActivityCallback()
 
 }

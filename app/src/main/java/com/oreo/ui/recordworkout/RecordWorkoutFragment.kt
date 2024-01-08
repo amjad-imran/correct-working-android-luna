@@ -124,6 +124,10 @@ class RecordWorkoutFragment :
 
     override fun initListener() {
 
+        binding.ivWorkoutImage.setOnClickListener {
+            viewModel.sessionManager.sendUpdateQueryAction(UpdateDeviceAction.CheckOngoingWorkout())
+        }
+
         binding.btnStartWorkout.setOnClickListener {
 
             //TODO check if device is connected

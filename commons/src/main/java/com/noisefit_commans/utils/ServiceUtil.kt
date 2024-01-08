@@ -379,6 +379,9 @@ object ServiceUtil {
             is UpdateDeviceAction.StartWorkout -> {
                 updateAction.startWorkout(it.sportType,it.sportStartTime)
             }
+            is UpdateDeviceAction.CheckOngoingWorkout -> {
+                updateAction.checkOngoingWorkout()
+            }
             is UpdateDeviceAction.UpdateOngoingWorkout -> {
                 updateAction.updateOngoingWorkout(it.sportType,it.sportTimeStamp,it.action)
             }

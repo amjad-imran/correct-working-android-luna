@@ -144,6 +144,7 @@ sealed class UpdateDeviceAction {
     class ClearUPIQRCode(val id: Int) : UpdateDeviceAction()
     class CloseFindPhoneFromWatch(val status: Boolean) : UpdateDeviceAction()
 
+    class CheckOngoingWorkout() : UpdateDeviceAction()
     class StartWorkout(val sportType: Int,val sportStartTime: Long) : UpdateDeviceAction()
     class UpdateOngoingWorkout(val sportType: Int,val sportTimeStamp: Long,val action:Int) : UpdateDeviceAction()
 }

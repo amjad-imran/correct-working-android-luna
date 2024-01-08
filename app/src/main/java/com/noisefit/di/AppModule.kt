@@ -34,6 +34,7 @@ import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
 import com.oreo.data.db.implementation.OreoDayTimeMovementDataImpl
 import com.oreo.data.db.implementation.OreoHeartRateDataImpl
+import com.oreo.data.db.implementation.OreoRecordedWorkoutDataImpl
 import com.oreo.data.db.implementation.OreoRespiratoryDataImpl
 import com.oreo.data.db.implementation.OreoSleepDataImpl
 import com.oreo.data.db.implementation.OreoStepsDataImpl
@@ -233,6 +234,7 @@ object AppModule {
         lastSyncProvider: LastSyncProvider,
         testModeUtils: TestModeUtils,
         oreoAutoSportDataImpl: OreoAutoSportDataImpl,
+        oreoRecordedWorkoutDataImpl: OreoRecordedWorkoutDataImpl,
         gson: Gson
     ): OreoSyncRepository =
         OreoSyncRepositoryImpl(
@@ -253,6 +255,7 @@ object AppModule {
             lastSyncProvider,
             testModeUtils,
             oreoAutoSportDataImpl,
+            oreoRecordedWorkoutDataImpl,
         )
 
 

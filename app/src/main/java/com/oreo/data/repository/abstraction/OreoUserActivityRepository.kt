@@ -3,6 +3,7 @@ package com.oreo.data.repository.abstraction
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.remote.base.Resource
+import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.data.model.UserHealthData
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
@@ -87,6 +88,10 @@ interface OreoUserActivityRepository {
         page: Int,
         pageLimit: Int
     ): Flow<Resource<BaseApiResponse<List<OActivityListModal>>>>
+
+    suspend fun addRecordedWorkout(
+        request: JsonObject
+    ): Flow<Resource<BaseApiResponse<Any>>>
 
     suspend fun deleteWorkoutFromServer(
         id: String

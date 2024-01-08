@@ -290,6 +290,17 @@ constructor(
             })
     }
 
+    override fun checkOngoingWorkout() {
+        ControlBleTools.getInstance().getRingSportStatus(object : ParsingStateManager.SendCmdStateListener() {
+            override fun onState(state: SendCmdState?) {
+                when (state) {
+                    SendCmdState.SUCCEED -> {}
+                    else -> {}
+                }
+            }
+        })
+    }
+
     override fun startWorkout(sportType: Int, sportStartTime: Long) {
         val bean = SendRingSportStatusBean(
             sportType,
