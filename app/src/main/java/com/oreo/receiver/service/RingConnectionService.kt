@@ -21,6 +21,7 @@ import android.os.Message
 import android.os.SystemClock
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleService
+import com.google.firebase.crashlytics.internal.model.CrashlyticsReport
 import com.noisefit.luna.R
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.local.db.CacheResult
@@ -72,6 +73,7 @@ import com.noisefit_commans.models.TimeFormat
 import com.noisefit_commans.models.TimeFormats
 import com.noisefit_commans.models.UpdateStatus
 import com.noisefit_commans.models.WatchFirmwareDetails
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.CallHandler
@@ -181,22 +183,8 @@ constructor() : LifecycleService() {
     private var updateDeviceDataAction: UpdateDeviceDataActions? = null
     private var userActivityDataActions: UserActivityDataActions? = null
     private val handler = Handler()
-    private val handlerActivity = Handler()
 
     var mLastNotification: Notification? = null
-
-    private val runnableCode: Runnable = object : Runnable {
-        override fun run() {
-            val request = sessionManager.sportsModeRequest.value
-            request?.let { sportsReq ->
-                sportsReq?.duration = sportsReq?.duration?.plus(1)!!
-                sessionManager.postSportsModeRequest(sportsReq)
-                sessionManager.sendUserActivityAction(UserActivityAction.Refresh(sportsReq))
-            }
-            handlerActivity.sendEmptyMessage(100)
-            handlerActivity.postDelayed(this, 1000)
-        }
-    }
 
     @Inject
     lateinit var applicationHandler: ApplicationHandler
@@ -1057,6 +1045,10 @@ constructor() : LifecycleService() {
                         LOGS.d(TAG, "SportsModeStatusChange " + it.stepsData)
                     }
 
+                    is UserActivityCallback.RingUserWorkoutData -> {
+                        showShortToast(it.data)
+                    }
+
                     is UserActivityCallback.AutoSportDataObtained -> {
                         LOGS.d(TAG, "SyncDataWork: onAutoSportData inside")
 
@@ -1569,37 +1561,6 @@ constructor() : LifecycleService() {
 
 
         }
-    }
-
-    private fun handleSportsModeStatus(status: String?) {
-        when (status) {
-            "start" -> {
-                startTimer()
-            }
-
-            "pause" -> {
-                stopTimer()
-            }
-
-            "resume" -> {
-                startTimer()
-            }
-
-            "stop" -> {
-                stopTimer()
-                sessionManager.setSportsModeRequest(null)
-            }
-        }
-    }
-
-    private fun startTimer() {
-        stopTimer()
-        handlerActivity.postDelayed(runnableCode, 1000)
-    }
-
-    private fun stopTimer() {
-        handlerActivity.removeMessages(100)
-        handlerActivity.removeCallbacks(runnableCode)
     }
 
     private fun registerTimeChangeReceiver() {

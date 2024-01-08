@@ -989,4 +989,6 @@
     <string name="text_ring_connecting">Ring connecting...</string>
     <string name="text_ring_out_of_range">Your Luna ring is out of range. Don’t worry, your data will reflect once the ring is connected.</string>
     <string name="text_end">End</string>
+    <string name="text_end_workout">End workout</string>
+    <string name="text_ready_to_end_your_workout">Ready to end your workout and save your progress?</string>
 </resources>

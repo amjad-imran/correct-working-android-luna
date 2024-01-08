@@ -83,7 +83,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivWorkout"
-        tools:text="00:00" />
+        android:text="00:00" />
 
     <TextView
         style="@style/H5"
@@ -95,7 +95,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTimer"
-        tools:text="Duration" />
+        android:text="@string/text_duration" />
 
     <include
         android:id="@+id/lytRingConnecting"
@@ -119,6 +119,20 @@
         android:layout_marginBottom="12dp"
         android:gravity="center"
         android:text="@string/text_start"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toTopOf="@+id/btnPauseResume"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+    <Button
+        android:id="@+id/btnPauseResume"
+        style="@style/SecondaryButtonStyle"
+        android:layout_width="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="12dp"
+        android:visibility="gone"
+        android:gravity="center"
+        android:text="@string/pause"
         app:backgroundTint="@null"
         app:layout_constraintBottom_toTopOf="@+id/btnEndWorkout"
         app:layout_constraintEnd_toEndOf="parent"

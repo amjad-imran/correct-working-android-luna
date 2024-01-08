@@ -64,5 +64,6 @@ sealed class UserActivityCallback {
         UserActivityCallback()
 
     class SportsModeDataSyncSuccess() : UserActivityCallback()
+    class RingUserWorkoutData(val data:String) : UserActivityCallback()
 
 }

@@ -131,6 +131,7 @@ constructor(
         CallBackUtils.setSportCallBack(object : SportCallBack {
             override fun onDevSportInfo(data: DevSportInfoBean) {
                 LOGS.d(TAG, "onDevSportInfo $data")
+                userActivityDataCallbacks?.onUserActivityDataReceived(UserActivityCallback.RingUserWorkoutData(Gson().toJson(data)))
                 sportModleInfoList.add(data)
             }
 

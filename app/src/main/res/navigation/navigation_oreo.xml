@@ -473,5 +473,9 @@
         android:id="@+id/selectWorkoutFragment"
         android:name="com.oreo.ui.recordworkout.SelectWorkoutFragment"
         android:label="fragment_select_workout"/>
+    <dialog
+        android:id="@+id/bottomSheetEndWorkout"
+        android:name="com.oreo.ui.recordworkout.BottomSheetEndWorkout"
+        android:label="BottomSheetEndWorkout" />
 
 </navigation>

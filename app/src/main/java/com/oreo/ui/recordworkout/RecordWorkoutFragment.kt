@@ -2,10 +2,12 @@ package com.oreo.ui.recordworkout
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentRecordWorkoutBinding
+import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
@@ -34,6 +36,90 @@ class RecordWorkoutFragment :
             binding.tvWorkoutTitle.text = it.activityType
             binding.ivWorkoutImage.loadImage(binding.ivWorkoutImage.context, it.iconUrl)
         }
+
+        binding.btnEndWorkout.isEnabled = false
+
+        startTimer()
+    }
+
+    private fun startTimer() {
+
+    }
+
+
+    private fun startWorkout() {
+        viewModel.sportStartTime = System.currentTimeMillis() / 1000
+
+        val sportId = viewModel.workout?.ringId ?: -1
+        viewModel.currentWorkoutState = 1
+
+        viewModel.sessionManager.sendUpdateQueryAction(
+            UpdateDeviceAction.StartWorkout(
+                sportId,
+                viewModel.sportStartTime
+            )
+        )
+
+        binding.btnStartWorkout.gone()
+        binding.btnPauseResume.apply {
+            this.text = getString(R.string.pause)
+            this.visible()
+        }
+        binding.btnEndWorkout.isEnabled = true
+        viewModel.starTimer()
+    }
+
+    private fun pauseWorkout() {
+        val sportId = viewModel.workout?.ringId ?: -1
+
+        viewModel.sessionManager.sendUpdateQueryAction(
+            UpdateDeviceAction.UpdateOngoingWorkout(
+                sportId,
+                viewModel.sportStartTime,
+                2
+            )
+        )
+        viewModel.currentWorkoutState = 2
+
+        binding.btnPauseResume.text = getString(R.string.resume)
+        viewModel.pauseTimer()
+
+    }
+
+    private fun resumeWorkout() {
+        val sportId = viewModel.workout?.ringId ?: -1
+
+        viewModel.sessionManager.sendUpdateQueryAction(
+            UpdateDeviceAction.UpdateOngoingWorkout(
+                sportId,
+                viewModel.sportStartTime,
+                3
+            )
+        )
+        viewModel.currentWorkoutState = 3
+        binding.btnPauseResume.text = getString(R.string.pause)
+        viewModel.resumeTimer()
+    }
+
+    private fun stopWorkout() {
+
+        val sportId = viewModel.workout?.ringId ?: -1
+
+        viewModel.sessionManager.sendUpdateQueryAction(
+            UpdateDeviceAction.UpdateOngoingWorkout(
+                sportId,
+                viewModel.sportStartTime,
+                4
+            )
+        )
+        viewModel.currentWorkoutState = 4
+        navigateUpSafe()
+        viewModel.stopTimer()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.stopTimer()
     }
 
     override fun initListener() {
@@ -41,54 +127,55 @@ class RecordWorkoutFragment :
         binding.btnStartWorkout.setOnClickListener {
 
             //TODO check if device is connected
+            if (!viewModel.isDeviceConnected()) {
+                return@setOnClickListener
+            }
 
+            startWorkout()
 
-            viewModel.sportStartTime = System.currentTimeMillis() / 1000
+        }
 
-            val sportId = viewModel.workout?.ringId ?: -1
-
-            viewModel.sessionManager.sendUpdateQueryAction(
-                UpdateDeviceAction.StartWorkout(
-                    sportId,
-                    viewModel.sportStartTime
-                )
-            )
-
+        binding.btnPauseResume.setOnClickListener {
+            if (viewModel.currentWorkoutState == 1 || viewModel.currentWorkoutState == 3) {
+                pauseWorkout()
+            } else if (viewModel.currentWorkoutState == 2) {
+                resumeWorkout()
+            }
         }
 
         binding.btnEndWorkout.setOnClickListener {
 
-            val sportId = viewModel.workout?.ringId ?: -1
+            if (!viewModel.isDeviceConnected()) {
+                return@setOnClickListener
+            }
 
-            viewModel.sessionManager.sendUpdateQueryAction(
-                UpdateDeviceAction.UpdateOngoingWorkout(
-                    sportId,
-                    viewModel.sportStartTime,
-                    4
-                )
-            )
+            setFragmentResultListener(
+                END_WORKOUT_KEY
+            ) { _, bundle ->
+                val allow = bundle.getBoolean("allow")
 
-            /*sessionManager.sendUpdateQueryAction(
-                UpdateDeviceAction.UpdateOngoingWorkout(
-                    sportType,
-                    sportStartTime,
-                    3
-                )
-            )
-
-
-
-            sessionManager.sendUpdateQueryAction(
-                UpdateDeviceAction.UpdateOngoingWorkout(
-                    sportType,
-                    sportStartTime,
-                    2
-                )
-            )*/
+                if (allow) {
+                    stopWorkout()
+                }
+            }
+            navigate(R.id.bottomSheetEndWorkout)
         }
 
         binding.ivCross.setOnClickListener {
-            navigateUpSafe()
+            if (viewModel.currentWorkoutState == 0) {
+                navigateUpSafe()
+            } else {
+                setFragmentResultListener(
+                    END_WORKOUT_KEY
+                ) { _, bundle ->
+                    val allow = bundle.getBoolean("allow")
+
+                    if (allow) {
+                        stopWorkout()
+                    }
+                }
+            }
+            navigate(R.id.bottomSheetEndWorkout)
         }
 
         viewModel.sessionManager.connectStateRing.observe(this) { connectedState ->
@@ -141,6 +228,14 @@ class RecordWorkoutFragment :
     }
 
     override fun subscribeObservers() {
+
+        viewModel.displayTimer.observe(viewLifecycleOwner) {
+            if (it.isEmpty()) {
+                binding.tvTimer.text = "00:00"
+            } else {
+                binding.tvTimer.text = it
+            }
+        }
 
 
         viewModel.sessionManager.updateDeviceCallback.observe(this) {

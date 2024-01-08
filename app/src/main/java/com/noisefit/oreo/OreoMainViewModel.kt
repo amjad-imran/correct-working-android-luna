@@ -600,7 +600,7 @@ constructor(
     }
 
     fun isDeviceConnected(): Boolean {
-        if (getDeviceConnected() == null) {
+        if (isDevicePaired() == null) {
             return false
         }
 
@@ -609,7 +609,7 @@ constructor(
         }
         return false
     }
-    fun getDeviceConnected(): ColorFitDevice? {
+    fun isDevicePaired(): ColorFitDevice? {
         return ringDataStore.getRingDevice()
     }
 

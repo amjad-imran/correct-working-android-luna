@@ -110,10 +110,6 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             .setFrameClearDrawable(windowBackground) // Optional
             .setBlurRadius(radius)
 
-
-        binding.blurViewSelector.setupWith(rootView, blurAlgo)
-            .setFrameClearDrawable(windowBackground) // Optional
-            .setBlurRadius(radius)
     }
 
     private fun setNavViewListeners() {
