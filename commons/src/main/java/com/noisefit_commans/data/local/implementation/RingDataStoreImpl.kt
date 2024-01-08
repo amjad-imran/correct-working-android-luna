@@ -25,6 +25,7 @@ private const val READINESS_WALKAROUND_KEY = "READINESS_WALKAROUND_KEY"
 private const val ACTIVITY_WALKAROUND_KEY = "ACTIVITY_WALKAROUND_KEY"
 private const val MANUAL_MEASUREMENT_KEY = "MANUAL_MEASUREMENT_KEY"
 private const val DEVICE_INTRO = "DEVICE_INTRO"
+private const val TEMP_BASE_LINE = "TEMP_BASE_LINE"
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
 
@@ -33,6 +34,17 @@ class RingDataStoreImpl
     private val gson: Gson,
     private val mPrefs: SharedPreferences
 ) : RingDataStore {
+
+
+    override fun getTempBaseLine(): Float {
+        return mPrefs.getFloat(TEMP_BASE_LINE, 98.6f)
+    }
+
+    override fun setTempBaseLine(temp: Float) {
+        mPrefs.edit()?.putFloat(TEMP_BASE_LINE, temp)?.apply()
+
+    }
+
     override fun saveRingDevice(noiseFitDevice: ColorFitDevice): Boolean {
         return mPrefs.edit()?.putString(RING_DEVICE_INFO, gson.toJson(noiseFitDevice))?.commit()
             ?: false
