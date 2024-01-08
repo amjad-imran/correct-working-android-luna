@@ -26,6 +26,7 @@ import com.noisefit_commans.data.model.UserHealthData
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
 import com.noisefit_commans.ui.checkDayDifferenceMoreOne
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.dataConverter.OreoOfflineDataMapper
@@ -135,6 +136,7 @@ class OreoUserActivityRepositoryImpl(
                     val dateList = getDaysList(DateFormats.getCurrentDateMinusDays(6), todayDate)
 
                     val dates = ArrayList<LocalDate>()
+                    AppLogs.sendAppLogs("SYNC_DATA_CASE -> started Case 1")
 
                     dateList.forEach {
                         val data = userHealthDataSource.getDataByDate(it)
@@ -143,17 +145,19 @@ class OreoUserActivityRepositoryImpl(
                         }
                     }
                     LOGS.d("dates____ ${dates}")
+                    AppLogs.sendAppLogs("SYNC_DATA_CASE -> $dates")
 
                     if (dates.isEmpty()) {
                         apiStartDate = todayDate
                         apiEndDate = todayDate
+                        AppLogs.sendAppLogs("SYNC_DATA_CASE -> dates empty")
 
                     } else {
                         val minDate = dates.stream().min(LocalDate::compareTo)
                             .get()
                         apiStartDate = minDate.toString()
                         apiEndDate = todayDate
-
+                        AppLogs.sendAppLogs("SYNC_DATA_CASE -> dates not empty $startDate $endDate")
                     }
                     return@safeCacheCall null
 
@@ -161,6 +165,7 @@ class OreoUserActivityRepositoryImpl(
                     apiStartDate = startDate
                     apiEndDate = endDate
                     val datesList = getDaysList(startDate, endDate)
+                    AppLogs.sendAppLogs("SYNC_DATA_CASE -> Case 2")
 
                     val localData = ArrayList<ServerUserHealthData>()
                     datesList.forEach {

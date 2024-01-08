@@ -198,7 +198,7 @@ constructor(
 
                                     datesToRemove?.let {
                                         userHealthDataDataSource.clearDataByDates(it)
-                                        delay(100)
+                                        delay(200)
                                     }
                                     //syncRepository.deleteServerSyncData(userActivities.second)
                                 }
