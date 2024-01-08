@@ -117,6 +117,8 @@ class BodyTempScoreDetailFragment :
         binding.lytScoreOverview.tvScoreMsg.text = trendScoreMsg
 
         bindDataOnUi(it)
+        binding.groupMain.visible()
+
     }
 
     private fun bindDataOnUi(it: OInternalPageResponseModal) {
