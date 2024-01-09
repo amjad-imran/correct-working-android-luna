@@ -62,12 +62,8 @@ class OreoSleepDetailFragment :
     private val mSleepContributorAdapter: OreoSleepContributorAdapter by lazy {
         OreoSleepContributorAdapter(object :
             OreoSleepContributorAdapter.ContributorItemClickListener {
-            override fun onItemClick(
-                resultData: ArrayList<Contributors>,
-                position: Int,
-                version: Int,
-                hasTempBalance: Boolean
-            ) {
+            override fun onItemClick(resultData: ArrayList<Contributors>, position: Int,
+                                     version: Int) {
 //                if (resultData[position].barPercent > 0) {
                 openContributorBottomSheet(resultData, position)
 //                }
@@ -848,7 +844,7 @@ class OreoSleepDetailFragment :
 
         //sleep contributor
         binding.lytSleepContributor.tvTitle.text = getString(R.string.text_sleep_contributors)
-        mSleepContributorAdapter.setData(viewModel.getContributorsData(dayData),false,1)
+        mSleepContributorAdapter.setData(viewModel.getContributorsData(dayData),1)
 
 
         //sleep night movement
