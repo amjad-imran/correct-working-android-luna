@@ -5,7 +5,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSelectWorkoutBinding
@@ -15,7 +14,6 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.oreo.data.model.OWorkoutListModal
 import com.oreo.ui.workout.add.OSelectWorkoutAdapter
-import com.oreo.ui.workout.add.SELECT_REQUEST_KEY
 import dagger.hilt.android.AndroidEntryPoint
 
 const val SELECT_RECORD_WORKOUT = "SELECT_RECORD_WORKOUT"
@@ -29,12 +27,7 @@ class SelectWorkoutFragment :
     private val selectWorkoutAdapter by lazy {
         OSelectWorkoutAdapter(object : OSelectWorkoutAdapter.OSelectWorkoutInteraction {
             override fun onWorkoutSelected(oWorkoutListModal: OWorkoutListModal) {
-                navigateUpSafe()
-                requireActivity().supportFragmentManager.setFragmentResult(
-                    SELECT_RECORD_WORKOUT,
-                    bundleOf("workout" to oWorkoutListModal)
-                )
-
+                navigateToStartWorkout(oWorkoutListModal)
             }
 
         })
@@ -48,6 +41,27 @@ class SelectWorkoutFragment :
         setRecycler()
 
         viewModel.getWorkoutList()
+    }
+
+    fun navigateToStartWorkout(oWorkoutListModal: OWorkoutListModal) {
+
+        if (viewModel.isBatteryLow()) {
+            navigate(R.id.bottomSheetRingBatteryLow)
+            return
+        }
+
+        if (!viewModel.isDeviceConnected()) {
+            navigate(R.id.bottomSheetRingConnecting)
+            return
+        }
+
+
+        navigateUpSafe()
+        requireActivity().supportFragmentManager.setFragmentResult(
+            SELECT_RECORD_WORKOUT,
+            bundleOf("workout" to oWorkoutListModal)
+        )
+
     }
 
 

@@ -477,5 +477,13 @@
         android:id="@+id/bottomSheetEndWorkout"
         android:name="com.oreo.ui.recordworkout.BottomSheetEndWorkout"
         android:label="BottomSheetEndWorkout" />
+    <dialog
+        android:id="@+id/bottomSheetRingConnecting"
+        android:name="com.oreo.ui.recordworkout.BottomSheetRingConnecting"
+        android:label="BottomSheetRingConnecting" />
+    <dialog
+        android:id="@+id/bottomSheetRingBatteryLow"
+        android:name="com.oreo.ui.recordworkout.BottomSheetRingBatteryLow"
+        android:label="BottomSheetRingBatteryLow" />
 
 </navigation>

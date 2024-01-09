@@ -1253,7 +1253,8 @@ constructor() : LifecycleService() {
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-
+                            syncRepository.removeRecordedWorkouts()
+                            //TODO reload data - discuss condition
                         }
                     }
 

@@ -992,4 +992,10 @@
     <string name="text_end_workout">End workout</string>
     <string name="text_ready_to_end_your_workout">Ready to end your workout and save your progress?</string>
     <string name="text_select_workout">Select workout</string>
+    <string name="text_trying_to_connect_your_ring">Trying to connect your ring</string>
+    <string name="text_ring_not_in_range">To record your workout, make sure your ring is charged and on your finger, and within range of your device.</string>
+    <string name="text_connected_successfully">Connected successfully</string>
+    <string name="text_bluetooth_turn_on">Please ensure your bluetooth is on</string>
+    <string name="text_bluetooth_on_message">Make sure your ring is charged and on your finger, and within range of your device, with you bluetooth turned on.</string>
+    <string name="text_time_to_charge_your_ring">Time to charge your ring</string>
 </resources>

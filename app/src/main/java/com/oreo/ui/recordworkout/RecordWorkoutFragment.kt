@@ -51,18 +51,7 @@ class RecordWorkoutFragment :
 
 
     private fun startWorkout() {
-        viewModel.sportStartTime = System.currentTimeMillis() / 1000
-
-        val sportId = viewModel.workout?.ringId ?: -1
         viewModel.currentWorkoutState = 1
-
-        viewModel.sessionManager.sendUpdateQueryAction(
-            UpdateDeviceAction.StartWorkout(
-                sportId,
-                viewModel.sportStartTime
-            )
-        )
-
         binding.btnStartWorkout.gone()
         binding.btnPauseResume.apply {
             this.text = getString(R.string.pause)
@@ -73,48 +62,18 @@ class RecordWorkoutFragment :
     }
 
     private fun pauseWorkout() {
-        val sportId = viewModel.workout?.ringId ?: -1
-
-        viewModel.sessionManager.sendUpdateQueryAction(
-            UpdateDeviceAction.UpdateOngoingWorkout(
-                sportId,
-                viewModel.sportStartTime,
-                2
-            )
-        )
         viewModel.currentWorkoutState = 2
-
         binding.btnPauseResume.text = getString(R.string.resume)
         viewModel.pauseTimer()
-
     }
 
     private fun resumeWorkout() {
-        val sportId = viewModel.workout?.ringId ?: -1
-
-        viewModel.sessionManager.sendUpdateQueryAction(
-            UpdateDeviceAction.UpdateOngoingWorkout(
-                sportId,
-                viewModel.sportStartTime,
-                3
-            )
-        )
         viewModel.currentWorkoutState = 3
         binding.btnPauseResume.text = getString(R.string.pause)
         viewModel.resumeTimer()
     }
 
     private fun stopWorkout() {
-
-        val sportId = viewModel.workout?.ringId ?: -1
-
-        viewModel.sessionManager.sendUpdateQueryAction(
-            UpdateDeviceAction.UpdateOngoingWorkout(
-                sportId,
-                viewModel.sportStartTime,
-                4
-            )
-        )
         viewModel.currentWorkoutState = 4
         navigateUpSafe()
         viewModel.stopTimer()
@@ -135,7 +94,15 @@ class RecordWorkoutFragment :
                 val allow = bundle.getBoolean("allow")
 
                 if (allow) {
-                    stopWorkout()
+                    val sportId = viewModel.workout?.ringId ?: -1
+
+                    viewModel.sessionManager.sendUpdateQueryAction(
+                        UpdateDeviceAction.UpdateOngoingWorkout(
+                            sportId,
+                            viewModel.sportStartTime,
+                            4
+                        )
+                    )
                 }
             }
             navigate(R.id.bottomSheetEndWorkout)
@@ -150,20 +117,45 @@ class RecordWorkoutFragment :
 
         binding.btnStartWorkout.setOnClickListener {
 
-            //TODO check if device is connected
             if (!viewModel.isDeviceConnected()) {
                 return@setOnClickListener
             }
+            binding.progressBar.root.visible()
+            viewModel.sportStartTime = System.currentTimeMillis() / 1000
+            val sportId = viewModel.workout?.ringId ?: -1
 
-            startWorkout()
+            viewModel.sessionManager.sendUpdateQueryAction(
+                UpdateDeviceAction.StartWorkout(
+                    sportId,
+                    viewModel.sportStartTime
+                )
+            )
 
         }
 
         binding.btnPauseResume.setOnClickListener {
+            binding.progressBar.root.visible()
+
             if (viewModel.currentWorkoutState == 1 || viewModel.currentWorkoutState == 3) {
-                pauseWorkout()
+                val sportId = viewModel.workout?.ringId ?: -1
+
+                viewModel.sessionManager.sendUpdateQueryAction(
+                    UpdateDeviceAction.UpdateOngoingWorkout(
+                        sportId,
+                        viewModel.sportStartTime,
+                        2
+                    )
+                )
             } else if (viewModel.currentWorkoutState == 2) {
-                resumeWorkout()
+                val sportId = viewModel.workout?.ringId ?: -1
+
+                viewModel.sessionManager.sendUpdateQueryAction(
+                    UpdateDeviceAction.UpdateOngoingWorkout(
+                        sportId,
+                        viewModel.sportStartTime,
+                        3
+                    )
+                )
             }
         }
 
@@ -179,7 +171,16 @@ class RecordWorkoutFragment :
                 val allow = bundle.getBoolean("allow")
 
                 if (allow) {
-                    stopWorkout()
+                    binding.progressBar.root.visible()
+                    val sportId = viewModel.workout?.ringId ?: -1
+
+                    viewModel.sessionManager.sendUpdateQueryAction(
+                        UpdateDeviceAction.UpdateOngoingWorkout(
+                            sportId,
+                            viewModel.sportStartTime,
+                            4
+                        )
+                    )
                 }
             }
             navigate(R.id.bottomSheetEndWorkout)
@@ -254,7 +255,12 @@ class RecordWorkoutFragment :
 
                 when (it) {
                     is UpdateDeviceDataCallback.WorkoutStartState -> {
-                        context.showShortToast("Workout started : ${it.success}")
+                        if(it.success){
+                            startWorkout()
+                        }else{
+                            context.showShortToast("Workout started : ${it.success}")
+                        }
+                        binding.progressBar.root.gone()
                     }
 
                     /*is UpdateDeviceDataCallback.OngoingWorkoutData -> {
@@ -262,15 +268,30 @@ class RecordWorkoutFragment :
                     }*/
 
                     is UpdateDeviceDataCallback.WorkoutStopped -> {
-                        context.showShortToast("Workout Stopped : ${it.success}")
+                        if(it.success){
+                            stopWorkout()
+                        }else{
+                            context.showShortToast("Workout Stopped : ${it.success}")
+                        }
+                        binding.progressBar.root.gone()
                     }
 
                     is UpdateDeviceDataCallback.WorkoutPaused -> {
-                        context.showShortToast("Workout Paused : ${it.success}")
+                        if(it.success){
+                            pauseWorkout()
+                        }else{
+                            context.showShortToast("Workout Paused : ${it.success}")
+                        }
+                        binding.progressBar.root.gone()
                     }
 
                     is UpdateDeviceDataCallback.WorkoutResumed -> {
-                        context.showShortToast("Workout Resumed : ${it.success}")
+                        if(it.success){
+                            resumeWorkout()
+                        }else{
+                            context.showShortToast("Workout Resumed : ${it.success}")
+                        }
+                        binding.progressBar.root.gone()
                     }
 
 

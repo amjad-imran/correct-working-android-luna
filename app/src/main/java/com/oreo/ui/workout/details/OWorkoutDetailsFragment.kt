@@ -138,7 +138,6 @@ class OWorkoutDetailsFragment :
         }
 
 
-
         binding.rvActivityDetails.visible()
         binding.lytActivityItem.root.visible()
         binding.lytActivityItem.tvActivityDate.text = DateFormats.formatActivityDate(it.date)
@@ -161,13 +160,16 @@ class OWorkoutDetailsFragment :
 
             binding.lytHeartRate.root.gone()
 
-            /*setHrGraph(
-                it.hrArray,
-                it.hrAvg,
-                it.hrLow,
-                "${it.date} ${it.startTime}",
-                "${it.date} ${it.endTime}"
-            )*/
+            if(it.type.equals("userworkout",true)){
+                setHrGraph(
+                    it.hrArray,
+                    it.hrAvg,
+                    it.hrLow,
+                    "${it.date} ${it.startTime}",
+                    "${it.date} ${it.endTime}"
+                )
+            }
+
 
             setMovementGraph(
                 it.intensity,
@@ -351,9 +353,14 @@ class OWorkoutDetailsFragment :
 
     private fun prepareDataForActivity(it: OWorkoutDetailsResponseModel) {
         val activityList = ArrayList<OWDActivityData>()
+        val duration = if(it.type.equals("userworkout",true)){
+            ApplicationUtils.getFormattedRecordedWorkoutFromSeconds(it.duration?.toInt()?:0)
+        }else{
+            ApplicationUtils.getActivityDurationFormat2(it.duration)
+        }
         activityList.add(
             OWDActivityData(
-                "Duration", ApplicationUtils.getActivityDurationFormat2(it.duration), ""
+                "Duration", duration, ""
             )
         )
         if (it.calories != null && it.calories > 0) {

@@ -40,7 +40,7 @@ constructor() {
                 this.addProperty("activity_type", workout.type)
                 this.addProperty("start_time", startTime)
                 this.addProperty("end_time", endTime)
-                this.addProperty("intensity", "0")//todo change as per logic
+                this.addProperty("intensity", getIntensity(0))//todo change as per logic
 
                 val intensityArray = JsonArray()
                 Gson().fromJson<List<Int>>(workout.intensityList ?: "")?.forEach {
@@ -59,6 +59,22 @@ constructor() {
 
         }
         return jsonArray
+    }
+
+    private fun getIntensity(intensity: Int): String {
+        return when (intensity) {
+            0 -> {
+                "Easy"
+            }
+
+            1 -> {
+                "Moderate"
+            }
+
+            else -> {
+                "Hard"
+            }
+        }
     }
 
 }

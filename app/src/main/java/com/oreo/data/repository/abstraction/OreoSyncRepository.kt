@@ -107,6 +107,8 @@ interface OreoSyncRepository {
 
     suspend fun getTodayBodyTemp(): Flow<CacheResult<List<OreoBodyTemperatureBreakup>?>>
 
+    suspend fun removeRecordedWorkouts(): Flow<CacheResult<Boolean?>>
+
     /*suspend fun saveAndGetGFitWorkout(data: List<GoogleFitWorkoutData>): Flow<CacheResult<List<GoogleFitWorkoutData>?>>
 
     suspend fun getGFitUnSyncWorkout(): Flow<CacheResult<List<GoogleFitWorkoutData>?>>

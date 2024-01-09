@@ -659,7 +659,8 @@ constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-
+                            syncRepository.removeRecordedWorkouts()
+                            reloadTodaysData()
                         }
                     }
 
