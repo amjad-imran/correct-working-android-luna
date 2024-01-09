@@ -257,7 +257,7 @@ constructor(
     }
 
 
-    private fun getParsedDescriptionData(contriVersion: Int): ArrayList<String> {
+    private fun getParsedDescriptionData(contriVersion: Int,hasTempBalance: Boolean): ArrayList<String> {
         val descriptionList = ArrayList<String>()
         if (contriVersion >= 2) {
             descriptionList.add(contributorInfo.value?.sleep_score ?: "")
@@ -268,7 +268,9 @@ constructor(
             descriptionList.add(contributorInfo.value?.resting_hr ?: "")
             descriptionList.add(contributorInfo.value?.activityBalance ?: "")
             descriptionList.add(contributorInfo.value?.hrvBalance ?: "")
-            descriptionList.add(contributorInfo.value?.temp_balance ?: "")
+            if (hasTempBalance){
+                descriptionList.add(contributorInfo.value?.temp_balance ?: "")
+            }
         } else {
             descriptionList.add(contributorInfo.value?.yesterdaySleepDuration ?: "")
             descriptionList.add(contributorInfo.value?.sleepBalance ?: "")
@@ -283,10 +285,11 @@ constructor(
 
     fun prepareDataForDescriptionArray(
         resultData: java.util.ArrayList<Contributors>,
-        contriVersion: Int
+        contriVersion: Int,
+        hasTempBalance:Boolean
     ): ArrayList<Contributors> {
         val contList = ArrayList<Contributors>()
-        val desList = getParsedDescriptionData(contriVersion)
+        val desList = getParsedDescriptionData(contriVersion,hasTempBalance)
         for (i in resultData.indices) {
             val ctList = resultData[i]
             val child = Contributors(
@@ -304,16 +307,17 @@ constructor(
         return contList
     }
 
-    fun getContributorsData(dayData: OreoReadinessModel?, contriVersion: Int): List<Contributors> {
+    fun getContributorsData(dayData: OreoReadinessModel?, contriVersion: Int): Pair<List<Contributors>,Boolean> {
         return if (contriVersion >= 2) {
             getContributorsDataVersion2(dayData)
         } else {
-            getContributorsDataVersion1(dayData)
+            Pair(getContributorsDataVersion1(dayData),false)
         }
     }
 
-    fun getContributorsDataVersion2(dayData: OreoReadinessModel?): List<Contributors> {
+    fun getContributorsDataVersion2(dayData: OreoReadinessModel?): Pair<List<Contributors>,Boolean> {
         val result = ArrayList<Contributors>()
+        var hasTempBalance = false
 
         //Sleep score
         if (dayData?.sleepScore != null) {
@@ -531,6 +535,7 @@ constructor(
 
         //Body Temperature
         if (dayData?.tempBalance != null) {
+            hasTempBalance = true
             val (textColor, barColor, background) = getContributorsColors(dayData.tempBalance.status)
             result.add(
                 Contributors(
@@ -542,7 +547,7 @@ constructor(
                     backgroundRes = background
                 )
             )
-        } else {
+        }/* else {
             result.add(
                 Contributors(
                     title = "Body temperature",
@@ -553,8 +558,8 @@ constructor(
                     backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
                 )
             )
-        }
-        return result
+        }*/
+        return Pair(result,hasTempBalance)
     }
 
     private fun getContributorsDataVersion1(dayData: OreoReadinessModel?): List<Contributors> {

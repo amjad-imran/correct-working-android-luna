@@ -58,9 +58,10 @@ class OreoReadinessFragment :
             override fun onItemClick(
                 resultData: ArrayList<Contributors>,
                 position: Int,
-                version: Int
+                version: Int,
+                hasTempBalance: Boolean
             ) {
-                openContributorBottomSheet(resultData, position, version)
+                openContributorBottomSheet(resultData, position, version, hasTempBalance)
             }
 
         })
@@ -69,9 +70,10 @@ class OreoReadinessFragment :
     private fun openContributorBottomSheet(
         resultData: ArrayList<Contributors>,
         position: Int,
-        contriVer: Int
+        contriVer: Int,
+        hasTempBalance: Boolean
     ) {
-        val descList = mViewModel.prepareDataForDescriptionArray(resultData, contriVer)
+        val descList = mViewModel.prepareDataForDescriptionArray(resultData, contriVer,hasTempBalance)
         navigate(
             OreoReadinessFragmentDirections.actionNavigationReadinessDetailsFragToDescriptionPopUpBottomDialogFragment(
                 position, descList.toTypedArray(), resultData[position].title
@@ -691,14 +693,16 @@ class OreoReadinessFragment :
             binding.lytRScoreData.lytSec3.lytHrMn.root.gone()
             binding.lytRScoreData.lytSec3.tvPercentValue.visible()
             binding.lytRScoreData.lytSec3.lytBpmView.root.gone()
-            val baselineAvg = mainViewModel.temperatureBaseLine ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE
+            val baselineAvg =
+                mainViewModel.temperatureBaseLine ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE
             val deviation = it.avg_temp.value - baselineAvg
 
             binding.lytRScoreData.lytSec3.tvPercentValue.text =
                 String.format("%.1f °F", deviation)
         } else {
             if ((it.temperature?.value ?: 0) != 0) {
-                val baselineAvg = mainViewModel.temperatureBaseLine ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE
+                val baselineAvg =
+                    mainViewModel.temperatureBaseLine ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE
                 val todayAvg = it.temperature?.value ?: baselineAvg
                 val deviation = todayAvg - baselineAvg
 
@@ -735,8 +739,10 @@ class OreoReadinessFragment :
         //readiness contributor
         binding.lytRContributor.tvTitle.text = getString(R.string.text_readiness_contributor)
         val contriVersion = it.contriVersion ?: 2
+        val contriData = mViewModel.getContributorsData(it, contriVersion)
         mReadinessConAdapter.setData(
-            mViewModel.getContributorsData(it, contriVersion),
+            contriData.first,
+            contriData.second,
             contriVersion
         )
 

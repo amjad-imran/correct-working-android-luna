@@ -11,6 +11,7 @@ class OreoSleepContributorAdapter(val mListener: ContributorItemClickListener) :
     RecyclerView.Adapter<OreoSleepContributorAdapter.ViewHolder>() {
     private var mDataSet = ArrayList<Contributors>()
     private var mVersion: Int = 1
+    private var hasTempBalance: Boolean = false
 
     inner class ViewHolder(val binding: OreoItemSleepContributorBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -42,7 +43,7 @@ class OreoSleepContributorAdapter(val mListener: ContributorItemClickListener) :
             )
 
             binding.root.setOnClickListener {
-                mListener.onItemClick(mDataSet, bindingAdapterPosition,mVersion)
+                mListener.onItemClick(mDataSet, bindingAdapterPosition, mVersion, hasTempBalance)
             }
 
         }
@@ -64,15 +65,21 @@ class OreoSleepContributorAdapter(val mListener: ContributorItemClickListener) :
         holder.bind(mDataSet[position])
     }
 
-    fun setData(resultData: List<Contributors>, version: Int) {
+    fun setData(resultData: List<Contributors>, hasTempBalance: Boolean, version: Int) {
         mVersion = version
+        this.hasTempBalance = hasTempBalance
         mDataSet.clear()
         mDataSet.addAll(resultData)
         notifyDataSetChanged()
     }
 
     interface ContributorItemClickListener {
-        fun onItemClick(resultData: ArrayList<Contributors>, position: Int,version: Int)
+        fun onItemClick(
+            resultData: ArrayList<Contributors>,
+            position: Int,
+            version: Int,
+            hasTempBalance: Boolean
+        )
     }
 }
 
