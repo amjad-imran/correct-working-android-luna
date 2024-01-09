@@ -813,6 +813,7 @@ class OreoActivityFragment :
         if (mainViewModel.shouldLoadMoreData()) {
             LOGS.w("Loading more data")
         }
+        mainViewModel.handleAddWorkoutVisibility()
     }
 
     override fun onScrolling(position: Int, chartModel: ChartModel?) {

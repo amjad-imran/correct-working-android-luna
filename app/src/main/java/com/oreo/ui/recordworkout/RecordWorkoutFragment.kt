@@ -2,18 +2,17 @@ package com.oreo.ui.recordworkout
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentRecordWorkoutBinding
-import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
@@ -39,12 +38,16 @@ class RecordWorkoutFragment :
 
         binding.btnEndWorkout.isEnabled = false
 
-        startTimer()
-    }
-
-    private fun startTimer() {
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
 
     }
+
+    val callback: OnBackPressedCallback =
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                onCrossClicked()
+            }
+        }
 
 
     private fun startWorkout() {
@@ -122,6 +125,23 @@ class RecordWorkoutFragment :
         viewModel.stopTimer()
     }
 
+    private fun onCrossClicked() {
+        if (viewModel.currentWorkoutState == 0) {
+            navigateUpSafe()
+        } else {
+            setFragmentResultListener(
+                END_WORKOUT_KEY
+            ) { _, bundle ->
+                val allow = bundle.getBoolean("allow")
+
+                if (allow) {
+                    stopWorkout()
+                }
+            }
+            navigate(R.id.bottomSheetEndWorkout)
+        }
+    }
+
     override fun initListener() {
 
         binding.ivWorkoutImage.setOnClickListener {
@@ -166,20 +186,7 @@ class RecordWorkoutFragment :
         }
 
         binding.ivCross.setOnClickListener {
-            if (viewModel.currentWorkoutState == 0) {
-                navigateUpSafe()
-            } else {
-                setFragmentResultListener(
-                    END_WORKOUT_KEY
-                ) { _, bundle ->
-                    val allow = bundle.getBoolean("allow")
-
-                    if (allow) {
-                        stopWorkout()
-                    }
-                }
-            }
-            navigate(R.id.bottomSheetEndWorkout)
+            onCrossClicked()
         }
 
         viewModel.sessionManager.connectStateRing.observe(this) { connectedState ->

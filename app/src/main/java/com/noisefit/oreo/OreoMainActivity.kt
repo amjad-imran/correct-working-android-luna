@@ -177,13 +177,16 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         }
 
         binding.btnAddWorkout.setOnClickListener {
-            binding.btnAddWorkout.gone()
+            //binding.btnAddWorkout.gone()
+            viewModel.addWorkoutCtaVisibility.postValue(false)
+
             binding.blurViewSelector.visible()
         }
     }
 
     fun showAddWorkoutCta() {
-        binding.btnAddWorkout.visible()
+        viewModel.addWorkoutCtaVisibility.postValue(true)
+        //binding.btnAddWorkout.visible()
     }
 
     fun checkBluetooth() {
@@ -314,6 +317,15 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
     override fun observeSubscriber() {
+
+        viewModel.addWorkoutCtaVisibility.observe(this) {
+            if(it){
+                binding.btnAddWorkout.visible()
+            }else{
+                binding.btnAddWorkout.gone()
+            }
+        }
+
         viewModel.getLoading().observe(this) {
             if (it) {
                 binding.progressBar.root.visible()
@@ -409,13 +421,16 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     binding.view27.visible()
                     binding.navView.root.visible()
 
-                    binding.btnAddWorkout.visible()//todo add today condition
+                    viewModel.handleAddWorkoutVisibility()
+
+                    //binding.btnAddWorkout.visible()//todo add today condition
                 }
 
                 else -> {
                     binding.view27.gone()
                     binding.navView.root.gone()
-                    binding.btnAddWorkout.gone()
+                    viewModel.addWorkoutCtaVisibility.postValue(false)
+
                 }
             }
         }
@@ -439,6 +454,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             if (viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
                 viewModel.startDisconnectTimer()
             }
+            viewModel.syncRecordedWorkoutData()
         }
 
         viewModel.shouldResetMasterDates()

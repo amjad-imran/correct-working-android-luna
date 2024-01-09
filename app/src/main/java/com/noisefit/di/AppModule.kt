@@ -4,6 +4,7 @@ import android.content.Context
 import android.location.Geocoder
 import com.google.gson.Gson
 import com.noisefit.NoiseFitApplicationMain
+import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.dataConverter.OfflineDataMapper
 import com.noisefit.data.googleFit.GoogleFitDataObservers
@@ -90,6 +91,13 @@ object AppModule {
         localDataStore: DataStoredInterface
     ): DataUnitConverter {
         return DataUnitConverter(localDataStore)
+    }
+
+    @Singleton
+    @Provides
+    fun provideDataConverter(
+    ): DataConverter {
+        return DataConverter()
     }
 
 

@@ -114,6 +114,12 @@ class OreoSyncRepositoryImpl(
         }
     }
 
+    override suspend fun getRecordedWorkouts(): Flow<CacheResult<List<RecordedWorkoutData>?>> {
+        return safeCacheCall(Dispatchers.IO) {
+            oreoRecordedWorkoutDataImpl.getAllWorkouts()
+        }
+    }
+
     override suspend fun saveAutoWorkoutData(data: List<OreoAutoSportData>): Flow<CacheResult<Boolean?>> {
         return safeCacheCall(Dispatchers.IO) {
             data.forEach {

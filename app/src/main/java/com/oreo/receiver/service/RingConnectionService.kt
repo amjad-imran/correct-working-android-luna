@@ -23,11 +23,14 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.crashlytics.internal.model.CrashlyticsReport
+import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.luna.R
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.local.db.CacheResult
+import com.noisefit.data.local.db.Converters
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.LastSyncProvider
 import com.noisefit.data.repository.abstraction.DeviceRepository
@@ -45,6 +48,7 @@ import com.noisefit.watch.DeviceQueryHandler
 import com.noisefit.watch.UpdateDeviceHandler
 import com.noisefit.watch.UserActivityHandler
 import com.noisefit.watch.WatchesSDK
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.BinaryActionCallback
@@ -127,6 +131,9 @@ constructor() : LifecycleService() {
 
     @Inject
     lateinit var dataUnitConverter: DataUnitConverter
+
+    @Inject
+    lateinit var dataConverter: DataConverter
 
     @Inject
     lateinit var database: OreoDataBase
@@ -1145,7 +1152,6 @@ constructor() : LifecycleService() {
 
                     is UserActivityCallback.RingUserWorkoutData -> {
                         if (it.data.isNotEmpty()) {
-                            showShortToast(it.data.toString())
                             saveAndSyncWorkouts(it.data)
                         }
                     }
@@ -1222,7 +1228,7 @@ constructor() : LifecycleService() {
                     when (resource) {
                         is CacheResult.Success -> {
 
-                            //syncWorkoutsToServer()
+                            syncWorkoutsToServer(workouts)
 
                         }
 
@@ -1238,26 +1244,7 @@ constructor() : LifecycleService() {
         GlobalScope.launch(Dispatchers.IO) {
 
             val reqObj = JsonObject()
-
-            val jsonArray = JsonArray()
-            workouts.forEach { workout ->
-                jsonArray.add(JsonObject(
-                ).apply {
-                    this.addProperty("duration", workout.duration)
-                    this.addProperty("calories", workout.calories)
-                    this.addProperty("activity_type", "")
-                    this.addProperty("start_time", "")
-                    this.addProperty("end_time", "")
-                    this.addProperty("intensity", workout.intensityList)
-                    this.addProperty("intensity_value", "")
-                    this.addProperty("hr_value", workout.hrData)
-                    this.addProperty("steps", "")
-                    this.addProperty("type", "userworkout")
-                    this.addProperty("date", "")
-                })
-
-            }
-            reqObj.add("workouts", jsonArray)
+            reqObj.add("workouts", dataConverter.createRecordedWorkoutArray(workouts))
 
             userActivityRepository.addRecordedWorkout(
                 reqObj

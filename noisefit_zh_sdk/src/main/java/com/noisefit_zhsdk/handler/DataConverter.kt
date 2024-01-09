@@ -1129,7 +1129,7 @@ constructor(
             calories = it.reportCal.toInt(),
             startTime = it.reportSportStartTime,
             steps = it.reportTotalStep.toInt(),
-            type = "",
+            type = "walking",//todo change
             hrData = Gson().toJson(hrData),
             intensityList =  Gson().toJson(intensity),
             date = date

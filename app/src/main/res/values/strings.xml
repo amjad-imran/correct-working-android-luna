@@ -991,4 +991,5 @@
     <string name="text_end">End</string>
     <string name="text_end_workout">End workout</string>
     <string name="text_ready_to_end_your_workout">Ready to end your workout and save your progress?</string>
+    <string name="text_select_workout">Select workout</string>
 </resources>

@@ -79,11 +79,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:text="00:00"
         android:textSize="64sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivWorkout"
-        android:text="00:00" />
+        app:layout_constraintTop_toBottomOf="@+id/ivWorkout" />
 
     <TextView
         style="@style/H5"
@@ -91,11 +91,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/gilroy_medium"
+        android:text="@string/text_duration"
         android:textColor="@color/white_12_72"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTimer"
-        android:text="@string/text_duration" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTimer" />
 
     <include
         android:id="@+id/lytRingConnecting"
@@ -123,6 +123,7 @@
         app:layout_constraintBottom_toTopOf="@+id/btnPauseResume"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
     <Button
         android:id="@+id/btnPauseResume"
         style="@style/SecondaryButtonStyle"
@@ -130,9 +131,9 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="12dp"
-        android:visibility="gone"
         android:gravity="center"
         android:text="@string/pause"
+        android:visibility="gone"
         app:backgroundTint="@null"
         app:layout_constraintBottom_toTopOf="@+id/btnEndWorkout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -157,6 +158,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:constraint_referenced_ids="oreoStatus,batteryStatus" />
+
+    <include
+        android:id="@+id/progressBar"
+        layout="@layout/default_loader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

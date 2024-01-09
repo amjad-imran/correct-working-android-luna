@@ -75,6 +75,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 super.onPageSelected(position)
 
                 mainViewModel.selectedDate = pagerAdapter?.getDate(position)
+                mainViewModel.handleAddWorkoutVisibility()
                 setTabDates(position)
 
                 if (mainViewModel.shouldLoadMoreData()) {

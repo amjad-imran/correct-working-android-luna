@@ -11,6 +11,35 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <View
+        android:id="@+id/searchBox"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginStart="@dimen/dimen_16dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="@dimen/side_margin"
+        android:background="@drawable/back_modal_dialog_10"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/etSearch"
+        style="@style/EditTextStyleSearch"
+        android:layout_width="0dp"
+        android:background="@android:color/transparent"
+        android:drawableEnd="@drawable/ic_search"
+        android:drawablePadding="16dp"
+        android:hint="@string/text_search_here"
+        android:inputType="textCapWords"
+        android:textColorHint="@color/white_64"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@id/searchBox"
+        app:layout_constraintEnd_toEndOf="@+id/searchBox"
+        app:layout_constraintStart_toStartOf="@+id/searchBox"
+        app:layout_constraintTop_toTopOf="@+id/searchBox" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSelectWorkout"
         android:layout_width="match_parent"
@@ -22,7 +51,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintTop_toBottomOf="@id/searchBox"
         tools:listitem="@layout/layout_select_workout_item" />
 
     <include

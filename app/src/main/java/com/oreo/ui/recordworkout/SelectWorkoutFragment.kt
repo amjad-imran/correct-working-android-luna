@@ -1,10 +1,13 @@
 package com.oreo.ui.recordworkout
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSelectWorkoutBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
@@ -40,6 +43,8 @@ class SelectWorkoutFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.toolbar.tvTitle.text = getString(R.string.text_select_workout)
+
         setRecycler()
 
         viewModel.getWorkoutList()
@@ -54,6 +59,17 @@ class SelectWorkoutFragment :
     }
 
     override fun initListener() {
+
+        binding.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                selectWorkoutAdapter.filter.filter(s)
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+
+        })
 
     }
 
