@@ -96,12 +96,15 @@ import com.noisefit_commans.utils.LOW_VIBRATION
 import com.noisefit_commans.utils.ServiceUtil
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.db.OreoDataBase
+import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
@@ -152,6 +155,9 @@ constructor() : LifecycleService() {
 
     @Inject
     lateinit var userActivityRepository: OreoUserActivityRepository
+
+    @Inject
+    lateinit var userHealthDataDataSource: OreoUserHealthDataDataSource
 
     @Inject
     lateinit var firebaseCrashlyticsUtils: FirebaseCrashlyticsUtils
@@ -1253,8 +1259,17 @@ constructor() : LifecycleService() {
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            syncRepository.removeRecordedWorkouts()
-                            //TODO reload data - discuss condition
+                            val dates = HashSet<String>()
+                            workouts.forEach {workout->
+                                workout.date?.let {date->
+                                    dates.add(date)
+                                }
+                            }
+                            userHealthDataDataSource.clearDataByDates(dates.toList())
+                            syncRepository.removeRecordedWorkouts().collect()
+                            ringDataStore.removeRecordDeleteList()
+                            delay(200)
+                            sessionManager.forceSyncData.postValue(Event(true))
                         }
                     }
 

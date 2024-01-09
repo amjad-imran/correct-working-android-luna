@@ -47,4 +47,9 @@ interface RingDataStore {
     fun getAutoLogsTimeStamp(): Long
     fun isShowDeviceIntro():Boolean
     fun setShowDeviceIntro(boolean: Boolean)
+
+
+    fun addToRecordDeleteList(sportStartTime: Long)
+    fun removeRecordDeleteList()
+    fun getRecordDeleteList(): HashSet<Long>
 }

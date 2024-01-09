@@ -24,6 +24,7 @@ class BottomSheetEndWorkout :
         binding.tvTitle.text = getString(R.string.text_end_workout)
         binding.tvDesc.text = getString(R.string.text_ready_to_end_your_workout)
         binding.btnAllow.text = getString(R.string.text_save)
+        binding.btnCancel.text = getString(R.string.text_delete)
 
     }
 
@@ -36,6 +37,10 @@ class BottomSheetEndWorkout :
             navigateUpSafe()
         }
         binding.btnCancel.setOnClickListener {
+            setFragmentResult(
+                END_WORKOUT_KEY,
+                bundleOf("delete" to true)
+            )
             navigateUpSafe()
         }
 

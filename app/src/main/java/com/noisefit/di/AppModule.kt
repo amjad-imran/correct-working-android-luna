@@ -96,9 +96,10 @@ object AppModule {
     @Singleton
     @Provides
     fun provideDataConverter(
-        keyValueDataSource: KeyValueDataSource
+        keyValueDataSource: KeyValueDataSource,
+        ringDataStore: RingDataStore
     ): DataConverter {
-        return DataConverter(keyValueDataSource)
+        return DataConverter(keyValueDataSource,ringDataStore)
     }
 
 

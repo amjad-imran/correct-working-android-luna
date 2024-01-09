@@ -25,6 +25,7 @@ import com.noisefit_commans.ui.checkDayDifferenceMoreOne
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.TrendsData
 import com.oreo.data.model.health.OreoActivityModel
@@ -37,6 +38,8 @@ import com.oreo.ui.home.summary.PushLocalNotification
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.selects.select
 import org.joda.time.Days
@@ -54,6 +57,7 @@ constructor(
     val sessionManager: SessionManager,
     val ringDataStore: RingDataStore,
     val syncRepository: OreoSyncRepository,
+    val userHealthDataDataSource: OreoUserHealthDataDataSource,
     val dataConverter: DataConverter,
     val userActivityRepository: OreoUserActivityRepository
 ) : BaseViewModel() {
@@ -659,7 +663,17 @@ constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            syncRepository.removeRecordedWorkouts()
+                            val dates = HashSet<String>()
+                            workouts.forEach {workout->
+                                workout.date?.let {date->
+                                    dates.add(date)
+                                }
+                            }
+                            userHealthDataDataSource.clearDataByDates(dates.toList())
+                            syncRepository.removeRecordedWorkouts().collect()
+                            ringDataStore.removeRecordDeleteList()
+                            delay(200)
+
                             reloadTodaysData()
                         }
                     }

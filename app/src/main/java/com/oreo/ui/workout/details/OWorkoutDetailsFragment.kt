@@ -353,11 +353,7 @@ class OWorkoutDetailsFragment :
 
     private fun prepareDataForActivity(it: OWorkoutDetailsResponseModel) {
         val activityList = ArrayList<OWDActivityData>()
-        val duration = if(it.type.equals("userworkout",true)){
-            ApplicationUtils.getFormattedRecordedWorkoutFromSeconds(it.duration?.toInt()?:0)
-        }else{
-            ApplicationUtils.getActivityDurationFormat2(it.duration)
-        }
+        val duration = ApplicationUtils.getActivityDurationFormat2(it.duration)
         activityList.add(
             OWDActivityData(
                 "Duration", duration, ""

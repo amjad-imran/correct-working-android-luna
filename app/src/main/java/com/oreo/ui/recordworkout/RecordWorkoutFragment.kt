@@ -32,7 +32,7 @@ class RecordWorkoutFragment :
 
         navArgs.workout.let {
             viewModel.workout = it
-            binding.tvWorkoutTitle.text = it.activityType
+            binding.tvWorkoutTitle.text = it.getFormattedActivityName()
             binding.ivWorkoutImage.loadImage(binding.ivWorkoutImage.context, it.iconUrl)
         }
 
@@ -169,8 +169,9 @@ class RecordWorkoutFragment :
                 END_WORKOUT_KEY
             ) { _, bundle ->
                 val allow = bundle.getBoolean("allow")
+                val delete = bundle.getBoolean("delete")
 
-                if (allow) {
+                if (allow || delete) {
                     binding.progressBar.root.visible()
                     val sportId = viewModel.workout?.ringId ?: -1
 
@@ -181,6 +182,10 @@ class RecordWorkoutFragment :
                             4
                         )
                     )
+
+                    if (delete) {
+                        viewModel.markForDelete(viewModel.sportStartTime)
+                    }
                 }
             }
             navigate(R.id.bottomSheetEndWorkout)
@@ -255,9 +260,9 @@ class RecordWorkoutFragment :
 
                 when (it) {
                     is UpdateDeviceDataCallback.WorkoutStartState -> {
-                        if(it.success){
+                        if (it.success) {
                             startWorkout()
-                        }else{
+                        } else {
                             context.showShortToast("Workout started : ${it.success}")
                         }
                         binding.progressBar.root.gone()
@@ -268,27 +273,27 @@ class RecordWorkoutFragment :
                     }*/
 
                     is UpdateDeviceDataCallback.WorkoutStopped -> {
-                        if(it.success){
+                        if (it.success) {
                             stopWorkout()
-                        }else{
+                        } else {
                             context.showShortToast("Workout Stopped : ${it.success}")
                         }
                         binding.progressBar.root.gone()
                     }
 
                     is UpdateDeviceDataCallback.WorkoutPaused -> {
-                        if(it.success){
+                        if (it.success) {
                             pauseWorkout()
-                        }else{
+                        } else {
                             context.showShortToast("Workout Paused : ${it.success}")
                         }
                         binding.progressBar.root.gone()
                     }
 
                     is UpdateDeviceDataCallback.WorkoutResumed -> {
-                        if(it.success){
+                        if (it.success) {
                             resumeWorkout()
-                        }else{
+                        } else {
                             context.showShortToast("Workout Resumed : ${it.success}")
                         }
                         binding.progressBar.root.gone()

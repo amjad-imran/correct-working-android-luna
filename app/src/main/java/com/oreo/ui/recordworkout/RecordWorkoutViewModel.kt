@@ -1,7 +1,5 @@
 package com.oreo.ui.recordworkout
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.local.abstraction.RingDataStore
@@ -88,6 +86,10 @@ class RecordWorkoutViewModel @Inject constructor(
 
     fun isDevicePaired(): ColorFitDevice? {
         return ringDataStore.getRingDevice()
+    }
+
+    fun markForDelete(sportStartTime: Long) {
+        ringDataStore.addToRecordDeleteList(sportStartTime)
     }
 
 

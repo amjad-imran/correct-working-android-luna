@@ -6,6 +6,8 @@ import com.google.gson.JsonObject
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.local.db.fromJson
+import com.noisefit_commans.data.local.abstraction.RingDataStore
+import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.OWorkoutListModal
@@ -15,7 +17,8 @@ import javax.inject.Inject
 class DataConverter
 @Inject
 constructor(
-    val keyValueDataSource: KeyValueDataSource
+    val keyValueDataSource: KeyValueDataSource,
+    val ringDataStore: RingDataStore
 ) {
 
     suspend fun createRecordedWorkoutArray(workouts: List<RecordedWorkoutData>): JsonArray? {
@@ -28,11 +31,13 @@ constructor(
         )
         if (workoutsList.isEmpty()) return null
 
+        val toDeleteList = ringDataStore.getRecordDeleteList()
+
 
         workouts.forEach { workout ->
 
             val workoutTypeString = getWorkoutType(workout.type, workoutsList)
-            if(workoutTypeString!=null){
+            if (workoutTypeString != null && workout.duration != 0 && !toDeleteList.contains(workout.startTime)) {
 
                 val date = DateFormats.convertTimestampToDate(
                     workout.startTime,

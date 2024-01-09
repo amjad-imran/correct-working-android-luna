@@ -25,6 +25,8 @@ private const val READINESS_WALKAROUND_KEY = "READINESS_WALKAROUND_KEY"
 private const val ACTIVITY_WALKAROUND_KEY = "ACTIVITY_WALKAROUND_KEY"
 private const val MANUAL_MEASUREMENT_KEY = "MANUAL_MEASUREMENT_KEY"
 private const val DEVICE_INTRO = "DEVICE_INTRO"
+private const val RECORD_DELETE_LIST = "RECORD_DELETE_LIST"
+
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
 
@@ -33,6 +35,30 @@ class RingDataStoreImpl
     private val gson: Gson,
     private val mPrefs: SharedPreferences
 ) : RingDataStore {
+
+    override fun addToRecordDeleteList(sportStartTime: Long) {
+        var prevList = Gson().fromJson<HashSet<Long>>(
+            mPrefs.getString(RECORD_DELETE_LIST, "") ?: ""
+        )
+        if (prevList == null) {
+            prevList = HashSet()
+        }
+        prevList.add(sportStartTime)
+
+        mPrefs.edit().putString(RECORD_DELETE_LIST, Gson().toJson(prevList)).commit()
+    }
+
+    override fun removeRecordDeleteList() {
+        mPrefs.edit().remove(RECORD_DELETE_LIST).commit()
+    }
+
+    override fun getRecordDeleteList(): HashSet<Long> {
+        val prevList = Gson().fromJson<HashSet<Long>>(
+            mPrefs.getString(RECORD_DELETE_LIST, "") ?: ""
+        )
+        return prevList ?: HashSet()
+    }
+
     override fun saveRingDevice(noiseFitDevice: ColorFitDevice): Boolean {
         return mPrefs.edit()?.putString(RING_DEVICE_INFO, gson.toJson(noiseFitDevice))?.commit()
             ?: false
