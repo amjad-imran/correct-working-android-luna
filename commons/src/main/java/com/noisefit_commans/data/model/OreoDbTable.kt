@@ -78,7 +78,7 @@ data class RecordedWorkoutData(
     @ColumnInfo(name = "startTime") @SerializedName("startTime") var startTime: Long = 0,
     @ColumnInfo(name = "endTime") @SerializedName("endTime") var endTime: Long = 0,
     @ColumnInfo(name = "steps") @SerializedName("steps") var steps: Int? = null,
-    @ColumnInfo(name = "type") @SerializedName("type") var type: String? = null,
+    @ColumnInfo(name = "type") @SerializedName("type") var type: Int? = null,
     @ColumnInfo(name = "hr") @SerializedName("hr") var hrData: String? = null,
     @ColumnInfo(name = "intensity_list") @SerializedName("intensity_list") var intensityList: String? = null,
     @SerializedName("date") var date: String? = null

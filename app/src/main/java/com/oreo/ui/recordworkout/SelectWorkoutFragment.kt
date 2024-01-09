@@ -45,13 +45,13 @@ class SelectWorkoutFragment :
 
     fun navigateToStartWorkout(oWorkoutListModal: OWorkoutListModal) {
 
-        if (viewModel.isBatteryLow()) {
-            navigate(R.id.bottomSheetRingBatteryLow)
+        if (!viewModel.isDeviceConnected()) {
+            navigate(R.id.bottomSheetRingConnecting)
             return
         }
 
-        if (!viewModel.isDeviceConnected()) {
-            navigate(R.id.bottomSheetRingConnecting)
+        if (viewModel.isBatteryLow()) {
+            navigate(R.id.bottomSheetRingBatteryLow)
             return
         }
 

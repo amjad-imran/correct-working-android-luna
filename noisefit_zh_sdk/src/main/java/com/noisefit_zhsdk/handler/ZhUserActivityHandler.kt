@@ -143,11 +143,14 @@ constructor(
             override fun onSportRequest(requestBean: SportRequestBean) {
                 LOGS.d(TAG, "onSportRequest $requestBean")
                 deviceRequest(requestBean)
+                AppLogs.sendAppLogs("RECORD_WORKOUT onSportRequest-> $requestBean")
             }
         })
 
         CallBackUtils.setSportParsingProgressCallBack { progress, total ->
             LOGS.d(TAG, "setSportParsingProgressCallBack $progress $total")
+            AppLogs.sendAppLogs("RECORD_WORKOUT  setSportParsingProgressCallBack-> $progress $total")
+
             if (progress == total) {
                 val result = ArrayList<RecordedWorkoutData>()
                 sportModleInfoList.forEach { sportModleInfo ->
@@ -160,6 +163,7 @@ constructor(
                 userActivityDataCallbacks?.onUserActivityDataReceived(
                     UserActivityCallback.RingUserWorkoutData(result)
                 )
+                AppLogs.sendAppLogs("RECORD_WORKOUT  Activity Sync:: success Size: ${sportModleInfoList.size}")
 
                 LOGS.i(TAG, "Activity Sync:: success Size: ${sportModleInfoList.size}")
 

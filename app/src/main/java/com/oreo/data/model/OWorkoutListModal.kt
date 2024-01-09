@@ -34,6 +34,7 @@ data class OActivityListModal(
     @SerializedName("activity_type") val activityType: String? = null,
     @SerializedName("start_time") val startTime: String? = null,
     @SerializedName("end_time") val endTime: String? = null,
+    @SerializedName("type") val type: String? = null,
     @SerializedName("intensity") val intensity: String? = null,
     @SerializedName("created_date") val createdDate: String? = null,
     @SerializedName("icon_url") val iconUrl:String?=null

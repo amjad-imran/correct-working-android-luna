@@ -1115,8 +1115,8 @@ constructor(
             }
         }
 
-        val duration = it.reportDuration.toInt()
-        val date =  DateFormats.convertTimestampToDate(
+        val duration = it.reportDuration.toInt() / 60
+        val date = DateFormats.convertTimestampToDate(
             it.reportSportStartTime, DateFormats.dateFormat3
         )
 
@@ -1130,9 +1130,9 @@ constructor(
             startTime = it.reportSportStartTime,
             endTime = it.reportSportEndTime,
             steps = it.reportTotalStep.toInt(),
-            type = "walking",//todo change
+            type = it.recordPointSportType,
             hrData = Gson().toJson(hrData),
-            intensityList =  Gson().toJson(intensity),
+            intensityList = Gson().toJson(intensity),
             date = date
         )
     }

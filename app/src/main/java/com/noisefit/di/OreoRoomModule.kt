@@ -115,7 +115,7 @@ class OreoRoomModule {
                         "`startTime` INTEGER NOT NULL," +
                         "`endTime` INTEGER NOT NULL," +
                         "`steps` INTEGER," +
-                        "`type` TEXT," +
+                        "`type` INTEGER," +
                         "`hr` TEXT," +
                         "`intensity_list` TEXT," +
                         "`date` TEXT, PRIMARY KEY(`id`))"

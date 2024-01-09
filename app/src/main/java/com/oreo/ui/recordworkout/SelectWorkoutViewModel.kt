@@ -3,17 +3,23 @@ package com.oreo.ui.recordworkout
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.noisefit.data.local.db.abstraction.KeyValueDataSource
+import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
+import com.noisefit_commans.data.model.KeyValue
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.ui.delay
 import com.noisefit_commans.utils.Event
 import com.oreo.data.model.OWorkoutListModal
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,7 +28,8 @@ class SelectWorkoutViewModel @Inject
 constructor(
     private val userActivityRepository: OreoUserActivityRepository,
     private val sessionManager: SessionManager,
-    private val watchDataStore: WatchDataStore
+    private val watchDataStore: WatchDataStore,
+    private val keyValueDataSource: KeyValueDataSource
 ) : BaseViewModel() {
 
 
@@ -35,7 +42,7 @@ constructor(
     }
 
     fun getWorkoutList() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
 
             userActivityRepository.getWorkoutListRecord().collect { resource ->
                 when (resource) {
@@ -65,8 +72,18 @@ constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
+
                             _oWorkoutListModalResponse.postValue(it)
 
+                            keyValueDataSource.removeDataByType(KeyValueDataType.RECORD_WORKOUT)
+                            kotlinx.coroutines.delay(200L)
+                            keyValueDataSource.insertData(
+                                KeyValue(
+                                    key = "",
+                                    value = Gson().toJson(it),
+                                    type = KeyValueDataType.RECORD_WORKOUT.name
+                                )
+                            )
                         }
                     }
                 }
@@ -78,7 +95,7 @@ constructor(
 
     fun isBatteryLow(): Boolean {
         val batteryPercentage = watchDataStore.getBatteryPercentRing()
-        return batteryPercentage<=5
+        return batteryPercentage <= 5
     }
 
 
