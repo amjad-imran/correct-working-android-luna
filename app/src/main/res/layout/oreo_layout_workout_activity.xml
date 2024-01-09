@@ -67,6 +67,7 @@
             android:layout_height="48dp"
             android:layout_margin="@dimen/side_margin"
             android:text="@string/text_add_a_workout"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:backgroundTint="@null"
             app:layout_constraintEnd_toEndOf="parent"

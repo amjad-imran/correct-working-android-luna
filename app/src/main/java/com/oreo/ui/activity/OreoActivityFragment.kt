@@ -617,16 +617,16 @@ class OreoActivityFragment :
         }
 
         if (mainViewModel.selectedDate == DateFormats.getCurrentDateOreoFormat()) {
-            if (mViewModel.ringDataStore.getRingDevice() != null) {
+            /*if (mViewModel.ringDataStore.getRingDevice() != null) {
                 binding.lytWorkouts.viewAddWorkout.visible()
             } else {
                 binding.lytWorkouts.viewAddWorkout.gone()
-            }
+            }*/
             binding.lytWorkouts.tvEmptyMsg.text =
                 getString(R.string.text_you_haven_t_added_any_workouts_for_today)
 
         } else {
-            binding.lytWorkouts.viewAddWorkout.gone()
+            //binding.lytWorkouts.viewAddWorkout.gone()
             binding.lytWorkouts.tvEmptyMsg.text =
                 getString(R.string.text_you_haven_t_added_any_workouts_for_this_day)
         }
