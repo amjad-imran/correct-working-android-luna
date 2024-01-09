@@ -218,9 +218,7 @@ constructor(
 
                 }
 
-                AppLogs.sendAppLogs("SYNC_DATA_CASE -> Clearing date started")
                 datesToRemove?.let {
-                    AppLogs.sendAppLogs("SYNC_DATA_CASE -> Clearing dates $it")
 
                     userHealthDataDataSource.clearDataByDates(it)
                     delay(200)

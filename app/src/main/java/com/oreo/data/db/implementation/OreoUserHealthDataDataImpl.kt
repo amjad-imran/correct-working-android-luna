@@ -57,7 +57,6 @@ constructor(
     override suspend fun clearDataByDates(dates: List<String>) {
         CoroutineScope(Dispatchers.IO).launch {
             dates.forEach {
-                AppLogs.sendAppLogs("SYNC_DATA_CASE -> clearDataByDates -> $it")
                 userHealthDao.clearByDate(it)
             }
         }

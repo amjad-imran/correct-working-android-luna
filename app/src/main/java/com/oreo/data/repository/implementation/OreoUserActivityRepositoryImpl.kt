@@ -136,7 +136,6 @@ class OreoUserActivityRepositoryImpl(
                     val dateList = getDaysList(DateFormats.getCurrentDateMinusDays(6), todayDate)
 
                     val dates = ArrayList<LocalDate>()
-                    AppLogs.sendAppLogs("SYNC_DATA_CASE -> started Case 1")
 
                     dateList.forEach {
                         val data = userHealthDataSource.getDataByDate(it)
@@ -145,19 +144,16 @@ class OreoUserActivityRepositoryImpl(
                         }
                     }
                     LOGS.d("dates____ ${dates}")
-                    AppLogs.sendAppLogs("SYNC_DATA_CASE -> $dates")
 
                     if (dates.isEmpty()) {
                         apiStartDate = todayDate
                         apiEndDate = todayDate
-                        AppLogs.sendAppLogs("SYNC_DATA_CASE -> dates empty")
 
                     } else {
                         val minDate = dates.stream().min(LocalDate::compareTo)
                             .get()
                         apiStartDate = minDate.toString()
                         apiEndDate = todayDate
-                        AppLogs.sendAppLogs("SYNC_DATA_CASE -> dates not empty $startDate $endDate")
                     }
                     return@safeCacheCall null
 
@@ -165,7 +161,6 @@ class OreoUserActivityRepositoryImpl(
                     apiStartDate = startDate
                     apiEndDate = endDate
                     val datesList = getDaysList(startDate, endDate)
-                    AppLogs.sendAppLogs("SYNC_DATA_CASE -> Case 2")
 
                     val localData = ArrayList<ServerUserHealthData>()
                     datesList.forEach {
