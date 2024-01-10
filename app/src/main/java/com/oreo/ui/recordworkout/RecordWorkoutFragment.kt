@@ -35,8 +35,17 @@ class RecordWorkoutFragment :
             binding.tvWorkoutTitle.text = it.getFormattedActivityName()
             binding.ivWorkoutImage.loadImage(binding.ivWorkoutImage.context, it.iconUrl)
         }
-
         binding.btnEndWorkout.isEnabled = false
+
+        navArgs.onGoingWorkout?.let {
+            viewModel.workoutDuration = it.duration.toLong()
+            if (it.sportStatus == 1 || it.sportStatus == 3) {
+                startWorkout()
+            } else if (it.sportStatus == 2) {
+                pauseWorkout()
+                viewModel.updateTimer()
+            }
+        }
 
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
 
@@ -59,24 +68,33 @@ class RecordWorkoutFragment :
         }
         binding.btnEndWorkout.isEnabled = true
         viewModel.starTimer()
+
+        viewModel.saveOngoingRecordWorkout()
     }
 
     private fun pauseWorkout() {
         viewModel.currentWorkoutState = 2
+        binding.btnStartWorkout.gone()
+        binding.btnPauseResume.visible()
         binding.btnPauseResume.text = getString(R.string.resume)
         viewModel.pauseTimer()
+        binding.btnEndWorkout.isEnabled = true
     }
 
     private fun resumeWorkout() {
         viewModel.currentWorkoutState = 3
+        binding.btnStartWorkout.gone()
+        binding.btnPauseResume.visible()
         binding.btnPauseResume.text = getString(R.string.pause)
         viewModel.resumeTimer()
+        binding.btnEndWorkout.isEnabled = true
     }
 
     private fun stopWorkout() {
+        viewModel.deleteOngoingRecordWorkout()
         viewModel.currentWorkoutState = 4
-        navigateUpSafe()
         viewModel.stopTimer()
+        navigateUpSafe()
     }
 
     override fun onDestroyView() {

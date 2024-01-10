@@ -4,10 +4,10 @@ import androidx.lifecycle.MutableLiveData
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
+import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseViewModel
-import com.oreo.data.model.OWorkoutListModal
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Timer
 import java.util.TimerTask
@@ -38,23 +38,26 @@ class RecordWorkoutViewModel @Inject constructor(
     var currentWorkoutState = 0
 
 
+    fun updateTimer() {
+        val hours = workoutDuration / 3600
+        val minutes = (workoutDuration % 3600) / 60
+        val seconds = workoutDuration % 60
+
+        val timeString = if (hours == 0L) {
+            String.format("%02d:%02d", minutes, seconds)
+        } else {
+            String.format("%02d:%02d:%02d", hours, minutes, seconds)
+        }
+        displayTimer.postValue(timeString)
+    }
+
     fun starTimer() {
         timer?.cancel()
         timer = Timer().apply {
             scheduleAtFixedRate(object : TimerTask() {
                 override fun run() {
                     workoutDuration += 1
-
-                    val hours = workoutDuration / 3600
-                    val minutes = (workoutDuration % 3600) / 60
-                    val seconds = workoutDuration % 60
-
-                    val timeString = if (hours == 0L) {
-                        String.format("%02d:%02d", minutes, seconds)
-                    } else {
-                        String.format("%02d:%02d:%02d", hours, minutes, seconds)
-                    }
-                    displayTimer.postValue(timeString)
+                    updateTimer()
                 }
             }, 0, 1000)
         }
@@ -90,6 +93,16 @@ class RecordWorkoutViewModel @Inject constructor(
 
     fun markForDelete(sportStartTime: Long) {
         ringDataStore.addToRecordDeleteList(sportStartTime * 1000L)
+    }
+
+    fun saveOngoingRecordWorkout() {
+        if (sportStartTime != 0L && workout != null) {
+            ringDataStore.saveOngoingRecordWorkout(Pair(sportStartTime, workout!!))
+        }
+    }
+
+    fun deleteOngoingRecordWorkout() {
+        ringDataStore.deleteOngoingRecordWorkout()
     }
 
 

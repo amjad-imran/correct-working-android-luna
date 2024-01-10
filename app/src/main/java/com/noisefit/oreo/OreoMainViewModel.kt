@@ -16,9 +16,11 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
+import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.data.model.User
 import com.noisefit_commans.interfaces.connection.ConnectState
+import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.ui.checkDayDifferenceMoreOne
@@ -659,8 +661,8 @@ constructor(
 
             if (workoutsArray == null || workoutsArray.isEmpty) {
                 val dates = HashSet<String>()
-                workouts.forEach {workout->
-                    workout.date?.let {date->
+                workouts.forEach { workout ->
+                    workout.date?.let { date ->
                         dates.add(date)
                     }
                 }
@@ -680,8 +682,8 @@ constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             val dates = HashSet<String>()
-                            workouts.forEach {workout->
-                                workout.date?.let {date->
+                            workouts.forEach { workout ->
+                                workout.date?.let { date ->
                                     dates.add(date)
                                 }
                             }
@@ -718,4 +720,12 @@ constructor(
         }
     }
 
+    fun checkOnGoingWorkout() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val workout = ringDataStore.getOngoingRecordWorkout()
+            if (workout != null) {
+                sessionManager.sendUpdateQueryAction(UpdateDeviceAction.CheckOngoingWorkout())
+            }
+        }
+    }
 }

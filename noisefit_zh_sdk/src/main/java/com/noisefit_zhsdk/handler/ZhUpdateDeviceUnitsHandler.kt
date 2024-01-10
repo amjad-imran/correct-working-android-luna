@@ -109,6 +109,7 @@ import javax.inject.Inject
 import kotlin.math.roundToInt
 
 private val TAG = "ZhUpdateDeviceUnitsHandler"
+
 class ZhUpdateDeviceUnitsHandler
 @Inject
 constructor(
@@ -149,7 +150,7 @@ constructor(
 
 
     override fun attachCallbacks() {
-        CallBackUtils.watchFaceInstallCallBack =  watchFaceInstallCallBack
+        CallBackUtils.watchFaceInstallCallBack = watchFaceInstallCallBack
         CallBackUtils.ringSportCallBack = ringSportCallback
 
     }
@@ -171,7 +172,7 @@ constructor(
             }
 
             var isError = false
-            if(p0.errorReason >0){
+            if (p0.errorReason > 0) {
                 isError = true
             }
 
@@ -261,10 +262,14 @@ constructor(
 
     override fun setManualMeasurement(manualMeasureType: ManualMeasureType, status: Boolean) {
         CallBackUtils.activeMeasureCallBack = activeMeasureCallBack
-      LOGS.d("onMeasuring setManualMeasurement ${oreoDataConverter.getManualMeasurement(
-          manualMeasureType,
-          status
-      )}")
+        LOGS.d(
+            "onMeasuring setManualMeasurement ${
+                oreoDataConverter.getManualMeasurement(
+                    manualMeasureType,
+                    status
+                )
+            }"
+        )
         ControlBleTools.getInstance().activeMeasurementStart(
             oreoDataConverter.getManualMeasurement(
                 manualMeasureType,
@@ -273,7 +278,7 @@ constructor(
                 override fun onState(state: SendCmdState) {
                     LOGS.d(ZhQueryDeviceUnitsHandler.TAG, "$state")
 
-                    if(state==SendCmdState.NOT_SUPPORT){
+                    if (state == SendCmdState.NOT_SUPPORT) {
                         testUpdateDeviceDataCallback?.onUpdateDataReceived(
                             UpdateDeviceDataCallback.ManualMeasurementObtained(
                                 ManualMeasurement(
@@ -291,14 +296,15 @@ constructor(
     }
 
     override fun checkOngoingWorkout() {
-        ControlBleTools.getInstance().getRingSportStatus(object : ParsingStateManager.SendCmdStateListener() {
-            override fun onState(state: SendCmdState?) {
-                when (state) {
-                    SendCmdState.SUCCEED -> {}
-                    else -> {}
+        ControlBleTools.getInstance()
+            .getRingSportStatus(object : ParsingStateManager.SendCmdStateListener() {
+                override fun onState(state: SendCmdState?) {
+                    when (state) {
+                        SendCmdState.SUCCEED -> {}
+                        else -> {}
+                    }
                 }
-            }
-        })
+            })
     }
 
     override fun startWorkout(sportType: Int, sportStartTime: Long) {
@@ -319,7 +325,7 @@ constructor(
 
                         else -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
-                                UpdateDeviceDataCallback.WorkoutStartState(false,"Failed")
+                                UpdateDeviceDataCallback.WorkoutStartState(false, "Failed")
                             )
                         }
                     }
@@ -401,18 +407,38 @@ constructor(
             LOGS.d(TAG, "onRingSportStatus ${Gson().toJson(bean)}")
             if (bean == null) return
 
+
+            if (bean.startResult == RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_NONE.result && bean.isSporting &&
+                bean.sportStatus != RingSportCallBack.RingSportStatus.SPORT_STATUS_END.status
+            ) {
+                testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                    UpdateDeviceDataCallback.OngoingWorkoutData(
+                        bean.duration,
+                        bean.sportStatus,
+                        bean.sportType,
+                        bean.startTime
+                    )
+                )
+            }
+
             if (bean.startResult != RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_NONE.result) {
                 when (bean.startResult) {
                     RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_LOW_POWER.result -> {
-                        UpdateDeviceDataCallback.WorkoutStartState(false,"Low Battery")
+                        testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                            UpdateDeviceDataCallback.WorkoutStartState(false, "Low Battery")
+                        )
                     }
 
                     RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_UN_WEAR.result -> {
-                        UpdateDeviceDataCallback.WorkoutStartState(false,"Device not worn")
+                        testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                            UpdateDeviceDataCallback.WorkoutStartState(false, "Device not worn")
+                        )
                     }
 
                     RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_CHARGING.result -> {
-                        UpdateDeviceDataCallback.WorkoutStartState(false,"Ring on Charging")
+                        testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                            UpdateDeviceDataCallback.WorkoutStartState(false, "Ring on Charging")
+                        )
 
                     }
                 }
@@ -422,25 +448,35 @@ constructor(
                 if (bean.endReason != RingSportCallBack.RingSportEndReason.SPORT_END_REASON_NONE.reason) {
                     when (bean.endReason) {
                         RingSportCallBack.RingSportEndReason.SPORT_END_REASON_LOW_POWER.reason -> {
-                            UpdateDeviceDataCallback.WorkoutStartState(false,"Low Battery")
+                            testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                                UpdateDeviceDataCallback.WorkoutStartState(false, "Low Battery")
+                            )
                         }
 
                         RingSportCallBack.RingSportEndReason.SPORT_END_REASON_TIMEOUT.reason -> {
-                            UpdateDeviceDataCallback.WorkoutStartState(false,"Exercise 8 hours timeout")
+                            testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                                UpdateDeviceDataCallback.WorkoutStartState(
+                                    false,
+                                    "Exercise 8 hours timeout"
+                                )
+                            )
+
                         }
 
                         RingSportCallBack.RingSportEndReason.SPORT_END_REASON_NO_MEMORY.reason -> {
-                            UpdateDeviceDataCallback.WorkoutStartState(false,"Insufficient device memory")
+                            testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                                UpdateDeviceDataCallback.WorkoutStartState(
+                                    false,
+                                    "Insufficient device memory"
+                                )
+                            )
                         }
                     }
                 }
 
                 if (bean.isSportNoSync) {
                     ControlBleTools.getInstance()
-                        .getFitnessSportIdsData(object : SendCmdStateListener(null) {
-                            override fun onState(state: SendCmdState) {
-                            }
-                        })
+                        .getFitnessSportIdsData(null)
                 }
             }
 
@@ -474,6 +510,7 @@ constructor(
                 UnitSystem.IMPERIAL.type.lowercase() -> {
                     1
                 }
+
                 else -> {
                     0
                 }
@@ -588,6 +625,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("alarm data update succeed")
                         }
+
                         else -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.AlarmUpdated(
@@ -624,6 +662,7 @@ constructor(
                                 )
                                 AppLogs.sendAppLogs("contact list data update succeed")
                             }
+
                             else -> {
                                 testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                     UpdateDeviceDataCallback.ContactListUpdated(
@@ -721,6 +760,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("delete reminder data update succeed")
                         }
+
                         else -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.DeleteReminder(
@@ -748,6 +788,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("app list data update succeed")
                         }
+
                         else -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.WidgetSortListUpdated(
@@ -774,6 +815,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("app list data update succeed")
                         }
+
                         else -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.UpdateAppList(
@@ -829,6 +871,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("Sync Stock data succeed")
                         }
+
                         SendCmdState.TIMEOUT -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.SyncStockInfoList(
@@ -837,6 +880,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("sync stock data timeout")
                         }
+
                         else -> {}
                     }
                 }
@@ -862,6 +906,7 @@ constructor(
                                 AppLogs.sendAppLogs("delete stock succeed")
                             }, 1000)
                         }
+
                         SendCmdState.TIMEOUT -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.DeleteStock(
@@ -870,6 +915,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("delete stock timeout")
                         }
+
                         else -> {}
                     }
                 }
@@ -918,6 +964,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("add reminder update succeed")
                         }
+
                         else -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.AddReminder(
@@ -1200,12 +1247,14 @@ constructor(
                             )
                             AppLogs.sendAppLogs("BLE calling succeed")
                         }
+
                         SendCmdState.TIMEOUT -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.BleCallingSwitchUpdated(false)
                             )
                             AppLogs.sendAppLogs("BLE calling timeout")
                         }
+
                         else -> {}
                     }
                 }
@@ -1546,6 +1595,7 @@ constructor(
                 )
                 AppLogs.sendAppLogs("Missed call app notification")
             }
+
             ApplicationType.SMS.type -> {
                 ControlBleTools.getInstance().sendSystemNotification(
                     2,
@@ -1556,6 +1606,7 @@ constructor(
                 )
                 AppLogs.sendAppLogs("SMS app notification")
             }
+
             else -> {
                 val message =
                     dataConverter.formatNotificationMessage(appNotification.message)
@@ -1743,6 +1794,7 @@ constructor(
                 )
                 AppLogs.sendAppLogs("Incoming call : succeed")
             }
+
             else -> {
                 ControlBleTools.getInstance().sendCallState(1, null)
                 AppLogs.sendAppLogs("Incoming call : error")
@@ -1782,6 +1834,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("DND Reminder : Succeed")
                         }
+
                         else -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.DoNotDisturbUpdated(
@@ -1833,6 +1886,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("SedentaryDataUpdated Reminder : Succeed")
                         }
+
                         else -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.SedentaryDataUpdated(
@@ -1889,6 +1943,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("HandWashingUpdated Reminder: Succeed")
                         }
+
                         else -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.HandWashingUpdated(
@@ -2041,6 +2096,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("HeartRateAlert : Succeed")
                         }
+
                         else -> {
                             LOGS.d("setHeartRateAlert failed")
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
@@ -2158,6 +2214,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("MedicineReminder Alert: Succeed")
                         }
+
                         else -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.MedicineDataUpdated(
@@ -2201,6 +2258,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("MealReminder: Succeed")
                         }
+
                         else -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.MealDataUpdated(
@@ -2233,6 +2291,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("CustomReply Reminder: Succeed")
                         }
+
                         else -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.CustomizeReplyUpdated(
@@ -2277,6 +2336,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("WorldClock Reminder: Succeed")
                         }
+
                         SendCmdState.TIMEOUT -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.WorldClockSet(
@@ -2285,6 +2345,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("WorldClock Reminder: Failed")
                         }
+
                         else -> {}
                     }
                 }
@@ -2316,6 +2377,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("QuickEyeMovement Reminder: Failed")
                         }
+
                         else -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.QuickEyeMovementSwitchUpdated(

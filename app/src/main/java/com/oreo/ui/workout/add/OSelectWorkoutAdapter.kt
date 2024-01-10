@@ -6,11 +6,10 @@ import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.databinding.LayoutSelectWorkoutItemBinding
-import com.noisefit_commans.ui.gone
+import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
-import com.oreo.data.model.OWorkoutListModal
 
 class OSelectWorkoutAdapter(val oSelectWorkoutInteraction: OSelectWorkoutInteraction) :
     RecyclerView.Adapter<OSelectWorkoutAdapter.ViewHolder>(), Filterable {

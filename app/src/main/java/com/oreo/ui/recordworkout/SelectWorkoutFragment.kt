@@ -8,11 +8,11 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSelectWorkoutBinding
+import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
-import com.oreo.data.model.OWorkoutListModal
 import com.oreo.ui.workout.add.OSelectWorkoutAdapter
 import dagger.hilt.android.AndroidEntryPoint
 

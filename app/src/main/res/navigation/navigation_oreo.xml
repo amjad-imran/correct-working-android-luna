@@ -224,7 +224,7 @@
         android:label="SelectWorkoutBottomSheet">
         <argument
             android:name="workoutList"
-            app:argType="com.oreo.data.model.OWorkoutListModal[]" />
+            app:argType="com.noisefit_commans.data.model.OWorkoutListModal[]" />
     </dialog>
 
     <dialog
@@ -463,7 +463,13 @@
         android:label="fragment_record_workout" >
         <argument
             android:name="workout"
-            app:argType="com.oreo.data.model.OWorkoutListModal" />
+            app:argType="com.noisefit_commans.data.model.OWorkoutListModal" />
+      <argument
+            android:name="onGoingWorkout"
+            app:argType="com.noisefit_commans.data.model.DetectedOngoingWorkout"
+          app:nullable="true"
+          android:defaultValue="@null" />
+
     </fragment>
     <fragment
         android:id="@+id/addWorkoutSelectorFragment"

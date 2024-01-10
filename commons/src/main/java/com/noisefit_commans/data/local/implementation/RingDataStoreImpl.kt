@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.DeviceFeatures
+import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.ManualMeasurement
 import com.noisefit_commans.utils.DateFormats
@@ -27,6 +28,9 @@ private const val MANUAL_MEASUREMENT_KEY = "MANUAL_MEASUREMENT_KEY"
 private const val DEVICE_INTRO = "DEVICE_INTRO"
 private const val RECORD_DELETE_LIST = "RECORD_DELETE_LIST"
 
+private const val RECORD_WORKOUT_TIMESTAMP = "RECORD_WORKOUT_TIMESTAMP"
+private const val RECORD_WORKOUT_MODEL = "RECORD_WORKOUT_MODEL"
+
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
 
@@ -35,6 +39,30 @@ class RingDataStoreImpl
     private val gson: Gson,
     private val mPrefs: SharedPreferences
 ) : RingDataStore {
+
+    override fun saveOngoingRecordWorkout(pair: Pair<Long, OWorkoutListModal>) {
+        mPrefs.edit().putLong(RECORD_WORKOUT_TIMESTAMP, pair.first).commit()
+        mPrefs.edit().putString(RECORD_WORKOUT_MODEL, gson.toJson(pair.second)).commit()
+    }
+
+    override fun getOngoingRecordWorkout(): Pair<Long, OWorkoutListModal>? {
+
+        val model = Gson().fromJson<OWorkoutListModal>(
+            mPrefs.getString(RECORD_WORKOUT_MODEL, "") ?: ""
+        )
+        val timeStamp = mPrefs.getLong(RECORD_WORKOUT_TIMESTAMP, 0L)
+
+        if (model == null || timeStamp == 0L) {
+            return null
+        }
+        return Pair(timeStamp, model)
+    }
+
+    override fun deleteOngoingRecordWorkout() {
+        mPrefs.edit().remove(RECORD_WORKOUT_TIMESTAMP).commit()
+        mPrefs.edit().remove(RECORD_WORKOUT_MODEL).commit()
+
+    }
 
     override fun addToRecordDeleteList(sportStartTime: Long) {
         var prevList = Gson().fromJson<HashSet<Long>>(

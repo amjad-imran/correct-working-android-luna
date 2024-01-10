@@ -408,6 +408,10 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                     viewModel.checkBatteryPercentage()
                     shouldSync()
                     mainViewModel.onRingConnected()
+
+                    //condition to be called once only
+                    mainViewModel.checkOnGoingWorkout()
+
                 }
 
                 is ConnectState.UnPaired -> {

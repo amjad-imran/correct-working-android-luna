@@ -1607,6 +1607,10 @@ constructor() : LifecycleService() {
                     ringDataStore.setManualMeasurementValue(dataCallback.manualMeasurement)
                     sessionManager.setManualMeasurementValue(true)
                 }
+                is UpdateDeviceDataCallback.OngoingWorkoutData->{
+                    sessionManager.onGoingWorkoutDetected(dataCallback.duration,
+                        dataCallback.sportStatus,dataCallback.sportType,dataCallback.startTimeStamp)
+                }
 
                 is UpdateDeviceDataCallback.FirmwareUpgradeProgress -> {
                     if (dataCallback.watchUpdateStatus.status == UpdateStatus.COMPLETED ||

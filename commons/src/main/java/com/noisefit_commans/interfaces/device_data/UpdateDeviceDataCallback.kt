@@ -1,11 +1,19 @@
 package com.noisefit_commans.interfaces.device_data
 
-import com.noisefit_commans.interfaces.data.UserActivityCallback
-import com.noisefit_commans.models.*
+import com.noisefit_commans.models.ColorfitError
+import com.noisefit_commans.models.ManualMeasurement
+import com.noisefit_commans.models.SwitchSetting
+import com.noisefit_commans.models.UpdateStatus
+import com.noisefit_commans.models.WatchFace
+import com.noisefit_commans.models.WatchUpdateStatus
 
 sealed class UpdateDeviceDataCallback {
 
-    class WorkoutStartState(val success: Boolean, val errorMessage: String? = null) : UpdateDeviceDataCallback()
+    class WorkoutStartState(val success: Boolean, val errorMessage: String? = null) :
+        UpdateDeviceDataCallback()
+
+    class OngoingWorkoutData(val duration: Int,val sportStatus: Int,val sportType: Int,
+                             val startTimeStamp: Long) : UpdateDeviceDataCallback()
 
     class WorkoutPaused(val success: Boolean) : UpdateDeviceDataCallback()
     class WorkoutResumed(val success: Boolean) : UpdateDeviceDataCallback()
@@ -21,7 +29,9 @@ sealed class UpdateDeviceDataCallback {
     class Spo2SettingsUpdated(val success: Boolean) : UpdateDeviceDataCallback()
     class SedentaryDataUpdated(val success: Boolean) : UpdateDeviceDataCallback()
     class FirstDayUpdated(val success: Boolean) : UpdateDeviceDataCallback()
-    class AGPSUpdateProgress(val status: UpdateStatus, val progress: Int? = 0) : UpdateDeviceDataCallback()
+    class AGPSUpdateProgress(val status: UpdateStatus, val progress: Int? = 0) :
+        UpdateDeviceDataCallback()
+
     class MusicSwitchUpdated(val success: Boolean) : UpdateDeviceDataCallback()
     class CallSwitchUpdated(val success: Boolean) : UpdateDeviceDataCallback()
     class UserInfoUpdated(val success: Boolean) : UpdateDeviceDataCallback()
@@ -88,6 +98,8 @@ sealed class UpdateDeviceDataCallback {
     class UPIQRCodeUpdated(val success: Boolean) : UpdateDeviceDataCallback()
     class ClearUPIQRCodeUpdated(val success: Boolean) : UpdateDeviceDataCallback()
     class SportWidgetSortDataUpdated(val success: Boolean) : UpdateDeviceDataCallback()
-    class ManualMeasurementObtained(val manualMeasurement: ManualMeasurement) : UpdateDeviceDataCallback()
+    class ManualMeasurementObtained(val manualMeasurement: ManualMeasurement) :
+        UpdateDeviceDataCallback()
+
     class SleepReminderUpdated(val success: Boolean) : UpdateDeviceDataCallback()
 }

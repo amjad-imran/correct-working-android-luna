@@ -27,6 +27,7 @@ import com.noisefit.util.notif.NotificationUtil
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.response.VersionCheckResponse
 import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit_commans.interfaces.connection.ConnectState
@@ -35,7 +36,6 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
-import com.oreo.data.model.OWorkoutListModal
 import com.oreo.ui.recordworkout.SELECT_RECORD_WORKOUT
 import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderEffectBlur
@@ -318,10 +318,23 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     override fun observeSubscriber() {
 
+        viewModel.sessionManager.ongoingWorkoutDetected.observe(this) {
+            it.getContent()?.let { pair ->
+                if (navController?.currentDestination?.id != R.id.recordWorkoutFragment) {
+                    navController?.navigate(
+                        R.id.recordWorkoutFragment, bundleOf(
+                            "workout" to pair.second,
+                            "onGoingWorkout" to pair.first,
+                        )
+                    )
+                }
+            }
+        }
+
         viewModel.addWorkoutCtaVisibility.observe(this) {
-            if(it){
+            if (it) {
                 binding.btnAddWorkout.visible()
-            }else{
+            } else {
                 binding.btnAddWorkout.gone()
             }
         }
