@@ -50,7 +50,7 @@
 
         <TextView
             android:id="@+id/tvTime"
-            style="@style/H6"
+            style="@style/Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
