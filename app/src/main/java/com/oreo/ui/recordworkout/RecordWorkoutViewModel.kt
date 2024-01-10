@@ -89,7 +89,7 @@ class RecordWorkoutViewModel @Inject constructor(
     }
 
     fun markForDelete(sportStartTime: Long) {
-        ringDataStore.addToRecordDeleteList(sportStartTime)
+        ringDataStore.addToRecordDeleteList(sportStartTime * 1000L)
     }
 
 

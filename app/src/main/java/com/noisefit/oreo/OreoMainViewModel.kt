@@ -650,12 +650,28 @@ constructor(
         }
     }
 
+    //TODO convert to worker
     private fun syncWorkoutsToServer(workouts: List<RecordedWorkoutData>) {
         if (workouts.isEmpty()) return
         GlobalScope.launch(Dispatchers.IO) {
 
+            val workoutsArray = dataConverter.createRecordedWorkoutArray(workouts)
+
+            if (workoutsArray == null || workoutsArray.isEmpty) {
+                val dates = HashSet<String>()
+                workouts.forEach {workout->
+                    workout.date?.let {date->
+                        dates.add(date)
+                    }
+                }
+                userHealthDataDataSource.clearDataByDates(dates.toList())
+                syncRepository.removeRecordedWorkouts().collect()
+                ringDataStore.removeRecordDeleteList()
+                return@launch
+            }
+
             val reqObj = JsonObject()
-            reqObj.add("workouts", dataConverter.createRecordedWorkoutArray(workouts))
+            reqObj.add("workouts", workoutsArray)
             userActivityRepository.addRecordedWorkout(
                 reqObj
             ).collect { resource ->
