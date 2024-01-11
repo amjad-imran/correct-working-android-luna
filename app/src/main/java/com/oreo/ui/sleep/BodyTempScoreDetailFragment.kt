@@ -281,8 +281,8 @@ class BodyTempScoreDetailFragment :
 
     private fun handleShowTrendCompareProgress(it: OInternalPageResponseModal) {
         val trendData = it.trendData
-        var todayProgress: Long
-        var yesterdayProgress: Long
+        var todayProgress: Float
+        var yesterdayProgress: Float
         if (trendData != null) {
             if (trendData.today?.value == null || trendData.today.value.toInt() == 0 ||
                 trendData.yesterday?.value == null || trendData.yesterday.value.toInt() == 0
@@ -292,9 +292,9 @@ class BodyTempScoreDetailFragment :
             } else {
                 var difference = 0f
                 todayProgress =
-                    trendData.today.value.toLong()
+                    trendData.today.value
                 yesterdayProgress =
-                    trendData.yesterday.value.toLong()
+                    trendData.yesterday.value
                 if (todayProgress > yesterdayProgress) {
                     binding.lytScoreOverview.tvTrendProg.setCompoundDrawable(R.drawable.ic_trend_up)
                     binding.lytScoreOverview.tvTrendProg.setTextColor(
