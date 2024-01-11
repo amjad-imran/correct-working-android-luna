@@ -439,6 +439,15 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     //binding.btnAddWorkout.visible()//todo add today condition
                 }
 
+                R.id.oActivityListFragment -> {
+                    binding.view27.gone()
+                    binding.navView.root.gone()
+
+                    if (viewModel.isDevicePaired()!=null) {
+                        viewModel.addWorkoutCtaVisibility.postValue(true)
+                    }
+                }
+
                 else -> {
                     binding.view27.gone()
                     binding.navView.root.gone()

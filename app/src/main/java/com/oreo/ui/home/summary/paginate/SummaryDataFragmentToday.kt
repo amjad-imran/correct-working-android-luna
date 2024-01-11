@@ -734,7 +734,13 @@ class SummaryDataFragmentToday :
         val lytWorkouts = binding.contentMain.lytWorkouts
         lytWorkouts.root.visible()
 
-        lytWorkouts.tvEmptyMsg.gone()
+        if(workouts.isNullOrEmpty()){
+            lytWorkouts.tvEmptyMsg.visible()
+            lytWorkouts.tvEmptyMsg.text = getString(R.string.text_tap_plus_workout)
+
+        }else{
+            lytWorkouts.tvEmptyMsg.gone()
+        }
         lytWorkouts.rvWorkouts.layoutManager = LinearLayoutManager(
             lytWorkouts.rvWorkouts.context, LinearLayoutManager.VERTICAL, false
         )
@@ -771,7 +777,7 @@ class SummaryDataFragmentToday :
                 navigate(R.id.addWorkoutFragment)
                 viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_ADD_WORKOUT_CLICK)
             } else {
-                requireContext().showShortToast("Please connect your ring to add a workout")
+                requireContext().showShortToast(getString(R.string.text_please_connect_your_ring_to_add_a_workout))
             }
         }
 

@@ -623,7 +623,7 @@ class OreoActivityFragment :
                 binding.lytWorkouts.viewAddWorkout.gone()
             }*/
             binding.lytWorkouts.tvEmptyMsg.text =
-                getString(R.string.text_you_haven_t_added_any_workouts_for_today)
+                getString(R.string.text_tap_plus_workout)
 
         } else {
             //binding.lytWorkouts.viewAddWorkout.gone()
