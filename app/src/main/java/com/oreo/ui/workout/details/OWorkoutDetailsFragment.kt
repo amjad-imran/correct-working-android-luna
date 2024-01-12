@@ -171,6 +171,14 @@ class OWorkoutDetailsFragment :
             }
 
 
+          /*  val movement = ArrayList<Int>()
+            for (i in 0..480){
+                val random = arrayListOf<Int>(0,1,2,3).random()
+                movement.add(random)
+            }
+
+            val combinedMovement = mViewModel.getCombinedMovement(movement)*/
+
             setMovementGraph(
                 it.intensity,
                 it.movement, DateFormats.convert24HourTo12(
@@ -181,6 +189,7 @@ class OWorkoutDetailsFragment :
                     )
                 )
             )
+
         }
 
 

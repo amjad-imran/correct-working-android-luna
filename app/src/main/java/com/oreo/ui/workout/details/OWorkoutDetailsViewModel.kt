@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit.data.remote.base.Resource
+import com.noisefit_commans.common.ceilRound
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
@@ -188,5 +189,25 @@ class OWorkoutDetailsViewModel @Inject constructor(
                     endTime.lowercase()
             }
             .toList()
+    }
+
+    fun getCombinedMovement(movement: List<Int>): List<Int> {
+        val list = ArrayList<Int>()
+
+        val chunkSize = when (movement.size) {
+            in 0..60 -> 2
+            in 61..180 -> 4
+            in 181..320 -> 10
+            in 321..Int.MAX_VALUE -> 120
+            else -> 1
+        }
+
+        val chunked = movement.chunked(chunkSize)
+        chunked.forEach {
+            val data = it.average().ceilRound()
+            list.add(data)
+        }
+
+        return list
     }
 }
