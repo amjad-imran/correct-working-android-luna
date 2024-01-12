@@ -373,7 +373,7 @@ class OWorkoutDetailsFragment :
                 OWDActivityData(
                     "Calories",
                     it.calories.toString(),
-                    "Kcal",
+                    "kcal",
                 )
             )
         }
