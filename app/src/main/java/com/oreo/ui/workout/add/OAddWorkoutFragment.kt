@@ -26,12 +26,7 @@ import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.FirebaseLunaAppEvents
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
-import com.oreo.data.model.CandleChartModel
-import com.oreo.data.model.OWorkoutListModal
-import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 import kotlin.math.roundToInt
