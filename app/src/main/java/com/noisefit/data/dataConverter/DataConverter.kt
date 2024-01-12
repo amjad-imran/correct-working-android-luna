@@ -6,12 +6,18 @@ import com.google.gson.JsonObject
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.local.db.fromJson
+import com.noisefit_commans.common.averageWithoutZero
+import com.noisefit_commans.common.ceilRound
+import com.noisefit_commans.common.roundUpDecimal
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.utils.DateFormats
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 
 class DataConverter
@@ -48,6 +54,7 @@ constructor(
                 val endTime =
                     DateFormats.convertTimestampToDate(workout.endTime, DateFormats.timeFormat)
 
+
                 jsonArray.add(
                     JsonObject(
                     ).apply {
@@ -56,12 +63,20 @@ constructor(
                         this.addProperty("activity_type", workoutTypeString)
                         this.addProperty("start_time", startTime)
                         this.addProperty("end_time", endTime)
-                        this.addProperty("intensity", getIntensity(0))//todo change as per logic
 
                         val intensityArray = JsonArray()
-                        Gson().fromJson<List<Int>>(workout.intensityList ?: "").forEach {
+
+                        val intArray = Gson().fromJson<List<Int>>(workout.intensityList ?: "")
+
+                        intArray.forEach {
                             intensityArray.add(it)
                         }
+
+                        val intensity = intArray.average().ceilRound()
+
+                        this.addProperty("intensity", getIntensity(intensity))//todo change as per logic
+
+
                         this.add("intensity_value", intensityArray)
                         val hrArray = JsonArray()
                         Gson().fromJson<List<Int>>(workout.hrData ?: "").forEach {
