@@ -252,6 +252,8 @@ dependencies {
     implementation(platform(Firebase.bom))
     implementation("androidx.paging:paging-common-ktx:3.1.1")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.2")
+    implementation("com.github.grapesnberries:curlloggerinterceptor:0.1")
+
 
     implementation(Glide.glide)
     implementation("com.github.yalantis:ucrop:2.2.6")
@@ -342,6 +344,14 @@ dependencies {
     androidTestImplementation(InstrumentTest.archCore)
     androidTestImplementation(InstrumentTest.hiltTesting)
     implementation(Test.androidxTestRunner)
+    //moengage
+    implementation(moengage.core)
+    implementation(moengage.inapp)
+    implementation(moengage.pushAmpPlus)
+    implementation(moengage.pushKit)
+    implementation(moengage.pushAmp)
+    implementation(moengage.geofence)
+    implementation(moengage.inboxCore)
 
 
 }

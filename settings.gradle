@@ -17,6 +17,11 @@ dependencyResolutionManagement {
         maven { url 'https://jitpack.io' }
         maven {url "https://developer.huawei.com/repo/"}
         maven {url "https://mobilesdk.useinsider.com/android"}
+        versionCatalogs {
+            create("moengage"){
+                from("com.moengage:android-dependency-catalog:3.2.2")
+            }
+        }
     }
 }
 rootProject.name = "LunaRing"

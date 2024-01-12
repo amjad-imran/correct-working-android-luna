@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_marginTop="24dp"
         android:paddingBottom="16dp"
-        style="@style/ModalStyleReadinessNew"
+        style="@style/ModalStyleTransparentOreo"
         android:layout_height="wrap_content">
 
         <TextView

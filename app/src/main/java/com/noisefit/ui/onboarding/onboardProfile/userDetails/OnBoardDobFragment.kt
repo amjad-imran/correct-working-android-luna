@@ -8,6 +8,7 @@ import com.noisefit.luna.databinding.FragmentOnBoardDobBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit.ui.onboarding.onboardProfile.SetupProfileViewModel
 import com.noisefit_commans.utils.InsiderAppEvents
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
@@ -20,7 +21,7 @@ class OnBoardDobFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.LAND_ON_ENTER_AGE_PAGE_VISIT)
+        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_land_on_enter_age_page_visit)
         binding.lytOnBoardProgress.apply {
             pgBr.progress = 40
             tvCount.text = getString(R.string.text_2)
@@ -67,7 +68,7 @@ class OnBoardDobFragment :
         }
         binding.btnContinue.setOnClickListener {
             viewModel.saveUserInfoLocally()
-            viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.CONTINUE_ENTER_AGE_CLICK)
+//            viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.CONTINUE_ENTER_AGE_CLICK)
             navigate(R.id.onBoardGenderFragment)
         }
     }

@@ -35,6 +35,8 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.FirebaseLunaAppEvents
+import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
 import com.oreo.ui.recordworkout.SELECT_RECORD_WORKOUT
 import dagger.hilt.android.AndroidEntryPoint
@@ -535,7 +537,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     navController?.navigate(R.id.navigation_oreo_home)
                 }
 
-                viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_FOOTER_HOME_CLICK)
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_footer_home_click)
             }
 
             BottomNavOption.SLEEP -> {
@@ -558,7 +560,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     navController?.popBackStack(R.id.navigation_oreo_sleep, true)
                     navController?.navigate(R.id.navigation_oreo_sleep)
                 }
-                viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_FOOTER_SLEEP_CLICK)
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_footer_sleep_click)
 
             }
 
@@ -581,7 +583,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     navController?.popBackStack(R.id.navigation_oreo_readiness, true)
                     navController?.navigate(R.id.navigation_oreo_readiness)
                 }
-                viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_FOOTER_READINESS_CLICK)
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_footer_readiness_click)
 
             }
 
@@ -603,7 +605,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     navController?.popBackStack(R.id.navigation_oreo_workouts, true)
                     navController?.navigate(R.id.navigation_oreo_workouts)
                 }
-                viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_FOOTER_ACTIVITY_CLICK)
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_footer_activity_click)
             }
 
             else -> {}

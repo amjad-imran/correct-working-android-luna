@@ -89,7 +89,7 @@ class FindDeviceListFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_device_list)
+        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_land_on_look_for_device_page_visit)
         binding.lScanning.repeatCount = 0
         binding.lScanning.setAnimation(R.raw.anim_device_default)
         binding.lScanning.playAnimation()
@@ -457,11 +457,12 @@ class FindDeviceListFragment :
 
                 stopLeScanning()
 
-                viewModel.sessionManager.addUserAttributeToInsider(false,
-                    HashMap<String, Any>().apply
-                    {
-                        this["pair_device_method_used"] = "list of nearby devices"
-                    })
+//                viewModel.sessionManager.addUserAttributeToInsider(false,
+//                    HashMap<String, Any>().apply
+//                    {
+//                        this["pair_device_method_used"] = "list of nearby devices"
+//                    })
+                viewModel.sessionManager.logInsiderAppEvent(MoEngageLunaAppEvents.luna_registration_device_selected)
                 /*if (colorFitDevice.isBind) {
                     //show alert
                     val msg = "Watch "+colorFitDevice.bluetoothName+" ("+ colorFitDevice.address+")"+" already connected with some other devices"

@@ -15,6 +15,7 @@ data class OActivityListModal(
     @SerializedName("duration") val duration: Long? = null,
     @SerializedName("calories") val calories: String? = null,
     @SerializedName("activity_type") val activityType: String? = null,
+    @SerializedName("type") var type: String? = null,
     @SerializedName("start_time") val startTime: String? = null,
     @SerializedName("end_time") val endTime: String? = null,
     @SerializedName("type") val type: String? = null,

@@ -66,6 +66,9 @@ constructor(
 
 
     var registerDate: Int = -1
+    var temperatureBaseLine: Float? = null
+    val DEFAULT_TEMPERATURE_BASELINE = 98.6f
+
     var checkBluetooth = MutableLiveData<Event<Boolean>>()
 
     var user: User? = null
@@ -226,6 +229,7 @@ constructor(
                         resource.data?.data?.let {
 
                             registerDate = it.registerDate ?: -1
+                            temperatureBaseLine = it.tempBaseLine ?: DEFAULT_TEMPERATURE_BASELINE
 
                             it.data.forEach { data ->
                                 userHealthData[data.date] = data
@@ -246,8 +250,8 @@ constructor(
                             _activityHistoryResponse.value = (activityList)
 
 
-                            val todayData = userHealthData[getTodayDate()]
-                            showNotification(todayData)
+                            /*val todayData = userHealthData[getTodayDate()]
+                            showNotification(todayData)*/
 
                             val reloadDays = getDaysList(startDate, endDate)
                             dataReload.value = Event(reloadDays)

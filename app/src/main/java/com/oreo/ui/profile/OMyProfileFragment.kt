@@ -14,7 +14,8 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.FirebaseLunaAppEvents
+import com.noisefit_commans.utils.MoEngageAppEventParams
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -47,7 +48,7 @@ class OMyProfileFragment :
 
     override fun initListener() {
         binding.rowAbout.setOnClickListener {
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ABOUT_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_about_click)
             navigate(R.id.aboutFragment)
         }
         binding.backBtn.setOnClickListener {
@@ -64,7 +65,7 @@ class OMyProfileFragment :
 //            )
 //        }
         binding.rowFeedBack.setOnClickListener {
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_RATE_US_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_rate_us_click)
             navigate(R.id.rateUsOreo)
         }
 
@@ -74,7 +75,7 @@ class OMyProfileFragment :
 //        }
 
         binding.llMyProfile.setOnClickListener {
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_YOUR_PROFILE_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_your_profile_click)
             goToProfile()
         }
         binding.tvName.setOnClickListener {
@@ -87,11 +88,11 @@ class OMyProfileFragment :
         }
 
         binding.rowHelp.setOnClickListener {
-            viewModel.sessionManager.logFirebaseEvent(
-                FirebaseLunaAppEvents.LUNA_HELP_SUPPORT_CLICK,
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.luna_help_support_click,
                 HashMap<String, Any>().apply {
-                    this["operating_system"] = "Android"
-                    this["mobile_manufacturer"] = viewModel.getDeviceName()
+                    this[MoEngageAppEventParams.operating_system] = "Android"
+                    this[MoEngageAppEventParams.mobile_manufacturer] = viewModel.getDeviceName()
                 })
             navigate(R.id.oreoHelpAndSupportFragment)
         }
@@ -101,10 +102,13 @@ class OMyProfileFragment :
             setFragmentResultListener(LOGOUT_KEY) { key, bundle ->
                 val isSelected = bundle.getBoolean("isSelected")
                 if (isSelected) {
+                    viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_myprofile_logout_allow_click)
                     viewModel.logoutUser()
+                } else {
+                    viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_myprofile_logout_cancel_click)
                 }
             }
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HAMBURGER_LOGOUT_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_hamburger_logout_click)
             navigate(
                 R.id.logoutBottomSheet2
             )

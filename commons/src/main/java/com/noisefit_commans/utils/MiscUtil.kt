@@ -1,5 +1,6 @@
 package com.noisefit_commans.utils
 
+import android.text.TextUtils
 import com.noisefit_commans.models.SleepType
 
 object MiscUtil {
@@ -52,6 +53,34 @@ object MiscUtil {
 
     fun addUnderscore(itemName: String): String {
         return itemName.lowercase().replace(" ", "_")
+    }
+    fun getDeviceName(): String {
+
+        val manufacturer: String = BuildUtils.getDeviceManufacturer()
+        val model: String = BuildUtils.getDeviceModel()
+        return if (model.startsWith(manufacturer)) {
+            capitalize(model)
+        } else capitalize(manufacturer) + " " + model
+    }
+
+    private fun capitalize(str: String): String {
+        if (TextUtils.isEmpty(str)) {
+            return str
+        }
+        val arr = str.toCharArray()
+        var capitalizeNext = true
+        val phrase = StringBuilder()
+        for (c in arr) {
+            if (capitalizeNext && Character.isLetter(c)) {
+                phrase.append(c.uppercaseChar())
+                capitalizeNext = false
+                continue
+            } else if (Character.isWhitespace(c)) {
+                capitalizeNext = true
+            }
+            phrase.append(c)
+        }
+        return phrase.toString()
     }
 
 

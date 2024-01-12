@@ -30,6 +30,7 @@ private const val RECORD_DELETE_LIST = "RECORD_DELETE_LIST"
 
 private const val RECORD_WORKOUT_TIMESTAMP = "RECORD_WORKOUT_TIMESTAMP"
 private const val RECORD_WORKOUT_MODEL = "RECORD_WORKOUT_MODEL"
+private const val TEMP_BASE_LINE = "TEMP_BASE_LINE"
 
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
@@ -85,6 +86,17 @@ class RingDataStoreImpl
             mPrefs.getString(RECORD_DELETE_LIST, "") ?: ""
         )
         return prevList ?: HashSet()
+    }
+
+
+
+    override fun getTempBaseLine(): Float {
+        return mPrefs.getFloat(TEMP_BASE_LINE, 98.6f)
+    }
+
+    override fun setTempBaseLine(temp: Float) {
+        mPrefs.edit()?.putFloat(TEMP_BASE_LINE, temp)?.apply()
+
     }
 
     override fun saveRingDevice(noiseFitDevice: ColorFitDevice): Boolean {

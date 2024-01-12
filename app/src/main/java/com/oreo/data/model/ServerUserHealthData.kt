@@ -17,6 +17,9 @@ data class ServerUserHealthResponse(
     val trends: TrendsData? = null,
     @SerializedName("register_date")
     val registerDate: Int? = null,
+
+    @SerializedName("temp_base")
+    val tempBaseLine: Float? = null,
 ) : ColorfitData()
 
 data class TrendsData(

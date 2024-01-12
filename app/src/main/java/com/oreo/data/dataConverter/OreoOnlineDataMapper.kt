@@ -2,6 +2,7 @@ package com.oreo.data.dataConverter
 
 import com.google.gson.Gson
 import com.noisefit_commans.common.averageWithoutZero
+import com.noisefit_commans.common.averageWithoutZeroFloat
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.common.minWithoutZero
 import com.noisefit_commans.data.model.DayTimeMovementBreakup
@@ -239,6 +240,7 @@ constructor(
                     respBreakup = sleepOverlayData.respBreakup,
                     tempBreakup = sleepOverlayData.tempBreakup,
                     oxyBreakup = sleepOverlayData.spo2Breakup,
+                    avgTemp = sleepOverlayData.tempBreakup.averageWithoutZeroFloat(),
                     avgOxy = if (sleepOverlayData.spo2Breakup.isEmpty()) 0 else sleepOverlayData.spo2Breakup.averageWithoutZero(),
                     avgResp = if (sleepOverlayData.respBreakup.isEmpty()) 0 else sleepOverlayData.respBreakup.average()
                         .roundToInt() ?: 0,

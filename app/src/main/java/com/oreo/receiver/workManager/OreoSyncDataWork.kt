@@ -143,6 +143,7 @@ constructor(
 
         //sessionManager.logAppEvent(FunnelEvents.SyncEvents.Sync_Start_Uploading_Data.name, eventProperty)
         sessionManager.setSyncCompletedState(Event(SyncEvents.ServerSyncStarted))
+        var datesToRemove: List<String>? = null
         syncDataScope.launch {
             LOGS.d(TAG, "OreoSyncDataWork: Sync start")
             supervisorScope {
@@ -186,20 +187,17 @@ constructor(
 //                                sessionManager.logAppEvent(FunnelEvents.SyncEvents.Sync_Completed_Uploading_Data.name, eventProperty)
 //                                sessionManager.logAppEvent(FunnelEvents.SyncEvents.Sync_Completed.name, eventProperty)
 //                                localDataStore.setLastStepsSyncWithServer(DateFormats.getTimeStamp())
-                                var datesToRemove: List<String>? = null
                                 resource.data?.data?.let {
                                     handleAppVersion(context, it)
                                     datesToRemove = it.dates
                                 }
+
                                 syncDataScope.launch {
                                     syncRepository.markDataSynced(userActivities.second)
                                     syncRepository.deleteSleepServerSyncData(userActivities.second)
 
 
-                                    datesToRemove?.let {
-                                        userHealthDataDataSource.clearDataByDates(it)
-                                        delay(100)
-                                    }
+
                                     //syncRepository.deleteServerSyncData(userActivities.second)
                                 }
 
@@ -218,6 +216,12 @@ constructor(
                     //call2?.await()
                 } catch (e: Exception) {
 
+                }
+
+                datesToRemove?.let {
+
+                    userHealthDataDataSource.clearDataByDates(it)
+                    delay(200)
                 }
 
                 val logsSync = shouldSyncAutoLogs()

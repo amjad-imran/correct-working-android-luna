@@ -10,7 +10,7 @@ import com.noisefit.luna.databinding.FragmentOnBoardHeightBinding
 import com.noisefit.ui.onboarding.onboardProfile.SetupProfileViewModel
 import com.noisefit_commans.models.HeightUnitSystem
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.utils.InsiderAppEvents
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.WheelAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,7 +34,7 @@ class OnBoardHeightFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.LAND_ON_ENTER_HEIGHT_PAGE_VISIT)
+        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_land_on_enter_height_page_visit)
         binding.lytOnBoardProgress.apply {
             pgBr.progress = 80
             tvCount.text = getString(R.string.text_4)
@@ -66,7 +66,7 @@ class OnBoardHeightFragment :
         binding.btnContinue.setOnClickListener {
             viewModel.saveUserInfoLocally()
 
-            viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.CONTINUE_ENTER_HEIGHT_CLICK)
+//            viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.CONTINUE_ENTER_HEIGHT_CLICK)
             navigate(R.id.onBoardWeightFragment)
         }
         binding.btnMetric.setOnClickListener {

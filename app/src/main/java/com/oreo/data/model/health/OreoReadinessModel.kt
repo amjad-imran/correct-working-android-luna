@@ -18,6 +18,18 @@ data class OreoReadinessModel(
     val recoveryIndex: CommonDataModel? = null,
     @SerializedName("activity_score")
     val activityScore: CommonDataModel? = null,
+    @SerializedName("sleep_score")
+    val sleepScore: CommonDataModel? = null,
+    @SerializedName("sleep_regularity")
+    val sleepRegularity: CommonDataModel? = null,
+    @SerializedName("body_temp")
+    val bodyTemp: CommonDataModel? = null,
+
+    val tempBalance: CommonDataModel? = null,
+
+    @SerializedName("contri_ver")
+    val contriVersion: Int? = null,//1-> show 7 contributors, 2-> show 9 contributors
+
     val activityBalance: CommonDataModel? = null,
     val restingHrBalance: CommonDataModel? = null,
     val hrReserve: CommonDataModel? = null,
@@ -27,6 +39,7 @@ data class OreoReadinessModel(
     val hrvBreakUp: UnitDataModelArray? = null,
     val respiration: UnitDataModel? = null,
     val temperature: UnitDataModelFloat? = null,
+    val avg_temp: UnitDataModelTemp? = null,
     val temperatureBreakUp: UnitDataModelArrayFloat? = null
 
 
@@ -39,6 +52,7 @@ data class UnitDataModelArray(
     val low: Int? = null,
     val max: Int? = null
 )
+
 data class UnitDataModelArrayFloat(
     val value: List<Float>?,
     val avg: Float? = null,
@@ -46,3 +60,4 @@ data class UnitDataModelArrayFloat(
 )
 
 data class UnitDataModelFloat(val value: Float)
+data class UnitDataModelTemp(val value: Float? = null, val deviation: Float? = null)

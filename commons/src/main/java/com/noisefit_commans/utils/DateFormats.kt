@@ -44,6 +44,7 @@ object DateFormats {
 
     @SuppressLint("ConstantLocale")
     val dateFormat6 = SimpleDateFormat("dd MMMM, yyyy", defaultLocale)
+    val dateFormatDay = SimpleDateFormat("dd", defaultLocale)
 
     @SuppressLint("ConstantLocale")
     val dateFormat7 = SimpleDateFormat("dd MMM", defaultLocale)
@@ -653,7 +654,7 @@ object DateFormats {
     }
 
     val mWeek = SimpleDateFormat("EEE", defaultLocale)
-    val mDay = SimpleDateFormat("dd", defaultLocale)
+    val mDay = SimpleDateFormat("d", defaultLocale)
     val mMonth = SimpleDateFormat("MMM", defaultLocale)
 
     fun getOrdinalDate(
@@ -671,6 +672,7 @@ object DateFormats {
             ""
         }
     }
+
     fun getOrdinalDateToday(
         dateInput: String?,
         currentFormat: SimpleDateFormat
@@ -1986,6 +1988,20 @@ object DateFormats {
             "${outputFormat.format(start)} - ${outputFormat.format(end)}"
         } catch (exp: Exception) {
             ""
+        }
+    }
+
+    fun parseDate(
+        date: String,
+        inputDateFormat: SimpleDateFormat,
+        outputDateFormat: SimpleDateFormat,
+    ): String? {
+        try {
+            val parsedDate = inputDateFormat.parse(date)
+            return outputDateFormat.format(parsedDate)
+
+        } catch (exp: Exception) {
+            return ""
         }
     }
 }

@@ -13,9 +13,10 @@ import com.noisefit.luna.databinding.FragmentFeedback2Binding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MiscUtil
+import com.noisefit_commans.utils.MoEngageAppEventParams
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -42,7 +43,7 @@ class FeedbackFragment : BaseFragment<FragmentFeedback2Binding>(FragmentFeedback
 
         binding.lvAnimFirst.setOnClickListener {
             viewModel.rating = 1
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_RATEUS_RATING + "_${1}_CLICK")
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_rateus_rating + "_${1}_CLICK")
             hideViews(1)
 
             handleEmoji(1)
@@ -50,7 +51,7 @@ class FeedbackFragment : BaseFragment<FragmentFeedback2Binding>(FragmentFeedback
         }
         binding.lvAnimSecond.setOnClickListener {
             viewModel.rating = 2
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_RATEUS_RATING + "_${2}_CLICK")
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_rateus_rating + "_${2}_CLICK")
             hideViews(1)
 
             handleEmoji(2)
@@ -58,7 +59,7 @@ class FeedbackFragment : BaseFragment<FragmentFeedback2Binding>(FragmentFeedback
         }
         binding.lvAnimThird.setOnClickListener {
             viewModel.rating = 3
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_RATEUS_RATING + "_${3}_CLICK")
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_rateus_rating + "_${3}_CLICK")
             hideViews(1)
 
             handleEmoji(3)
@@ -67,7 +68,7 @@ class FeedbackFragment : BaseFragment<FragmentFeedback2Binding>(FragmentFeedback
         }
         binding.lvAnimFourth.setOnClickListener {
             viewModel.rating = 4
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_RATEUS_RATING + "_${4}_CLICK")
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_rateus_rating + "_${4}_CLICK")
             hideViews(1)
 
             handleEmoji(4)
@@ -75,7 +76,7 @@ class FeedbackFragment : BaseFragment<FragmentFeedback2Binding>(FragmentFeedback
         }
         binding.lvAnimFifth.setOnClickListener {
             viewModel.rating = 5
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_RATEUS_RATING + "_${5}_CLICK")
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_rateus_rating + "_${5}_CLICK")
             hideViews(1)
 
             handleEmoji(5)
@@ -103,10 +104,10 @@ class FeedbackFragment : BaseFragment<FragmentFeedback2Binding>(FragmentFeedback
                 ).show()
             } else {
                 uiController.hideSoftKeyboard()
-                viewModel.sessionManager.logFirebaseEvent(
-                    FirebaseLunaAppEvents.LUNA_RATEUS_SUBMIT_CLICK,
+                viewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.luna_rateus_submit_click,
                     HashMap<String, Any>().apply {
-                        this["star_rating"] = viewModel.rating
+                        this[MoEngageAppEventParams.star_rating] = viewModel.rating
                     })
                 viewModel.submitFeedbackNew(
                     viewModel.provideFeedbackNewData(
@@ -248,7 +249,7 @@ class FeedbackFragment : BaseFragment<FragmentFeedback2Binding>(FragmentFeedback
                     if (isChecked) {
                         LOGS.d("Checked Chips ${mChip.text}")
                         val name = MiscUtil.addUnderscore(mChip.text.toString())
-                        viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_RATEUS_FEEDBACK + "_${name}_SELECT")
+                        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_rateus_feedback + "_${name}_SELECT")
                     }
                 }
                 binding.lytChipView.chipsPrograms.addView(mChip)

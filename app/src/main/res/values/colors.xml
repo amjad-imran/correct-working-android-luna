@@ -167,4 +167,6 @@
     <color name="carolina_blue">#88b0ff</color>
     <color name="activity_track_back">#0fffffff</color>
     <color name="activity_arc">#8ed3f1</color>
+    <color name="color_workout">#88d6eb</color>
+    <color name="steel_grey">#8a8c8e</color>
 </resources>

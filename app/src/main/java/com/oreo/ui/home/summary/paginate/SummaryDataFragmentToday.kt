@@ -27,8 +27,9 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
-import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageAppEventParams
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
@@ -197,17 +198,17 @@ class SummaryDataFragmentToday :
 
                 OSummaryHealthOverviewClickEnum.ActivityDetailsWorkoutClick -> {
                     mainViewModel.navigateTo(BottomNavOption.ACTIVITY)
-                    mainViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_ACTIVITY_CLICK)
+                    mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_activity_click)
                 }
 
                 OSummaryHealthOverviewClickEnum.ReadinessDetailsWorkoutClick -> {
                     mainViewModel.navigateTo(BottomNavOption.READINESS)
-                    mainViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_READINESS_CLICK)
+                    mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_readiness_click)
                 }
 
                 OSummaryHealthOverviewClickEnum.SleepDetailsWorkoutClick -> {
                     mainViewModel.navigateTo(BottomNavOption.SLEEP)
-                    mainViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_SLEEP_CLICK)
+                    mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_sleep_click)
                 }
 
                 is OSummaryHealthOverviewClickEnum.VideoInfoClicked -> {
@@ -215,12 +216,12 @@ class SummaryDataFragmentToday :
                         this.putString("videoUrl", type.videoUrl)
                     })
                     viewModel.localDataStore.setDashCardClickState(
-                         when (type.type) {
-                             VideoInfoType.SLEEP -> DashInfoCard.SLEEP
-                             VideoInfoType.READINESS -> DashInfoCard.READINESS
-                             VideoInfoType.ACTIVITY -> DashInfoCard.ACTIVITY
-                         }, true
-                     )
+                        when (type.type) {
+                            VideoInfoType.SLEEP -> DashInfoCard.SLEEP
+                            VideoInfoType.READINESS -> DashInfoCard.READINESS
+                            VideoInfoType.ACTIVITY -> DashInfoCard.ACTIVITY
+                        }, true
+                    )
                 }
 
                 is OSummaryHealthOverviewClickEnum.TextRingCareClicked -> {
@@ -261,11 +262,12 @@ class SummaryDataFragmentToday :
             }
             pairStatus = "paired"
 
-            logFirebaseAppEvent(FirebaseLunaAppEvents.LUNA_ACTIVITY_SYNC_MANUAL,
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_sync_manual,
                 HashMap<String, Any>().apply {
-                    this["operating_system"] = "Android"
-                    this["device_pairing_status"] = pairStatus
+                    this[MoEngageAppEventParams.operating_system] = "Android"
+                    this[MoEngageAppEventParams.device_pairing_status] = pairStatus
                 })
+
 
             syncData()
 
@@ -295,18 +297,18 @@ class SummaryDataFragmentToday :
         }
 
         binding.contentMain.lytReadinessAvg.root.setOnClickListener {
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_READINESS_SCORE_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_readiness_score_click)
             viewModel.getContributorInfo("readiness")
         }
 
         binding.contentMain.lytSleepAvg.constraintLayout2.setOnClickListener {
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_SLEEP_SCORE_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_sleep_score_click)
             viewModel.getContributorInfo("sleep")
 
         }
 
         binding.contentMain.lytSleepAvg.constraintLayout.setOnClickListener {
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_ACTIVITY_SCORE_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_activity_score_click)
             viewModel.getContributorInfo("activity")
         }
 
@@ -421,6 +423,14 @@ class SummaryDataFragmentToday :
             }
         }
 
+        viewModel.stateGoogleFitCard.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.contentMain.lytGoogleFit.root.visible()
+            } else {
+                binding.contentMain.lytGoogleFit.root.gone()
+            }
+        }
+
         viewModel.stateReadinessAvgCard.observe(viewLifecycleOwner) {
 
             if (it == null) {
@@ -442,7 +452,7 @@ class SummaryDataFragmentToday :
                 return@observe
             }
 
-            if (it.first != null && it.second != null) {
+            if (it.first != null || it.second != null) {
                 binding.contentMain.lytSleepAvg.root.visible()
 
                 updateSleepAvgUi(it)
@@ -569,10 +579,8 @@ class SummaryDataFragmentToday :
         val lytReadinessAvg = binding.contentMain.lytReadinessAvg
         if (data.readinessScore != null && data.readinessScore >= 0) {
             lytReadinessAvg.tvSleepScore.text = data.readinessScore.toString()
-            lytReadinessAvg.tvAvgThisWeek.gone()
             lytReadinessAvg.tvDaysAvg.visible()
             lytReadinessAvg.tvSleepScore.visible()
-            lytReadinessAvg.tvEmpty.gone()
             lytReadinessAvg.lineChart.visible()
             val trendValue = "${kotlin.math.abs(data.trend ?: 0)}%"
             if (data.trend != null && data.trend > 0) {
@@ -605,16 +613,20 @@ class SummaryDataFragmentToday :
                 viewModel.convertIntToChartModel(data.value), ArrayList(), ArrayList(), 20, true
             )
         } else {
+            lytReadinessAvg.lineChart.updateDataWithMaxMin(
+                viewModel.convertIntToChartModel(arrayListOf(0, 0, 0, 0, 0, 0, 0)),
+                ArrayList(),
+                ArrayList(),
+                20,
+                true
+            )
 
-            lytReadinessAvg.tvAvgThisWeek.visible()
             lytReadinessAvg.tvSleepScore.text = "--"
-            lytReadinessAvg.tvSleepScore.gone()
-            lytReadinessAvg.tvEmpty.visible()
-            lytReadinessAvg.tvDaysAvg.gone()
-            lytReadinessAvg.lineChart.gone()
-            lytReadinessAvg.sleepTrendImv.gone()
-            lytReadinessAvg.sleepTrendValue.gone()
-            lytReadinessAvg.tvSleepFromLast.gone()
+            lytReadinessAvg.tvDaysAvg.visible()
+            lytReadinessAvg.lineChart.visible()
+            lytReadinessAvg.sleepTrendImv.invisible()
+            lytReadinessAvg.sleepTrendValue.invisible()
+            lytReadinessAvg.tvSleepFromLast.invisible()
         }
     }
 
@@ -625,8 +637,8 @@ class SummaryDataFragmentToday :
         val activity = data.second!!
 
         if (sleep.sleepScore != null && sleep.sleepScore >= 0) {
+            lytSleepAvg.tvSleepScore.visible()
             lytSleepAvg.tvSleepScore.text = sleep.sleepScore.toString()
-            lytSleepAvg.tvAvgThisWeek.gone()
             lytSleepAvg.tvDaysAvg.visible()
             lytSleepAvg.sleepLineChart.visible()
             lytSleepAvg.sleepLine.root.visible()
@@ -660,16 +672,20 @@ class SummaryDataFragmentToday :
                 viewModel.convertIntToChartModel(sleep.value), ArrayList(), ArrayList(), 20, true
             )
         } else {
+            lytSleepAvg.sleepLineChart.updateDataWithMaxMin(
+                viewModel.convertIntToChartModel(arrayListOf(0, 0, 0, 0, 0, 0, 0)),
+                ArrayList(),
+                ArrayList(),
+                20,
+                true
+            )
 
-            lytSleepAvg.tvAvgThisWeek.visible()
             lytSleepAvg.tvSleepScore.text = "--"
-
-            lytSleepAvg.tvDaysAvg.gone()
-            lytSleepAvg.sleepLineChart.gone()
-            lytSleepAvg.sleepLine.root.gone()
-            lytSleepAvg.sleepTrendImv.gone()
-            lytSleepAvg.sleepTrendValue.gone()
-            lytSleepAvg.tvSleepFromLast.gone()
+            lytSleepAvg.tvDaysAvg.visible()
+            lytSleepAvg.sleepTrendImv.invisible()
+            lytSleepAvg.sleepTrendValue.invisible()
+            lytSleepAvg.tvSleepFromLast.invisible()
+            lytSleepAvg.sleepLine.root.invisible()
         }
 
         if (activity.activityScore != null && activity.activityScore >= 0) {
@@ -678,7 +694,6 @@ class SummaryDataFragmentToday :
             lytSleepAvg.activityLineChart.updateDataWithMaxMin(
                 viewModel.convertIntToChartModel(activity.value), ArrayList(), ArrayList(), 20, true
             )
-            lytSleepAvg.tvActAvgThisWeek.gone()
             lytSleepAvg.tvDaysAvg1.visible()
             lytSleepAvg.activityLineChart.visible()
             lytSleepAvg.activityLine.root.visible()
@@ -713,15 +728,20 @@ class SummaryDataFragmentToday :
             //                binding.activityLineChart.updateDataWithMax(data.activityValue, ArrayList(), ArrayList())
         } else {
             lytSleepAvg.tvActivityScore.text = "--"
+            lytSleepAvg.activityLineChart.updateDataWithMaxMin(
+                viewModel.convertIntToChartModel(arrayListOf(0, 0, 0, 0, 0, 0, 0)),
+                ArrayList(),
+                ArrayList(),
+                20,
+                true
+            )
 
-
-            lytSleepAvg.tvActAvgThisWeek.visible()
-            lytSleepAvg.tvDaysAvg1.gone()
-            lytSleepAvg.activityLineChart.gone()
-            lytSleepAvg.activityLine.root.gone()
-            lytSleepAvg.activityTrendImv.gone()
-            lytSleepAvg.activityTrendValue.gone()
-            lytSleepAvg.tvActivityFrom.gone()
+            lytSleepAvg.tvDaysAvg1.visible()
+            //lytSleepAvg.activityLineChart.gone()
+            lytSleepAvg.activityLine.root.invisible()
+            lytSleepAvg.activityTrendImv.invisible()
+            lytSleepAvg.activityTrendValue.invisible()
+            lytSleepAvg.tvActivityFrom.invisible()
         }
 
 
@@ -775,14 +795,14 @@ class SummaryDataFragmentToday :
         lytWorkouts.viewAddWorkout.setOnClickListener {
             if (viewModel.isDeviceConnected()) {
                 navigate(R.id.addWorkoutFragment)
-                viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_ADD_WORKOUT_CLICK)
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_add_workout_click)
             } else {
                 requireContext().showShortToast(getString(R.string.text_please_connect_your_ring_to_add_a_workout))
             }
         }
 
         lytWorkouts.ivViewAll.setOnClickListener {
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_WORKOUTS_ENTRY_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_workouts_entry_click)
             navigate(R.id.oActivityListFragment)
         }
 
@@ -898,7 +918,7 @@ class SummaryDataFragmentToday :
 
         lytHeartRate.imvHrMeasure.setOnClickListener {
 
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_HR_REFRESH_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_hr_refresh_click)
             if (data.measureState == TapMeasureState.MEASURING || data.measureState == TapMeasureState.NO_DEVICE) {
                 return@setOnClickListener
             }

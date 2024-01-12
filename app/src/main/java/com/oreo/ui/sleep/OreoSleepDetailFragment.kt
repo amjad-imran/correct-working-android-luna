@@ -16,17 +16,17 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoSleepDetailBinding
-import com.noisefit.oreo.HEALTH_DATA_PAGINATION_DAYS
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.common.averageIntWithoutZeroFloat
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.ui.custom.NightTimeGraphViewOreo
 import com.noisefit_commans.ui.custom.SleepGraphViewOreo
 import com.noisefit_commans.utils.AppLogs
-import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageAppEventParams
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.GraphDummyModel
@@ -40,6 +40,7 @@ import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
+import java.math.BigDecimal
 
 
 @AndroidEntryPoint
@@ -61,7 +62,8 @@ class OreoSleepDetailFragment :
     private val mSleepContributorAdapter: OreoSleepContributorAdapter by lazy {
         OreoSleepContributorAdapter(object :
             OreoSleepContributorAdapter.ContributorItemClickListener {
-            override fun onItemClick(resultData: ArrayList<Contributors>, position: Int) {
+            override fun onItemClick(resultData: ArrayList<Contributors>, position: Int,
+                                     version: Int) {
 //                if (resultData[position].barPercent > 0) {
                 openContributorBottomSheet(resultData, position)
 //                }
@@ -83,7 +85,6 @@ class OreoSleepDetailFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //sleepDayGraphView = SleepGraphViewOreo(requireContext())
-        viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_PAGE_VISIT)
         setRecycler()
 
         if (viewModel.ringDataStore.isSleepWalkAroundShown()) {
@@ -104,6 +105,28 @@ class OreoSleepDetailFragment :
         }
     }
 
+    private fun showAverageBloodOxygen(
+        oxy: CommonListDataModel?
+    ) {
+        if ((oxy?.avg ?: 0) == 0) {
+            binding.lytAverageBloodOxygen.root.gone()
+            return
+        }
+
+        binding.lytAverageBloodOxygen.tvNudge.text = viewModel.getBloodOxygenNudge(oxy)
+
+        if ((oxy?.avg ?: 0) < 95) {
+            binding.lytAverageBloodOxygen.root.visible()
+            binding.lytAverageBloodOxygen.tvAvgValue.text = "<95"
+            return
+        }
+        binding.lytAverageBloodOxygen.root.visible()
+        binding.lytAverageBloodOxygen.tvAvgValue.text = (oxy?.avg ?: 0).toString()
+
+
+
+    }
+
     private fun showBloodOxygenGraph(
         oxy: CommonListDataModel?,
         sleepStartTime: String?,
@@ -121,7 +144,7 @@ class OreoSleepDetailFragment :
             tvTitle.text = getString(R.string.text_spo2)
             tvSubtitle1.text = getString(R.string.text_average)
             tvSubtitle2.gone()
-            lytSubtitleValue1.tvValue.text = (oxy?.avg ?: 0).toString()+" %"
+            lytSubtitleValue1.tvValue.text = (oxy?.avg ?: 0).toString() + " %"
             lytSubtitleValue1.tvUnit.gone()
             lytSubtitleValue2.root.gone()
         }
@@ -249,27 +272,7 @@ class OreoSleepDetailFragment :
         )
     }
 
-    private fun showAverageBloodOxygen(
-        oxy: CommonListDataModel?
-    ) {
-        if ((oxy?.avg ?: 0) == 0) {
-            binding.lytAverageBloodOxygen.root.gone()
-            return
-        }
 
-        binding.lytAverageBloodOxygen.tvNudge.text = viewModel.getBloodOxygenNudge(oxy)
-
-        if ((oxy?.avg ?: 0) < 95) {
-            binding.lytAverageBloodOxygen.root.visible()
-            binding.lytAverageBloodOxygen.tvAvgValue.text = "<95"
-            return
-        }
-        binding.lytAverageBloodOxygen.root.visible()
-        binding.lytAverageBloodOxygen.tvAvgValue.text = (oxy?.avg ?: 0).toString()
-
-
-
-    }
 
 
     private fun showHeartRateGraph(
@@ -467,6 +470,13 @@ class OreoSleepDetailFragment :
                 })
             }
         }
+        binding.lytAverageBloodOxygen.bInfo.setOnClickListener {
+            viewModel.contributorInfo.value?.oxy_graph?.let { content ->
+                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                    this.putString("infoData", content)
+                })
+            }
+        }
 
         binding.lytAverageBloodOxygen.bInfo.setOnClickListener {
             viewModel.contributorInfo.value?.oxy_graph?.let { content ->
@@ -490,7 +500,7 @@ class OreoSleepDetailFragment :
 
         binding.lytToolbar.view1.setOnClickListener {
 
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_DATE_RANGE_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_sleep_date_range_click)
             resultLauncher.launch(
                 HistoryCalendarActivity.getStartIntent(
                     requireContext(),
@@ -516,7 +526,7 @@ class OreoSleepDetailFragment :
                 putString("infoData", viewModel.contributorInfo.value?.sleep_score)
                 putString("date", mainViewModel.selectedDate)
             })
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_SLEEP_SCORE_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_sleep_sleep_score_click)
         }
         binding.lytSleepScore.lytTotalSleep.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -528,7 +538,7 @@ class OreoSleepDetailFragment :
                 putString("date", mainViewModel.selectedDate)
             })
 
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_TOTAL_SLEEP_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_sleep_total_sleep_click)
         }
         binding.lytSleepScore.lytTimeInBed.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -540,7 +550,7 @@ class OreoSleepDetailFragment :
                 putString("date", mainViewModel.selectedDate)
             })
 
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_BED_TIME_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_sleep_bed_time_click)
         }
         binding.lytSleepScore.lytSleepEfficiency.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -552,7 +562,7 @@ class OreoSleepDetailFragment :
                 putString("date", mainViewModel.selectedDate)
             })
 
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_SLEEP_EFFICIENCY_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_sleep_sleep_efficiency_click)
         }
         binding.lytSleepScore.lytRestHr.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -564,7 +574,7 @@ class OreoSleepDetailFragment :
                 putString("date", mainViewModel.selectedDate)
             })
 
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_RESTING_HR_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_sleep_resting_hr_click)
         }
 
         //night time see/saw
@@ -586,7 +596,7 @@ class OreoSleepDetailFragment :
             binding.lytSSAnalysis.tvSummaryTitle.visible()
 
 
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_STAGE_ANALYSIS_EXPAND_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_sleep_stage_analysis_expand_click)
         }
         binding.lytSSAnalysis.viewUp.setOnClickListener {
             binding.lytSSAnalysis.lytNightMovement.root.gone()
@@ -598,7 +608,7 @@ class OreoSleepDetailFragment :
             binding.lytSSAnalysis.ivDown.visible()
             binding.lytSSAnalysis.tvSummaryTitle.gone()
 
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_SLEEP_STAGE_ANALYSIS_COMPRESS_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_sleep_stage_analysis_compress_click)
         }
     }
 
@@ -726,6 +736,11 @@ class OreoSleepDetailFragment :
         binding.lytSleepScore.lytSleepAvg.tvQuality.setTextColor(statusColor)
         binding.lytSleepScore.lytSleepAvg.tvQuality.text = sleepScoreData.text
         binding.lytSleepScore.lytSleepAvg.tvQuality.visible()
+        viewModel.sessionManager.logMoEngageAppEvent(
+            MoEngageLunaAppEvents.luna_sleep_page_visit,
+            HashMap<String, Any>().apply {
+                this[MoEngageAppEventParams.status] = sleepScoreData.status
+            })
     }
 
     private fun updateUi(dayData: OreoSleepModel) {
@@ -829,7 +844,7 @@ class OreoSleepDetailFragment :
 
         //sleep contributor
         binding.lytSleepContributor.tvTitle.text = getString(R.string.text_sleep_contributors)
-        mSleepContributorAdapter.setData(viewModel.getContributorsData(dayData))
+        mSleepContributorAdapter.setData(viewModel.getContributorsData(dayData),1)
 
 
         //sleep night movement

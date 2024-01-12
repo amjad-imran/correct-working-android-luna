@@ -15,7 +15,7 @@ import com.noisefit_commans.models.WeightUnitSystem
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.InsiderAppEvents
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.WheelAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -37,7 +37,7 @@ class OnBoardWeightFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.LAND_ON_ENTER_WEIGHT_PAGE_VISIT)
+        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_land_on_enter_weight_page_visit)
         binding.lytOnBoardProgress.apply {
             pgBr.progress = 100
             tvCount.text = getString(R.string.text_5)
@@ -70,7 +70,7 @@ class OnBoardWeightFragment :
         }
         binding.btnContinue.setOnClickListener {
             viewModel.saveUserInfoLocally()
-            viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.CONTINUE_ENTER_WEIGHT_CLICK)
+//            viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.CONTINUE_ENTER_WEIGHT_CLICK)
             //navigate(R.id.onBoardStepsGoalFragment)
 
             viewModel.updateUserProfile()
@@ -124,7 +124,7 @@ class OnBoardWeightFragment :
         viewModel.successMessage.observe(this) {
             it.getContent()?.let {
                 val openProfile = activity is GuestProfileSetupActivity
-                viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.CONTINUE_ENTER_DAILY_GOAL_CLICK)
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_profile_successful_setup)
                 if (viewModel.isDevicePaired()) {
                     goToDeviceSetupActivity(openProfile)
                 } else {
@@ -136,7 +136,13 @@ class OnBoardWeightFragment :
     }
 
     private fun goToDeviceSetupActivity(openProfile: Boolean) {
-        startActivity(DeviceSetupActivity.getStartIntent(requireContext(), openProfile, setupDevice = true))
+        startActivity(
+            DeviceSetupActivity.getStartIntent(
+                requireContext(),
+                openProfile,
+                setupDevice = true
+            )
+        )
         activity?.finish()
     }
 }

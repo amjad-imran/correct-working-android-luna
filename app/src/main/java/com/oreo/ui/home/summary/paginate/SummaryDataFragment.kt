@@ -14,8 +14,8 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
@@ -115,17 +115,17 @@ class SummaryDataFragment :
 
                 OSummaryHealthOverviewClickEnum.ActivityDetailsWorkoutClick -> {
                     mainViewModel.navigateTo(BottomNavOption.ACTIVITY)
-                    mainViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_ACTIVITY_CLICK)
+                    mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_activity_click)
                 }
 
                 OSummaryHealthOverviewClickEnum.ReadinessDetailsWorkoutClick -> {
                     mainViewModel.navigateTo(BottomNavOption.READINESS)
-                    mainViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_READINESS_CLICK)
+                    mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_readiness_click)
                 }
 
                 OSummaryHealthOverviewClickEnum.SleepDetailsWorkoutClick -> {
                     mainViewModel.navigateTo(BottomNavOption.SLEEP)
-                    mainViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_SLEEP_CLICK)
+                    mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_sleep_click)
                 }
 
                 is OSummaryHealthOverviewClickEnum.VideoInfoClicked -> {
@@ -254,7 +254,7 @@ class SummaryDataFragment :
 
 
         lytWorkouts.ivViewAll.setOnClickListener {
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_HOMEPAGE_WORKOUTS_ENTRY_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_workouts_entry_click)
             navigate(R.id.oActivityListFragment)
         }
 

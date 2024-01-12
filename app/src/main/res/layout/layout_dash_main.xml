@@ -11,14 +11,14 @@
         android:orientation="vertical">
 
 
-        <include
+        <!--<include
             android:id="@+id/lytHeader"
             layout="@layout/list_o_header_card_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:visibility="gone"
-            tools:visibility="visible" />
+            tools:visibility="visible" />-->
 
         <include
             android:id="@+id/lytConnectHelp"
@@ -41,6 +41,14 @@
         <include
             android:id="@+id/lytAlerts"
             layout="@layout/list_o_alerts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_24dp"
+            android:visibility="gone"
+            tools:visibility="visible" />
+        <include
+            android:id="@+id/lytGoogleFit"
+            layout="@layout/card_google_fit_dash"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_24dp"

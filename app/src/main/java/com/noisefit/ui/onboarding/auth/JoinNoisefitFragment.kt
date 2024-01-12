@@ -4,7 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import com.facebook.*
+import com.facebook.AccessToken
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.GraphRequest
+import com.facebook.HttpMethod
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -14,14 +19,15 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentJoinNoisefitBinding
-import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.visible
 import com.noisefit.ui.onboarding.onboardProfile.ProfileSetupActivity
 import com.noisefit.ui.onboarding.pairing.DeviceSetupActivity
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
+import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -57,6 +63,7 @@ class JoinNoisefitFragment :
         binding.vGoogle.setOnClickListener {
             binding.progressBar.root.visible()
             authViewModel.loginMethod = "google"
+            authViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_sign_in_google)
             googleSignIn()
         }
         binding.vFacebook.setOnClickListener {
@@ -66,6 +73,7 @@ class JoinNoisefitFragment :
         }
         binding.vEmail.setOnClickListener {
             authViewModel.loginMethod = "email"
+            authViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_sign_in_email)
             navigate(
                 JoinNoisefitFragmentDirections.actionJoinNoisefitFragmentToEmailFragment(
                     EmailMode.LOGIN
@@ -82,8 +90,12 @@ class JoinNoisefitFragment :
                 if (value) {
                     if (authViewModel.isDevicePaired()) {
                         if (authViewModel.isProfileSetupComplete()) {
-                            startActivity(DeviceSetupActivity.getStartIntent(requireContext(),
-                                setupDevice = true))
+                            startActivity(
+                                DeviceSetupActivity.getStartIntent(
+                                    requireContext(),
+                                    setupDevice = true
+                                )
+                            )
                             activity?.finish()
                         } else {
                             startActivity(ProfileSetupActivity.getStartIntent(requireContext()))

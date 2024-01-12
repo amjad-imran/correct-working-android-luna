@@ -12,7 +12,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.oreo.data.model.OHSQuestionariesResponseModel
 
-class OHSQAAdapter :
+class OHSQAAdapter(val listener: OnItemClickListener) :
     RecyclerView.Adapter<OHSQAAdapter.ViewHolder>() {
     private val mDataset = ArrayList<OHSQuestionariesResponseModel>()
     var lastSelectedPos: Int = -1
@@ -40,6 +40,7 @@ class OHSQAAdapter :
                     notifyItemChanged(lastPos)
                     notifyItemChanged(lastSelectedPos)
                 }
+                listener.onItemClick(result)
 
             }
 
@@ -75,6 +76,10 @@ class OHSQAAdapter :
         mDataset.clear()
         mDataset.addAll(dataList)
         notifyDataSetChanged()
+    }
+
+    interface OnItemClickListener{
+        fun onItemClick(data:OHSQuestionariesResponseModel)
     }
 
 }

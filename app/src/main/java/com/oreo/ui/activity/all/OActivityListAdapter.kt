@@ -14,6 +14,7 @@ import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.luna.R
 import com.noisefit_commans.models.Units
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
@@ -81,19 +82,19 @@ class OActivityListAdapter(
                     ItemPos.BOTTOM -> {
                         view.findViewById<View>(R.id.parentContainer).apply {
                             setBackgroundResource(R.drawable.o_bottom_rounded_back)
-                            bottom = 16
+                            //bottom = 16
                         }
 
-                        view.findViewById<View>(R.id.view16).gone()
+                        view.findViewById<View>(R.id.view16).invisible()
                     }
 
                     ItemPos.DEFAULT -> {
                         view.findViewById<View>(R.id.parentContainer).apply {
                             setBackgroundResource(R.drawable.back_modal_transparent_oreo)
-                            bottom = 16
+                            //bottom = 16
                         }
 
-                        view.findViewById<View>(R.id.view16).gone()
+                        view.findViewById<View>(R.id.view16).invisible()
                     }
                 }
 
@@ -103,45 +104,29 @@ class OActivityListAdapter(
                 view.findViewById<TextView>(R.id.tvName).text = activity.getFormattedActivityName()
                 val time = DateFormats.convert24HourTo12(activity.startTime)
                 if (time.isNotEmpty()) {
-                    val timeArray = time.split(" ")
-                    if (timeArray.isNotEmpty() && timeArray.size == 2) {
-                        view.findViewById<TextView>(R.id.tvStart).text = buildSpannedString {
-                            append(timeArray[0])
-                            inSpans(
-                                ForegroundColorSpan(
-                                    ContextCompat.getColor(
-                                        view.context,
-                                        R.color.white_48
-                                    )
-                                )
-                            ) {
-                                append(" ${timeArray[1].lowercase()}")
-                            }
-                        }
-                    } else {
-                        view.findViewById<TextView>(R.id.tvStart).text = time
-                    }
+                    view.findViewById<TextView>(R.id.tvStart).text = "${time.lowercase()}"
                 }
 
 
-                view.findViewById<TextView>(R.id.tvMin).text = buildSpannedString {
-                    append(activity.duration.toString())
-                    inSpans(
-                        ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.white_48))
-                    ) {
-                        append(" min")
+                view.findViewById<TextView>(R.id.tvMin).text = "${activity.duration} min"
+
+                view.findViewById<TextView>(R.id.tvCalories).text = "${activity.calories} kcal"
+
+                if (activity.type.equals("apple", true)) {
+                    view.findViewById<TextView>(R.id.tvImportedFrom).apply {
+                        text = "Imported from Health"
+                        visible()
+                    }
+                }else if(activity.type.equals("google", true)){
+                    view.findViewById<TextView>(R.id.tvImportedFrom).apply {
+                        text = "Imported from Google Fit"
+                        visible()
+                    }
+                } else {
+                    view.findViewById<TextView>(R.id.tvImportedFrom).apply {
+                        gone()
                     }
                 }
-
-                view.findViewById<TextView>(R.id.tvCalories).text = buildSpannedString {
-                    append(activity.calories.toString())
-                    inSpans(
-                        ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.white_48))
-                    ) {
-                        append(" kcal")
-                    }
-                }
-
             }
         }
 

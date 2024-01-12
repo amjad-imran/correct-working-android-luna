@@ -81,12 +81,20 @@ fun List<Int>.averageWithoutZero(): Int {
     }
 }
 
-fun List<Float>.averageWithoutZeroFloat(): Int {
-    val newList = this.filter { it != 0f }
+fun List<Float>.averageWithoutZeroFloat(): Float {
+    val newList = this.filter { it != 0.0f && it != 255.0f }
     return if (newList.isNotEmpty()) {
-        newList.average().roundToInt()
+        newList.average().toFloat()
     } else {
-        0
+        0.0f
+    }
+}
+fun List<Int>.averageIntWithoutZeroFloat(): Float {
+    val newList = this.filter { it != 0 && it != 255 }
+    return if (newList.isNotEmpty()) {
+        newList.average().toFloat()
+    } else {
+        0.0f
     }
 }
 

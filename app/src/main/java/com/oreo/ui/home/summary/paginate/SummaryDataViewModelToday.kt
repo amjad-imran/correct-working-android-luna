@@ -71,6 +71,7 @@ constructor(
     val statePairDeviceCard = MutableLiveData<Boolean>()
     val stateDashRingBattery = MutableLiveData<Pair<Boolean, ColorFitDevice?>>()
     val stateDashAlerts = MutableLiveData<HashMap<AlertType, DashAlert>>()
+    val stateGoogleFitCard = MutableLiveData<Boolean>()
 
 
     var contributorInfo: OContributorResponseModal? = null
@@ -186,7 +187,7 @@ constructor(
 
             val readinessModel = ODashboardReadinessModel(
                 readinessScore = healthData.readiness?.readinessScore?.value,
-                status = healthData.readiness?.readinessScore?.status?.capitalizeWords(),
+                status = healthData.readiness?.readinessScore?.text?.capitalizeWords(),
                 nudges = healthData.readiness?.dashNudges
             )
             val sleepModel = ODashboardSleepModel(
@@ -194,7 +195,7 @@ constructor(
                 totalSleep = healthData.sleep?.totalSleep?.value,
                 restingHr = healthData.sleep?.restingHr?.value,
                 sleepStage = healthData.sleep?.hourly_breakup ?: ArrayList(),
-                status = healthData.sleep?.sleepScore?.status?.capitalizeWords(),
+                status = healthData.sleep?.sleepScore?.text?.capitalizeWords(),
                 startTime = healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time ?: "",
                 endTime = healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time ?: ""
             )
@@ -216,17 +217,22 @@ constructor(
                     if (healthData.sleep?.sleepScore != null) {
                         if (registerDate != 0) {
                             healthData.readiness?.let {
-                                userActivities.add(OHealthOverview.Readiness(readinessModel))
+                                if ((readinessModel.readinessScore ?: 0) > 0) {
+                                    userActivities.add(OHealthOverview.Readiness(readinessModel))
+                                }
                             }
-                            userActivities.add(
-                                OHealthOverview.Sleep(
-                                    sleepModel,
-                                    makeSleepArray(healthData.sleep?.hourly_breakup),
-                                    healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time
-                                        ?: "",
-                                    healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time ?: ""
+                            if ((sleepModel.totalSleep ?: 0) > 0) {
+                                userActivities.add(
+                                    OHealthOverview.Sleep(
+                                        sleepModel,
+                                        makeSleepArray(healthData.sleep?.hourly_breakup),
+                                        healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time
+                                            ?: "",
+                                        healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time
+                                            ?: ""
+                                    )
                                 )
-                            )
+                            }
                         }
                     } else {
                         userActivities.add(OHealthOverview.SleepWaiting)
@@ -239,24 +245,29 @@ constructor(
                     if (healthData.sleep?.sleepScore != null) {
                         if (registerDate != 0) {
                             healthData.readiness?.let {
-                                userActivities.add(OHealthOverview.Readiness(readinessModel))
+                                if ((readinessModel.readinessScore ?: 0) > 0) {
+                                    userActivities.add(OHealthOverview.Readiness(readinessModel))
+                                }
                             }
-                            userActivities.add(
-                                OHealthOverview.Sleep(
-                                    sleepModel,
-                                    makeSleepArray(healthData.sleep?.hourly_breakup),
-                                    healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time
-                                        ?: "",
-                                    healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time ?: ""
+                            if ((sleepModel.totalSleep ?: 0) > 0) {
+                                userActivities.add(
+                                    OHealthOverview.Sleep(
+                                        sleepModel,
+                                        makeSleepArray(healthData.sleep?.hourly_breakup),
+                                        healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time
+                                            ?: "",
+                                        healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time
+                                            ?: ""
+                                    )
                                 )
-                            )
+                            }
                         }
                     } else {
                         userActivities.add(OHealthOverview.SleepWaiting)
                     }
 
                     //Activity
-                    if (healthData.activity?.activeCalories != null) {
+                    if ((healthData.activity?.activeCalories ?: 0) > 0) {
                         val activeCalories = healthData.activity?.activeCalories ?: 0
                         if (activeCalories in 1..49) {
                             val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
@@ -282,23 +293,28 @@ constructor(
                 2 -> {
                     if (registerDate != 0) {
                         healthData.readiness?.let {
-                            userActivities.add(OHealthOverview.Readiness(readinessModel))
+                            if ((readinessModel.readinessScore ?: 0) > 0) {
+                                userActivities.add(OHealthOverview.Readiness(readinessModel))
+                            }
                         }
 
                         healthData.sleep?.let {
-                            userActivities.add(
-                                OHealthOverview.Sleep(
-                                    sleepModel,
-                                    makeSleepArray(healthData.sleep?.hourly_breakup),
-                                    healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time
-                                        ?: "",
-                                    healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time ?: ""
+                            if ((sleepModel.totalSleep ?: 0) > 0) {
+                                userActivities.add(
+                                    OHealthOverview.Sleep(
+                                        sleepModel,
+                                        makeSleepArray(healthData.sleep?.hourly_breakup),
+                                        healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time
+                                            ?: "",
+                                        healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time
+                                            ?: ""
+                                    )
                                 )
-                            )
+                            }
                         }
                     }
 
-                    healthData.activity?.let {
+                    if ((healthData.activity?.activeCalories ?: 0) > 0) {
 
                         val activeCalories = healthData.activity?.activeCalories ?: 0
                         if (activeCalories in 0..49) {
@@ -324,7 +340,7 @@ constructor(
                 }
 
                 else -> {
-                    healthData.activity?.let {
+                    if ((healthData.activity?.activeCalories ?: 0) > 0) {
 
                         val activeCalories = healthData.activity?.activeCalories ?: 0
                         if (activeCalories in 0..49) {
@@ -348,32 +364,45 @@ constructor(
 
                     if (registerDate != 0) {
                         if (healthData.sleep?.sleepScore != null) {
-                            userActivities.add(
-                                OHealthOverview.SleepMinimal(
-                                    sleepModel,
-                                    makeSleepArray(healthData.sleep?.hourly_breakup)
-                                )
-                            )
-
-                            healthData.readiness?.let {
-                                userActivities.add(OHealthOverview.ReadinessMinimal(readinessModel))
-                            }
-
-                        } else {
-                            healthData.sleep?.let {
+                            if ((sleepModel.totalSleep ?: 0) > 0) {
                                 userActivities.add(
-                                    OHealthOverview.Sleep(
+                                    OHealthOverview.SleepMinimal(
                                         sleepModel,
-                                        makeSleepArray(healthData.sleep?.hourly_breakup),
-                                        healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time
-                                            ?: "",
-                                        healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time
-                                            ?: ""
+                                        makeSleepArray(healthData.sleep?.hourly_breakup)
                                     )
                                 )
                             }
-                            healthData.readiness?.let {
-                                userActivities.add(OHealthOverview.Readiness(readinessModel))
+
+                            if ((readinessModel.readinessScore ?: 0) > 0) {
+
+                                healthData.readiness?.let {
+                                    userActivities.add(
+                                        OHealthOverview.ReadinessMinimal(
+                                            readinessModel
+                                        )
+                                    )
+                                }
+                            }
+
+                        } else {
+                            if ((sleepModel.totalSleep ?: 0) > 0) {
+                                healthData.sleep?.let {
+                                    userActivities.add(
+                                        OHealthOverview.Sleep(
+                                            sleepModel,
+                                            makeSleepArray(healthData.sleep?.hourly_breakup),
+                                            healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time
+                                                ?: "",
+                                            healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time
+                                                ?: ""
+                                        )
+                                    )
+                                }
+                            }
+                            if ((readinessModel.readinessScore ?: 0) > 0) {
+                                healthData.readiness?.let {
+                                    userActivities.add(OHealthOverview.Readiness(readinessModel))
+                                }
                             }
                         }
                     }
@@ -432,7 +461,7 @@ constructor(
         viewedCardsData: ArrayList<OHealthOverview>,
     ) {
         val registerDays = (registerDate ?: 0)
-        if(registerDays==-1) return
+        if (registerDays == -1) return
 
         if (registerDays < 7) {
 

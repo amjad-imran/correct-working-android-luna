@@ -1,14 +1,13 @@
 package com.noisefit.ui.onboarding
 
-import android.net.Uri
+//import com.noisefit_commans.utils.InsiderAppEvents
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentWelcomeBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.showShortToast
-import com.noisefit_commans.utils.InsiderAppEvents
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -19,6 +18,7 @@ class WelcomeFragment : BaseFragment<FragmentWelcomeBinding>(FragmentWelcomeBind
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_land_on_start_fitness_page_visit)
         viewModel.autoContinue = false
 
         setOnBoardVideo()
@@ -58,7 +58,7 @@ class WelcomeFragment : BaseFragment<FragmentWelcomeBinding>(FragmentWelcomeBind
 //                viewModel.getConfig()
 //                return@setOnClickListener
 //            }
-            viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.WELCOME_PAGE_CONTINUE_BUTTON_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_welcome_page_continue_button_click)
             navigate(WelcomeFragmentDirections.actionWelcomeFragmentToJoinNoisefitFragment())
         }
 

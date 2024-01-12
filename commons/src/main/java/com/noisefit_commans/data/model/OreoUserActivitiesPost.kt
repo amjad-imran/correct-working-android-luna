@@ -79,6 +79,7 @@ data class OreoSleepNetworkEntity(
         @SerializedName("resting_hr") var restingHr: Int,
         @SerializedName("sleep_latency") var sleepLatency: Int,
         @SerializedName("max_temp") var maxTemp: Float,
+        @SerializedName("avg_temp") var avgTemp: Float,
         @SerializedName("avg_resp") var avgResp: Int,
         @SerializedName("avg_oxy") var avgOxy: Int,
         @SerializedName("hr_breakup") var hrBreakup: List<Int>,

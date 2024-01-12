@@ -1,6 +1,7 @@
 package com.oreo.ui.sleep.scoredetails
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
@@ -22,6 +23,7 @@ import com.noisefit_commans.utils.DistanceUtil
 import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MiscUtil
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Comparison
 import com.oreo.data.model.OInternalPageResponseModal
@@ -1679,6 +1681,10 @@ class OSleepScoreDetailsFragment :
 
             null -> {
 
+            }
+
+            ViewItemClickType.AVG_TEMP -> {
+                trendTitle = "Body temperature trend"
             }
         }
         return trendTitle

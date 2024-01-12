@@ -28,6 +28,9 @@ import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.ITEM_HEIGHT
 import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MiscUtil
+import com.noisefit_commans.utils.MoEngageAppEventAttributes
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.ScreenUtils
 import com.noisefit_commans.utils.WheelItem
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -643,7 +646,7 @@ class SetupProfileViewModel
 
         )
         stepsGoal = stepGoalNew.second.toInt()
-        caloriesGoal=caloriesGoalNew
+        caloriesGoal = caloriesGoalNew
 
         val userObject = JsonObject().apply {
             addProperty("first_name", userName.value)
@@ -740,7 +743,7 @@ class SetupProfileViewModel
     private fun logProfileEvent(user: User) {
         val userInfo = user.userInfo
         val userGoals = user.userGoals
-        sessionManager.logInsiderAppEvent(InsiderAppEvents.ACCOUNT_SET_UP_SUCCESS)
+        sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_profile_successful_setup)
         val gender: String = if (userInfo?.gender?.lowercase() == Gender.MALE.name.lowercase()) {
             "Male"
         } else if (userInfo?.gender?.lowercase() == Gender.FEMALE.name.lowercase()) {
@@ -748,32 +751,30 @@ class SetupProfileViewModel
         } else {
             "Other"
         }
-        sessionManager.addUserAttributeToInsider(true,
+        sessionManager.addUserAttributeToMoEngage(true,
             HashMap<String, Any>().apply
             {
-                this["name"] = user.firstName ?: ""
-                this["gender"] = gender
-                this["age"] = userInfo?.age ?: 0
-                this["dob"] = userInfo?.dob.toString()
-                this["step_goal"] = userGoals?.stepGoal ?: 0
-                this["sleep_goal"] = userGoals?.sleepGoal ?: 8
-                this["distance_goal"] = userGoals?.distanceGoal ?: 0
-                this["calories_goal"] = userGoals?.caloriesGoal ?: 0
-                this["unit_type"] = userGoals?.unitSystem ?: 0
-                this["height"] = userInfo?.height ?: 0
-                this["weight"] = userInfo?.weight ?: 0
-                this["personality_type"] = getEndGameValue(user.endGame)
+                this[MoEngageAppEventAttributes.name] = user.firstName ?: ""
+                this[MoEngageAppEventAttributes.gender] = gender
+                this[MoEngageAppEventAttributes.age] = userInfo?.age ?: 0
+                this[MoEngageAppEventAttributes.dob] = userInfo?.dob.toString()
+                this[MoEngageAppEventAttributes.height] = userInfo?.height ?: 0
+                this[MoEngageAppEventAttributes.weight] = userInfo?.weight ?: 0
                 val connectedDeviceData = ringDataStore.getRingDevice()
                 try {
                     if (connectedDeviceData != null) {
                         val arr = arrayOf(connectedDeviceData.bluetoothName)
-                        this["pair_device_watchname"] =
+                        this[MoEngageAppEventAttributes.pair_device_name] =
                             connectedDeviceData.bluetoothName ?: ""
 
-                        this["pair_device_mac_address"] =
+                        this[MoEngageAppEventAttributes.pair_device_mac_address] =
                             connectedDeviceData.address ?: ""
-                        this["pair_device_firmware_number"] = ""
-                        this["paired_devices_list"] = arr
+                        this[MoEngageAppEventAttributes.pair_device_color] = ""
+                        this[MoEngageAppEventAttributes.mobile_device] = "Android"
+                        this[MoEngageAppEventAttributes.mobile_device_manufacturer] =
+                            MiscUtil.getDeviceName()
+                        this[MoEngageAppEventAttributes.pair_device_firmware_number] = ""
+                        this[MoEngageAppEventAttributes.paired_devices_list] = arr
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()

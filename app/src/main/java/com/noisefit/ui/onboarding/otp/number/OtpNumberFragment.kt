@@ -24,6 +24,7 @@ import com.noisefit_commans.ui.isValidMobileNumber
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.TextWatcherExtended
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -41,7 +42,7 @@ class OtpNumberFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        authViewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.LAND_ON_ENTER_PHONE_NO_PAGE_VISIT)
+        authViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_land_on_enter_phone_no_page_visit)
         viewModel.uuid = authViewModel.uuid
         viewModel.uuidType = authViewModel.uuidType
         viewModel.googleImageUrl = authViewModel.googleImageUrl

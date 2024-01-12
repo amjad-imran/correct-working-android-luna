@@ -983,6 +983,10 @@
     <string name="text_device_intro_msg"><![CDATA[Now find all your device details & settings in the quick access corner]]></string>
     <string name="text_something_went_wrong_please_try_again">Something went wrong. Please try again</string>
     <string name="text_retry">Retry</string>
+    <string name="text_your_baseline">Your baseline</string>
+    <string name="text_turn_on_google_fit_sync">Turn on Google Fit sync</string>
+    <string name="text_enable_google_fit_access">Enable Google Fit access</string>
+    <string name="text_allow_google_fit_message">Allow Luna Ring to connect to Google Fit app for data sharing to improve your daily scores.</string>
     <string name="text_average_oxygen_saturation">Average oxygen saturation</string>
     <string name="text_add_workout">Add workout</string>
     <string name="text_record_workout">Record workout</string>

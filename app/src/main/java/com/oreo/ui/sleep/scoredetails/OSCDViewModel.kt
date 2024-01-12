@@ -307,6 +307,81 @@ class OSCDViewModel @Inject constructor(
         return Triple(Pair(list, max), suffix, prefix)
     }
 
+    fun getPrefixAndSuffixListTemp(
+        dataList: ArrayList<ResultData>,
+    ): Triple<Pair<ArrayList<ChartModel>, Int>, ArrayList<ChartModel>, ArrayList<ChartModel>> {
+        dataList.reversed()
+        val list = java.util.ArrayList<ChartModel>()
+        var max = 10
+        dataList.forEach {
+
+
+            val chartModel = ChartModel()
+            chartModel.date = it.date
+            chartModel.index =
+                DateFormats.parseDate(it.date, DateFormats.dateFormat3, DateFormats.dateFormatDay)
+
+
+            chartModel.valueFloat = it.deviation ?: 0.0f
+
+            list.add(chartModel)
+        }
+
+
+        val suffix = java.util.ArrayList<ChartModel>()
+        for (i in 1..15) {
+            val chartModel = ChartModel()
+            chartModel.index = ""
+            chartModel.value = 0
+            chartModel.date = ""
+            suffix.add(chartModel)
+        }
+
+        val prefix = java.util.ArrayList<ChartModel>()
+        for (i in 1..15) {
+            val chartModel = ChartModel()
+            chartModel.index = ""
+            chartModel.value = 0
+            chartModel.date = ""
+            prefix.add(chartModel)
+        }
+        return Triple(Pair(list, max), suffix, prefix)
+    }
+    fun getPrefixAndSuffixListTempDummy(
+    ): Triple<Pair<ArrayList<ChartModel>, Int>, ArrayList<ChartModel>, ArrayList<ChartModel>> {
+        val list = java.util.ArrayList<ChartModel>()
+        var max = 10
+
+        for (i in 1..15){
+            val chartModel = ChartModel()
+            chartModel.index = "$i"
+            chartModel.value = 0
+            chartModel.valueFloat = -5.0f
+            chartModel.date = ""
+            list.add(chartModel)
+        }
+
+
+        val suffix = java.util.ArrayList<ChartModel>()
+        for (i in 1..15) {
+            val chartModel = ChartModel()
+            chartModel.index = ""
+            chartModel.value = 0
+            chartModel.date = ""
+            suffix.add(chartModel)
+        }
+
+        val prefix = java.util.ArrayList<ChartModel>()
+        for (i in 1..15) {
+            val chartModel = ChartModel()
+            chartModel.index = ""
+            chartModel.value = 0
+            chartModel.date = ""
+            prefix.add(chartModel)
+        }
+        return Triple(Pair(list, max), suffix, prefix)
+    }
+
     fun updateSelectedDate(date: String) {
 
         val dayData = _internalDetailsData.value?.result?.firstOrNull() {

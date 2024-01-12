@@ -164,23 +164,6 @@ class OSummaryHealthOverviewAdapter :
                 )
             )
 
-            R.layout.list_sleep_activity_card_item -> HomeRecyclerViewHolder.SleepActivityViewHolder(
-                ListSleepActivityCardItemBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
-            )
-
-
-            R.layout.list_readiness_score_card_item -> HomeRecyclerViewHolder.ReadinessScoreViewHolder(
-                ListReadinessScoreCardItemBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
-            )
-
             R.layout.list_readiness_minimal_card_item -> HomeRecyclerViewHolder.ReadinessMinimalViewHolder(
                 ListReadinessMinimalCardItemBinding.inflate(
                     LayoutInflater.from(parent.context),
@@ -247,13 +230,6 @@ class OSummaryHealthOverviewAdapter :
                 devicePaired
             )
 
-            is HomeRecyclerViewHolder.ReadinessScoreViewHolder -> holder.bind(
-                items[position] as OHealthOverview.ReadinessScore,
-                position,
-                lastPosition,
-                devicePaired
-            )
-
             is HomeRecyclerViewHolder.ReadinessMinimalViewHolder -> holder.bind(
                 items[position] as OHealthOverview.ReadinessMinimal,
                 position,
@@ -263,13 +239,6 @@ class OSummaryHealthOverviewAdapter :
 
             is HomeRecyclerViewHolder.ReadinessViewHolder -> holder.bind(
                 items[position] as OHealthOverview.Readiness,
-                position,
-                lastPosition,
-                devicePaired
-            )
-
-            is HomeRecyclerViewHolder.SleepActivityViewHolder -> holder.bind(
-                items[position] as OHealthOverview.SleepActivityScore,
                 position,
                 lastPosition,
                 devicePaired
@@ -825,209 +794,6 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.ActivityDetailsWorkoutClick)
-            }
-        }
-    }
-
-
-    class SleepActivityViewHolder(private val binding: ListSleepActivityCardItemBinding) :
-        HomeRecyclerViewHolder(binding) {
-        fun bind(
-            data: OHealthOverview.SleepActivityScore,
-            position: Int,
-            lastPosition: Int,
-            devicePaired: Boolean
-        ) {
-            if (data.sleepScore != null && data.sleepScore >= 0) {
-                binding.tvSleepScore.text = data.sleepScore.toString()
-                binding.tvAvgThisWeek.gone()
-                binding.tvDaysAvg.visible()
-                binding.sleepLineChart.visible()
-                binding.sleepLine.root.visible()
-                val trendValue = "${kotlin.math.abs(data.sleepTrend ?: 0)}%"
-                if (data.sleepTrend != null && data.sleepTrend > 0) {
-                    binding.sleepTrendValue.text = trendValue
-                    binding.sleepTrendValue.setTextColor(Color.parseColor("#29cc74"))
-                    binding.sleepTrendImv.loadImage(
-                        binding.sleepTrendImv.context,
-                        R.drawable.ic_trend_up
-                    )
-                    binding.sleepTrendImv.visible()
-                    binding.sleepTrendValue.visible()
-                    binding.tvSleepFromLast.visible()
-                } else if (data.sleepTrend != null && data.sleepTrend < 0) {
-                    binding.sleepTrendValue.text = trendValue
-                    binding.sleepTrendImv.loadImage(
-                        binding.sleepTrendImv.context,
-                        R.drawable.ic_trend_down
-                    )
-                    binding.sleepTrendValue.setTextColor(Color.parseColor("#ff5b79"))
-                    binding.sleepTrendImv.visible()
-                    binding.sleepTrendValue.visible()
-                    binding.tvSleepFromLast.visible()
-                } else {
-                    binding.sleepTrendImv.invisible()
-                    binding.sleepTrendValue.invisible()
-                    binding.tvSleepFromLast.invisible()
-                }
-
-
-                binding.sleepLineChart.updateDataWithMaxMin(
-                    data.sleepValue,
-                    ArrayList(),
-                    ArrayList(),
-                    20,
-                    true
-                )
-            } else {
-
-                binding.tvAvgThisWeek.visible()
-                binding.tvSleepScore.text = "--"
-
-                binding.tvDaysAvg.gone()
-                binding.sleepLineChart.gone()
-                binding.sleepLine.root.gone()
-                binding.sleepTrendImv.gone()
-                binding.sleepTrendValue.gone()
-                binding.tvSleepFromLast.gone()
-            }
-
-            if (data.activityScore != null && data.activityScore >= 0) {
-
-                binding.tvActivityScore.text = data.activityScore.toString()
-                binding.activityLineChart.updateDataWithMaxMin(
-                    data.activityValue,
-                    ArrayList(),
-                    ArrayList(),
-                    20,
-                    true
-                )
-                binding.tvActAvgThisWeek.gone()
-                binding.tvDaysAvg1.visible()
-                binding.activityLineChart.visible()
-                binding.activityLine.root.visible()
-                binding.activityTrendImv.visible()
-                binding.activityTrendValue.visible()
-                binding.tvActivityFrom.visible()
-
-                val trendValue = "${kotlin.math.abs(data.activityTrend ?: 0)}%"
-                if (data.activityTrend != null && data.activityTrend > 0) {
-                    binding.activityTrendValue.text = trendValue
-                    binding.activityTrendValue.setTextColor(Color.parseColor("#29cc74"))
-                    binding.activityTrendImv.loadImage(
-                        binding.sleepTrendImv.context,
-                        R.drawable.ic_trend_up
-                    )
-                    binding.activityTrendImv.visible()
-                    binding.activityTrendValue.visible()
-                    binding.tvActivityFrom.visible()
-                } else if (data.activityTrend != null && data.activityTrend < 0) {
-                    binding.activityTrendValue.text = trendValue
-                    binding.activityTrendImv.loadImage(
-                        binding.sleepTrendImv.context,
-                        R.drawable.ic_trend_down
-                    )
-                    binding.activityTrendValue.setTextColor(Color.parseColor("#ff5b79"))
-                    binding.activityTrendImv.visible()
-                    binding.activityTrendValue.visible()
-                    binding.tvActivityFrom.visible()
-                } else {
-                    binding.activityTrendImv.invisible()
-                    binding.activityTrendValue.invisible()
-                    binding.tvActivityFrom.invisible()
-                }
-//                binding.activityLineChart.updateDataWithMax(data.activityValue, ArrayList(), ArrayList())
-            } else {
-                binding.tvActivityScore.text = "--"
-
-
-                binding.tvActAvgThisWeek.visible()
-                binding.tvDaysAvg1.gone()
-                binding.activityLineChart.gone()
-                binding.activityLine.root.gone()
-                binding.activityTrendImv.gone()
-                binding.activityTrendValue.gone()
-                binding.tvActivityFrom.gone()
-            }
-
-
-            binding.root.setOnClickListener {
-                //   itemClickListener?.invoke(it, data, position)
-            }
-        }
-    }
-
-
-    class ReadinessScoreViewHolder(private val binding: ListReadinessScoreCardItemBinding) :
-        HomeRecyclerViewHolder(binding) {
-        fun bind(
-            data: OHealthOverview.ReadinessScore,
-            position: Int,
-            lastPosition: Int,
-            devicePaired: Boolean
-        ) {
-
-            if (data.score != null && data.score >= 0) {
-                binding.tvSleepScore.text = data.score.toString()
-                binding.tvAvgThisWeek.gone()
-                binding.tvDaysAvg.visible()
-                binding.tvSleepScore.visible()
-                binding.tvEmpty.gone()
-                binding.lineChart.visible()
-                val trendValue = "${kotlin.math.abs(data.trend ?: 0)}%"
-                if (data.trend != null && data.trend > 0) {
-                    binding.sleepTrendValue.text = trendValue
-                    binding.sleepTrendValue.setTextColor(Color.parseColor("#29cc74"))
-                    binding.sleepTrendImv.loadImage(
-                        binding.sleepTrendImv.context,
-                        R.drawable.ic_trend_up
-                    )
-                    binding.sleepTrendImv.visible()
-                    binding.sleepTrendValue.visible()
-                    binding.tvSleepFromLast.visible()
-                } else if (data.trend != null && data.trend < 0) {
-                    binding.sleepTrendValue.text = trendValue
-                    binding.sleepTrendImv.loadImage(
-                        binding.sleepTrendImv.context,
-                        R.drawable.ic_trend_down
-                    )
-                    binding.sleepTrendValue.setTextColor(Color.parseColor("#ff5b79"))
-                    binding.sleepTrendImv.visible()
-                    binding.sleepTrendValue.visible()
-                    binding.tvSleepFromLast.visible()
-                } else {
-                    binding.sleepTrendImv.invisible()
-                    binding.sleepTrendValue.invisible()
-                    binding.tvSleepFromLast.invisible()
-                }
-
-
-
-                binding.lineChart.updateDataWithMaxMin(
-                    data.value,
-                    ArrayList(),
-                    ArrayList(),
-                    20,
-                    true
-                )
-            } else {
-
-                binding.tvAvgThisWeek.visible()
-                binding.tvSleepScore.text = "--"
-                binding.tvSleepScore.gone()
-                binding.tvEmpty.visible()
-                binding.tvDaysAvg.gone()
-                binding.lineChart.gone()
-                binding.sleepTrendImv.gone()
-                binding.sleepTrendValue.gone()
-                binding.tvSleepFromLast.gone()
-            }
-
-
-
-
-            binding.root.setOnClickListener {
-                //   itemClickListener?.invoke(it, data, position)
             }
         }
     }

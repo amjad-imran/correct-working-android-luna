@@ -9,7 +9,7 @@ import com.noisefit.luna.databinding.FragmentAboutBinding
 import com.noisefit.ui.web.WebViewActivity
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.AppConstants
-import com.noisefit_commans.utils.FirebaseLunaAppEvents
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,7 +28,7 @@ class AboutFragment : BaseFragment<FragmentAboutBinding>(FragmentAboutBinding::i
             navigateUpSafe()
         }
         binding.rowTermsCondition.setOnClickListener {
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ABOUT_TERMS_CONDITIONS_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_about_terms_conditions_click)
             startActivity(
                 WebViewActivity.getStartIntent(
                     requireActivity(),
@@ -38,7 +38,7 @@ class AboutFragment : BaseFragment<FragmentAboutBinding>(FragmentAboutBinding::i
             )
         }
         binding.rowPrivacyPolicy.setOnClickListener {
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ABOUT_PRIVACY_POLICY_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_about_privacy_policy_click)
             startActivity(
                 WebViewActivity.getStartIntent(
                     requireActivity(),
@@ -48,7 +48,7 @@ class AboutFragment : BaseFragment<FragmentAboutBinding>(FragmentAboutBinding::i
             )
         }
         binding.rowCheckForUpdate.setOnClickListener {
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ABOUT_CHECK_UPDATE_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_about_check_update_click)
             ShareUtil.openPlayStore(requireContext(), "com.noisefit.luna")
         }
     }
