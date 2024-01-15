@@ -6,16 +6,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.databinding.RowNapDashBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
+import com.oreo.data.model.health.Nap
 
-class DashNapAdapter(private val napList: List<String>) :
+class DashNapAdapter(private val napList: List<Nap>) :
     RecyclerView.Adapter<DashNapAdapter.ViewHolder>() {
+    var listener: OnNapSelectedAction? = null
+
     inner class ViewHolder(val binding: RowNapDashBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: String) {
+        fun bind(nap: Nap) {
 
             if (bindingAdapterPosition == (napList.size - 1)) {
                 binding.divider.root.gone()
             } else {
                 binding.divider.root.visible()
+            }
+            binding.root.setOnClickListener {
+                listener?.onNapSelected(nap.id)
             }
         }
     }
@@ -35,5 +41,13 @@ class DashNapAdapter(private val napList: List<String>) :
         holder.bind(napList[position])
     }
 
+    fun setOnNapSelectedListener(listener: OnNapSelectedAction) {
+        this.listener = listener
+    }
 
+
+}
+
+interface OnNapSelectedAction {
+    fun onNapSelected(napId: String)
 }

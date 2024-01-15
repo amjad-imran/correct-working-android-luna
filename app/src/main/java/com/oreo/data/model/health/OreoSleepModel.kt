@@ -21,10 +21,18 @@ data class OreoSleepModel(
     var hr: CommonListDataModel? = null,
     var hrv: CommonListDataModel? = null,
     var oxy: CommonListDataModel? = null,
+    val nap: List<Nap>? = null,
     @SerializedName("int_nudges")
     val nudges: List<Nudges>?,
     var hourly_breakup: List<SleepHourlyBreakup>? = null,
     var night_time_movement: List<SleepMovementBreakup>? = null,
+)
+
+data class Nap(
+    val id: String,
+    val startTime: String,
+    val endTime: String,
+    val duration: Int? = null
 )
 
 @Parcelize

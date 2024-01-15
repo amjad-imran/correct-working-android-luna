@@ -473,7 +473,11 @@
     <fragment
         android:id="@+id/napDetails"
         android:name="com.oreo.ui.sleep.nap.ONapDetailsFragment"
-        android:label="fragment_nap_details" />
+        android:label="fragment_nap_details" >
+        <argument
+            android:name="napId"
+            app:argType="string" />
+    </fragment>
     <dialog
         android:id="@+id/bottomSheetNapScore"
         android:name="com.oreo.ui.sleep.nap.OBottomSheetNapScore"

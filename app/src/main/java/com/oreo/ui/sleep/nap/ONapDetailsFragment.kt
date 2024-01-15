@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
@@ -32,10 +33,15 @@ import dagger.hilt.android.AndroidEntryPoint
 class ONapDetailsFragment :
     BaseFragment<FragmentONapDetailsBinding>(FragmentONapDetailsBinding::inflate) {
     private val mViewModel: ONapDetailsViewModel by viewModels()
+    private val navArgs: ONapDetailsFragmentArgs by navArgs()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mViewModel.getUserNapData(navArgs.napId)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mViewModel.getUserNapData("d5554682-d31a-4903-8852-0b95bb13f7da")
     }
 
     override fun initListener() {
@@ -183,7 +189,7 @@ class ONapDetailsFragment :
         val sleepDayGraphView = SleepProgressbarView(binding.lytNapDetails.napPrg.context)
         binding.lytNapDetails.napPrg.removeAllViews()
         binding.lytNapDetails.napPrg.addView(sleepDayGraphView)
-        sleepDayGraphView.setData(mViewModel.getNapArrayData(it.duration?.toInt()?:0))
+        sleepDayGraphView.setData(mViewModel.getNapArrayData(it.duration?.toInt() ?: 0))
 
         binding.lytNapDetails.tvNapStart.text = DateFormats.parseDate(
             it.startTime,

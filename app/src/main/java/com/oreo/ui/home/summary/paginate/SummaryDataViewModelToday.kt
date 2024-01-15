@@ -207,7 +207,7 @@ constructor(
                 nudges = healthData.activity?.dash_nudges
             )
 
-            val nap = listOf<String>("Nap1, Nap2")
+            val nap = healthData.sleep?.nap ?: ArrayList()
 
 
             val daySlot = getDaySlot()

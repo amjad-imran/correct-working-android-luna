@@ -3,6 +3,7 @@ package com.oreo.ui.home.summary.paginate
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -237,6 +238,10 @@ class SummaryDataFragmentToday :
                 OSummaryHealthOverviewClickEnum.TextWelcomeRingClicked -> {
                     viewModel.localDataStore.setDashCardClickState(DashInfoCard.WELCOME, true)
                     navigate(R.id.ringWelcomeFragment)
+                }
+                is OSummaryHealthOverviewClickEnum.OnNapClicked -> {
+
+                    navigate(R.id.napDetails, bundleOf("napId" to type.napId))
                 }
             }
         }

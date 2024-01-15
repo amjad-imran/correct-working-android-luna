@@ -47,6 +47,7 @@ sealed class OSummaryHealthOverviewClickEnum {
     object ActivityDetailsWorkoutClick : OSummaryHealthOverviewClickEnum()
     object ReadinessDetailsWorkoutClick : OSummaryHealthOverviewClickEnum()
     object TextWelcomeRingClicked : OSummaryHealthOverviewClickEnum()
+    data class OnNapClicked(val napId: String) : OSummaryHealthOverviewClickEnum()
     data class TextRingCareClicked(val title: String) : OSummaryHealthOverviewClickEnum()
     data class VideoInfoClicked(val type: VideoInfoType, val videoUrl: String) :
         OSummaryHealthOverviewClickEnum()
@@ -320,7 +321,18 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         ) {
 
             binding.rvNap.layoutManager = LinearLayoutManager(binding.rvNap.context)
-            binding.rvNap.adapter = DashNapAdapter(data.napList)
+            binding.rvNap.adapter = DashNapAdapter(data.naps).apply {
+
+                this.setOnNapSelectedListener(object : OnNapSelectedAction {
+                    override fun onNapSelected(napId: String) {
+                        itemClickListener?.invoke(
+                            OSummaryHealthOverviewClickEnum.OnNapClicked(
+                                napId
+                            )
+                        )
+                    }
+                })
+            }
 
 
             /* binding.root.setOnClickListener {
