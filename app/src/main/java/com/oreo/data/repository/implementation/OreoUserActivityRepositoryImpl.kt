@@ -48,7 +48,6 @@ import com.oreo.data.model.OHSQuestionariesResponseModel
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.OInternalPageResponseModal
 import com.oreo.data.model.OWorkoutDetailsResponseModel
-import com.oreo.data.model.OWorkoutListModal
 import com.oreo.data.model.OreoNapDetailsDataModel
 import com.oreo.data.model.RingCareResponse
 import com.oreo.data.model.RingWelcome
