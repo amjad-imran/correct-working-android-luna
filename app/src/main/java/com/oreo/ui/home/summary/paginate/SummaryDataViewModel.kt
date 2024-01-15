@@ -88,7 +88,7 @@ constructor(
                         OHealthOverview.Readiness(
                             ODashboardReadinessModel(
                                 readinessScore = it?.readinessScore?.value,
-                                status = it?.readinessScore?.status?.capitalizeWords(),
+                                status = it?.readinessScore?.text?.capitalizeWords(),
                                 nudges = it?.dashNudges
                             )
                         )
@@ -105,7 +105,7 @@ constructor(
                                 totalSleep = it?.totalSleep?.value,
                                 restingHr = healthData.sleep?.restingHr?.value,
                                 sleepStage = it?.hourly_breakup ?: ArrayList(),
-                                status = it?.sleepScore?.status?.capitalizeWords(),
+                                status = it?.sleepScore?.text?.capitalizeWords(),
                                 startTime = "",
                                 endTime = ""
                             ),

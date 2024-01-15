@@ -10,6 +10,7 @@ import com.oreo.data.model.Contributors
 class OreoSleepContributorAdapter(val mListener: ContributorItemClickListener) :
     RecyclerView.Adapter<OreoSleepContributorAdapter.ViewHolder>() {
     private var mDataSet = ArrayList<Contributors>()
+    private var mVersion: Int = 1
 
     inner class ViewHolder(val binding: OreoItemSleepContributorBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -41,7 +42,7 @@ class OreoSleepContributorAdapter(val mListener: ContributorItemClickListener) :
             )
 
             binding.root.setOnClickListener {
-                mListener.onItemClick(mDataSet,bindingAdapterPosition)
+                mListener.onItemClick(mDataSet, bindingAdapterPosition,mVersion)
             }
 
         }
@@ -63,14 +64,15 @@ class OreoSleepContributorAdapter(val mListener: ContributorItemClickListener) :
         holder.bind(mDataSet[position])
     }
 
-    fun setData(resultData: List<Contributors>) {
+    fun setData(resultData: List<Contributors>, version: Int) {
+        mVersion = version
         mDataSet.clear()
         mDataSet.addAll(resultData)
         notifyDataSetChanged()
     }
 
     interface ContributorItemClickListener {
-        fun onItemClick(resultData: ArrayList<Contributors>,position: Int)
+        fun onItemClick(resultData: ArrayList<Contributors>, position: Int,version: Int)
     }
 }
 

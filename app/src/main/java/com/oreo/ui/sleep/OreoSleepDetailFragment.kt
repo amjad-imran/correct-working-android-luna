@@ -62,7 +62,8 @@ class OreoSleepDetailFragment :
     private val mSleepContributorAdapter: OreoSleepContributorAdapter by lazy {
         OreoSleepContributorAdapter(object :
             OreoSleepContributorAdapter.ContributorItemClickListener {
-            override fun onItemClick(resultData: ArrayList<Contributors>, position: Int) {
+            override fun onItemClick(resultData: ArrayList<Contributors>, position: Int,
+                                     version: Int) {
 //                if (resultData[position].barPercent > 0) {
                 openContributorBottomSheet(resultData, position)
 //                }
@@ -111,6 +112,9 @@ class OreoSleepDetailFragment :
             binding.lytAverageBloodOxygen.root.gone()
             return
         }
+
+        binding.lytAverageBloodOxygen.tvNudge.text = viewModel.getBloodOxygenNudge(oxy)
+
         if ((oxy?.avg ?: 0) < 95) {
             binding.lytAverageBloodOxygen.root.visible()
             binding.lytAverageBloodOxygen.tvAvgValue.text = "<95"
@@ -119,7 +123,6 @@ class OreoSleepDetailFragment :
         binding.lytAverageBloodOxygen.root.visible()
         binding.lytAverageBloodOxygen.tvAvgValue.text = (oxy?.avg ?: 0).toString()
 
-        binding.lytAverageBloodOxygen.tvNudge.text = viewModel.getBloodOxygenNudge(oxy)
 
 
     }
@@ -268,6 +271,8 @@ class OreoSleepDetailFragment :
             hrv?.avg
         )
     }
+
+
 
 
     private fun showHeartRateGraph(
@@ -465,6 +470,14 @@ class OreoSleepDetailFragment :
                 })
             }
         }
+        binding.lytAverageBloodOxygen.bInfo.setOnClickListener {
+            viewModel.contributorInfo.value?.oxy_graph?.let { content ->
+                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                    this.putString("infoData", content)
+                })
+            }
+        }
+
         binding.lytAverageBloodOxygen.bInfo.setOnClickListener {
             viewModel.contributorInfo.value?.oxy_graph?.let { content ->
                 navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
@@ -831,7 +844,7 @@ class OreoSleepDetailFragment :
 
         //sleep contributor
         binding.lytSleepContributor.tvTitle.text = getString(R.string.text_sleep_contributors)
-        mSleepContributorAdapter.setData(viewModel.getContributorsData(dayData))
+        mSleepContributorAdapter.setData(viewModel.getContributorsData(dayData),1)
 
 
         //sleep night movement

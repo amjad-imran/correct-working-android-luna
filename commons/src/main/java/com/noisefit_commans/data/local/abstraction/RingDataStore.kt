@@ -31,6 +31,9 @@ interface RingDataStore {
     fun setRegisterDay(day: Int)
     fun getRegisterDay(): Int?
 
+    fun setTempBaseLine(temp: Float)
+    fun getTempBaseLine(): Float?
+
     fun setSleepWalkAroundShown(status: Boolean)
     fun isSleepWalkAroundShown(): Boolean
 

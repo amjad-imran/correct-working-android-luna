@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewModelScope
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
@@ -255,9 +256,11 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         val shouldSync = viewModel.sessionManager.forceSyncData.value?.getContent() ?: false
 
         if (shouldSync || kotlin.math.abs(DateFormats.getTimeStamp() - lastSyncTime) > 2 * 60 * 60 * 1000L) {
-            binding.lytHeader.tvHeaderStatus.apply {
-                text = context.getString(R.string.text_syncing_dot)
-                visible()
+            if(viewModel.sessionManager.bluetoothStateDash.value != false){
+                binding.lytHeader.tvHeaderStatus.apply {
+                    text = context.getString(R.string.text_syncing_dot)
+                    visible()
+                }
             }
             syncData()
         }
@@ -301,18 +304,6 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             }
 
         }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         viewModel.deviceConnected.observe(this) { connected ->
@@ -391,10 +382,13 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             when (connectedState) {
                 is ConnectState.ConnectFailed -> {
                     setConnectingState(true)
+                    binding.lytHeader.pbSync.gone()
+
                 }
 
                 is ConnectState.Connecting -> {
                     setConnectingState(true)
+                    binding.lytHeader.pbSync.gone()
 
                 }
 
@@ -409,6 +403,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 is ConnectState.UnPaired -> {
                     viewModel.handleUnPairState()
                     viewModel.updateDeviceConnectedStatus()
+                    binding.lytHeader.pbSync.gone()
                 }
 
                 else -> {}
@@ -477,7 +472,9 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         binding.lytHeader.batteryStatus.isIndeterminate = connecting
 
         if (viewModel.sessionManager.bluetoothStateDash.value == false) {
+            ApplicationUtils.stopOreSyncScheduler(requireContext())
             stateBluetoothOff()
+            binding.lytHeader.pbSync.gone()
         } else {
 
             binding.lytHeader.batteryStatus.invisible()

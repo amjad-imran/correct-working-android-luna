@@ -26,6 +26,7 @@ import com.noisefit_commans.data.model.UserHealthData
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
 import com.noisefit_commans.ui.checkDayDifferenceMoreOne
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.dataConverter.OreoOfflineDataMapper
@@ -138,6 +139,7 @@ class OreoUserActivityRepositoryImpl(
             val todayDate = DateFormats.getTodaysDateString(10)
             var resultTrendsData: TrendsData? = null
             var registerDate: Int? = null
+            var tempBaseLine: Float? = null
 
             var apiStartDate: String? = startDate
             var apiEndDate: String? = endDate
@@ -167,7 +169,6 @@ class OreoUserActivityRepositoryImpl(
                             .get()
                         apiStartDate = minDate.toString()
                         apiEndDate = todayDate
-
                     }
                     return@safeCacheCall null
 
@@ -220,7 +221,8 @@ class OreoUserActivityRepositoryImpl(
                             data = ServerUserHealthResponse(
                                 data = resultData!!,
                                 trends = resultTrendsData,
-                                registerDate = ringDataStore.getRegisterDay()
+                                registerDate = ringDataStore.getRegisterDay(),
+                                tempBaseLine = ringDataStore.getTempBaseLine()
                             ),
                             message = "",
                         )
@@ -256,6 +258,8 @@ class OreoUserActivityRepositoryImpl(
                             resultData = response.data
                             resultTrendsData = response.trends
                             registerDate = response.registerDate
+                            tempBaseLine = response.tempBaseLine
+                            ringDataStore.setTempBaseLine(tempBaseLine ?: 98.6f)
 
                             ringDataStore.setRegisterDay(registerDate ?: -1)
                         }
@@ -290,7 +294,8 @@ class OreoUserActivityRepositoryImpl(
                                         data = ServerUserHealthResponse(
                                             data = resultData!!,
                                             trends = resultTrendsData,
-                                            registerDate = registerDate
+                                            registerDate = registerDate,
+                                            tempBaseLine = tempBaseLine
                                         ),
                                         message = "",
                                     )

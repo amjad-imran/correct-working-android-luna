@@ -9,7 +9,7 @@ class OInternalPageResponseModal(
     val comparision: Comparison? = null
 )
 
-class ResultData(val date: String, val data: Float,val deviation: Float?=null)
+class ResultData(val date: String, val data: Float,val deviation: Float?=null, val year: String?=null)
 class TrendData(
     val today: ValueData? = null,
     val yesterday: ValueData? = null,
@@ -19,14 +19,14 @@ class TrendData(
 
 class ValueData(var value: Float = 0F)
 class Comparison(
-    var today: Int?=null,
-    var average: Int?=null,
-    var breakup: List<BreakUp>?=null
+    var today: Int? = null,
+    var average: Int? = null,
+    var breakup: List<BreakUp>? = null
 
 )
 
 class BreakUp(
-    @SerializedName("hour_of_day") var hourOfDay: Int?=null,
-    var calories: Int?=null,
-    @SerializedName("avg_calories") var avgCalories: Int?=null
+    @SerializedName("hour_of_day") var hourOfDay: Int? = null,
+    var calories: Int? = null,
+    @SerializedName("avg_calories") var avgCalories: Int? = null
 )

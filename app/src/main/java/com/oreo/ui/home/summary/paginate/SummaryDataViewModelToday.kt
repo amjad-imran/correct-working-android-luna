@@ -187,7 +187,7 @@ constructor(
 
             val readinessModel = ODashboardReadinessModel(
                 readinessScore = healthData.readiness?.readinessScore?.value,
-                status = healthData.readiness?.readinessScore?.status?.capitalizeWords(),
+                status = healthData.readiness?.readinessScore?.text?.capitalizeWords(),
                 nudges = healthData.readiness?.dashNudges
             )
             val sleepModel = ODashboardSleepModel(
@@ -195,7 +195,7 @@ constructor(
                 totalSleep = healthData.sleep?.totalSleep?.value,
                 restingHr = healthData.sleep?.restingHr?.value,
                 sleepStage = healthData.sleep?.hourly_breakup ?: ArrayList(),
-                status = healthData.sleep?.sleepScore?.status?.capitalizeWords(),
+                status = healthData.sleep?.sleepScore?.text?.capitalizeWords(),
                 startTime = healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time ?: "",
                 endTime = healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time ?: ""
             )

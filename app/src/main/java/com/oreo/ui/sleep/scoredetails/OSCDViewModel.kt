@@ -264,10 +264,7 @@ class OSCDViewModel @Inject constructor(
                 }
 
                 else -> {
-                    val dummyData =
-                        arrayListOf<Int>(-1, -2, -3, -4, -5, -6, 0, 1, 2, 3, 4, 5, 6).random()
-                    LOGS.d("DUMMY_DATA $dummyData")
-                    chartModel.value = dummyData//it.data.toInt()//TODO remove after testing
+                    chartModel.value = it.data.toInt()
                 }
             }
 
@@ -327,6 +324,40 @@ class OSCDViewModel @Inject constructor(
 
             chartModel.valueFloat = it.deviation ?: 0.0f
 
+            list.add(chartModel)
+        }
+
+
+        val suffix = java.util.ArrayList<ChartModel>()
+        for (i in 1..15) {
+            val chartModel = ChartModel()
+            chartModel.index = ""
+            chartModel.value = 0
+            chartModel.date = ""
+            suffix.add(chartModel)
+        }
+
+        val prefix = java.util.ArrayList<ChartModel>()
+        for (i in 1..15) {
+            val chartModel = ChartModel()
+            chartModel.index = ""
+            chartModel.value = 0
+            chartModel.date = ""
+            prefix.add(chartModel)
+        }
+        return Triple(Pair(list, max), suffix, prefix)
+    }
+    fun getPrefixAndSuffixListTempDummy(
+    ): Triple<Pair<ArrayList<ChartModel>, Int>, ArrayList<ChartModel>, ArrayList<ChartModel>> {
+        val list = java.util.ArrayList<ChartModel>()
+        var max = 10
+
+        for (i in 1..15){
+            val chartModel = ChartModel()
+            chartModel.index = "$i"
+            chartModel.value = 0
+            chartModel.valueFloat = -5.0f
+            chartModel.date = ""
             list.add(chartModel)
         }
 
