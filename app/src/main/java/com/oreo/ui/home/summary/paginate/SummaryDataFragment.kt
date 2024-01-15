@@ -137,6 +137,8 @@ class SummaryDataFragment :
 
                 OSummaryHealthOverviewClickEnum.TextWelcomeRingClicked -> {
                 }
+
+                is OSummaryHealthOverviewClickEnum.OnNapClicked -> TODO()
             }
         }
 

@@ -31,6 +31,7 @@ sealed class UserActivityCallback {
     class GetTempFromLatLog(val lat: Double, val log: Double) : UserActivityCallback()
     class SleepDataObtained(val sleepData: SleepData) : UserActivityCallback()
     class SleepDataObtainedOreo(val sleepData: OreoSleepData) : UserActivityCallback()
+    class NapObtainedOreo(val sleepData: OreoSleepData) : UserActivityCallback()
     class HealthScoreObtainedOreo(val score: Int, val date: String) : UserActivityCallback()
 
     //    class HeartRateObtained(val heartRate: HeartRate) : UserActivityCallback()

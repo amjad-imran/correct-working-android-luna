@@ -757,8 +757,20 @@ constructor(
             }
 
             override fun onRingSleepNAP(p0: MutableList<RingSleepNapBean>?) {
+                //onRingSleepNAP : [RingSleepNapBean{existSleepNap=true, asleepNapTime=1705284882, wakeupNapTime=1705286418, sleepNapDuration=1536, date='2024-01-15 00:00:00'}]
                 LOGS.d(TAG, "onRingSleepNAP : $p0")
+                //val dummyNap = Gson().fromJson<List<RingSleepNapBean>>("[{\"existSleepNap\":true, \"asleepNapTime\":1705284882, \"wakeupNapTime\":1705286418, \"sleepNapDuration\":1536, \"date\":\"2024-01-15 00:00:00\"}]")
+
                 AppLogs.sendAppLogs("$TRACK_TAG onRingSleepNAP : $p0")
+                if (p0 == null) return
+
+                val sleepDataParsed = oreoDataConverter.parseNapData(p0.toList())
+                AppLogs.run { sendAppLogs("Parsed Nap Data $sleepDataParsed") }
+                /* userActivityDataCallbacks?.onUserActivityDataReceived(
+                     UserActivityCallback.NapObtainedOreo(
+                         sleepDataParsed
+                     )
+                 )*/
             }
 
             override fun onRingAutoActiveSportData(p0: AutoActiveSportBean?) {

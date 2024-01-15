@@ -15,6 +15,7 @@ import com.noisefit_commans.data.model.DayTimeMovementBreakup
 import com.noisefit_commans.data.model.OreoBloodOxygenBreakup
 import com.noisefit_commans.data.model.OreoBodyTemperatureBreakup
 import com.noisefit_commans.data.model.OreoHeartRate
+import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.data.model.OreoRespiratoryData
 import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.data.model.OreoStepsData
@@ -51,6 +52,7 @@ import com.zhapp.ble.bean.DoNotDisturbModeBean
 import com.zhapp.ble.bean.EventInfoBean
 import com.zhapp.ble.bean.OverallDayMovementData
 import com.zhapp.ble.bean.PressureModeBean
+import com.zhapp.ble.bean.RingSleepNapBean
 import com.zhapp.ble.bean.RingSleepResultBean
 import com.zhapp.ble.bean.TodayRespiratoryRateData
 import com.zhapp.ble.bean.WidgetBean
@@ -921,6 +923,31 @@ constructor(
             )
         }
         return data
+    }
+
+    //onRingSleepNAP : [RingSleepNapBean{existSleepNap=true, asleepNapTime=1705284882,
+    // wakeupNapTime=1705286418, sleepNapDuration=1536, date='2024-01-15 00:00:00'}]
+    fun parseNapData(naps: List<RingSleepNapBean>): List<OreoNapData> {
+        val returnNaps = ArrayList<OreoNapData>()
+        naps.forEach {
+            val nap = OreoNapData().apply {
+                this.startTime = DateFormats.convertTimestampToDate(
+                    it.asleepNapTime.toLong() * 1000,
+                    DateFormats.dateTimeFormat5
+                )
+                this.endTime = DateFormats.convertTimestampToDate(
+                    it.wakeupNapTime.toLong() * 1000,
+                    DateFormats.dateTimeFormat5
+                )
+                this.duration = it.sleepNapDuration
+                this.date = DateFormats.convertTimestampToDate(
+                    it.asleepNapTime.toLong() * 1000,
+                    DateFormats.dateFormat3
+                )
+            }
+            returnNaps.add(nap)
+        }
+        return returnNaps
     }
 
     fun parseSleepData(bean: RingSleepResultBean): OreoSleepData {

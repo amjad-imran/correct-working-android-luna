@@ -4,8 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.databinding.RowNapDashBinding
+import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.health.Nap
 
 class DashNapAdapter(private val napList: List<Nap>) :
@@ -14,6 +16,21 @@ class DashNapAdapter(private val napList: List<Nap>) :
 
     inner class ViewHolder(val binding: RowNapDashBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(nap: Nap) {
+
+            val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(nap.duration ?: 0)
+            binding.tvDuration.text = if (hour == 0) {
+                "$minute m"
+            } else {
+                "$hour h $minute m"
+            }
+
+            //TODO show yesterday also
+            binding.tvStartTime.text = DateFormats.parseDate(
+                nap.startTime,
+                DateFormats.dateTimeFormat5,
+                DateFormats.timeFormat12
+            )
+
 
             if (bindingAdapterPosition == (napList.size - 1)) {
                 binding.divider.root.gone()

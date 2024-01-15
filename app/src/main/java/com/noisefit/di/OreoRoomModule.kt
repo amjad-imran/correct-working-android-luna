@@ -19,6 +19,7 @@ import com.oreo.data.db.database.OreoBloodOxygenDao
 import com.oreo.data.db.database.OreoBodyTemperatureDao
 import com.oreo.data.db.database.OreoDayTimeMovementDao
 import com.oreo.data.db.database.OreoHeartRateDao
+import com.oreo.data.db.database.OreoNapDao
 import com.oreo.data.db.database.OreoRecordedWorkoutDao
 import com.oreo.data.db.database.OreoRespiratoryDao
 import com.oreo.data.db.database.OreoSleepDao
@@ -48,6 +49,7 @@ class OreoRoomModule {
             .addMigrations(MIGRATION_1_2)
             .addMigrations(MIGRATION_2_4)
             .addMigrations(MIGRATION_4_5)
+            .addMigrations(MIGRATION_5_6)
             /*.addMigrations(MIGRATION_3_4)*/
             .build()
     }
@@ -125,6 +127,24 @@ class OreoRoomModule {
         }
     }
 
+    private val MIGRATION_5_6: Migration = object : Migration(5, 6) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(
+                "CREATE TABLE IF NOT EXISTS `nap_data` " +
+                        "(`id` INTEGER NOT NULL, " +
+                        "`is_synced` INTEGER NOT NULL," +
+                        "`is_google_fit_sync` INTEGER NOT NULL," +
+                        "`start_time` TEXT," +
+                        "`end_time` TEXT," +
+                        "`duration` INTEGER NOT NULL," +
+                        "`date` TEXT, PRIMARY KEY(`id`))"
+            )
+            database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_nap_data_start_time_end_time ON  nap_data(start_time,end_time)")
+
+        }
+    }
+
+
     /*private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL(
@@ -176,6 +196,12 @@ class OreoRoomModule {
     @Provides
     fun providesSleepDao(database: OreoDataBase): OreoSleepDao {
         return database.sleepDao()
+    }
+
+    @Singleton
+    @Provides
+    fun providesNapDao(database: OreoDataBase): OreoNapDao {
+        return database.napDao()
     }
 
     @Singleton

@@ -176,6 +176,21 @@ data class OreoRespiratoryData(
     @SerializedName("date") var date: String? = null
 ) : ColorfitData()
 
+
+@Entity(
+    tableName = "nap_data", indices = [Index(value = ["start_time", "end_time"], unique = true)]
+)
+data class OreoNapData(
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    @ColumnInfo(name = "is_synced") var isSynced: Boolean = false,
+    @ColumnInfo(name = "is_google_fit_sync") var isGoogleFitSynced: Boolean = false,
+    @ColumnInfo(name = "start_time") var startTime: String? = null,
+    @ColumnInfo(name = "end_time") var endTime: String? = null,
+    @ColumnInfo(name = "duration") var duration: Int = 0,
+    @ColumnInfo(name = "date") var date: String? = null
+)
+
+
 @Entity(
     tableName = "sleep_data", indices = [Index(value = ["startTime", "endTime"], unique = true)]
 )
