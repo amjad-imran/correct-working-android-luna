@@ -413,7 +413,15 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.tvDayStatus.text = nudge?.label ?: ""
                 binding.tvNudge.text = nudge?.message ?: ""
             }
-
+            //todo will set nap data here once received
+            /* binding.lytNapLabel.root.visible()
+             binding.lytNapLabel.tvNapUpdatedScore.text = "+4"
+             binding.lytNapLabel.tvNapUpdatedScore.setTextColor(
+                 binding.lytNapLabel.tvNapUpdatedScore.context.getColor(
+                     R.color.nap_dash_readiness_score
+                 )
+             )
+             binding.lytNapLabel.tvNapCountMsg.text = "after 1 nap"*/
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.ReadinessDetailsWorkoutClick)
             }
@@ -474,6 +482,16 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.lottieAnimationView.playAnimation()
 
             }
+            /*
+            //todo will set nap data here once received
+            binding.lytNapLabel.root.visible()
+            binding.lytNapLabel.tvNapUpdatedScore.text = "+4"
+            binding.lytNapLabel.tvNapUpdatedScore.setTextColor(
+                binding.lytNapLabel.tvNapUpdatedScore.context.getColor(
+                    R.color.nap_dash_readiness_score
+                )
+            )
+            binding.lytNapLabel.tvNapCountMsg.text = "after 1 nap"*/
 
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.ReadinessDetailsWorkoutClick)
@@ -535,6 +553,16 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             } else {
                 "$hourTimeInBed hr $minuteTimeInBed min"
             }
+
+            /* //todo will set nap data here once received
+             binding.lytNapLabel.root.visible()
+             binding.lytNapLabel.tvNapUpdatedScore.text = "+4"
+             binding.lytNapLabel.tvNapUpdatedScore.setTextColor(
+                 binding.lytNapLabel.tvNapUpdatedScore.context.getColor(
+                     R.color.nap_dash_sleep_score
+                 )
+             )
+             binding.lytNapLabel.tvNapCountMsg.text = "after 1 nap"*/
 
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.SleepDetailsWorkoutClick)
@@ -621,6 +649,16 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.lottieAnimationView.playAnimation()
 
             }
+
+            /*//todo will set nap data here once received
+            binding.lytNapLabel.root.visible()
+            binding.lytNapLabel.tvNapUpdatedScore.text = "+4"
+            binding.lytNapLabel.tvNapUpdatedScore.setTextColor(
+                binding.lytNapLabel.tvNapUpdatedScore.context.getColor(
+                    R.color.nap_dash_sleep_score
+                )
+            )
+            binding.lytNapLabel.tvNapCountMsg.text = "after 1 nap"*/
 
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.SleepDetailsWorkoutClick)

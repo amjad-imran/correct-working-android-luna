@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.data.model.OreoNapDetailsDataModel
+import com.oreo.data.model.SlideUpNapScoreDataModel
 import com.oreo.data.model.health.Nudges
 import com.oreo.data.model.health.UnitDataModelArray
 import com.oreo.data.model.health.UnitDataModelArrayFloat
@@ -213,6 +214,17 @@ class ONapDetailsViewModel @Inject constructor(val userActivityRepository: OreoU
         dataList.add(child1)
         return dataList
 
+    }
+
+    fun getSlideUpNapScoreData(): SlideUpNapScoreDataModel {
+        val modelData = SlideUpNapScoreDataModel()
+        modelData.title = "You took a late nap"
+        modelData.description = "Naps post 7 pm negatively impact sleep and readiness scores the next day."
+        modelData.oldSleepScore = 87
+        modelData.newSleepScore = 86
+        modelData.oldReadinessScore = 98
+        modelData.newReadinessScore = 97
+        return modelData
     }
 
 }

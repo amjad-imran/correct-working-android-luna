@@ -77,6 +77,17 @@
         app:layout_constraintEnd_toEndOf="@+id/lottieAnimationView"
         app:layout_constraintStart_toStartOf="@+id/lottieAnimationView"
         app:layout_constraintTop_toBottomOf="@+id/tvValue" />
+    <include
+        android:id="@+id/lytNapLabel"
+        layout="@layout/layout_nap_dash_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_12dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvStatus"
+        tools:visibility="visible" />
 
     <View
         android:id="@+id/view"
@@ -109,7 +120,7 @@
         android:layout_marginEnd="@dimen/dimen_4dp"
         app:layout_constraintEnd_toStartOf="@+id/view2"
         app:layout_constraintStart_toEndOf="@+id/view"
-        app:layout_constraintTop_toBottomOf="@+id/tvStatus" />
+        app:layout_constraintTop_toBottomOf="@+id/lytNapLabel" />
 
     <TextView
         android:id="@+id/tvSleepStart"
