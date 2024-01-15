@@ -7,6 +7,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.database.KeyValueDao
 import com.noisefit.data.local.db.implementation.KeyValueDataSourceImpl
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.OreoDataBase
 import com.oreo.data.db.abstaction.OreoBodyTemperatureDataSource
 import com.oreo.data.db.abstaction.OreoDayTimeMovementDataSource
@@ -18,6 +19,7 @@ import com.oreo.data.db.database.OreoBloodOxygenDao
 import com.oreo.data.db.database.OreoBodyTemperatureDao
 import com.oreo.data.db.database.OreoDayTimeMovementDao
 import com.oreo.data.db.database.OreoHeartRateDao
+import com.oreo.data.db.database.OreoRecordedWorkoutDao
 import com.oreo.data.db.database.OreoRespiratoryDao
 import com.oreo.data.db.database.OreoSleepDao
 import com.oreo.data.db.database.OreoStepsDao
@@ -45,6 +47,7 @@ class OreoRoomModule {
         return Room.databaseBuilder(appContext, OreoDataBase::class.java, "noisefit-db-oreo")
             .addMigrations(MIGRATION_1_2)
             .addMigrations(MIGRATION_2_4)
+            .addMigrations(MIGRATION_4_5)
             /*.addMigrations(MIGRATION_3_4)*/
             .build()
     }
@@ -95,6 +98,29 @@ class OreoRoomModule {
                         "`date` TEXT, PRIMARY KEY(`id`))"
             )
             database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_user_health_data_date ON  user_health_data(date)")
+
+        }
+    }
+
+    private val MIGRATION_4_5: Migration = object : Migration(4, 5) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(
+                "CREATE TABLE IF NOT EXISTS `recorded_workout` " +
+                        "(`id` INTEGER NOT NULL, " +
+                        "`is_synced` INTEGER NOT NULL," +
+                        "`is_accepted` INTEGER NOT NULL," +
+                        "`duration` INTEGER," +
+                        "`intensity` INTEGER," +
+                        "`calories` INTEGER," +
+                        "`startTime` INTEGER NOT NULL," +
+                        "`endTime` INTEGER NOT NULL," +
+                        "`steps` INTEGER," +
+                        "`type` INTEGER," +
+                        "`hr` TEXT," +
+                        "`intensity_list` TEXT," +
+                        "`date` TEXT, PRIMARY KEY(`id`))"
+            )
+            database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_recorded_workout_startTime ON  recorded_workout(startTime)")
 
         }
     }
@@ -207,6 +233,12 @@ class OreoRoomModule {
     @Provides
     fun providesAutoSportDao(database: OreoDataBase): OreoAutoSportDao {
         return database.oreoAutoSportDao()
+    }
+
+    @Singleton
+    @Provides
+    fun providesRecordedWorkoutDao(database: OreoDataBase): OreoRecordedWorkoutDao {
+        return database.oreoRecordedWorkoutDap()
     }
 
     @Singleton

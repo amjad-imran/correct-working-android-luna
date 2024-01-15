@@ -15,6 +15,8 @@ import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
+import com.noisefit_commans.data.model.DetectedOngoingWorkout
+import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.response.UpdateResponse
 import com.noisefit_commans.data.response.VersionCheckResponse
 import com.noisefit_commans.interfaces.QueryAction
@@ -28,11 +30,13 @@ import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.Gender
 import com.noisefit_commans.models.SportsModeRequest
 import com.noisefit_commans.models.UserLocation
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.receiver.workManager.HealthOverviewDataType
+import kotlinx.coroutines.Dispatchers
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope
@@ -57,6 +61,9 @@ constructor(
         val TAG = "SessionManager"
 
     }
+
+    var ongoingWorkoutDetected =
+        MutableLiveData<Event<Pair<DetectedOngoingWorkout, OWorkoutListModal>>>()
 
     var tempUserLocation: UserLocation? = null
 
@@ -550,6 +557,33 @@ constructor(
         }
 
 
+    }
+
+    fun onGoingWorkoutDetected(
+        duration: Int,
+        sportStatus: Int,
+        sportType: Int,
+        startTimeStamp: Long
+    ) {
+        GlobalScope.launch(Dispatchers.IO) {
+            val savedWorkout = ringDataStore.getOngoingRecordWorkout() ?: return@launch
+            AppLogs.sendAppLogs("onGoingWorkoutDetected $duration $sportStatus $sportType $startTimeStamp | Saved Workout ->$savedWorkout")
+            if (savedWorkout.first == startTimeStamp && savedWorkout.second.ringId == sportType) {
+
+                ongoingWorkoutDetected.postValue(
+                    Event(
+                        Pair(
+                            DetectedOngoingWorkout(
+                                startTimeStamp,
+                                duration,
+                                sportStatus
+                            ),
+                            savedWorkout.second
+                        )
+                    )
+                )
+            }
+        }
     }
 }
 

@@ -22,6 +22,7 @@ import com.noisefit_commans.common.checkDayDifferenceMoreNMinutes
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.KeyValue
+import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.model.UserHealthData
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
@@ -1351,6 +1352,13 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
+    override suspend fun getWorkoutListRecord(): Flow<Resource<BaseApiResponse<List<OWorkoutListModal>>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/activity/v1/record_workout_list"
+            remoteDataSource.getWorkoutList(url)
+        }
+    }
+
     override suspend fun getWorkoutList(): Flow<Resource<BaseApiResponse<List<OWorkoutListModal>>>> {
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.OREO_BASE_URL}/activity/v1/workout_list"
@@ -1398,6 +1406,14 @@ class OreoUserActivityRepositoryImpl(
             val url =
                 "${BuildConfig.OREO_BASE_URL}/sleep/v1/readiness-contributors"
             remoteDataSource.getReadinessInternalPagesData(url, selectDate, dayType, contriType)
+        }
+    }
+
+    override suspend fun addRecordedWorkout(request: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${BuildConfig.OREO_BASE_URL}/activity/v1/add_workout"
+            remoteDataSource.addRecordedWorkout(url, request)
         }
     }
 

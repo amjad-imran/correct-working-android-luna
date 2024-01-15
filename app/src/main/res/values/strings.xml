@@ -993,4 +993,20 @@
     <string name="text_impact_on_scores">Impact on scores</string>
     <string name="text_nap">Nap</string>
     <string name="text_know_more">Know more</string>
+    <string name="text_add_workout">Add workout</string>
+    <string name="text_record_workout">Record workout</string>
+    <string name="text_ring_connecting">Ring connecting...</string>
+    <string name="text_ring_out_of_range">Your Luna ring is out of range. Don’t worry, your data will reflect once the ring is connected.</string>
+    <string name="text_end">End</string>
+    <string name="text_end_workout">End workout</string>
+    <string name="text_ready_to_end_your_workout">Ready to end your workout and save your progress?</string>
+    <string name="text_select_workout">Select workout</string>
+    <string name="text_trying_to_connect_your_ring">Trying to connect your ring</string>
+    <string name="text_ring_not_in_range">To record your workout, make sure your ring is charged and on your finger, and within range of your device.</string>
+    <string name="text_connected_successfully">Connected successfully</string>
+    <string name="text_bluetooth_turn_on">Please ensure your bluetooth is on</string>
+    <string name="text_bluetooth_on_message">Make sure your ring is charged and on your finger, and within range of your device, with you bluetooth turned on.</string>
+    <string name="text_time_to_charge_your_ring">Time to charge your ring</string>
+    <string name="text_tap_plus_workout">Tap the + button to add a workout for today.</string>
+    <string name="text_please_connect_your_ring_to_add_a_workout">Please connect your ring to add a workout</string>
 </resources>

@@ -1,23 +1,18 @@
 package com.oreo.ui.workout.add
 
-import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.widget.FrameLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.noisefit.luna.databinding.FragmentOSelectWorkoutBottomSheetBinding
-import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY
-import com.noisefit.ui.common.bottomSheet.AlertTextBottomSheetArgs
+import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
-import com.oreo.data.model.OWorkoutListModal
 import dagger.hilt.android.AndroidEntryPoint
 
 const val SELECT_REQUEST_KEY = "SELECT_REQUEST_KEY"
+
 @AndroidEntryPoint
 class OSelectWorkoutBottomSheet :
     BaseBottomSheetWithTransparent<FragmentOSelectWorkoutBottomSheetBinding>(
@@ -28,7 +23,7 @@ class OSelectWorkoutBottomSheet :
     private var workoutList = ArrayList<OWorkoutListModal>()
 
     private val selectWorkoutAdapter by lazy {
-        OSelectWorkoutAdapter(object :OSelectWorkoutAdapter.OSelectWorkoutInteraction{
+        OSelectWorkoutAdapter(object : OSelectWorkoutAdapter.OSelectWorkoutInteraction {
             override fun onWorkoutSelected(oWorkoutListModal: OWorkoutListModal) {
                 setFragmentResult(
                     SELECT_REQUEST_KEY,

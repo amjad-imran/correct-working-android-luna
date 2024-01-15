@@ -3,6 +3,7 @@ package com.oreo.data.repository.abstraction
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.remote.base.Resource
+import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
 import com.oreo.data.model.LearnModel
@@ -56,6 +57,7 @@ interface OreoUserActivityRepository {
     suspend fun syncGoogleFitUserData(request: JsonObject): Flow<Resource<BaseApiResponseData<Any>>>
     suspend fun getWorkoutDetails(id: String): Flow<Resource<BaseApiResponse<OWorkoutDetailsResponseModel>>>
 
+    suspend fun getWorkoutListRecord(): Flow<Resource<BaseApiResponse<List<OWorkoutListModal>>>>
     suspend fun getWorkoutList(): Flow<Resource<BaseApiResponse<List<OWorkoutListModal>>>>
     suspend fun getRecentWorkoutList(isToday: Boolean): Flow<Resource<BaseApiResponse<List<OActivityListModal>>>>
 
@@ -81,6 +83,10 @@ interface OreoUserActivityRepository {
         page: Int,
         pageLimit: Int
     ): Flow<Resource<BaseApiResponse<List<OActivityListModal>>>>
+
+    suspend fun addRecordedWorkout(
+        request: JsonObject
+    ): Flow<Resource<BaseApiResponse<Any>>>
 
     suspend fun deleteWorkoutFromServer(
         id: String

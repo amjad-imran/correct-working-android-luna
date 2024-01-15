@@ -164,6 +164,12 @@ fun Double.roundDownDecimal(): String {
     return df.format(this)
 }
 
+fun Double.ceilRound():Int{
+    return DecimalFormat("#").apply {
+        roundingMode = RoundingMode.CEILING
+    }.format(this).toInt()
+}
+
 fun Double.roundUpDecimal(): String {
     val df = DecimalFormat("0.00")
     df.roundingMode = RoundingMode.UP

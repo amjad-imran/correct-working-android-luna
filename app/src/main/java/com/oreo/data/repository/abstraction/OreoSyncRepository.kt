@@ -11,6 +11,7 @@ import com.noisefit_commans.data.model.OreoRespiratoryData
 import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.data.model.OreoStepsData
 import com.noisefit_commans.data.model.OreoStressDataBreakup
+import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.VersionCheckResponse
 import com.noisefit_commans.models.StepDataGoogleFit
@@ -25,6 +26,9 @@ interface OreoSyncRepository {
     suspend fun saveStepsData(data: OreoStepsData): Flow<CacheResult<OreoStepsData?>>
 
     suspend fun getMovementData(date:String): Flow<CacheResult<String?>>
+
+    suspend fun getRecordedWorkouts(): Flow<CacheResult<List<RecordedWorkoutData>?>>
+    suspend fun saveRecordedWorkouts(data: List<RecordedWorkoutData>): Flow<CacheResult<Boolean?>>
 
     suspend fun saveAutoWorkoutData(data: List<OreoAutoSportData>): Flow<CacheResult<Boolean?>>
 
@@ -102,6 +106,8 @@ interface OreoSyncRepository {
     suspend fun getTodaySleepData(): Flow<CacheResult<OreoSleepData?>>
 
     suspend fun getTodayBodyTemp(): Flow<CacheResult<List<OreoBodyTemperatureBreakup>?>>
+
+    suspend fun removeRecordedWorkouts(): Flow<CacheResult<Boolean?>>
 
     /*suspend fun saveAndGetGFitWorkout(data: List<GoogleFitWorkoutData>): Flow<CacheResult<List<GoogleFitWorkoutData>?>>
 

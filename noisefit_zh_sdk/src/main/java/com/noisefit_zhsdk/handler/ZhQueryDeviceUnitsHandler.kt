@@ -41,6 +41,7 @@ import com.noisefit_zhsdk.base.ZhApplicationHandler
 import com.zh.ble.wear.protobuf.MusicProtos
 import com.zhapp.ble.ControlBleTools
 import com.zhapp.ble.bean.BodyTemperatureSettingBean
+import com.zhapp.ble.bean.BreathingLightSettingsBean
 import com.zhapp.ble.bean.ClassicBluetoothStateBean
 import com.zhapp.ble.bean.ClockInfoBean
 import com.zhapp.ble.bean.CommonReminderBean
@@ -860,6 +861,10 @@ constructor(
             }
 
             override fun onFindWearSettings(p0: FindWearSettingsBean?) {
+
+            }
+
+            override fun onBreathingLightSettings(p0: BreathingLightSettingsBean?) {
 
             }
 

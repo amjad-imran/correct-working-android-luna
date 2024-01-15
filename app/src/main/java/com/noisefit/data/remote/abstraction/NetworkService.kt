@@ -782,6 +782,12 @@ interface NetworkService {
         @Url url: String
     ): BaseApiResponse<List<LearnModel>>
 
+    @POST
+    suspend fun addRecordedWorkout(
+        @Url url: String,
+        @Body requestObject: JsonObject
+    ): BaseApiResponse<Any>
+
     @GET
     suspend fun getReadinessInternalPagesData(
         @Url url: String,

@@ -1,7 +1,9 @@
 package com.noisefit.data.dataConverter
 
+import com.google.gson.JsonArray
 import com.noisefit_commans.common.*
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.models.DeviceType
 import com.noisefit_commans.models.Units
 import com.noisefit_commans.utils.ActivityConvertUtils
@@ -102,7 +104,7 @@ constructor(
     }
 
     fun formatDistance(distanceInMeter: Int, unit: Units?): String {
-        var finalDistance  =
+        var finalDistance =
             DistanceUtil.getDistanceFromMeters(distanceInMeter, unit ?: Units.METRIC)
                 .roundToNearestDecimalFloor(2).toString()
 
@@ -113,7 +115,7 @@ constructor(
 
     fun formatActivityDistance(distanceInMeter: Int, unit: Units?): String {
 
-        var finalDistance  =
+        var finalDistance =
             DistanceUtil.getDistanceForPulse(distanceInMeter, unit ?: Units.METRIC)
                 .toDouble().roundDownDecimal()
 

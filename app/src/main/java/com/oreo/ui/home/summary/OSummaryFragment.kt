@@ -72,6 +72,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 super.onPageSelected(position)
 
                 mainViewModel.selectedDate = pagerAdapter?.getDate(position)
+                mainViewModel.handleAddWorkoutVisibility()
                 setTabDates(position)
 
                 if (mainViewModel.shouldLoadMoreData()) {
@@ -398,6 +399,10 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                     viewModel.checkBatteryPercentage()
                     shouldSync()
                     mainViewModel.onRingConnected()
+
+                    //condition to be called once only
+                    mainViewModel.checkOnGoingWorkout()
+
                 }
 
                 is ConnectState.UnPaired -> {

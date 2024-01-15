@@ -17,6 +17,7 @@ import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.data.model.OreoAutoSportData
+import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.interfaces.QueryCallback
 import com.noisefit_commans.interfaces.data.IUserActivityDataCallback
 import com.noisefit_commans.interfaces.data.UserActivityCallback
@@ -131,6 +132,7 @@ constructor(
         CallBackUtils.setSportCallBack(object : SportCallBack {
             override fun onDevSportInfo(data: DevSportInfoBean) {
                 LOGS.d(TAG, "onDevSportInfo $data")
+                //userActivityDataCallbacks?.onUserActivityDataReceived(UserActivityCallback.RingUserWorkoutData(Gson().toJson(data)))
                 sportModleInfoList.add(data)
             }
 
@@ -141,22 +143,28 @@ constructor(
             override fun onSportRequest(requestBean: SportRequestBean) {
                 LOGS.d(TAG, "onSportRequest $requestBean")
                 deviceRequest(requestBean)
+                AppLogs.sendAppLogs("RECORD_WORKOUT onSportRequest-> $requestBean")
             }
         })
 
         CallBackUtils.setSportParsingProgressCallBack { progress, total ->
             LOGS.d(TAG, "setSportParsingProgressCallBack $progress $total")
+            AppLogs.sendAppLogs("RECORD_WORKOUT  setSportParsingProgressCallBack-> $progress $total")
+
             if (progress == total) {
+                val result = ArrayList<RecordedWorkoutData>()
                 sportModleInfoList.forEach { sportModleInfo ->
                     sportModleInfo.let {
-                        dataConverter.parseSportsDataGPS(it, colorFitDevice!!)
+                        result.add(dataConverter.parseRecordedData(it))
+                        //dataConverter.parseSportsDataGPS(it, colorFitDevice!!)
                     }
-                        .let {
-                            userActivityDataCallbacks?.onUserActivityDataReceived(
-                                UserActivityCallback.SportsModeDataObtainedGPS(it)
-                            )
-                        }
                 }
+
+                userActivityDataCallbacks?.onUserActivityDataReceived(
+                    UserActivityCallback.RingUserWorkoutData(result)
+                )
+                AppLogs.sendAppLogs("RECORD_WORKOUT  Activity Sync:: success Size: ${sportModleInfoList.size}")
+
                 LOGS.i(TAG, "Activity Sync:: success Size: ${sportModleInfoList.size}")
 
                 sportModleInfoList.clear()
