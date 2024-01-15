@@ -1,22 +1,26 @@
 package com.oreo.data.model
 
+import com.google.gson.annotations.SerializedName
 import com.oreo.data.model.health.Nudges
 import com.oreo.data.model.health.UnitDataModelArray
 import com.oreo.data.model.health.UnitDataModelArrayFloat
 
-class OreoNapDetailsDataModel(
-
-    var start_time: String="2023-12-12 04:06:30",//YYYY-MM-DD,
-    var end_time: String="2023-12-12 04:06:30",//YYYY-MM-DD,
-    var sleep_old_score: Int? = null,
-    var sleep_new_score: Int? = null,
-    var readiness_old_score: Int? = null,
-    var readiness_new_score: Int? = null,
-    var nap_duration: Long? = null,
-    var nap_start_time: Long? = null,
-    var nap_end_time: Long? = null,
-    var nap_nudges: List<Nudges>? = null,
-    var hrBreakUp: UnitDataModelArray? = null,
+data class OreoNapDetailsDataModel(
+    @SerializedName("start_time")
+    var startTime: String,//YYYY-MM-DD,
+    @SerializedName("end_time")
+    var endTime: String,//YYYY-MM-DD,
+    @SerializedName("prev_sleep_score")
+    var prevSleepScore: Int? = null,
+    @SerializedName("sleep_score")
+    var sleepScore: Int? = null,
+    @SerializedName("prev_readiness_score")
+    var prevReadinessScore: Int? = null,
+    @SerializedName("readiness_score")
+    var readinessScore: Int? = null,
+    var duration: Long? = null,
+    var nudges: List<Nudges>? = null,
+    var hrBreakup: UnitDataModelArray? = null,
     var hrvBreakUp: UnitDataModelArray? = null,
-    var temperatureBreakUp: UnitDataModelArrayFloat? = null,
+    var temperatureBreakup: UnitDataModelArrayFloat? = null,
 )

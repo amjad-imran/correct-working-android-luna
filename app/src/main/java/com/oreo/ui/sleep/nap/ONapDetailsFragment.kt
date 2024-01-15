@@ -14,7 +14,9 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.custom.SleepProgressbarView
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.GraphDummyModel
 import com.oreo.data.model.OreoNapDetailsDataModel
@@ -33,7 +35,7 @@ class ONapDetailsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mViewModel.getUserNapData()
+        mViewModel.getUserNapData("d5554682-d31a-4903-8852-0b95bb13f7da")
     }
 
     override fun initListener() {
@@ -82,8 +84,8 @@ class ONapDetailsFragment :
 
     private fun updateUi(it: OreoNapDetailsDataModel) {
         //nap sleep score
-        binding.lytNapTopView.lytImpact.tvOldSScore.text = "${it.sleep_old_score ?: 0}"
-        binding.lytNapTopView.lytImpact.tvNewSScore.text = "${it.sleep_new_score ?: 0}"
+        binding.lytNapTopView.lytImpact.tvOldSScore.text = "${it.prevSleepScore ?: 0}"
+        binding.lytNapTopView.lytImpact.tvNewSScore.text = "${it.sleepScore ?: 0}"
         mViewModel.setTextGradient(
             binding.lytNapTopView.lytImpact.tvNewSScore,
             requireActivity().getColor(R.color.white_12_70),
@@ -92,8 +94,8 @@ class ONapDetailsFragment :
         )
         val diffScore: String
         val preFix: String
-        val newSScore = it.sleep_new_score
-        val oldSScore = it.sleep_old_score
+        val newSScore = it.sleepScore
+        val oldSScore = it.prevSleepScore
         var isScoreGreater = false
         if (oldSScore != null && newSScore != null) {
             if (newSScore > oldSScore) {
@@ -121,8 +123,8 @@ class ONapDetailsFragment :
             binding.lytNapTopView.lytImpact.tvDiffSScore.invisible()
         }
         //nap readiness score
-        binding.lytNapTopView.lytImpact.tvOldRScore.text = "${it.readiness_old_score ?: 0}"
-        binding.lytNapTopView.lytImpact.tvNewRScore.text = "${it.readiness_new_score ?: 0}"
+        binding.lytNapTopView.lytImpact.tvOldRScore.text = "${it.prevReadinessScore ?: 0}"
+        binding.lytNapTopView.lytImpact.tvNewRScore.text = "${it.readinessScore ?: 0}"
         mViewModel.setTextGradient(
             binding.lytNapTopView.lytImpact.tvNewRScore,
             requireActivity().getColor(R.color.white_12_70),
@@ -132,8 +134,8 @@ class ONapDetailsFragment :
 
         val diffRScore: String
         val preFix2: String
-        val newRScore = it.readiness_new_score
-        val oldRScore = it.readiness_old_score
+        val newRScore = it.readinessScore
+        val oldRScore = it.prevReadinessScore
         if (oldRScore != null && newRScore != null) {
             if (newRScore > oldRScore) {
                 diffRScore = (newRScore - oldRScore).toString()
@@ -166,41 +168,56 @@ class ONapDetailsFragment :
         }
         //nap details
         val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(
-            it.nap_duration?.toInt() ?: 0
+            it.duration?.toInt() ?: 0
         )
-        binding.lytNapDetails.tvHour.text = "$hour"
-        binding.lytNapDetails.tvMinute.text = "$minute"
+        if (hour > 0) {
+            binding.lytNapDetails.tvHour.text = "$hour"
+            binding.lytNapDetails.tvMinute.text = "$minute"
+        } else {
+            binding.lytNapDetails.tvHour.gone()
+            binding.lytNapDetails.tvHourUnit.gone()
+            binding.lytNapDetails.tvMinute.text = "$minute"
+        }
 
         //set nap progress
         val sleepDayGraphView = SleepProgressbarView(binding.lytNapDetails.napPrg.context)
         binding.lytNapDetails.napPrg.removeAllViews()
         binding.lytNapDetails.napPrg.addView(sleepDayGraphView)
-        sleepDayGraphView.setData(mViewModel.getNapArrayData())
+        sleepDayGraphView.setData(mViewModel.getNapArrayData(it.duration?.toInt()?:0))
 
-        binding.lytNapDetails.tvNapStart.text = "4:01 PM"
-        binding.lytNapDetails.tvNapEnd.text = "8:01 PM"
+        binding.lytNapDetails.tvNapStart.text = DateFormats.parseDate(
+            it.startTime,
+            DateFormats.dateTimeFormat5,
+            DateFormats.timeFormat12
+        )
+        binding.lytNapDetails.tvNapEnd.text = DateFormats.parseDate(
+            it.endTime,
+            DateFormats.dateTimeFormat5,
+            DateFormats.timeFormat12
+        )
+
         //nap nudges
-        setNapBannerViewPager(it.nap_nudges)
+        setNapBannerViewPager(it.nudges)
         //set data on heart rate
         binding.lytHeartRate.bInfo.invisible()
         binding.lytHeartRate.tvTitle.text = getString(R.string.text_heart_rate)
         binding.lytHeartRate.tvSubtitle1.text = getString(R.string.text_lowest_hr)
         binding.lytHeartRate.tvSubtitle2.text = getString(R.string.text_average_hr)
-        if (it.hrBreakUp != null) {
-            if (!it.hrBreakUp?.value.isNullOrEmpty()) {
-                if (it.hrBreakUp?.low == 0 || it.hrBreakUp?.low == 255) {
+        if (it.hrBreakup != null) {
+            if (!it.hrBreakup?.value.isNullOrEmpty()) {
+                if (it.hrBreakup?.low == 0 || it.hrBreakup?.low == 255) {
                     binding.lytHeartRate.lytSubtitleValue1.tvUnit.gone()
                     binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
                 } else {
-                    binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "${it.hrBreakUp?.low}"
+                    binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "${it.hrBreakup?.low}"
                     binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
                     binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
                 }
-                if (it.hrBreakUp?.avg == 0 || it.hrBreakUp?.avg == 255) {
+                if (it.hrBreakup?.avg == 0 || it.hrBreakup?.avg == 255) {
                     binding.lytHeartRate.lytSubtitleValue2.tvUnit.gone()
                     binding.lytHeartRate.lytSubtitleValue2.tvValue.text = "-"
                 } else {
-                    binding.lytHeartRate.lytSubtitleValue2.tvValue.text = "${it.hrBreakUp?.avg}"
+                    binding.lytHeartRate.lytSubtitleValue2.tvValue.text = "${it.hrBreakup?.avg}"
                     binding.lytHeartRate.lytSubtitleValue2.tvUnit.visible()
                     binding.lytHeartRate.lytSubtitleValue2.tvUnit.text = "bpm"
                 }
@@ -211,11 +228,11 @@ class ONapDetailsFragment :
             heartRateDefaultView()
         }
         //todo will change startTime, endTime
-        val sleepStartTime = it.start_time
-        val sleepEndTime = it.end_time
+        val sleepStartTime = it.startTime
+        val sleepEndTime = it.endTime
 
         showHeartRateGraph(
-            it.hrBreakUp,
+            it.hrBreakup,
             sleepStartTime, sleepEndTime
         )
 
@@ -259,11 +276,11 @@ class ONapDetailsFragment :
         //set data on temperature
         binding.lytTemperature.bInfo.invisible()
         binding.lytTemperature.tvTitle.text = getString(R.string.text_temperature)
-        binding.lytTemperature.tvSubtitle1.text = getString(R.string.text_max)
+        binding.lytTemperature.tvSubtitle1.text = getString(R.string.text_average)
         binding.lytTemperature.tvSubtitle2.gone()
         binding.lytTemperature.divider1.root.invisible()
-        if (!it.temperatureBreakUp?.value.isNullOrEmpty()) {
-            binding.lytTemperature.lytSubtitleValue1.tvValue.text = "${it.temperatureBreakUp?.max}"
+        if (!it.temperatureBreakup?.value.isNullOrEmpty()) {
+            binding.lytTemperature.lytSubtitleValue1.tvValue.text = "${it.temperatureBreakup?.avg}"
             binding.lytTemperature.lytSubtitleValue1.tvUnit.visible()
             binding.lytTemperature.lytSubtitleValue1.tvUnit.text = "°F"
         } else {
@@ -271,7 +288,7 @@ class ONapDetailsFragment :
         }
         //todo will change startTime, endTime
         showTemperatureGraph(
-            it.temperatureBreakUp,
+            it.temperatureBreakup,
             sleepStartTime,
             sleepEndTime
         )
@@ -481,8 +498,29 @@ class ONapDetailsFragment :
     }
 
     override fun subscribeObservers() {
+        mViewModel.getMessages().observe(this) {
+            it.getContent()?.let { message ->
+                context.showShortToast(message)
+            }
+        }
+
+
+        mViewModel.getLoading().observe(this) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
+            }
+        }
+
+        mViewModel.getApiErrors().observe(this) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
+            }
+        }
         mViewModel.napDetailsResponse.observe(this) {
             if (it != null) {
+                binding.viewMain.visible()
                 updateUi(it)
             }
         }

@@ -98,5 +98,6 @@ interface OreoUserActivityRepository {
     suspend fun clearAllHealthData()
 
     suspend fun getUserNapData(
+        napId:String
     ): Flow<Resource<BaseApiResponse<OreoNapDetailsDataModel>>>
 }
