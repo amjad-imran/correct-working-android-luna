@@ -61,9 +61,11 @@
             android:background="#19ffffff" />
 
         <ImageView
+            android:id="@+id/ivSleep"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
+            android:layout_gravity="center_vertical"
             android:src="@drawable/ic_nap_sleep_score" />
 
         <TextView
@@ -75,15 +77,18 @@
             tools:text="-4" />
 
         <View
+            android:id="@+id/ivSleepSeparator"
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_marginStart="6dp"
             android:background="#19ffffff" />
 
         <ImageView
+            android:id="@+id/ivReadiness"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
+            android:layout_gravity="center_vertical"
             android:src="@drawable/ic_nap_readiness_score" />
 
         <TextView

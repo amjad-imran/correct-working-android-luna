@@ -3,6 +3,7 @@ package com.oreo.ui.home.summary
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.RowNapDashBinding
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.gone
@@ -22,6 +23,36 @@ class DashNapAdapter(private val napList: List<Nap>) :
                 "$minute m"
             } else {
                 "$hour h $minute m"
+            }
+            if ((nap.sleepScoreImpact ?: 0) > 0) {
+                binding.ivSleep.visible()
+                val sleepImpactScore = "+${nap.sleepScoreImpact.toString()}"
+                binding.tvSleepScoreChange.text = sleepImpactScore
+                binding.tvSleepScoreChange.setTextColor(binding.ivSleep.context.getColor(R.color.steps_arc))
+            } else {
+                if (nap.sleepScoreImpact == null || nap.sleepScoreImpact == 0) {
+                    binding.ivSleep.gone()
+                    binding.tvSleepScoreChange.gone()
+                } else {
+                    binding.ivSleep.visible()
+                    binding.tvSleepScoreChange.text = nap.sleepScoreImpact.toString()
+                    binding.tvSleepScoreChange.setTextColor(binding.ivSleep.context.getColor(R.color.nap_dash_sleep_impact_score))
+                }
+            }
+            if ((nap.readinessScoreImpact ?: 0) > 0) {
+                binding.ivReadiness.visible()
+                val readinessImpactScore = "+${nap.readinessScoreImpact.toString()}"
+                binding.tvReadinessScoreChange.text = readinessImpactScore
+                binding.tvReadinessScoreChange.setTextColor(binding.ivReadiness.context.getColor(R.color.steps_arc))
+            } else {
+                if (nap.readinessScoreImpact == null || nap.readinessScoreImpact == 0) {
+                    binding.ivReadiness.gone()
+                    binding.tvReadinessScoreChange.gone()
+                } else {
+                    binding.ivReadiness.visible()
+                    binding.tvReadinessScoreChange.text = nap.readinessScoreImpact.toString()
+                    binding.tvReadinessScoreChange.setTextColor(binding.ivSleep.context.getColor(R.color.nap_dash_sleep_impact_score))
+                }
             }
 
             //TODO show yesterday also

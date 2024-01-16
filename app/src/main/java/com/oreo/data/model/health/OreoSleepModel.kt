@@ -21,7 +21,7 @@ data class OreoSleepModel(
     var hr: CommonListDataModel? = null,
     var hrv: CommonListDataModel? = null,
     var oxy: CommonListDataModel? = null,
-    val nap: List<Nap>? = null,
+    val naps: List<Nap>? = null,
     @SerializedName("int_nudges")
     val nudges: List<Nudges>?,
     var hourly_breakup: List<SleepHourlyBreakup>? = null,
@@ -29,8 +29,16 @@ data class OreoSleepModel(
 )
 
 data class Nap(
+    val date: String,
     val id: String,
+    @SerializedName("start_time")
     val startTime: String,
+    @SerializedName("sleep_score_impact")
+    val sleepScoreImpact: Int? = null,
+    @SerializedName("after_7pm")
+    val after7pm: String,
+    @SerializedName("readiness_score_impact")
+    val readinessScoreImpact: Int? = null,
     val endTime: String,
     val duration: Int? = null
 )
