@@ -64,6 +64,7 @@ constructor(
 
 
 
+
     override fun getLastSavedAverageHrv(): Int {
         return mPrefs.getInt(AVERAGE_LAST_DAY_HRV, 0)
     }

@@ -4,6 +4,7 @@ import android.content.Context
 import android.location.Geocoder
 import com.google.gson.Gson
 import com.noisefit.NoiseFitApplicationMain
+import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.dataConverter.OfflineDataMapper
 import com.noisefit.data.googleFit.GoogleFitDataObservers
@@ -34,6 +35,7 @@ import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
 import com.oreo.data.db.implementation.OreoDayTimeMovementDataImpl
 import com.oreo.data.db.implementation.OreoHeartRateDataImpl
+import com.oreo.data.db.implementation.OreoRecordedWorkoutDataImpl
 import com.oreo.data.db.implementation.OreoRespiratoryDataImpl
 import com.oreo.data.db.implementation.OreoSleepDataImpl
 import com.oreo.data.db.implementation.OreoStepsDataImpl
@@ -89,6 +91,15 @@ object AppModule {
         localDataStore: DataStoredInterface
     ): DataUnitConverter {
         return DataUnitConverter(localDataStore)
+    }
+
+    @Singleton
+    @Provides
+    fun provideDataConverter(
+        keyValueDataSource: KeyValueDataSource,
+        ringDataStore: RingDataStore
+    ): DataConverter {
+        return DataConverter(keyValueDataSource,ringDataStore)
     }
 
 
@@ -233,6 +244,7 @@ object AppModule {
         lastSyncProvider: LastSyncProvider,
         testModeUtils: TestModeUtils,
         oreoAutoSportDataImpl: OreoAutoSportDataImpl,
+        oreoRecordedWorkoutDataImpl: OreoRecordedWorkoutDataImpl,
         gson: Gson
     ): OreoSyncRepository =
         OreoSyncRepositoryImpl(
@@ -253,6 +265,7 @@ object AppModule {
             lastSyncProvider,
             testModeUtils,
             oreoAutoSportDataImpl,
+            oreoRecordedWorkoutDataImpl,
         )
 
 

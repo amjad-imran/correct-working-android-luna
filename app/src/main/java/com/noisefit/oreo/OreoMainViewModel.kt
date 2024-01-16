@@ -4,6 +4,10 @@ import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
+import com.noisefit.data.dataConverter.DataConverter
+import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.session.SessionManager
 import com.noisefit.util.notif.NotificationEventsClass
@@ -12,22 +16,32 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
+import com.noisefit_commans.data.model.OWorkoutListModal
+import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.data.model.User
+import com.noisefit_commans.interfaces.connection.ConnectState
+import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
+import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.ui.checkDayDifferenceMoreOne
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.TrendsData
 import com.oreo.data.model.health.OreoActivityModel
 import com.oreo.data.model.health.OreoDashboardResponseModel
 import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.data.model.health.OreoSleepModel
+import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.ui.home.summary.PushLocalNotification
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.selects.select
 import org.joda.time.Days
@@ -44,6 +58,9 @@ constructor(
     val localDataStore: DataStoredInterface,
     val sessionManager: SessionManager,
     val ringDataStore: RingDataStore,
+    val syncRepository: OreoSyncRepository,
+    val userHealthDataDataSource: OreoUserHealthDataDataSource,
+    val dataConverter: DataConverter,
     val userActivityRepository: OreoUserActivityRepository
 ) : BaseViewModel() {
 
@@ -56,6 +73,7 @@ constructor(
 
     var user: User? = null
 
+    var addWorkoutCtaVisibility = MutableLiveData<Boolean>()
 
     val userHealthData = HashMap<String, ServerUserHealthData?>()
     var trendsData: TrendsData? = null
@@ -601,5 +619,117 @@ constructor(
         dateSetOn = DateFormats.getCurrentDateOreoFormat()
     }
 
+    fun isDeviceConnected(): Boolean {
+        if (isDevicePaired() == null) {
+            return false
+        }
 
+        if (sessionManager.connectStateRing.value is ConnectState.ConnectSuccess) {
+            return true
+        }
+        return false
+    }
+
+    fun isDevicePaired(): ColorFitDevice? {
+        return ringDataStore.getRingDevice()
+    }
+
+    fun syncRecordedWorkoutData() {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            syncRepository.getRecordedWorkouts()
+                .collect { resource ->
+                    when (resource) {
+                        is CacheResult.Success -> {
+                            resource.value?.let {
+                                syncWorkoutsToServer(resource.value)
+                            }
+                        }
+
+                        is CacheResult.GenericError -> {
+
+                        }
+                    }
+                }
+
+
+        }
+    }
+
+    //TODO convert to worker
+    private fun syncWorkoutsToServer(workouts: List<RecordedWorkoutData>) {
+        if (workouts.isEmpty()) return
+        GlobalScope.launch(Dispatchers.IO) {
+
+            val workoutsArray = dataConverter.createRecordedWorkoutArray(workouts)
+
+            if (workoutsArray == null || workoutsArray.isEmpty) {
+                val dates = HashSet<String>()
+                workouts.forEach { workout ->
+                    workout.date?.let { date ->
+                        dates.add(date)
+                    }
+                }
+                userHealthDataDataSource.clearDataByDates(dates.toList())
+                syncRepository.removeRecordedWorkouts().collect()
+                ringDataStore.removeRecordDeleteList()
+                return@launch
+            }
+
+            val reqObj = JsonObject()
+            reqObj.add("workouts", workoutsArray)
+            userActivityRepository.addRecordedWorkout(
+                reqObj
+            ).collect { resource ->
+                when (resource) {
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            val dates = HashSet<String>()
+                            workouts.forEach { workout ->
+                                workout.date?.let { date ->
+                                    dates.add(date)
+                                }
+                            }
+                            userHealthDataDataSource.clearDataByDates(dates.toList())
+                            syncRepository.removeRecordedWorkouts().collect()
+                            ringDataStore.removeRecordDeleteList()
+                            delay(200)
+
+                            reloadTodaysData()
+                        }
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+    }
+
+    /**
+     * Today condition check
+     * Device paired check
+     */
+    fun handleAddWorkoutVisibility() {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (sessionManager.connectedDeviceRing.value == null) {
+                addWorkoutCtaVisibility.postValue(false)
+                return@launch
+            }
+            if (selectedDate == DateFormats.getCurrentDateOreoFormat()) {
+                addWorkoutCtaVisibility.postValue(true)
+            } else {
+                addWorkoutCtaVisibility.postValue(false)
+            }
+        }
+    }
+
+    fun checkOnGoingWorkout() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val workout = ringDataStore.getOngoingRecordWorkout()
+            if (workout != null) {
+                sessionManager.sendUpdateQueryAction(UpdateDeviceAction.CheckOngoingWorkout())
+            }
+        }
+    }
 }

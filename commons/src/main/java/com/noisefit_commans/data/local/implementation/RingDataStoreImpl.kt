@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.DeviceFeatures
+import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.ManualMeasurement
 import com.noisefit_commans.utils.DateFormats
@@ -25,7 +26,12 @@ private const val READINESS_WALKAROUND_KEY = "READINESS_WALKAROUND_KEY"
 private const val ACTIVITY_WALKAROUND_KEY = "ACTIVITY_WALKAROUND_KEY"
 private const val MANUAL_MEASUREMENT_KEY = "MANUAL_MEASUREMENT_KEY"
 private const val DEVICE_INTRO = "DEVICE_INTRO"
+private const val RECORD_DELETE_LIST = "RECORD_DELETE_LIST"
+
+private const val RECORD_WORKOUT_TIMESTAMP = "RECORD_WORKOUT_TIMESTAMP"
+private const val RECORD_WORKOUT_MODEL = "RECORD_WORKOUT_MODEL"
 private const val TEMP_BASE_LINE = "TEMP_BASE_LINE"
+
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
 
@@ -34,6 +40,54 @@ class RingDataStoreImpl
     private val gson: Gson,
     private val mPrefs: SharedPreferences
 ) : RingDataStore {
+
+    override fun saveOngoingRecordWorkout(pair: Pair<Long, OWorkoutListModal>) {
+        mPrefs.edit().putLong(RECORD_WORKOUT_TIMESTAMP, pair.first).commit()
+        mPrefs.edit().putString(RECORD_WORKOUT_MODEL, gson.toJson(pair.second)).commit()
+    }
+
+    override fun getOngoingRecordWorkout(): Pair<Long, OWorkoutListModal>? {
+
+        val model = Gson().fromJson<OWorkoutListModal>(
+            mPrefs.getString(RECORD_WORKOUT_MODEL, "") ?: ""
+        )
+        val timeStamp = mPrefs.getLong(RECORD_WORKOUT_TIMESTAMP, 0L)
+
+        if (model == null || timeStamp == 0L) {
+            return null
+        }
+        return Pair(timeStamp, model)
+    }
+
+    override fun deleteOngoingRecordWorkout() {
+        mPrefs.edit().remove(RECORD_WORKOUT_TIMESTAMP).commit()
+        mPrefs.edit().remove(RECORD_WORKOUT_MODEL).commit()
+
+    }
+
+    override fun addToRecordDeleteList(sportStartTime: Long) {
+        var prevList = Gson().fromJson<HashSet<Long>>(
+            mPrefs.getString(RECORD_DELETE_LIST, "") ?: ""
+        )
+        if (prevList == null) {
+            prevList = HashSet()
+        }
+        prevList.add(sportStartTime)
+
+        mPrefs.edit().putString(RECORD_DELETE_LIST, Gson().toJson(prevList)).commit()
+    }
+
+    override fun removeRecordDeleteList() {
+        mPrefs.edit().remove(RECORD_DELETE_LIST).commit()
+    }
+
+    override fun getRecordDeleteList(): HashSet<Long> {
+        val prevList = Gson().fromJson<HashSet<Long>>(
+            mPrefs.getString(RECORD_DELETE_LIST, "") ?: ""
+        )
+        return prevList ?: HashSet()
+    }
+
 
 
     override fun getTempBaseLine(): Float {

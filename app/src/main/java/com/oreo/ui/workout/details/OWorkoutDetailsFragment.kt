@@ -138,7 +138,6 @@ class OWorkoutDetailsFragment :
         }
 
 
-
         binding.rvActivityDetails.visible()
         binding.lytActivityItem.root.visible()
         binding.lytActivityItem.tvActivityDate.text = DateFormats.formatActivityDate(it.date)
@@ -161,13 +160,24 @@ class OWorkoutDetailsFragment :
 
             binding.lytHeartRate.root.gone()
 
-            /*setHrGraph(
-                it.hrArray,
-                it.hrAvg,
-                it.hrLow,
-                "${it.date} ${it.startTime}",
-                "${it.date} ${it.endTime}"
-            )*/
+            if(it.type.equals("userworkout",true)){
+                setHrGraph(
+                    it.hrArray,
+                    it.hrAvg,
+                    it.hrLow,
+                    "${it.date} ${it.startTime}",
+                    "${it.date} ${it.endTime}"
+                )
+            }
+
+
+          /*  val movement = ArrayList<Int>()
+            for (i in 0..480){
+                val random = arrayListOf<Int>(0,1,2,3).random()
+                movement.add(random)
+            }
+
+            val combinedMovement = mViewModel.getCombinedMovement(movement)*/
 
             setMovementGraph(
                 it.intensity,
@@ -179,6 +189,7 @@ class OWorkoutDetailsFragment :
                     )
                 )
             )
+
         }
 
 
@@ -351,9 +362,10 @@ class OWorkoutDetailsFragment :
 
     private fun prepareDataForActivity(it: OWorkoutDetailsResponseModel) {
         val activityList = ArrayList<OWDActivityData>()
+        val duration = ApplicationUtils.getActivityDurationFormat2(it.duration)
         activityList.add(
             OWDActivityData(
-                "Duration", ApplicationUtils.getActivityDurationFormat2(it.duration), ""
+                "Duration", duration, ""
             )
         )
         if (it.calories != null && it.calories > 0) {
@@ -361,7 +373,7 @@ class OWorkoutDetailsFragment :
                 OWDActivityData(
                     "Calories",
                     it.calories.toString(),
-                    "Kcal",
+                    "kcal",
                 )
             )
         }

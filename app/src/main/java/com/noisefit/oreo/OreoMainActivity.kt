@@ -5,13 +5,13 @@ import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.noisefit.NoiseFitApplicationMain
@@ -20,7 +20,6 @@ import com.noisefit.luna.databinding.ActivityOreoMainBinding
 import com.noisefit.ui.APP_CONTINUE
 import com.noisefit.ui.APP_EXIT
 import com.noisefit.ui.APP_UPDATE
-import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit.ui.common.BaseActivity
 import com.noisefit.ui.onboarding.FirebaseUpdateViewModel
 import com.noisefit.util.ApplicationUtils
@@ -28,13 +27,20 @@ import com.noisefit.util.notif.NotificationUtil
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.response.VersionCheckResponse
+import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.visible
 import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.FirebaseLunaAppEvents
+import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
+import com.oreo.ui.recordworkout.SELECT_RECORD_WORKOUT
 import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderEffectBlur
 import eightbitlab.com.blurview.RenderScriptBlur
@@ -54,7 +60,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     companion object {
         fun getStartIntent(
-            context: Context, notificationType: String? = null,
+            context: Context,
+            notificationType: String? = null,
             notificationIndex: String? = null,
             deeplink: String? = null
         ): Intent {
@@ -68,10 +75,28 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         navController = findNavController(com.noisefit.luna.R.id.o_nav_host_fragment)
         setNavViewListeners()
         setBlur()
+        setBlurAddCta()
 
         viewModel.sessionManager.getPairedState()
         checkBluetooth()
         firebaseViewModel.generateToken()
+    }
+
+    private fun setBlurAddCta() {
+        val radius = 20f;
+        val decorView = window.decorView;
+        val rootView = binding.container
+        val windowBackground = decorView.background
+
+        val blurAlgo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            RenderEffectBlur()
+        } else {
+            RenderScriptBlur(this)
+        }
+
+        binding.blurViewSelector.setupWith(rootView, blurAlgo)
+            .setFrameClearDrawable(windowBackground) // Optional
+            .setBlurRadius(radius)
     }
 
     private fun setBlur() {
@@ -88,6 +113,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         binding.blurView.setupWith(rootView, blurAlgo) // or RenderEffectBlur
             .setFrameClearDrawable(windowBackground) // Optional
             .setBlurRadius(radius)
+
     }
 
     private fun setNavViewListeners() {
@@ -116,10 +142,54 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
     override fun initListener() {
+
+        supportFragmentManager.setFragmentResultListener(SELECT_RECORD_WORKOUT, this) { _, bundle ->
+            val workout = bundle.getParcelable<OWorkoutListModal>("workout")
+            workout?.let {
+                navController?.navigate(
+                    R.id.recordWorkoutFragment,
+                    bundleOf("workout" to it)
+                )
+            }
+        }
+
+
         binding.layoutRetry.btnRetry.setOnClickListener {
             binding.layoutRetry.root.gone()
             viewModel.getUserHealthData(viewModel.mStartDate, viewModel.mEndDate)
         }
+
+        binding.lytAddWorkoutSelector.tvAddWorkout.setOnClickListener {
+            showAddWorkoutCta()
+            binding.blurViewSelector.gone()
+            if (viewModel.isDeviceConnected()) {
+                navController?.navigate(R.id.addWorkoutFragment)
+            } else {
+                showShortToast("Please connect your ring to add a workout")
+            }
+        }
+        binding.lytAddWorkoutSelector.ivWorkoutClose.setOnClickListener {
+            showAddWorkoutCta()
+            binding.blurViewSelector.gone()
+        }
+
+        binding.lytAddWorkoutSelector.tvRecordWorkout.setOnClickListener {
+            showAddWorkoutCta()
+            binding.blurViewSelector.gone()
+            navController?.navigate(R.id.selectWorkoutFragment)
+        }
+
+        binding.btnAddWorkout.setOnClickListener {
+            //binding.btnAddWorkout.gone()
+            viewModel.addWorkoutCtaVisibility.postValue(false)
+
+            binding.blurViewSelector.visible()
+        }
+    }
+
+    fun showAddWorkoutCta() {
+        viewModel.addWorkoutCtaVisibility.postValue(true)
+        //binding.btnAddWorkout.visible()
     }
 
     fun checkBluetooth() {
@@ -250,6 +320,28 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
     override fun observeSubscriber() {
+
+        viewModel.sessionManager.ongoingWorkoutDetected.observe(this) {
+            it.getContent()?.let { pair ->
+                if (navController?.currentDestination?.id != R.id.recordWorkoutFragment) {
+                    navController?.navigate(
+                        R.id.recordWorkoutFragment, bundleOf(
+                            "workout" to pair.second,
+                            "onGoingWorkout" to pair.first,
+                        )
+                    )
+                }
+            }
+        }
+
+        viewModel.addWorkoutCtaVisibility.observe(this) {
+            if (it) {
+                binding.btnAddWorkout.visible()
+            } else {
+                binding.btnAddWorkout.gone()
+            }
+        }
+
         viewModel.getLoading().observe(this) {
             if (it) {
                 binding.progressBar.root.visible()
@@ -341,18 +433,29 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     private val navListener =
         NavController.OnDestinationChangedListener { controller, destination, arguments ->
             when (destination.id) {
-                R.id.navigation_oreo_home,
-                R.id.navigation_oreo_readiness,
-                R.id.navigation_oreo_workouts,
-                R.id.navigation_oreo_sleep
-                -> {
+                R.id.navigation_oreo_home, R.id.navigation_oreo_readiness, R.id.navigation_oreo_workouts, R.id.navigation_oreo_sleep -> {
                     binding.view27.visible()
                     binding.navView.root.visible()
+
+                    viewModel.handleAddWorkoutVisibility()
+
+                    //binding.btnAddWorkout.visible()//todo add today condition
+                }
+
+                R.id.oActivityListFragment -> {
+                    binding.view27.gone()
+                    binding.navView.root.gone()
+
+                    if (viewModel.isDevicePaired()!=null) {
+                        viewModel.addWorkoutCtaVisibility.postValue(true)
+                    }
                 }
 
                 else -> {
                     binding.view27.gone()
                     binding.navView.root.gone()
+                    viewModel.addWorkoutCtaVisibility.postValue(false)
+
                 }
             }
         }
@@ -360,11 +463,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     private fun showLocalNotification(title: String, content: String, key: String) {
         NotificationUtil.pushNotification(
-            NoiseFitApplicationMain.context!!,
-            title,
-            content,
-            key,
-            "1"
+            NoiseFitApplicationMain.context!!, title, content, key, "1"
         )
     }
 
@@ -380,6 +479,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             if (viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
                 viewModel.startDisconnectTimer()
             }
+            viewModel.syncRecordedWorkoutData()
         }
 
         viewModel.shouldResetMasterDates()
@@ -394,10 +494,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     override fun onBackPressed() {
         navController?.let {
             when (it.currentDestination?.id) {
-                R.id.navigation_oreo_home,
-                R.id.navigation_oreo_readiness,
-                R.id.navigation_oreo_workouts,
-                R.id.navigation_oreo_sleep -> {
+                R.id.navigation_oreo_home, R.id.navigation_oreo_readiness, R.id.navigation_oreo_workouts, R.id.navigation_oreo_sleep -> {
 
                     if (it.currentDestination?.id == R.id.navigation_oreo_home) {
                         finish()

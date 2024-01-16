@@ -623,16 +623,16 @@ class OreoActivityFragment :
         }
 
         if (mainViewModel.selectedDate == DateFormats.getCurrentDateOreoFormat()) {
-            if (mViewModel.ringDataStore.getRingDevice() != null) {
+            /*if (mViewModel.ringDataStore.getRingDevice() != null) {
                 binding.lytWorkouts.viewAddWorkout.visible()
             } else {
                 binding.lytWorkouts.viewAddWorkout.gone()
-            }
+            }*/
             binding.lytWorkouts.tvEmptyMsg.text =
-                getString(R.string.text_you_haven_t_added_any_workouts_for_today)
+                getString(R.string.text_tap_plus_workout)
 
         } else {
-            binding.lytWorkouts.viewAddWorkout.gone()
+            //binding.lytWorkouts.viewAddWorkout.gone()
             binding.lytWorkouts.tvEmptyMsg.text =
                 getString(R.string.text_you_haven_t_added_any_workouts_for_this_day)
         }
@@ -819,6 +819,7 @@ class OreoActivityFragment :
         if (mainViewModel.shouldLoadMoreData()) {
             LOGS.w("Loading more data")
         }
+        mainViewModel.handleAddWorkoutVisibility()
     }
 
     override fun onScrolling(position: Int, chartModel: ChartModel?) {

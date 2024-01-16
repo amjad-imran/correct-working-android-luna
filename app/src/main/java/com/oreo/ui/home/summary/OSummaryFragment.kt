@@ -72,6 +72,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 super.onPageSelected(position)
 
                 mainViewModel.selectedDate = pagerAdapter?.getDate(position)
+                mainViewModel.handleAddWorkoutVisibility()
                 setTabDates(position)
 
                 if (mainViewModel.shouldLoadMoreData()) {
@@ -229,7 +230,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         }
 
 
-        //handle device intro
+       /* //handle device intro
         if (!mainViewModel.ringDataStore.isShowDeviceIntro()) {
             setFragmentResultListener(CALL_GOT_IT) { _, bundle ->
                 val isSelected = bundle.getBoolean("isSelected")
@@ -238,7 +239,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 }
             }
             navigate(R.id.myDeviceIntroBottomSheet)
-        }
+        }*/
 
     }
 
@@ -397,6 +398,10 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                     viewModel.checkBatteryPercentage()
                     shouldSync()
                     mainViewModel.onRingConnected()
+
+                    //condition to be called once only
+                    mainViewModel.checkOnGoingWorkout()
+
                 }
 
                 is ConnectState.UnPaired -> {

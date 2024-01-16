@@ -10,6 +10,7 @@ import com.noisefit_commans.constants.SportActivityName
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.data.model.OreoStepsData
+import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.enums.ApplicationType
 import com.noisefit_commans.models.AlarmsList
 import com.noisefit_commans.models.BloodOxygenBreakup
@@ -31,7 +32,9 @@ import com.noisefit_commans.models.StepsData
 import com.noisefit_commans.models.StressDataBreakup
 import com.noisefit_commans.models.Widget
 import com.noisefit_commans.models.WorldClockList
+import com.noisefit_commans.ui.checkDayDifferenceMoreOne
 import com.noisefit_commans.utils.AppConversionUtils
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.zhapp.ble.bean.AutoActiveSportBean
@@ -1096,6 +1099,42 @@ constructor(
             )
         }
         return data
+    }
+
+    fun parseRecordedData(it: DevSportInfoBean): RecordedWorkoutData {
+
+        AppLogs.sendAppLogs("Recorded Workout $it")
+
+        val hrData: ArrayList<Int> = ArrayList()
+        val intensity: ArrayList<Int> = ArrayList()
+
+        if (it.ringPointData != null && it.ringPointData.isNotEmpty()) {
+            it.ringPointData.forEach { ringPointData ->
+                hrData.add(ringPointData.heartRate)
+                intensity.add(ringPointData.exerciseIntensity)
+            }
+        }
+
+        val duration = it.reportDuration.toInt() / 60
+        val date = DateFormats.convertTimestampToDate(
+            it.reportSportStartTime, DateFormats.dateFormat3
+        )
+
+
+        return RecordedWorkoutData(
+            isSynced = false,
+            isAccepted = false,
+            duration = duration,
+            intensity = 0,
+            calories = it.reportCal.toInt(),
+            startTime = it.reportSportStartTime,
+            endTime = it.reportSportEndTime,
+            steps = it.reportTotalStep.toInt(),
+            type = it.recordPointSportType,
+            hrData = Gson().toJson(hrData),
+            intensityList = Gson().toJson(intensity),
+            date = date
+        )
     }
 }
 
