@@ -365,11 +365,10 @@ constructor(
                             }
 
                             4 -> {
-                                ControlBleTools.getInstance().getFitnessSportIdsData(null)
-
                                 testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                     UpdateDeviceDataCallback.WorkoutStopped(true)
                                 )
+                                ControlBleTools.getInstance().getFitnessSportIdsData(null)
                             }
                         }
                     }
@@ -389,10 +388,10 @@ constructor(
                             }
 
                             4 -> {
-                                ControlBleTools.getInstance().getFitnessSportIdsData(null)
                                 testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                     UpdateDeviceDataCallback.WorkoutStopped(false)
                                 )
+                                ControlBleTools.getInstance().getFitnessSportIdsData(null)
                             }
                         }
                     }

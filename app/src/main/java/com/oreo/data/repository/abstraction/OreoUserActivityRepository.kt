@@ -6,6 +6,7 @@ import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
+import com.oreo.data.model.AddWorkoutResponse
 import com.oreo.data.model.LearnModel
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
@@ -84,7 +85,7 @@ interface OreoUserActivityRepository {
 
     suspend fun addRecordedWorkout(
         request: JsonObject
-    ): Flow<Resource<BaseApiResponse<Any>>>
+    ): Flow<Resource<BaseApiResponse<List<AddWorkoutResponse>>>>
 
     suspend fun deleteWorkoutFromServer(
         id: String

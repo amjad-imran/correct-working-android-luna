@@ -1159,6 +1159,8 @@ constructor() : LifecycleService() {
                     is UserActivityCallback.RingUserWorkoutData -> {
                         if (it.data.isNotEmpty()) {
                             saveAndSyncWorkouts(it.data)
+                        }else{
+                            postWorkout("none")
                         }
                     }
 
@@ -1262,6 +1264,7 @@ constructor() : LifecycleService() {
                 userHealthDataDataSource.clearDataByDates(dates.toList())
                 syncRepository.removeRecordedWorkouts().collect()
                 ringDataStore.removeRecordDeleteList()
+                postWorkout("none")
                 return@launch
             }
 
@@ -1283,6 +1286,15 @@ constructor() : LifecycleService() {
                                     dates.add(date)
                                 }
                             }
+
+                            val workoutId = dataConverter.getWorkoutId(
+                                it,
+                                sessionManager.lastOngoingWorkoutTimestamp *1000L
+                            )
+
+                            postWorkout(workoutId?:"none")
+
+
                             userHealthDataDataSource.clearDataByDates(dates.toList())
                             syncRepository.removeRecordedWorkouts().collect()
                             ringDataStore.removeRecordDeleteList()
@@ -1294,6 +1306,16 @@ constructor() : LifecycleService() {
                     else -> {}
                 }
             }
+        }
+    }
+
+    fun postWorkout(workoutId:String){
+        sessionManager.lastOngoingWorkoutTimestamp = 0L
+        LOGS.d("sdkjfhskdfj received $workoutId")
+
+        GlobalScope.launch(Dispatchers.Main) {
+            sessionManager.showWorkoutDetails.value = (Event(workoutId))
+            sessionManager.showWorkoutDetails.value = Event(null)
         }
     }
 
@@ -1607,9 +1629,14 @@ constructor() : LifecycleService() {
                     ringDataStore.setManualMeasurementValue(dataCallback.manualMeasurement)
                     sessionManager.setManualMeasurementValue(true)
                 }
-                is UpdateDeviceDataCallback.OngoingWorkoutData->{
-                    sessionManager.onGoingWorkoutDetected(dataCallback.duration,
-                        dataCallback.sportStatus,dataCallback.sportType,dataCallback.startTimeStamp)
+
+                is UpdateDeviceDataCallback.OngoingWorkoutData -> {
+                    sessionManager.onGoingWorkoutDetected(
+                        dataCallback.duration,
+                        dataCallback.sportStatus,
+                        dataCallback.sportType,
+                        dataCallback.startTimeStamp
+                    )
                 }
 
                 is UpdateDeviceDataCallback.FirmwareUpgradeProgress -> {

@@ -21,6 +21,7 @@ class RecordWorkoutViewModel @Inject constructor(
 ) : BaseViewModel() {
 
 
+    var markedDeleted: Boolean = false
     var workout: OWorkoutListModal? = null
     var sportStartTime = 0L
     var workoutDuration = 0L

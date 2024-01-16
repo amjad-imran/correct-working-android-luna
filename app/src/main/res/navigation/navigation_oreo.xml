@@ -137,11 +137,11 @@
     <dialog
         android:id="@+id/unpairBottomDialogFragment"
         android:name="com.noisefit.ui.myDevice.UnpairBottomDialogFragment"
-        android:label="UnpairBottomDialogFragment" >
+        android:label="UnpairBottomDialogFragment">
         <argument
             android:name="forceUnpair"
-            app:argType="boolean"
-            android:defaultValue="false" />
+            android:defaultValue="false"
+            app:argType="boolean" />
     </dialog>
     <dialog
         android:id="@+id/descriptionPopUpBottomDialogFragment"
@@ -460,7 +460,7 @@
     <fragment
         android:id="@+id/bodyTempScoreDetailFragment"
         android:name="com.oreo.ui.sleep.BodyTempScoreDetailFragment"
-        android:label="fragment_body_temp_score_detail" >
+        android:label="fragment_body_temp_score_detail">
         <argument
             android:name="date"
             app:argType="string" />
@@ -474,15 +474,20 @@
     <fragment
         android:id="@+id/recordWorkoutFragment"
         android:name="com.oreo.ui.recordworkout.RecordWorkoutFragment"
-        android:label="fragment_record_workout" >
+        android:label="fragment_record_workout">
         <argument
             android:name="workout"
             app:argType="com.noisefit_commans.data.model.OWorkoutListModal" />
-      <argument
+        <argument
             android:name="onGoingWorkout"
+            android:defaultValue="@null"
             app:argType="com.noisefit_commans.data.model.DetectedOngoingWorkout"
-          app:nullable="true"
-          android:defaultValue="@null" />
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_recordWorkoutFragment_to_oWorkoutDetailsFragment"
+            app:destination="@id/oWorkoutDetailsFragment"
+            app:popUpTo="@id/recordWorkoutFragment"
+            app:popUpToInclusive="true" />
 
     </fragment>
     <fragment
@@ -492,7 +497,7 @@
     <fragment
         android:id="@+id/selectWorkoutFragment"
         android:name="com.oreo.ui.recordworkout.SelectWorkoutFragment"
-        android:label="fragment_select_workout"/>
+        android:label="fragment_select_workout" />
     <dialog
         android:id="@+id/bottomSheetEndWorkout"
         android:name="com.oreo.ui.recordworkout.BottomSheetEndWorkout"
@@ -505,5 +510,9 @@
         android:id="@+id/bottomSheetRingBatteryLow"
         android:name="com.oreo.ui.recordworkout.BottomSheetRingBatteryLow"
         android:label="BottomSheetRingBatteryLow" />
+    <dialog
+        android:id="@+id/bottomSheetRingCharging"
+        android:name="com.oreo.ui.recordworkout.BottomSheetRingCharging"
+        android:label="BottomSheetRingCharging" />
 
 </navigation>

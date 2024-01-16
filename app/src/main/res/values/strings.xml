@@ -1004,4 +1004,6 @@
     <string name="text_time_to_charge_your_ring">Time to charge your ring</string>
     <string name="text_tap_plus_workout">Tap the + button to add a workout for today.</string>
     <string name="text_please_connect_your_ring_to_add_a_workout">Please connect your ring to add a workout</string>
+    <string name="text_ring_charging">Ring charging</string>
+    <string name="text_charging_message">To record your workout, remove your ring from the charger and wear it on your finger.</string>
 </resources>

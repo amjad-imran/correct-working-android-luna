@@ -1,14 +1,11 @@
 package com.oreo.ui.recordworkout
 
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.viewModels
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.BottomSheetRingConnectingBinding
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import dagger.hilt.android.AndroidEntryPoint
 
