@@ -437,7 +437,11 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     binding.view27.visible()
                     binding.navView.root.visible()
 
-                    viewModel.handleAddWorkoutVisibility()
+                    if (destination.id == R.id.navigation_oreo_home || destination.id == R.id.navigation_oreo_workouts) {
+                        viewModel.handleAddWorkoutVisibility()
+                    } else {
+                        viewModel.addWorkoutCtaVisibility.postValue(false)
+                    }
 
                     //binding.btnAddWorkout.visible()//todo add today condition
                 }
@@ -446,7 +450,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     binding.view27.gone()
                     binding.navView.root.gone()
 
-                    if (viewModel.isDevicePaired()!=null) {
+                    if (viewModel.isDevicePaired() != null) {
                         viewModel.addWorkoutCtaVisibility.postValue(true)
                     }
                 }
