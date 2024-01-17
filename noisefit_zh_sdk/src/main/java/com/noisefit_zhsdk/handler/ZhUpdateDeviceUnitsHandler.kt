@@ -473,10 +473,10 @@ constructor(
                     }
                 }
 
-                if (bean.isSportNoSync) {
+                /*if (bean.isSportNoSync) {
                     ControlBleTools.getInstance()
                         .getFitnessSportIdsData(null)
-                }
+                }*/
             }
 
             /*testUpdateDeviceDataCallback?.onUpdateDataReceived(
