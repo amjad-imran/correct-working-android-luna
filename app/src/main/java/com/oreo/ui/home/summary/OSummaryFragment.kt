@@ -14,6 +14,8 @@ import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.receiver.service.FeedbackSubmitService
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.constants.SyncEvents
+import com.noisefit_commans.data.ErrorResponse
+import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseFragment
@@ -33,6 +35,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.StringBuilder
 import java.time.LocalDate
 
 
@@ -224,7 +227,27 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         binding.lytHeader.profileView1.setOnLongClickListener {
             if (BuildConfig.DEBUG) {
-                navigate(R.id.logsDisplayFragment)
+                val stress = viewModel.watchDataStore.testGetStressData()
+                val bodyBattery = viewModel.watchDataStore.testGetBodyBatteryData()
+                val text = StringBuilder()
+                text.append("Stress Data ")
+                text.append(stress)
+                text.appendLine()
+                text.appendLine()
+                text.append("Body Battery Data ")
+                text.append(bodyBattery)
+
+                uiController.onApiErrorReceived(
+                    ErrorResponse(
+                        UIComponentType.InfoAlertDialog(
+                            "Stress-Body Battery data",
+                            text.toString(),
+
+                            getString(R.string.text_ok)
+                        )
+                    )
+                )
+            //navigate(R.id.logsDisplayFragment)
             }
             return@setOnLongClickListener true
         }

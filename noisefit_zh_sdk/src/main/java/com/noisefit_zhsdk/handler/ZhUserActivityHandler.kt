@@ -795,11 +795,16 @@ constructor(
             }
 
             override fun onRingBodyBatteryData(p0: RingBodyBatteryBean?) {
+                LOGS.w(TAG,"onRingBodyBatteryData ${Gson().toJson(p0)}")
                 AppLogs.sendAppLogs("onRingBodyBatteryData ${Gson().toJson(p0)}")
+                watchDataStore.testSaveBodyBatteryData(Gson().toJson(p0))
+
             }
 
             override fun onRingStressDetectionData(p0: RingStressDetectionBean?) {
+                LOGS.w(TAG,"onRingStressDetectionData ${Gson().toJson(p0)}")
                 AppLogs.sendAppLogs("onRingStressDetectionData ${Gson().toJson(p0)}")
+                watchDataStore.testSaveStressData(Gson().toJson(p0))
             }
 
         }

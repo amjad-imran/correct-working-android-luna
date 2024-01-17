@@ -104,6 +104,13 @@ interface WatchDataStore {
 
     fun getLastSavedAverageHrv(): Int
     fun setLastSavedAverageHrv(value: Int)
+
+
+    fun testSaveBodyBatteryData(data: String?)
+    fun testGetBodyBatteryData(): String?
+
+    fun testSaveStressData(data: String?)
+    fun testGetStressData(): String?
 }
 
 enum class ChargingNotificationLevel {
