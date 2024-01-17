@@ -6,6 +6,7 @@ import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.data.model.OreoBloodOxygenBreakup
 import com.noisefit_commans.data.model.OreoBodyTemperatureBreakup
 import com.noisefit_commans.data.model.OreoHeartRate
+import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.data.model.OreoRespiratoryData
 import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.data.model.OreoStepsData
@@ -31,7 +32,7 @@ sealed class UserActivityCallback {
     class GetTempFromLatLog(val lat: Double, val log: Double) : UserActivityCallback()
     class SleepDataObtained(val sleepData: SleepData) : UserActivityCallback()
     class SleepDataObtainedOreo(val sleepData: OreoSleepData) : UserActivityCallback()
-    class NapObtainedOreo(val sleepData: OreoSleepData) : UserActivityCallback()
+    class NapObtainedOreo(val napList: List<OreoNapData>) : UserActivityCallback()
     class HealthScoreObtainedOreo(val score: Int, val date: String) : UserActivityCallback()
 
     //    class HeartRateObtained(val heartRate: HeartRate) : UserActivityCallback()

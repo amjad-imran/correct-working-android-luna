@@ -17,6 +17,7 @@ import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.data.model.OreoBloodOxygenBreakup
 import com.noisefit_commans.data.model.OreoBodyTemperatureBreakup
 import com.noisefit_commans.data.model.OreoHeartRate
+import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.data.model.OreoRespiratoryData
 import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.data.model.OreoStepsData
@@ -32,11 +33,13 @@ import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.EncryptUtils
 import com.oreo.data.dataConverter.OreoOnlineDataMapper
+import com.oreo.data.db.abstaction.OreoNapDataSource
 import com.oreo.data.db.implementation.OreoAutoSportDataImpl
 import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
 import com.oreo.data.db.implementation.OreoDayTimeMovementDataImpl
 import com.oreo.data.db.implementation.OreoHeartRateDataImpl
+import com.oreo.data.db.implementation.OreoNapDataImpl
 import com.oreo.data.db.implementation.OreoRecordedWorkoutDataImpl
 import com.oreo.data.db.implementation.OreoRespiratoryDataImpl
 import com.oreo.data.db.implementation.OreoSleepDataImpl
@@ -59,6 +62,7 @@ class OreoSyncRepositoryImpl(
     private val dayTimeMovementImpl: OreoDayTimeMovementDataImpl,
     private val respiratoryDataImpl: OreoRespiratoryDataImpl,
     private val sleepDataImpl: OreoSleepDataImpl,
+    private val napDataSource: OreoNapDataImpl,
     private val bodyTemperatureDataImpl: OreoBodyTemperatureDataImpl,
     private val offlineDataMapper: OfflineDataMapper,
     private val gson: Gson,
@@ -154,6 +158,14 @@ class OreoSyncRepositoryImpl(
         return safeCacheCall(Dispatchers.IO) {
             sleepDataImpl.insertData(
                 data
+            )
+        }
+    }
+
+    override suspend fun saveNapData(napList: List<OreoNapData>): Flow<CacheResult<Boolean?>> {
+        return safeCacheCall(Dispatchers.IO) {
+            napDataSource.insertData(
+                napList
             )
         }
     }

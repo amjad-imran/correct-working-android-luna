@@ -29,12 +29,14 @@ import com.noisefit_commans.utils.EncryptUtils
 import com.oreo.data.dataConverter.OreoOfflineDataMapper
 import com.oreo.data.dataConverter.OreoOnlineDataMapper
 import com.oreo.data.db.OreoDataBase
+import com.oreo.data.db.abstaction.OreoNapDataSource
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.db.implementation.OreoAutoSportDataImpl
 import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
 import com.oreo.data.db.implementation.OreoDayTimeMovementDataImpl
 import com.oreo.data.db.implementation.OreoHeartRateDataImpl
+import com.oreo.data.db.implementation.OreoNapDataImpl
 import com.oreo.data.db.implementation.OreoRecordedWorkoutDataImpl
 import com.oreo.data.db.implementation.OreoRespiratoryDataImpl
 import com.oreo.data.db.implementation.OreoSleepDataImpl
@@ -240,6 +242,7 @@ object AppModule {
         bodyTemperatureDataImpl: OreoBodyTemperatureDataImpl,
         offlineDataMapper: OfflineDataMapper,
         onlineDataMapper: OreoOnlineDataMapper,
+        oreNapDataSource: OreoNapDataImpl,
         encryptUtils: EncryptUtils,
         lastSyncProvider: LastSyncProvider,
         testModeUtils: TestModeUtils,
@@ -257,6 +260,7 @@ object AppModule {
             dayTimeMovementDataImpl,
             respiratoryDataImpl,
             sleepDataImpl,
+            oreNapDataSource,
             bodyTemperatureDataImpl,
             offlineDataMapper,
             gson,

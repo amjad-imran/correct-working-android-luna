@@ -767,11 +767,11 @@ constructor(
 
                 val sleepDataParsed = oreoDataConverter.parseNapData(p0.toList())
                 AppLogs.run { sendAppLogs("Parsed Nap Data $sleepDataParsed") }
-                /* userActivityDataCallbacks?.onUserActivityDataReceived(
+                 userActivityDataCallbacks?.onUserActivityDataReceived(
                      UserActivityCallback.NapObtainedOreo(
                          sleepDataParsed
                      )
-                 )*/
+                 )
             }
 
             override fun onRingAutoActiveSportData(p0: AutoActiveSportBean?) {

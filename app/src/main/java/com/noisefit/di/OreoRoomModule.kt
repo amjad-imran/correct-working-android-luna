@@ -11,6 +11,7 @@ import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.OreoDataBase
 import com.oreo.data.db.abstaction.OreoBodyTemperatureDataSource
 import com.oreo.data.db.abstaction.OreoDayTimeMovementDataSource
+import com.oreo.data.db.abstaction.OreoNapDataSource
 import com.oreo.data.db.abstaction.OreoSleepDataSource
 import com.oreo.data.db.abstaction.OreoStepsDataSource
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
@@ -28,6 +29,7 @@ import com.oreo.data.db.database.OreoStressDao
 import com.oreo.data.db.database.OreoUserHealthDataDao
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
 import com.oreo.data.db.implementation.OreoDayTimeMovementDataImpl
+import com.oreo.data.db.implementation.OreoNapDataImpl
 import com.oreo.data.db.implementation.OreoSleepDataImpl
 import com.oreo.data.db.implementation.OreoStepsDataImpl
 import com.oreo.data.db.implementation.OreoUserHealthDataDataImpl
@@ -67,29 +69,29 @@ class OreoRoomModule {
         }
     }
 
-   /* private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
-        override fun migrate(database: SupportSQLiteDatabase) {
-            database.execSQL(
-                "CREATE TABLE IF NOT EXISTS `google_fit_workout` " +
-                        "(`id` INTEGER NOT NULL, " +
-                        "`is_synced` INTEGER NOT NULL," +
-                        "`name` TEXT," +
-                        "`identifier` TEXT," +
-                        "`appPackageName` TEXT," +
-                        "`activity` TEXT," +
-                        "`startTime` INTEGER," +
-                        "`endTime` INTEGER," +
-                        "`distance` REAL," +
-                        "`duration` INTEGER," +
-                        "`calories` REAL," +
-                        "`heartRate` INTEGER," +
-                        "`steps` INTEGER," +
-                        "`type` TEXT, PRIMARY KEY(`id`))"
-            )
-            database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_google_fit_workout_startTime ON  google_fit_workout(startTime)")
+    /* private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
+         override fun migrate(database: SupportSQLiteDatabase) {
+             database.execSQL(
+                 "CREATE TABLE IF NOT EXISTS `google_fit_workout` " +
+                         "(`id` INTEGER NOT NULL, " +
+                         "`is_synced` INTEGER NOT NULL," +
+                         "`name` TEXT," +
+                         "`identifier` TEXT," +
+                         "`appPackageName` TEXT," +
+                         "`activity` TEXT," +
+                         "`startTime` INTEGER," +
+                         "`endTime` INTEGER," +
+                         "`distance` REAL," +
+                         "`duration` INTEGER," +
+                         "`calories` REAL," +
+                         "`heartRate` INTEGER," +
+                         "`steps` INTEGER," +
+                         "`type` TEXT, PRIMARY KEY(`id`))"
+             )
+             database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_google_fit_workout_startTime ON  google_fit_workout(startTime)")
 
-        }
-    }*/
+         }
+     }*/
     private val MIGRATION_2_4: Migration = object : Migration(2, 4) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL(
@@ -321,4 +323,11 @@ class OreoRoomModule {
     fun provideSleepData(sleepDao: OreoSleepDao): OreoSleepDataSource {
         return OreoSleepDataImpl(sleepDao)
     }
+
+    @Singleton
+    @Provides
+    fun provideNapData(napDao: OreoNapDao): OreoNapDataSource {
+        return OreoNapDataImpl(napDao)
+    }
+
 }

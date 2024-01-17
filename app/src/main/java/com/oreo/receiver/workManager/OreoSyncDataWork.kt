@@ -197,7 +197,6 @@ constructor(
                                     syncRepository.deleteSleepServerSyncData(userActivities.second)
 
 
-
                                     //syncRepository.deleteServerSyncData(userActivities.second)
                                 }
 
@@ -376,6 +375,36 @@ constructor(
                                         }
                                     }
 
+
+                            }
+                        }
+
+                        is UserActivityCallback.NapObtainedOreo -> {
+                            syncDataScope.launch {
+                                syncRepository.saveNapData(userActivityCallback.napList)
+                                    .collect { resource ->
+                                        when (resource) {
+                                            is CacheResult.Success -> {
+
+                                                LOGS.d(
+                                                    TAG,
+                                                    "OreoSyncDataWork: nap ${resource.value}"
+                                                )
+                                               /* sessionManager.setShowSyncOfflineData(
+                                                    Event(
+                                                        HealthOverviewDataType.SLEEP
+                                                    )
+                                                )*/
+
+                                            }
+
+                                            is CacheResult.GenericError -> {
+//                                                failed.invoke()
+                                                LOGS.e(TAG, "OreoSyncDataWork: Error $it")
+
+                                            }
+                                        }
+                                    }
 
                             }
                         }
