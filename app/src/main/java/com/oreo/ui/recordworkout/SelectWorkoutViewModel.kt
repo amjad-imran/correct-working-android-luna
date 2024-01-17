@@ -39,6 +39,10 @@ constructor(
         return sessionManager.connectStateRing.value is ConnectState.ConnectSuccess
     }
 
+    fun isDeviceCharging(): Boolean {
+        return sessionManager.isRingCharging.value == true
+    }
+
     fun getWorkoutList() {
         viewModelScope.launch(Dispatchers.IO) {
 

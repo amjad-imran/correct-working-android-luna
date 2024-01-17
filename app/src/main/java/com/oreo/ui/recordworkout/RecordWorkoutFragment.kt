@@ -16,6 +16,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -94,7 +95,13 @@ class RecordWorkoutFragment :
         viewModel.deleteOngoingRecordWorkout()
         viewModel.currentWorkoutState = 4
         viewModel.stopTimer()
-        navigateUpSafe()
+
+        if (viewModel.markedDeleted) {
+            navigateUpSafe()
+        } else {
+            binding.progressBar.root.visible()
+            viewModel.sessionManager.lastOngoingWorkoutTimestamp = viewModel.sportStartTime
+        }
     }
 
     override fun onDestroyView() {
@@ -110,8 +117,10 @@ class RecordWorkoutFragment :
                 END_WORKOUT_KEY
             ) { _, bundle ->
                 val allow = bundle.getBoolean("allow")
+                val delete = bundle.getBoolean("delete")
 
-                if (allow) {
+                if (allow || delete) {
+                    binding.progressBar.root.visible()
                     val sportId = viewModel.workout?.ringId ?: -1
 
                     viewModel.sessionManager.sendUpdateQueryAction(
@@ -121,6 +130,11 @@ class RecordWorkoutFragment :
                             4
                         )
                     )
+
+                    if (delete) {
+                        viewModel.markedDeleted = true
+                        viewModel.markForDelete(viewModel.sportStartTime)
+                    }
                 }
             }
             navigate(R.id.bottomSheetEndWorkout)
@@ -183,30 +197,7 @@ class RecordWorkoutFragment :
                 return@setOnClickListener
             }
 
-            setFragmentResultListener(
-                END_WORKOUT_KEY
-            ) { _, bundle ->
-                val allow = bundle.getBoolean("allow")
-                val delete = bundle.getBoolean("delete")
-
-                if (allow || delete) {
-                    binding.progressBar.root.visible()
-                    val sportId = viewModel.workout?.ringId ?: -1
-
-                    viewModel.sessionManager.sendUpdateQueryAction(
-                        UpdateDeviceAction.UpdateOngoingWorkout(
-                            sportId,
-                            viewModel.sportStartTime,
-                            4
-                        )
-                    )
-
-                    if (delete) {
-                        viewModel.markForDelete(viewModel.sportStartTime)
-                    }
-                }
-            }
-            navigate(R.id.bottomSheetEndWorkout)
+            onCrossClicked()
         }
 
         binding.ivCross.setOnClickListener {
@@ -228,7 +219,6 @@ class RecordWorkoutFragment :
                 }
 
                 is ConnectState.UnPaired -> {
-                    //TODO remove workout temp data
                     navigateUpSafe()
                 }
 
@@ -248,7 +238,7 @@ class RecordWorkoutFragment :
         if (batteryPercentage <= 20) {
             binding.oreoStatus.loadImage(
                 requireContext(),
-                R.drawable.ic_ring_low_battery
+                R.drawable.ic_ring_default_silver_new
             )
             binding.batteryStatus.setIndicatorColor(resources.getColor(R.color.color_error))
         } else {
@@ -263,6 +253,29 @@ class RecordWorkoutFragment :
     }
 
     override fun subscribeObservers() {
+
+        viewModel.sessionManager.showWorkoutDetails.observe(viewLifecycleOwner) {
+            it.getContent()?.let { workoutId ->
+                LOGS.d("sdkjfhskdfj Record frag $workoutId ${viewModel.currentWorkoutState}")
+
+                if (workoutId != null) {
+                    if (viewModel.currentWorkoutState == 4) {
+                        if(workoutId.equals("none")){
+                            navigateUpSafe()
+                            return@observe
+                        }
+                        LOGS.d("sdkjfhskdfj navigate to wirkout details")
+                        navigate(
+                            RecordWorkoutFragmentDirections.actionRecordWorkoutFragmentToOWorkoutDetailsFragment(
+                                viewModel.workout?.getFormattedActivityName()?:"",
+                                workoutId,
+                                -1
+                            )
+                        )
+                    }
+                }
+            }
+        }
 
         viewModel.displayTimer.observe(viewLifecycleOwner) {
             if (it.isEmpty()) {
@@ -281,7 +294,7 @@ class RecordWorkoutFragment :
                         if (it.success) {
                             startWorkout()
                         } else {
-                            context.showShortToast("Workout started : ${it.success}")
+                            //context.showShortToast("Workout started : ${it.success}")
                         }
                         binding.progressBar.root.gone()
                     }
@@ -291,19 +304,19 @@ class RecordWorkoutFragment :
                     }*/
 
                     is UpdateDeviceDataCallback.WorkoutStopped -> {
+                        binding.progressBar.root.gone()
                         if (it.success) {
                             stopWorkout()
                         } else {
-                            context.showShortToast("Workout Stopped : ${it.success}")
+                            //context.showShortToast("Workout Stopped : ${it.success}")
                         }
-                        binding.progressBar.root.gone()
                     }
 
                     is UpdateDeviceDataCallback.WorkoutPaused -> {
                         if (it.success) {
                             pauseWorkout()
                         } else {
-                            context.showShortToast("Workout Paused : ${it.success}")
+                            //context.showShortToast("Workout Paused : ${it.success}")
                         }
                         binding.progressBar.root.gone()
                     }
@@ -312,7 +325,7 @@ class RecordWorkoutFragment :
                         if (it.success) {
                             resumeWorkout()
                         } else {
-                            context.showShortToast("Workout Resumed : ${it.success}")
+                            //context.showShortToast("Workout Resumed : ${it.success}")
                         }
                         binding.progressBar.root.gone()
                     }

@@ -786,7 +786,7 @@ interface NetworkService {
     suspend fun addRecordedWorkout(
         @Url url: String,
         @Body requestObject: JsonObject
-    ): BaseApiResponse<Any>
+    ): BaseApiResponse<List<AddWorkoutResponse>>
 
     @GET
     suspend fun getReadinessInternalPagesData(

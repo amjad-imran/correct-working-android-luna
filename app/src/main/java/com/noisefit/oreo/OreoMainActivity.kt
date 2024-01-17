@@ -36,6 +36,8 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
 import com.oreo.ui.recordworkout.SELECT_RECORD_WORKOUT
@@ -174,7 +176,6 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         binding.lytAddWorkoutSelector.tvRecordWorkout.setOnClickListener {
             showAddWorkoutCta()
             binding.blurViewSelector.gone()
-            //TODO add ring connection related dialogs
             navController?.navigate(R.id.selectWorkoutFragment)
         }
 

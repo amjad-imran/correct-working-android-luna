@@ -62,6 +62,9 @@ constructor(
 
     }
 
+    var lastOngoingWorkoutTimestamp: Long = 0L
+    val showWorkoutDetails = MutableLiveData<Event<String?>>()
+
     var ongoingWorkoutDetected =
         MutableLiveData<Event<Pair<DetectedOngoingWorkout, OWorkoutListModal>>>()
 

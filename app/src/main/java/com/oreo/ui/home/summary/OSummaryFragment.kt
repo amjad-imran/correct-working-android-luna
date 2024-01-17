@@ -231,7 +231,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         }
 
 
-        //handle device intro
+       /* //handle device intro
         if (!mainViewModel.ringDataStore.isShowDeviceIntro()) {
             setFragmentResultListener(CALL_GOT_IT) { _, bundle ->
                 val isSelected = bundle.getBoolean("isSelected")
@@ -240,7 +240,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 }
             }
             navigate(R.id.myDeviceIntroBottomSheet)
-        }
+        }*/
 
     }
 

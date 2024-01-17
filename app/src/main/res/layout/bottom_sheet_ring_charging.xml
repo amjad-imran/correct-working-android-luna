@@ -42,18 +42,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/lottieAnimView"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                app:layout_constraintBottom_toBottomOf="@+id/oreoStatus"
-                app:layout_constraintEnd_toEndOf="@+id/oreoStatus"
-                app:layout_constraintStart_toStartOf="@+id/oreoStatus"
-                app:layout_constraintTop_toTopOf="@+id/oreoStatus"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
-                app:lottie_rawRes="@raw/raw_anim_ring_sync" />
-
 
             <TextView
                 android:id="@+id/textView90"
@@ -86,34 +74,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView90" />
 
 
-            <ImageView
-                android:id="@+id/ivConnectSuccess"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_marginTop="50dp"
-                android:src="@drawable/iv_connected_successfully"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textRingConnecteMessage"
-                tools:visibility="visible" />
-
-
-            <TextView
-                android:id="@+id/textConnectSuccess"
-                style="@style/H4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:gravity="center_horizontal"
-                android:text="@string/text_connected_successfully"
-                android:textColor="@color/white"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivConnectSuccess"
-                tools:visibility="visible" />
-
             <Button
                 android:id="@+id/btnAllow"
                 style="@style/PrimaryButtonStyle"
@@ -124,13 +84,12 @@
                 android:layout_marginBottom="@dimen/dimen_24dp"
                 android:text="@string/text_done"
                 app:backgroundTint="@null"
-                android:enabled="false"
+                android:enabled="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textConnectSuccess" />
-
+                app:layout_constraintTop_toBottomOf="@+id/textRingConnecteMessage" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </RelativeLayout>
 </layout>

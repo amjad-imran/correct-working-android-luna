@@ -49,6 +49,10 @@ class SelectWorkoutFragment :
             navigate(R.id.bottomSheetRingConnecting)
             return
         }
+        if (viewModel.isDeviceCharging()) {
+            navigate(R.id.bottomSheetRingCharging)
+            return
+        }
 
         if (viewModel.isBatteryLow()) {
             navigate(R.id.bottomSheetRingBatteryLow)

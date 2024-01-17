@@ -6,18 +6,14 @@ import com.google.gson.JsonObject
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.local.db.fromJson
-import com.noisefit_commans.common.averageWithoutZero
 import com.noisefit_commans.common.ceilRound
-import com.noisefit_commans.common.roundUpDecimal
 import com.noisefit_commans.data.local.abstraction.RingDataStore
-import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.utils.DateFormats
-import java.math.RoundingMode
-import java.text.DecimalFormat
+import com.noisefit_commans.utils.LOGS
+import com.oreo.data.model.AddWorkoutResponse
 import javax.inject.Inject
-import kotlin.math.roundToInt
 
 
 class DataConverter
@@ -74,7 +70,10 @@ constructor(
 
                         val intensity = intArray.average().ceilRound()
 
-                        this.addProperty("intensity", getIntensity(intensity))//todo change as per logic
+                        this.addProperty(
+                            "intensity",
+                            getIntensity(intensity)
+                        )//todo change as per logic
 
 
                         this.add("intensity_value", intensityArray)
@@ -115,6 +114,19 @@ constructor(
                 "Hard"
             }
         }
+    }
+
+    fun getWorkoutId(workouts: List<AddWorkoutResponse>, timeStamp: Long): String? {
+        LOGS.d("sdkjfhskdfj received getWorkoutId $workouts $timeStamp")
+
+        if (timeStamp == 0L) return null
+        if (workouts.isEmpty()) return null
+        val time = DateFormats.convertTimestampToDate(timeStamp, DateFormats.timeFormat)
+        val date = DateFormats.convertTimestampToDate(timeStamp, DateFormats.dateFormat3)
+        LOGS.d("sdkjfhskdfj getWorkoutId  time-date $time $date")
+        return workouts.find {
+            it.start_time.equals(time, true) && it.date.equals(date, true)
+        }?.workoutId
     }
 
 }

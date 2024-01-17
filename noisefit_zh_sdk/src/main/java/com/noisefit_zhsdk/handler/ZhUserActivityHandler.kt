@@ -160,15 +160,16 @@ constructor(
                     }
                 }
 
-                userActivityDataCallbacks?.onUserActivityDataReceived(
-                    UserActivityCallback.RingUserWorkoutData(result)
-                )
+
                 AppLogs.sendAppLogs("RECORD_WORKOUT  Activity Sync:: success Size: ${sportModleInfoList.size}")
 
                 LOGS.i(TAG, "Activity Sync:: success Size: ${sportModleInfoList.size}")
 
                 sportModleInfoList.clear()
                 isSyncProtoSportSyncing = false
+                userActivityDataCallbacks?.onUserActivityDataReceived(
+                    UserActivityCallback.RingUserWorkoutData(result)
+                )
                 userActivityDataCallbacks?.onUserActivityDataReceived(UserActivityCallback.SportsModeDataSyncSuccess())
             }
         }
@@ -812,6 +813,7 @@ constructor(
 
             ControlBleTools.getInstance().getDailyHistoryData(null)
             ControlBleTools.getInstance().getAutoSportData(null)
+            ControlBleTools.getInstance().getFitnessSportIdsData(null)
 
         } catch (e: Exception) {
             e.printStackTrace()

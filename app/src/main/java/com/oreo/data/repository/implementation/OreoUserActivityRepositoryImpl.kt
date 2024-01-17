@@ -1408,7 +1408,7 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
-    override suspend fun addRecordedWorkout(request: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+    override suspend fun addRecordedWorkout(request: JsonObject): Flow<Resource<BaseApiResponse<List<AddWorkoutResponse>>>> {
         return safeApiCallFlow(dispatcher) {
             val url =
                 "${BuildConfig.OREO_BASE_URL}/activity/v1/add_workout"

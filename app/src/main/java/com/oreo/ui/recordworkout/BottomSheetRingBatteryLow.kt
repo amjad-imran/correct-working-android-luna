@@ -25,7 +25,7 @@ class BottomSheetRingBatteryLow :
 
         binding.oreoStatus.loadImage(
             requireContext(),
-            R.drawable.ic_ring_low_battery
+            R.drawable.ic_ring_default_silver_new
         )
         binding.batteryStatus.setIndicatorColor(resources.getColor(R.color.color_error))
 

@@ -1,14 +1,11 @@
 package com.oreo.ui.recordworkout
 
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.viewModels
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.BottomSheetRingConnectingBinding
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -37,7 +34,6 @@ class BottomSheetRingConnecting :
                         stateConnecting()
                     }
 
-                    binding.btnAllow.isEnabled = false
                 }
 
                 is ConnectState.Connecting -> {
@@ -46,12 +42,18 @@ class BottomSheetRingConnecting :
                     } else {
                         stateConnecting()
                     }
-                    binding.btnAllow.isEnabled = false
                 }
 
                 is ConnectState.ConnectSuccess -> {
-                    binding.groupConnecting.gone()
-                    binding.groupConnected.visible()
+
+                    binding.oreoStatus.gone()
+                    binding.lottieAnimView.gone()
+                    binding.textView90.gone()
+                    binding.textRingConnecteMessage.gone()
+
+                    binding.ivConnectSuccess.visible()
+                    binding.textConnectSuccess.visible()
+
                     binding.btnAllow.isEnabled = true
                 }
 
@@ -65,8 +67,16 @@ class BottomSheetRingConnecting :
     }
 
     private fun stateBluetoothOff() {
-        binding.groupConnecting.visible()
-        binding.groupConnected.gone()
+        binding.oreoStatus.visible()
+        binding.lottieAnimView.gone()
+        binding.textView90.visible()
+        binding.textRingConnecteMessage.visible()
+
+        binding.ivConnectSuccess.gone()
+        binding.textConnectSuccess.gone()
+
+
+        binding.btnAllow.isEnabled = true
         binding.oreoStatus.setImageResource(R.drawable.ic_ring_bluetooth_off)
         binding.textView90.text = getString(R.string.text_bluetooth_turn_on)
         binding.textRingConnecteMessage.text = getString(R.string.text_bluetooth_on_message)
@@ -74,9 +84,16 @@ class BottomSheetRingConnecting :
     }
 
     private fun stateConnecting() {
-        binding.groupConnecting.visible()
-        binding.groupConnected.gone()
+
+        binding.oreoStatus.visible()
         binding.lottieAnimView.visible()
+        binding.textView90.visible()
+        binding.textRingConnecteMessage.visible()
+
+        binding.ivConnectSuccess.gone()
+        binding.textConnectSuccess.gone()
+
+        binding.btnAllow.isEnabled = false
         binding.oreoStatus.setImageResource(R.drawable.ic_ring_default_silver_new)
         binding.textView90.text = getString(R.string.text_trying_to_connect_your_ring)
         binding.textRingConnecteMessage.text = getString(R.string.text_ring_not_in_range)
