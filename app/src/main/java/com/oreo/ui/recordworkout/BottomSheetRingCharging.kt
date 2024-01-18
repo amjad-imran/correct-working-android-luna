@@ -6,6 +6,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.BottomSheetRingChargingBinding
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
+import com.noisefit_commans.ui.loadImage
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -35,8 +36,13 @@ class BottomSheetRingCharging :
     }
 
     private fun stateCharging() {
-        binding.batteryStatus.setIndicatorColor(resources.getColor(R.color.white))
         val batteryPercentage = watchDataStore.getBatteryPercentRing()
+        if (batteryPercentage <= 20) {
+            binding.batteryStatus.setIndicatorColor(resources.getColor(R.color.color_error))
+        } else {
+            binding.batteryStatus.setIndicatorColor(resources.getColor(R.color.white))
+        }
+
         binding.batteryStatus.progress = batteryPercentage
         binding.oreoStatus.setImageResource(R.drawable.ic_ring_charging)
         binding.textView90.text = getString(R.string.text_ring_charging)
