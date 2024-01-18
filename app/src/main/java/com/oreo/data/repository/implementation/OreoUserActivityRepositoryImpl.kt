@@ -1807,12 +1807,12 @@ class OreoUserActivityRepositoryImpl(
     override suspend fun addNapServer(nap: OreoNapData): Flow<Resource<BaseApiResponse<Any>>> {
 
 
-        val jsonObject = onlineDataMapper.getNapRequest(nap)
+        val napRequest = onlineDataMapper.getNapRequest(nap)
 
         return safeApiCallFlow(dispatcher) {
             val url =
                 "${BuildConfig.OREO_BASE_URL}/sleep/v1/nap"
-            remoteDataSource.addNapServer(url, jsonObject)
+            remoteDataSource.addNapServer(url, napRequest)
         }
     }
 

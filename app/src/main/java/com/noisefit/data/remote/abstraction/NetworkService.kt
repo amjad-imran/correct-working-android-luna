@@ -847,7 +847,7 @@ interface NetworkService {
     @POST
     suspend fun addNapServer(
         @Url url: String,
-        @Body jsonObject: JsonObject
+        @Body napRequest: OreoNapNetworkEntity
     ): BaseApiResponse<Any>
     /**
      * ---------------------------------------------------------------------------------
