@@ -23,4 +23,12 @@ constructor(
         return true
     }
 
+    override suspend fun getNaps(): List<OreoNapData>? {
+        return napDao.getAllData()
+    }
+
+    override suspend fun removeNapById(id: Int) {
+        napDao.removeNapById(id)
+    }
+
 }

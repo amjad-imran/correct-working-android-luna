@@ -838,10 +838,17 @@ interface NetworkService {
     suspend fun getHSQAnswer(
         @Url url: String
     ): BaseApiResponse<List<OHSQuestionariesResponseModel>>
+
     @GET
     suspend fun getUserNapDetailsData(
         @Url url: String
     ): BaseApiResponse<OreoNapDetailsDataModel>
+
+    @POST
+    suspend fun addNapServer(
+        @Url url: String,
+        @Body jsonObject: JsonObject
+    ): BaseApiResponse<Any>
     /**
      * ---------------------------------------------------------------------------------
      *                                Oreo Services End

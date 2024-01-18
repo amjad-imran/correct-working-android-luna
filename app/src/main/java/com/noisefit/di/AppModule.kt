@@ -363,8 +363,10 @@ object AppModule {
         stepsDataImpl: OreoStepsDataImpl,
         sleepDataImpl: OreoSleepDataImpl,
         offlineDataMapper: OreoOfflineDataMapper,
+        napDataImpl: OreoNapDataImpl,
         oreoAutoSportDataImpl: OreoAutoSportDataImpl,
         keyValueDataSource: KeyValueDataSource,
+        onlineDataMapper: OreoOnlineDataMapper,
         lastSyncProvider: LastSyncProvider,
         userHealthDataSource: OreoUserHealthDataDataSource,
         offlineApiStore: IOfflineApiResponseStore
@@ -380,10 +382,12 @@ object AppModule {
             respiratoryDataImpl,
             temperatureDataImpl,
             sleepDataImpl,
+            napDataImpl,
             stepsDataImpl,
             oreoAutoSportDataImpl,
             offlineDataMapper,
             keyValueDataSource,
+            onlineDataMapper,
             userHealthDataSource,
             lastSyncProvider,
             offlineApiStore

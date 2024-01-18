@@ -15,6 +15,7 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
+import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.data.model.User
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
@@ -72,6 +73,7 @@ constructor(
     val stateDashRingBattery = MutableLiveData<Pair<Boolean, ColorFitDevice?>>()
     val stateDashAlerts = MutableLiveData<HashMap<AlertType, DashAlert>>()
     val stateGoogleFitCard = MutableLiveData<Boolean>()
+    val napsList = MutableLiveData<List<OreoNapData>>()
 
 
     var contributorInfo: OContributorResponseModal? = null
@@ -446,9 +448,18 @@ constructor(
             })
 
             stateWorkouts.postValue(healthData.activity?.workout ?: ArrayList())
+            loadNapsToConfirm()
 
         }
     }
+
+    fun loadNapsToConfirm() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val naps = userActivityRepository.getNapsToConfirm()
+            napsList.postValue(naps ?: ArrayList())
+        }
+    }
+
 
     private fun handleHrFormat(time: Int): String {
 
@@ -769,6 +780,53 @@ constructor(
         if (index != null && index != -1) {
             healthOverviewData.value?.removeAt(index)
             healthOverviewData.postValue(healthOverviewData.value)
+        }
+    }
+
+    fun confirmNap(nap: OreoNapData) {
+        viewModelScope.launch {
+            userActivityRepository.addNapServer(
+                nap
+            ).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        confirmNap(nap)
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            removeNapById(nap)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun removeNapById(nap: OreoNapData) {
+        viewModelScope.launch(Dispatchers.IO) {
+            userActivityRepository.removeNap(nap.id)
+            loadNapsToConfirm()
         }
     }
 

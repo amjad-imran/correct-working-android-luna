@@ -4,6 +4,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.model.OWorkoutListModal
+import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
 import com.oreo.data.model.AddWorkoutResponse
@@ -99,6 +100,14 @@ interface OreoUserActivityRepository {
     suspend fun clearAllHealthData()
 
     suspend fun getUserNapData(
-        napId:String
+        napId: String
     ): Flow<Resource<BaseApiResponse<OreoNapDetailsDataModel>>>
+
+    suspend fun addNapServer(
+        nap: OreoNapData
+    ): Flow<Resource<BaseApiResponse<Any>>>
+
+    suspend fun getNapsToConfirm(): List<OreoNapData>?
+
+    suspend fun removeNap(id: Int): Boolean
 }

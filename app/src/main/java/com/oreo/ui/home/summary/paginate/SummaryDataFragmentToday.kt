@@ -19,6 +19,7 @@ import com.noisefit.ui.common.bottomSheet.DELETE_REQ_REQUEST_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.enums.DashInfoCard
+import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
@@ -88,9 +89,24 @@ class SummaryDataFragmentToday :
         OSummaryHealthOverviewAdapter()
     }
 
+    private val napsAdapter: NapsConfirmAdapter by lazy {
+        NapsConfirmAdapter(object : NapConfirmAction {
+            override fun onNapConfirmClicked(nap: OreoNapData) {
+                viewModel.confirmNap(nap)
+
+            }
+
+            override fun onNapRemoveClicked(nap: OreoNapData) {
+                viewModel.removeNapById(nap)
+
+            }
+        })
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setNapsPager()
 
         setAdapter()
 
@@ -100,6 +116,17 @@ class SummaryDataFragmentToday :
 
         LOGS.d("CREATED_WITH_DATE $date")
         LOGS.d(TAG, "Today onCreate Called")
+    }
+
+    private fun setNapsPager() {
+        binding.contentMain.lytConfirmNap.vpNaps.apply {
+            offscreenPageLimit = 1
+            adapter = napsAdapter
+        }
+        TabLayoutMediator(
+            binding.contentMain.lytConfirmNap.napsTabLayout,
+            binding.contentMain.lytConfirmNap.vpNaps
+        ) { _, _ -> }.attach()
     }
 
     override fun onDestroyView() {
@@ -239,6 +266,7 @@ class SummaryDataFragmentToday :
                     viewModel.localDataStore.setDashCardClickState(DashInfoCard.WELCOME, true)
                     navigate(R.id.ringWelcomeFragment)
                 }
+
                 is OSummaryHealthOverviewClickEnum.OnNapClicked -> {
 
                     navigate(R.id.napDetails, bundleOf("napId" to type.napId))
@@ -335,6 +363,15 @@ class SummaryDataFragmentToday :
     }
 
     override fun subscribeObservers() {
+
+        viewModel.napsList.observe(viewLifecycleOwner) {
+            if (it.isEmpty()) {
+                binding.contentMain.lytConfirmNap.root.gone()
+            } else {
+                binding.contentMain.lytConfirmNap.root.visible()
+            }
+            napsAdapter.setDataSet(it)
+        }
 
         mainViewModel.dashTodayReload.observe(viewLifecycleOwner) {
             it.getContent()?.let {
@@ -759,11 +796,11 @@ class SummaryDataFragmentToday :
         val lytWorkouts = binding.contentMain.lytWorkouts
         lytWorkouts.root.visible()
 
-        if(workouts.isNullOrEmpty()){
+        if (workouts.isNullOrEmpty()) {
             lytWorkouts.tvEmptyMsg.visible()
             lytWorkouts.tvEmptyMsg.text = getString(R.string.text_tap_plus_workout)
 
-        }else{
+        } else {
             lytWorkouts.tvEmptyMsg.gone()
         }
         lytWorkouts.rvWorkouts.layoutManager = LinearLayoutManager(

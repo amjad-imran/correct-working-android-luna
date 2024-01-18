@@ -23,6 +23,7 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.KeyValue
 import com.noisefit_commans.data.model.OWorkoutListModal
+import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.data.model.UserHealthData
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
@@ -31,11 +32,13 @@ import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.dataConverter.OreoOfflineDataMapper
+import com.oreo.data.dataConverter.OreoOnlineDataMapper
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.db.implementation.OreoAutoSportDataImpl
 import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
 import com.oreo.data.db.implementation.OreoHeartRateDataImpl
+import com.oreo.data.db.implementation.OreoNapDataImpl
 import com.oreo.data.db.implementation.OreoRespiratoryDataImpl
 import com.oreo.data.db.implementation.OreoSleepDataImpl
 import com.oreo.data.db.implementation.OreoStepsDataImpl
@@ -85,10 +88,12 @@ class OreoUserActivityRepositoryImpl(
     private val respiratoryDataImpl: OreoRespiratoryDataImpl,
     private val temperatureDataImpl: OreoBodyTemperatureDataImpl,
     private val sleepDataImpl: OreoSleepDataImpl,
+    private val napDataImpl: OreoNapDataImpl,
     private val stepsDataImpl: OreoStepsDataImpl,
     private val oreoAutoSportDataImpl: OreoAutoSportDataImpl,
     private val offlineDataMapper: OreoOfflineDataMapper,
     private val keyValueDataSource: KeyValueDataSource,
+    private val onlineDataMapper: OreoOnlineDataMapper,
     private val userHealthDataSource: OreoUserHealthDataDataSource,
     private val lastSyncProvider: LastSyncProvider,
     private val offlineApiStore: IOfflineApiResponseStore,
@@ -1791,12 +1796,33 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
-    override suspend fun getUserNapData(napId:String): Flow<Resource<BaseApiResponse<OreoNapDetailsDataModel>>> {
+    override suspend fun getUserNapData(napId: String): Flow<Resource<BaseApiResponse<OreoNapDetailsDataModel>>> {
         return safeApiCallFlow(dispatcher) {
             val url =
-                "${BuildConfig.OREO_BASE_URL}/sleep/v1/nap/$napId"//todo end point will change later
+                "${BuildConfig.OREO_BASE_URL}/sleep/v1/nap/$napId"
             remoteDataSource.getUserNapDetailsData(url)
         }
+    }
+
+    override suspend fun addNapServer(nap: OreoNapData): Flow<Resource<BaseApiResponse<Any>>> {
+
+
+        val jsonObject = onlineDataMapper.getNapRequest(nap)
+
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${BuildConfig.OREO_BASE_URL}/sleep/v1/nap"
+            remoteDataSource.addNapServer(url, jsonObject)
+        }
+    }
+
+    override suspend fun getNapsToConfirm(): List<OreoNapData>? {
+        return napDataImpl.getNaps()
+    }
+
+    override suspend fun removeNap(id: Int): Boolean {
+        napDataImpl.removeNapById(id)
+        return true
     }
 
 }
