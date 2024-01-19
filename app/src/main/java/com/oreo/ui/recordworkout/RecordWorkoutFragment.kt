@@ -1,5 +1,6 @@
 package com.oreo.ui.recordworkout
 
+import android.animation.Animator
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
@@ -14,6 +15,7 @@ import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.playAnimation
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
@@ -126,7 +128,7 @@ class RecordWorkoutFragment :
                     viewModel.sessionManager.sendUpdateQueryAction(
                         UpdateDeviceAction.UpdateOngoingWorkout(
                             sportId,
-                            viewModel.sportStartTime,
+                            viewModel.getCurrentTimeStamp(),
                             4
                         )
                     )
@@ -141,6 +143,47 @@ class RecordWorkoutFragment :
         }
     }
 
+
+    private fun startWorkoutAnim() {
+        binding.lottieAnim.visible()
+        binding.lottieAnim.setAnimation(R.raw.anim_3_2_1_go)
+        binding.lottieAnim.playAnimation()
+        binding.lottieAnim.repeatCount = 0
+
+        binding.lottieAnim.addAnimatorListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(p0: Animator) {
+
+            }
+
+            override fun onAnimationEnd(p0: Animator) {
+                binding.lottieAnim.gone()
+                binding.btnStartWorkout.visible()
+                sendStartWorkoutCommand()
+            }
+
+            override fun onAnimationCancel(p0: Animator) {
+
+            }
+
+            override fun onAnimationRepeat(p0: Animator) {
+
+            }
+        })
+    }
+
+    fun sendStartWorkoutCommand() {
+        binding.progressBar.root.visible()
+        viewModel.sportStartTime = viewModel.getCurrentTimeStamp()
+        val sportId = viewModel.workout?.ringId ?: -1
+
+        viewModel.sessionManager.sendUpdateQueryAction(
+            UpdateDeviceAction.StartWorkout(
+                sportId,
+                viewModel.sportStartTime
+            )
+        )
+    }
+
     override fun initListener() {
 
         binding.ivWorkoutImage.setOnClickListener {
@@ -152,16 +195,11 @@ class RecordWorkoutFragment :
             if (!viewModel.isDeviceConnected()) {
                 return@setOnClickListener
             }
-            binding.progressBar.root.visible()
-            viewModel.sportStartTime = System.currentTimeMillis() / 1000
-            val sportId = viewModel.workout?.ringId ?: -1
 
-            viewModel.sessionManager.sendUpdateQueryAction(
-                UpdateDeviceAction.StartWorkout(
-                    sportId,
-                    viewModel.sportStartTime
-                )
-            )
+            binding.btnStartWorkout.gone()
+
+
+            startWorkoutAnim()
 
         }
 
@@ -174,7 +212,7 @@ class RecordWorkoutFragment :
                 viewModel.sessionManager.sendUpdateQueryAction(
                     UpdateDeviceAction.UpdateOngoingWorkout(
                         sportId,
-                        viewModel.sportStartTime,
+                        viewModel.getCurrentTimeStamp(),
                         2
                     )
                 )
@@ -184,7 +222,7 @@ class RecordWorkoutFragment :
                 viewModel.sessionManager.sendUpdateQueryAction(
                     UpdateDeviceAction.UpdateOngoingWorkout(
                         sportId,
-                        viewModel.sportStartTime,
+                        viewModel.getCurrentTimeStamp(),
                         3
                     )
                 )
@@ -260,14 +298,14 @@ class RecordWorkoutFragment :
 
                 if (workoutId != null) {
                     if (viewModel.currentWorkoutState == 4) {
-                        if(workoutId.equals("none")){
+                        if (workoutId.equals("none")) {
                             navigateUpSafe()
                             return@observe
                         }
                         LOGS.d("sdkjfhskdfj navigate to wirkout details")
                         navigate(
                             RecordWorkoutFragmentDirections.actionRecordWorkoutFragmentToOWorkoutDetailsFragment(
-                                viewModel.workout?.getFormattedActivityName()?:"",
+                                viewModel.workout?.getFormattedActivityName() ?: "",
                                 workoutId,
                                 -1
                             )
