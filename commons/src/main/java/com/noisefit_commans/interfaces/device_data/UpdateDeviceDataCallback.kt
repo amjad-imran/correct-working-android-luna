@@ -11,6 +11,8 @@ sealed class UpdateDeviceDataCallback {
 
     class WorkoutStartState(val success: Boolean, val errorMessage: String? = null) :
         UpdateDeviceDataCallback()
+    class WorkoutEndFromRingState(val errorMessage: String? = null) :
+        UpdateDeviceDataCallback()
 
     class OngoingWorkoutData(val duration: Int,val sportStatus: Int,val sportType: Int,
                              val startTimeStamp: Long) : UpdateDeviceDataCallback()

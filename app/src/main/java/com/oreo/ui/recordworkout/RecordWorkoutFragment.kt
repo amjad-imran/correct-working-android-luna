@@ -18,6 +18,7 @@ import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.playAnimation
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -294,7 +295,6 @@ class RecordWorkoutFragment :
 
         viewModel.sessionManager.showWorkoutDetails.observe(viewLifecycleOwner) {
             it.getContent()?.let { workoutId ->
-                LOGS.d("sdkjfhskdfj Record frag $workoutId ${viewModel.currentWorkoutState}")
 
                 if (workoutId != null) {
                     if (viewModel.currentWorkoutState == 4) {
@@ -302,7 +302,6 @@ class RecordWorkoutFragment :
                             navigateUpSafe()
                             return@observe
                         }
-                        LOGS.d("sdkjfhskdfj navigate to wirkout details")
                         navigate(
                             RecordWorkoutFragmentDirections.actionRecordWorkoutFragmentToOWorkoutDetailsFragment(
                                 viewModel.workout?.getFormattedActivityName() ?: "",
@@ -328,6 +327,11 @@ class RecordWorkoutFragment :
             it.getContent()?.let {
 
                 when (it) {
+                    /*is UpdateDeviceDataCallback.WorkoutEndFromRingState -> {
+                        AppLogs.sendAppLogs("Workout failed from ring Reason: ${it.errorMessage}")
+                        stopWorkout()
+                    }*/
+
                     is UpdateDeviceDataCallback.WorkoutStartState -> {
                         if (it.success) {
                             startWorkout()
