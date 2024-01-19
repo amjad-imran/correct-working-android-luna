@@ -38,6 +38,8 @@ class RecordWorkoutFragment :
             viewModel.workout = it
             binding.tvWorkoutTitle.text = it.getFormattedActivityName()
             binding.ivWorkoutImage.loadImage(binding.ivWorkoutImage.context, it.iconUrl)
+            viewModel.sportStartTime =
+                viewModel.ringDataStore.getOngoingRecordWorkout()?.first ?: 0L
         }
         binding.btnEndWorkout.isEnabled = false
 
