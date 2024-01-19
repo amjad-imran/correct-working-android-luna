@@ -83,7 +83,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
     private fun setBlurAddCta() {
-        val radius = 20f;
+        val radius = 5f
         val decorView = window.decorView;
         val rootView = binding.container
         val windowBackground = decorView.background
@@ -181,6 +181,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         binding.btnAddWorkout.setOnClickListener {
             //binding.btnAddWorkout.gone()
+            setBlurAddCta()
+
             viewModel.addWorkoutCtaVisibility.postValue(false)
 
             binding.blurViewSelector.visible()
