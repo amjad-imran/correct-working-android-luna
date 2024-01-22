@@ -143,6 +143,11 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     override fun initListener() {
 
+        binding.blurViewSelector.setOnClickListener {
+            showAddWorkoutCta()
+            binding.blurViewSelector.gone()
+        }
+
         supportFragmentManager.setFragmentResultListener(SELECT_RECORD_WORKOUT, this) { _, bundle ->
             val workout = bundle.getParcelable<OWorkoutListModal>("workout")
             workout?.let {

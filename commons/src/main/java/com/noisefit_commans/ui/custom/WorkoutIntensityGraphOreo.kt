@@ -59,7 +59,8 @@ class WorkoutIntensityGraphOreo(var mContext: Context) : View(
 
         if (!isDisable) {
             canvas.drawText("High", textXPos, sectionHeight * 1, mTextPaint)
-
+            canvas.drawText("Med", textXPos, sectionHeight * 2, mTextPaint)
+            canvas.drawText("Low", textXPos, sectionHeight * 3, mTextPaint)
             canvas.drawText("None", textXPos, sectionHeight * 4, mTextPaint)
         }
 
