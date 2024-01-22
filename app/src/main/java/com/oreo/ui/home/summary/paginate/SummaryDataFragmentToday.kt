@@ -2,6 +2,7 @@ package com.oreo.ui.home.summary.paginate
 
 import android.graphics.Color
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -9,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.data.CombinedData
 import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
@@ -55,6 +57,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 
 @AndroidEntryPoint
 class SummaryDataFragmentToday :
@@ -278,6 +281,8 @@ class SummaryDataFragmentToday :
 
 
     override fun initListener() {
+
+
         binding.swipeRefreshLayout.setOnRefreshListener {
             binding.swipeRefreshLayout.isRefreshing = false
 
@@ -363,6 +368,12 @@ class SummaryDataFragmentToday :
     }
 
     override fun subscribeObservers() {
+
+        viewModel.reloadTodayData.observe(viewLifecycleOwner) {
+            it.getContent()?.let {
+                mainViewModel.reloadTodaysData()
+            }
+        }
 
         viewModel.napsList.observe(viewLifecycleOwner) {
             if (it.isEmpty()) {

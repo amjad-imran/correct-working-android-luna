@@ -77,6 +77,8 @@ constructor(
 
     fun parseHealthData(healthData: ServerUserHealthData) {
 
+        val nap = healthData.sleep?.naps ?: ArrayList()
+
         viewModelScope.launch(Dispatchers.IO) {
 
 
@@ -116,6 +118,9 @@ constructor(
                     )
                 }
 
+            }
+            if (nap.isNotEmpty()) {
+                userActivities.add(OHealthOverview.NapDashCard(nap))
             }
 
             healthData.activity.let {

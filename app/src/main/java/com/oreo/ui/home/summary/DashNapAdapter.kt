@@ -26,30 +26,36 @@ class DashNapAdapter(private val napList: List<Nap>) :
             }
             if ((nap.sleepScoreImpact ?: 0) > 0) {
                 binding.ivSleep.visible()
+                binding.ivSleepSeperator.visible()
                 val sleepImpactScore = "+${nap.sleepScoreImpact.toString()}"
                 binding.tvSleepScoreChange.text = sleepImpactScore
                 binding.tvSleepScoreChange.setTextColor(binding.ivSleep.context.getColor(R.color.steps_arc))
             } else {
                 if (nap.sleepScoreImpact == null || nap.sleepScoreImpact == 0) {
                     binding.ivSleep.gone()
+                    binding.ivSleepSeperator.gone()
                     binding.tvSleepScoreChange.gone()
                 } else {
                     binding.ivSleep.visible()
+                    binding.ivSleepSeperator.visible()
                     binding.tvSleepScoreChange.text = nap.sleepScoreImpact.toString()
                     binding.tvSleepScoreChange.setTextColor(binding.ivSleep.context.getColor(R.color.nap_dash_sleep_impact_score))
                 }
             }
             if ((nap.readinessScoreImpact ?: 0) > 0) {
                 binding.ivReadiness.visible()
+                binding.ivReadinessSeparator.visible()
                 val readinessImpactScore = "+${nap.readinessScoreImpact.toString()}"
                 binding.tvReadinessScoreChange.text = readinessImpactScore
                 binding.tvReadinessScoreChange.setTextColor(binding.ivReadiness.context.getColor(R.color.steps_arc))
             } else {
                 if (nap.readinessScoreImpact == null || nap.readinessScoreImpact == 0) {
                     binding.ivReadiness.gone()
+                    binding.ivReadinessSeparator.gone()
                     binding.tvReadinessScoreChange.gone()
                 } else {
                     binding.ivReadiness.visible()
+                    binding.ivReadinessSeparator.visible()
                     binding.tvReadinessScoreChange.text = nap.readinessScoreImpact.toString()
                     binding.tvReadinessScoreChange.setTextColor(binding.ivSleep.context.getColor(R.color.nap_dash_sleep_impact_score))
                 }

@@ -92,6 +92,7 @@ constructor(
 
     var user: User? = null
     var registerDate: Int = -1
+    var reloadTodayData = MutableLiveData<Event<Boolean>>()
 
 
     fun setRingBatteryInfoState() {
@@ -784,7 +785,7 @@ constructor(
     }
 
     fun confirmNap(nap: OreoNapData) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             userActivityRepository.addNapServer(
                 nap
             ).collect { resource ->
@@ -816,6 +817,7 @@ constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             removeNapById(nap)
+                            reloadTodayData.postValue(Event(true))
                         }
                     }
                 }
