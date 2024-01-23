@@ -24,8 +24,10 @@
                 android:background="@drawable/ic_slide_up_nap_post_7_pm_bg_1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
                 app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize28dp" />
 
 
@@ -62,8 +64,8 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="32dp"
-                android:lineSpacingExtra="6sp"
                 android:gravity="center"
+                android:lineSpacingExtra="6sp"
                 android:textColor="@color/white_64"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -74,9 +76,10 @@
                 android:id="@+id/ivScoreStatus"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
                 android:src="@drawable/ic_bs_nap_score_down"
-                app:layout_constraintTop_toBottomOf="@id/tvDescription" />
+                app:layout_constraintTop_toBottomOf="@id/tvDescription"
+                tools:layout_editor_absoluteX="75dp" />
 
             <TextView
                 android:id="@+id/tvScoreTitle"
@@ -85,45 +88,108 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
                 android:text="@string/text_sleep_score"
-                app:layout_constraintEnd_toEndOf="@id/tvNewSScore"
-                app:layout_constraintStart_toStartOf="@id/tvOldSScore"
-                app:layout_constraintTop_toBottomOf="@id/ivScoreStatus" />
-
-            <TextView
-                android:id="@+id/tvOldSScore"
-                style="@style/H1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="46dp"
-                android:layout_marginTop="15dp"
-                android:textColor="@color/white_64"
-                android:textSize="28sp"
+                app:layout_constraintEnd_toStartOf="@+id/divider1"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvScoreTitle"
-                tools:text="81" />
+                app:layout_constraintTop_toBottomOf="@+id/ivScoreStatus" />
 
-            <ImageView
-                android:id="@+id/ivArrow1"
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
-                android:src="@drawable/ic_nap_forward_arrow"
-                app:layout_constraintBottom_toBottomOf="@id/tvOldSScore"
-                app:layout_constraintStart_toEndOf="@id/tvOldSScore"
-                app:layout_constraintTop_toTopOf="@id/tvOldSScore" />
+                android:layout_marginTop="14dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="@+id/tvScoreTitle"
+                app:layout_constraintStart_toStartOf="@+id/tvScoreTitle"
+                app:layout_constraintTop_toBottomOf="@id/tvScoreTitle">
+
+                <TextView
+                    android:id="@+id/tvOldSScore"
+                    style="@style/H1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white_64"
+                    android:textSize="28sp"
+                    tools:text="81" />
+
+                <ImageView
+                    android:id="@+id/ivArrow1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:src="@drawable/ic_nap_forward_arrow" />
+
+                <TextView
+                    android:id="@+id/tvNewSScore"
+                    style="@style/H1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:textColor="@color/white"
+                    android:textSize="28sp"
+                    tools:text="84" />
+
+            </LinearLayout>
+
+
+
+            <include
+                android:id="@+id/divider1"
+                layout="@layout/layout_divider"
+                android:layout_width="1dp"
+                android:layout_height="54dp"
+                android:layout_marginTop="40dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivScoreStatus" />
 
             <TextView
-                android:id="@+id/tvNewSScore"
-                style="@style/H1"
+                android:id="@+id/tvReadinessScoreTitle"
+                style="@style/H6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
-                android:layout_marginTop="15dp"
-                android:textColor="@color/white"
-                android:textSize="28sp"
-                app:layout_constraintStart_toEndOf="@id/ivArrow1"
-                app:layout_constraintTop_toBottomOf="@id/tvScoreTitle"
-                tools:text="84" />
+                android:layout_marginTop="40dp"
+                android:text="@string/text_readiness_score"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/divider1"
+                app:layout_constraintTop_toBottomOf="@+id/ivScoreStatus" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="@+id/tvReadinessScoreTitle"
+                app:layout_constraintStart_toStartOf="@+id/tvReadinessScoreTitle"
+                app:layout_constraintTop_toBottomOf="@+id/tvReadinessScoreTitle">
+
+                <TextView
+                    android:id="@+id/tvOldRScore"
+                    style="@style/H1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white_64"
+                    android:textSize="28sp"
+                    tools:text="81" />
+
+                <ImageView
+                    android:id="@+id/ivArrow2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:src="@drawable/ic_nap_forward_arrow" />
+
+                <TextView
+                    android:id="@+id/tvNewRScore"
+                    style="@style/H1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:textColor="@color/white"
+                    android:textSize="28sp"
+                    tools:text="84" />
+            </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnKnowMore"
@@ -138,64 +204,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvOldSScore" />
-
-            <include
-                android:id="@+id/divider1"
-                layout="@layout/layout_divider"
-                android:layout_width="1dp"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="@id/tvNewSScore"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tvScoreTitle" />
-
-            <TextView
-                android:id="@+id/tvReadinessScoreTitle"
-                style="@style/H6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="42dp"
-                android:layout_marginTop="40dp"
-                android:text="@string/text_readiness_score"
-                app:layout_constraintStart_toStartOf="@id/divider1"
-                app:layout_constraintTop_toBottomOf="@id/ivScoreStatus" />
-
-            <TextView
-                android:id="@+id/tvOldRScore"
-                style="@style/H1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="46dp"
-                android:layout_marginTop="15dp"
-                android:textColor="@color/white_64"
-                android:textSize="28sp"
-                app:layout_constraintStart_toStartOf="@id/divider1"
-                app:layout_constraintTop_toBottomOf="@id/tvReadinessScoreTitle"
-                tools:text="81" />
-
-            <ImageView
-                android:id="@+id/ivArrow2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
-                android:src="@drawable/ic_nap_forward_arrow"
-                app:layout_constraintBottom_toBottomOf="@id/tvOldRScore"
-                app:layout_constraintStart_toEndOf="@id/tvOldRScore"
-                app:layout_constraintTop_toTopOf="@id/tvOldRScore" />
-
-            <TextView
-                android:id="@+id/tvNewRScore"
-                style="@style/H1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
-                android:layout_marginTop="15dp"
-                android:textColor="@color/white"
-                android:textSize="28sp"
-                app:layout_constraintStart_toEndOf="@id/ivArrow2"
-                app:layout_constraintTop_toBottomOf="@id/tvReadinessScoreTitle"
-                tools:text="84" />
+                app:layout_constraintTop_toBottomOf="@+id/divider1" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

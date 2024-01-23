@@ -19,6 +19,11 @@ data class OreoNapDetailsDataModel(
     @SerializedName("readiness_score")
     var readinessScore: Int? = null,
     var duration: Long? = null,
+    var id: String? = null,
+    var title: String? = null,
+
+    @SerializedName("sub_title")
+    var subtitle: String? = null,
     var nudges: List<Nudges>? = null,
     var hrBreakup: UnitDataModelArray? = null,
     var hrvBreakUp: UnitDataModelArray? = null,

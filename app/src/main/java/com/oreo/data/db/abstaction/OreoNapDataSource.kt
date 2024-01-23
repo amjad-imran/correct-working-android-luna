@@ -13,4 +13,7 @@ interface OreoNapDataSource {
 
     suspend fun removeNapById(id: Int)
 
+    suspend fun deleteOldData(days: Int): Int
+
+
 }

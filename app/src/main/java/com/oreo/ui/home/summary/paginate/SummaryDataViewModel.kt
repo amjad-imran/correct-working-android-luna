@@ -120,7 +120,7 @@ constructor(
 
             }
             if (nap.isNotEmpty()) {
-                userActivities.add(OHealthOverview.NapDashCard(nap))
+                userActivities.add(OHealthOverview.NapDashCard(nap,healthData.date))
             }
 
             healthData.activity.let {

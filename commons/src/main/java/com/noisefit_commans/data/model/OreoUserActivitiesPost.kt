@@ -54,6 +54,7 @@ data class OreoNapNetworkObjEntity(
     @SerializedName("max_hrv") var maxHrv: Int,
     @SerializedName("low_hr") var lowHr: Int,
     @SerializedName("avg_hr") var avgHr: Int,
+    @SerializedName("avg_hrv") var avgHrv: Int,
     @SerializedName("hr") var hr: List<Int>,
     @SerializedName("hrv") var hrv: List<Int>,
 )

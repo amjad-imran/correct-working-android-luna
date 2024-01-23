@@ -31,7 +31,7 @@ interface OreoSleepDao : BaseDao<OreoSleepData> {
     )
     fun getUnSyncServerData(endDate: Long, isSync: Boolean): List<OreoSleepData>?
 
-    @Query("DELETE FROM heart_rate WHERE date <= date('now', '-' || :day || ' days')")
+    @Query("DELETE FROM sleep_data WHERE date <= date('now', '-' || :day || ' days')")
     fun deleteOlderData(day: Int): Int
 
     @Query("UPDATE sleep_data SET is_synced = :is_synced WHERE id IN (:ids)")

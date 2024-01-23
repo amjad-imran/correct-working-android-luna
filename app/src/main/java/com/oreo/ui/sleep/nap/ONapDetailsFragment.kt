@@ -128,6 +128,8 @@ class ONapDetailsFragment :
         } else {
             binding.lytNapTopView.lytImpact.tvDiffSScore.invisible()
         }
+
+
         //nap readiness score
         binding.lytNapTopView.lytImpact.tvOldRScore.text = "${it.prevReadinessScore ?: 0}"
         binding.lytNapTopView.lytImpact.tvNewRScore.text = "${it.readinessScore ?: 0}"
@@ -201,6 +203,15 @@ class ONapDetailsFragment :
             DateFormats.dateTimeFormat5,
             DateFormats.timeFormat12
         )
+
+        if ((it.sleepScore ?: 0) == 0 && (it.readinessScore ?: 0) == 0 && (it.prevSleepScore
+                ?: 0) == 0 && (it.prevReadinessScore ?: 0) == 0
+        ) {
+            binding.lytNapTopView.lytImpact.root.gone()
+            binding.lytNapTopView.rootView.setBackgroundResource(0)
+        } else {
+            binding.lytNapTopView.lytImpact.root.visible()
+        }
 
         //nap nudges
         setNapBannerViewPager(it.nudges)

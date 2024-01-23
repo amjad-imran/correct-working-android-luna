@@ -2,7 +2,6 @@ package com.oreo.ui.home.summary.paginate
 
 import android.graphics.Color
 import android.os.Bundle
-import android.view.MotionEvent
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -10,7 +9,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.data.CombinedData
 import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
@@ -369,9 +367,29 @@ class SummaryDataFragmentToday :
 
     override fun subscribeObservers() {
 
-        viewModel.reloadTodayData.observe(viewLifecycleOwner) {
-            it.getContent()?.let {
+        viewModel.getLoading().observe(viewLifecycleOwner) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
+            }
+        }
+        viewModel.getApiErrors().observe(viewLifecycleOwner) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
+            }
+        }
+
+        viewModel.onNapAddSuccess.observe(viewLifecycleOwner) {
+            it.getContent()?.let { nap ->
                 mainViewModel.reloadTodaysData()
+                if (nap.sleepScore != 0 && nap.readinessScore != 0) {
+                    navigate(
+                        R.id.bottomSheetNapScore, bundleOf(
+                            "napScoreData" to viewModel.getNapSlideUpObj(nap)
+                        )
+                    )
+                }
             }
         }
 
@@ -381,7 +399,7 @@ class SummaryDataFragmentToday :
             } else {
                 binding.contentMain.lytConfirmNap.root.visible()
             }
-            napsAdapter.setDataSet(it)
+            napsAdapter.setDataSet(it,viewModel.date)
         }
 
         mainViewModel.dashTodayReload.observe(viewLifecycleOwner) {

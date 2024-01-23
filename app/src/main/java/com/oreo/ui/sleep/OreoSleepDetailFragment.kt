@@ -21,7 +21,6 @@ import com.noisefit.luna.databinding.FragmentOreoSleepDetailBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit.util.ApplicationUtils
-import com.noisefit_commans.common.averageIntWithoutZeroFloat
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.ui.custom.NightTimeGraphViewOreo
 import com.noisefit_commans.ui.custom.SleepGraphViewOreo
@@ -36,7 +35,6 @@ import com.oreo.data.model.SleepChartModel
 import com.oreo.data.model.health.*
 import com.oreo.ui.custom.ScrollListener
 import com.oreo.ui.home.summary.DashNapAdapter
-import com.oreo.ui.home.summary.OSummaryHealthOverviewClickEnum
 import com.oreo.ui.home.summary.OnNapSelectedAction
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.sleep.banner.OreoSleepBannerFragment
@@ -45,7 +43,6 @@ import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
-import java.math.BigDecimal
 
 
 @AndroidEntryPoint
@@ -961,11 +958,11 @@ class OreoSleepDetailFragment :
 
         setNightTimeMovement(dayData.night_time_movement)
 
-        setNapData(dayData.naps)
+        setNapData(dayData.naps,dayData.date)
 
     }
 
-    private fun setNapData(naps: List<Nap>?) {
+    private fun setNapData(naps: List<Nap>?, date: String) {
 
         if (naps.isNullOrEmpty()) {
             binding.lytNaps.root.gone()
@@ -976,7 +973,7 @@ class OreoSleepDetailFragment :
 
         binding.lytNaps.lytNap.rvNap.layoutManager =
             LinearLayoutManager(binding.lytNaps.lytNap.rvNap.context)
-        binding.lytNaps.lytNap.rvNap.adapter = DashNapAdapter(naps).apply {
+        binding.lytNaps.lytNap.rvNap.adapter = DashNapAdapter(naps,date).apply {
 
             this.setOnNapSelectedListener(object : OnNapSelectedAction {
                 override fun onNapSelected(napId: String) {

@@ -31,4 +31,8 @@ constructor(
         napDao.removeNapById(id)
     }
 
+    override suspend fun deleteOldData(days: Int): Int {
+        return napDao.deleteOlderData(days)
+    }
+
 }

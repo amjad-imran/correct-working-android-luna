@@ -16,4 +16,7 @@ interface OreoNapDao : BaseDao<OreoNapData> {
     @Query("DELETE from nap_data where id=:id")
     fun removeNapById(id: Int)
 
+    @Query("DELETE FROM nap_data WHERE date <= date('now', '-' || :day || ' days')")
+    fun deleteOlderData(day: Int): Int
+
 }

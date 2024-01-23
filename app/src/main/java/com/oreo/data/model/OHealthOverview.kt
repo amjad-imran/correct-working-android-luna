@@ -16,7 +16,7 @@ sealed class OHealthOverview {
 
     data class InfoRingWelcome(val data: InfoTextData) : OHealthOverview()
     data class InfoRingCare(val data: InfoTextData) : OHealthOverview()
-    data class NapDashCard(val naps: List<Nap>) : OHealthOverview()
+    data class NapDashCard(val naps: List<Nap>, val date: String) : OHealthOverview()
     data class InfoVideo(val type: VideoInfoType, val data: InfoVideoData) :
         OHealthOverview()
 

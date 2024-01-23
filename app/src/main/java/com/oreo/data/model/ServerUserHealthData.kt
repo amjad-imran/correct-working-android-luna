@@ -38,9 +38,7 @@ data class ServerUserHealthData(
     var activity: OreoActivityModel? = null,
     var readiness: OreoReadinessModel? = null,
     var heart: DataBreakup? = null,
-
-
-    )
+)
 
 data class DataBreakup(
     val break_up: List<Int>

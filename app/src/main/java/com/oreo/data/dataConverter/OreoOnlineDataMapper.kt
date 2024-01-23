@@ -260,6 +260,7 @@ class OreoOnlineDataMapper
             endTime = nap.endTime ?: "",
             duration = nap.duration,
             date = nap.date ?: "",
+            avgHrv = overlayData.hrvBreakup.minWithoutZero(),
             temperature = overlayData.tempBreakup,
             avgTemp = overlayData.tempBreakup.averageWithoutZeroFloat(),
             hr = overlayData.hrBreakup,

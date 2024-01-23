@@ -72,6 +72,7 @@ import kotlinx.coroutines.withContext
 import org.joda.time.LocalDate
 import org.json.JSONObject
 import com.oreo.data.model.AddWorkoutResponse
+import com.oreo.data.model.health.Nap
 
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -1804,9 +1805,7 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
-    override suspend fun addNapServer(nap: OreoNapData): Flow<Resource<BaseApiResponse<Any>>> {
-
-
+    override suspend fun addNapServer(nap: OreoNapData): Flow<Resource<BaseApiResponse<List<OreoNapDetailsDataModel>>>> {
         val napRequest = onlineDataMapper.getNapRequest(nap)
 
         return safeApiCallFlow(dispatcher) {
@@ -1816,7 +1815,11 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
+    /**
+     * delete naps more than 2 days and returns response
+     */
     override suspend fun getNapsToConfirm(): List<OreoNapData>? {
+        napDataImpl.deleteOldData(2)
         return napDataImpl.getNaps()
     }
 

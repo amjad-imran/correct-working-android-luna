@@ -5,6 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class SlideUpNapScoreDataModel(
+    var napId: String? = null,
     var title: String? = null,
     var description: String? = null,
     var oldSleepScore: Int? = 0,

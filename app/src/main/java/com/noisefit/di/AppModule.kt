@@ -166,6 +166,7 @@ object AppModule {
         tempDataSource: OreoBodyTemperatureDataImpl,
         respDataSource: OreoRespiratoryDataImpl,
         sleepDataSource: OreoSleepDataImpl,
+        napDataSource: OreoNapDataImpl,
         dayTimeMovementDataSource: OreoDayTimeMovementDataImpl,
         autoWorkoutDataSource: OreoAutoSportDataImpl,
         gson: Gson
@@ -179,6 +180,7 @@ object AppModule {
             tempDataSource,
             respDataSource,
             sleepDataSource,
+            napDataSource,
             dayTimeMovementDataSource,
             autoWorkoutDataSource,
             gson

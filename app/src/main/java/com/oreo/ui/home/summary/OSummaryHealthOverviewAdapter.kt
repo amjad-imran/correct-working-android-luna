@@ -321,7 +321,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         ) {
 
             binding.rvNap.layoutManager = LinearLayoutManager(binding.rvNap.context)
-            binding.rvNap.adapter = DashNapAdapter(data.naps).apply {
+            binding.rvNap.adapter = DashNapAdapter(data.naps, data.date).apply {
 
                 this.setOnNapSelectedListener(object : OnNapSelectedAction {
                     override fun onNapSelected(napId: String) {
@@ -333,16 +333,6 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     }
                 })
             }
-
-
-            /* binding.root.setOnClickListener {
-                 itemClickListener?.invoke(
-                     OSummaryHealthOverviewClickEnum.VideoInfoClicked(
-                         data.type,
-                         data.data.url
-                     )
-                 )
-             }*/
         }
     }
 
@@ -425,15 +415,25 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.tvDayStatus.text = nudge?.label ?: ""
                 binding.tvNudge.text = nudge?.message ?: ""
             }
-            //todo will set nap data here once received
-            /* binding.lytNapLabel.root.visible()
-             binding.lytNapLabel.tvNapUpdatedScore.text = "+4"
-             binding.lytNapLabel.tvNapUpdatedScore.setTextColor(
-                 binding.lytNapLabel.tvNapUpdatedScore.context.getColor(
-                     R.color.nap_dash_readiness_score
-                 )
-             )
-             binding.lytNapLabel.tvNapCountMsg.text = "after 1 nap"*/
+
+            if (data.data.readinessNapScoreImpact == null || data.data.readinessNapScoreImpact == 0) {
+                binding.lytNapLabel.root.gone()
+            } else {
+                binding.lytNapLabel.root.visible()
+                binding.lytNapLabel.tvNapUpdatedScore.text =
+                    if ((data.data.readinessNapScoreImpact ?: 0) >= 0) {
+                        "+${data.data.readinessNapScoreImpact}"
+                    } else {
+                        "${data.data.readinessNapScoreImpact}"
+                    }
+                binding.lytNapLabel.tvNapUpdatedScore.setTextColor(
+                    binding.lytNapLabel.tvNapUpdatedScore.context.getColor(
+                        R.color.nap_dash_readiness_score
+                    )
+                )
+                binding.lytNapLabel.tvNapCountMsg.text = "after ${data.data.noOfNaps} nap"
+            }
+
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.ReadinessDetailsWorkoutClick)
             }
@@ -494,16 +494,24 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.lottieAnimationView.playAnimation()
 
             }
-            /*
-            //todo will set nap data here once received
-            binding.lytNapLabel.root.visible()
-            binding.lytNapLabel.tvNapUpdatedScore.text = "+4"
-            binding.lytNapLabel.tvNapUpdatedScore.setTextColor(
-                binding.lytNapLabel.tvNapUpdatedScore.context.getColor(
-                    R.color.nap_dash_readiness_score
+
+            if (data.data.readinessNapScoreImpact == null || data.data.readinessNapScoreImpact == 0) {
+                binding.lytNapLabel.root.gone()
+            } else {
+                binding.lytNapLabel.root.visible()
+                binding.lytNapLabel.tvNapUpdatedScore.text =
+                    if ((data.data.readinessNapScoreImpact ?: 0) >= 0) {
+                        "+${data.data.readinessNapScoreImpact}"
+                    } else {
+                        "${data.data.readinessNapScoreImpact}"
+                    }
+                binding.lytNapLabel.tvNapUpdatedScore.setTextColor(
+                    binding.lytNapLabel.tvNapUpdatedScore.context.getColor(
+                        R.color.nap_dash_readiness_score
+                    )
                 )
-            )
-            binding.lytNapLabel.tvNapCountMsg.text = "after 1 nap"*/
+                binding.lytNapLabel.tvNapCountMsg.text = "after ${data.data.noOfNaps} nap"
+            }
 
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.ReadinessDetailsWorkoutClick)
@@ -566,15 +574,24 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 "$hourTimeInBed hr $minuteTimeInBed min"
             }
 
-            /* //todo will set nap data here once received
-             binding.lytNapLabel.root.visible()
-             binding.lytNapLabel.tvNapUpdatedScore.text = "+4"
-             binding.lytNapLabel.tvNapUpdatedScore.setTextColor(
-                 binding.lytNapLabel.tvNapUpdatedScore.context.getColor(
-                     R.color.nap_dash_sleep_score
-                 )
-             )
-             binding.lytNapLabel.tvNapCountMsg.text = "after 1 nap"*/
+
+            if (data.data.sleepNapScoreImpact == null || data.data.sleepNapScoreImpact == 0) {
+                binding.lytNapLabel.root.gone()
+            } else {
+                binding.lytNapLabel.root.visible()
+                binding.lytNapLabel.tvNapUpdatedScore.text =
+                    if ((data.data.sleepNapScoreImpact ?: 0) >= 0) {
+                        "+${data.data.sleepNapScoreImpact}"
+                    } else {
+                        "${data.data.sleepNapScoreImpact}"
+                    }
+                binding.lytNapLabel.tvNapUpdatedScore.setTextColor(
+                    binding.lytNapLabel.tvNapUpdatedScore.context.getColor(
+                        R.color.nap_dash_sleep_score
+                    )
+                )
+                binding.lytNapLabel.tvNapCountMsg.text = "after ${data.data.noOfNaps} nap"
+            }
 
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.SleepDetailsWorkoutClick)
@@ -662,15 +679,23 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             }
 
-            /*//todo will set nap data here once received
-            binding.lytNapLabel.root.visible()
-            binding.lytNapLabel.tvNapUpdatedScore.text = "+4"
-            binding.lytNapLabel.tvNapUpdatedScore.setTextColor(
-                binding.lytNapLabel.tvNapUpdatedScore.context.getColor(
-                    R.color.nap_dash_sleep_score
+            if (data.data.sleepNapScoreImpact == null || data.data.sleepNapScoreImpact == 0) {
+                binding.lytNapLabel.root.gone()
+            } else {
+                binding.lytNapLabel.root.visible()
+                binding.lytNapLabel.tvNapUpdatedScore.text =
+                    if ((data.data.sleepNapScoreImpact ?: 0) >= 0) {
+                        "+${data.data.sleepNapScoreImpact}"
+                    } else {
+                        "${data.data.sleepNapScoreImpact}"
+                    }
+                binding.lytNapLabel.tvNapUpdatedScore.setTextColor(
+                    binding.lytNapLabel.tvNapUpdatedScore.context.getColor(
+                        R.color.nap_dash_sleep_score
+                    )
                 )
-            )
-            binding.lytNapLabel.tvNapCountMsg.text = "after 1 nap"*/
+                binding.lytNapLabel.tvNapCountMsg.text = "after ${data.data.noOfNaps} nap"
+            }
 
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.SleepDetailsWorkoutClick)

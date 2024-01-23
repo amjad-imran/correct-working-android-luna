@@ -10,8 +10,9 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.health.Nap
+import java.lang.StringBuilder
 
-class DashNapAdapter(private val napList: List<Nap>) :
+class DashNapAdapter(private val napList: List<Nap>, private val date: String) :
     RecyclerView.Adapter<DashNapAdapter.ViewHolder>() {
     var listener: OnNapSelectedAction? = null
 
@@ -61,12 +62,20 @@ class DashNapAdapter(private val napList: List<Nap>) :
                 }
             }
 
-            //TODO show yesterday also
-            binding.tvStartTime.text = DateFormats.parseDate(
-                nap.startTime,
-                DateFormats.dateTimeFormat5,
-                DateFormats.timeFormat12
+
+            val timeBuilder = StringBuilder()
+            if (!nap.date.equals(date)) {
+                timeBuilder.append("Yesterday ")
+            }
+            timeBuilder.append(
+                DateFormats.parseDate(
+                    nap.startTime,
+                    DateFormats.dateTimeFormat5,
+                    DateFormats.timeFormat12
+                )?.lowercase()
             )
+
+            binding.tvStartTime.text = timeBuilder.toString()
 
 
             if (bindingAdapterPosition == (napList.size - 1)) {

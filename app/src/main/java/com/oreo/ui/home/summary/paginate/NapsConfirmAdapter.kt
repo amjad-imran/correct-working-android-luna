@@ -7,10 +7,12 @@ import com.noisefit.luna.databinding.RowNapConfirmBinding
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.utils.DateFormats
+import java.lang.StringBuilder
 
 class NapsConfirmAdapter(val listener: NapConfirmAction) :
     RecyclerView.Adapter<NapsConfirmAdapter.ViewHolder>() {
     private var mDataSet = ArrayList<OreoNapData>()
+    private var mDate: String? = null
 
     inner class ViewHolder(private val binding: RowNapConfirmBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -24,13 +26,23 @@ class NapsConfirmAdapter(val listener: NapConfirmAction) :
                 "$hour h $minute m"
             }
 
-            val startTime = DateFormats.parseDate(
-                nap.startTime ?: "",
-                DateFormats.dateTimeFormat5,
-                DateFormats.timeFormat12
-            )?.lowercase()
+            val timeBuilder = StringBuilder()
+            if (mDate != null && !nap.date.equals(mDate)) {
+                timeBuilder.append("Yesterday ")
+            }
+            timeBuilder.append(
+                DateFormats.parseDate(
+                    nap.startTime ?: "",
+                    DateFormats.dateTimeFormat5,
+                    DateFormats.timeFormat12
+                )?.lowercase()
+            )
+            timeBuilder.append(" | ")
+            timeBuilder.append(time)
 
-            binding.tvNapTime.text = "$startTime | $time"
+            binding.tvNapTime.text = timeBuilder.toString()
+
+
 
             binding.ivRemoveNap.setOnClickListener {
                 listener.onNapRemoveClicked(nap)
@@ -58,7 +70,8 @@ class NapsConfirmAdapter(val listener: NapConfirmAction) :
 
     override fun getItemCount(): Int = mDataSet.size
 
-    fun setDataSet(dataSet: List<OreoNapData>) {
+    fun setDataSet(dataSet: List<OreoNapData>, date: String?) {
+        mDate = date
         mDataSet.clear()
         mDataSet.addAll(dataSet)
         notifyDataSetChanged()
