@@ -1074,7 +1074,6 @@ class OreoSleepDetailFragment :
         if (mainViewModel.shouldLoadMoreData()) {
             LOGS.w("Loading more data")
         }
-        mainViewModel.handleAddWorkoutVisibility()
 
     }
 

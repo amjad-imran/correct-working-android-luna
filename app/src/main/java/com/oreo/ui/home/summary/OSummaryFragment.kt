@@ -384,12 +384,14 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 is ConnectState.ConnectFailed -> {
                     setConnectingState(true)
                     binding.lytHeader.pbSync.gone()
+                    binding.lytHeader.tvHeaderStatus.gone()
 
                 }
 
                 is ConnectState.Connecting -> {
                     setConnectingState(true)
                     binding.lytHeader.pbSync.gone()
+                    binding.lytHeader.tvHeaderStatus.gone()
 
                 }
 

@@ -1,5 +1,6 @@
 package com.oreo.ui.recordworkout
 
+import android.animation.Animator
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
@@ -14,8 +15,10 @@ import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.playAnimation
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,6 +38,8 @@ class RecordWorkoutFragment :
             viewModel.workout = it
             binding.tvWorkoutTitle.text = it.getFormattedActivityName()
             binding.ivWorkoutImage.loadImage(binding.ivWorkoutImage.context, it.iconUrl)
+            viewModel.sportStartTime =
+                viewModel.ringDataStore.getOngoingRecordWorkout()?.first ?: 0L
         }
         binding.btnEndWorkout.isEnabled = false
 
@@ -126,7 +131,7 @@ class RecordWorkoutFragment :
                     viewModel.sessionManager.sendUpdateQueryAction(
                         UpdateDeviceAction.UpdateOngoingWorkout(
                             sportId,
-                            viewModel.sportStartTime,
+                            viewModel.getCurrentTimeStamp(),
                             4
                         )
                     )
@@ -141,6 +146,47 @@ class RecordWorkoutFragment :
         }
     }
 
+
+    private fun startWorkoutAnim() {
+        binding.lottieAnim.visible()
+        binding.lottieAnim.setAnimation(R.raw.anim_3_2_1_go)
+        binding.lottieAnim.playAnimation()
+        binding.lottieAnim.repeatCount = 0
+
+        binding.lottieAnim.addAnimatorListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(p0: Animator) {
+
+            }
+
+            override fun onAnimationEnd(p0: Animator) {
+                binding.lottieAnim.gone()
+                binding.btnStartWorkout.visible()
+                sendStartWorkoutCommand()
+            }
+
+            override fun onAnimationCancel(p0: Animator) {
+
+            }
+
+            override fun onAnimationRepeat(p0: Animator) {
+
+            }
+        })
+    }
+
+    fun sendStartWorkoutCommand() {
+        binding.progressBar.root.visible()
+        viewModel.sportStartTime = viewModel.getCurrentTimeStamp()
+        val sportId = viewModel.workout?.ringId ?: -1
+
+        viewModel.sessionManager.sendUpdateQueryAction(
+            UpdateDeviceAction.StartWorkout(
+                sportId,
+                viewModel.sportStartTime
+            )
+        )
+    }
+
     override fun initListener() {
 
         binding.ivWorkoutImage.setOnClickListener {
@@ -152,16 +198,11 @@ class RecordWorkoutFragment :
             if (!viewModel.isDeviceConnected()) {
                 return@setOnClickListener
             }
-            binding.progressBar.root.visible()
-            viewModel.sportStartTime = System.currentTimeMillis() / 1000
-            val sportId = viewModel.workout?.ringId ?: -1
 
-            viewModel.sessionManager.sendUpdateQueryAction(
-                UpdateDeviceAction.StartWorkout(
-                    sportId,
-                    viewModel.sportStartTime
-                )
-            )
+            binding.btnStartWorkout.gone()
+
+
+            startWorkoutAnim()
 
         }
 
@@ -174,7 +215,7 @@ class RecordWorkoutFragment :
                 viewModel.sessionManager.sendUpdateQueryAction(
                     UpdateDeviceAction.UpdateOngoingWorkout(
                         sportId,
-                        viewModel.sportStartTime,
+                        viewModel.getCurrentTimeStamp(),
                         2
                     )
                 )
@@ -184,7 +225,7 @@ class RecordWorkoutFragment :
                 viewModel.sessionManager.sendUpdateQueryAction(
                     UpdateDeviceAction.UpdateOngoingWorkout(
                         sportId,
-                        viewModel.sportStartTime,
+                        viewModel.getCurrentTimeStamp(),
                         3
                     )
                 )
@@ -256,18 +297,16 @@ class RecordWorkoutFragment :
 
         viewModel.sessionManager.showWorkoutDetails.observe(viewLifecycleOwner) {
             it.getContent()?.let { workoutId ->
-                LOGS.d("sdkjfhskdfj Record frag $workoutId ${viewModel.currentWorkoutState}")
 
                 if (workoutId != null) {
                     if (viewModel.currentWorkoutState == 4) {
-                        if(workoutId.equals("none")){
+                        if (workoutId.equals("none")) {
                             navigateUpSafe()
                             return@observe
                         }
-                        LOGS.d("sdkjfhskdfj navigate to wirkout details")
                         navigate(
                             RecordWorkoutFragmentDirections.actionRecordWorkoutFragmentToOWorkoutDetailsFragment(
-                                viewModel.workout?.getFormattedActivityName()?:"",
+                                viewModel.workout?.getFormattedActivityName() ?: "",
                                 workoutId,
                                 -1
                             )
@@ -290,6 +329,11 @@ class RecordWorkoutFragment :
             it.getContent()?.let {
 
                 when (it) {
+                    /*is UpdateDeviceDataCallback.WorkoutEndFromRingState -> {
+                        AppLogs.sendAppLogs("Workout failed from ring Reason: ${it.errorMessage}")
+                        stopWorkout()
+                    }*/
+
                     is UpdateDeviceDataCallback.WorkoutStartState -> {
                         if (it.success) {
                             startWorkout()

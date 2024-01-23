@@ -160,7 +160,8 @@ class OWorkoutDetailsFragment :
 
             binding.lytHeartRate.root.gone()
 
-            if(it.type.equals("userworkout",true)){
+            var movement = it.movement
+            if (it.type.equals("userworkout", true)) {
                 setHrGraph(
                     it.hrArray,
                     it.hrAvg,
@@ -168,20 +169,20 @@ class OWorkoutDetailsFragment :
                     "${it.date} ${it.startTime}",
                     "${it.date} ${it.endTime}"
                 )
+                movement = mViewModel.getCombinedMovement(it.movement ?: ArrayList())
             }
 
 
-          /*  val movement = ArrayList<Int>()
-            for (i in 0..480){
+            /*val movement = ArrayList<Int>()
+            for (i in 0..959){
                 val random = arrayListOf<Int>(0,1,2,3).random()
                 movement.add(random)
-            }
+            }*/
 
-            val combinedMovement = mViewModel.getCombinedMovement(movement)*/
 
             setMovementGraph(
                 it.intensity,
-                it.movement, DateFormats.convert24HourTo12(
+                movement, DateFormats.convert24HourTo12(
                     it.startTime, SimpleDateFormat("HH:mm:ss", DateFormats.defaultLocale)
                 ), DateFormats.convert24HourTo12(
                     it.endTime, SimpleDateFormat(

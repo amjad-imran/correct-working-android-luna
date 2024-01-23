@@ -39,6 +39,10 @@ class RecordWorkoutViewModel @Inject constructor(
     var currentWorkoutState = 0
 
 
+    fun getCurrentTimeStamp(): Long {
+        return System.currentTimeMillis() / 1000
+    }
+
     fun updateTimer() {
         val hours = workoutDuration / 3600
         val minutes = (workoutDuration % 3600) / 60

@@ -150,6 +150,7 @@ constructor(
         CallBackUtils.setSportParsingProgressCallBack { progress, total ->
             LOGS.d(TAG, "setSportParsingProgressCallBack $progress $total")
             AppLogs.sendAppLogs("RECORD_WORKOUT  setSportParsingProgressCallBack-> $progress $total")
+            if (total == 0) return@setSportParsingProgressCallBack
 
             if (progress == total) {
                 val result = ArrayList<RecordedWorkoutData>()

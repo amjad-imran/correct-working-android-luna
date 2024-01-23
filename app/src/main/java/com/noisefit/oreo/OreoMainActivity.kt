@@ -83,7 +83,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
     private fun setBlurAddCta() {
-        val radius = 20f;
+        val radius = 5f
         val decorView = window.decorView;
         val rootView = binding.container
         val windowBackground = decorView.background
@@ -143,6 +143,11 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     override fun initListener() {
 
+        binding.blurViewSelector.setOnClickListener {
+            showAddWorkoutCta()
+            binding.blurViewSelector.gone()
+        }
+
         supportFragmentManager.setFragmentResultListener(SELECT_RECORD_WORKOUT, this) { _, bundle ->
             val workout = bundle.getParcelable<OWorkoutListModal>("workout")
             workout?.let {
@@ -181,6 +186,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         binding.btnAddWorkout.setOnClickListener {
             //binding.btnAddWorkout.gone()
+            setBlurAddCta()
+
             viewModel.addWorkoutCtaVisibility.postValue(false)
 
             binding.blurViewSelector.visible()
@@ -437,7 +444,11 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     binding.view27.visible()
                     binding.navView.root.visible()
 
-                    viewModel.handleAddWorkoutVisibility()
+                    if (destination.id == R.id.navigation_oreo_home || destination.id == R.id.navigation_oreo_workouts) {
+                        viewModel.handleAddWorkoutVisibility()
+                    } else {
+                        viewModel.addWorkoutCtaVisibility.postValue(false)
+                    }
 
                     //binding.btnAddWorkout.visible()//todo add today condition
                 }
@@ -446,7 +457,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     binding.view27.gone()
                     binding.navView.root.gone()
 
-                    if (viewModel.isDevicePaired()!=null) {
+                    if (viewModel.isDevicePaired() != null) {
                         viewModel.addWorkoutCtaVisibility.postValue(true)
                     }
                 }
