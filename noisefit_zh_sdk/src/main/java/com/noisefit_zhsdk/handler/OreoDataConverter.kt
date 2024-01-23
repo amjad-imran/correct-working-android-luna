@@ -940,7 +940,7 @@ constructor(
                     it.wakeupNapTime.toLong() * 1000,
                     DateFormats.dateTimeFormat5
                 )
-                this.duration = it.sleepNapDuration
+                this.duration = it.sleepNapDuration / 60
                 this.date = DateFormats.convertTimestampToDate(
                     it.asleepNapTime.toLong() * 1000,
                     DateFormats.dateFormat3
