@@ -153,6 +153,7 @@ class SummaryDataFragment :
         binding.lytHeartRate.bInfo.setOnClickListener {
             viewModel.getContributorInfo("hr")
         }
+
     }
 
     override fun subscribeObservers() {

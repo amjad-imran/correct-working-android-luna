@@ -2,6 +2,7 @@ package com.oreo.ui.home.summary.paginate
 
 import android.graphics.Color
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -9,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.data.CombinedData
 import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
@@ -42,6 +44,8 @@ import com.oreo.data.model.VideoInfoType
 import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
+import com.oreo.ui.custom.LinePagerIndicatorDecoration
+import com.oreo.ui.custom.SnapHelperOneByOne
 import com.oreo.ui.home.summary.AlertClickListener
 import com.oreo.ui.home.summary.HomeRecyclerViewHolder
 import com.oreo.ui.home.summary.OSummaryHealthOverviewAdapter
@@ -94,12 +98,10 @@ class SummaryDataFragmentToday :
         NapsConfirmAdapter(object : NapConfirmAction {
             override fun onNapConfirmClicked(nap: OreoNapData) {
                 viewModel.confirmNap(nap)
-
             }
 
             override fun onNapRemoveClicked(nap: OreoNapData) {
                 viewModel.removeNapById(nap)
-
             }
         })
     }
@@ -120,14 +122,25 @@ class SummaryDataFragmentToday :
     }
 
     private fun setNapsPager() {
-        binding.contentMain.lytConfirmNap.vpNaps.apply {
-            offscreenPageLimit = 1
+        SnapHelperOneByOne().attachToRecyclerView(binding.contentMain.lytConfirmNap.vpNaps)
+        with(binding.contentMain.lytConfirmNap.vpNaps) {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = napsAdapter
+            addItemDecoration(LinePagerIndicatorDecoration())
         }
-        TabLayoutMediator(
-            binding.contentMain.lytConfirmNap.napsTabLayout,
-            binding.contentMain.lytConfirmNap.vpNaps
-        ) { _, _ -> }.attach()
+
+        binding.contentMain.lytConfirmNap.vpNaps.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
+            override fun onInterceptTouchEvent(view: RecyclerView, event: MotionEvent): Boolean {
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> binding.contentMain.lytConfirmNap.vpNaps.parent
+                        .requestDisallowInterceptTouchEvent(true)
+                }
+                return false
+            }
+
+            override fun onTouchEvent(view: RecyclerView, event: MotionEvent) {}
+            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+        })
     }
 
     override fun onDestroyView() {
@@ -280,7 +293,6 @@ class SummaryDataFragmentToday :
 
     override fun initListener() {
 
-
         binding.swipeRefreshLayout.setOnRefreshListener {
             binding.swipeRefreshLayout.isRefreshing = false
 
@@ -383,7 +395,7 @@ class SummaryDataFragmentToday :
         viewModel.onNapAddSuccess.observe(viewLifecycleOwner) {
             it.getContent()?.let { nap ->
                 mainViewModel.reloadTodaysData()
-                if (nap.sleepScore != 0 && nap.readinessScore != 0) {
+                if ((nap.sleepScore?:0) != 0 && (nap.readinessScore?:0) != 0) {
                     navigate(
                         R.id.bottomSheetNapScore, bundleOf(
                             "napScoreData" to viewModel.getNapSlideUpObj(nap)
@@ -399,7 +411,7 @@ class SummaryDataFragmentToday :
             } else {
                 binding.contentMain.lytConfirmNap.root.visible()
             }
-            napsAdapter.setDataSet(it,viewModel.date)
+            napsAdapter.setDataSet(it, viewModel.date)
         }
 
         mainViewModel.dashTodayReload.observe(viewLifecycleOwner) {
