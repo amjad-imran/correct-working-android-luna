@@ -75,7 +75,14 @@ constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
 
-                            _oWorkoutListModalResponse.postValue(it)
+                            val list= it
+
+                            (list as ArrayList).add(OWorkoutListModal(6,211,"",activityType = "badminton"))
+                            (list as ArrayList).add(OWorkoutListModal(7,212,"",activityType = "tennis"))
+                            (list as ArrayList).add(OWorkoutListModal(8,213,"",activityType = "football"))
+                            (list as ArrayList).add(OWorkoutListModal(9,214,"",activityType = "cricket "))
+                            (list as ArrayList).add(OWorkoutListModal(10,215,"",activityType = "yoga"))
+                            _oWorkoutListModalResponse.postValue(list)
 
                             keyValueDataSource.removeDataByType(KeyValueDataType.RECORD_WORKOUT)
                             kotlinx.coroutines.delay(200L)
