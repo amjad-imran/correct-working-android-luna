@@ -28,7 +28,7 @@ data class ODashboardReadinessModel(
     val status: String? = "",
     val nudges: List<Nudges>? = null,
 
-)
+    )
 
 data class ODashboardActivityScoreModel(
     val activityScore: Int? = null,
@@ -71,4 +71,5 @@ data class ODashboardSleepModel(
     val sleepNapScoreImpact: Int? = null,
     @SerializedName("no_of_naps")
     val noOfNaps: Int? = null,
+    val naps: List<Nap>? = null,
 )

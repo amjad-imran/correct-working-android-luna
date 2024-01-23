@@ -26,6 +26,7 @@ import com.noisefit.luna.databinding.RowDashAlertBinding
 import com.noisefit.ui.common.calculatePercentage
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.dpToPx
+import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.custom.SleepProgressbarView
 import com.noisefit_commans.ui.getColor
 import com.noisefit_commans.ui.gone
@@ -39,6 +40,7 @@ import com.oreo.data.model.AlertType
 import com.oreo.data.model.DashAlert
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.VideoInfoType
+import com.oreo.data.model.health.Nap
 import com.oreo.util.UtilClass.seriesItemWithoutInset
 
 
@@ -664,6 +666,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             val sleepDayGraphView = SleepProgressbarView(binding.sleepPgbr.context)
             binding.sleepPgbr.removeAllViews()
             binding.sleepPgbr.addView(sleepDayGraphView)
+            val newSleepArray = mergeSleepData(data.sleepArray, data.data.naps)
+
             sleepDayGraphView.setData(data.sleepArray)
 
 
@@ -700,6 +704,18 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.SleepDetailsWorkoutClick)
             }
+        }
+
+        //TODO write logic
+        private fun mergeSleepData(
+            sleepArray: ArrayList<SleepData.SleepDataBreakup>,
+            naps: List<Nap>?
+        ): ArrayList<SleepData.SleepDataBreakup> {
+            if (naps.isNullOrEmpty()) return sleepArray
+
+
+
+            return sleepArray
         }
     }
 
