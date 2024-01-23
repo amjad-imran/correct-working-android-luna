@@ -12,7 +12,11 @@ import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.health.Nap
 import java.lang.StringBuilder
 
-class DashNapAdapter(private val napList: List<Nap>, private val date: String) :
+class DashNapAdapter(
+    private val napList: List<Nap>,
+    private val date: String,
+    private val showWhite: Boolean = false
+) :
     RecyclerView.Adapter<DashNapAdapter.ViewHolder>() {
     var listener: OnNapSelectedAction? = null
 
@@ -30,7 +34,9 @@ class DashNapAdapter(private val napList: List<Nap>, private val date: String) :
                 binding.ivSleepSeperator.visible()
                 val sleepImpactScore = "+${nap.sleepScoreImpact.toString()}"
                 binding.tvSleepScoreChange.text = sleepImpactScore
-                binding.tvSleepScoreChange.setTextColor(binding.ivSleep.context.getColor(R.color.steps_arc))
+                if (!showWhite) {
+                    binding.tvSleepScoreChange.setTextColor(binding.ivSleep.context.getColor(R.color.steps_arc))
+                }
             } else {
                 if (nap.sleepScoreImpact == null || nap.sleepScoreImpact == 0) {
                     binding.ivSleep.gone()
@@ -40,7 +46,9 @@ class DashNapAdapter(private val napList: List<Nap>, private val date: String) :
                     binding.ivSleep.visible()
                     binding.ivSleepSeperator.visible()
                     binding.tvSleepScoreChange.text = nap.sleepScoreImpact.toString()
-                    binding.tvSleepScoreChange.setTextColor(binding.ivSleep.context.getColor(R.color.nap_dash_sleep_impact_score))
+                    if (!showWhite) {
+                        binding.tvSleepScoreChange.setTextColor(binding.ivSleep.context.getColor(R.color.nap_dash_sleep_impact_score))
+                    }
                 }
             }
             if ((nap.readinessScoreImpact ?: 0) > 0) {
@@ -48,7 +56,13 @@ class DashNapAdapter(private val napList: List<Nap>, private val date: String) :
                 binding.ivReadinessSeparator.visible()
                 val readinessImpactScore = "+${nap.readinessScoreImpact.toString()}"
                 binding.tvReadinessScoreChange.text = readinessImpactScore
-                binding.tvReadinessScoreChange.setTextColor(binding.ivReadiness.context.getColor(R.color.steps_arc))
+                if (!showWhite) {
+                    binding.tvReadinessScoreChange.setTextColor(
+                        binding.ivReadiness.context.getColor(
+                            R.color.steps_arc
+                        )
+                    )
+                }
             } else {
                 if (nap.readinessScoreImpact == null || nap.readinessScoreImpact == 0) {
                     binding.ivReadiness.gone()
@@ -58,7 +72,13 @@ class DashNapAdapter(private val napList: List<Nap>, private val date: String) :
                     binding.ivReadiness.visible()
                     binding.ivReadinessSeparator.visible()
                     binding.tvReadinessScoreChange.text = nap.readinessScoreImpact.toString()
-                    binding.tvReadinessScoreChange.setTextColor(binding.ivSleep.context.getColor(R.color.nap_dash_sleep_impact_score))
+                    if (!showWhite) {
+                        binding.tvReadinessScoreChange.setTextColor(
+                            binding.ivSleep.context.getColor(
+                                R.color.nap_dash_sleep_impact_score
+                            )
+                        )
+                    }
                 }
             }
 

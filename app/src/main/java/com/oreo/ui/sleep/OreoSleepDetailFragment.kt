@@ -973,7 +973,7 @@ class OreoSleepDetailFragment :
 
         binding.lytNaps.lytNap.rvNap.layoutManager =
             LinearLayoutManager(binding.lytNaps.lytNap.rvNap.context)
-        binding.lytNaps.lytNap.rvNap.adapter = DashNapAdapter(naps,date).apply {
+        binding.lytNaps.lytNap.rvNap.adapter = DashNapAdapter(naps,date,true).apply {
 
             this.setOnNapSelectedListener(object : OnNapSelectedAction {
                 override fun onNapSelected(napId: String) {
