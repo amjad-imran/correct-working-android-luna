@@ -35,6 +35,7 @@ import com.noisefit_commans.models.SportsModeListGPS
 import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.models.Widget
 import com.noisefit_commans.models.WorldClockList
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
@@ -945,7 +946,22 @@ constructor(
                     DateFormats.dateFormat3
                 )
             }
-            returnNaps.add(nap)
+
+            try {
+                val startHour = DateFormats.convertTimestampToDate(
+                    it.asleepNapTime.toLong() * 1000,
+                    DateFormats.timeFormatHour
+                ).toInt()
+
+                if (startHour >= 10 || startHour <= 20) {
+                    returnNaps.add(nap)
+                } else {
+                    AppLogs.sendAppLogs("Nap ignored $it")
+                    //context.showShortToast("Start time in between 10-20")
+                }
+            } catch (exp: Exception) {
+                returnNaps.add(nap)
+            }
         }
         return returnNaps
     }

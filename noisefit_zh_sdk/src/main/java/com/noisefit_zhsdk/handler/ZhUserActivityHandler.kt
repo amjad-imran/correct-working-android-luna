@@ -760,7 +760,7 @@ constructor(
             override fun onRingSleepNAP(p0: MutableList<RingSleepNapBean>?) {
                 //onRingSleepNAP : [RingSleepNapBean{existSleepNap=true, asleepNapTime=1705284882, wakeupNapTime=1705286418, sleepNapDuration=1536, date='2024-01-15 00:00:00'}]
                 LOGS.d(TAG, "onRingSleepNAP : $p0")
-                //val dummyNap = Gson().fromJson<List<RingSleepNapBean>>("[{\"existSleepNap\":true, \"asleepNapTime\":1705865400, \"wakeupNapTime\":1705869000, \"sleepNapDuration\":60, \"date\":\"2024-01-18 00:00:00\"},{\"existSleepNap\":true, \"asleepNapTime\":1705872600, \"wakeupNapTime\":1705876200, \"sleepNapDuration\":60, \"date\":\"2024-01-18 00:00:00\"}]")
+                //val dummyNap = Gson().fromJson<List<RingSleepNapBean>>("[{\"existSleepNap\":true, \"asleepNapTime\":1705980600, \"wakeupNapTime\":1705984200, \"sleepNapDuration\":60, \"date\":\"2024-01-23 00:00:00\"},{\"existSleepNap\":true, \"asleepNapTime\":1705987800, \"wakeupNapTime\":1705991400, \"sleepNapDuration\":60, \"date\":\"2024-01-23 00:00:00\"}]")
 
                 AppLogs.sendAppLogs("$TRACK_TAG onRingSleepNAP : $p0")
                 if (p0 == null) return
