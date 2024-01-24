@@ -1,12 +1,18 @@
 package com.noisefit.oreo
 
 import android.Manifest
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -14,6 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import com.leinardi.android.speeddial.SpeedDialActionItem
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ActivityOreoMainBinding
@@ -145,7 +152,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         binding.blurViewSelector.setOnClickListener {
             showAddWorkoutCta()
-            binding.blurViewSelector.gone()
+            animateFabDown()
+            //binding.blurViewSelector.gone()
         }
 
         supportFragmentManager.setFragmentResultListener(SELECT_RECORD_WORKOUT, this) { _, bundle ->
@@ -175,7 +183,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         }
         binding.lytAddWorkoutSelector.ivWorkoutClose.setOnClickListener {
             showAddWorkoutCta()
-            binding.blurViewSelector.gone()
+            //binding.blurViewSelector.gone()
+            animateFabDown()
         }
 
         binding.lytAddWorkoutSelector.tvRecordWorkout.setOnClickListener {
@@ -185,16 +194,99 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         }
 
         binding.btnAddWorkout.setOnClickListener {
-            //binding.btnAddWorkout.gone()
             setBlurAddCta()
 
             viewModel.addWorkoutCtaVisibility.postValue(false)
 
-            binding.blurViewSelector.visible()
+
+            animateFabUp()
+
+            //binding.blurViewSelector.visible()
         }
     }
 
-    fun showAddWorkoutCta() {
+    private fun animateFabUp() {
+        binding.blurViewSelector.visible()
+
+        animateItemsUp(binding.lytAddWorkoutSelector.ivRecordWorkout, 200f)
+        animateItemsUp(binding.lytAddWorkoutSelector.ivAddWorkoutManual, 300f)
+        animateItemsUp(binding.lytAddWorkoutSelector.tvAddWorkout, 300f)
+        animateItemsUp(binding.lytAddWorkoutSelector.tvRecordWorkout, 200f)
+    }
+
+    private fun animateFabDown() {
+        //binding.blurViewSelector.gone()
+
+        animateItemsDown(binding.lytAddWorkoutSelector.ivRecordWorkout)
+        animateItemsDown(binding.lytAddWorkoutSelector.ivAddWorkoutManual)
+        animateItemsDown(binding.lytAddWorkoutSelector.tvAddWorkout)
+        animateItemsDown(binding.lytAddWorkoutSelector.tvRecordWorkout)
+
+        /*val alpha =
+            ObjectAnimator.ofFloat(binding.blurViewSelector, "alpha", 1f, 0f)
+                .apply {
+                    this.duration = 500
+                }
+
+        val animatorSet = AnimatorSet()
+        animatorSet.interpolator = AccelerateDecelerateInterpolator()
+        animatorSet.playTogether(alpha)
+        animatorSet.start()*/
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            try {
+                binding.blurViewSelector.gone()
+            } catch (exp: Exception) {
+            }
+        }, 500)
+
+    }
+
+    private fun animateItemsUp(view: View, value: Float) {
+
+        val translateUp = ObjectAnimator.ofFloat(
+            view,
+            View.TRANSLATION_Y,
+            value,
+            0f
+        ).apply {
+            this.duration = 500
+        }
+        val alpha =
+            ObjectAnimator.ofFloat(view, "alpha", 0f, 1f)
+                .apply {
+                    this.duration = 500
+                }
+
+        val animatorSet = AnimatorSet()
+        animatorSet.interpolator = AccelerateDecelerateInterpolator()
+        animatorSet.playTogether(translateUp, alpha)
+        animatorSet.start()
+    }
+
+    private fun animateItemsDown(view: View) {
+        val translateDown = ObjectAnimator.ofFloat(
+            view,
+            View.TRANSLATION_Y,
+            0f,
+            binding.lytAddWorkoutSelector.ivWorkoutClose.y - view.y
+        ).apply {
+            this.duration = 500
+        }
+
+        val alpha =
+            ObjectAnimator.ofFloat(view, "alpha", 1f, 0f)
+                .apply {
+                    this.duration = 500
+                }
+
+        val animatorSet = AnimatorSet()
+        animatorSet.interpolator = AccelerateDecelerateInterpolator()
+        animatorSet.playTogether(translateDown, alpha)
+        animatorSet.start()
+    }
+
+    private fun showAddWorkoutCta() {
         viewModel.addWorkoutCtaVisibility.postValue(true)
         //binding.btnAddWorkout.visible()
     }
