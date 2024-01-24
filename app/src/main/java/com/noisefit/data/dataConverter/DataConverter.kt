@@ -10,9 +10,12 @@ import com.noisefit_commans.common.ceilRound
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.model.RecordedWorkoutData
+import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.AddWorkoutResponse
+import com.oreo.data.model.health.Nap
+import com.oreo.data.model.health.SleepHourlyBreakup
 import javax.inject.Inject
 
 
@@ -22,6 +25,95 @@ constructor(
     val keyValueDataSource: KeyValueDataSource,
     val ringDataStore: RingDataStore
 ) {
+
+    fun mergeSleepData(
+        sleepArray: List<SleepHourlyBreakup>?,
+        naps: List<Nap>?
+    ): List<SleepHourlyBreakup>? {
+        if (naps.isNullOrEmpty()) return sleepArray
+        if (sleepArray.isNullOrEmpty()) return null
+
+
+        val dates = ArrayList<String>()
+
+        naps.forEach {
+            dates.add(it.startTime)
+        }
+
+        val sleepArrayFirst = sleepArray?.firstOrNull()
+
+        sleepArrayFirst?.start_time?.let { dates.add(it) }
+
+        val sortedDates = DateFormats.sortDates(dates)
+        val newSleepArray = ArrayList<SleepHourlyBreakup>()
+        var lastDateTime: String? = null
+        sortedDates.forEach {
+            val dateTime = it.toString("yyyy-MM-dd HH:mm:ss")
+
+            if (sleepArrayFirst?.start_time != null && dateTime.equals(sleepArrayFirst.start_time)) {
+                if (lastDateTime != null) {
+                    val duration =
+                        DateFormats.getDifferenceInMinutes(
+                            lastDateTime,
+                            sleepArrayFirst.start_time
+                        ) * 60
+                    newSleepArray.add(
+                        SleepHourlyBreakup(
+                            start_time = lastDateTime ?: "",
+                            end_time = sleepArrayFirst.start_time,
+                            duration = duration,
+                            sleep_type = "awake",
+                            date = ""
+                        )
+                    )
+                }
+
+                newSleepArray.addAll(sleepArray)
+                lastDateTime = sleepArray.lastOrNull()?.end_time
+            } else {
+                val breakup = getSleepDataBreakup(dateTime, naps)
+
+                breakup?.let {
+                    if (lastDateTime != null) {
+                        val duration = DateFormats.getDifferenceInMinutes(
+                            lastDateTime,
+                            it.start_time
+                        ) * 60
+                        newSleepArray.add(
+                            SleepHourlyBreakup(
+                                start_time = lastDateTime ?: "",
+                                end_time = it.start_time ?: "",
+                                duration = duration,
+                                sleep_type = "awake",
+                                date = ""
+                            )
+                        )
+                    }
+                    newSleepArray.add(it)
+                    lastDateTime = it.end_time
+                }
+            }
+
+        }
+        return newSleepArray
+    }
+
+    fun getSleepDataBreakup(dateTime: String, naps: List<Nap>): SleepHourlyBreakup? {
+
+        val nap = naps.firstOrNull {
+            it.startTime.equals(dateTime)
+        } ?: return null
+
+
+        return SleepHourlyBreakup(
+            start_time = nap.startTime,
+            end_time = nap.endTime,
+            duration = nap.duration ?: 0,
+            sleep_type = "deep",
+            date = ""
+        )
+    }
+
 
     suspend fun createRecordedWorkoutArray(workouts: List<RecordedWorkoutData>): JsonArray? {
         val jsonArray = JsonArray()
@@ -41,10 +133,10 @@ constructor(
             val workoutTypeString = getWorkoutType(workout.type, workoutsList)
             if (workoutTypeString != null && workout.duration != 0 && !toDeleteList.contains(workout.startTime)) {
 
-               /* val date = DateFormats.convertTimestampToDate(
-                    workout.startTime,
-                    DateFormats.dateFormat3
-                )*/
+                /* val date = DateFormats.convertTimestampToDate(
+                     workout.startTime,
+                     DateFormats.dateFormat3
+                 )*/
 
                 val startTime =
                     DateFormats.convertTimestampToDate(workout.startTime, DateFormats.timeFormat)

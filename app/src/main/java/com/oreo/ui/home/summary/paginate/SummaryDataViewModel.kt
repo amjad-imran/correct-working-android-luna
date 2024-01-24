@@ -4,9 +4,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.data.Entry
+import com.google.gson.Gson
+import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.common.maxWithoutZero
 import com.noisefit_commans.common.minWithoutZero
 import com.noisefit_commans.data.BinaryActionCallback
@@ -35,6 +38,7 @@ import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.VideoInfoType
+import com.oreo.data.model.health.Nap
 import com.oreo.data.model.health.ODashboardActivityModel
 import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessModel
@@ -55,6 +59,7 @@ constructor(
     val ringDataStore: RingDataStore,
     val localDataStore: DataStoredInterface,
     val sessionManager: SessionManager,
+    val dataConverter: DataConverter,
     val userActivityRepository: OreoUserActivityRepository
 ) : BaseViewModel() {
 
@@ -98,6 +103,12 @@ constructor(
                 }
             }
 
+            val newSleepArray =
+                dataConverter.mergeSleepData(
+                    healthData.sleep?.hourly_breakup,
+                    healthData.sleep?.naps
+                )
+
             healthData.sleep.let {
                 if ((it?.sleepScore?.value ?: 0) > 0) {
                     userActivities.add(
@@ -111,16 +122,16 @@ constructor(
                                 startTime = "",
                                 endTime = ""
                             ),
-                            makeSleepArray(it?.hourly_breakup),
-                            it?.hourly_breakup?.firstOrNull()?.start_time ?: "",
-                            it?.hourly_breakup?.lastOrNull()?.end_time ?: ""
+                            makeSleepArray(newSleepArray),
+                            newSleepArray?.firstOrNull()?.start_time ?: "",
+                            newSleepArray?.lastOrNull()?.end_time ?: ""
                         )
                     )
                 }
 
             }
             if (nap.isNotEmpty()) {
-                userActivities.add(OHealthOverview.NapDashCard(nap,healthData.date))
+                userActivities.add(OHealthOverview.NapDashCard(nap, healthData.date))
             }
 
             healthData.activity.let {

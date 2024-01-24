@@ -7,7 +7,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import com.google.gson.Gson
 import com.hookedonplay.decoviewlib.events.DecoEvent
+import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ListActivityBurnCardItem2Binding
 import com.noisefit.luna.databinding.ListActivityBurnCardItemBinding
@@ -26,6 +28,7 @@ import com.noisefit.luna.databinding.RowDashAlertBinding
 import com.noisefit.ui.common.calculatePercentage
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.dpToPx
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.custom.SleepProgressbarView
 import com.noisefit_commans.ui.getColor
@@ -63,7 +66,7 @@ sealed class OSummaryHealthOverviewClickEnum {
 
 }
 
-class OSummaryHealthOverviewAdapter :
+class OSummaryHealthOverviewAdapter() :
     RecyclerView.Adapter<HomeRecyclerViewHolder>() {
 
     var devicePaired = false
@@ -666,7 +669,6 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             val sleepDayGraphView = SleepProgressbarView(binding.sleepPgbr.context)
             binding.sleepPgbr.removeAllViews()
             binding.sleepPgbr.addView(sleepDayGraphView)
-            val newSleepArray = mergeSleepData(data.sleepArray, data.data.naps)
 
             sleepDayGraphView.setData(data.sleepArray)
 
@@ -705,19 +707,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.SleepDetailsWorkoutClick)
             }
         }
-
-        //TODO write logic
-        private fun mergeSleepData(
-            sleepArray: ArrayList<SleepData.SleepDataBreakup>,
-            naps: List<Nap>?
-        ): ArrayList<SleepData.SleepDataBreakup> {
-            if (naps.isNullOrEmpty()) return sleepArray
-
-
-
-            return sleepArray
-        }
     }
+
 
     class ActivityMinimalViewHolder(private val binding: ListActivityMinimalItemBinding) :
         HomeRecyclerViewHolder(binding) {

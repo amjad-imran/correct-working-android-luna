@@ -6,9 +6,12 @@ import android.os.Build
 import android.text.format.DateFormat
 import android.text.format.DateUtils
 import androidx.annotation.RequiresApi
+import com.google.gson.Gson
 import com.noisefit_commans.models.TimeFormat
 import com.noisefit_commans.models.TimeFormats
 import org.joda.time.DateTime
+import org.joda.time.Duration
+import org.joda.time.LocalDateTime
 import java.text.DateFormatSymbols
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -1704,6 +1707,17 @@ object DateFormats {
         return Pair(differenceTxt, daysText)
     }
 
+    //Sort dates
+    fun sortDates(dates: List<String>): List<LocalDateTime> {
+        val parsedLocalDates = ArrayList<org.joda.time.LocalDateTime>()
+        val formatter = org.joda.time.format.DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
+        dates.forEach {
+            val parsedData = org.joda.time.LocalDateTime.parse(it, formatter)
+            parsedLocalDates.add(parsedData)
+        }
+        return parsedLocalDates.sorted()
+    }
+
     fun getEndsInData(currentTime: String, end_date: String): Pair<String, String> {
         val sdfSource = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", DateFormats.defaultLocale).apply {
             timeZone = TimeZone.getTimeZone("UTC")
@@ -2006,6 +2020,17 @@ object DateFormats {
         } catch (exp: Exception) {
             return ""
         }
+    }
+
+    fun getDifferenceInMinutes(startTime: String?, endTime: String?): Int {
+        if (startTime == null || endTime == null) return 0
+
+        val formatter = org.joda.time.format.DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
+        val startTimeParsed = LocalDateTime.parse(startTime,formatter)
+        val endTimeParsed = LocalDateTime.parse(endTime,formatter)
+
+        val duration = Duration(startTimeParsed.toDateTime(), endTimeParsed.toDateTime())
+        return duration.toStandardMinutes().minutes
     }
 }
 

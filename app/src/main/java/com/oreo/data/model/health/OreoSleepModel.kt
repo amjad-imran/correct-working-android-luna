@@ -43,6 +43,7 @@ data class Nap(
     val after7pm: String,
     @SerializedName("readiness_score_impact")
     val readinessScoreImpact: Int? = null,
+    @SerializedName("end_time")
     val endTime: String,
     val duration: Int? = null
 )

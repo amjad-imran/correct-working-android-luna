@@ -4,10 +4,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.data.Entry
+import com.google.gson.Gson
+import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.common.maxWithoutZero
 import com.noisefit_commans.common.minWithoutZero
 import com.noisefit_commans.data.BinaryActionCallback
@@ -62,6 +65,7 @@ constructor(
     val ringDataStore: RingDataStore,
     val localDataStore: DataStoredInterface,
     val sessionManager: SessionManager,
+    val dataConverter: DataConverter,
     private val syncRepository: OreoSyncRepository,
     val userActivityRepository: OreoUserActivityRepository
 ) : BaseViewModel() {
@@ -198,6 +202,14 @@ constructor(
                 readinessNapScoreImpact = healthData.readiness?.readinessNapScoreImpact,
                 noOfNaps = healthData.readiness?.noOfNaps
             )
+
+
+            val newSleepArray = dataConverter.mergeSleepData(
+                healthData.sleep?.hourly_breakup,
+                healthData.sleep?.naps
+            )
+
+
             val sleepModel = ODashboardSleepModel(
                 sleepScore = healthData.sleep?.sleepScore?.value,
                 totalSleep = healthData.sleep?.totalSleep?.value,
@@ -237,10 +249,10 @@ constructor(
                                 userActivities.add(
                                     OHealthOverview.Sleep(
                                         sleepModel,
-                                        makeSleepArray(healthData.sleep?.hourly_breakup),
-                                        healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time
+                                        makeSleepArray(newSleepArray),
+                                        newSleepArray?.firstOrNull()?.start_time
                                             ?: "",
-                                        healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time
+                                        newSleepArray?.lastOrNull()?.end_time
                                             ?: ""
                                     )
                                 )
@@ -268,10 +280,10 @@ constructor(
                                 userActivities.add(
                                     OHealthOverview.Sleep(
                                         sleepModel,
-                                        makeSleepArray(healthData.sleep?.hourly_breakup),
-                                        healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time
+                                        makeSleepArray(newSleepArray),
+                                        newSleepArray?.firstOrNull()?.start_time
                                             ?: "",
-                                        healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time
+                                        newSleepArray?.lastOrNull()?.end_time
                                             ?: ""
                                     )
                                 )
@@ -322,10 +334,10 @@ constructor(
                                 userActivities.add(
                                     OHealthOverview.Sleep(
                                         sleepModel,
-                                        makeSleepArray(healthData.sleep?.hourly_breakup),
-                                        healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time
+                                        makeSleepArray(newSleepArray),
+                                        newSleepArray?.firstOrNull()?.start_time
                                             ?: "",
-                                        healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time
+                                        newSleepArray?.lastOrNull()?.end_time
                                             ?: ""
                                     )
                                 )
