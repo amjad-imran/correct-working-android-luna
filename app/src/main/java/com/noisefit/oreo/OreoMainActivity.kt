@@ -1,12 +1,18 @@
 package com.noisefit.oreo
 
 import android.Manifest
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -34,10 +40,6 @@ import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.FirebaseLunaAppEvents
-import com.noisefit_commans.ui.showShortToast
-import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
 import com.oreo.ui.recordworkout.SELECT_RECORD_WORKOUT
@@ -72,7 +74,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        navController = findNavController(com.noisefit.luna.R.id.o_nav_host_fragment)
+        navController = findNavController(R.id.o_nav_host_fragment)
         setNavViewListeners()
         setBlur()
         setBlurAddCta()
@@ -83,7 +85,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
     private fun setBlurAddCta() {
-        val radius = 20f;
+        val radius = 5f
         val decorView = window.decorView;
         val rootView = binding.container
         val windowBackground = decorView.background
@@ -143,6 +145,12 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     override fun initListener() {
 
+        binding.blurViewSelector.setOnClickListener {
+            showAddWorkoutCta()
+            animateFabDown()
+            //binding.blurViewSelector.gone()
+        }
+
         supportFragmentManager.setFragmentResultListener(SELECT_RECORD_WORKOUT, this) { _, bundle ->
             val workout = bundle.getParcelable<OWorkoutListModal>("workout")
             workout?.let {
@@ -160,34 +168,153 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         }
 
         binding.lytAddWorkoutSelector.tvAddWorkout.setOnClickListener {
-            showAddWorkoutCta()
-            binding.blurViewSelector.gone()
-            if (viewModel.isDeviceConnected()) {
-                navController?.navigate(R.id.addWorkoutFragment)
-            } else {
-                showShortToast("Please connect your ring to add a workout")
-            }
+            showAddWorkout()
         }
+        binding.lytAddWorkoutSelector.ivAddWorkoutManual.setOnClickListener {
+            showAddWorkout()
+        }
+
+
         binding.lytAddWorkoutSelector.ivWorkoutClose.setOnClickListener {
             showAddWorkoutCta()
-            binding.blurViewSelector.gone()
+            animateFabDown()
         }
 
         binding.lytAddWorkoutSelector.tvRecordWorkout.setOnClickListener {
-            showAddWorkoutCta()
-            binding.blurViewSelector.gone()
-            navController?.navigate(R.id.selectWorkoutFragment)
+            showRecordWorkout()
+        }
+        binding.lytAddWorkoutSelector.ivRecordWorkout.setOnClickListener {
+            showRecordWorkout()
         }
 
         binding.btnAddWorkout.setOnClickListener {
-            //binding.btnAddWorkout.gone()
-            viewModel.addWorkoutCtaVisibility.postValue(false)
+            setBlurAddCta()
 
-            binding.blurViewSelector.visible()
+            viewModel.addWorkoutCtaVisibility.postValue(false)
+            animateFabUp()
+
+            //binding.blurViewSelector.visible()
         }
     }
 
-    fun showAddWorkoutCta() {
+    private fun showAddWorkout() {
+        showAddWorkoutCta()
+        binding.blurViewSelector.gone()
+        if (viewModel.isDeviceConnected()) {
+            navController?.navigate(R.id.addWorkoutFragment)
+        } else {
+            showShortToast("Please connect your ring to add a workout")
+        }
+    }
+
+    private fun showRecordWorkout() {
+        showAddWorkoutCta()
+        binding.blurViewSelector.gone()
+        navController?.navigate(R.id.selectWorkoutFragment)
+    }
+
+    private fun animateFabUp() {
+        binding.blurViewSelector.visible()
+
+        animateItemsUp(binding.lytAddWorkoutSelector.ivRecordWorkout, 200f)
+        animateItemsUp(binding.lytAddWorkoutSelector.ivAddWorkoutManual, 300f)
+        animateItemsUp(binding.lytAddWorkoutSelector.tvAddWorkout, 300f)
+        animateItemsUp(binding.lytAddWorkoutSelector.tvRecordWorkout, 200f)
+
+        val rotate =
+            ObjectAnimator.ofFloat(
+                binding.lytAddWorkoutSelector.ivWorkoutClose,
+                View.ROTATION,
+                0f,
+                -45f
+            )
+                .apply {
+                    this.duration = viewModel.FAB_ANIM_TIME
+                }
+
+        val animatorSet = AnimatorSet()
+        animatorSet.playTogether(rotate)
+        animatorSet.start()
+
+    }
+
+    private fun animateFabDown() {
+        //binding.blurViewSelector.gone()
+
+        animateItemsDown(binding.lytAddWorkoutSelector.ivRecordWorkout)
+        animateItemsDown(binding.lytAddWorkoutSelector.ivAddWorkoutManual)
+        animateItemsDown(binding.lytAddWorkoutSelector.tvAddWorkout)
+        animateItemsDown(binding.lytAddWorkoutSelector.tvRecordWorkout)
+
+        val alpha =
+            ObjectAnimator.ofFloat(
+                binding.lytAddWorkoutSelector.ivWorkoutClose,
+                View.ROTATION,
+                -45f,
+                0f
+            )
+                .apply {
+                    this.duration = viewModel.FAB_ANIM_TIME
+                }
+
+        val animatorSet = AnimatorSet()
+        animatorSet.playTogether(alpha)
+        animatorSet.start()
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            try {
+                binding.blurViewSelector.gone()
+            } catch (exp: Exception) {
+            }
+        }, viewModel.FAB_ANIM_TIME)
+
+    }
+
+    private fun animateItemsUp(view: View, value: Float) {
+
+        val translateUp = ObjectAnimator.ofFloat(
+            view,
+            View.TRANSLATION_Y,
+            value,
+            0f
+        ).apply {
+            this.duration = viewModel.FAB_ANIM_TIME
+        }
+        val alpha =
+            ObjectAnimator.ofFloat(view, "alpha", 0f, 1f)
+                .apply {
+                    this.duration = viewModel.FAB_ANIM_TIME
+                }
+
+        val animatorSet = AnimatorSet()
+        animatorSet.interpolator = AccelerateDecelerateInterpolator()
+        animatorSet.playTogether(translateUp, alpha)
+        animatorSet.start()
+    }
+
+    private fun animateItemsDown(view: View) {
+        val translateDown = ObjectAnimator.ofFloat(
+            view,
+            View.TRANSLATION_Y,
+            0f,
+            binding.lytAddWorkoutSelector.ivWorkoutClose.y - view.y
+        ).apply {
+            this.duration = viewModel.FAB_ANIM_TIME
+        }
+
+        val alpha =
+            ObjectAnimator.ofFloat(view, "alpha", 1f, 0f)
+                .apply {
+                    this.duration = viewModel.FAB_ANIM_TIME
+                }
+
+        val animatorSet = AnimatorSet()
+        animatorSet.interpolator = AccelerateDecelerateInterpolator()
+        animatorSet.playTogether(translateDown, alpha)
+        animatorSet.start()
+    }
+
+    private fun showAddWorkoutCta() {
         viewModel.addWorkoutCtaVisibility.postValue(true)
         //binding.btnAddWorkout.visible()
     }
@@ -437,7 +564,11 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     binding.view27.visible()
                     binding.navView.root.visible()
 
-                    viewModel.handleAddWorkoutVisibility()
+                    if (destination.id == R.id.navigation_oreo_home || destination.id == R.id.navigation_oreo_workouts) {
+                        viewModel.handleAddWorkoutVisibility()
+                    } else {
+                        viewModel.addWorkoutCtaVisibility.postValue(false)
+                    }
 
                     //binding.btnAddWorkout.visible()//todo add today condition
                 }
@@ -446,7 +577,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     binding.view27.gone()
                     binding.navView.root.gone()
 
-                    if (viewModel.isDevicePaired()!=null) {
+                    if (viewModel.isDevicePaired() != null) {
                         viewModel.addWorkoutCtaVisibility.postValue(true)
                     }
                 }

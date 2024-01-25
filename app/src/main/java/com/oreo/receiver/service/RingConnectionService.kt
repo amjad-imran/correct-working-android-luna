@@ -1160,6 +1160,7 @@ constructor() : LifecycleService() {
                         if (it.data.isNotEmpty()) {
                             saveAndSyncWorkouts(it.data)
                         }else{
+                            AppLogs.sendAppLogs("Workouts empty")
                             postWorkout("none")
                         }
                     }
@@ -1264,6 +1265,8 @@ constructor() : LifecycleService() {
                 userHealthDataDataSource.clearDataByDates(dates.toList())
                 syncRepository.removeRecordedWorkouts().collect()
                 ringDataStore.removeRecordDeleteList()
+                AppLogs.sendAppLogs("syncWorkoutsToServer workouts empty")
+
                 postWorkout("none")
                 return@launch
             }
@@ -1291,6 +1294,7 @@ constructor() : LifecycleService() {
                                 it,
                                 sessionManager.lastOngoingWorkoutTimestamp *1000L
                             )
+                            AppLogs.sendAppLogs("Workout id not found")
 
                             postWorkout(workoutId?:"none")
 
@@ -1312,6 +1316,7 @@ constructor() : LifecycleService() {
     fun postWorkout(workoutId:String){
         sessionManager.lastOngoingWorkoutTimestamp = 0L
         LOGS.d("sdkjfhskdfj received $workoutId")
+        AppLogs.sendAppLogs("postWorkout $workoutId")
 
         GlobalScope.launch(Dispatchers.Main) {
             sessionManager.showWorkoutDetails.value = (Event(workoutId))

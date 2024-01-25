@@ -690,11 +690,10 @@ constructor(
             stepData.steps = data
             stepData.calories = dailyBean.calorieData[i]
             stepData.distance = dailyBean.distanceData[i]
-            stepData.activeCalories =
-                dailyBean.todayOuraCalorieHourlyData[i] + dailyBean.todaySportCalorieHourlyData[i]
+            stepData.activeCalories = dailyBean.todaySportCalorieHourlyData[i]
             calories += dailyBean.calorieData[i]
             distance += dailyBean.distanceData[i]
-            activeCalories += dailyBean.todayOuraCalorieHourlyData[i] + dailyBean.todaySportCalorieHourlyData[i]
+            activeCalories += dailyBean.todaySportCalorieHourlyData[i]
             steps += data
             stepArray.add(stepData)
         }
