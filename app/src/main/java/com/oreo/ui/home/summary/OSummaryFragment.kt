@@ -3,9 +3,7 @@ package com.oreo.ui.home.summary
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.viewModelScope
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
@@ -30,12 +28,10 @@ import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import com.oreo.ui.home.summary.paginate.SummaryPagerAdapter
-import com.oreo.ui.info.CALL_GOT_IT
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.StringBuilder
 import java.time.LocalDate
 
 
@@ -178,7 +174,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         binding.lytHeader.profileView1.setOnClickListener {
 //            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_hamburger_click)
 //            navigate(R.id.OMyProfileFragment)
-            navigate(R.id.fragmentOStress)
+            navigate(R.id.fragmentOStressDetails)
         }
 
         /* setFragmentResultListener(ADD_WORKOUT_REQUEST_KEY) { _, bundle ->
@@ -248,22 +244,22 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                         )
                     )
                 )
-            //navigate(R.id.logsDisplayFragment)
+                //navigate(R.id.logsDisplayFragment)
             }
             return@setOnLongClickListener true
         }
 
 
-       /* //handle device intro
-        if (!mainViewModel.ringDataStore.isShowDeviceIntro()) {
-            setFragmentResultListener(CALL_GOT_IT) { _, bundle ->
-                val isSelected = bundle.getBoolean("isSelected")
-                if (isSelected) {
-                    mainViewModel.ringDataStore.setShowDeviceIntro(true)
-                }
-            }
-            navigate(R.id.myDeviceIntroBottomSheet)
-        }*/
+        /* //handle device intro
+         if (!mainViewModel.ringDataStore.isShowDeviceIntro()) {
+             setFragmentResultListener(CALL_GOT_IT) { _, bundle ->
+                 val isSelected = bundle.getBoolean("isSelected")
+                 if (isSelected) {
+                     mainViewModel.ringDataStore.setShowDeviceIntro(true)
+                 }
+             }
+             navigate(R.id.myDeviceIntroBottomSheet)
+         }*/
 
     }
 
@@ -280,7 +276,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         val shouldSync = viewModel.sessionManager.forceSyncData.value?.getContent() ?: false
 
         if (shouldSync || kotlin.math.abs(DateFormats.getTimeStamp() - lastSyncTime) > 2 * 60 * 60 * 1000L) {
-            if(viewModel.sessionManager.bluetoothStateDash.value != false){
+            if (viewModel.sessionManager.bluetoothStateDash.value != false) {
                 binding.lytHeader.tvHeaderStatus.apply {
                     text = context.getString(R.string.text_syncing_dot)
                     visible()

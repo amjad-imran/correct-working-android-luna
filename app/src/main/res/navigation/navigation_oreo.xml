@@ -517,5 +517,9 @@
         android:id="@+id/fragmentOStress"
         android:name="com.oreo.ui.stress.OStressMovementFragment"
         android:label="OStress" />
+    <fragment
+        android:id="@+id/fragmentOStressDetails"
+        android:name="com.oreo.ui.stress.OStressDetailsFragment"
+        android:label="OStressDetails" />
 
 </navigation>

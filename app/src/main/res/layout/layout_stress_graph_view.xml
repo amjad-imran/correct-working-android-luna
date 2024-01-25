@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/ivBackStress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_stress_meter_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/lytTicker"
+        layout="@layout/layout_arrow"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/ivBackStress"
+        app:layout_constraintEnd_toEndOf="@id/ivBackStress"
+        app:layout_constraintStart_toStartOf="@id/ivBackStress" />
+
+    <TextView
+        style="@style/H1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toBottomOf="@id/lytTicker"
+        app:layout_constraintEnd_toEndOf="@id/ivBackStress"
+        app:layout_constraintStart_toStartOf="@id/ivBackStress"
+        tools:text="345" />
+
+    <TextView
+        android:id="@+id/tvMinStress"
+        style="@style/H6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="6dp"
+        android:text="@string/text_0"
+        android:textColor="@color/white_48"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivBackStress" />
+
+    <TextView
+        android:id="@+id/tvMaxStress"
+        style="@style/H6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="94dp"
+        android:text="@string/text_100"
+        android:textColor="@color/white_48"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivBackStress" />
+
+    <TextView
+        android:id="@+id/tvStressStatus"
+        style="@style/H5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/tvMinStress"
+        app:layout_constraintEnd_toStartOf="@id/tvMaxStress"
+        app:layout_constraintStart_toEndOf="@id/tvMinStress"
+        app:layout_constraintTop_toTopOf="@id/tvMinStress"
+        tools:text="Fixed" />
+
+    <TextView
+        android:id="@+id/tvLastSyncStatus"
+        style="@style/Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white_64"
+        android:layout_marginTop="4dp"
+        app:layout_constraintTop_toBottomOf="@+id/tvStressStatus"
+        app:layout_constraintEnd_toStartOf="@id/tvMaxStress"
+        app:layout_constraintStart_toEndOf="@id/tvMinStress"
+        tools:text="Last updated at 10:40 pm" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
