@@ -65,6 +65,7 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="@dimen/side_margin"
                 app:layout_constraintTop_toBottomOf="@id/lytMediumMovement" />
+
             <include
                 android:id="@+id/lytNoMovement"
                 layout="@layout/layout_compare_view_item"
@@ -74,6 +75,24 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="@dimen/side_margin"
                 app:layout_constraintTop_toBottomOf="@id/lytLowMovement" />
+
+            <include
+                android:id="@+id/divider1"
+                layout="@layout/layout_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                app:layout_constraintTop_toBottomOf="@id/lytNoMovement" />
+
+            <include
+                layout="@layout/layout_stress_banner_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="24dp"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginEnd="@dimen/side_margin"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider1" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
