@@ -253,7 +253,6 @@ dependencies {
     implementation("androidx.paging:paging-common-ktx:3.1.1")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.2")
     implementation("com.github.grapesnberries:curlloggerinterceptor:0.1")
-    implementation("com.leinardi.android:speed-dial:3.3.0")
 
 
     implementation(Glide.glide)
