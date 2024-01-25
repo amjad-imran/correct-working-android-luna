@@ -79,7 +79,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        navController = findNavController(com.noisefit.luna.R.id.o_nav_host_fragment)
+        navController = findNavController(R.id.o_nav_host_fragment)
         setNavViewListeners()
         setBlur()
         setBlurAddCta()
@@ -173,36 +173,49 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         }
 
         binding.lytAddWorkoutSelector.tvAddWorkout.setOnClickListener {
-            showAddWorkoutCta()
-            binding.blurViewSelector.gone()
-            if (viewModel.isDeviceConnected()) {
-                navController?.navigate(R.id.addWorkoutFragment)
-            } else {
-                showShortToast("Please connect your ring to add a workout")
-            }
+            showAddWorkout()
         }
+        binding.lytAddWorkoutSelector.ivAddWorkoutManual.setOnClickListener {
+            showAddWorkout()
+        }
+
+
         binding.lytAddWorkoutSelector.ivWorkoutClose.setOnClickListener {
             showAddWorkoutCta()
-            //binding.blurViewSelector.gone()
             animateFabDown()
         }
 
         binding.lytAddWorkoutSelector.tvRecordWorkout.setOnClickListener {
-            showAddWorkoutCta()
-            binding.blurViewSelector.gone()
-            navController?.navigate(R.id.selectWorkoutFragment)
+            showRecordWorkout()
+        }
+        binding.lytAddWorkoutSelector.ivRecordWorkout.setOnClickListener {
+            showRecordWorkout()
         }
 
         binding.btnAddWorkout.setOnClickListener {
             setBlurAddCta()
 
             viewModel.addWorkoutCtaVisibility.postValue(false)
-
-
             animateFabUp()
 
             //binding.blurViewSelector.visible()
         }
+    }
+
+    private fun showAddWorkout() {
+        showAddWorkoutCta()
+        binding.blurViewSelector.gone()
+        if (viewModel.isDeviceConnected()) {
+            navController?.navigate(R.id.addWorkoutFragment)
+        } else {
+            showShortToast("Please connect your ring to add a workout")
+        }
+    }
+
+    private fun showRecordWorkout() {
+        showAddWorkoutCta()
+        binding.blurViewSelector.gone()
+        navController?.navigate(R.id.selectWorkoutFragment)
     }
 
     private fun animateFabUp() {
@@ -212,6 +225,22 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         animateItemsUp(binding.lytAddWorkoutSelector.ivAddWorkoutManual, 300f)
         animateItemsUp(binding.lytAddWorkoutSelector.tvAddWorkout, 300f)
         animateItemsUp(binding.lytAddWorkoutSelector.tvRecordWorkout, 200f)
+
+        val rotate =
+            ObjectAnimator.ofFloat(
+                binding.lytAddWorkoutSelector.ivWorkoutClose,
+                View.ROTATION,
+                0f,
+                -45f
+            )
+                .apply {
+                    this.duration = viewModel.FAB_ANIM_TIME
+                }
+
+        val animatorSet = AnimatorSet()
+        animatorSet.playTogether(rotate)
+        animatorSet.start()
+
     }
 
     private fun animateFabDown() {
@@ -222,23 +251,27 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         animateItemsDown(binding.lytAddWorkoutSelector.tvAddWorkout)
         animateItemsDown(binding.lytAddWorkoutSelector.tvRecordWorkout)
 
-        /*val alpha =
-            ObjectAnimator.ofFloat(binding.blurViewSelector, "alpha", 1f, 0f)
+        val alpha =
+            ObjectAnimator.ofFloat(
+                binding.lytAddWorkoutSelector.ivWorkoutClose,
+                View.ROTATION,
+                -45f,
+                0f
+            )
                 .apply {
-                    this.duration = 500
+                    this.duration = viewModel.FAB_ANIM_TIME
                 }
 
         val animatorSet = AnimatorSet()
-        animatorSet.interpolator = AccelerateDecelerateInterpolator()
         animatorSet.playTogether(alpha)
-        animatorSet.start()*/
+        animatorSet.start()
 
         Handler(Looper.getMainLooper()).postDelayed({
             try {
                 binding.blurViewSelector.gone()
             } catch (exp: Exception) {
             }
-        }, 500)
+        }, viewModel.FAB_ANIM_TIME)
 
     }
 
@@ -250,12 +283,12 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             value,
             0f
         ).apply {
-            this.duration = 500
+            this.duration = viewModel.FAB_ANIM_TIME
         }
         val alpha =
             ObjectAnimator.ofFloat(view, "alpha", 0f, 1f)
                 .apply {
-                    this.duration = 500
+                    this.duration = viewModel.FAB_ANIM_TIME
                 }
 
         val animatorSet = AnimatorSet()
@@ -271,13 +304,13 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             0f,
             binding.lytAddWorkoutSelector.ivWorkoutClose.y - view.y
         ).apply {
-            this.duration = 500
+            this.duration = viewModel.FAB_ANIM_TIME
         }
 
         val alpha =
             ObjectAnimator.ofFloat(view, "alpha", 1f, 0f)
                 .apply {
-                    this.duration = 500
+                    this.duration = viewModel.FAB_ANIM_TIME
                 }
 
         val animatorSet = AnimatorSet()

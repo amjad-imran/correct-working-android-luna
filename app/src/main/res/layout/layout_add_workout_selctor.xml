@@ -53,9 +53,8 @@
         android:layout_height="48dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="80dp"
-        android:padding="8dp"
-        android:visibility="invisible"
-        android:src="@drawable/ic_add_workout_close"
+        android:padding="12dp"
+        android:src="@drawable/ic_add_workout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

@@ -60,6 +60,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvWorkoutTitle"
+        app:layout_constraintVertical_bias="0.3"
         app:layout_constraintVertical_chainStyle="packed"
         app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
 
@@ -89,19 +90,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivWorkout" />
 
-    <include
-        android:id="@+id/lytRingConnecting"
-        layout="@layout/layout_record_workout_ring_connecting"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="16dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="gone" />
-
     <Button
         android:id="@+id/btnStartWorkout"
         style="@style/PrimaryButtonStyle"
@@ -112,6 +100,7 @@
         android:layout_marginEnd="68dp"
         android:gravity="center"
         android:text="@string/text_start"
+        android:textSize="16sp"
         app:backgroundTint="@null"
         app:layout_constraintBottom_toTopOf="@+id/btnPauseResume"
         app:layout_constraintEnd_toEndOf="parent"
@@ -129,6 +118,7 @@
         android:layout_marginEnd="68dp"
         android:gravity="center"
         android:text="@string/pause"
+        android:textSize="16sp"
         android:visibility="gone"
         app:backgroundTint="@null"
         app:layout_constraintBottom_toTopOf="@+id/btnEndWorkout"
@@ -147,6 +137,7 @@
         android:layout_marginEnd="68dp"
         android:gravity="center"
         android:text="@string/text_end"
+        android:textSize="16sp"
         app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -161,6 +152,19 @@
         app:constraint_referenced_ids="oreoStatus,batteryStatus" />
 
     <include
+        android:id="@+id/lytRingConnecting"
+        layout="@layout/layout_record_workout_ring_connecting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="gone" />
+
+    <include
         android:id="@+id/progressBar"
         layout="@layout/default_loader"
         android:layout_width="match_parent"
@@ -170,6 +174,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottieAnim"
