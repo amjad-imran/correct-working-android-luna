@@ -41,10 +41,11 @@ constructor(
             val workoutTypeString = getWorkoutType(workout.type, workoutsList)
             if (workoutTypeString != null && workout.duration != 0 && !toDeleteList.contains(workout.startTime)) {
 
-                val date = DateFormats.convertTimestampToDate(
+               /* val date = DateFormats.convertTimestampToDate(
                     workout.startTime,
                     DateFormats.dateFormat3
-                )
+                )*/
+
                 val startTime =
                     DateFormats.convertTimestampToDate(workout.startTime, DateFormats.timeFormat)
                 val endTime =
@@ -84,7 +85,7 @@ constructor(
                         this.add("hr_value", hrArray)
                         this.addProperty("steps", workout.steps)
                         this.addProperty("type", "userworkout")
-                        this.addProperty("date", date)
+                        this.addProperty("date", workout.date)
                     })
             }
         }

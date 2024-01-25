@@ -42,6 +42,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/batteryStatus"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:indeterminate="false"
+                app:indicatorSize="64dp"
+                app:layout_constraintBottom_toBottomOf="@+id/oreoStatus"
+                app:layout_constraintEnd_toEndOf="@+id/oreoStatus"
+                app:layout_constraintStart_toStartOf="@+id/oreoStatus"
+                app:layout_constraintTop_toTopOf="@+id/oreoStatus"
+                app:trackColor="#1effffff"
+                app:trackThickness="1dp" />
+
 
             <TextView
                 android:id="@+id/textView90"

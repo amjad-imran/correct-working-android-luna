@@ -77,7 +77,8 @@ class BottomSheetRingConnecting :
 
 
         binding.btnAllow.isEnabled = true
-        binding.oreoStatus.setImageResource(R.drawable.ic_ring_bluetooth_off)
+        binding.oreoStatus.setImageResource(R.drawable.ic_ring_bluetooth_off_2)
+        binding.oreoStatus.background = null
         binding.textView90.text = getString(R.string.text_bluetooth_turn_on)
         binding.textRingConnecteMessage.text = getString(R.string.text_bluetooth_on_message)
         binding.lottieAnimView.gone()

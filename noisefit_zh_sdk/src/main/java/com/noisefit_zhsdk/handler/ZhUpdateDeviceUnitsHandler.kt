@@ -401,6 +401,13 @@ constructor(
 
     }
 
+    fun stopWorkout(){
+        testUpdateDeviceDataCallback?.onUpdateDataReceived(
+            UpdateDeviceDataCallback.WorkoutStopped(true)
+        )
+        ControlBleTools.getInstance().getFitnessSportIdsData(null)
+    }
+
     private val ringSportCallback = object : RingSportCallBack {
         override fun onRingSportStatus(bean: RingSportStatusBean?) {
             LOGS.d(TAG, "onRingSportStatus ${Gson().toJson(bean)}")
@@ -423,21 +430,29 @@ constructor(
             if (bean.startResult != RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_NONE.result) {
                 when (bean.startResult) {
                     RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_LOW_POWER.result -> {
-                        testUpdateDeviceDataCallback?.onUpdateDataReceived(
-                            UpdateDeviceDataCallback.WorkoutStartState(false, "Low Battery")
-                        )
+                        /*testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                            UpdateDeviceDataCallback.WorkoutEndFromRingState("Low Battery")
+                        )*/
+                        AppLogs.sendAppLogs("Workout failed from ring Reason: Low Battery")
+                        stopWorkout()
                     }
 
                     RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_UN_WEAR.result -> {
-                        testUpdateDeviceDataCallback?.onUpdateDataReceived(
-                            UpdateDeviceDataCallback.WorkoutStartState(false, "Device not worn")
-                        )
+                        /*testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                            UpdateDeviceDataCallback.WorkoutEndFromRingState("Device not worn")
+                        )*/
+                        AppLogs.sendAppLogs("Workout failed from ring Reason: Device not worn")
+
+                        stopWorkout()
                     }
 
                     RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_CHARGING.result -> {
-                        testUpdateDeviceDataCallback?.onUpdateDataReceived(
-                            UpdateDeviceDataCallback.WorkoutStartState(false, "Ring on Charging")
-                        )
+                        /*testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                            UpdateDeviceDataCallback.WorkoutEndFromRingState("Ring on Charging")
+                        )*/
+                        AppLogs.sendAppLogs("Workout failed from ring Reason: Ring on Charging")
+
+                        stopWorkout()
 
                     }
                 }
@@ -447,28 +462,35 @@ constructor(
                 if (bean.endReason != RingSportCallBack.RingSportEndReason.SPORT_END_REASON_NONE.reason) {
                     when (bean.endReason) {
                         RingSportCallBack.RingSportEndReason.SPORT_END_REASON_LOW_POWER.reason -> {
-                            testUpdateDeviceDataCallback?.onUpdateDataReceived(
-                                UpdateDeviceDataCallback.WorkoutStartState(false, "Low Battery")
-                            )
+                            /*testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                                UpdateDeviceDataCallback.WorkoutEndFromRingState("Low Battery")
+                            )*/
+                            AppLogs.sendAppLogs("Workout failed from ring Reason: Low Battery")
+
+                            stopWorkout()
                         }
 
                         RingSportCallBack.RingSportEndReason.SPORT_END_REASON_TIMEOUT.reason -> {
-                            testUpdateDeviceDataCallback?.onUpdateDataReceived(
-                                UpdateDeviceDataCallback.WorkoutStartState(
-                                    false,
+                            /*testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                                UpdateDeviceDataCallback.WorkoutEndFromRingState(
                                     "Exercise 8 hours timeout"
                                 )
-                            )
+                            )*/
+                            AppLogs.sendAppLogs("Workout failed from ring Reason: Exercise 8 hours timeout")
+
+                            stopWorkout()
 
                         }
 
                         RingSportCallBack.RingSportEndReason.SPORT_END_REASON_NO_MEMORY.reason -> {
-                            testUpdateDeviceDataCallback?.onUpdateDataReceived(
-                                UpdateDeviceDataCallback.WorkoutStartState(
-                                    false,
+                            /*testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                                UpdateDeviceDataCallback.WorkoutEndFromRingState(
                                     "Insufficient device memory"
                                 )
-                            )
+                            )*/
+                            AppLogs.sendAppLogs("Workout failed from ring Reason: Insufficient device memory")
+
+                            stopWorkout()
                         }
                     }
                 }
