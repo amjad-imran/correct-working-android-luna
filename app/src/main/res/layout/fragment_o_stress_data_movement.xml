@@ -27,16 +27,53 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/lytTopStressGraph" />
 
-            <com.oreo.ui.custom.CompareChart
-                android:id="@+id/compareChart"
+            <TextView
+                android:id="@+id/tvCompareHeader"
                 android:layout_width="match_parent"
-                android:layout_marginStart="@dimen/side_margin"
-                android:layout_marginEnd="@dimen/side_margin"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="@id/lytStressMidGraph"
-                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="@dimen/side_margin"
+                android:text="@string/text_select_to_compare"
+                android:textColor="@color/white_48"
                 app:layout_constraintTop_toBottomOf="@id/lytStressMidGraph" />
 
+            <include
+                android:id="@+id/lytHighMovement"
+                layout="@layout/layout_compare_view_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="@dimen/side_margin"
+                app:layout_constraintTop_toBottomOf="@id/tvCompareHeader" />
+
+            <include
+                android:id="@+id/lytMediumMovement"
+                layout="@layout/layout_compare_view_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="@dimen/side_margin"
+                app:layout_constraintTop_toBottomOf="@id/lytHighMovement" />
+
+            <include
+                android:id="@+id/lytLowMovement"
+                layout="@layout/layout_compare_view_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="@dimen/side_margin"
+                app:layout_constraintTop_toBottomOf="@id/lytMediumMovement" />
+            <include
+                android:id="@+id/lytNoMovement"
+                layout="@layout/layout_compare_view_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="@dimen/side_margin"
+                app:layout_constraintTop_toBottomOf="@id/lytLowMovement" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

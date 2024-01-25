@@ -6,18 +6,31 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         style="@style/ModalStyle10"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginStart="@dimen/side_margin"
-        android:layout_marginEnd="@dimen/side_margin">
+        android:layout_height="wrap_content"
+        android:paddingBottom="14dp">
 
         <TextView
+            android:id="@+id/tvHeader"
             style="@style/Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginTop="14dp"
+            android:textColor="@color/white_80"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="High movement" />
+
+        <com.oreo.ui.custom.CompareChart
+            android:id="@+id/compareChart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvHeader" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1008,4 +1008,6 @@
     <string name="text_charging_message">To record your workout, remove your ring from the charger and wear it on your finger.</string>
     <string name="text_0">0</string>
     <string name="text_100">100</string>
+    <string name="text_select_to_compare">Select to compare:</string>
+    <string name="text_no_movement">No movement</string>
 </resources>

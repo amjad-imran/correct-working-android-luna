@@ -3,6 +3,7 @@ package com.oreo.ui.stress
 import android.os.Bundle
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOStressDataMovementBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit_commans.ui.BaseFragment
@@ -33,11 +34,33 @@ class OStressDataMovementFragment :
     }
 
     private fun handleMovementViews() {
-        binding.compareChart.setDrawData(
+        binding.lytHighMovement.tvHeader.text = getString(R.string.text_high_movement)
+        binding.lytHighMovement.compareChart.setDrawData(
+            movementViewModel.getCombinedMovementData(
+                ArrayList(),
+                false
+            ) as ArrayList<Int>, 1, "#ffffff"
+        )
+        binding.lytMediumMovement.tvHeader.text = getString(R.string.text_medium_movement)
+        binding.lytMediumMovement.compareChart.setDrawData(
             movementViewModel.getCombinedMovementData(
                 ArrayList(),
                 false
             ) as ArrayList<Int>, 1, "#8cd7f6"
+        )
+        binding.lytLowMovement.tvHeader.text = getString(R.string.text_low_movement)
+        binding.lytLowMovement.compareChart.setDrawData(
+            movementViewModel.getCombinedMovementData(
+                ArrayList(),
+                false
+            ) as ArrayList<Int>, 1, "#307384"
+        )
+        binding.lytNoMovement.tvHeader.text = getString(R.string.text_no_movement)
+        binding.lytNoMovement.compareChart.setDrawData(
+            movementViewModel.getCombinedMovementData(
+                ArrayList(),
+                false
+            ) as ArrayList<Int>, 1, "#757575"
         )
     }
 
