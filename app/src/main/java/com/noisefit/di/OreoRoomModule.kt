@@ -18,6 +18,7 @@ import com.oreo.data.db.database.OreoAutoSportDao
 import com.oreo.data.db.database.OreoBloodOxygenDao
 import com.oreo.data.db.database.OreoBodyTemperatureDao
 import com.oreo.data.db.database.OreoDayTimeMovementDao
+import com.oreo.data.db.database.OreoGFitWorkoutDao
 import com.oreo.data.db.database.OreoHeartRateDao
 import com.oreo.data.db.database.OreoRecordedWorkoutDao
 import com.oreo.data.db.database.OreoRespiratoryDao
@@ -27,6 +28,7 @@ import com.oreo.data.db.database.OreoStressDao
 import com.oreo.data.db.database.OreoUserHealthDataDao
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
 import com.oreo.data.db.implementation.OreoDayTimeMovementDataImpl
+import com.oreo.data.db.implementation.OreoGFitWorkoutDataImpl
 import com.oreo.data.db.implementation.OreoSleepDataImpl
 import com.oreo.data.db.implementation.OreoStepsDataImpl
 import com.oreo.data.db.implementation.OreoUserHealthDataDataImpl
@@ -166,11 +168,11 @@ class OreoRoomModule {
         return database.stepsDao()
     }
 
-    /*@Singleton
+    @Singleton
     @Provides
     fun providesOreoGFitWorkoutDao(database: OreoDataBase): OreoGFitWorkoutDao {
         return database.gFitWorkoutDao()
-    }*/
+    }
 
     @Singleton
     @Provides
@@ -204,11 +206,11 @@ class OreoRoomModule {
     }
 
 
-    /*@Singleton
+    @Singleton
     @Provides
     fun provideOreoGFitWorkoutDataImpl(data: OreoGFitWorkoutDao): OreoGFitWorkoutDataImpl {
         return OreoGFitWorkoutDataImpl(data)
-    }*/
+    }
 
 
     @Singleton
