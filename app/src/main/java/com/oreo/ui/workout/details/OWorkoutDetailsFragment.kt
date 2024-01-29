@@ -5,11 +5,13 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOWorkoutDetailsBinding
+import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.ui.custom.WorkoutIntensityGraphOreo
@@ -33,6 +35,8 @@ class OWorkoutDetailsFragment :
 
     private val mViewModel: OWorkoutDetailsViewModel by viewModels()
     private val args: OWorkoutDetailsFragmentArgs by navArgs()
+    private val mainViewModel: OreoMainViewModel by activityViewModels()
+
     private val mAdapter: OWorkoutDetailslAdapter by lazy {
         OWorkoutDetailslAdapter()
     }
@@ -92,6 +96,8 @@ class OWorkoutDetailsFragment :
 
         mViewModel.workoutDeletedResponse.observe(this) {
             it?.getContent()?.let { response ->
+                mainViewModel.reloadTodaysData()
+
                 setFragmentResult(
                     DELETE_WORKOUT_REQUEST_KEY,
                     bundleOf("allow" to true, "position" to mViewModel.position)
@@ -132,7 +138,6 @@ class OWorkoutDetailsFragment :
         }
 
 
-
         binding.rvActivityDetails.visible()
         binding.lytActivityItem.root.visible()
         binding.lytActivityItem.tvActivityDate.text = DateFormats.formatActivityDate(it.date)
@@ -155,17 +160,29 @@ class OWorkoutDetailsFragment :
 
             binding.lytHeartRate.root.gone()
 
-            /*setHrGraph(
-                it.hrArray,
-                it.hrAvg,
-                it.hrLow,
-                "${it.date} ${it.startTime}",
-                "${it.date} ${it.endTime}"
-            )*/
+            var movement = it.movement
+            if (it.type.equals("userworkout", true)) {
+                setHrGraph(
+                    it.hrArray,
+                    it.hrAvg,
+                    it.hrLow,
+                    "${it.date} ${it.startTime}",
+                    "${it.date} ${it.endTime}"
+                )
+                movement = mViewModel.getCombinedMovement(it.movement ?: ArrayList())
+            }
+
+
+            /*val movement = ArrayList<Int>()
+            for (i in 0..959){
+                val random = arrayListOf<Int>(0,1,2,3).random()
+                movement.add(random)
+            }*/
+
 
             setMovementGraph(
                 it.intensity,
-                it.movement, DateFormats.convert24HourTo12(
+                movement, DateFormats.convert24HourTo12(
                     it.startTime, SimpleDateFormat("HH:mm:ss", DateFormats.defaultLocale)
                 ), DateFormats.convert24HourTo12(
                     it.endTime, SimpleDateFormat(
@@ -173,6 +190,7 @@ class OWorkoutDetailsFragment :
                     )
                 )
             )
+
         }
 
 
@@ -345,9 +363,10 @@ class OWorkoutDetailsFragment :
 
     private fun prepareDataForActivity(it: OWorkoutDetailsResponseModel) {
         val activityList = ArrayList<OWDActivityData>()
+        val duration = ApplicationUtils.getActivityDurationFormat2(it.duration)
         activityList.add(
             OWDActivityData(
-                "Duration", ApplicationUtils.getActivityDurationFormat2(it.duration), ""
+                "Duration", duration, ""
             )
         )
         if (it.calories != null && it.calories > 0) {
@@ -355,7 +374,7 @@ class OWorkoutDetailsFragment :
                 OWDActivityData(
                     "Calories",
                     it.calories.toString(),
-                    "Kcal",
+                    "kcal",
                 )
             )
         }

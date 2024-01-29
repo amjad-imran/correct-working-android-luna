@@ -113,6 +113,7 @@ public class LineChart extends View {
 
     private List<ChartModel> list = new ArrayList<>();
     private int prefixCount;
+    private int mCurrentPos = -1;
     private int suffixCount;
     private boolean canScroll = true;
     private boolean showXAxis = true;
@@ -420,6 +421,7 @@ public class LineChart extends View {
 
         xMax = 120;
         if(currentPos!=-1){
+            mCurrentPos = currentPos;
             moveToPosition(currentPos);
         }
 
@@ -519,14 +521,22 @@ public class LineChart extends View {
         mHeight = h;
 
         unitHLenth = (mWith - leftWith - rightWith) / hCount;
-        offSet = prefixCount * unitHLenth;
+        if(mCurrentPos!=-1){
+           offSet = mCurrentPos* unitHLenth;
+        }else {
+            offSet = prefixCount * unitHLenth;
+        }
 
         if (titleWidth == 0) {
             indicatorUnitLength = mWith / 2f;
         } else {
             indicatorUnitLength = titleWidth;
         }
-        indicatorOffSet = prefixCount * indicatorUnitLength;
+        if(mCurrentPos!=-1){
+            indicatorOffSet = mCurrentPos * indicatorUnitLength;
+        }else {
+            indicatorOffSet = prefixCount * indicatorUnitLength;
+        }
 
         selectedLinePath.moveTo(leftWith + (mWith - leftWith - rightWith) / 2f - 2 * unitHLenth, topWith);
         selectedLinePath.lineTo(leftWith + (mWith - leftWith - rightWith) / 2f - unitHLenth / 5f, topWith);
@@ -569,7 +579,7 @@ public class LineChart extends View {
             canvas.drawPath(selectedLinePath, bgTopSelectedPaint);
             bgTopSelectedPaint.setStyle(Paint.Style.STROKE);
             bgTopSelectedPaint.setColor(Color.WHITE);
-            bgTopSelectedPaint.setStrokeWidth(dip2px(2));
+            bgTopSelectedPaint.setStrokeWidth(dip2px(1));
             canvas.drawPath(selectedLinePath, bgTopSelectedPaint);
         }
     }

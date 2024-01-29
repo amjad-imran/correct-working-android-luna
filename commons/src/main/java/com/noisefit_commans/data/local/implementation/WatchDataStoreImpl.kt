@@ -28,6 +28,7 @@ private const val WORLD_CLOCK_DATA = "WORLD_CLOCK_DATA"
 private const val SAVE_UNIQUE_WATCH_FACE_ID = "SAVE_UNIQUE_WATCH_FACE_ID"
 private const val SAVE_CUSTOM_REPLIES = "SAVE_CUSTOM_REPLIES"
 private const val SAVE_LOGS_PATH_NAME = "SAVE_LOGS_PATH_NAME"
+private const val FIRMWARE_LOGS_PATH = "FIRMWARE_LOGS_PATH"
 private const val FIRMWARE_VERSION = "FIRMWARE_VERSION"
 private const val BATTERY_PERCENT = "BATTERY_PERCENT"
 private const val BATTERY_PERCENT_RING = "BATTERY_PERCENT_RING"
@@ -61,6 +62,7 @@ constructor(
     private val gson: Gson,
     private val mPrefs: SharedPreferences
 ) : WatchDataStore {
+
 
 
 
@@ -433,6 +435,16 @@ constructor(
 
     override fun getLogPathName(): String? {
         return mPrefs.getString(SAVE_LOGS_PATH_NAME, null)
+    }
+
+    override fun saveFirmwareLogPath(data: String) {
+        mPrefs.edit()
+            ?.putString(FIRMWARE_LOGS_PATH, data)
+            ?.apply()
+    }
+
+    override fun getFirmwareLogPath(): String? {
+        return mPrefs.getString(FIRMWARE_LOGS_PATH, null)
     }
 
     override fun getCustomReplies(): CustomReplyData? {

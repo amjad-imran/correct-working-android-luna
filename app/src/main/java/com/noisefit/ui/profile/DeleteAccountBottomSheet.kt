@@ -26,6 +26,10 @@ class DeleteAccountBottomSheet :
 
     private fun initListener() {
         binding.btnCancel.setOnClickListener {
+            setFragmentResult(
+                DELETE_KEY,
+                bundleOf("isSelected" to false)
+            )
             navigateUpSafe()
         }
         binding.btnSave.setOnClickListener {

@@ -2,9 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/ModalStyleReadinessNew"
+    style="@style/ModalStyleTransparentOreo"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingBottom="20dp"
     android:layout_marginTop="24dp">
 
     <TextView
@@ -73,7 +74,6 @@
         android:layout_height="@dimen/dimen_32dp"
         android:layout_marginStart="@dimen/dimen_16dp"
         android:layout_marginTop="@dimen/dimen_24dp"
-        android:layout_marginBottom="22dp"
         android:contentDescription="@null"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -89,7 +89,6 @@
         android:layout_height="@dimen/dimen_32dp"
         android:layout_marginStart="@dimen/dimen_16dp"
         android:layout_marginTop="@dimen/dimen_24dp"
-        android:layout_marginBottom="21dp"
         android:contentDescription="@null"
         android:src="@drawable/ic_black_heart_with_circle"
         app:layout_constraintBottom_toBottomOf="parent"

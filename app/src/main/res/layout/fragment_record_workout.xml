@@ -1,0 +1,190 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.oreo.ui.recordworkout.RecordWorkoutFragment">
+
+    <ImageView
+        android:id="@+id/ivCross"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:padding="14dp"
+        android:src="@drawable/ic_add_workout_close"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvWorkoutTitle"
+        style="@style/H4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/ivCross"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ivCross"
+        tools:text="Outdoor run" />
+
+    <ImageView
+        android:id="@+id/oreoStatus"
+        android:layout_width="@dimen/dimen_32dp"
+        android:layout_height="@dimen/dimen_32dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/back_modal_new_round"
+        android:src="@drawable/ic_ring_default_silver_new"
+        app:layout_constraintBottom_toBottomOf="@+id/ivCross"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ivCross" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/batteryStatus"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:indeterminate="false"
+        android:visibility="gone"
+        app:indicatorSize="@dimen/dimen_32dp"
+        app:layout_constraintBottom_toBottomOf="@+id/oreoStatus"
+        app:layout_constraintEnd_toEndOf="@+id/oreoStatus"
+        app:layout_constraintStart_toStartOf="@+id/oreoStatus"
+        app:layout_constraintTop_toTopOf="@+id/oreoStatus"
+        app:trackColor="#1effffff"
+        app:trackThickness="1dp" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ivWorkout"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:background="@drawable/back_modal_new_round"
+        app:layout_constraintBottom_toTopOf="@+id/tvTimer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvWorkoutTitle"
+        app:layout_constraintVertical_bias="0.3"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+
+    <ImageView
+        android:id="@+id/ivWorkoutImage"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivWorkout"
+        app:layout_constraintEnd_toEndOf="@+id/ivWorkout"
+        app:layout_constraintStart_toStartOf="@+id/ivWorkout"
+        app:layout_constraintTop_toTopOf="@+id/ivWorkout"
+        tools:src="@drawable/ic_o_workout" />
+
+
+    <TextView
+        android:id="@+id/tvTimer"
+        style="@style/H32"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="00:00"
+        android:textSize="64sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnStartWorkout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivWorkout" />
+
+    <Button
+        android:id="@+id/btnStartWorkout"
+        style="@style/PrimaryButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="68dp"
+        android:gravity="center"
+        android:text="@string/text_start"
+        android:textSize="16sp"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toTopOf="@+id/btnPauseResume"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTimer" />
+
+    <Button
+        android:id="@+id/btnPauseResume"
+        style="@style/SecondaryButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="68dp"
+        android:gravity="center"
+        android:text="@string/pause"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toTopOf="@+id/btnEndWorkout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnStartWorkout" />
+
+    <Button
+        android:id="@+id/btnEndWorkout"
+        style="@style/RecordWorkPrimaryButtonStyleHighlight"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="68dp"
+        android:gravity="center"
+        android:text="@string/text_end"
+        android:textSize="16sp"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnPauseResume" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupRingStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="oreoStatus,batteryStatus" />
+
+    <include
+        android:id="@+id/lytRingConnecting"
+        layout="@layout/layout_record_workout_ring_connecting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="gone" />
+
+    <include
+        android:id="@+id/progressBar"
+        layout="@layout/default_loader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieAnim"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

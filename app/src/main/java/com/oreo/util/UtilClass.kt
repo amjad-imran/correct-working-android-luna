@@ -217,6 +217,78 @@ object UtilClass {
 
     }
 
+    fun getXAxisPoints15Mins(
+        startTime: String?,
+        endTime: String?,
+        dataSize: Int
+    ): HashMap<Int, String> {
+
+        val hm = HashMap<Int, String>()
+        if (startTime == null || endTime == null) {
+        /*    hm[0] = getHour(0)
+            hm[71] = getHour(71)
+            hm[143] = getHour(143)
+            hm[215] = getHour(215)
+            hm[95] = getHour(287)*/
+            return hm
+        }
+
+        //3 points
+        if (dataSize <= 36) {
+            val center = dataSize / 2
+            val centerTime = getCenterTime(
+                DateFormats.dateTimeFormat5.parse(startTime),
+                DateFormats.dateTimeFormat5.parse(endTime)
+            )
+
+            hm[0] = DateFormats.formatDate(
+                startTime,
+                DateFormats.dateTimeFormat5,
+                DateFormats.time12Meridian
+            )
+            hm[center] = DateFormats.time12Meridian.format(centerTime).lowercase()
+            hm[dataSize - 1] = DateFormats.formatDate(
+                endTime,
+                DateFormats.dateTimeFormat5,
+                DateFormats.time12Meridian
+            )
+        }
+        //5 points
+
+        val center = dataSize / 2
+        val centerLeft = center / 2
+
+        val centerTime = getCenterTime(
+            DateFormats.dateTimeFormat5.parse(startTime),
+            DateFormats.dateTimeFormat5.parse(endTime)
+        )
+        val centerLeftTime = getCenterTime(
+            DateFormats.dateTimeFormat5.parse(startTime),
+            centerTime
+        )
+        val centerRightTime = getCenterTime(
+            centerTime,
+            DateFormats.dateTimeFormat5.parse(endTime)
+        )
+
+        hm[0] = DateFormats.formatDate(
+            startTime,
+            DateFormats.dateTimeFormat5,
+            DateFormats.time12Meridian
+        ).lowercase()
+        hm[centerLeft] = DateFormats.time12Meridian.format(centerLeftTime).lowercase()
+        hm[center] = DateFormats.time12Meridian.format(centerTime).lowercase()
+        hm[center + centerLeft] = DateFormats.time12Meridian.format(centerRightTime).lowercase()
+        hm[dataSize - 1] = DateFormats.formatDate(
+            endTime,
+            DateFormats.dateTimeFormat5,
+            DateFormats.time12Meridian
+        ).lowercase()
+
+        return hm
+
+    }
+
 
     fun getXAxisPoints(
         startTime: String?,

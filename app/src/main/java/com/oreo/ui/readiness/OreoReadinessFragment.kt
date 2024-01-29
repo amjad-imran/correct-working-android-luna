@@ -14,11 +14,16 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoReadinessBinding
+import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
-import com.noisefit_commans.ui.*
-import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.FirebaseLunaAppEvents
+import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageAppEventParams
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.GraphDummyModel
@@ -36,7 +41,6 @@ import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.math.roundToInt
 
 
 @AndroidEntryPoint
@@ -45,22 +49,29 @@ class OreoReadinessFragment :
     ScrollListener {
     private val mViewModel: OreoReadinessViewModel by viewModels()
     private val mSharedViewModel: SharedOSCDViewModel by activityViewModels()
+    private val mainViewModel: OreoMainViewModel by activityViewModels()
 
 
     private val mReadinessConAdapter: OreoSleepContributorAdapter by lazy {
         OreoSleepContributorAdapter(object :
             OreoSleepContributorAdapter.ContributorItemClickListener {
-            override fun onItemClick(resultData: ArrayList<Contributors>, position: Int) {
-//                if (resultData[position].barPercent > 0) {
-                openContributorBottomSheet(resultData, position)
-//                }
+            override fun onItemClick(
+                resultData: ArrayList<Contributors>,
+                position: Int,
+                version: Int
+            ) {
+                openContributorBottomSheet(resultData, position, version)
             }
 
         })
     }
 
-    private fun openContributorBottomSheet(resultData: ArrayList<Contributors>, position: Int) {
-        val descList = mViewModel.prepareDataForDescriptionArray(resultData)
+    private fun openContributorBottomSheet(
+        resultData: ArrayList<Contributors>,
+        position: Int,
+        contriVer: Int
+    ) {
+        val descList = mViewModel.prepareDataForDescriptionArray(resultData, contriVer)
         navigate(
             OreoReadinessFragmentDirections.actionNavigationReadinessDetailsFragToDescriptionPopUpBottomDialogFragment(
                 position, descList.toTypedArray(), resultData[position].title
@@ -71,7 +82,6 @@ class OreoReadinessFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_PAGE_VISIT)
         setRecycler()
 
 
@@ -87,6 +97,7 @@ class OreoReadinessFragment :
         if (show) {
             binding.lytEmptyView.root.visible()
             binding.svMain.gone()
+            binding.groupHeader.gone()
         } else {
             binding.lytEmptyView.root.gone()
         }
@@ -121,7 +132,7 @@ class OreoReadinessFragment :
             binding.lytRScoreData.lytAScoreBanner.vpBannerSlider
         ) { _, _ -> }.attach()
 
-        if (fragments.size > 0) {
+        if (fragments.size > 1) {
             binding.lytRScoreData.lytAScoreBanner.tabLayout.visible()
         } else {
             binding.lytRScoreData.lytAScoreBanner.tabLayout.invisible()
@@ -162,11 +173,11 @@ class OreoReadinessFragment :
         }
 
 
-      /*  val baseTimeList = UtilClass.graphTwoHoursInterval(
-            ssTime,
-            seTime,
-            breakUpData.size ?: 288
-        )*/
+        /*  val baseTimeList = UtilClass.graphTwoHoursInterval(
+              ssTime,
+              seTime,
+              breakUpData.size ?: 288
+          )*/
 
         val baseTimeListNew =
             UtilClass.getXAxisPoints(ssTime, seTime, breakUpData.size ?: 288)
@@ -243,11 +254,11 @@ class OreoReadinessFragment :
         }
 
 
-      /*  val baseTimeList = UtilClass.graphTwoHoursInterval(
-            ssTime,
-            seTime,
-            breakUpData.size ?: 288
-        )*/
+        /*  val baseTimeList = UtilClass.graphTwoHoursInterval(
+              ssTime,
+              seTime,
+              breakUpData.size ?: 288
+          )*/
 
         val baseTimeListNew =
             UtilClass.getXAxisPoints(ssTime, seTime, breakUpData.size ?: 288)
@@ -319,11 +330,11 @@ class OreoReadinessFragment :
             breakUpData = temperatureBreakUpData?.value as ArrayList<Float>
         }
 
-       /* val baseTimeList = UtilClass.graphTwoHoursInterval(
-            ssTime,
-            seTime,
-            breakUpData.size ?: 288
-        )*/
+        /* val baseTimeList = UtilClass.graphTwoHoursInterval(
+             ssTime,
+             seTime,
+             breakUpData.size ?: 288
+         )*/
         val baseTimeListNew =
             UtilClass.getXAxisPoints(ssTime, seTime, breakUpData.size ?: 288)
 
@@ -378,14 +389,13 @@ class OreoReadinessFragment :
             if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
 
-                val selectedDate = data?.getStringExtra("selected_date")
-                mViewModel.selectedMasterDate = selectedDate
-                mViewModel.selectedDate = selectedDate
-                LOGS.d("Selected Date  :${selectedDate}")
-                mViewModel.getReadinessDetailsData(selectedDate)
-                /*if (selectedDate != null) {
-                    mViewModel.updateSelectedDate(selectedDate)
-                }*/
+                val selectedDate =
+                    data?.getStringExtra("selected_date") ?: return@registerForActivityResult
+                mainViewModel.onCalendarDateSelected(selectedDate)
+                LOGS.d("moveToPosition Selected Date  :${selectedDate}")
+
+                mainViewModel.getUserHealthData(mainViewModel.mStartDate, mainViewModel.mEndDate)
+
 
             }
         }
@@ -427,12 +437,13 @@ class OreoReadinessFragment :
 
         binding.lytToolbar.view1.setOnClickListener {
 
-            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_DATE_RANGE_CLICK)
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_date_range_click)
+
             resultLauncher.launch(
                 HistoryCalendarActivity.getStartIntent(
                     requireContext(),
-                    mViewModel.readinessHistoryResponse.value?.lastOrNull()?.date
-                        ?: mViewModel.selectedMasterDate,
+                    /*viewModel.sleepHistoryResponse.value?.lastOrNull()?.date
+                        ?:*/mainViewModel.selectedDate,
                     "ring"
                 )
             )
@@ -445,9 +456,9 @@ class OreoReadinessFragment :
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
                 putString("infoData", mViewModel.contributorInfo.value?.readiness_score)
-                putString("date", mViewModel.selectedDate)
+                putString("date", mainViewModel.selectedDate)
             })
-            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_READINESS_SCORE_CLICK)
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_readiness_score_click)
         }
         binding.lytRScoreData.lytSec1.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -456,9 +467,9 @@ class OreoReadinessFragment :
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
                 putString("infoData", mViewModel.contributorInfo.value?.resting_hr)
-                putString("date", mViewModel.selectedDate)
+                putString("date", mainViewModel.selectedDate)
             })
-            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_RESTING_HR_CLICK)
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_resting_hr_click)
 
         }
         binding.lytRScoreData.lytSec2.root.setOnClickListener {
@@ -468,20 +479,26 @@ class OreoReadinessFragment :
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
                 putString("infoData", mViewModel.contributorInfo.value?.hrv)
-                putString("date", mViewModel.selectedDate)
+                putString("date", mainViewModel.selectedDate)
             })
-            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_HR_VARIABILITY_CLICK)
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_hr_variability_click)
         }
         binding.lytRScoreData.lytSec3.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
             mSharedViewModel.itemType = ClickViewType.READINESS.name
             mSharedViewModel.itemClickType = ViewItemClickType.BODY_TEMPERATURE
-            navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
-                putString("viewType", "readiness")
-                putString("infoData", mViewModel.contributorInfo.value?.temperature)
-                putString("date", mViewModel.selectedDate)
+            /*  navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
+                  putString("viewType", "readiness")
+                  putString("infoData", mViewModel.contributorInfo.value?.temperature)
+                  putString("date", mainViewModel.selectedDate)
+              })*/
+
+            navigate(R.id.bodyTempScoreDetailFragment, Bundle().apply {
+                putString("date", mainViewModel.selectedDate)
+                putString("infoData", mViewModel.contributorInfo.value?.avg_temp ?: "")
             })
-            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_BODY_TEMP_CLICK)
+
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_body_temp_click)
         }
         binding.lytRScoreData.lytSec4.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
@@ -490,18 +507,21 @@ class OreoReadinessFragment :
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
                 putString("infoData", mViewModel.contributorInfo.value?.respiration)
-                putString("date", mViewModel.selectedDate)
+                putString("date", mainViewModel.selectedDate)
             })
-            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_READINESS_RESPIRATORY_RATE_CLICK)
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_respiratory_rate_click)
         }
 
 
     }
 
     override fun subscribeObservers() {
-        mViewModel.readinessHistoryResponse.observe(this) {
+        mainViewModel.readinessHistoryResponse.observe(this) {
+
+            if (it.isNullOrEmpty()) return@observe
+
             binding.svMain.visible()
-            binding.rvTopGraph.visible()
+            binding.groupHeader.visible()
             binding.lytToolbar.root.visible()
 
             val topGraphData = mViewModel.getPrefixAndSuffixList(it)
@@ -509,16 +529,16 @@ class OreoReadinessFragment :
             var moveToPos = -1
 
 
-            LOGS.d("moveToPosition date initia ${mViewModel.selectedDate}")
+            LOGS.d("moveToPosition date initia ${mainViewModel.selectedDate}")
 
-            if (mViewModel.selectedDate != null) {
+            if (mainViewModel.selectedDate != null) {
                 val index = it?.indexOfFirst { data ->
-                    data.date.equals(mViewModel.selectedDate, true)
+                    data.date.equals(mainViewModel.selectedDate, true)
                 }
                 if (index != null) {
 
-                    moveToPos =  15 + (15-index-1)
-                    LOGS.d("moveToPosition date ${mViewModel.selectedDate}")
+                    moveToPos = 15 + (it.size - index - 1)
+                    LOGS.d("moveToPosition date ${mainViewModel.selectedDate}")
                     //binding.rvTopGraph.moveToPosition(15 + (15-index-1))
                 }
 
@@ -533,8 +553,14 @@ class OreoReadinessFragment :
             setScrollDate()
             mViewModel.getContributorInfo()
 
+            val returnDate = mainViewModel.updateSelectedDateReadiness(mainViewModel.selectedDate)
+            if (returnDate != null) {
+                mainViewModel.selectedDate = returnDate
+            }
+
+
         }
-        mViewModel.dayReadinessData.observe(this) {
+        mainViewModel.dayReadinessData.observe(this) {
             updateUiRead(it)
         }
 
@@ -573,6 +599,11 @@ class OreoReadinessFragment :
         } else {
             binding.lytRScoreData.lytScore.tvQuality.gone()
         }
+        mViewModel.sessionManager.logMoEngageAppEvent(
+            MoEngageLunaAppEvents.luna_readiness_page_visit,
+            HashMap<String, Any>().apply {
+                this[MoEngageAppEventParams.status] = readinessData.status ?: ""
+            })
     }
 
     private fun updateUiRead(it: OreoReadinessModel) {
@@ -656,14 +687,30 @@ class OreoReadinessFragment :
             hrVariabilityDefaultView()
         }
         //temperature
-        if (it.temperature != null) {
+        if (it.avg_temp?.value != null) {
             binding.lytRScoreData.lytSec3.lytHrMn.root.gone()
             binding.lytRScoreData.lytSec3.tvPercentValue.visible()
             binding.lytRScoreData.lytSec3.lytBpmView.root.gone()
+            val baselineAvg = mainViewModel.temperatureBaseLine ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE
+            val deviation = it.avg_temp.value - baselineAvg
+
             binding.lytRScoreData.lytSec3.tvPercentValue.text =
-                "${it.temperature?.value} °F"
+                String.format("%.1f °F", deviation)
         } else {
-            temperatureDefaultView()
+            if ((it.temperature?.value ?: 0) != 0) {
+                val baselineAvg = mainViewModel.temperatureBaseLine ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE
+                val todayAvg = it.temperature?.value ?: baselineAvg
+                val deviation = todayAvg - baselineAvg
+
+                binding.lytRScoreData.lytSec3.lytHrMn.root.gone()
+                binding.lytRScoreData.lytSec3.tvPercentValue.visible()
+                binding.lytRScoreData.lytSec3.lytBpmView.root.gone()
+                binding.lytRScoreData.lytSec3.tvPercentValue.text =
+                    String.format("%.1f °F", deviation)
+
+            } else {
+                temperatureDefaultView()
+            }
         }
 
         //respiration
@@ -687,7 +734,11 @@ class OreoReadinessFragment :
 
         //readiness contributor
         binding.lytRContributor.tvTitle.text = getString(R.string.text_readiness_contributor)
-        mReadinessConAdapter.setData(mViewModel.getContributorsData(it))
+        val contriVersion = it.contriVersion ?: 2
+        mReadinessConAdapter.setData(
+            mViewModel.getContributorsData(it, contriVersion),
+            contriVersion
+        )
 
         //set data on heart rate
         binding.lytHeartRate.tvTitle.text = getString(R.string.text_heart_rate)
@@ -797,7 +848,6 @@ class OreoReadinessFragment :
     }
 
 
-
     private fun heartRateDefaultView() {
         binding.lytHeartRate.lytSubtitleValue1.tvUnit.gone()
         binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
@@ -858,14 +908,20 @@ class OreoReadinessFragment :
 
     override fun onPositionSelected(position: Int, chartModel: ChartModel?) {
 
-        if (mViewModel.selectedDate == chartModel?.date!!) {
+        if (mainViewModel.selectedDate == chartModel?.date!!) {
             return
         }
         //mSharedViewModel.selectedDate = chartModel.date!!
         LOGS.w("moveToPosition onPositionSelected ${chartModel.date}")
-        mViewModel.selectedDate = chartModel.date!!
-        mViewModel.updateSelectedDate()
+        mainViewModel.selectedDate = chartModel.date!!
+        val returnDate = mainViewModel.updateSelectedDateReadiness(mainViewModel.selectedDate)
+        if (returnDate != null) {
+            mainViewModel.selectedDate = returnDate
+        }
 
+        if (mainViewModel.shouldLoadMoreData()) {
+            LOGS.w("Loading more data")
+        }
 
     }
 

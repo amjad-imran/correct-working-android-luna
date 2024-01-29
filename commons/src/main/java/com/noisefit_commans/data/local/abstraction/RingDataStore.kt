@@ -1,6 +1,7 @@
 package com.noisefit_commans.data.local.abstraction
 
 import com.noisefit_commans.data.model.DeviceFeatures
+import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.ManualMeasurement
 
@@ -31,6 +32,9 @@ interface RingDataStore {
     fun setRegisterDay(day: Int)
     fun getRegisterDay(): Int?
 
+    fun setTempBaseLine(temp: Float)
+    fun getTempBaseLine(): Float?
+
     fun setSleepWalkAroundShown(status: Boolean)
     fun isSleepWalkAroundShown(): Boolean
 
@@ -45,4 +49,15 @@ interface RingDataStore {
 
     fun saveAutoLogsTimeStamp()
     fun getAutoLogsTimeStamp(): Long
+    fun isShowDeviceIntro(): Boolean
+    fun setShowDeviceIntro(boolean: Boolean)
+
+
+    fun addToRecordDeleteList(sportStartTime: Long)
+    fun removeRecordDeleteList()
+    fun getRecordDeleteList(): HashSet<Long>
+
+    fun saveOngoingRecordWorkout(pair: Pair<Long, OWorkoutListModal>)
+    fun getOngoingRecordWorkout(): Pair<Long, OWorkoutListModal>?
+    fun deleteOngoingRecordWorkout()
 }

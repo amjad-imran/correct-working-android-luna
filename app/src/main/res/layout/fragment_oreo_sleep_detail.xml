@@ -3,228 +3,263 @@
     xmlns:lineChart="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/lytEmptyView"
-            layout="@layout/layout_empty_sleep_details"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageView48"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginBottom="30dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/sleep_back_top"
+                app:layout_constraintBottom_toBottomOf="@+id/rvTopGraph"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <include
+                android:id="@+id/lytToolbar"
+                layout="@layout/oreo_layout_toolbar_with_2_icons"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.oreo.ui.custom.LineChart
+                android:id="@+id/rvTopGraph"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lytToolbar"
+                lineChart:bgBottomColor="@android:color/transparent"
+                lineChart:bgColor="@android:color/transparent"
+                lineChart:bgLeftColor="@android:color/transparent"
+                lineChart:bgRightColor="@android:color/transparent"
+                lineChart:bgTopColor="@android:color/transparent"
+                lineChart:bottomWith="30dp"
+                lineChart:centerLineColor="@color/white_80"
+                lineChart:centerLineWidth="3dp"
+                lineChart:chartLineColor="@color/sleep_chart_line_color"
+                lineChart:chartLineWidth="2dp"
+                lineChart:fillColorEnd="@color/sleep_fill_end_color"
+
+                lineChart:fillColorStart="@color/sleep_fill_start_color"
+                lineChart:gridColor="@color/white_12"
+                lineChart:hCount="11"
+                lineChart:innerCircleColor="#e9d4ff"
+                lineChart:innerCircleRadius="4dp"
+                lineChart:leftWith="0dp"
+                lineChart:outCircleColor="#66aa5bff"
+                lineChart:outCircleRadius="1dp"
+                lineChart:rightWith="0dp"
+                lineChart:scaleColor="#ff000000"
+                lineChart:scaleLenth="4dp"
+                lineChart:scaleNodeColor="#FFFFFF"
+                lineChart:scaleNodeRadius="6dp"
+                lineChart:showGrid="true"
+
+                lineChart:topWith="40dp"
+                lineChart:vCount="2"
+                lineChart:xLineColor="#80FFFFFF"
+                lineChart:xMax="130"
+                lineChart:xMin="0"
+                lineChart:xTextColor="#FFFFFF"
+                lineChart:xTextSize="12sp"
+                lineChart:yLineColor="#00FFFFFF"
+                lineChart:yTextSize="12sp" />
 
 
-        <ScrollView
-            android:id="@+id/svMain"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:visibility="gone"
-            tools:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <ScrollView
+                android:id="@+id/svMain"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/lytToolbar">
+                app:layout_constraintTop_toBottomOf="@id/rvTopGraph"
+                tools:visibility="visible">
 
-
-                <ImageView
-                    android:id="@+id/imageView48"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:src="@drawable/sleep_back_top"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:background="@drawable/back_stick_bottom"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView48" />
-
-                <include
-                    android:id="@+id/lytToolbar"
-                    layout="@layout/oreo_layout_toolbar_with_2_icons"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <com.oreo.ui.custom.LineChart
-                    android:id="@+id/rvTopGraph"
-                    android:layout_width="match_parent"
-                    android:layout_height="180dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/lytToolbar"
-                    lineChart:bgBottomColor="@android:color/transparent"
-                    lineChart:bgColor="@android:color/transparent"
-                    lineChart:bgLeftColor="@android:color/transparent"
-                    lineChart:bgRightColor="@android:color/transparent"
-                    lineChart:bgTopColor="@android:color/transparent"
-                    lineChart:bottomWith="30dp"
-                    lineChart:centerLineColor="@color/white_80"
-                    lineChart:centerLineWidth="3dp"
-                    lineChart:chartLineColor="@color/sleep_chart_line_color"
-                    lineChart:chartLineWidth="2dp"
-                    lineChart:fillColorEnd="@color/sleep_fill_end_color"
-
-                    lineChart:fillColorStart="@color/sleep_fill_start_color"
-                    lineChart:gridColor="@color/white_12"
-                    lineChart:hCount="11"
-                    lineChart:innerCircleColor="#e9d4ff"
-                    lineChart:innerCircleRadius="4dp"
-                    lineChart:leftWith="0dp"
-                    lineChart:outCircleColor="#66aa5bff"
-                    lineChart:outCircleRadius="1dp"
-                    lineChart:rightWith="0dp"
-                    lineChart:scaleColor="#ff000000"
-                    lineChart:scaleLenth="4dp"
-                    lineChart:scaleNodeColor="#FFFFFF"
-                    lineChart:scaleNodeRadius="6dp"
-                    lineChart:showGrid="true"
-
-                    lineChart:topWith="40dp"
-                    lineChart:vCount="2"
-                    lineChart:xLineColor="#80FFFFFF"
-                    lineChart:xMax="130"
-                    lineChart:xMin="0"
-                    lineChart:xTextColor="#FFFFFF"
-                    lineChart:xTextSize="12sp"
-                    lineChart:yLineColor="#00FFFFFF"
-                    lineChart:yTextSize="12sp" />
+                    app:layout_constraintTop_toBottomOf="@id/lytToolbar">
 
 
-                <include
-                    android:id="@+id/lytSleepScore"
-                    layout="@layout/oreo_layout_sleep_score_subdata"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/side_margin"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="@dimen/side_margin"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/rvTopGraph" />
-
-                <include
-                    android:id="@+id/divider11"
-                    layout="@layout/layout_divider"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="24dp"
-                    app:layout_constraintTop_toBottomOf="@id/lytSleepScore" />
-
-                <include
-                    android:id="@+id/lytSleepContributor"
-                    layout="@layout/oreo_layout_sleep_contributors"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/side_margin"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="@dimen/side_margin"
-                    app:layout_constraintTop_toBottomOf="@+id/divider11" />
-
-                <include
-                    android:id="@+id/divider22"
-                    layout="@layout/layout_divider"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="24dp"
-                    app:layout_constraintTop_toBottomOf="@id/lytSleepContributor" />
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="@drawable/back_stick_bottom"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
 
-                <include
-                    android:id="@+id/lytSSAnalysis"
-                    layout="@layout/oreo_layout_sleep_stage_analysis"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@+id/divider22" />
+                    <include
+                        android:id="@+id/lytSleepScore"
+                        layout="@layout/oreo_layout_sleep_score_subdata"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/side_margin"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginEnd="@dimen/side_margin"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <!--                <include-->
-                <!--                    android:id="@+id/divider2"-->
-                <!--                    layout="@layout/layout_divider"-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="1dp"-->
-                <!--                    android:layout_marginTop="16dp"-->
-                <!--                    app:layout_constraintTop_toBottomOf="@id/lytSSAnalysis" />-->
+                    <include
+                        android:id="@+id/divider11"
+                        layout="@layout/layout_divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="24dp"
+                        app:layout_constraintTop_toBottomOf="@id/lytSleepScore" />
 
-                <!--                <include-->
-                <!--                    android:id="@+id/lytNightMovement"-->
-                <!--                    layout="@layout/oreo_layout_sleep_night_time_meovement"-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-                <!--                    app:layout_constraintStart_toStartOf="parent"-->
-                <!--                    app:layout_constraintTop_toBottomOf="@+id/divider2" />-->
+                    <include
+                        android:id="@+id/lytSleepContributor"
+                        layout="@layout/oreo_layout_sleep_contributors"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/side_margin"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginEnd="@dimen/side_margin"
+                        app:layout_constraintTop_toBottomOf="@+id/divider11" />
 
-                <include
-                    android:id="@+id/divider3"
-                    layout="@layout/layout_divider"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="24dp"
-                    app:layout_constraintTop_toBottomOf="@id/lytSSAnalysis" />
+                    <include
+                        android:id="@+id/divider22"
+                        layout="@layout/layout_divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="24dp"
+                        app:layout_constraintTop_toBottomOf="@id/lytSleepContributor" />
 
-                <include
-                    android:id="@+id/lytHeartRate"
-                    layout="@layout/oreo_layout_sleep_movement"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/divider3" />
 
-                <include
-                    android:id="@+id/divider4"
-                    layout="@layout/layout_divider"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="24dp"
-                    app:layout_constraintTop_toBottomOf="@id/lytHeartRate" />
+                    <include
+                        android:id="@+id/lytSSAnalysis"
+                        layout="@layout/oreo_layout_sleep_stage_analysis"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@+id/divider22" />
 
-                <include
-                    android:id="@+id/lytHRVariability"
-                    layout="@layout/oreo_layout_sleep_movement"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/divider4" />
+                    <!--                <include-->
+                    <!--                    android:id="@+id/divider2"-->
+                    <!--                    layout="@layout/layout_divider"-->
+                    <!--                    android:layout_width="match_parent"-->
+                    <!--                    android:layout_height="1dp"-->
+                    <!--                    android:layout_marginTop="16dp"-->
+                    <!--                    app:layout_constraintTop_toBottomOf="@id/lytSSAnalysis" />-->
 
-                <include
-                    android:id="@+id/divider5"
-                    layout="@layout/layout_divider"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="24dp"
-                    app:layout_constraintTop_toBottomOf="@id/lytHRVariability" />
+                    <!--                <include-->
+                    <!--                    android:id="@+id/lytNightMovement"-->
+                    <!--                    layout="@layout/oreo_layout_sleep_night_time_meovement"-->
+                    <!--                    android:layout_width="match_parent"-->
+                    <!--                    android:layout_height="wrap_content"-->
+                    <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+                    <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                    <!--                    app:layout_constraintTop_toBottomOf="@+id/divider2" />-->
 
-                <View
-                    android:id="@+id/dummyView"
-                    android:layout_width="match_parent"
-                    android:layout_height="64dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/divider5" />
+                    <include
+                        android:id="@+id/divider3"
+                        layout="@layout/layout_divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="24dp"
+                        app:layout_constraintTop_toBottomOf="@id/lytSSAnalysis" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </ScrollView>
+                    <include
+                        android:id="@+id/lytHeartRate"
+                        layout="@layout/oreo_layout_sleep_movement"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/divider3" />
+
+                    <include
+                        android:id="@+id/divider4"
+                        layout="@layout/layout_divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="24dp"
+                        app:layout_constraintTop_toBottomOf="@id/lytHeartRate" />
+
+                    <include
+                        android:id="@+id/lytHRVariability"
+                        layout="@layout/oreo_layout_sleep_movement"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/divider4" />
+
+                    <include
+                        android:id="@+id/lytAverageBloodOxygen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:visibility="gone"
+                        android:layout_marginTop="24dp"
+                        app:layout_constraintTop_toBottomOf="@id/lytHRVariability"
+                        layout="@layout/layout_average_blood_oxygen"/>
+
+                    <include
+                        android:id="@+id/divider6"
+                        layout="@layout/layout_divider"
+                        android:layout_width="match_parent"
+                        android:visibility="gone"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="24dp"
+                        app:layout_constraintTop_toBottomOf="@id/lytAverageBloodOxygen" />
+
+                    <include
+                        android:id="@+id/lytBloodOxygenGraph"
+                        layout="@layout/oreo_layout_sleep_movement"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/divider6" />
+
+                    <include
+                        android:id="@+id/divider5"
+                        layout="@layout/layout_divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="24dp"
+                        app:layout_constraintTop_toBottomOf="@id/lytBloodOxygenGraph" />
+
+                    <View
+                        android:id="@+id/dummyView"
+                        android:layout_width="match_parent"
+                        android:layout_height="64dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/divider5" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </ScrollView>
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/groupHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:constraint_referenced_ids="imageView48,lytToolbar,rvTopGraph"
+                tools:visibility="visible" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <include
             android:id="@+id/progressBar1"
@@ -237,5 +272,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <include
+            android:id="@+id/lytEmptyView"
+            layout="@layout/layout_empty_sleep_details"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </FrameLayout>
+
 </layout>

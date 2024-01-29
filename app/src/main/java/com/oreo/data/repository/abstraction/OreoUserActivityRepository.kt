@@ -3,8 +3,10 @@ package com.oreo.data.repository.abstraction
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.remote.base.Resource
+import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
+import com.oreo.data.model.AddWorkoutResponse
 import com.oreo.data.model.LearnModel
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
@@ -13,30 +15,29 @@ import com.oreo.data.model.OHSQuestionariesResponseModel
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.OInternalPageResponseModal
 import com.oreo.data.model.OWorkoutDetailsResponseModel
-import com.oreo.data.model.OWorkoutListModal
 import com.oreo.data.model.RingCareResponse
 import com.oreo.data.model.RingWelcome
-import com.oreo.data.model.health.OreoActivityModel
-import com.oreo.data.model.health.OreoDashboardResponseModel
-import com.oreo.data.model.health.OreoReadinessModel
-import com.oreo.data.model.health.OreoSleepModel
+import com.oreo.data.model.ServerUserHealthResponse
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import com.oreo.ui.TestUserData
 import kotlinx.coroutines.flow.Flow
-import org.json.JSONArray
 
 interface OreoUserActivityRepository {
 
     suspend fun getRingCareData(): Flow<Resource<BaseApiResponse<RingCareResponse>>>
     suspend fun getWelcomeRingData(): Flow<Resource<BaseApiResponse<RingWelcome>>>
 
-    suspend fun getDashboardData(forceRefresh:Boolean): Flow<Resource<BaseApiResponse<OreoDashboardResponseModel>>>
+    //    suspend fun getDashboardData(forceRefresh: Boolean): Flow<Resource<BaseApiResponse<OreoDashboardResponseModel>>>
     suspend fun getLearnData(): Flow<Resource<BaseApiResponse<List<LearnModel>>>>
 
-    suspend fun getSleepHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoSleepModel>>>>
+    //    suspend fun getSleepHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoSleepModel>>>>
+    suspend fun getUserHealthData(
+        startDate: String? = null,
+        endDate: String? = null
+    ): Flow<Resource<BaseApiResponse<ServerUserHealthResponse>>>
 
-    suspend fun getActivityHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoActivityModel>>>>
-    suspend fun getReadinessHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoReadinessModel>>>>
+//    suspend fun getActivityHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoActivityModel>>>>
+//    suspend fun getReadinessHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoReadinessModel>>>>
 
     suspend fun getSummaryHRHealthOverview(): OHealthOverview.HeartRate?
 
@@ -55,6 +56,7 @@ interface OreoUserActivityRepository {
     suspend fun syncGoogleFitUserData(request: JsonObject): Flow<Resource<BaseApiResponseData<Any>>>
     suspend fun getWorkoutDetails(id: String): Flow<Resource<BaseApiResponse<OWorkoutDetailsResponseModel>>>
 
+    suspend fun getWorkoutListRecord(): Flow<Resource<BaseApiResponse<List<OWorkoutListModal>>>>
     suspend fun getWorkoutList(): Flow<Resource<BaseApiResponse<List<OWorkoutListModal>>>>
     suspend fun getRecentWorkoutList(isToday: Boolean): Flow<Resource<BaseApiResponse<List<OActivityListModal>>>>
 
@@ -81,11 +83,17 @@ interface OreoUserActivityRepository {
         pageLimit: Int
     ): Flow<Resource<BaseApiResponse<List<OActivityListModal>>>>
 
+    suspend fun addRecordedWorkout(
+        request: JsonObject
+    ): Flow<Resource<BaseApiResponse<List<AddWorkoutResponse>>>>
+
     suspend fun deleteWorkoutFromServer(
         id: String
     ): Flow<Resource<BaseApiResponse<Any>>>
 
     suspend fun getContributorDetailsInfo(contributorType: String): Flow<Resource<BaseApiResponse<OContributorResponseModal>>>
     suspend fun getHSCategories(): Flow<Resource<BaseApiResponse<List<OHSModel>>>>
-    suspend fun getHSQAnswer(quesId:String): Flow<Resource<BaseApiResponse<List<OHSQuestionariesResponseModel>>>>
+    suspend fun getHSQAnswer(quesId: String): Flow<Resource<BaseApiResponse<List<OHSQuestionariesResponseModel>>>>
+
+    suspend fun clearAllHealthData()
 }

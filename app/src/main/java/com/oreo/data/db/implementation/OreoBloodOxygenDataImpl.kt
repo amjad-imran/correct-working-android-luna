@@ -4,10 +4,15 @@ import androidx.room.Transaction
 import com.google.gson.Gson
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.model.OreoBloodOxygenBreakup
+import com.noisefit_commans.data.model.OreoRespiratoryData
 import com.noisefit_commans.models.BloodOxygenBreakup
+import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.db.abstaction.OreoBloodOxygenDataSource
 import com.oreo.data.db.database.OreoBloodOxygenDao
 import javax.inject.Inject
+import kotlin.math.abs
+import kotlin.math.ceil
+import kotlin.math.floor
 
 
 class OreoBloodOxygenDataImpl
@@ -34,6 +39,100 @@ constructor(
             }
         }
         return true
+    }
+
+    override suspend fun getDataBetweenTimeStamp(
+        startTimeStamp: Long,
+        endTimeStamp: Long
+    ): List<Int> {
+        val startDate = DateFormats.getDateFromTimeStamp(startTimeStamp)
+        val endDate = DateFormats.getDateFromTimeStamp(endTimeStamp)
+
+        if (startDate == null || endDate == null) {
+            return ArrayList()
+        }
+        if (startDate.equals(endDate, true)) {
+            val day1Data = getTodayData(startDate) ?: return ArrayList()
+            val day1Minutes =
+                DateFormats.getDayElapsedMinutesFromTimeStamp(startTimeStamp)
+            val day2Minutes = DateFormats.getDayElapsedMinutesFromTimeStamp(endTimeStamp)
+            if (day1Minutes == null || day2Minutes == null) return ArrayList()
+            val day1MinutesCeil = 15 * (floor(abs(day1Minutes.toDouble() / 15)))
+            val day2MinutesCeil = 15 * (ceil(abs(day2Minutes.toDouble() / 15)))
+
+            return extractDataByStartTimeEndTime(day1Data, day1MinutesCeil, day2MinutesCeil)
+        } else {
+            val day1Data = getTodayData(startDate)
+            val day2Data = getTodayData(endDate)
+
+            if (day1Data == null || day2Data == null) return ArrayList()
+
+            val day1Minutes = DateFormats.getDayElapsedMinutesFromTimeStamp(startTimeStamp)
+            val day2Minutes = DateFormats.getDayElapsedMinutesFromTimeStamp(endTimeStamp)
+
+            if (day1Minutes == null || day2Minutes == null) return ArrayList()
+
+            val day1MinutesCeil = 15 * (floor(abs(day1Minutes.toDouble() / 15)))
+            val day2MinutesCeil = 15 * (ceil(abs(day2Minutes.toDouble() / 15)))
+
+
+            val day1List = extractDataByStartTime(day1Data, day1MinutesCeil)
+            val day2List = extractDataByEndTime(day2Data, day2MinutesCeil)
+            return day1List.toMutableList().apply {
+                addAll(day2List)
+            }
+        }
+    }
+
+    private fun extractDataByStartTime(dayData: OreoBloodOxygenBreakup, dayStartMinutes: Double): List<Int> {
+        var startPos = (dayStartMinutes / 15 - 1).toInt()
+        val breakupArray = Gson().fromJson<List<Int>>(dayData.breakUp ?: "")
+        if (startPos < 0) {
+            startPos = 0
+        }
+        if (breakupArray.size != 96) {
+            val currentSize = breakupArray.size
+            breakupArray.toMutableList()
+            for (i in currentSize until 96) {
+                (breakupArray as ArrayList<Int>).add(0)
+            }
+        }
+        return breakupArray.subList(startPos, 96)
+    }
+    private fun extractDataByEndTime(day2Data: OreoBloodOxygenBreakup, day2MinutesCeil: Double): List<Int> {
+        val endPos = (day2MinutesCeil / 15).toInt()
+        val breakupArray = Gson().fromJson<List<Int>>(day2Data.breakUp ?: "")
+        if (breakupArray.size != 96) {
+            val currentSize = breakupArray.size
+            breakupArray.toMutableList()
+            for (i in currentSize until 96) {
+                (breakupArray as ArrayList<Int>).add(0)
+            }
+        }
+        return breakupArray.subList(0, endPos)
+    }
+
+
+
+    private fun extractDataByStartTimeEndTime(
+        dayData: OreoBloodOxygenBreakup,
+        dayStartMinutes: Double,
+        day2MinutesCeil: Double
+    ): List<Int> {
+        var startPos = (dayStartMinutes / 15 - 1).toInt()
+        val endPos = (day2MinutesCeil / 15).toInt()
+        if (startPos < 0) {
+            startPos = 0
+        }
+        val breakupArray = Gson().fromJson<List<Int>>(dayData.breakUp ?: "")
+        if (breakupArray.size != 96) {
+            val currentSize = breakupArray.size
+            breakupArray.toMutableList()
+            for (i in currentSize until 96) {
+                (breakupArray as ArrayList<Int>).add(0)
+            }
+        }
+        return breakupArray.subList(startPos, endPos)
     }
 
 

@@ -61,7 +61,7 @@ class FeedbackNewViewModel @Inject constructor(
 
 
     init {
-        getLogsPath()
+        //getLogsPath()
     }
 
     fun getLogsPath() {
@@ -139,10 +139,10 @@ class FeedbackNewViewModel @Inject constructor(
 
         feedback.user_id = localDataStore.getUser()?.id
 
-        if (feedback.rating <= 3) {
+        /*if (feedback.rating <= 3) {
             feedback.file = appLogFile
             feedback.watchLogs = watchLogFile
-        }
+        }*/
 
 
         viewModelScope.launch {
@@ -164,7 +164,7 @@ class FeedbackNewViewModel @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        submitFeedbackNew(
+                                        submitFeedbackWithFile(
                                             feedback
                                         )
                                     }

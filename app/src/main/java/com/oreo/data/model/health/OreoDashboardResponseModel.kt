@@ -8,16 +8,7 @@ data class OreoDashboardResponseModel(
     @SerializedName("readiness")
     val readiness: ODashboardReadinessModel? = null,
     @SerializedName("activity")
-    val activity: ODashboardActivityModel? = null,
-    @SerializedName("activitityScoreAvg")
-    val activityScoreAvg: ODashboardActivityScoreModel? = null,
-    @SerializedName("sleepScoreAvg")
-    val sleepScoreAvg: ODashboardSleepScoreModel? = null,
-    @SerializedName("readinessScoreAvg")
-    val readinessScoreAvg: ODashboardReadinessScoreModel? = null,
-    @SerializedName("registerDate")
-    val registerDate: Int? = null,
-    val welcome: WelcomeData? = null,
+    val activity: ODashboardActivityModel? = null
     )
 
 data class InfoTextData(val title: String, val content: String)
@@ -33,7 +24,7 @@ data class WelcomeData(
 data class ODashboardReadinessModel(
     val readinessScore: Int? = null,
     val status: String? = "",
-    val nudges: List<String>? = null,
+    val nudges: List<Nudges>? = null
 )
 
 data class ODashboardActivityScoreModel(
@@ -56,10 +47,10 @@ data class ODashboardSleepScoreModel(
 
 data class ODashboardActivityModel(
     val activityScore: Int? = null,
-    val activeCalories: Int? = null,
+    var activeCalories: Int? = null,
     val inactiveMinutes: Int? = null,
     val status: String? = "",
-    val nudges: List<String>? = null,
+    val nudges: List<Nudges>? = null,
 )
 
 data class ODashboardSleepModel(
@@ -67,20 +58,10 @@ data class ODashboardSleepModel(
     val totalSleep: Int? = null,
     @SerializedName("resting_hr")
     val restingHr: Int? = null,
-    val sleepStage: ArrayList<ODashboardSleepStageModel> = ArrayList(),
+    val sleepStage: List<SleepHourlyBreakup> = ArrayList(),
     val status: String? = "",
     @SerializedName("start_time")
     val startTime: String? = "",
     @SerializedName("end_time")
     val endTime: String? = "",
-)
-
-data class ODashboardSleepStageModel(
-    val duration: Int? = null,
-    @SerializedName("start_time")
-    val startTime: String? = "",
-    @SerializedName("end_time")
-    val endTime: String? = "",
-    @SerializedName("sleep_type")
-    val sleepType: String? = "",
 )

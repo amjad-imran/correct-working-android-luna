@@ -4,5 +4,6 @@ data class SleepOverlayData(
     val hrBreakup: List<Int>,
     val stressBreakup: List<Int>,
     var respBreakup: List<Int>,
-    val tempBreakup: List<Float>
+    val tempBreakup: List<Float>,
+    var spo2Breakup: List<Int>
 )

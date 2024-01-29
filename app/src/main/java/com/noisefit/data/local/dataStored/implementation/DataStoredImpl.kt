@@ -138,6 +138,7 @@ private const val HISTORY_YEARS = "HISTORY_YEARS"
 private const val DASHBOARD_BANNERS_1 = "DASHBOARD_BANNERS_1"
 private const val ROUND_UP_DATA = "ROUND_UP_DATA"
 private const val IS_PREVIOUSLY_PAIRED = "IS_PREVIOUSLY_PAIRED"
+private const val USER_HEALTH_CACHE_V = "USER_HEALTH_CACHE_V"
 private const val WORKOUT_IMAGES = "WORKOUT_IMAGES"
 
 
@@ -190,6 +191,9 @@ private const val WF_RATING_KEY = "WF_RATING_KEY"
 private const val TOKEN_LAST_UPDATE = "TOKEN_LAST_UPDATE"
 private const val DASH_CARD_CLICK_STATE = "DASH_CARD_CLICK_STATE"
 private const val BATTERY_DASH_ALERT = "BATTERY_DASH_ALERT"
+private const val SLEEP_NOTIFICATION = "SLEEP_NOTIFICATION"
+private const val READINESS_NOTIFICATION = "READINESS_NOTIFICATION"
+
 private const val GFIT_USER_SYNC_KEY = "GFIT_USER_SYNC_KEY"
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -200,6 +204,22 @@ class DataStoredImpl
     private val gson: Gson, private val mPrefs: SharedPreferences
 ) : DataStoredInterface {
 
+    override fun getReadinessNotificationTimeStamp(): Long {
+        return mPrefs.getLong(READINESS_NOTIFICATION, 0)
+    }
+
+    override fun setReadinessNotificationTimeStamp() {
+        mPrefs.edit()?.putLong(READINESS_NOTIFICATION, System.currentTimeMillis())?.commit()
+    }
+
+    override fun getSleepNotificationTimeStamp(): Long {
+        return mPrefs.getLong(SLEEP_NOTIFICATION, 0)
+    }
+
+    override fun setSleepNotificationTimeStamp() {
+        mPrefs.edit()?.putLong(SLEEP_NOTIFICATION, System.currentTimeMillis())?.commit()
+    }
+
     override fun getIsBatteryAlertShown(): Boolean {
         return mPrefs.getBoolean(BATTERY_DASH_ALERT, false)
     }
@@ -209,6 +229,7 @@ class DataStoredImpl
             ?.putBoolean(BATTERY_DASH_ALERT, true)
             ?.commit()
     }
+
     override fun clearUserLogoutData() {
         mPrefs.edit()?.remove(BATTERY_DASH_ALERT)?.apply()
     }
@@ -241,6 +262,14 @@ class DataStoredImpl
 
     override fun setGFitUserDataLastSyncTime() {
         mPrefs.edit()?.putLong(GFIT_USER_SYNC_KEY, System.currentTimeMillis())?.apply()
+    }
+
+    override fun getUserHealthCacheVersion(): Int {
+        return mPrefs.getInt(USER_HEALTH_CACHE_V, 1)
+    }
+
+    override fun setUserHealthCacheVersion(version: Int) {
+        mPrefs.edit()?.putInt(USER_HEALTH_CACHE_V, version)?.apply()
     }
 
     override fun isPreviouslyPaired(): Boolean {

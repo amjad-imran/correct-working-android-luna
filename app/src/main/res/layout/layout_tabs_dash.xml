@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="400dp">
+
+    <TextView
+        android:id="@+id/tvDateLeft"
+        style="@style/H5"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:gravity="center_vertical"
+        android:textColor="@color/white_64"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvSelectedDate"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvSelectedDate"
+        tools:text="5th Mar" />
+
+    <TextView
+        android:id="@+id/tvSelectedDate"
+        style="@style/H5"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Today, 6th Mar" />
+
+    <View
+        android:id="@+id/view29"
+        android:layout_width="138dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="4dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSelectedDate" />
+
+    <View
+        android:id="@+id/view28"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="0.5dp"
+        android:background="@color/white_12"
+        app:layout_constraintEnd_toStartOf="@+id/view29"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/view29" />
+
+    <View
+        android:id="@+id/view30"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/white_12"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="0.5dp"
+        app:layout_constraintStart_toEndOf="@+id/view29"
+        app:layout_constraintTop_toTopOf="@+id/view29" />
+
+    <TextView
+        android:id="@+id/tvDateRight"
+        style="@style/H5"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:textColor="@color/white_64"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvSelectedDate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvSelectedDate"
+        tools:text="5th Mar" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

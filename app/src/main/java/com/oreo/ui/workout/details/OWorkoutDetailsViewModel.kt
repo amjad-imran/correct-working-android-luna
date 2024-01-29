@@ -4,15 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit.data.remote.base.Resource
+import com.noisefit_commans.common.ceilRound
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
+import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.util.UtilClass
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -21,7 +25,8 @@ import kotlin.math.ceil
 
 @HiltViewModel
 class OWorkoutDetailsViewModel @Inject constructor(
-    val userActivityRepository: OreoUserActivityRepository
+    val userActivityRepository: OreoUserActivityRepository,
+    private val userHealthDataDataSource: OreoUserHealthDataDataSource
 ) : BaseViewModel() {
 
     var position: Int = -1
@@ -71,7 +76,7 @@ class OWorkoutDetailsViewModel @Inject constructor(
     }
 
     fun deleteWorkout(workoutId: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             userActivityRepository.deleteWorkoutFromServer(
                 workoutId
             ).collect { resource ->
@@ -103,6 +108,15 @@ class OWorkoutDetailsViewModel @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             sendMessage("Workout Deleted")
+                            userHealthDataDataSource.clearDataByDates(
+                                listOf(
+                                    DateFormats.getTodaysDateString(
+                                        10
+                                    )
+                                )
+                            )
+                            delay(100)
+
                             _workoutDeletedResponse.postValue(Event(true))
                         }
                     }
@@ -175,5 +189,25 @@ class OWorkoutDetailsViewModel @Inject constructor(
                     endTime.lowercase()
             }
             .toList()
+    }
+
+    fun getCombinedMovement(movement: List<Int>): List<Int> {
+        val list = ArrayList<Int>()
+
+        val chunkSize = when (movement.size) {
+            in 0..60 -> 2
+            in 61..180 -> 4
+            in 181..320 -> 10
+            in 321..Int.MAX_VALUE -> 120
+            else -> 1
+        }
+
+        val chunked = movement.chunked(chunkSize)
+        chunked.forEach {
+            val data = it.average().ceilRound()
+            list.add(data)
+        }
+
+        return list
     }
 }

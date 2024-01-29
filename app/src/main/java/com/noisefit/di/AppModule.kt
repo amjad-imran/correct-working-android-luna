@@ -4,6 +4,7 @@ import android.content.Context
 import android.location.Geocoder
 import com.google.gson.Gson
 import com.noisefit.NoiseFitApplicationMain
+import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.dataConverter.OfflineDataMapper
 import com.noisefit.data.googleFit.GoogleFitDataObservers
@@ -28,13 +29,13 @@ import com.noisefit_commans.utils.EncryptUtils
 import com.oreo.data.dataConverter.OreoOfflineDataMapper
 import com.oreo.data.dataConverter.OreoOnlineDataMapper
 import com.oreo.data.db.OreoDataBase
-import com.oreo.data.db.abstaction.OreoHeartRateDataSource
+import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.db.implementation.OreoAutoSportDataImpl
 import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
 import com.oreo.data.db.implementation.OreoDayTimeMovementDataImpl
-import com.oreo.data.db.implementation.OreoGFitWorkoutDataImpl
 import com.oreo.data.db.implementation.OreoHeartRateDataImpl
+import com.oreo.data.db.implementation.OreoRecordedWorkoutDataImpl
 import com.oreo.data.db.implementation.OreoRespiratoryDataImpl
 import com.oreo.data.db.implementation.OreoSleepDataImpl
 import com.oreo.data.db.implementation.OreoStepsDataImpl
@@ -73,11 +74,13 @@ object AppModule {
         respiratoryDataImpl: OreoRespiratoryDataImpl,
         temperatureDataImpl: OreoBodyTemperatureDataImpl,
         oreoHeartRateDataImpl: OreoHeartRateDataImpl,
+        oreoBloodOxygenDataImpl: OreoBloodOxygenDataImpl,
     ): OreoOnlineDataMapper {
         return OreoOnlineDataMapper(
             stressDataImpl,
             respiratoryDataImpl,
             temperatureDataImpl,
+            oreoBloodOxygenDataImpl,
             oreoHeartRateDataImpl
         )
     }
@@ -88,6 +91,15 @@ object AppModule {
         localDataStore: DataStoredInterface
     ): DataUnitConverter {
         return DataUnitConverter(localDataStore)
+    }
+
+    @Singleton
+    @Provides
+    fun provideDataConverter(
+        keyValueDataSource: KeyValueDataSource,
+        ringDataStore: RingDataStore
+    ): DataConverter {
+        return DataConverter(keyValueDataSource,ringDataStore)
     }
 
 
@@ -231,8 +243,8 @@ object AppModule {
         encryptUtils: EncryptUtils,
         lastSyncProvider: LastSyncProvider,
         testModeUtils: TestModeUtils,
-        oreoGFitWorkoutDataImpl: OreoGFitWorkoutDataImpl,
         oreoAutoSportDataImpl: OreoAutoSportDataImpl,
+        oreoRecordedWorkoutDataImpl: OreoRecordedWorkoutDataImpl,
         gson: Gson
     ): OreoSyncRepository =
         OreoSyncRepositoryImpl(
@@ -253,7 +265,7 @@ object AppModule {
             lastSyncProvider,
             testModeUtils,
             oreoAutoSportDataImpl,
-            oreoGFitWorkoutDataImpl
+            oreoRecordedWorkoutDataImpl,
         )
 
 
@@ -338,6 +350,7 @@ object AppModule {
         remoteDataSource: NetworkService,
         gson: Gson,
         localDatSource: DataStoredInterface,
+        ringDataStore: RingDataStore,
         heartRateDataImpl: OreoHeartRateDataImpl,
         hrv: OreoStressDataImpl,
         bloodOxygenDataImpl: OreoBloodOxygenDataImpl,
@@ -349,12 +362,14 @@ object AppModule {
         oreoAutoSportDataImpl: OreoAutoSportDataImpl,
         keyValueDataSource: KeyValueDataSource,
         lastSyncProvider: LastSyncProvider,
+        userHealthDataSource: OreoUserHealthDataDataSource,
         offlineApiStore: IOfflineApiResponseStore
     ): OreoUserActivityRepository =
         OreoUserActivityRepositoryImpl(
             remoteDataSource,
             gson,
             localDatSource,
+            ringDataStore,
             heartRateDataImpl,
             hrv,
             bloodOxygenDataImpl,
@@ -365,6 +380,7 @@ object AppModule {
             oreoAutoSportDataImpl,
             offlineDataMapper,
             keyValueDataSource,
+            userHealthDataSource,
             lastSyncProvider,
             offlineApiStore
         )

@@ -22,6 +22,10 @@ class LogoutBottomSheet :
 
     override fun initListener() {
         binding.btnCancel.setOnClickListener {
+            setFragmentResult(
+                LOGOUT_KEY,
+                bundleOf("isSelected" to false)
+            )
             dismiss()
         }
         binding.btnAllow.setOnClickListener {

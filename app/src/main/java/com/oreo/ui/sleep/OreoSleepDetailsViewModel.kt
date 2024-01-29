@@ -23,13 +23,16 @@ import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.OContributorResponseModal
+import com.oreo.data.model.health.CommonListDataModel
 import com.oreo.data.model.health.OreoSleepModel
 import com.oreo.data.model.health.SleepHourlyBreakup
 import com.oreo.data.model.health.SleepMovementBreakup
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.abs
 
 @HiltViewModel
 class OreoSleepDetailsViewModel
@@ -40,28 +43,25 @@ constructor(
     val sessionManager: SessionManager
 ) : BaseViewModel() {
 
-    var selectedMasterDate: String? = null
-    var selectedDate: String? = null
 
-    private val _sleepHistoryResponse = MutableLiveData<List<OreoSleepModel>>()
-    val sleepHistoryResponse: LiveData<List<OreoSleepModel>> = _sleepHistoryResponse
+    /* private val _sleepHistoryResponse = MutableLiveData<List<OreoSleepModel>>()
+     val sleepHistoryResponse: LiveData<List<OreoSleepModel>> = _sleepHistoryResponse*/
 
-    private val _daySleepData = MutableLiveData<OreoSleepModel>()
-    val daySleepData: LiveData<OreoSleepModel> = _daySleepData
+    /*private val _daySleepData = MutableLiveData<OreoSleepModel>()
+    val daySleepData: LiveData<OreoSleepModel> = _daySleepData*/
 
     private val _contributorInfo = MutableLiveData<OContributorResponseModal>()
     val contributorInfo: LiveData<OContributorResponseModal> = _contributorInfo
 
 
-    var dateList = ArrayList<String>()
-
     init {
-        selectedMasterDate = DateFormats.getCurrentDateOreoFormat()
+        //selectedMasterDate = DateFormats.getCurrentDateOreoFormat()
     }
 
     fun getPrefixAndSuffixList(dataList: List<OreoSleepModel>): Triple<ArrayList<ChartModel>, ArrayList<ChartModel>, ArrayList<ChartModel>> {
-        dataList.reversed()
+        //dataList.reversed()
 
+        val dateList = ArrayList<String>()
 
         val list = java.util.ArrayList<ChartModel>()
         dataList.forEach {
@@ -71,12 +71,18 @@ constructor(
             if (it.date == DateFormats.getCurrentDate(DateFormats.dateFormat3)) {
                 currentDayText = "Today, "
             }
-            val formattedDate = DateFormats.formatDate(
-                it.date,
-                DateFormats.dateFormat3,
-                DateFormats.dateFormat7
-            )
-            chartModel.formattedDate = "$currentDayText $formattedDate"
+            val formattedDate = if (currentDayText.isEmpty()) {
+                DateFormats.getOrdinalDate(
+                    it.date,
+                    DateFormats.dateFormat3
+                )
+            } else {
+                DateFormats.getOrdinalDateToday(
+                    it.date,
+                    DateFormats.dateFormat3,
+                )
+            }
+            chartModel.formattedDate = "$currentDayText$formattedDate"
             chartModel.index = DateFormats.formatWeek(it.date)
             chartModel.value = it.sleepScore?.value ?: 0
             list.add(chartModel)
@@ -84,13 +90,13 @@ constructor(
         }
 
         list.reverse()
-        val lastDateFromList = dataList.last().date
+        val lastDateFromList = dataList.first().date
         val lastDate = DateFormats.subtractDateFormat3(lastDateFromList, 1)!!
         val suffixDatesList = DateFormats.getWeekDaysBetweenDates(
             DateFormats.subtractDateFormat3(lastDate, 14)!!, lastDate,
             DateFormats.dateFormat3, DateFormats.singleWeekDay
         )
-        val currentDateFromList = dataList.first().date
+        val currentDateFromList = dataList.last().date
         val currentDate = DateFormats.addDateFormat3(currentDateFromList, 1)!!
         val prefixDatesList = DateFormats.getWeekDaysBetweenDates(
             currentDate,
@@ -127,7 +133,8 @@ constructor(
 
 
     fun getSleepDetailsData() {
-        viewModelScope.launch {
+        return
+        /*viewModelScope.launch {
             userActivityRepository.getSleepHistory(
                 selectedMasterDate ?: DateFormats.getCurrentDateOreoFormat()
             ).collect { resource ->
@@ -146,7 +153,7 @@ constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        getSleepDetailsData()
+                                        getSleepDetailsData(selectedMasterDate)
                                     }
 
                                     override fun no() {
@@ -160,23 +167,22 @@ constructor(
                         resource.data?.data?.let {
 
                             _sleepHistoryResponse.value = (it.reversed())
-                           /* if (selectedDate == null) {
-                                it.firstOrNull()?.let { data ->
-                                    selectedDate = data.date
-                                }
-                            }*/
+                            *//* if (selectedDate == null) {
+                                 it.firstOrNull()?.let { data ->
+                                     selectedDate = data.date
+                                 }
+                             }*//*
 
-                            updateSelectedDate()
                         }
                     }
                 }
             }
-        }
+        }*/
 
 
     }
 
-    fun getInfoValueByKey(type:String){
+    fun getInfoValueByKey(type: String) {
 
     }
 
@@ -523,11 +529,11 @@ constructor(
         val color: Int = if (status.equals("warning", true)) {
             R.color.oreo_contributor_warning
         } else if (status.equals("good", true)) {
-            R.color.distance_arc
+            R.color.white_12_72
         } else if (status.equals("optimal", true)) {
             R.color.steps_arc
         } else {
-            R.color.white
+            R.color.white_12_72
         }
         return color
     }
@@ -608,22 +614,24 @@ constructor(
         return Pair(sleepArray, countCData)
     }
 
-    fun updateSelectedDate() {
+    /*fun updateSelectedDate(selectedDate: String?): String? {
+        var returnSelectedDate: String? = null
 
         val dayData = _sleepHistoryResponse.value?.firstOrNull() {
             it.date.equals(selectedDate, false)
         }
         if (dayData != null) {
             _daySleepData.postValue(dayData)
-        }else{
+        } else {
             _sleepHistoryResponse.value?.lastOrNull()?.let { data ->
                 LOGS.w("moveToPosition selected Date new $selectedDate")
-                selectedDate = data.date
+                returnSelectedDate = data.date
                 LOGS.w("moveToPosition selected Date new set $selectedDate")
                 _daySleepData.postValue(data)
             }
         }
-    }
+        return returnSelectedDate
+    }*/
 
     fun getAvgValue(it: List<OreoSleepModel>): Int {
         var avgValue = 0
@@ -660,6 +668,27 @@ constructor(
         }
         return dummyList
 
+    }
+
+    fun getBloodOxygenNudge(oxy: CommonListDataModel?): String {
+        val avg = oxy?.avg
+        if (avg == null || avg == 0) return ""
+
+        var count = 0
+        oxy.value.forEach {
+            if (it != 0 && it != 255) {
+                val diff = abs(it - avg)
+                if (diff >= 3) {
+                    count++
+                }
+            }
+        }
+
+        return when (count) {
+            in 0..2 -> "Your blood oxygen levels have shown consistency, indicating no breathing disturbances during sleep."
+            in 3..5 -> "Your blood oxygen levels had some variations. This may be because of occasional breathing disturbances during sleep."
+            else -> "Your blood oxygen levels had several variations. This may be because of significant breathing disturbances during sleep."
+        }
     }
 
 

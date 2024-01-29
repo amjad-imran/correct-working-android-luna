@@ -21,9 +21,16 @@ import android.os.Message
 import android.os.SystemClock
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.viewModelScope
+import com.google.firebase.crashlytics.internal.model.CrashlyticsReport
+import com.google.gson.Gson
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
+import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.luna.R
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.local.db.CacheResult
+import com.noisefit.data.local.db.Converters
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.LastSyncProvider
 import com.noisefit.data.repository.abstraction.DeviceRepository
@@ -41,13 +48,17 @@ import com.noisefit.watch.DeviceQueryHandler
 import com.noisefit.watch.UpdateDeviceHandler
 import com.noisefit.watch.UserActivityHandler
 import com.noisefit.watch.WatchesSDK
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.constants.WatchInfoGlobals
+import com.noisefit_commans.data.BinaryActionCallback
+import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.enums.Actions
 import com.noisefit_commans.data.enums.ServiceState
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
+import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.data.model.User
 import com.noisefit_commans.interfaces.IQueryDataCallback
 import com.noisefit_commans.interfaces.QueryCallback
@@ -67,11 +78,13 @@ import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.DeviceFirmware
 import com.noisefit_commans.models.DeviceUnits
+import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.models.StepsData
 import com.noisefit_commans.models.TimeFormat
 import com.noisefit_commans.models.TimeFormats
 import com.noisefit_commans.models.UpdateStatus
 import com.noisefit_commans.models.WatchFirmwareDetails
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.CallHandler
@@ -83,11 +96,15 @@ import com.noisefit_commans.utils.LOW_VIBRATION
 import com.noisefit_commans.utils.ServiceUtil
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.db.OreoDataBase
+import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.repository.abstraction.OreoSyncRepository
+import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
@@ -119,6 +136,9 @@ constructor() : LifecycleService() {
     lateinit var dataUnitConverter: DataUnitConverter
 
     @Inject
+    lateinit var dataConverter: DataConverter
+
+    @Inject
     lateinit var database: OreoDataBase
 
     @Inject
@@ -132,6 +152,12 @@ constructor() : LifecycleService() {
 
     @Inject
     lateinit var syncRepository: OreoSyncRepository
+
+    @Inject
+    lateinit var userActivityRepository: OreoUserActivityRepository
+
+    @Inject
+    lateinit var userHealthDataDataSource: OreoUserHealthDataDataSource
 
     @Inject
     lateinit var firebaseCrashlyticsUtils: FirebaseCrashlyticsUtils
@@ -159,9 +185,6 @@ constructor() : LifecycleService() {
 
 
     @Inject
-    lateinit var userRepository: UserRepository
-
-    @Inject
     lateinit var callHandler: CallHandler
 
     @Inject
@@ -181,22 +204,8 @@ constructor() : LifecycleService() {
     private var updateDeviceDataAction: UpdateDeviceDataActions? = null
     private var userActivityDataActions: UserActivityDataActions? = null
     private val handler = Handler()
-    private val handlerActivity = Handler()
 
     var mLastNotification: Notification? = null
-
-    private val runnableCode: Runnable = object : Runnable {
-        override fun run() {
-            val request = sessionManager.sportsModeRequest.value
-            request?.let { sportsReq ->
-                sportsReq?.duration = sportsReq?.duration?.plus(1)!!
-                sessionManager.postSportsModeRequest(sportsReq)
-                sessionManager.sendUserActivityAction(UserActivityAction.Refresh(sportsReq))
-            }
-            handlerActivity.sendEmptyMessage(100)
-            handlerActivity.postDelayed(this, 1000)
-        }
-    }
 
     @Inject
     lateinit var applicationHandler: ApplicationHandler
@@ -1147,6 +1156,15 @@ constructor() : LifecycleService() {
 
                     }
 
+                    is UserActivityCallback.RingUserWorkoutData -> {
+                        if (it.data.isNotEmpty()) {
+                            saveAndSyncWorkouts(it.data)
+                        }else{
+                            AppLogs.sendAppLogs("Workouts empty")
+                            postWorkout("none")
+                        }
+                    }
+
                     is UserActivityCallback.SportsModeDataObtainedGPS -> {
                         LOGS.d(TAG, "SportsModeDataObtainedGPS RingConnectionService")
                         LOGS.d(
@@ -1156,7 +1174,8 @@ constructor() : LifecycleService() {
                         )
                         if (!it.sportsModeResponse.activities.isNullOrEmpty()) {
 
-                            it.sportsModeResponse.activities?.forEach { act ->
+
+                            /*it.sportsModeResponse.activities?.forEach { act ->
                                 val startTime = DateFormats.formatActivityTime6(act.time)
                                 var endTime = "0"
                                 if (act.duration != null && act.time != null) {
@@ -1175,17 +1194,9 @@ constructor() : LifecycleService() {
                                 } else
                                     act.activityType.toString()
 
-                                sessionManager.logInsiderAppEvent(
-                                    InsiderAppEvents.ACTIVITY_SYNC,
-                                    HashMap<String, Any>().apply {
-                                        this["activity_name"] = activityName
-                                        this["activity_starttime"] = startTime
-                                        this["activity_endtime"] = endTime
-                                        this["activity_duration"] = act.duration.toString()
-                                        this["activity_caloriesburnt"] = act.calories.toString()
-                                    }
-                                )
-                            }
+
+
+                            }*/
                         }
                     }
 
@@ -1216,6 +1227,100 @@ constructor() : LifecycleService() {
 
                 onDisconnectSuccess()
             }
+        }
+    }
+
+    private fun saveAndSyncWorkouts(workouts: List<RecordedWorkoutData>) {
+        GlobalScope.launch(Dispatchers.IO) {
+            syncRepository.saveRecordedWorkouts(workouts)
+                .collect { resource ->
+                    when (resource) {
+                        is CacheResult.Success -> {
+
+                            syncWorkoutsToServer(workouts)
+
+                        }
+
+                        is CacheResult.GenericError -> {
+
+                        }
+                    }
+                }
+        }
+    }
+
+    //TODO convert to worker
+    private fun syncWorkoutsToServer(workouts: List<RecordedWorkoutData>) {
+        GlobalScope.launch(Dispatchers.IO) {
+
+            val workoutsArray = dataConverter.createRecordedWorkoutArray(workouts)
+
+            if (workoutsArray == null || workoutsArray.isEmpty) {
+                val dates = HashSet<String>()
+                workouts.forEach { workout ->
+                    workout.date?.let { date ->
+                        dates.add(date)
+                    }
+                }
+                userHealthDataDataSource.clearDataByDates(dates.toList())
+                syncRepository.removeRecordedWorkouts().collect()
+                ringDataStore.removeRecordDeleteList()
+                AppLogs.sendAppLogs("syncWorkoutsToServer workouts empty")
+
+                postWorkout("none")
+                return@launch
+            }
+
+            val reqObj = JsonObject()
+            reqObj.add("workouts", workoutsArray)
+
+
+
+            userActivityRepository.addRecordedWorkout(
+                reqObj
+            ).collect { resource ->
+                when (resource) {
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            val dates = HashSet<String>()
+                            workouts.forEach { workout ->
+                                workout.date?.let { date ->
+                                    dates.add(date)
+                                }
+                            }
+
+                            val workoutId = dataConverter.getWorkoutId(
+                                it,
+                                sessionManager.lastOngoingWorkoutTimestamp *1000L
+                            )
+                            AppLogs.sendAppLogs("Workout id not found")
+
+                            postWorkout(workoutId?:"none")
+
+
+                            userHealthDataDataSource.clearDataByDates(dates.toList())
+                            syncRepository.removeRecordedWorkouts().collect()
+                            ringDataStore.removeRecordDeleteList()
+                            delay(200)
+                            sessionManager.forceSyncData.postValue(Event(true))
+                        }
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+    }
+
+    fun postWorkout(workoutId:String){
+        sessionManager.lastOngoingWorkoutTimestamp = 0L
+        LOGS.d("sdkjfhskdfj received $workoutId")
+        AppLogs.sendAppLogs("postWorkout $workoutId")
+
+        GlobalScope.launch(Dispatchers.Main) {
+            sessionManager.showWorkoutDetails.value = (Event(workoutId))
+            sessionManager.showWorkoutDetails.value = Event(null)
         }
     }
 
@@ -1530,6 +1635,15 @@ constructor() : LifecycleService() {
                     sessionManager.setManualMeasurementValue(true)
                 }
 
+                is UpdateDeviceDataCallback.OngoingWorkoutData -> {
+                    sessionManager.onGoingWorkoutDetected(
+                        dataCallback.duration,
+                        dataCallback.sportStatus,
+                        dataCallback.sportType,
+                        dataCallback.startTimeStamp
+                    )
+                }
+
                 is UpdateDeviceDataCallback.FirmwareUpgradeProgress -> {
                     if (dataCallback.watchUpdateStatus.status == UpdateStatus.COMPLETED ||
                         dataCallback.watchUpdateStatus.status == UpdateStatus.ERROR ||
@@ -1569,37 +1683,6 @@ constructor() : LifecycleService() {
 
 
         }
-    }
-
-    private fun handleSportsModeStatus(status: String?) {
-        when (status) {
-            "start" -> {
-                startTimer()
-            }
-
-            "pause" -> {
-                stopTimer()
-            }
-
-            "resume" -> {
-                startTimer()
-            }
-
-            "stop" -> {
-                stopTimer()
-                sessionManager.setSportsModeRequest(null)
-            }
-        }
-    }
-
-    private fun startTimer() {
-        stopTimer()
-        handlerActivity.postDelayed(runnableCode, 1000)
-    }
-
-    private fun stopTimer() {
-        handlerActivity.removeMessages(100)
-        handlerActivity.removeCallbacks(runnableCode)
     }
 
     private fun registerTimeChangeReceiver() {

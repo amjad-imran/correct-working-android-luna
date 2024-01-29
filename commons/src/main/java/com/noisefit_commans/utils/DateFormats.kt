@@ -44,9 +44,11 @@ object DateFormats {
 
     @SuppressLint("ConstantLocale")
     val dateFormat6 = SimpleDateFormat("dd MMMM, yyyy", defaultLocale)
+    val dateFormatDay = SimpleDateFormat("dd", defaultLocale)
 
     @SuppressLint("ConstantLocale")
     val dateFormat7 = SimpleDateFormat("dd MMM", defaultLocale)
+    val dateFormat7Week = SimpleDateFormat("EEE, dd MMM", defaultLocale)
 
     @SuppressLint("ConstantLocale")
     val dateTimeFormatWithoutZone = SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", defaultLocale)
@@ -242,6 +244,14 @@ object DateFormats {
         val c = Calendar.getInstance().time
         val df = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         return df.format(c)
+    }
+
+    fun getCurrentDateMinusDays(days: Int): String {
+        val cal = Calendar.getInstance()
+        cal.add(Calendar.DATE, -days)
+        val time = cal.time
+        val df = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return df.format(time)
     }
 
     fun getCurrentDate(dataFormat: SimpleDateFormat): String {
@@ -640,6 +650,52 @@ object DateFormats {
             requestedFormat.format(date)
         } catch (exp: Exception) {
             ""
+        }
+    }
+
+    val mWeek = SimpleDateFormat("EEE", defaultLocale)
+    val mDay = SimpleDateFormat("d", defaultLocale)
+    val mMonth = SimpleDateFormat("MMM", defaultLocale)
+
+    fun getOrdinalDate(
+        dateInput: String?,
+        currentFormat: SimpleDateFormat
+    ): String {
+        return try {
+            if (dateInput.isNullOrEmpty()) return ""
+            val date = currentFormat.parse(dateInput) ?: return ""
+            val week = mWeek.format(date)
+            val day = mDay.format(date)
+            val month = mMonth.format(date)
+            return "$week, $day${getDayOfMonthSuffix(day.toInt())} $month"
+        } catch (exp: Exception) {
+            ""
+        }
+    }
+
+    fun getOrdinalDateToday(
+        dateInput: String?,
+        currentFormat: SimpleDateFormat
+    ): String {
+        return try {
+            if (dateInput.isNullOrEmpty()) return ""
+            val date = currentFormat.parse(dateInput) ?: return ""
+            val day = mDay.format(date)
+            val month = mMonth.format(date)
+            return "$day${getDayOfMonthSuffix(day.toInt())} $month"
+        } catch (exp: Exception) {
+            ""
+        }
+    }
+
+    fun getDayOfMonthSuffix(n: Int): String {
+        return if (n >= 11 && n <= 13) {
+            "th"
+        } else when (n % 10) {
+            1 -> "st"
+            2 -> "nd"
+            3 -> "rd"
+            else -> "th"
         }
     }
 
@@ -1133,13 +1189,14 @@ object DateFormats {
     //11.28 04.00 11.59
     fun isTimeBetween(time: String, startTime: String, endTime: String): Boolean {
         try {
-            val date1 = timeFormat.parse(time)
-            val date2 = timeFormat.parse(startTime)
-            val date3 = timeFormat.parse(endTime)
-            LOGS.d("currentTime $date1 $date2 $date3")
+            val date1 = SimpleDateFormat("HH:mm", defaultLocale).parse(time)
+            val date2 = SimpleDateFormat("HH:mm", defaultLocale).parse(startTime)
+            val date3 = SimpleDateFormat("HH:mm", defaultLocale).parse(endTime)
+            LOGS.d("TIME_TEST", "isTimeBetween $date1 $date2 $date3")
             return (date1.after(date2) && date1.before(date3)) ||
                     (date1.equals(date2) || date1.equals(date3))
         } catch (e: ParseException) {
+            LOGS.d("TIME_TEST", "isTimeBetween ${e.message}")
             e.printStackTrace()
         }
         return false
@@ -1935,6 +1992,20 @@ object DateFormats {
             "${outputFormat.format(start)} - ${outputFormat.format(end)}"
         } catch (exp: Exception) {
             ""
+        }
+    }
+
+    fun parseDate(
+        date: String,
+        inputDateFormat: SimpleDateFormat,
+        outputDateFormat: SimpleDateFormat,
+    ): String? {
+        try {
+            val parsedDate = inputDateFormat.parse(date)
+            return outputDateFormat.format(parsedDate)
+
+        } catch (exp: Exception) {
+            return ""
         }
     }
 }

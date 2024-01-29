@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container"
@@ -32,6 +34,17 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navGraph="@navigation/navigation_oreo" />
+
+        <include
+            android:id="@+id/layoutRetry"
+            layout="@layout/layout_api_failed_retry"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/blurView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <!--  <com.google.android.material.bottomnavigation.BottomNavigationView
               android:id="@+id/nav_view"
@@ -84,6 +97,50 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/btnAddWorkout"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="80dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageView
+                android:id="@+id/ivAddWorkoutBack"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/back_add_workout" />
+
+            <ImageView
+                android:id="@+id/ivWorkout"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:padding="12dp"
+                android:src="@drawable/ic_add_workout" />
+        </FrameLayout>
+
+
+        <eightbitlab.com.blurview.BlurView
+            android:id="@+id/blurViewSelector"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <include
+                android:id="@+id/lytAddWorkoutSelector"
+                layout="@layout/layout_add_workout_selctor"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </eightbitlab.com.blurview.BlurView>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

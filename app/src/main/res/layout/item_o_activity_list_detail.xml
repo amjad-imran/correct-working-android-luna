@@ -14,10 +14,11 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_margin="16dp"
+            android:layout_marginBottom="14dp"
             android:background="@drawable/back_modal_new_round"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/linearLayout3"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/linearLayout3"
             app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
 
         <ImageView
@@ -35,138 +36,100 @@
             android:id="@+id/btnCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dimen_8dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:background="@android:color/transparent"
-            android:padding="@dimen/dimen_8dp"
             android:src="@drawable/ic_arrow_right_duotone"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/linearLayout3" />
 
-        <TextView
-            android:id="@+id/tvName"
-            style="@style/H6"
+        <LinearLayout
+            android:id="@+id/linearLayout3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dimen_12dp"
-            android:layout_marginTop="@dimen/dimen_4dp"
-            android:layout_marginEnd="@dimen/dimen_12dp"
-            android:singleLine="true"
-            android:textColor="@color/medium_movement"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
             app:layout_constraintEnd_toStartOf="@+id/btnCancel"
             app:layout_constraintStart_toEndOf="@id/imageView8"
-            app:layout_constraintTop_toTopOf="@id/imageView8"
-            tools:text="Archery" />
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_8dp"
-            app:layout_constraintEnd_toStartOf="@+id/constraintLayout4"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/imageView8"
-            app:layout_constraintStart_toStartOf="@+id/tvName"
-            app:layout_constraintTop_toBottomOf="@+id/tvName">
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/tvStart"
-                style="@style/Small"
-                android:layout_width="wrap_content"
+                android:id="@+id/tvName"
+                style="@style/H6"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="10:20 am" />
-
-            <include
-                layout="@layout/layout_line_separator"
-                android:layout_width="1dp"
-                android:layout_height="0dp"
+                android:layout_marginStart="12dp"
                 android:layout_marginEnd="@dimen/dimen_12dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:singleLine="true"
+                android:textColor="@color/color_workout"
+                tools:text="Archery" />
+
+            <LinearLayout
+                android:id="@+id/constraintLayout3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvStart"
+                    style="@style/Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white_64"
+                    tools:text="10:20 am" />
+
+                <include
+                    layout="@layout/layout_line_separator"
+                    android:layout_width="1dp"
+                    android:layout_height="16dp"
+                    android:layout_marginStart="12dp" />
+
+                <TextView
+                    android:id="@+id/tvMin"
+                    style="@style/Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:textColor="@color/white_64"
+                    tools:text="10:20 am" />
+
+                <include
+                    layout="@layout/layout_line_separator"
+                    android:layout_width="1dp"
+                    android:layout_height="16dp"
+                    android:layout_marginStart="12dp" />
+
+                <TextView
+                    android:id="@+id/tvCalories"
+                    style="@style/Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:textColor="@color/white_64"
+                    tools:text="10:20 am" />
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_8dp"
-            app:layout_constraintEnd_toStartOf="@+id/constraintLayout6"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/constraintLayout3"
-            app:layout_constraintTop_toBottomOf="@+id/tvName">
-
-
-            <ImageView
-                android:id="@+id/img1"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:src="@drawable/ic_timer_white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/tvMin"
-                style="@style/Small"
+                android:id="@+id/tvImportedFrom"
+                style="@style/Tinny"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dimen_4dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/img1"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/back_imported_from"
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="4dp"
+                android:textColor="@color/white_64"
+                android:visibility="gone"
+                tools:visibility="visible"
+                tools:text="Imported from Health" />
 
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="10:20 am" />
-
-            <include
-                layout="@layout/layout_line_separator"
-                android:layout_width="1dp"
-                android:layout_height="0dp"
-                android:layout_marginEnd="@dimen/dimen_12dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout6"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_8dp"
-            app:layout_constraintEnd_toEndOf="@+id/tvName"
-            app:layout_constraintEnd_toStartOf="@+id/btnCancel"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/constraintLayout4"
-            app:layout_constraintTop_toBottomOf="@+id/tvName">
-
-
-            <ImageView
-                android:id="@+id/img2"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-
-                android:src="@drawable/ic_calories_white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvCalories"
-                style="@style/Small"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dimen_4dp"
-
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/img2"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="10:20 am" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
 
         <include
@@ -174,10 +137,12 @@
             layout="@layout/layout_divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginTop="16dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

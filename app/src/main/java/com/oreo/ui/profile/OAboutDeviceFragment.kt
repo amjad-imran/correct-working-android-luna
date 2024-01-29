@@ -14,14 +14,17 @@ import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.interfaces.QueryAction
+import com.noisefit_commans.interfaces.QueryCallback
+import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.FirebaseLunaAppEvents
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageAppEventParams
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.RingSerialNoParser
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -45,8 +48,10 @@ class OAboutDeviceFragment :
     }
     var connectedDevice: ColorFitDevice? = null
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        updateViewModel.mShouldFetchInfo = false
         setUi()
     }
 
@@ -117,7 +122,7 @@ class OAboutDeviceFragment :
         }
         binding.btnCheckForUpdates.setOnClickListener {
             if (updateViewModel.sessionManager.isDeviceConnected()) {
-                updateViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ABOUTDEVICE_UPDATE_CLICK)
+                updateViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_aboutdevice_update_click)
                 updateViewModel.checkForUpdates(false)
             }else{
                 context.showShortToast("Ring not connected")
@@ -125,12 +130,38 @@ class OAboutDeviceFragment :
             }
         }
         binding.btnCopyMac.setOnClickListener {
-            updateViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_ABOUTDEVICE_COPY_MAC_CLICK)
+            updateViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_aboutdevice_copy_mac_click)
             connectedDevice?.address?.copyToClipBoard()
         }
     }
 
     override fun subscribeObservers() {
+
+
+        updateViewModel.sessionManager.connectStateRing.observe(this) {
+            when (it) {
+                is ConnectState.ConnectSuccess -> {
+                    if (updateViewModel.mShouldFetchInfo) {
+                        updateViewModel.sessionManager.sendQueryAction(QueryAction.QueryBatteryPower)
+                        updateViewModel.sessionManager.sendQueryAction(QueryAction.QueryFirmwareVersion)
+                        updateViewModel.mShouldFetchInfo = false
+                    }
+                }
+                else -> {}
+            }
+        }
+
+        updateViewModel.sessionManager.deviceQueryCallback.observe(viewLifecycleOwner) {
+            when (it) {
+                is QueryCallback.FirmwareVersionObtained -> {
+                    connectedDevice?.let {
+                        adapter.setDataSet(generateData(it))
+                    }
+                }
+                else -> {}
+            }
+        }
+
 
         updateViewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->

@@ -7,26 +7,29 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.database.KeyValueDao
 import com.noisefit.data.local.db.implementation.KeyValueDataSourceImpl
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.OreoDataBase
 import com.oreo.data.db.abstaction.OreoBodyTemperatureDataSource
 import com.oreo.data.db.abstaction.OreoDayTimeMovementDataSource
 import com.oreo.data.db.abstaction.OreoSleepDataSource
 import com.oreo.data.db.abstaction.OreoStepsDataSource
+import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.db.database.OreoAutoSportDao
 import com.oreo.data.db.database.OreoBloodOxygenDao
 import com.oreo.data.db.database.OreoBodyTemperatureDao
 import com.oreo.data.db.database.OreoDayTimeMovementDao
-import com.oreo.data.db.database.OreoGFitWorkoutDao
 import com.oreo.data.db.database.OreoHeartRateDao
+import com.oreo.data.db.database.OreoRecordedWorkoutDao
 import com.oreo.data.db.database.OreoRespiratoryDao
 import com.oreo.data.db.database.OreoSleepDao
 import com.oreo.data.db.database.OreoStepsDao
 import com.oreo.data.db.database.OreoStressDao
+import com.oreo.data.db.database.OreoUserHealthDataDao
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
 import com.oreo.data.db.implementation.OreoDayTimeMovementDataImpl
-import com.oreo.data.db.implementation.OreoGFitWorkoutDataImpl
 import com.oreo.data.db.implementation.OreoSleepDataImpl
 import com.oreo.data.db.implementation.OreoStepsDataImpl
+import com.oreo.data.db.implementation.OreoUserHealthDataDataImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,24 +45,27 @@ class OreoRoomModule {
     @Provides
     fun provideDataBase(@ApplicationContext appContext: Context): OreoDataBase {
         return Room.databaseBuilder(appContext, OreoDataBase::class.java, "noisefit-db-oreo")
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+            .addMigrations(MIGRATION_1_2)
+            .addMigrations(MIGRATION_2_4)
+            .addMigrations(MIGRATION_4_5)
+            /*.addMigrations(MIGRATION_3_4)*/
             .build()
     }
 
-     private val MIGRATION_1_2: Migration = object : Migration(1, 2) {
-         override fun migrate(database: SupportSQLiteDatabase) {
-             database.execSQL(
-                 "CREATE TABLE IF NOT EXISTS `key_value` " +
-                         "(`uId` INTEGER NOT NULL, " +
-                         "`lastSync` INTEGER," +
-                         "`value` TEXT," +
-                         "`type` TEXT," +
-                         "`key` TEXT, PRIMARY KEY(`uId`))"
-             )
-         }
-     }
+    private val MIGRATION_1_2: Migration = object : Migration(1, 2) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(
+                "CREATE TABLE IF NOT EXISTS `key_value` " +
+                        "(`uId` INTEGER NOT NULL, " +
+                        "`lastSync` INTEGER," +
+                        "`value` TEXT," +
+                        "`type` TEXT," +
+                        "`key` TEXT, PRIMARY KEY(`uId`))"
+            )
+        }
+    }
 
-    private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
+   /* private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL(
                 "CREATE TABLE IF NOT EXISTS `google_fit_workout` " +
@@ -79,6 +85,42 @@ class OreoRoomModule {
                         "`type` TEXT, PRIMARY KEY(`id`))"
             )
             database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_google_fit_workout_startTime ON  google_fit_workout(startTime)")
+
+        }
+    }*/
+    private val MIGRATION_2_4: Migration = object : Migration(2, 4) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(
+                "CREATE TABLE IF NOT EXISTS `user_health_data` " +
+                        "(`id` INTEGER NOT NULL, " +
+                        "`trendData` TEXT," +
+                        "`userHealthData` TEXT," +
+                        "`date` TEXT, PRIMARY KEY(`id`))"
+            )
+            database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_user_health_data_date ON  user_health_data(date)")
+
+        }
+    }
+
+    private val MIGRATION_4_5: Migration = object : Migration(4, 5) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(
+                "CREATE TABLE IF NOT EXISTS `recorded_workout` " +
+                        "(`id` INTEGER NOT NULL, " +
+                        "`is_synced` INTEGER NOT NULL," +
+                        "`is_accepted` INTEGER NOT NULL," +
+                        "`duration` INTEGER," +
+                        "`intensity` INTEGER," +
+                        "`calories` INTEGER," +
+                        "`startTime` INTEGER NOT NULL," +
+                        "`endTime` INTEGER NOT NULL," +
+                        "`steps` INTEGER," +
+                        "`type` INTEGER," +
+                        "`hr` TEXT," +
+                        "`intensity_list` TEXT," +
+                        "`date` TEXT, PRIMARY KEY(`id`))"
+            )
+            database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_recorded_workout_startTime ON  recorded_workout(startTime)")
 
         }
     }
@@ -103,6 +145,14 @@ class OreoRoomModule {
 
     @Singleton
     @Provides
+    fun provideUserHealthDataSource(
+        userHealthDao: OreoUserHealthDataDao
+    ): OreoUserHealthDataDataSource {
+        return OreoUserHealthDataDataImpl(userHealthDao)
+    }
+
+    @Singleton
+    @Provides
     fun provideKeyValueDataSource(
         keyValueDao: KeyValueDao,
     ): KeyValueDataSource {
@@ -116,11 +166,11 @@ class OreoRoomModule {
         return database.stepsDao()
     }
 
-    @Singleton
+    /*@Singleton
     @Provides
     fun providesOreoGFitWorkoutDao(database: OreoDataBase): OreoGFitWorkoutDao {
         return database.gFitWorkoutDao()
-    }
+    }*/
 
     @Singleton
     @Provides
@@ -154,11 +204,11 @@ class OreoRoomModule {
     }
 
 
-    @Singleton
+    /*@Singleton
     @Provides
     fun provideOreoGFitWorkoutDataImpl(data: OreoGFitWorkoutDao): OreoGFitWorkoutDataImpl {
         return OreoGFitWorkoutDataImpl(data)
-    }
+    }*/
 
 
     @Singleton
@@ -183,6 +233,24 @@ class OreoRoomModule {
     @Provides
     fun providesAutoSportDao(database: OreoDataBase): OreoAutoSportDao {
         return database.oreoAutoSportDao()
+    }
+
+    @Singleton
+    @Provides
+    fun providesRecordedWorkoutDao(database: OreoDataBase): OreoRecordedWorkoutDao {
+        return database.oreoRecordedWorkoutDap()
+    }
+
+    @Singleton
+    @Provides
+    fun providesUserHealthDataDao(database: OreoDataBase): OreoUserHealthDataDao {
+        return database.userHealthDataDao()
+    }
+
+    @Singleton
+    @Provides
+    fun providesUserHealthDataImpl(userHealthDataDao: OreoUserHealthDataDao): OreoUserHealthDataDataImpl {
+        return OreoUserHealthDataDataImpl(userHealthDataDao)
     }
 
     @Singleton

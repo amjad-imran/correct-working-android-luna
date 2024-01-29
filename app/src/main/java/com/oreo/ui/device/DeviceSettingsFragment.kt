@@ -14,7 +14,7 @@ import com.noisefit.ui.myDevice.REST_REQUEST_KEY
 import com.noisefit.ui.myDevice.UNPAIR_REQUEST_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.utils.FirebaseLunaAppEvents
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -57,6 +57,7 @@ class DeviceSettingsFragment :
                     })
                 }
             }
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_device_settings_restart_click)
             navigate(R.id.restartBottomDialogFragment)
         }
         binding.tvFactoryReset.setOnClickListener {
@@ -64,10 +65,13 @@ class DeviceSettingsFragment :
                 val unpairDevice = bundle.getBoolean("unpair")
                 val ringNotConnected = bundle.getBoolean("ring_not_connected")
                 if (unpairDevice) {
+                    mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_device_settings_reset_confirm_click)
                     Handler(Looper.getMainLooper()).post {
                         mViewModel.localDataStore.setGoogleFitStatus(false)
                         navigateUpSafe()
                     }
+                } else {
+                    mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_device_settings_reset_cancel_click)
                 }
                 if (ringNotConnected) {
                     navigate(R.id.unpairDeviceNotConnectedFragment, Bundle().apply {
@@ -79,7 +83,7 @@ class DeviceSettingsFragment :
                     })
                 }
             }
-            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_MYDEVICES_UNPAIR_CLICK)
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_device_settings_reset_click)
 
             navigate(R.id.unpairBottomDialogFragment)
         }
@@ -107,8 +111,7 @@ class DeviceSettingsFragment :
                     })
                 }*/
             }
-            mViewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_MYDEVICES_UNPAIR_CLICK)
-
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_device_settings_pair_new_click)
             navigate(R.id.unpairBottomDialogFragment, Bundle().apply {
                 this.putBoolean("forceUnpair", true)
             })

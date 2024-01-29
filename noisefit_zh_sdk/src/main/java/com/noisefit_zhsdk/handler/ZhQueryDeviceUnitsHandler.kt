@@ -16,9 +16,7 @@ import com.noisefit_commans.enums.ApplicationType
 import com.noisefit_commans.handler.MusicControlActionsEvents
 import com.noisefit_commans.interfaces.IQueryDataCallback
 import com.noisefit_commans.interfaces.QueryCallback
-import com.noisefit_commans.interfaces.data.UserActivityCallback
 import com.noisefit_commans.interfaces.device_data.QueryDeviceDataActions
-import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
 import com.noisefit_commans.models.BatteryData
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.CustomReplyData
@@ -32,6 +30,7 @@ import com.noisefit_commans.models.StockSymbol
 import com.noisefit_commans.models.StockSymbolList
 import com.noisefit_commans.models.SwitchSetting
 import com.noisefit_commans.models.WorldClockList
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.FileLogsUtils
 import com.noisefit_commans.utils.LOGS
@@ -41,11 +40,11 @@ import com.noisefit_zhsdk.base.ZhApplicationHandler
 import com.zh.ble.wear.protobuf.MusicProtos
 import com.zhapp.ble.ControlBleTools
 import com.zhapp.ble.bean.BodyTemperatureSettingBean
+import com.zhapp.ble.bean.BreathingLightSettingsBean
 import com.zhapp.ble.bean.ClassicBluetoothStateBean
 import com.zhapp.ble.bean.ClockInfoBean
 import com.zhapp.ble.bean.CommonReminderBean
 import com.zhapp.ble.bean.ContinuousBloodOxygenSettingsBean
-import com.zhapp.ble.bean.DeviceBatteryValueBean
 import com.zhapp.ble.bean.DeviceInfoBean
 import com.zhapp.ble.bean.DoNotDisturbModeBean
 import com.zhapp.ble.bean.EventInfoBean
@@ -74,6 +73,7 @@ import com.zhapp.ble.callback.DeviceBatteryReportingCallBack
 import com.zhapp.ble.callback.DeviceInfoCallBack
 import com.zhapp.ble.callback.DeviceLogCallBack
 import com.zhapp.ble.callback.EmergencyContactsCallBack
+import com.zhapp.ble.callback.FirmwareLogStateCallBack
 import com.zhapp.ble.callback.MicroCallBack
 import com.zhapp.ble.callback.MusicCallBack
 import com.zhapp.ble.callback.QuickReplyCallBack
@@ -319,11 +319,13 @@ constructor(
     }
 
     private val batteryAlertCallback = DeviceBatteryReportingCallBack {
-        testQueryDeviceDataCallback?.onQueryDataReceived(
-            QueryCallback.BatteryAlertObtained(
-                it.deviceBatteryValue
+        if (it.deviceBatteryValue <= 20) {
+            testQueryDeviceDataCallback?.onQueryDataReceived(
+                QueryCallback.BatteryAlertObtained(
+                    it.deviceBatteryValue
+                )
             )
-        )
+        }
     }
 
     private val realDataCallback = object : RealTimeDataCallBack {
@@ -861,6 +863,10 @@ constructor(
 
             }
 
+            override fun onBreathingLightSettings(p0: BreathingLightSettingsBean?) {
+
+            }
+
 
         }
 
@@ -998,6 +1004,24 @@ constructor(
 
     }
 
+    override fun getFirmwareLogs() {
+
+        ControlBleTools.getInstance().getFirmwareLog(object : SendCmdStateListener() {
+            override fun onState(state: SendCmdState) {
+                when (state) {
+                    SendCmdState.SUCCEED -> {
+                        context.showShortToast("Firmware logs generated")
+                    }
+
+                    else -> {
+                        context.showShortToast("Firmware logs generation failed")
+                    }
+                }
+            }
+        })
+
+    }
+
     private fun sendErrorMessageToApp(message: String, title: String) {
         LOGS.i("QuickReply sendErrorMessageToApp")
         val appNotification = ApplicationType.NOISEFIT.type
@@ -1121,6 +1145,25 @@ constructor(
 
 
     private fun initLogListener() {
+        CallBackUtils.firmwareLogStateCallBack = object : FirmwareLogStateCallBack {
+            override fun onFirmwareLogState(state: Int) {
+                if (state == FirmwareLogStateCallBack.FirmwareLogState.START.state) {
+
+                } else if (state == FirmwareLogStateCallBack.FirmwareLogState.UPLOADING.state) {
+
+                } else if (state == FirmwareLogStateCallBack.FirmwareLogState.END.state) {
+
+                }
+            }
+
+            override fun onFirmwareLogFilePath(filePath: String?) {
+                filePath?.let {
+                    watchDataStore.saveFirmwareLogPath(it)
+                }
+            }
+        }
+
+
         ControlBleTools.getInstance().deviceLogCallBack = object : DeviceLogCallBack {
             override fun onLogI(tag: String?, msg: String?, p2: String?) {
                 FileLogsUtils.saveILogs(

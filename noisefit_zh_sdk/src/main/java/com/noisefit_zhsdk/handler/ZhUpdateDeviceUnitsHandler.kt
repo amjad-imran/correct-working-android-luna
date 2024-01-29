@@ -81,6 +81,8 @@ import com.zhapp.ble.bean.DoNotDisturbModeBean
 import com.zhapp.ble.bean.EmergencyContactBean
 import com.zhapp.ble.bean.EventInfoBean
 import com.zhapp.ble.bean.HeartRateMonitorBean
+import com.zhapp.ble.bean.RingSportStatusBean
+import com.zhapp.ble.bean.SendRingSportStatusBean
 import com.zhapp.ble.bean.SettingTimeBean
 import com.zhapp.ble.bean.StockInfoBean
 import com.zhapp.ble.bean.TimeBean
@@ -91,8 +93,10 @@ import com.zhapp.ble.callback.ActiveMeasureCallBack
 import com.zhapp.ble.callback.CallBackUtils
 import com.zhapp.ble.callback.DeviceLargeFileStatusListener
 import com.zhapp.ble.callback.DeviceWatchFaceFileStatusListener
+import com.zhapp.ble.callback.RingSportCallBack
 import com.zhapp.ble.callback.UploadBigDataListener
 import com.zhapp.ble.callback.WatchFaceInstallCallBack
+import com.zhapp.ble.parsing.ParsingStateManager
 import com.zhapp.ble.parsing.ParsingStateManager.SendCmdStateListener
 import com.zhapp.ble.parsing.SendCmdState
 import java.io.File
@@ -105,6 +109,7 @@ import javax.inject.Inject
 import kotlin.math.roundToInt
 
 private val TAG = "ZhUpdateDeviceUnitsHandler"
+
 class ZhUpdateDeviceUnitsHandler
 @Inject
 constructor(
@@ -145,8 +150,8 @@ constructor(
 
 
     override fun attachCallbacks() {
-        CallBackUtils.watchFaceInstallCallBack =  watchFaceInstallCallBack
-
+        CallBackUtils.watchFaceInstallCallBack = watchFaceInstallCallBack
+        CallBackUtils.ringSportCallBack = ringSportCallback
 
     }
 
@@ -167,7 +172,7 @@ constructor(
             }
 
             var isError = false
-            if(p0.errorReason >0){
+            if (p0.errorReason > 0) {
                 isError = true
             }
 
@@ -257,10 +262,14 @@ constructor(
 
     override fun setManualMeasurement(manualMeasureType: ManualMeasureType, status: Boolean) {
         CallBackUtils.activeMeasureCallBack = activeMeasureCallBack
-      LOGS.d("onMeasuring setManualMeasurement ${oreoDataConverter.getManualMeasurement(
-          manualMeasureType,
-          status
-      )}")
+        LOGS.d(
+            "onMeasuring setManualMeasurement ${
+                oreoDataConverter.getManualMeasurement(
+                    manualMeasureType,
+                    status
+                )
+            }"
+        )
         ControlBleTools.getInstance().activeMeasurementStart(
             oreoDataConverter.getManualMeasurement(
                 manualMeasureType,
@@ -269,7 +278,7 @@ constructor(
                 override fun onState(state: SendCmdState) {
                     LOGS.d(ZhQueryDeviceUnitsHandler.TAG, "$state")
 
-                    if(state==SendCmdState.NOT_SUPPORT){
+                    if (state == SendCmdState.NOT_SUPPORT) {
                         testUpdateDeviceDataCallback?.onUpdateDataReceived(
                             UpdateDeviceDataCallback.ManualMeasurementObtained(
                                 ManualMeasurement(
@@ -284,6 +293,227 @@ constructor(
                     }
                 }
             })
+    }
+
+    override fun checkOngoingWorkout() {
+        ControlBleTools.getInstance()
+            .getRingSportStatus(object : ParsingStateManager.SendCmdStateListener() {
+                override fun onState(state: SendCmdState?) {
+                    when (state) {
+                        SendCmdState.SUCCEED -> {}
+                        else -> {}
+                    }
+                }
+            })
+    }
+
+    override fun startWorkout(sportType: Int, sportStartTime: Long) {
+        val bean = SendRingSportStatusBean(
+            sportType,
+            RingSportCallBack.RingSportStatus.SPORT_STATUS_START.status,
+            sportStartTime
+        )
+        ControlBleTools.getInstance()
+            .sendRingSportStatus(bean, object : ParsingStateManager.SendCmdStateListener() {
+                override fun onState(state: SendCmdState?) {
+                    when (state) {
+                        SendCmdState.SUCCEED -> {
+                            testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                                UpdateDeviceDataCallback.WorkoutStartState(true)
+                            )
+                        }
+
+                        else -> {
+                            testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                                UpdateDeviceDataCallback.WorkoutStartState(false, "Failed")
+                            )
+                        }
+                    }
+                }
+            })
+    }
+
+    /**
+     * @param action 2->Pause. 3-> Resume 4->Stop
+     *
+     */
+    override fun updateOngoingWorkout(sportType: Int, sportTimeStamp: Long, action: Int) {
+
+        val status = when (action) {
+            2 -> RingSportCallBack.RingSportStatus.SPORT_STATUS_PAUSE.status
+            3 -> RingSportCallBack.RingSportStatus.SPORT_STATUS_RESUME.status
+
+            else -> RingSportCallBack.RingSportStatus.SPORT_STATUS_END.status
+        }
+
+        val bean = SendRingSportStatusBean(sportType, status, sportTimeStamp)
+        ControlBleTools.getInstance().sendRingSportStatus(bean, object : SendCmdStateListener() {
+            override fun onState(state: SendCmdState?) {
+                when (state) {
+                    SendCmdState.SUCCEED -> {
+                        when (action) {
+                            2 -> {
+                                testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                                    UpdateDeviceDataCallback.WorkoutPaused(true)
+                                )
+                            }
+
+                            3 -> {
+                                testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                                    UpdateDeviceDataCallback.WorkoutResumed(true)
+                                )
+                            }
+
+                            4 -> {
+                                testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                                    UpdateDeviceDataCallback.WorkoutStopped(true)
+                                )
+                                ControlBleTools.getInstance().getFitnessSportIdsData(null)
+                            }
+                        }
+                    }
+
+                    else -> {
+                        when (action) {
+                            2 -> {
+                                testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                                    UpdateDeviceDataCallback.WorkoutPaused(false)
+                                )
+                            }
+
+                            3 -> {
+                                testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                                    UpdateDeviceDataCallback.WorkoutResumed(false)
+                                )
+                            }
+
+                            4 -> {
+                                testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                                    UpdateDeviceDataCallback.WorkoutStopped(false)
+                                )
+                                ControlBleTools.getInstance().getFitnessSportIdsData(null)
+                            }
+                        }
+                    }
+                }
+            }
+        })
+
+    }
+
+    fun stopWorkout(){
+        testUpdateDeviceDataCallback?.onUpdateDataReceived(
+            UpdateDeviceDataCallback.WorkoutStopped(true)
+        )
+        ControlBleTools.getInstance().getFitnessSportIdsData(null)
+    }
+
+    private val ringSportCallback = object : RingSportCallBack {
+        override fun onRingSportStatus(bean: RingSportStatusBean?) {
+            LOGS.d(TAG, "onRingSportStatus ${Gson().toJson(bean)}")
+            if (bean == null) return
+
+
+            if (bean.startResult == RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_NONE.result && bean.isSporting &&
+                bean.sportStatus != RingSportCallBack.RingSportStatus.SPORT_STATUS_END.status
+            ) {
+                testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                    UpdateDeviceDataCallback.OngoingWorkoutData(
+                        bean.duration,
+                        bean.sportStatus,
+                        bean.sportType,
+                        bean.startTime
+                    )
+                )
+            }
+
+            if (bean.startResult != RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_NONE.result) {
+                when (bean.startResult) {
+                    RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_LOW_POWER.result -> {
+                        /*testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                            UpdateDeviceDataCallback.WorkoutEndFromRingState("Low Battery")
+                        )*/
+                        AppLogs.sendAppLogs("Workout failed from ring Reason: Low Battery")
+                        stopWorkout()
+                    }
+
+                    RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_UN_WEAR.result -> {
+                        /*testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                            UpdateDeviceDataCallback.WorkoutEndFromRingState("Device not worn")
+                        )*/
+                        AppLogs.sendAppLogs("Workout failed from ring Reason: Device not worn")
+
+                        stopWorkout()
+                    }
+
+                    RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_CHARGING.result -> {
+                        /*testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                            UpdateDeviceDataCallback.WorkoutEndFromRingState("Ring on Charging")
+                        )*/
+                        AppLogs.sendAppLogs("Workout failed from ring Reason: Ring on Charging")
+
+                        stopWorkout()
+
+                    }
+                }
+            }
+
+            if (bean.sportStatus == RingSportCallBack.RingSportStatus.SPORT_STATUS_END.status) {
+                if (bean.endReason != RingSportCallBack.RingSportEndReason.SPORT_END_REASON_NONE.reason) {
+                    when (bean.endReason) {
+                        RingSportCallBack.RingSportEndReason.SPORT_END_REASON_LOW_POWER.reason -> {
+                            /*testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                                UpdateDeviceDataCallback.WorkoutEndFromRingState("Low Battery")
+                            )*/
+                            AppLogs.sendAppLogs("Workout failed from ring Reason: Low Battery")
+
+                            stopWorkout()
+                        }
+
+                        RingSportCallBack.RingSportEndReason.SPORT_END_REASON_TIMEOUT.reason -> {
+                            /*testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                                UpdateDeviceDataCallback.WorkoutEndFromRingState(
+                                    "Exercise 8 hours timeout"
+                                )
+                            )*/
+                            AppLogs.sendAppLogs("Workout failed from ring Reason: Exercise 8 hours timeout")
+
+                            stopWorkout()
+
+                        }
+
+                        RingSportCallBack.RingSportEndReason.SPORT_END_REASON_NO_MEMORY.reason -> {
+                            /*testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                                UpdateDeviceDataCallback.WorkoutEndFromRingState(
+                                    "Insufficient device memory"
+                                )
+                            )*/
+                            AppLogs.sendAppLogs("Workout failed from ring Reason: Insufficient device memory")
+
+                            stopWorkout()
+                        }
+                    }
+                }
+
+                /*if (bean.isSportNoSync) {
+                    ControlBleTools.getInstance()
+                        .getFitnessSportIdsData(null)
+                }*/
+            }
+
+            /*testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                UpdateDeviceDataCallback.OngoingWorkoutData(
+                    WorkoutData(
+                        steps = p0?.steps,
+                        calories = p0?.calories,
+                        sportLevel = p0?.sportLevel,
+                        distance = p0?.distance,
+                        heartRate = p0?.heartRate
+                    )
+                )
+            )*/
+        }
+
     }
 
     override fun closeFindPhoneFromWatch(status: Boolean) {
@@ -301,6 +531,7 @@ constructor(
                 UnitSystem.IMPERIAL.type.lowercase() -> {
                     1
                 }
+
                 else -> {
                     0
                 }
@@ -415,6 +646,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("alarm data update succeed")
                         }
+
                         else -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.AlarmUpdated(
@@ -451,6 +683,7 @@ constructor(
                                 )
                                 AppLogs.sendAppLogs("contact list data update succeed")
                             }
+
                             else -> {
                                 testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                     UpdateDeviceDataCallback.ContactListUpdated(
@@ -548,6 +781,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("delete reminder data update succeed")
                         }
+
                         else -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.DeleteReminder(
@@ -575,6 +809,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("app list data update succeed")
                         }
+
                         else -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.WidgetSortListUpdated(
@@ -601,6 +836,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("app list data update succeed")
                         }
+
                         else -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.UpdateAppList(
@@ -656,6 +892,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("Sync Stock data succeed")
                         }
+
                         SendCmdState.TIMEOUT -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.SyncStockInfoList(
@@ -664,6 +901,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("sync stock data timeout")
                         }
+
                         else -> {}
                     }
                 }
@@ -689,6 +927,7 @@ constructor(
                                 AppLogs.sendAppLogs("delete stock succeed")
                             }, 1000)
                         }
+
                         SendCmdState.TIMEOUT -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.DeleteStock(
@@ -697,6 +936,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("delete stock timeout")
                         }
+
                         else -> {}
                     }
                 }
@@ -745,6 +985,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("add reminder update succeed")
                         }
+
                         else -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.AddReminder(
@@ -1027,12 +1268,14 @@ constructor(
                             )
                             AppLogs.sendAppLogs("BLE calling succeed")
                         }
+
                         SendCmdState.TIMEOUT -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.BleCallingSwitchUpdated(false)
                             )
                             AppLogs.sendAppLogs("BLE calling timeout")
                         }
+
                         else -> {}
                     }
                 }
@@ -1373,6 +1616,7 @@ constructor(
                 )
                 AppLogs.sendAppLogs("Missed call app notification")
             }
+
             ApplicationType.SMS.type -> {
                 ControlBleTools.getInstance().sendSystemNotification(
                     2,
@@ -1383,6 +1627,7 @@ constructor(
                 )
                 AppLogs.sendAppLogs("SMS app notification")
             }
+
             else -> {
                 val message =
                     dataConverter.formatNotificationMessage(appNotification.message)
@@ -1570,6 +1815,7 @@ constructor(
                 )
                 AppLogs.sendAppLogs("Incoming call : succeed")
             }
+
             else -> {
                 ControlBleTools.getInstance().sendCallState(1, null)
                 AppLogs.sendAppLogs("Incoming call : error")
@@ -1609,6 +1855,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("DND Reminder : Succeed")
                         }
+
                         else -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.DoNotDisturbUpdated(
@@ -1660,6 +1907,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("SedentaryDataUpdated Reminder : Succeed")
                         }
+
                         else -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.SedentaryDataUpdated(
@@ -1716,6 +1964,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("HandWashingUpdated Reminder: Succeed")
                         }
+
                         else -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.HandWashingUpdated(
@@ -1868,6 +2117,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("HeartRateAlert : Succeed")
                         }
+
                         else -> {
                             LOGS.d("setHeartRateAlert failed")
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
@@ -1985,6 +2235,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("MedicineReminder Alert: Succeed")
                         }
+
                         else -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.MedicineDataUpdated(
@@ -2028,6 +2279,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("MealReminder: Succeed")
                         }
+
                         else -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.MealDataUpdated(
@@ -2060,6 +2312,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("CustomReply Reminder: Succeed")
                         }
+
                         else -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.CustomizeReplyUpdated(
@@ -2104,6 +2357,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("WorldClock Reminder: Succeed")
                         }
+
                         SendCmdState.TIMEOUT -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.WorldClockSet(
@@ -2112,6 +2366,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("WorldClock Reminder: Failed")
                         }
+
                         else -> {}
                     }
                 }
@@ -2143,6 +2398,7 @@ constructor(
                             )
                             AppLogs.sendAppLogs("QuickEyeMovement Reminder: Failed")
                         }
+
                         else -> {
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.QuickEyeMovementSwitchUpdated(

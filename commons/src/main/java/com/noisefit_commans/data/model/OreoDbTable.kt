@@ -63,6 +63,27 @@ data class OreoAutoSportData(
     @SerializedName("date") var date: String? = null
 ) : ColorfitData(), Parcelable
 
+
+@Entity(
+    tableName = "recorded_workout", indices = [Index(value = ["startTime"], unique = true)]
+)
+@Parcelize
+data class RecordedWorkoutData(
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    @ColumnInfo(name = "is_synced") var isSynced: Boolean = false,
+    @ColumnInfo(name = "is_accepted") var isAccepted: Boolean = false,
+    @ColumnInfo(name = "duration") var duration: Int? = null,
+    @ColumnInfo(name = "intensity") @SerializedName("intensity") var intensity: Int? = null,
+    @ColumnInfo(name = "calories") @SerializedName("calories") var calories: Int? = null,
+    @ColumnInfo(name = "startTime") @SerializedName("startTime") var startTime: Long = 0,
+    @ColumnInfo(name = "endTime") @SerializedName("endTime") var endTime: Long = 0,
+    @ColumnInfo(name = "steps") @SerializedName("steps") var steps: Int? = null,
+    @ColumnInfo(name = "type") @SerializedName("type") var type: Int? = null,
+    @ColumnInfo(name = "hr") @SerializedName("hr") var hrData: String? = null,
+    @ColumnInfo(name = "intensity_list") @SerializedName("intensity_list") var intensityList: String? = null,
+    @SerializedName("date") var date: String? = null
+) : ColorfitData(), Parcelable
+
 /*
  var name: String? = null,
     var identifier: String? = null,
@@ -77,6 +98,7 @@ data class OreoAutoSportData(
     var steps: Int? = null,
     var type: String? = null
  */
+/*
 @Entity(
     tableName = "google_fit_workout", indices = [Index(value = ["startTime"], unique = true)]
 )
@@ -97,6 +119,7 @@ data class GoogleFitWorkoutData(
     @ColumnInfo(name = "steps") var steps: Int? = null,
     @ColumnInfo(name = "type") var type: String? = null,
 ) : ColorfitData(), Parcelable
+*/
 
 
 
@@ -108,6 +131,17 @@ data class DayTimeMovementBreakup(
     @ColumnInfo(name = "is_synced") var isSynced: Boolean = false,
     @ColumnInfo(name = "is_google_fit_sync") var isGoogleFitSynced: Boolean = false,
     @ColumnInfo(name = "break_up") @SerializedName("break_up") var breakUp: String? = null,
+    @SerializedName("date") var date: String? = null
+) : ColorfitData()
+
+
+@Entity(
+    tableName = "user_health_data", indices = [Index(value = ["date"], unique = true)]
+)
+data class UserHealthData(
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    @ColumnInfo(name = "userHealthData") @SerializedName("userHealthData") var userHealthData: String? = null,
+    @ColumnInfo(name = "trendData") @SerializedName("trendData") var trendData: String? = null,
     @SerializedName("date") var date: String? = null
 ) : ColorfitData()
 

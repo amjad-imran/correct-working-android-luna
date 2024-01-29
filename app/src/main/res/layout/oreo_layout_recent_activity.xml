@@ -6,7 +6,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_marginTop="24dp"
-        style="@style/ModalStyleReadinessNew"
+        android:paddingBottom="16dp"
+        style="@style/ModalStyleTransparentOreo"
         android:layout_height="wrap_content">
 
         <TextView
@@ -65,10 +66,11 @@
             style="@style/SecondaryButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_margin="@dimen/side_margin"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:layout_marginTop="@dimen/side_margin"
             android:text="@string/text_add_a_workout"
-            android:visibility="visible"
-            tools:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:backgroundTint="@null"
             app:layout_constraintEnd_toEndOf="parent"

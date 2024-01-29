@@ -2,62 +2,78 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
-    <me.dkzwm.widget.srl.SmoothRefreshLayout
-        android:id="@+id/swipeToRefresh"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.noisefit.ui.custom.swipeHeader.srl.extra.header.ClassicHeader
-            android:id="@+id/swipeHeader"
+    <!--
+        <me.dkzwm.widget.srl.SmoothRefreshLayout
+            android:id="@+id/swipeToRefresh"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
-            <include
-                android:id="@+id/layoutRefresh"
-                layout="@layout/layout_swipe_refresh"
+            <com.noisefit.ui.custom.swipeHeader.srl.extra.header.ClassicHeader
+                android:id="@+id/swipeHeader"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </com.noisefit.ui.custom.swipeHeader.srl.extra.header.ClassicHeader>
+                android:layout_height="wrap_content">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+                <include
+                    android:id="@+id/layoutRefresh"
+                    layout="@layout/layout_swipe_refresh"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.noisefit.ui.custom.swipeHeader.srl.extra.header.ClassicHeader>-->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.home.summary.OSummaryFragment">
+
+        <include
+            android:id="@+id/lytHeader"
+            layout="@layout/layout_o_summary_header"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!--<com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabIndicatorColor="@color/white"
+            app:tabSelectedTextColor="@color/white"
+            app:tabMode="scrollable"
+            app:tabTextColor="@color/white_64"
+            app:layout_constraintTop_toBottomOf="@+id/lytHeader" />-->
+
+        <include
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@+id/lytHeader"
+            layout="@layout/layout_tabs_dash"/>
+
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPagerSummary"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
+
+
+
+        <include
+            android:id="@+id/progressBar"
+            layout="@layout/default_loader"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".ui.home.summary.OSummaryFragment">
-
-            <include
-                android:id="@+id/lytHeader"
-                layout="@layout/layout_o_summary_header"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <include
-                android:id="@+id/contentMain"
-                layout="@layout/layout_dash_main"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:visibility="gone"
-                tools:visibility="visible"
-                android:layout_marginStart="@dimen/side_margin"
-                android:layout_marginEnd="@dimen/side_margin"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lytHeader" />
-
-            <include
-                android:id="@+id/progressBar"
-                layout="@layout/default_loader"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </me.dkzwm.widget.srl.SmoothRefreshLayout>
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <!--    </me.dkzwm.widget.srl.SmoothRefreshLayout>-->
 
 </layout>

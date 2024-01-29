@@ -30,7 +30,6 @@ import com.noisefit_commans.ui.loadImageCacheWithProgress
 import com.noisefit_commans.ui.loadImageWCacheWithProgress
 import com.noisefit_commans.utils.AppConstants
 import com.noisefit_commans.utils.LOGS
-import com.oreo.receiver.workManager.GoogleFitSyncWork
 import com.oreo.receiver.workManager.OreoSyncDataWork
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -41,6 +40,7 @@ import kotlin.math.floor
 
 private const val UniqueSyncDataWorkName: String = "SyncDataWork"
 private const val UniqueRingSyncDataWorkName: String = "RingSyncDataWork"
+private const val LOGS_SYNC_WORKER_NAME: String = "LOGS_SYNC_WORKER_NAME"
 private const val UniqueWeatherWorkName: String = "WeatherWork"
 private const val UniqueGoogleSyncDataWorkName: String = "GoogleSyncDataWork"
 private const val UniqueActivitySyncWorkName: String = "ActivitySyncWork"
@@ -225,6 +225,20 @@ object ApplicationUtils {
     /** value in seconds
      * Returns HH:MM:SS
      */
+    fun getFormattedRecordedWorkoutFromSeconds(value: Int): String {
+        if (value == 0) {
+            return "00:00:00"
+        } else {
+            val hours: Int = value / 3600
+            val minutes: Int = (value % 3600) / 60
+            val seconds = value % 60;
+            return String.format("%02d:%02d:%02d", hours, minutes, seconds)
+        }
+    }
+
+    /** value in seconds
+     * Returns HH:MM:SS
+     */
     fun getFormattedVideoDurationFromSeconds(value: Int): String {
         if (value == 0) {
             return "00:00"
@@ -268,25 +282,30 @@ object ApplicationUtils {
         return isWorkScheduled(uniqueId, context)
     }
 
-    suspend fun startGoogleFitSyncScheduler(context: Context): Boolean {
-        val uniqueId = getUniqueGoogleFitWorkName()
-        LOGS.d("SyncDataWork: inside startGoogleFitSyncScheduler ")
-        if (!isWorkScheduled(uniqueId, context)) {
+    /* suspend fun startGoogleFitSyncScheduler(context: Context): Boolean {
+         val uniqueId = getUniqueGoogleFitWorkName()
+         LOGS.d("SyncDataWork: inside startGoogleFitSyncScheduler ")
+         if (!isWorkScheduled(uniqueId, context)) {
 
-            WorkManager.getInstance(context).cancelUniqueWork(uniqueId)
-            val work =
-                OneTimeWorkRequest.Builder(GoogleFitSyncWork::class.java)
-                    .addTag(uniqueId)
-                    .build()
-            WorkManager.getInstance(context).enqueueUniqueWork(
-                uniqueId,
-                ExistingWorkPolicy.KEEP,
-                work
-            )
-            return true
-        }
+             WorkManager.getInstance(context).cancelUniqueWork(uniqueId)
+             val work =
+                 OneTimeWorkRequest.Builder(GoogleFitSyncWork::class.java)
+                     .addTag(uniqueId)
+                     .build()
+             WorkManager.getInstance(context).enqueueUniqueWork(
+                 uniqueId,
+                 ExistingWorkPolicy.KEEP,
+                 work
+             )
+             return true
+         }
 
-        return false
+         return false
+     }*/
+
+    fun stopOreSyncScheduler(context: Context){
+        val uniqueId = getUniqueRingSyncDataWorkName()
+        WorkManager.getInstance(context).cancelUniqueWork(uniqueId)
     }
 
     suspend fun startOreoSyncScheduler(context: Context): Boolean {
@@ -327,6 +346,27 @@ object ApplicationUtils {
         }
 
         return false
+    }
+
+
+    fun startFeedbackSubmitWorker(context: Context): Boolean {
+
+        val constraints: Constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val workRequest =
+            OneTimeWorkRequest.Builder(FeedbackSubmitWorker::class.java)
+                .addTag(LOGS_SYNC_WORKER_NAME)
+                .setConstraints(constraints)
+                .build()
+
+        WorkManager.getInstance(context).enqueueUniqueWork(
+            LOGS_SYNC_WORKER_NAME,
+            ExistingWorkPolicy.KEEP,
+            workRequest
+        )
+        return true
     }
 
     private suspend fun isWorkScheduled1(workName: String, context: Context): Boolean {
@@ -839,6 +879,18 @@ object ApplicationUtils {
      * duration in minutes
      */
     fun getActivityDurationFormat2(duration: Long?): String {
+        if (duration == null) return ""
+
+        val (hour, minute) = getFormattedSleepDuration(
+            (duration ?: 0L).toInt()
+        )
+
+        val secs = 0
+        // Output like "00:00:00"
+        return String.format("%02d:%02d:%02d", hour, minute, secs)
+    }
+
+    fun getActivityDurationFormat2Seconds(duration: Long?): String {
         if (duration == null) return ""
 
         val (hour, minute) = getFormattedSleepDuration(

@@ -126,6 +126,7 @@ interface NetworkService {
         @Url url: String,
         @Part appLogs: MultipartBody.Part?,
         @Part ringLogs: MultipartBody.Part?,
+        @Part firmwareLogs: MultipartBody.Part?,
     ): BaseApiResponseData<Any>
 
     @Multipart
@@ -496,6 +497,13 @@ interface NetworkService {
     ): BaseApiResponse<RingWelcome>
 
     @GET
+    suspend fun getUserHealthData(
+        @Url string: String,
+        @Query("start_date") startDate: String?,
+        @Query("end_date") endDate: String?
+    ): BaseApiResponse<ServerUserHealthResponse>
+
+    @GET
     suspend fun getCityList(
         @Url string: String,
     ): BaseApiResponse<List<CityData>>
@@ -774,6 +782,12 @@ interface NetworkService {
     suspend fun getLearnData(
         @Url url: String
     ): BaseApiResponse<List<LearnModel>>
+
+    @POST
+    suspend fun addRecordedWorkout(
+        @Url url: String,
+        @Body requestObject: JsonObject
+    ): BaseApiResponse<List<AddWorkoutResponse>>
 
     @GET
     suspend fun getReadinessInternalPagesData(

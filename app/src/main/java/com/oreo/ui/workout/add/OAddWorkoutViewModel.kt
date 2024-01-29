@@ -11,18 +11,21 @@ import com.noisefit_commans.common.maxWithoutInvalidMovementValues
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.OAddWorkout
-import com.oreo.data.model.OWorkoutListModal
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -34,6 +37,7 @@ constructor(
     private val userActivityRepository: OreoUserActivityRepository,
     private val localDatSource: DataStoredInterface,
     private val syncRepository: OreoSyncRepository,
+    private val userHealthDataDataSource: OreoUserHealthDataDataSource,
     val sessionManager: SessionManager
 ) : BaseViewModel() {
 
@@ -148,7 +152,7 @@ constructor(
         } else {
             activityType
         }
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val requestObject = JsonObject().apply {
                 this.addProperty("duration", addWorkout.duration)
                 this.addProperty("calories", addWorkout.calories)
@@ -201,6 +205,17 @@ constructor(
                             autoWorkoutId?.let {
                                 deleteAutoSport(it)
                             }
+
+                            val isAuto = autoSport.value != null
+                            val date = if (isAuto) {
+                                addWorkout.date ?: DateFormats.getTodaysDateString(10)
+                            } else {
+                                DateFormats.getTodaysDateString(10)
+                            }
+                            userHealthDataDataSource.clearDataByDates(listOf(date))
+                            delay(100)
+
+
                             _addWorkoutResponse.postValue(true)
                         }
                     }
@@ -355,5 +370,29 @@ constructor(
             }
         }
         return combinedList
+    }
+
+    fun getHighlightedPoints(): HashSet<Int> {
+        try {
+            val startMinutes = addWorkout.startHour * 60 + addWorkout.startMinute
+            val endMinutes = addWorkout.endHour * 60 + addWorkout.endMinute
+            var start = startMinutes / 15
+            val end = endMinutes / 15
+
+            LOGS.d("getHighlightedPoints $start $end")
+            return if (start == end) {
+                hashSetOf(start)
+            } else {
+                val result = HashSet<Int>()
+                while (start != end) {
+                    result.add(start)
+                    start++
+                }
+                result
+            }
+
+        } catch (exp: Exception) {
+            return HashSet()
+        }
     }
 }

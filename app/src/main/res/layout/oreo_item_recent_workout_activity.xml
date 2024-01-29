@@ -1,23 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="MissingDefaultResource">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container"
+        android:id="@+id/parentContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imageView8"
-            android:background="@drawable/back_modal_new_round"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_margin="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="14dp"
+            android:background="@drawable/back_modal_new_round"
+            app:layout_constraintBottom_toBottomOf="@+id/linearLayout3"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/linearLayout3"
             app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
 
         <ImageView
@@ -31,70 +30,118 @@
             app:layout_constraintTop_toTopOf="@+id/imageView8"
             tools:src="@drawable/ic_o_workout" />
 
-
-        <TextView
-            android:id="@+id/tvActivityName"
-            style="@style/H6"
-            android:layout_width="0dp"
-            android:textSize="12sp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="@dimen/dimen_16dp"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:textColor="@color/medium_movement"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView8"
-            app:layout_constraintTop_toTopOf="@+id/imageView8"
-            tools:text="Strength Training" />
-
-        <TextView
-            android:id="@+id/tvCalories"
-            style="@style/H5"
+        <ImageButton
+            android:id="@+id/btnCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="4dp"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView8"
-            app:layout_constraintStart_toEndOf="@+id/imageView8"
-            tools:text="15.6" />
-
-        <TextView
-            android:id="@+id/tvCaloriesUnit"
-            style="@style/H6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:singleLine="true"
-            android:textSize="12sp"
-            android:textColor="@color/white_64"
-            app:layout_constraintBottom_toBottomOf="@+id/tvCalories"
-            app:layout_constraintStart_toEndOf="@+id/tvCalories"
-            android:text="@string/text_kcal" />
-
-        <TextView
-            android:id="@+id/tvDate"
-            style="@style/H6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dimen_16dp"
-            android:textColor="@color/white_64"
-            android:textSize="12sp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView8"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_arrow_right_duotone"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:text="2nd Feb, 2022" />
+            app:layout_constraintTop_toTopOf="@+id/linearLayout3" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toStartOf="@+id/btnCancel"
+            app:layout_constraintStart_toEndOf="@id/imageView8"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tvName"
+                style="@style/H6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="@dimen/dimen_12dp"
+                android:singleLine="true"
+                android:textColor="@color/color_workout"
+                tools:text="Archery" />
+
+            <LinearLayout
+                android:id="@+id/constraintLayout3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvStart"
+                    style="@style/Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white_64"
+                    tools:text="10:20 am" />
+
+                <include
+                    layout="@layout/layout_line_separator"
+                    android:layout_width="1dp"
+                    android:layout_height="16dp"
+                    android:layout_marginStart="12dp" />
+
+                <TextView
+                    android:id="@+id/tvMin"
+                    style="@style/Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:textColor="@color/white_64"
+                    tools:text="10:20 am" />
+
+                <include
+                    layout="@layout/layout_line_separator"
+                    android:layout_width="1dp"
+                    android:layout_height="16dp"
+                    android:layout_marginStart="12dp" />
+
+                <TextView
+                    android:id="@+id/tvCalories"
+                    style="@style/Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:textColor="@color/white_64"
+                    tools:text="10:20 am" />
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvImportedFrom"
+                style="@style/Tinny"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/back_imported_from"
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="4dp"
+                android:textColor="@color/white_64"
+                android:visibility="gone"
+                tools:visibility="visible"
+                tools:text="Imported from Health" />
+
+        </LinearLayout>
+
+
         <include
-            layout="@layout/layout_line_separator"
+            android:id="@+id/view16"
+            layout="@layout/layout_divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginStart="1dp"
-            android:layout_marginEnd="1dp"
-            android:id="@+id/divider1"
+            android:layout_marginTop="16dp"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

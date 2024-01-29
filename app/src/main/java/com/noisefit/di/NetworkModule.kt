@@ -1,6 +1,7 @@
 package com.noisefit.di
 
 import android.content.Context
+import com.grapesnberries.curllogger.CurlLoggerInterceptor
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.luna.BuildConfig
 import com.noisefit.data.remote.NetworkConnectionInterceptor
@@ -65,6 +66,7 @@ object NetworkModule {
         .apply {
             if (BuildConfig.DEBUG) {
                 this.addInterceptor(logger)
+                this.addInterceptor(CurlLoggerInterceptor("CURL"))
             }
         }
         .build()

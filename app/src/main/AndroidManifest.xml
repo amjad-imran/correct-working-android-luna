@@ -106,9 +106,6 @@
             android:name="com.noisefit.ui.web.WebViewActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-        <activity
-            android:name="com.noisefit.ui.myDevice.camera.CameraShutterActivity"
-            android:screenOrientation="portrait" />
 
         <activity
             android:name="com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity"
@@ -136,17 +133,6 @@
                 <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
             </intent-filter>
         </receiver>
-
-        <service
-            android:name="com.noisefit.receiver.service.StockUpdateService"
-            android:exported="false"
-            android:stopWithTask="false" />
-
-        <service
-            android:name="com.noisefit.receiver.service.FeedbackSubmitService"
-            android:exported="false"
-            android:stopWithTask="false" />
-
 
         <service
             android:name="com.oreo.receiver.service.RingConnectionService"
@@ -197,6 +183,12 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713" />
+        <service android:name="com.moengage.firebase.MoEFireBaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
         <service
             android:name="com.noisefit.receiver.service.NotificationService"
@@ -239,18 +231,6 @@
             android:exported="false"
             android:grantUriPermissions="false"
             android:initOrder="101" />
-
-        <activity
-            android:name="com.noisefit.ui.dashboard.feature.findmydevice.FindMyPhoneActivity"
-            android:exported="false"
-            android:launchMode="singleInstance"
-            android:screenOrientation="portrait"
-            android:showOnLockScreen="true" />
-
-        <receiver
-            android:name="com.noisefit.receiver.broadcastReceiver.StopFindMyPhoneBroadcast"
-            android:enabled="true"
-            android:exported="true" />
 
         <receiver
             android:name="com.noisefit.receiver.broadcastReceiver.AlarmReceiver"

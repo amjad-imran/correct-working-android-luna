@@ -192,6 +192,53 @@
         <item name="android:textColor">@color/md_theme_light_text_button</item>
     </style>
 
+    <style name="RecordWorkPrimaryButtonStyleHighlight" parent="ThemeOverlay.Material3.Button.TextButton">
+        <item name="shapeAppearance">@style/ButtonAppearance</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:fontFamily">@font/gilroy_medium</item>
+        <item name="android:background">@drawable/btn_record_work_primary_highlight_selector</item>
+        <item name="android:textColor">@drawable/btn_primary_color_selector</item>
+    </style>
+    <style name="RecordWorkSecondaryButtonStyleHighlight" parent="ThemeOverlay.Material3.Button.TextButton">
+        <item name="shapeAppearance">@style/ButtonAppearance</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:alpha">.5</item>
+        <item name="android:fontFamily">@font/gilroy_medium</item>
+        <item name="android:background">@drawable/btn_record_work_secondary_highlight_selector</item>
+        <item name="android:textColor">@drawable/btn_record_work_secondary_color_selector</item>
+    </style>
+    <style name="RecordWorkSecondaryButtonStyle" parent="ThemeOverlay.Material3.Button.TextButton">
+        <item name="shapeAppearance">@style/ButtonAppearance</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">@font/gilroy_medium</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:background">@drawable/btn_record_work_secondary_bg_selector</item>
+        <item name="android:textColor">@drawable/btn_record_work_secondary_color_selector</item>
+    </style>
+
 
 
     <style name="ToolbarBackButton" parent="Widget.AppCompat.ImageButton">

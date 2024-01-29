@@ -376,6 +376,15 @@ object ServiceUtil {
             is UpdateDeviceAction.CloseFindPhoneFromWatch -> {
                 updateAction.closeFindPhoneFromWatch(it.status)
             }
+            is UpdateDeviceAction.StartWorkout -> {
+                updateAction.startWorkout(it.sportType,it.sportStartTime)
+            }
+            is UpdateDeviceAction.CheckOngoingWorkout -> {
+                updateAction.checkOngoingWorkout()
+            }
+            is UpdateDeviceAction.UpdateOngoingWorkout -> {
+                updateAction.updateOngoingWorkout(it.sportType,it.sportTimeStamp,it.action)
+            }
 
             else -> {
                 LOGS.d("Update Device Action not defined in ServiceUtil $it")

@@ -11,6 +11,8 @@ import com.facebook.share.Share
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOHSQuestionariesBinding
 import com.noisefit_commans.ui.*
+import com.noisefit_commans.utils.MoEngageAppEventParams
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
 import com.oreo.data.model.OHSQuestionariesResponseModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,7 +24,15 @@ class OHSQAFragment :
     private val mOHSQAViewModel: OHSQAViewModel by viewModels()
     private val args: OHSQAFragmentArgs by navArgs()
     private val mOHSQAAdapter: OHSQAAdapter by lazy {
-        OHSQAAdapter()
+        OHSQAAdapter(object :OHSQAAdapter.OnItemClickListener{
+            override fun onItemClick(data: OHSQuestionariesResponseModel) {
+                mOHSQAViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_support_options_question_click,HashMap<String, Any>().apply {
+                    this[MoEngageAppEventParams.question_id]=data.quesId
+                    this[MoEngageAppEventParams.question_title]=data.question
+                })
+            }
+
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

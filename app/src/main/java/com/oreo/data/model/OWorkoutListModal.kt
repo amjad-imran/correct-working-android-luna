@@ -6,22 +6,6 @@ import com.google.gson.annotations.SerializedName
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import kotlinx.parcelize.Parcelize
 
-@Parcelize
-data class OWorkoutListModal(
-    @SerializedName("id") val id: Int? = null,
-    @SerializedName("icon_url") val iconUrl: String? = null,
-    @SerializedName("activity_type") val activityType: String? = null,
-    @SerializedName("low") val lowIntensity: Float? = null,
-    @SerializedName("medium") val mediumIntensity: Float? = null,
-    @SerializedName("high") val highIntensity: Float? = null,
-) : Parcelable{
-    fun getFormattedActivityName(): String {
-        val activityName =  activityType ?: return ""
-        val actNameTemp = activityName.replace("_", " ")
-        return actNameTemp.capitalizeWords()
-    }
-}
-
 
 @Parcelize
 data class OActivityListModal(
@@ -31,6 +15,7 @@ data class OActivityListModal(
     @SerializedName("duration") val duration: Long? = null,
     @SerializedName("calories") val calories: String? = null,
     @SerializedName("activity_type") val activityType: String? = null,
+    @SerializedName("type") var type: String? = null,
     @SerializedName("start_time") val startTime: String? = null,
     @SerializedName("end_time") val endTime: String? = null,
     @SerializedName("intensity") val intensity: String? = null,

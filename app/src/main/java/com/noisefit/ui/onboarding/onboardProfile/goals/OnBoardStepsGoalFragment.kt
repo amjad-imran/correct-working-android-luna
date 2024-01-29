@@ -10,7 +10,7 @@ import com.noisefit.ui.onboarding.onboardProfile.SetupProfileViewModel
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.numberFormatter
-import com.noisefit_commans.utils.InsiderAppEvents
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.WheelAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,7 +28,7 @@ class OnBoardStepsGoalFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.LAND_ON_DAILY_GOAL_SET_PAGE_VISIT)
+        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_land_on_daily_goal_set_page_visit)
         binding.lytOnBoardProgress.apply {
             pgBr.progress = 84
             tvCount.text = getString(R.string.text_7)

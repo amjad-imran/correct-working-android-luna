@@ -97,16 +97,7 @@ class NetworkConnectionInterceptor(
         })
     }
     private suspend fun removeOfflineUserData() {
-        arrayListOf(
-            KeyValueDataType.DASHBOARD,
-            KeyValueDataType.SLEEP,
-            KeyValueDataType.ACTIVITY,
-            KeyValueDataType.READINESS
-        ).forEach {
-            keyValueDataSource.removeDataByType(it)
-            database.clearAllTables()
-        }
-
+        database.clearAllTables()
     }
 
     override fun intercept(chain: Interceptor.Chain): Response {

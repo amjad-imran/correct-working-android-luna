@@ -14,7 +14,6 @@ import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
-import com.noisefit.receiver.service.FeedbackSubmitService
 import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
 import com.noisefit.util.moveToServer.SleepNotificationUtils
@@ -24,9 +23,11 @@ import com.noisefit.watch.UserActivityHandler
 import com.noisefit.watch.WatchesSDK
 import com.noisefit_commans.common.checkDayDifferenceMoreNMinutes
 import com.noisefit_commans.constants.SyncEvents
+import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.response.VersionCheckResponse
+import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.data.IUserActivityDataCallback
 import com.noisefit_commans.interfaces.data.UserActivityAction
@@ -35,19 +36,24 @@ import com.noisefit_commans.interfaces.data.UserActivityDataActions
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.models.TimeFormat
 import com.noisefit_commans.models.TimeFormats
+import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
+import kotlinx.coroutines.withContext
 import java.util.Calendar
 import java.util.Timer
 import java.util.TimerTask
@@ -56,7 +62,7 @@ import kotlin.concurrent.schedule
 import kotlin.coroutines.CoroutineContext
 
 
-private const val SyncingTimeOut: Long = 30000
+private const val SyncingTimeOut: Long = 40000
 private const val SyncWithServerTime: Long = 10800000 //10800000
 
 //255 - no value
@@ -79,6 +85,7 @@ constructor(
     private val userActivityHandler: UserActivityHandler,
     private val watchesSdk: WatchesSDK,
     private val keyValueDataSource: KeyValueDataSource,
+    private val userHealthDataDataSource: OreoUserHealthDataDataSource,
     private val sleepNotificationUtils: SleepNotificationUtils
 ) : ListenableWorker(context, workerParams) {
 
@@ -136,12 +143,13 @@ constructor(
 
         //sessionManager.logAppEvent(FunnelEvents.SyncEvents.Sync_Start_Uploading_Data.name, eventProperty)
         sessionManager.setSyncCompletedState(Event(SyncEvents.ServerSyncStarted))
+        var datesToRemove: List<String>? = null
         syncDataScope.launch {
             LOGS.d(TAG, "OreoSyncDataWork: Sync start")
             supervisorScope {
                 val userActivities = syncRepository.getUnSyncUserActivities()
 
-                syncRepository.getTodaySleepData().collect { resource ->
+                /*syncRepository.getTodaySleepData().collect { resource ->
                     when (resource) {
                         is CacheResult.Success -> {
                             sleepNotificationUtils.handleSleepData(resource.value)
@@ -149,7 +157,7 @@ constructor(
 
                         else -> {}
                     }
-                }
+                }*/
 
                 val call1 = async {
                     syncRepository.postDataToServer(userActivities.first)?.collect { resource ->
@@ -167,8 +175,11 @@ constructor(
                             is Resource.NetworkError -> {
 //                                sessionManager.logAppEvent(FunnelEvents.SyncEvents.Sync_Error_Uploading_Data.name, eventProperty)
                                 LOGS.d(TAG, "OreoSyncDataWork: combinedData1 " + resource.response)
-                                AppLogs.sendAppLogs("OreoSyncDataWork postDataToServer NetworkError ${resource.response}")
-
+                                tryCatch {
+                                    val dialog =
+                                        resource.response.uiComponentType as UIComponentType.RetryApiDialog
+                                    AppLogs.sendAppLogs("OreoSyncDataWork postDataToServer NetworkError ${dialog.message}")
+                                }
                             }
 
                             is Resource.Success -> {
@@ -178,15 +189,19 @@ constructor(
 //                                localDataStore.setLastStepsSyncWithServer(DateFormats.getTimeStamp())
                                 resource.data?.data?.let {
                                     handleAppVersion(context, it)
-
+                                    datesToRemove = it.dates
                                 }
-                                //TODO uncomment after testing -deepak
+
                                 syncDataScope.launch {
                                     syncRepository.markDataSynced(userActivities.second)
                                     syncRepository.deleteSleepServerSyncData(userActivities.second)
 
+
+
                                     //syncRepository.deleteServerSyncData(userActivities.second)
                                 }
+
+                                AppLogs.sendAppLogs("OreoSyncDataWork Server sync success")
 
                                 //syncRepository.updateHashForLastSyncData(userActivities.first)
 
@@ -196,54 +211,6 @@ constructor(
                     }
                 }
 
-                /*val call2 = if (!userActivities.first.sleepData.isNullOrEmpty()) {
-                    async {
-
-                        syncRepository.postSleepHistoryData(userActivities.first)
-                            ?.collect { resource ->
-                                when (resource) {
-                                    is Resource.GenericError -> {
-                                        AppLogs.sendAppLogs("OreoSyncDataWork postSleepHistoryData GenericError ${resource.message}")
-
-                                        LOGS.d(
-                                            TAG,
-                                            "OreoSyncDataWork: sleep " + resource.message
-                                        )
-                                    }
-
-                                    is Resource.Loading -> {
-
-                                    }
-
-                                    is Resource.NetworkError -> {
-                                        AppLogs.sendAppLogs("OreoSyncDataWork postSleepHistoryData NetworkError ${resource.response}")
-                                        LOGS.d(
-                                            TAG,
-                                            "OreoSyncDataWork: sleep " + resource.response
-                                        )
-                                    }
-
-                                    is Resource.Success -> {
-
-                                        //TODO uncomment after testing -deepak
-                                        syncDataScope.launch {
-                                            syncRepository.deleteSleepServerSyncData(userActivities.second)
-                                        }
-                                        *//*syncRepository.updateSleepHashForLastSyncData(userActivities.first)*//*
-
-                                        LOGS.d(
-                                            TAG,
-                                            "OreoSyncDataWork::: sleep " + resource.data
-                                        )
-                                    }
-                                }
-                            }
-                    }
-                } else null*/
-
-
-
-
                 try {
                     call1.await()
                     //call2?.await()
@@ -251,20 +218,22 @@ constructor(
 
                 }
 
-                val logsSync = shouldSyncAutoLogs()
-                if (logsSync) {
-                    context.let {
-                        FeedbackSubmitService.startService(
-                            it
-                        )
-                    }
+                datesToRemove?.let {
+
+                    userHealthDataDataSource.clearDataByDates(it)
+                    delay(200)
                 }
 
-                removeOfflineUserData()
-                AppLogs.sendAppLogs("OreoSyncDataWork Server sync success")
+                val logsSync = true//shouldSyncAutoLogs()
+                if (logsSync) {
+                    val status = ApplicationUtils.startFeedbackSubmitWorker(context)
+                }
+
+                AppLogs.sendAppLogs("OreoSyncDataWork server call complete")
 
                 ringDataStore.setLastSyncWithServer(DateFormats.getTimeStamp())
                 sessionManager.setSyncCompletedState(Event(SyncEvents.ServerSyncSuccess))
+                sessionManager.sendQueryAction(QueryAction.GetFirmwareLogs)
                 //sessionManager.setShowSyncOfflineData(Event(HealthOverviewDataType.SERVER_SYNC_SUCCESS))
 
                 if (::job.isInitialized) {
@@ -277,18 +246,6 @@ constructor(
         }
 
         return success.invoke()
-    }
-
-    private suspend fun removeOfflineUserData() {
-        arrayListOf(
-            KeyValueDataType.DASHBOARD,
-            KeyValueDataType.SLEEP,
-            KeyValueDataType.ACTIVITY,
-            KeyValueDataType.READINESS
-        ).forEach {
-            keyValueDataSource.removeDataByType(it)
-        }
-
     }
 
 
@@ -628,14 +585,14 @@ constructor(
                                 timer?.cancel()
                                 val syncTime =
                                     if (total < 20)
-                                        30 * 1000L
+                                        40 * 1000L
                                     else if (total in 20..49)
-                                        60 * 1000L
+                                        70 * 1000L
                                     else
-                                        90 * 1000L
+                                        100 * 1000L
                                 timer = Timer("DelayConnection", false).schedule(syncTime) {
                                     //syncTime()
-                                    AppLogs.sendAppLogs("OreoSyncDataWork inner timer time out SyncingTimeOut : $SyncingTimeOut  isDataReceived: $isDataReceived")
+                                    AppLogs.sendAppLogs("OreoSyncDataWork inner timer time out SyncingTimeOut : $syncTime  isDataReceived: $isDataReceived")
                                     if (isDataReceived) {
                                         return@schedule returnSuccess(success)
                                     } else {
@@ -743,11 +700,11 @@ constructor(
             getSyncData(
                 success = {
 //                    sessionManager.logAppEvent(FunnelEvents.SyncEvents.Sync_Success.name, eventProperty)
-                    if (localDataStore.isEnableGoogleFit()) {
+                    /*if (localDataStore.isEnableGoogleFit()) {
                         syncDataScope.launch {
                             ApplicationUtils.startGoogleFitSyncScheduler(context)
                         }
-                    }
+                    }*/
 
 
                     ringDataStore.getRingDevice()?.let {

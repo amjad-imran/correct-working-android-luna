@@ -35,9 +35,11 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.CommonConstants
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
-import com.noisefit_commans.utils.FirebaseLunaAppEvents
+
 import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageAppEventAttributes
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
@@ -173,7 +175,7 @@ class ProfileEditFragment :
                 return@setOnClickListener
             }
 
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_PROFILE_SAVE_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_profile_save_click)
             viewModel.updateUserProfile()
 
 
@@ -195,7 +197,7 @@ class ProfileEditFragment :
                 }
 
             }
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_PROFILE_NAME_EDIT_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_profile_name_edit_click)
             navigate(
                 ProfileEditFragmentDirections.actionProfileEditFragmentToNameUpdateBottomSheet(
                     viewModel.userName.value
@@ -211,7 +213,7 @@ class ProfileEditFragment :
                 }
 
             }
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_PROFILE_GENDER_EDIT_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_profile_gender_edit_click)
             navigate(
                 ProfileEditFragmentDirections.actionProfileEditFragmentToValueSelectorBottomSheet(
                     viewModel.getGenderValue(),
@@ -230,7 +232,7 @@ class ProfileEditFragment :
                 viewModel.setDob(year, month, date)
                 setDob()
             }
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_PROFILE_DOB_EDIT_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_profile_dob_edit_click)
             navigate(
                 ProfileEditFragmentDirections.actionProfileEditFragmentToDateBottomSheet(
                     getString(R.string.dob),
@@ -258,7 +260,7 @@ class ProfileEditFragment :
 
 
             }
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_PROFILE_HEIGHT_EDIT_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_profile_height_edit_click)
             navigate(
                 ProfileEditFragmentDirections.actionProfileEditFragmentToValueSelectorBottomSheet(
                     viewModel.getHeight(),
@@ -283,7 +285,7 @@ class ProfileEditFragment :
 
 
             }
-            viewModel.sessionManager.logFirebaseEvent(FirebaseLunaAppEvents.LUNA_PROFILE_WEIGHT_EDIT_CLICK)
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_profile_weight_edit_click)
             navigate(
                 ProfileEditFragmentDirections.actionProfileEditFragmentToValueSelectorBottomSheet(
                     viewModel.getWeight(),
@@ -346,21 +348,15 @@ class ProfileEditFragment :
             } else {
                 "Other"
             }
-        viewModel.sessionManager.addUserAttributeToInsider(true,
+        viewModel.sessionManager.addUserAttributeToMoEngage(true,
             HashMap<String, Any>().apply
             {
-                this["name"] = user.firstName.toString()
-                this["gender"] = gender
-                this["age"] = user.userInfo?.age ?: 0
-                this["dob"] = user.userInfo?.dob.toString()
-                this["step_goal"] = user.userGoals?.stepGoal ?: 0
-                this["sleep_goal"] = user.userGoals?.sleepGoal ?: 8
-                this["distance_goal"] = user.userGoals?.distanceGoal ?: 0
-                this["calories_goal"] = user.userGoals?.caloriesGoal ?: 0
-                this["unit_type"] = user.userGoals?.unitSystem ?: 0
-                this["height"] = user.userInfo?.height ?: 0
-                this["weight"] = user.userInfo?.weight ?: 0
-                this["personality_type"] = viewModel.getEndGameValue(user.endGame)
+                this[MoEngageAppEventAttributes.name] = user.firstName.toString()
+                this[MoEngageAppEventAttributes.gender] = gender
+                this[MoEngageAppEventAttributes.age] = user.userInfo?.age ?: 0
+                this[MoEngageAppEventAttributes.dob] = user.userInfo?.dob.toString()
+                this[MoEngageAppEventAttributes.height] = user.userInfo?.height ?: 0
+                this[MoEngageAppEventAttributes.weight] = user.userInfo?.weight ?: 0
             })
     }
 

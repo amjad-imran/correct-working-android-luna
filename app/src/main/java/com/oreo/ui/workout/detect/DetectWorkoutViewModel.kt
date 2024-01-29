@@ -16,11 +16,13 @@ import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.OAddWorkout
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.ZoneId
@@ -34,7 +36,8 @@ class DetectWorkoutViewModel
 @Inject
 constructor(
     private val syncRepository: OreoSyncRepository,
-    private val userActivityRepository: OreoUserActivityRepository
+    private val userActivityRepository: OreoUserActivityRepository,
+    private val userHealthDataDataSource: OreoUserHealthDataDataSource
 ) : BaseViewModel() {
 
     var dayKey: String = ""
@@ -245,6 +248,12 @@ constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
+
+                            addWorkout.date?.let {
+                                userHealthDataDataSource.clearDataByDates(listOf(it))
+                            }
+                            delay(100)
+
                             onAddSuccess.invoke()
                         }
                     }

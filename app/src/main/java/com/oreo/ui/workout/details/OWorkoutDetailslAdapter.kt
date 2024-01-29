@@ -7,6 +7,7 @@ import com.noisefit.luna.databinding.RowActivityDetailBinding
 import com.noisefit.luna.databinding.RowOwdItemBinding
 import com.noisefit.ui.workout.adapter.ActivityDetailAdapter
 import com.noisefit_commans.data.model.DetailData
+import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import com.oreo.data.model.OWDActivityData
@@ -28,6 +29,13 @@ class OWorkoutDetailslAdapter : RecyclerView.Adapter<OWorkoutDetailslAdapter.Vie
                 binding.viewDivider.root.visible()
             } else {
                 binding.viewDivider.root.invisible()
+            }
+
+            //Change code if workout params added
+            if (bindingAdapterPosition == 0) {
+                binding.dividerVertical.visible()
+            } else {
+                binding.dividerVertical.gone()
             }
 
         }
