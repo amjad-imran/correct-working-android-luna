@@ -5,6 +5,19 @@
     android:layout_height="match_parent"
     tools:context="com.oreo.ui.recordworkout.RecordWorkoutFragment">
 
+
+    <ImageView
+        android:id="@+id/imageConnecting"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/image_ring_connecting_workout"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/ivCross"
         android:layout_width="56dp"
@@ -55,12 +68,12 @@
         android:layout_width="72dp"
         android:layout_height="72dp"
         android:background="@drawable/back_modal_new_round"
-        app:layout_constraintBottom_toTopOf="@+id/tvTimer"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvWorkoutTitle"
-        app:layout_constraintVertical_bias="0.3"
+        app:layout_constraintVertical_bias="0.16000003"
         app:layout_constraintVertical_chainStyle="packed"
         app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
 
@@ -81,7 +94,7 @@
         style="@style/H32"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:text="00:00"
         android:textSize="64sp"
         app:layout_constraintBottom_toTopOf="@+id/btnStartWorkout"
@@ -96,12 +109,13 @@
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="68dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="64dp"
         android:layout_marginEnd="68dp"
         android:gravity="center"
         android:text="@string/text_start"
         android:textSize="16sp"
         app:backgroundTint="@null"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/btnPauseResume"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -114,8 +128,8 @@
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="68dp"
-        android:layout_marginTop="12dp"
         android:layout_marginEnd="68dp"
+        android:layout_marginTop="64dp"
         android:gravity="center"
         android:text="@string/pause"
         android:textSize="16sp"
@@ -139,7 +153,6 @@
         android:text="@string/text_end"
         android:textSize="16sp"
         app:backgroundTint="@null"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"

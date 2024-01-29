@@ -18,7 +18,6 @@ import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.noisefit.NoiseFitApplicationMain
@@ -47,7 +46,6 @@ import com.oreo.ui.recordworkout.SELECT_RECORD_WORKOUT
 import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderEffectBlur
 import eightbitlab.com.blurview.RenderScriptBlur
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
@@ -148,7 +146,6 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     override fun initListener() {
 
         binding.blurViewSelector.setOnClickListener {
-            showAddWorkoutCta()
             animateFabDown()
             //binding.blurViewSelector.gone()
         }
@@ -178,7 +175,6 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
 
         binding.lytAddWorkoutSelector.ivWorkoutClose.setOnClickListener {
-            showAddWorkoutCta()
             animateFabDown()
         }
 
@@ -234,9 +230,27 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     this.duration = viewModel.FAB_ANIM_TIME
                 }
 
+        val alphaAdd =
+            ObjectAnimator.ofFloat(
+                binding.lytAddWorkoutSelector.ivAddWorkoutBack,
+                View.ALPHA,
+                1f,
+                0f
+            )
+                .apply {
+                    this.duration = viewModel.FAB_ANIM_TIME
+                }
+
+        val scaleDownX = ObjectAnimator.ofFloat(binding.lytAddWorkoutSelector.ivAddWorkoutBack,  View.SCALE_X, 0f)
+        val scaleDownY = ObjectAnimator.ofFloat(binding.lytAddWorkoutSelector.ivAddWorkoutBack, View.SCALE_Y, 0f)
+        scaleDownX.setDuration(viewModel.FAB_ANIM_TIME)
+        scaleDownY.setDuration(viewModel.FAB_ANIM_TIME)
+
+
         val animatorSet = AnimatorSet()
-        animatorSet.playTogether(rotate)
+        animatorSet.playTogether(rotate,scaleDownX,scaleDownY,alphaAdd)
         animatorSet.start()
+
 
     }
 
@@ -259,12 +273,29 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     this.duration = viewModel.FAB_ANIM_TIME
                 }
 
+        val alphaAdd =
+            ObjectAnimator.ofFloat(
+                binding.lytAddWorkoutSelector.ivAddWorkoutBack,
+                View.ALPHA,
+                0f,
+                1f
+            )
+                .apply {
+                    this.duration = viewModel.FAB_ANIM_TIME
+                }
+
+        val scaleDownX = ObjectAnimator.ofFloat(binding.lytAddWorkoutSelector.ivAddWorkoutBack,  View.SCALE_X, 1f)
+        val scaleDownY = ObjectAnimator.ofFloat(binding.lytAddWorkoutSelector.ivAddWorkoutBack, View.SCALE_Y, 1f)
+        scaleDownX.setDuration(viewModel.FAB_ANIM_TIME)
+        scaleDownY.setDuration(viewModel.FAB_ANIM_TIME)
+
         val animatorSet = AnimatorSet()
-        animatorSet.playTogether(alpha)
+        animatorSet.playTogether(alpha,scaleDownX,scaleDownY,alphaAdd)
         animatorSet.start()
 
         Handler(Looper.getMainLooper()).postDelayed({
             try {
+                viewModel.addWorkoutCtaVisibility.value = (true)
                 binding.blurViewSelector.gone()
             } catch (exp: Exception) {
             }

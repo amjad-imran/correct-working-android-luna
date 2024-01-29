@@ -14,6 +14,7 @@ import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.playAnimation
 import com.noisefit_commans.ui.showShortToast
@@ -271,7 +272,9 @@ class RecordWorkoutFragment :
 
     private fun setStateConnected() {
         binding.lytRingConnecting.root.gone()
+        binding.imageConnecting.gone()
         binding.groupRingStatus.visible()
+        binding.ivCross.visible()
         val batteryPercentage = viewModel.watchDataStore.getBatteryPercentRing()
         binding.batteryStatus.progress = batteryPercentage
 
@@ -290,7 +293,9 @@ class RecordWorkoutFragment :
 
     private fun setConnectingState() {
         binding.lytRingConnecting.root.visible()
+        binding.imageConnecting.visible()
         binding.groupRingStatus.gone()
+        binding.ivCross.invisible()
     }
 
     override fun subscribeObservers() {
