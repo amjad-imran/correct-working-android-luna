@@ -633,7 +633,7 @@ constructor(
 
 
     private fun insertWorkout(){
-        insertUserData(
+       /* insertUserData(
             context,
             "weight",
             DataType.TYPE_WEIGHT,
@@ -671,7 +671,7 @@ constructor(
                 it.exception
             }
         }
-
+*/
 
     }
 
