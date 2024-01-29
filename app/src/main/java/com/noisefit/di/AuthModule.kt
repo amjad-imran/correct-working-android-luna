@@ -70,6 +70,7 @@ object AuthModule {
         return FitnessOptions.builder()
             .accessSleepSessions(FitnessOptions.ACCESS_WRITE)
             .accessActivitySessions(FitnessOptions.ACCESS_WRITE)
+            .accessActivitySessions(FitnessOptions.ACCESS_READ)
             .addDataType(DataType.TYPE_WORKOUT_EXERCISE, FitnessOptions.ACCESS_WRITE)
             .addDataType(DataType.TYPE_DISTANCE_DELTA, FitnessOptions.ACCESS_WRITE)
             .addDataType(DataType.TYPE_ACTIVITY_SEGMENT, FitnessOptions.ACCESS_WRITE)

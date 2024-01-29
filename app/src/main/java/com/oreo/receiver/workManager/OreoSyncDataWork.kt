@@ -729,11 +729,11 @@ constructor(
             getSyncData(
                 success = {
 //                    sessionManager.logAppEvent(FunnelEvents.SyncEvents.Sync_Success.name, eventProperty)
-                    /*if (localDataStore.isEnableGoogleFit()) {
+                    if (localDataStore.isEnableGoogleFit()) {
                         syncDataScope.launch {
                             ApplicationUtils.startGoogleFitSyncScheduler(context)
                         }
-                    }*/
+                    }
 
 
                     ringDataStore.getRingDevice()?.let {

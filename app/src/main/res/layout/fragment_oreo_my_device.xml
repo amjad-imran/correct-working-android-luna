@@ -82,14 +82,14 @@
                     app:layout_constraintTop_toBottomOf="@+id/lytDeviceConnected"
                     tools:visibility="visible">
 
-                 <!--   <com.noisefit_commans.ui.custom.SettingsRow
+                    <com.noisefit_commans.ui.custom.SettingsRow
                         android:id="@+id/rowGoogleFit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:visibility="visible"
+                        app:setFeatureVisibility="@{features.googleFit}"
                         app:image="@drawable/ic_google_fit"
-                        app:text="Google fit" />-->
+                        app:text="Google fit" />
 
 
                     <com.noisefit_commans.ui.custom.SettingsRow

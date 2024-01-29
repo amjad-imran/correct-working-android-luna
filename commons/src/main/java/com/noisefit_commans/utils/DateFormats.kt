@@ -183,7 +183,7 @@ object DateFormats {
 
     fun subtractDate(date: String, subtractDay: Int): String? {
         val cal = Calendar.getInstance()
-        cal.time = dateFormat.parse(date)
+        cal.time = dateTimeFormat6.parse(date)
         cal.add(Calendar.DATE, -subtractDay)
         return dateFormat.format(cal.time)
     }
@@ -1045,6 +1045,10 @@ object DateFormats {
 
     fun convertDateTimeToTimeStamp(date: String, time: String): Long {
         return SimpleDateFormat("dd/MM/yyyyHH:mm", defaultLocale).parse("$date$time").time
+
+    }
+    fun convertDateTimeToTimeStamp(time: String): Long {
+        return dateTimeFormat6.parse(time).time
 
     }
 
