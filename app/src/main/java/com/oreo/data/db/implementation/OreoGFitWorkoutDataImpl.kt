@@ -1,9 +1,11 @@
 package com.oreo.data.db.implementation
 
+import com.noisefit_commans.data.model.GoogleFitWorkoutData
 import com.noisefit_commans.models.HeartRate
+import com.oreo.data.db.abstaction.OreoGFitWorkoutDataSource
+import com.oreo.data.db.database.OreoGFitWorkoutDao
 import javax.inject.Inject
 
-/*
 
 class OreoGFitWorkoutDataImpl
 @Inject
@@ -38,4 +40,4 @@ constructor(
     }
 
 
-}*/
+}

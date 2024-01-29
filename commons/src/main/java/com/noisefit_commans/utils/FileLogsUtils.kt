@@ -190,7 +190,7 @@ object FileLogsUtils {
         return getUri(path, context)
     }
 
-    fun getZipFileUri(context: Context,path: String): Uri? {
+    fun getZipFileUri(context: Context, path: String): Uri? {
         return getUri(path, context)
     }
 
@@ -227,7 +227,7 @@ object FileLogsUtils {
         return logFile
     }
 
-    private fun getFile(logFilePath: String, context: Context): File {
+    fun getFile(logFilePath: String, context: Context): File {
         val file = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             File(context.externalCacheDir?.absolutePath, logFilePath)
         } else {
@@ -239,6 +239,12 @@ object FileLogsUtils {
 //
 //        }
 
+        return file
+    }
+
+    fun getFileDirect(logFilePath: String): File {
+        val file =
+            File(logFilePath)
         return file
     }
 
@@ -258,7 +264,7 @@ object FileLogsUtils {
                 it == DeviceType.NOISEFIT_AGILE.deviceType
             ) {
                 "$LogsFolder/$logFileName"
-            }else{
+            } else {
                 "$LogsFolder/$LogsTxtFile"
             }
         }
@@ -345,6 +351,7 @@ object FileLogsUtils {
 
     private val scope = CoroutineScope(Dispatchers.IO)
     private val backgroundDispatcher = newFixedThreadPoolContext(1, "File Write")
+
     //TODO convert its operation to background thread
     private fun writeLogs(
         colorFitDevice: ColorFitDevice?,
@@ -354,27 +361,31 @@ object FileLogsUtils {
         errorType: ErrorType
     ) {
         scope.launch(backgroundDispatcher) {
-                cleanLogFilesIfNecessary()
-                val logs =
-                    "${logType.name} ${colorFitDevice?.deviceType} $tag ---> $msg"
+            cleanLogFilesIfNecessary()
+            val logs =
+                "${logType.name} ${colorFitDevice?.deviceType} $tag ---> $msg"
 
-                when (errorType) {
-                    ErrorType.Debug -> {
-                        XLog.printers(filePrinter).d(logs)
-                    }
-                    ErrorType.Error -> {
-                        XLog.printers(filePrinter).e(logs)
-                    }
-                    ErrorType.Info -> {
-                        XLog.printers(filePrinter).i(logs)
-                    }
-                    ErrorType.Verbose -> {
-                        XLog.printers(filePrinter).v(logs)
-                    }
-                    else -> {
-                        XLog.printers(filePrinter).d(logs)
-                    }
+            when (errorType) {
+                ErrorType.Debug -> {
+                    XLog.printers(filePrinter).d(logs)
                 }
+
+                ErrorType.Error -> {
+                    XLog.printers(filePrinter).e(logs)
+                }
+
+                ErrorType.Info -> {
+                    XLog.printers(filePrinter).i(logs)
+                }
+
+                ErrorType.Verbose -> {
+                    XLog.printers(filePrinter).v(logs)
+                }
+
+                else -> {
+                    XLog.printers(filePrinter).d(logs)
+                }
+            }
         }
     }
 

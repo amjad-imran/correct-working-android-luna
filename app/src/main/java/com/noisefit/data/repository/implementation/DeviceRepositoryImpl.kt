@@ -578,10 +578,14 @@ class DeviceRepositoryImpl(
         }
     }
 
-    override suspend fun periodicFeedbackFile(appLogs: File?,
-                                                ringLogs: File?): Flow<Resource<BaseApiResponseData<Any>>> {
+    override suspend fun periodicFeedbackFile(
+        appLogs: File?,
+        ringLogs: File?,
+        firmwareLogs: File?
+    ): Flow<Resource<BaseApiResponseData<Any>>> {
         var appLog: MultipartBody.Part? = null
         var ringLog: MultipartBody.Part? = null
+        var firmwareLog: MultipartBody.Part? = null
         if (appLogs != null) {
             appLog = MultipartBody.Part.createFormData(
                 "app_logs",
@@ -602,6 +606,14 @@ class DeviceRepositoryImpl(
             )
 
         }
+        if (firmwareLogs != null) {
+            firmwareLog = MultipartBody.Part.createFormData(
+                "firmware_logs",
+                "firmware_logs.txt",
+                firmwareLogs.asRequestBody("text/plain".toMediaTypeOrNull())
+            )
+
+        }
 
 
         val url =
@@ -610,7 +622,8 @@ class DeviceRepositoryImpl(
             remoteDataSource.periodicFeedbackFile(
                 url,
                 appLog,
-                ringLog
+                ringLog,
+                firmwareLog
             )
         }
     }
