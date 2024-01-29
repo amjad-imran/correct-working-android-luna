@@ -54,7 +54,7 @@ class OreoRoomModule {
             .addMigrations(MIGRATION_2_4)
             .addMigrations(MIGRATION_4_5)
             .addMigrations(MIGRATION_5_6)
-            /*.addMigrations(MIGRATION_3_4)*/
+            .addMigrations(MIGRATION_6_7)
             .build()
     }
 
@@ -71,29 +71,7 @@ class OreoRoomModule {
         }
     }
 
-   /* private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
-        override fun migrate(database: SupportSQLiteDatabase) {
-            database.execSQL(
-                "CREATE TABLE IF NOT EXISTS `google_fit_workout` " +
-                        "(`id` INTEGER NOT NULL, " +
-                        "`is_synced` INTEGER NOT NULL," +
-                        "`name` TEXT," +
-                        "`identifier` TEXT," +
-                        "`appPackageName` TEXT," +
-                        "`activity` TEXT," +
-                        "`startTime` INTEGER," +
-                        "`endTime` INTEGER," +
-                        "`distance` REAL," +
-                        "`duration` INTEGER," +
-                        "`calories` REAL," +
-                        "`heartRate` INTEGER," +
-                        "`steps` INTEGER," +
-                        "`type` TEXT, PRIMARY KEY(`id`))"
-            )
-            database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_google_fit_workout_startTime ON  google_fit_workout(startTime)")
 
-        }
-    }*/
     private val MIGRATION_2_4: Migration = object : Migration(2, 4) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL(
@@ -144,6 +122,30 @@ class OreoRoomModule {
                         "`date` TEXT, PRIMARY KEY(`id`))"
             )
             database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_nap_data_start_time_end_time ON  nap_data(start_time,end_time)")
+
+        }
+    }
+
+    private val MIGRATION_6_7: Migration = object : Migration(6, 7) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(
+                "CREATE TABLE IF NOT EXISTS `google_fit_workout` " +
+                        "(`id` INTEGER NOT NULL, " +
+                        "`is_synced` INTEGER NOT NULL," +
+                        "`name` TEXT," +
+                        "`identifier` TEXT," +
+                        "`appPackageName` TEXT," +
+                        "`activity` TEXT," +
+                        "`startTime` INTEGER," +
+                        "`endTime` INTEGER," +
+                        "`distance` REAL," +
+                        "`duration` INTEGER," +
+                        "`calories` REAL," +
+                        "`heartRate` INTEGER," +
+                        "`steps` INTEGER," +
+                        "`type` TEXT, PRIMARY KEY(`id`))"
+            )
+            database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_google_fit_workout_startTime ON  google_fit_workout(startTime)")
 
         }
     }
