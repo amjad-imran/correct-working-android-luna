@@ -224,7 +224,7 @@ constructor(
                     delay(200)
                 }
 
-                val logsSync = true//shouldSyncAutoLogs()
+                val logsSync = shouldSyncAutoLogs()
                 if (logsSync) {
                     val status = ApplicationUtils.startFeedbackSubmitWorker(context)
                 }
