@@ -34,6 +34,7 @@ import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
+import com.noisefit_commans.utils.getHoursBasedOnDateTime
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
@@ -94,6 +95,7 @@ class SummaryDataFragmentToday :
         OSummaryHealthOverviewAdapter()
     }
 
+
     private val napsAdapter: NapsConfirmAdapter by lazy {
         NapsConfirmAdapter(object : NapConfirmAction {
             override fun onNapConfirmClicked(nap: OreoNapData) {
@@ -129,7 +131,8 @@ class SummaryDataFragmentToday :
             addItemDecoration(LinePagerIndicatorDecoration())
         }
 
-        binding.contentMain.lytConfirmNap.vpNaps.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
+        binding.contentMain.lytConfirmNap.vpNaps.addOnItemTouchListener(object :
+            RecyclerView.OnItemTouchListener {
             override fun onInterceptTouchEvent(view: RecyclerView, event: MotionEvent): Boolean {
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> binding.contentMain.lytConfirmNap.vpNaps.parent
@@ -395,13 +398,22 @@ class SummaryDataFragmentToday :
         viewModel.onNapAddSuccess.observe(viewLifecycleOwner) {
             it.getContent()?.let { nap ->
                 mainViewModel.reloadTodaysData()
-                if ((nap.sleepScore?:0) != 0 && (nap.readinessScore?:0) != 0) {
+                val hour = nap.startTime.let { getHoursBasedOnDateTime(it) }
+                if (hour.toInt() >= 19) {
+                    navigate(
+                        R.id.bottomSheetNoDataNapScore,
+                        bundleOf("napScoreData" to viewModel.getNapSlideUpObj(nap))
+                    )
+                    return@observe
+                }
+                if ((nap.sleepScore ?: 0) != 0 && (nap.readinessScore ?: 0) != 0) {
                     navigate(
                         R.id.bottomSheetNapScore, bundleOf(
                             "napScoreData" to viewModel.getNapSlideUpObj(nap)
                         )
                     )
                 }
+
             }
         }
 
