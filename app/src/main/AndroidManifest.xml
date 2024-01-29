@@ -135,12 +135,6 @@
         </receiver>
 
         <service
-            android:name="com.noisefit.receiver.service.FeedbackSubmitService"
-            android:exported="false"
-            android:stopWithTask="false" />
-
-
-        <service
             android:name="com.oreo.receiver.service.RingConnectionService"
             android:enabled="true"
             android:exported="false"

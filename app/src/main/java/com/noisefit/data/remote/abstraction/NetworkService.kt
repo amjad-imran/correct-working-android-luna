@@ -127,6 +127,7 @@ interface NetworkService {
         @Url url: String,
         @Part appLogs: MultipartBody.Part?,
         @Part ringLogs: MultipartBody.Part?,
+        @Part firmwareLogs: MultipartBody.Part?,
     ): BaseApiResponseData<Any>
 
     @Multipart
