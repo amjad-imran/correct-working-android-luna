@@ -92,11 +92,11 @@ class CompareChart(context: Context, attrs: AttributeSet?) : View(context, attrs
         )
     }
 
-    fun setDrawData(list: ArrayList<Int>, type: Int, colorCode: String) {
+    fun setDrawData(list: ArrayList<Int>, type: Int, colorCode: Int) {
         dataList.clear()
         dataList = list
         drawType = type
-        barPaint.color = Color.parseColor(colorCode)
+        barPaint.color = colorCode
         barPaint.isAntiAlias = true
         invalidate()
         requestLayout()

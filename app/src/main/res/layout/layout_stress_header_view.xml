@@ -1,0 +1,98 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvHeaderLabel"
+            style="@style/H5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_header"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvCalmLabel"
+            style="@style/H5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4 hr 2 min"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvHeaderLabel" />
+
+        <TextView
+            android:id="@+id/tvCalm"
+            style="@style/Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="#87c1ff"
+            app:layout_constraintStart_toStartOf="@id/tvCalmLabel"
+            app:layout_constraintTop_toBottomOf="@id/tvCalmLabel"
+            tools:text="Calm" />
+
+        <View
+            android:id="@+id/view1"
+            android:layout_width="1dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="130dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvCalmLabel" />
+
+        <TextView
+            android:id="@+id/tvFocusLabel"
+            style="@style/H5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="4 hr 2 min"
+            app:layout_constraintStart_toEndOf="@id/view1"
+            app:layout_constraintTop_toBottomOf="@id/tvHeaderLabel" />
+
+        <TextView
+            android:id="@+id/tvFocus"
+            style="@style/Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="#87c1ff"
+            app:layout_constraintStart_toStartOf="@id/tvFocusLabel"
+            app:layout_constraintTop_toBottomOf="@id/tvFocusLabel"
+            tools:text="Calm" />
+
+        <View
+            android:id="@+id/view2"
+            android:layout_width="1dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="130dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvCalmLabel" />
+
+        <TextView
+            android:id="@+id/tvStressLabel"
+            style="@style/H5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:text="4 hr 2 min"
+            app:layout_constraintStart_toEndOf="@id/view2"
+            app:layout_constraintTop_toBottomOf="@id/tvHeaderLabel" />
+
+        <TextView
+            android:id="@+id/tvStressed"
+            style="@style/Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="#87c1ff"
+            app:layout_constraintStart_toStartOf="@id/tvStressLabel"
+            app:layout_constraintTop_toBottomOf="@id/tvStressLabel"
+            tools:text="Calm" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
