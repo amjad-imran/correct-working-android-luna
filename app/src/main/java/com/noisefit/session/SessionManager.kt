@@ -84,6 +84,9 @@ constructor(
     var batteryPercentRing = MutableLiveData(0)
     var isRingCharging = MutableLiveData(false)
 
+    var reloadTodayData = MutableLiveData<Event<Boolean>>()
+
+
     var forceOtaFlowRunning: Boolean = false
     var forceOtaResponse: UpdateResponse? = null
     var forceOtaResponseRing: UpdateResponse? = null

@@ -13,9 +13,11 @@ import com.noisefit.data.googleFit.GoogleFitDataObservers
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.local.db.fromJson
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DateFormats.checkTimeDifferenceMoreThanN
+import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
@@ -25,6 +27,7 @@ import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
 private const val TAG = "GoogleFitSyncWork"
+
 @HiltWorker
 class GoogleFitSyncWork
 @AssistedInject
@@ -35,6 +38,7 @@ constructor(
     private val syncRepository: OreoSyncRepository,
     private val googleFitDataObservers: GoogleFitDataObservers,
     private val offlineDataMapper: OfflineDataMapper,
+    private val sessionManager: SessionManager,
     private val userActivityRepository: OreoUserActivityRepository
 ) : ListenableWorker(context, workerParams) {
 
@@ -59,6 +63,8 @@ constructor(
         if (localDataStore.getGFitUserDataLastSyncTime().checkTimeDifferenceMoreThanN(24)) {
             shouldUserObjectSync = true
         }
+        shouldUserObjectSync = true
+
 
         LOGS.d("$TAG inside")
         job = syncDataScope.launch {
@@ -101,7 +107,7 @@ constructor(
 
 
                 if (shouldUserObjectSync) {
-                    LOGS.d("$TAG height weight failed")
+                    LOGS.d("$TAG height weight start get")
                     val call2 = async {
                         googleFitDataObservers.getHeightWeight(
                             success = {
@@ -185,6 +191,9 @@ constructor(
                                                                 ).collect { resource2 ->
                                                                     when (resource2) {
                                                                         is CacheResult.Success -> {
+                                                                            sessionManager.reloadTodayData.postValue(
+                                                                                Event(true)
+                                                                            )
                                                                             LOGS.d("$TAG workout session gFit success")
                                                                         }
 

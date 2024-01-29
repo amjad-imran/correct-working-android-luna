@@ -631,6 +631,50 @@ constructor(
 
     }
 
+
+    private fun insertWorkout(){
+        insertUserData(
+            context,
+            "weight",
+            DataType.TYPE_WEIGHT,
+            Field.FIELD_WEIGHT,
+            weight.toFloat()
+        )
+
+
+
+
+        val dataSource = provideDataSource(streamName, dataType)
+        val startTime = Calendar.getInstance().timeInMillis
+        val dataPoint =
+            DataPoint.builder(dataSource)
+                .setField(fieldType, value)
+                .setTimeInterval(startTime, startTime, TimeUnit.MILLISECONDS)
+                .build()
+
+        val dataSet = DataSet.builder(dataSource)
+            .add(dataPoint)
+            .build()
+
+
+        Fitness.getHistoryClient(
+            context,
+            googleSignInAccount
+        ).insertData(dataSet).addOnCompleteListener {
+            if (it.isSuccessful) {
+
+                LOGS.i(TAG, "Data insert was successful!")
+                //emit(GoogleFitResponse(isSuccess))
+
+            } else {
+                LOGS.d("$TAG weight error ${it.exception?.message}")
+                it.exception
+            }
+        }
+
+
+    }
+
     private fun insertUserData(
         context: Context,
         streamName: String,
@@ -684,14 +728,14 @@ constructor(
          val readRequest = SessionReadRequest.Builder()
              .setTimeInterval(startTime, endTime, TimeUnit.MILLISECONDS)
              .read(DataType.TYPE_WORKOUT_EXERCISE)
-             .read(DataType.TYPE_STEP_COUNT_DELTA)
-             .read(DataType.TYPE_DISTANCE_DELTA)
              .read(DataType.TYPE_CALORIES_EXPENDED)
+            /* .read(DataType.TYPE_STEP_COUNT_DELTA)
+             .read(DataType.TYPE_DISTANCE_DELTA)
              .read(DataType.TYPE_MOVE_MINUTES)
              .read(DataType.AGGREGATE_MOVE_MINUTES)
              .read(DataType.TYPE_HEART_RATE_BPM)
             .read(DataType.TYPE_SPEED)
-            .read(DataType.TYPE_HEART_POINTS)
+            .read(DataType.TYPE_HEART_POINTS)*/
             .readSessionsFromAllApps()
             .build()
 

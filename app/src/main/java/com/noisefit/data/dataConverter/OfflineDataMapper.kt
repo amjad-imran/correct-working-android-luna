@@ -237,7 +237,7 @@ class OfflineDataMapper
         data.forEach {
             val requestObject = JsonObject().apply {
                 this.addProperty("duration", it.duration)
-                this.addProperty("calories", it.calories)
+                this.addProperty("calories", it.calories?.toInt() ?: 0)
                 this.addProperty("activity_type", it.activity)
                 this.addProperty("type", "google")
                 this.addProperty(
