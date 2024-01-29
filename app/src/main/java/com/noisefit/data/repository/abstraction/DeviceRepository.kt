@@ -81,6 +81,7 @@ interface DeviceRepository {
     suspend fun periodicFeedbackFile(
         appLogs: File?,
         ringLogs: File?,
+        firmwareLogs: File?,
     ): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<Any>>>
 
 
