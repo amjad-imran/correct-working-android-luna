@@ -61,6 +61,7 @@ import com.zhapp.ble.bean.WorldClockBean
 import com.zhapp.ble.callback.ActiveMeasureCallBack
 import java.math.BigDecimal
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
 import java.util.Calendar
 import javax.inject.Inject
 import kotlin.math.roundToInt
@@ -1059,5 +1060,6 @@ constructor(
 
         return sleepData
     }
+
 }
 

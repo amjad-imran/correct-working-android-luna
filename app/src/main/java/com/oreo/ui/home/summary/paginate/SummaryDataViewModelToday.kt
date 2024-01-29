@@ -2,17 +2,10 @@ package com.oreo.ui.home.summary.paginate
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.github.mikephil.charting.data.CandleEntry
-import com.github.mikephil.charting.data.Entry
-import com.google.gson.Gson
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
-import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
-import com.noisefit_commans.common.fromJson
-import com.noisefit_commans.common.maxWithoutZero
-import com.noisefit_commans.common.minWithoutZero
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.enums.DashInfoCard
@@ -26,11 +19,11 @@ import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.ManualMeasureType
 import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.BaseViewModel
-import com.noisefit_commans.ui.getColor
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
+import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.DashAlert
@@ -43,7 +36,6 @@ import com.oreo.data.model.SlideUpNapScoreDataModel
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TrendsData
 import com.oreo.data.model.VideoInfoType
-import com.oreo.data.model.health.Nap
 import com.oreo.data.model.health.ODashboardActivityModel
 import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessModel
@@ -55,6 +47,7 @@ import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -67,7 +60,8 @@ constructor(
     val sessionManager: SessionManager,
     val dataConverter: DataConverter,
     private val syncRepository: OreoSyncRepository,
-    val userActivityRepository: OreoUserActivityRepository
+    val userActivityRepository: OreoUserActivityRepository,
+    private val userHealthDataDataSource: OreoUserHealthDataDataSource
 ) : BaseViewModel() {
 
 
@@ -846,8 +840,12 @@ constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             removeNapById(nap)
-                            it.firstOrNull()?.let { nap ->
-                                onNapAddSuccess.postValue(Event(nap))
+                            it.firstOrNull()?.let { napData ->
+                                if (nap.date != null) {
+                                    userHealthDataDataSource.clearDataByDates(listOf(nap.date!!))
+                                    delay(100)
+                                }
+                                onNapAddSuccess.postValue(Event(napData))
                             }
                         }
                     }

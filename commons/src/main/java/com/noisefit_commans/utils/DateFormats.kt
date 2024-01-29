@@ -6,7 +6,6 @@ import android.os.Build
 import android.text.format.DateFormat
 import android.text.format.DateUtils
 import androidx.annotation.RequiresApi
-import com.google.gson.Gson
 import com.noisefit_commans.models.TimeFormat
 import com.noisefit_commans.models.TimeFormats
 import org.joda.time.DateTime
@@ -2030,8 +2029,8 @@ object DateFormats {
         if (startTime == null || endTime == null) return 0
 
         val formatter = org.joda.time.format.DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
-        val startTimeParsed = LocalDateTime.parse(startTime,formatter)
-        val endTimeParsed = LocalDateTime.parse(endTime,formatter)
+        val startTimeParsed = LocalDateTime.parse(startTime, formatter)
+        val endTimeParsed = LocalDateTime.parse(endTime, formatter)
 
         val duration = Duration(startTimeParsed.toDateTime(), endTimeParsed.toDateTime())
         return duration.toStandardMinutes().minutes
@@ -2079,6 +2078,11 @@ fun String.convertToYYYY_MM_DD(): String {
     }
 }
 
+fun getHoursBasedOnDateTime(startTime: String): String {
+    val date = DateFormats.dateTimeFormat5.parse(startTime)
+    return SimpleDateFormat("HH").format(date)
+}
+
 fun String.to12HourFormat(): String {
     return try {
         LocalTime.parse(this, DateTimeFormatter.ofPattern("HH:mm"))
@@ -2087,3 +2091,4 @@ fun String.to12HourFormat(): String {
         ""
     }
 }
+
