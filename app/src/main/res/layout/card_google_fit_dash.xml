@@ -19,6 +19,7 @@
         app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp" />
 
     <ImageView
+        android:id="@+id/ivCross"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginTop="8dp"

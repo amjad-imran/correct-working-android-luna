@@ -296,6 +296,14 @@ class SummaryDataFragmentToday :
 
     override fun initListener() {
 
+        binding.contentMain.lytGoogleFit.tvGoogleFitTurnOn.setOnClickListener {
+            navigate(R.id.googleFitFragmentOreo)
+        }
+        binding.contentMain.lytGoogleFit.ivCross.setOnClickListener {
+            viewModel.ringDataStore.setGoogleFitCrossed()
+            viewModel.stateGoogleFitCard.postValue(false)
+        }
+
         binding.swipeRefreshLayout.setOnRefreshListener {
             binding.swipeRefreshLayout.isRefreshing = false
 

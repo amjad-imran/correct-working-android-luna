@@ -121,9 +121,35 @@ constructor(
                     this?.measureState = TapMeasureState.NO_DEVICE
                 }
             })
+
+
+
+            handleGoogleFitCard()
+
         }
 
         updateAlerts()
+    }
+
+    private fun handleGoogleFitCard() {
+        val showGoogleFit = ringDataStore.getDeviceFeatures()?.googleFit
+
+        if (showGoogleFit == 1) {
+            val isGoogleFitEnabled = localDataStore.isEnableGoogleFit()
+            val isGoogleFitCrossed = ringDataStore.isGoogleFitCrossed()
+
+            if (isGoogleFitEnabled) {
+                stateGoogleFitCard.postValue(false)
+            } else {
+                if (isGoogleFitCrossed) {
+                    stateGoogleFitCard.postValue(false)
+                } else {
+                    stateGoogleFitCard.postValue(true)
+                }
+            }
+        } else {
+            stateGoogleFitCard.postValue(false)
+        }
     }
 
     fun getGreetingMessageValue(): String {
