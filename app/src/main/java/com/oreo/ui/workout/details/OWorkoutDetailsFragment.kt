@@ -159,7 +159,7 @@ class OWorkoutDetailsFragment :
             binding.lytIntensity.root.gone()
             binding.divider2.root.gone()
             binding.tvImportText.visible()
-            binding.tvImportText.text = "Imported from Apple Health"
+            binding.tvImportText.text = "Imported from Health"
         } else {
 
             binding.lytHeartRate.root.gone()

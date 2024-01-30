@@ -63,8 +63,6 @@ constructor(
         if (localDataStore.getGFitUserDataLastSyncTime().checkTimeDifferenceMoreThanN(24)) {
             shouldUserObjectSync = true
         }
-        shouldUserObjectSync = true
-
 
         LOGS.d("$TAG inside")
         job = syncDataScope.launch {

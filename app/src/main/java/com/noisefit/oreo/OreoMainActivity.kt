@@ -18,6 +18,7 @@ import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.noisefit.NoiseFitApplicationMain
@@ -46,6 +47,7 @@ import com.oreo.ui.recordworkout.SELECT_RECORD_WORKOUT
 import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderEffectBlur
 import eightbitlab.com.blurview.RenderScriptBlur
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
@@ -186,6 +188,12 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         }
 
         binding.btnAddWorkout.setOnClickListener {
+
+            viewModel.viewModelScope.launch {
+                ApplicationUtils.startGoogleFitSyncScheduler(this@OreoMainActivity)
+            }
+
+            return@setOnClickListener
             setBlurAddCta()
 
             viewModel.addWorkoutCtaVisibility.postValue(false)
