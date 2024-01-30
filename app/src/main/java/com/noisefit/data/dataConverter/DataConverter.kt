@@ -11,6 +11,7 @@ import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.models.SleepData
+import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.AddWorkoutResponse
@@ -108,7 +109,7 @@ constructor(
         return SleepHourlyBreakup(
             start_time = nap.startTime,
             end_time = nap.endTime,
-            duration = nap.duration ?: 0,
+            duration = (nap.duration ?: 0) * 60,
             sleep_type = "deep",
             date = ""
         )
@@ -166,7 +167,7 @@ constructor(
                         this.addProperty(
                             "intensity",
                             getIntensity(intensity)
-                        )//todo change as per logic
+                        )
 
 
                         this.add("intensity_value", intensityArray)
@@ -210,16 +211,50 @@ constructor(
     }
 
     fun getWorkoutId(workouts: List<AddWorkoutResponse>, timeStamp: Long): String? {
-        LOGS.d("sdkjfhskdfj received getWorkoutId $workouts $timeStamp")
 
         if (timeStamp == 0L) return null
         if (workouts.isEmpty()) return null
         val time = DateFormats.convertTimestampToDate(timeStamp, DateFormats.timeFormat)
         val date = DateFormats.convertTimestampToDate(timeStamp, DateFormats.dateFormat3)
-        LOGS.d("sdkjfhskdfj getWorkoutId  time-date $time $date")
         return workouts.find {
             it.start_time.equals(time, true) && it.date.equals(date, true)
         }?.workoutId
+    }
+
+    suspend fun getSportModeResponseArray(workouts: List<RecordedWorkoutData>): List<SportsModeResponse> {
+        val list = ArrayList<SportsModeResponse>()
+
+        val offlineList =
+            keyValueDataSource.getData("", KeyValueDataType.RECORD_WORKOUT)?.value
+
+        val workoutsList = if (offlineList == null) {
+            ArrayList()
+        } else {
+            Gson().fromJson<List<OWorkoutListModal>>(
+                offlineList
+            )
+        }
+
+        workouts.forEach {
+            val workoutTypeString = getWorkoutType(it.type, workoutsList)
+
+            val startTime =
+                DateFormats.convertTimestampToDate(it.startTime, DateFormats.dateTimeFormat6)
+
+            val sportObj = SportsModeResponse(
+                date = it.date,
+                distance = 0,
+                duration = (it.duration ?: 0).toLong() * 60,
+                calories = it.calories?.toLong() ?: 0L,
+                heartRateCurrent = 0,
+                steps = it.steps ?: 0,
+                type = workoutTypeString,
+                time = startTime
+            )
+            list.add(sportObj)
+        }
+
+        return list
     }
 
 }

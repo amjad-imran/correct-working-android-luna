@@ -8,6 +8,8 @@ import com.noisefit_commans.data.model.GoogleFitWorkoutData
 import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.models.DeviceType
 import com.noisefit_commans.models.SleepDataGoogleFit
+import com.noisefit_commans.models.SportsDataGoogleFit
+import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.models.WorkoutGoogleFit
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
@@ -293,4 +295,39 @@ class OfflineDataMapper
         }
         return workoutList
     }
+
+    fun convertSportDataToGoogleFit(sportsModeResponse: SportsModeResponse): SportsDataGoogleFit? {
+        if (sportsModeResponse.date == null || sportsModeResponse.time == null || sportsModeResponse.duration == null) {
+            return null
+        }
+        val dateWithTime = DateFormats.convertDateTimeToTimeStamp(
+            sportsModeResponse.time!!,
+            DateFormats.dateTimeFormat6
+        )
+
+        val endTime =
+            DateFormats.addSecondToTimeStamp(dateWithTime, sportsModeResponse.duration!!.toInt())
+        val distance = sportsModeResponse.distance?.toFloat() ?: 0f
+        val duration = sportsModeResponse.duration?.toInt() ?: 0
+        val calories = sportsModeResponse.calories?.toFloat() ?: 0f
+        val heartRate = sportsModeResponse.heartRateCurrent?.toFloat() ?: 0f
+        var steps = 0
+        if (sportsModeResponse.steps != 0) {
+            steps = sportsModeResponse.steps ?: 0
+        }
+        val type = sportsModeResponse.type ?: ""
+
+        return SportsDataGoogleFit(
+            dateWithTime,
+            endTime,
+            distance,
+            duration,
+            calories,
+            heartRate,
+            steps,
+            type
+        )
+
+    }
+
 }

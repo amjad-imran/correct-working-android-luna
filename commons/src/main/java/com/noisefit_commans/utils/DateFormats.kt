@@ -960,7 +960,7 @@ object DateFormats {
     }
 
 
-    fun convertDateTimeToTimeStamp(date: String, simpleDateFormat: SimpleDateFormat): Long? {
+    fun convertDateTimeToTimeStamp(date: String, simpleDateFormat: SimpleDateFormat): Long {
 
         try {
             val mDate = simpleDateFormat.parse(date)
@@ -969,7 +969,7 @@ object DateFormats {
         } catch (e: ParseException) {
             e.printStackTrace()
         }
-        return null
+        return 0
 
     }
 

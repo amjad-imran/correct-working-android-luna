@@ -29,6 +29,7 @@ import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.Gender
 import com.noisefit_commans.models.SportsModeRequest
+import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.models.UserLocation
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.ui.tryCatch
@@ -512,6 +513,13 @@ constructor(
 //
 //        Firebase.analytics.logEvent(newEventName, ApplicationUtils.convertMapToBundle(data))
         //LOGS.d("LOGS_FIREBASE_EVENT_HAS_PARAMS $newEventName ")
+    }
+
+
+    fun saveSportsActivities(list: List<SportsModeResponse>?) {
+        GlobalScope.launch(Main) {
+            userRepository.saveActivity(list)
+        }
     }
 
     fun reloadNotification(event: Event<Boolean>) {
