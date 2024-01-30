@@ -27,14 +27,36 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/lytTopStressGraph" />
 
+            <View
+                android:id="@+id/viewOpen"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/back_cicular_36"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lytStressMidGraph" />
+
+            <ImageView
+                android:id="@+id/ivOpen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_o_dropdown"
+                app:layout_constraintBottom_toBottomOf="@id/viewOpen"
+                app:layout_constraintEnd_toEndOf="@id/viewOpen"
+                app:layout_constraintStart_toStartOf="@id/viewOpen"
+                app:layout_constraintTop_toTopOf="@id/viewOpen" />
+
             <TextView
                 android:id="@+id/tvCompareHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginTop="24dp"
+                android:visibility="gone"
                 android:text="@string/text_select_to_compare"
                 android:textColor="@color/white_48"
-                app:layout_constraintTop_toBottomOf="@id/lytStressMidGraph" />
+                app:layout_constraintTop_toBottomOf="@id/viewOpen" />
 
             <include
                 android:id="@+id/lytHighMovement"
@@ -43,6 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/side_margin"
                 android:layout_marginTop="12dp"
+                android:visibility="gone"
                 android:layout_marginEnd="@dimen/side_margin"
                 app:layout_constraintTop_toBottomOf="@id/tvCompareHeader" />
 
@@ -53,6 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/side_margin"
                 android:layout_marginTop="12dp"
+                android:visibility="gone"
                 android:layout_marginEnd="@dimen/side_margin"
                 app:layout_constraintTop_toBottomOf="@id/lytHighMovement" />
 
@@ -62,6 +86,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/side_margin"
+                android:visibility="gone"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="@dimen/side_margin"
                 app:layout_constraintTop_toBottomOf="@id/lytMediumMovement" />
@@ -73,8 +98,32 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/side_margin"
                 android:layout_marginTop="12dp"
+                android:visibility="gone"
                 android:layout_marginEnd="@dimen/side_margin"
                 app:layout_constraintTop_toBottomOf="@id/lytLowMovement" />
+
+            <View
+                android:id="@+id/viewClose"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/back_cicular_36"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lytNoMovement" />
+
+            <ImageView
+                android:id="@+id/ivClose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:rotation="180"
+                android:visibility="visible"
+                android:src="@drawable/ic_o_dropdown"
+                app:layout_constraintBottom_toBottomOf="@id/viewClose"
+                app:layout_constraintEnd_toEndOf="@id/viewClose"
+                app:layout_constraintStart_toStartOf="@id/viewClose"
+                app:layout_constraintTop_toTopOf="@id/viewClose" />
 
             <include
                 android:id="@+id/divider1"
@@ -82,7 +131,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="24dp"
-                app:layout_constraintTop_toBottomOf="@id/lytNoMovement" />
+                app:layout_constraintTop_toBottomOf="@id/viewClose" />
 
             <TextView
                 android:id="@+id/tvBannerHeader"
@@ -107,6 +156,25 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvBannerHeader" />
 
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="24dp"
+                android:background="@color/divider_color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lytStressBanner" />
+
+            <include
+                android:id="@+id/lytStressHeader"
+                layout="@layout/layout_stress_header_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="@dimen/side_margin"
+                app:layout_constraintTop_toBottomOf="@id/divider2" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,8 +1,26 @@
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/lytHrMn"
+            layout="@layout/oreo_layout_hour_mn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tvCalm"
+            style="@style/Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="#87c1ff"
+            app:layout_constraintStart_toStartOf="@id/lytHrMn"
+            app:layout_constraintTop_toBottomOf="@id/lytHrMn"
+            tools:text="Calm" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

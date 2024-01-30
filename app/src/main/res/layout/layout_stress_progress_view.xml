@@ -1,0 +1,29 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="6dp"
+            android:id="@+id/viewCalm"
+            android:background="@drawable/calm_left_round_edge" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="6dp"
+            android:layout_marginStart="2dp"
+            android:id="@+id/viewFocused"
+            android:background="@drawable/focused_flat_corner" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="6dp"
+            android:layout_marginStart="2dp"
+            android:id="@+id/viewStressed"
+            android:background="@drawable/stress_right_round_edge" />
+    </LinearLayout>
+</layout>
