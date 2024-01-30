@@ -1013,4 +1013,5 @@
     <string name="text_charging_message">To record your workout, remove your ring from the charger and wear it on your finger.</string>
     <string name="text_nap_detected">Nap detected</string>
     <string name="text_confirm">Confirm</string>
+    <string name="text_imported_from_google_fit">Imported from Google Fit</string>
 </resources>

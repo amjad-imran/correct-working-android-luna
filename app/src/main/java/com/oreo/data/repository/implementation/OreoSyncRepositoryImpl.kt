@@ -189,9 +189,6 @@ class OreoSyncRepositoryImpl(
         return sleepDataImpl.getUnSyncGoogleFitData()
     }
 
-    override suspend fun updateGoogleFitSleepUnSyncData(sleepData: List<OreoSleepData>) {
-        sleepDataImpl.updateUnSyncGoogleFitData(sleepData)
-    }
 
     override suspend fun saveStressData(
         data: OreoStressDataBreakup
@@ -655,9 +652,7 @@ class OreoSyncRepositoryImpl(
     }
 
     override suspend fun updateGoogleFitUnSyncSleepStatus(sleepData: OreoSleepData) {
-        //TODO implement
-
-//        googleFitDataImpl.updateSyncSleepStatus(sleepData)
+        sleepDataImpl.updateUnSyncGoogleFitData(sleepData)
     }
 
 

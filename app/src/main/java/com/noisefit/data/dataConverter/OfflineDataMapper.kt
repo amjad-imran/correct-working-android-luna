@@ -11,6 +11,7 @@ import com.noisefit_commans.models.SleepDataGoogleFit
 import com.noisefit_commans.models.SportsDataGoogleFit
 import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.models.WorkoutGoogleFit
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import javax.inject.Inject
@@ -22,6 +23,7 @@ class OfflineDataMapper
 ) {
 
     fun convertSleepDataToGoogleFit(sleepData: OreoSleepData?): SleepDataGoogleFit? {
+        AppLogs.sendAppLogs("Sleep Google Fit RAW -> $sleepData")
         LOGS.d("DATACONVERTER sleepData ${sleepData?.startTime}  ${sleepData?.endTime}")
         if (sleepData?.startTime == null || sleepData.date == null || sleepData.sleepArray.isNullOrEmpty() || sleepData.sleepArray!![0].startTime == null) {
             return null
@@ -64,8 +66,8 @@ class OfflineDataMapper
             } else {
                 breakUpStartTime =
                     DateFormats.convertDateTimeToTimeStamp(
-                        sleepData.date!!,
-                        sleepDataBreakup.startTime!!
+                        sleepDataBreakup.startTime!!,
+                        DateFormats.dateTimeFormat5
                     )
                 breakupEndTime =
                     DateFormats.addSecondToTimeStamp(breakUpStartTime, sleepDataBreakup.duration)

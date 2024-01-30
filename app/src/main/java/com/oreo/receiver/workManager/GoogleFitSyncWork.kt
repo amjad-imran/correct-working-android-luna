@@ -15,6 +15,7 @@ import com.noisefit.data.local.db.fromJson
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DateFormats.checkTimeDifferenceMoreThanN
 import com.noisefit_commans.utils.Event
@@ -79,11 +80,13 @@ constructor(
                                 offlineDataMapper.convertSleepDataToGoogleFit(sleepData)
                             LOGS.d("$TAG google  inside sleep data 2")
                             LOGS.d("GOOGLE_SLEEP_DATA ${Gson().toJson(googleSleepData)}")
+                            AppLogs.sendAppLogs("Sleep Google Fit Parsed -> ${Gson().toJson(googleSleepData)}")
                             googleSleepData?.let { sleepDataGoogleFit ->
                                 LOGS.d("$TAG google  inside sleep data 3")
                                 googleFitDataObservers.insertSleepData(
                                     sleepDataGoogleFit, success = {
                                         LOGS.d("$TAG google success sleep data")
+                                        AppLogs.sendAppLogs("Sleep Google Fit Sync success")
                                         job = syncDataScope.launch {
                                             syncRepository.updateGoogleFitUnSyncSleepStatus(
                                                 sleepData

@@ -46,7 +46,6 @@ interface OreoSyncRepository {
     suspend fun saveHealthScoreData(score: Int, date: String): Flow<CacheResult<Boolean?>>
 
     suspend fun getGoogleFitSleepUnSyncData(date: String):  List<OreoSleepData>?
-    suspend fun updateGoogleFitSleepUnSyncData(sleepData:  List<OreoSleepData>)
     suspend fun saveStressData(
         data: OreoStressDataBreakup
     ): Flow<CacheResult<Boolean?>>

@@ -188,12 +188,6 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         }
 
         binding.btnAddWorkout.setOnClickListener {
-
-            viewModel.viewModelScope.launch {
-                ApplicationUtils.startGoogleFitSyncScheduler(this@OreoMainActivity)
-            }
-
-            return@setOnClickListener
             setBlurAddCta()
 
             viewModel.addWorkoutCtaVisibility.postValue(false)
