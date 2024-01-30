@@ -133,6 +133,10 @@ class OWorkoutDetailsFragment :
                 "apple",
                 true
             )
+            && !it.type.equals(
+                "google",
+                true
+            )
         ) {
             binding.tvEdit.visible()
         }

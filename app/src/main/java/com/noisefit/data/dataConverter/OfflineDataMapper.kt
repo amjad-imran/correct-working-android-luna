@@ -274,24 +274,27 @@ class OfflineDataMapper
     fun convertWorkoutGoogleFit(data: List<WorkoutGoogleFit>): List<GoogleFitWorkoutData> {
         val workoutList = ArrayList<GoogleFitWorkoutData>()
         data.forEach {
-            workoutList.add(
-                GoogleFitWorkoutData(
-                    0,
-                    false,
-                    it.name,
-                    it.identifier,
-                    it.appPackageName,
-                    it.activity,
-                    it.startTime,
-                    it.endTime,
-                    it.distance,
-                    it.duration,
-                    it.calories,
-                    it.heartRate,
-                    it.steps,
-                    it.type
+            val duration = (it.duration ?: 0L) / 60
+            if (duration != 0L) {
+                workoutList.add(
+                    GoogleFitWorkoutData(
+                        0,
+                        false,
+                        it.name,
+                        it.identifier,
+                        it.appPackageName,
+                        it.activity,
+                        it.startTime,
+                        it.endTime,
+                        it.distance,
+                        duration,
+                        it.calories,
+                        it.heartRate,
+                        it.steps,
+                        it.type
+                    )
                 )
-            )
+            }
         }
         return workoutList
     }
