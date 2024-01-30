@@ -62,5 +62,5 @@ interface RingDataStore {
     fun deleteOngoingRecordWorkout()
 
     fun isGoogleFitCrossed(): Boolean
-    fun setGoogleFitCrossed()
+    fun setGoogleFitCrossed(status: Boolean)
 }

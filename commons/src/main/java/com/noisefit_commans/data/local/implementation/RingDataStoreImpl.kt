@@ -46,8 +46,8 @@ class RingDataStoreImpl
         return mPrefs.getBoolean(GOOGLE_FIT_CROSSED, false)
     }
 
-    override fun setGoogleFitCrossed() {
-        mPrefs.edit().putBoolean(GOOGLE_FIT_CROSSED, true).commit()
+    override fun setGoogleFitCrossed(status: Boolean) {
+        mPrefs.edit().putBoolean(GOOGLE_FIT_CROSSED, status).commit()
     }
 
     override fun saveOngoingRecordWorkout(pair: Pair<Long, OWorkoutListModal>) {

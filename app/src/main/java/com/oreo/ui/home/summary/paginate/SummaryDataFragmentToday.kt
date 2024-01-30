@@ -300,7 +300,7 @@ class SummaryDataFragmentToday :
             navigate(R.id.googleFitFragmentOreo)
         }
         binding.contentMain.lytGoogleFit.ivCross.setOnClickListener {
-            viewModel.ringDataStore.setGoogleFitCrossed()
+            viewModel.ringDataStore.setGoogleFitCrossed(true)
             viewModel.stateGoogleFitCard.postValue(false)
         }
 

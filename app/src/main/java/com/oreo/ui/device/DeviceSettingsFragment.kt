@@ -67,7 +67,6 @@ class DeviceSettingsFragment :
                 if (unpairDevice) {
                     mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_device_settings_reset_confirm_click)
                     Handler(Looper.getMainLooper()).post {
-                        mViewModel.localDataStore.setGoogleFitStatus(false)
                         navigateUpSafe()
                     }
                 } else {
@@ -92,7 +91,6 @@ class DeviceSettingsFragment :
                 val unpairDevice = bundle.getBoolean("unpair")
                 val ringNotConnected = bundle.getBoolean("ring_not_connected")
                 if (unpairDevice) {
-                    mViewModel.localDataStore.setGoogleFitStatus(false)
                     activity?.startActivity(
                         PairDeviceActivity.getStartIntent(
                             requireContext(),

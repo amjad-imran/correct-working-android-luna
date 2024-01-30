@@ -220,28 +220,11 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
             updateDeviceDateTime()
         }, 1000)
         Handler(Looper.getMainLooper()).postDelayed({
-            sendDefaultQuickReply()
+            setUserInfo()
         }, 2000)
         Handler(Looper.getMainLooper()).postDelayed({
-            sendDefaultSportsMode()
-        }, 3000)
-        Handler(Looper.getMainLooper()).postDelayed({
-            setUserInfo()
-        }, 4000)
-        Handler(Looper.getMainLooper()).postDelayed({
             setUnit()
-        }, 5000)
-        /*Handler(Looper.getMainLooper()).postDelayed({
-            sessionManager.sendUpdateQueryAction(UpdateDeviceAction.SetBrightnessLevel(3))
-//            setWeather()
-        }, 6000)*/
-        /*Handler(Looper.getMainLooper()).postDelayed({
-            localDataStore.setDeviceSetupPendingStatus(false)
-            vibrationUtils.vibrate(LOW_VIBRATION)
-             *//*binding.textView.text = "Device setup successful"
-             binding.bGetStarted.isEnabled = true*//*
-
-        }, 7000)*/
+        }, 3000)
 
         sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_device_setup_complete,
             HashMap<String, Any>().apply {
