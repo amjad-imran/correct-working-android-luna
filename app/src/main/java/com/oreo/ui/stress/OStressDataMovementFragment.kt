@@ -1,6 +1,9 @@
 package com.oreo.ui.stress
 
+import android.graphics.Color
 import android.os.Bundle
+import android.view.View
+import android.widget.Button
 import android.widget.LinearLayout
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -10,6 +13,8 @@ import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
+import com.oreo.ui.custom.StressCombineModel
+import com.oreo.ui.custom.StressCombinedChart
 
 
 class OStressDataMovementFragment :
@@ -28,6 +33,15 @@ class OStressDataMovementFragment :
         }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        handleMovementViews()
+        handleBannerView(60)
+        handleStressProgressView()
+        initCombineChart()
+    }
+
     override fun initListener() {
         binding.ivOpen.setOnClickListener {
             handleMovementViews(true)
@@ -35,9 +49,7 @@ class OStressDataMovementFragment :
         binding.ivClose.setOnClickListener {
             handleMovementViews(false)
         }
-        handleMovementViews()
-        handleBannerView(60)
-        handleStressProgressView()
+
     }
 
     private fun handleStressProgressView() {
@@ -136,6 +148,85 @@ class OStressDataMovementFragment :
                 false
             ) as ArrayList<Int>, 1, requireContext().getColor(R.color.no_movement_color)
         )
+    }
+
+    private fun initCombineChart() {
+        val combineModel = StressCombineModel()
+        combineModel.setHigh(70)
+        combineModel.setMedium(30)
+        val sections: MutableList<StressCombineModel.Section> =
+            ArrayList()
+        var section: StressCombineModel.Section = StressCombineModel.Section()
+        section.setStart(0)
+        section.setEnd(30)
+        section.setColor(Color.parseColor("#C4A9F5"))
+        section.setImageRes(R.drawable.icon_stress_sleep)
+        sections.add(section)
+        section = StressCombineModel.Section()
+        section.setStart(40)
+        section.setEnd(50)
+        section.setColor(Color.parseColor("#00BCD4"))
+        section.setImageRes(R.drawable.icon_stress_sport)
+        sections.add(section)
+        section = StressCombineModel.Section()
+        section.setStart(60)
+        section.setEnd(65)
+        section.setColor(Color.parseColor("#00BCD4"))
+        section.setImageRes(R.drawable.icon_stress_sport)
+        sections.add(section)
+        combineModel.setSections(sections)
+        val items: MutableList<StressCombineModel.Item> = ArrayList<StressCombineModel.Item>()
+        for (i in 0..95) {
+            val item: StressCombineModel.Item = StressCombineModel.Item()
+            item.setIndex(i)
+            if (i > 40 && i < 60) {
+                item.setValue(0)
+                if (i == 50) {
+                    item.setValue((Math.random() * 100).toInt())
+                }
+            } else {
+                item.setValue((Math.random() * 100).toInt())
+            }
+            items.add(item)
+        }
+
+        combineModel.setItems(items)
+        binding.lytStressMidGraph.updateData(combineModel)
+        /* btnHigh.setOnClickListener {
+             val highlights: MutableList<Int> =
+                 ArrayList()
+             highlights.add(10)
+             highlights.add(11)
+             highlights.add(12)
+             highlights.add(13)
+             highlights.add(43)
+             highlights.add(44)
+             highlights.add(50)
+             highlights.add(74)
+             highlights.add(75)
+             combineLineChart.updateHighlight(highlights, Color.RED)
+         }
+         btnMed.setOnClickListener {
+             val highlights: MutableList<Int> =
+                 ArrayList()
+             highlights.add(20)
+             highlights.add(21)
+             highlights.add(22)
+             highlights.add(23)
+             highlights.add(53)
+             highlights.add(54)
+             combineLineChart.updateHighlight(highlights, Color.YELLOW)
+         }
+         btnLow.setOnClickListener {
+             val highlights: MutableList<Int> =
+                 ArrayList()
+             highlights.add(70)
+             highlights.add(71)
+             highlights.add(72)
+             highlights.add(73)
+             highlights.add(74)
+             combineLineChart.updateHighlight(highlights, Color.parseColor("#FF009688"))
+         }*/
     }
 
 }
