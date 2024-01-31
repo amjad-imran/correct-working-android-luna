@@ -1,17 +1,21 @@
 package com.noisefit.oreo
 
+import android.graphics.Color
 import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit.util.notif.NotificationEventsClass
 import com.noisefit_commans.common.checkDayDifferenceMoreNMinutes
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -36,6 +40,9 @@ import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.data.model.health.OreoSleepModel
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
+import com.oreo.ui.custom.Item
+import com.oreo.ui.custom.Section
+import com.oreo.ui.custom.StressCombineModel
 import com.oreo.ui.home.summary.PushLocalNotification
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -490,6 +497,10 @@ constructor(
         return Pair(dayData, trendsData)
     }
 
+    fun getStressData(date: String): ServerUserHealthData? {
+        return userHealthData[date] ?: return null
+    }
+
     fun getTodayDate(): String {
         return DateFormats.getTodaysDateString(10)
     }
@@ -733,5 +744,33 @@ constructor(
                 sessionManager.sendUpdateQueryAction(UpdateDeviceAction.CheckOngoingWorkout())
             }
         }
+    }
+
+    fun getStressCombinedData(date: String): StressCombineModel {
+
+
+        val stressBreakup =
+            Gson().fromJson<List<Int>>("[10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44]")
+
+
+        val sections: MutableList<Section> =
+            ArrayList()
+        sections.add(Section(0, 30, Color.parseColor("#C4A9F5"), R.drawable.icon_stress_sleep))
+        sections.add(Section(40, 50, Color.parseColor("#00BCD4"), R.drawable.icon_stress_sport))
+        sections.add(Section(40, 65, Color.parseColor("#00BCD4"), R.drawable.icon_stress_sport))
+
+        val items: MutableList<Item> = ArrayList<Item>()
+
+        stressBreakup?.forEachIndexed { index, i ->
+            items.add(Item(index, i))
+        }
+
+
+        return StressCombineModel(
+            sections = sections,
+            items = items,
+            high = 70,
+            medium = 30
+        )
     }
 }

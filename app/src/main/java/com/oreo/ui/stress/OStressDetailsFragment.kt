@@ -14,8 +14,10 @@ import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 
+@AndroidEntryPoint
 class OStressDetailsFragment :
     BaseFragment<FragmentOStressDetailsBinding>(FragmentOStressDetailsBinding::inflate) {
     private val mainViewModel: OreoMainViewModel by activityViewModels()

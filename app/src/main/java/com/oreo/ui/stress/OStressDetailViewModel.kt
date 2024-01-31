@@ -3,8 +3,15 @@ package com.oreo.ui.stress
 import com.noisefit_commans.common.maxWithInvalidMovementValues
 import com.noisefit_commans.common.maxWithoutInvalidMovementValues
 import com.noisefit_commans.ui.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class OStressDataMovementViewModel : BaseViewModel() {
+@HiltViewModel
+class OStressDetailViewModel @Inject
+constructor() : BaseViewModel() {
+
+    var date: String? = null
+
 
     fun getCombinedMovementData(
         originalList: List<Int>?,

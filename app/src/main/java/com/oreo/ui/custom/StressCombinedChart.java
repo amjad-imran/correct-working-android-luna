@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -67,7 +68,7 @@ public class StressCombinedChart extends View {
 
     private Rect xTextBounds;
     private StressCombineModel combineModel;
-    private List<StressCombineModel.Item> list = new ArrayList<>();
+    private List<Item> list = new ArrayList<>();
     private List<Integer> highlightIndexs = new ArrayList<>();
     private int highlightColor;
     private boolean showXAxis = true;
@@ -78,7 +79,7 @@ public class StressCombinedChart extends View {
     private LinearGradient linearGradientShadow;
     private Map<Integer, Pair<LinearGradient, Bitmap>> resMap;
     private int shadowWidth = dip2px(50);
-
+    private DashPathEffect effect = new DashPathEffect(new float[]{dip2px(1), dip2px(5)}, 0);
 
     public StressCombinedChart(Context context) {
         super(context);
@@ -153,6 +154,7 @@ public class StressCombinedChart extends View {
 //        chartLinePaint.setColor(restLineColor);
         chartLinePaint.setAntiAlias(true);
         chartLinePaint.setStyle(Paint.Style.STROKE);
+        chartLinePaint.setStrokeCap(Paint.Cap.ROUND);
 
         chartLineFillPaint = new Paint();
 //        chartLineFillPaint.setColor(Color.GRAY);
@@ -204,7 +206,9 @@ public class StressCombinedChart extends View {
         linearGradientShadow = new LinearGradient(mWith - rightWith - shadowWidth, mHeight / 2f, mWith - rightWith, mHeight / 2f, Color.TRANSPARENT, Color.parseColor("#C0000000"), Shader.TileMode.CLAMP);
         unitHLenth = (mWith - leftWith - rightWith) / (list.size() - 1);
 
-        StressCombineModel.Section section;
+        if (combineModel == null) return;
+
+        Section section;
         for (int i = 0; i < combineModel.getSections().size(); i++) {
             section = combineModel.getSections().get(i);
             resMap.put(i, new Pair<>(new LinearGradient(0, 0, 0, mHeight / 2f, section.getColor(), Color.TRANSPARENT, Shader.TileMode.CLAMP),
@@ -259,6 +263,8 @@ public class StressCombinedChart extends View {
         canvas.drawLine(leftWith, topWith, mWith - rightWith, topWith, gridPaint);
         canvas.drawLine(leftWith, mHeight - bottomWith, mWith - rightWith, mHeight - bottomWith, gridPaint);
 
+        if (combineModel == null) return;
+
         if (combineModel.getHigh() > 0) {
             float high = (mHeight - bottomWith) - (combineModel.getHigh() * 1f / xMax) * (mHeight - bottomWith - topWith);
             canvas.drawLine(leftWith, high, mWith - rightWith, high, gridPaint);
@@ -280,19 +286,21 @@ public class StressCombinedChart extends View {
         chartLineFillPaint.setShader(linearGradientShadow);
         canvas.drawRect(rectF, chartLineFillPaint);
         float high = 0;
+
+        if(combineModel==null) return;
         if (combineModel.getHigh() > 0) {
             high = (mHeight - bottomWith) - (combineModel.getHigh() * 1f / xMax) * (mHeight - bottomWith - topWith);
-            String highText = "Stressed";
+            String highText = "High";
             xTextPaint.getTextBounds(highText, 0, highText.length(), xTextBounds);
             canvas.drawText(highText, mWith - rightWith - xTextBounds.width() - dip2px(5), (high + topWith) / 2 + xTextBounds.height() / 2f, xTextPaint);
         }
 
         if (combineModel.getMedium() > 0) {
             float medium = (mHeight - bottomWith) - (combineModel.getMedium() * 1f / xMax) * (mHeight - bottomWith - topWith);
-            String mediumText = "Focussed";
+            String mediumText = "Med";
             xTextPaint.getTextBounds(mediumText, 0, mediumText.length(), xTextBounds);
             canvas.drawText(mediumText, mWith - rightWith - xTextBounds.width() - dip2px(5), (medium + high) / 2 + xTextBounds.height() / 2f, xTextPaint);
-            String lowText = "Calm";
+            String lowText = "Low";
             xTextPaint.getTextBounds(lowText, 0, lowText.length(), xTextBounds);
             canvas.drawText(lowText, mWith - rightWith - xTextBounds.width() - dip2px(5), (medium + mHeight - bottomWith) / 2 + xTextBounds.height() / 2f, xTextPaint);
         }
@@ -306,7 +314,7 @@ public class StressCombinedChart extends View {
 
         int imageSize = dip2px(20);
         for (int i = 0; i < combineModel.getSections().size(); i++) {
-            StressCombineModel.Section section = combineModel.getSections().get(i);
+            Section section = combineModel.getSections().get(i);
             rectF.left = section.getStart() * unitHLenth + leftWith;
             rectF.top = topWith;
             rectF.right = rectF.left + (section.getEnd() - section.getStart()) * unitHLenth;
@@ -331,7 +339,7 @@ public class StressCombinedChart extends View {
         }
 
 
-        StressCombineModel.Item current, next;
+        Item current, next;
         for (int i = 0; i < list.size(); i++) {
             current = list.get(i);
             float x = (mWith - leftWith - rightWith) + leftWith - i * unitHLenth;
@@ -391,6 +399,47 @@ public class StressCombinedChart extends View {
             }*/
         }
 
+        int start = 0;
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getValue() > 0) {
+                start = i;
+                break;
+            }
+        }
+        int end = 0;
+        for (int i = list.size() - 1; i >= 0; i--) {
+            if (list.get(i).getValue() > 0) {
+                end = i;
+                break;
+            }
+        }
+
+        int lastIndex = -1;
+        for (int i = start; i <= end; i++) {
+            current = list.get(i);
+            if (current.getValue() == 0) {
+                if (i > 0 && lastIndex == -1) {
+                    lastIndex = i - 1;
+                }
+            } else {
+                if (lastIndex != -1) {
+                    if (Math.abs(i - lastIndex) < 120 / (1440 / list.size())) {
+                        float x = (mWith - leftWith - rightWith) + leftWith - i * unitHLenth;
+                        float y = mHeight - bottomWith - current.getValue() * (mHeight - topWith - bottomWith) / (xMax - xMin);
+
+                        float x1 = (mWith - leftWith - rightWith) + leftWith - lastIndex * unitHLenth;
+                        float y1 = mHeight - bottomWith - list.get(lastIndex).getValue() * (mHeight - topWith - bottomWith) / (xMax - xMin);
+
+                        chartLinePaint.setShader(null);
+                        chartLinePaint.setColor(Color.WHITE);
+                        chartLinePaint.setPathEffect(effect);
+                        canvas.drawLine(x, y, x1, y1, chartLinePaint);
+                        chartLinePaint.setPathEffect(null);
+                    }
+                    lastIndex = -1;
+                }
+            }
+        }
     }
 
     private int dip2px(float dpValue) {

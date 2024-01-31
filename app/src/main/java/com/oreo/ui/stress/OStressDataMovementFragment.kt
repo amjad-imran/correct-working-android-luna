@@ -1,9 +1,7 @@
 package com.oreo.ui.stress
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import android.widget.LinearLayout
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -13,14 +11,14 @@ import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
-import com.oreo.ui.custom.StressCombineModel
-import com.oreo.ui.custom.StressCombinedChart
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class OStressDataMovementFragment :
     BaseFragment<FragmentOStressDataMovementBinding>(FragmentOStressDataMovementBinding::inflate) {
     private val mainViewModel: OreoMainViewModel by activityViewModels()
-    private val movementViewModel: OStressDataMovementViewModel by viewModels()
+    private val viewModel: OStressDetailViewModel by viewModels()
     private val ARGS_DATE = "ARGS_DATE"
 
     companion object {
@@ -36,10 +34,30 @@ class OStressDataMovementFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        val date = arguments?.getString(ARGS_DATE)
+        viewModel.date = date
+
         handleMovementViews()
-        handleBannerView(60)
-        handleStressProgressView()
-        initCombineChart()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadData()
+    }
+
+    private fun loadData() {
+        viewModel.date?.let {
+            mainViewModel.getStressData(it)?.let { dayData ->
+
+                initCombineChart(it)
+                setMovementData(dayData.activity?.daytimeMovement?.movement)
+                handleStressProgressView()
+                setNudge(60)
+
+            }
+        }
     }
 
     override fun initListener() {
@@ -76,7 +94,7 @@ class OStressDataMovementFragment :
         return (progress.toFloat() / 100).times(100)
     }
 
-    private fun handleBannerView(stressValue: Int) {
+    private fun setNudge(stressValue: Int) {
         when (stressValue) {
             in 1..35 -> {
                 binding.lytStressBanner.rootView.setBackgroundResource(R.drawable.ic_st_calm_cue_bg)
@@ -95,6 +113,28 @@ class OStressDataMovementFragment :
 
     override fun subscribeObservers() {
 
+    }
+
+    private fun setMovementData(movementList: List<Int>?) {
+
+        val combinedData = viewModel.getCombinedMovementData(movementList, true)
+
+        binding.lytHighMovement.tvHeader.text = getString(R.string.text_high_movement)
+        binding.lytHighMovement.compareChart.setDrawData(
+            combinedData, 3, requireContext().getColor(R.color.white)
+        )
+        binding.lytMediumMovement.tvHeader.text = getString(R.string.text_medium_movement)
+        binding.lytMediumMovement.compareChart.setDrawData(
+            combinedData, 2, requireContext().getColor(R.color.medium_movement_color)
+        )
+        binding.lytLowMovement.tvHeader.text = getString(R.string.text_low_movement)
+        binding.lytLowMovement.compareChart.setDrawData(
+            combinedData, 1, requireContext().getColor(R.color.low_movement_color)
+        )
+        binding.lytNoMovement.tvHeader.text = getString(R.string.text_no_movement)
+        binding.lytNoMovement.compareChart.setDrawData(
+            combinedData, 0, requireContext().getColor(R.color.no_movement_color)
+        )
     }
 
     private fun handleMovementViews(isOpen: Boolean = false) {
@@ -119,79 +159,10 @@ class OStressDataMovementFragment :
             binding.viewClose.gone()
             binding.ivClose.gone()
         }
-
-        binding.lytHighMovement.tvHeader.text = getString(R.string.text_high_movement)
-        binding.lytHighMovement.compareChart.setDrawData(
-            movementViewModel.getCombinedMovementData(
-                ArrayList(),
-                false
-            ) as ArrayList<Int>, 1, requireContext().getColor(R.color.white)
-        )
-        binding.lytMediumMovement.tvHeader.text = getString(R.string.text_medium_movement)
-        binding.lytMediumMovement.compareChart.setDrawData(
-            movementViewModel.getCombinedMovementData(
-                ArrayList(),
-                false
-            ) as ArrayList<Int>, 1, requireContext().getColor(R.color.medium_movement_color)
-        )
-        binding.lytLowMovement.tvHeader.text = getString(R.string.text_low_movement)
-        binding.lytLowMovement.compareChart.setDrawData(
-            movementViewModel.getCombinedMovementData(
-                ArrayList(),
-                false
-            ) as ArrayList<Int>, 1, requireContext().getColor(R.color.low_movement_color)
-        )
-        binding.lytNoMovement.tvHeader.text = getString(R.string.text_no_movement)
-        binding.lytNoMovement.compareChart.setDrawData(
-            movementViewModel.getCombinedMovementData(
-                ArrayList(),
-                false
-            ) as ArrayList<Int>, 1, requireContext().getColor(R.color.no_movement_color)
-        )
     }
 
-    private fun initCombineChart() {
-        val combineModel = StressCombineModel()
-        combineModel.setHigh(70)
-        combineModel.setMedium(30)
-        val sections: MutableList<StressCombineModel.Section> =
-            ArrayList()
-        var section: StressCombineModel.Section = StressCombineModel.Section()
-        section.setStart(0)
-        section.setEnd(30)
-        section.setColor(Color.parseColor("#C4A9F5"))
-        section.setImageRes(R.drawable.icon_stress_sleep)
-        sections.add(section)
-        section = StressCombineModel.Section()
-        section.setStart(40)
-        section.setEnd(50)
-        section.setColor(Color.parseColor("#00BCD4"))
-        section.setImageRes(R.drawable.icon_stress_sport)
-        sections.add(section)
-        section = StressCombineModel.Section()
-        section.setStart(60)
-        section.setEnd(65)
-        section.setColor(Color.parseColor("#00BCD4"))
-        section.setImageRes(R.drawable.icon_stress_sport)
-        sections.add(section)
-        combineModel.setSections(sections)
-        val items: MutableList<StressCombineModel.Item> = ArrayList<StressCombineModel.Item>()
-        for (i in 0..95) {
-            val item: StressCombineModel.Item = StressCombineModel.Item()
-            item.setIndex(i)
-            if (i > 40 && i < 60) {
-                item.setValue(0)
-                if (i == 50) {
-                    item.setValue((Math.random() * 100).toInt())
-                }
-            } else {
-                item.setValue((Math.random() * 100).toInt())
-            }
-            items.add(item)
-        }
-
-        combineModel.setItems(items)
-        binding.lytStressMidGraph.updateData(combineModel)
+    private fun initCombineChart(date: String) {
+        binding.lytStressMidGraph.updateData(mainViewModel.getStressCombinedData(date))
         /* btnHigh.setOnClickListener {
              val highlights: MutableList<Int> =
                  ArrayList()
