@@ -32,6 +32,7 @@ import com.oreo.data.db.OreoDataBase
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.db.implementation.OreoAutoSportDataImpl
 import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
+import com.oreo.data.db.implementation.OreoBodyStressDataImpl
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
 import com.oreo.data.db.implementation.OreoDayTimeMovementDataImpl
 import com.oreo.data.db.implementation.OreoHeartRateDataImpl
@@ -238,6 +239,7 @@ object AppModule {
         dayTimeMovementDataImpl: OreoDayTimeMovementDataImpl,
         sleepDataImpl: OreoSleepDataImpl,
         bodyTemperatureDataImpl: OreoBodyTemperatureDataImpl,
+        bodyStressDataImpl: OreoBodyStressDataImpl,
         offlineDataMapper: OfflineDataMapper,
         onlineDataMapper: OreoOnlineDataMapper,
         encryptUtils: EncryptUtils,
@@ -256,6 +258,7 @@ object AppModule {
             bloodOxygenDataImpl,
             dayTimeMovementDataImpl,
             respiratoryDataImpl,
+            bodyStressDataImpl,
             sleepDataImpl,
             bodyTemperatureDataImpl,
             offlineDataMapper,

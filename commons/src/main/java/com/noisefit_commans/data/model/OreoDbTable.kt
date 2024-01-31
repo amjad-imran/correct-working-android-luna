@@ -176,6 +176,18 @@ data class OreoRespiratoryData(
     @SerializedName("date") var date: String? = null
 ) : ColorfitData()
 
+
+@Entity(
+    tableName = "body_stress", indices = [Index(value = ["date"], unique = true)]
+)
+data class OreoBodyStressData(
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    @ColumnInfo(name = "is_synced") var isSynced: Boolean = false,
+    @ColumnInfo(name = "is_google_fit_sync") var isGoogleFitSynced: Boolean = false,
+    @ColumnInfo(name = "break_up") @SerializedName("break_up") var breakUp: String? = null,
+    @SerializedName("date") var date: String? = null
+) : ColorfitData()
+
 @Entity(
     tableName = "sleep_data", indices = [Index(value = ["startTime", "endTime"], unique = true)]
 )

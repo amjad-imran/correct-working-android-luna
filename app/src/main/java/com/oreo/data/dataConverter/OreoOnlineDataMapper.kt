@@ -7,6 +7,7 @@ import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.common.minWithoutZero
 import com.noisefit_commans.data.model.DayTimeMovementBreakup
 import com.noisefit_commans.data.model.OreoBloodOxygenBreakup
+import com.noisefit_commans.data.model.OreoBodyStressData
 import com.noisefit_commans.data.model.OreoBodyTempNetworkEntity
 import com.noisefit_commans.data.model.OreoBodyTemperatureBreakup
 import com.noisefit_commans.data.model.OreoCommonNetworkEntity
@@ -51,6 +52,7 @@ constructor(
         val stress = parseStressData(userSyncActivities.stressData)
         val heartRateHistory = parseHeartHistoryData(userSyncActivities.hrHistoryData)
         val bloodOxygen = parseBloodOxygenData(userSyncActivities.boData)
+        val bodyStress = parseBodyStressData(userSyncActivities.bodyStressData)
         val bodyTemperature = parseBodyTemperature(userSyncActivities.bodyTemperature)
         val respiratory = parseRespiratoryData(userSyncActivities.respiratory)
 
@@ -60,6 +62,7 @@ constructor(
 
         combinedData.activities = steps
         combinedData.stress = stress
+        combinedData.bodyStress = bodyStress
         combinedData.heartRateHistory = heartRateHistory
         combinedData.bloodOxygen = bloodOxygen
         combinedData.bodyTemperature = bodyTemperature
@@ -67,7 +70,7 @@ constructor(
         combinedData.sleeps = sleeps
 
         if (steps == null && stress == null && heartRateHistory == null
-            && bloodOxygen == null && bodyTemperature == null && respiratory == null
+            && bloodOxygen == null && bodyTemperature == null && respiratory == null && bodyStress == null
         ) {
             LOGS.d("Hurray!! just saved one api call")
             return null
@@ -324,6 +327,25 @@ constructor(
         }
         val commonList = ArrayList<OreoCommonNetworkEntity>()
         bloodOxygenList.forEach {
+            val breakUp = Gson().fromJson<List<Int>>(it.breakUp ?: "")
+            val networkReq = OreoCommonNetworkEntity()
+            networkReq.dayBreakup = OreoCommonNetworkEntity.DayBreakup(
+                breakUp = breakUp,
+                frequency = 15,
+                date = it.date ?: ""
+            )
+            commonList.add(networkReq)
+        }
+        return commonList
+    }
+
+    private fun parseBodyStressData(bodyStressList: List<OreoBodyStressData>?): ArrayList<OreoCommonNetworkEntity>? {
+
+        if (bodyStressList.isNullOrEmpty()) {
+            return null
+        }
+        val commonList = ArrayList<OreoCommonNetworkEntity>()
+        bodyStressList.forEach {
             val breakUp = Gson().fromJson<List<Int>>(it.breakUp ?: "")
             val networkReq = OreoCommonNetworkEntity()
             networkReq.dayBreakup = OreoCommonNetworkEntity.DayBreakup(

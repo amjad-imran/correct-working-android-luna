@@ -16,6 +16,7 @@ import com.oreo.data.db.abstaction.OreoStepsDataSource
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.db.database.OreoAutoSportDao
 import com.oreo.data.db.database.OreoBloodOxygenDao
+import com.oreo.data.db.database.OreoBodyStressDao
 import com.oreo.data.db.database.OreoBodyTemperatureDao
 import com.oreo.data.db.database.OreoDayTimeMovementDao
 import com.oreo.data.db.database.OreoHeartRateDao
@@ -25,6 +26,7 @@ import com.oreo.data.db.database.OreoSleepDao
 import com.oreo.data.db.database.OreoStepsDao
 import com.oreo.data.db.database.OreoStressDao
 import com.oreo.data.db.database.OreoUserHealthDataDao
+import com.oreo.data.db.implementation.OreoBodyStressDataImpl
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
 import com.oreo.data.db.implementation.OreoDayTimeMovementDataImpl
 import com.oreo.data.db.implementation.OreoSleepDataImpl
@@ -48,7 +50,7 @@ class OreoRoomModule {
             .addMigrations(MIGRATION_1_2)
             .addMigrations(MIGRATION_2_4)
             .addMigrations(MIGRATION_4_5)
-            /*.addMigrations(MIGRATION_3_4)*/
+            .addMigrations(MIGRATION_5_6)
             .build()
     }
 
@@ -121,6 +123,21 @@ class OreoRoomModule {
                         "`date` TEXT, PRIMARY KEY(`id`))"
             )
             database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_recorded_workout_startTime ON  recorded_workout(startTime)")
+
+        }
+    }
+
+    private val MIGRATION_5_6: Migration = object : Migration(5, 6) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(
+                "CREATE TABLE IF NOT EXISTS `body_stress` " +
+                        "(`id` INTEGER NOT NULL, " +
+                        "`is_synced` INTEGER NOT NULL," +
+                        "`is_google_fit_sync` INTEGER NOT NULL," +
+                        "`break_up` TEXT," +
+                        "`date` TEXT, PRIMARY KEY(`id`))"
+            )
+            database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS index_body_stress_date ON  body_stress(date)")
 
         }
     }
@@ -225,6 +242,12 @@ class OreoRoomModule {
 
     @Singleton
     @Provides
+    fun providesBodyStressDao(database: OreoDataBase): OreoBodyStressDao {
+        return database.bodyStressDao()
+    }
+
+    @Singleton
+    @Provides
     fun providesBODao(database: OreoDataBase): OreoBloodOxygenDao {
         return database.bloodOxygenDao()
     }
@@ -269,6 +292,12 @@ class OreoRoomModule {
     @Provides
     fun provideTempDataImpl(tempDao: OreoBodyTemperatureDao): OreoBodyTemperatureDataImpl {
         return OreoBodyTemperatureDataImpl(tempDao)
+    }
+
+    @Singleton
+    @Provides
+    fun provideBodyStressDataImpl(bodyStressDao: OreoBodyStressDao): OreoBodyStressDataImpl {
+        return OreoBodyStressDataImpl(bodyStressDao)
     }
 
     @Singleton

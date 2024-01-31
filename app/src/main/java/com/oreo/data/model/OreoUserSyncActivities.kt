@@ -3,6 +3,7 @@ package com.oreo.data.model
 import com.google.gson.annotations.SerializedName
 import com.noisefit_commans.data.model.DayTimeMovementBreakup
 import com.noisefit_commans.data.model.OreoBloodOxygenBreakup
+import com.noisefit_commans.data.model.OreoBodyStressData
 import com.noisefit_commans.data.model.OreoBodyTemperatureBreakup
 import com.noisefit_commans.data.model.OreoHeartRate
 import com.noisefit_commans.data.model.OreoRespiratoryData
@@ -18,6 +19,7 @@ data class OreoUserSyncActivities(
     @SerializedName("hrHistoryData") var hrHistoryData: List<OreoHeartRate>? = null,
     @SerializedName("bodyTemperatureData") var bodyTemperature: List<OreoBodyTemperatureBreakup>? = null,
     @SerializedName("boData") var boData: List<OreoBloodOxygenBreakup>? = null,
+    @SerializedName("bodyStressData") var bodyStressData: List<OreoBodyStressData>? = null,
     @SerializedName("stressData") var stressData: List<OreoStressDataBreakup>? = null,
     @SerializedName("dayTimeMovement") var dayTimeMovement: List<DayTimeMovementBreakup>? = null,
     @SerializedName("respiratory") var respiratory: List<OreoRespiratoryData>? = null,
@@ -30,6 +32,7 @@ data class OreoUserSyncRawData(
     @SerializedName("hrHistoryData") var hrHistoryData: List<OreoHeartRate>? = null,
     @SerializedName("bodyTemperatureData") var bodyTemperature: List<OreoBodyTemperatureBreakup>? = null,
     @SerializedName("boData") var boData: List<OreoBloodOxygenBreakup>? = null,
+    @SerializedName("bodyStressData") var bodyStressData: List<OreoBodyStressData>? = null,
     @SerializedName("stressData") var stressData: List<OreoStressDataBreakup>? = null,
     @SerializedName("respiratory") var respiratory: List<OreoRespiratoryData>? = null,
     @SerializedName("dayTimeMovement") var dayTimeMovement: List<DayTimeMovementBreakup>? = null,

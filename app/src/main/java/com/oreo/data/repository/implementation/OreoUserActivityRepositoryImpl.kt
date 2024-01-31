@@ -1098,6 +1098,7 @@ class OreoUserActivityRepositoryImpl(
             HealthOverviewDataType.ACTIVITY -> {}
             HealthOverviewDataType.SERVER_SYNC_SUCCESS -> {}
             HealthOverviewDataType.AUTO_WORKOUT -> {}
+            HealthOverviewDataType.BODY_STRESS->{}
         }
 
         return Pair(hOverviewData, index)

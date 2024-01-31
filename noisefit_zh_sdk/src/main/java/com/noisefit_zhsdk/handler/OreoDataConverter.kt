@@ -13,6 +13,7 @@ import com.noisefit_commans.constants.SportActivityName
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.data.model.DayTimeMovementBreakup
 import com.noisefit_commans.data.model.OreoBloodOxygenBreakup
+import com.noisefit_commans.data.model.OreoBodyStressData
 import com.noisefit_commans.data.model.OreoBodyTemperatureBreakup
 import com.noisefit_commans.data.model.OreoHeartRate
 import com.noisefit_commans.data.model.OreoRespiratoryData
@@ -52,6 +53,7 @@ import com.zhapp.ble.bean.EventInfoBean
 import com.zhapp.ble.bean.OverallDayMovementData
 import com.zhapp.ble.bean.PressureModeBean
 import com.zhapp.ble.bean.RingSleepResultBean
+import com.zhapp.ble.bean.RingStressDetectionBean
 import com.zhapp.ble.bean.TodayRespiratoryRateData
 import com.zhapp.ble.bean.WidgetBean
 import com.zhapp.ble.bean.WorldClockBean
@@ -625,6 +627,16 @@ constructor(
         respiratoryData.date = DateFormats.dateFormat3.format(startDayTimeStamp)
         respiratoryData.breakUp = gson.toJson(bean.data)
         return respiratoryData
+    }
+
+    fun parseBodyStressData(bean: RingStressDetectionBean): OreoBodyStressData {
+        val startDayTimeStamp =
+            DateFormats.convertDateTimeToTimeStamp(bean.date, DateFormats.dateTimeFormat5)
+
+        val bodyStressData = OreoBodyStressData()
+        bodyStressData.date = DateFormats.dateFormat3.format(startDayTimeStamp)
+        bodyStressData.breakUp = gson.toJson(bean.data)
+        return bodyStressData
     }
 
 
