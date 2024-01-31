@@ -765,6 +765,31 @@ constructor(
 
     }
 
+    private fun parseWorkoutName(workoutType: String?): String? {
+        if (workoutType.isNullOrEmpty()) return null
+
+        return when (workoutType) {
+            FitnessActivities.RUNNING -> "running"
+            FitnessActivities.WALKING -> "walking"
+            FitnessActivities.YOGA -> "yoga"
+            FitnessActivities.BIKING -> "cycling"
+            FitnessActivities.BADMINTON -> "badminton"
+            FitnessActivities.CRICKET -> "cricket"
+            FitnessActivities.STRENGTH_TRAINING -> "strength_training"
+            FitnessActivities.JUMP_ROPE -> "rope_skipping"
+            FitnessActivities.FOOTBALL_SOCCER -> "football"
+            FitnessActivities.FOOTBALL_AMERICAN -> "football"
+            FitnessActivities.FOOTBALL_AUSTRALIAN -> "football"
+            FitnessActivities.DANCING -> "dance"
+            FitnessActivities.BASKETBALL -> "basketball"
+            FitnessActivities.HIGH_INTENSITY_INTERVAL_TRAINING -> "hiit"
+            FitnessActivities.BOXING -> "boxing"
+            FitnessActivities.HIKING -> "hiking"
+            FitnessActivities.SWIMMING -> "swimming"
+            else -> null
+        }
+    }
+
 
     fun getWorkoutFromSession(
         success: (data: ArrayList<WorkoutGoogleFit>) -> Unit,
@@ -803,6 +828,14 @@ constructor(
                     if (context.packageName == session.appPackageName) {
                         continue
                     }
+
+                    val workoutType = parseWorkoutName(session.activity)
+                    LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.activity}")
+                    if (workoutType.isNullOrEmpty()) {
+                        LOGS.i(TAG, "GoogleFitSyncWork Session details: Workout ignored")
+                        continue
+                    }
+
                     val workoutGoogleFit = WorkoutGoogleFit()
                     workoutGoogleFit.name = session.name
                     workoutGoogleFit.identifier = session.identifier
@@ -810,7 +843,7 @@ constructor(
                     workoutGoogleFit.startTime = session.getStartTime(TimeUnit.SECONDS)
                     workoutGoogleFit.endTime = session.getEndTime(TimeUnit.SECONDS)
                     workoutGoogleFit.appPackageName = session.appPackageName
-                    workoutGoogleFit.activity = session.activity
+                    workoutGoogleFit.activity = workoutType//session.activity
 
                     LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.name}")
                     LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.identifier}")
@@ -827,7 +860,7 @@ constructor(
                         "GoogleFitSyncWork Session details: ${session.getEndTime(TimeUnit.MILLISECONDS)}"
                     )
                     LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.appPackageName}")
-                    LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.activity}")
+                    LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.activity} Parsed $workoutType")
                     val dataSets = response.getDataSet(session)
                     for (dataSet in dataSets) {
                         for (point in dataSet.dataPoints) {
