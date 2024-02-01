@@ -14,6 +14,7 @@ data class OreoNapDetailsDataModel(
     var prevSleepScore: Int? = null,
     @SerializedName("sleep_score")
     var sleepScore: Int? = null,
+    var date: String? = null,
     @SerializedName("prev_readiness_score")
     var prevReadinessScore: Int? = null,
     @SerializedName("readiness_score")
