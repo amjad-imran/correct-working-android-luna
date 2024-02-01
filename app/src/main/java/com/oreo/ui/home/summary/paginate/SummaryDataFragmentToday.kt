@@ -129,6 +129,7 @@ class SummaryDataFragmentToday :
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = napsAdapter
             addItemDecoration(LinePagerIndicatorDecoration())
+
         }
 
         binding.contentMain.lytConfirmNap.vpNaps.addOnItemTouchListener(object :

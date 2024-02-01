@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
@@ -21,21 +22,22 @@ public class LinePagerIndicatorDecoration extends RecyclerView.ItemDecoration {
     /**
      * Height of the space the indicator takes up at the bottom of the view.
      */
-    private final int mIndicatorHeight = (int) (DP * 16);
+    private final int mIndicatorHeight = (int) (DP * 24);
+
 
     /**
      * Indicator stroke width.
      */
-    private final float mIndicatorStrokeWidth = DP * 2;
+    private final float mIndicatorStrokeWidth = DP * 6;
 
     /**
      * Indicator width.
      */
-    private final float mIndicatorItemLength = DP * 1;
+    private final float mIndicatorItemLength = DP * .4f;
     /**
      * Padding between indicators.
      */
-    private final float mIndicatorItemPadding = DP * 4;
+    private final float mIndicatorItemPadding = DP * 12;
 
     /**
      * Some more natural animation interpolation
@@ -54,7 +56,7 @@ public class LinePagerIndicatorDecoration extends RecyclerView.ItemDecoration {
     @Override
     public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
         super.onDrawOver(c, parent, state);
-
+//        Log.e("TAG DP", DP + "");
         int itemCount = parent.getAdapter().getItemCount();
 
         // center horizontally, calculate width and subtract half from center
