@@ -867,8 +867,8 @@ constructor(
                         resource.data?.data?.let {
                             removeNapById(nap)
                             it.firstOrNull()?.let { napData ->
-                                if (nap.date != null) {
-                                    userHealthDataDataSource.clearDataByDates(listOf(nap.date!!))
+                                if (napData.date != null) {
+                                    userHealthDataDataSource.clearDataByDates(listOf(napData.date!!))
                                     delay(100)
                                 }
                                 onNapAddSuccess.postValue(Event(napData))
