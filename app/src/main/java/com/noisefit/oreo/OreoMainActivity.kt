@@ -86,8 +86,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         firebaseViewModel.generateToken()
     }
 
-    private fun setBlurAddCta() {
-        val radius = 5f
+    private fun setBlurAddCta(radius: Float = 5f) {
         val decorView = window.decorView;
         val rootView = binding.container
         val windowBackground = decorView.background
@@ -243,14 +242,27 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     this.duration = viewModel.FAB_ANIM_TIME
                 }
 
-        val scaleDownX = ObjectAnimator.ofFloat(binding.lytAddWorkoutSelector.ivAddWorkoutBack,  View.SCALE_X, 0f)
-        val scaleDownY = ObjectAnimator.ofFloat(binding.lytAddWorkoutSelector.ivAddWorkoutBack, View.SCALE_Y, 0f)
+        val alphaBlurLayer =
+            ObjectAnimator.ofFloat(
+                binding.blurViewSelector,
+                View.ALPHA,
+                0f,
+                1f
+            )
+                .apply {
+                    this.duration = viewModel.FAB_ANIM_TIME
+                }
+
+        val scaleDownX =
+            ObjectAnimator.ofFloat(binding.lytAddWorkoutSelector.ivAddWorkoutBack, View.SCALE_X, 0f)
+        val scaleDownY =
+            ObjectAnimator.ofFloat(binding.lytAddWorkoutSelector.ivAddWorkoutBack, View.SCALE_Y, 0f)
         scaleDownX.setDuration(viewModel.FAB_ANIM_TIME)
         scaleDownY.setDuration(viewModel.FAB_ANIM_TIME)
 
 
         val animatorSet = AnimatorSet()
-        animatorSet.playTogether(rotate,scaleDownX,scaleDownY,alphaAdd)
+        animatorSet.playTogether(rotate, scaleDownX, scaleDownY, alphaAdd, alphaBlurLayer)
         animatorSet.start()
 
 
@@ -286,13 +298,26 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     this.duration = viewModel.FAB_ANIM_TIME
                 }
 
-        val scaleDownX = ObjectAnimator.ofFloat(binding.lytAddWorkoutSelector.ivAddWorkoutBack,  View.SCALE_X, 1f)
-        val scaleDownY = ObjectAnimator.ofFloat(binding.lytAddWorkoutSelector.ivAddWorkoutBack, View.SCALE_Y, 1f)
+        val alphaBlurLayer =
+            ObjectAnimator.ofFloat(
+                binding.blurViewSelector,
+                View.ALPHA,
+                1f,
+                0.3f
+            )
+                .apply {
+                    this.duration = viewModel.FAB_ANIM_TIME
+                }
+
+        val scaleDownX =
+            ObjectAnimator.ofFloat(binding.lytAddWorkoutSelector.ivAddWorkoutBack, View.SCALE_X, 1f)
+        val scaleDownY =
+            ObjectAnimator.ofFloat(binding.lytAddWorkoutSelector.ivAddWorkoutBack, View.SCALE_Y, 1f)
         scaleDownX.setDuration(viewModel.FAB_ANIM_TIME)
         scaleDownY.setDuration(viewModel.FAB_ANIM_TIME)
 
         val animatorSet = AnimatorSet()
-        animatorSet.playTogether(alpha,scaleDownX,scaleDownY,alphaAdd)
+        animatorSet.playTogether(alpha, scaleDownX, scaleDownY, alphaAdd, alphaBlurLayer)
         animatorSet.start()
 
         Handler(Looper.getMainLooper()).postDelayed({
@@ -483,7 +508,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     override fun observeSubscriber() {
 
-        viewModel.sessionManager.reloadTodayData.observe(this){
+        viewModel.sessionManager.reloadTodayData.observe(this) {
             it.getContent()?.let {
                 viewModel.reloadTodaysData()
             }
