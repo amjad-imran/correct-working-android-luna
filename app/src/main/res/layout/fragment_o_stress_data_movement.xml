@@ -34,13 +34,13 @@
                 lineChart:chartLineWidth="2dp"
                 lineChart:gridColor="#80FFFFFF"
                 lineChart:topWith="50dp"
-                lineChart:highColor="#FFF44336"
-                lineChart:mediumColor="#FF673AB7"
-                lineChart:lowColor="#FF2196F3"
+                lineChart:highColor="#e87e5c"
+                lineChart:mediumColor="#7156cc"
+                lineChart:lowColor="#59aefd"
                 lineChart:xMax="100"
                 lineChart:xMin="0"
                 lineChart:xTextColor="#FFFFFF"
-                lineChart:xTextSize="16sp" />
+                lineChart:xTextSize="12sp" />
 
             <View
                 android:id="@+id/viewOpen"

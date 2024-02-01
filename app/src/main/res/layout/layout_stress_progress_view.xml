@@ -1,29 +1,42 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="100">
+        app:cardForegroundColor="@color/transparent"
+        app:cardBackgroundColor="#071220"
+        app:cardElevation="0dp"
+        app:cardCornerRadius="30dp">
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="6dp"
-            android:id="@+id/viewCalm"
-            android:background="@drawable/calm_left_round_edge" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="100">
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="6dp"
-            android:layout_marginStart="2dp"
-            android:id="@+id/viewFocused"
-            android:background="@drawable/focused_flat_corner" />
+            <View
+                android:id="@+id/viewCalm"
+                android:layout_width="0dp"
+                android:layout_height="6dp"
+                tools:layout_weight="40"
+                android:background="@drawable/calm_back" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="6dp"
-            android:layout_marginStart="2dp"
-            android:id="@+id/viewStressed"
-            android:background="@drawable/stress_right_round_edge" />
-    </LinearLayout>
+            <View
+                android:id="@+id/viewFocused"
+                android:layout_width="0dp"
+                android:layout_height="6dp"
+                tools:layout_weight="40"
+                android:background="@drawable/focused_back" />
+
+            <View
+                android:id="@+id/viewStressed"
+                android:layout_width="0dp"
+                android:layout_height="6dp"
+                tools:layout_weight="20"
+                android:background="@drawable/stress_back" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 </layout>

@@ -3,8 +3,5 @@
     <gradient
         android:endColor="#418dd4"
         android:startColor="#59aefd" />
-    <corners
-        android:bottomLeftRadius="10dp"
-        android:topLeftRadius="10dp" />
 
 </shape>

@@ -206,6 +206,23 @@ public class StressCombinedChart extends View {
         linearGradientShadow = new LinearGradient(mWith - rightWith - shadowWidth, mHeight / 2f, mWith - rightWith, mHeight / 2f, Color.TRANSPARENT, Color.parseColor("#C0000000"), Shader.TileMode.CLAMP);
         unitHLenth = (mWith - leftWith - rightWith) / (list.size() - 1);
 
+
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        generateResMap();
+        drawBg(canvas);
+        drawTop(canvas);
+        drawBottom(canvas);
+        drawRight(canvas);
+        drawLeft(canvas);
+        drawContent(canvas);
+        drawDesc(canvas);
+    }
+
+    private void generateResMap() {
         if (combineModel == null) return;
 
         Section section;
@@ -215,18 +232,6 @@ public class StressCombinedChart extends View {
                     BitmapFactory.decodeResource(getResources(), section.getImageRes())
             ));
         }
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        drawBg(canvas);
-        drawTop(canvas);
-        drawBottom(canvas);
-        drawRight(canvas);
-        drawLeft(canvas);
-        drawContent(canvas);
-        drawDesc(canvas);
     }
 
 
@@ -245,15 +250,14 @@ public class StressCombinedChart extends View {
     private void drawBottom(Canvas canvas) {
         canvas.drawRect(0, mHeight - bottomWith, mWith, mHeight, bgBottomPaint);
         if (showXAxis) {
-            String xText = "24";
+            String xText = "23:59";
             xTextPaint.getTextBounds(xText, 0, xText.length(), xTextBounds);
-            xTextPaint.setColor(Color.parseColor("#ffffff"));
-            canvas.drawText(xText, mWith - rightWith - xTextBounds.width() - dip2px(5), mHeight - bottomWith / 4, xTextPaint);
+            xTextPaint.setColor(Color.parseColor("#a3ffffff"));
+            canvas.drawText(xText, mWith - rightWith - xTextBounds.width() - dip2px(5), mHeight - bottomWith / 3, xTextPaint);
 
-
-            xText = "0";
+            xText = "00:00";
             xTextPaint.getTextBounds(xText, 0, xText.length(), xTextBounds);
-            canvas.drawText(xText, leftWith + dip2px(5), mHeight - bottomWith / 4, xTextPaint);
+            canvas.drawText(xText, leftWith + dip2px(5), mHeight - bottomWith / 3, xTextPaint);
         }
     }
 
@@ -287,7 +291,7 @@ public class StressCombinedChart extends View {
         canvas.drawRect(rectF, chartLineFillPaint);
         float high = 0;
 
-        if(combineModel==null) return;
+        if (combineModel == null) return;
         if (combineModel.getHigh() > 0) {
             high = (mHeight - bottomWith) - (combineModel.getHigh() * 1f / xMax) * (mHeight - bottomWith - topWith);
             String highText = "High";
@@ -335,7 +339,10 @@ public class StressCombinedChart extends View {
             rectF.right = rectF.left + imageSize;
             rectF.bottom = rectF.top + imageSize;
 
-            canvas.drawBitmap(resMap.get(i).second, null, rectF, null);
+            if (resMap.get(i).second != null) {
+                canvas.drawBitmap(resMap.get(i).second, null, rectF, null);
+            }
+
         }
 
 

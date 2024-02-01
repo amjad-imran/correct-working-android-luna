@@ -2,8 +2,8 @@ package com.oreo.ui.custom;
 
 
 data class StressCombineModel(
-    val sections: List<Section>?=null,
-    val items: List<Item>?=null,
+    val sections: List<Section>? = null,
+    val items: List<Item>? = null,
     val high: Int = 0,
     val medium: Int = 0
 )
@@ -16,6 +16,6 @@ data class Item(
 data class Section(
     val start: Int,
     val end: Int,
-    val imageRes: Int,
-    val color: Int
+    val color: Int,
+    val imageRes: Int
 )

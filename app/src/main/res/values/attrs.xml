@@ -8,6 +8,8 @@
         <attr name="bgTopColor" />
         <attr name="bgBottomColor" />
         <attr name="xTextColor" />
+        <attr name="yTextColor" />
+        <attr name="yTextSize" />
         <attr name="restLineColor" format="color"/>
         <attr name="highColor" format="color"/>
         <attr name="mediumColor" format="color"/>

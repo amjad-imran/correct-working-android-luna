@@ -1,5 +1,6 @@
 package com.oreo.ui.stress
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
@@ -8,9 +9,12 @@ import androidx.fragment.app.viewModels
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOStressDataMovementBinding
 import com.noisefit.oreo.OreoMainViewModel
+import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
+import com.oreo.data.model.ServerUserHealthData
+import com.oreo.data.model.Stress
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -51,9 +55,9 @@ class OStressDataMovementFragment :
         viewModel.date?.let {
             mainViewModel.getStressData(it)?.let { dayData ->
 
-                initCombineChart(it)
+                initCombineChart(dayData)
                 setMovementData(dayData.activity?.daytimeMovement?.movement)
-                handleStressProgressView()
+                handleStressProgressView(dayData.stress)
                 setNudge(60)
 
             }
@@ -70,37 +74,87 @@ class OStressDataMovementFragment :
 
     }
 
-    private fun handleStressProgressView() {
-        binding.lytStressHeader.lytStressProgress.viewCalm.layoutParams =
-            binding.lytStressHeader.lytStressProgress.viewCalm.layoutParams.apply {
-                (this as LinearLayout.LayoutParams).weight =
-                    calculateWeightPercent(60)
-            }
+    private fun handleStressProgressView(stress: Stress?) {
 
-        binding.lytStressHeader.lytStressProgress.viewFocused.layoutParams =
-            binding.lytStressHeader.lytStressProgress.viewFocused.layoutParams.apply {
-                (this as LinearLayout.LayoutParams).weight =
-                    calculateWeightPercent(20)
-            }
-        binding.lytStressHeader.lytStressProgress.viewStressed.layoutParams =
-            binding.lytStressHeader.lytStressProgress.viewStressed.layoutParams.apply {
-                (this as LinearLayout.LayoutParams).weight =
-                    calculateWeightPercent(20)
-            }
+        val (calm, focused, stressed) = viewModel.getStressMinutes(stress)
+        val total = calm + focused + stressed
+
+
+        binding.lytStressHeader.apply {
+            val (hourCalm, minuteCalm) = ApplicationUtils.getFormattedSleepDuration(
+                calm
+            )
+            lytCalm.lytHrMn.tvHour.text = "$hourCalm"
+            lytCalm.lytHrMn.tvMinute.text = "$minuteCalm"
+            lytCalm.tvCalm.setTextColor(Color.parseColor("#87c1ff"))
+            lytCalm.tvCalm.text = getString(R.string.text_calm)
+
+
+            val (hourFocused, minuteFocused) = ApplicationUtils.getFormattedSleepDuration(
+                focused
+            )
+            lytFocussed.lytHrMn.tvHour.text = "$hourFocused"
+            lytFocussed.lytHrMn.tvMinute.text = "$minuteFocused"
+            lytFocussed.tvCalm.setTextColor(Color.parseColor("#b5b2ff"))
+            lytFocussed.tvCalm.text = getString(R.string.text_focussed)
+
+
+            val (hourStressed, minuteStressed) = ApplicationUtils.getFormattedSleepDuration(
+                stressed
+            )
+            lytStressed.lytHrMn.tvHour.text = "$hourStressed"
+            lytStressed.lytHrMn.tvMinute.text = "$minuteStressed"
+            lytStressed.tvCalm.setTextColor(Color.parseColor("#ffbba5"))
+            lytStressed.tvCalm.text = getString(R.string.text_stressed)
+
+        }
+
+        binding.lytStressHeader.lytStressProgress.apply {
+
+            viewCalm.layoutParams =
+                viewCalm.layoutParams.apply {
+                    (this as LinearLayout.LayoutParams).weight =
+                        calculateWeightPercent(calm, total)
+                }
+
+            viewFocused.layoutParams =
+                viewFocused.layoutParams.apply {
+                    if (calm == 0 || focused == 0) {
+                        (this as LinearLayout.LayoutParams).marginStart = 0
+                    } else {
+                        (this as LinearLayout.LayoutParams).marginStart =
+                            viewModel.screenUtils.dpToPx(2, viewFocused.context).toInt()
+                    }
+                    (this as LinearLayout.LayoutParams).weight =
+                        calculateWeightPercent(focused, total)
+                }
+            viewStressed.layoutParams =
+                viewStressed.layoutParams.apply {
+                    if (calm == 0 && focused == 0) {
+                        (this as LinearLayout.LayoutParams).marginStart = 0
+                    } else {
+                        (this as LinearLayout.LayoutParams).marginStart =
+                            viewModel.screenUtils.dpToPx(2, viewFocused.context).toInt()
+                    }
+
+                    (this as LinearLayout.LayoutParams).weight =
+                        calculateWeightPercent(stressed, total)
+                }
+        }
 
     }
 
-    private fun calculateWeightPercent(progress: Int): Float {
-        return (progress.toFloat() / 100).times(100)
+    private fun calculateWeightPercent(progress: Int, total: Int): Float {
+        return (progress.toFloat() / total).times(100)
     }
 
     private fun setNudge(stressValue: Int) {
         when (stressValue) {
-            in 1..35 -> {
+            in 1..34 -> {
                 binding.lytStressBanner.rootView.setBackgroundResource(R.drawable.ic_st_calm_cue_bg)
             }
 
-            in 31..70 -> {
+            in 35..69 -> {
                 binding.lytStressBanner.rootView.setBackgroundResource(R.drawable.ic_st_focus_cue_bg)
             }
 
@@ -161,8 +215,8 @@ class OStressDataMovementFragment :
         }
     }
 
-    private fun initCombineChart(date: String) {
-        binding.lytStressMidGraph.updateData(mainViewModel.getStressCombinedData(date))
+    private fun initCombineChart(dayData: ServerUserHealthData) {
+        binding.lytStressMidGraph.updateData(viewModel.getStressCombinedData(dayData))
         /* btnHigh.setOnClickListener {
              val highlights: MutableList<Int> =
                  ArrayList()

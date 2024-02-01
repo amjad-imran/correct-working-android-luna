@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
-import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.local.db.CacheResult
@@ -20,7 +19,6 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
-import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.data.model.User
 import com.noisefit_commans.interfaces.connection.ConnectState
@@ -32,10 +30,10 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
+import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.TrendsData
 import com.oreo.data.model.health.OreoActivityModel
-import com.oreo.data.model.health.OreoDashboardResponseModel
 import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.data.model.health.OreoSleepModel
 import com.oreo.data.repository.abstraction.OreoSyncRepository
@@ -50,10 +48,11 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.selects.select
 import org.joda.time.Days
 import org.joda.time.LocalDate
 import javax.inject.Inject
+import kotlin.math.abs
+import kotlin.math.floor
 
 
 const val HEALTH_DATA_PAGINATION_DAYS = 7
@@ -744,33 +743,5 @@ constructor(
                 sessionManager.sendUpdateQueryAction(UpdateDeviceAction.CheckOngoingWorkout())
             }
         }
-    }
-
-    fun getStressCombinedData(date: String): StressCombineModel {
-
-
-        val stressBreakup =
-            Gson().fromJson<List<Int>>("[10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44]")
-
-
-        val sections: MutableList<Section> =
-            ArrayList()
-        sections.add(Section(0, 30, Color.parseColor("#C4A9F5"), R.drawable.icon_stress_sleep))
-        sections.add(Section(40, 50, Color.parseColor("#00BCD4"), R.drawable.icon_stress_sport))
-        sections.add(Section(40, 65, Color.parseColor("#00BCD4"), R.drawable.icon_stress_sport))
-
-        val items: MutableList<Item> = ArrayList<Item>()
-
-        stressBreakup?.forEachIndexed { index, i ->
-            items.add(Item(index, i))
-        }
-
-
-        return StressCombineModel(
-            sections = sections,
-            items = items,
-            high = 70,
-            medium = 30
-        )
     }
 }
