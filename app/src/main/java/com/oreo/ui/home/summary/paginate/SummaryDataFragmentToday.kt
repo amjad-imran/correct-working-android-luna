@@ -80,6 +80,7 @@ class SummaryDataFragmentToday :
     private val mSharedViewModel: SharedOSCDViewModel by activityViewModels()
 
     private val TAG = "SummaryDataFragment"
+    val circleObj = CirclePagerIndicatorDecoration()
 
 
     companion object {
@@ -151,7 +152,7 @@ class SummaryDataFragmentToday :
         with(binding.contentMain.lytConfirmNap.vpNaps) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = napsAdapter
-            addItemDecoration(CirclePagerIndicatorDecoration())
+            //addItemDecoration(CirclePagerIndicatorDecoration())
             clipToPadding = false
             val padding =
                 viewModel.screenUtils.dpToPx(12, binding.contentMain.lytConfirmNap.vpNaps.context)
@@ -477,6 +478,10 @@ class SummaryDataFragmentToday :
                 binding.contentMain.lytConfirmNap.root.visible()
             }
             napsAdapter.setDataSet(it, viewModel.date)
+            binding.contentMain.lytConfirmNap.vpNaps.removeItemDecoration(circleObj)
+            if (it.size > 1) {
+                binding.contentMain.lytConfirmNap.vpNaps.addItemDecoration(circleObj)
+            }
         }
 
         mainViewModel.dashTodayReload.observe(viewLifecycleOwner) {

@@ -238,8 +238,8 @@ constructor(
                 restingHr = healthData.sleep?.restingHr?.value,
                 sleepStage = healthData.sleep?.hourly_breakup ?: ArrayList(),
                 status = healthData.sleep?.sleepScore?.text?.capitalizeWords(),
-                startTime = healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time ?: "",
-                endTime = healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time ?: "",
+                startTime = newSleepArray?.firstOrNull()?.start_time ?: "",
+                endTime = newSleepArray?.lastOrNull()?.end_time ?: "",
                 sleepNapScoreImpact = healthData.sleep?.sleepNapScoreImpact ?: 0,
                 noOfNaps = healthData.sleep?.noOfNaps ?: 0
             )
@@ -424,7 +424,7 @@ constructor(
                                 userActivities.add(
                                     OHealthOverview.SleepMinimal(
                                         sleepModel,
-                                        makeSleepArray(healthData.sleep?.hourly_breakup)
+                                        makeSleepArray(newSleepArray)
                                     )
                                 )
                             }
