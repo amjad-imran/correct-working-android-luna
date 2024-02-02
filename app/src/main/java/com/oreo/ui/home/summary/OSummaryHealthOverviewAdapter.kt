@@ -544,41 +544,17 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             val scoreValue = data.data.sleepScore ?: 0
 
-            val sleepTime = StringBuilder()
-            sleepTime.append(
-                DateFormats.formatDate(
-                    data.data.startTime,
-                    DateFormats.dateTimeFormat5,
-                    DateFormats.time12Meridian
-                )
-            )
-            sleepTime.append(" - ")
-            sleepTime.append(
-                DateFormats.formatDate(
-                    data.data.endTime,
-                    DateFormats.dateTimeFormat5,
-                    DateFormats.time12Meridian
-                )
-            )
-            binding.tvSleepStartEndTime.text = sleepTime.toString()
             binding.tvSleepScore.text = scoreValue.toString()
             binding.tvSleepStatus.text = data.data.status
-            binding.tvLowestHr.text = if (data.data.restingHr == null) {
-                "--"
-            } else {
-                data.data.restingHr.toString() + " bpm"
-            }
 
             val (hourTimeInBed, minuteTimeInBed) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
                 data.data.totalSleep ?: 0
             )
-
             binding.tvSleepTime.text = if (hourTimeInBed == 0) {
                 "$minuteTimeInBed min"
             } else {
                 "$hourTimeInBed hr $minuteTimeInBed min"
             }
-
 
             if (data.data.sleepNapScoreImpact == null || data.data.sleepNapScoreImpact == 0) {
                 binding.lytNapLabel.root.gone()
@@ -597,6 +573,23 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 )
                 binding.lytNapLabel.tvNapCountMsg.text = "after ${data.data.noOfNaps} nap"
             }
+
+            val sleepDayGraphView = SleepProgressbarView(binding.sleepPgbr.context)
+            binding.sleepPgbr.removeAllViews()
+            binding.sleepPgbr.addView(sleepDayGraphView)
+
+            sleepDayGraphView.setData(data.sleepArray)
+
+            binding.tvSleepStart.text = DateFormats.formatDate(
+                data.data.startTime,
+                DateFormats.dateTimeFormat5,
+                DateFormats.time12Meridian
+            )
+            binding.tvSleepEnd.text = DateFormats.formatDate(
+                data.data.endTime,
+                DateFormats.dateTimeFormat5,
+                DateFormats.time12Meridian
+            )
 
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.SleepDetailsWorkoutClick)
