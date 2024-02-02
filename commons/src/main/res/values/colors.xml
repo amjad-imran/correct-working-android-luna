@@ -126,8 +126,8 @@
     <color name="sleep_pg_bg">#3dffffff</color>
     <color name="sleep_score_chart">#ca99ff</color>
 
-    <color name="sleep_chart">#b470ff</color>
-    <color name="sleep_chart_end">#6425a8</color>
+    <color name="sleep_chart">#c5a8ed</color>
+    <color name="sleep_chart_end">#c5a8ed</color>
     <color name="distance_arc">#ffd230</color>
     <color name="round_up_step_color">#3bff7c</color>
     <color name="white_48">#7affffff</color>
