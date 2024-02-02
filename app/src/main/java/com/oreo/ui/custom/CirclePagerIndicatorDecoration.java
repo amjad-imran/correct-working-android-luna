@@ -1,15 +1,19 @@
 package com.oreo.ui.custom;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.noisefit_commans.utils.LOGS;
 
 public class CirclePagerIndicatorDecoration extends RecyclerView.ItemDecoration {
 
@@ -65,7 +69,7 @@ public class CirclePagerIndicatorDecoration extends RecyclerView.ItemDecoration 
         float totalLength = mIndicatorItemLength * itemCount;
         float paddingBetweenItems = Math.max(0, itemCount - 1) * mIndicatorItemPadding;
         float indicatorTotalWidth = totalLength + paddingBetweenItems;
-        float indicatorStartX = (parent.getWidth() - indicatorTotalWidth) / 2F;
+        float indicatorStartX = (parent.getWidth() - indicatorTotalWidth) / 2F - dpToPx(6, parent.getContext());
 
         // center vertically in the allotted space
         float indicatorPosY = parent.getHeight() - mIndicatorHeight / 2F;
@@ -90,6 +94,12 @@ public class CirclePagerIndicatorDecoration extends RecyclerView.ItemDecoration 
         float progress = mInterpolator.getInterpolation(left * -1 / (float) width);
 
         drawHighlights(c, indicatorStartX, indicatorPosY, activePosition, progress, itemCount);
+    }
+
+    private Float dpToPx(int px, Context context) {
+        return TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, px, context.getResources().getDisplayMetrics()
+        );
     }
 
     private void drawInactiveIndicators(Canvas c, float indicatorStartX, float indicatorPosY, int itemCount) {
