@@ -722,15 +722,24 @@ class OreoReadinessFragment :
 
         } else {
             if ((it.temperature?.value ?: 0) != 0) {
-                val baselineAvg = mainViewModel.temperatureBaseLine ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE
-                val todayAvg = it.temperature?.value ?: baselineAvg
-                val deviation = todayAvg - baselineAvg
+                val baselineAvg =
+                    mainViewModel.temperatureBaseLine ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE
 
                 binding.lytRScoreData.lytSec3.lytHrMn.root.gone()
                 binding.lytRScoreData.lytSec3.tvPercentValue.visible()
                 binding.lytRScoreData.lytSec3.lytBpmView.root.gone()
-                binding.lytRScoreData.lytSec3.tvPercentValue.text =
-                    String.format("%.1f °F", deviation)
+                if (baselineAvg != mainViewModel.DEFAULT_TEMPERATURE_BASELINE) {
+
+                    val todayAvg = it.temperature?.value ?: baselineAvg
+                    val deviation = todayAvg - baselineAvg
+
+                    binding.lytRScoreData.lytSec3.tvPercentValue.text =
+                        String.format("%.1f °F", deviation)
+
+
+                } else {
+                    binding.lytRScoreData.lytSec3.tvPercentValue.text = "-"
+                }
 
             } else {
                 temperatureDefaultView()
