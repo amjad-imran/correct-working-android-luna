@@ -7,6 +7,7 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,7 +18,9 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSummaryDataTodayBinding
 import com.noisefit.oreo.BottomNavOption
 import com.noisefit.oreo.OreoMainViewModel
+import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.DELETE_REQ_REQUEST_KEY
+import com.noisefit.ui.common.bottomSheet.NAP_REQUEST_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.enums.DashInfoCard
@@ -45,7 +48,7 @@ import com.oreo.data.model.VideoInfoType
 import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
-import com.oreo.ui.custom.LinePagerIndicatorDecoration
+import com.oreo.ui.custom.CirclePagerIndicatorDecoration
 import com.oreo.ui.custom.SnapHelperOneByOne
 import com.oreo.ui.home.summary.AlertClickListener
 import com.oreo.ui.home.summary.HomeRecyclerViewHolder
@@ -55,6 +58,7 @@ import com.oreo.ui.home.summary.OreoRWorkoutAdapter
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
+import com.oreo.ui.workout.detect.DetectWorkoutListFragmentDirections
 import com.oreo.util.graph.OCombineChartUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -103,7 +107,7 @@ class SummaryDataFragmentToday :
             }
 
             override fun onNapRemoveClicked(nap: OreoNapData) {
-                viewModel.removeNapById(nap)
+                showRemoveNapBottomSheet(nap)
             }
         })
     }
@@ -128,7 +132,12 @@ class SummaryDataFragmentToday :
         with(binding.contentMain.lytConfirmNap.vpNaps) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = napsAdapter
-            addItemDecoration(LinePagerIndicatorDecoration())
+            addItemDecoration(CirclePagerIndicatorDecoration())
+            clipToPadding = false
+            val padding =
+                viewModel.screenUtils.dpToPx(12, binding.contentMain.lytConfirmNap.vpNaps.context)
+                    .toInt()
+            setPadding(padding, 0, padding, 0)
 
         }
 
@@ -390,6 +399,12 @@ class SummaryDataFragmentToday :
     }
 
     override fun subscribeObservers() {
+
+        viewModel.getMessages().observe(this) {
+            it.getContent()?.let { message ->
+                context.showShortToast(message)
+            }
+        }
 
         viewModel.getLoading().observe(viewLifecycleOwner) {
             if (it) {
@@ -1047,6 +1062,20 @@ class SummaryDataFragmentToday :
 
             return@setOnClickListener
         }
+    }
+
+    private fun showRemoveNapBottomSheet(nap: OreoNapData) {
+        requireActivity().supportFragmentManager.setFragmentResultListener(
+            NAP_REQUEST_KEY,
+            this
+        ) { _, bundle ->
+            val updated = bundle.getBoolean("remove")
+            if (updated) {
+                viewModel.removeNapById(nap)
+            }
+        }
+
+        navigate(R.id.removeNapBottomSheet)
     }
 
     private fun logFirebaseAppEvent(eventName: String, params: HashMap<String, Any>) {

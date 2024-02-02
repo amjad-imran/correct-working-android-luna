@@ -22,6 +22,7 @@ import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.ScreenUtils
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.AlertType
@@ -59,6 +60,7 @@ constructor(
     val localDataStore: DataStoredInterface,
     val sessionManager: SessionManager,
     val dataConverter: DataConverter,
+    val screenUtils: ScreenUtils,
     private val syncRepository: OreoSyncRepository,
     val userActivityRepository: OreoUserActivityRepository,
     private val userHealthDataDataSource: OreoUserHealthDataDataSource

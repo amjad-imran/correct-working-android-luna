@@ -1014,4 +1014,6 @@
     <string name="text_nap_detected">Nap detected</string>
     <string name="text_confirm">Confirm</string>
     <string name="text_imported_from_google_fit">Imported from Google Fit</string>
+    <string name="text_dismiss_detected_nap">Dismiss detected nap?</string>
+    <string name="text_nap_remove_message">This nap data can not be recovered if once dismissed. Are you sure you want to proceed?</string>
 </resources>

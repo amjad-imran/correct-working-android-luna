@@ -23,6 +23,8 @@
         <include
             android:id="@+id/lytConnectHelp"
             layout="@layout/layout_trouble_connecting_ring"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_24dp"
@@ -42,6 +44,8 @@
             android:id="@+id/lytPairDevice"
             layout="@layout/list_o_pair_device"
             android:layout_width="match_parent"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_24dp"
             android:visibility="gone"
@@ -51,6 +55,8 @@
             android:id="@+id/lytAlerts"
             layout="@layout/list_o_alerts"
             android:layout_width="match_parent"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_24dp"
             android:visibility="gone"
@@ -60,6 +66,8 @@
             android:id="@+id/lytGoogleFit"
             layout="@layout/card_google_fit_dash"
             android:layout_width="match_parent"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_24dp"
             android:visibility="gone"
@@ -69,6 +77,8 @@
             android:id="@+id/lytChargeRing"
             layout="@layout/layout_ring_charge_info"
             android:layout_width="match_parent"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_24dp"
             android:visibility="gone"
@@ -76,6 +86,8 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvHealthData"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -83,6 +95,8 @@
             android:id="@+id/lytHeartRate"
             layout="@layout/list_heart_rate_card_item"
             android:layout_width="match_parent"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_24dp"
             android:visibility="gone"
@@ -94,6 +108,8 @@
             layout="@layout/list_sleep_activity_card_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
             android:layout_marginTop="@dimen/dimen_24dp"
             android:visibility="gone"
             tools:visibility="visible" />
@@ -101,6 +117,8 @@
         <include
             android:id="@+id/lytReadinessAvg"
             layout="@layout/list_readiness_score_card_item"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_24dp"
@@ -112,12 +130,16 @@
             layout="@layout/oreo_layout_recent_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
             android:layout_marginTop="@dimen/dimen_24dp"
             android:visibility="gone"
             tools:visibility="visible" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvViewedCards"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
