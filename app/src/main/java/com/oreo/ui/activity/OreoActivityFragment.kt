@@ -104,6 +104,7 @@ class OreoActivityFragment :
             mViewModel.getActivityDetailsData()
         } else {
             showWalkAround(true)
+            mainViewModel.addWorkoutCtaVisibility.postValue(false)
         }
     }
 
@@ -653,6 +654,7 @@ class OreoActivityFragment :
             mViewModel.ringDataStore.setActivityWalkAroundShown(true)
             showWalkAround(false)
             mViewModel.getActivityDetailsData()
+            mainViewModel.handleAddWorkoutVisibility()
         }
         binding.lytToolbar.tvTitle.text = getString(R.string.text_workout_page_title)
         binding.lytToolbar.view1.visible()
