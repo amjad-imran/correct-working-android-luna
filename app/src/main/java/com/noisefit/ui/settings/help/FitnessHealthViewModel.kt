@@ -56,32 +56,32 @@ class FitnessHealthViewModel @Inject constructor(
         return tempHeart
     }
 
-    fun bodyTemperatureData(): ArrayList<FitnessHealthModel> {
-        val tempHeart = ArrayList<FitnessHealthModel>()
-        val titleArray = arrayListOf(
-            "What is body temperature, and how is it measured?",
-            "What is the normal range of body temperature?",
-            "What to do in case of a high body temperature? "
-        )
-        val msgArray = arrayListOf(
-            "Body temperature measures how well your body can make and get rid of the heat. Your temperature varies during the day owing to several factors – activity levels, gender, age, what you’ve eaten or had to drink, what time of the day it is, where you are in your menstrual cycle, etc.",
-            "A normal body temperature for a typical adult can be anywhere between 97 F to 99 F. Babies and children have a slightly higher range: 97.9 F to 100.4 F.",
-            "Some common ways to cool down the body’s temperature in case of fever are:\n\n" +
-                    "1. Stay hydrated – Drink water, iced tea, and very diluted juices to replenish the water loss due to sweat.\n\n" +
-                    "2. Stay cool – remove extra layers of clothing and blankets unless you have the chills.\n\n" +
-                    "3. Take a lukewarm bath or use a cold compress to relieve the fever.\n\n" +
-                    "4. You can also take over-the-counter medicines only after consulting with your doctor.\n\n" +
-                    "If the fever persists or you have any concerns, you should definitely consult your doctor."
-        )
-        for (it in titleArray.indices) {
-            val child = FitnessHealthModel()
-            child.title = titleArray[it]
-            child.msg = msgArray[it]
-            tempHeart.add(child)
-        }
-
-        return tempHeart
-    }
+//    fun bodyTemperatureData(): ArrayList<FitnessHealthModel> {
+//        val tempHeart = ArrayList<FitnessHealthModel>()
+//        val titleArray = arrayListOf(
+//            "What is body temperature, and how is it measured?",
+//            "What is the normal range of body temperature?",
+//            "What to do in case of a high body temperature? "
+//        )
+//        val msgArray = arrayListOf(
+//            "Body temperature measures how well your body can make and get rid of the heat. Your temperature varies during the day owing to several factors – activity levels, gender, age, what you’ve eaten or had to drink, what time of the day it is, where you are in your menstrual cycle, etc.",
+//            "A normal body temperature for a typical adult can be anywhere between 97 F to 99 F. Babies and children have a slightly higher range: 97.9 F to 100.4 F.",
+//            "Some common ways to cool down the body’s temperature in case of fever are:\n\n" +
+//                    "1. Stay hydrated – Drink water, iced tea, and very diluted juices to replenish the water loss due to sweat.\n\n" +
+//                    "2. Stay cool – remove extra layers of clothing and blankets unless you have the chills.\n\n" +
+//                    "3. Take a lukewarm bath or use a cold compress to relieve the fever.\n\n" +
+//                    "4. You can also take over-the-counter medicines only after consulting with your doctor.\n\n" +
+//                    "If the fever persists or you have any concerns, you should definitely consult your doctor."
+//        )
+//        for (it in titleArray.indices) {
+//            val child = FitnessHealthModel()
+//            child.title = titleArray[it]
+//            child.msg = msgArray[it]
+//            tempHeart.add(child)
+//        }
+//
+//        return tempHeart
+//    }
 
     fun distanceData(): ArrayList<FitnessHealthModel> {
         val tempHeart = ArrayList<FitnessHealthModel>()
