@@ -767,6 +767,7 @@
     <string name="text_readiness_score">Readiness score</string>
     <string name="text_hr_variability">HR variability</string>
     <string name="text_body_tempreature">Body temperature</string>
+    <string name="text_skin_temperature">Skin temperature</string>
     <string name="text_respiratory_rate">Respiratory rate</string>
     <string name="text_heart_rate_variability">Heart rate variability</string>
     <string name="text_average_hrv">Average HRV</string>
@@ -1016,4 +1017,6 @@
     <string name="text_imported_from_google_fit">Imported from Google Fit</string>
     <string name="text_dismiss_detected_nap">Dismiss detected nap?</string>
     <string name="text_nap_remove_message">This nap data can not be recovered if once dismissed. Are you sure you want to proceed?</string>
+    <string name="text_calculating_your_baseline">Calculating your baseline</string>
+    <string name="text_wear_your_ring_consistently_for_14_days_to_see_deviation_in_your_skin_temperature_from_your_personalised_baseline">Wear your ring consistently for 14 days to see deviation in your skin temperature from your personalised baseline.</string>
 </resources>
