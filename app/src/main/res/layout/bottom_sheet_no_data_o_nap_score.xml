@@ -9,13 +9,9 @@
         android:background="@android:color/transparent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            style="@style/ModalStyleDialog"
+            style="@style/ModalStyleDialogNew"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dimen_12dp"
-            android:layout_marginTop="@dimen/dimen_12dp"
-            android:layout_marginEnd="@dimen/dimen_12dp"
-            android:layout_marginBottom="@dimen/dimen_12dp">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/imgView1"
@@ -28,7 +24,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"
-                app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize28dp" />
+                app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize28dpTop" />
 
 
             <com.google.android.material.divider.MaterialDivider
@@ -62,7 +58,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="32dp"
                 android:gravity="center"
                 android:lineSpacingExtra="6sp"
@@ -76,8 +72,10 @@
                 android:id="@+id/ivScoreStatus"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="48dp"
+                android:layout_marginBottom="86dp"
                 android:src="@drawable/ic_bs_nap_score_down"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvDescription"
                 tools:layout_editor_absoluteX="75dp" />
         </androidx.constraintlayout.widget.ConstraintLayout>

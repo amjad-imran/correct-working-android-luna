@@ -7,6 +7,7 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
@@ -18,6 +19,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSummaryDataTodayBinding
 import com.noisefit.oreo.BottomNavOption
 import com.noisefit.oreo.OreoMainViewModel
+import com.noisefit.ui.APP_UPDATE
 import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.DELETE_REQ_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.NAP_REQUEST_KEY
@@ -38,10 +40,12 @@ import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.getHoursBasedOnDateTime
+import com.noisefit_commans.utils.share.ShareUtil
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
+import com.oreo.data.model.SlideUpNapScoreDataModel
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TrendsData
 import com.oreo.data.model.VideoInfoType
@@ -55,6 +59,7 @@ import com.oreo.ui.home.summary.HomeRecyclerViewHolder
 import com.oreo.ui.home.summary.OSummaryHealthOverviewAdapter
 import com.oreo.ui.home.summary.OSummaryHealthOverviewClickEnum
 import com.oreo.ui.home.summary.OreoRWorkoutAdapter
+import com.oreo.ui.sleep.nap.BOTTOM_NAP_RESULT
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
@@ -125,6 +130,20 @@ class SummaryDataFragmentToday :
 
         LOGS.d("CREATED_WITH_DATE $date")
         LOGS.d(TAG, "Today onCreate Called")
+
+        /*navigate(
+            R.id.bottomSheetNapScore, bundleOf(
+                "napScoreData" to SlideUpNapScoreDataModel(
+                    napId = "8d60a64e-11c7-4453-acba-7417c90d4927",
+                    title = "dsfsdfsdfsd",
+                    description = "ksjdfkljsgdjkfgsdfjkgsjkdf kjgsd kfjgsd kfjg sdkfg sdkfg sdkf",
+                    oldSleepScore = 70,
+                    newSleepScore = 55,
+                    oldReadinessScore = 50,
+                    newReadinessScore = 35,
+                )
+            )
+        )*/
     }
 
     private fun setNapsPager() {
@@ -399,6 +418,16 @@ class SummaryDataFragmentToday :
     }
 
     override fun subscribeObservers() {
+
+        requireActivity().supportFragmentManager.setFragmentResultListener(
+            BOTTOM_NAP_RESULT,
+            this
+        ) { key, bundle ->
+            val napId = bundle.getString("napId")
+            if (!napId.isNullOrEmpty()) {
+                navigate(R.id.napDetails, bundleOf("napId" to napId))
+            }
+        }
 
         viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->

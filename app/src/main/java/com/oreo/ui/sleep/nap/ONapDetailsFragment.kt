@@ -118,7 +118,7 @@ class ONapDetailsFragment :
                 preFix = "-"
                 binding.lytNapTopView.lytImpact.tvDiffSScore.setTextColor(
                     binding.lytNapTopView.lytImpact.tvDiffSScore.context.getColor(
-                        R.color.calories_arc
+                        R.color.nap_down
                     )
                 )
                 isScoreGreater = false
@@ -197,12 +197,12 @@ class ONapDetailsFragment :
             it.startTime,
             DateFormats.dateTimeFormat5,
             DateFormats.timeFormat12
-        )
+        )?.lowercase()
         binding.lytNapDetails.tvNapEnd.text = DateFormats.parseDate(
             it.endTime,
             DateFormats.dateTimeFormat5,
             DateFormats.timeFormat12
-        )
+        )?.lowercase()
 
         if ((it.sleepScore ?: 0) == 0 && (it.readinessScore ?: 0) == 0 && (it.prevSleepScore
                 ?: 0) == 0 && (it.prevReadinessScore ?: 0) == 0
