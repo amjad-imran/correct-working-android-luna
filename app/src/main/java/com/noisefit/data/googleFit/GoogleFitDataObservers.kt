@@ -837,9 +837,16 @@ constructor(
                     }
 
                     val workoutGoogleFit = WorkoutGoogleFit()
+
+                    val duration = try {
+                        session.getActiveTime(TimeUnit.SECONDS)
+                    } catch (exp: IllegalStateException) {
+                        exp.printStackTrace()
+                        session.getEndTime(TimeUnit.SECONDS) - session.getStartTime(TimeUnit.SECONDS)
+                    }
                     workoutGoogleFit.name = session.name
                     workoutGoogleFit.identifier = session.identifier
-                    workoutGoogleFit.duration = session.getActiveTime(TimeUnit.SECONDS)
+                    workoutGoogleFit.duration = duration
                     workoutGoogleFit.startTime = session.getStartTime(TimeUnit.SECONDS)
                     workoutGoogleFit.endTime = session.getEndTime(TimeUnit.SECONDS)
                     workoutGoogleFit.appPackageName = session.appPackageName
@@ -849,7 +856,7 @@ constructor(
                     LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.identifier}")
                     LOGS.i(
                         TAG,
-                        "GoogleFitSyncWork Session details: ${session.getActiveTime(TimeUnit.MILLISECONDS)}"
+                        "GoogleFitSyncWork Session details: ${duration}"
                     )
                     LOGS.i(
                         TAG,
@@ -860,7 +867,10 @@ constructor(
                         "GoogleFitSyncWork Session details: ${session.getEndTime(TimeUnit.MILLISECONDS)}"
                     )
                     LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.appPackageName}")
-                    LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.activity} Parsed $workoutType")
+                    LOGS.i(
+                        TAG,
+                        "GoogleFitSyncWork Session details: ${session.activity} Parsed $workoutType"
+                    )
                     val dataSets = response.getDataSet(session)
                     for (dataSet in dataSets) {
                         for (point in dataSet.dataPoints) {
