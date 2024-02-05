@@ -212,6 +212,9 @@ class OreoOnlineDataMapper
                 )
             }
             var dayBreakup: OreoSleepNetworkEntity.OreoDayBreakup? = null
+            val avgTemp =
+                String.format("%.1f", sleepOverlayData.tempBreakup.averageWithoutZeroFloat())
+
             dayBreakup = OreoSleepNetworkEntity.OreoDayBreakup(
                 totalDeep = sleepData.deep,
                 totalLight = sleepData.light,
@@ -231,7 +234,7 @@ class OreoOnlineDataMapper
                 respBreakup = sleepOverlayData.respBreakup,
                 tempBreakup = sleepOverlayData.tempBreakup,
                 oxyBreakup = sleepOverlayData.spo2Breakup,
-                avgTemp = sleepOverlayData.tempBreakup.averageWithoutZeroFloat(),
+                avgTemp = avgTemp.toFloat(),
                 avgOxy = if (sleepOverlayData.spo2Breakup.isEmpty()) 0 else sleepOverlayData.spo2Breakup.averageWithoutZero(),
                 avgResp = if (sleepOverlayData.respBreakup.isEmpty()) 0 else sleepOverlayData.respBreakup.average()
                     .roundToInt() ?: 0,
@@ -255,6 +258,8 @@ class OreoOnlineDataMapper
 
     suspend fun getNapRequest(nap: OreoNapData): OreoNapNetworkEntity {
         val overlayData = getNapOverlayData(nap)
+        val avgTemp = String.format("%.1f", overlayData.tempBreakup.averageWithoutZeroFloat())
+
         val napObject = OreoNapNetworkObjEntity(
             startTime = nap.startTime ?: "",
             endTime = nap.endTime ?: "",
@@ -262,7 +267,7 @@ class OreoOnlineDataMapper
             date = nap.date ?: "",
             avgHrv = overlayData.hrvBreakup.minWithoutZero(),
             temperature = overlayData.tempBreakup,
-            avgTemp = overlayData.tempBreakup.averageWithoutZeroFloat(),
+            avgTemp = avgTemp.toFloat(),
             hr = overlayData.hrBreakup,
             hrv = overlayData.hrvBreakup,
             avgHr = overlayData.hrBreakup.averageWithoutZero(),
