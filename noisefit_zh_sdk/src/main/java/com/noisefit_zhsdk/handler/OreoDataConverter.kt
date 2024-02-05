@@ -953,11 +953,10 @@ constructor(
                     DateFormats.timeFormatHour
                 ).toInt()
 
-                if (startHour >= 10 || startHour <= 20) {
+                if (startHour in 10..19) {
                     returnNaps.add(nap)
                 } else {
                     AppLogs.sendAppLogs("Nap ignored $it")
-                    //context.showShortToast("Start time in between 10-20")
                 }
             } catch (exp: Exception) {
                 returnNaps.add(nap)
