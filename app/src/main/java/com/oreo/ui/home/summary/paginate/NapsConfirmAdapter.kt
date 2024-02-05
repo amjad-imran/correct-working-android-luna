@@ -21,9 +21,9 @@ class NapsConfirmAdapter(val listener: NapConfirmAction) :
 
             val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(nap.duration ?: 0)
             val time = if (hour == 0) {
-                "$minute m"
+                "$minute min"
             } else {
-                "$hour h $minute m"
+                "$hour hr $minute min"
             }
 
             val timeBuilder = StringBuilder()
