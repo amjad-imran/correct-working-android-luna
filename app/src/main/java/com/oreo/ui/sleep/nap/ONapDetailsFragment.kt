@@ -220,7 +220,9 @@ class ONapDetailsFragment :
         binding.lytHeartRate.tvTitle.text = getString(R.string.text_heart_rate)
         binding.lytHeartRate.tvSubtitle1.text = getString(R.string.text_lowest_hr)
         binding.lytHeartRate.tvSubtitle2.text = getString(R.string.text_average_hr)
-        if (it.hrBreakup != null) {
+        val isHrDataNull = (it.hrBreakup?.avg ?: 0) == 0
+
+        if (!isHrDataNull) {
             if (!it.hrBreakup?.value.isNullOrEmpty()) {
                 if (it.hrBreakup?.low == 0 || it.hrBreakup?.low == 255) {
                     binding.lytHeartRate.lytSubtitleValue1.tvUnit.gone()
@@ -249,7 +251,8 @@ class ONapDetailsFragment :
         val sleepEndTime = it.endTime
 
         showHeartRateGraph(
-            it.hrBreakup,
+            if (isHrDataNull) null else it.hrBreakup?.value,
+            it.hrBreakup?.avg ?: 0,
             sleepStartTime, sleepEndTime
         )
 
@@ -258,7 +261,10 @@ class ONapDetailsFragment :
         binding.lytHRVariability.tvTitle.text = getString(R.string.text_heart_rate_variability)
         binding.lytHRVariability.tvSubtitle1.text = getString(R.string.text_average_hrv)
         binding.lytHRVariability.tvSubtitle2.text = getString(R.string.text_max)
-        if (it.hrvBreakUp != null) {
+
+        val isHrvDataNull = (it.hrvBreakUp?.avg ?: 0) == 0
+
+        if (!isHrvDataNull) {
             if (!it.hrvBreakUp?.value.isNullOrEmpty()) {
                 if (it.hrvBreakUp?.avg == 0 || it.hrvBreakUp?.avg == 255) {
                     binding.lytHRVariability.lytSubtitleValue1.tvUnit.gone()
@@ -286,7 +292,8 @@ class ONapDetailsFragment :
         }
         //todo will change startTime, endTime
         showHeartRateVariabilityGraph(
-            it.hrvBreakUp,
+            if (isHrvDataNull) null else it.hrvBreakUp?.value,
+            it.hrvBreakUp?.avg ?: 0,
             sleepStartTime, sleepEndTime
         )
 
@@ -296,7 +303,11 @@ class ONapDetailsFragment :
         binding.lytTemperature.tvSubtitle1.text = getString(R.string.text_average)
         binding.lytTemperature.tvSubtitle2.gone()
         binding.lytTemperature.divider1.root.invisible()
-        if (!it.temperatureBreakup?.value.isNullOrEmpty()) {
+
+        val isTempDataNull = (it.temperatureBreakup?.avg ?: 0) == 0.0f
+
+
+        if (!isTempDataNull) {
             binding.lytTemperature.lytSubtitleValue1.tvValue.text = "${it.temperatureBreakup?.avg}"
             binding.lytTemperature.lytSubtitleValue1.tvUnit.visible()
             binding.lytTemperature.lytSubtitleValue1.tvUnit.text = "°F"
@@ -305,21 +316,22 @@ class ONapDetailsFragment :
         }
         //todo will change startTime, endTime
         showTemperatureGraph(
-            it.temperatureBreakup,
+            if (isTempDataNull) null else it.temperatureBreakup?.value,
             sleepStartTime,
             sleepEndTime
         )
     }
 
     private fun showHeartRateGraph(
-        heartRateData: UnitDataModelArray?,
+        heartRateData: List<Int>?,
+        avg: Int,
         startTime: String?, endTime: String?
     ) {
         val ssTime: String?
         val seTime: String?
         var breakUpData = ArrayList<Int>()
         var hasDummyData = true
-        if (heartRateData?.value.isNullOrEmpty()) {
+        if (heartRateData.isNullOrEmpty()) {
             breakUpData = mViewModel.getDummyBreakUpDataForTimeDisplay()
             ssTime = null
             seTime = null
@@ -327,7 +339,7 @@ class ONapDetailsFragment :
             hasDummyData = false
             seTime = endTime
             ssTime = startTime
-            breakUpData = heartRateData?.value as ArrayList<Int>
+            breakUpData.addAll(heartRateData)
         }
 
 
@@ -370,14 +382,15 @@ class ONapDetailsFragment :
             false, true, GraphDummyModel(
                 hasDummyData, 40, 100
             ),
-            heartRateData?.avg
+            avg
         )
 
 
     }
 
     private fun showHeartRateVariabilityGraph(
-        hrvBreakUpData: UnitDataModelArray?,
+        hrvBreakUpData: List<Int>?,
+        avg: Int,
         startTime: String,
         endTime: String
     ) {
@@ -387,7 +400,7 @@ class ONapDetailsFragment :
         val seTime: String?
         var breakUpData = ArrayList<Int>()
         var hasDummyData = false
-        if (hrvBreakUpData?.value.isNullOrEmpty()) {
+        if (hrvBreakUpData.isNullOrEmpty()) {
             breakUpData = mViewModel.getDummyBreakUpDataForTimeDisplay()
             ssTime = null
             seTime = null
@@ -396,7 +409,7 @@ class ONapDetailsFragment :
             hasDummyData = false
             seTime = endTime
             ssTime = startTime
-            breakUpData = hrvBreakUpData?.value as ArrayList<Int>
+            breakUpData.addAll(hrvBreakUpData)
         }
 
         val baseTimeListNew =
@@ -432,13 +445,13 @@ class ONapDetailsFragment :
             true, false, GraphDummyModel(
                 hasDummyData, 0, 200
             ),
-            hrvBreakUpData?.avg
+            avg
         )
 
     }
 
     private fun showTemperatureGraph(
-        temperatureBreakUpData: UnitDataModelArrayFloat?,
+        temperatureBreakUpData: List<Float>?,
         startTime: String?,
         endTime: String?
     ) {
@@ -446,7 +459,7 @@ class ONapDetailsFragment :
         val seTime: String?
         var breakUpData = ArrayList<Float>()
         var hasDummyData = true
-        if (temperatureBreakUpData?.value.isNullOrEmpty()) {
+        if (temperatureBreakUpData.isNullOrEmpty()) {
             breakUpData = mViewModel.getDummyBreakUpDataForTimeDisplayFloat()
             ssTime = null
             seTime = null
@@ -454,7 +467,7 @@ class ONapDetailsFragment :
             hasDummyData = false
             seTime = endTime
             ssTime = startTime
-            breakUpData = temperatureBreakUpData?.value as ArrayList<Float>
+            breakUpData.addAll(temperatureBreakUpData)
         }
 
         val baseTimeListNew =

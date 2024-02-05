@@ -460,7 +460,7 @@ class SummaryDataFragmentToday :
                     )
                     return@observe
                 }
-                if ((nap.sleepScore ?: 0) != 0 && (nap.readinessScore ?: 0) != 0) {
+                if ((nap.sleepScore ?: 0) != 0 /*&& (nap.readinessScore ?: 0) != 0*/) {
                     navigate(
                         R.id.bottomSheetNapScore, bundleOf(
                             "napScoreData" to viewModel.getNapSlideUpObj(nap)
