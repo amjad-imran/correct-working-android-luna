@@ -60,10 +60,10 @@ constructor(
     private suspend fun getSyncData(success: () -> Unit, failed: () -> Unit) {
         val todayDate = DateFormats.getTodaysDateString(7)
 
-        var shouldUserObjectSync = false
+        /*var shouldUserObjectSync = false
         if (localDataStore.getGFitUserDataLastSyncTime().checkTimeDifferenceMoreThanN(24)) {
             shouldUserObjectSync = true
-        }
+        }*/
 
         LOGS.d("$TAG inside")
         job = syncDataScope.launch {
@@ -107,7 +107,7 @@ constructor(
                 }
 
 
-                if (shouldUserObjectSync) {
+               /* if (shouldUserObjectSync) {
                     LOGS.d("$TAG height weight start get")
                     val call2 = async {
                         googleFitDataObservers.getHeightWeight(
@@ -148,7 +148,7 @@ constructor(
                         )
                     }
                     call2.await()
-                }
+                }*/
 
                 val call3 = async {
                     googleFitDataObservers.getWorkoutFromSession(
