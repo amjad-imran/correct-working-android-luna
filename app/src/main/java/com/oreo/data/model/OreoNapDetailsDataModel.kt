@@ -7,9 +7,9 @@ import com.oreo.data.model.health.UnitDataModelArrayFloat
 
 data class OreoNapDetailsDataModel(
     @SerializedName("start_time")
-    var startTime: String,//YYYY-MM-DD,
+    var startTime: String,
     @SerializedName("end_time")
-    var endTime: String,//YYYY-MM-DD,
+    var endTime: String,
     @SerializedName("prev_sleep_score")
     var prevSleepScore: Int? = null,
     @SerializedName("sleep_score")

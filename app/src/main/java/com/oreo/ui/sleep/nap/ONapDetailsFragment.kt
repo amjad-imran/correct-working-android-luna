@@ -191,7 +191,7 @@ class ONapDetailsFragment :
         val sleepDayGraphView = SleepProgressbarView(binding.lytNapDetails.napPrg.context)
         binding.lytNapDetails.napPrg.removeAllViews()
         binding.lytNapDetails.napPrg.addView(sleepDayGraphView)
-        sleepDayGraphView.setData(mViewModel.getNapArrayData(it.duration?.toInt() ?: 0))
+        sleepDayGraphView.setData(mViewModel.getNapArrayData((it.duration?.toInt() ?: 0) * 60))
 
         binding.lytNapDetails.tvNapStart.text = DateFormats.parseDate(
             it.startTime,

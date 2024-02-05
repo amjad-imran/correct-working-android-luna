@@ -25,9 +25,9 @@ class DashNapAdapter(
 
             val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(nap.duration ?: 0)
             binding.tvDuration.text = if (hour == 0) {
-                "$minute m"
+                "$minute min"
             } else {
-                "$hour h $minute m"
+                "$hour hr $minute min"
             }
             if ((nap.sleepScoreImpact ?: 0) > 0) {
                 binding.ivSleep.visible()
