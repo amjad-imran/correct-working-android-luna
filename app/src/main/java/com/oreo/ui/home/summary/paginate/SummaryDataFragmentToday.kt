@@ -452,22 +452,23 @@ class SummaryDataFragmentToday :
         viewModel.onNapAddSuccess.observe(viewLifecycleOwner) {
             it.getContent()?.let { nap ->
                 mainViewModel.reloadTodaysData()
-                val hour = nap.startTime.let { getHoursBasedOnDateTime(it) }
-                if (hour.toInt() >= 19) {
-                    navigate(
-                        R.id.bottomSheetNoDataNapScore,
-                        bundleOf("napScoreData" to viewModel.getNapSlideUpObj(nap))
-                    )
-                    return@observe
-                }
+
                 if ((nap.sleepScore ?: 0) != 0 /*&& (nap.readinessScore ?: 0) != 0*/) {
                     navigate(
                         R.id.bottomSheetNapScore, bundleOf(
                             "napScoreData" to viewModel.getNapSlideUpObj(nap)
                         )
                     )
+                    return@observe
                 }
 
+                val hour = getHoursBasedOnDateTime(nap.startTime)
+                if (hour.toInt() >= 19) {
+                    navigate(
+                        R.id.bottomSheetNoDataNapScore,
+                        bundleOf("napScoreData" to viewModel.getNapSlideUpObj(nap))
+                    )
+                }
             }
         }
 
