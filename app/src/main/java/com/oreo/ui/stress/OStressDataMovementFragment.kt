@@ -58,6 +58,8 @@ class OStressDataMovementFragment :
                 initCombineChart(dayData)
                 setMovementData(dayData.activity?.daytimeMovement?.movement)
                 handleStressProgressView(dayData.stress)
+                viewModel.prepareStressActivityData(dayData)
+
                 setNudge(60)
 
             }
@@ -70,6 +72,16 @@ class OStressDataMovementFragment :
         }
         binding.ivClose.setOnClickListener {
             handleMovementViews(false)
+        }
+        binding.lytHighMovement.root.setOnClickListener {
+            //todo open activity bottomsheet for testing
+            /*viewModel.stressActivityData?.toTypedArray()?.let { it1 ->
+                navigate(
+                    OStressDetailsFragmentDirections.actionStressDetailFragmentToBottomSheetStressActivity(
+                        it1
+                    )
+                )
+            }*/
         }
 
     }

@@ -520,6 +520,18 @@
     <fragment
         android:id="@+id/fragmentOStressDetails"
         android:name="com.oreo.ui.stress.OStressDetailsFragment"
-        android:label="OStressDetails" />
+        android:label="OStressDetails">
+        <action
+            android:id="@+id/action_stressDetailFragment_to_bottomSheetStressActivity"
+            app:destination="@id/bottomSheetStressActivity" />
+    </fragment>
+    <dialog
+        android:id="@+id/bottomSheetStressActivity"
+        android:name="com.oreo.ui.stress.BottomSheetStressActivities"
+        android:label="BottomSheetStressActivity">
+        <argument
+            android:name="dataList"
+            app:argType="com.oreo.data.model.OStressActivitiesDataModel[]" />
+    </dialog>
 
 </navigation>
