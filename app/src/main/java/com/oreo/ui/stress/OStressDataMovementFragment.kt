@@ -3,6 +3,7 @@ package com.oreo.ui.stress
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -44,6 +45,7 @@ class OStressDataMovementFragment :
 
         handleMovementViews()
 
+
     }
 
     override fun onResume() {
@@ -75,13 +77,13 @@ class OStressDataMovementFragment :
         }
         binding.lytHighMovement.root.setOnClickListener {
             //todo open activity bottomsheet for testing
-            /*viewModel.stressActivityData?.toTypedArray()?.let { it1 ->
+            viewModel.stressActivityData?.toTypedArray()?.let { it1 ->
                 navigate(
                     OStressDetailsFragmentDirections.actionStressDetailFragmentToBottomSheetStressActivity(
                         it1
                     )
                 )
-            }*/
+            }
         }
 
     }

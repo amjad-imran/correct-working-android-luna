@@ -53,6 +53,8 @@ constructor(
         return combinedList
     }
 
+
+
     var stressActivityData: ArrayList<OStressActivitiesDataModel>? = null
     fun prepareStressActivityData(dayData: ServerUserHealthData) {
         val workouts = dayData.activity?.workout
