@@ -9,7 +9,6 @@
         <attr name="bgBottomColor" />
         <attr name="xTextColor" />
         <attr name="yTextColor" />
-        <attr name="yTextSize" />
         <attr name="restLineColor" format="color"/>
         <attr name="highColor" format="color"/>
         <attr name="mediumColor" format="color"/>
@@ -20,6 +19,7 @@
         <attr name="xMax" />
         <attr name="xMin" />
         <attr name="xTextSize" />
+        <attr name="yTextSize" />
         <attr name="leftWith" />
         <attr name="rightWith" />
         <attr name="bottomWith" />

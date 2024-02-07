@@ -56,7 +56,9 @@ class OStressDataMovementFragment :
             mainViewModel.getStressData(it)?.let { dayData ->
 
                 initCombineChart(dayData)
-                setMovementData(dayData.activity?.daytimeMovement?.movement)
+                viewModel.dayTimeMovement = dayData.activity?.daytimeMovement?.movement
+                viewModel.isSelectedMode = false
+                setMovementData(viewModel.dayTimeMovement, viewModel.isSelectedMode, -1)
                 handleStressProgressView(dayData.stress)
                 setNudge(60)
 
@@ -72,6 +74,32 @@ class OStressDataMovementFragment :
             handleMovementViews(false)
         }
 
+        binding.lytHighMovement.root.setOnClickListener {
+            handleMovementClick(3)
+        }
+        binding.lytMediumMovement.root.setOnClickListener {
+            handleMovementClick(2)
+        }
+        binding.lytLowMovement.root.setOnClickListener {
+            handleMovementClick(1)
+        }
+        binding.lytNoMovement.root.setOnClickListener {
+            handleMovementClick(0)
+        }
+    }
+
+    private fun handleMovementClick(type: Int) {
+        val lastSelected = viewModel.lastSelectedType
+
+        if (lastSelected == type) {
+            setMovementData(viewModel.dayTimeMovement, false, -1)
+            viewModel.isSelectedMode = false
+            viewModel.lastSelectedType = -1
+        } else {
+            setMovementData(viewModel.dayTimeMovement, true, type)
+            viewModel.isSelectedMode = true
+            viewModel.lastSelectedType = type
+        }
     }
 
     private fun handleStressProgressView(stress: Stress?) {
@@ -169,26 +197,70 @@ class OStressDataMovementFragment :
 
     }
 
-    private fun setMovementData(movementList: List<Int>?) {
+    private fun setMovementData(
+        movementList: List<Int>?,
+        isSelectedMode: Boolean,
+        selectedType: Int
+    ) {
 
         val combinedData = viewModel.getCombinedMovementData(movementList, true)
 
-        binding.lytHighMovement.tvHeader.text = getString(R.string.text_high_movement)
-        binding.lytHighMovement.compareChart.setDrawData(
-            combinedData, 3, requireContext().getColor(R.color.white)
-        )
-        binding.lytMediumMovement.tvHeader.text = getString(R.string.text_medium_movement)
-        binding.lytMediumMovement.compareChart.setDrawData(
-            combinedData, 2, requireContext().getColor(R.color.medium_movement_color)
-        )
-        binding.lytLowMovement.tvHeader.text = getString(R.string.text_low_movement)
-        binding.lytLowMovement.compareChart.setDrawData(
-            combinedData, 1, requireContext().getColor(R.color.low_movement_color)
-        )
-        binding.lytNoMovement.tvHeader.text = getString(R.string.text_no_movement)
-        binding.lytNoMovement.compareChart.setDrawData(
-            combinedData, 0, requireContext().getColor(R.color.no_movement_color)
-        )
+        binding.lytHighMovement.apply {
+            tvHeader.text = getString(R.string.text_high_movement)
+            compareChart.updateInitData(3, requireContext().getColor(R.color.white))
+            compareChart.setDrawData(
+                combinedData, isSelectedMode
+            )
+
+            if (selectedType == 3) {
+                this.lytMain.background = resources.getDrawable(R.drawable.back_modal_new_10,null)
+                this.root.alpha = 1.0f
+            } else {
+                this.lytMain.background = resources.getDrawable(R.drawable.back_movement_inactive,null)
+                this.root.alpha = 0.5f
+            }
+        }
+
+        binding.lytMediumMovement.apply {
+            binding.lytMediumMovement.tvHeader.text = getString(R.string.text_medium_movement)
+            compareChart.updateInitData(2, requireContext().getColor(R.color.medium_movement_color))
+            binding.lytMediumMovement.compareChart.setDrawData(
+                combinedData, isSelectedMode
+            )
+            if (selectedType == 2) {
+                this.root.alpha = 1.0f
+            } else {
+                this.root.alpha = 0.5f
+            }
+        }
+
+
+        binding.lytLowMovement.apply {
+            binding.lytLowMovement.tvHeader.text = getString(R.string.text_low_movement)
+            compareChart.updateInitData(1, requireContext().getColor(R.color.low_movement_color))
+            binding.lytLowMovement.compareChart.setDrawData(
+                combinedData, isSelectedMode
+            )
+            if (selectedType == 1) {
+                this.root.alpha = 1.0f
+            } else {
+                this.root.alpha = 0.5f
+            }
+        }
+
+        binding.lytNoMovement.apply {
+            binding.lytNoMovement.tvHeader.text = getString(R.string.text_no_movement)
+            compareChart.updateInitData(0, requireContext().getColor(R.color.no_movement_color))
+            binding.lytNoMovement.compareChart.setDrawData(
+                combinedData, isSelectedMode
+            )
+            if (selectedType == 0) {
+                this.root.alpha = 1.0f
+            } else {
+                this.root.alpha = 0.5f
+            }
+        }
+
     }
 
     private fun handleMovementViews(isOpen: Boolean = false) {

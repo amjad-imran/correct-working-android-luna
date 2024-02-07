@@ -1,6 +1,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:lineChart="http://schemas.android.com/apk/res-auto">
+    xmlns:lineChart="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -30,17 +31,18 @@
                 app:layout_constraintTop_toBottomOf="@id/lytTopStressGraph"
                 lineChart:bottomWith="30dp"
                 lineChart:chartLineColor="#FFFFFF"
-                lineChart:restLineColor="#40FFFFFF"
                 lineChart:chartLineWidth="2dp"
                 lineChart:gridColor="#80FFFFFF"
+                lineChart:highColor="#ff922d"
+                lineChart:lowColor="#12cba9"
+                lineChart:mediumColor="#ffe561"
+                lineChart:restLineColor="#40FFFFFF"
                 lineChart:topWith="50dp"
-                lineChart:highColor="#e87e5c"
-                lineChart:mediumColor="#7156cc"
-                lineChart:lowColor="#59aefd"
                 lineChart:xMax="100"
                 lineChart:xMin="0"
                 lineChart:xTextColor="#FFFFFF"
-                lineChart:xTextSize="12sp" />
+                lineChart:xTextSize="12sp"
+                lineChart:yTextSize="12sp" />
 
             <View
                 android:id="@+id/viewOpen"
@@ -82,7 +84,8 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="@dimen/side_margin"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/tvCompareHeader" />
+                app:layout_constraintTop_toBottomOf="@id/tvCompareHeader"
+                tools:visibility="visible" />
 
             <include
                 android:id="@+id/lytMediumMovement"
@@ -93,7 +96,8 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="@dimen/side_margin"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/lytHighMovement" />
+                app:layout_constraintTop_toBottomOf="@id/lytHighMovement"
+                tools:visibility="visible" />
 
             <include
                 android:id="@+id/lytLowMovement"
@@ -104,7 +108,8 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="@dimen/side_margin"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/lytMediumMovement" />
+                app:layout_constraintTop_toBottomOf="@id/lytMediumMovement"
+                tools:visibility="visible" />
 
             <include
                 android:id="@+id/lytNoMovement"
@@ -115,7 +120,8 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="@dimen/side_margin"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/lytLowMovement" />
+                app:layout_constraintTop_toBottomOf="@id/lytLowMovement"
+                tools:visibility="visible" />
 
             <View
                 android:id="@+id/viewClose"

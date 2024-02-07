@@ -13,9 +13,12 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.Pair;
 import android.view.View;
+
+import androidx.core.content.res.ResourcesCompat;
 
 import com.noisefit.luna.R;
 
@@ -48,6 +51,7 @@ public class StressCombinedChart extends View {
     private float bottomWith;
     private float topWith;
     private float xTextSize;
+    private float yTextSize;
     private Paint bgPaint;
     private Paint bgLeftPaint;
     private Paint bgRightPaint;
@@ -55,6 +59,10 @@ public class StressCombinedChart extends View {
     private Paint bgBottomPaint;
 
     private Paint xTextPaint;
+
+    private Paint paintCalm;
+    private Paint paintFocussed;
+    private Paint paintStressed;
     private Paint gridPaint;
     private Paint chartLinePaint;
     private Paint chartLineFillPaint;
@@ -78,7 +86,7 @@ public class StressCombinedChart extends View {
     private LinearGradient chartLineGradient;
     private LinearGradient linearGradientShadow;
     private Map<Integer, Pair<LinearGradient, Bitmap>> resMap;
-    private int shadowWidth = dip2px(50);
+    private int shadowWidth = dip2px(100);
     private DashPathEffect effect = new DashPathEffect(new float[]{dip2px(1), dip2px(5)}, 0);
 
     public StressCombinedChart(Context context) {
@@ -109,6 +117,7 @@ public class StressCombinedChart extends View {
         xMax = ta.getInt(R.styleable.CombineLineChart_xMax, 10);
         xMin = ta.getInt(R.styleable.CombineLineChart_xMin, 0);
         xTextSize = ta.getDimension(R.styleable.CombineLineChart_xTextSize, 8f);
+        yTextSize = ta.getDimension(R.styleable.CombineLineChart_yTextSize, 12f);
         leftWith = ta.getDimension(R.styleable.CombineLineChart_leftWith, 16f);
         rightWith = ta.getDimension(R.styleable.CombineLineChart_rightWith, 8f);
         bottomWith = ta.getDimension(R.styleable.CombineLineChart_bottomWith, 16f);
@@ -127,6 +136,10 @@ public class StressCombinedChart extends View {
     }
 
     private void initPaint() {
+
+        Typeface fontGilroy = ResourcesCompat.getFont(this.getContext(), com.noisefit_commans.R.font.gilroy_medium);
+
+
         bgPaint = new Paint();
         bgPaint.setColor(bgColor);
 
@@ -145,6 +158,21 @@ public class StressCombinedChart extends View {
         xTextPaint = new Paint();
         xTextPaint.setTextSize(xTextSize);
         xTextPaint.setAntiAlias(true);
+
+        paintCalm = new Paint();
+        paintCalm.setTextSize(yTextSize);
+        paintCalm.setTypeface(fontGilroy);
+        paintCalm.setColor(Color.parseColor("#3fe8b5"));
+
+        paintFocussed = new Paint();
+        paintFocussed.setTextSize(yTextSize);
+        paintFocussed.setTypeface(fontGilroy);
+        paintFocussed.setColor(Color.parseColor("#ffed91"));
+
+        paintStressed = new Paint();
+        paintStressed.setTextSize(yTextSize);
+        paintStressed.setTypeface(fontGilroy);
+        paintStressed.setColor(Color.parseColor("#ffad60"));
 
         gridPaint = new Paint();
         gridPaint.setColor(gridColor);
@@ -291,22 +319,23 @@ public class StressCombinedChart extends View {
         canvas.drawRect(rectF, chartLineFillPaint);
         float high = 0;
 
+
         if (combineModel == null) return;
         if (combineModel.getHigh() > 0) {
             high = (mHeight - bottomWith) - (combineModel.getHigh() * 1f / xMax) * (mHeight - bottomWith - topWith);
-            String highText = "High";
-            xTextPaint.getTextBounds(highText, 0, highText.length(), xTextBounds);
-            canvas.drawText(highText, mWith - rightWith - xTextBounds.width() - dip2px(5), (high + topWith) / 2 + xTextBounds.height() / 2f, xTextPaint);
+            String highText = "Stressed";
+            paintStressed.getTextBounds(highText, 0, highText.length(), xTextBounds);
+            canvas.drawText(highText, mWith - rightWith - xTextBounds.width() - dip2px(5), (high + topWith) / 2 + xTextBounds.height() / 2f, paintStressed);
         }
 
         if (combineModel.getMedium() > 0) {
             float medium = (mHeight - bottomWith) - (combineModel.getMedium() * 1f / xMax) * (mHeight - bottomWith - topWith);
-            String mediumText = "Med";
-            xTextPaint.getTextBounds(mediumText, 0, mediumText.length(), xTextBounds);
-            canvas.drawText(mediumText, mWith - rightWith - xTextBounds.width() - dip2px(5), (medium + high) / 2 + xTextBounds.height() / 2f, xTextPaint);
-            String lowText = "Low";
-            xTextPaint.getTextBounds(lowText, 0, lowText.length(), xTextBounds);
-            canvas.drawText(lowText, mWith - rightWith - xTextBounds.width() - dip2px(5), (medium + mHeight - bottomWith) / 2 + xTextBounds.height() / 2f, xTextPaint);
+            String mediumText = "Focussed";
+            paintFocussed.getTextBounds(mediumText, 0, mediumText.length(), xTextBounds);
+            canvas.drawText(mediumText, mWith - rightWith - xTextBounds.width() - dip2px(5), (medium + high) / 2 + xTextBounds.height() / 2f, paintFocussed);
+            String lowText = "Calm";
+            paintCalm.getTextBounds(lowText, 0, lowText.length(), xTextBounds);
+            canvas.drawText(lowText, mWith - rightWith - xTextBounds.width() - dip2px(5), (medium + mHeight - bottomWith) / 2 + xTextBounds.height() / 2f, paintCalm);
         }
 
     }

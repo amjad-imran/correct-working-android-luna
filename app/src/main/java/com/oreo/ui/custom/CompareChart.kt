@@ -8,6 +8,7 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.LOGS
 
 class CompareChart(context: Context, attrs: AttributeSet?) : View(context, attrs) {
@@ -37,8 +38,9 @@ class CompareChart(context: Context, attrs: AttributeSet?) : View(context, attrs
         lineWidth = width.toFloat() / (dataList.size * 2)
 
         var x = 0f
+        var barPaints: Paint?=null
+
         dataList.forEachIndexed { index, it ->
-            val barPaints: Paint
             val end = x + lineWidth
             if (it == drawType) {
                 barPaints = barPaint
@@ -52,19 +54,12 @@ class CompareChart(context: Context, attrs: AttributeSet?) : View(context, attrs
                 end,
                 height.toFloat(),
             )
-            canvas.drawRoundRect(rectf, dpToPx(2), dpToPx(2), barPaints)
+            barPaints?.let {
+                canvas.drawRoundRect(rectf, dpToPx(2), dpToPx(2), it)
+            }
 
             x = end + lineWidth
         }
-
-    }
-
-
-    fun setData(list: List<Int>) {
-        dataList.clear()
-        dataList.addAll(list)
-        invalidate()
-        requestLayout()
     }
 
     fun dpToPx(px: Int): Float {
@@ -73,11 +68,29 @@ class CompareChart(context: Context, attrs: AttributeSet?) : View(context, attrs
         )
     }
 
-    fun setDrawData(list: List<Int>, type: Int, colorCode: Int) {
-        dataList.clear()
-        dataList.addAll(list)
+    fun updateInitData(type: Int, colorCode: Int){
         drawType = type
         barPaint.color = colorCode
+    }
+
+    fun setDrawData(list: List<Int>, isSelectedMode: Boolean = true) {
+        if (!isSelectedMode) {
+            val selectedList = list.filter {
+                it == drawType
+            }
+            val capacity = 96 - selectedList.size
+
+            val appendList = Array(capacity) { 255 }
+            val mutableList = (selectedList as MutableList)
+            mutableList.addAll(appendList)
+
+            dataList.clear()
+            dataList.addAll(mutableList)
+        } else {
+            dataList.clear()
+            dataList.addAll(list)
+        }
+
         barPaint.isAntiAlias = true
         invalidate()
         requestLayout()

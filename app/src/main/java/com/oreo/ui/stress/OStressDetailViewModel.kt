@@ -27,6 +27,10 @@ constructor(
     val screenUtils: ScreenUtils
 ) : BaseViewModel() {
 
+    var lastSelectedType: Int = -1
+    var isSelectedMode: Boolean = false
+    var dayTimeMovement: List<Int>? = null
+
     var date: String? = null
 
 
