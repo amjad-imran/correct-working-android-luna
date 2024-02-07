@@ -3,7 +3,6 @@ package com.oreo.ui.stress
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -16,6 +15,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.Stress
+import com.oreo.data.model.StressNudge
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -23,6 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class OStressDataMovementFragment :
     BaseFragment<FragmentOStressDataMovementBinding>(FragmentOStressDataMovementBinding::inflate) {
     private val mainViewModel: OreoMainViewModel by activityViewModels()
+    private val sharedViewModel: StressDetailSharedViewModel by activityViewModels()
     private val viewModel: OStressDetailViewModel by viewModels()
     private val ARGS_DATE = "ARGS_DATE"
 
@@ -57,27 +58,31 @@ class OStressDataMovementFragment :
         viewModel.date?.let {
             mainViewModel.getStressData(it)?.let { dayData ->
 
-                initCombineChart(dayData)
                 viewModel.dayTimeMovement = dayData.activity?.daytimeMovement?.movement
                 viewModel.isSelectedMode = false
+
+                initCombineChart(dayData)
                 setMovementData(viewModel.dayTimeMovement, viewModel.isSelectedMode, -1)
                 handleStressProgressView(dayData.stress)
                 viewModel.prepareStressActivityData(dayData)
 
-                setNudge(60)
+                setNudge(dayData.stress?.nudges)
 
             }
         }
     }
 
     override fun initListener() {
+        //sharedViewModel.setSelectedType(StressType.NO_DATA)
+
+
         binding.ivOpen.setOnClickListener {
             handleMovementViews(true)
         }
         binding.ivClose.setOnClickListener {
             handleMovementViews(false)
         }
-        binding.lytHighMovement.root.setOnClickListener {
+        /*binding.lytHighMovement.root.setOnClickListener {
             //todo open activity bottomsheet for testing
             viewModel.stressActivityData?.toTypedArray()?.let { it1 ->
                 navigate(
@@ -86,7 +91,7 @@ class OStressDataMovementFragment :
                     )
                 )
             }
-        }
+        }*/
 
         binding.lytHighMovement.root.setOnClickListener {
             handleMovementClick(3)
@@ -128,7 +133,7 @@ class OStressDataMovementFragment :
             )
             lytCalm.lytHrMn.tvHour.text = "$hourCalm"
             lytCalm.lytHrMn.tvMinute.text = "$minuteCalm"
-            lytCalm.tvCalm.setTextColor(Color.parseColor("#87c1ff"))
+            lytCalm.tvCalm.setTextColor(Color.parseColor("#3fe8b5"))
             lytCalm.tvCalm.text = getString(R.string.text_calm)
 
 
@@ -137,7 +142,7 @@ class OStressDataMovementFragment :
             )
             lytFocussed.lytHrMn.tvHour.text = "$hourFocused"
             lytFocussed.lytHrMn.tvMinute.text = "$minuteFocused"
-            lytFocussed.tvCalm.setTextColor(Color.parseColor("#b5b2ff"))
+            lytFocussed.tvCalm.setTextColor(Color.parseColor("#ffed91"))
             lytFocussed.tvCalm.text = getString(R.string.text_focussed)
 
 
@@ -146,7 +151,7 @@ class OStressDataMovementFragment :
             )
             lytStressed.lytHrMn.tvHour.text = "$hourStressed"
             lytStressed.lytHrMn.tvMinute.text = "$minuteStressed"
-            lytStressed.tvCalm.setTextColor(Color.parseColor("#ffbba5"))
+            lytStressed.tvCalm.setTextColor(Color.parseColor("#ffad60"))
             lytStressed.tvCalm.text = getString(R.string.text_stressed)
 
         }
@@ -172,7 +177,7 @@ class OStressDataMovementFragment :
                 }
             viewStressed.layoutParams =
                 viewStressed.layoutParams.apply {
-                    if (calm == 0 && focused == 0) {
+                    if (focused == 0 || stressed == 0) {
                         (this as LinearLayout.LayoutParams).marginStart = 0
                     } else {
                         (this as LinearLayout.LayoutParams).marginStart =
@@ -190,8 +195,14 @@ class OStressDataMovementFragment :
         return (progress.toFloat() / total).times(100)
     }
 
-    private fun setNudge(stressValue: Int) {
-        when (stressValue) {
+    private fun setNudge(nudges: List<StressNudge>?) {
+        if (nudges.isNullOrEmpty()) {
+            binding.lytStressBanner.rootView.gone()
+            return
+        }
+        binding.lytStressBanner.rootView.visible()
+
+        when (nudges.first().value) {
             in 1..34 -> {
                 binding.lytStressBanner.rootView.setBackgroundResource(R.drawable.ic_st_calm_cue_bg)
             }
@@ -204,6 +215,8 @@ class OStressDataMovementFragment :
                 binding.lytStressBanner.rootView.setBackgroundResource(R.drawable.ic_st_stress_cue_bg)
             }
         }
+
+        binding.
 
     }
 

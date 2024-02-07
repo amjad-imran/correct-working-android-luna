@@ -43,7 +43,24 @@ data class ServerUserHealthData(
     )
 
 data class Stress(
-    val breakup: List<Int>
+    @SerializedName("break_up")
+    val breakUp: List<Int>,
+    @SerializedName("stress_value")
+    val stressValue: StressValue? = null,
+    val nudges: List<StressNudge>? = null,
+    @SerializedName("last_updated")
+    val lastUpdated: Long? = null
+)
+
+data class StressValue(
+    val value: Int? = null,
+    val text: String? = null
+)
+
+data class StressNudge(
+    val label: String,
+    val value: String? = null,
+    val message: String
 )
 
 data class DataBreakup(

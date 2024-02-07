@@ -23,52 +23,26 @@ import java.time.LocalDate
 class OStressDetailsFragment :
     BaseFragment<FragmentOStressDetailsBinding>(FragmentOStressDetailsBinding::inflate) {
     private val mainViewModel: OreoMainViewModel by activityViewModels()
+    private val sharedViewModel: StressDetailSharedViewModel by activityViewModels()
     private var pagerAdapter: StressPagerAdapter? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sharedViewModel.lastSelectedStressType = StressType.NO_DATA
         setViewPager()
-        mainViewModel.lastSelectedStressType = StressType.CALM
-        animateBackFadeInView(StressType.CALM)
     }
 
-    /*
-    * 0-calm
-    * 1-stress
-    * 2-focused
-    * */
+
     private fun animateBackFadeInView(type: StressType) {
         val backDrawable: Int = when (type) {
-            StressType.CALM -> {
-                R.drawable.ic_calm_stress_bg
-            }
-
-            StressType.FOCUSED -> {
-                R.drawable.ic_focused_stress_bg
-            }
-
-            else -> R.drawable.ic_high_stress_bg
+            StressType.CALM -> R.drawable.ic_calm_stress_bg
+            StressType.FOCUSED -> R.drawable.ic_focused_stress_bg
+            StressType.STRESSED -> R.drawable.ic_high_stress_bg
+            StressType.NO_DATA -> 0
         }
         binding.imageBg.setBackgroundResource(backDrawable)
         val animFadeIn = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
         binding.imageBg.startAnimation(animFadeIn)
 
-    }
-
-    private fun animateBackFadeOutView(type: StressType) {
-        val backDrawable: Int = when (type) {
-            StressType.CALM -> {
-                R.drawable.ic_calm_stress_bg
-            }
-
-            StressType.FOCUSED -> {
-                R.drawable.ic_focused_stress_bg
-            }
-
-            else -> R.drawable.ic_high_stress_bg
-        }
-        binding.imageBg.setBackgroundResource(backDrawable)
-        val animFadeOut = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
-        binding.imageBg.startAnimation(animFadeOut)
     }
 
     private fun setViewPager() {
@@ -161,9 +135,7 @@ class OStressDetailsFragment :
             val currentItem = binding.viewPagerStress.currentItem
             if (currentItem == 0) return@setOnClickListener
             binding.viewPagerStress.setCurrentItem((currentItem - 1), true)
-            animateBackFadeOutView(mainViewModel.lastSelectedStressType)
-            animateBackFadeInView(StressType.STRESS)
-            mainViewModel.lastSelectedStressType = StressType.STRESS
+
         }
         binding.tabLayout.tvDateRight.setOnClickListener {
             if (pagerAdapter == null) return@setOnClickListener
@@ -172,9 +144,6 @@ class OStressDetailsFragment :
                 return@setOnClickListener
             }
             binding.viewPagerStress.setCurrentItem((currentItem + 1), true)
-            animateBackFadeOutView(mainViewModel.lastSelectedStressType)
-            animateBackFadeInView(StressType.FOCUSED)
-            mainViewModel.lastSelectedStressType = StressType.FOCUSED
         }
 
     }
@@ -190,6 +159,11 @@ class OStressDetailsFragment :
             binding.tabLayout.root.visible()
             setTabDates(pos)
 
+        }
+
+        sharedViewModel.selectedStressLevel.observe(this) {
+            animateBackFadeInView(it)
+            sharedViewModel.lastSelectedStressType = it
         }
     }
 

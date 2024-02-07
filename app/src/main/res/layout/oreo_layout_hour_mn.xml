@@ -8,7 +8,7 @@
 
         <TextView
             android:id="@+id/tvHour"
-            style="@style/H5"
+            style="@style/H3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
@@ -17,11 +17,10 @@
 
         <TextView
             android:id="@+id/tvHourUnit"
-            style="@style/H6"
+            style="@style/Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
-            android:textSize="12sp"
             app:layout_constraintBaseline_toBaselineOf="@id/tvHour"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tvHour"
@@ -29,7 +28,7 @@
 
         <TextView
             android:id="@+id/tvMinute"
-            style="@style/H5"
+            style="@style/H3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
@@ -40,11 +39,10 @@
 
         <TextView
             android:id="@+id/tvMinuteUnit"
-            style="@style/H6"
+            style="@style/Small"
             android:layout_width="wrap_content"
             android:layout_marginStart="2dp"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
             app:layout_constraintBaseline_toBaselineOf="@id/tvHour"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tvMinute"

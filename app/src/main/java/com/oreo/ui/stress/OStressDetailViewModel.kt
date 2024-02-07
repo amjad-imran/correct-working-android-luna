@@ -218,13 +218,13 @@ constructor(
 
     fun getStressMinutes(stress: Stress?): Triple<Int, Int, Int> {
         //return Triple(32, 21, 10)
-        if (stress?.breakup.isNullOrEmpty()) return Triple(0, 0, 0)
+        if (stress?.breakUp.isNullOrEmpty()) return Triple(0, 0, 0)
 
         var calmCount = 0
         var focusedCount = 0
         var stressedCount = 0
 
-        stress?.breakup?.forEach { stressValue ->
+        stress?.breakUp?.forEach { stressValue ->
             when (stressValue) {
                 0 -> {}
                 in 1..34 -> {

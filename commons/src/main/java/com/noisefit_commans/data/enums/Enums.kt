@@ -47,5 +47,5 @@ enum class GraphType {
 }
 
 enum class StressType {
-    CALM, STRESS, FOCUSED
+    CALM, FOCUSED, STRESSED, NO_DATA
 }

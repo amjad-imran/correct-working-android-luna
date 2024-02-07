@@ -90,7 +90,6 @@ constructor(
     val dashTodayReload = MutableLiveData<Event<Boolean>>()
 
     var bottomNavigation = MutableLiveData<Event<BottomNavOption>>()
-    var lastSelectedStressType: StressType =StressType.CALM
     fun navigateTo(option: BottomNavOption) {
         bottomNavigation.postValue(Event(option))
     }
