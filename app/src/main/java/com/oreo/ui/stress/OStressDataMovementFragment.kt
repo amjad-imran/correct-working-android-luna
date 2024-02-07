@@ -227,10 +227,10 @@ class OStressDataMovementFragment :
             )
 
             if (selectedType == 3) {
-                this.lytMain.background = resources.getDrawable(R.drawable.back_modal_new_10,null)
+                this.lytMain.setBackgroundResource(R.drawable.back_modal_new_10)
                 this.root.alpha = 1.0f
             } else {
-                this.lytMain.background = resources.getDrawable(R.drawable.back_movement_inactive,null)
+                this.lytMain.setBackgroundResource(R.drawable.back_modal_new_10_normal)
                 this.root.alpha = 0.5f
             }
         }
@@ -241,9 +241,12 @@ class OStressDataMovementFragment :
             binding.lytMediumMovement.compareChart.setDrawData(
                 combinedData, isSelectedMode
             )
+
             if (selectedType == 2) {
+                this.lytMain.setBackgroundResource(R.drawable.back_modal_new_10)
                 this.root.alpha = 1.0f
             } else {
+                this.lytMain.setBackgroundResource(R.drawable.back_modal_new_10_normal)
                 this.root.alpha = 0.5f
             }
         }
@@ -255,9 +258,12 @@ class OStressDataMovementFragment :
             binding.lytLowMovement.compareChart.setDrawData(
                 combinedData, isSelectedMode
             )
+
             if (selectedType == 1) {
+                this.lytMain.setBackgroundResource(R.drawable.back_modal_new_10)
                 this.root.alpha = 1.0f
             } else {
+                this.lytMain.setBackgroundResource(R.drawable.back_modal_new_10_normal)
                 this.root.alpha = 0.5f
             }
         }
@@ -268,9 +274,12 @@ class OStressDataMovementFragment :
             binding.lytNoMovement.compareChart.setDrawData(
                 combinedData, isSelectedMode
             )
+
             if (selectedType == 0) {
+                this.lytMain.setBackgroundResource(R.drawable.back_modal_new_10)
                 this.root.alpha = 1.0f
             } else {
+                this.lytMain.setBackgroundResource(R.drawable.back_modal_new_10_normal)
                 this.root.alpha = 0.5f
             }
         }
