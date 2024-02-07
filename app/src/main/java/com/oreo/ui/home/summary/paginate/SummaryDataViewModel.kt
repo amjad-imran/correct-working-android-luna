@@ -96,7 +96,9 @@ constructor(
                             ODashboardReadinessModel(
                                 readinessScore = it?.readinessScore?.value,
                                 status = it?.readinessScore?.text?.capitalizeWords(),
-                                nudges = it?.dashNudges
+                                nudges = it?.dashNudges,
+                                readinessNapScoreImpact = healthData.readiness?.readinessNapScoreImpact,
+                                noOfNaps = healthData.readiness?.noOfNaps
                             )
                         )
                     )
@@ -119,8 +121,10 @@ constructor(
                                 restingHr = healthData.sleep?.restingHr?.value,
                                 sleepStage = it?.hourly_breakup ?: ArrayList(),
                                 status = it?.sleepScore?.text?.capitalizeWords(),
-                                startTime = "",
-                                endTime = ""
+                                startTime = newSleepArray?.firstOrNull()?.start_time ?: "",
+                                endTime = newSleepArray?.lastOrNull()?.end_time ?: "",
+                                sleepNapScoreImpact = healthData.sleep?.sleepNapScoreImpact ?: 0,
+                                noOfNaps = healthData.sleep?.noOfNaps ?: 0
                             ),
                             makeSleepArray(newSleepArray),
                             newSleepArray?.firstOrNull()?.start_time ?: "",

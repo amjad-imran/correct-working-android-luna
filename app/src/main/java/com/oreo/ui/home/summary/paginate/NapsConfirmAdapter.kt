@@ -37,8 +37,8 @@ class NapsConfirmAdapter(val listener: NapConfirmAction) :
                     DateFormats.timeFormat12
                 )?.lowercase()
             )
-            timeBuilder.append(" | ")
-            timeBuilder.append(time)
+
+            binding.tvNapDuration.text = time
 
             binding.tvNapTime.text = timeBuilder.toString()
 
