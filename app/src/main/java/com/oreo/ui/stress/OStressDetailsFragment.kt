@@ -2,11 +2,13 @@ package com.oreo.ui.stress
 
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AnimationUtils
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOStressDetailsBinding
 import com.noisefit.oreo.OreoMainViewModel
+import com.noisefit_commans.data.enums.StressType
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
@@ -25,6 +27,48 @@ class OStressDetailsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setViewPager()
+        mainViewModel.lastSelectedStressType = StressType.CALM
+        animateBackFadeInView(StressType.CALM)
+    }
+
+    /*
+    * 0-calm
+    * 1-stress
+    * 2-focused
+    * */
+    private fun animateBackFadeInView(type: StressType) {
+        val backDrawable: Int = when (type) {
+            StressType.CALM -> {
+                R.drawable.ic_calm_stress_bg
+            }
+
+            StressType.FOCUSED -> {
+                R.drawable.ic_focused_stress_bg
+            }
+
+            else -> R.drawable.ic_high_stress_bg
+        }
+        binding.imageBg.setBackgroundResource(backDrawable)
+        val animFadeIn = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
+        binding.imageBg.startAnimation(animFadeIn)
+
+    }
+
+    private fun animateBackFadeOutView(type: StressType) {
+        val backDrawable: Int = when (type) {
+            StressType.CALM -> {
+                R.drawable.ic_calm_stress_bg
+            }
+
+            StressType.FOCUSED -> {
+                R.drawable.ic_focused_stress_bg
+            }
+
+            else -> R.drawable.ic_high_stress_bg
+        }
+        binding.imageBg.setBackgroundResource(backDrawable)
+        val animFadeOut = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
+        binding.imageBg.startAnimation(animFadeOut)
     }
 
     private fun setViewPager() {
@@ -117,6 +161,9 @@ class OStressDetailsFragment :
             val currentItem = binding.viewPagerStress.currentItem
             if (currentItem == 0) return@setOnClickListener
             binding.viewPagerStress.setCurrentItem((currentItem - 1), true)
+            animateBackFadeOutView(mainViewModel.lastSelectedStressType)
+            animateBackFadeInView(StressType.STRESS)
+            mainViewModel.lastSelectedStressType = StressType.STRESS
         }
         binding.tabLayout.tvDateRight.setOnClickListener {
             if (pagerAdapter == null) return@setOnClickListener
@@ -125,7 +172,11 @@ class OStressDetailsFragment :
                 return@setOnClickListener
             }
             binding.viewPagerStress.setCurrentItem((currentItem + 1), true)
+            animateBackFadeOutView(mainViewModel.lastSelectedStressType)
+            animateBackFadeInView(StressType.FOCUSED)
+            mainViewModel.lastSelectedStressType = StressType.FOCUSED
         }
+
     }
 
     override fun subscribeObservers() {

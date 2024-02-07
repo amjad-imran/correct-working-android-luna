@@ -17,6 +17,7 @@ import com.noisefit_commans.common.checkDayDifferenceMoreNMinutes
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.enums.StressType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.RecordedWorkoutData
@@ -89,6 +90,7 @@ constructor(
     val dashTodayReload = MutableLiveData<Event<Boolean>>()
 
     var bottomNavigation = MutableLiveData<Event<BottomNavOption>>()
+    var lastSelectedStressType: StressType =StressType.CALM
     fun navigateTo(option: BottomNavOption) {
         bottomNavigation.postValue(Event(option))
     }

@@ -11,6 +11,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+
             <include
                 android:id="@+id/lytTopStressGraph"
                 layout="@layout/layout_stress_graph_view"

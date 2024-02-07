@@ -10,6 +10,7 @@ import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.ScreenUtils
 import com.oreo.data.model.OActivityListModal
+import com.oreo.data.model.OStressActivitiesDataModel
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.Stress
 import com.oreo.data.model.health.OreoSleepModel
@@ -54,6 +55,37 @@ constructor(
             }
         }
         return combinedList
+    }
+
+
+
+    var stressActivityData: ArrayList<OStressActivitiesDataModel>? = null
+    fun prepareStressActivityData(dayData: ServerUserHealthData) {
+        val workouts = dayData.activity?.workout
+        val sleep = dayData.sleep
+        val dataList = ArrayList<OStressActivitiesDataModel>()
+        workouts?.forEach {
+            dataList.add(
+                OStressActivitiesDataModel(
+                    type = "Workout",
+                    startTime = it.startTime,
+                    endTime = it.endTime,
+                    id = it.id
+                )
+            )
+        }
+        if (sleep != null) {
+            if (sleep.hourly_breakup != null)
+                dataList.add(
+                    OStressActivitiesDataModel(
+                        type = "Sleep",
+                        startTime = sleep.hourly_breakup?.firstOrNull()?.start_time,
+                        endTime = sleep.hourly_breakup?.lastOrNull()?.end_time,
+                        id = ""
+                    )
+                )
+        }
+        stressActivityData = dataList
     }
 
     fun getStressCombinedData(dayData: ServerUserHealthData): StressCombineModel {
