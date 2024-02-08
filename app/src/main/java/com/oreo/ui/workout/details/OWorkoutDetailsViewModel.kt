@@ -135,7 +135,16 @@ class OWorkoutDetailsViewModel @Inject constructor(
 
     }
 
-    fun getXAxisList(movementList: List<Int>, startTime: String, endTime: String): List<String?> {
+    fun getXAxisList(movementList: List<Int>?, startTime: String, endTime: String): List<String?> {
+        if(movementList.isNullOrEmpty()){
+            return MutableList<String>(2,{""})
+                .apply {
+                    this[0] = startTime.lowercase()
+                    this[1] =
+                        endTime.lowercase()
+                }
+                .toList()
+        }
 
         val list = arrayOfNulls<String>(movementList.size)
 
@@ -204,7 +213,12 @@ class OWorkoutDetailsViewModel @Inject constructor(
 
         val chunked = movement.chunked(chunkSize)
         chunked.forEach {
-            val data = it.average().ceilRound()
+            val newList = it.map {
+                if (it==255){
+                    0
+                }else it
+            }
+            val data = newList.average().ceilRound()
             list.add(data)
         }
 

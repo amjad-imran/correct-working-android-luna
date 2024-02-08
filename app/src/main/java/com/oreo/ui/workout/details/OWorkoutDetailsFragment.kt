@@ -16,6 +16,7 @@ import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.ui.custom.WorkoutIntensityGraphOreo
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.GraphDummyModel
@@ -72,7 +73,7 @@ class OWorkoutDetailsFragment :
         binding.lytToolbar.tvTitle.text = args.workoutName
         binding.lytIntensity.tvTitle.text = getString(R.string.text_intensity)
         binding.lytHeartRate.tvTitle.text = getString(R.string.text_heart_rate)
-        binding.lytHeartRate.tvSubtitle1.text = getString(R.string.text_lowest_hr)
+        binding.lytHeartRate.tvSubtitle1.text = getString(R.string.text_max_hr)
         binding.lytHeartRate.tvSubtitle2.text = getString(R.string.text_average_hr)
 
         binding.lytPace.tvTitle.text = getString(R.string.text_pace)
@@ -160,22 +161,25 @@ class OWorkoutDetailsFragment :
             binding.divider2.root.gone()
             binding.tvImportText.visible()
             binding.tvImportText.text = "Imported from Health"
-        } else if(it.type.equals("google", true)){
+        } else if (it.type.equals("google", true)) {
             binding.lytHeartRate.root.gone()
             binding.divider1.root.visible()
             binding.lytIntensity.root.gone()
             binding.divider2.root.gone()
             binding.tvImportText.visible()
             binding.tvImportText.text = getString(R.string.text_imported_from_google_fit)
-        }else {
+        } else {
+
 
             binding.lytHeartRate.root.gone()
 
             var movement = it.movement
             if (it.type.equals("userworkout", true)) {
+                val maxHr = it.hrArray?.maxOrNull()
                 setHrGraph(
                     it.hrArray,
                     it.hrAvg,
+                    maxHr,
                     it.hrLow,
                     "${it.date} ${it.startTime}",
                     "${it.date} ${it.endTime}"
@@ -213,6 +217,7 @@ class OWorkoutDetailsFragment :
     private fun setHrGraph(
         hrArray: List<Int>?,
         hrAvg: Int?,
+        hrMax: Int?,
         hrLow: Int?,
         startTime: String?,
         endTime: String?
@@ -221,7 +226,7 @@ class OWorkoutDetailsFragment :
         binding.lytHeartRate.bInfo.gone()
 
         binding.lytHeartRate.tvTitle.text = getString(R.string.text_heart_rate)
-        binding.lytHeartRate.tvSubtitle1.text = getString(R.string.text_lowest_hr)
+        binding.lytHeartRate.tvSubtitle1.text = getString(R.string.text_max_hr)
         binding.lytHeartRate.tvSubtitle2.text = getString(R.string.text_average_hr)
         val heartRateData = hrArray
         if (heartRateData != null) {
@@ -239,13 +244,13 @@ class OWorkoutDetailsFragment :
                 binding.lytHeartRate.lytSubtitleValue2.tvValue.text = "-"
                 binding.lytHeartRate.lytSubtitleValue2.tvUnit.gone()
             }
-            if (hrLow != null) {
-                if (hrLow == 0 || hrLow == 255) {
+            if (hrMax != null) {
+                if (hrMax == 0 || hrMax == 255) {
                     binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
                     binding.lytHeartRate.lytSubtitleValue1.tvUnit.gone()
                 } else {
                     binding.lytHeartRate.lytSubtitleValue1.tvValue.text =
-                        hrLow.toString()
+                        hrMax.toString()
                     binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
                     binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
                 }
@@ -351,11 +356,30 @@ class OWorkoutDetailsFragment :
         startTime: String,
         endTime: String
     ) {
-        if (movementList == null) return
+
+        var hasNoData = false
+        if (movementList == null) {
+            hasNoData = true
+        } else {
+            val filteredData = movementList.filter { it != 0 && it != 255 }
+            if (filteredData.isEmpty()) {
+                hasNoData = true
+            }
+        }
+
+        if (hasNoData) {
+            binding.lytIntensity.textNoData.visible()
+            binding.lytIntensity.tvIntensityType.invisible()
+            binding.lytIntensity.backIntensity.invisible()
+        } else {
+            binding.lytIntensity.textNoData.gone()
+            binding.lytIntensity.backIntensity.visible()
+            binding.lytIntensity.tvIntensityType.visible()
+            binding.lytIntensity.tvIntensityType.text = intensity?.capitalizeWords()
+        }
 
         binding.divider1.root.visible()
         binding.lytIntensity.root.visible()
-        binding.lytIntensity.tvIntensityType.text = intensity?.capitalizeWords()
 
         val sleepDayGraphView = WorkoutIntensityGraphOreo(requireContext())
         binding.lytIntensity.graphView.removeAllViews()
@@ -364,8 +388,12 @@ class OWorkoutDetailsFragment :
         sleepDayGraphView.init(false)
 
         sleepDayGraphView.setData(
-            movementList,
-            mViewModel.getXAxisList(movementList, startTime, endTime)
+            if (hasNoData) {
+                ArrayList()
+            } else movementList ?: ArrayList(),
+            mViewModel.getXAxisList(if (hasNoData) {
+                ArrayList()
+            } else movementList, startTime, endTime)
         )
 
         sleepDayGraphView.invalidate()
