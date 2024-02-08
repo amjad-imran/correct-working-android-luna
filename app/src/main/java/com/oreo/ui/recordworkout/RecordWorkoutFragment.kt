@@ -119,6 +119,37 @@ class RecordWorkoutFragment :
         if (viewModel.currentWorkoutState == 0) {
             navigateUpSafe()
         } else {
+
+            if (viewModel.workoutDuration < 60) {
+
+                setFragmentResultListener(
+                    END_WORKOUT_KEY_SHORT
+                ) { _, bundle ->
+                    val end = bundle.getBoolean("end")
+
+                    if (end) {
+                        binding.progressBar.root.visible()
+                        val sportId = viewModel.workout?.ringId ?: -1
+
+                        viewModel.sessionManager.sendUpdateQueryAction(
+                            UpdateDeviceAction.UpdateOngoingWorkout(
+                                sportId,
+                                viewModel.getCurrentTimeStamp(),
+                                4
+                            )
+                        )
+                        viewModel.markedDeleted = true
+                        viewModel.markForDelete(viewModel.sportStartTime)
+                    }
+                }
+                navigate(R.id.bottomSheetEndWorkoutShort)
+                return
+            }
+
+
+
+
+
             setFragmentResultListener(
                 END_WORKOUT_KEY
             ) { _, bundle ->

@@ -1001,6 +1001,7 @@
     <string name="text_end">End</string>
     <string name="text_end_workout">End workout</string>
     <string name="text_ready_to_end_your_workout">Ready to end your workout and save your progress?</string>
+    <string name="text_ready_to_end_your_workout_short">Since your workout lasts less than 1 minute, it won\'t be saved. Are you sure you want to end your workout?</string>
     <string name="text_select_workout">Select workout</string>
     <string name="text_trying_to_connect_your_ring">Trying to connect your ring</string>
     <string name="text_ring_not_in_range">To record your workout, make sure your ring is charged and on your finger, and within range of your device.</string>

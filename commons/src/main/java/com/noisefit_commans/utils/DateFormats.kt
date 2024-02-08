@@ -1155,6 +1155,8 @@ object DateFormats {
         return convertTimeStampToPrevious12ofDay(subtractDate(currentTimeStamp, PastSyncData))
     }
 
+
+
     fun convertTimeStampToPrevious12ofDay(timestamp: Long): Long {
         val cal = Calendar.getInstance()
         cal.timeInMillis = timestamp

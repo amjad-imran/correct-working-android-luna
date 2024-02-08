@@ -549,5 +549,9 @@
         android:id="@+id/removeNapBottomSheet"
         android:name="com.noisefit.ui.common.bottomSheet.RemoveNapBottomSheet"
         android:label="RemoveNapBottomSheet" />
+    <dialog
+        android:id="@+id/bottomSheetEndWorkoutShort"
+        android:name="com.oreo.ui.recordworkout.BottomSheetEndWorkoutShort"
+        android:label="BottomSheetEndWorkoutShort" />
 
 </navigation>

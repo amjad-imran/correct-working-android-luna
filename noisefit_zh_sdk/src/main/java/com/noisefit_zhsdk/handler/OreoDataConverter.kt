@@ -63,6 +63,7 @@ import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -930,6 +931,11 @@ constructor(
     // wakeupNapTime=1705286418, sleepNapDuration=1536, date='2024-01-15 00:00:00'}]
     fun parseNapData(naps: List<RingSleepNapBean>): List<OreoNapData> {
         val returnNaps = ArrayList<OreoNapData>()
+
+        val date = DateFormats.getDateFromTimeStamp(DateFormats.subtractDate(System.currentTimeMillis(),1))
+        val timestamp = DateFormats.convertDateTimeToTimeStamp(date?:"", DateFormats.dateFormat3)
+
+
         naps.forEach {
             val nap = OreoNapData().apply {
                 this.startTime = DateFormats.convertTimestampToDate(
@@ -953,10 +959,14 @@ constructor(
                     DateFormats.timeFormatHour
                 ).toInt()
 
-                if (startHour in 10..19) {
-                    returnNaps.add(nap)
+                if (it.asleepNapTime.toLong() * 1000 >= timestamp) {
+                    if (startHour in 10..19) {
+                        returnNaps.add(nap)
+                    } else {
+                        AppLogs.sendAppLogs("Nap ignored $it")
+                    }
                 } else {
-                    AppLogs.sendAppLogs("Nap ignored $it")
+                    AppLogs.sendAppLogs("Nap ignored old $it ")
                 }
             } catch (exp: Exception) {
                 returnNaps.add(nap)

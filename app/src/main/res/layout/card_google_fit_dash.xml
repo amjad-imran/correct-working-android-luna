@@ -59,6 +59,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         style="@style/H6"
+        android:gravity="center"
         android:textColor="@color/white_64"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
