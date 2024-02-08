@@ -553,5 +553,9 @@
         android:id="@+id/bottomSheetEndWorkoutShort"
         android:name="com.oreo.ui.recordworkout.BottomSheetEndWorkoutShort"
         android:label="BottomSheetEndWorkoutShort" />
+    <dialog
+        android:id="@+id/workoutStopRingBottomSheet"
+        android:name="com.noisefit.ui.common.bottomSheet.WorkoutStopRingBottomSheet"
+        android:label="WorkoutStopRingBottomSheet" />
 
 </navigation>

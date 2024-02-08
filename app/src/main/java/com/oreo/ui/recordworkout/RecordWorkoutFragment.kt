@@ -2,6 +2,8 @@ package com.oreo.ui.recordworkout
 
 import android.animation.Animator
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.setFragmentResultListener
@@ -9,7 +11,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentRecordWorkoutBinding
+import com.noisefit.ui.common.bottomSheet.DELETE_REQ_REQUEST_KEY
+import com.noisefit.ui.common.bottomSheet.WORKOUT_STOP_KEY
 import com.noisefit_commans.interfaces.connection.ConnectState
+import com.noisefit_commans.interfaces.data.UserActivityAction
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
 import com.noisefit_commans.ui.BaseFragment
@@ -20,6 +25,7 @@ import com.noisefit_commans.ui.playAnimation
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.AppLogs
+import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -331,6 +337,36 @@ class RecordWorkoutFragment :
 
     override fun subscribeObservers() {
 
+        viewModel.showWorkoutStoppedByRingDialog.observe(viewLifecycleOwner) {
+            it.getContent()?.let {
+
+                setFragmentResultListener(
+                    WORKOUT_STOP_KEY,
+                ) { _, bundle ->
+
+                    val allow = bundle.getBoolean("allow")
+                    val delete = bundle.getBoolean("delete")
+
+                    if (allow || delete) {
+
+                        if (delete) {
+                            viewModel.markedDeleted = true
+                            viewModel.markForDelete(viewModel.sportStartTime)
+                        }
+
+                        stopWorkout()
+                        viewModel.sessionManager.sendUserActivityAction(
+                            UserActivityAction.SyncAutoSportsActivity()
+                        )
+
+                    }
+                }
+                viewModel.stopTimer()
+
+                navigate(R.id.workoutStopRingBottomSheet)
+            }
+        }
+
         viewModel.sessionManager.showWorkoutDetails.observe(viewLifecycleOwner) {
             it.getContent()?.let { workoutId ->
 
@@ -390,6 +426,13 @@ class RecordWorkoutFragment :
                         } else {
                             //context.showShortToast("Workout Stopped : ${it.success}")
                         }
+                    }
+
+                    is UpdateDeviceDataCallback.WorkoutStoppedByRing -> {
+                        binding.progressBar.root.gone()
+
+                        viewModel.showWorkoutStoppedByRingDialog.postValue(Event(true))
+
                     }
 
                     is UpdateDeviceDataCallback.WorkoutPaused -> {

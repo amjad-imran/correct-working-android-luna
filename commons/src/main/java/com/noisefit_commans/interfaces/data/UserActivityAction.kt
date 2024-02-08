@@ -18,6 +18,7 @@ sealed class UserActivityAction {
     class Refresh(val sportsModeRequest: SportsModeRequest) : UserActivityAction()
     class GetHeartHistory(val calendar: Calendar) : UserActivityAction()
     class SyncSportsActivity(val date: String) : UserActivityAction()
+    class SyncAutoSportsActivity() : UserActivityAction()
     class PushGPSData(val gpsSignal: Int, val distance: Int) : UserActivityAction()
     object DisableEnableBluetooth : UserActivityAction()
     class OnMusicEventChanged(val event: String) : UserActivityAction()

@@ -835,6 +835,11 @@ constructor(
 
     }
 
+    override fun syncAutoSports() {
+        ControlBleTools.getInstance().getFitnessSportIdsData(null)
+        AppLogs.sendAppLogs("SyncRecordedActivity")
+    }
+
     override fun getStepsData(date: String) {
     }
 

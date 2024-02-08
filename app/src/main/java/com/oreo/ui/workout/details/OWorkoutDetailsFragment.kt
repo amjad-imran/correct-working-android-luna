@@ -341,7 +341,7 @@ class OWorkoutDetailsFragment :
         )
 
         binding.lytHeartRate.lineChart.updateDataWithMax(
-            sleepChart, 5, false, true,
+            sleepChart, 5, true, false,
             GraphDummyModel(
                 hasDummyData, 40, 100
             ),
