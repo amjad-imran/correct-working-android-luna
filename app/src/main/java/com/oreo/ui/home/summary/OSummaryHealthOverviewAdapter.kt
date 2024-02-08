@@ -1,24 +1,25 @@
 package com.oreo.ui.home.summary
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import com.google.gson.Gson
 import com.hookedonplay.decoviewlib.events.DecoEvent
+import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ItemStressGraphBinding
 import com.noisefit.luna.databinding.ListActivityBurnCardItem2Binding
 import com.noisefit.luna.databinding.ListActivityBurnCardItemBinding
 import com.noisefit.luna.databinding.ListActivityMinimalItemBinding
+import com.noisefit.luna.databinding.ListDashNapBinding
 import com.noisefit.luna.databinding.ListOWAlertCardItemBinding
 import com.noisefit.luna.databinding.ListReadinessCardItemBinding
 import com.noisefit.luna.databinding.ListReadinessMinimalCardItemBinding
-import com.noisefit.luna.databinding.ListReadinessScoreCardItemBinding
 import com.noisefit.luna.databinding.ListRingCareBinding
-import com.noisefit.luna.databinding.ListSleepActivityCardItemBinding
 import com.noisefit.luna.databinding.ListSleepCardItemBinding
 import com.noisefit.luna.databinding.ListSleepMinimalItemBinding
 import com.noisefit.luna.databinding.ListSleepWaitingCardItemBinding
@@ -28,6 +29,8 @@ import com.noisefit.luna.databinding.RowDashAlertBinding
 import com.noisefit.ui.common.calculatePercentage
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.dpToPx
+import com.noisefit_commans.common.fromJson
+import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.custom.SleepProgressbarView
 import com.noisefit_commans.ui.getColor
 import com.noisefit_commans.ui.gone
@@ -41,6 +44,7 @@ import com.oreo.data.model.AlertType
 import com.oreo.data.model.DashAlert
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.VideoInfoType
+import com.oreo.data.model.health.Nap
 import com.oreo.util.UtilClass.seriesItemWithoutInset
 
 
@@ -49,6 +53,7 @@ sealed class OSummaryHealthOverviewClickEnum {
     object ActivityDetailsWorkoutClick : OSummaryHealthOverviewClickEnum()
     object ReadinessDetailsWorkoutClick : OSummaryHealthOverviewClickEnum()
     object TextWelcomeRingClicked : OSummaryHealthOverviewClickEnum()
+    data class OnNapClicked(val napId: String) : OSummaryHealthOverviewClickEnum()
     object StressGraphClicked : OSummaryHealthOverviewClickEnum()
     data class TextRingCareClicked(val title: String) : OSummaryHealthOverviewClickEnum()
     data class VideoInfoClicked(val type: VideoInfoType, val videoUrl: String) :
@@ -63,7 +68,7 @@ sealed class OSummaryHealthOverviewClickEnum {
 
 }
 
-class OSummaryHealthOverviewAdapter :
+class OSummaryHealthOverviewAdapter() :
     RecyclerView.Adapter<HomeRecyclerViewHolder>() {
 
     var devicePaired = false
@@ -86,6 +91,14 @@ class OSummaryHealthOverviewAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeRecyclerViewHolder {
         return when (viewType) {
+            R.layout.list_dash_nap -> HomeRecyclerViewHolder.NapWidgetCardViewHolder(
+                ListDashNapBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
             R.layout.item_stress_graph -> HomeRecyclerViewHolder.StressGraphViewHolder(
                 ItemStressGraphBinding.inflate(
                     LayoutInflater.from(parent.context),
@@ -213,6 +226,7 @@ class OSummaryHealthOverviewAdapter :
         holder.itemClickListener = itemClickListener
         when (holder) {
             is HomeRecyclerViewHolder.StressGraphViewHolder -> holder.bind(items[position] as OHealthOverview.StressGraph)
+            is HomeRecyclerViewHolder.NapWidgetCardViewHolder -> holder.bind(items[position] as OHealthOverview.NapDashCard)
             is HomeRecyclerViewHolder.InfoWelcomeCardViewHolder -> holder.bind(items[position] as OHealthOverview.InfoRingWelcome)
             is HomeRecyclerViewHolder.InfoRingCareViewHolder -> holder.bind(items[position] as OHealthOverview.InfoRingCare)
             is HomeRecyclerViewHolder.InfoVideoCardViewHolder -> holder.bind(
@@ -307,6 +321,7 @@ class OSummaryHealthOverviewAdapter :
             is OHealthOverview.StressGraph -> R.layout.item_stress_graph
             is OHealthOverview.InfoRingCare -> R.layout.list_ring_care
             is OHealthOverview.InfoRingWelcome -> R.layout.list_welcome_card
+            is OHealthOverview.NapDashCard -> R.layout.list_dash_nap
         }
     }
 }
@@ -315,6 +330,28 @@ class OSummaryHealthOverviewAdapter :
 sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(binding.root) {
 
     var itemClickListener: ((type: OSummaryHealthOverviewClickEnum) -> Unit)? = null
+
+    class NapWidgetCardViewHolder(private val binding: ListDashNapBinding) :
+        HomeRecyclerViewHolder(binding) {
+        fun bind(
+            data: OHealthOverview.NapDashCard,
+        ) {
+
+            binding.rvNap.layoutManager = LinearLayoutManager(binding.rvNap.context)
+            binding.rvNap.adapter = DashNapAdapter(data.naps, data.date).apply {
+
+                this.setOnNapSelectedListener(object : OnNapSelectedAction {
+                    override fun onNapSelected(napId: String) {
+                        itemClickListener?.invoke(
+                            OSummaryHealthOverviewClickEnum.OnNapClicked(
+                                napId
+                            )
+                        )
+                    }
+                })
+            }
+        }
+    }
 
     class InfoVideoCardViewHolder(private val binding: ListVideoInfoCardBinding) :
         HomeRecyclerViewHolder(binding) {
@@ -411,6 +448,24 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.tvNudge.text = nudge?.message ?: ""
             }
 
+            if (data.data.readinessNapScoreImpact == null || data.data.readinessNapScoreImpact == 0) {
+                binding.lytNapLabel.root.gone()
+            } else {
+                binding.lytNapLabel.root.visible()
+                binding.lytNapLabel.tvNapUpdatedScore.text =
+                    if ((data.data.readinessNapScoreImpact ?: 0) >= 0) {
+                        "+${data.data.readinessNapScoreImpact}"
+                    } else {
+                        "${data.data.readinessNapScoreImpact}"
+                    }
+                binding.lytNapLabel.tvNapUpdatedScore.setTextColor(
+                    binding.lytNapLabel.tvNapUpdatedScore.context.getColor(
+                        R.color.nap_dash_readiness_score
+                    )
+                )
+                binding.lytNapLabel.tvNapCountMsg.text = "after ${data.data.noOfNaps} nap"
+            }
+
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.ReadinessDetailsWorkoutClick)
             }
@@ -472,6 +527,24 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             }
 
+            if (data.data.readinessNapScoreImpact == null || data.data.readinessNapScoreImpact == 0) {
+                binding.lytNapLabel.root.gone()
+            } else {
+                binding.lytNapLabel.root.visible()
+                binding.lytNapLabel.tvNapUpdatedScore.text =
+                    if ((data.data.readinessNapScoreImpact ?: 0) >= 0) {
+                        "+${data.data.readinessNapScoreImpact}"
+                    } else {
+                        "${data.data.readinessNapScoreImpact}"
+                    }
+                binding.lytNapLabel.tvNapUpdatedScore.setTextColor(
+                    binding.lytNapLabel.tvNapUpdatedScore.context.getColor(
+                        R.color.nap_dash_readiness_score
+                    )
+                )
+                binding.lytNapLabel.tvNapCountMsg.text = "after ${data.data.noOfNaps} nap"
+            }
+
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.ReadinessDetailsWorkoutClick)
             }
@@ -498,40 +571,52 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             val scoreValue = data.data.sleepScore ?: 0
 
-            val sleepTime = StringBuilder()
-            sleepTime.append(
-                DateFormats.formatDate(
-                    data.data.startTime,
-                    DateFormats.dateTimeFormat5,
-                    DateFormats.time12Meridian
-                )
-            )
-            sleepTime.append(" - ")
-            sleepTime.append(
-                DateFormats.formatDate(
-                    data.data.endTime,
-                    DateFormats.dateTimeFormat5,
-                    DateFormats.time12Meridian
-                )
-            )
-            binding.tvSleepStartEndTime.text = sleepTime.toString()
             binding.tvSleepScore.text = scoreValue.toString()
             binding.tvSleepStatus.text = data.data.status
-            binding.tvLowestHr.text = if (data.data.restingHr == null) {
-                "--"
-            } else {
-                data.data.restingHr.toString() + " bpm"
-            }
 
             val (hourTimeInBed, minuteTimeInBed) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
                 data.data.totalSleep ?: 0
             )
-
             binding.tvSleepTime.text = if (hourTimeInBed == 0) {
                 "$minuteTimeInBed min"
             } else {
                 "$hourTimeInBed hr $minuteTimeInBed min"
             }
+
+            if (data.data.sleepNapScoreImpact == null || data.data.sleepNapScoreImpact == 0) {
+                binding.lytNapLabel.root.gone()
+            } else {
+                binding.lytNapLabel.root.visible()
+                binding.lytNapLabel.tvNapUpdatedScore.text =
+                    if ((data.data.sleepNapScoreImpact ?: 0) >= 0) {
+                        "+${data.data.sleepNapScoreImpact}"
+                    } else {
+                        "${data.data.sleepNapScoreImpact}"
+                    }
+                binding.lytNapLabel.tvNapUpdatedScore.setTextColor(
+                    binding.lytNapLabel.tvNapUpdatedScore.context.getColor(
+                        R.color.nap_dash_sleep_score
+                    )
+                )
+                binding.lytNapLabel.tvNapCountMsg.text = "after ${data.data.noOfNaps} nap"
+            }
+
+            val sleepDayGraphView = SleepProgressbarView(binding.sleepPgbr.context)
+            binding.sleepPgbr.removeAllViews()
+            binding.sleepPgbr.addView(sleepDayGraphView)
+
+            sleepDayGraphView.setData(data.sleepArray)
+
+            binding.tvSleepStart.text = DateFormats.formatDate(
+                data.data.startTime,
+                DateFormats.dateTimeFormat5,
+                DateFormats.time12Meridian
+            )
+            binding.tvSleepEnd.text = DateFormats.formatDate(
+                data.data.endTime,
+                DateFormats.dateTimeFormat5,
+                DateFormats.time12Meridian
+            )
 
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.SleepDetailsWorkoutClick)
@@ -604,6 +689,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             val sleepDayGraphView = SleepProgressbarView(binding.sleepPgbr.context)
             binding.sleepPgbr.removeAllViews()
             binding.sleepPgbr.addView(sleepDayGraphView)
+
             sleepDayGraphView.setData(data.sleepArray)
 
 
@@ -619,11 +705,30 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             }
 
+            if (data.data.sleepNapScoreImpact == null || data.data.sleepNapScoreImpact == 0) {
+                binding.lytNapLabel.root.gone()
+            } else {
+                binding.lytNapLabel.root.visible()
+                binding.lytNapLabel.tvNapUpdatedScore.text =
+                    if ((data.data.sleepNapScoreImpact ?: 0) >= 0) {
+                        "+${data.data.sleepNapScoreImpact}"
+                    } else {
+                        "${data.data.sleepNapScoreImpact}"
+                    }
+                binding.lytNapLabel.tvNapUpdatedScore.setTextColor(
+                    binding.lytNapLabel.tvNapUpdatedScore.context.getColor(
+                        R.color.nap_dash_sleep_score
+                    )
+                )
+                binding.lytNapLabel.tvNapCountMsg.text = "after ${data.data.noOfNaps} nap"
+            }
+
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.SleepDetailsWorkoutClick)
             }
         }
     }
+
 
     class ActivityMinimalViewHolder(private val binding: ListActivityMinimalItemBinding) :
         HomeRecyclerViewHolder(binding) {

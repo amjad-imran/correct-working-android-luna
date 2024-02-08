@@ -23,8 +23,6 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.DialogResetDeviceBinding
 import com.noisefit.luna.databinding.DialogResetingDeviceBinding
 import com.noisefit.luna.databinding.FragmentPairingBinding
-import com.noisefit.receiver.service.FeedbackSubmitService
-import com.noisefit.receiver.service.ProblemType
 import com.noisefit.session.SessionManager
 import com.noisefit.ui.onboarding.onboardProfile.ProfileSetupActivity
 import com.noisefit.ui.onboarding.pairing.DeviceSetupActivity

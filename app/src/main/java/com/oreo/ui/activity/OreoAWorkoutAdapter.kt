@@ -3,6 +3,7 @@ package com.oreo.ui.activity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.OreoItemRecentWorkoutActivityBinding
 import com.noisefit.luna.databinding.OreoItemWorkoutActivityBinding
 import com.noisefit_commans.ui.gone
@@ -47,7 +48,7 @@ class OreoAWorkoutAdapter(val mListener: OnItemClickListener) :
                 }
             } else if (activity.type.equals("google", true)) {
                 binding.tvImportedFrom.apply {
-                    text = "Imported from Google Fit"
+                    text = this.context.getString(R.string.text_imported_from_google_fit)
                     visible()
                 }
             } else {

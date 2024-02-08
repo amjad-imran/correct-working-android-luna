@@ -4,10 +4,14 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.watch.SDKWatchType
 import com.noisefit.watch.WatchesSDK
+import com.noisefit_commans.data.model.GoogleFitWorkoutData
 import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.models.DeviceType
 import com.noisefit_commans.models.SleepDataGoogleFit
+import com.noisefit_commans.models.SportsDataGoogleFit
+import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.models.WorkoutGoogleFit
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import javax.inject.Inject
@@ -19,6 +23,7 @@ class OfflineDataMapper
 ) {
 
     fun convertSleepDataToGoogleFit(sleepData: OreoSleepData?): SleepDataGoogleFit? {
+        AppLogs.sendAppLogs("Sleep Google Fit RAW -> $sleepData")
         LOGS.d("DATACONVERTER sleepData ${sleepData?.startTime}  ${sleepData?.endTime}")
         if (sleepData?.startTime == null || sleepData.date == null || sleepData.sleepArray.isNullOrEmpty() || sleepData.sleepArray!![0].startTime == null) {
             return null
@@ -28,23 +33,23 @@ class OfflineDataMapper
         val googleFitSleepBreakUpList = ArrayList<SleepDataGoogleFit.SleepDataBreakup>()
         var offSet = 0
         val midnightTime = "23:59"
-        val startTime = sleepData.sleepArray!![0].startTime!!
+        val startTime = sleepData.startTime!!.split(" ")[1]
 
         if (DateFormats.isTimeBefore(startTime, midnightTime)) {
             offSet = 1
         }
         LOGS.d("DATACONVERTER time $startTime $midnightTime $offSet")
-        val sleepStartDate = DateFormats.subtractDate(sleepData.date!!, offSet)!!
+        val sleepStartDate = DateFormats.subtractDate(sleepData.startTime!!, offSet)!!
         LOGS.d("DATACONVERTER sleepStartDate $sleepStartDate")
         val sleepStartTime = DateFormats.convertDateTimeToTimeStamp(sleepStartDate, startTime)
         LOGS.d("DATACONVERTER sleepStartTime $sleepStartTime")
         sleepData.sleepArray!!.forEach { sleepDataBreakup ->
             var breakUpStartTime =
-                DateFormats.convertDateTimeToTimeStamp(sleepStartDate, sleepDataBreakup.startTime!!)
+                DateFormats.convertDateTimeToTimeStamp(sleepDataBreakup.startTime!!)
             var breakupEndTime = 0L
             if (sleepStartTime <= breakUpStartTime) {
                 breakupEndTime =
-                    DateFormats.addMinuteToTimeStamp(breakUpStartTime, sleepDataBreakup.duration)
+                    DateFormats.addSecondToTimeStamp(breakUpStartTime, sleepDataBreakup.duration)
                 LOGS.d(
                     "DATACONVERTER SAME DAY $breakUpStartTime $breakupEndTime ${
                         DateFormats.convertTimestampToDate(
@@ -61,11 +66,11 @@ class OfflineDataMapper
             } else {
                 breakUpStartTime =
                     DateFormats.convertDateTimeToTimeStamp(
-                        sleepData.date!!,
-                        sleepDataBreakup.startTime!!
+                        sleepDataBreakup.startTime!!,
+                        DateFormats.dateTimeFormat5
                     )
                 breakupEndTime =
-                    DateFormats.addMinuteToTimeStamp(breakUpStartTime, sleepDataBreakup.duration)
+                    DateFormats.addSecondToTimeStamp(breakUpStartTime, sleepDataBreakup.duration)
                 LOGS.d(
                     "DATACONVERTER Different DAY ${sleepDataBreakup.endTime} ${sleepDataBreakup.startTime} $breakUpStartTime $breakupEndTime ${
                         DateFormats.convertTimestampToDate(
@@ -231,12 +236,12 @@ class OfflineDataMapper
         return jsonObject
     }
 
-    /*fun convertGFWorkoutIntoJsonArray(data: List<GoogleFitWorkoutData>): JsonArray {
+    fun convertGFWorkoutIntoJsonArray(data: List<GoogleFitWorkoutData>): JsonArray {
         val jsonArray = JsonArray()
         data.forEach {
             val requestObject = JsonObject().apply {
                 this.addProperty("duration", it.duration)
-                this.addProperty("calories", it.calories)
+                this.addProperty("calories", it.calories?.toInt() ?: 0)
                 this.addProperty("activity_type", it.activity)
                 this.addProperty("type", "google")
                 this.addProperty(
@@ -271,25 +276,63 @@ class OfflineDataMapper
     fun convertWorkoutGoogleFit(data: List<WorkoutGoogleFit>): List<GoogleFitWorkoutData> {
         val workoutList = ArrayList<GoogleFitWorkoutData>()
         data.forEach {
-            workoutList.add(
-                GoogleFitWorkoutData(
-                    0,
-                    false,
-                    it.name,
-                    it.identifier,
-                    it.appPackageName,
-                    it.activity,
-                    it.startTime,
-                    it.endTime,
-                    it.distance,
-                    it.duration,
-                    it.calories,
-                    it.heartRate,
-                    it.steps,
-                    it.type
+            val duration = (it.duration ?: 0L) / 60
+            if (duration != 0L) {
+                workoutList.add(
+                    GoogleFitWorkoutData(
+                        0,
+                        false,
+                        it.name,
+                        it.identifier,
+                        it.appPackageName,
+                        it.activity,
+                        it.startTime,
+                        it.endTime,
+                        it.distance,
+                        duration,
+                        it.calories,
+                        it.heartRate,
+                        it.steps,
+                        it.type
+                    )
                 )
-            )
+            }
         }
         return workoutList
-    }*/
+    }
+
+    fun convertSportDataToGoogleFit(sportsModeResponse: SportsModeResponse): SportsDataGoogleFit? {
+        if (sportsModeResponse.date == null || sportsModeResponse.time == null || sportsModeResponse.duration == null) {
+            return null
+        }
+        val dateWithTime = DateFormats.convertDateTimeToTimeStamp(
+            sportsModeResponse.time!!,
+            DateFormats.dateTimeFormat6
+        )
+
+        val endTime =
+            DateFormats.addSecondToTimeStamp(dateWithTime, sportsModeResponse.duration!!.toInt())
+        val distance = sportsModeResponse.distance?.toFloat() ?: 0f
+        val duration = sportsModeResponse.duration?.toInt() ?: 0
+        val calories = sportsModeResponse.calories?.toFloat() ?: 0f
+        val heartRate = sportsModeResponse.heartRateCurrent?.toFloat() ?: 0f
+        var steps = 0
+        if (sportsModeResponse.steps != 0) {
+            steps = sportsModeResponse.steps ?: 0
+        }
+        val type = sportsModeResponse.type ?: ""
+
+        return SportsDataGoogleFit(
+            dateWithTime,
+            endTime,
+            distance,
+            duration,
+            calories,
+            heartRate,
+            steps,
+            type
+        )
+
+    }
+
 }

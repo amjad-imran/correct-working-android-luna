@@ -17,6 +17,6 @@ interface OreoSleepDataSource {
     suspend fun setHealthScore(score: Int, date: String)
 
     suspend fun getUnSyncGoogleFitData(): List<OreoSleepData>?
-    suspend fun updateUnSyncGoogleFitData(data: List<OreoSleepData>?)
+    suspend fun updateUnSyncGoogleFitData(data: OreoSleepData)
 
 }

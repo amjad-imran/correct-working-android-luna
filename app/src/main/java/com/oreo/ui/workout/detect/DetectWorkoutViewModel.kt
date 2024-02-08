@@ -6,10 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.common.maxWithoutInvalidMovementValues
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.model.OreoAutoSportData
+import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.ui.getParseList
 import com.noisefit_commans.ui.tryCatch
@@ -36,6 +38,7 @@ class DetectWorkoutViewModel
 @Inject
 constructor(
     private val syncRepository: OreoSyncRepository,
+    private val sessionManager: SessionManager,
     private val userActivityRepository: OreoUserActivityRepository,
     private val userHealthDataDataSource: OreoUserHealthDataDataSource
 ) : BaseViewModel() {
@@ -252,6 +255,18 @@ constructor(
                             addWorkout.date?.let {
                                 userHealthDataDataSource.clearDataByDates(listOf(it))
                             }
+                            val sportObj = SportsModeResponse(
+                                date = addWorkout.date,
+                                distance = 0,
+                                duration = addWorkout.duration.toLong() * 60,
+                                calories = addWorkout.calories.toLong(),
+                                heartRateCurrent = 0,
+                                steps = addWorkout.steps,
+                                type = data.type,
+                                time = "${addWorkout.date} ${addWorkout.startTimeIn24H}"
+                            )
+                            sessionManager.saveSportsActivities(listOf(sportObj))
+
                             delay(100)
 
                             onAddSuccess.invoke()

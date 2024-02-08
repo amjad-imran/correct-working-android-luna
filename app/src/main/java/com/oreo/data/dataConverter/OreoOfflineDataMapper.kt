@@ -137,38 +137,6 @@ constructor(
     }
 
 
-    fun convertSportDataToGoogleFit(sportsModeResponse: SportsModeResponse): SportsDataGoogleFit? {
-        if (sportsModeResponse.date == null || sportsModeResponse.time == null || sportsModeResponse.duration == null) {
-            return null
-        }
-        val dateWithTime = DateFormats.convertDateTimeToTimeStampWithISO(
-            sportsModeResponse.time!!
-        )
-        val endTime =
-            DateFormats.addSecondToTimeStamp(dateWithTime, sportsModeResponse.duration!!.toInt())
-        val distance = sportsModeResponse.distance?.toFloat() ?: 0f
-        val duration = sportsModeResponse.duration?.toInt() ?: 0
-        val calories = sportsModeResponse.calories?.toFloat() ?: 0f
-        val heartRate = sportsModeResponse.heartRateCurrent?.toFloat() ?: 0f
-        var steps = 0
-        if (sportsModeResponse.steps != 0) {
-            steps = sportsModeResponse.steps ?: 0
-        }
-        val type = sportsModeResponse.type ?: ""
-
-        return SportsDataGoogleFit(
-            dateWithTime,
-            endTime,
-            distance,
-            duration,
-            calories,
-            heartRate,
-            steps,
-            type
-        )
-
-    }
-
     fun convertHealthOverviewData(
         stepsData: StepsData?,
         userGoals: UserGoals?,

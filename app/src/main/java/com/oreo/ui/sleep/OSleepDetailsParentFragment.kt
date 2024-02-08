@@ -198,11 +198,9 @@ class OSleepDetailsParentFragment :
         binding.lytToolbar.view1.setOnClickListener {
             mViewModel.sessionManager.logMoEngageAppEvent("${mViewModel.itemClickType}_" + MoEngageLunaAppEvents.info_click)
             args.infoData?.let{data->
-                navigate(
-                    OSleepDetailsParentFragmentDirections.actionSleepDetailsParentOreoToBottomSheetDataMetrics(
-                        data
-                    )
-                )
+                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                    this.putString("infoData", data)
+                })
             }
 
         }

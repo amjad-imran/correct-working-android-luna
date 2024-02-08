@@ -16,6 +16,7 @@ import com.noisefit_commans.data.model.OreoBloodOxygenBreakup
 import com.noisefit_commans.data.model.OreoBodyStressData
 import com.noisefit_commans.data.model.OreoBodyTemperatureBreakup
 import com.noisefit_commans.data.model.OreoHeartRate
+import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.data.model.OreoRespiratoryData
 import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.data.model.OreoStepsData
@@ -35,6 +36,7 @@ import com.noisefit_commans.models.SportsModeListGPS
 import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.models.Widget
 import com.noisefit_commans.models.WorldClockList
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
@@ -52,6 +54,7 @@ import com.zhapp.ble.bean.DoNotDisturbModeBean
 import com.zhapp.ble.bean.EventInfoBean
 import com.zhapp.ble.bean.OverallDayMovementData
 import com.zhapp.ble.bean.PressureModeBean
+import com.zhapp.ble.bean.RingSleepNapBean
 import com.zhapp.ble.bean.RingSleepResultBean
 import com.zhapp.ble.bean.RingStressDetectionBean
 import com.zhapp.ble.bean.TodayRespiratoryRateData
@@ -60,7 +63,9 @@ import com.zhapp.ble.bean.WorldClockBean
 import com.zhapp.ble.callback.ActiveMeasureCallBack
 import java.math.BigDecimal
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -938,6 +943,54 @@ constructor(
         return data
     }
 
+    //onRingSleepNAP : [RingSleepNapBean{existSleepNap=true, asleepNapTime=1705284882,
+    // wakeupNapTime=1705286418, sleepNapDuration=1536, date='2024-01-15 00:00:00'}]
+    fun parseNapData(naps: List<RingSleepNapBean>): List<OreoNapData> {
+        val returnNaps = ArrayList<OreoNapData>()
+
+        val date = DateFormats.getDateFromTimeStamp(DateFormats.subtractDate(System.currentTimeMillis(),1))
+        val timestamp = DateFormats.convertDateTimeToTimeStamp(date?:"", DateFormats.dateFormat3)
+
+
+        naps.forEach {
+            val nap = OreoNapData().apply {
+                this.startTime = DateFormats.convertTimestampToDate(
+                    it.asleepNapTime.toLong() * 1000,
+                    DateFormats.dateTimeFormat5
+                )
+                this.endTime = DateFormats.convertTimestampToDate(
+                    it.wakeupNapTime.toLong() * 1000,
+                    DateFormats.dateTimeFormat5
+                )
+                this.duration = it.sleepNapDuration / 60
+                this.date = DateFormats.convertTimestampToDate(
+                    it.asleepNapTime.toLong() * 1000,
+                    DateFormats.dateFormat3
+                )
+            }
+
+            try {
+                val startHour = DateFormats.convertTimestampToDate(
+                    it.asleepNapTime.toLong() * 1000,
+                    DateFormats.timeFormatHour
+                ).toInt()
+
+                if (it.asleepNapTime.toLong() * 1000 >= timestamp) {
+                    if (startHour in 10..19) {
+                        returnNaps.add(nap)
+                    } else {
+                        AppLogs.sendAppLogs("Nap ignored $it")
+                    }
+                } else {
+                    AppLogs.sendAppLogs("Nap ignored old $it ")
+                }
+            } catch (exp: Exception) {
+                returnNaps.add(nap)
+            }
+        }
+        return returnNaps
+    }
+
     fun parseSleepData(bean: RingSleepResultBean): OreoSleepData {
         val sleepData = OreoSleepData(availableSleepTypes = "deep;light;awake;rem")
 
@@ -1032,5 +1085,6 @@ constructor(
 
         return sleepData
     }
+
 }
 

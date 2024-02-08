@@ -14,6 +14,7 @@ import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.playAnimation
 import com.noisefit_commans.ui.showShortToast
@@ -118,6 +119,37 @@ class RecordWorkoutFragment :
         if (viewModel.currentWorkoutState == 0) {
             navigateUpSafe()
         } else {
+
+            if (viewModel.workoutDuration < 60) {
+
+                setFragmentResultListener(
+                    END_WORKOUT_KEY_SHORT
+                ) { _, bundle ->
+                    val end = bundle.getBoolean("end")
+
+                    if (end) {
+                        binding.progressBar.root.visible()
+                        val sportId = viewModel.workout?.ringId ?: -1
+
+                        viewModel.sessionManager.sendUpdateQueryAction(
+                            UpdateDeviceAction.UpdateOngoingWorkout(
+                                sportId,
+                                viewModel.getCurrentTimeStamp(),
+                                4
+                            )
+                        )
+                        viewModel.markedDeleted = true
+                        viewModel.markForDelete(viewModel.sportStartTime)
+                    }
+                }
+                navigate(R.id.bottomSheetEndWorkoutShort)
+                return
+            }
+
+
+
+
+
             setFragmentResultListener(
                 END_WORKOUT_KEY
             ) { _, bundle ->
@@ -271,7 +303,9 @@ class RecordWorkoutFragment :
 
     private fun setStateConnected() {
         binding.lytRingConnecting.root.gone()
+        binding.imageConnecting.gone()
         binding.groupRingStatus.visible()
+        binding.ivCross.visible()
         val batteryPercentage = viewModel.watchDataStore.getBatteryPercentRing()
         binding.batteryStatus.progress = batteryPercentage
 
@@ -290,7 +324,9 @@ class RecordWorkoutFragment :
 
     private fun setConnectingState() {
         binding.lytRingConnecting.root.visible()
+        binding.imageConnecting.visible()
         binding.groupRingStatus.gone()
+        binding.ivCross.invisible()
     }
 
     override fun subscribeObservers() {

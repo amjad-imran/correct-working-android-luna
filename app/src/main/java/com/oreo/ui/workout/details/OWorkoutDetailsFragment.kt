@@ -133,6 +133,10 @@ class OWorkoutDetailsFragment :
                 "apple",
                 true
             )
+            && !it.type.equals(
+                "google",
+                true
+            )
         ) {
             binding.tvEdit.visible()
         }
@@ -155,8 +159,15 @@ class OWorkoutDetailsFragment :
             binding.lytIntensity.root.gone()
             binding.divider2.root.gone()
             binding.tvImportText.visible()
-            binding.tvImportText.text = "Imported from Apple Health"
-        } else {
+            binding.tvImportText.text = "Imported from Health"
+        } else if(it.type.equals("google", true)){
+            binding.lytHeartRate.root.gone()
+            binding.divider1.root.visible()
+            binding.lytIntensity.root.gone()
+            binding.divider2.root.gone()
+            binding.tvImportText.visible()
+            binding.tvImportText.text = getString(R.string.text_imported_from_google_fit)
+        }else {
 
             binding.lytHeartRate.root.gone()
 

@@ -61,6 +61,9 @@ interface WatchDataStore {
     fun saveLogPathName(data: String)
     fun getLogPathName(): String?
 
+    fun saveFirmwareLogPath(data: String)
+    fun getFirmwareLogPath(): String?
+
     fun getCustomReplies(): CustomReplyData?
     fun setCustomReplies(customReplyData: CustomReplyData)
     fun getUniqueIdForWatchFaces(): Int

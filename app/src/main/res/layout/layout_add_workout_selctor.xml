@@ -23,6 +23,7 @@
         android:layout_height="72dp"
         android:layout_marginEnd="4dp"
         android:src="@drawable/ic_add_workout_manual"
+        android:layout_marginBottom="-12dp"
         app:layout_constraintBottom_toTopOf="@+id/ivRecordWorkout"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -46,6 +47,16 @@
         android:src="@drawable/ic_add_workout_record"
         app:layout_constraintBottom_toTopOf="@+id/ivWorkoutClose"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivAddWorkoutBack"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/back_add_workout"
+        app:layout_constraintBottom_toBottomOf="@+id/ivWorkoutClose"
+        app:layout_constraintEnd_toEndOf="@+id/ivWorkoutClose"
+        app:layout_constraintStart_toStartOf="@+id/ivWorkoutClose"
+        app:layout_constraintTop_toTopOf="@+id/ivWorkoutClose" />
 
     <ImageView
         android:id="@+id/ivWorkoutClose"

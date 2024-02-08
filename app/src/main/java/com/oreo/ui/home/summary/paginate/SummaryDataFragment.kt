@@ -2,6 +2,7 @@ package com.oreo.ui.home.summary.paginate
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -141,6 +142,10 @@ class SummaryDataFragment :
                 OSummaryHealthOverviewClickEnum.StressGraphClicked -> {
                     navigate(R.id.fragmentOStressDetails)
                 }
+
+                is OSummaryHealthOverviewClickEnum.OnNapClicked -> {
+                    navigate(R.id.napDetails, bundleOf("napId" to type.napId))
+                }
             }
         }
 
@@ -152,6 +157,7 @@ class SummaryDataFragment :
         binding.lytHeartRate.bInfo.setOnClickListener {
             viewModel.getContributorInfo("hr")
         }
+
     }
 
     override fun subscribeObservers() {

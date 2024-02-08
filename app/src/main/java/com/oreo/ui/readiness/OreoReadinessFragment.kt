@@ -483,23 +483,40 @@ class OreoReadinessFragment :
             })
             mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_hr_variability_click)
         }
+
         binding.lytRScoreData.lytSec3.root.setOnClickListener {
-            mSharedViewModel.selectedTab = 0
-            mSharedViewModel.itemType = ClickViewType.READINESS.name
-            mSharedViewModel.itemClickType = ViewItemClickType.BODY_TEMPERATURE
-            /*  navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
-                  putString("viewType", "readiness")
-                  putString("infoData", mViewModel.contributorInfo.value?.temperature)
-                  putString("date", mainViewModel.selectedDate)
-              })*/
 
-            navigate(R.id.bodyTempScoreDetailFragment, Bundle().apply {
-                putString("date", mainViewModel.selectedDate)
-                putString("infoData", mViewModel.contributorInfo.value?.avg_temp ?: "")
-            })
+            val baselineAvg =
+                mainViewModel.temperatureBaseLine ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE
+            if (baselineAvg == mainViewModel.DEFAULT_TEMPERATURE_BASELINE) {
+                mViewModel.contributorInfo.value?.temp_balance?.let { content ->
+                    navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                        this.putString("infoData", content)
+                        this.putString("type", ViewItemClickType.BODY_TEMPERATURE.name)
+                    })
+                }
+            } else {
+                mSharedViewModel.selectedTab = 0
+                mSharedViewModel.itemType = ClickViewType.READINESS.name
+                mSharedViewModel.itemClickType = ViewItemClickType.BODY_TEMPERATURE
+                /*  navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
+                      putString("viewType", "readiness")
+                      putString("infoData", mViewModel.contributorInfo.value?.temperature)
+                      putString("date", mainViewModel.selectedDate)
+                  })*/
 
-            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_body_temp_click)
+                navigate(R.id.bodyTempScoreDetailFragment, Bundle().apply {
+                    putString("date", mainViewModel.selectedDate)
+                    putString("infoData", mViewModel.contributorInfo.value?.avg_temp ?: "")
+                })
+
+                mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_body_temp_click)
+
+            }
+
+
         }
+
         binding.lytRScoreData.lytSec4.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0
             mSharedViewModel.itemType = ClickViewType.READINESS.name
@@ -610,7 +627,7 @@ class OreoReadinessFragment :
         binding.lytRScoreData.lytScore.tvTitle.text = getString(R.string.text_readiness_score)
         binding.lytRScoreData.lytSec1.tvTitle.text = getString(R.string.text_resting_hr)
         binding.lytRScoreData.lytSec2.tvTitle.text = getString(R.string.text_hr_variability)
-        binding.lytRScoreData.lytSec3.tvTitle.text = getString(R.string.text_body_tempreature)
+        binding.lytRScoreData.lytSec3.tvTitle.text = getString(R.string.text_skin_temperature)
         binding.lytRScoreData.lytSec4.tvTitle.text = getString(R.string.text_respiratory_rate)
 
         setReadinessBannerViewPager(it.nudges)
@@ -691,22 +708,38 @@ class OreoReadinessFragment :
             binding.lytRScoreData.lytSec3.lytHrMn.root.gone()
             binding.lytRScoreData.lytSec3.tvPercentValue.visible()
             binding.lytRScoreData.lytSec3.lytBpmView.root.gone()
-            val baselineAvg = mainViewModel.temperatureBaseLine ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE
-            val deviation = it.avg_temp.value - baselineAvg
+            val baselineAvg =
+                mainViewModel.temperatureBaseLine ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE
+            if (baselineAvg != mainViewModel.DEFAULT_TEMPERATURE_BASELINE) {
 
-            binding.lytRScoreData.lytSec3.tvPercentValue.text =
-                String.format("%.1f °F", deviation)
+                val deviation = it.avg_temp.value - baselineAvg
+                binding.lytRScoreData.lytSec3.tvPercentValue.text =
+                    String.format("%.1f °F", deviation)
+            } else {
+                binding.lytRScoreData.lytSec3.tvPercentValue.text = "-"
+            }
+
+
         } else {
             if ((it.temperature?.value ?: 0) != 0) {
-                val baselineAvg = mainViewModel.temperatureBaseLine ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE
-                val todayAvg = it.temperature?.value ?: baselineAvg
-                val deviation = todayAvg - baselineAvg
+                val baselineAvg =
+                    mainViewModel.temperatureBaseLine ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE
 
                 binding.lytRScoreData.lytSec3.lytHrMn.root.gone()
                 binding.lytRScoreData.lytSec3.tvPercentValue.visible()
                 binding.lytRScoreData.lytSec3.lytBpmView.root.gone()
-                binding.lytRScoreData.lytSec3.tvPercentValue.text =
-                    String.format("%.1f °F", deviation)
+                if (baselineAvg != mainViewModel.DEFAULT_TEMPERATURE_BASELINE) {
+
+                    val todayAvg = it.temperature?.value ?: baselineAvg
+                    val deviation = todayAvg - baselineAvg
+
+                    binding.lytRScoreData.lytSec3.tvPercentValue.text =
+                        String.format("%.1f °F", deviation)
+
+
+                } else {
+                    binding.lytRScoreData.lytSec3.tvPercentValue.text = "-"
+                }
 
             } else {
                 temperatureDefaultView()

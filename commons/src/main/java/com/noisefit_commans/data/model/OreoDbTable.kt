@@ -84,21 +84,7 @@ data class RecordedWorkoutData(
     @SerializedName("date") var date: String? = null
 ) : ColorfitData(), Parcelable
 
-/*
- var name: String? = null,
-    var identifier: String? = null,
-    var appPackageName: String? = null,
-    var activity: String? = null,
-    var startTime: Long? = null,
-    var endTime: Long? = null,
-    var distance: Float? = null,
-    var duration: Long? = null,
-    var calories: Float? = null,
-    var heartRate: Float? = null,
-    var steps: Int? = null,
-    var type: String? = null
- */
-/*
+
 @Entity(
     tableName = "google_fit_workout", indices = [Index(value = ["startTime"], unique = true)]
 )
@@ -119,8 +105,6 @@ data class GoogleFitWorkoutData(
     @ColumnInfo(name = "steps") var steps: Int? = null,
     @ColumnInfo(name = "type") var type: String? = null,
 ) : ColorfitData(), Parcelable
-*/
-
 
 
 @Entity(
@@ -176,6 +160,19 @@ data class OreoRespiratoryData(
     @SerializedName("date") var date: String? = null
 ) : ColorfitData()
 
+
+@Entity(
+    tableName = "nap_data", indices = [Index(value = ["start_time", "end_time"], unique = true)]
+)
+data class OreoNapData(
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    @ColumnInfo(name = "is_synced") var isSynced: Boolean = false,
+    @ColumnInfo(name = "is_google_fit_sync") var isGoogleFitSynced: Boolean = false,
+    @ColumnInfo(name = "start_time") var startTime: String? = null,
+    @ColumnInfo(name = "end_time") var endTime: String? = null,
+    @ColumnInfo(name = "duration") var duration: Int = 0,
+    @ColumnInfo(name = "date") var date: String? = null
+)
 
 @Entity(
     tableName = "body_stress", indices = [Index(value = ["date"], unique = true)]

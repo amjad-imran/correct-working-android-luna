@@ -14,7 +14,6 @@ import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
-import com.noisefit.receiver.service.FeedbackSubmitService
 import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
 import com.noisefit.util.moveToServer.SleepNotificationUtils
@@ -28,6 +27,7 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.response.VersionCheckResponse
+import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.data.IUserActivityDataCallback
 import com.noisefit_commans.interfaces.data.UserActivityAction
@@ -232,6 +232,7 @@ constructor(
 
                 ringDataStore.setLastSyncWithServer(DateFormats.getTimeStamp())
                 sessionManager.setSyncCompletedState(Event(SyncEvents.ServerSyncSuccess))
+                sessionManager.sendQueryAction(QueryAction.GetFirmwareLogs)
                 //sessionManager.setShowSyncOfflineData(Event(HealthOverviewDataType.SERVER_SYNC_SUCCESS))
 
                 if (::job.isInitialized) {
@@ -375,6 +376,36 @@ constructor(
                                         }
                                     }
 
+
+                            }
+                        }
+
+                        is UserActivityCallback.NapObtainedOreo -> {
+                            syncDataScope.launch {
+                                syncRepository.saveNapData(userActivityCallback.napList)
+                                    .collect { resource ->
+                                        when (resource) {
+                                            is CacheResult.Success -> {
+
+                                                LOGS.d(
+                                                    TAG,
+                                                    "OreoSyncDataWork: nap ${resource.value}"
+                                                )
+                                               /* sessionManager.setShowSyncOfflineData(
+                                                    Event(
+                                                        HealthOverviewDataType.SLEEP
+                                                    )
+                                                )*/
+
+                                            }
+
+                                            is CacheResult.GenericError -> {
+//                                                failed.invoke()
+                                                LOGS.e(TAG, "OreoSyncDataWork: Error $it")
+
+                                            }
+                                        }
+                                    }
 
                             }
                         }
@@ -725,11 +756,11 @@ constructor(
             getSyncData(
                 success = {
 //                    sessionManager.logAppEvent(FunnelEvents.SyncEvents.Sync_Success.name, eventProperty)
-                    /*if (localDataStore.isEnableGoogleFit()) {
+                    if (localDataStore.isEnableGoogleFit()) {
                         syncDataScope.launch {
                             ApplicationUtils.startGoogleFitSyncScheduler(context)
                         }
-                    }*/
+                    }
 
 
                     ringDataStore.getRingDevice()?.let {

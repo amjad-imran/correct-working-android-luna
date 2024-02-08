@@ -21,6 +21,7 @@ import com.noisefit_commans.utils.ConnectionUtil
 import com.noisefit_commans.utils.Event
 import com.noisefit.watch.ConnectionHandler
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.models.HeightUnitSystem
 import com.noisefit_commans.models.Units
 import com.noisefit_commans.utils.BuildUtils
@@ -39,6 +40,7 @@ constructor(
     private val repository: AuthenticationRepository,
     private val lastSyncProvider: LastSyncProvider,
     val localDataStore: DataStoredInterface,
+    val ringDataStore: RingDataStore,
     private val userRepository: UserRepository,
     private val connectionUtil: ConnectionUtil
 ) : BaseViewModel() {
@@ -136,6 +138,8 @@ constructor(
                                 if (it) {
                                     localDataStore.setEndGameValue("")
                                     localDataStore.deleteYearlyGoal()
+                                    localDataStore.setGoogleFitStatus(false)
+                                    ringDataStore.setGoogleFitCrossed(false)
                                     _logoutSuccess.value = true
                                 }
                             }
@@ -171,7 +175,9 @@ constructor(
                         resource.data?.let {
                             repository.logoutUserLocally().collect {
                                 if (it) {
+                                    localDataStore.setGoogleFitStatus(false)
                                     localDataStore.setEndGameValue("")
+                                    ringDataStore.setGoogleFitCrossed(false)
                                     _logoutSuccess.value = true
                                 }
                             }

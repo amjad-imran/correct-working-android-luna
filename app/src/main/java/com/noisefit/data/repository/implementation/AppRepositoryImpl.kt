@@ -17,6 +17,7 @@ import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
 import com.oreo.data.db.implementation.OreoDayTimeMovementDataImpl
 import com.oreo.data.db.implementation.OreoHeartRateDataImpl
+import com.oreo.data.db.implementation.OreoNapDataImpl
 import com.oreo.data.db.implementation.OreoRespiratoryDataImpl
 import com.oreo.data.db.implementation.OreoSleepDataImpl
 import com.oreo.data.db.implementation.OreoStepsDataImpl
@@ -35,6 +36,7 @@ class AppRepositoryImpl(
     private val tempDataSource: OreoBodyTemperatureDataImpl,
     private val respDataSource: OreoRespiratoryDataImpl,
     private val sleepDataSource: OreoSleepDataImpl,
+    private val napDataSource: OreoNapDataImpl,
     private val dayTimeMovementDataSource: OreoDayTimeMovementDataImpl,
     private val autoWorkoutDataSource: OreoAutoSportDataImpl,
     private val gson: Gson,
@@ -62,6 +64,7 @@ class AppRepositoryImpl(
             tempDataSource.deleteOldData(DELETE_DB_DAYS)
             respDataSource.deleteOldData(DELETE_DB_DAYS)
             sleepDataSource.deleteOldData(DELETE_DB_DAYS)
+            napDataSource.deleteOldData(2)
             dayTimeMovementDataSource.deleteOldData(DELETE_DB_DAYS)
             autoWorkoutDataSource.deleteOldData(timeStamp)
 

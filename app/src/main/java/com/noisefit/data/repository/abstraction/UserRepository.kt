@@ -24,6 +24,10 @@ interface UserRepository {
         unitSystem: String
     ): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<Trophies>>>
 
+
+    suspend fun saveActivity(sportsModeResponse: List<SportsModeResponse>?)
+
+
     suspend fun getBuddiesTrophiesData(requestObject: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<Trophies>>>
 
     suspend fun getRecentTrophies(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<List<TrophyBadge>>>>

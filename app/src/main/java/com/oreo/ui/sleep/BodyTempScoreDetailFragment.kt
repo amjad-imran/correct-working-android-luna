@@ -37,18 +37,16 @@ class BodyTempScoreDetailFragment :
         super.onViewCreated(view, savedInstanceState)
         mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_body_temp_page_visit)
 
-        binding.toolbar.tvTitle.text = "Body temperature"
+        binding.toolbar.tvTitle.text = "Skin temperature"
         binding.toolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }
         binding.toolbar.view1.setOnClickListener {
             mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_body_temp_info_click)
             args.infoData?.let { data ->
-                navigate(
-                    BodyTempScoreDetailFragmentDirections.actionBodyTempScoreDetailFragmentToBottomSheetDataMetrics(
-                        data
-                    )
-                )
+                navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
+                    this.putString("infoData", data)
+                })
             }
         }
         binding.toolbar.view1.visible()
@@ -77,7 +75,7 @@ class BodyTempScoreDetailFragment :
             }"
             binding.tvDeviationValue.text = "${it.deviation}°"
         }
-        binding.tvBaseline.text = "${if (it.trendData?.base == null) "-" else it.trendData.base}°"
+//        binding.tvBaseline.text = "${if (it.trendData?.base == null) "-" else it.trendData.base}°"
 
 
         val topGraphData = mViewModel.getPrefixAndSuffixListTemp(
@@ -92,31 +90,31 @@ class BodyTempScoreDetailFragment :
         )
 
 
-        var trendTodayTitle = ""
-        var trendYesterdayTitle = ""
-        var trendScoreMsg = ""
+//        var trendTodayTitle = ""
+//        var trendYesterdayTitle = ""
+//        var trendScoreMsg = ""
+//
+//        trendTodayTitle = getString(R.string.text_today)
+//        trendYesterdayTitle = getString(R.string.text_yesterday)
 
-        trendTodayTitle = getString(R.string.text_today)
-        trendYesterdayTitle = getString(R.string.text_yesterday)
+//        binding.lytScoreOverview.tvTitle.text = "Body temperature trend"
+        //  handleShowTrendCompareProgress(it)
 
-        binding.lytScoreOverview.tvTitle.text = "Body temperature trend"
-        handleShowTrendCompareProgress(it)
-
-        trendScoreMsg = if (mViewModel.isProgressEqual)
-            "same as yesterday"
-        else {
-            if (mViewModel.isTodayGreater)
-                "more than yesterday"
-            else
-                "less than yesterday"
-        }
+//        trendScoreMsg = if (mViewModel.isProgressEqual)
+//            "same as yesterday"
+//        else {
+//            if (mViewModel.isTodayGreater)
+//                "more than yesterday"
+//            else
+//                "less than yesterday"
+//        }
 
 
-        binding.lytScoreOverview.lytToday.tvToday.text = trendTodayTitle
-        binding.lytScoreOverview.lytYesterday.tvToday.text = trendYesterdayTitle
-        binding.lytScoreOverview.tvScoreMsg.text = trendScoreMsg
+//        binding.lytScoreOverview.lytToday.tvToday.text = trendTodayTitle
+//        binding.lytScoreOverview.lytYesterday.tvToday.text = trendYesterdayTitle
+//        binding.lytScoreOverview.tvScoreMsg.text = trendScoreMsg
 
-        bindDataOnUi(it)
+//        bindDataOnUi(it)
         binding.groupMain.visible()
 
     }

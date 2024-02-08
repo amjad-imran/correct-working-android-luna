@@ -60,4 +60,7 @@ interface RingDataStore {
     fun saveOngoingRecordWorkout(pair: Pair<Long, OWorkoutListModal>)
     fun getOngoingRecordWorkout(): Pair<Long, OWorkoutListModal>?
     fun deleteOngoingRecordWorkout()
+
+    fun isGoogleFitCrossed(): Boolean
+    fun setGoogleFitCrossed(status: Boolean)
 }

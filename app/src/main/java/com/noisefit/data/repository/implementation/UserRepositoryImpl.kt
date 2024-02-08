@@ -26,6 +26,7 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.Interest
 import com.noisefit_commans.ui.checkDayDifferenceMoreOne
 import com.noisefit_commans.models.*
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import kotlinx.coroutines.CoroutineDispatcher
@@ -91,11 +92,28 @@ class UserRepositoryImpl(
             remoteDataSource.getStateList(url)
         }
     }
+
     override suspend fun getCityList(stateId: Int): Flow<Resource<BaseApiResponse<List<CityData>>>> {
         return safeApiCallFlow(dispatcher) {
             val url =
                 "${BuildConfig.BASE_URL_NEW}/master/location/city_list/$stateId"
             remoteDataSource.getCityList(url)
+        }
+    }
+
+    override suspend fun saveActivity(sportsModeResponse: List<SportsModeResponse>?) {
+        val enableGoogleFit = localDatSource.isEnableGoogleFit()
+        LOGS.i("SAVE Activity")
+        AppLogs.sendAppLogs("Save to Google fit $sportsModeResponse")
+
+        sportsModeResponse?.forEach { response ->
+            if (enableGoogleFit) {
+                val sportsMode = offlineDataMapper.convertSportDataToGoogleFit(response)
+                sportsMode?.let {
+                    googleFitDataObservers.insertActivityData(sportsMode)
+                }
+
+            }
         }
     }
 

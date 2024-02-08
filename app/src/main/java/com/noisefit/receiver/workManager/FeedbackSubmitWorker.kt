@@ -9,6 +9,7 @@ import com.noisefit.data.repository.abstraction.DeviceRepository
 import com.noisefit_commans.NoisefitApplication
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.FileLogsUtils
 import com.noisefit_commans.utils.LOGS
@@ -38,10 +39,10 @@ class FeedbackSubmitWorker @AssistedInject constructor(
 
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
-        LOGS.w("FeedbackSubmitWorker","Worker running")
+        LOGS.w("FeedbackSubmitWorker", "Worker running")
         try {
             getFileLogs().collect { files ->
-                sendFeedback(files.first, files.second, this)
+                sendFeedback(files.first, files.second, files.third, this)
             }
 
             Result.success()
@@ -51,7 +52,7 @@ class FeedbackSubmitWorker @AssistedInject constructor(
         }
     }
 
-    private suspend fun getFileLogs(): Flow<Pair<File?, File?>> {
+    private suspend fun getFileLogs(): Flow<Triple<File?, File?, File?>> {
         return flow {
 
             val context = NoisefitApplication.context!!
@@ -60,6 +61,18 @@ class FeedbackSubmitWorker @AssistedInject constructor(
                 appLogs = AppLogs.getFile(context)
             } catch (e: Exception) {
                 e.printStackTrace()
+            }
+
+            var firmwareLogs: File? = null
+
+            try {
+                val firmwareFile = watchDataStore.getFirmwareLogPath()
+                if (!firmwareFile.isNullOrEmpty()) {
+                    firmwareLogs = FileLogsUtils.getFileDirect(
+                        watchDataStore.getFirmwareLogPath()!!
+                    )
+                }
+            } catch (ignored: Exception) {
             }
 
 
@@ -84,13 +97,14 @@ class FeedbackSubmitWorker @AssistedInject constructor(
                 e.printStackTrace()
             }
 
-            emit(Pair(appLogs, watchLogs))
+            emit(Triple(appLogs, watchLogs, firmwareLogs))
         }
     }
 
     private suspend fun sendFeedback(
         appLogFile: File?,
         watchLogFile: File?,
+        firmwareLogs: File?,
         scope: CoroutineScope
     ) {
 
@@ -99,10 +113,12 @@ class FeedbackSubmitWorker @AssistedInject constructor(
             val tempAppLogFile =
                 async(Dispatchers.IO) { createTempAppLogFile("tempAppLogs", appLogFile) }
             val tempRingLogFile = async { createTempAppLogFile("tempRingLogs", watchLogFile) }
+            val tempFirmwareLogFile =
+                async { createTempAppLogFile("tempFirmwareLogs", firmwareLogs) }
 
 
             deviceRepository.periodicFeedbackFile(
-                tempAppLogFile.await(), tempRingLogFile.await()
+                tempAppLogFile.await(), tempRingLogFile.await(), tempFirmwareLogFile.await()
             ).collect { resource ->
 
 
@@ -112,12 +128,16 @@ class FeedbackSubmitWorker @AssistedInject constructor(
 
                             val appFile = tempAppLogFile.await()
                             val ringFile = tempRingLogFile.await()
+                            val firmwareFile = tempFirmwareLogFile.await()
                             if (appFile?.exists() == true) {
                                 appFile.delete()
                             }
 
                             if (ringFile?.exists() == true) {
                                 ringFile.delete()
+                            }
+                            if (firmwareFile?.exists() == true) {
+                                firmwareFile.delete()
                             }
 
 

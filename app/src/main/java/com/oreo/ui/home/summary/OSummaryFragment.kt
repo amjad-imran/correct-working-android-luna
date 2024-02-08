@@ -9,7 +9,6 @@ import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSummaryOBinding
 import com.noisefit.oreo.OreoMainViewModel
-import com.noisefit.receiver.service.FeedbackSubmitService
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.data.ErrorResponse
@@ -174,6 +173,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         binding.lytHeader.profileView1.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_hamburger_click)
             navigate(R.id.OMyProfileFragment)
+//            navigate(R.id.napDetails)
         }
 
         /* setFragmentResultListener(ADD_WORKOUT_REQUEST_KEY) { _, bundle ->
@@ -467,16 +467,6 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
     }
 
-    private fun sendLogs() {
-        val shouldSendLogs = viewModel.shouldSendLogs()
-        if (shouldSendLogs) {
-            context?.let {
-                FeedbackSubmitService.startService(
-                    it
-                )
-            }
-        }
-    }
 
 
     private fun stateBluetoothOff() {

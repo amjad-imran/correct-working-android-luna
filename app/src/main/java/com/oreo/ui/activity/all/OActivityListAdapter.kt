@@ -119,7 +119,7 @@ class OActivityListAdapter(
                     }
                 }else if(activity.type.equals("google", true)){
                     view.findViewById<TextView>(R.id.tvImportedFrom).apply {
-                        text = "Imported from Google Fit"
+                        text = this.context.getString(R.string.text_imported_from_google_fit)
                         visible()
                     }
                 } else {

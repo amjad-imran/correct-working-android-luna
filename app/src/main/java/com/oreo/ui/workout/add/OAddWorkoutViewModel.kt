@@ -13,6 +13,7 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.model.OreoAutoSportData
+import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
@@ -45,7 +46,7 @@ constructor(
     val maxWorkoutTime = 180
 
     var autoSport = MutableLiveData<Boolean>()
-    private val _addWorkoutResponse = MutableLiveData<Boolean>()
+    private val _addWorkoutResponse = MutableLiveData<SportsModeResponse>()
     val addWorkoutResponse = _addWorkoutResponse
     private val _oWorkoutListModalResponse = MutableLiveData<List<OWorkoutListModal>>()
     val oWorkoutListModalResponse: LiveData<List<OWorkoutListModal>> = _oWorkoutListModalResponse
@@ -216,7 +217,18 @@ constructor(
                             delay(100)
 
 
-                            _addWorkoutResponse.postValue(true)
+                            val sportObj = SportsModeResponse(
+                                date = date,
+                                distance = 0,
+                                duration = addWorkout.duration.toLong() * 60,
+                                calories = addWorkout.calories.toLong(),
+                                heartRateCurrent = 0,
+                                steps = addWorkout.steps,
+                                type = type,
+                                time = "$date ${addWorkout.startTimeIn24H}"
+                            )
+
+                            _addWorkoutResponse.postValue(sportObj)
                         }
                     }
                 }

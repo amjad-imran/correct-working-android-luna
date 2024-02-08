@@ -31,6 +31,7 @@ private const val RECORD_DELETE_LIST = "RECORD_DELETE_LIST"
 private const val RECORD_WORKOUT_TIMESTAMP = "RECORD_WORKOUT_TIMESTAMP"
 private const val RECORD_WORKOUT_MODEL = "RECORD_WORKOUT_MODEL"
 private const val TEMP_BASE_LINE = "TEMP_BASE_LINE"
+private const val GOOGLE_FIT_CROSSED = "GOOGLE_FIT_CROSSED"
 
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
@@ -40,6 +41,14 @@ class RingDataStoreImpl
     private val gson: Gson,
     private val mPrefs: SharedPreferences
 ) : RingDataStore {
+
+    override fun isGoogleFitCrossed(): Boolean {
+        return mPrefs.getBoolean(GOOGLE_FIT_CROSSED, false)
+    }
+
+    override fun setGoogleFitCrossed(status: Boolean) {
+        mPrefs.edit().putBoolean(GOOGLE_FIT_CROSSED, status).commit()
+    }
 
     override fun saveOngoingRecordWorkout(pair: Pair<Long, OWorkoutListModal>) {
         mPrefs.edit().putLong(RECORD_WORKOUT_TIMESTAMP, pair.first).commit()
@@ -65,6 +74,7 @@ class RingDataStoreImpl
 
     }
 
+
     override fun addToRecordDeleteList(sportStartTime: Long) {
         var prevList = Gson().fromJson<HashSet<Long>>(
             mPrefs.getString(RECORD_DELETE_LIST, "") ?: ""
@@ -87,7 +97,6 @@ class RingDataStoreImpl
         )
         return prevList ?: HashSet()
     }
-
 
 
     override fun getTempBaseLine(): Float {

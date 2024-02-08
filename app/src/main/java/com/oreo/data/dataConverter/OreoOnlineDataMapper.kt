@@ -12,6 +12,9 @@ import com.noisefit_commans.data.model.OreoBodyTemperatureBreakup
 import com.noisefit_commans.data.model.OreoCommonNetworkEntity
 import com.noisefit_commans.data.model.OreoHeartNetworkEntity
 import com.noisefit_commans.data.model.OreoHeartRate
+import com.noisefit_commans.data.model.OreoNapData
+import com.noisefit_commans.data.model.OreoNapNetworkEntity
+import com.noisefit_commans.data.model.OreoNapNetworkObjEntity
 import com.noisefit_commans.data.model.OreoRespiratoryData
 import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.data.model.OreoSleepNetworkEntity
@@ -26,6 +29,7 @@ import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
 import com.oreo.data.db.implementation.OreoHeartRateDataImpl
 import com.oreo.data.db.implementation.OreoRespiratoryDataImpl
 import com.oreo.data.db.implementation.OreoStressDataImpl
+import com.oreo.data.model.NapOverlayData
 import com.oreo.data.model.OreoUserSyncActivities
 import com.oreo.data.model.SleepOverlayData
 import java.text.SimpleDateFormat
@@ -33,8 +37,7 @@ import javax.inject.Inject
 import kotlin.math.roundToInt
 
 class OreoOnlineDataMapper
-@Inject
-constructor(
+@Inject constructor(
     private val stressDataImpl: OreoStressDataImpl,
     private val respiratoryData: OreoRespiratoryDataImpl,
     private val temperatureData: OreoBodyTemperatureDataSource,
@@ -88,8 +91,7 @@ constructor(
     }
 
     private fun parseStepsDataOreo(
-        stepsDataList: List<OreoStepsData>?,
-        dayTimeMovement: List<DayTimeMovementBreakup>?
+        stepsDataList: List<OreoStepsData>?, dayTimeMovement: List<DayTimeMovementBreakup>?
     ): ArrayList<OreoStepsNetworkEntity>? {
         if (stepsDataList.isNullOrEmpty()) {
             return null
@@ -110,11 +112,7 @@ constructor(
                 if (data.steps != 0) {
                     hourlyBreakupList.add(
                         OreoStepsNetworkEntity.HourlyBreakup(
-                            data.steps,
-                            data.activeCalories,
-                            data.calories,
-                            data.distance,
-                            hour
+                            data.steps, data.activeCalories, data.calories, data.distance, hour
                         )
                     )
                 }
@@ -131,18 +129,16 @@ constructor(
             }
 
 
-            val dayBreakup =
-                OreoStepsNetworkEntity.DayBreakup(
-                    stepsData.totalSteps,
-                    stepsData.activeCalories ?: 0,
-                    stepsData.totalCalories,
-                    stepsData.totalDistance,
-                    date
-                )
+            val dayBreakup = OreoStepsNetworkEntity.DayBreakup(
+                stepsData.totalSteps,
+                stepsData.activeCalories ?: 0,
+                stepsData.totalCalories,
+                stepsData.totalDistance,
+                date
+            )
 
             val steps = OreoStepsNetworkEntity(
-                hourlyBreakupList, dayBreakup,
-                dayTimeMovement = dayDataBreakup
+                hourlyBreakupList, dayBreakup, dayTimeMovement = dayDataBreakup
             )
             stepsList.add(steps)
         }
@@ -221,34 +217,36 @@ constructor(
                 )
             }
             var dayBreakup: OreoSleepNetworkEntity.OreoDayBreakup? = null
-            dayBreakup =
-                OreoSleepNetworkEntity.OreoDayBreakup(
-                    totalDeep = sleepData.deep,
-                    totalLight = sleepData.light,
-                    totalDuration = sleepData.total,
-                    timeInBed = sleepData.timeInBedTime,
-                    startTime = sleepData.startTime ?: "",
-                    endtime = sleepData.endTime ?: "",
-                    totalAwake = sleepData.awake,
-                    date = (sleepData.date ?: ""),
-                    totalRem = sleepData.remCount,
-                    sleepScore = sleepData.sleepScore,
-                    sleepEfficiency = sleepData.sleepEfficiency,
-                    restingHr = sleepOverlayData.hrBreakup.averageWithoutZero(),
-                    sleepLatency = sleepData.sleepLatency,
-                    hrBreakup = sleepOverlayData.hrBreakup,
-                    hrvBreakup = sleepOverlayData.stressBreakup,
-                    respBreakup = sleepOverlayData.respBreakup,
-                    tempBreakup = sleepOverlayData.tempBreakup,
-                    oxyBreakup = sleepOverlayData.spo2Breakup,
-                    avgTemp = sleepOverlayData.tempBreakup.averageWithoutZeroFloat(),
-                    avgOxy = if (sleepOverlayData.spo2Breakup.isEmpty()) 0 else sleepOverlayData.spo2Breakup.averageWithoutZero(),
-                    avgResp = if (sleepOverlayData.respBreakup.isEmpty()) 0 else sleepOverlayData.respBreakup.average()
-                        .roundToInt() ?: 0,
-                    maxTemp = sleepOverlayData.tempBreakup.maxOrNull() ?: 0f,
-                    avgHrv = sleepOverlayData.stressBreakup.averageWithoutZero(),
-                    readinessScore = sleepData.readinessScore ?: 0
-                )
+            val avgTemp =
+                String.format("%.1f", sleepOverlayData.tempBreakup.averageWithoutZeroFloat())
+
+            dayBreakup = OreoSleepNetworkEntity.OreoDayBreakup(
+                totalDeep = sleepData.deep,
+                totalLight = sleepData.light,
+                totalDuration = sleepData.total,
+                timeInBed = sleepData.timeInBedTime,
+                startTime = sleepData.startTime ?: "",
+                endtime = sleepData.endTime ?: "",
+                totalAwake = sleepData.awake,
+                date = (sleepData.date ?: ""),
+                totalRem = sleepData.remCount,
+                sleepScore = sleepData.sleepScore,
+                sleepEfficiency = sleepData.sleepEfficiency,
+                restingHr = sleepOverlayData.hrBreakup.averageWithoutZero(),
+                sleepLatency = sleepData.sleepLatency,
+                hrBreakup = sleepOverlayData.hrBreakup,
+                hrvBreakup = sleepOverlayData.stressBreakup,
+                respBreakup = sleepOverlayData.respBreakup,
+                tempBreakup = sleepOverlayData.tempBreakup,
+                oxyBreakup = sleepOverlayData.spo2Breakup,
+                avgTemp = avgTemp.toFloat(),
+                avgOxy = if (sleepOverlayData.spo2Breakup.isEmpty()) 0 else sleepOverlayData.spo2Breakup.averageWithoutZero(),
+                avgResp = if (sleepOverlayData.respBreakup.isEmpty()) 0 else sleepOverlayData.respBreakup.average()
+                    .roundToInt() ?: 0,
+                maxTemp = sleepOverlayData.tempBreakup.maxOrNull() ?: 0f,
+                avgHrv = sleepOverlayData.stressBreakup.averageWithoutZero(),
+                readinessScore = sleepData.readinessScore ?: 0
+            )
 
             val sleep = OreoSleepNetworkEntity(hourlyList, nightTimeMovement, dayBreakup)
             sleepList.add(sleep)
@@ -262,6 +260,46 @@ constructor(
 
     }
 
+
+    suspend fun getNapRequest(nap: OreoNapData): OreoNapNetworkEntity {
+        val overlayData = getNapOverlayData(nap)
+        val avgTemp = String.format("%.1f", overlayData.tempBreakup.averageWithoutZeroFloat())
+
+        val napObject = OreoNapNetworkObjEntity(
+            startTime = nap.startTime ?: "",
+            endTime = nap.endTime ?: "",
+            duration = nap.duration,
+            date = nap.date ?: "",
+            avgHrv = overlayData.hrvBreakup.minWithoutZero(),
+            temperature = overlayData.tempBreakup,
+            avgTemp = avgTemp.toFloat(),
+            hr = overlayData.hrBreakup,
+            hrv = overlayData.hrvBreakup,
+            avgHr = overlayData.hrBreakup.averageWithoutZero(),
+            lowHr = overlayData.hrBreakup.minWithoutZero(),
+            maxHrv = overlayData.hrvBreakup.maxOrNull() ?: 0
+        )
+        return OreoNapNetworkEntity(
+            naps = arrayListOf(napObject)
+        )
+    }
+
+    private suspend fun getNapOverlayData(napData: OreoNapData): NapOverlayData {
+        //val startTime = napData.startTime!!
+
+        val sleepStartTime = DateFormats.convertDateTimeToTimeStamp3(napData.startTime!!)
+        val sleepEndTime = DateFormats.addSecondToTimeStamp(sleepStartTime, napData.duration * 60)
+
+        val hrData =
+            oreoHeartRateDataImpl.getHeartRateBetweenTimeStamp(sleepStartTime, sleepEndTime)
+        val hrv = stressDataImpl.getStressBetweenTimeStamp(sleepStartTime, sleepEndTime)
+        val resp = respiratoryData.getDataBetweenTimeStamp(sleepStartTime, sleepEndTime)
+        val spo2Breakup = bloodOxygenDataImpl.getDataBetweenTimeStamp(sleepStartTime, sleepEndTime)
+        val temp = temperatureData.getDataBetweenTimeStamp(sleepStartTime, sleepEndTime)
+
+        return NapOverlayData(hrData, hrv, resp, temp, spo2Breakup)
+    }
+
     private fun parseStressData(stressDataList: List<OreoStressDataBreakup>?): ArrayList<OreoCommonNetworkEntity>? {
         if (stressDataList.isNullOrEmpty()) {
             return null
@@ -271,9 +309,7 @@ constructor(
             val breakUp = Gson().fromJson<List<Int>>(it.breakUp ?: "")
             val networkReq = OreoCommonNetworkEntity()
             networkReq.dayBreakup = OreoCommonNetworkEntity.DayBreakup(
-                breakUp = breakUp,
-                frequency = 5,
-                date = it.date ?: ""
+                breakUp = breakUp, frequency = 5, date = it.date ?: ""
             )
             commonList.add(networkReq)
         }
@@ -289,9 +325,7 @@ constructor(
             val breakUp = Gson().fromJson<List<Int>>(it.breakUp ?: "")
             val networkReq = OreoCommonNetworkEntity()
             networkReq.dayBreakup = OreoCommonNetworkEntity.DayBreakup(
-                breakUp = breakUp,
-                frequency = 5,
-                date = it.date ?: ""
+                breakUp = breakUp, frequency = 5, date = it.date ?: ""
             )
             commonList.add(networkReq)
         }
@@ -308,9 +342,7 @@ constructor(
             val breakUp = Gson().fromJson<List<Float>>(it.breakUp ?: "")
             val networkReq = OreoBodyTempNetworkEntity()
             networkReq.dayBreakup = OreoBodyTempNetworkEntity.DayBreakup(
-                breakUp = breakUp,
-                frequency = 5,
-                date = it.date ?: ""
+                breakUp = breakUp, frequency = 5, date = it.date ?: ""
             )
             commonList.add(networkReq)
         }
@@ -328,9 +360,7 @@ constructor(
             val breakUp = Gson().fromJson<List<Int>>(it.breakUp ?: "")
             val networkReq = OreoCommonNetworkEntity()
             networkReq.dayBreakup = OreoCommonNetworkEntity.DayBreakup(
-                breakUp = breakUp,
-                frequency = 15,
-                date = it.date ?: ""
+                breakUp = breakUp, frequency = 15, date = it.date ?: ""
             )
             commonList.add(networkReq)
         }
@@ -386,15 +416,12 @@ constructor(
             val breakUp = Gson().fromJson<List<Int>>(it.breakUp ?: "")
             val networkReq = OreoHeartNetworkEntity()
             networkReq.dayBreakup = OreoHeartNetworkEntity.DayBreakup(
-                breakUp = breakUp,
-                frequency = 5,
-                date = it.date ?: ""
+                breakUp = breakUp, frequency = 5, date = it.date ?: ""
             )
             commonList.add(networkReq)
         }
 
         return commonList
     }
-
 
 }

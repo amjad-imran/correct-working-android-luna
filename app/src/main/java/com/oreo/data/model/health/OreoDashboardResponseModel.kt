@@ -9,7 +9,7 @@ data class OreoDashboardResponseModel(
     val readiness: ODashboardReadinessModel? = null,
     @SerializedName("activity")
     val activity: ODashboardActivityModel? = null
-    )
+)
 
 data class InfoTextData(val title: String, val content: String)
 data class InfoVideoData(val url: String, val time: String, val title: String)
@@ -23,9 +23,12 @@ data class WelcomeData(
 
 data class ODashboardReadinessModel(
     val readinessScore: Int? = null,
+    val readinessNapScoreImpact: Int? = null,
+    val noOfNaps: Int? = null,
     val status: String? = "",
-    val nudges: List<Nudges>? = null
-)
+    val nudges: List<Nudges>? = null,
+
+    )
 
 data class ODashboardActivityScoreModel(
     val activityScore: Int? = null,
@@ -64,4 +67,9 @@ data class ODashboardSleepModel(
     val startTime: String? = "",
     @SerializedName("end_time")
     val endTime: String? = "",
+    @SerializedName("sleep_nap_score_impact")
+    val sleepNapScoreImpact: Int? = null,
+    @SerializedName("no_of_naps")
+    val noOfNaps: Int? = null,
+    val naps: List<Nap>? = null,
 )

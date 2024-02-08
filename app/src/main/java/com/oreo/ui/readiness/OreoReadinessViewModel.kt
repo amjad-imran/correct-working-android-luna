@@ -534,7 +534,7 @@ constructor(
             val (textColor, barColor, background) = getContributorsColors(dayData.tempBalance.status)
             result.add(
                 Contributors(
-                    title = "Body temperature",
+                    title = "Skin temperature",
                     leftText = dayData.tempBalance.text,
                     leftTextColor = textColor,
                     barColor = barColor,
@@ -545,7 +545,7 @@ constructor(
         } else {
             result.add(
                 Contributors(
-                    title = "Body temperature",
+                    title = "Skin temperature",
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,

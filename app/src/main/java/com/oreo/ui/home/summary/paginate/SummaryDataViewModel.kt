@@ -4,9 +4,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.data.Entry
+import com.google.gson.Gson
+import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.common.maxWithoutZero
 import com.noisefit_commans.common.minWithoutZero
 import com.noisefit_commans.data.BinaryActionCallback
@@ -36,6 +39,7 @@ import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.VideoInfoType
+import com.oreo.data.model.health.Nap
 import com.oreo.data.model.health.ODashboardActivityModel
 import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessModel
@@ -56,6 +60,7 @@ constructor(
     val ringDataStore: RingDataStore,
     val localDataStore: DataStoredInterface,
     val sessionManager: SessionManager,
+    val dataConverter: DataConverter,
     val oreoStressDataConvertor: OreoStressDataConvertor,
     val userActivityRepository: OreoUserActivityRepository
 ) : BaseViewModel() {
@@ -79,6 +84,8 @@ constructor(
 
     fun parseHealthData(healthData: ServerUserHealthData) {
 
+        val nap = healthData.sleep?.naps ?: ArrayList()
+
         viewModelScope.launch(Dispatchers.IO) {
 
 
@@ -91,12 +98,20 @@ constructor(
                             ODashboardReadinessModel(
                                 readinessScore = it?.readinessScore?.value,
                                 status = it?.readinessScore?.text?.capitalizeWords(),
-                                nudges = it?.dashNudges
+                                nudges = it?.dashNudges,
+                                readinessNapScoreImpact = healthData.readiness?.readinessNapScoreImpact,
+                                noOfNaps = healthData.readiness?.noOfNaps
                             )
                         )
                     )
                 }
             }
+
+            val newSleepArray =
+                dataConverter.mergeSleepData(
+                    healthData.sleep?.hourly_breakup,
+                    healthData.sleep?.naps
+                )
 
             healthData.sleep.let {
                 if ((it?.sleepScore?.value ?: 0) > 0) {
@@ -108,16 +123,21 @@ constructor(
                                 restingHr = healthData.sleep?.restingHr?.value,
                                 sleepStage = it?.hourly_breakup ?: ArrayList(),
                                 status = it?.sleepScore?.text?.capitalizeWords(),
-                                startTime = "",
-                                endTime = ""
+                                startTime = newSleepArray?.firstOrNull()?.start_time ?: "",
+                                endTime = newSleepArray?.lastOrNull()?.end_time ?: "",
+                                sleepNapScoreImpact = healthData.sleep?.sleepNapScoreImpact ?: 0,
+                                noOfNaps = healthData.sleep?.noOfNaps ?: 0
                             ),
-                            makeSleepArray(it?.hourly_breakup),
-                            it?.hourly_breakup?.firstOrNull()?.start_time ?: "",
-                            it?.hourly_breakup?.lastOrNull()?.end_time ?: ""
+                            makeSleepArray(newSleepArray),
+                            newSleepArray?.firstOrNull()?.start_time ?: "",
+                            newSleepArray?.lastOrNull()?.end_time ?: ""
                         )
                     )
                 }
 
+            }
+            if (nap.isNotEmpty()) {
+                userActivities.add(OHealthOverview.NapDashCard(nap, healthData.date))
             }
 
             healthData.activity.let {

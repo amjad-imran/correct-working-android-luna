@@ -54,7 +54,7 @@ class OreoRWorkoutAdapter(val mListener: OnItemClickListener) :
                 }
             } else if(activity.type.equals("google", true)) {
                 binding.tvImportedFrom.apply {
-                    text = "Imported from Google Fit"
+                    text = this.context.getString(R.string.text_imported_from_google_fit)
                     visible()
                 }
             }else{

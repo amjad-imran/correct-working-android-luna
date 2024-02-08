@@ -70,13 +70,16 @@ object AuthModule {
         return FitnessOptions.builder()
             .accessSleepSessions(FitnessOptions.ACCESS_WRITE)
             .accessActivitySessions(FitnessOptions.ACCESS_WRITE)
+            .accessActivitySessions(FitnessOptions.ACCESS_READ)
             .addDataType(DataType.TYPE_WORKOUT_EXERCISE, FitnessOptions.ACCESS_WRITE)
             .addDataType(DataType.TYPE_DISTANCE_DELTA, FitnessOptions.ACCESS_WRITE)
             .addDataType(DataType.TYPE_ACTIVITY_SEGMENT, FitnessOptions.ACCESS_WRITE)
             .addDataType(DataType.TYPE_CALORIES_EXPENDED, FitnessOptions.ACCESS_WRITE)
             .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_WRITE)
             .addDataType(DataType.TYPE_HEIGHT, FitnessOptions.ACCESS_WRITE)
+            /*.addDataType(DataType.TYPE_HEIGHT, FitnessOptions.ACCESS_READ)*/
             .addDataType(DataType.TYPE_WEIGHT, FitnessOptions.ACCESS_WRITE)
+            /*.addDataType(DataType.TYPE_WEIGHT, FitnessOptions.ACCESS_READ)*/
             .addDataType(DataType.TYPE_HEART_RATE_BPM, FitnessOptions.ACCESS_WRITE)
             .build()
 

@@ -10,8 +10,6 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.oreo.data.model.LearnModel
-import com.oreo.ui.home.summary.OSummaryHealthOverviewAdapter
-import com.oreo.ui.home.summary.OSummaryHealthOverviewClickEnum
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
