@@ -14,14 +14,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <include
+    <ImageView
         android:id="@+id/lytTicker"
-        layout="@layout/layout_arrow"
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:src="@drawable/ic_stress_pointer"
         app:layout_constraintBottom_toBottomOf="@id/ivBackStress"
         app:layout_constraintEnd_toEndOf="@id/ivBackStress"
         app:layout_constraintStart_toStartOf="@id/ivBackStress" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_stress_meter_foreground"
+        app:layout_constraintBottom_toBottomOf="@+id/ivBackStress"
+        app:layout_constraintEnd_toEndOf="@+id/ivBackStress"
+        app:layout_constraintStart_toStartOf="@+id/ivBackStress" />
+
 
     <TextView
         android:id="@+id/tvStressValue"

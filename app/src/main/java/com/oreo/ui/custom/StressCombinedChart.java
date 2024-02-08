@@ -16,11 +16,13 @@ import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.Pair;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.core.content.res.ResourcesCompat;
 
 import com.noisefit.luna.R;
+import com.noisefit_commans.utils.LOGS;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -488,4 +490,20 @@ public class StressCombinedChart extends View {
         return (int) (spValue * fontScale + 0.5f);
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_MOVE:
+                float touchX = event.getX();
+                float touchY = event.getY();
+                LOGS.INSTANCE.d("TOUCH_EVENTS "+touchX +" "+touchY);
+                invalidate();
+                return true;
+            case MotionEvent.ACTION_UP:
+                // Handle action up if needed
+                return true;
+        }
+        return super.onTouchEvent(event);
+    }
 }

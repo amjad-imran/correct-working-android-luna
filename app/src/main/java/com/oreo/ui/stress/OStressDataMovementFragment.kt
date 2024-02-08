@@ -3,6 +3,9 @@ package com.oreo.ui.stress
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.Animation
+import android.view.animation.RotateAnimation
 import android.widget.LinearLayout
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -88,7 +91,22 @@ class OStressDataMovementFragment :
             binding.lytTopStressGraph.tvLastSyncStatus.text =
                 DateFormats.getRelativeTime(lastUpdatedTimestamp)
         }
+
+        val rotate = RotateAnimation(
+            -90f,
+            0f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f,
+            Animation.RELATIVE_TO_SELF,
+            1f
+        )
+        rotate.duration = 1000
+        rotate.fillAfter = true
+        rotate.interpolator = AccelerateDecelerateInterpolator()
+        binding.lytTopStressGraph.lytTicker.startAnimation(rotate)
+
     }
+
 
     override fun initListener() {
         //sharedViewModel.setSelectedType(StressType.NO_DATA)
