@@ -20,30 +20,17 @@
                 android:layout_marginTop="32dp"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.oreo.ui.custom.StressCombinedChart
+            <include
                 android:id="@+id/lytStressMidGraph"
+                layout="@layout/item_stress_graph"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="26dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="26dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/lytTopStressGraph"
-                lineChart:bottomWith="30dp"
-                lineChart:chartLineColor="#FFFFFF"
-                lineChart:chartLineWidth="2dp"
-                lineChart:gridColor="#80FFFFFF"
-                lineChart:highColor="#ff922d"
-                lineChart:lowColor="#12cba9"
-                lineChart:mediumColor="#ffe561"
-                lineChart:restLineColor="#40FFFFFF"
-                lineChart:topWith="50dp"
-                lineChart:xMax="100"
-                lineChart:xMin="0"
-                lineChart:xTextColor="#FFFFFF"
-                lineChart:xTextSize="12sp"
-                lineChart:yTextSize="12sp" />
+                app:layout_constraintTop_toBottomOf="@id/lytTopStressGraph" />
 
             <View
                 android:id="@+id/viewOpen"

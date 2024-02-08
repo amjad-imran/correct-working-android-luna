@@ -48,13 +48,14 @@ data class Stress(
     @SerializedName("stress_value")
     val stressValue: StressValue? = null,
     val nudges: List<StressNudge>? = null,
-    @SerializedName("last_updated")
-    val lastUpdated: Long? = null
+
 )
 
 data class StressValue(
     val value: Int? = null,
-    val text: String? = null
+    val text: String? = null,
+    @SerializedName("last_updated")
+    val lastUpdated: Long? = null
 )
 
 data class StressNudge(

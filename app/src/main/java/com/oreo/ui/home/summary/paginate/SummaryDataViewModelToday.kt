@@ -27,6 +27,7 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
+import com.oreo.data.dataConverter.OreoStressDataConvertor
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.DashAlert
@@ -59,6 +60,7 @@ constructor(
     val localDataStore: DataStoredInterface,
     val sessionManager: SessionManager,
     private val syncRepository: OreoSyncRepository,
+    val oreoStressDataConvertor: OreoStressDataConvertor,
     val userActivityRepository: OreoUserActivityRepository
 ) : BaseViewModel() {
 
@@ -408,6 +410,8 @@ constructor(
                     }
                 }
             }
+            userActivities.add(OHealthOverview.StressGraph(oreoStressDataConvertor.getStressCombinedData(healthData)))
+
 
             stateSleepAvgCard.postValue(
                 Pair(

@@ -238,6 +238,9 @@ class SummaryDataFragmentToday :
                     viewModel.localDataStore.setDashCardClickState(DashInfoCard.WELCOME, true)
                     navigate(R.id.ringWelcomeFragment)
                 }
+                OSummaryHealthOverviewClickEnum.StressGraphClicked -> {
+                    navigate(R.id.fragmentOStressDetails)
+                }
             }
         }
 

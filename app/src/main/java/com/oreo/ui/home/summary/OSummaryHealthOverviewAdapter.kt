@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.hookedonplay.decoviewlib.events.DecoEvent
 import com.noisefit.luna.R
+import com.noisefit.luna.databinding.ItemStressGraphBinding
 import com.noisefit.luna.databinding.ListActivityBurnCardItem2Binding
 import com.noisefit.luna.databinding.ListActivityBurnCardItemBinding
 import com.noisefit.luna.databinding.ListActivityMinimalItemBinding
@@ -48,6 +49,7 @@ sealed class OSummaryHealthOverviewClickEnum {
     object ActivityDetailsWorkoutClick : OSummaryHealthOverviewClickEnum()
     object ReadinessDetailsWorkoutClick : OSummaryHealthOverviewClickEnum()
     object TextWelcomeRingClicked : OSummaryHealthOverviewClickEnum()
+    object StressGraphClicked : OSummaryHealthOverviewClickEnum()
     data class TextRingCareClicked(val title: String) : OSummaryHealthOverviewClickEnum()
     data class VideoInfoClicked(val type: VideoInfoType, val videoUrl: String) :
         OSummaryHealthOverviewClickEnum()
@@ -84,6 +86,14 @@ class OSummaryHealthOverviewAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeRecyclerViewHolder {
         return when (viewType) {
+            R.layout.item_stress_graph -> HomeRecyclerViewHolder.StressGraphViewHolder(
+                ItemStressGraphBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
             R.layout.list_video_info_card -> HomeRecyclerViewHolder.InfoVideoCardViewHolder(
                 ListVideoInfoCardBinding.inflate(
                     LayoutInflater.from(parent.context),
@@ -202,6 +212,7 @@ class OSummaryHealthOverviewAdapter :
     override fun onBindViewHolder(holder: HomeRecyclerViewHolder, position: Int) {
         holder.itemClickListener = itemClickListener
         when (holder) {
+            is HomeRecyclerViewHolder.StressGraphViewHolder -> holder.bind(items[position] as OHealthOverview.StressGraph)
             is HomeRecyclerViewHolder.InfoWelcomeCardViewHolder -> holder.bind(items[position] as OHealthOverview.InfoRingWelcome)
             is HomeRecyclerViewHolder.InfoRingCareViewHolder -> holder.bind(items[position] as OHealthOverview.InfoRingCare)
             is HomeRecyclerViewHolder.InfoVideoCardViewHolder -> holder.bind(
@@ -293,6 +304,7 @@ class OSummaryHealthOverviewAdapter :
             is OHealthOverview.AutoSport -> R.layout.list_o_w_alert_card_item
             is OHealthOverview.HeartRate -> 0
             is OHealthOverview.InfoVideo -> R.layout.list_video_info_card
+            is OHealthOverview.StressGraph -> R.layout.item_stress_graph
             is OHealthOverview.InfoRingCare -> R.layout.list_ring_care
             is OHealthOverview.InfoRingWelcome -> R.layout.list_welcome_card
         }
@@ -345,6 +357,21 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.TextWelcomeRingClicked)
+            }
+
+        }
+    }
+
+    class StressGraphViewHolder(private val binding: ItemStressGraphBinding) :
+        HomeRecyclerViewHolder(binding) {
+        fun bind(
+            data: OHealthOverview.StressGraph,
+        ) {
+            binding.graphStress.updateData(data.data)
+
+
+            binding.root.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.StressGraphClicked)
             }
 
         }

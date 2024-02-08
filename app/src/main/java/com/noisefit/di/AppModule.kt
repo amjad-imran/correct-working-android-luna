@@ -28,6 +28,7 @@ import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataActions
 import com.noisefit_commans.utils.EncryptUtils
 import com.oreo.data.dataConverter.OreoOfflineDataMapper
 import com.oreo.data.dataConverter.OreoOnlineDataMapper
+import com.oreo.data.dataConverter.OreoStressDataConvertor
 import com.oreo.data.db.OreoDataBase
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.db.implementation.OreoAutoSportDataImpl
@@ -84,6 +85,14 @@ object AppModule {
             oreoBloodOxygenDataImpl,
             oreoHeartRateDataImpl
         )
+    }
+
+
+    @Singleton
+    @Provides
+    fun provideOreoStressDataConvertor(
+    ): OreoStressDataConvertor {
+        return OreoStressDataConvertor()
     }
 
     @Singleton

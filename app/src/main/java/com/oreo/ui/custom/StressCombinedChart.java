@@ -256,7 +256,7 @@ public class StressCombinedChart extends View {
         Section section;
         for (int i = 0; i < combineModel.getSections().size(); i++) {
             section = combineModel.getSections().get(i);
-            resMap.put(i, new Pair<>(new LinearGradient(0, 0, 0, mHeight / 2f, section.getColor(), Color.TRANSPARENT, Shader.TileMode.CLAMP),
+            resMap.put(i, new Pair<>(new LinearGradient(0, 0, 0, mHeight - bottomWith, section.getColor(), Color.TRANSPARENT, Shader.TileMode.CLAMP),
                     BitmapFactory.decodeResource(getResources(), section.getImageRes())
             ));
         }
@@ -351,7 +351,7 @@ public class StressCombinedChart extends View {
             rectF.left = section.getStart() * unitHLenth + leftWith;
             rectF.top = topWith;
             rectF.right = rectF.left + (section.getEnd() - section.getStart()) * unitHLenth;
-            rectF.bottom = mHeight / 2f;
+            rectF.bottom = mHeight - bottomWith;
             chartLineFillPaint.setShader(resMap.get(i).first);
             canvas.drawRect(rectF, chartLineFillPaint);
 

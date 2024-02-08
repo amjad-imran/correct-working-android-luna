@@ -8,6 +8,7 @@ import com.oreo.data.model.health.InfoVideoData
 import com.oreo.data.model.health.ODashboardActivityModel
 import com.oreo.data.model.health.ODashboardReadinessModel
 import com.oreo.data.model.health.ODashboardSleepModel
+import com.oreo.ui.custom.StressCombineModel
 
 
 sealed class OHealthOverview {
@@ -16,6 +17,9 @@ sealed class OHealthOverview {
     data class InfoRingWelcome(val data: InfoTextData) : OHealthOverview()
     data class InfoRingCare(val data: InfoTextData) : OHealthOverview()
     data class InfoVideo(val type: VideoInfoType, val data: InfoVideoData) :
+        OHealthOverview()
+
+    data class StressGraph(val data: StressCombineModel) :
         OHealthOverview()
 
 

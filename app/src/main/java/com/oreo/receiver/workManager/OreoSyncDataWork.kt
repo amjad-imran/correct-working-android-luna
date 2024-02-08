@@ -165,7 +165,7 @@ constructor(
                             is Resource.GenericError -> {
 //                                sessionManager.logAppEvent(FunnelEvents.SyncEvents.Sync_Error_Uploading_Data.name, eventProperty)
                                 LOGS.d(TAG, "OreoSyncDataWork: combinedData1 " + resource.message)
-                                AppLogs.sendAppLogs("OreoSyncDataWork postDataToServer GenericError ${resource.message}")
+                                AppLogs.sendAppLogs("OreoSyncDataWork postDataToServer GenericError ${resource.errorCode} ${resource.message}")
                             }
 
                             is Resource.Loading -> {

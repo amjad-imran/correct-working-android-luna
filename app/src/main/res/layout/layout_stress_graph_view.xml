@@ -24,6 +24,7 @@
         app:layout_constraintStart_toStartOf="@id/ivBackStress" />
 
     <TextView
+        android:id="@+id/tvStressValue"
         style="@style/H1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -38,11 +39,11 @@
         style="@style/H6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="6dp"
         android:text="@string/text_0"
         android:textColor="@color/white_48"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/ivBackStress"
         app:layout_constraintTop_toBottomOf="@id/ivBackStress" />
 
     <TextView
@@ -51,10 +52,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
-        android:layout_marginEnd="94dp"
+        android:layout_marginEnd="6dp"
         android:text="@string/text_100"
         android:textColor="@color/white_48"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/ivBackStress"
         app:layout_constraintTop_toBottomOf="@id/ivBackStress" />
 
     <TextView
@@ -63,8 +64,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@id/tvMinStress"
-        app:layout_constraintEnd_toStartOf="@id/tvMaxStress"
-        app:layout_constraintStart_toEndOf="@id/tvMinStress"
+        app:layout_constraintEnd_toEndOf="@+id/ivBackStress"
+        app:layout_constraintStart_toStartOf="@+id/ivBackStress"
         app:layout_constraintTop_toTopOf="@id/tvMinStress"
         tools:text="Fixed" />
 
@@ -73,11 +74,11 @@
         style="@style/Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/white_64"
         android:layout_marginTop="4dp"
+        android:textColor="@color/white_64"
+        app:layout_constraintEnd_toEndOf="@+id/ivBackStress"
+        app:layout_constraintStart_toStartOf="@+id/ivBackStress"
         app:layout_constraintTop_toBottomOf="@+id/tvStressStatus"
-        app:layout_constraintEnd_toStartOf="@id/tvMaxStress"
-        app:layout_constraintStart_toEndOf="@id/tvMinStress"
         tools:text="Last updated at 10:40 pm" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,9 +10,11 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOStressDataMovementBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.data.enums.StressType
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.Stress
 import com.oreo.data.model.StressNudge
@@ -61,14 +63,30 @@ class OStressDataMovementFragment :
                 viewModel.dayTimeMovement = dayData.activity?.daytimeMovement?.movement
                 viewModel.isSelectedMode = false
 
+                setTopMeter(dayData.stress)
                 initCombineChart(dayData)
                 setMovementData(viewModel.dayTimeMovement, viewModel.isSelectedMode, -1)
                 handleStressProgressView(dayData.stress)
-                viewModel.prepareStressActivityData(dayData)
+                //viewModel.prepareStressActivityData(dayData)
 
                 setNudge(dayData.stress?.nudges)
 
             }
+        }
+    }
+
+    private fun setTopMeter(stress: Stress?) {
+
+        binding.lytTopStressGraph.tvStressValue.text = "${stress?.stressValue?.value ?: "--"}"
+        binding.lytTopStressGraph.tvStressStatus.text = stress?.stressValue?.text
+
+        val lastUpdatedTimestamp = stress?.stressValue?.lastUpdated ?: 0
+
+        if (lastUpdatedTimestamp == 0L) {
+            binding.lytTopStressGraph.tvLastSyncStatus.text = "-"
+        } else {
+            binding.lytTopStressGraph.tvLastSyncStatus.text =
+                DateFormats.getRelativeTime(lastUpdatedTimestamp)
         }
     }
 
@@ -197,26 +215,28 @@ class OStressDataMovementFragment :
 
     private fun setNudge(nudges: List<StressNudge>?) {
         if (nudges.isNullOrEmpty()) {
-            binding.lytStressBanner.rootView.gone()
+            binding.lytStressBanner.root.gone()
+            binding.tvBannerHeader.gone()
+            binding.divider1.root.gone()
             return
         }
-        binding.lytStressBanner.rootView.visible()
+        binding.tvBannerHeader.visible()
+        binding.lytStressBanner.root.visible()
+        binding.divider1.root.visible()
 
-        when (nudges.first().value) {
-            in 1..34 -> {
-                binding.lytStressBanner.rootView.setBackgroundResource(R.drawable.ic_st_calm_cue_bg)
-            }
-
-            in 35..69 -> {
-                binding.lytStressBanner.rootView.setBackgroundResource(R.drawable.ic_st_focus_cue_bg)
-            }
-
-            else -> {
-                binding.lytStressBanner.rootView.setBackgroundResource(R.drawable.ic_st_stress_cue_bg)
-            }
+        val stressType = nudges.first().value?.lowercase()
+        if (stressType.equals(StressType.CALM.name.lowercase())) {
+            binding.lytStressBanner.rootView.setBackgroundResource(R.drawable.ic_st_calm_cue_bg)
+        } else if (stressType.equals(StressType.FOCUSED.name.lowercase())) {
+            binding.lytStressBanner.rootView.setBackgroundResource(R.drawable.ic_st_focus_cue_bg)
+        } else if (stressType.equals(StressType.STRESSED.name.lowercase())) {
+            binding.lytStressBanner.rootView.setBackgroundResource(R.drawable.ic_st_stress_cue_bg)
+        } else {
+            binding.lytStressBanner.rootView.setBackgroundResource(com.noisefit_commans.R.drawable.back_modal_new)
         }
 
-        binding.
+        binding.lytStressBanner.tvTitle.text = nudges.first().label
+        binding.lytStressBanner.tvDescription.text = nudges.first().message
 
     }
 
@@ -324,7 +344,11 @@ class OStressDataMovementFragment :
     }
 
     private fun initCombineChart(dayData: ServerUserHealthData) {
-        binding.lytStressMidGraph.updateData(viewModel.getStressCombinedData(dayData))
+        binding.lytStressMidGraph.graphStress.updateData(
+            viewModel.oreoStressDataConvertor.getStressCombinedData(
+                dayData
+            )
+        )
         /* btnHigh.setOnClickListener {
              val highlights: MutableList<Int> =
                  ArrayList()

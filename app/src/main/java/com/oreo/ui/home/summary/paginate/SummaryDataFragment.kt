@@ -137,6 +137,10 @@ class SummaryDataFragment :
 
                 OSummaryHealthOverviewClickEnum.TextWelcomeRingClicked -> {
                 }
+
+                OSummaryHealthOverviewClickEnum.StressGraphClicked -> {
+                    navigate(R.id.fragmentOStressDetails)
+                }
             }
         }
 
