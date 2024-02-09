@@ -30,6 +30,7 @@ constructor(
     val oreoStressDataConvertor: OreoStressDataConvertor
 ) : BaseViewModel() {
 
+    var oldDegree: Float = 0.0f
     var lastSelectedType: Int = -1
     var isSelectedMode: Boolean = false
     var dayTimeMovement: List<Int>? = null

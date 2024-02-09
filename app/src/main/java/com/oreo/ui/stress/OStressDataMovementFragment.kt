@@ -2,6 +2,7 @@ package com.oreo.ui.stress
 
 import android.graphics.Color
 import android.os.Bundle
+import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Animation
@@ -100,10 +101,11 @@ class OStressDataMovementFragment :
                 DateFormats.getRelativeTime(lastUpdatedTimestamp)
         }
 
+        val newDegree = viewModel.getRotationDegree(value)
 
         val rotate = RotateAnimation(
-            0f,
-            viewModel.getRotationDegree(value),
+            viewModel.oldDegree,
+            newDegree,
             Animation.RELATIVE_TO_SELF,
             1f,
             Animation.RELATIVE_TO_SELF,
@@ -113,6 +115,7 @@ class OStressDataMovementFragment :
         rotate.fillAfter = true
         rotate.interpolator = AccelerateDecelerateInterpolator()
         binding.lytTopStressGraph.lytTicker.startAnimation(rotate)
+        viewModel.oldDegree = newDegree
 
     }
 

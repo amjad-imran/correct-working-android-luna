@@ -15,10 +15,13 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.Typeface;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Pair;
+import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewParent;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -90,11 +93,13 @@ public class StressCombinedChart extends View {
     private RectF rectF;
     private LinearGradient linearGradient;
     private LinearGradient chartLineGradient;
+    private LinearGradient chartLineGradientInteracting;
     private LinearGradient linearGradientShadow;
     private Map<Integer, Pair<LinearGradient, Bitmap>> resMap;
     private int shadowWidth = dip2px(100);
 
     private boolean interactiveMode = false;
+    private boolean isInteracting = false;
     private Float touchX = null;
     private Paint overlayLinePaint;
     private Bitmap stressDot;
@@ -102,6 +107,8 @@ public class StressCombinedChart extends View {
     private Bitmap focusedDot;
 
     private OnStressClickAction listener;
+
+    private Integer lastSentValuePos;
     private DashPathEffect effect = new DashPathEffect(new float[]{dip2px(1), dip2px(5)}, 0);
 
     public StressCombinedChart(Context context) {
@@ -160,8 +167,8 @@ public class StressCombinedChart extends View {
         //TODO change icon when updated on zeplin
         int dimen = dip2px(30);
         calmDot = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(res, R.drawable.ic_stress_calm_dot), dimen, dimen, true);
-        focusedDot = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(res, R.drawable.ic_stress_calm_dot), dimen, dimen, true);
-        stressDot = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(res, R.drawable.ic_stress_calm_dot), dimen, dimen, true);
+        focusedDot = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(res, R.drawable.ic_stress_focussed_dot), dimen, dimen, true);
+        stressDot = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(res, R.drawable.ic_stress_stressed_dot), dimen, dimen, true);
     }
 
     public void setClickListener(OnStressClickAction listener) {
@@ -264,6 +271,10 @@ public class StressCombinedChart extends View {
         mHeight = h;
 
         chartLineGradient = new LinearGradient(0, topWith, 0, mHeight - bottomWith, new int[]{highColor, mediumColor, lowColor}, new float[]{0f, 0.5f, 1f}, Shader.TileMode.CLAMP);
+        chartLineGradientInteracting = new LinearGradient(0, topWith, 0, mHeight - bottomWith,
+                new int[]{Color.parseColor("#80ff922d"),
+                        Color.parseColor("#80ffe762"),
+                        Color.parseColor("#8012cba9")}, new float[]{0f, 0.5f, 1f}, Shader.TileMode.CLAMP);
         linearGradient = new LinearGradient(0, 0, 0, mHeight - bottomWith, highlightColor, Color.TRANSPARENT, Shader.TileMode.CLAMP);
         linearGradientShadow = new LinearGradient(mWith - rightWith - shadowWidth, mHeight / 2f, mWith - rightWith, mHeight / 2f, Color.TRANSPARENT, Color.parseColor("#C0000000"), Shader.TileMode.CLAMP);
         unitHLenth = (mWith - leftWith - rightWith) / (list.size() - 1);
@@ -344,6 +355,8 @@ public class StressCombinedChart extends View {
 
     private void drawDesc(Canvas canvas) {
 
+        if (isInteracting) return;
+
         rectF.left = mWith - rightWith - shadowWidth;
         rectF.top = topWith;
         rectF.right = mWith - rightWith;
@@ -407,8 +420,6 @@ public class StressCombinedChart extends View {
 
         }
 
-        float lastX = 0.0f;
-
         Item current, next;
         for (int i = 0; i < list.size(); i++) {
             current = list.get(i);
@@ -417,12 +428,7 @@ public class StressCombinedChart extends View {
             path.reset();
             path.moveTo(x, y);
 
-
-            for (float loopX=lastX;lastX<x;lastX++){
-                pointsValueMapping.put((int) loopX, current.getValue());
-            }
-
-            lastX = x;
+            pointsValueMapping.put((int) x, current.getValue());
 
 
             if (i < list.size() - 1) {
@@ -444,7 +450,11 @@ public class StressCombinedChart extends View {
                             fillPath.reset();
                         } else {
                             if (highlightIndexs.isEmpty()) {
-                                chartLinePaint.setShader(chartLineGradient);
+                                if (isInteracting) {
+                                    chartLinePaint.setShader(chartLineGradientInteracting);
+                                } else {
+                                    chartLinePaint.setShader(chartLineGradient);
+                                }
                             } else {
                                 chartLinePaint.setShader(null);
                                 chartLinePaint.setColor(restLineColor);
@@ -457,7 +467,11 @@ public class StressCombinedChart extends View {
                             chartLinePaint.setColor(highlightColor);
                         } else {
                             if (highlightIndexs.isEmpty()) {
-                                chartLinePaint.setShader(chartLineGradient);
+                                if (isInteracting) {
+                                    chartLinePaint.setShader(chartLineGradientInteracting);
+                                } else {
+                                    chartLinePaint.setShader(chartLineGradient);
+                                }
 //                                chartLinePaint.setColor(chartLineColor);
                             } else {
                                 chartLinePaint.setShader(null);
@@ -522,6 +536,7 @@ public class StressCombinedChart extends View {
     }
 
     private void drawOverlay(Canvas canvas) {
+        if (!isInteracting) return;
 
         if (touchX != null) {
             if (touchX > 0 && touchX < mWith) {
@@ -534,24 +549,61 @@ public class StressCombinedChart extends View {
                 float width = (float) calmDot.getWidth() / 2;
                 float height = (float) calmDot.getHeight() / 2;
 
-                int value = 0;
-                try {
-                    value = pointsValueMapping.get(touchX.intValue());
-                } catch (Exception e) {
+                Pair value = getClickedValue(touchX);
 
-                }
+                LOGS.INSTANCE.d("CLICKED_VALUE value " + value + " Touch " + touchX.intValue());
 
-                LOGS.INSTANCE.d("CLICKED_VALUE value "+value +" Touch "+touchX.intValue() +"   " +pointsValueMapping);
-
-                if (value != 0) {
-                    canvas.drawRect(rectF, overlayLinePaint);
-                    canvas.drawBitmap(calmDot, touchX - width, getDotHeight(value) - height, paintStressed);
+                canvas.drawRect(rectF, overlayLinePaint);
+                if ((int) value.second != 0) {
+                    canvas.drawBitmap(calmDot, touchX - width, getDotHeight((int) value.second) - height, paintStressed);
                 }
 
                 if (listener != null) {
-                    listener.onValueSelected(value);
+                    int position = (int) value.first;
+                    int selectedValue = (int) value.second;
+
+                    if (lastSentValuePos == null) {
+                        listener.onValueSelected(selectedValue);
+                        lastSentValuePos = position;
+                        performHapticFeedbackCustom(selectedValue);
+                    } else {
+                        if (lastSentValuePos != position) {
+                            listener.onValueSelected(selectedValue);
+                            lastSentValuePos = position;
+                            performHapticFeedbackCustom(selectedValue);
+                        }
+                    }
+
                 }
             }
+        }
+    }
+
+    void performHapticFeedbackCustom(Integer value) {
+        if (value != 0) {
+            this.performHapticFeedback(
+                    HapticFeedbackConstants.KEYBOARD_TAP
+            );
+        }
+    }
+
+    private Pair<Integer, Integer> getClickedValue(Float touchX) {
+        float sectionLast = 0f;
+        int position = -1;
+
+        for (int i = (list.size() - 1); i > 0; i--) {
+            float sectionEnd = sectionLast + unitHLenth;
+            if (touchX < sectionEnd) {
+                position = i;
+                break;
+            }
+            sectionLast = sectionEnd;
+        }
+
+        if (position == -1) {
+            return new Pair(0, 0);
+        } else {
+            return new Pair<>(position, list.get(position).getValue());
         }
     }
 
@@ -580,14 +632,20 @@ public class StressCombinedChart extends View {
             parent.requestDisallowInterceptTouchEvent(true);
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    this.touchX = event.getX();
+                    handler.postDelayed(mLongPressed, ViewConfiguration.getLongPressTimeout());
+                    return true;
                 case MotionEvent.ACTION_MOVE:
-                    float touchX = event.getX();
-                    float touchY = event.getY();
-                    this.touchX = touchX;
-                    invalidate();
+                    if (isInteracting) {
+                        this.touchX = event.getX();
+                        invalidate();
+                    }
                     return true;
                 case MotionEvent.ACTION_UP:
-                    // Handle action up if needed
+                    handler.removeCallbacks(mLongPressed);
+                    isInteracting = false;
+                    invalidate();
+                    this.touchX = 0.0f;
                     return true;
             }
         } else {
@@ -595,4 +653,14 @@ public class StressCombinedChart extends View {
         }
         return false;
     }
+
+    final Handler handler = new Handler();
+    Runnable mLongPressed = () -> {
+        isInteracting = true;
+        invalidate();
+
+        getRootView().performHapticFeedback(
+                HapticFeedbackConstants.LONG_PRESS
+        );
+    };
 }
