@@ -66,7 +66,10 @@ class OStressDataMovementFragment :
                 viewModel.dayTimeMovement = dayData.activity?.daytimeMovement?.movement
                 viewModel.isSelectedMode = false
 
-                setTopMeter(dayData.stress)
+                setTopMeter(
+                    dayData.stress?.stressValue?.value,
+                    dayData.stress?.stressValue?.lastUpdated
+                )
                 initCombineChart(dayData)
                 setMovementData(viewModel.dayTimeMovement, viewModel.isSelectedMode, -1)
                 handleStressProgressView(dayData.stress)
@@ -78,12 +81,17 @@ class OStressDataMovementFragment :
         }
     }
 
-    private fun setTopMeter(stress: Stress?) {
+    private fun setTopMeter(
+        value: Int? = null,
+        lastUpdated: Long? = null,
+        timeStamp: Long? = null
+    ) {
 
-        binding.lytTopStressGraph.tvStressValue.text = "${stress?.stressValue?.value ?: "--"}"
-        binding.lytTopStressGraph.tvStressStatus.text = stress?.stressValue?.text
+        binding.lytTopStressGraph.tvStressValue.text = "${value ?: "--"}"
 
-        val lastUpdatedTimestamp = stress?.stressValue?.lastUpdated ?: 0
+        binding.lytTopStressGraph.tvStressStatus.text = viewModel.getStressStatus(value)
+
+        val lastUpdatedTimestamp = lastUpdated ?: 0
 
         if (lastUpdatedTimestamp == 0L) {
             binding.lytTopStressGraph.tvLastSyncStatus.text = "-"
@@ -92,15 +100,16 @@ class OStressDataMovementFragment :
                 DateFormats.getRelativeTime(lastUpdatedTimestamp)
         }
 
+
         val rotate = RotateAnimation(
-            -90f,
             0f,
+            viewModel.getRotationDegree(value),
             Animation.RELATIVE_TO_SELF,
-            0.5f,
+            1f,
             Animation.RELATIVE_TO_SELF,
-            1f
+            0.5f
         )
-        rotate.duration = 1000
+        rotate.duration = 500
         rotate.fillAfter = true
         rotate.interpolator = AccelerateDecelerateInterpolator()
         binding.lytTopStressGraph.lytTicker.startAnimation(rotate)
@@ -111,6 +120,11 @@ class OStressDataMovementFragment :
     override fun initListener() {
         //sharedViewModel.setSelectedType(StressType.NO_DATA)
 
+        binding.lytStressMidGraph.graphStress.setClickListener(object : OnStressClickAction {
+            override fun onValueSelected(value: Int) {
+                setTopMeter(value, 0)
+            }
+        })
 
         binding.ivOpen.setOnClickListener {
             handleMovementViews(true)
@@ -362,11 +376,13 @@ class OStressDataMovementFragment :
     }
 
     private fun initCombineChart(dayData: ServerUserHealthData) {
+        binding.lytStressMidGraph.graphStress.enableInteractiveMode(true)
         binding.lytStressMidGraph.graphStress.updateData(
             viewModel.oreoStressDataConvertor.getStressCombinedData(
                 dayData
             )
         )
+
         /* btnHigh.setOnClickListener {
              val highlights: MutableList<Int> =
                  ArrayList()

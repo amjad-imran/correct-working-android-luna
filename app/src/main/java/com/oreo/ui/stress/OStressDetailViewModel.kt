@@ -60,36 +60,34 @@ constructor(
     }
 
 
-
-   /* var stressActivityData: ArrayList<OStressActivitiesDataModel>? = null
-    fun prepareStressActivityData(dayData: ServerUserHealthData) {
-        val workouts = dayData.activity?.workout
-        val sleep = dayData.sleep
-        val dataList = ArrayList<OStressActivitiesDataModel>()
-        workouts?.forEach {
-            dataList.add(
-                OStressActivitiesDataModel(
-                    type = "Workout",
-                    startTime = it.startTime,
-                    endTime = it.endTime,
-                    id = it.id
-                )
-            )
-        }
-        if (sleep != null) {
-            if (sleep.hourly_breakup != null)
-                dataList.add(
-                    OStressActivitiesDataModel(
-                        type = "Sleep",
-                        startTime = sleep.hourly_breakup?.firstOrNull()?.start_time,
-                        endTime = sleep.hourly_breakup?.lastOrNull()?.end_time,
-                        id = ""
-                    )
-                )
-        }
-        stressActivityData = dataList
-    }*/
-
+    /* var stressActivityData: ArrayList<OStressActivitiesDataModel>? = null
+     fun prepareStressActivityData(dayData: ServerUserHealthData) {
+         val workouts = dayData.activity?.workout
+         val sleep = dayData.sleep
+         val dataList = ArrayList<OStressActivitiesDataModel>()
+         workouts?.forEach {
+             dataList.add(
+                 OStressActivitiesDataModel(
+                     type = "Workout",
+                     startTime = it.startTime,
+                     endTime = it.endTime,
+                     id = it.id
+                 )
+             )
+         }
+         if (sleep != null) {
+             if (sleep.hourly_breakup != null)
+                 dataList.add(
+                     OStressActivitiesDataModel(
+                         type = "Sleep",
+                         startTime = sleep.hourly_breakup?.firstOrNull()?.start_time,
+                         endTime = sleep.hourly_breakup?.lastOrNull()?.end_time,
+                         id = ""
+                     )
+                 )
+         }
+         stressActivityData = dataList
+     }*/
 
 
     fun getStressMinutes(stress: Stress?): Triple<Int, Int, Int> {
@@ -118,6 +116,20 @@ constructor(
 
         }
         return Triple(calmCount * 15, focusedCount * 15, stressedCount * 15)
+    }
+
+    fun getStressStatus(value: Int?): String {
+        return when (value) {
+            0 -> ""
+            in 1..34 -> "Calm"
+            in 35..69 -> "Focussed"
+            else -> "Stressed"
+        }
+    }
+
+    fun getRotationDegree(value: Int?): Float {
+        if (value == null) return 0.0f
+        return ((value.toFloat() / 100) * 180)
     }
 
 

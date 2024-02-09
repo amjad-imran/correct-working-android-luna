@@ -20,8 +20,8 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_stress_pointer"
         app:layout_constraintBottom_toBottomOf="@id/ivBackStress"
-        app:layout_constraintEnd_toEndOf="@id/ivBackStress"
-        app:layout_constraintStart_toStartOf="@id/ivBackStress" />
+        app:layout_constraintStart_toStartOf="@id/ivBackStress"
+        app:layout_constraintTop_toBottomOf="@+id/ivBackStress" />
 
     <ImageView
         android:layout_width="wrap_content"

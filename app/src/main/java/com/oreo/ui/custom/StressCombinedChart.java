@@ -1,6 +1,7 @@
 package com.oreo.ui.custom;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,11 +19,13 @@ import android.util.AttributeSet;
 import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewParent;
 
 import androidx.core.content.res.ResourcesCompat;
 
 import com.noisefit.luna.R;
 import com.noisefit_commans.utils.LOGS;
+import com.oreo.ui.stress.OnStressClickAction;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -79,6 +82,7 @@ public class StressCombinedChart extends View {
     private Rect xTextBounds;
     private StressCombineModel combineModel;
     private List<Item> list = new ArrayList<>();
+    private Map<Integer, Integer> pointsValueMapping = new HashMap();
     private List<Integer> highlightIndexs = new ArrayList<>();
     private int highlightColor;
     private boolean showXAxis = true;
@@ -89,11 +93,22 @@ public class StressCombinedChart extends View {
     private LinearGradient linearGradientShadow;
     private Map<Integer, Pair<LinearGradient, Bitmap>> resMap;
     private int shadowWidth = dip2px(100);
+
+    private boolean interactiveMode = false;
+    private Float touchX = null;
+    private Paint overlayLinePaint;
+    private Bitmap stressDot;
+    private Bitmap calmDot;
+    private Bitmap focusedDot;
+
+    private OnStressClickAction listener;
     private DashPathEffect effect = new DashPathEffect(new float[]{dip2px(1), dip2px(5)}, 0);
 
     public StressCombinedChart(Context context) {
         super(context);
+        resMap = new HashMap<>();
         initPaint();
+        initBitmap();
     }
 
     public StressCombinedChart(Context context, AttributeSet attrs) {
@@ -134,7 +149,23 @@ public class StressCombinedChart extends View {
 
         resMap = new HashMap<>();
         initPaint();
+        initBitmap();
 
+
+    }
+
+    private void initBitmap() {
+
+        Resources res = getResources();
+        //TODO change icon when updated on zeplin
+        int dimen = dip2px(30);
+        calmDot = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(res, R.drawable.ic_stress_calm_dot), dimen, dimen, true);
+        focusedDot = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(res, R.drawable.ic_stress_calm_dot), dimen, dimen, true);
+        stressDot = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(res, R.drawable.ic_stress_calm_dot), dimen, dimen, true);
+    }
+
+    public void setClickListener(OnStressClickAction listener) {
+        this.listener = listener;
     }
 
     private void initPaint() {
@@ -144,6 +175,9 @@ public class StressCombinedChart extends View {
 
         bgPaint = new Paint();
         bgPaint.setColor(bgColor);
+
+        overlayLinePaint = new Paint();
+        overlayLinePaint.setColor(Color.parseColor("#939aa3"));
 
         bgLeftPaint = new Paint();
         bgLeftPaint.setColor(bgLeftColor);
@@ -229,9 +263,7 @@ public class StressCombinedChart extends View {
         mWith = w;
         mHeight = h;
 
-        chartLineGradient = new LinearGradient(0, topWith, 0, mHeight - bottomWith,
-                new int[]{highColor, mediumColor, lowColor},
-                new float[]{0f, 0.5f, 1f}, Shader.TileMode.CLAMP);
+        chartLineGradient = new LinearGradient(0, topWith, 0, mHeight - bottomWith, new int[]{highColor, mediumColor, lowColor}, new float[]{0f, 0.5f, 1f}, Shader.TileMode.CLAMP);
         linearGradient = new LinearGradient(0, 0, 0, mHeight - bottomWith, highlightColor, Color.TRANSPARENT, Shader.TileMode.CLAMP);
         linearGradientShadow = new LinearGradient(mWith - rightWith - shadowWidth, mHeight / 2f, mWith - rightWith, mHeight / 2f, Color.TRANSPARENT, Color.parseColor("#C0000000"), Shader.TileMode.CLAMP);
         unitHLenth = (mWith - leftWith - rightWith) / (list.size() - 1);
@@ -250,6 +282,7 @@ public class StressCombinedChart extends View {
         drawLeft(canvas);
         drawContent(canvas);
         drawDesc(canvas);
+        drawOverlay(canvas);
     }
 
     private void generateResMap() {
@@ -258,9 +291,7 @@ public class StressCombinedChart extends View {
         Section section;
         for (int i = 0; i < combineModel.getSections().size(); i++) {
             section = combineModel.getSections().get(i);
-            resMap.put(i, new Pair<>(new LinearGradient(0, 0, 0, mHeight - bottomWith, section.getColor(), Color.TRANSPARENT, Shader.TileMode.CLAMP),
-                    BitmapFactory.decodeResource(getResources(), section.getImageRes())
-            ));
+            resMap.put(i, new Pair<>(new LinearGradient(0, 0, 0, mHeight - bottomWith, section.getColor(), Color.TRANSPARENT, Shader.TileMode.CLAMP), BitmapFactory.decodeResource(getResources(), section.getImageRes())));
         }
     }
 
@@ -376,6 +407,7 @@ public class StressCombinedChart extends View {
 
         }
 
+        float lastX = 0.0f;
 
         Item current, next;
         for (int i = 0; i < list.size(); i++) {
@@ -384,6 +416,15 @@ public class StressCombinedChart extends View {
             float y = mHeight - bottomWith - current.getValue() * (mHeight - topWith - bottomWith) / (xMax - xMin);
             path.reset();
             path.moveTo(x, y);
+
+
+            for (float loopX=lastX;lastX<x;lastX++){
+                pointsValueMapping.put((int) loopX, current.getValue());
+            }
+
+            lastX = x;
+
+
             if (i < list.size() - 1) {
                 next = list.get(i + 1);
                 if (current.getValue() > 0) {
@@ -480,6 +521,44 @@ public class StressCombinedChart extends View {
         }
     }
 
+    private void drawOverlay(Canvas canvas) {
+
+        if (touchX != null) {
+            if (touchX > 0 && touchX < mWith) {
+                RectF rectF = new RectF();
+                rectF.left = touchX - 2;
+                rectF.right = touchX + 2;
+                rectF.top = topWith;
+                rectF.bottom = mHeight - bottomWith;
+
+                float width = (float) calmDot.getWidth() / 2;
+                float height = (float) calmDot.getHeight() / 2;
+
+                int value = 0;
+                try {
+                    value = pointsValueMapping.get(touchX.intValue());
+                } catch (Exception e) {
+
+                }
+
+                LOGS.INSTANCE.d("CLICKED_VALUE value "+value +" Touch "+touchX.intValue() +"   " +pointsValueMapping);
+
+                if (value != 0) {
+                    canvas.drawRect(rectF, overlayLinePaint);
+                    canvas.drawBitmap(calmDot, touchX - width, getDotHeight(value) - height, paintStressed);
+                }
+
+                if (listener != null) {
+                    listener.onValueSelected(value);
+                }
+            }
+        }
+    }
+
+    private float getDotHeight(int value) {
+        return mHeight - bottomWith - value * (mHeight - topWith - bottomWith) / (xMax - xMin);
+    }
+
     private int dip2px(float dpValue) {
         float scale = getContext().getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
@@ -490,20 +569,30 @@ public class StressCombinedChart extends View {
         return (int) (spValue * fontScale + 0.5f);
     }
 
+    public void enableInteractiveMode(Boolean mode) {
+        interactiveMode = mode;
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-            case MotionEvent.ACTION_MOVE:
-                float touchX = event.getX();
-                float touchY = event.getY();
-                LOGS.INSTANCE.d("TOUCH_EVENTS "+touchX +" "+touchY);
-                invalidate();
-                return true;
-            case MotionEvent.ACTION_UP:
-                // Handle action up if needed
-                return true;
+        if (interactiveMode) {
+            ViewParent parent = getParent();
+            parent.requestDisallowInterceptTouchEvent(true);
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                case MotionEvent.ACTION_MOVE:
+                    float touchX = event.getX();
+                    float touchY = event.getY();
+                    this.touchX = touchX;
+                    invalidate();
+                    return true;
+                case MotionEvent.ACTION_UP:
+                    // Handle action up if needed
+                    return true;
+            }
+        } else {
+            return super.onTouchEvent(event);
         }
-        return super.onTouchEvent(event);
+        return false;
     }
 }
