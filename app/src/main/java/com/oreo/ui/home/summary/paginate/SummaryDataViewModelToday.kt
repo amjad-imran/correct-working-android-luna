@@ -482,7 +482,8 @@ constructor(
                     }
                 }
             }
-            userActivities.add(OHealthOverview.StressGraph(oreoStressDataConvertor.getStressCombinedData(healthData)))
+            val combinedData = oreoStressDataConvertor.getStressCombinedData(healthData)
+            userActivities.add(OHealthOverview.StressGraph(combinedData))
 
 
             stateSleepAvgCard.postValue(

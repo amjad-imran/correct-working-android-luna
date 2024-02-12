@@ -1,9 +1,10 @@
 package com.oreo.ui.stress
 
-import android.graphics.Color
 import android.os.Bundle
-import android.view.HapticFeedbackConstants
+import android.os.Handler
+import android.os.Looper
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Animation
 import android.view.animation.RotateAnimation
@@ -33,6 +34,14 @@ class OStressDataMovementFragment :
     private val viewModel: OStressDetailViewModel by viewModels()
     private val ARGS_DATE = "ARGS_DATE"
 
+
+    private val setBackHandler = Handler(Looper.getMainLooper())
+
+    private var setBackRunnable = Runnable {
+        sharedViewModel.setSelectedType(viewModel.getStressType(viewModel.lastStressValue))
+    }
+
+
     companion object {
 
         @JvmStatic
@@ -49,6 +58,7 @@ class OStressDataMovementFragment :
 
         val date = arguments?.getString(ARGS_DATE)
         viewModel.date = date
+        viewModel.checkIsToday(date)
 
         handleMovementViews()
 
@@ -66,6 +76,11 @@ class OStressDataMovementFragment :
 
                 viewModel.dayTimeMovement = dayData.activity?.daytimeMovement?.movement
                 viewModel.isSelectedMode = false
+
+                viewModel.defaultMeterData = Pair(
+                    dayData.stress?.stressValue?.value,
+                    dayData.stress?.stressValue?.lastUpdated
+                )
 
                 setTopMeter(
                     dayData.stress?.stressValue?.value,
@@ -85,21 +100,39 @@ class OStressDataMovementFragment :
     private fun setTopMeter(
         value: Int? = null,
         lastUpdated: Long? = null,
-        timeStamp: Long? = null
+        selectedValueTime: String? = null
     ) {
 
-        binding.lytTopStressGraph.tvStressValue.text = "${value ?: "--"}"
-
-        binding.lytTopStressGraph.tvStressStatus.text = viewModel.getStressStatus(value)
-
-        val lastUpdatedTimestamp = lastUpdated ?: 0
-
-        if (lastUpdatedTimestamp == 0L) {
-            binding.lytTopStressGraph.tvLastSyncStatus.text = "-"
+        binding.lytTopStressGraph.tvStressValue.text = if (value == null || value == 0) {
+            "--"
         } else {
-            binding.lytTopStressGraph.tvLastSyncStatus.text =
-                DateFormats.getRelativeTime(lastUpdatedTimestamp)
+            "$value"
         }
+
+
+        if (viewModel.isToday) {
+            val lastUpdatedTimestamp = lastUpdated ?: 0
+            if (lastUpdatedTimestamp == 0L) {
+                binding.lytTopStressGraph.tvLastSyncStatus.text = ""
+            } else {
+                binding.lytTopStressGraph.tvLastSyncStatus.text =
+                    DateFormats.getRelativeTime(lastUpdatedTimestamp)
+            }
+        } else {
+            binding.lytTopStressGraph.tvLastSyncStatus.text = ""
+        }
+
+        if (!selectedValueTime.isNullOrEmpty() && value != null && value != 0) {
+            binding.lytTopStressGraph.tvLastSyncStatus.text = selectedValueTime
+        }
+
+        val (stressValue, stressColor) = viewModel.getStressStatus(value)
+        binding.lytTopStressGraph.tvStressStatus.text = stressValue
+        binding.lytTopStressGraph.tvStressStatus.setTextColor(resources.getColor(stressColor, null))
+
+        viewModel.lastStressValue = value
+        setBackHandler.removeCallbacks(setBackRunnable)
+        setBackHandler.postDelayed(setBackRunnable, 200)
 
         val newDegree = viewModel.getRotationDegree(value)
 
@@ -121,11 +154,23 @@ class OStressDataMovementFragment :
 
 
     override fun initListener() {
-        //sharedViewModel.setSelectedType(StressType.NO_DATA)
 
         binding.lytStressMidGraph.graphStress.setClickListener(object : OnStressClickAction {
-            override fun onValueSelected(value: Int) {
-                setTopMeter(value, 0)
+            override fun onValueSelected(value: Int, position: Int) {
+
+                val time = viewModel.getTimeFromPosition(position)
+                setTopMeter(value, 0, time)
+            }
+
+            override fun isInteractionOnGoing(onGoing: Boolean) {
+                if (!onGoing) {
+                    if (viewModel.defaultMeterData != null) {
+                        setTopMeter(
+                            viewModel.defaultMeterData?.first,
+                            viewModel.defaultMeterData?.second
+                        )
+                    }
+                }
             }
         })
 
@@ -186,7 +231,7 @@ class OStressDataMovementFragment :
             )
             lytCalm.lytHrMn.tvHour.text = "$hourCalm"
             lytCalm.lytHrMn.tvMinute.text = "$minuteCalm"
-            lytCalm.tvCalm.setTextColor(Color.parseColor("#3fe8b5"))
+            lytCalm.tvCalm.setTextColor(resources.getColor(R.color.stress_nap_calm, null))
             lytCalm.tvCalm.text = getString(R.string.text_calm)
 
 
@@ -195,7 +240,7 @@ class OStressDataMovementFragment :
             )
             lytFocussed.lytHrMn.tvHour.text = "$hourFocused"
             lytFocussed.lytHrMn.tvMinute.text = "$minuteFocused"
-            lytFocussed.tvCalm.setTextColor(Color.parseColor("#ffed91"))
+            lytFocussed.tvCalm.setTextColor(resources.getColor(R.color.stress_nap_focussed, null))
             lytFocussed.tvCalm.text = getString(R.string.text_focussed)
 
 
@@ -204,7 +249,7 @@ class OStressDataMovementFragment :
             )
             lytStressed.lytHrMn.tvHour.text = "$hourStressed"
             lytStressed.lytHrMn.tvMinute.text = "$minuteStressed"
-            lytStressed.tvCalm.setTextColor(Color.parseColor("#ffad60"))
+            lytStressed.tvCalm.setTextColor(resources.getColor(R.color.stress_nap_stressed, null))
             lytStressed.tvCalm.text = getString(R.string.text_stressed)
 
         }

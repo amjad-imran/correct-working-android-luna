@@ -14,7 +14,10 @@ constructor(
     val selectedStressLevel = MutableLiveData<StressType>()
 
     fun setSelectedType(type: StressType) {
-        selectedStressLevel.value = type
+        val lastValue = selectedStressLevel.value
+        if (lastValue != type) {
+            selectedStressLevel.value = type
+        }
     }
 
     var lastSelectedStressType: StressType = StressType.CALM

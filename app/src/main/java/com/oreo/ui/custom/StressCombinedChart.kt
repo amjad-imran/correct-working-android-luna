@@ -1,486 +1,511 @@
-package com.oreo.ui.custom;
+package com.oreo.ui.custom
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.content.res.TypedArray;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.DashPathEffect;
-import android.graphics.LinearGradient;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.graphics.Shader;
-import android.graphics.Typeface;
-import android.os.Handler;
-import android.util.AttributeSet;
-import android.util.Pair;
-import android.view.HapticFeedbackConstants;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewConfiguration;
-import android.view.ViewParent;
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.DashPathEffect
+import android.graphics.LinearGradient
+import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.Rect
+import android.graphics.RectF
+import android.graphics.Shader
+import android.os.Handler
+import android.os.Looper
+import android.util.AttributeSet
+import android.util.Pair
+import android.view.HapticFeedbackConstants
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewConfiguration
+import androidx.core.content.res.ResourcesCompat
+import com.noisefit.luna.R
+import com.noisefit_commans.utils.LOGS.d
+import com.oreo.ui.stress.OnStressClickAction
+import java.util.Collections
 
-import androidx.core.content.res.ResourcesCompat;
+class StressCombinedChart : View {
+    private var bgColor = 0
+    private var bgLeftColor = 0
+    private var bgRightColor = 0
+    private var bgTopColor = 0
+    private var bgBottomColor = 0
+    private var xTextColor = 0
+    private var restLineColor = 0
+    private var highColor = 0
+    private var mediumColor = 0
+    private var lowColor = 0
+    private var chartLineWidth = 10f
+    private var gridColor = 0
+    var max = 0
+    private var xMin = 0
+    private var leftWith = 0f
+    private var rightWith = 0f
+    private var bottomWith = 0f
+    private var topWith = 0f
+    private var xTextSize = 0f
+    private var yTextSize = 0f
+    lateinit var bgPaint: Paint
+    lateinit var bgLeftPaint: Paint
+    lateinit var bgRightPaint: Paint
+    lateinit var bgTopPaint: Paint
+    lateinit var bgBottomPaint: Paint
+    lateinit var xTextPaint: Paint
+    lateinit var paintCalm: Paint
+    lateinit var paintFocussed: Paint
+    lateinit var paintStressed: Paint
+    lateinit var gridPaint: Paint
+    lateinit var chartLinePaint: Paint
+    lateinit var chartLineFillPaint: Paint
+    private val path = Path()
+    private val fillPath = Path()
+    private var unitHLenth = 0f
+    private var mWith = 0
+    private var mHeight = 0
+    private var xTextBounds: Rect? = null
+    private var combineModel: StressCombineModel? = null
+    private val list = ArrayList<Item>()
+    private val pointsValueMapping: MutableMap<Int?, Int?> = HashMap<Int?, Int?>()
+    private val highlightIndexs: MutableList<Int> = ArrayList()
+    private var highlightColor = 0
+    private var showXAxis = true
+    private var interval = 0
+    private var rectF: RectF? = null
+    private var linearGradient: LinearGradient? = null
+    private var chartLineGradient: LinearGradient? = null
+    private var chartLineGradientInteracting: LinearGradient? = null
+    private var linearGradientShadow: LinearGradient? = null
+    private var resMap: MutableMap<Int, Pair<LinearGradient, Bitmap?>>? = null
+    private val shadowWidth = dip2px(100f)
+    private var interactiveMode = false
+    private var isInteracting = false
+    private var touchX: Float? = null
+    lateinit var overlayLinePaint: Paint
+    private var stressDot: Bitmap? = null
+    private var calmDot: Bitmap? = null
+    private var focusedDot: Bitmap? = null
+    private var listener: OnStressClickAction? = null
+    private var lastSentValuePos: Int? = null
+    private val effect =
+        DashPathEffect(floatArrayOf(dip2px(1f).toFloat(), dip2px(5f).toFloat()), 0f)
 
-import com.noisefit.luna.R;
-import com.noisefit_commans.utils.LOGS;
-import com.oreo.ui.stress.OnStressClickAction;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-public class StressCombinedChart extends View {
-
-    private int bgColor;
-    private int bgLeftColor;
-    private int bgRightColor;
-    private int bgTopColor;
-    private int bgBottomColor;
-    private int xTextColor;
-    private int restLineColor;
-    private int highColor;
-    private int mediumColor;
-    private int lowColor;
-    private float chartLineWidth = 10f;
-
-    private int gridColor;
-    private int xMax;
-    private int xMin;
-
-    private float leftWith;
-    private float rightWith;
-    private float bottomWith;
-    private float topWith;
-    private float xTextSize;
-    private float yTextSize;
-    private Paint bgPaint;
-    private Paint bgLeftPaint;
-    private Paint bgRightPaint;
-    private Paint bgTopPaint;
-    private Paint bgBottomPaint;
-
-    private Paint xTextPaint;
-
-    private Paint paintCalm;
-    private Paint paintFocussed;
-    private Paint paintStressed;
-    private Paint gridPaint;
-    private Paint chartLinePaint;
-    private Paint chartLineFillPaint;
-
-    private Path path = new Path();
-    private Path fillPath = new Path();
-    private float unitHLenth;
-
-    private int mWith;
-    private int mHeight;
-
-    private Rect xTextBounds;
-    private StressCombineModel combineModel;
-    private List<Item> list = new ArrayList<>();
-    private Map<Integer, Integer> pointsValueMapping = new HashMap();
-    private List<Integer> highlightIndexs = new ArrayList<>();
-    private int highlightColor;
-    private boolean showXAxis = true;
-    private int interval = 0;
-    private RectF rectF;
-    private LinearGradient linearGradient;
-    private LinearGradient chartLineGradient;
-    private LinearGradient chartLineGradientInteracting;
-    private LinearGradient linearGradientShadow;
-    private Map<Integer, Pair<LinearGradient, Bitmap>> resMap;
-    private int shadowWidth = dip2px(100);
-
-    private boolean interactiveMode = false;
-    private boolean isInteracting = false;
-    private Float touchX = null;
-    private Paint overlayLinePaint;
-    private Bitmap stressDot;
-    private Bitmap calmDot;
-    private Bitmap focusedDot;
-
-    private OnStressClickAction listener;
-
-    private Integer lastSentValuePos;
-    private DashPathEffect effect = new DashPathEffect(new float[]{dip2px(1), dip2px(5)}, 0);
-
-    public StressCombinedChart(Context context) {
-        super(context);
-        resMap = new HashMap<>();
-        initPaint();
-        initBitmap();
+    constructor(context: Context?) : super(context) {
+        resMap = HashMap()
+        initPaint()
+        initBitmap()
     }
 
-    public StressCombinedChart(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init(attrs);
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
+        init(attrs)
     }
 
-    public StressCombinedChart(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init(attrs);
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
+        init(attrs)
     }
 
-
-    private void init(AttributeSet attrs) {
-        TypedArray ta = getContext().obtainStyledAttributes(attrs, R.styleable.CombineLineChart);
-        bgColor = ta.getColor(R.styleable.CombineLineChart_bgColor, 0x00000000);
-        bgLeftColor = ta.getColor(R.styleable.CombineLineChart_bgLeftColor, 0x00000000);
-        bgRightColor = ta.getColor(R.styleable.CombineLineChart_bgRightColor, 0x00000000);
-        bgTopColor = ta.getColor(R.styleable.CombineLineChart_bgTopColor, 0x00000000);
-        bgBottomColor = ta.getColor(R.styleable.CombineLineChart_bgBottomColor, 0x00000000);
-        xTextColor = ta.getColor(R.styleable.CombineLineChart_xTextColor, 0xff000000);
-        gridColor = ta.getColor(R.styleable.CombineLineChart_gridColor, 0xffff00ff);
-        xMax = ta.getInt(R.styleable.CombineLineChart_xMax, 10);
-        xMin = ta.getInt(R.styleable.CombineLineChart_xMin, 0);
-        xTextSize = ta.getDimension(R.styleable.CombineLineChart_xTextSize, 8f);
-        yTextSize = ta.getDimension(R.styleable.CombineLineChart_yTextSize, 12f);
-        leftWith = ta.getDimension(R.styleable.CombineLineChart_leftWith, 16f);
-        rightWith = ta.getDimension(R.styleable.CombineLineChart_rightWith, 8f);
-        bottomWith = ta.getDimension(R.styleable.CombineLineChart_bottomWith, 16f);
-        topWith = ta.getDimension(R.styleable.CombineLineChart_topWith, 8f);
-        restLineColor = ta.getColor(R.styleable.CombineLineChart_restLineColor, 0xff000000);
-        highColor = ta.getColor(R.styleable.CombineLineChart_highColor, 0xff000000);
-        mediumColor = ta.getColor(R.styleable.CombineLineChart_mediumColor, 0xff000000);
-        lowColor = ta.getColor(R.styleable.CombineLineChart_lowColor, 0xff000000);
-        chartLineWidth = ta.getDimension(R.styleable.CombineLineChart_chartLineWidth, 10f);
-        showXAxis = ta.getBoolean(R.styleable.CombineLineChart_showXAxis, true);
-        ta.recycle();
-
-        resMap = new HashMap<>();
-        initPaint();
-        initBitmap();
-
-
+    private fun init(attrs: AttributeSet?) {
+        val ta = context.obtainStyledAttributes(attrs, R.styleable.CombineLineChart)
+        bgColor = ta.getColor(R.styleable.CombineLineChart_bgColor, 0x00000000)
+        bgLeftColor = ta.getColor(R.styleable.CombineLineChart_bgLeftColor, 0x00000000)
+        bgRightColor = ta.getColor(R.styleable.CombineLineChart_bgRightColor, 0x00000000)
+        bgTopColor = ta.getColor(R.styleable.CombineLineChart_bgTopColor, 0x00000000)
+        bgBottomColor = ta.getColor(R.styleable.CombineLineChart_bgBottomColor, 0x00000000)
+        xTextColor = ta.getColor(R.styleable.CombineLineChart_xTextColor, -0x1000000)
+        gridColor = ta.getColor(R.styleable.CombineLineChart_gridColor, -0xff01)
+        max = ta.getInt(R.styleable.CombineLineChart_xMax, 10)
+        xMin = ta.getInt(R.styleable.CombineLineChart_xMin, 0)
+        xTextSize = ta.getDimension(R.styleable.CombineLineChart_xTextSize, 8f)
+        yTextSize = ta.getDimension(R.styleable.CombineLineChart_yTextSize, 12f)
+        leftWith = ta.getDimension(R.styleable.CombineLineChart_leftWith, 16f)
+        rightWith = ta.getDimension(R.styleable.CombineLineChart_rightWith, 8f)
+        bottomWith = ta.getDimension(R.styleable.CombineLineChart_bottomWith, 16f)
+        topWith = ta.getDimension(R.styleable.CombineLineChart_topWith, 8f)
+        restLineColor = ta.getColor(R.styleable.CombineLineChart_restLineColor, -0x1000000)
+        highColor = ta.getColor(R.styleable.CombineLineChart_highColor, -0x1000000)
+        mediumColor = ta.getColor(R.styleable.CombineLineChart_mediumColor, -0x1000000)
+        lowColor = ta.getColor(R.styleable.CombineLineChart_lowColor, -0x1000000)
+        chartLineWidth = ta.getDimension(R.styleable.CombineLineChart_chartLineWidth, 10f)
+        showXAxis = ta.getBoolean(R.styleable.CombineLineChart_showXAxis, true)
+        ta.recycle()
+        resMap = HashMap()
+        initPaint()
+        initBitmap()
     }
 
-    private void initBitmap() {
-
-        Resources res = getResources();
-        //TODO change icon when updated on zeplin
-        int dimen = dip2px(30);
-        calmDot = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(res, R.drawable.ic_stress_calm_dot), dimen, dimen, true);
-        focusedDot = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(res, R.drawable.ic_stress_focussed_dot), dimen, dimen, true);
-        stressDot = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(res, R.drawable.ic_stress_stressed_dot), dimen, dimen, true);
+    private fun initBitmap() {
+        val res = resources
+        val dimen = dip2px(30f)
+        calmDot = Bitmap.createScaledBitmap(
+            BitmapFactory.decodeResource(
+                res,
+                R.drawable.ic_stress_calm_dot
+            ), dimen, dimen, true
+        )
+        focusedDot = Bitmap.createScaledBitmap(
+            BitmapFactory.decodeResource(
+                res,
+                R.drawable.ic_stress_focussed_dot
+            ), dimen, dimen, true
+        )
+        stressDot = Bitmap.createScaledBitmap(
+            BitmapFactory.decodeResource(
+                res,
+                R.drawable.ic_stress_stressed_dot
+            ), dimen, dimen, true
+        )
     }
 
-    public void setClickListener(OnStressClickAction listener) {
-        this.listener = listener;
+    fun setClickListener(listener: OnStressClickAction?) {
+        this.listener = listener
     }
 
-    private void initPaint() {
+    private fun initPaint() {
+        val fontGilroy =
+            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.gilroy_medium)
+        bgPaint = Paint()
+        bgPaint.color = bgColor
 
-        Typeface fontGilroy = ResourcesCompat.getFont(this.getContext(), com.noisefit_commans.R.font.gilroy_medium);
+        overlayLinePaint = Paint()
+        overlayLinePaint.color = Color.parseColor("#939aa3")
 
+        bgLeftPaint = Paint()
+        bgLeftPaint.color = bgLeftColor
 
-        bgPaint = new Paint();
-        bgPaint.setColor(bgColor);
+        bgRightPaint = Paint()
+        bgRightPaint.color = bgRightColor
 
-        overlayLinePaint = new Paint();
-        overlayLinePaint.setColor(Color.parseColor("#939aa3"));
+        bgTopPaint = Paint()
+        bgTopPaint.color = bgTopColor
 
-        bgLeftPaint = new Paint();
-        bgLeftPaint.setColor(bgLeftColor);
+        bgBottomPaint = Paint()
+        bgBottomPaint.color = bgBottomColor
 
-        bgRightPaint = new Paint();
-        bgRightPaint.setColor(bgRightColor);
+        xTextPaint = Paint()
+        xTextPaint.textSize = xTextSize
+        xTextPaint.isAntiAlias = true
 
-        bgTopPaint = new Paint();
-        bgTopPaint.setColor(bgTopColor);
-
-        bgBottomPaint = new Paint();
-        bgBottomPaint.setColor(bgBottomColor);
-
-        xTextPaint = new Paint();
-        xTextPaint.setTextSize(xTextSize);
-        xTextPaint.setAntiAlias(true);
-
-        paintCalm = new Paint();
-        paintCalm.setTextSize(yTextSize);
-        paintCalm.setTypeface(fontGilroy);
-        paintCalm.setColor(Color.parseColor("#3fe8b5"));
-
-        paintFocussed = new Paint();
-        paintFocussed.setTextSize(yTextSize);
-        paintFocussed.setTypeface(fontGilroy);
-        paintFocussed.setColor(Color.parseColor("#ffed91"));
-
-        paintStressed = new Paint();
-        paintStressed.setTextSize(yTextSize);
-        paintStressed.setTypeface(fontGilroy);
-        paintStressed.setColor(Color.parseColor("#ffad60"));
-
-        gridPaint = new Paint();
-        gridPaint.setColor(gridColor);
-
-        chartLinePaint = new Paint();
-        chartLinePaint.setStrokeWidth(chartLineWidth);
-//        chartLinePaint.setColor(restLineColor);
-        chartLinePaint.setAntiAlias(true);
-        chartLinePaint.setStyle(Paint.Style.STROKE);
-        chartLinePaint.setStrokeCap(Paint.Cap.ROUND);
-
-        chartLineFillPaint = new Paint();
-//        chartLineFillPaint.setColor(Color.GRAY);
-        chartLineFillPaint.setStyle(Paint.Style.FILL);
-        chartLineFillPaint.setAntiAlias(true);
-
-
-        xTextBounds = new Rect();
-        rectF = new RectF();
+        paintCalm = Paint()
+        paintCalm.textSize = yTextSize
+        paintCalm.setTypeface(fontGilroy)
+        paintCalm.color = Color.parseColor("#3fe8b5")
+        paintFocussed = Paint()
+        paintFocussed.textSize = yTextSize
+        paintFocussed.setTypeface(fontGilroy)
+        paintFocussed.color = Color.parseColor("#ffed91")
+        paintStressed = Paint()
+        paintStressed.textSize = yTextSize
+        paintStressed.setTypeface(fontGilroy)
+        paintStressed.color = Color.parseColor("#ffad60")
+        gridPaint = Paint()
+        gridPaint.color = gridColor
+        chartLinePaint = Paint()
+        chartLinePaint.strokeWidth = chartLineWidth
+        //        chartLinePaint.setColor(restLineColor);
+        chartLinePaint.isAntiAlias = true
+        chartLinePaint.style = Paint.Style.STROKE
+        chartLinePaint.strokeCap = Paint.Cap.ROUND
+        chartLineFillPaint = Paint()
+        //        chartLineFillPaint.setColor(Color.GRAY);
+        chartLineFillPaint.style = Paint.Style.FILL
+        chartLineFillPaint.isAntiAlias = true
+        xTextBounds = Rect()
+        rectF = RectF()
     }
 
-    public void updateData(StressCombineModel datas) {
-        combineModel = datas;
-        list.clear();
-        list.addAll(combineModel.getItems());
-        Collections.reverse(list);
-        interval = (int) (list.size() / 4f);
-        postInvalidate();
+    fun updateData(datas: StressCombineModel?) {
+        combineModel = datas
+        list.clear()
+        datas?.items?.let { list.addAll(it) }
+        list.reverse()
+        interval = (list.size / 4f).toInt()
+        postInvalidate()
     }
 
-    public void updateHighlight(List<Integer> indexList, int color) {
-        highlightIndexs.clear();
-        highlightIndexs.addAll(indexList);
-        highlightColor = color;
-
+    fun updateHighlight(indexList: List<Int>?, color: Int) {
+        highlightIndexs.clear()
+        highlightIndexs.addAll(indexList!!)
+        highlightColor = color
         if (mHeight > 0) {
-            linearGradient = new LinearGradient(0, 0, 0, mHeight - bottomWith, highlightColor, Color.TRANSPARENT, Shader.TileMode.CLAMP);
+            linearGradient = LinearGradient(
+                0f,
+                0f,
+                0f,
+                mHeight - bottomWith,
+                highlightColor,
+                Color.TRANSPARENT,
+                Shader.TileMode.CLAMP
+            )
         }
-        postInvalidate();
+        postInvalidate()
     }
 
-    public int getMax() {
-        return xMax;
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        mWith = w
+        mHeight = h
+        chartLineGradient = LinearGradient(
+            0f,
+            topWith,
+            0f,
+            mHeight - bottomWith,
+            intArrayOf(highColor, mediumColor, lowColor),
+            floatArrayOf(0f, 0.5f, 1f),
+            Shader.TileMode.CLAMP
+        )
+        chartLineGradientInteracting = LinearGradient(
+            0f, topWith, 0f, mHeight - bottomWith, intArrayOf(
+                Color.parseColor("#80ff922d"),
+                Color.parseColor("#80ffe762"),
+                Color.parseColor("#8012cba9")
+            ), floatArrayOf(0f, 0.5f, 1f), Shader.TileMode.CLAMP
+        )
+        linearGradient = LinearGradient(
+            0f,
+            0f,
+            0f,
+            mHeight - bottomWith,
+            highlightColor,
+            Color.TRANSPARENT,
+            Shader.TileMode.CLAMP
+        )
+        linearGradientShadow = LinearGradient(
+            mWith - rightWith - shadowWidth,
+            mHeight / 2f,
+            mWith - rightWith,
+            mHeight / 2f,
+            Color.TRANSPARENT,
+            Color.parseColor("#C0000000"),
+            Shader.TileMode.CLAMP
+        )
     }
 
-    public void setMax(int xMax) {
-        this.xMax = xMax;
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        generateResMap()
+        drawBg(canvas)
+        drawTop(canvas)
+        drawBottom(canvas)
+        drawRight(canvas)
+        drawLeft(canvas)
+        drawContent(canvas)
+        drawDesc(canvas)
+        drawOverlay(canvas)
     }
 
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        mWith = w;
-        mHeight = h;
-
-        chartLineGradient = new LinearGradient(0, topWith, 0, mHeight - bottomWith, new int[]{highColor, mediumColor, lowColor}, new float[]{0f, 0.5f, 1f}, Shader.TileMode.CLAMP);
-        chartLineGradientInteracting = new LinearGradient(0, topWith, 0, mHeight - bottomWith,
-                new int[]{Color.parseColor("#80ff922d"),
-                        Color.parseColor("#80ffe762"),
-                        Color.parseColor("#8012cba9")}, new float[]{0f, 0.5f, 1f}, Shader.TileMode.CLAMP);
-        linearGradient = new LinearGradient(0, 0, 0, mHeight - bottomWith, highlightColor, Color.TRANSPARENT, Shader.TileMode.CLAMP);
-        linearGradientShadow = new LinearGradient(mWith - rightWith - shadowWidth, mHeight / 2f, mWith - rightWith, mHeight / 2f, Color.TRANSPARENT, Color.parseColor("#C0000000"), Shader.TileMode.CLAMP);
-        unitHLenth = (mWith - leftWith - rightWith) / (list.size() - 1);
-
-
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        generateResMap();
-        drawBg(canvas);
-        drawTop(canvas);
-        drawBottom(canvas);
-        drawRight(canvas);
-        drawLeft(canvas);
-        drawContent(canvas);
-        drawDesc(canvas);
-        drawOverlay(canvas);
-    }
-
-    private void generateResMap() {
-        if (combineModel == null) return;
-
-        Section section;
-        for (int i = 0; i < combineModel.getSections().size(); i++) {
-            section = combineModel.getSections().get(i);
-            resMap.put(i, new Pair<>(new LinearGradient(0, 0, 0, mHeight - bottomWith, section.getColor(), Color.TRANSPARENT, Shader.TileMode.CLAMP), BitmapFactory.decodeResource(getResources(), section.getImageRes())));
+    private fun generateResMap() {
+        if (combineModel == null) return
+        var section: Section
+        for (i in combineModel!!.sections!!.indices) {
+            section = combineModel!!.sections!![i]
+            resMap!![i] = Pair(
+                LinearGradient(
+                    0f,
+                    0f,
+                    0f,
+                    mHeight - bottomWith,
+                    section.color,
+                    Color.TRANSPARENT,
+                    Shader.TileMode.CLAMP
+                ), BitmapFactory.decodeResource(resources, section.imageRes)
+            )
         }
     }
 
-
-    private void drawBg(Canvas canvas) {
-        canvas.drawRect(0, 0, mWith, mHeight, bgPaint);
+    private fun drawBg(canvas: Canvas) {
+        canvas.drawRect(0f, 0f, mWith.toFloat(), mHeight.toFloat(), bgPaint)
     }
 
-    private void drawTop(Canvas canvas) {
-        canvas.drawRect(0, 0, mWith, topWith, bgTopPaint);
+    private fun drawTop(canvas: Canvas) {
+        canvas.drawRect(0f, 0f, mWith.toFloat(), topWith, bgTopPaint!!)
     }
 
-    private void drawRight(Canvas canvas) {
-        canvas.drawRect(mWith - rightWith, 0, mWith, mHeight, bgRightPaint);
+    private fun drawRight(canvas: Canvas) {
+        canvas.drawRect(mWith - rightWith, 0f, mWith.toFloat(), mHeight.toFloat(), bgRightPaint!!)
     }
 
-    private void drawBottom(Canvas canvas) {
-        canvas.drawRect(0, mHeight - bottomWith, mWith, mHeight, bgBottomPaint);
+    private fun drawBottom(canvas: Canvas) {
+        canvas.drawRect(
+            0f,
+            mHeight - bottomWith,
+            mWith.toFloat(),
+            mHeight.toFloat(),
+            bgBottomPaint
+        )
         if (showXAxis) {
-            String xText = "23:59";
-            xTextPaint.getTextBounds(xText, 0, xText.length(), xTextBounds);
-            xTextPaint.setColor(Color.parseColor("#a3ffffff"));
-            canvas.drawText(xText, mWith - rightWith - xTextBounds.width() - dip2px(5), mHeight - bottomWith / 3, xTextPaint);
-
-            xText = "00:00";
-            xTextPaint.getTextBounds(xText, 0, xText.length(), xTextBounds);
-            canvas.drawText(xText, leftWith + dip2px(5), mHeight - bottomWith / 3, xTextPaint);
+            var xText = "23:59"
+            xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
+            xTextPaint.color = Color.parseColor("#a3ffffff")
+            canvas.drawText(
+                xText,
+                mWith - rightWith - xTextBounds!!.width() - dip2px(5f),
+                mHeight - bottomWith / 3,
+                xTextPaint
+            )
+            xText = "00:00"
+            xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
+            canvas.drawText(xText, leftWith + dip2px(5f), mHeight - bottomWith / 3, xTextPaint)
         }
     }
 
-
-    private void drawLeft(Canvas canvas) {
-        gridPaint.setColor(gridColor);
-        canvas.drawLine(leftWith, topWith, mWith - rightWith, topWith, gridPaint);
-        canvas.drawLine(leftWith, mHeight - bottomWith, mWith - rightWith, mHeight - bottomWith, gridPaint);
-
-        if (combineModel == null) return;
-
-        if (combineModel.getHigh() > 0) {
-            float high = (mHeight - bottomWith) - (combineModel.getHigh() * 1f / xMax) * (mHeight - bottomWith - topWith);
-            canvas.drawLine(leftWith, high, mWith - rightWith, high, gridPaint);
+    private fun drawLeft(canvas: Canvas) {
+        gridPaint.color = gridColor
+        canvas.drawLine(leftWith, topWith, mWith - rightWith, topWith, gridPaint!!)
+        canvas.drawLine(
+            leftWith,
+            mHeight - bottomWith,
+            mWith - rightWith,
+            mHeight - bottomWith,
+            gridPaint
+        )
+        if (combineModel == null) return
+        if (combineModel!!.high > 0) {
+            val high =
+                mHeight - bottomWith - combineModel!!.high * 1f / max * (mHeight - bottomWith - topWith)
+            canvas.drawLine(leftWith, high, mWith - rightWith, high, gridPaint)
         }
-
-        if (combineModel.getMedium() > 0) {
-            float medium = (mHeight - bottomWith) - (combineModel.getMedium() * 1f / xMax) * (mHeight - bottomWith - topWith);
-            canvas.drawLine(leftWith, medium, mWith - rightWith, medium, gridPaint);
+        if (combineModel!!.medium > 0) {
+            val medium =
+                mHeight - bottomWith - combineModel!!.medium * 1f / max * (mHeight - bottomWith - topWith)
+            canvas.drawLine(leftWith, medium, mWith - rightWith, medium, gridPaint)
         }
-
     }
 
-    private void drawDesc(Canvas canvas) {
-
-        if (isInteracting) return;
-
-        rectF.left = mWith - rightWith - shadowWidth;
-        rectF.top = topWith;
-        rectF.right = mWith - rightWith;
-        rectF.bottom = mHeight - bottomWith;
-        chartLineFillPaint.setShader(linearGradientShadow);
-        canvas.drawRect(rectF, chartLineFillPaint);
-        float high = 0;
-
-
-        if (combineModel == null) return;
-        if (combineModel.getHigh() > 0) {
-            high = (mHeight - bottomWith) - (combineModel.getHigh() * 1f / xMax) * (mHeight - bottomWith - topWith);
-            String highText = "Stressed";
-            paintStressed.getTextBounds(highText, 0, highText.length(), xTextBounds);
-            canvas.drawText(highText, mWith - rightWith - xTextBounds.width() - dip2px(5), (high + topWith) / 2 + xTextBounds.height() / 2f, paintStressed);
+    private fun drawDesc(canvas: Canvas) {
+        if (isInteracting) return
+        rectF!!.left = mWith - rightWith - shadowWidth
+        rectF!!.top = topWith
+        rectF!!.right = mWith - rightWith
+        rectF!!.bottom = mHeight - bottomWith
+        chartLineFillPaint.setShader(linearGradientShadow)
+        canvas.drawRect(rectF!!, chartLineFillPaint)
+        var high = 0f
+        if (combineModel == null) return
+        if (combineModel!!.high > 0) {
+            high =
+                mHeight - bottomWith - combineModel!!.high * 1f / max * (mHeight - bottomWith - topWith)
+            val highText = "Stressed"
+            paintStressed.getTextBounds(highText, 0, highText.length, xTextBounds)
+            canvas.drawText(
+                highText,
+                mWith - rightWith - xTextBounds!!.width() - dip2px(5f),
+                (high + topWith) / 2 + xTextBounds!!.height() / 2f,
+                paintStressed
+            )
         }
-
-        if (combineModel.getMedium() > 0) {
-            float medium = (mHeight - bottomWith) - (combineModel.getMedium() * 1f / xMax) * (mHeight - bottomWith - topWith);
-            String mediumText = "Focussed";
-            paintFocussed.getTextBounds(mediumText, 0, mediumText.length(), xTextBounds);
-            canvas.drawText(mediumText, mWith - rightWith - xTextBounds.width() - dip2px(5), (medium + high) / 2 + xTextBounds.height() / 2f, paintFocussed);
-            String lowText = "Calm";
-            paintCalm.getTextBounds(lowText, 0, lowText.length(), xTextBounds);
-            canvas.drawText(lowText, mWith - rightWith - xTextBounds.width() - dip2px(5), (medium + mHeight - bottomWith) / 2 + xTextBounds.height() / 2f, paintCalm);
+        if (combineModel!!.medium > 0) {
+            val medium =
+                mHeight - bottomWith - combineModel!!.medium * 1f / max * (mHeight - bottomWith - topWith)
+            val mediumText = "Focussed"
+            paintFocussed.getTextBounds(mediumText, 0, mediumText.length, xTextBounds)
+            canvas.drawText(
+                mediumText,
+                mWith - rightWith - xTextBounds!!.width() - dip2px(5f),
+                (medium + high) / 2 + xTextBounds!!.height() / 2f,
+                paintFocussed
+            )
+            val lowText = "Calm"
+            paintCalm.getTextBounds(lowText, 0, lowText.length, xTextBounds)
+            canvas.drawText(
+                lowText,
+                mWith - rightWith - xTextBounds!!.width() - dip2px(5f),
+                (medium + mHeight - bottomWith) / 2 + xTextBounds!!.height() / 2f,
+                paintCalm
+            )
         }
-
     }
 
-    private void drawContent(Canvas canvas) {
-        if (null == list || list.size() == 0) {
-            return;
+    private fun drawContent(canvas: Canvas) {
+        if (list.size == 0) {
+            return
         }
-
-        int imageSize = dip2px(20);
-        for (int i = 0; i < combineModel.getSections().size(); i++) {
-            Section section = combineModel.getSections().get(i);
-            rectF.left = section.getStart() * unitHLenth + leftWith;
-            rectF.top = topWith;
-            rectF.right = rectF.left + (section.getEnd() - section.getStart()) * unitHLenth;
-            rectF.bottom = mHeight - bottomWith;
-            chartLineFillPaint.setShader(resMap.get(i).first);
-            canvas.drawRect(rectF, chartLineFillPaint);
-
-            rectF.left = section.getStart() * unitHLenth + leftWith;
-            rectF.top = topWith;
-            rectF.right = rectF.left + (section.getEnd() - section.getStart()) * unitHLenth;
-            rectF.bottom = topWith + dip2px(2);
-            gridPaint.setColor(section.getColor());
-            canvas.drawRect(rectF, gridPaint);
-
-
-            rectF.left = (rectF.right + rectF.left) / 2 - imageSize / 2f;
-            rectF.top = topWith - imageSize - dip2px(10);
-            rectF.right = rectF.left + imageSize;
-            rectF.bottom = rectF.top + imageSize;
-
-            if (resMap.get(i).second != null) {
-                canvas.drawBitmap(resMap.get(i).second, null, rectF, null);
+        unitHLenth = (mWith - leftWith - rightWith) / (list.size - 1)
+        val imageSize = dip2px(20f)
+        for (i in combineModel!!.sections!!.indices) {
+            val (start, end, color) = combineModel!!.sections!![i]
+            rectF!!.left = start * unitHLenth + leftWith
+            rectF!!.top = topWith
+            rectF!!.right = rectF!!.left + (end - start) * unitHLenth
+            rectF!!.bottom = mHeight - bottomWith
+            chartLineFillPaint.setShader(resMap!![i]!!.first)
+            canvas.drawRect(rectF!!, chartLineFillPaint)
+            rectF!!.left = start * unitHLenth + leftWith
+            rectF!!.top = topWith
+            rectF!!.right = rectF!!.left + (end - start) * unitHLenth
+            rectF!!.bottom = topWith + dip2px(2f)
+            gridPaint.color = color
+            canvas.drawRect(rectF!!, gridPaint)
+            rectF!!.left = (rectF!!.right + rectF!!.left) / 2 - imageSize / 2f
+            rectF!!.top = topWith - imageSize - dip2px(10f)
+            rectF!!.right = rectF!!.left + imageSize
+            rectF!!.bottom = rectF!!.top + imageSize
+            if (resMap!![i]!!.second != null) {
+                canvas.drawBitmap(resMap!![i]!!.second!!, null, rectF!!, null)
             }
-
         }
-
-        Item current, next;
-        for (int i = 0; i < list.size(); i++) {
-            current = list.get(i);
-            float x = (mWith - leftWith - rightWith) + leftWith - i * unitHLenth;
-            float y = mHeight - bottomWith - current.getValue() * (mHeight - topWith - bottomWith) / (xMax - xMin);
-            path.reset();
-            path.moveTo(x, y);
-
-            pointsValueMapping.put((int) x, current.getValue());
-
-
-            if (i < list.size() - 1) {
-                next = list.get(i + 1);
-                if (current.getValue() > 0) {
-
-                    if (next.getValue() > 0) {
-                        float x1 = (mWith - leftWith - rightWith) + leftWith - (i + 1) * unitHLenth;
-                        float y1 = mHeight - bottomWith - next.getValue() * (mHeight - topWith - bottomWith) / (xMax - xMin);
-                        path.cubicTo(x1 + (x - x1) / 4, y, x - (x - x1) / 4, y1, x1, y1);
-                        if (highlightIndexs.contains(list.size() - 1 - i)) {
-                            fillPath.addPath(path);
+        var current: Item?
+        var next: Item?
+        for (i in list.indices) {
+            current = list[i]
+            val x = mWith - leftWith - rightWith + leftWith - i * unitHLenth
+            val y =
+                mHeight - bottomWith - current!!.value * (mHeight - topWith - bottomWith) / (max - xMin)
+            path.reset()
+            path.moveTo(x, y)
+            pointsValueMapping[x.toInt()] = current.value
+            if (i < list.size - 1) {
+                next = list[i + 1]
+                if (current.value > 0) {
+                    if (next!!.value > 0) {
+                        val x1 = mWith - leftWith - rightWith + leftWith - (i + 1) * unitHLenth
+                        val y1 =
+                            mHeight - bottomWith - next.value * (mHeight - topWith - bottomWith) / (max - xMin)
+                        path.cubicTo(x1 + (x - x1) / 4, y, x - (x - x1) / 4, y1, x1, y1)
+                        if (highlightIndexs.contains(list.size - 1 - i)) {
+                            fillPath.addPath(path)
                             //draw fill first
-                            fillPath.lineTo(x1, mHeight - bottomWith);
-                            fillPath.lineTo(x, mHeight - bottomWith);
-                            chartLineFillPaint.setShader(linearGradient);
-                            canvas.drawPath(fillPath, chartLineFillPaint);
-                            chartLinePaint.setColor(highlightColor);
-                            fillPath.reset();
+                            fillPath.lineTo(x1, mHeight - bottomWith)
+                            fillPath.lineTo(x, mHeight - bottomWith)
+                            chartLineFillPaint.setShader(linearGradient)
+                            canvas.drawPath(fillPath, chartLineFillPaint)
+                            chartLinePaint.color = highlightColor
+                            fillPath.reset()
                         } else {
                             if (highlightIndexs.isEmpty()) {
                                 if (isInteracting) {
-                                    chartLinePaint.setShader(chartLineGradientInteracting);
+                                    chartLinePaint.setShader(chartLineGradientInteracting)
                                 } else {
-                                    chartLinePaint.setShader(chartLineGradient);
+                                    chartLinePaint.setShader(chartLineGradient)
                                 }
                             } else {
-                                chartLinePaint.setShader(null);
-                                chartLinePaint.setColor(restLineColor);
+                                chartLinePaint.setShader(null)
+                                chartLinePaint.color = restLineColor
                             }
                         }
                         //draw chart line second, need to cover fill color
-                        canvas.drawPath(path, chartLinePaint);
+                        canvas.drawPath(path, chartLinePaint)
                     } else {
-                        if (highlightIndexs.contains(list.size() - 1 - i)) {
-                            chartLinePaint.setColor(highlightColor);
+                        if (highlightIndexs.contains(list.size - 1 - i)) {
+                            chartLinePaint.color = highlightColor
                         } else {
                             if (highlightIndexs.isEmpty()) {
                                 if (isInteracting) {
-                                    chartLinePaint.setShader(chartLineGradientInteracting);
+                                    chartLinePaint.setShader(chartLineGradientInteracting)
                                 } else {
-                                    chartLinePaint.setShader(chartLineGradient);
+                                    chartLinePaint.setShader(chartLineGradient)
                                 }
-//                                chartLinePaint.setColor(chartLineColor);
+                                //                                chartLinePaint.setColor(chartLineColor);
                             } else {
-                                chartLinePaint.setShader(null);
-                                chartLinePaint.setColor(restLineColor);
+                                chartLinePaint.setShader(null)
+                                chartLinePaint.color = restLineColor
                             }
                         }
-                        canvas.drawPoint(x, y, chartLinePaint);
+                        canvas.drawPoint(x, y, chartLinePaint)
                     }
-
                 }
             }
 
@@ -491,176 +516,177 @@ public class StressCombinedChart extends View {
                 canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 4, xTextPaint);
             }*/
         }
-
-        int start = 0;
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getValue() > 0) {
-                start = i;
-                break;
+        var start = 0
+        for (i in list.indices) {
+            if (list[i]!!.value > 0) {
+                start = i
+                break
             }
         }
-        int end = 0;
-        for (int i = list.size() - 1; i >= 0; i--) {
-            if (list.get(i).getValue() > 0) {
-                end = i;
-                break;
+        var end = 0
+        for (i in list.indices.reversed()) {
+            if (list[i]!!.value > 0) {
+                end = i
+                break
             }
         }
-
-        int lastIndex = -1;
-        for (int i = start; i <= end; i++) {
-            current = list.get(i);
-            if (current.getValue() == 0) {
+        var lastIndex = -1
+        for (i in start..end) {
+            current = list[i]
+            if (current!!.value == 0) {
                 if (i > 0 && lastIndex == -1) {
-                    lastIndex = i - 1;
+                    lastIndex = i - 1
                 }
             } else {
                 if (lastIndex != -1) {
-                    if (Math.abs(i - lastIndex) < 120 / (1440 / list.size())) {
-                        float x = (mWith - leftWith - rightWith) + leftWith - i * unitHLenth;
-                        float y = mHeight - bottomWith - current.getValue() * (mHeight - topWith - bottomWith) / (xMax - xMin);
-
-                        float x1 = (mWith - leftWith - rightWith) + leftWith - lastIndex * unitHLenth;
-                        float y1 = mHeight - bottomWith - list.get(lastIndex).getValue() * (mHeight - topWith - bottomWith) / (xMax - xMin);
-
-                        chartLinePaint.setShader(null);
-                        chartLinePaint.setColor(Color.WHITE);
-                        chartLinePaint.setPathEffect(effect);
-                        canvas.drawLine(x, y, x1, y1, chartLinePaint);
-                        chartLinePaint.setPathEffect(null);
+                    if (Math.abs(i - lastIndex) < 120 / (1440 / list.size)) {
+                        val x = mWith - leftWith - rightWith + leftWith - i * unitHLenth
+                        val y =
+                            mHeight - bottomWith - current.value * (mHeight - topWith - bottomWith) / (max - xMin)
+                        val x1 = mWith - leftWith - rightWith + leftWith - lastIndex * unitHLenth
+                        val y1 =
+                            mHeight - bottomWith - list[lastIndex]!!.value * (mHeight - topWith - bottomWith) / (max - xMin)
+                        chartLinePaint.setShader(null)
+                        chartLinePaint.color = Color.WHITE
+                        chartLinePaint.setPathEffect(effect)
+                        canvas.drawLine(x, y, x1, y1, chartLinePaint)
+                        chartLinePaint.setPathEffect(null)
                     }
-                    lastIndex = -1;
+                    lastIndex = -1
                 }
             }
         }
     }
 
-    private void drawOverlay(Canvas canvas) {
-        if (!isInteracting) return;
-
+    private fun drawOverlay(canvas: Canvas) {
+        if (!isInteracting) return
         if (touchX != null) {
-            if (touchX > 0 && touchX < mWith) {
-                RectF rectF = new RectF();
-                rectF.left = touchX - 2;
-                rectF.right = touchX + 2;
-                rectF.top = topWith;
-                rectF.bottom = mHeight - bottomWith;
-
-                float width = (float) calmDot.getWidth() / 2;
-                float height = (float) calmDot.getHeight() / 2;
-
-                Pair value = getClickedValue(touchX);
-
-                LOGS.INSTANCE.d("CLICKED_VALUE value " + value + " Touch " + touchX.intValue());
-
-                canvas.drawRect(rectF, overlayLinePaint);
-                if ((int) value.second != 0) {
-                    canvas.drawBitmap(calmDot, touchX - width, getDotHeight((int) value.second) - height, paintStressed);
+            if (touchX!! > 0 && touchX!! < mWith) {
+                val rectF = RectF()
+                rectF.left = touchX!! - 2
+                rectF.right = touchX!! + 2
+                rectF.top = topWith
+                rectF.bottom = mHeight - bottomWith
+                val width = calmDot!!.width.toFloat() / 2
+                val height = calmDot!!.height.toFloat() / 2
+                val value: Pair<Int, Int> = getClickedValue(touchX!!)
+                d("CLICKED_VALUE value " + value + " Touch " + touchX!!.toInt())
+                canvas.drawRect(rectF, overlayLinePaint)
+                if (value.second as Int != 0) {
+                    canvas.drawBitmap(
+                        calmDot!!,
+                        touchX!! - width,
+                        getDotHeight(value.second as Int) - height,
+                        paintStressed
+                    )
                 }
-
                 if (listener != null) {
-                    int position = (int) value.first;
-                    int selectedValue = (int) value.second;
-
+                    val position = value.first as Int
+                    val selectedValue = value.second as Int
                     if (lastSentValuePos == null) {
-                        listener.onValueSelected(selectedValue);
-                        lastSentValuePos = position;
-                        performHapticFeedbackCustom(selectedValue);
+                        listener?.onValueSelected(selectedValue, position)
+                        lastSentValuePos = position
+                        performHapticFeedbackCustom(selectedValue)
                     } else {
                         if (lastSentValuePos != position) {
-                            listener.onValueSelected(selectedValue);
-                            lastSentValuePos = position;
-                            performHapticFeedbackCustom(selectedValue);
+                            listener?.onValueSelected(selectedValue, position)
+                            lastSentValuePos = position
+                            performHapticFeedbackCustom(selectedValue)
                         }
                     }
-
                 }
             }
         }
     }
 
-    void performHapticFeedbackCustom(Integer value) {
+    fun performHapticFeedbackCustom(value: Int) {
         if (value != 0) {
             this.performHapticFeedback(
-                    HapticFeedbackConstants.KEYBOARD_TAP
-            );
+                HapticFeedbackConstants.KEYBOARD_TAP
+            )
         }
     }
 
-    private Pair<Integer, Integer> getClickedValue(Float touchX) {
-        float sectionLast = 0f;
-        int position = -1;
-
-        for (int i = (list.size() - 1); i > 0; i--) {
-            float sectionEnd = sectionLast + unitHLenth;
+    private fun getClickedValue(touchX: Float): Pair<Int, Int> {
+        var sectionLast = 0f
+        var position = -1
+        for (i in list.size - 1 downTo 1) {
+            val sectionEnd = sectionLast + unitHLenth
             if (touchX < sectionEnd) {
-                position = i;
-                break;
+                position = i
+                break
             }
-            sectionLast = sectionEnd;
+            sectionLast = sectionEnd
         }
-
-        if (position == -1) {
-            return new Pair(0, 0);
+        return if (position == -1) {
+            Pair(0, 0)
         } else {
-            return new Pair<>(position, list.get(position).getValue());
+            Pair(position, list[position].value)
         }
     }
 
-    private float getDotHeight(int value) {
-        return mHeight - bottomWith - value * (mHeight - topWith - bottomWith) / (xMax - xMin);
+    private fun getDotHeight(value: Int): Float {
+        return mHeight - bottomWith - value * (mHeight - topWith - bottomWith) / (max - xMin)
     }
 
-    private int dip2px(float dpValue) {
-        float scale = getContext().getResources().getDisplayMetrics().density;
-        return (int) (dpValue * scale + 0.5f);
+    private fun dip2px(dpValue: Float): Int {
+        val scale = context.resources.displayMetrics.density
+        return (dpValue * scale + 0.5f).toInt()
     }
 
-    private int sp2px(float spValue) {
-        final float fontScale = getContext().getResources().getDisplayMetrics().scaledDensity;
-        return (int) (spValue * fontScale + 0.5f);
+    private fun sp2px(spValue: Float): Int {
+        val fontScale = context.resources.displayMetrics.scaledDensity
+        return (spValue * fontScale + 0.5f).toInt()
     }
 
-    public void enableInteractiveMode(Boolean mode) {
-        interactiveMode = mode;
+    fun enableInteractiveMode(mode: Boolean) {
+        interactiveMode = mode
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    override fun onTouchEvent(event: MotionEvent): Boolean {
         if (interactiveMode) {
-            ViewParent parent = getParent();
-            parent.requestDisallowInterceptTouchEvent(true);
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    this.touchX = event.getX();
-                    handler.postDelayed(mLongPressed, ViewConfiguration.getLongPressTimeout());
-                    return true;
-                case MotionEvent.ACTION_MOVE:
+            val parent = parent
+            parent.requestDisallowInterceptTouchEvent(true)
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    touchX = event.x
+                    handler.postDelayed(
+                        mLongPressed,
+                        ViewConfiguration.getLongPressTimeout().toLong()
+                    )
+                    return true
+                }
+
+                MotionEvent.ACTION_MOVE -> {
                     if (isInteracting) {
-                        this.touchX = event.getX();
-                        invalidate();
+                        touchX = event.x
+                        invalidate()
                     }
-                    return true;
-                case MotionEvent.ACTION_UP:
-                    handler.removeCallbacks(mLongPressed);
-                    isInteracting = false;
-                    invalidate();
-                    this.touchX = 0.0f;
-                    return true;
+                    return true
+                }
+
+                MotionEvent.ACTION_UP -> {
+                    handler.removeCallbacks(mLongPressed)
+                    isInteracting = false
+                    listener?.isInteractionOnGoing(false)
+                    invalidate()
+                    touchX = 0.0f
+                    return true
+                }
             }
         } else {
-            return super.onTouchEvent(event);
+            return super.onTouchEvent(event)
         }
-        return false;
+        return false
     }
 
-    final Handler handler = new Handler();
-    Runnable mLongPressed = () -> {
-        isInteracting = true;
-        invalidate();
-
-        getRootView().performHapticFeedback(
-                HapticFeedbackConstants.LONG_PRESS
-        );
-    };
+    private val handler = Handler(Looper.getMainLooper())
+    private var mLongPressed = Runnable {
+        isInteracting = true
+        invalidate()
+        listener?.isInteractionOnGoing(true)
+        rootView.performHapticFeedback(
+            HapticFeedbackConstants.LONG_PRESS
+        )
+    }
 }

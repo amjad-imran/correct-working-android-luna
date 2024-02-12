@@ -183,4 +183,11 @@
     <color name="nap_dash_sleep_score">#e1caff</color>
     <color name="nap_dash_readiness_score">#ffddc9</color>
     <color name="nap_dash_sleep_impact_score">#ff6b86</color>
+
+    <color name="stress_nap_calm">#3fe8b5</color>
+    <color name="stress_nap_focussed">#ffed91</color>
+    <color name="stress_nap_stressed">#ffad60</color>
+
+
+
 </resources>
