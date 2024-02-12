@@ -1,5 +1,6 @@
 package com.oreo.ui.stress
 
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -87,7 +88,11 @@ class OStressDataMovementFragment :
                     dayData.stress?.stressValue?.lastUpdated
                 )
                 initCombineChart(dayData)
-                setMovementData(viewModel.dayTimeMovement, viewModel.isSelectedMode, -1)
+                val combinedData =
+                    viewModel.getCombinedMovementData(viewModel.dayTimeMovement, true)
+                viewModel.dayTimeMovement = combinedData
+
+                setMovementData(combinedData, viewModel.isSelectedMode, -1)
                 handleStressProgressView(dayData.stress)
                 //viewModel.prepareStressActivityData(dayData)
 
@@ -212,10 +217,17 @@ class OStressDataMovementFragment :
             setMovementData(viewModel.dayTimeMovement, false, -1)
             viewModel.isSelectedMode = false
             viewModel.lastSelectedType = -1
+            binding.lytStressMidGraph.graphStress.removeHighlights()
         } else {
             setMovementData(viewModel.dayTimeMovement, true, type)
             viewModel.isSelectedMode = true
             viewModel.lastSelectedType = type
+            val highlights = viewModel.getHighlights(type, viewModel.dayTimeMovement)
+            val color = viewModel.getMovementColor(type)
+            binding.lytStressMidGraph.graphStress.updateHighlight(
+                highlights,
+                resources.getColor(color, null)
+            )
         }
     }
 
@@ -325,18 +337,17 @@ class OStressDataMovementFragment :
     }
 
     private fun setMovementData(
-        movementList: List<Int>?,
+        combinedData: List<Int>?,
         isSelectedMode: Boolean,
         selectedType: Int
     ) {
 
-        val combinedData = viewModel.getCombinedMovementData(movementList, true)
 
         binding.lytHighMovement.apply {
             tvHeader.text = getString(R.string.text_high_movement)
             compareChart.updateInitData(3, requireContext().getColor(R.color.white))
             compareChart.setDrawData(
-                combinedData, isSelectedMode
+                combinedData ?: ArrayList(), isSelectedMode
             )
 
             if (selectedType == 3) {
@@ -344,7 +355,11 @@ class OStressDataMovementFragment :
                 this.root.alpha = 1.0f
             } else {
                 this.lytMain.setBackgroundResource(R.drawable.back_modal_new_10_normal)
-                this.root.alpha = 0.5f
+                if (selectedType == -1) {
+                    this.root.alpha = 1f
+                } else {
+                    this.root.alpha = 0.5f
+                }
             }
         }
 
@@ -352,7 +367,7 @@ class OStressDataMovementFragment :
             binding.lytMediumMovement.tvHeader.text = getString(R.string.text_medium_movement)
             compareChart.updateInitData(2, requireContext().getColor(R.color.medium_movement_color))
             binding.lytMediumMovement.compareChart.setDrawData(
-                combinedData, isSelectedMode
+                combinedData ?: ArrayList(), isSelectedMode
             )
 
             if (selectedType == 2) {
@@ -360,7 +375,11 @@ class OStressDataMovementFragment :
                 this.root.alpha = 1.0f
             } else {
                 this.lytMain.setBackgroundResource(R.drawable.back_modal_new_10_normal)
-                this.root.alpha = 0.5f
+                if (selectedType == -1) {
+                    this.root.alpha = 1f
+                } else {
+                    this.root.alpha = 0.5f
+                }
             }
         }
 
@@ -369,7 +388,7 @@ class OStressDataMovementFragment :
             binding.lytLowMovement.tvHeader.text = getString(R.string.text_low_movement)
             compareChart.updateInitData(1, requireContext().getColor(R.color.low_movement_color))
             binding.lytLowMovement.compareChart.setDrawData(
-                combinedData, isSelectedMode
+                combinedData ?: ArrayList(), isSelectedMode
             )
 
             if (selectedType == 1) {
@@ -377,7 +396,11 @@ class OStressDataMovementFragment :
                 this.root.alpha = 1.0f
             } else {
                 this.lytMain.setBackgroundResource(R.drawable.back_modal_new_10_normal)
-                this.root.alpha = 0.5f
+                if (selectedType == -1) {
+                    this.root.alpha = 1f
+                } else {
+                    this.root.alpha = 0.5f
+                }
             }
         }
 
@@ -385,7 +408,7 @@ class OStressDataMovementFragment :
             binding.lytNoMovement.tvHeader.text = getString(R.string.text_no_movement)
             compareChart.updateInitData(0, requireContext().getColor(R.color.no_movement_color))
             binding.lytNoMovement.compareChart.setDrawData(
-                combinedData, isSelectedMode
+                combinedData ?: ArrayList(), isSelectedMode
             )
 
             if (selectedType == 0) {
@@ -393,7 +416,11 @@ class OStressDataMovementFragment :
                 this.root.alpha = 1.0f
             } else {
                 this.lytMain.setBackgroundResource(R.drawable.back_modal_new_10_normal)
-                this.root.alpha = 0.5f
+                if (selectedType == -1) {
+                    this.root.alpha = 1f
+                } else {
+                    this.root.alpha = 0.5f
+                }
             }
         }
 

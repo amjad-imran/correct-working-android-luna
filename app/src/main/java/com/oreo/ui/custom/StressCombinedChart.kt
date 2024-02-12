@@ -69,6 +69,7 @@ class StressCombinedChart : View {
     private val list = ArrayList<Item>()
     private val pointsValueMapping: MutableMap<Int?, Int?> = HashMap<Int?, Int?>()
     private val highlightIndexs: MutableList<Int> = ArrayList()
+    private var isHighlighted = false
     private var highlightColor = 0
     private var showXAxis = true
     private var interval = 0
@@ -227,9 +228,9 @@ class StressCombinedChart : View {
         postInvalidate()
     }
 
-    fun updateHighlight(indexList: List<Int>?, color: Int) {
+    fun updateHighlight(indexList: List<Int>, color: Int) {
         highlightIndexs.clear()
-        highlightIndexs.addAll(indexList!!)
+        highlightIndexs.addAll(indexList)
         highlightColor = color
         if (mHeight > 0) {
             linearGradient = LinearGradient(
@@ -242,6 +243,13 @@ class StressCombinedChart : View {
                 Shader.TileMode.CLAMP
             )
         }
+        isHighlighted = true
+        postInvalidate()
+    }
+
+    fun removeHighlights() {
+        highlightIndexs.clear()
+        isHighlighted = false
         postInvalidate()
     }
 
@@ -475,7 +483,7 @@ class StressCombinedChart : View {
                             chartLinePaint.color = highlightColor
                             fillPath.reset()
                         } else {
-                            if (highlightIndexs.isEmpty()) {
+                            if (!isHighlighted /*highlightIndexs.isEmpty()*/) {
                                 if (isInteracting) {
                                     chartLinePaint.setShader(chartLineGradientInteracting)
                                 } else {
@@ -492,7 +500,7 @@ class StressCombinedChart : View {
                         if (highlightIndexs.contains(list.size - 1 - i)) {
                             chartLinePaint.color = highlightColor
                         } else {
-                            if (highlightIndexs.isEmpty()) {
+                            if (!isHighlighted /*highlightIndexs.isEmpty()*/) {
                                 if (isInteracting) {
                                     chartLinePaint.setShader(chartLineGradientInteracting)
                                 } else {
@@ -679,6 +687,8 @@ class StressCombinedChart : View {
         }
         return false
     }
+
+
 
     private val handler = Handler(Looper.getMainLooper())
     private var mLongPressed = Runnable {

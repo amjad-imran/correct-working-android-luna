@@ -174,5 +174,43 @@ constructor(
         return DateFormats.convertTimestampToDate(calendar.timeInMillis, DateFormats.timeFormat12)
     }
 
+    fun getHighlights(type: Int, movement: List<Int>?): List<Int> {
+
+        if (movement.isNullOrEmpty()) return ArrayList()
+
+        val highlights: MutableList<Int> =
+            ArrayList()
+        movement.forEachIndexed { index, i ->
+            if (i == type) {
+                highlights.add(index)
+            }
+        }
+
+        return highlights
+
+
+        /*
+          highlights.add(10)
+          highlights.add(11)
+          highlights.add(12)
+          highlights.add(13)
+          highlights.add(43)
+          highlights.add(44)
+          highlights.add(50)
+          highlights.add(74)
+          highlights.add(75)*/
+
+    }
+
+    fun getMovementColor(type: Int): Int {
+        return when(type){
+            0->R.color.no_movement_color
+            1->R.color.low_movement_color
+            2->R.color.medium_movement_color
+            3->R.color.white
+            else -> R.color.no_movement_color
+        }
+    }
+
 
 }
