@@ -644,7 +644,6 @@ class StressCombinedChart : View {
                 rectF.bottom = mHeight - bottomWith
 
                 val value: Pair<Int, Int> = getClickedValue(touchX!!)
-                d("CLICKED_VALUE value " + value + " Touch " + touchX!!.toInt())
                 canvas.drawRect(rectF, overlayLinePaint)
                 if (value.second != 0) {
 
@@ -737,6 +736,13 @@ class StressCombinedChart : View {
                 }
 
                 MotionEvent.ACTION_UP -> {
+                    if(!isInteracting){
+                        if(event.y<dip2px(50f)){
+                            listener?.onTopClicked()
+                        }
+                    }
+
+
                     handler.removeCallbacks(mLongPressed)
                     isInteracting = false
                     listener?.isInteractionOnGoing(false)

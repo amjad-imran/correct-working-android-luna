@@ -6,7 +6,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class OStressActivitiesDataModel(
     val type: String? = null,
+    val workoutData: OActivityListModal? = null,
     val startTime: String? = null,
-    val endTime: String? = null,
-    var id: String? = null
-):Parcelable
+    val endTime: String? = null
+) : Parcelable

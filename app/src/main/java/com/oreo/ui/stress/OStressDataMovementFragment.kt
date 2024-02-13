@@ -88,7 +88,10 @@ class OStressDataMovementFragment :
                 )
                 initCombineChart(dayData)
                 val combinedData =
-                    viewModel.getCombinedMovementData(dayData.activity?.daytimeMovement?.movement, true)
+                    viewModel.getCombinedMovementData(
+                        dayData.activity?.daytimeMovement?.movement,
+                        true
+                    )
                 viewModel.dayTimeMovement = combinedData
 
                 setMovementData(combinedData, viewModel.isSelectedMode, -1)
@@ -96,6 +99,8 @@ class OStressDataMovementFragment :
                 //viewModel.prepareStressActivityData(dayData)
 
                 setNudge(dayData.stress?.nudges)
+
+                viewModel.prepareStressActivityData(dayData)
 
             }
         }
@@ -160,6 +165,7 @@ class OStressDataMovementFragment :
     override fun initListener() {
 
         binding.lytStressMidGraph.graphStress.setClickListener(object : OnStressClickAction {
+
             override fun onValueSelected(value: Int, position: Int) {
 
                 val time = viewModel.getTimeFromPosition(position)
@@ -176,6 +182,16 @@ class OStressDataMovementFragment :
                     }
                 }
             }
+
+            override fun onTopClicked() {
+                viewModel.stressActivityData?.toTypedArray()?.let { it1 ->
+                    navigate(
+                        OStressDetailsFragmentDirections.actionStressDetailFragmentToBottomSheetStressActivity(
+                            it1
+                        )
+                    )
+                }
+            }
         })
 
         binding.ivOpen.setOnClickListener {
@@ -184,16 +200,6 @@ class OStressDataMovementFragment :
         binding.ivClose.setOnClickListener {
             handleMovementViews(false)
         }
-        /*binding.lytHighMovement.root.setOnClickListener {
-            //todo open activity bottomsheet for testing
-            viewModel.stressActivityData?.toTypedArray()?.let { it1 ->
-                navigate(
-                    OStressDetailsFragmentDirections.actionStressDetailFragmentToBottomSheetStressActivity(
-                        it1
-                    )
-                )
-            }
-        }*/
 
         binding.lytHighMovement.root.setOnClickListener {
             handleMovementClick(3)

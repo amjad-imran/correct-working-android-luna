@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ItemStressActivitiesLayoutBinding
+import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.OStressActivitiesDataModel
 
@@ -17,15 +18,23 @@ class StressActivitiesAdapter(val mListener: StressActivitiesInteractionListener
     inner class ViewHolder(private val binding: ItemStressActivitiesLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: OStressActivitiesDataModel) {
-            if (data.type?.lowercase() == "workout") {
+            if (data.type?.equals("workout", true) == true) {
                 binding.tvName.setTextColor(
                     ContextCompat.getColor(
                         binding.tvName.context,
                         R.color.oreo_activity_bar_color
                     )
                 )
-                binding.imageView8.setImageResource(R.drawable.ic_walking_lb)
-            } else if (data.type?.lowercase() == "sleep") {
+                binding.imageView8.loadImage(binding.imageView8.context, data.workoutData?.iconUrl)
+
+                val formattedTime =
+                    "${DateFormats.convert24HourTo12(data.workoutData?.startTime).lowercase()} - ${
+                        DateFormats.convert24HourTo12(data.workoutData?.endTime).lowercase()
+                    }"
+                binding.tvActivityTime.text = formattedTime
+                binding.tvName.text = data.workoutData?.getFormattedActivityName()
+
+            } else if (data.type?.equals("sleep", true) == true) {
                 binding.tvName.setTextColor(
                     ContextCompat.getColor(
                         binding.tvName.context,
@@ -33,27 +42,55 @@ class StressActivitiesAdapter(val mListener: StressActivitiesInteractionListener
                     )
                 )
                 binding.imageView8.setImageResource(R.drawable.ic_stress_nap)
-            }
-            binding.tvName.text = data.type
-            val formattedTime = "${
-                DateFormats.formatDate(
-                    data.startTime,
-                    DateFormats.dateTimeFormat5,
-                    DateFormats.time12Meridian
-                )
-            } - ${
-                DateFormats.formatDate(
-                    data.endTime,
-                    DateFormats.dateTimeFormat5,
-                    DateFormats.time12Meridian
-                )
-            }"
-            binding.tvActivityTime.text = formattedTime
 
-            binding.ivMore.setOnClickListener {
-                data.id?.let { it1 -> mListener.onActivitiesSelected(it1) }
+                val formattedTime = "${
+                    DateFormats.formatDate(
+                        data.startTime,
+                        DateFormats.dateTimeFormat5,
+                        DateFormats.time12Meridian
+                    ).lowercase()
+                } - ${
+                    DateFormats.formatDate(
+                        data.endTime,
+                        DateFormats.dateTimeFormat5,
+                        DateFormats.time12Meridian
+                    ).lowercase()
+                }"
+                binding.tvActivityTime.text = formattedTime
+                binding.tvName.text = data.type
+
+
+            } else if (data.type?.equals("nap", true) == true) {
+                binding.tvName.setTextColor(
+                    ContextCompat.getColor(
+                        binding.tvName.context,
+                        R.color.oreo_sleep_bar_color
+                    )
+                )
+                binding.imageView8.setImageResource(R.drawable.ic_stress_nap)
+
+
+                val formattedTime = "${
+                    DateFormats.formatDate(
+                        data.startTime,
+                        DateFormats.dateTimeFormat5,
+                        DateFormats.time12Meridian
+                    ).lowercase()
+                } - ${
+                    DateFormats.formatDate(
+                        data.endTime,
+                        DateFormats.dateTimeFormat5,
+                        DateFormats.time12Meridian
+                    ).lowercase()
+                }"
+                binding.tvActivityTime.text = formattedTime
+                binding.tvName.text = data.type
+
             }
 
+            binding.root.setOnClickListener {
+                mListener.onActivitiesSelected(data)
+            }
         }
     }
 
@@ -79,6 +116,6 @@ class StressActivitiesAdapter(val mListener: StressActivitiesInteractionListener
     }
 
     interface StressActivitiesInteractionListener {
-        fun onActivitiesSelected(id: String)
+        fun onActivitiesSelected(data: OStressActivitiesDataModel)
     }
 }
