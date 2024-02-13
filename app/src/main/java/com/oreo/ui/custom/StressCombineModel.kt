@@ -14,9 +14,11 @@ data class Item(
 )
 
 data class Section(
-    val start: Int,
-    val end: Int,
+    var type: String,
+    var start: Int,
+    var end: Int,
     val color: Int,
     val imageRes: Int,
-    val imageUrl: String?=null
+    val imageUrl: String? = null,
+    var count: Int? = null
 )

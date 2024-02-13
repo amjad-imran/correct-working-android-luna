@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.noisefit.data.local.db.fromJson
 import com.noisefit.luna.R
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.health.Nap
@@ -37,6 +38,7 @@ constructor(
             getWorkoutSections(it)?.let { pos ->
                 sections.add(
                     Section(
+                        "workout",
                         pos.first,
                         pos.second,
                         Color.parseColor("#4c8ed3f1"),
@@ -50,6 +52,7 @@ constructor(
         getSleepSection(dayData.sleep)?.let { pos ->
             sections.add(
                 Section(
+                    "sleep",
                     pos.first,
                     pos.second,
                     Color.parseColor("#4cc5a8ed"),
@@ -58,9 +61,10 @@ constructor(
             )
         }
 
-        dayData.sleep?.naps?.forEach {nap->
+        dayData.sleep?.naps?.forEach { nap ->
             getNapSection(nap)?.let {
                 Section(
+                    "nap",
                     it.first,
                     it.second,
                     Color.parseColor("#4cc5a8ed"),
@@ -76,14 +80,80 @@ constructor(
         }
 
 
+        val combinedSection = combineSections(sections)
+
+
         return StressCombineModel(
-            sections = sections,
+            sections = combinedSection,
             items = items,
             high = 70,
             medium = 35
         )
     }
 
+    private fun combineSections(sections: List<Section>): List<Section>? {
+
+        val sortedSection = sections.sortedBy {
+            it.start
+        }
+
+        LOGS.d("SECTIONS___ Sorted $sortedSection")
+
+
+        val combinedSection = ArrayList<Section>()
+
+        var current = 0
+        var innerLoop = 0
+        while (current < sortedSection.size) {
+            if (sortedSection[current].type.equals("workout", true)) {
+                innerLoop = current
+                var count = 1
+
+                val sectionStart = sortedSection[current].start
+                var sectionEnd = sortedSection[current].end
+                while (innerLoop < sortedSection.size) {
+                    val nextItemPos = innerLoop + 1
+
+                    if (nextItemPos == sortedSection.size) break
+
+                    if (sortedSection[innerLoop].end + 1 == sortedSection[innerLoop + 1].start ||
+                        sortedSection[innerLoop].start == sortedSection[innerLoop + 1].start
+                    ) {
+                        sectionEnd = sortedSection[innerLoop + 1].end
+                        count++
+                    } else {
+                        break
+                    }
+
+                    innerLoop++
+                }
+                current = innerLoop
+
+                val combinedSec = sortedSection[current].copy()
+
+                if (count > 1) {
+                    combinedSec.start = sectionStart
+                    combinedSec.end = sectionEnd
+                    combinedSec.type = "combined"
+                    combinedSec.count = count
+                }
+
+
+
+                combinedSection.add(combinedSec)
+            } else {
+                combinedSection.add(sortedSection[current])
+            }
+
+            current++
+        }
+
+        LOGS.d("SECTIONS___ $sortedSection \n $combinedSection")
+
+        return combinedSection
+
+
+    }
 
 
     private fun getWorkoutSections(it: OActivityListModal): Triple<Int, Int, String?>? {
@@ -108,7 +178,7 @@ constructor(
         return Triple(startPos, calculatedDuration.toInt(), it.iconUrl)
     }
 
-    private fun getNapSection(nap: Nap) : Pair<Int, Int>? {
+    private fun getNapSection(nap: Nap): Pair<Int, Int>? {
 
         val startTime = nap.startTime
         val endTime = nap.endTime
@@ -160,8 +230,6 @@ constructor(
 
             return Pair(0, endPos)
         }
-
-
 
 
     }

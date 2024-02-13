@@ -45,6 +45,7 @@
         lineChart:chartLineColor="#FFFFFF"
         lineChart:chartLineWidth="2dp"
         lineChart:gridColor="#80FFFFFF"
+        lineChart:combineTextSize="16sp"
         lineChart:highColor="#ff922d"
         lineChart:layout_constraintEnd_toEndOf="parent"
         lineChart:layout_constraintStart_toStartOf="parent"

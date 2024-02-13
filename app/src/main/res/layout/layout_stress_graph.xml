@@ -18,6 +18,7 @@
         lineChart:layout_constraintStart_toStartOf="parent"
         lineChart:layout_constraintTop_toTopOf="parent"
         lineChart:lowColor="#12cba9"
+        lineChart:combineTextSize="16sp"
         lineChart:mediumColor="#ffe561"
         lineChart:restLineColor="#40FFFFFF"
         lineChart:topWith="50dp"

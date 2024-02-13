@@ -53,6 +53,7 @@ class StressCombinedChart : View {
     private var topWith = 0f
     private var xTextSize = 0f
     private var yTextSize = 0f
+    private var combineTextSize = 0f
     lateinit var bgPaint: Paint
     lateinit var bgLeftPaint: Paint
     lateinit var bgRightPaint: Paint
@@ -91,6 +92,7 @@ class StressCombinedChart : View {
     private var isInteracting = false
     private var touchX: Float? = null
     lateinit var overlayLinePaint: Paint
+    lateinit var topCombinedPaint: Paint
     lateinit var stressDot: Bitmap
     lateinit var calmDot: Bitmap
     lateinit var focusedDot: Bitmap
@@ -130,6 +132,7 @@ class StressCombinedChart : View {
         xMin = ta.getInt(R.styleable.CombineLineChart_xMin, 0)
         xTextSize = ta.getDimension(R.styleable.CombineLineChart_xTextSize, 8f)
         yTextSize = ta.getDimension(R.styleable.CombineLineChart_yTextSize, 12f)
+        combineTextSize = ta.getDimension(R.styleable.CombineLineChart_combineTextSize, 12f)
         leftWith = ta.getDimension(R.styleable.CombineLineChart_leftWith, 16f)
         rightWith = ta.getDimension(R.styleable.CombineLineChart_rightWith, 8f)
         bottomWith = ta.getDimension(R.styleable.CombineLineChart_bottomWith, 16f)
@@ -181,6 +184,12 @@ class StressCombinedChart : View {
             ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.gilroy_medium)
         bgPaint = Paint()
         bgPaint.color = bgColor
+
+        topCombinedPaint = Paint().apply {
+            color = Color.WHITE
+            textSize = combineTextSize
+            typeface = fontGilroy
+        }
 
         overlayLinePaint = Paint()
         overlayLinePaint.color = Color.parseColor("#939aa3")
@@ -445,55 +454,73 @@ class StressCombinedChart : View {
         unitHLenth = (mWith - leftWith - rightWith) / (list.size - 1)
         val imageSize = dip2px(16f)
         for (i in combineModel!!.sections!!.indices) {
-            val (start, end, color) = combineModel!!.sections!![i]
-            val calculatedEnd = if (end < 95) {
-                end + 1
+            val section = combineModel!!.sections!![i]
+            val calculatedEnd = if (section.end < 95) {
+                section.end + 1
             } else {
-                end
+                section.end
             }
 
 
-            rectF.left = start * unitHLenth + leftWith
+            rectF.left = section.start * unitHLenth + leftWith
             rectF.top = topWith
-            rectF.right = rectF.left + (calculatedEnd - start) * unitHLenth
+            rectF.right = rectF.left + (calculatedEnd - section.start) * unitHLenth
             rectF.bottom = mHeight - bottomWith
             chartLineFillPaint.setShader(resMap!![i]!!.first)
             canvas.drawRect(rectF, chartLineFillPaint)
-            rectF.left = start * unitHLenth + leftWith
-            rectF.top = topWith
-            rectF.right = rectF.left + (calculatedEnd - start) * unitHLenth
-            rectF.bottom = topWith + dip2px(2f)
-            gridPaint.color = color
+
+            rectF.left = section.start * unitHLenth + leftWith
+            rectF.top = topWith - dip2px(1f)
+            rectF.right = rectF.left + (calculatedEnd - section.start) * unitHLenth
+            rectF.bottom = topWith + dip2px(1f)
+            gridPaint.color = section.color
             canvas.drawRect(rectF, gridPaint)
-            rectF.left = (rectF.right + rectF.left) / 2 - imageSize / 2f
-            rectF.top = topWith - imageSize - dip2px(10f)
-            rectF.right = rectF.left + imageSize
-            rectF.bottom = rectF.top + imageSize
 
-            val imageUrl = resMap[i]?.third
-            val bitmap = bitmapMap[i]
-            if (bitmap != null) {
-                canvas.drawBitmap(bitmap, null, rectF, workoutPaint)
+
+
+
+            if (section.type.equals("combined", true)) {
+
+                val text = "${section.count}"
+                topCombinedPaint.getTextBounds(text, 0, text.length, xTextBounds)
+                canvas.drawText(
+                    text,
+                    (rectF.left + rectF.right) / 2 - xTextBounds!!.width() / 2f,
+                    rectF.top-xTextBounds!!.height(),
+                    topCombinedPaint
+                )
+
             } else {
-                if (imageUrl.isNullOrEmpty()) {
-                    if (resMap[i]!!.second != null) {
-                        canvas.drawBitmap(resMap[i]!!.second!!, null, rectF, null)
-                    }
-                } else {
-                    Glide.with(context)
-                        .asBitmap()
-                        .load(imageUrl)
-                        .into(object : CustomTarget<Bitmap?>(imageSize, imageSize) {
-                            override fun onResourceReady(
-                                resource: Bitmap,
-                                transition: Transition<in Bitmap?>?
-                            ) {
-                                bitmapMap[i] = resource
-                                postInvalidate()
-                            }
+                rectF.left = (rectF.right + rectF.left) / 2 - imageSize / 2f
+                rectF.top = topWith - imageSize - dip2px(10f)
+                rectF.right = rectF.left + imageSize
+                rectF.bottom = rectF.top + imageSize
 
-                            override fun onLoadCleared(placeholder: Drawable?) {}
-                        })
+                val imageUrl = resMap[i]?.third
+                val bitmap = bitmapMap[i]
+                if (bitmap != null) {
+                    canvas.drawBitmap(bitmap, null, rectF, workoutPaint)
+                } else {
+                    if (imageUrl.isNullOrEmpty()) {
+                        if (resMap[i]!!.second != null) {
+                            canvas.drawBitmap(resMap[i]!!.second!!, null, rectF, null)
+                        }
+                    } else {
+                        Glide.with(context)
+                            .asBitmap()
+                            .load(imageUrl)
+                            .into(object : CustomTarget<Bitmap?>(imageSize, imageSize) {
+                                override fun onResourceReady(
+                                    resource: Bitmap,
+                                    transition: Transition<in Bitmap?>?
+                                ) {
+                                    bitmapMap[i] = resource
+                                    postInvalidate()
+                                }
+
+                                override fun onLoadCleared(placeholder: Drawable?) {}
+                            })
+                    }
                 }
             }
         }
@@ -736,18 +763,17 @@ class StressCombinedChart : View {
                 }
 
                 MotionEvent.ACTION_UP -> {
-                    if(!isInteracting){
-                        if(event.y<dip2px(50f)){
+                    if (!isInteracting) {
+                        if (event.y < dip2px(50f)) {
                             listener?.onTopClicked()
                         }
                     }
 
-
                     handler.removeCallbacks(mLongPressed)
                     isInteracting = false
                     listener?.isInteractionOnGoing(false)
-                    invalidate()
                     touchX = 0.0f
+                    invalidate()
                     return true
                 }
             }
