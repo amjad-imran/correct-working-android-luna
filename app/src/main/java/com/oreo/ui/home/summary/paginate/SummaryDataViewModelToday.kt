@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -483,7 +484,15 @@ constructor(
                 }
             }
             val combinedData = oreoStressDataConvertor.getStressCombinedData(healthData)
-            userActivities.add(OHealthOverview.StressGraph(combinedData))
+            userActivities.add(
+                OHealthOverview.StressGraph(
+                    combinedData,
+                    healthData.stress?.stressValue?.value ?: 0,
+                    healthData.stress?.stressValue?.lastUpdated ?: 0L,
+                    getStressStatus(healthData.stress?.stressValue?.value ?: 0),
+                    true
+                )
+            )
 
 
             stateSleepAvgCard.postValue(
@@ -507,6 +516,16 @@ constructor(
             stateWorkouts.postValue(healthData.activity?.workout ?: ArrayList())
             loadNapsToConfirm()
 
+        }
+    }
+
+    fun getStressStatus(value: Int?): String {
+        return when (value) {
+            0 -> ""
+            in 1..34 -> "Calm"
+            in 35..69 -> "Focussed"
+            in 70..100 -> "Stressed"
+            else -> ""
         }
     }
 

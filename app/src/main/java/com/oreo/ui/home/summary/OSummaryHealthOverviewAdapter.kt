@@ -406,6 +406,30 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         ) {
             binding.graphStress.updateData(data.data)
 
+            if (data.value == 0) {
+                binding.tvStressValue.gone()
+                binding.tvStressStatus.gone()
+                binding.tvLastUpdate.gone()
+            } else {
+                binding.tvStressValue.visible()
+                binding.tvStressStatus.visible()
+                binding.tvLastUpdate.visible()
+
+                binding.tvStressValue.text = "${data.value}"
+                binding.tvStressStatus.text = data.valueStatus
+
+                if (data.isToday) {
+                    val lastUpdatedTimestamp = data.timeStamp
+                    if (lastUpdatedTimestamp == 0L) {
+                        binding.tvLastUpdate.text = ""
+                    } else {
+                        binding.tvLastUpdate.text =
+                            DateFormats.getRelativeTime(lastUpdatedTimestamp)
+                    }
+                } else {
+                    binding.tvLastUpdate.text = ""
+                }
+            }
 
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.StressGraphClicked)

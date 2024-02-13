@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:lineChart="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.oreo.ui.custom.StressCombinedChart
+        android:id="@+id/graphStress"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        lineChart:bottomWith="30dp"
+        lineChart:chartLineColor="#FFFFFF"
+        lineChart:chartLineWidth="2dp"
+        lineChart:gridColor="#80FFFFFF"
+        lineChart:highColor="#ff922d"
+        lineChart:layout_constraintBottom_toBottomOf="parent"
+        lineChart:layout_constraintEnd_toEndOf="parent"
+        lineChart:layout_constraintStart_toStartOf="parent"
+        lineChart:layout_constraintTop_toTopOf="parent"
+        lineChart:lowColor="#12cba9"
+        lineChart:mediumColor="#ffe561"
+        lineChart:restLineColor="#40FFFFFF"
+        lineChart:topWith="50dp"
+        lineChart:xMax="100"
+        lineChart:xMin="0"
+        lineChart:xTextColor="#FFFFFF"
+        lineChart:xTextSize="12sp"
+        lineChart:yTextSize="12sp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

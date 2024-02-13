@@ -22,7 +22,7 @@
 
             <include
                 android:id="@+id/lytStressMidGraph"
-                layout="@layout/item_stress_graph"
+                layout="@layout/layout_stress_graph"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="26dp"

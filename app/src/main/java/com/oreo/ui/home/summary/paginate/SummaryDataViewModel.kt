@@ -157,7 +157,15 @@ constructor(
                     )
                 }
             }
-            userActivities.add(OHealthOverview.StressGraph(oreoStressDataConvertor.getStressCombinedData(healthData)))
+            userActivities.add(
+                OHealthOverview.StressGraph(
+                    oreoStressDataConvertor.getStressCombinedData(healthData),
+                    healthData.stress?.stressValue?.value ?: 0,
+                    healthData.stress?.stressValue?.lastUpdated ?: 0L,
+                    getStressStatus(healthData.stress?.stressValue?.value ?: 0),
+                    false
+                )
+            )
 
 
             healthOverviewData.postValue(userActivities)
@@ -166,6 +174,16 @@ constructor(
 
             stateWorkouts.postValue(healthData.activity?.workout ?: ArrayList())
 
+        }
+    }
+
+    fun getStressStatus(value: Int?): String {
+        return when (value) {
+            0 -> ""
+            in 1..34 -> "Calm"
+            in 35..69 -> "Focussed"
+            in 70..100 -> "Stressed"
+            else -> ""
         }
     }
 

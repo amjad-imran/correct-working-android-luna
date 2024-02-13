@@ -91,9 +91,9 @@ class StressCombinedChart : View {
     private var isInteracting = false
     private var touchX: Float? = null
     lateinit var overlayLinePaint: Paint
-    private var stressDot: Bitmap? = null
-    private var calmDot: Bitmap? = null
-    private var focusedDot: Bitmap? = null
+    lateinit var stressDot: Bitmap
+    lateinit var calmDot: Bitmap
+    lateinit var focusedDot: Bitmap
     private var listener: OnStressClickAction? = null
     private var lastSentValuePos: Int? = null
     private val effect =
@@ -611,6 +611,28 @@ class StressCombinedChart : View {
         }
     }
 
+    private fun drawDot(canvas: Canvas, value: Int) {
+
+        val dotBitmap = when (value) {
+            in 1..34 -> calmDot
+            in 35..69 -> focusedDot
+            in 70..100 -> stressDot
+            else -> calmDot
+        }
+
+        val width = dotBitmap.width.toFloat() / 2
+        val height = dotBitmap.height.toFloat() / 2
+
+        canvas.drawBitmap(
+            dotBitmap,
+            touchX!! - width,
+            getDotHeight(value) - height,
+            paintStressed
+        )
+
+
+    }
+
     private fun drawOverlay(canvas: Canvas) {
         if (!isInteracting) return
         if (touchX != null) {
@@ -620,18 +642,14 @@ class StressCombinedChart : View {
                 rectF.right = touchX!! + 2
                 rectF.top = topWith
                 rectF.bottom = mHeight - bottomWith
-                val width = calmDot!!.width.toFloat() / 2
-                val height = calmDot!!.height.toFloat() / 2
+
                 val value: Pair<Int, Int> = getClickedValue(touchX!!)
                 d("CLICKED_VALUE value " + value + " Touch " + touchX!!.toInt())
                 canvas.drawRect(rectF, overlayLinePaint)
-                if (value.second as Int != 0) {
-                    canvas.drawBitmap(
-                        calmDot!!,
-                        touchX!! - width,
-                        getDotHeight(value.second as Int) - height,
-                        paintStressed
-                    )
+                if (value.second != 0) {
+
+                    drawDot(canvas, value.second)
+
                 }
                 if (listener != null) {
                     val position = value.first as Int

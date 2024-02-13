@@ -21,7 +21,13 @@ sealed class OHealthOverview {
     data class InfoVideo(val type: VideoInfoType, val data: InfoVideoData) :
         OHealthOverview()
 
-    data class StressGraph(val data: StressCombineModel) :
+    data class StressGraph(
+        val data: StressCombineModel,
+        val value: Int,
+        val timeStamp: Long,
+        val valueStatus: String,
+        val isToday: Boolean
+    ) :
         OHealthOverview()
 
 
