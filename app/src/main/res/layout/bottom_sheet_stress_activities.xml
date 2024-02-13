@@ -51,6 +51,7 @@
                 android:layout_marginStart="@dimen/side_margin"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="@dimen/side_margin"
+                android:layout_marginBottom="20dp"
                 android:nestedScrollingEnabled="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
