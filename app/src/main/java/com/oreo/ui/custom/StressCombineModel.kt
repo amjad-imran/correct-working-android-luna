@@ -17,5 +17,6 @@ data class Section(
     val start: Int,
     val end: Int,
     val color: Int,
-    val imageRes: Int
+    val imageRes: Int,
+    val imageUrl: String?=null
 )

@@ -66,7 +66,8 @@ constructor(
                         pos.first,
                         pos.second,
                         Color.parseColor("#4c8ed3f1"),
-                        R.drawable.icon_stress_sport
+                        R.drawable.icon_stress_sport,
+                        pos.third
                     )
                 )
             }
@@ -98,7 +99,7 @@ constructor(
         )
     }
 
-    private fun getWorkoutSections(it: OActivityListModal): Pair<Int, Int>? {
+    private fun getWorkoutSections(it: OActivityListModal): Triple<Int, Int, String?>? {
         val startTimeStamp = DateFormats.convertDateTimeToTimeStamp(
             "${it.date} ${it.startTime}",
             DateFormats.dateTimeFormat5
@@ -117,7 +118,7 @@ constructor(
             calculatedDuration = 95
         }
 
-        return Pair(startPos, calculatedDuration.toInt())
+        return Triple(startPos, calculatedDuration.toInt(), it.iconUrl)
     }
 
     /**
@@ -177,7 +178,6 @@ constructor(
             return Pair(0, endPos)
         }
     }
-
 
 
 }

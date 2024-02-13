@@ -75,7 +75,6 @@ class OStressDataMovementFragment :
         viewModel.date?.let {
             mainViewModel.getStressData(it)?.let { dayData ->
 
-                viewModel.dayTimeMovement = dayData.activity?.daytimeMovement?.movement
                 viewModel.isSelectedMode = false
 
                 viewModel.defaultMeterData = Pair(
@@ -89,7 +88,7 @@ class OStressDataMovementFragment :
                 )
                 initCombineChart(dayData)
                 val combinedData =
-                    viewModel.getCombinedMovementData(viewModel.dayTimeMovement, true)
+                    viewModel.getCombinedMovementData(dayData.activity?.daytimeMovement?.movement, true)
                 viewModel.dayTimeMovement = combinedData
 
                 setMovementData(combinedData, viewModel.isSelectedMode, -1)
@@ -342,7 +341,6 @@ class OStressDataMovementFragment :
         selectedType: Int
     ) {
 
-
         binding.lytHighMovement.apply {
             tvHeader.text = getString(R.string.text_high_movement)
             compareChart.updateInitData(3, requireContext().getColor(R.color.white))
@@ -457,42 +455,6 @@ class OStressDataMovementFragment :
                 dayData
             )
         )
-
-        /* btnHigh.setOnClickListener {
-             val highlights: MutableList<Int> =
-                 ArrayList()
-             highlights.add(10)
-             highlights.add(11)
-             highlights.add(12)
-             highlights.add(13)
-             highlights.add(43)
-             highlights.add(44)
-             highlights.add(50)
-             highlights.add(74)
-             highlights.add(75)
-             combineLineChart.updateHighlight(highlights, Color.RED)
-         }
-         btnMed.setOnClickListener {
-             val highlights: MutableList<Int> =
-                 ArrayList()
-             highlights.add(20)
-             highlights.add(21)
-             highlights.add(22)
-             highlights.add(23)
-             highlights.add(53)
-             highlights.add(54)
-             combineLineChart.updateHighlight(highlights, Color.YELLOW)
-         }
-         btnLow.setOnClickListener {
-             val highlights: MutableList<Int> =
-                 ArrayList()
-             highlights.add(70)
-             highlights.add(71)
-             highlights.add(72)
-             highlights.add(73)
-             highlights.add(74)
-             combineLineChart.updateHighlight(highlights, Color.parseColor("#FF009688"))
-         }*/
     }
 
 }

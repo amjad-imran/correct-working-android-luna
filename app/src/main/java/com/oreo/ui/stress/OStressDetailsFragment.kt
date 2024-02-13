@@ -28,6 +28,7 @@ class OStressDetailsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedViewModel.lastSelectedStressType = StressType.NO_DATA
+        binding.lytHeader.view1.invisible()//TODO un comment on receiving i data
         setViewPager()
     }
 
@@ -122,7 +123,6 @@ class OStressDetailsFragment :
     }
 
     override fun initListener() {
-        binding.lytHeader.view1.visible()
         binding.lytHeader.ivAddFriend.invisible()
         binding.lytHeader.view1.loadImage(requireActivity(), R.drawable.ic_info_oreo)
         binding.lytHeader.tvTitle.text = getString(R.string.text_stress)

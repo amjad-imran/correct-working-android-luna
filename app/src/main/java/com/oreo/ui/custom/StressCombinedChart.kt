@@ -9,9 +9,12 @@ import android.graphics.DashPathEffect
 import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Shader
+import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
@@ -21,10 +24,13 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.noisefit.luna.R
 import com.noisefit_commans.utils.LOGS.d
 import com.oreo.ui.stress.OnStressClickAction
-import java.util.Collections
+
 
 class StressCombinedChart : View {
     private var bgColor = 0
@@ -67,18 +73,19 @@ class StressCombinedChart : View {
     private var xTextBounds: Rect? = null
     private var combineModel: StressCombineModel? = null
     private val list = ArrayList<Item>()
-    private val pointsValueMapping: MutableMap<Int?, Int?> = HashMap<Int?, Int?>()
     private val highlightIndexs: MutableList<Int> = ArrayList()
     private var isHighlighted = false
     private var highlightColor = 0
     private var showXAxis = true
     private var interval = 0
-    private var rectF: RectF? = null
+    lateinit var rectF: RectF
+    lateinit var workoutPaint: Paint
     private var linearGradient: LinearGradient? = null
     private var chartLineGradient: LinearGradient? = null
     private var chartLineGradientInteracting: LinearGradient? = null
     private var linearGradientShadow: LinearGradient? = null
-    private var resMap: MutableMap<Int, Pair<LinearGradient, Bitmap?>>? = null
+    private var resMap = HashMap<Int, Triple<LinearGradient, Bitmap?, String?>>()
+    private var bitmapMap = HashMap<Int, Bitmap>()
     private val shadowWidth = dip2px(100f)
     private var interactiveMode = false
     private var isInteracting = false
@@ -167,6 +174,9 @@ class StressCombinedChart : View {
     }
 
     private fun initPaint() {
+        workoutPaint = Paint()
+        workoutPaint.setColorFilter(PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN))
+
         val fontGilroy =
             ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.gilroy_medium)
         bgPaint = Paint()
@@ -310,7 +320,7 @@ class StressCombinedChart : View {
         var section: Section
         for (i in combineModel!!.sections!!.indices) {
             section = combineModel!!.sections!![i]
-            resMap!![i] = Pair(
+            resMap[i] = Triple(
                 LinearGradient(
                     0f,
                     0f,
@@ -319,7 +329,7 @@ class StressCombinedChart : View {
                     section.color,
                     Color.TRANSPARENT,
                     Shader.TileMode.CLAMP
-                ), BitmapFactory.decodeResource(resources, section.imageRes)
+                ), BitmapFactory.decodeResource(resources, section.imageRes), section.imageUrl
             )
         }
     }
@@ -385,12 +395,13 @@ class StressCombinedChart : View {
 
     private fun drawDesc(canvas: Canvas) {
         if (isInteracting) return
-        rectF!!.left = mWith - rightWith - shadowWidth
-        rectF!!.top = topWith
-        rectF!!.right = mWith - rightWith
-        rectF!!.bottom = mHeight - bottomWith
+        rectF.left = mWith - rightWith - shadowWidth
+        rectF.top = topWith
+        rectF.right = mWith - rightWith
+        rectF.bottom = mHeight - bottomWith
+
         chartLineFillPaint.setShader(linearGradientShadow)
-        canvas.drawRect(rectF!!, chartLineFillPaint)
+        canvas.drawRect(rectF, chartLineFillPaint)
         var high = 0f
         if (combineModel == null) return
         if (combineModel!!.high > 0) {
@@ -432,27 +443,58 @@ class StressCombinedChart : View {
             return
         }
         unitHLenth = (mWith - leftWith - rightWith) / (list.size - 1)
-        val imageSize = dip2px(20f)
+        val imageSize = dip2px(16f)
         for (i in combineModel!!.sections!!.indices) {
             val (start, end, color) = combineModel!!.sections!![i]
-            rectF!!.left = start * unitHLenth + leftWith
-            rectF!!.top = topWith
-            rectF!!.right = rectF!!.left + (end - start) * unitHLenth
-            rectF!!.bottom = mHeight - bottomWith
+            val calculatedEnd = if (end < 95) {
+                end + 1
+            } else {
+                end
+            }
+
+
+            rectF.left = start * unitHLenth + leftWith
+            rectF.top = topWith
+            rectF.right = rectF.left + (calculatedEnd - start) * unitHLenth
+            rectF.bottom = mHeight - bottomWith
             chartLineFillPaint.setShader(resMap!![i]!!.first)
-            canvas.drawRect(rectF!!, chartLineFillPaint)
-            rectF!!.left = start * unitHLenth + leftWith
-            rectF!!.top = topWith
-            rectF!!.right = rectF!!.left + (end - start) * unitHLenth
-            rectF!!.bottom = topWith + dip2px(2f)
+            canvas.drawRect(rectF, chartLineFillPaint)
+            rectF.left = start * unitHLenth + leftWith
+            rectF.top = topWith
+            rectF.right = rectF.left + (calculatedEnd - start) * unitHLenth
+            rectF.bottom = topWith + dip2px(2f)
             gridPaint.color = color
-            canvas.drawRect(rectF!!, gridPaint)
-            rectF!!.left = (rectF!!.right + rectF!!.left) / 2 - imageSize / 2f
-            rectF!!.top = topWith - imageSize - dip2px(10f)
-            rectF!!.right = rectF!!.left + imageSize
-            rectF!!.bottom = rectF!!.top + imageSize
-            if (resMap!![i]!!.second != null) {
-                canvas.drawBitmap(resMap!![i]!!.second!!, null, rectF!!, null)
+            canvas.drawRect(rectF, gridPaint)
+            rectF.left = (rectF.right + rectF.left) / 2 - imageSize / 2f
+            rectF.top = topWith - imageSize - dip2px(10f)
+            rectF.right = rectF.left + imageSize
+            rectF.bottom = rectF.top + imageSize
+
+            val imageUrl = resMap[i]?.third
+            val bitmap = bitmapMap[i]
+            if (bitmap != null) {
+                canvas.drawBitmap(bitmap, null, rectF, workoutPaint)
+            } else {
+                if (imageUrl.isNullOrEmpty()) {
+                    if (resMap[i]!!.second != null) {
+                        canvas.drawBitmap(resMap[i]!!.second!!, null, rectF, null)
+                    }
+                } else {
+                    Glide.with(context)
+                        .asBitmap()
+                        .load(imageUrl)
+                        .into(object : CustomTarget<Bitmap?>(imageSize, imageSize) {
+                            override fun onResourceReady(
+                                resource: Bitmap,
+                                transition: Transition<in Bitmap?>?
+                            ) {
+                                bitmapMap[i] = resource
+                                postInvalidate()
+                            }
+
+                            override fun onLoadCleared(placeholder: Drawable?) {}
+                        })
+                }
             }
         }
         var current: Item?
@@ -464,7 +506,6 @@ class StressCombinedChart : View {
                 mHeight - bottomWith - current!!.value * (mHeight - topWith - bottomWith) / (max - xMin)
             path.reset()
             path.moveTo(x, y)
-            pointsValueMapping[x.toInt()] = current.value
             if (i < list.size - 1) {
                 next = list[i + 1]
                 if (current.value > 0) {
@@ -483,7 +524,7 @@ class StressCombinedChart : View {
                             chartLinePaint.color = highlightColor
                             fillPath.reset()
                         } else {
-                            if (!isHighlighted /*highlightIndexs.isEmpty()*/) {
+                            if (!isHighlighted) {
                                 if (isInteracting) {
                                     chartLinePaint.setShader(chartLineGradientInteracting)
                                 } else {
@@ -555,7 +596,11 @@ class StressCombinedChart : View {
                         val y1 =
                             mHeight - bottomWith - list[lastIndex]!!.value * (mHeight - topWith - bottomWith) / (max - xMin)
                         chartLinePaint.setShader(null)
-                        chartLinePaint.color = Color.WHITE
+                        chartLinePaint.color = if (isHighlighted || isInteracting) {
+                            Color.GRAY
+                        } else {
+                            Color.WHITE
+                        }
                         chartLinePaint.setPathEffect(effect)
                         canvas.drawLine(x, y, x1, y1, chartLinePaint)
                         chartLinePaint.setPathEffect(null)
@@ -689,9 +734,9 @@ class StressCombinedChart : View {
     }
 
 
-
     private val handler = Handler(Looper.getMainLooper())
     private var mLongPressed = Runnable {
+        if (isHighlighted) return@Runnable
         isInteracting = true
         invalidate()
         listener?.isInteractionOnGoing(true)
