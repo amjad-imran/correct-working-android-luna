@@ -216,17 +216,17 @@ class SleepGraphView(var mContext: Context) : View(
 
 
                     }
-                    val range = sleepArray!![i].startTime + " - " + sleepArray!![i].endTime
 
                     tooltipEntryArray!!.add(
                         ToolTipEntry(
-                            start,
-                            end,
-                            top,
-                            bottom,
-                            rowData.duration,
-                            rowData.sleepType,
-                            range
+                            x1 = start,
+                            x2 = end,
+                            y1 = top,
+                            y2 = bottom,
+                            duration = rowData.duration,
+                            type = rowData.sleepType,
+                            startTime = sleepArray!![i].startTime,
+                            endTime = sleepArray!![i].endTime
                         )
                     )
                     start = end
@@ -465,8 +465,10 @@ data class ToolTipEntry(
     var x2: Float = 0f,
     var y1: Float = 0f,
     var y2: Float = 0f,
-    var value: Int = 0,
+    var duration: Int = 0,
     var type: String = "",
+    val startTime:String?=null,
+    val endTime:String?=null,
     val range: String = "",
 )
 

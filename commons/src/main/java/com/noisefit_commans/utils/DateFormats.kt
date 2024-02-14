@@ -111,6 +111,9 @@ object DateFormats {
     val timeFormat12 = SimpleDateFormat("hh:mm a", defaultLocale)
 
     @SuppressLint("ConstantLocale")
+    val timeFormat12_unit = SimpleDateFormat("a", defaultLocale)
+
+    @SuppressLint("ConstantLocale")
     val timeFormat12_2 = SimpleDateFormat("hh:mm", defaultLocale)
 
 

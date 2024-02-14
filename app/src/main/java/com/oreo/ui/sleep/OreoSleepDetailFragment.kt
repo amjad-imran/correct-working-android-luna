@@ -24,7 +24,10 @@ import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.ui.custom.NightTimeGraphViewOreo
 import com.noisefit_commans.ui.custom.SleepGraphViewOreo
+import com.noisefit_commans.ui.custom.SleepStageAction
+import com.noisefit_commans.ui.custom.ToolTipEntry
 import com.noisefit_commans.utils.AppLogs
+import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
@@ -346,10 +349,82 @@ class OreoSleepDetailFragment :
 
     }
 
+    fun setInteractionDate(data: ToolTipEntry) {
+        binding.lytSSAnalysis.lytSleepInteraction.apply {
+
+            if (data.type.equals("deep", true)) {
+                this.tvSleepType.text = getString(R.string.text_deep_sleep)
+                this.tvSleepType.setTextColor(Color.parseColor("#a882ff"))
+
+            } else if (data.type.equals("light", true)) {
+                this.tvSleepType.text = getString(R.string.text_light_sleep)
+                this.tvSleepType.setTextColor(Color.parseColor("#cc9cfb"))
+
+            } else if (data.type.equals("rem", true)) {
+                this.tvSleepType.text = getString(R.string.text_rem_sleep)
+                this.tvSleepType.setTextColor(Color.parseColor("#cbade8"))
+
+            } else if (data.type.equals("awake", true)) {
+                this.tvSleepType.text = getString(R.string.text_awake)
+                this.tvSleepType.setTextColor(Color.parseColor("#e5dafa"))
+            }
+
+            val startTime = DateFormats.formatDate(
+                data.startTime,
+                DateFormats.dateTimeFormat5,
+                DateFormats.timeFormat12_2
+            )
+            val startTimeUnit = DateFormats.formatDate(
+                data.startTime,
+                DateFormats.dateTimeFormat5,
+                DateFormats.timeFormat12_unit
+            )
+            val endTime = DateFormats.formatDate(
+                data.endTime,
+                DateFormats.dateTimeFormat5,
+                DateFormats.timeFormat12_2
+            )
+            val endTimeUnit = DateFormats.formatDate(
+                data.endTime,
+                DateFormats.dateTimeFormat5,
+                DateFormats.timeFormat12_unit
+            )
+
+            this.tvStartTime.text = startTime
+            this.tvStartUnit.text = startTimeUnit
+            this.tvEndTime.text = endTime
+            this.tvEndUnit.text = endTimeUnit
+
+        }
+    }
+
 
     private fun initSleepAnalysisGraph(hourlyBreakup: List<SleepHourlyBreakup>?) {
 
         sleepDayGraphView = SleepGraphViewOreo(requireContext())
+        sleepDayGraphView?.setClickListener(object : SleepStageAction {
+            override fun onValueSelected(data: ToolTipEntry) {
+                setInteractionDate(data)
+            }
+
+            override fun isInteractionOnGoing(onGoing: Boolean) {
+                if (onGoing) {
+                    binding.lytSSAnalysis.lytSleepInteraction.root.visible()
+                    binding.lytSSAnalysis.lytTotalSleep.root.gone()
+                } else {
+                    binding.lytSSAnalysis.lytSleepInteraction.root.gone()
+                    binding.lytSSAnalysis.lytTotalSleep.root.visible()
+                }
+            }
+        })
+
+        if (hourlyBreakup.isNullOrEmpty()) {
+            sleepDayGraphView?.enableInteractiveMode(false)
+        } else {
+            sleepDayGraphView?.enableInteractiveMode(true)
+        }
+
+
         binding.lytSSAnalysis.flSleepGraph.removeAllViews()
         binding.lytSSAnalysis.flSleepGraph.addView(sleepDayGraphView)
 
@@ -954,11 +1029,28 @@ class OreoSleepDetailFragment :
         showAverageBloodOxygen(dayData.oxy)
 
         mSleepStageAdapter.setData(viewModel.getStepAnalysisData(dayData))
+
+        binding.lytSSAnalysis.lytTotalSleep.apply {
+
+            if (dayData.totalSleep != null) {
+                val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
+                    dayData.totalSleep?.value ?: 0
+                )
+                this.tvHour.text = "$hour"
+                this.tvMin.text = "$minute"
+            } else {
+
+                this.tvHour.text = "_"
+                this.tvMin.text = "_"
+            }
+
+        }
+
         initSleepAnalysisGraph(dayData.hourly_breakup)
 
         setNightTimeMovement(dayData.night_time_movement)
 
-        setNapData(dayData.naps,dayData.date)
+        setNapData(dayData.naps, dayData.date)
 
     }
 
@@ -973,7 +1065,7 @@ class OreoSleepDetailFragment :
 
         binding.lytNaps.lytNap.rvNap.layoutManager =
             LinearLayoutManager(binding.lytNaps.lytNap.rvNap.context)
-        binding.lytNaps.lytNap.rvNap.adapter = DashNapAdapter(naps,date,true).apply {
+        binding.lytNaps.lytNap.rvNap.adapter = DashNapAdapter(naps, date, true).apply {
 
             this.setOnNapSelectedListener(object : OnNapSelectedAction {
                 override fun onNapSelected(napId: String) {

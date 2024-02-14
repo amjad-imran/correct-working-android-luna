@@ -1023,4 +1023,8 @@
     <string name="text_wear_ring_for">Wear your ring consistently for 15 days to see deviation in your skin temperature from your personalised baseline.</string>
     <string name="text_intensity_not_capture">Could not capture intensity data for this workout because of either an improper fit of the ring or lack of movement.</string>
     <string name="text_ring_lo_battert_stop_message">Your workout has ended because your ring battery is low. Make sure your ring is charged and on your finger, and within range of your device.</string>
+    <string name="text_deep_sleep">Deep sleep</string>
+    <string name="text_light_sleep">Light sleep</string>
+    <string name="text_rem_sleep">REM sleep</string>
+    <string name="text_awake">Awake</string>
 </resources>

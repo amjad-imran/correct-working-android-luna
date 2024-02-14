@@ -91,7 +91,7 @@ class NightTimeGraphViewOreo(var mContext: Context) : View(
                 canvas.drawText(
                     endTime.lowercase(),
                     (width - textWidth - endPadding),
-                    sectionHeight * 4 - SleepGraphViewOreo.pxFromDp(context, 2.0f),
+                    sectionHeight * 4 - pxFromDp(context, 2.0f),
                     mTextPaintEdge
                 )
             }
@@ -167,10 +167,14 @@ class NightTimeGraphViewOreo(var mContext: Context) : View(
             canvas.drawText(
                 "12 am",
                 (width - textWidth - endPadding),
-                sectionHeight * 4 - SleepGraphViewOreo.pxFromDp(context, 2.0f),
+                sectionHeight * 4 - pxFromDp(context, 2.0f),
                 mTextPaint
             )
         }
+    }
+
+    fun pxFromDp(dp: Float): Float {
+        return dp * this.resources.displayMetrics.density
     }
 
     private fun drawLines(sectionHeight: Float, canvas: Canvas) {
