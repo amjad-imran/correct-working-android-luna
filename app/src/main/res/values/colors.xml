@@ -20,6 +20,8 @@
     <color name="white_10">#20FFFFFF</color>
     <color name="white_12">#1effffff</color>
     <color name="white_12_72">#b8ffffff</color>
+    <color name="white_12_70">#b3ffffff</color>
+    <color name="white_12_50">#80ffffff</color>
     <color name="white_80">#ccffffff</color>
     <color name="white_50">#80ffffff</color>
     <color name="white_40">#40ffffff</color>
@@ -127,6 +129,7 @@
     <color name="friends_request_status_color">#ffba00</color>
 
     <color name="calories_arc">#ff3358</color>
+    <color name="nap_down">#ff7c94</color>
 
     <color name="steps_arc">#29cc74</color>
 
@@ -169,4 +172,12 @@
     <color name="activity_arc">#8ed3f1</color>
     <color name="color_workout">#88d6eb</color>
     <color name="steel_grey">#8a8c8e</color>
+    <color name="nap_sleep_grad_start">#ddc5ff</color>
+    <color name="nap_sleep_grad_end">#a665ff</color>
+    <color name="nap_readiness_grad_start">#ffd6c5</color>
+    <color name="nap_readiness_grad_end">#f18f67</color>
+    <color name="lavender">#c5a8ed</color>
+    <color name="nap_dash_sleep_score">#e1caff</color>
+    <color name="nap_dash_readiness_score">#ffddc9</color>
+    <color name="nap_dash_sleep_impact_score">#ff6b86</color>
 </resources>

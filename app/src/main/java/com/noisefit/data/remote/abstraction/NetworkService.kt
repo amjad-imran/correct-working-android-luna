@@ -23,6 +23,7 @@ import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.models.WatchFace
 import com.noisefit_commans.response.SleepHistoryResponse
 import com.oreo.data.model.*
+import com.oreo.data.model.health.Nap
 import com.oreo.data.model.health.OreoActivityModel
 import com.oreo.data.model.health.OreoDashboardResponseModel
 import com.oreo.data.model.health.OreoReadinessModel
@@ -839,6 +840,17 @@ interface NetworkService {
     suspend fun getHSQAnswer(
         @Url url: String
     ): BaseApiResponse<List<OHSQuestionariesResponseModel>>
+
+    @GET
+    suspend fun getUserNapDetailsData(
+        @Url url: String
+    ): BaseApiResponse<OreoNapDetailsDataModel>
+
+    @POST
+    suspend fun addNapServer(
+        @Url url: String,
+        @Body napRequest: OreoNapNetworkEntity
+    ): BaseApiResponse<List<OreoNapDetailsDataModel>>
     /**
      * ---------------------------------------------------------------------------------
      *                                Oreo Services End

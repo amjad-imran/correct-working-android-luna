@@ -4,6 +4,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.model.OWorkoutListModal
+import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
 import com.oreo.data.model.AddWorkoutResponse
@@ -15,9 +16,11 @@ import com.oreo.data.model.OHSQuestionariesResponseModel
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.OInternalPageResponseModal
 import com.oreo.data.model.OWorkoutDetailsResponseModel
+import com.oreo.data.model.OreoNapDetailsDataModel
 import com.oreo.data.model.RingCareResponse
 import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthResponse
+import com.oreo.data.model.health.Nap
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import com.oreo.ui.TestUserData
 import kotlinx.coroutines.flow.Flow
@@ -96,4 +99,16 @@ interface OreoUserActivityRepository {
     suspend fun getHSQAnswer(quesId: String): Flow<Resource<BaseApiResponse<List<OHSQuestionariesResponseModel>>>>
 
     suspend fun clearAllHealthData()
+
+    suspend fun getUserNapData(
+        napId: String
+    ): Flow<Resource<BaseApiResponse<OreoNapDetailsDataModel>>>
+
+    suspend fun addNapServer(
+        nap: OreoNapData
+    ): Flow<Resource<BaseApiResponse<List<OreoNapDetailsDataModel>>>>
+
+    suspend fun getNapsToConfirm(): List<OreoNapData>?
+
+    suspend fun removeNap(id: Int): Boolean
 }

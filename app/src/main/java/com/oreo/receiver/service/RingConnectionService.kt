@@ -1159,7 +1159,7 @@ constructor() : LifecycleService() {
                     is UserActivityCallback.RingUserWorkoutData -> {
                         if (it.data.isNotEmpty()) {
                             saveAndSyncWorkouts(it.data)
-                        }else{
+                        } else {
                             AppLogs.sendAppLogs("Workouts empty")
                             postWorkout("none")
                         }
@@ -1292,11 +1292,17 @@ constructor() : LifecycleService() {
 
                             val workoutId = dataConverter.getWorkoutId(
                                 it,
-                                sessionManager.lastOngoingWorkoutTimestamp *1000L
+                                sessionManager.lastOngoingWorkoutTimestamp * 1000L
                             )
                             AppLogs.sendAppLogs("Workout id not found")
 
-                            postWorkout(workoutId?:"none")
+                            postWorkout(workoutId ?: "none")
+
+                            sessionManager.saveSportsActivities(
+                                dataConverter.getSportModeResponseArray(
+                                    workouts
+                                )
+                            )
 
 
                             userHealthDataDataSource.clearDataByDates(dates.toList())
@@ -1313,7 +1319,7 @@ constructor() : LifecycleService() {
         }
     }
 
-    fun postWorkout(workoutId:String){
+    fun postWorkout(workoutId: String) {
         sessionManager.lastOngoingWorkoutTimestamp = 0L
         LOGS.d("sdkjfhskdfj received $workoutId")
         AppLogs.sendAppLogs("postWorkout $workoutId")

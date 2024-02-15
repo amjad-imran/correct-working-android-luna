@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_oreo"
     app:startDestination="@id/navigation_oreo_home">
 
@@ -377,6 +376,10 @@
         <argument
             android:name="infoData"
             app:argType="string" />
+        <argument
+            android:name="type"
+            app:argType="string"
+            android:defaultValue="" />
     </dialog>
     <fragment
         android:id="@+id/ringCareFragment"
@@ -472,6 +475,34 @@
             app:destination="@id/bottomSheetDataMetrics" />
     </fragment>
     <fragment
+        android:id="@+id/napDetails"
+        android:name="com.oreo.ui.sleep.nap.ONapDetailsFragment"
+        android:label="fragment_nap_details" >
+        <argument
+            android:name="napId"
+            app:argType="string" />
+    </fragment>
+    <dialog
+        android:id="@+id/bottomSheetNapScore"
+        android:name="com.oreo.ui.sleep.nap.OBottomSheetNapScore"
+        android:label="nap_score_bottomsheet" >
+        <argument
+            android:name="napScoreData"
+            android:defaultValue="@null"
+            app:argType="com.oreo.data.model.SlideUpNapScoreDataModel"
+            app:nullable="true" />
+    </dialog>
+    <dialog
+        android:id="@+id/bottomSheetNoDataNapScore"
+        android:name="com.oreo.ui.sleep.nap.OBottomSheetNoDataNapScore"
+        android:label="nap_score_bottomsheet" >
+        <argument
+            android:name="napScoreData"
+            android:defaultValue="@null"
+            app:argType="com.oreo.data.model.SlideUpNapScoreDataModel"
+            app:nullable="true" />
+    </dialog>
+    <fragment
         android:id="@+id/recordWorkoutFragment"
         android:name="com.oreo.ui.recordworkout.RecordWorkoutFragment"
         android:label="fragment_record_workout">
@@ -514,5 +545,17 @@
         android:id="@+id/bottomSheetRingCharging"
         android:name="com.oreo.ui.recordworkout.BottomSheetRingCharging"
         android:label="BottomSheetRingCharging" />
+    <dialog
+        android:id="@+id/removeNapBottomSheet"
+        android:name="com.noisefit.ui.common.bottomSheet.RemoveNapBottomSheet"
+        android:label="RemoveNapBottomSheet" />
+    <dialog
+        android:id="@+id/bottomSheetEndWorkoutShort"
+        android:name="com.oreo.ui.recordworkout.BottomSheetEndWorkoutShort"
+        android:label="BottomSheetEndWorkoutShort" />
+    <dialog
+        android:id="@+id/workoutStopRingBottomSheet"
+        android:name="com.noisefit.ui.common.bottomSheet.WorkoutStopRingBottomSheet"
+        android:label="WorkoutStopRingBottomSheet" />
 
 </navigation>

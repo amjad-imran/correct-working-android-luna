@@ -46,8 +46,12 @@ constructor(
         return sleepDao.getUnSyncGoogleFitTodayData(false)
     }
 
-    override suspend fun updateUnSyncGoogleFitData(data: List<OreoSleepData>?) {
-
+    override suspend fun updateUnSyncGoogleFitData(data: OreoSleepData) {
+        val ids = ArrayList<Int>()
+        data.let { sleep ->
+            ids.add(sleep.id)
+        }
+        sleepDao.updateServerUnSyncStatus(ids,true)
     }
 
 

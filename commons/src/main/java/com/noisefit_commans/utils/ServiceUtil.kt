@@ -440,6 +440,9 @@ object ServiceUtil {
             is UserActivityAction.SyncSportsActivity -> {
                 activityAction.syncSportsActivity(it.date)
             }
+            is UserActivityAction.SyncAutoSportsActivity -> {
+                activityAction.syncAutoSports()
+            }
 
 
             is UserActivityAction.PushGPSData -> {

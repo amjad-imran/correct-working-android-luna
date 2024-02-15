@@ -174,6 +174,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         binding.lytHeader.profileView1.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_hamburger_click)
             navigate(R.id.OMyProfileFragment)
+//            navigate(R.id.napDetails)
         }
 
         /* setFragmentResultListener(ADD_WORKOUT_REQUEST_KEY) { _, bundle ->

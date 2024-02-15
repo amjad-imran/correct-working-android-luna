@@ -2,22 +2,31 @@ package com.oreo.ui.home.summary.paginate
 
 import android.graphics.Color
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.data.CombinedData
 import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSummaryDataTodayBinding
 import com.noisefit.oreo.BottomNavOption
 import com.noisefit.oreo.OreoMainViewModel
+import com.noisefit.ui.APP_UPDATE
+import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.DELETE_REQ_REQUEST_KEY
+import com.noisefit.ui.common.bottomSheet.NAP_REQUEST_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.enums.DashInfoCard
+import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
@@ -30,29 +39,37 @@ import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
+import com.noisefit_commans.utils.getHoursBasedOnDateTime
+import com.noisefit_commans.utils.share.ShareUtil
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
+import com.oreo.data.model.SlideUpNapScoreDataModel
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TrendsData
 import com.oreo.data.model.VideoInfoType
 import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
+import com.oreo.ui.custom.CirclePagerIndicatorDecoration
+import com.oreo.ui.custom.SnapHelperOneByOne
 import com.oreo.ui.home.summary.AlertClickListener
 import com.oreo.ui.home.summary.HomeRecyclerViewHolder
 import com.oreo.ui.home.summary.OSummaryHealthOverviewAdapter
 import com.oreo.ui.home.summary.OSummaryHealthOverviewClickEnum
 import com.oreo.ui.home.summary.OreoRWorkoutAdapter
+import com.oreo.ui.sleep.nap.BOTTOM_NAP_RESULT
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
+import com.oreo.ui.workout.detect.DetectWorkoutListFragmentDirections
 import com.oreo.util.graph.OCombineChartUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 
 @AndroidEntryPoint
 class SummaryDataFragmentToday :
@@ -63,6 +80,7 @@ class SummaryDataFragmentToday :
     private val mSharedViewModel: SharedOSCDViewModel by activityViewModels()
 
     private val TAG = "SummaryDataFragment"
+    val circleObj = CirclePagerIndicatorDecoration()
 
 
     companion object {
@@ -87,9 +105,23 @@ class SummaryDataFragmentToday :
         OSummaryHealthOverviewAdapter()
     }
 
+
+    private val napsAdapter: NapsConfirmAdapter by lazy {
+        NapsConfirmAdapter(object : NapConfirmAction {
+            override fun onNapConfirmClicked(nap: OreoNapData) {
+                viewModel.confirmNap(nap)
+            }
+
+            override fun onNapRemoveClicked(nap: OreoNapData) {
+                showRemoveNapBottomSheet(nap)
+            }
+        })
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setNapsPager()
 
         setAdapter()
 
@@ -99,6 +131,49 @@ class SummaryDataFragmentToday :
 
         LOGS.d("CREATED_WITH_DATE $date")
         LOGS.d(TAG, "Today onCreate Called")
+
+        /*navigate(
+            R.id.bottomSheetNapScore, bundleOf(
+                "napScoreData" to SlideUpNapScoreDataModel(
+                    napId = "8d60a64e-11c7-4453-acba-7417c90d4927",
+                    title = "dsfsdfsdfsd",
+                    description = "ksjdfkljsgdjkfgsdfjkgsjkdf kjgsd kfjgsd kfjg sdkfg sdkfg sdkf",
+                    oldSleepScore = 70,
+                    newSleepScore = 55,
+                    oldReadinessScore = 50,
+                    newReadinessScore = 35,
+                )
+            )
+        )*/
+    }
+
+    private fun setNapsPager() {
+        SnapHelperOneByOne().attachToRecyclerView(binding.contentMain.lytConfirmNap.vpNaps)
+        with(binding.contentMain.lytConfirmNap.vpNaps) {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = napsAdapter
+            //addItemDecoration(CirclePagerIndicatorDecoration())
+            clipToPadding = false
+            val padding =
+                viewModel.screenUtils.dpToPx(12, binding.contentMain.lytConfirmNap.vpNaps.context)
+                    .toInt()
+            setPadding(padding, 0, padding, 0)
+
+        }
+
+        binding.contentMain.lytConfirmNap.vpNaps.addOnItemTouchListener(object :
+            RecyclerView.OnItemTouchListener {
+            override fun onInterceptTouchEvent(view: RecyclerView, event: MotionEvent): Boolean {
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> binding.contentMain.lytConfirmNap.vpNaps.parent
+                        .requestDisallowInterceptTouchEvent(true)
+                }
+                return false
+            }
+
+            override fun onTouchEvent(view: RecyclerView, event: MotionEvent) {}
+            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+        })
     }
 
     override fun onDestroyView() {
@@ -238,6 +313,11 @@ class SummaryDataFragmentToday :
                     viewModel.localDataStore.setDashCardClickState(DashInfoCard.WELCOME, true)
                     navigate(R.id.ringWelcomeFragment)
                 }
+
+                is OSummaryHealthOverviewClickEnum.OnNapClicked -> {
+
+                    navigate(R.id.napDetails, bundleOf("napId" to type.napId))
+                }
             }
         }
 
@@ -245,6 +325,15 @@ class SummaryDataFragmentToday :
 
 
     override fun initListener() {
+
+        binding.contentMain.lytGoogleFit.tvGoogleFitTurnOn.setOnClickListener {
+            navigate(R.id.googleFitFragmentOreo)
+        }
+        binding.contentMain.lytGoogleFit.ivCross.setOnClickListener {
+            viewModel.ringDataStore.setGoogleFitCrossed(true)
+            viewModel.stateGoogleFitCard.postValue(false)
+        }
+
         binding.swipeRefreshLayout.setOnRefreshListener {
             binding.swipeRefreshLayout.isRefreshing = false
 
@@ -330,6 +419,71 @@ class SummaryDataFragmentToday :
     }
 
     override fun subscribeObservers() {
+
+        requireActivity().supportFragmentManager.setFragmentResultListener(
+            BOTTOM_NAP_RESULT,
+            this
+        ) { key, bundle ->
+            val napId = bundle.getString("napId")
+            if (!napId.isNullOrEmpty()) {
+                navigate(R.id.napDetails, bundleOf("napId" to napId))
+            }
+        }
+
+        viewModel.getMessages().observe(this) {
+            it.getContent()?.let { message ->
+                context.showShortToast(message)
+            }
+        }
+
+        viewModel.getLoading().observe(viewLifecycleOwner) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
+            }
+        }
+        viewModel.getApiErrors().observe(viewLifecycleOwner) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
+            }
+        }
+
+        viewModel.onNapAddSuccess.observe(viewLifecycleOwner) {
+            it.getContent()?.let { nap ->
+                mainViewModel.reloadTodaysData()
+
+                if ((nap.sleepScore ?: 0) != 0 /*&& (nap.readinessScore ?: 0) != 0*/) {
+                    navigate(
+                        R.id.bottomSheetNapScore, bundleOf(
+                            "napScoreData" to viewModel.getNapSlideUpObj(nap)
+                        )
+                    )
+                    return@observe
+                }
+
+                val hour = getHoursBasedOnDateTime(nap.startTime)
+                if (hour.toInt() >= 19) {
+                    navigate(
+                        R.id.bottomSheetNoDataNapScore,
+                        bundleOf("napScoreData" to viewModel.getNapSlideUpObj(nap))
+                    )
+                }
+            }
+        }
+
+        viewModel.napsList.observe(viewLifecycleOwner) {
+            if (it.isEmpty()) {
+                binding.contentMain.lytConfirmNap.root.gone()
+            } else {
+                binding.contentMain.lytConfirmNap.root.visible()
+            }
+            napsAdapter.setDataSet(it, viewModel.date)
+            binding.contentMain.lytConfirmNap.vpNaps.removeItemDecoration(circleObj)
+            if (it.size > 1) {
+                binding.contentMain.lytConfirmNap.vpNaps.addItemDecoration(circleObj)
+            }
+        }
 
         mainViewModel.dashTodayReload.observe(viewLifecycleOwner) {
             it.getContent()?.let {
@@ -754,11 +908,11 @@ class SummaryDataFragmentToday :
         val lytWorkouts = binding.contentMain.lytWorkouts
         lytWorkouts.root.visible()
 
-        if(workouts.isNullOrEmpty()){
+        if (workouts.isNullOrEmpty()) {
             lytWorkouts.tvEmptyMsg.visible()
             lytWorkouts.tvEmptyMsg.text = getString(R.string.text_tap_plus_workout)
 
-        }else{
+        } else {
             lytWorkouts.tvEmptyMsg.gone()
         }
         lytWorkouts.rvWorkouts.layoutManager = LinearLayoutManager(
@@ -943,6 +1097,20 @@ class SummaryDataFragmentToday :
 
             return@setOnClickListener
         }
+    }
+
+    private fun showRemoveNapBottomSheet(nap: OreoNapData) {
+        requireActivity().supportFragmentManager.setFragmentResultListener(
+            NAP_REQUEST_KEY,
+            this
+        ) { _, bundle ->
+            val updated = bundle.getBoolean("remove")
+            if (updated) {
+                viewModel.removeNapById(nap)
+            }
+        }
+
+        navigate(R.id.removeNapBottomSheet)
     }
 
     private fun logFirebaseAppEvent(eventName: String, params: HashMap<String, Any>) {

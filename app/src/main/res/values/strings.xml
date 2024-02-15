@@ -756,6 +756,7 @@
     <string name="text_smart_ring">Smart Ring</string>
 
     <string name="text_lowest_hr">Lowest HR</string>
+    <string name="text_max_hr">Max HR</string>
     <string name="text_readiness">Readiness</string>
     <string name="text_activity_o">Activity</string>
     <string name="text_goal_progress">Goal progress</string>
@@ -767,6 +768,7 @@
     <string name="text_readiness_score">Readiness score</string>
     <string name="text_hr_variability">HR variability</string>
     <string name="text_body_tempreature">Body temperature</string>
+    <string name="text_skin_temperature">Skin temperature</string>
     <string name="text_respiratory_rate">Respiratory rate</string>
     <string name="text_heart_rate_variability">Heart rate variability</string>
     <string name="text_average_hrv">Average HRV</string>
@@ -986,8 +988,13 @@
     <string name="text_your_baseline">Your baseline</string>
     <string name="text_turn_on_google_fit_sync">Turn on Google Fit sync</string>
     <string name="text_enable_google_fit_access">Enable Google Fit access</string>
-    <string name="text_allow_google_fit_message">Allow Luna Ring to connect to Google Fit app for data sharing to improve your daily scores.</string>
+    <string name="text_allow_google_fit_message">Based on your preference, allow Luna ring app to import &amp; export data from Googlefit &amp; incorporate it into your activity &amp; readiness scores.</string>
     <string name="text_average_oxygen_saturation">Average oxygen saturation</string>
+    <string name="text_sleep_score">Sleep score</string>
+    <string name="text_nap_details">Nap details</string>
+    <string name="text_impact_on_scores">Impact on scores</string>
+    <string name="text_nap">Nap</string>
+    <string name="text_know_more">Know more</string>
     <string name="text_add_workout">Add workout</string>
     <string name="text_record_workout">Record workout</string>
     <string name="text_ring_connecting">Ring connecting...</string>
@@ -995,15 +1002,25 @@
     <string name="text_end">End</string>
     <string name="text_end_workout">End workout</string>
     <string name="text_ready_to_end_your_workout">Ready to end your workout and save your progress?</string>
+    <string name="text_ready_to_end_your_workout_short">Since your workout lasts less than 1 minute, it won\'t be saved. Are you sure you want to end your workout?</string>
     <string name="text_select_workout">Select workout</string>
     <string name="text_trying_to_connect_your_ring">Trying to connect your ring</string>
     <string name="text_ring_not_in_range">To record your workout, make sure your ring is charged and on your finger, and within range of your device.</string>
     <string name="text_connected_successfully">Connected successfully</string>
-    <string name="text_bluetooth_turn_on">Please ensure your bluetooth is on</string>
+    <string name="text_bluetooth_turn_on">Please ensure your\nbluetooth is on</string>
     <string name="text_bluetooth_on_message">Make sure your ring is charged and on your finger, and within range of your device, with your bluetooth turned on.</string>
     <string name="text_time_to_charge_your_ring">Time to charge your ring</string>
     <string name="text_tap_plus_workout">Tap the + button to add a workout for today.</string>
     <string name="text_please_connect_your_ring_to_add_a_workout">Please connect your ring to add a workout</string>
     <string name="text_ring_charging">Ring charging</string>
     <string name="text_charging_message">To record your workout, remove your ring from the charger and wear it on your finger.</string>
+    <string name="text_nap_detected">Nap detected</string>
+    <string name="text_confirm">Confirm</string>
+    <string name="text_imported_from_google_fit">Imported from Google Fit</string>
+    <string name="text_dismiss_detected_nap">Dismiss detected nap?</string>
+    <string name="text_nap_remove_message">This nap data can not be recovered if once dismissed. Are you sure you want to proceed?</string>
+    <string name="text_calculating_your_baseline">Calculating your baseline</string>
+    <string name="text_wear_ring_for">Wear your ring consistently for 15 days to see deviation in your skin temperature from your personalised baseline.</string>
+    <string name="text_intensity_not_capture">Could not capture intensity data for this workout because of either an improper fit of the ring or lack of movement.</string>
+    <string name="text_ring_lo_battert_stop_message">Your workout has ended because your ring battery is low. Make sure your ring is charged and on your finger, and within range of your device.</string>
 </resources>

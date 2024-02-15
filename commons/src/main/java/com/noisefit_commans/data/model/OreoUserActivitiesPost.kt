@@ -40,6 +40,25 @@ data class OreoStepsNetworkEntity(
     ) : OreoUserActivitiesPost()
 }
 
+data class OreoNapNetworkEntity(
+    val naps: List<OreoNapNetworkObjEntity>? = null
+)
+
+data class OreoNapNetworkObjEntity(
+    @SerializedName("start_time") var startTime: String,
+    @SerializedName("end_time") var endTime: String,
+    @SerializedName("duration") var duration: Int,
+    @SerializedName("date") var date: String,
+    @SerializedName("temperature") var temperature: List<Float>,
+    @SerializedName("avg_temp") var avgTemp: Float,
+    @SerializedName("max_hrv") var maxHrv: Int,
+    @SerializedName("low_hr") var lowHr: Int,
+    @SerializedName("avg_hr") var avgHr: Int,
+    @SerializedName("avg_hrv") var avgHrv: Int,
+    @SerializedName("hr") var hr: List<Int>,
+    @SerializedName("hrv") var hrv: List<Int>,
+)
+
 data class OreoSleepNetworkEntity(
     @SerializedName("hourly_breakup") var hourlyBreakup: List<OreoHourlyBreakup>? = null,
     @SerializedName("night_time_movement") var nightTimeMovement: List<OreoMovementBreakup>? = null,

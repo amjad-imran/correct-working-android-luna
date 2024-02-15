@@ -23,6 +23,7 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.KeyValue
 import com.noisefit_commans.data.model.OWorkoutListModal
+import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.data.model.UserHealthData
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
@@ -31,13 +32,32 @@ import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.dataConverter.OreoOfflineDataMapper
+import com.oreo.data.dataConverter.OreoOnlineDataMapper
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
-import com.oreo.data.db.implementation.*
-import com.oreo.data.model.*
-import com.oreo.data.model.health.OreoActivityModel
-import com.oreo.data.model.health.OreoDashboardResponseModel
-import com.oreo.data.model.health.OreoReadinessModel
-import com.oreo.data.model.health.OreoSleepModel
+import com.oreo.data.db.implementation.OreoAutoSportDataImpl
+import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
+import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
+import com.oreo.data.db.implementation.OreoHeartRateDataImpl
+import com.oreo.data.db.implementation.OreoNapDataImpl
+import com.oreo.data.db.implementation.OreoRespiratoryDataImpl
+import com.oreo.data.db.implementation.OreoSleepDataImpl
+import com.oreo.data.db.implementation.OreoStepsDataImpl
+import com.oreo.data.db.implementation.OreoStressDataImpl
+import com.oreo.data.model.LearnModel
+import com.oreo.data.model.OActivityListModal
+import com.oreo.data.model.OContributorResponseModal
+import com.oreo.data.model.OHSModel
+import com.oreo.data.model.OHSQuestionariesResponseModel
+import com.oreo.data.model.OHealthOverview
+import com.oreo.data.model.OInternalPageResponseModal
+import com.oreo.data.model.OWorkoutDetailsResponseModel
+import com.oreo.data.model.OreoNapDetailsDataModel
+import com.oreo.data.model.RingCareResponse
+import com.oreo.data.model.RingWelcome
+import com.oreo.data.model.ServerUserHealthData
+import com.oreo.data.model.ServerUserHealthResponse
+import com.oreo.data.model.TapMeasureState
+import com.oreo.data.model.TrendsData
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import com.oreo.ui.DataType
@@ -45,15 +65,14 @@ import com.oreo.ui.TestUserData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.json.JSONArray
-import org.json.JSONObject
 import org.joda.time.LocalDate
-import java.util.Date
+import org.json.JSONObject
+import com.oreo.data.model.AddWorkoutResponse
+import com.oreo.data.model.health.Nap
 
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -70,10 +89,12 @@ class OreoUserActivityRepositoryImpl(
     private val respiratoryDataImpl: OreoRespiratoryDataImpl,
     private val temperatureDataImpl: OreoBodyTemperatureDataImpl,
     private val sleepDataImpl: OreoSleepDataImpl,
+    private val napDataImpl: OreoNapDataImpl,
     private val stepsDataImpl: OreoStepsDataImpl,
     private val oreoAutoSportDataImpl: OreoAutoSportDataImpl,
     private val offlineDataMapper: OreoOfflineDataMapper,
     private val keyValueDataSource: KeyValueDataSource,
+    private val onlineDataMapper: OreoOnlineDataMapper,
     private val userHealthDataSource: OreoUserHealthDataDataSource,
     private val lastSyncProvider: LastSyncProvider,
     private val offlineApiStore: IOfflineApiResponseStore,
@@ -1774,6 +1795,37 @@ class OreoUserActivityRepositoryImpl(
                 }
             }
         }
+    }
+
+    override suspend fun getUserNapData(napId: String): Flow<Resource<BaseApiResponse<OreoNapDetailsDataModel>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${BuildConfig.OREO_BASE_URL}/sleep/v1/nap/$napId"
+            remoteDataSource.getUserNapDetailsData(url)
+        }
+    }
+
+    override suspend fun addNapServer(nap: OreoNapData): Flow<Resource<BaseApiResponse<List<OreoNapDetailsDataModel>>>> {
+        val napRequest = onlineDataMapper.getNapRequest(nap)
+
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${BuildConfig.OREO_BASE_URL}/sleep/v1/nap"
+            remoteDataSource.addNapServer(url, napRequest)
+        }
+    }
+
+    /**
+     * delete naps more than 2 days and returns response
+     */
+    override suspend fun getNapsToConfirm(): List<OreoNapData>? {
+        napDataImpl.deleteOldData(2)
+        return napDataImpl.getNaps()
+    }
+
+    override suspend fun removeNap(id: Int): Boolean {
+        napDataImpl.removeNapById(id)
+        return true
     }
 
 }

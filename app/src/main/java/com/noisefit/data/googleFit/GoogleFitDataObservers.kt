@@ -58,15 +58,19 @@ constructor(
             "awake" -> {
                 return SleepStages.AWAKE
             }
+
             "light" -> {
                 return SleepStages.SLEEP_LIGHT
             }
+
             "deep" -> {
                 return SleepStages.SLEEP_DEEP
             }
+
             "rem" -> {
                 return SleepStages.SLEEP_REM
             }
+
             else -> {
                 return null
             }
@@ -232,99 +236,134 @@ constructor(
     private fun getActivityType(type: String): String {
         when (type) {
 
+            "walking" -> {
+                return FitnessActivities.WALKING
+            }
+
             "skateboarding" -> {
                 return FitnessActivities.SKATEBOARDING
             }
+
             "fencing" -> {
                 return FitnessActivities.FENCING
             }
+
             "boxing" -> {
                 return FitnessActivities.BOXING
             }
+
             "curling" -> {
                 return FitnessActivities.CURLING
             }
+
             "indoor_skating" -> {
                 return FitnessActivities.SKATING_INDOOR
             }
+
             "archery" -> {
                 return FitnessActivities.ARCHERY
             }
+
             "outdoor_hiking" -> {
                 return FitnessActivities.HIKING
             }
+
             "zumba" -> {
                 return FitnessActivities.ZUMBA
             }
+
             "mixed_aerobics" -> {
                 return FitnessActivities.AEROBICS
             }
+
             "strength_training" -> {
                 return FitnessActivities.STRENGTH_TRAINING
             }
+
             "elliptical_machine" -> {
                 return FitnessActivities.ELLIPTICAL
             }
+
             "yoga" -> {
                 return FitnessActivities.YOGA
             }
+
             "climbing_machine" -> {
                 return FitnessActivities.STAIR_CLIMBING
             }
+
             "gymnastics" -> {
                 return FitnessActivities.GYMNASTICS
             }
+
             "sailing" -> {
                 return FitnessActivities.SAILING
             }
+
             "roller_skating" -> {
                 return FitnessActivities.SKATING
             }
+
             "baseball" -> {
                 return FitnessActivities.BASEBALL
             }
+
             "squash" -> {
                 return FitnessActivities.SQUASH
             }
+
             "softball" -> {
                 return FitnessActivities.SOFTBALL
             }
+
             "volleyball" -> {
                 return FitnessActivities.VOLLEYBALL
             }
+
             "handball" -> {
                 return FitnessActivities.HANDBALL
             }
+
             "dance", "ballroom_dancing", "street_dance", "belly_dance" -> {
                 return FitnessActivities.DANCING
             }
+
             "martial_arts" -> {
                 return FitnessActivities.MARTIAL_ARTS
             }
+
             "rope_skipping" -> {
                 return FitnessActivities.JUMP_ROPE
             }
+
             "outdoor_running", "running" -> {
                 return FitnessActivities.RUNNING
             }
+
             "bicycling" -> {
                 return FitnessActivities.BIKING
             }
+
             "climbing" -> {
                 return FitnessActivities.ROCK_CLIMBING
             }
+
             "treadmill" -> {
                 return FitnessActivities.TREADMILL
             }
+
             "workout" -> {
                 return FitnessActivities.UNKNOWN
             }
+
             "basketball" -> {
                 return FitnessActivities.BASKETBALL
             }
+
             "football" -> {
                 return FitnessActivities.FOOTBALL_SOCCER
             }
+
             "tennis" -> {
                 return FitnessActivities.TENNIS
             }
@@ -332,18 +371,23 @@ constructor(
             "badminton" -> {
                 return FitnessActivities.BADMINTON
             }
+
             "swimming" -> {
                 return FitnessActivities.SWIMMING
             }
+
             "outdoor_walking" -> {
                 return FitnessActivities.WALKING
             }
+
             "spinning" -> {
                 return FitnessActivities.BIKING_SPINNING
             }
+
             "hiking" -> {
                 return FitnessActivities.HIKING
             }
+
             "outdoor_cycling" -> {
                 return FitnessActivities.BIKING
             }
@@ -351,27 +395,35 @@ constructor(
             "indoor_walking" -> {
                 return FitnessActivities.WALKING
             }
+
             "indoor_running" -> {
                 return FitnessActivities.RUNNING
             }
-            "indoor_cycling","cycling" -> {
+
+            "indoor_cycling", "cycling" -> {
                 return FitnessActivities.BIKING
             }
+
             "elliptical" -> {
                 return FitnessActivities.ELLIPTICAL
             }
+
             "rower", "rowing_machine" -> {
                 return FitnessActivities.ROWING
             }
+
             "cricket" -> {
                 return FitnessActivities.CRICKET
             }
+
             "pool_swimming" -> {
                 return FitnessActivities.SWIMMING_POOL
             }
+
             "open_water_swimming" -> {
                 return FitnessActivities.SWIMMING_OPEN_WATER
             }
+
             else -> {
                 return FitnessActivities.OTHER
             }
@@ -479,11 +531,11 @@ constructor(
                 .setStartTime(sportsData.startTime, TimeUnit.MILLISECONDS)
                 .setEndTime(sportsData.endTime, TimeUnit.MILLISECONDS)
                 .build()
-        }catch (exp  :Exception){
+        } catch (exp: Exception) {
             null
         }
 
-        if(session==null){
+        if (session == null) {
             LOGS.e("Failed to insert activities in google fit")
             return
         }
@@ -539,7 +591,7 @@ constructor(
             .addOnSuccessListener { dataReadResponse: DataReadResponse? ->
                 if (dataReadResponse == null) return@addOnSuccessListener
                 printHeightWeightData(dataReadResponse)
-                success.invoke(Pair(DistanceUtil.meterToCentimeter(height),weight))
+                success.invoke(Pair(DistanceUtil.meterToCentimeter(height), weight))
             }
             .addOnFailureListener { e: Exception? ->
                 failed.invoke()
@@ -591,7 +643,6 @@ constructor(
     }
 
 
-
     fun saveUserWeightAndHeight() {
         if (!localDataStore.isEnableGoogleFit()) {
             LOGS.d("$TAG please enable google fit")
@@ -628,6 +679,50 @@ constructor(
             }
         }
 
+
+    }
+
+
+    private fun insertWorkout() {
+        /* insertUserData(
+             context,
+             "weight",
+             DataType.TYPE_WEIGHT,
+             Field.FIELD_WEIGHT,
+             weight.toFloat()
+         )
+
+
+
+
+         val dataSource = provideDataSource(streamName, dataType)
+         val startTime = Calendar.getInstance().timeInMillis
+         val dataPoint =
+             DataPoint.builder(dataSource)
+                 .setField(fieldType, value)
+                 .setTimeInterval(startTime, startTime, TimeUnit.MILLISECONDS)
+                 .build()
+
+         val dataSet = DataSet.builder(dataSource)
+             .add(dataPoint)
+             .build()
+
+
+         Fitness.getHistoryClient(
+             context,
+             googleSignInAccount
+         ).insertData(dataSet).addOnCompleteListener {
+             if (it.isSuccessful) {
+
+                 LOGS.i(TAG, "Data insert was successful!")
+                 //emit(GoogleFitResponse(isSuccess))
+
+             } else {
+                 LOGS.d("$TAG weight error ${it.exception?.message}")
+                 it.exception
+             }
+         }
+ */
 
     }
 
@@ -670,28 +765,53 @@ constructor(
 
     }
 
+    private fun parseWorkoutName(workoutType: String?): String? {
+        if (workoutType.isNullOrEmpty()) return null
 
-     fun getWorkoutFromSession(
+        return when (workoutType) {
+            FitnessActivities.RUNNING -> "running"
+            FitnessActivities.WALKING -> "walking"
+            FitnessActivities.YOGA -> "yoga"
+            FitnessActivities.BIKING -> "cycling"
+            FitnessActivities.BADMINTON -> "badminton"
+            FitnessActivities.CRICKET -> "cricket"
+            FitnessActivities.STRENGTH_TRAINING -> "strength_training"
+            FitnessActivities.JUMP_ROPE -> "rope_skipping"
+            FitnessActivities.FOOTBALL_SOCCER -> "football"
+            FitnessActivities.FOOTBALL_AMERICAN -> "football"
+            FitnessActivities.FOOTBALL_AUSTRALIAN -> "football"
+            FitnessActivities.DANCING -> "dance"
+            FitnessActivities.BASKETBALL -> "basketball"
+            FitnessActivities.HIGH_INTENSITY_INTERVAL_TRAINING -> "hiit"
+            FitnessActivities.BOXING -> "boxing"
+            FitnessActivities.HIKING -> "hiking"
+            FitnessActivities.SWIMMING -> "swimming"
+            else -> null
+        }
+    }
+
+
+    fun getWorkoutFromSession(
         success: (data: ArrayList<WorkoutGoogleFit>) -> Unit,
         failed: () -> Unit
     ) {
-         val calendar = Calendar.getInstance()
-         val endTime = calendar.timeInMillis
+        val calendar = Calendar.getInstance()
+        val endTime = calendar.timeInMillis
         val startTime = DateFormats.startOfDayTimeStamp()
 //         calendar.add(Calendar.WEEK_OF_YEAR, -1) // Set the start time to one week ago
 //         val startTime = calendar.timeInMillis
-         LOGS.d("$TAG $startTime -- $endTime")
-         val readRequest = SessionReadRequest.Builder()
-             .setTimeInterval(startTime, endTime, TimeUnit.MILLISECONDS)
-             .read(DataType.TYPE_WORKOUT_EXERCISE)
-             .read(DataType.TYPE_STEP_COUNT_DELTA)
+        LOGS.d("$TAG $startTime -- $endTime")
+        val readRequest = SessionReadRequest.Builder()
+            .setTimeInterval(startTime, endTime, TimeUnit.MILLISECONDS)
+            .read(DataType.TYPE_WORKOUT_EXERCISE)
+            .read(DataType.TYPE_CALORIES_EXPENDED)
+            /* .read(DataType.TYPE_STEP_COUNT_DELTA)
              .read(DataType.TYPE_DISTANCE_DELTA)
-             .read(DataType.TYPE_CALORIES_EXPENDED)
              .read(DataType.TYPE_MOVE_MINUTES)
              .read(DataType.AGGREGATE_MOVE_MINUTES)
              .read(DataType.TYPE_HEART_RATE_BPM)
             .read(DataType.TYPE_SPEED)
-            .read(DataType.TYPE_HEART_POINTS)
+            .read(DataType.TYPE_HEART_POINTS)*/
             .readSessionsFromAllApps()
             .build()
 
@@ -705,25 +825,52 @@ constructor(
                 val workoutList = ArrayList<WorkoutGoogleFit>()
                 LOGS.i(TAG, "GoogleFitSyncWork Session size: ${response.sessions.size}")
                 for (session in response.sessions) {
-                    if(context.packageName == session.appPackageName){
+                    if (context.packageName == session.appPackageName) {
                         continue
                     }
+
+                    val workoutType = parseWorkoutName(session.activity)
+                    LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.activity}")
+                    if (workoutType.isNullOrEmpty()) {
+                        LOGS.i(TAG, "GoogleFitSyncWork Session details: Workout ignored")
+                        continue
+                    }
+
                     val workoutGoogleFit = WorkoutGoogleFit()
+
+                    val duration = try {
+                        session.getActiveTime(TimeUnit.SECONDS)
+                    } catch (exp: IllegalStateException) {
+                        exp.printStackTrace()
+                        session.getEndTime(TimeUnit.SECONDS) - session.getStartTime(TimeUnit.SECONDS)
+                    }
                     workoutGoogleFit.name = session.name
                     workoutGoogleFit.identifier = session.identifier
-                    workoutGoogleFit.duration = session.getActiveTime(TimeUnit.SECONDS)
+                    workoutGoogleFit.duration = duration
                     workoutGoogleFit.startTime = session.getStartTime(TimeUnit.SECONDS)
                     workoutGoogleFit.endTime = session.getEndTime(TimeUnit.SECONDS)
                     workoutGoogleFit.appPackageName = session.appPackageName
-                    workoutGoogleFit.activity = session.activity
+                    workoutGoogleFit.activity = workoutType//session.activity
 
                     LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.name}")
                     LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.identifier}")
-                    LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.getActiveTime(TimeUnit.MILLISECONDS)}")
-                    LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.getStartTime(TimeUnit.MILLISECONDS)}")
-                    LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.getEndTime(TimeUnit.MILLISECONDS)}")
+                    LOGS.i(
+                        TAG,
+                        "GoogleFitSyncWork Session details: ${duration}"
+                    )
+                    LOGS.i(
+                        TAG,
+                        "GoogleFitSyncWork Session details: ${session.getStartTime(TimeUnit.MILLISECONDS)}"
+                    )
+                    LOGS.i(
+                        TAG,
+                        "GoogleFitSyncWork Session details: ${session.getEndTime(TimeUnit.MILLISECONDS)}"
+                    )
                     LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.appPackageName}")
-                    LOGS.i(TAG, "GoogleFitSyncWork Session details: ${session.activity}")
+                    LOGS.i(
+                        TAG,
+                        "GoogleFitSyncWork Session details: ${session.activity} Parsed $workoutType"
+                    )
                     val dataSets = response.getDataSet(session)
                     for (dataSet in dataSets) {
                         for (point in dataSet.dataPoints) {
@@ -749,6 +896,7 @@ constructor(
 //                                        TAG, "speed " + point
 //                                    )
                                 }
+
                                 DataType.TYPE_HEART_POINTS -> {
 //                                    LOGS.d(
 //                                        TAG, "hr_point " + point

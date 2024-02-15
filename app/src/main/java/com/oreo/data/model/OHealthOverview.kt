@@ -5,6 +5,7 @@ import com.github.mikephil.charting.data.Entry
 import com.noisefit_commans.models.SleepData
 import com.oreo.data.model.health.InfoTextData
 import com.oreo.data.model.health.InfoVideoData
+import com.oreo.data.model.health.Nap
 import com.oreo.data.model.health.ODashboardActivityModel
 import com.oreo.data.model.health.ODashboardReadinessModel
 import com.oreo.data.model.health.ODashboardSleepModel
@@ -15,6 +16,7 @@ sealed class OHealthOverview {
 
     data class InfoRingWelcome(val data: InfoTextData) : OHealthOverview()
     data class InfoRingCare(val data: InfoTextData) : OHealthOverview()
+    data class NapDashCard(val naps: List<Nap>, val date: String) : OHealthOverview()
     data class InfoVideo(val type: VideoInfoType, val data: InfoVideoData) :
         OHealthOverview()
 

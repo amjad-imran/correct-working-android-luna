@@ -1010,11 +1010,11 @@ constructor(
             override fun onState(state: SendCmdState) {
                 when (state) {
                     SendCmdState.SUCCEED -> {
-                        context.showShortToast("Firmware logs generated")
+                        //context.showShortToast("Firmware logs generated")
                     }
 
                     else -> {
-                        context.showShortToast("Firmware logs generation failed")
+                        //context.showShortToast("Firmware logs generation failed")
                     }
                 }
             }

@@ -401,11 +401,11 @@ constructor(
 
     }
 
-    fun stopWorkout(){
+    fun stopWorkout(error: String) {
         testUpdateDeviceDataCallback?.onUpdateDataReceived(
-            UpdateDeviceDataCallback.WorkoutStopped(true)
+            UpdateDeviceDataCallback.WorkoutStoppedByRing(error)
         )
-        ControlBleTools.getInstance().getFitnessSportIdsData(null)
+        //ControlBleTools.getInstance().getFitnessSportIdsData(null)
     }
 
     private val ringSportCallback = object : RingSportCallBack {
@@ -434,7 +434,7 @@ constructor(
                             UpdateDeviceDataCallback.WorkoutEndFromRingState("Low Battery")
                         )*/
                         AppLogs.sendAppLogs("Workout failed from ring Reason: Low Battery")
-                        stopWorkout()
+                        stopWorkout("Low Battery")
                     }
 
                     RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_UN_WEAR.result -> {
@@ -443,7 +443,7 @@ constructor(
                         )*/
                         AppLogs.sendAppLogs("Workout failed from ring Reason: Device not worn")
 
-                        stopWorkout()
+                        //stopWorkout("Device not worn")
                     }
 
                     RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_CHARGING.result -> {
@@ -452,7 +452,7 @@ constructor(
                         )*/
                         AppLogs.sendAppLogs("Workout failed from ring Reason: Ring on Charging")
 
-                        stopWorkout()
+                        //stopWorkout("Ring on Charging")
 
                     }
                 }
@@ -467,7 +467,7 @@ constructor(
                             )*/
                             AppLogs.sendAppLogs("Workout failed from ring Reason: Low Battery")
 
-                            stopWorkout()
+                            stopWorkout("Low Battery")
                         }
 
                         RingSportCallBack.RingSportEndReason.SPORT_END_REASON_TIMEOUT.reason -> {
@@ -478,7 +478,7 @@ constructor(
                             )*/
                             AppLogs.sendAppLogs("Workout failed from ring Reason: Exercise 8 hours timeout")
 
-                            stopWorkout()
+                            //stopWorkout("Exercise 8 hours timeout")
 
                         }
 
@@ -490,7 +490,7 @@ constructor(
                             )*/
                             AppLogs.sendAppLogs("Workout failed from ring Reason: Insufficient device memory")
 
-                            stopWorkout()
+                            //stopWorkout("Insufficient device memory")
                         }
                     }
                 }

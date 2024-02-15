@@ -8,8 +8,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
@@ -19,7 +21,6 @@ import com.noisefit.luna.databinding.FragmentOreoSleepDetailBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit.util.ApplicationUtils
-import com.noisefit_commans.common.averageIntWithoutZeroFloat
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.ui.custom.NightTimeGraphViewOreo
 import com.noisefit_commans.ui.custom.SleepGraphViewOreo
@@ -33,6 +34,8 @@ import com.oreo.data.model.GraphDummyModel
 import com.oreo.data.model.SleepChartModel
 import com.oreo.data.model.health.*
 import com.oreo.ui.custom.ScrollListener
+import com.oreo.ui.home.summary.DashNapAdapter
+import com.oreo.ui.home.summary.OnNapSelectedAction
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.sleep.banner.OreoSleepBannerFragment
 import com.oreo.ui.sleep.scoredetails.ClickViewType
@@ -40,7 +43,6 @@ import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
-import java.math.BigDecimal
 
 
 @AndroidEntryPoint
@@ -62,8 +64,10 @@ class OreoSleepDetailFragment :
     private val mSleepContributorAdapter: OreoSleepContributorAdapter by lazy {
         OreoSleepContributorAdapter(object :
             OreoSleepContributorAdapter.ContributorItemClickListener {
-            override fun onItemClick(resultData: ArrayList<Contributors>, position: Int,
-                                     version: Int) {
+            override fun onItemClick(
+                resultData: ArrayList<Contributors>, position: Int,
+                version: Int
+            ) {
 //                if (resultData[position].barPercent > 0) {
                 openContributorBottomSheet(resultData, position)
 //                }
@@ -122,7 +126,6 @@ class OreoSleepDetailFragment :
         }
         binding.lytAverageBloodOxygen.root.visible()
         binding.lytAverageBloodOxygen.tvAvgValue.text = (oxy?.avg ?: 0).toString()
-
 
 
     }
@@ -271,8 +274,6 @@ class OreoSleepDetailFragment :
             hrv?.avg
         )
     }
-
-
 
 
     private fun showHeartRateGraph(
@@ -844,7 +845,7 @@ class OreoSleepDetailFragment :
 
         //sleep contributor
         binding.lytSleepContributor.tvTitle.text = getString(R.string.text_sleep_contributors)
-        mSleepContributorAdapter.setData(viewModel.getContributorsData(dayData),1)
+        mSleepContributorAdapter.setData(viewModel.getContributorsData(dayData), 1)
 
 
         //sleep night movement
@@ -957,6 +958,29 @@ class OreoSleepDetailFragment :
 
         setNightTimeMovement(dayData.night_time_movement)
 
+        setNapData(dayData.naps,dayData.date)
+
+    }
+
+    private fun setNapData(naps: List<Nap>?, date: String) {
+
+        if (naps.isNullOrEmpty()) {
+            binding.lytNaps.root.gone()
+            return
+        } else {
+            binding.lytNaps.root.visible()
+        }
+
+        binding.lytNaps.lytNap.rvNap.layoutManager =
+            LinearLayoutManager(binding.lytNaps.lytNap.rvNap.context)
+        binding.lytNaps.lytNap.rvNap.adapter = DashNapAdapter(naps,date,true).apply {
+
+            this.setOnNapSelectedListener(object : OnNapSelectedAction {
+                override fun onNapSelected(napId: String) {
+                    navigate(R.id.napDetails, bundleOf("napId" to napId))
+                }
+            })
+        }
     }
 
     private fun setNightTimeMovement(hourlyBreakup: List<SleepMovementBreakup>?) {

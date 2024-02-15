@@ -22,6 +22,7 @@ abstract class UserActivityDataActions() :
     open fun refresh(sportsModeRequest: SportsModeRequest) {}
     open fun getHeartHistory(calendar: Calendar) {}
     open fun syncSportsActivity(date: String) {}
+    open fun syncAutoSports() {}
     open fun pushGPSData(gpsSignal: Int, distance: Int) {}
     open fun disableEnableBluetooth() {}
     open fun onMusicEventChanged(event: String) {

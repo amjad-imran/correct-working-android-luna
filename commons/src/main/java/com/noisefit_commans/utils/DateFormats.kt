@@ -9,6 +9,8 @@ import androidx.annotation.RequiresApi
 import com.noisefit_commans.models.TimeFormat
 import com.noisefit_commans.models.TimeFormats
 import org.joda.time.DateTime
+import org.joda.time.Duration
+import org.joda.time.LocalDateTime
 import java.text.DateFormatSymbols
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -103,6 +105,9 @@ object DateFormats {
     val timeFormat = SimpleDateFormat("HH:mm", defaultLocale)
 
     @SuppressLint("ConstantLocale")
+    val timeFormatHour = SimpleDateFormat("HH", defaultLocale)
+
+    @SuppressLint("ConstantLocale")
     val timeFormat12 = SimpleDateFormat("hh:mm a", defaultLocale)
 
     @SuppressLint("ConstantLocale")
@@ -178,7 +183,7 @@ object DateFormats {
 
     fun subtractDate(date: String, subtractDay: Int): String? {
         val cal = Calendar.getInstance()
-        cal.time = dateFormat.parse(date)
+        cal.time = dateTimeFormat6.parse(date)
         cal.add(Calendar.DATE, -subtractDay)
         return dateFormat.format(cal.time)
     }
@@ -955,7 +960,7 @@ object DateFormats {
     }
 
 
-    fun convertDateTimeToTimeStamp(date: String, simpleDateFormat: SimpleDateFormat): Long? {
+    fun convertDateTimeToTimeStamp(date: String, simpleDateFormat: SimpleDateFormat): Long {
 
         try {
             val mDate = simpleDateFormat.parse(date)
@@ -964,7 +969,7 @@ object DateFormats {
         } catch (e: ParseException) {
             e.printStackTrace()
         }
-        return null
+        return 0
 
     }
 
@@ -1040,6 +1045,10 @@ object DateFormats {
 
     fun convertDateTimeToTimeStamp(date: String, time: String): Long {
         return SimpleDateFormat("dd/MM/yyyyHH:mm", defaultLocale).parse("$date$time").time
+
+    }
+    fun convertDateTimeToTimeStamp(time: String): Long {
+        return dateTimeFormat6.parse(time).time
 
     }
 
@@ -1145,6 +1154,8 @@ object DateFormats {
         //LOGS.d(TAG,"new time stamp ${convertTimeStampToStartOfDay(subtractDate(currentTimeStamp,7))}")
         return convertTimeStampToPrevious12ofDay(subtractDate(currentTimeStamp, PastSyncData))
     }
+
+
 
     fun convertTimeStampToPrevious12ofDay(timestamp: Long): Long {
         val cal = Calendar.getInstance()
@@ -1701,6 +1712,17 @@ object DateFormats {
         return Pair(differenceTxt, daysText)
     }
 
+    //Sort dates
+    fun sortDates(dates: List<String>): List<LocalDateTime> {
+        val parsedLocalDates = ArrayList<org.joda.time.LocalDateTime>()
+        val formatter = org.joda.time.format.DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
+        dates.forEach {
+            val parsedData = org.joda.time.LocalDateTime.parse(it, formatter)
+            parsedLocalDates.add(parsedData)
+        }
+        return parsedLocalDates.sorted()
+    }
+
     fun getEndsInData(currentTime: String, end_date: String): Pair<String, String> {
         val sdfSource = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", DateFormats.defaultLocale).apply {
             timeZone = TimeZone.getTimeZone("UTC")
@@ -2004,6 +2026,17 @@ object DateFormats {
             return ""
         }
     }
+
+    fun getDifferenceInMinutes(startTime: String?, endTime: String?): Int {
+        if (startTime == null || endTime == null) return 0
+
+        val formatter = org.joda.time.format.DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
+        val startTimeParsed = LocalDateTime.parse(startTime, formatter)
+        val endTimeParsed = LocalDateTime.parse(endTime, formatter)
+
+        val duration = Duration(startTimeParsed.toDateTime(), endTimeParsed.toDateTime())
+        return duration.toStandardMinutes().minutes
+    }
 }
 
 
@@ -2047,6 +2080,11 @@ fun String.convertToYYYY_MM_DD(): String {
     }
 }
 
+fun getHoursBasedOnDateTime(startTime: String): String {
+    val date = DateFormats.dateTimeFormat5.parse(startTime)
+    return SimpleDateFormat("HH").format(date)
+}
+
 fun String.to12HourFormat(): String {
     return try {
         LocalTime.parse(this, DateTimeFormatter.ofPattern("HH:mm"))
@@ -2055,3 +2093,4 @@ fun String.to12HourFormat(): String {
         ""
     }
 }
+

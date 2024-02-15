@@ -2,19 +2,16 @@ package com.oreo.ui.home.summary.paginate
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.github.mikephil.charting.data.CandleEntry
-import com.github.mikephil.charting.data.Entry
+import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
-import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
-import com.noisefit_commans.common.maxWithoutZero
-import com.noisefit_commans.common.minWithoutZero
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
+import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.data.model.User
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
@@ -22,18 +19,21 @@ import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.ManualMeasureType
 import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.BaseViewModel
-import com.noisefit_commans.ui.getColor
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.ScreenUtils
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
+import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.DashAlert
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.OHealthOverview
+import com.oreo.data.model.OreoNapDetailsDataModel
 import com.oreo.data.model.ServerUserHealthData
+import com.oreo.data.model.SlideUpNapScoreDataModel
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TrendsData
 import com.oreo.data.model.VideoInfoType
@@ -48,6 +48,7 @@ import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -58,8 +59,11 @@ constructor(
     val ringDataStore: RingDataStore,
     val localDataStore: DataStoredInterface,
     val sessionManager: SessionManager,
+    val dataConverter: DataConverter,
+    val screenUtils: ScreenUtils,
     private val syncRepository: OreoSyncRepository,
-    val userActivityRepository: OreoUserActivityRepository
+    val userActivityRepository: OreoUserActivityRepository,
+    private val userHealthDataDataSource: OreoUserHealthDataDataSource
 ) : BaseViewModel() {
 
 
@@ -72,6 +76,7 @@ constructor(
     val stateDashRingBattery = MutableLiveData<Pair<Boolean, ColorFitDevice?>>()
     val stateDashAlerts = MutableLiveData<HashMap<AlertType, DashAlert>>()
     val stateGoogleFitCard = MutableLiveData<Boolean>()
+    val napsList = MutableLiveData<List<OreoNapData>>()
 
 
     var contributorInfo: OContributorResponseModal? = null
@@ -90,6 +95,7 @@ constructor(
 
     var user: User? = null
     var registerDate: Int = -1
+    var onNapAddSuccess = MutableLiveData<Event<OreoNapDetailsDataModel>>()
 
 
     fun setRingBatteryInfoState() {
@@ -117,9 +123,35 @@ constructor(
                     this?.measureState = TapMeasureState.NO_DEVICE
                 }
             })
+
+
+
+            handleGoogleFitCard()
+
         }
 
         updateAlerts()
+    }
+
+    private fun handleGoogleFitCard() {
+        val showGoogleFit = ringDataStore.getDeviceFeatures()?.googleFit
+
+        if (showGoogleFit == 1) {
+            val isGoogleFitEnabled = localDataStore.isEnableGoogleFit()
+            val isGoogleFitCrossed = ringDataStore.isGoogleFitCrossed()
+
+            if (isGoogleFitEnabled) {
+                stateGoogleFitCard.postValue(false)
+            } else {
+                if (isGoogleFitCrossed) {
+                    stateGoogleFitCard.postValue(false)
+                } else {
+                    stateGoogleFitCard.postValue(true)
+                }
+            }
+        } else {
+            stateGoogleFitCard.postValue(false)
+        }
     }
 
     fun getGreetingMessageValue(): String {
@@ -188,16 +220,28 @@ constructor(
             val readinessModel = ODashboardReadinessModel(
                 readinessScore = healthData.readiness?.readinessScore?.value,
                 status = healthData.readiness?.readinessScore?.text?.capitalizeWords(),
-                nudges = healthData.readiness?.dashNudges
+                nudges = healthData.readiness?.dashNudges,
+                readinessNapScoreImpact = healthData.readiness?.readinessNapScoreImpact,
+                noOfNaps = healthData.readiness?.noOfNaps
             )
+
+
+            val newSleepArray = dataConverter.mergeSleepData(
+                healthData.sleep?.hourly_breakup,
+                healthData.sleep?.naps
+            )
+
+
             val sleepModel = ODashboardSleepModel(
                 sleepScore = healthData.sleep?.sleepScore?.value,
                 totalSleep = healthData.sleep?.totalSleep?.value,
                 restingHr = healthData.sleep?.restingHr?.value,
                 sleepStage = healthData.sleep?.hourly_breakup ?: ArrayList(),
                 status = healthData.sleep?.sleepScore?.text?.capitalizeWords(),
-                startTime = healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time ?: "",
-                endTime = healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time ?: ""
+                startTime = newSleepArray?.firstOrNull()?.start_time ?: "",
+                endTime = newSleepArray?.lastOrNull()?.end_time ?: "",
+                sleepNapScoreImpact = healthData.sleep?.sleepNapScoreImpact ?: 0,
+                noOfNaps = healthData.sleep?.noOfNaps ?: 0
             )
             val activityModal = ODashboardActivityModel(
                 activityScore = healthData.activity?.activityScore?.value,
@@ -206,6 +250,8 @@ constructor(
                 status = healthData.activity?.activityScore?.level?.capitalizeWords(),
                 nudges = healthData.activity?.dash_nudges
             )
+
+            val nap = healthData.sleep?.naps ?: ArrayList()
 
 
             val daySlot = getDaySlot()
@@ -225,10 +271,10 @@ constructor(
                                 userActivities.add(
                                     OHealthOverview.Sleep(
                                         sleepModel,
-                                        makeSleepArray(healthData.sleep?.hourly_breakup),
-                                        healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time
+                                        makeSleepArray(newSleepArray),
+                                        newSleepArray?.firstOrNull()?.start_time
                                             ?: "",
-                                        healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time
+                                        newSleepArray?.lastOrNull()?.end_time
                                             ?: ""
                                     )
                                 )
@@ -236,6 +282,9 @@ constructor(
                         }
                     } else {
                         userActivities.add(OHealthOverview.SleepWaiting)
+                    }
+                    if (nap.isNotEmpty()) {
+                        userActivities.add(OHealthOverview.NapDashCard(nap, healthData.date))
                     }
                 }
 
@@ -253,10 +302,10 @@ constructor(
                                 userActivities.add(
                                     OHealthOverview.Sleep(
                                         sleepModel,
-                                        makeSleepArray(healthData.sleep?.hourly_breakup),
-                                        healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time
+                                        makeSleepArray(newSleepArray),
+                                        newSleepArray?.firstOrNull()?.start_time
                                             ?: "",
-                                        healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time
+                                        newSleepArray?.lastOrNull()?.end_time
                                             ?: ""
                                     )
                                 )
@@ -265,6 +314,10 @@ constructor(
                     } else {
                         userActivities.add(OHealthOverview.SleepWaiting)
                     }
+                    if (nap.isNotEmpty()) {
+                        userActivities.add(OHealthOverview.NapDashCard(nap, healthData.date))
+                    }
+
 
                     //Activity
                     if ((healthData.activity?.activeCalories ?: 0) > 0) {
@@ -303,15 +356,18 @@ constructor(
                                 userActivities.add(
                                     OHealthOverview.Sleep(
                                         sleepModel,
-                                        makeSleepArray(healthData.sleep?.hourly_breakup),
-                                        healthData.sleep?.hourly_breakup?.firstOrNull()?.start_time
+                                        makeSleepArray(newSleepArray),
+                                        newSleepArray?.firstOrNull()?.start_time
                                             ?: "",
-                                        healthData.sleep?.hourly_breakup?.lastOrNull()?.end_time
+                                        newSleepArray?.lastOrNull()?.end_time
                                             ?: ""
                                     )
                                 )
                             }
                         }
+                    }
+                    if (nap.isNotEmpty()) {
+                        userActivities.add(OHealthOverview.NapDashCard(nap, healthData.date))
                     }
 
                     if ((healthData.activity?.activeCalories ?: 0) > 0) {
@@ -368,7 +424,15 @@ constructor(
                                 userActivities.add(
                                     OHealthOverview.SleepMinimal(
                                         sleepModel,
-                                        makeSleepArray(healthData.sleep?.hourly_breakup)
+                                        makeSleepArray(newSleepArray)
+                                    )
+                                )
+                            }
+                            if (nap.isNotEmpty()) {
+                                userActivities.add(
+                                    OHealthOverview.NapDashCard(
+                                        nap,
+                                        healthData.date
                                     )
                                 )
                             }
@@ -399,6 +463,14 @@ constructor(
                                     )
                                 }
                             }
+                            if (nap.isNotEmpty()) {
+                                userActivities.add(
+                                    OHealthOverview.NapDashCard(
+                                        nap,
+                                        healthData.date
+                                    )
+                                )
+                            }
                             if ((readinessModel.readinessScore ?: 0) > 0) {
                                 healthData.readiness?.let {
                                     userActivities.add(OHealthOverview.Readiness(readinessModel))
@@ -428,9 +500,18 @@ constructor(
             })
 
             stateWorkouts.postValue(healthData.activity?.workout ?: ArrayList())
+            loadNapsToConfirm()
 
         }
     }
+
+    fun loadNapsToConfirm() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val naps = userActivityRepository.getNapsToConfirm()
+            napsList.postValue(naps ?: ArrayList())
+        }
+    }
+
 
     private fun handleHrFormat(time: Int): String {
 
@@ -752,6 +833,72 @@ constructor(
             healthOverviewData.value?.removeAt(index)
             healthOverviewData.postValue(healthOverviewData.value)
         }
+    }
+
+    fun confirmNap(nap: OreoNapData) {
+        viewModelScope.launch(Dispatchers.IO) {
+            userActivityRepository.addNapServer(
+                nap
+            ).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        confirmNap(nap)
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            removeNapById(nap)
+                            it.firstOrNull()?.let { napData ->
+                                if (napData.date != null) {
+                                    userHealthDataDataSource.clearDataByDates(listOf(napData.date!!))
+                                    delay(100)
+                                }
+                                onNapAddSuccess.postValue(Event(napData))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun removeNapById(nap: OreoNapData) {
+        viewModelScope.launch(Dispatchers.IO) {
+            userActivityRepository.removeNap(nap.id)
+            loadNapsToConfirm()
+        }
+    }
+
+    fun getNapSlideUpObj(nap: OreoNapDetailsDataModel): SlideUpNapScoreDataModel {
+        return SlideUpNapScoreDataModel(
+            napId = nap.id,
+            title = nap.title,
+            description = nap.subtitle,
+            oldSleepScore = nap.prevSleepScore,
+            newSleepScore = nap.sleepScore,
+            oldReadinessScore = nap.prevReadinessScore,
+            newReadinessScore = nap.readinessScore,
+        )
     }
 
 

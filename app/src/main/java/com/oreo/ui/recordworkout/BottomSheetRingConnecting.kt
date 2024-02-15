@@ -1,13 +1,17 @@
 package com.oreo.ui.recordworkout
 
+import androidx.core.view.setPadding
 import androidx.fragment.app.viewModels
+import com.github.mikephil.charting.utils.Utils
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.BottomSheetRingConnectingBinding
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.ScreenUtils
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -17,6 +21,9 @@ class BottomSheetRingConnecting :
     ) {
 
     val viewModel: RecordWorkoutViewModel by viewModels()
+
+    @Inject
+    lateinit var screenUtils: ScreenUtils
 
     override fun initListener() {
         binding.btnAllow.setOnClickListener {
@@ -78,6 +85,7 @@ class BottomSheetRingConnecting :
 
         binding.btnAllow.isEnabled = true
         binding.oreoStatus.setImageResource(R.drawable.ic_ring_bluetooth_off_2)
+        binding.oreoStatus.setPadding(screenUtils.dpToPx(0,requireContext()).toInt())
         binding.oreoStatus.background = null
         binding.textView90.text = getString(R.string.text_bluetooth_turn_on)
         binding.textRingConnecteMessage.text = getString(R.string.text_bluetooth_on_message)
@@ -95,7 +103,8 @@ class BottomSheetRingConnecting :
         binding.textConnectSuccess.gone()
 
         binding.btnAllow.isEnabled = false
-        binding.oreoStatus.setImageResource(R.drawable.ic_ring_default_silver_new)
+        binding.oreoStatus.setImageResource(R.drawable.ic_ring_default_silver)
+        binding.oreoStatus.setPadding(screenUtils.dpToPx(14,requireContext()).toInt())
         binding.textView90.text = getString(R.string.text_trying_to_connect_your_ring)
         binding.textRingConnecteMessage.text = getString(R.string.text_ring_not_in_range)
     }

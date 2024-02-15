@@ -8,6 +8,7 @@ import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Timer
 import java.util.TimerTask
@@ -21,6 +22,7 @@ class RecordWorkoutViewModel @Inject constructor(
 ) : BaseViewModel() {
 
 
+    val showWorkoutStoppedByRingDialog = MutableLiveData<Event<Boolean>>()
     var markedDeleted: Boolean = false
     var workout: OWorkoutListModal? = null
     var sportStartTime = 0L
