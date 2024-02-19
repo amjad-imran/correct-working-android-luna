@@ -124,6 +124,15 @@ constructor(
         }
     }
 
+    fun removeBatteryNotification() {
+        NoiseFitApplicationMain.context?.let {
+            NotificationUtil.removeNotification(
+                it,
+                12342
+            )
+        }
+    }
+
 
     fun handleBatteryNotification(
         currentBatteryLevel: Int,
