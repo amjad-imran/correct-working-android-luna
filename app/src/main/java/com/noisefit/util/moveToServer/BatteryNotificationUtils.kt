@@ -73,28 +73,54 @@ constructor(
         }
     }
 
+    /* fun handleBatteryNotification(
+         currentBatteryLevel: Int
+     ) {
+
+         if (currentBatteryLevel <= 20) {
+             val message ="Your ring battery is below 20%. Please charge your ring to get uninterrupted insights."
+
+             val notificationShown = watchDataStore.getChargingNotificationsShown()
+
+             val level = when (currentBatteryLevel) {
+                 in 0..5 -> ChargingNotificationLevel.LEVEL_5
+                 in 6..10 -> ChargingNotificationLevel.LEVEL_10
+                 in 11..15 -> ChargingNotificationLevel.LEVEL_15
+                 in 16..20 -> ChargingNotificationLevel.LEVEL_20
+                 else -> null
+             } ?: return
+
+             if (notificationShown[level.name] == true) {
+                 return
+             }
+             //watchDataStore.setChargingNotificationShown(level)
+             pushBatteryNotification(NoiseFitApplicationMain.context!!, TITLE, message, "3")
+         }
+     }*/
+
     fun handleBatteryNotification(
         currentBatteryLevel: Int
     ) {
 
-        if (currentBatteryLevel <= 20) {
-            val message ="Your ring battery is below 20%. Please charge your ring to get uninterrupted insights."
+        if (currentBatteryLevel < 20) {
+            val message =
+                "Your ring battery is below 20%. Please charge your ring to get uninterrupted insights."
 
             val notificationShown = watchDataStore.getChargingNotificationsShown()
 
             val level = when (currentBatteryLevel) {
-                in 0..5 -> ChargingNotificationLevel.LEVEL_5
-                in 6..10 -> ChargingNotificationLevel.LEVEL_10
-                in 11..15 -> ChargingNotificationLevel.LEVEL_15
-                in 16..20 -> ChargingNotificationLevel.LEVEL_20
+                in 0..10 -> ChargingNotificationLevel.LEVEL_10
+                in 11..20 -> ChargingNotificationLevel.LEVEL_20
                 else -> null
             } ?: return
 
             if (notificationShown[level.name] == true) {
                 return
             }
-            //watchDataStore.setChargingNotificationShown(level)
+            watchDataStore.setChargingNotificationShown(level)
             pushBatteryNotification(NoiseFitApplicationMain.context!!, TITLE, message, "3")
+        } else {
+            watchDataStore.resetChargingNotificationData()
         }
     }
 
