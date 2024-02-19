@@ -19,7 +19,6 @@ import com.noisefit_commans.models.SleepMovementType
 import com.noisefit_commans.models.SleepType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.OContributorResponseModal
@@ -29,7 +28,6 @@ import com.oreo.data.model.health.SleepHourlyBreakup
 import com.oreo.data.model.health.SleepMovementBreakup
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.abs
@@ -42,7 +40,6 @@ constructor(
     val ringDataStore: RingDataStore,
     val sessionManager: SessionManager
 ) : BaseViewModel() {
-
 
 
     /* private val _sleepHistoryResponse = MutableLiveData<List<OreoSleepModel>>()
@@ -574,7 +571,11 @@ constructor(
         return Pair(sleepArray, countCData)
     }
 
-    fun getMovementBreakup(sleepBreakup: List<SleepMovementBreakup>?): Pair<List<OreoSleepData.OreoSleepMovementDataBreakup>,
+    fun getMovementBreakup(
+        sleepBreakup: List<SleepMovementBreakup>?,
+        sleepStartTime: String?,
+        sleepEndTime: String?
+    ): Pair<List<OreoSleepData.OreoSleepMovementDataBreakup>,
             CountCardData> {
         val countCData = CountCardData(
             type = "Movement",
@@ -585,19 +586,19 @@ constructor(
         countCData.count = "_"
         countCData.countSubText = "sub"
 
-        val startTime = DateFormats.formatDate(
-            sleepBreakup?.firstOrNull()?.start_time ?: "",
-            DateFormats.dateTimeFormat5,
-            DateFormats.time12Meridian
-        )
-        val endTime = DateFormats.formatDate(
-            sleepBreakup?.lastOrNull()?.end_time ?: "",
-            DateFormats.dateTimeFormat5,
-            DateFormats.time12Meridian
-        )
+        /*  val startTime = DateFormats.formatDate(
+              sleepBreakup?.firstOrNull()?.start_time ?: "",
+              DateFormats.dateTimeFormat5,
+              DateFormats.time12Meridian
+          )
+          val endTime = DateFormats.formatDate(
+              sleepBreakup?.lastOrNull()?.end_time ?: "",
+              DateFormats.dateTimeFormat5,
+              DateFormats.time12Meridian
+          )*/
 
-        countCData.leftValue = startTime
-        countCData.rightValue = endTime
+        countCData.leftValue = sleepStartTime ?: ""
+        countCData.rightValue = sleepEndTime ?: ""
 
         val sleepArray = ArrayList<OreoSleepData.OreoSleepMovementDataBreakup>()
         sleepBreakup?.forEach { breakup ->

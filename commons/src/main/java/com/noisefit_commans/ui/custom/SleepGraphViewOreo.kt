@@ -17,6 +17,9 @@ import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import org.joda.time.Duration
+import org.joda.time.LocalDateTime
+import org.joda.time.format.DateTimeFormat
 import java.util.Calendar
 import java.util.Date
 
@@ -39,6 +42,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
     private lateinit var awakePaintInteracting: Paint
 
     var overlayLinePaint: Paint
+    var edgeTextBackPaint: Paint
 
     var lastSelectedEntry: ToolTipEntry? = null
 
@@ -104,6 +108,9 @@ class SleepGraphViewOreo(var mContext: Context) : View(
 
         overlayLinePaint = Paint()
         overlayLinePaint.color = Color.parseColor("#bad4f2")
+
+        edgeTextBackPaint = Paint()
+        edgeTextBackPaint.color = Color.parseColor("#808080")
 
     }
 
@@ -186,60 +193,6 @@ class SleepGraphViewOreo(var mContext: Context) : View(
 
         if (sleepArray != null && sleepArray!!.size > 0) {
 
-            countCardData?.leftValue?.let { startTime ->
-
-                val startText = DateFormats.formatDate(
-                    startTime,
-                    DateFormats.dateTimeFormat5,
-                    DateFormats.time12Meridian
-                ).lowercase()
-
-                val rectF = RectF(
-                    0f,
-                    (sectionHeight * 4) + pxFromDp(8f),
-                    mTextPaintEdge.measureText(startText),
-                    height.toFloat()
-                )
-                canvas.drawRoundRect(
-                    rectF,
-                    pxFromDp(4f),
-                    pxFromDp(4f),
-                    overlayLinePaint
-                )
-
-                canvas.drawText(
-                    startText,
-                    0f,
-                    (sectionHeight * 5) - pxFromDp(5.0f),
-                    mTextPaintEdge
-                )
-
-
-            }
-
-            countCardData?.rightValue?.let { endTime ->
-
-                val text = DateFormats.formatDate(
-                    endTime,
-                    DateFormats.dateTimeFormat5,
-                    DateFormats.time12Meridian
-                )
-                val textWidth = mTextPaintEdge.measureText(text)
-
-
-                canvas.drawText(
-                    DateFormats.formatDate(
-                        endTime,
-                        DateFormats.dateTimeFormat5,
-                        DateFormats.time12Meridian
-                    ).lowercase(),
-                    (width - textWidth - endPadding),
-                    sectionHeight * 5 - pxFromDp( 5.0f),
-                    mTextPaintEdge
-                )
-            }
-
-
             var totalDuration = 0
             for (i in sleepArray!!.indices) {
                 totalDuration += sleepArray!![i].duration
@@ -247,13 +200,14 @@ class SleepGraphViewOreo(var mContext: Context) : View(
             if (totalDuration != 0) {
                 val eachSecondsWidth = (width.toFloat() - endPadding) / totalDuration
 
-                drawMidPoints(
+                drawXAxisTime(
                     canvas,
                     sectionHeight,
                     eachSecondsWidth,
                     countCardData?.leftValue,
                     countCardData?.rightValue
                 )
+
                 val lineWidth = pxFromDp(1f)
 
                 var start = 0f
@@ -589,21 +543,172 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                 }
             }
         } else {
-            canvas.drawText(
-                "12 am",
+
+            val edgeTextPadding = pxFromDp(4f)
+
+
+
+            var rectF = RectF(
                 0f,
-                (sectionHeight * 5) - pxFromDp( 5.0f),
-                mTextPaint
+                (sectionHeight * 4) + pxFromDp(8f),
+                mTextPaintEdge.measureText("12 am") + edgeTextPadding * 2,
+                height.toFloat()
+            )
+            canvas.drawRoundRect(
+                rectF,
+                pxFromDp(4f),
+                pxFromDp(4f),
+                edgeTextBackPaint
             )
 
-            val textWidth = mTextPaint.measureText("12 am")
             canvas.drawText(
                 "12 am",
-                (width - textWidth - endPadding),
-                sectionHeight * 5 - pxFromDp( 5.0f),
-                mTextPaint
+                edgeTextPadding,
+                (sectionHeight * 5) - pxFromDp(5.0f),
+                mTextPaintEdge
+            )
+
+
+            val text = "12 am"
+            val textWidth = mTextPaintEdge.measureText(text)
+            rectF = RectF(
+                (width - textWidth - endPadding) - edgeTextPadding * 2,
+                (sectionHeight * 4) + pxFromDp(8f),
+                width - endPadding,
+                height.toFloat()
+            )
+            canvas.drawRoundRect(
+                rectF,
+                pxFromDp(4f),
+                pxFromDp(4f),
+                edgeTextBackPaint
+            )
+
+            canvas.drawText(
+                text,
+                (width - textWidth - endPadding) - edgeTextPadding,
+                sectionHeight * 5 - pxFromDp(5.0f),
+                mTextPaintEdge
             )
         }
+    }
+
+    private fun drawXAxisTime(
+        canvas: Canvas,
+        sectionHeight: Float,
+        eachSecondsWidth: Float,
+        startTimeStr: String?,
+        endTimeStr: String?
+    ) {
+
+        if (startTimeStr == null || endTimeStr == null) return
+
+        tryCatch {
+            val formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
+
+            val startDateTime = LocalDateTime.parse(startTimeStr, formatter)
+            val endDateTime = LocalDateTime.parse(endTimeStr, formatter)
+
+            var currentDateTime = startDateTime
+
+            while (currentDateTime < endDateTime) {
+                var nextEvenHour =
+                    currentDateTime.plusHours(1).withMinuteOfHour(0).withSecondOfMinute(0)
+                if (nextEvenHour.hourOfDay % 2 != 0) {
+                    nextEvenHour = nextEvenHour.plusHours(1)
+                }
+
+                currentDateTime = nextEvenHour
+                if (nextEvenHour > endDateTime) {
+                    break
+                }
+
+                val formatterDisplay = DateTimeFormat.forPattern("h a")
+                val duration = Duration(startDateTime.toDateTime(), currentDateTime.toDateTime())
+                val secondsDifference = duration.toStandardSeconds().seconds
+                val startX = secondsDifference * eachSecondsWidth
+                val textWidth =
+                    mTextPaint.measureText(currentDateTime.toString(formatterDisplay).lowercase())
+
+                canvas.drawText(
+                    currentDateTime.toString(formatterDisplay).lowercase(),
+                    startX - textWidth / 2,
+                    sectionHeight * 5 - pxFromDp(5.0f),
+                    mTextPaint
+                )
+
+
+            }
+        }
+
+        val edgeTextPadding = pxFromDp(4f)
+
+        countCardData?.leftValue?.let { startTime ->
+
+            val startText = DateFormats.formatDate(
+                startTime,
+                DateFormats.dateTimeFormat5,
+                DateFormats.time12Meridian
+            ).lowercase()
+
+            val rectF = RectF(
+                0f,
+                (sectionHeight * 4) + pxFromDp(8f),
+                mTextPaintEdge.measureText(startText) + edgeTextPadding * 2,
+                height.toFloat()
+            )
+            canvas.drawRoundRect(
+                rectF,
+                pxFromDp(4f),
+                pxFromDp(4f),
+                edgeTextBackPaint
+            )
+
+            canvas.drawText(
+                startText,
+                edgeTextPadding,
+                (sectionHeight * 5) - pxFromDp(5.0f),
+                mTextPaintEdge
+            )
+
+
+        }
+
+        countCardData?.rightValue?.let { endTime ->
+
+            val text = DateFormats.formatDate(
+                endTime,
+                DateFormats.dateTimeFormat5,
+                DateFormats.time12Meridian
+            )
+            val textWidth = mTextPaintEdge.measureText(text)
+
+
+            val rectF = RectF(
+                (width - textWidth - endPadding) - edgeTextPadding * 2,
+                (sectionHeight * 4) + pxFromDp(8f),
+                width - endPadding,
+                height.toFloat()
+            )
+            canvas.drawRoundRect(
+                rectF,
+                pxFromDp(4f),
+                pxFromDp(4f),
+                edgeTextBackPaint
+            )
+
+            canvas.drawText(
+                DateFormats.formatDate(
+                    endTime,
+                    DateFormats.dateTimeFormat5,
+                    DateFormats.time12Meridian
+                ).lowercase(),
+                (width - textWidth - endPadding) - edgeTextPadding,
+                sectionHeight * 5 - pxFromDp(5.0f),
+                mTextPaintEdge
+            )
+        }
+
     }
 
     private fun drawBackGrid(canvas: Canvas, sectionHeight: Float) {
@@ -663,7 +768,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                 canvas.drawText(
                     DateFormats.time12Meridian.format(midLeftTIme).lowercase(),
                     center / 2 - textWidth1 / 2,
-                    sectionHeight * 5 - pxFromDp( 5.0f),
+                    sectionHeight * 5 - pxFromDp(5.0f),
                     mTextPaint
                 )
 
@@ -674,7 +779,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                 canvas.drawText(
                     DateFormats.time12Meridian.format(midTime).lowercase(),
                     center - textWidthCenter / 2,
-                    sectionHeight * 5 - pxFromDp( 5.0f),
+                    sectionHeight * 5 - pxFromDp(5.0f),
                     mTextPaint
                 )
                 val textWidth2 = mTextPaint.measureText(
@@ -683,7 +788,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                 canvas.drawText(
                     DateFormats.time12Meridian.format(midRightTIme).lowercase(),
                     center + (center / 2) - textWidth2 / 2,
-                    sectionHeight * 5 - pxFromDp( 5.0f),
+                    sectionHeight * 5 - pxFromDp(5.0f),
                     mTextPaint
                 )
 
@@ -697,7 +802,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                 canvas.drawText(
                     DateFormats.time12Meridian.format(midTime).lowercase(),
                     center - textWidthCenter / 2,
-                    sectionHeight * 5 - pxFromDp( 5.0f),
+                    sectionHeight * 5 - pxFromDp(5.0f),
                     mTextPaint
                 )
             }
