@@ -6,6 +6,7 @@ import android.graphics.*
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import com.noisefit_commans.R
 import com.noisefit_commans.data.model.CountCardData
 import com.noisefit_commans.data.model.OreoSleepData
@@ -455,6 +456,9 @@ class NightTimeGraphViewOreo(var mContext: Context) : View(
         edgeTextBackPaint = Paint()
         edgeTextBackPaint.color = Color.parseColor("#808080")
 
+        val fontGilroy = ResourcesCompat.getFont(this.context, R.font.gilroy_medium)
+
+
 
         mPaintHighLine = Paint().apply {
             isAntiAlias = true
@@ -477,14 +481,17 @@ class NightTimeGraphViewOreo(var mContext: Context) : View(
 
         mPaintLow = Paint().apply {
             style = Paint.Style.FILL
+            typeface = fontGilroy
             color = Color.parseColor("#7156cc")
         }
         mPaintMed = Paint().apply {
             style = Paint.Style.FILL
+            typeface = fontGilroy
             color = Color.parseColor("#ac7edb")
         }
         mPaintHigh = Paint().apply {
             style = Paint.Style.FILL
+            typeface = fontGilroy
             color = Color.parseColor("#ffffff")
         }
 
@@ -495,20 +502,29 @@ class NightTimeGraphViewOreo(var mContext: Context) : View(
         mPaint.style = Paint.Style.STROKE
         mPaint.color = ContextCompat.getColor(mContext, R.color.white_12)
         mPaint.strokeWidth = pxFromDp(mContext, 1f)
+        mPaint.typeface = fontGilroy
+
+
         mPaint2 = Paint()
         mPaint2.isAntiAlias = true
         mPaint2.style = Paint.Style.STROKE
         mPaint2.color = ContextCompat.getColor(mContext, R.color.sleep_graph_line)
         mPaint2.strokeWidth = pxFromDp(mContext, 2f)
+        mPaint2.typeface = fontGilroy
+
+
         mTextPaint = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
         mTextPaint.color = ContextCompat.getColor(mContext, R.color.white_64)
         mTextPaint.textSize = pxFromDp(mContext, 10f)
+        mTextPaint.typeface = fontGilroy
+
         outerPaint = Paint()
         outerPaint.style = Paint.Style.FILL
         outerPaint.color = Color.TRANSPARENT
 
         mTextPaintEdge = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
         mTextPaintEdge.color = ContextCompat.getColor(mContext, R.color.white)
+        mTextPaintEdge.typeface = fontGilroy
         mTextPaintEdge.textSize = pxFromDp(mContext, 10f)
 
     }

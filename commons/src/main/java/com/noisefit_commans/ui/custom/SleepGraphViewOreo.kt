@@ -121,8 +121,8 @@ class SleepGraphViewOreo(var mContext: Context) : View(
         val sectionHeight = height.toFloat() / 5
         drawBackGrid(canvas, sectionHeight)
         drawYAxis(canvas, sectionHeight)
-        drawContent(canvas, sectionHeight)
         drawOverlay(canvas, sectionHeight)
+        drawContent(canvas, sectionHeight)
     }
 
     private fun drawOverlay(canvas: Canvas, sectionHeight: Float) {
