@@ -103,16 +103,30 @@ constructor(
     ) {
 
         if (currentBatteryLevel < 20) {
-            val message =
-                "Your ring battery is below 20%. Please charge your ring to get uninterrupted insights."
+
 
             val notificationShown = watchDataStore.getChargingNotificationsShown()
 
+            var batteryLevelMessage = 20
+
             val level = when (currentBatteryLevel) {
-                in 0..10 -> ChargingNotificationLevel.LEVEL_10
-                in 11..20 -> ChargingNotificationLevel.LEVEL_20
+                in 0..5 ->{
+                    batteryLevelMessage = 5
+                    ChargingNotificationLevel.LEVEL_5
+                }
+                in 6..10 ->{
+                    batteryLevelMessage = 10
+                    ChargingNotificationLevel.LEVEL_10
+                }
+                in 11..19 ->{
+                    batteryLevelMessage = 20
+                    ChargingNotificationLevel.LEVEL_20
+                }
                 else -> null
             } ?: return
+
+            val message =
+                "Your ring battery is below $batteryLevelMessage%. Please charge your ring to get uninterrupted insights."
 
             if (notificationShown[level.name] == true) {
                 return
@@ -121,6 +135,7 @@ constructor(
             pushBatteryNotification(NoiseFitApplicationMain.context!!, TITLE, message, "3")
         } else {
             watchDataStore.resetChargingNotificationData()
+            removeBatteryNotification()
         }
     }
 
