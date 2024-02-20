@@ -16,11 +16,12 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.dataConverter.OreoDayTimeDataConvertor
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.OContributorResponseModal
+import com.oreo.data.model.ODayTimeActivitiesDataModel
+import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.health.OreoActivityModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -496,5 +497,41 @@ class OreoActivityViewModel @Inject constructor(
         val timeUnit = timeValue[1].lowercase()
         return Pair(time, timeUnit)
     }
+
+    var stressActivityData: ArrayList<ODayTimeActivitiesDataModel>? = null
+    fun prepareStressActivityData(dayData: ServerUserHealthData) {
+        val workouts = dayData.activity?.workout
+        val sleep = dayData.sleep
+        val dataList = ArrayList<ODayTimeActivitiesDataModel>()
+        workouts?.forEach {
+            dataList.add(
+                ODayTimeActivitiesDataModel(
+                    type = "Workout",
+                    workoutData = it
+                )
+            )
+        }
+        if (sleep != null) {
+            if (sleep.hourly_breakup != null)
+                dataList.add(
+                    ODayTimeActivitiesDataModel(
+                        type = "Sleep",
+                        startTime = sleep.hourly_breakup?.firstOrNull()?.start_time,
+                        endTime = sleep.hourly_breakup?.lastOrNull()?.end_time,
+                    )
+                )
+        }
+        if (sleep?.naps != null) {
+            dataList.add(
+                ODayTimeActivitiesDataModel(
+                    type = "Nap",
+                    startTime = sleep.naps.firstOrNull()?.startTime,
+                    endTime = sleep.naps.firstOrNull()?.endTime
+                )
+            )
+        }
+        stressActivityData = dataList
+    }
+
 
 }

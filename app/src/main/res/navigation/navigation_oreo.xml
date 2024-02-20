@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_navigation_activity_details_frag_to_descriptionPopUpBottomDialogFragment"
             app:destination="@id/descriptionPopUpBottomDialogFragment" />
+        <action
+            android:id="@+id/action_navigation_activity_details_frag_to_dayTimeActivitiesBottomSheet"
+            app:destination="@id/bottomSheetDayTimeActivity" />
     </fragment>
     <fragment
         android:id="@+id/navigation_oreo_sleep"
@@ -378,8 +381,8 @@
             app:argType="string" />
         <argument
             android:name="type"
-            app:argType="string"
-            android:defaultValue="" />
+            android:defaultValue=""
+            app:argType="string" />
     </dialog>
     <fragment
         android:id="@+id/ringCareFragment"
@@ -477,7 +480,7 @@
     <fragment
         android:id="@+id/napDetails"
         android:name="com.oreo.ui.sleep.nap.ONapDetailsFragment"
-        android:label="fragment_nap_details" >
+        android:label="fragment_nap_details">
         <argument
             android:name="napId"
             app:argType="string" />
@@ -485,7 +488,7 @@
     <dialog
         android:id="@+id/bottomSheetNapScore"
         android:name="com.oreo.ui.sleep.nap.OBottomSheetNapScore"
-        android:label="nap_score_bottomsheet" >
+        android:label="nap_score_bottomsheet">
         <argument
             android:name="napScoreData"
             android:defaultValue="@null"
@@ -495,7 +498,7 @@
     <dialog
         android:id="@+id/bottomSheetNoDataNapScore"
         android:name="com.oreo.ui.sleep.nap.OBottomSheetNoDataNapScore"
-        android:label="nap_score_bottomsheet" >
+        android:label="nap_score_bottomsheet">
         <argument
             android:name="napScoreData"
             android:defaultValue="@null"
@@ -557,5 +560,12 @@
         android:id="@+id/workoutStopRingBottomSheet"
         android:name="com.noisefit.ui.common.bottomSheet.WorkoutStopRingBottomSheet"
         android:label="WorkoutStopRingBottomSheet" />
-
+    <dialog
+        android:id="@+id/bottomSheetDayTimeActivity"
+        android:name="com.oreo.ui.activity.BottomSheetDayTimeActivities"
+        android:label="BottomSheetDayTimeActivity">
+        <argument
+            android:name="dataList"
+            app:argType="com.oreo.data.model.ODayTimeActivitiesDataModel[]" />
+    </dialog>
 </navigation>

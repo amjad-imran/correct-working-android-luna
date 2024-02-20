@@ -472,6 +472,7 @@ class ODayTimeInteractiveGraph : View {
             rectF?.top = topWith
             rectF?.right = rectF!!.left + (calculatedEnd - section.start) * unitHLenth
             rectF?.bottom = mHeight - bottomWith
+
             chartLineFillPaint.setShader(resMap!![i]!!.first)
             canvas.drawRect(rectF!!, chartLineFillPaint)
 
