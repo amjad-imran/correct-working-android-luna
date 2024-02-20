@@ -722,14 +722,18 @@ class OreoSleepDetailFragment :
         }
     }
 
-    private fun showNightTimeMovementGraph(nightMovementBreakUp: List<SleepMovementBreakup>?) {
+    private fun showNightTimeMovementGraph(
+        nightMovementBreakUp: List<SleepMovementBreakup>?,
+        sleepStartTime: String?,
+        sleepEndTime: String?
+    ) {
 
         val nightTimeMovementGraph = NightTimeGraphViewOreo(requireContext())
         binding.lytSSAnalysis.lytNightMovement.flNightTimeMovement.removeAllViews()
         binding.lytSSAnalysis.lytNightMovement.flNightTimeMovement.addView(nightTimeMovementGraph)
 
         val sleepData =
-            viewModel.getMovementBreakup(nightMovementBreakUp)
+            viewModel.getMovementBreakup(nightMovementBreakUp,sleepStartTime,sleepEndTime)
         nightTimeMovementGraph.init(false)
 
         nightTimeMovementGraph.setData(sleepData.second)
@@ -1040,7 +1044,7 @@ class OreoSleepDetailFragment :
 
         initSleepAnalysisGraph(dayData.hourly_breakup)
 
-        setNightTimeMovement(dayData.night_time_movement)
+        setNightTimeMovement(dayData.night_time_movement,sleepStartTime, sleepEndTime)
 
         setNapData(dayData.naps, dayData.date)
 
@@ -1067,8 +1071,12 @@ class OreoSleepDetailFragment :
         }
     }
 
-    private fun setNightTimeMovement(hourlyBreakup: List<SleepMovementBreakup>?) {
-        showNightTimeMovementGraph(hourlyBreakup)
+    private fun setNightTimeMovement(
+        hourlyBreakup: List<SleepMovementBreakup>?,
+        sleepStartTime: String?,
+        sleepEndTime: String?
+    ) {
+        showNightTimeMovementGraph(hourlyBreakup,sleepStartTime,sleepEndTime)
     }
 
     private fun totalSleepDataView() {

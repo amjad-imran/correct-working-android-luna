@@ -34,6 +34,7 @@ import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.health.ActivityScore
 import com.oreo.data.model.health.Nudges
 import com.oreo.data.model.health.OreoActivityModel
+import com.oreo.ui.custom.OnDayTimeClickAction
 import com.oreo.ui.custom.ScrollListener
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.sleep.scoredetails.ClickViewType
@@ -320,43 +321,50 @@ class OreoActivityFragment :
 
     }
 
+    private fun initDayTimeInteractiveGraph() {
+        val dayData = mainViewModel.getDayMovementData(mainViewModel.selectedDate)
+        binding.lytDailyMovement.lytInteractiveGraph.graphDayTime.enableInteractiveMode(true)
+        binding.lytDailyMovement.lytInteractiveGraph.graphDayTime.updateData(
+            dayData?.let {
+                mViewModel.dayTimeDataConvertor.getDayTimeCombinedData(
+                    it
+                )
+            }
+        )
+
+
+        resetDayTimeTopLevelUi()
+    }
+
+
     private fun handleMovementNewViews(it: OreoActivityModel) {
         val movementList = it.daytimeMovement?.movement
-
-        val newList = mViewModel.getCombinedMovementData(movementList, false)
         val newListInvalid = mViewModel.getCombinedMovementData(movementList, true)
-
         var highMovValue = 0
         var medMovValue = 0
         var lowMovValue = 0
         var inactiveMovValue = 0
-        if (movementList?.isNotEmpty() == true) {
-            newListInvalid.forEachIndexed { index, data ->
-                when (data) {
-                    0 -> {
-                        inactiveMovValue++
-                    }
-
-                    1 -> {
-                        lowMovValue++
-                    }
-
-                    2 -> {
-                        medMovValue++
-                    }
-
-                    3 -> {
-                        highMovValue++
-                    }
-
-                    else -> {}
+        newListInvalid.forEachIndexed { index, data ->
+            when (data) {
+                0 -> {
+                    inactiveMovValue++
                 }
+
+                1 -> {
+                    lowMovValue++
+                }
+
+                2 -> {
+                    medMovValue++
+                }
+
+                3 -> {
+                    highMovValue++
+                }
+
+                else -> {}
             }
         }
-
-        binding.lytDailyMovement.movementChart.setData(newList)
-
-        //mDayMovementAdapter.setData(newList)
 
 
         val totalValue = highMovValue + medMovValue + lowMovValue + inactiveMovValue
@@ -367,6 +375,10 @@ class OreoActivityFragment :
         val (inactiveProgress, inactiveRemark) = returnMovementProgress(
             inactiveMovValue, totalValue
         )
+        mViewModel.activeMinutes = (lowMovValue + medMovValue + highMovValue) * 15
+
+        initDayTimeInteractiveGraph()
+
 
         //for high value
         binding.lytDailyMovement.lytDMHigh.view1.layoutParams =
@@ -460,82 +472,6 @@ class OreoActivityFragment :
 
     private fun calculateWeightPercent(progress: Int): Float {
         return (progress.toFloat() / 100).times(42)
-    }
-
-    private fun handleMovementViews(it: OreoActivityModel) {
-//        binding.lytDailyMovement.lytDMHigh.tvTitle.text = getString(R.string.text_high_movement)
-
-        val movementList = it.daytimeMovement?.movement
-
-        val newList = mViewModel.getCombinedMovementData(movementList, false)
-        val newListInvalid = mViewModel.getCombinedMovementData(movementList, true)
-
-        var highMovValue = 0
-        var medMovValue = 0
-        var lowMovValue = 0
-        var inactiveMovValue = 0
-        if (movementList?.isNotEmpty() == true) {
-            newListInvalid.forEachIndexed { index, data ->
-                when (data) {
-                    0 -> {
-                        inactiveMovValue++
-                    }
-
-                    1 -> {
-                        lowMovValue++
-                    }
-
-                    2 -> {
-                        medMovValue++
-                    }
-
-                    3 -> {
-                        highMovValue++
-                    }
-
-                    else -> {}
-                }
-            }
-        }
-
-        binding.lytDailyMovement.movementChart.setData(newList)
-
-        //mDayMovementAdapter.setData(newList)
-
-
-        val totalValue = highMovValue + medMovValue + lowMovValue + inactiveMovValue
-
-        val (highProgress, highRemark) = returnMovementProgress(highMovValue, totalValue)
-        val (medProgress, medRemark) = returnMovementProgress(medMovValue, totalValue)
-        val (lowProgress, lowRemark) = returnMovementProgress(lowMovValue, totalValue)
-        val (inactiveProgress, inactiveRemark) = returnMovementProgress(
-            inactiveMovValue, totalValue
-        )
-
-
-        /*binding.lytDailyMovement.lytDMHigh.pbSteps.progress = highProgress
-        binding.lytDailyMovement.lytDMHigh.tvRemark.text = highRemark
-        binding.lytDailyMovement.lytDMHigh.pbSteps.setIndicatorColor(
-            ContextCompat.getColor(requireContext(), R.color.low_movement)
-        )
-        binding.lytDailyMovement.lytDMMed.tvTitle.text = getString(R.string.text_medium_movement)
-        binding.lytDailyMovement.lytDMMed.pbSteps.progress = medProgress
-        binding.lytDailyMovement.lytDMMed.tvRemark.text = medRemark
-        binding.lytDailyMovement.lytDMMed.pbSteps.setIndicatorColor(
-            ContextCompat.getColor(requireContext(), R.color.medium_movement)
-        )
-        binding.lytDailyMovement.lytDMLow.tvTitle.text = getString(R.string.text_low_movement)
-        binding.lytDailyMovement.lytDMLow.pbSteps.progress = lowProgress
-        binding.lytDailyMovement.lytDMLow.tvRemark.text = lowRemark
-        binding.lytDailyMovement.lytDMLow.pbSteps.setIndicatorColor(
-            ContextCompat.getColor(requireContext(), R.color.low_movement)
-        )
-        binding.lytDailyMovement.lytDMInactive.tvTitle.text = getString(R.string.text_inactive)
-        binding.lytDailyMovement.lytDMInactive.pbSteps.progress = inactiveProgress
-        binding.lytDailyMovement.lytDMInactive.tvRemark.text = inactiveRemark
-        binding.lytDailyMovement.lytDMInactive.pbSteps.setIndicatorColor(
-            ContextCompat.getColor(requireContext(), R.color.inactive_movement)
-        )*/
     }
 
 
@@ -639,7 +575,86 @@ class OreoActivityFragment :
         }
     }
 
+    private fun resetDayTimeTopLevelUi() {
+        val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(mViewModel.activeMinutes)
+        binding.lytDailyMovement.tvMovementType.text = getString(R.string.text_active_duration)
+        binding.lytDailyMovement.view1.gone()
+        binding.lytDailyMovement.tvStartTime.text = "$hour"
+        binding.lytDailyMovement.tvStartTimeUnit.text = "hr"
+        binding.lytDailyMovement.tvEndTime.text = "$minute"
+        binding.lytDailyMovement.tvEndTimeUnit.text = "min"
+    }
+
+    private fun updateDayTimeTopLabelUi(value: Int, position: Int) {
+        LOGS.d("CLICKED POS value $value Pos $position")
+        binding.lytDailyMovement.view1.visible()
+        val labelValue: String
+        val labelColor: Int
+        when (value) {
+            0 -> {
+                labelValue = "Inactive"
+                labelColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.daytime_analysis_inactive_label_color
+                )
+            }
+
+            1 -> {
+                labelValue = "Low movement"
+                labelColor =
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.daytime_low_movement_label_color
+                    )
+            }
+
+            2 -> {
+                labelValue = "Medium movement"
+                labelColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.daytime_medium_movement_label_color
+                )
+            }
+
+            3 -> {
+                labelValue = "High movement"
+                labelColor = ContextCompat.getColor(requireContext(), R.color.white)
+            }
+
+            else -> {
+                labelValue = "No data"
+                labelColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.daytime_analysis_inactive_label_color
+                )
+            }
+        }
+        binding.lytDailyMovement.tvMovementType.text = labelValue
+        binding.lytDailyMovement.tvMovementType.setTextColor(labelColor)
+        val startTime = mViewModel.formattedTime(mViewModel.getStartTimeFromPosition(position))
+        val endTime = mViewModel.formattedTime(mViewModel.getEndTimeFromPosition(position))
+        binding.lytDailyMovement.tvStartTime.text = startTime.first
+        binding.lytDailyMovement.tvStartTimeUnit.text = startTime.second
+        binding.lytDailyMovement.tvEndTime.text = endTime.first
+        binding.lytDailyMovement.tvEndTimeUnit.text = endTime.second
+    }
+
     override fun initListener() {
+        binding.lytDailyMovement.lytInteractiveGraph.graphDayTime.setClickListener(object :
+            OnDayTimeClickAction {
+            override fun onValueSelected(value: Int, position: Int) {
+                updateDayTimeTopLabelUi(value, position)
+            }
+
+            override fun isInteractionOnGoing(onGoing: Boolean) {
+                resetDayTimeTopLevelUi()
+
+            }
+
+            override fun onTopClicked() {
+
+            }
+        })
 
         binding.lytDailyMovement.bInfo.setOnClickListener {
             mViewModel.contributorInfo.value?.daytime_movement?.let {
@@ -778,7 +793,9 @@ class OreoActivityFragment :
             if (returnDate != null) {
                 mainViewModel.selectedDate = returnDate
             }
+
         }
+
 
         mainViewModel.dayActivityData.observe(this) {
 

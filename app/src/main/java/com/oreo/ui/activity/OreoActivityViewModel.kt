@@ -17,6 +17,7 @@ import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.dataConverter.OreoDayTimeDataConvertor
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.OContributorResponseModal
@@ -24,6 +25,7 @@ import com.oreo.data.model.health.OreoActivityModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,11 +33,12 @@ class OreoActivityViewModel @Inject constructor(
     private val userActivityRepository: OreoUserActivityRepository,
     val localDataStore: DataStoredInterface,
     val ringDataStore: RingDataStore,
-    val sessionManager: SessionManager
+    val sessionManager: SessionManager,
+    val dayTimeDataConvertor: OreoDayTimeDataConvertor
 ) : BaseViewModel() {
 
 
-
+    var activeMinutes: Int = 0
 
     private val _contributorInfo = MutableLiveData<OContributorResponseModal>()
     val contributorInfo: LiveData<OContributorResponseModal> = _contributorInfo
@@ -103,12 +106,12 @@ class OreoActivityViewModel @Inject constructor(
                 currentDayText = "Today, "
             }
 
-            val formattedDate = if(currentDayText.isEmpty()){
+            val formattedDate = if (currentDayText.isEmpty()) {
                 DateFormats.getOrdinalDate(
                     it.date,
                     DateFormats.dateFormat3,
                 )
-            }else{
+            } else {
                 DateFormats.getOrdinalDateToday(
                     it.date,
                     DateFormats.dateFormat3,
@@ -465,5 +468,33 @@ class OreoActivityViewModel @Inject constructor(
         return combinedList
     }
 
+    fun getStartTimeFromPosition(position: Int): String {
+        val minutes = (96 - position) * 15
+        val calendar = Calendar.getInstance()
+        calendar[Calendar.HOUR_OF_DAY] = 0 //set hours to zero
+        calendar[Calendar.MINUTE] = 0 // set minutes to zero
+        calendar[Calendar.SECOND] = 0 //set seconds to zero
+
+        calendar.set(Calendar.MINUTE, minutes)
+        return DateFormats.convertTimestampToDate(calendar.timeInMillis, DateFormats.timeFormat12)
+    }
+
+    fun getEndTimeFromPosition(position: Int): String {
+        val minutes = (96 - position) * 15
+        val calendar = Calendar.getInstance()
+        calendar[Calendar.HOUR_OF_DAY] = 0 //set hours to zero
+        calendar[Calendar.MINUTE] = 0 // set minutes to zero
+        calendar[Calendar.SECOND] = 0 //set seconds to zero
+
+        calendar.set(Calendar.MINUTE, minutes + 15)
+        return DateFormats.convertTimestampToDate(calendar.timeInMillis, DateFormats.timeFormat12)
+    }
+
+    fun formattedTime(receivedTime: String): Pair<String, String> {
+        val timeValue = receivedTime.split(" ")
+        val time = timeValue[0]
+        val timeUnit = timeValue[1].lowercase()
+        return Pair(time, timeUnit)
+    }
 
 }

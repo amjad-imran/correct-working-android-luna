@@ -861,7 +861,7 @@ class OreoReadinessFragment :
 
 
         //set data on temperature
-        binding.lytTemperature.tvTitle.text = getString(R.string.text_temperature)
+       /* binding.lytTemperature.tvTitle.text = getString(R.string.text_temperature)
         binding.lytTemperature.tvSubtitle1.text = getString(R.string.text_max)
         binding.lytTemperature.tvSubtitle2.gone()
         binding.lytTemperature.divider1.root.invisible()
@@ -877,7 +877,7 @@ class OreoReadinessFragment :
             it.temperatureBreakUp,
             sleepStartTime,
             sleepEndTime
-        )
+        )*/
     }
 
 
