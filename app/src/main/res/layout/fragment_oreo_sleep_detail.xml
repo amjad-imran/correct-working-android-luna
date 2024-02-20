@@ -169,12 +169,23 @@
                     <!--                    app:layout_constraintTop_toBottomOf="@+id/divider2" />-->
 
                     <include
+                        android:id="@+id/lytAverageBloodOxygen"
+                        layout="@layout/layout_average_blood_oxygen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/lytSSAnalysis" />
+
+                    <include
                         android:id="@+id/divider3"
                         layout="@layout/layout_divider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginTop="24dp"
-                        app:layout_constraintTop_toBottomOf="@id/lytSSAnalysis" />
+                        app:layout_constraintTop_toBottomOf="@id/lytAverageBloodOxygen" />
 
                     <include
                         android:id="@+id/lytHeartRate"
@@ -202,16 +213,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/divider4" />
 
-                    <include
-                        android:id="@+id/lytAverageBloodOxygen"
-                        layout="@layout/layout_average_blood_oxygen"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:visibility="gone"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/lytHRVariability" />
 
                     <include
                         android:id="@+id/divider6"
@@ -220,7 +221,8 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="24dp"
                         android:visibility="gone"
-                        app:layout_constraintTop_toBottomOf="@id/lytAverageBloodOxygen" />
+                        tools:visibility="visible"
+                        app:layout_constraintTop_toBottomOf="@id/lytHRVariability" />
 
                     <include
                         android:id="@+id/lytBloodOxygenGraph"
@@ -228,6 +230,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:visibility="gone"
+                        tools:visibility="visible"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/divider6" />

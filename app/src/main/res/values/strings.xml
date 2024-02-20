@@ -1028,4 +1028,9 @@
     <string name="text_rem_sleep">REM sleep</string>
     <string name="text_awake">Awake</string>
     <string name="text_movement_analysis">Movement analysis</string>
+    <string name="text_average_blood_oxygen">Average blood oxygen</string>
+    <string name="text_b_o_95_less">Your blood oxygen levels had some variations. Make sure that your ring’s sensors are underneath your finger, and your ring fit feels snug.</string>
+    <string name="text_bo_0_2">Your blood oxygen levels have shown consistency, indicating no breathing disturbances during sleep.</string>
+    <string name="text_bo_3_5">Your blood oxygen levels had some variations. This may be because of occasional breathing disturbances during sleep.</string>
+    <string name="text_bo_else">Your blood oxygen levels had several variations. This may be because of significant breathing disturbances during sleep.</string>
 </resources>

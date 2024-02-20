@@ -3,6 +3,7 @@ package com.oreo.ui.sleep
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
@@ -38,7 +39,8 @@ class OreoSleepDetailsViewModel
 constructor(
     val userActivityRepository: OreoUserActivityRepository,
     val ringDataStore: RingDataStore,
-    val sessionManager: SessionManager
+    val sessionManager: SessionManager,
+    val resourcesProvider: ResourcesProvider
 ) : BaseViewModel() {
 
 
@@ -677,6 +679,11 @@ constructor(
         val avg = oxy?.avg
         if (avg == null || avg == 0) return ""
 
+
+        if (avg < 95) {
+            return resourcesProvider.getString(R.string.text_b_o_95_less)
+        }
+
         var count = 0
         oxy.value.forEach {
             if (it != 0 && it != 255) {
@@ -688,9 +695,9 @@ constructor(
         }
 
         return when (count) {
-            in 0..2 -> "Your blood oxygen levels have shown consistency, indicating no breathing disturbances during sleep."
-            in 3..5 -> "Your blood oxygen levels had some variations. This may be because of occasional breathing disturbances during sleep."
-            else -> "Your blood oxygen levels had several variations. This may be because of significant breathing disturbances during sleep."
+            in 0..2 -> resourcesProvider.getString(R.string.text_bo_0_2)
+            in 3..5 -> resourcesProvider.getString(R.string.text_bo_3_5)
+            else -> resourcesProvider.getString(R.string.text_bo_else)
         }
     }
 
