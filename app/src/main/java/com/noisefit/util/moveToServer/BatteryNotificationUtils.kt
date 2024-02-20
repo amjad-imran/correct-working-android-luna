@@ -113,17 +113,17 @@ constructor(
             var batteryLevelMessage = 20
 
             val level = when (currentBatteryLevel) {
-                in 0..5 -> {
+                in 0..4 -> {
                     batteryLevelMessage = 5
                     ChargingNotificationLevel.LEVEL_5
                 }
 
-                in 6..10 -> {
+                in 5..9 -> {
                     batteryLevelMessage = 10
                     ChargingNotificationLevel.LEVEL_10
                 }
 
-                in 11..19 -> {
+                in 10..19 -> {
                     batteryLevelMessage = 20
                     ChargingNotificationLevel.LEVEL_20
                 }

@@ -1593,11 +1593,9 @@ constructor() : LifecycleService() {
 
                     LOGS.d(TAG, "battery Level Ring : $percent")
 
-                    if (percent >= 20) {
-                        watchDataStore.resetChargingNotificationData()
-                        batteryNotificationUtils.removeBatteryNotification()
-
-                    }
+                    batteryNotificationUtils.handleBatteryNotification(
+                        percent
+                    )
                     /* val lastBatteryLevel = watchDataStore.getBatteryPercentRing()
                      batteryNotificationUtils.handleBatteryNotification(
                          percent,
