@@ -233,12 +233,17 @@ class NightTimeGraphViewOreo(var mContext: Context) : View(
                 val textWidth =
                     mTextPaint.measureText(currentDateTime.toString(formatterDisplay).lowercase())
 
-                canvas.drawText(
-                    currentDateTime.toString(formatterDisplay).lowercase(),
-                    startX - textWidth / 2,
-                    (sectionHeight * 3) + pxFromDp(20f),
-                    mTextPaint
-                )
+
+                val maxWidth = width - endPadding
+                if (startX + textWidth < maxWidth) {
+                    canvas.drawText(
+                        currentDateTime.toString(formatterDisplay).lowercase(),
+                        startX - textWidth / 2,
+                        (sectionHeight * 3) + pxFromDp(20f),
+                        mTextPaint
+                    )
+                }
+
 
 
             }

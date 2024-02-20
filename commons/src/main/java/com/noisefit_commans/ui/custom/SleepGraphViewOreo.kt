@@ -547,7 +547,6 @@ class SleepGraphViewOreo(var mContext: Context) : View(
             val edgeTextPadding = pxFromDp(4f)
 
 
-
             var rectF = RectF(
                 0f,
                 (sectionHeight * 4) + pxFromDp(8f),
@@ -630,14 +629,15 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                 val textWidth =
                     mTextPaint.measureText(currentDateTime.toString(formatterDisplay).lowercase())
 
-                canvas.drawText(
-                    currentDateTime.toString(formatterDisplay).lowercase(),
-                    startX - textWidth / 2,
-                    sectionHeight * 5 - pxFromDp(5.0f),
-                    mTextPaint
-                )
-
-
+                val maxWidth = width - endPadding
+                if (startX + textWidth < maxWidth) {
+                    canvas.drawText(
+                        currentDateTime.toString(formatterDisplay).lowercase(),
+                        startX - textWidth / 2,
+                        sectionHeight * 5 - pxFromDp(5.0f),
+                        mTextPaint
+                    )
+                }
             }
         }
 
