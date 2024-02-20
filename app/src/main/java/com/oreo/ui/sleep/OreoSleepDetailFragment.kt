@@ -376,6 +376,10 @@ class OreoSleepDetailFragment :
                     binding.lytHeartRate.tvSubtitle2.text = averageTxt
                 }
 
+                override fun onTopClicked() {
+
+                }
+
             })
 
         }

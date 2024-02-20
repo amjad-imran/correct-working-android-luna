@@ -304,15 +304,11 @@ class LineChartView : View {
         return list.size - lastMinValueIndex
     }
 
-
-
-
-
-
-
     private var touchX = 0f
     private var isInteracting = false
     private var interactiveMode = false
+
+
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (interactiveMode) {
             val parent = parent
@@ -321,8 +317,7 @@ class LineChartView : View {
                 MotionEvent.ACTION_DOWN -> {
                     touchX = event.x
                     handler.postDelayed(
-                        mLongPressed,
-                        ViewConfiguration.getLongPressTimeout().toLong()
+                        mLongPressed, ViewConfiguration.getLongPressTimeout().toLong()
                     )
                     return true
                 }
@@ -336,12 +331,18 @@ class LineChartView : View {
                 }
 
                 MotionEvent.ACTION_UP -> {
+                    if (!isInteracting) {
+                        if (event.y < dip2px(50f)) {
+                            listener?.onTopClicked()
+                        }
+                    }
                     lastSentValuePos = null
                     handler.removeCallbacks(mLongPressed)
-                    listener?.onValueSelected(0, false)
                     isInteracting = false
-                    invalidate()
+                    listener?.onValueSelected(0, false)
+
                     touchX = 0.0f
+                    invalidate()
                     return true
                 }
             }
@@ -350,7 +351,6 @@ class LineChartView : View {
         }
         return false
     }
-
     fun setClickListener(listener: OnLinearChartClickAction?) {
         this.listener = listener
     }
@@ -552,10 +552,10 @@ class LineChartView : View {
             if (showXAxis) {
                 if (list[i] != null && list[i]!!.index != null && !list[i]!!.index!!.isEmpty()) {
                     val xText = list[i]!!.index
-                    xTextPaint!!.color = Color.WHITE
                     xTextPaint!!.getTextBounds(xText, 0, xText!!.length, xTextBounds)
                     if (endTextStartPos == 0f) {
                         val text = list[0]!!.index
+                        xTextPaint!!.color = Color.parseColor("#ffffff")
                         endTextStartPos = if (text != null) {
                             mWith - leftWith - xTextPaint!!.measureText(text)
                         } else {
@@ -564,35 +564,51 @@ class LineChartView : View {
                     }
                     if (leftTextEndPos == 0f) {
                         val lastText = list[list.size - 1]!!.index
+                        xTextPaint!!.color = Color.parseColor("#ffffff")
                         leftTextEndPos = leftWith + xTextPaint!!.measureText(lastText)
                     }
                     if (i == 0) {
-                        drawHorizontalLine(canvas, x)
+                        xTextPaint!!.color = Color.parseColor("#ffffff")
                         canvas.drawText(
-                            xText,
-                            x - xTextBounds!!.width(),
-                            mHeight - bottomWith / 4,
+                            xText!!, x - xTextBounds!!.width(), mHeight - bottomWith / 4,
                             xTextPaint!!
                         )
-                        //leftTextEndPos = xTextPaint.measureText(xText)
+                        //leftTextEndPos = xTextPaint.measureText(xText);
                     } else if (i == list.size - 1) {
-                        drawHorizontalLine(canvas, x)
-                        canvas.drawText(xText, x, mHeight - bottomWith / 4, xTextPaint!!)
+                        xTextPaint!!.color = Color.parseColor("#ffffff")
+                        canvas.drawText(xText!!, x, mHeight - bottomWith / 4, xTextPaint!!)
                     } else {
                         if (leftTextEndPos < x - xTextBounds!!.width() / 2f - dip2px(6f)
                             && x + xTextBounds!!.width() < endTextStartPos
                         ) {
-                            drawHorizontalLine(canvas, x)
+                            xTextPaint!!.color = xTextColor and -0x7f000001
                             canvas.drawText(
-                                xText,
-                                x - xTextBounds!!.width() / 2f,
-                                mHeight - bottomWith / 4,
+                                xText!!, x - xTextBounds!!.width() / 2f, mHeight - bottomWith / 4,
                                 xTextPaint!!
                             )
                         }
                     }
                 }
             }
+
+
+            if (showLowCircle && !mHasDummyData) {
+                if (i == lastMinValueIndex) {
+//
+//                    Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_dot_circle_graph);
+//                    canvas.drawBitmap(bmp, x, y, null); // 24 is the height of image
+                    canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint!!)
+                }
+            }
+
+            if (showHighCircle && !mHasDummyData) {
+                if (i == lastMaxValueIndex) {
+//                    Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_dot_circle_graph);
+//                    canvas.drawBitmap(bmp, x, y , null); // 24 is the height of image
+                    canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint!!)
+                }
+            }
+
         }
     }
 
@@ -774,4 +790,5 @@ class LineChartView : View {
 
 interface OnLinearChartClickAction {
     fun onValueSelected(value: Int, isInteracting: Boolean)
+    fun onTopClicked()
 }
