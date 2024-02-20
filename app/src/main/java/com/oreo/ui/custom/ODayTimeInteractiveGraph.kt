@@ -68,6 +68,7 @@ class ODayTimeInteractiveGraph : View {
     private var touchX: Float? = null
     private var listener: OnDayTimeClickAction? = null
     private var barStartEndXPosList: ArrayList<DayTimeXYDataModel>? = null
+
     /*
         * bar types
         * -No data
@@ -76,11 +77,22 @@ class ODayTimeInteractiveGraph : View {
         * -2-medium
         * -3-high
         * */
-    private var noDataBarPaint: Paint? = null
-    private var inActiveBarPaint: Paint? = null
-    private var lowBarPaint: Paint? = null
-    private var mediumPaint: Paint? = null
-    private var highPaint: Paint? = null
+
+
+    lateinit var noDataBarPaint: Paint
+    lateinit var inActiveBarPaint: Paint
+    lateinit var lowBarPaint: Paint
+    lateinit var mediumPaint: Paint
+    lateinit var highPaint: Paint
+
+
+    lateinit var noDataBarPaintI: Paint
+    lateinit var inActiveBarPaintI: Paint
+    lateinit var lowBarPaintI: Paint
+    lateinit var mediumPaintI: Paint
+    lateinit var highPaintI: Paint
+
+
     private lateinit var overlayLinePaint: Paint
     private lateinit var overlayLineOnTopPaint: Paint
     private var resMap: MutableMap<Int, Triple<LinearGradient, Bitmap?, String?>>? = null
@@ -171,23 +183,50 @@ class ODayTimeInteractiveGraph : View {
         xTextBounds = Rect()
         rectF = RectF()
 
-        noDataBarPaint = Paint()
-        noDataBarPaint?.color =
-            ContextCompat.getColor(context, R.color.daytime_zero_data_un_selected_color)
+        noDataBarPaint = Paint().apply {
+            color = Color.parseColor("#44515f")
+        }
+        noDataBarPaintI = Paint().apply {
+            color = Color.parseColor("#8044515f")
+        }
 
-        inActiveBarPaint = Paint()
-        inActiveBarPaint?.color =
-            ContextCompat.getColor(context, R.color.daytime_inactive_un_selected_color)
+        inActiveBarPaint = Paint().apply {
+            color =
+                Color.parseColor("#8a9fb3")
+        }
 
-        lowBarPaint = Paint()
-        lowBarPaint?.color = ContextCompat.getColor(context, R.color.daytime_low_un_selected_color)
+        inActiveBarPaintI = Paint().apply {
+            color =
+                Color.parseColor("#4b5e72")
+        }
 
-        mediumPaint = Paint()
-        mediumPaint?.color =
-            ContextCompat.getColor(context, R.color.daytime_medium_un_selected_color)
 
-        highPaint = Paint()
-        highPaint?.color = ContextCompat.getColor(context, R.color.daytime_high_un_selected_color)
+        lowBarPaint = Paint().apply {
+            color =
+                Color.parseColor("#387c8e")
+        }
+        lowBarPaintI = Paint().apply {
+            color =
+                Color.parseColor("#224d60")
+        }
+
+        mediumPaint = Paint().apply {
+            color =
+                Color.parseColor("#6bc5eb")
+        }
+        mediumPaintI = Paint().apply {
+            color =
+                Color.parseColor("#44515f")
+        }
+
+        highPaint = Paint().apply {
+            color =
+                Color.parseColor("#ffffff")
+        }
+        highPaintI = Paint().apply {
+            color =
+                Color.parseColor("#858e99")
+        }
 
         topCombinedPaint = Paint().apply {
             color = Color.WHITE
@@ -206,14 +245,10 @@ class ODayTimeInteractiveGraph : View {
                 list.addAll(it)
             }
         }
-        LOGS.d("TAG list size ${list.size}")
-
         postInvalidate()
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        LOGS.d("TAG w $w")
-        LOGS.d("TAG h $h")
         mWith = w
         mHeight = h
     }
@@ -289,10 +324,10 @@ class ODayTimeInteractiveGraph : View {
 
             var xText = "12 am"
             xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
-            xTextPaint.color = Color.parseColor("#a3ffffff")
+            xTextPaint.color = Color.parseColor("#ffffff")
             canvas.drawText(
                 xText,
-                (mWith - xTextBounds!!.width()).toFloat() - dip2px(2f),
+                (mWith - xTextBounds!!.width()).toFloat() - dip2px(6f),
                 mHeight - bottomWith / 3 + dip2px(3f),
                 xTextPaint
             )
@@ -325,9 +360,11 @@ class ODayTimeInteractiveGraph : View {
                 xTextPaint
             )
             xText = "12 am"
+            xTextPaint.color = Color.parseColor("#ffffff")
             xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
             canvas.drawText(
-                xText, dip2px(3f).toFloat(), mHeight - bottomWith / 3 + dip2px(5f), xTextPaint
+                xText, dip2px(3f).toFloat(),
+                mHeight - bottomWith / 3 + dip2px(3f), xTextPaint
             )
         }
     }
@@ -359,31 +396,31 @@ class ODayTimeInteractiveGraph : View {
             when (it.value) {
                 0 -> {
                     barHeight = dip2px(18f)
-                    barPaints = inActiveBarPaint
+                    barPaints = if (isInteracting) inActiveBarPaintI else inActiveBarPaint
                     barType = 0
                 }
 
                 1 -> {
                     barHeight = dip2px(55f)
-                    barPaints = lowBarPaint
+                    barPaints = if (isInteracting) lowBarPaintI else lowBarPaint
                     barType = 1
                 }
 
                 2 -> {
                     barHeight = dip2px(92f)
-                    barPaints = mediumPaint
+                    barPaints = if (isInteracting) mediumPaintI else mediumPaint
                     barType = 2
                 }
 
                 3 -> {
                     barHeight = dip2px(130f)
-                    barPaints = highPaint
+                    barPaints = if (isInteracting) highPaintI else highPaint
                     barType = 3
                 }
 
                 else -> {
                     barHeight = dip2px(8f)
-                    barPaints = noDataBarPaint
+                    barPaints = if (isInteracting) noDataBarPaintI else noDataBarPaint
                     barType = 4
                 }
             }
@@ -529,12 +566,12 @@ class ODayTimeInteractiveGraph : View {
         if (touchX != null) {
             if (touchX!! > 0 && touchX!! < mWith) {
                 val rectF = RectF()
-                rectF.left = touchX!! - dip2px(1f)
-                rectF.right = touchX!! + dip2px(1f)
+                rectF.left = touchX!! - dip2px(0.5f)
+                rectF.right = touchX!! + dip2px(0.5f)
                 rectF.top = topWith
                 rectF.bottom = mHeight - bottomWith
-                val value: Pair<Int, Int> = getClickedValue(touchX!!)
-                LOGS.d("CLICKED_VALUE value " + value + " Touch " + touchX!!.toInt())
+                //val value: Pair<Int, Int> = getClickedValue(touchX!!)
+                //LOGS.d("CLICKED_VALUE value " + value + " Touch " + touchX!!.toInt())
                 canvas.drawRect(rectF, overlayLinePaint)
                 for (it in 0 until (barStartEndXPosList?.size ?: 0)) {
                     var barColor: Int
@@ -593,25 +630,29 @@ class ODayTimeInteractiveGraph : View {
                             overlayLineOnTopPaint
                         )
 
+
+                        if (listener != null) {
+                            //val position = value.first as Int
+                            //val selectedValue = value.second as Int
+                            val selectedValue = barStartEndXPosList!![it].barType
+                            if (lastSentValuePos == null) {
+                                listener?.onValueSelected(selectedValue, it)
+                                lastSentValuePos = it
+                                performHapticFeedbackCustom(selectedValue)
+                            } else {
+                                if (lastSentValuePos != it) {
+                                    listener?.onValueSelected(selectedValue, it)
+                                    lastSentValuePos = it
+                                    performHapticFeedbackCustom(selectedValue)
+                                }
+                            }
+                        }
+
                         break
                     }
                 }
 
-                if (listener != null) {
-                    val position = value.first as Int
-                    val selectedValue = value.second as Int
-                    if (lastSentValuePos == null) {
-                        listener?.onValueSelected(selectedValue, position)
-                        lastSentValuePos = position
-                        performHapticFeedbackCustom(selectedValue)
-                    } else {
-                        if (lastSentValuePos != position) {
-                            listener?.onValueSelected(selectedValue, position)
-                            lastSentValuePos = position
-                            performHapticFeedbackCustom(selectedValue)
-                        }
-                    }
-                }
+
             }
         }
     }
@@ -621,21 +662,22 @@ class ODayTimeInteractiveGraph : View {
         var position = -1
         for (i in list.size - 1 downTo 1) {
             val sectionEnd = sectionLast + unitHLenth
-            if (touchX < sectionEnd) {
+            if (touchX <= sectionEnd) {
                 position = i
                 break
             }
             sectionLast = sectionEnd
         }
+        LOGS.d("POSITION_VALUE $position")
         return if (position == -1) {
             Pair(0, 0)
         } else {
-            Pair(position, list[96 - position].value)
+            Pair(position, list[95 - position].value)
         }
     }
 
     private fun performHapticFeedbackCustom(value: Int) {
-        if (value == 1 || value == 2 || value == 3) {
+        if (value == 0 || value == 1 || value == 2 || value == 3) {
             this.performHapticFeedback(
                 HapticFeedbackConstants.KEYBOARD_TAP
             )

@@ -38,7 +38,7 @@ class OreoActivityViewModel @Inject constructor(
 ) : BaseViewModel() {
 
 
-
+    var activeMinutes: Int = 0
 
     private val _contributorInfo = MutableLiveData<OContributorResponseModal>()
     val contributorInfo: LiveData<OContributorResponseModal> = _contributorInfo
@@ -106,12 +106,12 @@ class OreoActivityViewModel @Inject constructor(
                 currentDayText = "Today, "
             }
 
-            val formattedDate = if(currentDayText.isEmpty()){
+            val formattedDate = if (currentDayText.isEmpty()) {
                 DateFormats.getOrdinalDate(
                     it.date,
                     DateFormats.dateFormat3,
                 )
-            }else{
+            } else {
                 DateFormats.getOrdinalDateToday(
                     it.date,
                     DateFormats.dateFormat3,
@@ -467,6 +467,7 @@ class OreoActivityViewModel @Inject constructor(
         }
         return combinedList
     }
+
     fun getStartTimeFromPosition(position: Int): String {
         val minutes = (96 - position) * 15
         val calendar = Calendar.getInstance()
@@ -488,6 +489,7 @@ class OreoActivityViewModel @Inject constructor(
         calendar.set(Calendar.MINUTE, minutes + 15)
         return DateFormats.convertTimestampToDate(calendar.timeInMillis, DateFormats.timeFormat12)
     }
+
     fun formattedTime(receivedTime: String): Pair<String, String> {
         val timeValue = receivedTime.split(" ")
         val time = timeValue[0]

@@ -182,10 +182,10 @@
     <color name="nap_dash_sleep_impact_score">#ff6b86</color>
 
 
-    <color name="daytime_high_un_selected_color">#858e99</color>
+    <color name="daytime_high_un_selected_color">#ffffff</color>
     <color name="daytime_medium_selected_color">#6bc5eb</color>
-    <color name="daytime_medium_un_selected_color">#417794</color>
-    <color name="daytime_low_un_selected_color">#224d60</color>
+    <color name="daytime_medium_un_selected_color">#6bc5eb</color>
+    <color name="daytime_low_un_selected_color">#387c8e</color>
     <color name="daytime_low_selected_color">#387c8e</color>
     <color name="daytime_inactive_un_selected_color">#8a9fb3</color>
     <color name="daytime_inactive_selected_color">#a2bad1</color>

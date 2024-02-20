@@ -67,7 +67,7 @@ class OreoDayTimeDataConvertor @Inject constructor() {
 
         val items: MutableList<Item> = ArrayList<Item>()
         val combinedMovementData =
-            getCombinedMovementData(dayData.activity?.daytimeMovement?.movement)
+            getCombinedMovementData(dayData.activity?.daytimeMovement?.movement, true)
 
         combinedMovementData.forEachIndexed { index, i ->
             items.add(Item(i, index))

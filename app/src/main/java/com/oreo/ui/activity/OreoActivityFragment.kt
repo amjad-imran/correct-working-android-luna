@@ -331,9 +331,9 @@ class OreoActivityFragment :
                 )
             }
         )
-        if (dayData?.activity?.daytimeMovement == null) {
-            resetDayTimeTopLevelUi()
-        }
+
+
+        resetDayTimeTopLevelUi()
     }
 
 
@@ -344,31 +344,27 @@ class OreoActivityFragment :
         var medMovValue = 0
         var lowMovValue = 0
         var inactiveMovValue = 0
-        if (movementList?.isNotEmpty() == true) {
-            newListInvalid.forEachIndexed { index, data ->
-                when (data) {
-                    0 -> {
-                        inactiveMovValue++
-                    }
-
-                    1 -> {
-                        lowMovValue++
-                    }
-
-                    2 -> {
-                        medMovValue++
-                    }
-
-                    3 -> {
-                        highMovValue++
-                    }
-
-                    else -> {}
+        newListInvalid.forEachIndexed { index, data ->
+            when (data) {
+                0 -> {
+                    inactiveMovValue++
                 }
+
+                1 -> {
+                    lowMovValue++
+                }
+
+                2 -> {
+                    medMovValue++
+                }
+
+                3 -> {
+                    highMovValue++
+                }
+
+                else -> {}
             }
         }
-
-        initDayTimeInteractiveGraph()
 
 
         val totalValue = highMovValue + medMovValue + lowMovValue + inactiveMovValue
@@ -379,6 +375,10 @@ class OreoActivityFragment :
         val (inactiveProgress, inactiveRemark) = returnMovementProgress(
             inactiveMovValue, totalValue
         )
+        mViewModel.activeMinutes = (lowMovValue + medMovValue + highMovValue) * 15
+
+        initDayTimeInteractiveGraph()
+
 
         //for high value
         binding.lytDailyMovement.lytDMHigh.view1.layoutParams =
@@ -576,15 +576,18 @@ class OreoActivityFragment :
     }
 
     private fun resetDayTimeTopLevelUi() {
-        binding.lytDailyMovement.tvMovementType.text = ""
-        binding.lytDailyMovement.tvStartTime.text = ""
-        binding.lytDailyMovement.tvStartTimeUnit.text = ""
-        binding.lytDailyMovement.tvEndTime.text = ""
-        binding.lytDailyMovement.tvEndTimeUnit.text = ""
+        val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(mViewModel.activeMinutes)
+        binding.lytDailyMovement.tvMovementType.text = getString(R.string.text_active_duration)
+        binding.lytDailyMovement.view1.gone()
+        binding.lytDailyMovement.tvStartTime.text = "$hour"
+        binding.lytDailyMovement.tvStartTimeUnit.text = "hr"
+        binding.lytDailyMovement.tvEndTime.text = "$minute"
+        binding.lytDailyMovement.tvEndTimeUnit.text = "min"
     }
 
     private fun updateDayTimeTopLabelUi(value: Int, position: Int) {
         LOGS.d("CLICKED POS value $value Pos $position")
+        binding.lytDailyMovement.view1.visible()
         val labelValue: String
         val labelColor: Int
         when (value) {
@@ -644,7 +647,7 @@ class OreoActivityFragment :
             }
 
             override fun isInteractionOnGoing(onGoing: Boolean) {
-
+                resetDayTimeTopLevelUi()
 
             }
 
