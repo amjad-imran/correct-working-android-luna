@@ -165,6 +165,7 @@ class ODayTimeInteractiveGraph : View {
         overlayLineOnTopPaint = Paint()
 
         xTextPaint = Paint()
+        xTextPaint.typeface = fontGilroy
         xTextPaint.textSize = xTextSize
         xTextPaint.isAntiAlias = true
 
@@ -217,7 +218,7 @@ class ODayTimeInteractiveGraph : View {
         }
         mediumPaintI = Paint().apply {
             color =
-                Color.parseColor("#44515f")
+                Color.parseColor("#417794")
         }
 
         highPaint = Paint().apply {

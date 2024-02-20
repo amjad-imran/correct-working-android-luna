@@ -345,6 +345,17 @@ object DateFormats {
         return ""
     }
 
+    fun getTimeFromMinutes(minutes: Int): String {
+        LOGS.d("getTimeFromMinutes $minutes")
+        val hours = minutes / 60
+        val remainingMinutes = minutes % 60
+
+        val amPm = if (hours < 12) "AM" else "PM"
+        val formattedHours = if (hours % 12 == 0) 12 else hours % 12
+
+        return String.format("%02d:%02d %s", formattedHours, remainingMinutes, amPm)
+
+    }
     fun getCurrentHour(): Int {
         val cal = Calendar.getInstance()
         cal.add(Calendar.HOUR, 1)

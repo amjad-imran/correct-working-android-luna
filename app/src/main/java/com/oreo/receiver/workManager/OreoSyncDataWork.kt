@@ -232,7 +232,7 @@ constructor(
 
                 ringDataStore.setLastSyncWithServer(DateFormats.getTimeStamp())
                 sessionManager.setSyncCompletedState(Event(SyncEvents.ServerSyncSuccess))
-                sessionManager.sendQueryAction(QueryAction.GetFirmwareLogs)
+                sessionManager.sendQueryAction(QueryAction.GetFirmwareLogs)//TODO add 2 hours check
                 //sessionManager.setShowSyncOfflineData(Event(HealthOverviewDataType.SERVER_SYNC_SUCCESS))
 
                 if (::job.isInitialized) {
