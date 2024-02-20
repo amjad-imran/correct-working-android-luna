@@ -103,6 +103,7 @@ class ODayTimeInteractiveGraph : View {
     private var bitmapMap = HashMap<Int, Bitmap>()
     private var workoutPaint: Paint? = null
     private var dayTimeDataModel: DayTimeDataModel? = null
+    private var mSleepSection: List<Section>? = null
 
 
     constructor(context: Context?) : super(context) {
@@ -239,6 +240,8 @@ class ODayTimeInteractiveGraph : View {
 
     fun updateData(dayData: DayTimeDataModel?) {
         dayTimeDataModel = dayData
+        mSleepSection = dayTimeDataModel?.sections?.filter { it.type.equals("sleep", true) }
+
         list.clear()
         dayData?.items.let {
             if (it != null) {
@@ -382,6 +385,19 @@ class ODayTimeInteractiveGraph : View {
         canvas.drawLine(0f, qHeight * 3, mWith.toFloat(), qHeight * 3, gridPaint)
     }
 
+    private fun isInSleepSection(index: Int): Boolean {
+        if (mSleepSection.isNullOrEmpty()) return false
+
+        var isInSleepSection = false
+        mSleepSection?.forEach {
+            if (index in it.start..it.end) {
+                isInSleepSection = true
+                return@forEach
+            }
+        }
+        return isInSleepSection
+    }
+
     private fun drawBarContent(canvas: Canvas) {
         if (list.size == 0) return
         unitHLenth = (mWith.toFloat()) / (list.size - 1)
@@ -391,7 +407,7 @@ class ODayTimeInteractiveGraph : View {
         var barType = 0
         var barHeight: Int = 0
 
-        list.forEachIndexed { _, it ->
+        list.forEachIndexed { index, it ->
             val end = x + unitHLenth / 2
             when (it.value) {
                 0 -> {
@@ -424,13 +440,20 @@ class ODayTimeInteractiveGraph : View {
                     barType = 4
                 }
             }
-            val rectF = RectF(
-                x, mHeight.toFloat() - barHeight - bottomWith, end, mHeight.toFloat() - bottomWith
-            )
-            barPaints?.let {
-                canvas.drawRoundRect(rectF, dip2px(20f).toFloat(), dip2px(20f).toFloat(), it)
+
+            if (!isInSleepSection(index)) {
+                val rectF = RectF(
+                    x,
+                    mHeight.toFloat() - barHeight - bottomWith,
+                    end,
+                    mHeight.toFloat() - bottomWith
+                )
+                barPaints?.let {
+                    canvas.drawRoundRect(rectF, dip2px(20f).toFloat(), dip2px(20f).toFloat(), it)
+                }
+                barStartEndXPosList?.add(DayTimeXYDataModel(x, end, barType, barHeight))
             }
-            barStartEndXPosList?.add(DayTimeXYDataModel(x, end, barType, barHeight))
+
             x = end + unitHLenth / 2
         }
 
