@@ -384,10 +384,11 @@ constructor(
             val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
                 dayData.remSleep!!.value ?: 0
             )
+
             val leftText: String = if (hour > 0) {
-                "$hour hr $minute min"
+                "$hour hr $minute min, ${dayData.remSleep?.value_percentage ?: 0}%"
             } else {
-                "$minute min"
+                "$minute min, ${dayData.remSleep?.value_percentage ?: 0}%"
             }
             result.add(
                 Contributors(
@@ -418,9 +419,9 @@ constructor(
                 dayData.deepSleep?.value ?: 0
             )
             val leftText: String = if (hour > 0) {
-                "$hour hr $minute min"
+                "$hour hr $minute min, ${dayData.deepSleep?.value_percentage ?: 0}%"
             } else {
-                "$minute min"
+                "$minute min, ${dayData.deepSleep?.value_percentage ?: 0}%"
             }
             result.add(
                 Contributors(
