@@ -19,29 +19,10 @@ import kotlin.math.floor
 
 class OreoDayTimeDataConvertor @Inject constructor() {
 
-    fun getStressCombinedData(dayData: ServerUserHealthData): DayTimeDataModel {
-
+    fun getDayTimeCombinedData(dayData: ServerUserHealthData): DayTimeDataModel {
 //        val stressBreakup =
 //            Gson().fromJson<List<Int>>("[10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,4,10,12,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,55,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44]")
-
         val workouts = dayData.activity?.workout
-        /*var workouts = listOf<OActivityListModal>(
-            OActivityListModal(
-                date = "2024-02-18",
-                startTime = "10:30:00",
-                duration = 15
-            ),
-            OActivityListModal(
-                date = "2024-02-18",
-                startTime = "10:45:00",
-                duration = 15
-            ), OActivityListModal(
-                date = "2024-02-18",
-                startTime = "11:00:00",
-                duration = 15
-            )
-        )*/
-
         val sections: MutableList<Section> = ArrayList()
         workouts?.forEach {
             getWorkoutSections(it)?.let { pos ->
