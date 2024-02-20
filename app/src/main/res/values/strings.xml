@@ -1027,4 +1027,5 @@
     <string name="text_light_sleep">Light sleep</string>
     <string name="text_rem_sleep">REM sleep</string>
     <string name="text_awake">Awake</string>
+    <string name="text_movement_analysis">Movement analysis</string>
 </resources>
