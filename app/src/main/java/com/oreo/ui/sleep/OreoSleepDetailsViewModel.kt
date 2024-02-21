@@ -669,6 +669,7 @@ constructor(
     fun getDummyBreakUpDataForTimeDisplay(): ArrayList<Int> {
         val dummyList = ArrayList<Int>()
         for (i in 0..287) {
+            //dummyList.add(0)
             dummyList.add((10..140).random())
         }
         return dummyList
