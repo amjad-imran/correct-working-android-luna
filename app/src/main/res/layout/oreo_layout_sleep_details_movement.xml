@@ -77,7 +77,7 @@
         <com.oreo.ui.custom.LineChartView
             android:id="@+id/lineChart"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
+            android:layout_height="180dp"
             android:visibility="visible"
             app:bgBottomColor="@android:color/transparent"
             app:bgColor="@android:color/transparent"

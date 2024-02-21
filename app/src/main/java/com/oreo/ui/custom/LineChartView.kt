@@ -25,11 +25,13 @@ import com.noisefit_commans.utils.LOGS.d
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.GraphDummyModel
 import com.oreo.data.model.SleepChartModel
+import org.joda.time.LocalDateTime
+import org.joda.time.format.DateTimeFormat
 import java.util.Collections
 
 class LineChartView : View {
     private var overlayLinePaint: Paint? = null
-    private val toolTipList = ArrayList<Triple<Float, Float, Int>>()
+    private val toolTipList = ArrayList<Triple<Float, String, Int>>()
     private var showLowCircle = false
     private var showHighCircle = false
     private var yTextColor = 0
@@ -40,6 +42,7 @@ class LineChartView : View {
     private var bgBottomColor = 0
     private var xTextColor = 0
     private var chartLineColor = 0
+    private var chartLineColorI = 0
     private var chartLineWidth = 10f
     private var scaleNodeColor = 0
     private var outCirclePaint: Paint? = null
@@ -68,7 +71,7 @@ class LineChartView : View {
     private var fillColorEnd = 0
     private var centerLineWidth = 0f
     private var chartLinePaint: Paint? = null
-    private var chartLineFillPaint: Paint? = null
+    lateinit var chartLineFillPaint: Paint
     private var avgBackPaint: Paint? = null
     private var scaleNodePaint: Paint? = null
     private val onChartScrollChangedListener: ScrollListener? = null
@@ -79,6 +82,7 @@ class LineChartView : View {
     private var mHeight = 0
     private var xTextBounds: Rect? = null
     private var sleepModel: SleepChartModel? = null
+    private var sleepStartTime: String? = null
     private var mHasDummyData = true
     private val list: MutableList<ChartModel?> = ArrayList()
     private var showXAxis = true
@@ -92,7 +96,13 @@ class LineChartView : View {
     private var maxValue = 0
     private var minValue = 0
     private var linearGradient: LinearGradient? = null
+    private var linearGradientI: LinearGradient? = null
     lateinit var paintCalm: Paint
+    lateinit var lowTopPaint: Paint
+    lateinit var bgLine: Paint
+    lateinit var dotBitmap: Bitmap
+    lateinit var dotBitmapLow: Bitmap
+
 
     constructor(context: Context?) : super(context) {
         initPaint()
@@ -126,6 +136,9 @@ class LineChartView : View {
 
     private fun init(attrs: AttributeSet?) {
         val ta = context.obtainStyledAttributes(attrs, R.styleable.SleepLineChart)
+        dotBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_hr_dot)
+        dotBitmapLow = BitmapFactory.decodeResource(resources, R.drawable.ic_hr_lowest_dot)
+
         bgColor = ta.getColor(R.styleable.SleepLineChart_bgColor, -0x1)
         bgLeftColor = ta.getColor(R.styleable.SleepLineChart_bgLeftColor, -0x1)
         bgRightColor = ta.getColor(R.styleable.SleepLineChart_bgRightColor, 0xfffffff)
@@ -196,11 +209,15 @@ class LineChartView : View {
         centerLinePaint!!.strokeWidth = centerLineWidth
         centerLinePaint!!.style = Paint.Style.STROKE
         centerLinePaint!!.setPathEffect(DashPathEffect(floatArrayOf(1f, 4f), 0f))
+
         chartLinePaint = Paint()
         chartLinePaint!!.strokeWidth = chartLineWidth
         chartLinePaint!!.color = chartLineColor
         chartLinePaint!!.isAntiAlias = true
         chartLinePaint!!.style = Paint.Style.STROKE
+
+
+
         chartLineFillPaint = Paint()
         //        chartLineFillPaint.setColor(Color.GRAY);
         chartLineFillPaint!!.style = Paint.Style.FILL
@@ -216,6 +233,17 @@ class LineChartView : View {
         paintCalm.textSize = xTextSize
         paintCalm.setTypeface(fontGilroy)
         paintCalm.color = Color.parseColor("#3fe8b5")
+
+        lowTopPaint = Paint().apply {
+            this.color = Color.parseColor("#ffffff")
+        }
+
+        bgLine = Paint().apply {
+            this.color = Color.parseColor("#19ffffff")
+        }
+
+
+
         overlayLinePaint = Paint()
         overlayLinePaint!!.style = Paint.Style.STROKE
         overlayLinePaint!!.isAntiAlias = true
@@ -225,8 +253,14 @@ class LineChartView : View {
         xTextBounds = Rect()
     }
 
-    fun updateGraphColor(chartLineColor: Int, fillColorStart: Int, fillColorEnd: Int) {
+    fun updateGraphColor(
+        chartLineColor: Int,
+        chartLineColorI: Int,
+        fillColorStart: Int,
+        fillColorEnd: Int
+    ) {
         this.chartLineColor = chartLineColor
+        this.chartLineColorI = chartLineColorI
         this.fillColorEnd = fillColorEnd
         this.fillColorStart = fillColorStart
         chartLinePaint = Paint()
@@ -240,9 +274,15 @@ class LineChartView : View {
     }
 
     fun updateDataWithMax(
-        datas: SleepChartModel?, maxOffset: Int,
-        showHighCircle: Boolean, showLowCircle: Boolean, dummy: GraphDummyModel, averageValue: Int?
+        datas: SleepChartModel?,
+        maxOffset: Int,
+        showHighCircle: Boolean,
+        showLowCircle: Boolean,
+        dummy: GraphDummyModel,
+        averageValue: Int?,
+        sleepStartTime: String?
     ): Int {
+        this.sleepStartTime = sleepStartTime
         sleepModel = datas
         mHasDummyData = dummy.hasDummyData
         list.clear()
@@ -351,6 +391,7 @@ class LineChartView : View {
         }
         return false
     }
+
     fun setClickListener(listener: OnLinearChartClickAction?) {
         this.listener = listener
     }
@@ -378,14 +419,13 @@ class LineChartView : View {
         )
     }
 
-    private fun getClickedValue(touchX: Float): Pair<Int, Int> {
+    private fun getClickedValue(touchX: Float): Triple<Int, Int, String> {
         val index = findNumber(toolTipList, touchX)
-        LOGS.d("Fsajfajfddsf ${index} ----> ${touchX} --> ${list.getOrNull(index)?.value}")
-        return if (index < 0) {
+        return if (index.first < 0) {
             lastSentValuePos = null
-            Pair(0, 0)
+            Triple(0, 0, "")
         } else {
-            Pair(index, list[index]!!.value)
+            Triple(index.first, list[index.first]!!.value, index.second)
         }
 
     }
@@ -402,17 +442,28 @@ class LineChartView : View {
             overlayLinePaint!!.color = Color.WHITE
             canvas.drawRect(rectF, overlayLinePaint!!)
 
+
+            val y =
+                mHeight - bottomWith - (value.second - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
+
+            canvas.drawBitmap(
+                if (value.first == lastMinValueIndex) dotBitmapLow else dotBitmap,
+                touchX - dotBitmap.width / 2,
+                y - dotBitmap.height / 2,
+                null
+            )
+
             if (listener != null) {
                 val position = value.first
                 val selectedValue = value.second
                 d("CLICKED_VALUE value value Touch $position $selectedValue")
                 if (lastSentValuePos == null) {
-                    listener?.onValueSelected(selectedValue, true)
+                    listener?.onValueSelected(selectedValue, true, value.third)
                     lastSentValuePos = position
                     performHapticFeedbackCustom(selectedValue)
                 } else {
                     if (lastSentValuePos != position) {
-                        listener?.onValueSelected(selectedValue, true)
+                        listener?.onValueSelected(selectedValue, true, value.third)
                         lastSentValuePos = position
                         performHapticFeedbackCustom(selectedValue)
                     }
@@ -427,8 +478,17 @@ class LineChartView : View {
             0f,
             0f,
             h.toFloat(),
-            intArrayOf(fillColorStart, fillColorEnd),
-            floatArrayOf(0.3f, 0.6f),
+            Color.parseColor("#ff7f96"),//intArrayOf(Color.parseColor("#99ff718b"), Color.parseColor("#00ff5f7c")),
+            Color.TRANSPARENT/*floatArrayOf(0.3f, 0.6f)*/,
+            Shader.TileMode.CLAMP
+        )
+        linearGradientI = LinearGradient(
+            0f,
+            0f,
+            0f,
+            h.toFloat(),
+            Color.parseColor("#80ff7f96"),//intArrayOf(Color.parseColor("#99ff718b"), Color.parseColor("#00ff5f7c")),
+            Color.TRANSPARENT/*floatArrayOf(0.3f, 0.6f)*/,
             Shader.TileMode.CLAMP
         )
         mWith = w
@@ -437,6 +497,25 @@ class LineChartView : View {
 
     private fun drawBg(canvas: Canvas) {
         canvas.drawRect(0f, 0f, mWith.toFloat(), mHeight.toFloat(), bgPaint!!)
+
+        val sectionHeight = (mHeight - topWith - bottomWith) / 3
+        val height = dip2px(1f)
+
+        canvas.drawRect(
+            leftWith,
+            topWith + sectionHeight * 1,
+            mWith.toFloat() - rightWith,
+            topWith + sectionHeight * 1 + height,
+            bgLine
+        )
+
+        canvas.drawRect(
+            leftWith,
+            topWith + sectionHeight * 2,
+            mWith.toFloat() - rightWith,
+            topWith + sectionHeight * 2 + height,
+            bgLine
+        )
     }
 
     private fun drawTop(canvas: Canvas) {
@@ -518,18 +597,35 @@ class LineChartView : View {
                     val x1 = mWith - leftWith - rightWith + leftWith - (i + 1) * unitHLenth
                     val y1 =
                         mHeight - bottomWith - (next.value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
-                    toolTipList.add(Triple(x, x1, current.value))
+
+
                     path.cubicTo(x1 + (x - x1) / 4, y, x - (x - x1) / 4, y1, x1, y1)
                     fillPath.addPath(path)
                     //draw fill first
                     fillPath.lineTo(x1, mHeight - bottomWith)
                     fillPath.lineTo(x, mHeight - bottomWith)
-                    chartLineFillPaint!!.setShader(linearGradient)
+                    chartLineFillPaint!!.setShader(if (isInteracting) linearGradientI else linearGradient)
                     canvas.drawPath(fillPath, chartLineFillPaint!!)
                     //draw chart line second, need to cover fill color
+                    chartLinePaint?.color = if (isInteracting) chartLineColorI else chartLineColor
                     canvas.drawPath(path, chartLinePaint!!)
                 }
             }
+
+
+            if (sleepStartTime != null) {
+                val formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
+
+                val startDateTime = LocalDateTime.parse(sleepStartTime, formatter)
+                var updatedTime = startDateTime.plusMinutes((list.size - i - 1) * 5)
+                val formatterDisplay = DateTimeFormat.forPattern("h:mm a")
+
+                val time = updatedTime.toString(formatterDisplay).lowercase()
+
+                toolTipList.add(Triple(x, time ?: "", current.value))
+
+            }
+
             if (current.value > 0) {
                 if (i == firstPosition) {
                     next = list[i + 1]
@@ -592,22 +688,59 @@ class LineChartView : View {
             }
 
 
-            if (showLowCircle && !mHasDummyData) {
+            /*if (showLowCircle && !mHasDummyData) {
                 if (i == lastMinValueIndex) {
 //
 //                    Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_dot_circle_graph);
 //                    canvas.drawBitmap(bmp, x, y, null); // 24 is the height of image
                     canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint!!)
                 }
+            }*/
+
+            if (i == lastMinValueIndex) {
+                chartLineFillPaint.setShader(
+                    LinearGradient(
+                        0f,
+                        0f,
+                        0f,
+                        mHeight - bottomWith,
+                        Color.parseColor("#66ffffff"),
+                        Color.TRANSPARENT,
+                        Shader.TileMode.CLAMP
+                    )
+                )
+
+                val offset = dip2px(unitHLenth) / 2
+                val rectF = RectF().apply {
+                    this.left = x - offset
+                    this.right = x + offset
+                    this.top = topWith
+                    this.bottom = mHeight - bottomWith
+                }
+
+                canvas.drawRect(rectF, chartLineFillPaint)
+
+
+
+                rectF.apply {
+                    this.left = x - offset
+                    this.right = x + offset
+                    this.top = topWith - dip2px(1f)
+                    this.bottom = topWith + dip2px(1f)
+                }
+
+                canvas.drawRect(rectF, lowTopPaint)
+
             }
 
-            if (showHighCircle && !mHasDummyData) {
-                if (i == lastMaxValueIndex) {
-//                    Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_dot_circle_graph);
-//                    canvas.drawBitmap(bmp, x, y , null); // 24 is the height of image
-                    canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint!!)
-                }
-            }
+
+            /* if (showHighCircle && !mHasDummyData) {
+                 if (i == lastMaxValueIndex) {
+ //                    Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_dot_circle_graph);
+ //                    canvas.drawBitmap(bmp, x, y , null); // 24 is the height of image
+                     canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint!!)
+                 }
+             }*/
 
         }
     }
@@ -680,15 +813,15 @@ class LineChartView : View {
             avgBackPaint!!.color = Color.parseColor("#b3172941")
             val width = xTextPaint!!.measureText(avgStr)
             val padding = dip2px(2f).toFloat()
-            canvas.drawRect(
-                leftWith + dip2px(5f) - padding, avg - dip2px(18f),
-                leftWith + dip2px(5f) + width + padding, avg - dip2px(4f),
-                avgBackPaint!!
-            )
+            /* canvas.drawRect(
+                 leftWith + dip2px(5f) - padding, avg - dip2px(18f),
+                 leftWith + dip2px(5f) + width + padding, avg - dip2px(4f),
+                 avgBackPaint!!
+             )*/
             canvas.drawText(
                 avgStr,
                 leftWith + dip2px(5f),
-                avg - xTextBounds!!.height(),
+                avg + xTextBounds!!.height() / 2,
                 xTextPaint!!
             )
         } else {
@@ -731,7 +864,10 @@ class LineChartView : View {
     }
 
 
-    fun findNumber(toolTipList: ArrayList<Triple<Float, Float, Int>>, touchX: Float): Int {
+    fun findNumber(
+        toolTipList: List<Triple<Float, String, Int>>,
+        touchX: Float
+    ): Pair<Int, String> {
 
 //        LOGS.d("Dassdadsaasdasdas ${Gson().toJson(toolTipList)}")
 
@@ -751,12 +887,13 @@ class LineChartView : View {
 
         // Iterate and find the element
         // Iterate and find the element
+        val range = dip2px(2f)
         for (i in 0 until toolTipList.size) {
 
             // If K lies in the current range
-            if (touchX >= toolTipList.get(i).second &&
-                touchX <= toolTipList.get(i).first
-            ) return i
+            if (touchX in (toolTipList.get(i).first - range)..(toolTipList.get(i).first + range)) {
+                return Pair(i, toolTipList.get(i).second)
+            }
         }
 
 //        var low = 0
@@ -784,11 +921,11 @@ class LineChartView : View {
 //        }
 
         // Not found
-        return -1
+        return Pair(-1, "")
     }
 }
 
 interface OnLinearChartClickAction {
-    fun onValueSelected(value: Int, isInteracting: Boolean)
+    fun onValueSelected(value: Int, isInteracting: Boolean, time: String? = null)
     fun onTopClicked()
 }

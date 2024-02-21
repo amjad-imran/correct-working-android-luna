@@ -290,16 +290,23 @@ class OreoSleepDetailFragment :
 
 
         var lowerHr = "-"
-        LOGS.d("adfjadsklkjad ${heartRateData?.hr?.low}")
         if (heartRateData?.hr != null && heartRateData.hr?.low != 0 && heartRateData.hr?.low != 255) {
             lowerHr = heartRateData.hr?.low.toString()
         }
         binding.lytHeartRate.lytSubtitleValue1.tvValue.text = lowerHr
+        binding.lytHeartRate.tvSubtitle1.text = "Lowest HR"
+
         if (lowerHr != "-") {
             binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
             binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
         } else {
             binding.lytHeartRate.lytSubtitleValue1.tvUnit.gone()
+        }
+
+        if (heartRateData?.hr?.avg != null && heartRateData?.hr?.avg != 0) {
+            binding.lytHeartRate.tvSubtitle2.text = "Average ${heartRateData?.hr?.avg} bpm"
+        } else {
+            binding.lytHeartRate.tvSubtitle2.text = ""
         }
 
 
@@ -349,16 +356,18 @@ class OreoSleepDetailFragment :
         sleepChart.list = chartList
         binding.lytHeartRate.lineChart.apply {
             updateGraphColor(
-                Color.parseColor("#fc3559"),
-                Color.parseColor("#CCfc3559"),
-                Color.parseColor("#0Dfc3559")
+                Color.parseColor("#ff7f96"),
+                Color.parseColor("#80ff7f96"),
+                Color.parseColor("#99ff718b"),
+                Color.parseColor("#00ff5f7c")
             )
             val lowValueIndex = updateDataWithMax(
                 sleepChart, 5, false, true,
                 GraphDummyModel(
                     hasDummyData, 40, 100
                 ),
-                heartRateData?.hr?.avg
+                heartRateData?.hr?.avg,
+                sleepStartTime
             )
 
             if (!hasDummyData) {
@@ -368,12 +377,16 @@ class OreoSleepDetailFragment :
 
             setInteractiveMode(true)
             setClickListener(object : OnLinearChartClickAction {
-                override fun onValueSelected(value: Int, isInteracting: Boolean) {
-                    var averageTxt = ""
-                    if (isInteracting && value > 0) {
-                        averageTxt = "Average $value bpm"
+                override fun onValueSelected(value: Int, isInteracting: Boolean, time: String?) {
+                    if (isInteracting) {
+                        binding.lytHeartRate.tvSubtitle1.text = time ?: ""
+                        binding.lytHeartRate.lytSubtitleValue1.tvValue.text =
+                            if (value > 0) "$value" else "_"
+
+                    } else {
+                        binding.lytHeartRate.tvSubtitle1.text = ""
+                        binding.lytHeartRate.lytSubtitleValue1.tvValue.text = ""
                     }
-                    binding.lytHeartRate.tvSubtitle2.text = averageTxt
                 }
 
                 override fun onTopClicked() {
@@ -737,7 +750,7 @@ class OreoSleepDetailFragment :
         binding.lytSSAnalysis.lytNightMovement.flNightTimeMovement.addView(nightTimeMovementGraph)
 
         val sleepData =
-            viewModel.getMovementBreakup(nightMovementBreakUp,sleepStartTime,sleepEndTime)
+            viewModel.getMovementBreakup(nightMovementBreakUp, sleepStartTime, sleepEndTime)
         nightTimeMovementGraph.init(false)
 
         nightTimeMovementGraph.setData(sleepData.second)
@@ -840,7 +853,6 @@ class OreoSleepDetailFragment :
 
                 }*/
     }
-
 
 
     private fun setSleepScore(sleepScoreData: CommonDataModel) {
@@ -1048,7 +1060,7 @@ class OreoSleepDetailFragment :
 
         initSleepAnalysisGraph(dayData.hourly_breakup)
 
-        setNightTimeMovement(dayData.night_time_movement,sleepStartTime, sleepEndTime)
+        setNightTimeMovement(dayData.night_time_movement, sleepStartTime, sleepEndTime)
 
         setNapData(dayData.naps, dayData.date)
 
@@ -1080,7 +1092,7 @@ class OreoSleepDetailFragment :
         sleepStartTime: String?,
         sleepEndTime: String?
     ) {
-        showNightTimeMovementGraph(hourlyBreakup,sleepStartTime,sleepEndTime)
+        showNightTimeMovementGraph(hourlyBreakup, sleepStartTime, sleepEndTime)
     }
 
     private fun totalSleepDataView() {
