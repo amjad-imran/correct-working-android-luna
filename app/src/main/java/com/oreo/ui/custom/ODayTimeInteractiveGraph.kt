@@ -242,7 +242,7 @@ class ODayTimeInteractiveGraph : View {
     fun updateData(dayData: DayTimeDataModel?) {
         dayTimeDataModel = dayData
         mSleepSection = dayTimeDataModel?.sections?.filter { it.type.equals("sleep", true) }
-
+        bitmapMap = HashMap()
         list.clear()
         dayData?.items.let {
             if (it != null) {
@@ -473,6 +473,7 @@ class ODayTimeInteractiveGraph : View {
             rectF?.top = topWith
             rectF?.right = rectF!!.left + (calculatedEnd - section.start) * unitHLenth
             rectF?.bottom = mHeight - bottomWith
+
             chartLineFillPaint.setShader(resMap!![i]!!.first)
             canvas.drawRect(rectF!!, chartLineFillPaint)
 

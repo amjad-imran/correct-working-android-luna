@@ -323,6 +323,9 @@ class OreoActivityFragment :
 
     private fun initDayTimeInteractiveGraph() {
         val dayData = mainViewModel.getDayMovementData(mainViewModel.selectedDate)
+        if (dayData != null) {
+            mViewModel.prepareStressActivityData(dayData)
+        }
         binding.lytDailyMovement.lytInteractiveGraph.graphDayTime.enableInteractiveMode(true)
         binding.lytDailyMovement.lytInteractiveGraph.graphDayTime.updateData(
             dayData?.let {
@@ -331,7 +334,6 @@ class OreoActivityFragment :
                 )
             }
         )
-
 
         resetDayTimeTopLevelUi()
     }
@@ -652,7 +654,14 @@ class OreoActivityFragment :
             }
 
             override fun onTopClicked() {
-
+                if (mViewModel.stressActivityData?.isNotEmpty() == true)
+                    mViewModel.stressActivityData?.toTypedArray()?.let { it1 ->
+                        navigate(
+                            OreoActivityFragmentDirections.actionNavigationActivityDetailsFragToDayTimeActivitiesBottomSheet(
+                                it1
+                            )
+                        )
+                    }
             }
         })
 
