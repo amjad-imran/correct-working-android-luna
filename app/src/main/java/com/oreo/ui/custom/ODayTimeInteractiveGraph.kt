@@ -242,7 +242,7 @@ class ODayTimeInteractiveGraph : View {
     fun updateData(dayData: DayTimeDataModel?) {
         dayTimeDataModel = dayData
         mSleepSection = dayTimeDataModel?.sections?.filter { it.type.equals("sleep", true) }
-
+        bitmapMap = HashMap()
         list.clear()
         dayData?.items.let {
             if (it != null) {
