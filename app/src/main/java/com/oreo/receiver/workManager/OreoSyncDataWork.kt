@@ -226,13 +226,13 @@ constructor(
                 val logsSync = shouldSyncAutoLogs()
                 if (logsSync) {
                     val status = ApplicationUtils.startFeedbackSubmitWorker(context)
+                    sessionManager.sendQueryAction(QueryAction.GetFirmwareLogs)
                 }
 
                 AppLogs.sendAppLogs("OreoSyncDataWork server call complete")
 
                 ringDataStore.setLastSyncWithServer(DateFormats.getTimeStamp())
                 sessionManager.setSyncCompletedState(Event(SyncEvents.ServerSyncSuccess))
-                sessionManager.sendQueryAction(QueryAction.GetFirmwareLogs)//TODO add 2 hours check
                 //sessionManager.setShowSyncOfflineData(Event(HealthOverviewDataType.SERVER_SYNC_SUCCESS))
 
                 if (::job.isInitialized) {
@@ -391,11 +391,11 @@ constructor(
                                                     TAG,
                                                     "OreoSyncDataWork: nap ${resource.value}"
                                                 )
-                                               /* sessionManager.setShowSyncOfflineData(
-                                                    Event(
-                                                        HealthOverviewDataType.SLEEP
-                                                    )
-                                                )*/
+                                                /* sessionManager.setShowSyncOfflineData(
+                                                     Event(
+                                                         HealthOverviewDataType.SLEEP
+                                                     )
+                                                 )*/
 
                                             }
 
