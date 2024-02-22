@@ -82,7 +82,7 @@
             app:bgBottomColor="@android:color/transparent"
             app:bgColor="@android:color/transparent"
             app:bgLeftColor="@android:color/transparent"
-
+            android:layout_marginTop="8dp"
             app:bgRightColor="@android:color/transparent"
             app:bgTopColor="@android:color/transparent"
             app:bottomWith="20dp"

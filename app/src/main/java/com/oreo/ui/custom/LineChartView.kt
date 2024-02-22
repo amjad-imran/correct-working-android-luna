@@ -20,7 +20,6 @@ import android.view.View
 import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
 import com.noisefit.luna.R
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.LOGS.d
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.GraphDummyModel
@@ -83,6 +82,7 @@ class LineChartView : View {
     private var xTextBounds: Rect? = null
     private var sleepModel: SleepChartModel? = null
     private var sleepStartTime: String? = null
+    private var chartType: LineChartType = LineChartType.HEART_RATE
     private var mHasDummyData = true
     private val list: MutableList<ChartModel?> = ArrayList()
     private var showXAxis = true
@@ -101,7 +101,7 @@ class LineChartView : View {
     lateinit var lowTopPaint: Paint
     lateinit var bgLine: Paint
     lateinit var dotBitmap: Bitmap
-    lateinit var dotBitmapLow: Bitmap
+    lateinit var dotBitmap2: Bitmap
 
 
     constructor(context: Context?) : super(context) {
@@ -137,7 +137,7 @@ class LineChartView : View {
     private fun init(attrs: AttributeSet?) {
         val ta = context.obtainStyledAttributes(attrs, R.styleable.SleepLineChart)
         dotBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_hr_dot)
-        dotBitmapLow = BitmapFactory.decodeResource(resources, R.drawable.ic_hr_lowest_dot)
+        dotBitmap2 = BitmapFactory.decodeResource(resources, R.drawable.ic_hr_lowest_dot)
 
         bgColor = ta.getColor(R.styleable.SleepLineChart_bgColor, -0x1)
         bgLeftColor = ta.getColor(R.styleable.SleepLineChart_bgLeftColor, -0x1)
@@ -280,8 +280,24 @@ class LineChartView : View {
         showLowCircle: Boolean,
         dummy: GraphDummyModel,
         averageValue: Int?,
-        sleepStartTime: String?
+        sleepStartTime: String?,
+        chartType: LineChartType
     ): Int {
+        this.chartType = chartType
+
+        when (chartType) {
+            LineChartType.HEART_RATE -> {
+                dotBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_hr_dot)
+                dotBitmap2 = BitmapFactory.decodeResource(resources, R.drawable.ic_hr_lowest_dot)
+            }
+
+            LineChartType.HRV -> {
+                dotBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_hrv_dot)
+                dotBitmap2 = BitmapFactory.decodeResource(resources, R.drawable.ic_hr_lowest_dot)
+            }
+        }
+
+
         this.sleepStartTime = sleepStartTime
         sleepModel = datas
         mHasDummyData = dummy.hasDummyData
@@ -335,7 +351,6 @@ class LineChartView : View {
             max = maxValue + maxOffset
             xMin = minValue - maxOffset
         }
-        d("updateData " + max + " " + xMin + " " + minValue + " " + maxValue)
         if (xMin < 0) {
             xMin = 0
         }
@@ -446,12 +461,25 @@ class LineChartView : View {
             val y =
                 mHeight - bottomWith - (value.second - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
 
-            canvas.drawBitmap(
-                if (value.first == lastMinValueIndex) dotBitmapLow else dotBitmap,
-                touchX - dotBitmap.width / 2,
-                y - dotBitmap.height / 2,
-                null
-            )
+            when (chartType) {
+                LineChartType.HEART_RATE -> {
+                    canvas.drawBitmap(
+                        if (value.first == lastMinValueIndex) dotBitmap2 else dotBitmap,
+                        touchX - dotBitmap.width / 2,
+                        y - dotBitmap.height / 2,
+                        null
+                    )
+                }
+
+                LineChartType.HRV -> {
+                    canvas.drawBitmap(
+                        dotBitmap,
+                        touchX - dotBitmap.width / 2,
+                        y - dotBitmap.height / 2,
+                        null
+                    )
+                }
+            }
 
             if (listener != null) {
                 val position = value.first
@@ -497,25 +525,6 @@ class LineChartView : View {
 
     private fun drawBg(canvas: Canvas) {
         canvas.drawRect(0f, 0f, mWith.toFloat(), mHeight.toFloat(), bgPaint!!)
-
-        val sectionHeight = (mHeight - topWith - bottomWith) / 3
-        val height = dip2px(1f)
-
-        canvas.drawRect(
-            leftWith,
-            topWith + sectionHeight * 1,
-            mWith.toFloat() - rightWith,
-            topWith + sectionHeight * 1 + height,
-            bgLine
-        )
-
-        canvas.drawRect(
-            leftWith,
-            topWith + sectionHeight * 2,
-            mWith.toFloat() - rightWith,
-            topWith + sectionHeight * 2 + height,
-            bgLine
-        )
     }
 
     private fun drawTop(canvas: Canvas) {
@@ -688,60 +697,70 @@ class LineChartView : View {
             }
 
 
-            /*if (showLowCircle && !mHasDummyData) {
-                if (i == lastMinValueIndex) {
-//
-//                    Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_dot_circle_graph);
-//                    canvas.drawBitmap(bmp, x, y, null); // 24 is the height of image
+
+            if (!mHasDummyData) {
+                if (showHighCircle && i == lastMaxValueIndex && !isInteracting) {
                     canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint!!)
                 }
-            }*/
 
-            if (i == lastMinValueIndex) {
-                chartLineFillPaint.setShader(
-                    LinearGradient(
-                        0f,
-                        0f,
-                        0f,
-                        mHeight - bottomWith,
-                        Color.parseColor("#66ffffff"),
-                        Color.TRANSPARENT,
-                        Shader.TileMode.CLAMP
+                if (showLowCircle && i == lastMinValueIndex && !isInteracting) {
+                    canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint!!)
+                }
+
+                if (!showLowCircle && !showHighCircle && i == lastMinValueIndex) {
+
+                    chartLineFillPaint.setShader(
+                        LinearGradient(
+                            0f,
+                            0f,
+                            0f,
+                            mHeight - bottomWith,
+                            Color.parseColor("#66ffffff"),
+                            Color.TRANSPARENT,
+                            Shader.TileMode.CLAMP
+                        )
                     )
-                )
 
-                val offset = dip2px(unitHLenth) / 2
-                val rectF = RectF().apply {
-                    this.left = x - offset
-                    this.right = x + offset
-                    this.top = topWith
-                    this.bottom = mHeight - bottomWith
+                    val offset = dip2px(unitHLenth) / 2
+                    val rectF = RectF().apply {
+                        this.left = x - offset
+                        this.right = x + offset
+                        this.top = topWith
+                        this.bottom = mHeight - bottomWith
+                    }
+
+                    canvas.drawRect(rectF, chartLineFillPaint)
+
+                    rectF.apply {
+                        this.left = x - offset
+                        this.right = x + offset
+                        this.top = topWith - dip2px(1f)
+                        this.bottom = topWith + dip2px(1f)
+                    }
+
+                    canvas.drawRect(rectF, lowTopPaint)
+
+
+                    rectF.apply {
+                        this.left = x - offset
+                        this.right = x + offset
+                        this.top = topWith - dip2px(1f)
+                        this.bottom = topWith + dip2px(1f)
+                    }
+
+                    xTextPaint!!.color = Color.WHITE
+
+                    val textWidth = xTextPaint!!.measureText("Lowest HR")
+
+                    canvas.drawText(
+                        "Lowest HR",
+                        x - textWidth / 2,
+                        topWith - dip2px(8f),
+                        xTextPaint!!
+                    )
                 }
-
-                canvas.drawRect(rectF, chartLineFillPaint)
-
-
-
-                rectF.apply {
-                    this.left = x - offset
-                    this.right = x + offset
-                    this.top = topWith - dip2px(1f)
-                    this.bottom = topWith + dip2px(1f)
-                }
-
-                canvas.drawRect(rectF, lowTopPaint)
 
             }
-
-
-            /* if (showHighCircle && !mHasDummyData) {
-                 if (i == lastMaxValueIndex) {
- //                    Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_dot_circle_graph);
- //                    canvas.drawBitmap(bmp, x, y , null); // 24 is the height of image
-                     canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint!!)
-                 }
-             }*/
-
         }
     }
 
@@ -777,7 +796,7 @@ class LineChartView : View {
 
     private fun drawHorizontalTextWithLine(canvas: Canvas, text: String, bottomHeight: Float) {
 
-        canvas.drawLine(leftWith, bottomHeight, mWith - rightWith, bottomHeight, gridPaint!!)
+        canvas.drawLine(leftWith, bottomHeight, mWith - rightWith, bottomHeight, bgLine)
         xTextPaint!!.color = Color.parseColor("#a3ffffff")
         xTextPaint!!.getTextBounds(text, 0, text.length, xTextBounds)
         canvas.drawText(
@@ -792,38 +811,47 @@ class LineChartView : View {
         canvas.drawRect(0f, 0f, leftWith, mHeight.toFloat(), bgLeftPaint!!)
         val maxStr = max.toString()
         val minStr = xMin.toString()
+
+        val sectionH = ((max - xMin).toFloat() / 3).toInt()
+
+
         val avgStr = avgValue.toString()
         val max =
-            mHeight - bottomWith - (max - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
+            mHeight - bottomWith - (max - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
 
         drawHorizontalTextWithLine(canvas, maxStr, max)
 
         val min =
-            mHeight - bottomWith - (xMin - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
+            mHeight - bottomWith - (xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
 
         drawHorizontalTextWithLine(canvas, minStr, min)
-        LOGS.d("ADSdasdasads $max ----> $xMin")
 
         if (!mHasDummyData) {
+            val xAxis2 =
+                mHeight - bottomWith - (sectionH + xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
+
+            drawHorizontalTextWithLine(canvas, (xMin + sectionH).toString(), xAxis2)
+
+            val xAxis3 =
+                mHeight - bottomWith - (this.max - sectionH - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
+            drawHorizontalTextWithLine(canvas, (xMin + sectionH * 2).toString(), xAxis3)
+
             val avg =
                 mHeight - bottomWith - (avgValue - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
-//            canvas.drawLine(leftWith, avg, mWith - rightWith, avg, centerLinePaint!!)
+
+
             xTextPaint!!.getTextBounds(avgStr, 0, avgStr.length, xTextBounds)
             xTextPaint!!.color = Color.parseColor("#9cbdff")
             avgBackPaint!!.color = Color.parseColor("#b3172941")
-            val width = xTextPaint!!.measureText(avgStr)
-            val padding = dip2px(2f).toFloat()
-            /* canvas.drawRect(
-                 leftWith + dip2px(5f) - padding, avg - dip2px(18f),
-                 leftWith + dip2px(5f) + width + padding, avg - dip2px(4f),
-                 avgBackPaint!!
-             )*/
+
+
             canvas.drawText(
                 avgStr,
                 leftWith + dip2px(5f),
                 avg + xTextBounds!!.height() / 2,
                 xTextPaint!!
             )
+
         } else {
             val noDataText = "No data available"
             val textWidth = noDataPaint!!.measureText(noDataText)
@@ -923,6 +951,10 @@ class LineChartView : View {
         // Not found
         return Pair(-1, "")
     }
+}
+
+enum class LineChartType {
+    HEART_RATE, HRV
 }
 
 interface OnLinearChartClickAction {

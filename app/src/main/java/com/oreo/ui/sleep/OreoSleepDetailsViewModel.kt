@@ -50,6 +50,9 @@ constructor(
     /*private val _daySleepData = MutableLiveData<OreoSleepModel>()
     val daySleepData: LiveData<OreoSleepModel> = _daySleepData*/
 
+    var lowestHr: Int? = null
+    var maxHrv: Int? = null
+
     private val _contributorInfo = MutableLiveData<OContributorResponseModal>()
     val contributorInfo: LiveData<OContributorResponseModal> = _contributorInfo
 
