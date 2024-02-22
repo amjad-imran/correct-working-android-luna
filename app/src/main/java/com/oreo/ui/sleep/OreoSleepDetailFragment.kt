@@ -216,7 +216,7 @@ class OreoSleepDetailFragment :
     private fun setHrLowestHr() {
 
         binding.lytHeartRate.tvSubtitle1.text = getString(R.string.text_lowest_hr)
-        if (viewModel.lowestHr == null || viewModel.lowestHr == 0) {
+        if (viewModel.lowestHr == null || viewModel.lowestHr == 0 || viewModel.lowestHr == 255) {
             binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
             binding.lytHeartRate.lytSubtitleValue1.tvUnit.gone()
         } else {
@@ -229,7 +229,7 @@ class OreoSleepDetailFragment :
     private fun setHrvMax() {
 
         binding.lytHRVariability.tvSubtitle1.text = getString(R.string.text_maximum)
-        if (viewModel.maxHrv == null || viewModel.maxHrv == 0) {
+        if (viewModel.maxHrv == null || viewModel.maxHrv == 0 || viewModel.maxHrv == 255) {
             binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "-"
             binding.lytHRVariability.lytSubtitleValue1.tvUnit.gone()
         } else {
@@ -318,6 +318,7 @@ class OreoSleepDetailFragment :
                 ),
                 heartRateData?.hr?.avg,
                 sleepStartTime,
+                sleepEndTime,
                 LineChartType.HEART_RATE
             )
 
@@ -414,6 +415,7 @@ class OreoSleepDetailFragment :
                 ),
                 heartRateData?.hrv?.avg,
                 sleepStartTime,
+                sleepEndTime,
                 LineChartType.HRV
             )
 

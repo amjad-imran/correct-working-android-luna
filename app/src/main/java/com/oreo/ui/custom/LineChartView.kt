@@ -18,12 +18,16 @@ import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.noisefit.luna.R
+import com.noisefit_commans.ui.tryCatch
+import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS.d
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.GraphDummyModel
 import com.oreo.data.model.SleepChartModel
+import org.joda.time.Duration
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
 import java.util.Collections
@@ -81,7 +85,8 @@ class LineChartView : View {
     private var mHeight = 0
     private var xTextBounds: Rect? = null
     private var sleepModel: SleepChartModel? = null
-    private var sleepStartTime: String? = null
+    private var startTime: String? = null
+    private var endTime: String? = null
     private var chartType: LineChartType = LineChartType.HEART_RATE
     private var mHasDummyData = true
     private val list: MutableList<ChartModel?> = ArrayList()
@@ -102,6 +107,10 @@ class LineChartView : View {
     lateinit var bgLine: Paint
     lateinit var dotBitmap: Bitmap
     lateinit var dotBitmap2: Bitmap
+
+    lateinit var mTextPaint: Paint
+    lateinit var mTextPaintEdge: Paint
+    lateinit var edgeTextBackPaint: Paint
 
 
     constructor(context: Context?) : super(context) {
@@ -181,6 +190,24 @@ class LineChartView : View {
     }
 
     private fun initPaint() {
+        val fontGilroy =
+            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.gilroy_medium)
+
+        mTextPaint = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
+        mTextPaint.color = ContextCompat.getColor(context, com.noisefit_commans.R.color.white_64)
+        mTextPaint.textSize = dip2px(10f).toFloat()
+        mTextPaint.setTypeface(fontGilroy)
+
+
+        mTextPaintEdge = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
+        mTextPaintEdge.color = ContextCompat.getColor(context, com.noisefit_commans.R.color.white)
+        mTextPaintEdge.setTypeface(fontGilroy)
+        mTextPaintEdge.textSize = dip2px(10f).toFloat()
+
+        edgeTextBackPaint = Paint()
+        edgeTextBackPaint.color = Color.parseColor("#666666")
+
+
         bgPaint = Paint()
         bgPaint!!.color = bgColor
         bgLeftPaint = Paint()
@@ -191,8 +218,7 @@ class LineChartView : View {
         bgTopPaint!!.color = bgTopColor
         bgBottomPaint = Paint()
         bgBottomPaint!!.color = bgBottomColor
-        val fontGilroy =
-            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.gilroy_medium)
+
         xTextPaint = Paint()
         xTextPaint!!.textSize = xTextSize
         xTextPaint!!.setTypeface(fontGilroy)
@@ -280,7 +306,8 @@ class LineChartView : View {
         showLowCircle: Boolean,
         dummy: GraphDummyModel,
         averageValue: Int?,
-        sleepStartTime: String?,
+        startTime: String?,
+        endTime: String?,
         chartType: LineChartType
     ): Int {
         this.chartType = chartType
@@ -298,7 +325,9 @@ class LineChartView : View {
         }
 
 
-        this.sleepStartTime = sleepStartTime
+        this.startTime = startTime
+        this.endTime = endTime
+
         sleepModel = datas
         mHasDummyData = dummy.hasDummyData
         list.clear()
@@ -463,21 +492,26 @@ class LineChartView : View {
 
             when (chartType) {
                 LineChartType.HEART_RATE -> {
-                    canvas.drawBitmap(
-                        if (value.first == lastMinValueIndex) dotBitmap2 else dotBitmap,
-                        touchX - dotBitmap.width / 2,
-                        y - dotBitmap.height / 2,
-                        null
-                    )
+                    if (value.second != 0) {
+                        canvas.drawBitmap(
+                            if (value.first == lastMinValueIndex) dotBitmap2 else dotBitmap,
+                            touchX - dotBitmap.width / 2,
+                            y - dotBitmap.height / 2,
+                            null
+                        )
+                    }
                 }
 
                 LineChartType.HRV -> {
-                    canvas.drawBitmap(
-                        dotBitmap,
-                        touchX - dotBitmap.width / 2,
-                        y - dotBitmap.height / 2,
-                        null
-                    )
+                    if (value.second != 0) {
+                        canvas.drawBitmap(
+                            dotBitmap,
+                            touchX - dotBitmap.width / 2,
+                            y - dotBitmap.height / 2,
+                            null
+                        )
+                    }
+
                 }
             }
 
@@ -590,6 +624,9 @@ class LineChartView : View {
         var endTextStartPos = 0f
         var current: ChartModel?
         var next: ChartModel?
+
+
+
         toolTipList.clear()
         for (i in list.indices) {
             current = list[i]
@@ -622,10 +659,10 @@ class LineChartView : View {
             }
 
 
-            if (sleepStartTime != null) {
+            if (startTime != null) {
                 val formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
 
-                val startDateTime = LocalDateTime.parse(sleepStartTime, formatter)
+                val startDateTime = LocalDateTime.parse(startTime, formatter)
                 var updatedTime = startDateTime.plusMinutes((list.size - i - 1) * 5)
                 val formatterDisplay = DateTimeFormat.forPattern("h:mm a")
 
@@ -654,56 +691,15 @@ class LineChartView : View {
                     }
                 }
             }
-            if (showXAxis) {
-                if (list[i] != null && list[i]!!.index != null && !list[i]!!.index!!.isEmpty()) {
-                    val xText = list[i]!!.index
-                    xTextPaint!!.getTextBounds(xText, 0, xText!!.length, xTextBounds)
-                    if (endTextStartPos == 0f) {
-                        val text = list[0]!!.index
-                        xTextPaint!!.color = Color.parseColor("#ffffff")
-                        endTextStartPos = if (text != null) {
-                            mWith - leftWith - xTextPaint!!.measureText(text)
-                        } else {
-                            mWith - leftWith - xTextPaint!!.measureText("00:00 am")
-                        }
-                    }
-                    if (leftTextEndPos == 0f) {
-                        val lastText = list[list.size - 1]!!.index
-                        xTextPaint!!.color = Color.parseColor("#ffffff")
-                        leftTextEndPos = leftWith + xTextPaint!!.measureText(lastText)
-                    }
-                    if (i == 0) {
-                        xTextPaint!!.color = Color.parseColor("#ffffff")
-                        canvas.drawText(
-                            xText!!, x - xTextBounds!!.width(), mHeight - bottomWith / 4,
-                            xTextPaint!!
-                        )
-                        //leftTextEndPos = xTextPaint.measureText(xText);
-                    } else if (i == list.size - 1) {
-                        xTextPaint!!.color = Color.parseColor("#ffffff")
-                        canvas.drawText(xText!!, x, mHeight - bottomWith / 4, xTextPaint!!)
-                    } else {
-                        if (leftTextEndPos < x - xTextBounds!!.width() / 2f - dip2px(6f)
-                            && x + xTextBounds!!.width() < endTextStartPos
-                        ) {
-                            xTextPaint!!.color = xTextColor and -0x7f000001
-                            canvas.drawText(
-                                xText!!, x - xTextBounds!!.width() / 2f, mHeight - bottomWith / 4,
-                                xTextPaint!!
-                            )
-                        }
-                    }
-                }
-            }
 
 
 
             if (!mHasDummyData) {
-                if (showHighCircle && i == lastMaxValueIndex && !isInteracting) {
+                if (showHighCircle && i == lastMaxValueIndex && !isInteracting && maxValue != 0) {
                     canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint!!)
                 }
 
-                if (showLowCircle && i == lastMinValueIndex && !isInteracting) {
+                if (showLowCircle && i == lastMinValueIndex && !isInteracting && minValue != 0) {
                     canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint!!)
                 }
 
@@ -762,6 +758,61 @@ class LineChartView : View {
 
             }
         }
+
+
+        val eachSecondsWidth = (width.toFloat() - rightWith - leftWith) / (list.size * 5 * 60)
+        if (showXAxis) {
+
+            drawXAxisTime(
+                canvas,
+                mHeight - bottomWith / 4,
+                eachSecondsWidth,
+                startTime,
+                endTime
+            )
+
+            /*
+                            if (list[i] != null && list[i]!!.index != null && !list[i]!!.index!!.isEmpty()) {
+                                val xText = list[i]!!.index
+                                xTextPaint!!.getTextBounds(xText, 0, xText!!.length, xTextBounds)
+                                if (endTextStartPos == 0f) {
+                                    val text = list[0]!!.index
+                                    xTextPaint!!.color = Color.parseColor("#ffffff")
+                                    endTextStartPos = if (text != null) {
+                                        mWith - leftWith - xTextPaint!!.measureText(text)
+                                    } else {
+                                        mWith - leftWith - xTextPaint!!.measureText("00:00 am")
+                                    }
+                                }
+                                if (leftTextEndPos == 0f) {
+                                    val lastText = list[list.size - 1]!!.index
+                                    xTextPaint!!.color = Color.parseColor("#ffffff")
+                                    leftTextEndPos = leftWith + xTextPaint!!.measureText(lastText)
+                                }
+                                if (i == 0) {
+                                    xTextPaint!!.color = Color.parseColor("#ffffff")
+                                    canvas.drawText(
+                                        xText!!, x - xTextBounds!!.width(), mHeight - bottomWith / 4,
+                                        xTextPaint!!
+                                    )
+                                    //leftTextEndPos = xTextPaint.measureText(xText);
+                                } else if (i == list.size - 1) {
+                                    xTextPaint!!.color = Color.parseColor("#ffffff")
+                                    canvas.drawText(xText!!, x, mHeight - bottomWith / 4, xTextPaint!!)
+                                } else {
+                                    if (leftTextEndPos < x - xTextBounds!!.width() / 2f - dip2px(6f)
+                                        && x + xTextBounds!!.width() < endTextStartPos
+                                    ) {
+                                        xTextPaint!!.color = xTextColor and -0x7f000001
+                                        canvas.drawText(
+                                            xText!!, x - xTextBounds!!.width() / 2f, mHeight - bottomWith / 4,
+                                            xTextPaint!!
+                                        )
+                                    }
+                                }
+                            }*/
+        }
+
     }
 
 
@@ -950,6 +1001,167 @@ class LineChartView : View {
 
         // Not found
         return Pair(-1, "")
+    }
+
+    private fun drawXAxisTime(
+        canvas: Canvas,
+        yPos: Float,
+        eachSecondsWidth: Float,
+        startTimeStr: String?,
+        endTimeStr: String?
+    ) {
+
+        if (startTimeStr == null || endTimeStr == null) {
+
+            val edgeTextPadding = dip2px(4f)
+
+            val startText = "12 am"
+
+            var rectF = RectF(
+                leftWith,
+                yPos - dip2px(12f),
+                leftWith + mTextPaintEdge.measureText(startText) + edgeTextPadding * 2,
+                height.toFloat()
+            )
+            canvas.drawRoundRect(
+                rectF,
+                dip2px(4f).toFloat(),
+                dip2px(4f).toFloat(),
+                edgeTextBackPaint
+            )
+
+            canvas.drawText(
+                startText,
+                leftWith + edgeTextPadding.toFloat(),
+                yPos,
+                mTextPaintEdge
+            )
+
+
+            val text = "12 am"
+            val textWidth = mTextPaintEdge.measureText(text)
+
+
+            rectF = RectF(
+                (width - textWidth - rightWith) - edgeTextPadding * 2,
+                yPos - dip2px(12f),
+                width - rightWith,
+                height.toFloat()
+            )
+            canvas.drawRoundRect(
+                rectF,
+                dip2px(4f).toFloat(),
+                dip2px(4f).toFloat(),
+                edgeTextBackPaint
+            )
+
+            canvas.drawText(
+                text,
+                (width - textWidth - rightWith) - edgeTextPadding,
+                yPos,
+                mTextPaintEdge
+            )
+
+
+
+            return
+        }
+
+        tryCatch {
+            val formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
+
+            val startDateTime = LocalDateTime.parse(startTimeStr, formatter)
+            val endDateTime = LocalDateTime.parse(endTimeStr, formatter)
+
+            var currentDateTime = startDateTime
+
+            while (currentDateTime < endDateTime) {
+                var nextEvenHour =
+                    currentDateTime.plusHours(1).withMinuteOfHour(0).withSecondOfMinute(0)
+                if (nextEvenHour.hourOfDay % 2 != 0) {
+                    nextEvenHour = nextEvenHour.plusHours(1)
+                }
+
+                currentDateTime = nextEvenHour
+                if (nextEvenHour > endDateTime) {
+                    break
+                }
+
+                val formatterDisplay = DateTimeFormat.forPattern("h a")
+                val duration = Duration(startDateTime.toDateTime(), currentDateTime.toDateTime())
+                val secondsDifference = duration.toStandardSeconds().seconds
+                val startX = secondsDifference * eachSecondsWidth
+                val textWidth =
+                    mTextPaint.measureText(currentDateTime.toString(formatterDisplay).lowercase())
+
+                val maxWidth = width - leftWith - rightWith
+                if (startX + textWidth < maxWidth && startX > leftWith) {
+                    canvas.drawText(
+                        currentDateTime.toString(formatterDisplay).lowercase(),
+                        leftWith + startX - textWidth / 2,
+                        yPos,
+                        mTextPaint
+                    )
+                }
+            }
+        }
+
+        val edgeTextPadding = dip2px(4f)
+
+        val startText = DateFormats.formatDate(
+            startTimeStr,
+            DateFormats.dateTimeFormat5,
+            DateFormats.time12Meridian
+        ).lowercase()
+
+        var rectF = RectF(
+            leftWith,
+            yPos - dip2px(12f),
+            leftWith + mTextPaintEdge.measureText(startText) + edgeTextPadding * 2,
+            height.toFloat()
+        )
+        canvas.drawRoundRect(
+            rectF,
+            dip2px(4f).toFloat(),
+            dip2px(4f).toFloat(),
+            edgeTextBackPaint
+        )
+
+        canvas.drawText(
+            startText,
+            leftWith + edgeTextPadding.toFloat(),
+            yPos,
+            mTextPaintEdge
+        )
+
+
+        val text = DateFormats.formatDate(
+            endTimeStr,
+            DateFormats.dateTimeFormat5,
+            DateFormats.time12Meridian
+        ).lowercase()
+        val textWidth = mTextPaintEdge.measureText(text)
+
+
+        rectF = RectF(
+            (width - textWidth - rightWith) - edgeTextPadding * 2,
+            yPos - dip2px(12f),
+            width - rightWith,
+            height.toFloat()
+        )
+        canvas.drawRoundRect(
+            rectF,
+            dip2px(4f).toFloat(),
+            dip2px(4f).toFloat(),
+            edgeTextBackPaint
+        )
+
+        canvas.drawText(
+            text,
+            (width - textWidth - rightWith) - edgeTextPadding,
+            yPos,
+            mTextPaintEdge
+        )
     }
 }
 
