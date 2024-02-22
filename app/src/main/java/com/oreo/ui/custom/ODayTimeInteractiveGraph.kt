@@ -661,12 +661,12 @@ class ODayTimeInteractiveGraph : View {
                             //val selectedValue = value.second as Int
                             val selectedValue = barStartEndXPosList!![it].barType
                             if (lastSentValuePos == null) {
-                                listener?.onValueSelected(selectedValue, it)
+                                listener?.onValueSelected(selectedValue, 95 - it)
                                 lastSentValuePos = it
                                 performHapticFeedbackCustom(selectedValue)
                             } else {
                                 if (lastSentValuePos != it) {
-                                    listener?.onValueSelected(selectedValue, it)
+                                    listener?.onValueSelected(selectedValue, 95 - it)
                                     lastSentValuePos = it
                                     performHapticFeedbackCustom(selectedValue)
                                 }
