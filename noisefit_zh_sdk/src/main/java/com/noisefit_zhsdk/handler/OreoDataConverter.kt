@@ -565,7 +565,7 @@ constructor(
             stringBuilder.append("${pressureData[index]} -> $i\n")
         }
         //LOGS.w("filtered_data -> $stringBuilder")
-        AppLogs.sendAppLogs("geAveragedOutHrvData -> $stringBuilder")
+        //AppLogs.sendAppLogs("geAveragedOutHrvData -> $stringBuilder")
 
         return filteredData
     }

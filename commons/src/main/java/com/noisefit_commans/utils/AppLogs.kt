@@ -4,6 +4,8 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.os.Handler
+import android.os.Looper
 import androidx.core.content.FileProvider
 import com.elvishew.xlog.XLog
 import com.elvishew.xlog.flattener.ClassicFlattener
@@ -13,11 +15,17 @@ import com.elvishew.xlog.printer.file.FilePrinter
 import com.elvishew.xlog.printer.file.backup.NeverBackupStrategy
 import com.elvishew.xlog.printer.file.naming.FileNameGenerator
 import com.noisefit_commans.NoisefitApplication
+import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.tryCatch
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newFixedThreadPoolContext
+import java.io.BufferedReader
 import java.io.File
+import java.io.FileReader
+import java.io.FileWriter
+
 
 private const val LogsFolder = "appLogs"
 private const val LogsTxtFile = "logs.txt"
@@ -93,12 +101,39 @@ object AppLogs {
             val files = logDir.listFiles() ?: return
             for (file in files) {
                 if (file.sizeInMb > 2) {
-                    file.delete()
+                    clearNLines(file, 2000)
+                    //file.delete()
                 }
             }
         }
 
     }
+
+    private fun clearNLines(logFile: File, lines: Int) {
+
+        tryCatch {
+
+            val reader = BufferedReader(FileReader(logFile))
+            val stringBuilder = StringBuilder()
+            var line: String?
+
+            for (i in 0 until lines) {
+                reader.readLine()
+            }
+
+            while (reader.readLine().also { line = it } != null) {
+                stringBuilder.append(line).append("\n")
+            }
+            reader.close()
+
+            val writer = FileWriter(logFile)
+            writer.write(stringBuilder.toString())
+            writer.flush()
+            writer.close()
+
+        }
+    }
+
 
     fun getLogsFolder(): String {
         return LogsFolder

@@ -123,7 +123,7 @@ constructor(
         noiseFitDevice = colorFitDevice
 
         initLogListener()
-        AppLogs.sendAppLogs("Log listener initialized")
+        //AppLogs.sendAppLogs("Log listener initialized")
     }
 
 
@@ -438,7 +438,7 @@ constructor(
                         BatteryData(percentage = capacity, isCharging = isCharging)
                     )
                 )
-                AppLogs.sendAppLogs("Battery info get")
+                //AppLogs.sendAppLogs("Battery info get")
                 /*var state = "未知"
                 when (chargeStatus) {
                     0 -> {
@@ -494,7 +494,7 @@ constructor(
 
 
 
-                AppLogs.sendAppLogs("Get device info")
+                //AppLogs.sendAppLogs("Get device info")
             }
         }
 
