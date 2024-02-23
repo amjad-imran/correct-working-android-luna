@@ -40,6 +40,7 @@ import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
 import com.oreo.ui.recordworkout.SELECT_RECORD_WORKOUT
@@ -666,6 +667,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         super.onResume()
         navController?.addOnDestinationChangedListener(navListener)
         viewModel.ringDataStore.getRingDevice()?.let {
+            viewModel.sessionManager.forceSyncData.value = Event(true)
             if (viewModel.sessionManager.connectStateRing.value == null) {
                 viewModel.sessionManager.setConnectStateRing(ConnectState.Connecting(it))
                 ApplicationUtils.setRescueWorkManager(this)
