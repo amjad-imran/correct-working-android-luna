@@ -265,6 +265,55 @@ class ODayTimeInteractiveGraph : View {
         drawLeft(canvas)
         drawBarContent(canvas)
         drawOverlay(canvas)
+        drawRight(canvas)
+    }
+
+    private fun drawRight(canvas: Canvas) {
+
+        if (isInteracting) return
+
+        xTextPaint.color = Color.parseColor("#ffffff")
+
+        val qHeight = (mHeight - bottomWith - topWith) / 4
+
+        val highText = "High"
+        val medText = "Med"
+        val lowText = "Low"
+        val inactiveText = "Inactive"
+        val textPaddingLeft = dip2px(10f).toFloat()
+
+        xTextPaint.getTextBounds(highText, 0, highText.length, xTextBounds)
+        val highPosY = topWith + qHeight / 2 + xTextBounds!!.height() / 2
+        canvas.drawText(
+            highText,
+            mWith - xTextBounds!!.width() - textPaddingLeft,
+            highPosY,
+            xTextPaint
+        )
+
+        xTextPaint.getTextBounds(medText, 0, medText.length, xTextBounds)
+        canvas.drawText(
+            medText,
+            mWith - xTextBounds!!.width() - textPaddingLeft,
+            highPosY + qHeight,
+            xTextPaint
+        )
+
+        xTextPaint.getTextBounds(lowText, 0, lowText.length, xTextBounds)
+        canvas.drawText(
+            lowText,
+            mWith - xTextBounds!!.width() - textPaddingLeft,
+            highPosY + qHeight * 2,
+            xTextPaint
+        )
+
+        xTextPaint.getTextBounds(inactiveText, 0, inactiveText.length, xTextBounds)
+        canvas.drawText(
+            inactiveText,
+            mWith - xTextBounds!!.width() - textPaddingLeft,
+            highPosY + qHeight * 3,
+            xTextPaint
+        )
     }
 
     private fun generateResMap() {
@@ -374,16 +423,36 @@ class ODayTimeInteractiveGraph : View {
     }
 
     private fun drawLeft(canvas: Canvas) {
-        gridPaint.color = gridColor
-        val qHeight = (mHeight - bottomWith) / 4
+        gridPaint.color = Color.parseColor("#3dffffff")
+        val qHeight = (mHeight - bottomWith - topWith) / 4
+
         canvas.drawLine(0f, topWith, mWith.toFloat(), topWith, gridPaint!!)
+
+
+        gridPaint?.color = Color.parseColor("#1effffff")
+
         canvas.drawLine(
             0f, mHeight - bottomWith, mWith.toFloat(), mHeight - bottomWith, gridPaint
         )
+
+
         canvas.drawLine(
-            0f, qHeight * 2, mWith.toFloat(), qHeight * 2, gridPaint
+            0f, topWith + qHeight * 1, mWith.toFloat(), topWith + qHeight * 1, gridPaint
         )
-        canvas.drawLine(0f, qHeight * 3, mWith.toFloat(), qHeight * 3, gridPaint)
+        canvas.drawLine(
+            0f,
+            topWith + qHeight * 2,
+            mWith.toFloat(),
+            topWith + qHeight * 2,
+            gridPaint
+        )
+        canvas.drawLine(
+            0f,
+            topWith + qHeight * 3,
+            mWith.toFloat(),
+            topWith + qHeight * 3,
+            gridPaint
+        )
     }
 
     private fun isInSleepSection(index: Int): Boolean {
@@ -702,11 +771,11 @@ class ODayTimeInteractiveGraph : View {
     }
 
     private fun performHapticFeedbackCustom(value: Int) {
-        if (value == 0 || value == 1 || value == 2 || value == 3) {
-            this.performHapticFeedback(
-                HapticFeedbackConstants.KEYBOARD_TAP
-            )
-        }
+        //if (value == 0 || value == 1 || value == 2 || value == 3) {
+        this.performHapticFeedback(
+            HapticFeedbackConstants.KEYBOARD_TAP
+        )
+        //}
     }
 
     private val handler = Handler(Looper.getMainLooper())
