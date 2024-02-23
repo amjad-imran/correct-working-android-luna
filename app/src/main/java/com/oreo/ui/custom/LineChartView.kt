@@ -707,11 +707,21 @@ class LineChartView : View {
 
             if (!mHasDummyData) {
                 if (showHighCircle && i == lastMaxValueIndex && !isInteracting && maxValue != 0) {
-                    canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint!!)
+                    canvas.drawBitmap(
+                        dotBitmap2,
+                        x - dotBitmap.width / 2,
+                        y - dotBitmap.height / 2,
+                        null
+                    )
                 }
 
                 if (showLowCircle && i == lastMinValueIndex && !isInteracting && minValue != 0) {
-                    canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint!!)
+                    canvas.drawBitmap(
+                        dotBitmap2,
+                        x - dotBitmap.width / 2,
+                        y - dotBitmap.height / 2,
+                        null
+                    )
                 }
 
                 if (!showLowCircle && !showHighCircle && i == lastMinValueIndex) {
