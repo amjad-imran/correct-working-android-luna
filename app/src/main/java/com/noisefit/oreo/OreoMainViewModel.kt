@@ -123,7 +123,6 @@ constructor(
     val dayActivityData: LiveData<OreoActivityModel> = _dayActivityData
 
 
-
     init {
         viewModelScope.launch(Dispatchers.IO) {
             user = localDataStore.getUser()
@@ -279,6 +278,8 @@ constructor(
         if (sleepHistoryResponse.value.isNullOrEmpty()) return false
 
         if (sleepHistoryResponse.value!!.size < 2) return false
+
+        if (selectedDate.isNullOrEmpty()) return false
 
         if ((sleepHistoryResponse.value!![1]).date.equals(selectedDate) || (sleepHistoryResponse.value!![0]).date.equals(
                 selectedDate

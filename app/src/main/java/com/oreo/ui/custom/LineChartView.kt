@@ -493,8 +493,18 @@ class LineChartView : View {
             when (chartType) {
                 LineChartType.HEART_RATE -> {
                     if (value.second != 0) {
+
+                        val bitmap =
+                            if (lastMinValueIndex == value.first || (lastMinValueIndex - 1) == value.first
+                                || (lastMinValueIndex + 1) == value.first
+                            ) {
+                                dotBitmap2
+                            } else {
+                                dotBitmap
+                            }
+
                         canvas.drawBitmap(
-                            if (value.first == lastMinValueIndex) dotBitmap2 else dotBitmap,
+                            bitmap,
                             touchX - dotBitmap.width / 2,
                             y - dotBitmap.height / 2,
                             null
