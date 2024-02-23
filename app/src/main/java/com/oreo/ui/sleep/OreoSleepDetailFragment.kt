@@ -486,9 +486,9 @@ class OreoSleepDetailFragment :
             )
 
             this.tvStartTime.text = startTime
-            this.tvStartUnit.text = startTimeUnit
+            this.tvStartUnit.text = startTimeUnit.lowercase()
             this.tvEndTime.text = endTime
-            this.tvEndUnit.text = endTimeUnit
+            this.tvEndUnit.text = endTimeUnit.lowercase()
 
         }
     }
