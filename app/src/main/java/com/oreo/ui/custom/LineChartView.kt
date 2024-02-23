@@ -23,6 +23,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.noisefit.luna.R
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.LOGS.d
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.GraphDummyModel
@@ -111,7 +112,8 @@ class LineChartView : View {
     lateinit var mTextPaint: Paint
     lateinit var mTextPaintEdge: Paint
     lateinit var edgeTextBackPaint: Paint
-
+    private val effect =
+        DashPathEffect(floatArrayOf(dip2px(1f).toFloat(), dip2px(2f).toFloat()), 0f)
 
     constructor(context: Context?) : super(context) {
         initPaint()
@@ -636,7 +638,6 @@ class LineChartView : View {
         var next: ChartModel?
 
 
-
         toolTipList.clear()
         for (i in list.indices) {
             current = list[i]
@@ -766,6 +767,55 @@ class LineChartView : View {
                     )
                 }
 
+            }
+        }
+
+        var start = 0
+        for (i in list.indices) {
+            if (list[i]!!.value > 0) {
+                start = i
+                break
+            }
+        }
+        var end = 0
+        for (i in list.indices.reversed()) {
+            if (list[i]!!.value > 0) {
+                end = i
+                break
+            }
+        }
+        var lastIndex = -1
+        for (i in start..end) {
+            current = list[i]
+            if (current!!.value == 0) {
+                if (i > 0 && lastIndex == -1) {
+                    lastIndex = i - 1
+                }
+            } else {
+
+                if (lastIndex != -1) {
+                    if (Math.abs(i - lastIndex) < 4) {
+                        val x = mWith - leftWith - rightWith + leftWith - i * unitHLenth
+                        val y =
+                            mHeight - bottomWith - (current!!.value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
+
+
+                        val x1 = mWith - leftWith - rightWith + leftWith - lastIndex * unitHLenth
+                        val y1 =
+                            mHeight - bottomWith - (list[lastIndex]!!.value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
+
+                        chartLinePaint?.setShader(null)
+                        chartLinePaint?.color = if (isInteracting) {
+                            chartLineColorI
+                        } else {
+                            chartLineColor
+                        }
+                        chartLinePaint?.setPathEffect(effect)
+                        canvas.drawLine(x, y, x1, y1, chartLinePaint!!)
+                        chartLinePaint?.setPathEffect(null)
+                    }
+                    lastIndex = -1
+                }
             }
         }
 
