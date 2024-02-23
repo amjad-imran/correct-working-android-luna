@@ -16,7 +16,6 @@ import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.ui.custom.WorkoutIntensityGraphOreo
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.GraphDummyModel
@@ -203,7 +202,8 @@ class OWorkoutDetailsFragment :
                     it.endTime, SimpleDateFormat(
                         "HH:mm:ss", DateFormats.defaultLocale
                     )
-                )
+                ),
+                it.duration
             )
 
         }
@@ -354,7 +354,8 @@ class OWorkoutDetailsFragment :
         intensity: String?,
         movementList: List<Int>?,
         startTime: String,
-        endTime: String
+        endTime: String,
+        duration: Long?
     ) {
 
         var hasNoData = false
@@ -391,9 +392,11 @@ class OWorkoutDetailsFragment :
             if (hasNoData) {
                 ArrayList()
             } else movementList ?: ArrayList(),
-            mViewModel.getXAxisList(if (hasNoData) {
-                ArrayList()
-            } else movementList, startTime, endTime)
+            mViewModel.getXAxisList(
+                if (hasNoData) {
+                    ArrayList()
+                } else movementList, startTime, endTime, duration
+            )
         )
 
         sleepDayGraphView.invalidate()

@@ -13,12 +13,10 @@ import com.noisefit_commans.utils.Event
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
-import com.oreo.util.UtilClass
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.util.Calendar
 import javax.inject.Inject
 import kotlin.math.ceil
@@ -135,9 +133,14 @@ class OWorkoutDetailsViewModel @Inject constructor(
 
     }
 
-    fun getXAxisList(movementList: List<Int>?, startTime: String, endTime: String): List<String?> {
-        if(movementList.isNullOrEmpty()){
-            return MutableList<String>(2,{""})
+    fun getXAxisList(
+        movementList: List<Int>?,
+        startTime: String,
+        endTime: String,
+        duration: Long?
+    ): List<String?> {
+        if (movementList.isNullOrEmpty()) {
+            return MutableList<String>(2, { "" })
                 .apply {
                     this[0] = startTime.lowercase()
                     this[1] =
@@ -185,9 +188,15 @@ class OWorkoutDetailsViewModel @Inject constructor(
 
         var index = 0
         while (calendar.before(endTimeCalendar)) {
-            list[index] = DateFormats.timeFormat12_2.format(calendar.time)
-            calendar.add(Calendar.MINUTE, 5)
-            index++
+            try {
+                list[index] = DateFormats.timeFormat12_2.format(calendar.time)
+                calendar.add(Calendar.MINUTE, 5)
+                index++
+            } catch (exp: Exception) {
+                exp.printStackTrace()
+                calendar.add(Calendar.MINUTE, 5)
+                index++
+            }
         }
 
 
@@ -214,9 +223,9 @@ class OWorkoutDetailsViewModel @Inject constructor(
         val chunked = movement.chunked(chunkSize)
         chunked.forEach {
             val newList = it.map {
-                if (it==255){
+                if (it == 255) {
                     0
-                }else it
+                } else it
             }
             val data = newList.average().ceilRound()
             list.add(data)
