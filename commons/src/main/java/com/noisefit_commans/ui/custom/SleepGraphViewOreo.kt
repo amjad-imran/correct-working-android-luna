@@ -110,7 +110,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
         overlayLinePaint.color = Color.parseColor("#bad4f2")
 
         edgeTextBackPaint = Paint()
-        edgeTextBackPaint.color = Color.parseColor("#666666")
+        edgeTextBackPaint.color = Color.parseColor("#394653")
 
     }
 

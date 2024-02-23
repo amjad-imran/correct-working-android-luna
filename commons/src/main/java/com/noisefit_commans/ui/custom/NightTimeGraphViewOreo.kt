@@ -459,7 +459,7 @@ class NightTimeGraphViewOreo(var mContext: Context) : View(
 //        toolTipTextPaint.textAlign = Paint.Align.CENTER
 
         edgeTextBackPaint = Paint()
-        edgeTextBackPaint.color = Color.parseColor("#666666")
+        edgeTextBackPaint.color = Color.parseColor("#394653")
 
         val fontGilroy = ResourcesCompat.getFont(this.context, R.font.gilroy_medium)
 

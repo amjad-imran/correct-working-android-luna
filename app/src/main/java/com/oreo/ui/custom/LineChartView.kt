@@ -205,7 +205,7 @@ class LineChartView : View {
         mTextPaintEdge.textSize = dip2px(10f).toFloat()
 
         edgeTextBackPaint = Paint()
-        edgeTextBackPaint.color = Color.parseColor("#666666")
+        edgeTextBackPaint.color = Color.parseColor("#394653")
 
 
         bgPaint = Paint()
@@ -234,7 +234,7 @@ class LineChartView : View {
         centerLinePaint!!.color = centerLineColor
         centerLinePaint!!.strokeWidth = centerLineWidth
         centerLinePaint!!.style = Paint.Style.STROKE
-        centerLinePaint!!.setPathEffect(DashPathEffect(floatArrayOf(1f, 4f), 0f))
+        centerLinePaint!!.setPathEffect(DashPathEffect(floatArrayOf(2f, 4f), 0f))
 
         chartLinePaint = Paint()
         chartLinePaint!!.strokeWidth = chartLineWidth
@@ -887,21 +887,25 @@ class LineChartView : View {
                 mHeight - bottomWith - (this.max - sectionH - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
             drawHorizontalTextWithLine(canvas, (xMin + sectionH * 2).toString(), xAxis3)
 
-            val avg =
-                mHeight - bottomWith - (avgValue - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
 
+            if (avgValue > 0) {
+                val avg =
+                    mHeight - bottomWith - (avgValue - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
+                xTextPaint!!.getTextBounds(avgStr, 0, avgStr.length, xTextBounds)
+                xTextPaint!!.color = Color.parseColor("#9cbdff")
+                avgBackPaint!!.color = Color.parseColor("#b3172941")
 
-            xTextPaint!!.getTextBounds(avgStr, 0, avgStr.length, xTextBounds)
-            xTextPaint!!.color = Color.parseColor("#9cbdff")
-            avgBackPaint!!.color = Color.parseColor("#b3172941")
+                if (!isInteracting) {
+                    canvas.drawLine(leftWith, avg, mWith - rightWith, avg, centerLinePaint!!)
+                }
 
-
-            canvas.drawText(
-                avgStr,
-                leftWith + dip2px(5f),
-                avg + xTextBounds!!.height() / 2,
-                xTextPaint!!
-            )
+                canvas.drawText(
+                    avgStr,
+                    leftWith + dip2px(5f),
+                    avg - dip2px(3f),
+                    xTextPaint!!
+                )
+            }
 
         } else {
             val noDataText = "No data available"
