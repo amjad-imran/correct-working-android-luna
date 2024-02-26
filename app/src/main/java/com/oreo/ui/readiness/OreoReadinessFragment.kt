@@ -246,7 +246,7 @@ class OreoReadinessFragment :
 
             updateGraphColor(
                 Color.parseColor("#ff7f96"),
-                Color.parseColor("#80ff7f96"),
+                Color.parseColor("#844B60"),
                 Color.parseColor("#99ff718b"),
                 Color.parseColor("#00ff5f7c")
             )
@@ -345,7 +345,7 @@ class OreoReadinessFragment :
             setVibrationUtil(vibrationUtils)
             updateGraphColor(
                 Color.parseColor("#ff7fd6"),
-                Color.parseColor("#80ff7fd6"),
+                Color.parseColor("#844A7E"),
                 Color.parseColor("#99ff71d2"),
                 Color.parseColor("#00ff5fcc")
             )
