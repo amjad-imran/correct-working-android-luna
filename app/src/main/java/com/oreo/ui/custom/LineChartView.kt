@@ -514,7 +514,7 @@ class LineChartView : View {
 
     private fun drawOverlay(canvas: Canvas) {
         if (!isInteracting) return
-        if (touchX > 0 && touchX < graphOriginalWidth) {
+        if (touchX > leftWith && touchX < (mWith-rightWith)) {
             val rectF = RectF()
             rectF.left = touchX
             rectF.right = touchX
