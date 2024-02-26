@@ -280,7 +280,7 @@ class LineChartView : View {
         avgTextPaint = Paint().apply {
             this.color = Color.parseColor("#9cbdff")
             this.typeface = fontGilroy
-            this.textSize =  dip2px(14f).toFloat()
+            this.textSize = dip2px(14f).toFloat()
         }
 
         bgLine = Paint().apply {
@@ -1139,7 +1139,7 @@ class LineChartView : View {
 
             var rectF = RectF(
                 leftWith,
-                yPos - dip2px(8f),
+                yPos - dip2px(10f),
                 leftWith + mTextPaintEdge.measureText(startText) + edgeTextPadding * 2,
                 height.toFloat()
             )
@@ -1153,7 +1153,7 @@ class LineChartView : View {
             canvas.drawText(
                 startText,
                 leftWith + edgeTextPadding.toFloat(),
-                yPos,
+                yPos + dip2px(2f),
                 mTextPaintEdge
             )
 
@@ -1164,7 +1164,7 @@ class LineChartView : View {
 
             rectF = RectF(
                 (width - textWidth - rightWith) - edgeTextPadding * 2,
-                yPos - dip2px(8f),
+                yPos - dip2px(10f),
                 width - rightWith,
                 height.toFloat()
             )
@@ -1178,7 +1178,7 @@ class LineChartView : View {
             canvas.drawText(
                 text,
                 (width - textWidth - rightWith) - edgeTextPadding,
-                yPos,
+                yPos + dip2px(2f),
                 mTextPaintEdge
             )
 
@@ -1236,7 +1236,7 @@ class LineChartView : View {
 
         var rectF = RectF(
             leftWith,
-            yPos - dip2px(8f),
+            yPos - dip2px(10f),
             leftWith + mTextPaintEdge.measureText(startText) + edgeTextPadding * 2,
             height.toFloat()
         )
@@ -1265,7 +1265,7 @@ class LineChartView : View {
 
         rectF = RectF(
             (width - textWidth - rightWith) - edgeTextPadding * 2,
-            yPos - dip2px(8f),
+            yPos - dip2px(10f),
             width - rightWith,
             height.toFloat()
         )
