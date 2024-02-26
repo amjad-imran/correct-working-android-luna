@@ -349,7 +349,7 @@ class ODayTimeInteractiveGraph : View {
         val leftBgPaint = Paint()
         leftBgPaint.color = Color.parseColor("#33ffffff")
         val rectF = RectF(
-            0f, mHeight - bottomWith + dip2px(9f), dip2px(42f).toFloat(), mHeight.toFloat()
+            dip2px(6f).toFloat(), mHeight - bottomWith + dip2px(9f), dip2px(42f).toFloat(), mHeight.toFloat()
         )
         canvas.drawRoundRect(rectF, dip2px(5f).toFloat(), dip2px(5f).toFloat(), leftBgPaint)
 
@@ -362,7 +362,7 @@ class ODayTimeInteractiveGraph : View {
         val rectF = RectF(
             mWith - dip2px(42f).toFloat(),
             mHeight - bottomWith + dip2px(9f),
-            mWith.toFloat(),
+            mWith.toFloat()-dip2px(6f),
             mHeight.toFloat()
         )
         canvas.drawRoundRect(rectF, dip2px(5f).toFloat(), dip2px(3f).toFloat(), leftBgPaint)
@@ -386,7 +386,7 @@ class ODayTimeInteractiveGraph : View {
             xTextPaint.color = Color.parseColor("#ffffff")
             canvas.drawText(
                 xText,
-                (mWith - xTextBounds!!.width()).toFloat() - dip2px(6f),
+                (mWith - xTextBounds!!.width()).toFloat() - dip2px(9f),
                 mHeight - bottomWith / 3 + dip2px(3f),
                 xTextPaint
             )
@@ -422,7 +422,7 @@ class ODayTimeInteractiveGraph : View {
             xTextPaint.color = Color.parseColor("#ffffff")
             xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
             canvas.drawText(
-                xText, dip2px(3f).toFloat(),
+                xText, dip2px(8f).toFloat(),
                 mHeight - bottomWith / 3 + dip2px(3f), xTextPaint
             )
         }
