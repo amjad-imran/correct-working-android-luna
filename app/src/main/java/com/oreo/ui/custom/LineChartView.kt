@@ -119,6 +119,10 @@ class LineChartView : View {
     private val effect =
         DashPathEffect(floatArrayOf(dip2px(1f).toFloat(), dip2px(2f).toFloat()), 0f)
 
+    private var chartLineGradient: LinearGradient? = null
+    private var chartLineGradientInteracting: LinearGradient? = null
+
+
     constructor(context: Context?) : super(context) {
         initPaint()
         //        updateData();
@@ -137,6 +141,7 @@ class LineChartView : View {
         init(attrs)
         //        updateData();
     }
+
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -578,24 +583,7 @@ class LineChartView : View {
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        linearGradient = LinearGradient(
-            0f,
-            0f,
-            0f,
-            h.toFloat(),
-            Color.parseColor("#ff7f96"),//intArrayOf(Color.parseColor("#99ff718b"), Color.parseColor("#00ff5f7c")),
-            Color.TRANSPARENT/*floatArrayOf(0.3f, 0.6f)*/,
-            Shader.TileMode.CLAMP
-        )
-        linearGradientI = LinearGradient(
-            0f,
-            0f,
-            0f,
-            h.toFloat(),
-            Color.parseColor("#80ff7f96"),//intArrayOf(Color.parseColor("#99ff718b"), Color.parseColor("#00ff5f7c")),
-            Color.TRANSPARENT/*floatArrayOf(0.3f, 0.6f)*/,
-            Shader.TileMode.CLAMP
-        )
+
         mWith = w
         mHeight = h
     }
@@ -652,10 +640,94 @@ class LineChartView : View {
 //        canvas.drawText(avgStr, leftWith + dip2px(5), avg - xTextBounds.height(), xTextPaint)
     }
 
+
+    fun initLineGradient() {
+
+        linearGradient = LinearGradient(
+            0f,
+            0f,
+            0f,
+            mHeight.toFloat(),
+            if (chartType == LineChartType.HEART_RATE) {
+                Color.parseColor("#ff7f96")
+            } else {
+                Color.parseColor("#FF71D2")
+            },//intArrayOf(Color.parseColor("#99ff718b"), Color.parseColor("#00ff5f7c")),
+            Color.TRANSPARENT/*floatArrayOf(0.3f, 0.6f)*/,
+            Shader.TileMode.CLAMP
+        )
+        linearGradientI = LinearGradient(
+            0f,
+            0f,
+            0f,
+            mHeight.toFloat(),
+            if (chartType == LineChartType.HEART_RATE) {
+                Color.parseColor("#80ff7f96")
+            } else {
+                Color.parseColor("#80FF71D2")
+            },//intArrayOf(Color.parseColor("#99ff718b"), Color.parseColor("#00ff5f7c")),
+            Color.TRANSPARENT/*floatArrayOf(0.3f, 0.6f)*/,
+            Shader.TileMode.CLAMP
+        )
+
+
+        var arrayDef = intArrayOf()
+        var arrayDefI = intArrayOf()
+
+        when (chartType) {
+            LineChartType.HEART_RATE -> {
+
+                arrayDef = intArrayOf(
+                    Color.parseColor("#ff7f96"),
+                    Color.parseColor("#fc3559"),
+                    Color.parseColor("#fc3559")
+                )
+                arrayDefI = intArrayOf(
+                    Color.parseColor("#844B60"),
+                    Color.parseColor("#833947"),
+                    Color.parseColor("#832930")
+                )
+            }
+
+            LineChartType.HRV -> {
+                arrayDef = intArrayOf(
+                    Color.parseColor("#FF7FD6"),
+                    Color.parseColor("#FD5ACA"),
+                    Color.parseColor("#FC35BD")
+                )
+                arrayDefI = intArrayOf(
+                    Color.parseColor("#844A7F"),
+                    Color.parseColor("#833878"),
+                    Color.parseColor("#822571")
+                )
+            }
+        }
+
+        chartLineGradient = LinearGradient(
+            0f,
+            topWith,
+            0f,
+            mHeight - bottomWith,
+            arrayDef,
+            floatArrayOf(0f, 0.5f, 1f),
+            Shader.TileMode.CLAMP
+        )
+        chartLineGradientInteracting = LinearGradient(
+            0f,
+            topWith,
+            0f,
+            mHeight - bottomWith,
+            arrayDefI,
+            floatArrayOf(0f, 0.5f, 1f),
+            Shader.TileMode.CLAMP
+        )
+    }
+
     private fun drawContent(canvas: Canvas) {
         if (list.size == 0) {
             return
         }
+        initLineGradient()
         unitHLenth = (mWith - leftWith - rightWith) / (list.size - 1)
 
         //hack for touch and hold position
@@ -696,6 +768,14 @@ class LineChartView : View {
                     canvas.drawPath(fillPath, chartLineFillPaint!!)
                     //draw chart line second, need to cover fill color
                     chartLinePaint?.color = if (isInteracting) chartLineColorI else chartLineColor
+
+
+                    if (isInteracting) {
+                        chartLinePaint?.setShader(chartLineGradientInteracting)
+                    } else {
+                        chartLinePaint?.setShader(chartLineGradient)
+                    }
+
                     canvas.drawPath(path, chartLinePaint!!)
                 }
             }
