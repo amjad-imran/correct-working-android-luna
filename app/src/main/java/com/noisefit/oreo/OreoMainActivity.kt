@@ -29,6 +29,7 @@ import com.noisefit.ui.APP_UPDATE
 import com.noisefit.ui.common.BaseActivity
 import com.noisefit.ui.onboarding.FirebaseUpdateViewModel
 import com.noisefit.util.ApplicationUtils
+import com.noisefit.util.moveToServer.BatteryNotificationUtils
 import com.noisefit.util.notif.NotificationUtil
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
@@ -47,6 +48,8 @@ import com.oreo.ui.recordworkout.SELECT_RECORD_WORKOUT
 import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderEffectBlur
 import eightbitlab.com.blurview.RenderScriptBlur
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {

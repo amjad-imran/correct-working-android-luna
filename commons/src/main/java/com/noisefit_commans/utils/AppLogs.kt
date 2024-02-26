@@ -14,6 +14,7 @@ import com.elvishew.xlog.printer.Printer
 import com.elvishew.xlog.printer.file.FilePrinter
 import com.elvishew.xlog.printer.file.backup.NeverBackupStrategy
 import com.elvishew.xlog.printer.file.naming.FileNameGenerator
+import com.noisefit_commans.BuildConfig
 import com.noisefit_commans.NoisefitApplication
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.tryCatch
@@ -64,6 +65,18 @@ object AppLogs {
      * Print app Logs text
      */
     fun sendAppLogs(logText: String) {
+        scope.launch(backgroundDispatcher) {
+            cleanLogFilesIfNecessary()
+            XLog.printers(filePrinter).i(logText)
+        }
+    }
+
+    /**
+     * Print Debug app Logs text
+     */
+    fun sendDebugAppLogs(logText: String) {
+        if (!BuildConfig.DEBUG) return
+
         scope.launch(backgroundDispatcher) {
             cleanLogFilesIfNecessary()
             XLog.printers(filePrinter).i(logText)
@@ -131,9 +144,7 @@ object AppLogs {
             writer.flush()
             writer.close()
 
-        }
     }
-
 
     fun getLogsFolder(): String {
         return LogsFolder

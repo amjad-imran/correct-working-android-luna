@@ -955,7 +955,7 @@ class SummaryDataFragmentToday :
             }
         }
 
-        lytWorkouts.ivViewAll.setOnClickListener {
+        lytWorkouts.root.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_workouts_entry_click)
             navigate(R.id.oActivityListFragment)
         }

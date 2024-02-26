@@ -1592,6 +1592,10 @@ constructor() : LifecycleService() {
                     sessionManager.isRingCharging.postValue(queryCallback.batteryData.isCharging)
 
                     LOGS.d(TAG, "battery Level Ring : $percent")
+
+                    batteryNotificationUtils.handleBatteryNotification(
+                        percent
+                    )
                     /* val lastBatteryLevel = watchDataStore.getBatteryPercentRing()
                      batteryNotificationUtils.handleBatteryNotification(
                          percent,

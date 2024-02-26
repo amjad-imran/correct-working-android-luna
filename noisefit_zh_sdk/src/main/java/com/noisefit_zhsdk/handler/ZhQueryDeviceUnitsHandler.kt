@@ -319,13 +319,11 @@ constructor(
     }
 
     private val batteryAlertCallback = DeviceBatteryReportingCallBack {
-        if (it.deviceBatteryValue <= 20) {
-            testQueryDeviceDataCallback?.onQueryDataReceived(
-                QueryCallback.BatteryAlertObtained(
-                    it.deviceBatteryValue
-                )
+        testQueryDeviceDataCallback?.onQueryDataReceived(
+            QueryCallback.BatteryAlertObtained(
+                it.deviceBatteryValue
             )
-        }
+        )
     }
 
     private val realDataCallback = object : RealTimeDataCallBack {
