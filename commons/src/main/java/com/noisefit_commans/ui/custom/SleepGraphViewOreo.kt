@@ -154,7 +154,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                                 listener?.onValueSelected(entry.first())
 
                                 this.performHapticFeedback(
-                                    HapticFeedbackConstants.KEYBOARD_TAP
+                                    HapticFeedbackConstants.LONG_PRESS
                                 )
                                 postInvalidate()
                             }
@@ -999,15 +999,16 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                         mLongPressed,
                         ViewConfiguration.getLongPressTimeout().toLong()
                     )
-                    return true
+                    return true//super.onTouchEvent(event)
                 }
 
                 MotionEvent.ACTION_MOVE -> {
                     if (isInteracting) {
                         touchX = event.x
                         invalidate()
+                        return true
                     }
-                    return true
+                    return super.onTouchEvent(event)
                 }
 
                 MotionEvent.ACTION_UP -> {
@@ -1017,13 +1018,15 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                     listener?.isInteractionOnGoing(false)
                     touchX = 0.0f
                     invalidate()
-                    return true
+                    return super.onTouchEvent(event)
                 }
             }
         } else {
             return super.onTouchEvent(event)
         }
-        return false
+        return super.onTouchEvent(event)
+
+//        return false
     }
 
 

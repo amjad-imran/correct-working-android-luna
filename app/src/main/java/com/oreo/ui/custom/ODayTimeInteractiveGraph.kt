@@ -104,6 +104,7 @@ class ODayTimeInteractiveGraph : View {
     private var workoutPaint: Paint? = null
     private var dayTimeDataModel: DayTimeDataModel? = null
     private var mSleepSection: List<Section>? = null
+    private var mNapSection: List<Section>? = null
 
 
     constructor(context: Context?) : super(context) {
@@ -242,6 +243,7 @@ class ODayTimeInteractiveGraph : View {
     fun updateData(dayData: DayTimeDataModel?) {
         dayTimeDataModel = dayData
         mSleepSection = dayTimeDataModel?.sections?.filter { it.type.equals("sleep", true) }
+        mNapSection = dayTimeDataModel?.sections?.filter { it.type.equals("nap", true) }
         bitmapMap = HashMap()
         list.clear()
         dayData?.items.let {
@@ -468,6 +470,19 @@ class ODayTimeInteractiveGraph : View {
         return isInSleepSection
     }
 
+    private fun isInNapSection(index: Int): Boolean {
+        if (mNapSection.isNullOrEmpty()) return false
+
+        var isInNapSection = false
+        mNapSection?.forEach {
+            if (index in it.start..it.end) {
+                isInNapSection = true
+                return@forEach
+            }
+        }
+        return isInNapSection
+    }
+
     private fun drawBarContent(canvas: Canvas) {
         if (list.size == 0) return
         unitHLenth = (mWith.toFloat()) / (list.size - 1)
@@ -511,7 +526,7 @@ class ODayTimeInteractiveGraph : View {
                 }
             }
 
-            if (!isInSleepSection(index)) {
+            if (!isInSleepSection(index) && !isInNapSection(index)) {
                 val rectF = RectF(
                     x,
                     mHeight.toFloat() - barHeight - bottomWith,
@@ -773,7 +788,7 @@ class ODayTimeInteractiveGraph : View {
     private fun performHapticFeedbackCustom(value: Int) {
         //if (value == 0 || value == 1 || value == 2 || value == 3) {
         this.performHapticFeedback(
-            HapticFeedbackConstants.KEYBOARD_TAP
+            HapticFeedbackConstants.LONG_PRESS
         )
         //}
     }

@@ -450,7 +450,7 @@ class LineChartView : View {
     private fun performHapticFeedbackCustom(value: Int) {
         if (value != 0) {
             this.performHapticFeedback(
-                HapticFeedbackConstants.KEYBOARD_TAP
+                HapticFeedbackConstants.LONG_PRESS
             )
         }
     }
