@@ -946,15 +946,26 @@ class LineChartView : View {
         }
     }
 
-    private fun drawHorizontalTextWithLine(canvas: Canvas, text: String, bottomHeight: Float) {
+    private fun drawHorizontalTextWithLine(
+        canvas: Canvas,
+        text: String,
+        bottomHeight: Float,
+        isTop: Boolean = false,
+        isBottom: Boolean = false
+    ) {
 
         canvas.drawLine(leftWith, bottomHeight, mWith - rightWith, bottomHeight, bgLine)
         xTextPaint!!.color = Color.parseColor("#a3ffffff")
         xTextPaint!!.getTextBounds(text, 0, text.length, xTextBounds)
+        val yPos: Float = if (isTop) {
+            bottomHeight + xTextBounds!!.height() / 2f + dip2px(4f)
+        } else if (isBottom) {
+            bottomHeight + xTextBounds!!.height() / 2f - dip2px(4f)
+        } else
+            bottomHeight + xTextBounds!!.height() / 2f
         canvas.drawText(
             text,
-            mWith - rightWith + dip2px(10f),
-            bottomHeight + xTextBounds!!.height() / 2f,
+            mWith - rightWith + dip2px(10f), yPos,
             xTextPaint!!
         )
     }
@@ -971,12 +982,12 @@ class LineChartView : View {
         val max =
             mHeight - bottomWith - (max - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
 
-        drawHorizontalTextWithLine(canvas, maxStr, max)
+        drawHorizontalTextWithLine(canvas, maxStr, max, true, false)
 
         val min =
             mHeight - bottomWith - (xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
 
-        drawHorizontalTextWithLine(canvas, minStr, min)
+        drawHorizontalTextWithLine(canvas, minStr, min, false, true)
 
         if (!mHasDummyData) {
             val xAxis2 =
@@ -997,7 +1008,7 @@ class LineChartView : View {
                 avgBackPaint!!.color = Color.parseColor("#b3172941")
 
                 if (!isInteracting) {
-                    canvas.drawLine(leftWith, avg, mWith - rightWith, avg, centerLinePaint!!)
+                    canvas.drawLine(leftWith, avg, mWith.toFloat(), avg, centerLinePaint!!)
                 }
 
                 val padding = dip2px(8f)
@@ -1216,6 +1227,7 @@ class LineChartView : View {
 
                 val maxWidth = width - leftWith - rightWith
                 if (startX + textWidth < maxWidth && startX > leftWith) {
+                    mTextPaint.color = ContextCompat.getColor(context, R.color.white_64)
                     canvas.drawText(
                         currentDateTime.toString(formatterDisplay).lowercase(),
                         leftWith + startX - textWidth / 2,
