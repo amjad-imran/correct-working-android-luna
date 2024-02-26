@@ -654,7 +654,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
             val startText = DateFormats.formatDate(
                 startTime,
                 DateFormats.dateTimeFormat5,
-                DateFormats.time12Meridian
+                DateFormats.timeFormat12_2
             ).lowercase()
 
             val rectF = RectF(
@@ -685,7 +685,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
             val text = DateFormats.formatDate(
                 endTime,
                 DateFormats.dateTimeFormat5,
-                DateFormats.time12Meridian
+                DateFormats.timeFormat12_2
             )
             val textWidth = mTextPaintEdge.measureText(text)
 
@@ -707,7 +707,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                 DateFormats.formatDate(
                     endTime,
                     DateFormats.dateTimeFormat5,
-                    DateFormats.time12Meridian
+                    DateFormats.timeFormat12_2
                 ).lowercase(),
                 (width - textWidth - endPadding) - edgeTextPadding,
                 sectionHeight * 5 - pxFromDp(5.0f),
