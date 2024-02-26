@@ -687,7 +687,7 @@ class LineChartView : View {
                         mHeight - bottomWith - (next.value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
 
 
-                    path.cubicTo(x1 + (x - x1) / 4, y, x - (x - x1) / 4, y1, x1, y1)
+                    path.cubicTo(x1 + (x - x1) / 1.5f, y, x - (x - x1) / 1.5f, y1, x1, y1)
                     fillPath.addPath(path)
                     //draw fill first
                     fillPath.lineTo(x1, mHeight - bottomWith)

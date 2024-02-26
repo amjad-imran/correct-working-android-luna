@@ -220,7 +220,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                 var end: Float
                 var top = 0f
                 var bottom = 0f
-                val barHeight = pxFromDp(16f)
+                val barHeight = pxFromDp(12f)
 
 
                 for (i in sleepArray!!.indices) {

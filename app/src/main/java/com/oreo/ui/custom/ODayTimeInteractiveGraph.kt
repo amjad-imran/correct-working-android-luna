@@ -111,7 +111,6 @@ class ODayTimeInteractiveGraph : View {
     private var vibrationUtils: VibrationUtils? = null
 
 
-
     constructor(context: Context?) : super(context) {
         resMap = HashMap()
         initPaint()
@@ -542,6 +541,8 @@ class ODayTimeInteractiveGraph : View {
                     canvas.drawRoundRect(rectF, dip2px(20f).toFloat(), dip2px(20f).toFloat(), it)
                 }
                 barStartEndXPosList?.add(DayTimeXYDataModel(x, end, barType, barHeight))
+            } else {
+                barStartEndXPosList?.add(DayTimeXYDataModel(x, end, 5, barHeight))
             }
 
             x = end + unitHLenth / 2
@@ -721,6 +722,14 @@ class ODayTimeInteractiveGraph : View {
                             barHeight = dip2px(130f)
                         }
 
+                        5 -> {
+                            barColor = ContextCompat.getColor(
+                                context,
+                                R.color.daytime_zero_data_selected_color
+                            )
+                            barHeight = 0
+                        }
+
                         else -> {
                             barColor = ContextCompat.getColor(
                                 context,
@@ -748,16 +757,16 @@ class ODayTimeInteractiveGraph : View {
                         if (listener != null) {
                             //val position = value.first as Int
                             //val selectedValue = value.second as Int
-                            val selectedValue = barStartEndXPosList!![it].barType
-                            if (lastSentValuePos == null) {
-                                listener?.onValueSelected(selectedValue, 95 - it)
+                            val selectedBar = barStartEndXPosList!![it].barType
+                            if (lastSentValuePos == null && selectedBar != 5) {
+                                listener?.onValueSelected(selectedBar, 95 - it)
                                 lastSentValuePos = it
-                                performHapticFeedbackCustom(selectedValue)
+                                performHapticFeedbackCustom(selectedBar)
                             } else {
-                                if (lastSentValuePos != it) {
-                                    listener?.onValueSelected(selectedValue, 95 - it)
+                                if (lastSentValuePos != it && selectedBar != 5) {
+                                    listener?.onValueSelected(selectedBar, 95 - it)
                                     lastSentValuePos = it
-                                    performHapticFeedbackCustom(selectedValue)
+                                    performHapticFeedbackCustom(selectedBar)
                                 }
                             }
                         }
