@@ -23,8 +23,10 @@ import androidx.core.content.res.ResourcesCompat
 import com.noisefit.luna.R
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.LOGS.d
+import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.GraphDummyModel
 import com.oreo.data.model.SleepChartModel
@@ -447,12 +449,24 @@ class LineChartView : View {
     }
 
     private var listener: OnLinearChartClickAction? = null
+
+    private var vibrationUtils: VibrationUtils? = null
+
+
+
     private fun performHapticFeedbackCustom(value: Int) {
         if (value != 0) {
-            this.performHapticFeedback(
+            vibrationUtils?.vibrate(HAPTIC_VIBRATION)
+
+
+            /*this.performHapticFeedback(
                 HapticFeedbackConstants.LONG_PRESS
-            )
+            )*/
         }
+    }
+
+    fun setVibrationUtil(vibrationUtils: VibrationUtils) {
+        this.vibrationUtils = vibrationUtils
     }
 
     private var lastSentValuePos: Int? = null
@@ -460,9 +474,12 @@ class LineChartView : View {
     private var mLongPressed = Runnable {
         isInteracting = true
         invalidate()
-        rootView.performHapticFeedback(
+
+        vibrationUtils?.vibrate(HAPTIC_VIBRATION)
+
+        /*rootView.performHapticFeedback(
             HapticFeedbackConstants.LONG_PRESS
-        )
+        )*/
     }
 
     private fun getClickedValue(touchX: Float): Triple<Int, Int, String> {
@@ -530,7 +547,7 @@ class LineChartView : View {
             if (listener != null) {
                 val position = value.first
                 val selectedValue = value.second
-                d("CLICKED_VALUE value value Touch $position $selectedValue")
+                //d("CLICKED_VALUE value value Touch $position $selectedValue")
                 if (lastSentValuePos == null) {
                     listener?.onValueSelected(selectedValue, true, value.third)
                     lastSentValuePos = position

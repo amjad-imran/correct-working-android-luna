@@ -24,6 +24,7 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
+import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.GraphDummyModel
@@ -44,6 +45,7 @@ import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -53,6 +55,10 @@ class OreoReadinessFragment :
     private val mViewModel: OreoReadinessViewModel by viewModels()
     private val mSharedViewModel: SharedOSCDViewModel by activityViewModels()
     private val mainViewModel: OreoMainViewModel by activityViewModels()
+
+
+    @Inject
+    lateinit var vibrationUtils: VibrationUtils
 
 
     private val mReadinessConAdapter: OreoSleepContributorAdapter by lazy {
@@ -235,6 +241,9 @@ class OreoReadinessFragment :
 
         sleepChart.list = chartList
         binding.lytHeartRate.lineChart.apply {
+
+            setVibrationUtil(vibrationUtils)
+
             updateGraphColor(
                 Color.parseColor("#ff7f96"),
                 Color.parseColor("#80ff7f96"),
@@ -333,6 +342,7 @@ class OreoReadinessFragment :
 
         sleepChart.list = chartList
         binding.lytHRVariability.lineChart.apply {
+            setVibrationUtil(vibrationUtils)
             updateGraphColor(
                 Color.parseColor("#ff7fd6"),
                 Color.parseColor("#80ff7fd6"),

@@ -27,7 +27,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.noisefit.luna.R
+import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.DayTimeDataModel
 import com.oreo.data.model.DayTimeXYDataModel
 import com.oreo.data.model.Item
@@ -105,6 +107,9 @@ class ODayTimeInteractiveGraph : View {
     private var dayTimeDataModel: DayTimeDataModel? = null
     private var mSleepSection: List<Section>? = null
     private var mNapSection: List<Section>? = null
+
+    private var vibrationUtils: VibrationUtils? = null
+
 
 
     constructor(context: Context?) : super(context) {
@@ -785,11 +790,17 @@ class ODayTimeInteractiveGraph : View {
         }
     }
 
+    fun setVibrationUtil(vibrationUtils: VibrationUtils) {
+        this.vibrationUtils = vibrationUtils
+    }
+
     private fun performHapticFeedbackCustom(value: Int) {
         //if (value == 0 || value == 1 || value == 2 || value == 3) {
-        this.performHapticFeedback(
+        vibrationUtils?.vibrate(HAPTIC_VIBRATION)
+
+        /*this.performHapticFeedback(
             HapticFeedbackConstants.LONG_PRESS
-        )
+        )*/
         //}
     }
 
@@ -798,8 +809,12 @@ class ODayTimeInteractiveGraph : View {
         isInteracting = true
         invalidate()
         listener?.isInteractionOnGoing(true)
-        rootView.performHapticFeedback(
+
+        vibrationUtils?.vibrate(HAPTIC_VIBRATION)
+
+
+        /*rootView.performHapticFeedback(
             HapticFeedbackConstants.LONG_PRESS
-        )
+        )*/
     }
 }

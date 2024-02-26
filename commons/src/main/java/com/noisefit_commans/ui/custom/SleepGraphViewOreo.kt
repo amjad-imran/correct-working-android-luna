@@ -16,7 +16,9 @@ import com.noisefit_commans.data.model.CountCardData
 import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.VibrationUtils
 import org.joda.time.Duration
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
@@ -49,6 +51,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
 
     private var mTextPaint: Paint
     private var mTextPaintEdge: Paint
+    private var vibrationUtils: VibrationUtils? = null
 
     //    private var toolTipPaint: Paint = Paint()
 //    private var toolTipTextPaint: Paint
@@ -153,9 +156,12 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                                 lastSelectedEntry = entry.first()
                                 listener?.onValueSelected(entry.first())
 
-                                this.performHapticFeedback(
+                                vibrationUtils?.vibrate(HAPTIC_VIBRATION)
+
+
+                                /*this.performHapticFeedback(
                                     HapticFeedbackConstants.LONG_PRESS
-                                )
+                                )*/
                                 postInvalidate()
                             }
 
@@ -1029,14 +1035,20 @@ class SleepGraphViewOreo(var mContext: Context) : View(
 //        return false
     }
 
+    fun setVibrationUtil(vibrationUtils: VibrationUtils) {
+        this.vibrationUtils = vibrationUtils
+    }
+
 
     private val handler = Handler(Looper.getMainLooper())
     private var mLongPressed = Runnable {
         isInteracting = true
         invalidate()
         listener?.isInteractionOnGoing(true)
-        rootView.performHapticFeedback(
+        vibrationUtils?.vibrate(HAPTIC_VIBRATION)
+
+        /*rootView.performHapticFeedback(
             HapticFeedbackConstants.LONG_PRESS
-        )
+        )*/
     }
 }

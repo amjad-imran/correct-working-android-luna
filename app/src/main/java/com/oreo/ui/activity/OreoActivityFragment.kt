@@ -28,6 +28,7 @@ import com.noisefit_commans.utils.DistanceUtil
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
+import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.OActivityListModal
@@ -41,6 +42,7 @@ import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -52,6 +54,9 @@ class OreoActivityFragment :
     private val mViewModel: OreoActivityViewModel by viewModels()
     private val mSharedViewModel: SharedOSCDViewModel by activityViewModels()
     private val mainViewModel: OreoMainViewModel by activityViewModels()
+
+    @Inject
+    lateinit var vibrationUtils: VibrationUtils
 
 
     private val mWorkoutAdapter: OreoAWorkoutAdapter by lazy {
@@ -327,6 +332,7 @@ class OreoActivityFragment :
             mViewModel.prepareStressActivityData(dayData)
         }
         binding.lytDailyMovement.lytInteractiveGraph.graphDayTime.enableInteractiveMode(true)
+        binding.lytDailyMovement.lytInteractiveGraph.graphDayTime.setVibrationUtil(vibrationUtils)
         binding.lytDailyMovement.lytInteractiveGraph.graphDayTime.updateData(
             dayData?.let {
                 mViewModel.dayTimeDataConvertor.getDayTimeCombinedData(
