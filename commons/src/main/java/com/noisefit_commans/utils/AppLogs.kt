@@ -144,6 +144,7 @@ object AppLogs {
             writer.flush()
             writer.close()
 
+        }
     }
 
     fun getLogsFolder(): String {
