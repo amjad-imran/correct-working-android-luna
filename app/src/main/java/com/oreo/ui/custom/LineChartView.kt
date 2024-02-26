@@ -963,9 +963,14 @@ class LineChartView : View {
             bottomHeight + xTextBounds!!.height() / 2f - dip2px(4f)
         } else
             bottomHeight + xTextBounds!!.height() / 2f
+
+
+        val textStart = mWith.toFloat() - xTextBounds!!.width()
+
         canvas.drawText(
             text,
-            mWith - rightWith + dip2px(10f), yPos,
+            textStart,
+            yPos,
             xTextPaint!!
         )
     }
