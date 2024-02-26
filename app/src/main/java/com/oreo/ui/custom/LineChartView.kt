@@ -252,7 +252,7 @@ class LineChartView : View {
         centerLinePaint!!.color = centerLineColor
         centerLinePaint!!.strokeWidth = centerLineWidth
         centerLinePaint!!.style = Paint.Style.STROKE
-        centerLinePaint!!.setPathEffect(DashPathEffect(floatArrayOf(2f, 4f), 0f))
+        centerLinePaint!!.setPathEffect(DashPathEffect(floatArrayOf(2f, 6f), 0f))
 
         chartLinePaint = Paint()
         chartLinePaint!!.strokeWidth = chartLineWidth

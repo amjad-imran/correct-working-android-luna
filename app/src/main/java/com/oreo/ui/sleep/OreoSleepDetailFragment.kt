@@ -315,7 +315,7 @@ class OreoSleepDetailFragment :
                 Color.parseColor("#ff7f96"),
                 Color.parseColor("#844B60"),
                 Color.parseColor("#99ff718b"),
-                Color.parseColor("#00ff5f7c")
+                Color.parseColor("#0Dff718b")
             )
             val lowValueIndex = updateDataWithMax(
                 sleepChart, 5, false, false,
@@ -412,8 +412,8 @@ class OreoSleepDetailFragment :
             updateGraphColor(
                 Color.parseColor("#ff7fd6"),
                 Color.parseColor("#844A7E"),
-                Color.parseColor("#99ff71d2"),
-                Color.parseColor("#00ff5fcc")
+                Color.parseColor("#99FF71D2"),
+                Color.parseColor("#0DFF5FCC")
             )
             val lowValueIndex = updateDataWithMax(
                 sleepChart, 5, true, false,
