@@ -110,7 +110,7 @@
             app:xMax="100"
             app:xMin="0"
             app:xTextColor="#FFFFFF"
-            app:xTextSize="10sp"
+            app:xTextSize="12sp"
             app:noDataSize="12dp"
             app:yLineColor="#00FFFFFF"
             app:yTextColor="@color/white_64"

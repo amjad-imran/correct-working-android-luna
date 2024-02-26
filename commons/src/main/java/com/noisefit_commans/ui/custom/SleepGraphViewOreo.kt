@@ -289,7 +289,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                             null
                         }
 
-                        val radius = pxFromDp(4f)
+                        val radius = pxFromDp(2f)
                         var topLeftRadius = radius
                         var topRightRadius = radius
                         var bottomRightRadius = radius
