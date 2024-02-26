@@ -208,14 +208,14 @@ class LineChartView : View {
 
         mTextPaint = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
         mTextPaint.color = ContextCompat.getColor(context, com.noisefit_commans.R.color.white_64)
-        mTextPaint.textSize = dip2px(10f).toFloat()
+        mTextPaint.textSize = dip2px(12f).toFloat()
         mTextPaint.setTypeface(fontGilroy)
 
 
         mTextPaintEdge = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
         mTextPaintEdge.color = ContextCompat.getColor(context, com.noisefit_commans.R.color.white)
         mTextPaintEdge.setTypeface(fontGilroy)
-        mTextPaintEdge.textSize = dip2px(10f).toFloat()
+        mTextPaintEdge.textSize = dip2px(12f).toFloat()
 
         edgeTextBackPaint = Paint()
         edgeTextBackPaint.color = Color.parseColor("#394653")
@@ -1139,7 +1139,7 @@ class LineChartView : View {
 
             var rectF = RectF(
                 leftWith,
-                yPos - dip2px(12f),
+                yPos - dip2px(8f),
                 leftWith + mTextPaintEdge.measureText(startText) + edgeTextPadding * 2,
                 height.toFloat()
             )
@@ -1164,7 +1164,7 @@ class LineChartView : View {
 
             rectF = RectF(
                 (width - textWidth - rightWith) - edgeTextPadding * 2,
-                yPos - dip2px(12f),
+                yPos - dip2px(8f),
                 width - rightWith,
                 height.toFloat()
             )
@@ -1236,7 +1236,7 @@ class LineChartView : View {
 
         var rectF = RectF(
             leftWith,
-            yPos - dip2px(12f),
+            yPos - dip2px(8f),
             leftWith + mTextPaintEdge.measureText(startText) + edgeTextPadding * 2,
             height.toFloat()
         )
@@ -1250,7 +1250,7 @@ class LineChartView : View {
         canvas.drawText(
             startText,
             leftWith + edgeTextPadding.toFloat(),
-            yPos,
+            yPos + dip2px(2f),
             mTextPaintEdge
         )
 
@@ -1265,7 +1265,7 @@ class LineChartView : View {
 
         rectF = RectF(
             (width - textWidth - rightWith) - edgeTextPadding * 2,
-            yPos - dip2px(12f),
+            yPos - dip2px(8f),
             width - rightWith,
             height.toFloat()
         )
@@ -1279,7 +1279,7 @@ class LineChartView : View {
         canvas.drawText(
             text,
             (width - textWidth - rightWith) - edgeTextPadding,
-            yPos,
+            yPos + dip2px(2f),
             mTextPaintEdge
         )
     }
