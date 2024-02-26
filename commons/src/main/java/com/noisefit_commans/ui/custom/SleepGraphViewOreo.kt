@@ -735,7 +735,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
         val textPosOffset = pxFromDp(10f)
 
         canvas.drawText("Awake", textXPos, (sectionHeight * 1 - textPosOffset), mTextPaint)
-        canvas.drawText("Rem", textXPos, (sectionHeight * 2 - textPosOffset), mTextPaint)
+        canvas.drawText("REM", textXPos, (sectionHeight * 2 - textPosOffset), mTextPaint)
         canvas.drawText("Light", textXPos, (sectionHeight * 3 - textPosOffset), mTextPaint)
         canvas.drawText("Deep", textXPos, (sectionHeight * 4 - textPosOffset), mTextPaint)
 
