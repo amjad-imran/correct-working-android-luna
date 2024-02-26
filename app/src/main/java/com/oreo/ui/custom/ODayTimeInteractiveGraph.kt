@@ -7,6 +7,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Paint
+import android.graphics.Path
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.Rect
@@ -17,7 +18,6 @@ import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
 import android.util.Pair
-import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
@@ -293,7 +293,7 @@ class ODayTimeInteractiveGraph : View {
         canvas.drawText(
             highText,
             mWith - xTextBounds!!.width() - textPaddingLeft,
-            highPosY,
+            highPosY - dip2px(5f),
             xTextPaint
         )
 
@@ -301,7 +301,7 @@ class ODayTimeInteractiveGraph : View {
         canvas.drawText(
             medText,
             mWith - xTextBounds!!.width() - textPaddingLeft,
-            highPosY + qHeight,
+            highPosY + qHeight - dip2px(5f),
             xTextPaint
         )
 
@@ -309,7 +309,7 @@ class ODayTimeInteractiveGraph : View {
         canvas.drawText(
             lowText,
             mWith - xTextBounds!!.width() - textPaddingLeft,
-            highPosY + qHeight * 2,
+            highPosY + qHeight * 2 - dip2px(5f),
             xTextPaint
         )
 
@@ -317,7 +317,7 @@ class ODayTimeInteractiveGraph : View {
         canvas.drawText(
             inactiveText,
             mWith - xTextBounds!!.width() - textPaddingLeft,
-            highPosY + qHeight * 3,
+            highPosY + qHeight * 3 - dip2px(5f),
             xTextPaint
         )
     }
@@ -537,9 +537,19 @@ class ODayTimeInteractiveGraph : View {
                     end,
                     mHeight.toFloat() - bottomWith
                 )
+                val corners = floatArrayOf(
+                    80f, 80f,   // Top left radius in px
+                    80f, 80f,   // Top right radius in px
+                    0f, 0f,     // Bottom right radius in px
+                    0f, 0f      // Bottom left radius in px
+                )
                 barPaints?.let {
                     canvas.drawRoundRect(rectF, dip2px(20f).toFloat(), dip2px(20f).toFloat(), it)
+                    val path = Path()
+                    path.addRoundRect(rectF, corners, Path.Direction.CW)
+                    canvas.drawPath(path, barPaints!!)
                 }
+
                 barStartEndXPosList?.add(DayTimeXYDataModel(x, end, barType, barHeight))
             } else {
                 barStartEndXPosList?.add(DayTimeXYDataModel(x, end, 5, barHeight))
