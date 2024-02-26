@@ -1,6 +1,5 @@
 package com.oreo.ui.custom
 
-import android.R.attr.bitmap
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -32,6 +31,7 @@ import org.joda.time.Duration
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
 import java.util.Collections
+import kotlin.math.roundToInt
 
 
 class LineChartView : View {
@@ -964,7 +964,7 @@ class LineChartView : View {
         val maxStr = max.toString()
         val minStr = xMin.toString()
 
-        val sectionH = ((max - xMin).toFloat() / 3).toInt()
+        val sectionH = ((max - xMin).toFloat() / 3).roundToInt()
 
 
         val avgStr = avgValue.toString()
