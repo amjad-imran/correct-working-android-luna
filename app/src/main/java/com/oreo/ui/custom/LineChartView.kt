@@ -1,5 +1,6 @@
 package com.oreo.ui.custom
 
+import android.R.attr.bitmap
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -14,7 +15,6 @@ import android.graphics.RectF
 import android.graphics.Shader
 import android.os.Handler
 import android.util.AttributeSet
-import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
@@ -24,8 +24,6 @@ import com.noisefit.luna.R
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
-import com.noisefit_commans.utils.LOGS
-import com.noisefit_commans.utils.LOGS.d
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.GraphDummyModel
@@ -34,6 +32,7 @@ import org.joda.time.Duration
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
 import java.util.Collections
+
 
 class LineChartView : View {
     private var overlayLinePaint: Paint? = null
@@ -95,6 +94,7 @@ class LineChartView : View {
     private val list: MutableList<ChartModel?> = ArrayList()
     private var showXAxis = true
     lateinit var calmDot: Bitmap
+    lateinit var avgBackBitmap: Bitmap
 
     //    private int xMax;
     //    private int xMin;
@@ -107,6 +107,8 @@ class LineChartView : View {
     private var linearGradientI: LinearGradient? = null
     lateinit var paintCalm: Paint
     lateinit var lowTopPaint: Paint
+    lateinit var avgTextPaint: Paint
+
     lateinit var bgLine: Paint
     lateinit var dotBitmap: Bitmap
     lateinit var dotBitmap2: Bitmap
@@ -191,6 +193,13 @@ class LineChartView : View {
                 R.drawable.ic_pink_hot_dot
             ), dimen, dimen, true
         )
+
+        avgBackBitmap = Bitmap.createScaledBitmap(
+            BitmapFactory.decodeResource(
+                res,
+                R.drawable.image_blur_avg
+            ), dimen, dimen, true
+        )
     }
 
     private fun initPaint() {
@@ -266,6 +275,12 @@ class LineChartView : View {
 
         lowTopPaint = Paint().apply {
             this.color = Color.parseColor("#ffffff")
+        }
+
+        avgTextPaint = Paint().apply {
+            this.color = Color.parseColor("#9cbdff")
+            this.typeface = fontGilroy
+            this.textSize =  dip2px(14f).toFloat()
         }
 
         bgLine = Paint().apply {
@@ -451,7 +466,6 @@ class LineChartView : View {
     private var listener: OnLinearChartClickAction? = null
 
     private var vibrationUtils: VibrationUtils? = null
-
 
 
     private fun performHapticFeedbackCustom(value: Int) {
@@ -978,19 +992,34 @@ class LineChartView : View {
             if (avgValue > 0) {
                 val avg =
                     mHeight - bottomWith - (avgValue - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
-                xTextPaint!!.getTextBounds(avgStr, 0, avgStr.length, xTextBounds)
-                xTextPaint!!.color = Color.parseColor("#9cbdff")
+                avgTextPaint!!.getTextBounds(avgStr, 0, avgStr.length, xTextBounds)
+                //xTextPaint!!.color = Color.parseColor("#9cbdff")
                 avgBackPaint!!.color = Color.parseColor("#b3172941")
 
                 if (!isInteracting) {
                     canvas.drawLine(leftWith, avg, mWith - rightWith, avg, centerLinePaint!!)
                 }
 
+                val padding = dip2px(8f)
+                canvas.drawBitmap(
+                    avgBackBitmap,
+                    null,
+                    RectF(
+                        leftWith + dip2px(5f) - padding,
+                        avg - dip2px(3f) - xTextBounds!!.height() - padding,
+                        leftWith + dip2px(5f) + xTextBounds!!.width() + padding,
+                        avg - dip2px(6f) + padding
+                    ),
+                    null
+                )
+
+
+
                 canvas.drawText(
                     avgStr,
                     leftWith + dip2px(5f),
-                    avg - dip2px(3f),
-                    xTextPaint!!
+                    avg - dip2px(6f),
+                    avgTextPaint
                 )
             }
 
