@@ -895,9 +895,15 @@ class LineChartView : View {
 
                     val textWidth = xTextPaint!!.measureText("Lowest HR")
 
+                    var lowestHrPos = x - textWidth / 2
+
+                    if (lowestHrPos < leftWith) {
+                        lowestHrPos = leftWith
+                    }
+
                     canvas.drawText(
                         "Lowest HR",
-                        x - textWidth / 2,
+                        lowestHrPos,
                         topWith - dip2px(8f),
                         xTextPaint!!
                     )
