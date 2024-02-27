@@ -21,7 +21,7 @@
         lineChart:lowColor="#12cba9"
         lineChart:mediumColor="#ffe561"
         lineChart:restLineColor="#40FFFFFF"
-        lineChart:topWith="50dp"
+        lineChart:topWith="42dp"
         lineChart:xMax="100"
         lineChart:xMin="0"
         lineChart:xTextColor="#FFFFFF"
