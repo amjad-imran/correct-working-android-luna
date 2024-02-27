@@ -646,8 +646,7 @@ class ODayTimeInteractiveGraph : View {
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (interactiveMode) {
-            val parent = parent
-            parent.requestDisallowInterceptTouchEvent(true)
+
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     touchX = event.x
@@ -672,11 +671,7 @@ class ODayTimeInteractiveGraph : View {
                         }
                     }
 
-                    handler.removeCallbacks(mLongPressed)
-                    isInteracting = false
-                    listener?.isInteractionOnGoing(false)
-                    touchX = 0.0f
-                    invalidate()
+                    resetState()
                     return true
                 }
             }
@@ -684,6 +679,25 @@ class ODayTimeInteractiveGraph : View {
             return super.onTouchEvent(event)
         }
         return false
+    }
+
+    private fun resetState() {
+        handler.removeCallbacks(mLongPressed)
+        isInteracting = false
+        listener?.isInteractionOnGoing(false)
+        touchX = 0.0f
+        invalidate()
+    }
+
+
+    fun resetIfInteracting() {
+        handler.removeCallbacks(mLongPressed)
+        if (isInteracting) {
+            isInteracting = false
+            listener?.isInteractionOnGoing(false)
+            touchX = 0.0f
+            invalidate()
+        }
     }
 
     private fun drawOverlay(canvas: Canvas) {
@@ -823,6 +837,8 @@ class ODayTimeInteractiveGraph : View {
         //}
     }
 
+
+
     private val handler = Handler(Looper.getMainLooper())
     private var mLongPressed = Runnable {
         isInteracting = true
@@ -830,6 +846,9 @@ class ODayTimeInteractiveGraph : View {
         listener?.isInteractionOnGoing(true)
 
         vibrationUtils?.vibrate(HAPTIC_VIBRATION)
+
+        val parent = parent
+        parent.requestDisallowInterceptTouchEvent(true)
 
 
         /*rootView.performHapticFeedback(

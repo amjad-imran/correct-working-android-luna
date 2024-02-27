@@ -620,6 +620,14 @@ class OreoSleepDetailFragment :
         binding.lytToolbar.ivAddFriend.visible()
         binding.lytToolbar.ivAddFriend.setImageResource(R.drawable.ic_calenders)
 
+        binding.svMain.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            if (Math.abs(scrollY - oldScrollY) > 0) {
+                sleepDayGraphView?.resetIfInteracting()
+                binding.lytHeartRate.lineChart.resetIfInteracting()
+                binding.lytHRVariability.lineChart.resetIfInteracting()
+            }
+        }
+
 
         binding.lytSSAnalysis.lytNightMovement.bInfo.setOnClickListener {
             viewModel.contributorInfo.value?.night_time_movements?.let { content ->

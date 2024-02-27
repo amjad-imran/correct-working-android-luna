@@ -996,8 +996,8 @@ class SleepGraphViewOreo(var mContext: Context) : View(
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (interactiveMode) {
-            val parent = parent
-            parent.requestDisallowInterceptTouchEvent(true)
+            /* val parent = parent
+             parent.requestDisallowInterceptTouchEvent(true)*/
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     touchX = event.x
@@ -1018,12 +1018,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                 }
 
                 MotionEvent.ACTION_UP -> {
-                    handler.removeCallbacks(mLongPressed)
-                    isInteracting = false
-                    lastSelectedEntry = null
-                    listener?.isInteractionOnGoing(false)
-                    touchX = 0.0f
-                    invalidate()
+                    resetState()
                     return super.onTouchEvent(event)
                 }
             }
@@ -1039,6 +1034,26 @@ class SleepGraphViewOreo(var mContext: Context) : View(
         this.vibrationUtils = vibrationUtils
     }
 
+    fun resetIfInteracting() {
+        handler.removeCallbacks(mLongPressed)
+        if (isInteracting) {
+            isInteracting = false
+            lastSelectedEntry = null
+            listener?.isInteractionOnGoing(false)
+            touchX = 0.0f
+            invalidate()
+        }
+    }
+
+    fun resetState() {
+        handler.removeCallbacks(mLongPressed)
+        isInteracting = false
+        lastSelectedEntry = null
+        listener?.isInteractionOnGoing(false)
+        touchX = 0.0f
+        invalidate()
+    }
+
 
     private val handler = Handler(Looper.getMainLooper())
     private var mLongPressed = Runnable {
@@ -1046,6 +1061,9 @@ class SleepGraphViewOreo(var mContext: Context) : View(
         invalidate()
         listener?.isInteractionOnGoing(true)
         vibrationUtils?.vibrate(HAPTIC_VIBRATION)
+
+        val parent = parent
+        parent.requestDisallowInterceptTouchEvent(true)
 
         /*rootView.performHapticFeedback(
             HapticFeedbackConstants.LONG_PRESS

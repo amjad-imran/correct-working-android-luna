@@ -648,6 +648,14 @@ class OreoActivityFragment :
     }
 
     override fun initListener() {
+
+        binding.svMain.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            if (Math.abs(scrollY - oldScrollY) > 0) {
+                binding.lytDailyMovement.lytInteractiveGraph.graphDayTime.resetIfInteracting()
+            }
+        }
+
+
         binding.lytDailyMovement.lytInteractiveGraph.graphDayTime.setClickListener(object :
             OnDayTimeClickAction {
             override fun onValueSelected(value: Int, position: Int) {

@@ -419,8 +419,6 @@ class LineChartView : View {
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (interactiveMode) {
-            val parent = parent
-            parent.requestDisallowInterceptTouchEvent(true)
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     touchX = event.x
@@ -435,7 +433,7 @@ class LineChartView : View {
                         touchX = event.x
                         invalidate()
                     }
-                    return true
+                    return super.onTouchEvent(event)
                 }
 
                 MotionEvent.ACTION_UP -> {
@@ -444,20 +442,35 @@ class LineChartView : View {
                             listener?.onTopClicked()
                         }
                     }
-                    lastSentValuePos = null
-                    handler.removeCallbacks(mLongPressed)
-                    isInteracting = false
-                    listener?.onValueSelected(0, false)
-
-                    touchX = 0.0f
-                    invalidate()
-                    return true
+                    resetState()
+                    return super.onTouchEvent(event)
                 }
             }
         } else {
             return super.onTouchEvent(event)
         }
         return false
+    }
+
+    private fun resetState() {
+        lastSentValuePos = null
+        handler.removeCallbacks(mLongPressed)
+        isInteracting = false
+        listener?.onValueSelected(0, false)
+        touchX = 0.0f
+        invalidate()
+    }
+
+
+    fun resetIfInteracting() {
+        handler.removeCallbacks(mLongPressed)
+        if (isInteracting) {
+            lastSentValuePos = null
+            isInteracting = false
+            listener?.onValueSelected(0, false)
+            touchX = 0.0f
+            invalidate()
+        }
     }
 
     fun setClickListener(listener: OnLinearChartClickAction?) {
@@ -495,6 +508,8 @@ class LineChartView : View {
         invalidate()
 
         vibrationUtils?.vibrate(HAPTIC_VIBRATION)
+        val parent = parent
+        parent.requestDisallowInterceptTouchEvent(true)
 
         /*rootView.performHapticFeedback(
             HapticFeedbackConstants.LONG_PRESS
@@ -514,7 +529,7 @@ class LineChartView : View {
 
     private fun drawOverlay(canvas: Canvas) {
         if (!isInteracting) return
-        if (touchX > leftWith && touchX < (mWith-rightWith)) {
+        if (touchX > leftWith && touchX < (mWith - rightWith)) {
             val rectF = RectF()
             rectF.left = touchX
             rectF.right = touchX

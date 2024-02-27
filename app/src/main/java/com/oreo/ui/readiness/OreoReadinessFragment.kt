@@ -489,6 +489,15 @@ class OreoReadinessFragment :
         }
 
     override fun initListener() {
+
+        binding.svMain.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            if (Math.abs(scrollY - oldScrollY) > 0) {
+                binding.lytHeartRate.lineChart.resetIfInteracting()
+                binding.lytHRVariability.lineChart.resetIfInteracting()
+            }
+        }
+
+
         binding.lytHeartRate.bInfo.setOnClickListener {
             mViewModel.contributorInfo.value?.hr_graph?.let { content ->
                 navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
