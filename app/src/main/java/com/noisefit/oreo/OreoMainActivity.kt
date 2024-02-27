@@ -682,7 +682,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             viewModel.syncRecordedWorkoutData()
         }
 
-        viewModel.shouldResetMasterDates()
+        //viewModel.shouldResetMasterDates()
 
     }
 

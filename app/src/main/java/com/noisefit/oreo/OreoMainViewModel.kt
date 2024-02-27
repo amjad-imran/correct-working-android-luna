@@ -131,6 +131,7 @@ constructor(
     }
 
     private fun resetMasterDates() {
+        LOGS.d("RESET_DATES resetMasterDates")
         mEndDate = DateFormats.getCurrentDateOreoFormat()
         mStartDate = DateFormats.getCurrentDateMinusDays(6)
         selectedDate = DateFormats.getCurrentDateOreoFormat()
@@ -138,11 +139,14 @@ constructor(
         getUserHealthData(mStartDate, mEndDate)
     }
 
-    fun shouldResetMasterDates() {
+    fun shouldResetMasterDates(): Boolean {
+        LOGS.d("RESET_DATES shouldResetMasterDates")
         val todayDate = DateFormats.getCurrentDateOreoFormat()
-        if (todayDate.equals(dateSetOn, true)) return
+        if (todayDate.equals(dateSetOn, true)) return false
         resetHealthCacheData()
         resetMasterDates()
+        LOGS.d("RESET_DATES shouldResetMasterDates done")
+        return true
     }
 
     private fun resetHealthCacheData() {
@@ -517,8 +521,11 @@ constructor(
     }
 
     fun reloadTodaysData() {
-        val todayDate = getTodayDate()
-        getUserHealthData(todayDate, todayDate)
+        val shouldRefresh = shouldResetMasterDates()
+        if (!shouldRefresh) {
+            val todayDate = getTodayDate()
+            getUserHealthData(todayDate, todayDate)
+        }
     }
 
     private fun showNotification(response: ServerUserHealthData?) {

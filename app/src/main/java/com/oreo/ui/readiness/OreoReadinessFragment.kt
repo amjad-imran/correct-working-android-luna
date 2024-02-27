@@ -89,6 +89,11 @@ class OreoReadinessFragment :
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        mainViewModel.shouldResetMasterDates()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setRecycler()

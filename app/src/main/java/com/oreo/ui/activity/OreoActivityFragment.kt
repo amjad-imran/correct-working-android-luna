@@ -303,6 +303,10 @@ class OreoActivityFragment :
         updateWorkoutUI(it.workout)
     }
 
+    override fun onResume() {
+        super.onResume()
+        mainViewModel.shouldResetMasterDates()
+    }
 
     private fun returnMovementProgress(value: Int, total: Int): Pair<Int, String> {
         val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(value.times(15))
