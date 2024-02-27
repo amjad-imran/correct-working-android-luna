@@ -34,6 +34,7 @@ import com.oreo.data.model.DayTimeDataModel
 import com.oreo.data.model.DayTimeXYDataModel
 import com.oreo.data.model.Item
 import com.oreo.data.model.Section
+import com.oreo.ui.activity.dpToPx
 
 class ODayTimeInteractiveGraph : View {
     private var bgColor = 0
@@ -109,6 +110,7 @@ class ODayTimeInteractiveGraph : View {
     private var mNapSection: List<Section>? = null
 
     private var vibrationUtils: VibrationUtils? = null
+    lateinit var avgBackBitmap: Bitmap
 
 
     constructor(context: Context?) : super(context) {
@@ -241,6 +243,14 @@ class ODayTimeInteractiveGraph : View {
             typeface = fontGilroy
         }
 
+        val dimen = dip2px(30f)
+        avgBackBitmap = Bitmap.createScaledBitmap(
+            BitmapFactory.decodeResource(
+                resources,
+                R.drawable.image_blur_avg
+            ), dimen, dimen, true
+        )
+
 
     }
 
@@ -274,11 +284,24 @@ class ODayTimeInteractiveGraph : View {
         drawRight(canvas)
     }
 
+    private fun drawBackBlur(canvas: Canvas, rectF: RectF) {
+        /*canvas.drawRect(
+            rectF, gridPaint
+        )*/
+        canvas.drawBitmap(
+            avgBackBitmap,
+            null,
+            rectF,
+            null
+        )
+    }
+
     private fun drawRight(canvas: Canvas) {
 
         if (isInteracting) return
 
         xTextPaint.color = Color.parseColor("#ffffff")
+
 
         val qHeight = (mHeight - bottomWith - topWith) / 4
 
@@ -288,8 +311,21 @@ class ODayTimeInteractiveGraph : View {
         val inactiveText = "Inactive"
         val textPaddingLeft = dip2px(10f).toFloat()
 
+
         xTextPaint.getTextBounds(highText, 0, highText.length, xTextBounds)
         val highPosY = topWith + qHeight / 2 + xTextBounds!!.height() / 2
+
+        val textPadding = dpToPx(6, context)
+
+        drawBackBlur(
+            canvas, RectF(
+                mWith - xTextBounds!!.width() - textPaddingLeft - textPadding,
+                highPosY - dip2px(5f) - xTextBounds!!.height() - textPadding,
+                mWith.toFloat(),
+                highPosY + textPadding
+            )
+        )
+
         canvas.drawText(
             highText,
             mWith - xTextBounds!!.width() - textPaddingLeft,
@@ -298,6 +334,15 @@ class ODayTimeInteractiveGraph : View {
         )
 
         xTextPaint.getTextBounds(medText, 0, medText.length, xTextBounds)
+
+        drawBackBlur(
+            canvas, RectF(
+                mWith - xTextBounds!!.width() - textPaddingLeft - textPadding,
+                highPosY + qHeight - dip2px(5f) - xTextBounds!!.height() - textPadding,
+                mWith.toFloat(),
+                highPosY + qHeight + textPadding
+            )
+        )
         canvas.drawText(
             medText,
             mWith - xTextBounds!!.width() - textPaddingLeft,
@@ -306,6 +351,15 @@ class ODayTimeInteractiveGraph : View {
         )
 
         xTextPaint.getTextBounds(lowText, 0, lowText.length, xTextBounds)
+
+        drawBackBlur(
+            canvas, RectF(
+                mWith - xTextBounds!!.width() - textPaddingLeft - textPadding,
+                highPosY + qHeight * 2 - dip2px(5f) - xTextBounds!!.height() - textPadding,
+                mWith.toFloat(),
+                highPosY + qHeight * 2 + textPadding
+            )
+        )
         canvas.drawText(
             lowText,
             mWith - xTextBounds!!.width() - textPaddingLeft,
@@ -314,6 +368,15 @@ class ODayTimeInteractiveGraph : View {
         )
 
         xTextPaint.getTextBounds(inactiveText, 0, inactiveText.length, xTextBounds)
+
+        drawBackBlur(
+            canvas, RectF(
+                mWith - xTextBounds!!.width() - textPaddingLeft - textPadding,
+                highPosY + qHeight * 3 - dip2px(5f) - xTextBounds!!.height() - textPadding,
+                mWith.toFloat(),
+                highPosY + qHeight * 3 + textPadding
+            )
+        )
         canvas.drawText(
             inactiveText,
             mWith - xTextBounds!!.width() - textPaddingLeft,
@@ -349,7 +412,10 @@ class ODayTimeInteractiveGraph : View {
         val leftBgPaint = Paint()
         leftBgPaint.color = Color.parseColor("#33ffffff")
         val rectF = RectF(
-            dip2px(6f).toFloat(), mHeight - bottomWith + dip2px(9f), dip2px(42f).toFloat(), mHeight.toFloat()
+            dip2px(6f).toFloat(),
+            mHeight - bottomWith + dip2px(9f),
+            dip2px(42f).toFloat(),
+            mHeight.toFloat()
         )
         canvas.drawRoundRect(rectF, dip2px(5f).toFloat(), dip2px(5f).toFloat(), leftBgPaint)
 
@@ -362,7 +428,7 @@ class ODayTimeInteractiveGraph : View {
         val rectF = RectF(
             mWith - dip2px(42f).toFloat(),
             mHeight - bottomWith + dip2px(9f),
-            mWith.toFloat()-dip2px(6f),
+            mWith.toFloat() - dip2px(6f),
             mHeight.toFloat()
         )
         canvas.drawRoundRect(rectF, dip2px(5f).toFloat(), dip2px(3f).toFloat(), leftBgPaint)
@@ -836,7 +902,6 @@ class ODayTimeInteractiveGraph : View {
         )*/
         //}
     }
-
 
 
     private val handler = Handler(Looper.getMainLooper())
