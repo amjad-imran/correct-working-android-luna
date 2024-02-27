@@ -521,13 +521,17 @@ class OAddWorkoutFragment :
         viewModel.addWorkoutResponse.observe(this) {
             it?.let {
 
-                viewModel.sessionManager.saveSportsActivities(listOf(it))
+                viewModel.sessionManager.saveSportsActivities(listOf(it.first))
 
                 mainViewModel.reloadTodaysData()
 
                 setFragmentResult(
                     ADD_WORKOUT_REQUEST_KEY,
-                    bundleOf("allow" to true)
+                    bundleOf(
+                        "allow" to true,
+                        "workId" to it.second,
+                        "actName" to it.first.getFormattedActivityName()
+                    )
 
                 )
                 context.showShortToast("Workout Added Successfully")

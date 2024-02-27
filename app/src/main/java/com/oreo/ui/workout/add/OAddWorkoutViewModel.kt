@@ -33,8 +33,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OAddWorkoutViewModel
-@Inject
-constructor(
+@Inject constructor(
     private val userActivityRepository: OreoUserActivityRepository,
     private val localDatSource: DataStoredInterface,
     private val syncRepository: OreoSyncRepository,
@@ -46,7 +45,7 @@ constructor(
     val maxWorkoutTime = 180
 
     var autoSport = MutableLiveData<Boolean>()
-    private val _addWorkoutResponse = MutableLiveData<SportsModeResponse>()
+    private val _addWorkoutResponse = MutableLiveData<Pair<SportsModeResponse, String>>()
     val addWorkoutResponse = _addWorkoutResponse
     private val _oWorkoutListModalResponse = MutableLiveData<List<OWorkoutListModal>>()
     val oWorkoutListModalResponse: LiveData<List<OWorkoutListModal>> = _oWorkoutListModalResponse
@@ -113,8 +112,7 @@ constructor(
             var compareStartHour: Int = 0
             var compareStartMinute: Int = 0
             val startTime = DateFormats.convertTimestampToDate(
-                preFilledOreoAutoSportData!!.startTime,
-                DateFormats.timeFormat
+                preFilledOreoAutoSportData!!.startTime, DateFormats.timeFormat
             )
             if (startTime.isNotEmpty()) {
                 val startArray = startTime.split(":")
@@ -122,8 +120,7 @@ constructor(
                 compareStartMinute = startArray[1].toInt()
             }
             val endTime = DateFormats.addMinuteToTimeStamp(
-                preFilledOreoAutoSportData!!.startTime,
-                addWorkout.duration
+                preFilledOreoAutoSportData!!.startTime, addWorkout.duration
             )
             var compareEndHour: Int = 0
             var compareEndMinute: Int = 0
@@ -227,8 +224,7 @@ constructor(
                                 type = type,
                                 time = "$date ${addWorkout.startTimeIn24H}"
                             )
-
-                            _addWorkoutResponse.postValue(sportObj)
+                            if (it.id != null) _addWorkoutResponse.postValue(Pair(sportObj, it.id))
                         }
                     }
                 }

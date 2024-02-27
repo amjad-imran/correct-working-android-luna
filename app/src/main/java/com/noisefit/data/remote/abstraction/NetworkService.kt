@@ -802,7 +802,7 @@ interface NetworkService {
     @POST
     suspend fun addWorkout(
         @Url url: String, @Body jsonObject: JsonObject
-    ): BaseApiResponseData<Any>
+    ): BaseApiResponseData<OActivityListModal>
 
     @POST
     suspend fun syncGoogleFitUserData(
