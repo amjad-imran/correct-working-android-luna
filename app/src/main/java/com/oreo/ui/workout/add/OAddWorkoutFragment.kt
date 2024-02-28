@@ -26,6 +26,7 @@ import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
@@ -523,7 +524,9 @@ class OAddWorkoutFragment :
 
                 viewModel.sessionManager.saveSportsActivities(listOf(it.first))
 
-                mainViewModel.reloadTodaysData()
+                mainViewModel.sessionManager.forceSyncData.postValue(Event(true))
+
+                //mainViewModel.reloadTodaysData()
 
                 setFragmentResult(
                     ADD_WORKOUT_REQUEST_KEY,
