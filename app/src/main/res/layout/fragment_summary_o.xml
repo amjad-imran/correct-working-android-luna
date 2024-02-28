@@ -38,7 +38,7 @@
         <com.oreo.ui.custom.TabLayoutCustom
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="44dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lytHeader"
@@ -73,7 +73,7 @@
             lineChart:xMax="130"
             lineChart:xMin="0"
             lineChart:xTextColor="#FFFFFF"
-            lineChart:xTextSize="12sp"
+            lineChart:xTextSize="16sp"
             lineChart:yLineColor="#00FFFFFF"
             lineChart:yTextSize="12sp"
 

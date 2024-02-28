@@ -5,7 +5,6 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
-import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSummaryOBinding
@@ -72,7 +71,11 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
                 mainViewModel.selectedDate = pagerAdapter?.getDate(position)
                 mainViewModel.handleAddWorkoutVisibility()
-                setTabDates(position)
+
+                if (!binding.tabLayout.isInteracting) {
+                    setTopBar()
+                }
+                //setTabDates(mainViewModel.selectedDate)
 
                 if (mainViewModel.shouldLoadMoreData()) {
                     LOGS.w("Loading more data")
@@ -81,7 +84,9 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         })
     }
 
-    private fun setTabDates(position: Int) {
+    private fun setTabDates(date: String?) {
+
+
         /* var currentDayText = ""
          val centerDate = pagerAdapter?.getDate(position)
          if (centerDate.equals(DateFormats.getCurrentDate(DateFormats.dateFormat3))) {
@@ -269,39 +274,42 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         }
     }
 
+    fun setTopBar() {
+
+        val it = mainViewModel.dashboard.value ?: return
+
+        val topGraphData = viewModel.getPrefixAndSuffixList(it)
+
+        var moveToPos = -1
+
+        if (mainViewModel.selectedDate != null) {
+            val index = it?.indexOfFirst { data ->
+                data.equals(mainViewModel.selectedDate, true)
+            }
+            if (index != null) {
+                moveToPos = 15 + (it.size - index - 1)
+            }
+        }
+
+        binding.tabLayout.updateDataWithMax(
+            topGraphData.first,
+            topGraphData.third,
+            topGraphData.second,
+            moveToPos
+        )
+    }
+
 
     override fun subscribeObservers() {
         mainViewModel.dashboard.observe(viewLifecycleOwner) {
-            LOGS.w("Setting_data size ${it.size}")
-
-            val topGraphData = viewModel.getPrefixAndSuffixList(it)
-
-            var moveToPos = -1
-
-            if (mainViewModel.selectedDate != null) {
-                val index = it?.indexOfFirst { data ->
-                    data.equals(mainViewModel.selectedDate, true)
-                }
-                if (index != null) {
-                    moveToPos = 15 + (it.size - index - 1)
-                }
-            }
-
-            binding.tabLayout.updateDataWithMax(
-                topGraphData.first,
-                topGraphData.third,
-                topGraphData.second,
-                moveToPos
-            )
-
-
+            setTopBar()
             pagerAdapter?.setDataSet(it)
 
             val pos = pagerAdapter?.getPositionForDate(mainViewModel.selectedDate) ?: (it.size - 1)
 
             binding.viewPagerSummary.setCurrentItem(pos, false)
             binding.tabLayout.visible()
-            setTabDates(pos)
+            //setTabDates(pos)
 
         }
 
@@ -585,32 +593,16 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         val returnDate = mainViewModel.updateSelectedDate(mainViewModel.selectedDate)
         if (returnDate != null) {
             mainViewModel.selectedDate = returnDate
+        }
 
-            val pos = pagerAdapter?.getPositionForDate(returnDate)
-            if(pos!=null && pos!=-1){
-                binding.viewPagerSummary.setCurrentItem(pos, true)
-            }
+        val pos = pagerAdapter?.getPositionForDate(mainViewModel.selectedDate)
+        if (pos != null && pos != -1) {
+            binding.viewPagerSummary.setCurrentItem(pos, false)
         }
 
         if (mainViewModel.shouldLoadMoreData()) {
             LOGS.w("Loading more data")
         }
-
-
-
-        /* binding.tabLayout.tvDateLeft.setOnClickListener {
-           val currentItem = binding.viewPagerSummary.currentItem
-           if (currentItem == 0) return@setOnClickListener
-           binding.viewPagerSummary.setCurrentItem((currentItem - 1), true)
-       }
-       binding.tabLayout.tvDateRight.setOnClickListener {
-           if (pagerAdapter == null) return@setOnClickListener
-           val currentItem = binding.viewPagerSummary.currentItem
-           if (currentItem == (pagerAdapter!!.itemCount - 1)) {
-               return@setOnClickListener
-           }
-           binding.viewPagerSummary.setCurrentItem((currentItem + 1), true)
-       }*/
     }
 
     override fun onScrolling(position: Int, chartModel: ChartModel?) {

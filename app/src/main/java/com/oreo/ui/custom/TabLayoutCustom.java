@@ -466,6 +466,7 @@ public class TabLayoutCustom extends View {
         for (int i = firstPosition; i < lastPosition; i++) {
             if (showXAxis) {
                 if (showSelectedIndicator && list.get(i).getFormattedDate() != null) {
+                    xTextPaint.setColor(xTextColor & 0x80ffffff);
                     String title = list.get(i).getFormattedDate();
                     float xInd = indicatorOffSet + (moveOffSet * list.size() * indicatorUnitLength / (list.size() * unitHLenth)) + (mWith - leftWith - rightWith) * divisor + leftWith - i * indicatorUnitLength;
                     xTextPaint.getTextBounds(title, 0, title.length(), xTextBounds);
@@ -499,6 +500,13 @@ public class TabLayoutCustom extends View {
     private float xDown;
     private float moveOffSet;
 
+
+    public boolean isInteracting() {
+        return isInteracting;
+    }
+
+    private boolean isInteracting = false;
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (!canScroll) {
@@ -506,6 +514,7 @@ public class TabLayoutCustom extends View {
         }
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                isInteracting = true;
                 getParent().requestDisallowInterceptTouchEvent(true);
                 xDown = event.getX();
                 break;
@@ -522,6 +531,7 @@ public class TabLayoutCustom extends View {
                 LOGS.INSTANCE.w("moveToPosition MotionEvent.ACTION_UP");
                 callBack(true);
                 invalidate();
+                isInteracting = false;
                 break;
             default:
                 break;

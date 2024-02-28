@@ -70,7 +70,8 @@
                 lineChart:xMax="130"
                 lineChart:xMin="0"
                 lineChart:xTextColor="#FFFFFF"
-                lineChart:xTextSize="12sp"
+                lineChart:xTextSize="16sp"
+                lineChart:xTextSize2="12sp"
                 lineChart:yLineColor="#00FFFFFF"
                 lineChart:yTextSize="12sp" />
 
