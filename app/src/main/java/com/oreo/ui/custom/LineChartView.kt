@@ -539,71 +539,71 @@ class LineChartView : View {
         }
 
 
-       /* if (touchX > leftWith && touchX < (mWith - rightWith)) {*/
-            val rectF = RectF()
-            rectF.left = calculatedTouchX
-            rectF.right = calculatedTouchX
-            rectF.top = topWith
-            rectF.bottom = mHeight - bottomWith
-            val value = getClickedValue(calculatedTouchX)
-            overlayLinePaint!!.color = Color.WHITE
-            canvas.drawRect(rectF, overlayLinePaint!!)
+        /* if (touchX > leftWith && touchX < (mWith - rightWith)) {*/
+        val rectF = RectF()
+        rectF.left = calculatedTouchX
+        rectF.right = calculatedTouchX
+        rectF.top = topWith
+        rectF.bottom = mHeight - bottomWith
+        val value = getClickedValue(calculatedTouchX)
+        overlayLinePaint!!.color = Color.WHITE
+        canvas.drawRect(rectF, overlayLinePaint!!)
 
 
-            val y =
-                mHeight - bottomWith - (value.second - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
+        val y =
+            mHeight - bottomWith - (value.second - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
 
-            when (chartType) {
-                LineChartType.HEART_RATE -> {
-                    if (value.second != 0) {
+        when (chartType) {
+            LineChartType.HEART_RATE -> {
+                if (value.second != 0) {
 
-                        val bitmap =
-                            if (lastMinValueIndex == value.first || (lastMinValueIndex - 1) == value.first
-                                || (lastMinValueIndex + 1) == value.first
-                            ) {
-                                dotBitmap2
-                            } else {
-                                dotBitmap
-                            }
+                    val bitmap =
+                        if (lastMinValueIndex == value.first || (lastMinValueIndex - 1) == value.first
+                            || (lastMinValueIndex + 1) == value.first
+                        ) {
+                            dotBitmap2
+                        } else {
+                            dotBitmap
+                        }
 
-                        canvas.drawBitmap(
-                            bitmap,
-                            calculatedTouchX - dotBitmap.width / 2,
-                            y - dotBitmap.height / 2,
-                            null
-                        )
-                    }
-                }
-
-                LineChartType.HRV -> {
-                    if (value.second != 0) {
-                        canvas.drawBitmap(
-                            dotBitmap,
-                            calculatedTouchX - dotBitmap.width / 2,
-                            y - dotBitmap.height / 2,
-                            null
-                        )
-                    }
-
+                    canvas.drawBitmap(
+                        bitmap,
+                        calculatedTouchX - dotBitmap.width / 2,
+                        y - dotBitmap.height / 2,
+                        null
+                    )
                 }
             }
 
-            if (listener != null) {
-                val position = value.first
-                val selectedValue = value.second
-                //d("CLICKED_VALUE value value Touch $position $selectedValue")
-                if (lastSentValuePos == null) {
+            LineChartType.HRV -> {
+                if (value.second != 0) {
+                    canvas.drawBitmap(
+                        dotBitmap,
+                        calculatedTouchX - dotBitmap.width / 2,
+                        y - dotBitmap.height / 2,
+                        null
+                    )
+                }
+
+            }
+        }
+
+        if (listener != null) {
+            val position = value.first
+            val selectedValue = value.second
+            //d("CLICKED_VALUE value value Touch $position $selectedValue")
+            if (lastSentValuePos == null) {
+                listener?.onValueSelected(selectedValue, true, value.third)
+                lastSentValuePos = position
+                performHapticFeedbackCustom(selectedValue)
+            } else {
+                if (lastSentValuePos != position) {
                     listener?.onValueSelected(selectedValue, true, value.third)
                     lastSentValuePos = position
                     performHapticFeedbackCustom(selectedValue)
-                } else {
-                    if (lastSentValuePos != position) {
-                        listener?.onValueSelected(selectedValue, true, value.third)
-                        lastSentValuePos = position
-                        performHapticFeedbackCustom(selectedValue)
-                    }
                 }
             }
+        }
         /*}*/
     }
 
@@ -944,13 +944,15 @@ class LineChartView : View {
                     lastIndex = i - 1
                 }
             } else {
-
                 if (lastIndex != -1) {
                     if (Math.abs(i - lastIndex) < 4) {
                         val x = mWith - leftWith - rightWith + leftWith - i * unitHLenth
                         val y =
                             mHeight - bottomWith - (current!!.value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
 
+                        path.reset()
+                        fillPath.reset()
+                        path.moveTo(x, y)
 
                         val x1 = mWith - leftWith - rightWith + leftWith - lastIndex * unitHLenth
                         val y1 =
@@ -965,6 +967,17 @@ class LineChartView : View {
                         chartLinePaint?.setPathEffect(effect)
                         canvas.drawLine(x, y, x1, y1, chartLinePaint!!)
                         chartLinePaint?.setPathEffect(null)
+
+                        path.cubicTo(x1 + (x - x1) / 1.5f, y, x - (x - x1) / 1.5f, y1, x1, y1)
+
+                        fillPath.addPath(path)
+                        //draw fill first
+                        fillPath.lineTo(x1, mHeight - bottomWith)
+                        fillPath.lineTo(x, mHeight - bottomWith)
+                        chartLineFillPaint!!.setShader(if (isInteracting) linearGradientI else linearGradient)
+                        canvas.drawPath(fillPath, chartLineFillPaint!!)
+
+
                     }
                     lastIndex = -1
                 }

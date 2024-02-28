@@ -49,11 +49,11 @@ class OreoSleepStageAnalysisAdapter :
         val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(value)
         val leftText: String = if (hour > 0)
             if (minute > 0)
-                "$hour h $minute min, $percentage%"
+                "$hour h $minute min${if (percentage > 0) ", $percentage%" else ""}"
             else
-                "$hour h, $percentage%"
+                "$hour h${if (percentage > 0) ", $percentage%" else ""}"
         else if (minute > 0) {
-            "$minute min, $percentage%"
+            "$minute min${if (percentage > 0) ", $percentage%" else ""}"
         } else {
             "-"
         }
