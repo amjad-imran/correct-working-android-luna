@@ -133,20 +133,28 @@ class SleepGraphViewOreo(var mContext: Context) : View(
         if (touchX != null) {
             val textXPos = (width.toFloat() - endPadding)
 
-            if (touchX!! > 0 && touchX!! < textXPos) {
+            val calculatedTouchX =if(touchX!!<0){
+                0f
+            }else if(touchX!! > textXPos){
+                textXPos
+            }else{
+                touchX!!
+            }
+
+            //if (touchX!! > 0 && touchX!! < textXPos) {
                 val rectF = RectF()
-                rectF.left = touchX!! - 2
-                rectF.right = touchX!! + 2
+                rectF.left = calculatedTouchX!! - 2
+                rectF.right = calculatedTouchX!! + 2
                 rectF.top = 0f
                 rectF.bottom = sectionHeight * 4
 
                 canvas.drawRect(rectF, overlayLinePaint)
 
-                if (listener != null && touchX != null) {
+                if (listener != null && calculatedTouchX != null) {
 
                     if (tooltipEntryArray != null && tooltipEntryArray?.size!! > 0) {
 
-                        val x = touchX!!.toFloat()
+                        val x = calculatedTouchX!!.toFloat()
 
                         val entry =
                             tooltipEntryArray!!.filter { it1 -> x > it1.x1 && x < it1.x2 }
@@ -189,7 +197,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                          }
                      }
                  }*/
-            }
+            //}
         }
     }
 

@@ -1,5 +1,6 @@
 package com.oreo.ui.activity
 
+import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -237,7 +238,7 @@ class OreoActivityViewModel @Inject constructor(
         val trainingFrequency = actContributors?.trainingFrequency
         val trainingVolume = actContributors?.trainingVolume
         if (stayActive != null) {
-            val (textColor, barColor, background) = getContributorsColors(stayActive.status)
+            val (textColor, barColor, background) = getContributorsColors4(stayActive.status)
             val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(
                 stayActive.value ?: 0
             )
@@ -376,6 +377,44 @@ class OreoActivityViewModel @Inject constructor(
         }
         return result
     }
+
+    /**
+     * textColor, barColor, background
+     */
+    private fun getContributorsColors4(status: String): Triple<Int, Int, Int> {
+        return if (status.equals("warning", true)) {
+            Triple(
+                R.color.oreo_activity_text_color_warning,
+                R.color.oreo_activity_bar_color_warning,
+                com.noisefit_commans.R.drawable.back_modal_new_warning
+            )
+        } else if (status.equals("good", true)) {
+            Triple(
+                R.color.white,
+                R.color.oreo_activity_bar_color,
+                com.noisefit_commans.R.drawable.back_modal_new
+            )
+        } else if (status.equals("fair", true)) {
+            Triple(
+                R.color.white,
+                R.color.oreo_activity_bar_color_fair,
+                com.noisefit_commans.R.drawable.back_modal_new
+            )
+        } else if (status.equals("optimal", true)) {
+            Triple(
+                R.color.oreo_activity_text_color_optimal,
+                R.color.oreo_activity_bar_color_optimal,
+                com.noisefit_commans.R.drawable.back_modal_new
+            )
+        } else {
+            Triple(
+                R.color.white,
+                R.color.oreo_activity_bar_color,
+                com.noisefit_commans.R.drawable.back_modal_new
+            )
+        }
+    }
+
 
     private fun getContributorsColors(status: String): Triple<Int, Int, Int> {
         return if (status.equals("warning", true)) {
@@ -521,15 +560,18 @@ class OreoActivityViewModel @Inject constructor(
                     )
                 )
         }
-        if (sleep?.naps != null) {
+
+        sleep?.naps?.forEach { it ->
             dataList.add(
                 ODayTimeActivitiesDataModel(
                     type = "Nap",
-                    startTime = sleep.naps.firstOrNull()?.startTime,
-                    endTime = sleep.naps.firstOrNull()?.endTime
+                    id = it.id,
+                    startTime = it.startTime,
+                    endTime = it.endTime
                 )
             )
         }
+
         stressActivityData = dataList
     }
 

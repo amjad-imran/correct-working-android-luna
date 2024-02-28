@@ -529,13 +529,23 @@ class LineChartView : View {
 
     private fun drawOverlay(canvas: Canvas) {
         if (!isInteracting) return
-        if (touchX > leftWith && touchX < (mWith - rightWith)) {
+
+        val calculatedTouchX = if (touchX < leftWith) {
+            leftWith
+        } else if (touchX > (mWith - rightWith)) {
+            (mWith - rightWith)
+        } else {
+            touchX
+        }
+
+
+       /* if (touchX > leftWith && touchX < (mWith - rightWith)) {*/
             val rectF = RectF()
-            rectF.left = touchX
-            rectF.right = touchX
+            rectF.left = calculatedTouchX
+            rectF.right = calculatedTouchX
             rectF.top = topWith
             rectF.bottom = mHeight - bottomWith
-            val value = getClickedValue(touchX)
+            val value = getClickedValue(calculatedTouchX)
             overlayLinePaint!!.color = Color.WHITE
             canvas.drawRect(rectF, overlayLinePaint!!)
 
@@ -558,7 +568,7 @@ class LineChartView : View {
 
                         canvas.drawBitmap(
                             bitmap,
-                            touchX - dotBitmap.width / 2,
+                            calculatedTouchX - dotBitmap.width / 2,
                             y - dotBitmap.height / 2,
                             null
                         )
@@ -569,7 +579,7 @@ class LineChartView : View {
                     if (value.second != 0) {
                         canvas.drawBitmap(
                             dotBitmap,
-                            touchX - dotBitmap.width / 2,
+                            calculatedTouchX - dotBitmap.width / 2,
                             y - dotBitmap.height / 2,
                             null
                         )
@@ -594,7 +604,7 @@ class LineChartView : View {
                     }
                 }
             }
-        }
+        /*}*/
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

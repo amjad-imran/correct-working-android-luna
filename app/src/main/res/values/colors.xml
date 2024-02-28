@@ -55,6 +55,11 @@
     <color name="white">#FFFFFF</color>
     <color name="oreo_sleep_bar_color">#c5a8ed</color>
     <color name="oreo_activity_bar_color">#8ed3f1</color>
+    <color name="oreo_activity_bar_color_warning">#e34260</color>
+    <color name="oreo_activity_bar_color_fair">#e391aa</color>
+    <color name="oreo_activity_bar_color_optimal">#8ed3f1</color>
+    <color name="oreo_activity_text_color_warning">#ffa8c3</color>
+    <color name="oreo_activity_text_color_optimal">#a3e4ff</color>
     <color name="oreo_activity_bar_color_50">#804c7689</color>
     <color name="oreo_contributor_warning">#ff7c94</color>
 

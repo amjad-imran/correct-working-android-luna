@@ -2,6 +2,7 @@ package com.oreo.ui.activity
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.luna.R
@@ -31,8 +32,12 @@ class BottomSheetDayTimeActivities :
                     })
                 } else if (data.type.equals("sleep", true)) {
                     //viewModel.navigateTo(BottomNavOption.SLEEP)
+                    navigateUpSafe()
                 } else if (data.type.equals("nap", true)) {
                     //viewModel.navigateTo(BottomNavOption.SLEEP)
+                    data.id?.let {
+                        navigate(R.id.napDetails, bundleOf("napId" to data.id))
+                    }
                 }
             }
         })
