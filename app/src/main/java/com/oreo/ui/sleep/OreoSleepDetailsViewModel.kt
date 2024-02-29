@@ -513,12 +513,33 @@ constructor(
         return result
     }
 
+    /**
+     * textColor, barColor, background
+     */
     private fun getContributorsColors(status: String): Triple<Int, Int, Int> {
         return if (status.equals("warning", true)) {
             Triple(
                 R.color.oreo_contributor_warning,
                 R.color.oreo_contributor_warning,
                 com.noisefit_commans.R.drawable.back_modal_new_warning
+            )
+        } else if (status.equals("good", true)) {
+            Triple(
+                R.color.white,
+                R.color.oreo_sleep_bar_good,
+                com.noisefit_commans.R.drawable.back_modal_new
+            )
+        } else if (status.equals("fair", true)) {
+            Triple(
+                R.color.white,
+                R.color.oreo_sleep_bar_color_fair,
+                com.noisefit_commans.R.drawable.back_modal_new
+            )
+        } else if (status.equals("optimal", true)) {
+            Triple(
+                R.color.oreo_sleep_text_color_optimal,
+                R.color.oreo_sleep_bar_color_optimal,
+                com.noisefit_commans.R.drawable.back_modal_new_optimal_sleep
             )
         } else {
             Triple(
