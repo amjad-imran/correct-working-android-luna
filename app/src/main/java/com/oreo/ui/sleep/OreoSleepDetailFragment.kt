@@ -1059,10 +1059,11 @@ class OreoSleepDetailFragment :
                 )
                 this.tvHour.text = "$hour"
                 this.tvMin.text = "$minute"
+
             } else {
 
-                this.tvHour.text = "_"
-                this.tvMin.text = "_"
+                this.tvHour.text = "--"
+                this.tvMin.text = "--"
             }
 
         }
