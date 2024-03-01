@@ -1060,10 +1060,17 @@ class OreoSleepDetailFragment :
                 this.tvHour.text = "$hour"
                 this.tvMin.text = "$minute"
 
+                this.textHour.visible()
+                this.tvMin.visible()
+                this.textMin.visible()
+
             } else {
 
                 this.tvHour.text = "--"
-                this.tvMin.text = "--"
+
+                this.textHour.gone()
+                this.tvMin.gone()
+                this.textMin.gone()
             }
 
         }
