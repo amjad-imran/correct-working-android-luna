@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_oreo"
     app:startDestination="@id/navigation_oreo_home">
 
@@ -568,4 +569,21 @@
             android:name="dataList"
             app:argType="com.oreo.data.model.ODayTimeActivitiesDataModel[]" />
     </dialog>
+    <fragment
+        android:id="@+id/appUpdateDetailFragment"
+        android:name="com.oreo.ui.home.summary.update.UpdateDetailFragment"
+        android:label="fragment_app_update_detail" >
+        <argument
+            android:name="launchMode"
+            app:argType="com.oreo.ui.home.summary.update.UpdateLaunchMode" />
+        <action
+            android:id="@+id/openRingUpdate"
+            app:destination="@id/ringUpdateFragment"
+            app:popUpTo="@id/appUpdateDetailFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/ringUpdateFragment"
+        android:name="com.oreo.ui.home.summary.update.RingUpdateFragment"
+        android:label="fragment_ring_update" />
 </navigation>

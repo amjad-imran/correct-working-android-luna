@@ -1,0 +1,93 @@
+package com.oreo.ui.home.summary.update
+
+import android.os.Bundle
+import android.view.View
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
+import com.noisefit.data.model.AppUpdateModel
+import com.noisefit.data.model.OtaUpdateModel
+import com.noisefit.luna.R
+import com.noisefit.luna.databinding.FragmentUpdateDetailBinding
+import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.share.ShareUtil
+import dagger.hilt.android.AndroidEntryPoint
+
+@AndroidEntryPoint
+class UpdateDetailFragment :
+    BaseFragment<FragmentUpdateDetailBinding>(FragmentUpdateDetailBinding::inflate) {
+
+    private val args: UpdateDetailFragmentArgs by navArgs()
+    private val viewModel: UpdateDetailViewModel by viewModels()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.setLaunchMode(args.launchMode)
+    }
+
+    private fun setUiAppUpdate(appUpdateModel: AppUpdateModel) {
+        binding.toolbar.tvTitle.text = getString(R.string.text_update_my_app)
+        binding.tvTitle.text = appUpdateModel.title
+        binding.tvMessage.text = appUpdateModel.longMessage
+    }
+
+    private fun setUiOtaUpdate(otaUpdateModel: OtaUpdateModel) {
+        binding.toolbar.tvTitle.text = getString(R.string.text_update_my_ring)
+        binding.tvTitle.text = otaUpdateModel.title
+        binding.tvMessage.text = otaUpdateModel.longMessage
+    }
+
+    override fun initListener() {
+
+
+        binding.toolbar.backBtn.setOnClickListener {
+            navigateUpSafe()
+        }
+
+        binding.btnUpdateNow.setOnClickListener {
+            when (viewModel.launchMode) {
+                UpdateLaunchMode.APP -> {
+                    ShareUtil.openPlayStore(requireContext(), "com.noisefit.luna")
+                }
+
+                UpdateLaunchMode.OTA -> {
+                    navigate(UpdateDetailFragmentDirections.openRingUpdate())
+                }
+
+                null -> {
+                    navigateUpSafe()
+                }
+            }
+        }
+        binding.tvRemindLater.setOnClickListener {
+
+        }
+
+
+    }
+
+    override fun subscribeObservers() {
+        viewModel.appUpdateInfo.observe(viewLifecycleOwner) {
+            if (it == null) {
+                navigateUpSafe()
+                return@observe
+            }
+            setUiAppUpdate(it)
+        }
+        viewModel.otaUpdateInfo.observe(viewLifecycleOwner) {
+            if (it == null) {
+                navigateUpSafe()
+                return@observe
+            }
+
+            setUiOtaUpdate(it)
+        }
+
+    }
+
+
+}
+
+enum class UpdateLaunchMode {
+    APP, OTA
+}
