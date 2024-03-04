@@ -32,6 +32,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.loadImageWithCache
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
@@ -326,6 +327,14 @@ class SummaryDataFragmentToday :
 
     override fun initListener() {
 
+        binding.contentMain.lytAppUpdate.btnUpdateNow.setOnClickListener {
+
+        }
+
+        binding.contentMain.lytOtaUpdate.btnUpdateNow.setOnClickListener {
+
+        }
+
         binding.contentMain.lytGoogleFit.tvGoogleFitTurnOn.setOnClickListener {
             navigate(R.id.googleFitFragmentOreo)
         }
@@ -419,6 +428,33 @@ class SummaryDataFragmentToday :
     }
 
     override fun subscribeObservers() {
+
+        viewModel.appUpdateInfo.observe(viewLifecycleOwner) {
+            if (it == null) {
+                binding.contentMain.lytAppUpdate.root.gone()
+            } else {
+                binding.contentMain.lytAppUpdate.apply {
+                    this.tvTitle.text = it.title
+                    this.tvMessage.text = it.message
+                    this.imvBack.loadImageWithCache(this.imvBack.context, it.backUrl)
+                    root.visible()
+                }
+            }
+
+        }
+        viewModel.otaUpdateInfo.observe(viewLifecycleOwner) {
+            if (it == null) {
+                binding.contentMain.lytOtaUpdate.root.gone()
+            } else {
+                binding.contentMain.lytOtaUpdate.apply {
+                    this.tvTitle.text = it.title
+                    this.tvMessage.text = it.message
+                    this.imvBack.loadImageWithCache(this.imvBack.context, it.backUrl)
+                    root.visible()
+                }
+            }
+
+        }
 
         requireActivity().supportFragmentManager.setFragmentResultListener(
             BOTTOM_NAP_RESULT,

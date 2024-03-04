@@ -4,6 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.local.db.CacheResult
+import com.noisefit.data.model.AppUpdateModel
+import com.noisefit.data.model.OtaUpdateModel
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
@@ -84,6 +86,8 @@ constructor(
     var sleepScoreInfo = MutableLiveData<Event<String>>()
     var readinessScoreInfo = MutableLiveData<Event<String>>()
     var activityScoreInfo = MutableLiveData<Event<String>>()
+    var appUpdateInfo = MutableLiveData<AppUpdateModel?>()
+    var otaUpdateInfo = MutableLiveData<OtaUpdateModel?>()
 
     val stateWorkouts = MutableLiveData<List<OActivityListModal>>()
 
