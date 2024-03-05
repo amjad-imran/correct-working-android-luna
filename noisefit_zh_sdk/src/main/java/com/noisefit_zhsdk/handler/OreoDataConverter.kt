@@ -4,7 +4,6 @@ import android.content.Context
 import android.location.Geocoder
 import com.google.gson.Gson
 import com.noisefit_commans.common.averageWithoutZero
-import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.common.handleCaloriesData
 import com.noisefit_commans.common.handleHrData
 import com.noisefit_commans.common.upTo1Decimal
@@ -35,11 +34,11 @@ import com.noisefit_commans.models.SportsModeListGPS
 import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.models.Widget
 import com.noisefit_commans.models.WorldClockList
-import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_zhsdk.handler.ZhUserActivityHandler.Companion.TRACK_TAG
 import com.zhapp.ble.bean.ActiveMeasureParamsBean
 import com.zhapp.ble.bean.ClockInfoBean
 import com.zhapp.ble.bean.ContactBean
@@ -61,9 +60,7 @@ import com.zhapp.ble.bean.WorldClockBean
 import com.zhapp.ble.callback.ActiveMeasureCallBack
 import java.math.BigDecimal
 import java.text.DecimalFormat
-import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -975,11 +972,20 @@ constructor(
         return returnNaps
     }
 
-    fun parseSleepData(bean: RingSleepResultBean): OreoSleepData {
+    fun parseSleepData(bean: RingSleepResultBean): OreoSleepData? {
         val sleepData = OreoSleepData(availableSleepTypes = "deep;light;awake;rem")
 
         val sleepArray = ArrayList<OreoSleepData.OreoSleepDataBreakup>()
 
+        val sleepStartInBtw = DateFormats.convertTimestampToDate(
+            bean.entryTime.toLong() * 1000,
+            DateFormats.timeFormatHour
+        ).toInt() //00,01,02....23
+
+        if (sleepStartInBtw in 8..18) {
+            AppLogs.sendAppLogs("$TRACK_TAG Parsed Sleep Data invalid interval $bean")
+            return null
+        }
         sleepData.startTime = DateFormats.convertTimestampToDate(
             bean.entryTime.toLong() * 1000,
             DateFormats.timeFormatSleepTime
