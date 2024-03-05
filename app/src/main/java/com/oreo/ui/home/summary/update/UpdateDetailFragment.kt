@@ -22,7 +22,7 @@ class UpdateDetailFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.setLaunchMode(args.launchMode)
+        viewModel.initLaunchMode(args.launchMode)
     }
 
     private fun setUiAppUpdate(appUpdateModel: AppUpdateModel) {
