@@ -25,10 +25,8 @@ class OreoSleepContributorAdapter(val mListener: ContributorItemClickListener) :
                 )
             )
 
-            val progressValue: Int = if (resultData.barPercent == 0) {
-                1
-            } else {
-                resultData.barPercent
+             if (resultData.barPercent == 0) {
+                binding.backContributors.alpha = .5f
             }
 
             val progressColor = ContextCompat.getColor(
@@ -36,7 +34,7 @@ class OreoSleepContributorAdapter(val mListener: ContributorItemClickListener) :
                 resultData.barColor
             )
 
-            binding.pbSteps.progress = progressValue
+            binding.pbSteps.progress = resultData.barPercent
             binding.pbSteps.setIndicatorColor(
                 progressColor
             )

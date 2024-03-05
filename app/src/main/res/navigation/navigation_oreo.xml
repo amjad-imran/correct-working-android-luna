@@ -161,6 +161,10 @@
         <argument
             android:name="contriType"
             app:argType="string" />
+
+        <argument
+            android:name="type"
+            app:argType="string" />
     </dialog>
 
     <fragment

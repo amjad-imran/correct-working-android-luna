@@ -28,6 +28,7 @@ class DescriptionBottomDialogFragment :
     private var pos: Int = -1
     private var contributorList: ArrayList<Contributors>? = null
     private var contriType: String? = null
+    private var type: String? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -36,7 +37,10 @@ class DescriptionBottomDialogFragment :
             contributorList =
                 java.util.ArrayList(DescriptionBottomDialogFragmentArgs.fromBundle(it).contributorsList!!.toList())
             contriType = DescriptionBottomDialogFragmentArgs.fromBundle(it).contriType
+            type = DescriptionBottomDialogFragmentArgs.fromBundle(it).type
         }
+
+
         setViewpager()
 
     }
@@ -53,7 +57,7 @@ class DescriptionBottomDialogFragment :
             binding.tabLayout,
             binding.vpImageSlider
         ) { _, _ -> }.attach()
-        contributorList?.let { descriptionSliderAdapter.setDataSet(it) }
+        contributorList?.let { descriptionSliderAdapter.setDataSet(it,type) }
         binding.vpImageSlider.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
             override fun onPageScrolled(

@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoSleepDetailBinding
 import com.noisefit.oreo.OreoMainViewModel
@@ -26,7 +25,6 @@ import com.noisefit_commans.ui.custom.NightTimeGraphViewOreo
 import com.noisefit_commans.ui.custom.SleepGraphViewOreo
 import com.noisefit_commans.ui.custom.SleepStageAction
 import com.noisefit_commans.ui.custom.ToolTipEntry
-import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
@@ -89,7 +87,10 @@ class OreoSleepDetailFragment :
         val desListData = viewModel.prepareDataForDescriptionArray(resultData)
         navigate(
             OreoSleepDetailFragmentDirections.actionNavigationSleepDetailsFragToDescriptionPopUpBottomDialogFragment(
-                position, desListData.toTypedArray(), resultData[position].title
+                position,
+                desListData.toTypedArray(),
+                resultData[position].title,
+                ClickViewType.SLEEP.name
             )
         )
 

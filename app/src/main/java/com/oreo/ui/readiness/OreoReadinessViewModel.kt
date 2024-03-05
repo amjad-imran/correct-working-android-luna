@@ -339,8 +339,8 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                    barPercent = 0,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
@@ -366,8 +366,8 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                    barPercent = 0,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
@@ -393,8 +393,8 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                    barPercent = 0,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
@@ -419,8 +419,8 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                    barPercent = 0,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
@@ -445,8 +445,8 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                    barPercent = 0,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
@@ -472,8 +472,8 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                    barPercent = 0,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
@@ -499,8 +499,8 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                    barPercent = 0,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
@@ -525,8 +525,8 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                    barPercent = 0,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
@@ -552,8 +552,8 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                    barPercent = 0,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
