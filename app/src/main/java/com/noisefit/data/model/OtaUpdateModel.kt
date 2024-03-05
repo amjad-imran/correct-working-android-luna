@@ -6,10 +6,11 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class OtaUpdateModel(
-    val title: String? = null,
-    val message: String? = null,
-    @SerializedName("long_message")
-    val longMessage: String? = null,
-    @SerializedName("back_url")
-    val backUrl: String? = null,
+    @SerializedName("firmware_version")
+    val firmwareVersion: Int? = null,
+    val description: UpdateDescriptionModel? = null,
+    @SerializedName("image_url")
+    val imageUrl: String? = null,
+    @SerializedName("firmware_url")
+    val firmwareUrl: String? = null,
 ) : Parcelable

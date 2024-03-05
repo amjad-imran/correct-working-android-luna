@@ -33,6 +33,9 @@ private const val RECORD_WORKOUT_MODEL = "RECORD_WORKOUT_MODEL"
 private const val TEMP_BASE_LINE = "TEMP_BASE_LINE"
 private const val GOOGLE_FIT_CROSSED = "GOOGLE_FIT_CROSSED"
 
+private const val OTA_VERSION_NEW = "OTA_VERSION_NEW"
+private const val OTA_VERSION_CURRENT = "OTA_VERSION_CURRENT"
+
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
 
@@ -41,6 +44,29 @@ class RingDataStoreImpl
     private val gson: Gson,
     private val mPrefs: SharedPreferences
 ) : RingDataStore {
+
+
+    override fun saveNewOtaVersion(newOtaData: String?, currentVersion: Int) {
+        mPrefs.edit()?.putString(OTA_VERSION_NEW, newOtaData)?.commit()
+        mPrefs.edit()?.putInt(OTA_VERSION_CURRENT, currentVersion)?.commit()
+    }
+
+    override fun getNewOtaVersion(): Pair<String, Int>? {
+        val gson = mPrefs.getString(OTA_VERSION_NEW, null)
+        return if (gson == null) {
+            null
+        } else {
+            Pair(
+                gson,
+                mPrefs.getInt(OTA_VERSION_CURRENT, -1)
+            )
+        }
+    }
+
+    override fun cleaNewAppVersion() {
+        mPrefs.edit()?.remove(OTA_VERSION_NEW)?.commit()
+        mPrefs.edit()?.remove(OTA_VERSION_CURRENT)?.commit()
+    }
 
     override fun isGoogleFitCrossed(): Boolean {
         return mPrefs.getBoolean(GOOGLE_FIT_CROSSED, false)

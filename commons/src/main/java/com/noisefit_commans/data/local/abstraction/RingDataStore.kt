@@ -63,4 +63,9 @@ interface RingDataStore {
 
     fun isGoogleFitCrossed(): Boolean
     fun setGoogleFitCrossed(status: Boolean)
+
+
+    fun saveNewOtaVersion(newOtaData: String?, currentVersion: Int)
+    fun getNewOtaVersion(): Pair<String, Int>?
+    fun cleaNewAppVersion()
 }

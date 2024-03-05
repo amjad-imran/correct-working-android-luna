@@ -2,12 +2,16 @@ package com.oreo.ui.home.summary.paginate
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.JsonObject
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.model.AppUpdateModel
 import com.noisefit.data.model.OtaUpdateModel
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.data.repository.abstraction.UpdateRepository
+import com.noisefit.luna.BuildConfig
 import com.noisefit.session.SessionManager
+import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.enums.DashInfoCard
@@ -15,6 +19,7 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.data.model.User
+import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.models.ColorFitDevice
@@ -65,6 +70,7 @@ constructor(
     val screenUtils: ScreenUtils,
     private val syncRepository: OreoSyncRepository,
     val userActivityRepository: OreoUserActivityRepository,
+    val updateRepository: UpdateRepository,
     private val userHealthDataDataSource: OreoUserHealthDataDataSource
 ) : BaseViewModel() {
 
@@ -196,10 +202,10 @@ constructor(
             }
         }
 
-        if (sessionManager.forceOtaResponseRing != null) {
-            dashAlert[AlertType.OTA_UPDATE] =
-                DashAlert("Ring firmware update available", false)
-        }
+        /* if (sessionManager.forceOtaResponseRing != null) {
+             dashAlert[AlertType.OTA_UPDATE] =
+                 DashAlert("Ring firmware update available", false)
+         }*/
 
 
         stateDashAlerts.postValue(dashAlert)
@@ -812,6 +818,90 @@ constructor(
 
 
     }
+
+
+    fun checkAppVersion() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val shouldCheck = true
+            if (shouldCheck.not()) return@launch
+
+
+            val device = ringDataStore.getRingDevice()
+            if (device == null) {
+                checkAppVersionServer(null)
+            } else {
+                sessionManager.postFirmwareDetailsOnDash = true
+                sessionManager.sendQueryAction(QueryAction.QueryFirmwareVersion)
+            }
+
+
+        }
+
+    }
+
+    /**
+     * WatchInfoGlobals.firmwareVersionNumberRing,
+     *                                     WatchInfoGlobals.firmwareDeviceIdRing
+     */
+    fun checkAppVersionServer(pair: Pair<Int, Int>?) {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val request = getAppVersionRequest(pair)
+            updateRepository.checkAppVersionV2(request).collect { resource ->
+                when (resource) {
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+
+                            updateRepository.saveNewAppVersion(
+                                it.appVersion,
+                                BuildConfig.VERSION_CODE
+                            )
+                            updateRepository.saveNewOtaVersion(it.firmwareVersion, pair?.first)
+
+                            appUpdateInfo.postValue(it.appVersion)
+                            otaUpdateInfo.postValue(it.firmwareVersion)
+
+                        }
+                    }
+
+                    else -> {
+
+                    }
+                }
+            }
+        }
+
+
+    }
+
+    private fun getAppVersionRequest(pair: Pair<Int, Int>?): JsonObject {
+        val ringDevice = ringDataStore.getRingDevice()
+        val deviceType = ringDevice?.deviceType
+
+        return JsonObject().apply {
+
+            if (pair != null) {
+                addProperty(
+                    "version",
+                    pair.first
+                )
+                addProperty(
+                    "firmware_id",
+                    pair.second
+                )
+                addProperty("mac", ringDevice?.address)
+                addProperty("device_type", deviceType)
+                addProperty(
+                    "isOTARequired",
+                    sessionManager.needDfuUpdate.value?.peekContent() ?: false
+                )
+            }
+            addProperty("platform", "android")
+            addProperty("app_version", 70/*BuildConfig.VERSION_CODE*/)
+        }
+    }
+
 
     fun markWorkoutSyncedAll() {
         viewModelScope.launch {

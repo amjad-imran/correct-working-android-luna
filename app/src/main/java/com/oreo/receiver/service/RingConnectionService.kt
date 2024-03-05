@@ -1624,6 +1624,17 @@ constructor() : LifecycleService() {
                         )
                     )
 
+                    if (sessionManager.postFirmwareDetailsOnDash) {
+                        sessionManager.checkForVersionUpdate.postValue(
+                            Event(
+                                Pair(
+                                    WatchInfoGlobals.firmwareVersionNumberRing,
+                                    WatchInfoGlobals.firmwareDeviceIdRing
+                                )
+                            )
+                        )
+                    }
+
                     /*if (initDefaultValues) {
                         LOGS.d(TAG, "Settings Default values")
                         initDefaultValue()

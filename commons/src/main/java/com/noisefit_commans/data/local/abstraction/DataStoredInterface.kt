@@ -423,4 +423,9 @@ interface DataStoredInterface {
 
     fun getUserHealthCacheVersion(): Int
     fun setUserHealthCacheVersion(version: Int)
+
+
+    fun saveNewAppVersion(newAppData: String, currentVersion: Int)
+    fun getNewAppVersion(): Pair<String, Int>?
+    fun cleaNewAppVersion()
 }

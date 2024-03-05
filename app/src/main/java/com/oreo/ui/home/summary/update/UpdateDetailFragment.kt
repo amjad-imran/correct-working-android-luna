@@ -9,6 +9,7 @@ import com.noisefit.data.model.OtaUpdateModel
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentUpdateDetailBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.loadImageWithCache
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.share.ShareUtil
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,14 +28,16 @@ class UpdateDetailFragment :
 
     private fun setUiAppUpdate(appUpdateModel: AppUpdateModel) {
         binding.toolbar.tvTitle.text = getString(R.string.text_update_my_app)
-        binding.tvTitle.text = appUpdateModel.title
-        binding.tvMessage.text = appUpdateModel.longMessage
+        binding.tvHeader.text = appUpdateModel.description?.header
+        binding.tvMessage.text = appUpdateModel.description?.longDescription
+        binding.ivBack.loadImageWithCache(binding.ivBack.context, appUpdateModel.imageUrl)
     }
 
     private fun setUiOtaUpdate(otaUpdateModel: OtaUpdateModel) {
         binding.toolbar.tvTitle.text = getString(R.string.text_update_my_ring)
-        binding.tvTitle.text = otaUpdateModel.title
-        binding.tvMessage.text = otaUpdateModel.longMessage
+        binding.tvHeader.text = otaUpdateModel.description?.header
+        binding.tvMessage.text = otaUpdateModel.description?.longDescription
+        binding.ivBack.loadImageWithCache(binding.ivBack.context, otaUpdateModel.imageUrl)
     }
 
     override fun initListener() {

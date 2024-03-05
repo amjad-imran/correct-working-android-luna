@@ -194,6 +194,10 @@ private const val BATTERY_DASH_ALERT = "BATTERY_DASH_ALERT"
 private const val SLEEP_NOTIFICATION = "SLEEP_NOTIFICATION"
 private const val READINESS_NOTIFICATION = "READINESS_NOTIFICATION"
 
+
+private const val APP_VERSION_NEW = "APP_VERSION_NEW"
+private const val APP_VERSION_CURRENT = "APP_VERSION_CURRENT"
+
 private const val GFIT_USER_SYNC_KEY = "GFIT_USER_SYNC_KEY"
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -203,6 +207,28 @@ class DataStoredImpl
 @Inject constructor(
     private val gson: Gson, private val mPrefs: SharedPreferences
 ) : DataStoredInterface {
+
+    override fun saveNewAppVersion(newAppData: String, currentVersion: Int) {
+        mPrefs.edit()?.putString(APP_VERSION_NEW, newAppData)?.commit()
+        mPrefs.edit()?.putInt(APP_VERSION_CURRENT, currentVersion)?.commit()
+    }
+
+    override fun getNewAppVersion(): Pair<String, Int>? {
+        val gson = mPrefs.getString(APP_VERSION_NEW, null)
+        return if (gson == null) {
+            null
+        } else {
+            Pair(
+                gson,
+                mPrefs.getInt(APP_VERSION_CURRENT, -1)
+            )
+        }
+    }
+
+    override fun cleaNewAppVersion() {
+        mPrefs.edit()?.remove(APP_VERSION_NEW)?.commit()
+        mPrefs.edit()?.remove(APP_VERSION_CURRENT)?.commit()
+    }
 
     override fun getReadinessNotificationTimeStamp(): Long {
         return mPrefs.getLong(READINESS_NOTIFICATION, 0)

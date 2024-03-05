@@ -63,6 +63,9 @@ constructor(
 
     }
 
+    var postFirmwareDetailsOnDash: Boolean = false
+    var checkForVersionUpdate = MutableLiveData<Event<Pair<Int, Int>>>()
+
     var lastOngoingWorkoutTimestamp: Long = 0L
     val showWorkoutDetails = MutableLiveData<Event<String?>>()
 

@@ -183,6 +183,8 @@ class SummaryDataFragmentToday :
         LOGS.d(TAG, "Today onResume called")
         loadData()
 
+        viewModel.checkAppVersion()
+
 
     }
 
@@ -322,16 +324,14 @@ class SummaryDataFragmentToday :
     override fun initListener() {
 
         binding.contentMain.lytAppUpdate.btnUpdateNow.setOnClickListener {
-            viewModel.appUpdateInfo.value?.let {
-                navigate(
-                    R.id.appUpdateBottomSheet,
-                    bundleOf("launchMode" to UpdateLaunchMode.APP)
-                )
-            }
+            navigate(
+                R.id.appUpdateDetailFragment,
+                bundleOf("launchMode" to UpdateLaunchMode.APP)
+            )
         }
 
         binding.contentMain.lytOtaUpdate.btnUpdateNow.setOnClickListener {
-            navigate(R.id.appUpdateBottomSheet, bundleOf("launchMode" to UpdateLaunchMode.OTA))
+            navigate(R.id.appUpdateDetailFragment, bundleOf("launchMode" to UpdateLaunchMode.OTA))
         }
 
         binding.contentMain.lytGoogleFit.tvGoogleFitTurnOn.setOnClickListener {
@@ -428,14 +428,20 @@ class SummaryDataFragmentToday :
 
     override fun subscribeObservers() {
 
+        viewModel.sessionManager.checkForVersionUpdate.observe(viewLifecycleOwner) {
+            it.getContent()?.let { pair ->
+                viewModel.checkAppVersionServer(pair)
+            }
+        }
+
         viewModel.appUpdateInfo.observe(viewLifecycleOwner) {
             if (it == null) {
                 binding.contentMain.lytAppUpdate.root.gone()
             } else {
                 binding.contentMain.lytAppUpdate.apply {
-                    this.tvTitle.text = it.title
-                    this.tvMessage.text = it.message
-                    this.imvBack.loadImageWithCache(this.imvBack.context, it.backUrl)
+                    this.tvTitle.text = it.description?.header
+                    this.tvMessage.text = it.description?.shortDescription
+                    this.imvBack.loadImageWithCache(this.imvBack.context, it.imageUrl)
                     root.visible()
                 }
             }
@@ -446,9 +452,9 @@ class SummaryDataFragmentToday :
                 binding.contentMain.lytOtaUpdate.root.gone()
             } else {
                 binding.contentMain.lytOtaUpdate.apply {
-                    this.tvTitle.text = it.title
-                    this.tvMessage.text = it.message
-                    this.imvBack.loadImageWithCache(this.imvBack.context, it.backUrl)
+                    this.tvTitle.text = it.description?.header
+                    this.tvMessage.text = it.description?.shortDescription
+                    this.imvBack.loadImageWithCache(this.imvBack.context, it.imageUrl)
                     root.visible()
                 }
             }

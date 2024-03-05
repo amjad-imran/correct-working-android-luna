@@ -187,6 +187,21 @@ object AppModule {
             gson
         )
 
+    @Singleton
+    @Provides
+    fun provideUpdateRepository(
+        remoteDataSource: NetworkService,
+        ringDataStore: RingDataStore,
+        localDataStore: DataStoredInterface,
+        gson: Gson
+    ): UpdateRepository =
+        UpdateRepositoryImpl(
+            remoteDataSource,
+            ringDataStore,
+            localDataStore,
+            gson
+        )
+
 
     @Singleton
     @Provides

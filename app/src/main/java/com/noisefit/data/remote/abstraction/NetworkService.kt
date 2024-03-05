@@ -9,8 +9,6 @@ import com.noisefit.data.remote.UserLocationUpdatedResponse
 import com.noisefit.data.remote.request.LoginRequest
 import com.noisefit.data.remote.request.RegistrationRequest
 import com.noisefit.data.remote.request.UpdateAdditionalDetailRequest
-import com.noisefit.data.remote.response.CatWiseWatchFacesItem
-import com.noisefit.data.remote.response.WatchFaceCustomListResponse
 import com.noisefit.data.remote.response.Watchface2
 import com.noisefit_commans.data.model.*
 import com.noisefit_commans.data.model.history.*
@@ -43,6 +41,12 @@ interface NetworkService {
         @Url url: String,
         @Body jsonObject: JsonObject
     ): BaseApiResponse<VersionCheckResponse>
+
+    @POST
+    suspend fun checkAppVersionV2(
+        @Url url: String,
+        @Body jsonObject: JsonObject
+    ): BaseApiResponse<UpdateResponseV2>
 
 
     //Auth APIs
@@ -209,11 +213,6 @@ interface NetworkService {
     ): BaseApiResponse<DeviceFeatureResponse>
 
     @GET
-    suspend fun getWatchFaceCategory(
-        @Url url: String
-    ): BaseApiResponse<List<CatWiseWatchFacesItem>>
-
-    @GET
     suspend fun getWatchFacesByCategoryId(
         @Url url: String
     ): BaseApiResponse<List<WatchFace>>
@@ -232,12 +231,6 @@ interface NetworkService {
     suspend fun getWatchFaceById(
         @Url url: String,
     ): BaseApiResponse<WatchFaceResponse>
-
-    @GET
-    suspend fun getWatchFaceCustomData(
-        @Url url: String
-    ): BaseApiResponse<WatchFaceCustomListResponse>
-
 
     @POST("/watch_faces/v3/current")
     suspend fun setRecentWatchFace(

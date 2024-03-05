@@ -1,11 +1,15 @@
 package com.oreo.ui.home.summary.update
 
 import androidx.lifecycle.MutableLiveData
+import com.google.gson.Gson
 import com.noisefit.data.model.AppUpdateModel
 import com.noisefit.data.model.OtaUpdateModel
 import com.noisefit.data.repository.abstraction.DownloadRepository
 import com.noisefit.session.SessionManager
 import com.noisefit.watch.WatchesSDK
+import com.noisefit_commans.common.fromJson
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -14,6 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class UpdateDetailViewModel @Inject constructor(
     var sessionManager: SessionManager,
+    val ringDataStore: RingDataStore,
+    val localDataStore: DataStoredInterface,
     var watchesSDK: WatchesSDK
 ) : BaseViewModel() {
 
@@ -22,10 +28,26 @@ class UpdateDetailViewModel @Inject constructor(
     var launchMode: UpdateLaunchMode? = null
 
     private fun getAppUpdateDetails() {
+        val data = localDataStore.getNewAppVersion()
+        if (data?.first == null) {
+            appUpdateInfo.postValue(null)
+            return
+        }
+
+        val update = Gson().fromJson<AppUpdateModel>(data.first)
+        appUpdateInfo.postValue(update)
+
     }
 
     private fun getOtaUpdateDetails() {
+        val data = ringDataStore.getNewOtaVersion()
+        if (data?.first == null) {
+            appUpdateInfo.postValue(null)
+            return
+        }
 
+        val update = Gson().fromJson<OtaUpdateModel>(data.first)
+        otaUpdateInfo.postValue(update)
     }
 
     fun initLaunchMode(launchMode: UpdateLaunchMode) {
