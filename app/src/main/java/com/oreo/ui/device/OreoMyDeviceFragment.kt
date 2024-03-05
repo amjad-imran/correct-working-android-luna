@@ -83,6 +83,8 @@ class OreoMyDeviceFragment :
                 })
         }
         binding.rowShareFirmwareLogs.setOnClickListener {
+
+
             if (mViewModel.firmwareLogFile?.exists() == true) {
                 context?.let { ctx ->
                     LOGS.w("dsfsdf",mViewModel.firmwareLogFile!!.path)

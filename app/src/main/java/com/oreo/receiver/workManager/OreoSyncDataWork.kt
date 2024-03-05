@@ -2,6 +2,7 @@ package com.oreo.receiver.workManager
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.os.Looper
 import androidx.hilt.work.HiltWorker
 import androidx.work.ForegroundInfo
@@ -13,6 +14,7 @@ import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
@@ -224,8 +226,13 @@ constructor(
                 }
 
                 val logsSync = shouldSyncAutoLogs()
+                var isLogQuerySent = false
                 if (logsSync) {
                     val status = ApplicationUtils.startFeedbackSubmitWorker(context)
+                    isLogQuerySent = true
+                    sessionManager.sendQueryAction(QueryAction.GetFirmwareLogs)
+                }
+                if (BuildConfig.DEBUG && !isLogQuerySent) {
                     sessionManager.sendQueryAction(QueryAction.GetFirmwareLogs)
                 }
 
