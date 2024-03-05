@@ -25,12 +25,11 @@ class OreoAContributorAdapter(val mListener:ContributorItemClickListener) :
                     resultData.leftTextColor
                 )
             )
-            val progressValue: Int = if (resultData.barPercent == 0) {
-                1
-            } else {
-                resultData.barPercent
+            if (resultData.barPercent == 0) {
+                binding.backContributors.alpha = .5f
             }
-            binding.pbSteps.progress = progressValue
+
+            binding.pbSteps.progress = resultData.barPercent
             val progressColor = ContextCompat.getColor(
                 binding.pbSteps.context,
                 resultData.barColor

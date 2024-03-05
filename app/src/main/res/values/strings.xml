@@ -1042,4 +1042,6 @@
     <string name="text_update_my_ring">Update my ring</string>
     <string name="text_ring_update_alert_message">Please keep your ring and phone close to each other during the firmware update. The update will take a couple of minutes.</string>
     <string name="text_updating_firmware">Updating firmware</string>
+    <string name="text_contributor_value_missing">Contributor value missing</string>
+    <string name="text_this_can_be_because_there_s_not_enough_data_or_you_haven_t_worn_your_ring">This can be because there’s not enough data, or you haven’t worn your ring.</string>
 </resources>

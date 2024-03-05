@@ -94,7 +94,7 @@ class OreoActivityFragment :
         val desListData = mViewModel.prepareDataForDescriptionArray(resultData)
         navigate(
             OreoActivityFragmentDirections.actionNavigationActivityDetailsFragToDescriptionPopUpBottomDialogFragment(
-                position, desListData.toTypedArray(), resultData[position].title
+                position, desListData.toTypedArray(), resultData[position].title,ClickViewType.ACTIVITY.name
             )
         )
 

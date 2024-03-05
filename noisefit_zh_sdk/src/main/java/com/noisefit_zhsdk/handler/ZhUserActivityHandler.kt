@@ -88,10 +88,11 @@ constructor(
     companion object {
         const val LOCATION_BROADCAST_RECEIVER = "LOCATION_BROADCAST_RECEIVER"
         const val LAT_LONG = "LAT_LONG"
+        val TRACK_TAG = "LUNA->"
     }
 
     private val TAG = "ZhUserActivityHandler"
-    private val TRACK_TAG = "LUNA->"
+
     private var userActivityDataCallbacks: IUserActivityDataCallback? = null
     private var sportModleInfoList = ArrayList<DevSportInfoBean>()
     private var isSyncProtoSportSyncing = false
@@ -750,12 +751,16 @@ constructor(
                 )*/
 
                 val sleepDataParsed = oreoDataConverter.parseSleepData(p0)
-                AppLogs.sendAppLogs("$TRACK_TAG Parsed Sleep Data $sleepDataParsed")
-                userActivityDataCallbacks?.onUserActivityDataReceived(
-                    UserActivityCallback.SleepDataObtainedOreo(
-                        sleepDataParsed
+
+                sleepDataParsed?.let {
+                    AppLogs.sendAppLogs("$TRACK_TAG Parsed Sleep Data $sleepDataParsed")
+                    userActivityDataCallbacks?.onUserActivityDataReceived(
+                        UserActivityCallback.SleepDataObtainedOreo(
+                            sleepDataParsed
+                        )
                     )
-                )
+                }
+
             }
 
             override fun onRingSleepNAP(p0: MutableList<RingSleepNapBean>?) {

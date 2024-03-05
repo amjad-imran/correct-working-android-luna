@@ -83,7 +83,7 @@ class OreoReadinessFragment :
         val descList = mViewModel.prepareDataForDescriptionArray(resultData, contriVer)
         navigate(
             OreoReadinessFragmentDirections.actionNavigationReadinessDetailsFragToDescriptionPopUpBottomDialogFragment(
-                position, descList.toTypedArray(), resultData[position].title
+                position, descList.toTypedArray(), resultData[position].title,ClickViewType.READINESS.name
             )
         )
 
