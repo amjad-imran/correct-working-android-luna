@@ -6,10 +6,11 @@ import com.noisefit.data.model.OtaUpdateModel
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 
 @HiltViewModel
-class UpdateDetailViewModel : BaseViewModel() {
+class UpdateDetailViewModel @Inject constructor(): BaseViewModel() {
 
     var appUpdateInfo = MutableLiveData<AppUpdateModel?>()
     var otaUpdateInfo = MutableLiveData<OtaUpdateModel?>()
@@ -22,7 +23,7 @@ class UpdateDetailViewModel : BaseViewModel() {
 
     }
 
-    fun setLaunchMode(launchMode: UpdateLaunchMode) {
+    fun initLaunchMode(launchMode: UpdateLaunchMode) {
         this.launchMode = launchMode
         when (launchMode) {
             UpdateLaunchMode.APP -> {
