@@ -426,6 +426,8 @@ interface DataStoredInterface {
 
 
     fun saveNewAppVersion(newAppData: String, currentVersion: Int)
-    fun getNewAppVersion(): Pair<String, Int>?
+    fun getNewAppVersion(): Triple<String, Int,Long>?
     fun cleaNewAppVersion()
+    fun saveAppRemindDate()
+    fun getAppRemindDate(): String?
 }

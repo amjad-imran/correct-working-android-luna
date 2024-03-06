@@ -34,6 +34,8 @@ private const val TEMP_BASE_LINE = "TEMP_BASE_LINE"
 private const val GOOGLE_FIT_CROSSED = "GOOGLE_FIT_CROSSED"
 
 private const val OTA_VERSION_NEW = "OTA_VERSION_NEW"
+private const val OTA_VERSION_NEW_TIMESTAMP = "OTA_VERSION_NEW_TIMESTAMP"
+private const val OTA_VERSION_REMIND = "OTA_VERSION_REMIND"
 private const val OTA_VERSION_CURRENT = "OTA_VERSION_CURRENT"
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -49,23 +51,37 @@ class RingDataStoreImpl
     override fun saveNewOtaVersion(newOtaData: String?, currentVersion: Int) {
         mPrefs.edit()?.putString(OTA_VERSION_NEW, newOtaData)?.commit()
         mPrefs.edit()?.putInt(OTA_VERSION_CURRENT, currentVersion)?.commit()
+        mPrefs.edit()?.putLong(OTA_VERSION_NEW_TIMESTAMP, System.currentTimeMillis())?.commit()
     }
 
-    override fun getNewOtaVersion(): Pair<String, Int>? {
+    override fun getNewOtaVersion(): Triple<String, Int, Long>? {
         val gson = mPrefs.getString(OTA_VERSION_NEW, null)
         return if (gson == null) {
             null
         } else {
-            Pair(
+            val timestamp = mPrefs.getLong(OTA_VERSION_NEW_TIMESTAMP, 0L)
+
+            Triple(
                 gson,
-                mPrefs.getInt(OTA_VERSION_CURRENT, -1)
+                mPrefs.getInt(OTA_VERSION_CURRENT, -1),
+                timestamp
             )
         }
     }
 
-    override fun cleaNewAppVersion() {
+    override fun cleaNewOtaVersion() {
         mPrefs.edit()?.remove(OTA_VERSION_NEW)?.commit()
         mPrefs.edit()?.remove(OTA_VERSION_CURRENT)?.commit()
+        mPrefs.edit()?.remove(OTA_VERSION_REMIND)?.commit()
+        mPrefs.edit()?.remove(OTA_VERSION_NEW_TIMESTAMP)?.commit()
+    }
+
+    override fun saveOtaRemindDate() {
+        mPrefs.edit()?.putString(OTA_VERSION_REMIND, DateFormats.getCurrentDate())?.commit()
+    }
+
+    override fun getOtaRemindDate(): String? {
+        return mPrefs.getString(OTA_VERSION_REMIND, null)
     }
 
     override fun isGoogleFitCrossed(): Boolean {

@@ -589,5 +589,9 @@
     <fragment
         android:id="@+id/ringUpdateFragment"
         android:name="com.oreo.ui.home.summary.update.RingUpdateFragment"
-        android:label="fragment_ring_update" />
+        android:label="fragment_ring_update" >
+        <argument
+            android:name="otaData"
+            app:argType="com.noisefit.data.model.OtaUpdateModel" />
+    </fragment>
 </navigation>

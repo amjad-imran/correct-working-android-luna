@@ -35,6 +35,7 @@ class UpdateRepositoryImpl(
 
     override suspend fun saveNewAppVersion(appVersion: AppUpdateModel?, currentVersion: Int) {
         if (appVersion == null) {
+            localDataStore.cleaNewAppVersion()
             return
         }
 
@@ -44,6 +45,7 @@ class UpdateRepositoryImpl(
 
     override suspend fun saveNewOtaVersion(firmwareVersion: OtaUpdateModel?, currentVersion: Int?) {
         if (firmwareVersion == null || currentVersion == null) {
+            ringDataStore.cleaNewOtaVersion()
             return
         }
 
@@ -51,5 +53,11 @@ class UpdateRepositoryImpl(
         ringDataStore.saveNewOtaVersion(gson, currentVersion)
     }
 
+    override fun otaRemindLater() {
+        ringDataStore.saveOtaRemindDate()
+    }
 
+    override fun appRemindLater() {
+        localDataStore.saveAppRemindDate()
+    }
 }

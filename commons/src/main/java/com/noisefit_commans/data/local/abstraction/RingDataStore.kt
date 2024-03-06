@@ -66,6 +66,8 @@ interface RingDataStore {
 
 
     fun saveNewOtaVersion(newOtaData: String?, currentVersion: Int)
-    fun getNewOtaVersion(): Pair<String, Int>?
-    fun cleaNewAppVersion()
+    fun getNewOtaVersion(): Triple<String, Int, Long>?
+    fun cleaNewOtaVersion()
+    fun saveOtaRemindDate()
+    fun getOtaRemindDate(): String?
 }

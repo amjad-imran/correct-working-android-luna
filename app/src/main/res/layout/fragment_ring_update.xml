@@ -1,96 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout
+    android:id="@+id/lytMain"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.oreo.ui.home.summary.update.RingUpdateFragment">
 
-
-    <TextView
-        android:id="@+id/textView101"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="62dp"
-        android:fontFamily="@font/gilroy_medium"
-        android:gravity="center_horizontal"
-        android:lineSpacingExtra="14sp"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:textStyle="normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Updating ring" />
-
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lottieAnimationView2"
-        android:layout_width="220dp"
-        android:layout_height="220dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView99"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView101"
-        app:layout_constraintVertical_chainStyle="packed"
-        app:lottie_autoPlay="true"
-        app:lottie_rawRes="@raw/anim_splash_screen" />
-
-    <ImageView
-        android:id="@+id/ivRingImage"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        app:layout_constraintBottom_toBottomOf="@+id/lottieAnimationView2"
-        app:layout_constraintEnd_toEndOf="@+id/lottieAnimationView2"
-        app:layout_constraintStart_toStartOf="@+id/lottieAnimationView2"
-        app:layout_constraintTop_toTopOf="@+id/lottieAnimationView2" />
-
-
-    <TextView
-        android:id="@+id/textView99"
-        style="@style/S14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="@string/text_updating_firmware"
-        app:layout_constraintBottom_toTopOf="@+id/tvUpdatePercent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lottieAnimationView2" />
-
-    <TextView
-        android:id="@+id/tvUpdatePercent"
-        style="@style/S32"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView100"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView99"
-        tools:text="80%" />
-
-    <TextView
-        android:id="@+id/textView100"
-        style="@style/S14"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="52dp"
-        android:layout_marginEnd="52dp"
-        android:layout_marginBottom="62dp"
-        android:lineSpacingExtra="8sp"
-        android:text="@string/text_ring_update_alert_message"
-        android:textColor="@color/white_64"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <include
-        android:id="@+id/progressBar"
+        android:id="@+id/lytBack"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        layout="@layout/default_loader"/>
+        layout="@layout/fragment_update_detail"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <eightbitlab.com.blurview.BlurView
+        android:id="@+id/blurView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#c0030f1d"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/image_updating_back"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/textView101"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="62dp"
+                android:fontFamily="@font/gilroy_medium"
+                android:gravity="center_horizontal"
+                android:lineSpacingExtra="14sp"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Updating ring" />
+
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottieAnimationView2"
+                android:layout_width="220dp"
+                android:layout_height="220dp"
+                app:layout_constraintBottom_toTopOf="@+id/tvUpdating"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView101"
+                app:layout_constraintVertical_chainStyle="packed"/><!--
+                app:lottie_autoPlay="true"
+                app:lottie_rawRes="@raw/anim_splash_screen" />-->
+
+            <ImageView
+                android:id="@+id/ivRingImage"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                app:layout_constraintBottom_toBottomOf="@+id/lottieAnimationView2"
+                app:layout_constraintEnd_toEndOf="@+id/lottieAnimationView2"
+                app:layout_constraintStart_toStartOf="@+id/lottieAnimationView2"
+                app:layout_constraintTop_toTopOf="@+id/lottieAnimationView2" />
+
+
+            <TextView
+                android:id="@+id/tvUpdating"
+                style="@style/S14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                tools:text="@string/text_updating_firmware"
+                app:layout_constraintBottom_toTopOf="@+id/tvUpdatePercent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lottieAnimationView2" />
+
+            <TextView
+                android:id="@+id/tvUpdatePercent"
+                style="@style/S32"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/textView100"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvUpdating"
+                tools:text="80%" />
+
+            <TextView
+                android:id="@+id/textView100"
+                style="@style/S14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="52dp"
+                android:layout_marginEnd="52dp"
+                android:layout_marginBottom="62dp"
+                android:lineSpacingExtra="8sp"
+                android:text="@string/text_ring_update_alert_message"
+                android:textColor="@color/white_64"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <include
+                android:id="@+id/progressBar"
+                layout="@layout/default_loader"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </eightbitlab.com.blurview.BlurView>
+
+
+</RelativeLayout>

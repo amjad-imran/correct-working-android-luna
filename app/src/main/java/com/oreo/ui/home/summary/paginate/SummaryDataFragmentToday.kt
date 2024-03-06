@@ -183,7 +183,8 @@ class SummaryDataFragmentToday :
         LOGS.d(TAG, "Today onResume called")
         loadData()
 
-        viewModel.checkAppVersion()
+        viewModel.checkForNewAppVersion()
+        viewModel.checkForNewOtaVersion()
 
 
     }
@@ -331,6 +332,11 @@ class SummaryDataFragmentToday :
         }
 
         binding.contentMain.lytOtaUpdate.btnUpdateNow.setOnClickListener {
+            val isConnected = viewModel.isDeviceConnected()
+            if (isConnected.not()) {
+                context.showShortToast("Ring not connected")
+                return@setOnClickListener
+            }
             navigate(R.id.appUpdateDetailFragment, bundleOf("launchMode" to UpdateLaunchMode.OTA))
         }
 
@@ -430,7 +436,7 @@ class SummaryDataFragmentToday :
 
         viewModel.sessionManager.checkForVersionUpdate.observe(viewLifecycleOwner) {
             it.getContent()?.let { pair ->
-                viewModel.checkAppVersionServer(pair)
+                viewModel.checkOtaVersionServer(pair)
             }
         }
 
