@@ -23,9 +23,11 @@ import com.noisefit.luna.R
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.GraphDummyModel
+import com.oreo.data.model.LowestIntervalValue
 import com.oreo.data.model.SleepChartModel
 import org.joda.time.Duration
 import org.joda.time.LocalDateTime
@@ -384,9 +386,15 @@ class LineChartView : View {
             if (item.value > 0 && item.value < minValue) {
                 lastMinValueIndex = i
                 minValue = item.value
-                //                LOGS.INSTANCE.d("updateDataminValue " + xMax + " " + xMin);
             }
         }
+
+        LOGS.d("lowestHr fasdfsfdfsd $minValue")
+        val minValueWithIndex = getMinValueWithIndex(minValue)
+
+        minValue = minValueWithIndex.second
+        lastMinValueIndex = minValueWithIndex.first
+
         if (averageValue == null) {
             if (count > 0) {
                 avgValue = sum / count
@@ -411,6 +419,68 @@ class LineChartView : View {
 
         return list.size - lastMinValueIndex
     }
+
+
+    private fun getMinValueWithIndex(minValue: Int): Pair<Int, Int> {
+        val lowestPointHr = ArrayList<LowestIntervalValue>()
+
+        if (list.isEmpty()) {
+            return Pair(0, 0)
+        }
+
+        for (index in list.indices) {
+            val current = list[index]?.value
+            if (current == minValue && current !=0) {
+                val lowestValueData = list.getOrNull(index - 1)
+                val highestValueData = list.getOrNull(index + 1)
+                var lowestValue = -1
+                if (lowestValueData != null) {
+                    lowestValue = lowestValueData.value
+                }
+                var highestValue = -1
+                if (highestValueData != null) {
+                    highestValue = highestValueData.value
+                }
+
+                lowestPointHr.add(LowestIntervalValue(lowestValue, highestValue, current, index))
+            }
+        }
+        var avgMinIndex = 0
+        var avgValue = 0
+
+        var avgMinValue = Int.MAX_VALUE
+        if (lowestPointHr.size == 1) {
+            avgMinIndex = lowestPointHr[0].index
+            return Pair(lowestPointHr[0].index, lowestPointHr[0].value)
+        } else {
+            lowestPointHr.forEach {
+                var count = 0
+                var sum = 0
+                if (it.lowestValue != -1) {
+                    sum += it.lowestValue
+                    count += 1
+                }
+                if (it.highestValue != -1) {
+                    sum += it.highestValue
+                    count += 1
+                }
+                sum += it.value
+                count += 1
+                val avg = (sum / count)
+                println("lowestHr ---------------->lowest:- ${it.lowestValue}, highest:- ${it.highestValue}, current:- ${it.value}, avg:- $avg")
+                if (avg < avgMinValue) {
+                    avgMinValue = avg
+                    avgMinIndex = it.index
+                    avgValue = it.value
+                }
+
+            }
+            println("index $avgMinIndex")
+            return Pair(avgMinIndex, avgValue)
+
+        }
+    }
+
 
     private var touchX = 0f
     private var isInteracting = false
