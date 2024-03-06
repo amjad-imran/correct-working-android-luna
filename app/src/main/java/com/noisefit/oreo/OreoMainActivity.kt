@@ -473,13 +473,13 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         if (versionCheckResponse.upgradeType?.lowercase() == "force_upgrade") {
             return true
-        } else if (versionCheckResponse.upgradeType?.lowercase() == "soft_upgrade") {
+        }/* else if (versionCheckResponse.upgradeType?.lowercase() == "soft_upgrade") {
             val ignoredVersion = viewModel.localDataStore.getIgnoreVersion()
             if (ignoredVersion != versionCheckResponse.currentVersion) {
                 return true
             }
 
-        }
+        }*/
         return false
     }
 
