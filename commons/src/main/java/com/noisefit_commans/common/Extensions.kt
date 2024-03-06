@@ -41,6 +41,15 @@ fun Int?.convertMinuteIntoSeconds(): Int {
 
 }
 
+fun Int.px(): Float {
+    return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        this.toFloat(),
+        NoisefitApplication.context?.resources?.displayMetrics
+    )
+}
+
+
 fun Context.dpToPx(px: Int): Int {
     return TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_DIP, px.toFloat(), this.resources.displayMetrics
@@ -89,6 +98,7 @@ fun List<Float>.averageWithoutZeroFloat(): Float {
         0.0f
     }
 }
+
 fun List<Int>.averageIntWithoutZeroFloat(): Float {
     val newList = this.filter { it != 0 && it != 255 }
     return if (newList.isNotEmpty()) {
@@ -164,7 +174,7 @@ fun Double.roundDownDecimal(): String {
     return df.format(this)
 }
 
-fun Double.ceilRound():Int{
+fun Double.ceilRound(): Int {
     return DecimalFormat("#").apply {
         roundingMode = RoundingMode.CEILING
     }.format(this).toInt()

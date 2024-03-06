@@ -5,9 +5,11 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -19,6 +21,7 @@ import com.noisefit.luna.databinding.FragmentOreoActivityBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.common.px
 import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
@@ -96,7 +99,10 @@ class OreoActivityFragment :
         val desListData = mViewModel.prepareDataForDescriptionArray(resultData)
         navigate(
             OreoActivityFragmentDirections.actionNavigationActivityDetailsFragToDescriptionPopUpBottomDialogFragment(
-                position, desListData.toTypedArray(), resultData[position].title,ClickViewType.ACTIVITY.name
+                position,
+                desListData.toTypedArray(),
+                resultData[position].title,
+                ClickViewType.ACTIVITY.name
             )
         )
 
@@ -339,13 +345,35 @@ class OreoActivityFragment :
         }
         binding.lytDailyMovement.lytInteractiveGraph.graphDayTime.enableInteractiveMode(true)
         binding.lytDailyMovement.lytInteractiveGraph.graphDayTime.setVibrationUtil(vibrationUtils)
-        binding.lytDailyMovement.lytInteractiveGraph.graphDayTime.updateData(
-            dayData?.let {
-                mViewModel.dayTimeDataConvertor.getDayTimeCombinedData(
-                    it
-                )
+        dayData?.let {
+            val data = mViewModel.dayTimeDataConvertor.getDayTimeCombinedData(
+                it
+            )
+            binding.lytDailyMovement.lytInteractiveGraph.graphDayTime.updateData(
+                data
+            )
+
+            var marginTop = 0.px()
+            if (data.sections.isNullOrEmpty()) {
+                marginTop = (-8).px()
             }
-        )
+            binding.lytDailyMovement.lytInteractiveGraph.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                this.topMargin = dpToPx(
+                    marginTop.toInt(),
+                    binding.lytDailyMovement.lytInteractiveGraph.root.context
+                ).toInt()
+            }
+        } ?: run {
+            var marginTop = 0.px()
+            binding.lytDailyMovement.lytInteractiveGraph.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                this.topMargin = dpToPx(
+                    marginTop.toInt(),
+                    binding.lytDailyMovement.lytInteractiveGraph.root.context
+                ).toInt()
+            }
+        }
+
+
 
         resetDayTimeTopLevelUi()
     }
