@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoActivityBinding
 import com.noisefit.oreo.OreoMainViewModel
@@ -352,6 +353,7 @@ class OreoActivityFragment :
     private fun handleMovementNewViews(it: OreoActivityModel) {
         val movementList = it.daytimeMovement?.movement
         val newListInvalid = mViewModel.getCombinedMovementData(movementList, true)
+
         var highMovValue = 0
         var medMovValue = 0
         var lowMovValue = 0

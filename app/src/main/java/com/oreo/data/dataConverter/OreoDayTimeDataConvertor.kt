@@ -1,6 +1,7 @@
 package com.oreo.data.dataConverter
 
 import android.graphics.Color
+import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit_commans.common.maxWithInvalidMovementValues
 import com.noisefit_commans.common.maxWithoutInvalidMovementValues
@@ -25,9 +26,11 @@ class OreoDayTimeDataConvertor @Inject constructor() {
 //        val stressBreakup =
 //            Gson().fromJson<List<Int>>("[10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,4,10,12,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,55,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44]")
         val workouts = dayData.activity?.workout
+        val workoutSectionIntensity = ArrayList<Triple<Int, Int, Int>>()
         val sections: MutableList<Section> = ArrayList()
         workouts?.forEach {
             getWorkoutSections(it)?.let { pos ->
+                workoutSectionIntensity.add(Triple(pos.first, pos.second, 2))
                 sections.add(
                     Section(
                         "workout",
@@ -77,6 +80,8 @@ class OreoDayTimeDataConvertor @Inject constructor() {
         val combinedSection = combineSections(sections)
 
 
+        LOGS.d("hjkjkjfsd ---- ${Gson().toJson(combinedSection)}")
+        LOGS.d("hjkjkjfsd  ${Gson().toJson(items)}")
         return DayTimeDataModel(
             sections = combinedSection,
             items = items
