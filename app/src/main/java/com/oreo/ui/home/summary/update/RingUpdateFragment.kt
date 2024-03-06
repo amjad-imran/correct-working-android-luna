@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
@@ -30,6 +31,8 @@ import com.noisefit_commans.ui.loadImageWithCache
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.share.ShareUtil
+import com.oreo.ui.helpsupport.questionaries.CALL_REQUEST_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderEffectBlur
 import eightbitlab.com.blurview.RenderScriptBlur
@@ -62,6 +65,7 @@ class RingUpdateFragment :
 
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
     }
+
     val callback: OnBackPressedCallback =
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -121,7 +125,8 @@ class RingUpdateFragment :
 
 
             if (url.isNullOrEmpty()) {
-                context.showShortToast("Update Failed")
+                //context.showShortToast("Update Failed")
+                showFailedDialog()
                 return@tryCatch
             }
             val fileName = url.split("/").last()
@@ -137,6 +142,21 @@ class RingUpdateFragment :
         }
 
 
+    }
+
+    private fun showFailedDialog() {
+        setFragmentResultListener(UPDATE_FAILED) { _, bundle ->
+            val remindLater = bundle.getBoolean("remindLater")
+            val tryAgain = bundle.getBoolean("tryAgain")
+            if (remindLater) {
+                viewModel.ringDataStore.saveOtaRemindDate()
+                this@RingUpdateFragment.navigateUpSafe()
+            }
+            if (tryAgain) {
+                startUpdate()
+            }
+        }
+        navigate(R.id.bottomSheetUpdateFailed)
     }
 
     override fun initListener() {
@@ -220,7 +240,8 @@ class RingUpdateFragment :
             }
 
             UpdateStatus.ERROR -> {
-                context.showShortToast("Failed")
+                //context.showShortToast("Failed")
+                showFailedDialog()
                 viewModel.deleteTempFile()
             }
 

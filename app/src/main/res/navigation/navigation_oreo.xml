@@ -594,4 +594,8 @@
             android:name="otaData"
             app:argType="com.noisefit.data.model.OtaUpdateModel" />
     </fragment>
+    <dialog
+        android:id="@+id/bottomSheetUpdateFailed"
+        android:name="com.oreo.ui.home.summary.update.BottomSheetUpdateFailed"
+        android:label="BottomSheetUpdateFailed" />
 </navigation>

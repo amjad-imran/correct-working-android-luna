@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    android:id="@+id/lytMain"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/lytMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.oreo.ui.home.summary.update.RingUpdateFragment">
 
     <include
         android:id="@+id/lytBack"
+        layout="@layout/fragment_update_detail"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        layout="@layout/fragment_update_detail"/>
+        android:layout_height="match_parent" />
 
     <eightbitlab.com.blurview.BlurView
         android:id="@+id/blurView"
@@ -40,19 +39,14 @@
 
             <TextView
                 android:id="@+id/textView101"
+                style="@style/S18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="62dp"
-                android:fontFamily="@font/gilroy_medium"
-                android:gravity="center_horizontal"
-                android:lineSpacingExtra="14sp"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="normal"
+                android:text="@string/text_updating_ring"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Updating ring" />
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <com.airbnb.lottie.LottieAnimationView
@@ -63,7 +57,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView101"
-                app:layout_constraintVertical_chainStyle="packed"/><!--
+                app:layout_constraintVertical_chainStyle="packed" /><!--
                 app:lottie_autoPlay="true"
                 app:lottie_rawRes="@raw/anim_splash_screen" />-->
 
@@ -83,11 +77,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="28dp"
-                tools:text="@string/text_updating_firmware"
                 app:layout_constraintBottom_toTopOf="@+id/tvUpdatePercent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lottieAnimationView2" />
+                app:layout_constraintTop_toBottomOf="@+id/lottieAnimationView2"
+                tools:text="@string/text_updating_firmware" />
 
             <TextView
                 android:id="@+id/tvUpdatePercent"
