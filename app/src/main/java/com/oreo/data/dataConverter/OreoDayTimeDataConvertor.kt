@@ -80,8 +80,8 @@ class OreoDayTimeDataConvertor @Inject constructor() {
         val combinedSection = combineSections(sections)
 
 
-        LOGS.d("hjkjkjfsd ---- ${Gson().toJson(combinedSection)}")
-        LOGS.d("hjkjkjfsd  ${Gson().toJson(items)}")
+//        LOGS.d("hjkjkjfsd ---- ${Gson().toJson(combinedSection)}")
+//        LOGS.d("hjkjkjfsd  ${Gson().toJson(items)}")
         return DayTimeDataModel(
             sections = combinedSection,
             items = items

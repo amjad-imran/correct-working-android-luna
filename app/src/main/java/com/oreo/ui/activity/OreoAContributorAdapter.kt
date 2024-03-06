@@ -27,6 +27,8 @@ class OreoAContributorAdapter(val mListener:ContributorItemClickListener) :
             )
             if (resultData.barPercent == 0) {
                 binding.backContributors.alpha = .5f
+            }else{
+                binding.backContributors.alpha = 1f
             }
 
             binding.pbSteps.progress = resultData.barPercent
