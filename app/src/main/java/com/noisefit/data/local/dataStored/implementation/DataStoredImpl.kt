@@ -213,7 +213,15 @@ class DataStoredImpl
     override fun saveNewAppVersion(newAppData: String, currentVersion: Int) {
         mPrefs.edit()?.putString(APP_VERSION_NEW, newAppData)?.commit()
         mPrefs.edit()?.putInt(APP_VERSION_CURRENT, currentVersion)?.commit()
+        saveAppVersionCheckTimeStamp()
+    }
+
+    override fun saveAppVersionCheckTimeStamp() {
         mPrefs.edit()?.putLong(APP_VERSION_NEW_TIMESTAMP, System.currentTimeMillis())?.commit()
+    }
+
+    override fun getAppVersionCheckTimeStamp(): Long {
+        return mPrefs.getLong(APP_VERSION_NEW_TIMESTAMP, 0)
     }
 
     /**

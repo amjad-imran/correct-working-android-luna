@@ -13,7 +13,6 @@ import com.noisefit.data.repository.abstraction.UpdateRepository
 import com.noisefit.luna.BuildConfig
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.common.fromJson
-import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.enums.DashInfoCard
@@ -878,9 +877,15 @@ constructor(
                 val obj = Gson().fromJson<AppUpdateModel>(appUpdateObj.first)
                 appUpdateInfo.postValue(obj)
             }
+            return false
+        } else {
+            val lastCheckTimestamp = localDataStore.getAppVersionCheckTimeStamp()
+            return if (lastCheckTimestamp == 0L) {
+                true
+            } else {
+                lastCheckTimestamp.checkTimeDifferenceMoreThanN(2)
+            }
         }
-        return false
-
     }
 
     private fun postUpdateOtaDataOffline(): Boolean {
@@ -904,8 +909,15 @@ constructor(
                 val obj = Gson().fromJson<OtaUpdateModel>(firmwareObj.first)
                 otaUpdateInfo.postValue(obj)
             }
+            return false
+        }else{
+            val lastCheckTimestamp = ringDataStore.getOtaVersionCheckTimeStamp()
+            return if (lastCheckTimestamp == 0L) {
+                true
+            } else {
+                lastCheckTimestamp.checkTimeDifferenceMoreThanN(2)
+            }
         }
-        return false
     }
 
 

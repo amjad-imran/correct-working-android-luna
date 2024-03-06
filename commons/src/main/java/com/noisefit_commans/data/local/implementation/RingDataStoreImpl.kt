@@ -51,7 +51,7 @@ class RingDataStoreImpl
     override fun saveNewOtaVersion(newOtaData: String?, currentVersion: Int) {
         mPrefs.edit()?.putString(OTA_VERSION_NEW, newOtaData)?.commit()
         mPrefs.edit()?.putInt(OTA_VERSION_CURRENT, currentVersion)?.commit()
-        mPrefs.edit()?.putLong(OTA_VERSION_NEW_TIMESTAMP, System.currentTimeMillis())?.commit()
+        saveOtaVersionCheckTimeStamp()
     }
 
     override fun getNewOtaVersion(): Triple<String, Int, Long>? {
@@ -67,6 +67,14 @@ class RingDataStoreImpl
                 timestamp
             )
         }
+    }
+
+    override fun saveOtaVersionCheckTimeStamp() {
+        mPrefs.edit()?.putLong(OTA_VERSION_NEW_TIMESTAMP, System.currentTimeMillis())?.commit()
+    }
+
+    override fun getOtaVersionCheckTimeStamp(): Long {
+        return mPrefs.getLong(OTA_VERSION_NEW_TIMESTAMP, 0)
     }
 
     override fun cleaNewOtaVersion() {
