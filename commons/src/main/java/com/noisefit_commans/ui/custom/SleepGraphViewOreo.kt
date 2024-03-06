@@ -133,70 +133,70 @@ class SleepGraphViewOreo(var mContext: Context) : View(
         if (touchX != null) {
             val textXPos = (width.toFloat() - endPadding)
 
-            val calculatedTouchX =if(touchX!!<0){
+            val calculatedTouchX = if (touchX!! < 0) {
                 0f
-            }else if(touchX!! > textXPos){
+            } else if (touchX!! > textXPos) {
                 textXPos
-            }else{
+            } else {
                 touchX!!
             }
 
             //if (touchX!! > 0 && touchX!! < textXPos) {
-                val rectF = RectF()
-                rectF.left = calculatedTouchX!! - 2
-                rectF.right = calculatedTouchX!! + 2
-                rectF.top = 0f
-                rectF.bottom = sectionHeight * 4
+            val rectF = RectF()
+            rectF.left = calculatedTouchX!! - 2
+            rectF.right = calculatedTouchX!! + 2
+            rectF.top = 0f
+            rectF.bottom = sectionHeight * 4
 
-                canvas.drawRect(rectF, overlayLinePaint)
+            canvas.drawRect(rectF, overlayLinePaint)
 
-                if (listener != null && calculatedTouchX != null) {
+            if (listener != null && calculatedTouchX != null) {
 
-                    if (tooltipEntryArray != null && tooltipEntryArray?.size!! > 0) {
+                if (tooltipEntryArray != null && tooltipEntryArray?.size!! > 0) {
 
-                        val x = calculatedTouchX!!.toFloat()
+                    val x = calculatedTouchX!!.toFloat()
 
-                        val entry =
-                            tooltipEntryArray!!.filter { it1 -> x > it1.x1 && x < it1.x2 }
-                        if (entry.isNotEmpty()) {
+                    val entry =
+                        tooltipEntryArray!!.filter { it1 -> x > it1.x1 && x < it1.x2 }
+                    if (entry.isNotEmpty()) {
 
-                            if (lastSelectedEntry == null || lastSelectedEntry != entry.first()) {
-                                lastSelectedEntry = entry.first()
-                                listener?.onValueSelected(entry.first())
+                        if (lastSelectedEntry == null || lastSelectedEntry != entry.first()) {
+                            lastSelectedEntry = entry.first()
+                            listener?.onValueSelected(entry.first())
 
-                                vibrationUtils?.vibrate(HAPTIC_VIBRATION)
+                            vibrationUtils?.vibrate(HAPTIC_VIBRATION)
 
 
-                                /*this.performHapticFeedback(
-                                    HapticFeedbackConstants.LONG_PRESS
-                                )*/
-                                postInvalidate()
-                            }
-
-                            //sleepGraphInteractionListener?.onSleepGraphSelected(entry[0])
-                        } else {
-                            //sleepGraphInteractionListener?.onSleepGraphSelected(null)
+                            /*this.performHapticFeedback(
+                                HapticFeedbackConstants.LONG_PRESS
+                            )*/
+                            postInvalidate()
                         }
+
+                        //sleepGraphInteractionListener?.onSleepGraphSelected(entry[0])
+                    } else {
+                        //sleepGraphInteractionListener?.onSleepGraphSelected(null)
                     }
-
-
                 }
 
-                /* if (listener != null) {
-                     val position = value.first as Int
-                     val selectedValue = value.second as Int
-                     if (lastSentValuePos == null) {
+
+            }
+
+            /* if (listener != null) {
+                 val position = value.first as Int
+                 val selectedValue = value.second as Int
+                 if (lastSentValuePos == null) {
+                     listener?.onValueSelected(selectedValue, position)
+                     lastSentValuePos = position
+                     performHapticFeedbackCustom(selectedValue)
+                 } else {
+                     if (lastSentValuePos != position) {
                          listener?.onValueSelected(selectedValue, position)
                          lastSentValuePos = position
                          performHapticFeedbackCustom(selectedValue)
-                     } else {
-                         if (lastSentValuePos != position) {
-                             listener?.onValueSelected(selectedValue, position)
-                             lastSentValuePos = position
-                             performHapticFeedbackCustom(selectedValue)
-                         }
                      }
-                 }*/
+                 }
+             }*/
             //}
         }
     }
@@ -739,13 +739,19 @@ class SleepGraphViewOreo(var mContext: Context) : View(
 
     private fun drawYAxis(canvas: Canvas, sectionHeight: Float) {
 
-        val textXPos = (width.toFloat() - endPadding + pxFromDp(14f))
+        val textXPos = (width.toFloat() - pxFromDp(6f))
         val textPosOffset = pxFromDp(10f)
 
-        canvas.drawText("Awake", textXPos, (sectionHeight * 1 - textPosOffset), mTextPaint)
-        canvas.drawText("REM", textXPos, (sectionHeight * 2 - textPosOffset), mTextPaint)
-        canvas.drawText("Light", textXPos, (sectionHeight * 3 - textPosOffset), mTextPaint)
-        canvas.drawText("Deep", textXPos, (sectionHeight * 4 - textPosOffset), mTextPaint)
+
+        canvas.drawText(
+            "Awake",
+            textXPos - mTextPaint.measureText("Awake"),
+            (sectionHeight * 1 - textPosOffset),
+            mTextPaint
+        )
+        canvas.drawText("REM", textXPos- mTextPaint.measureText("REM"), (sectionHeight * 2 - textPosOffset), mTextPaint)
+        canvas.drawText("Light", textXPos- mTextPaint.measureText("Light"), (sectionHeight * 3 - textPosOffset), mTextPaint)
+        canvas.drawText("Deep", textXPos- mTextPaint.measureText("Deep"), (sectionHeight * 4 - textPosOffset), mTextPaint)
 
 
     }
@@ -970,7 +976,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
         previousRect = null
         this.isDisable = isDisable
         setPaint()
-        endPadding = pxFromDp(48f)
+        endPadding = pxFromDp(40f)
     }
 
 

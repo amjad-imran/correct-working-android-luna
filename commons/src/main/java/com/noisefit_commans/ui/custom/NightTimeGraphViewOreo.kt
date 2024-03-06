@@ -66,13 +66,30 @@ class NightTimeGraphViewOreo(var mContext: Context) : View(
 
         val sectionHeight = height.toFloat() / 5
 
-        val textXPos = (width.toFloat() - endPadding + pxFromDp(mContext, 14f))
+        val textXPos = (width.toFloat() - pxFromDp(mContext, 6f))
         tooltipEntryArray = ArrayList()
 
         if (!isDisable) {
-            canvas.drawText("High", textXPos, sectionHeight * 1, mTextPaint)
-            canvas.drawText("Med", textXPos, sectionHeight * 2, mTextPaint)
-            canvas.drawText("Low", textXPos, sectionHeight * 3, mTextPaint)
+
+
+            canvas.drawText(
+                "High",
+                textXPos - mTextPaint.measureText("High"),
+                sectionHeight * 1,
+                mTextPaint
+            )
+            canvas.drawText(
+                "Med",
+                textXPos - mTextPaint.measureText("Med"),
+                sectionHeight * 2,
+                mTextPaint
+            )
+            canvas.drawText(
+                "Low",
+                textXPos - mTextPaint.measureText("Low"),
+                sectionHeight * 3,
+                mTextPaint
+            )
         }
 
 
@@ -243,7 +260,6 @@ class NightTimeGraphViewOreo(var mContext: Context) : View(
                         mTextPaint
                     )
                 }
-
 
 
             }
@@ -651,7 +667,7 @@ class NightTimeGraphViewOreo(var mContext: Context) : View(
         previousRect = null
         this.isDisable = isDisable
         setPaint()
-        endPadding = pxFromDp(mContext, 48f)
+        endPadding = pxFromDp(mContext, 40f)
         startPadding = pxFromDp(mContext, 3f)
     }
 }

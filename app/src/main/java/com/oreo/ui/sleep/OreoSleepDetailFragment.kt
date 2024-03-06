@@ -337,7 +337,7 @@ class OreoSleepDetailFragment :
                     if (isInteracting) {
                         binding.lytHeartRate.tvSubtitle1.text = time ?: ""
                         binding.lytHeartRate.lytSubtitleValue1.tvValue.text =
-                            if (value > 0) "$value" else "_"
+                            if (value > 0) "$value" else "-"
 
                     } else {
                         setHrLowestHr()
@@ -435,7 +435,7 @@ class OreoSleepDetailFragment :
                     if (isInteracting) {
                         binding.lytHRVariability.tvSubtitle1.text = time ?: ""
                         binding.lytHRVariability.lytSubtitleValue1.tvValue.text =
-                            if (value > 0) "$value" else "_"
+                            if (value > 0) "$value" else "-"
 
                     } else {
                         setHrvMax()
@@ -1074,10 +1074,18 @@ class OreoSleepDetailFragment :
                 )
                 this.tvHour.text = "$hour"
                 this.tvMin.text = "$minute"
+
+                this.textHour.visible()
+                this.tvMin.visible()
+                this.textMin.visible()
+
             } else {
 
-                this.tvHour.text = "_"
-                this.tvMin.text = "_"
+                this.tvHour.text = "--"
+
+                this.textHour.gone()
+                this.tvMin.gone()
+                this.textMin.gone()
             }
 
         }

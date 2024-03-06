@@ -55,13 +55,23 @@
     <color name="white">#FFFFFF</color>
     <color name="oreo_sleep_bar_color">#c5a8ed</color>
     <color name="oreo_activity_bar_color">#8ed3f1</color>
+    <color name="oreo_readiness_bar_color">#e9ac91</color>
+    <color name="oreo_sleep_bar_good">#c5a8ed</color>
     <color name="oreo_activity_bar_color_warning">#e34260</color>
     <color name="oreo_activity_bar_color_fair">#e391aa</color>
+    <color name="oreo_readiness_bar_color_fair">#e391aa</color>
+    <color name="oreo_sleep_bar_color_fair">#e391aa</color>
     <color name="oreo_activity_bar_color_optimal">#8ed3f1</color>
+    <color name="oreo_readiness_bar_color_optimal">#e9ac91</color>
+    <color name="oreo_sleep_bar_color_optimal">#c5a8ed</color>
     <color name="oreo_activity_text_color_warning">#ffa8c3</color>
     <color name="oreo_activity_text_color_optimal">#a3e4ff</color>
+    <color name="oreo_readiness_text_color_optimal">#ffc3a8</color>
+    <color name="oreo_sleep_text_color_optimal">#d9bdff</color>
     <color name="oreo_activity_bar_color_50">#804c7689</color>
     <color name="oreo_contributor_warning">#ff7c94</color>
+    <color name="readiness_warning_text">#ffa8c3</color>
+    <color name="readiness_warning_bar">#e34260</color>
 
     <color name="lightest_gray">#8a8c8e</color>
     <color name="text_color">#7D7D7D</color>
