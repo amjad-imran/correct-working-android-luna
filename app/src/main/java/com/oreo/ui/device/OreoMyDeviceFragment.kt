@@ -87,7 +87,6 @@ class OreoMyDeviceFragment :
 
             if (mViewModel.firmwareLogFile?.exists() == true) {
                 context?.let { ctx ->
-                    LOGS.w("dsfsdf",mViewModel.firmwareLogFile!!.path)
                     ShareUtil.shareFile(
                         ctx,
                         FileLogsUtils.geFirmwareLogsUri(mViewModel.firmwareLogFile!!.path, ctx)
