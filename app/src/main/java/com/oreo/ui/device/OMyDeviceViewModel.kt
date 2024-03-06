@@ -47,6 +47,7 @@ class OMyDeviceViewModel @Inject constructor(
 
     var watchLogFile: File? = null
     var appLogFile: File? = null
+    var firmwareLogFile: File? = null
 
 
     init {
@@ -76,6 +77,17 @@ class OMyDeviceViewModel @Inject constructor(
                     hasLogFiles = true
                 }
             }
+
+            try {
+                val firmwareFile = watchDataStore.getFirmwareLogPath()
+                if (!firmwareFile.isNullOrEmpty()) {
+                    firmwareLogFile = FileLogsUtils.getFileDirect(
+                        watchDataStore.getFirmwareLogPath()!!
+                    )
+                }
+            } catch (ignored: Exception) {
+            }
+
         }
     }
 

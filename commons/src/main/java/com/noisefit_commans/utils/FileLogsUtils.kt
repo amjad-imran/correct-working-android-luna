@@ -194,7 +194,29 @@ object FileLogsUtils {
         return getUri(path, context)
     }
 
-    private fun getUri(path: String, context: Context): Uri? {
+    fun geFirmwareLogsUri(path: String, context: Context):Uri?{
+        val file = getFileDirect(path)
+        if (!file.exists()) {
+            return null
+        }
+        try {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                context.let {
+                    return FileProvider.getUriForFile(
+                        it,
+                        AppLogs.FILE_PROVIDER,
+                        file
+                    )
+                }
+            } else {
+                Uri.fromFile(file)
+            }
+        } catch (exp: Exception) {
+            return null
+        }
+    }
+
+    fun getUri(path: String, context: Context): Uri? {
         val file = getFile(path, context)
         if (!file.exists()) {
             return null
@@ -230,6 +252,21 @@ object FileLogsUtils {
     fun getFile(logFilePath: String, context: Context): File {
         val file = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             File(context.externalCacheDir?.absolutePath, logFilePath)
+        } else {
+            File(Environment.getExternalStorageDirectory().toString(), logFilePath)
+
+        }
+//        if (!file.exists()) {
+//            file.mkdirs()
+//
+//        }
+
+        return file
+    }
+
+    fun getFromFilesDir(logFilePath: String, context: Context): File {
+        val file = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            File(context.getExternalFilesDir(null)?.absolutePath, logFilePath)
         } else {
             File(Environment.getExternalStorageDirectory().toString(), logFilePath)
 
