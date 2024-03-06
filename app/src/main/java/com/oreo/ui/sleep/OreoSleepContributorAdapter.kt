@@ -27,7 +27,9 @@ class OreoSleepContributorAdapter(val mListener: ContributorItemClickListener) :
 
              if (resultData.barPercent == 0) {
                 binding.backContributors.alpha = .5f
-            }
+            }else{
+                 binding.backContributors.alpha = 1f
+             }
 
             val progressColor = ContextCompat.getColor(
                 binding.pbSteps.context,
