@@ -20,6 +20,7 @@ import com.noisefit.luna.databinding.FragmentOreoSleepDetailBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.ui.custom.NightTimeGraphViewOreo
 import com.noisefit_commans.ui.custom.SleepGraphViewOreo
@@ -825,6 +826,19 @@ class OreoSleepDetailFragment :
 
 
     override fun subscribeObservers() {
+        viewModel.sessionManager.syncCompleted.observe(this) {
+            it?.getContent()?.let { syncDataStatus ->
+                when (syncDataStatus) {
+                    SyncEvents.ServerSyncSuccess -> {
+                        mainViewModel.reloadTodaysData()
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+
+
         mainViewModel.sleepHistoryResponse.observe(viewLifecycleOwner) {
 
             if (it.isNullOrEmpty()) return@observe
