@@ -7,7 +7,7 @@ data class DayTimeDataModel(
 )
 
 data class Item(
-    val `value`: Int,
+    var `value`: Int,
     val index: Int
 )
 

@@ -1,7 +1,6 @@
 package com.oreo.data.dataConverter
 
 import android.graphics.Color
-import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit_commans.common.maxWithInvalidMovementValues
 import com.noisefit_commans.common.maxWithoutInvalidMovementValues
@@ -20,6 +19,27 @@ import kotlin.math.floor
 
 class OreoDayTimeDataConvertor @Inject constructor() {
 
+    private fun getWorkoutIntensity(intensity: String?): Int {
+        //"Easy", "Moderate", "Hard"
+        when (intensity?.lowercase()) {
+            "easy" -> {
+                return 1
+            }
+
+            "moderate" -> {
+                return 2
+            }
+
+            "hard" -> {
+                return 3
+            }
+
+            else -> {
+                return 0
+            }
+        }
+    }
+
     fun getDayTimeCombinedData(
         dayData: ServerUserHealthData
     ): DayTimeDataModel {
@@ -29,8 +49,18 @@ class OreoDayTimeDataConvertor @Inject constructor() {
         val workoutSectionIntensity = ArrayList<Triple<Int, Int, Int>>()
         val sections: MutableList<Section> = ArrayList()
         workouts?.forEach {
+
             getWorkoutSections(it)?.let { pos ->
-                workoutSectionIntensity.add(Triple(pos.first, pos.second, 2))
+                if (it.type == "manual") {
+                    workoutSectionIntensity.add(
+                        Triple(
+                            pos.first,
+                            pos.second,
+                            getWorkoutIntensity(it.intensity)
+                        )
+                    )
+                }
+
                 sections.add(
                     Section(
                         "workout",
@@ -79,13 +109,49 @@ class OreoDayTimeDataConvertor @Inject constructor() {
         }
         val combinedSection = combineSections(sections)
 
+        updateInactiveStateForWorkout(items, workoutSectionIntensity)
 
-//        LOGS.d("hjkjkjfsd ---- ${Gson().toJson(combinedSection)}")
-//        LOGS.d("hjkjkjfsd  ${Gson().toJson(items)}")
         return DayTimeDataModel(
             sections = combinedSection,
             items = items
         )
+    }
+
+
+    private fun updateInactiveStateForWorkout(
+        itemList: MutableList<Item>,
+        workoutSectionIntensity: ArrayList<Triple<Int, Int, Int>>
+    ) {
+
+        workoutSectionIntensity.forEach { sectionWithIntensity ->
+
+            var count = 0
+            for (i in sectionWithIntensity.first..sectionWithIntensity.second) {
+                val item = itemList.getOrNull(i)
+
+                item?.let {
+                    if (item.value == 0 || item.value == 255) {
+                        count += 1
+
+                    }
+                }
+
+
+            }
+            val intervalSize =
+                (sectionWithIntensity.second + 1) - sectionWithIntensity.first //last value exclusive
+
+            if (count == intervalSize) {
+                for (i in sectionWithIntensity.first..sectionWithIntensity.second) {
+                    val item = itemList.getOrNull(i)
+
+                    item?.let {
+                        item.value = sectionWithIntensity.third
+                    }
+                }
+            }
+
+        }
     }
 
     private fun getCombinedMovementData(
