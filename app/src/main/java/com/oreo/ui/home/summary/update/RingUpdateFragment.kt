@@ -3,17 +3,22 @@ package com.oreo.ui.home.summary.update
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.noisefit.data.model.OtaUpdateModel
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentRingUpdateBinding
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.interfaces.QueryAction
-import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
 import com.noisefit_commans.models.UpdateStatus
@@ -25,10 +30,10 @@ import com.noisefit_commans.ui.loadImageWithCache
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.DateFormats
 import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderEffectBlur
 import eightbitlab.com.blurview.RenderScriptBlur
+
 
 @AndroidEntryPoint
 class RingUpdateFragment :
@@ -206,7 +211,7 @@ class RingUpdateFragment :
             }
 
             UpdateStatus.COMPLETED -> {
-                context.showShortToast("Ring firmware is up to date")
+                viewModel.sessionManager.showCustomToast("Ring firmware is up to date")
                 viewModel.clearNewOtaUpdateData()
                 viewModel.sessionManager.sendQueryAction(QueryAction.QueryBatteryPower)
                 viewModel.sessionManager.sendQueryAction(QueryAction.QueryFirmwareVersion)
@@ -243,5 +248,4 @@ class RingUpdateFragment :
         )
 
     }
-
 }

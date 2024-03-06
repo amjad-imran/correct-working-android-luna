@@ -65,6 +65,7 @@ constructor(
 
     var postFirmwareDetailsOnDash: Boolean = false
     var checkForVersionUpdate = MutableLiveData<Event<Pair<Int, Int>>>()
+    val customSuccessToast = MutableLiveData<Event<String>>()
 
     var lastOngoingWorkoutTimestamp: Long = 0L
     val showWorkoutDetails = MutableLiveData<Event<String?>>()
@@ -601,6 +602,10 @@ constructor(
                 )
             }
         }
+    }
+
+    fun showCustomToast(message: String) {
+        customSuccessToast.postValue(Event(message))
     }
 }
 
