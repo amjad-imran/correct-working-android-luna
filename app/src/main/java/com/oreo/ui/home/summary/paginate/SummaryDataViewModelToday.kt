@@ -968,7 +968,7 @@ constructor(
     private fun getAppVersionRequest(): JsonObject {
         return JsonObject().apply {
             addProperty("platform", "android")
-            addProperty("app_version", 70/*BuildConfig.VERSION_CODE*/)
+            addProperty("app_version", BuildConfig.VERSION_CODE)
         }
     }
 
@@ -979,7 +979,7 @@ constructor(
         return JsonObject().apply {
             addProperty(
                 "version",
-                141/*pair.first*/
+                pair.first
             )
             addProperty(
                 "firmware_id",
