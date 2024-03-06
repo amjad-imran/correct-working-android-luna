@@ -362,6 +362,14 @@ class OreoActivityFragment :
                     binding.lytDailyMovement.lytInteractiveGraph.root.context
                 ).toInt()
             }
+        } ?: run {
+            var marginTop = 0.px()
+            binding.lytDailyMovement.lytInteractiveGraph.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                this.topMargin = dpToPx(
+                    marginTop.toInt(),
+                    binding.lytDailyMovement.lytInteractiveGraph.root.context
+                ).toInt()
+            }
         }
 
 
