@@ -2,6 +2,7 @@ package com.oreo.ui.home.summary.paginate
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.local.db.CacheResult
@@ -11,7 +12,7 @@ import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UpdateRepository
 import com.noisefit.luna.BuildConfig
 import com.noisefit.session.SessionManager
-import com.noisefit_commans.constants.WatchInfoGlobals
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.enums.DashInfoCard
@@ -27,6 +28,7 @@ import com.noisefit_commans.models.ManualMeasureType
 import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.DateFormats.checkTimeDifferenceMoreThanN
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.ScreenUtils
@@ -820,33 +822,114 @@ constructor(
     }
 
 
-    fun checkAppVersion() {
+    fun checkForNewAppVersion() {
         viewModelScope.launch(Dispatchers.IO) {
-            val shouldCheck = true
-            if (shouldCheck.not()) return@launch
+
+            val callApi = postOfflineAppUpdateData()
+            if (callApi.not()) return@launch
+
+            checkAppVersionServer()
+
+        }
 
 
+    }
+
+    fun checkForNewOtaVersion() {
+        viewModelScope.launch(Dispatchers.IO) {
             val device = ringDataStore.getRingDevice()
             if (device == null) {
-                checkAppVersionServer(null)
-            } else {
-                sessionManager.postFirmwareDetailsOnDash = true
-                sessionManager.sendQueryAction(QueryAction.QueryFirmwareVersion)
+                otaUpdateInfo.postValue(null)
+                return@launch
             }
+
+            val callApi = postUpdateOtaDataOffline()
+
+            if (callApi.not()) return@launch
+
+            sessionManager.postFirmwareDetailsOnDash = true
+            sessionManager.sendQueryAction(QueryAction.QueryFirmwareVersion)
 
 
         }
 
+
     }
 
-    /**
-     * WatchInfoGlobals.firmwareVersionNumberRing,
-     *                                     WatchInfoGlobals.firmwareDeviceIdRing
-     */
-    fun checkAppVersionServer(pair: Pair<Int, Int>?) {
+
+    fun postOfflineAppUpdateData(): Boolean {
+        val appUpdateObj = localDataStore.getNewAppVersion()
+        if (appUpdateObj?.first != null) {
+            val lastSaveTimeStamp = appUpdateObj.third
+
+            val isMoreThan2 = lastSaveTimeStamp.checkTimeDifferenceMoreThanN(2)
+            if (isMoreThan2) {
+                localDataStore.cleaNewAppVersion()
+                return true
+            }
+
+            if (appUpdateObj.second != BuildConfig.VERSION_CODE) {
+                localDataStore.cleaNewAppVersion()
+                return true
+            }
+
+            val remindDate = localDataStore.getAppRemindDate()
+
+            if (remindDate == null) {
+                val obj = Gson().fromJson<AppUpdateModel>(appUpdateObj.first)
+                appUpdateInfo.postValue(obj)
+            } else if (!remindDate.equals(DateFormats.getCurrentDate())) {
+                val obj = Gson().fromJson<AppUpdateModel>(appUpdateObj.first)
+                appUpdateInfo.postValue(obj)
+            }
+            return false
+        } else {
+            val lastCheckTimestamp = localDataStore.getAppVersionCheckTimeStamp()
+            return if (lastCheckTimestamp == 0L) {
+                true
+            } else {
+                lastCheckTimestamp.checkTimeDifferenceMoreThanN(2)
+            }
+        }
+    }
+
+    private fun postUpdateOtaDataOffline(): Boolean {
+        val firmwareObj = ringDataStore.getNewOtaVersion()
+        if (firmwareObj?.first != null) {
+
+            val lastSaveTimeStamp = firmwareObj.third
+
+            val isMoreThan2 = lastSaveTimeStamp.checkTimeDifferenceMoreThanN(2)
+            if (isMoreThan2) {
+                ringDataStore.cleaNewOtaVersion()
+                return true
+            }
+
+            val remindDate = ringDataStore.getOtaRemindDate()
+
+            if (remindDate == null) {
+                val obj = Gson().fromJson<OtaUpdateModel>(firmwareObj.first)
+                otaUpdateInfo.postValue(obj)
+            } else if (!remindDate.equals(DateFormats.getCurrentDate())) {
+                val obj = Gson().fromJson<OtaUpdateModel>(firmwareObj.first)
+                otaUpdateInfo.postValue(obj)
+            }
+            return false
+        } else {
+            val lastCheckTimestamp = ringDataStore.getOtaVersionCheckTimeStamp()
+            return if (lastCheckTimestamp == 0L) {
+                true
+            } else {
+                lastCheckTimestamp.checkTimeDifferenceMoreThanN(2)
+            }
+        }
+    }
+
+
+    fun checkAppVersionServer() {
         viewModelScope.launch(Dispatchers.IO) {
 
-            val request = getAppVersionRequest(pair)
+            val request = getAppVersionRequest()
             updateRepository.checkAppVersionV2(request).collect { resource ->
                 when (resource) {
 
@@ -857,11 +940,34 @@ constructor(
                                 it.appVersion,
                                 BuildConfig.VERSION_CODE
                             )
+                            postOfflineAppUpdateData()
+                        }
+                    }
+
+                    else -> {
+
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * WatchInfoGlobals.firmwareVersionNumberRing,
+     *                                     WatchInfoGlobals.firmwareDeviceIdRing
+     */
+    fun checkOtaVersionServer(pair: Pair<Int, Int>) {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val request = getOtaVersionRequest(pair)
+            updateRepository.checkAppVersionV2(request).collect { resource ->
+                when (resource) {
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
                             updateRepository.saveNewOtaVersion(it.firmwareVersion, pair?.first)
 
-                            appUpdateInfo.postValue(it.appVersion)
-                            otaUpdateInfo.postValue(it.firmwareVersion)
-
+                            postUpdateOtaDataOffline()
                         }
                     }
 
@@ -875,30 +981,34 @@ constructor(
 
     }
 
-    private fun getAppVersionRequest(pair: Pair<Int, Int>?): JsonObject {
+
+    private fun getAppVersionRequest(): JsonObject {
+        return JsonObject().apply {
+            addProperty("platform", "android")
+            addProperty("app_version", BuildConfig.VERSION_CODE)
+        }
+    }
+
+    private fun getOtaVersionRequest(pair: Pair<Int, Int>): JsonObject {
         val ringDevice = ringDataStore.getRingDevice()
         val deviceType = ringDevice?.deviceType
 
         return JsonObject().apply {
-
-            if (pair != null) {
-                addProperty(
-                    "version",
-                    pair.first
-                )
-                addProperty(
-                    "firmware_id",
-                    pair.second
-                )
-                addProperty("mac", ringDevice?.address)
-                addProperty("device_type", deviceType)
-                addProperty(
-                    "isOTARequired",
-                    sessionManager.needDfuUpdate.value?.peekContent() ?: false
-                )
-            }
+            addProperty(
+                "version",
+                pair.first
+            )
+            addProperty(
+                "firmware_id",
+                pair.second
+            )
+            addProperty("mac", ringDevice?.address)
+            addProperty("device_type", deviceType)
+            addProperty(
+                "isOTARequired",
+                sessionManager.needDfuUpdate.value?.peekContent() ?: false
+            )
             addProperty("platform", "android")
-            addProperty("app_version", 70/*BuildConfig.VERSION_CODE*/)
         }
     }
 

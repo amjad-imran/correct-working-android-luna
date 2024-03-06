@@ -690,15 +690,15 @@ constructor(
         dailyBean.stepsData?.forEachIndexed { i, data ->
             val stepData = OreoStepsData.OreoStepDataBreakup(hourOfTheDay = i)
             stepData.steps = data
-            stepData.calories = dailyBean.calorieData[i]
+            stepData.calories = dailyBean.todayOuraCalorieHourlyData[i]
             stepData.distance = dailyBean.distanceData[i]
             stepData.activeCalories = dailyBean.todaySportCalorieHourlyData[i]
-            calories += dailyBean.calorieData[i]
             distance += dailyBean.distanceData[i]
             activeCalories += dailyBean.todaySportCalorieHourlyData[i]
             steps += data
             stepArray.add(stepData)
         }
+        calories += dailyBean.todayOuraCalorieData
         dailyStepData.totalDistance = distance
         dailyStepData.totalCalories = calories
         dailyStepData.totalSteps = steps

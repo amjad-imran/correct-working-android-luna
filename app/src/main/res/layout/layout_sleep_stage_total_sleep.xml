@@ -26,7 +26,7 @@
         tools:text="1" />
 
     <TextView
-        android:id="@+id/textView98"
+        android:id="@+id/textHour"
         style="@style/H5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,10 +45,11 @@
         android:layout_marginStart="8dp"
         android:includeFontPadding="false"
         app:layout_constraintBaseline_toBaselineOf="@+id/tvHour"
-        app:layout_constraintStart_toEndOf="@+id/textView98"
+        app:layout_constraintStart_toEndOf="@+id/textHour"
         tools:text="42" />
 
     <TextView
+        android:id="@+id/textMin"
         style="@style/H5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

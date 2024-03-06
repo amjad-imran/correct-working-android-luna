@@ -13,6 +13,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -472,13 +473,13 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         if (versionCheckResponse.upgradeType?.lowercase() == "force_upgrade") {
             return true
-        } else if (versionCheckResponse.upgradeType?.lowercase() == "soft_upgrade") {
+        }/* else if (versionCheckResponse.upgradeType?.lowercase() == "soft_upgrade") {
             val ignoredVersion = viewModel.localDataStore.getIgnoreVersion()
             if (ignoredVersion != versionCheckResponse.currentVersion) {
                 return true
             }
 
-        }
+        }*/
         return false
     }
 
@@ -509,6 +510,12 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
     override fun observeSubscriber() {
+
+        viewModel.sessionManager.customSuccessToast.observe(this) {
+            it.getContent()?.let {
+                showCustomSuccessToast(it)
+            }
+        }
 
         viewModel.sessionManager.reloadTodayData.observe(this) {
             it.getContent()?.let {
@@ -623,6 +630,15 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 }
             }
         }
+    }
+
+    private fun showCustomSuccessToast(message: String) {
+        binding.lytToastSuccess.tvText.text = message
+        binding.lytToastSuccess.root.visible()
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.lytToastSuccess.root.gone()
+        }, 3000)
+
     }
 
     private val navListener =

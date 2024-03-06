@@ -19,6 +19,7 @@ import com.noisefit.luna.databinding.FragmentOreoActivityBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
@@ -786,6 +787,18 @@ class OreoActivityFragment :
     }
 
     override fun subscribeObservers() {
+
+        mainViewModel.sessionManager.syncCompleted.observe(this) {
+            it?.getContent()?.let { syncDataStatus ->
+                when (syncDataStatus) {
+                    SyncEvents.ServerSyncSuccess -> {
+                        mainViewModel.reloadTodaysData()
+                    }
+
+                    else -> {}
+                }
+            }
+        }
 
         mainViewModel.activityHistoryResponse.observe(this) {
             if (it.isNullOrEmpty()) return@observe

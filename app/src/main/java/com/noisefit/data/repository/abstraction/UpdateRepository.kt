@@ -19,5 +19,8 @@ interface UpdateRepository {
     suspend fun saveNewAppVersion(appVersion: AppUpdateModel?, currentVersion: Int)
     suspend fun saveNewOtaVersion(firmwareVersion: OtaUpdateModel?, currentVersion: Int?)
 
+    fun otaRemindLater()
+    fun appRemindLater()
+
 
 }

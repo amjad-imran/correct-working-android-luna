@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.noisefit.data.model.AppUpdateModel
 import com.noisefit.data.model.OtaUpdateModel
 import com.noisefit.data.repository.abstraction.DownloadRepository
+import com.noisefit.data.repository.abstraction.UpdateRepository
 import com.noisefit.session.SessionManager
 import com.noisefit.watch.WatchesSDK
 import com.noisefit_commans.common.fromJson
@@ -20,6 +21,7 @@ class UpdateDetailViewModel @Inject constructor(
     var sessionManager: SessionManager,
     val ringDataStore: RingDataStore,
     val localDataStore: DataStoredInterface,
+    val updateRepo: UpdateRepository,
     var watchesSDK: WatchesSDK
 ) : BaseViewModel() {
 
@@ -61,6 +63,14 @@ class UpdateDetailViewModel @Inject constructor(
                 getOtaUpdateDetails()
             }
         }
+    }
+
+    fun otaRemindLater() {
+        updateRepo.otaRemindLater()
+    }
+
+    fun appRemindLater() {
+        updateRepo.appRemindLater()
     }
 
 }

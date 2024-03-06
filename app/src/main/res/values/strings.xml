@@ -1044,4 +1044,7 @@
     <string name="text_updating_firmware">Updating firmware</string>
     <string name="text_contributor_value_missing">Contributor value missing</string>
     <string name="text_this_can_be_because_there_s_not_enough_data_or_you_haven_t_worn_your_ring">This can be because there’s not enough data, or you haven’t worn your ring.</string>
+    <string name="text_updating_ring">Updating ring</string>
+    <string name="text_firmware_update_failed">Firmware update failed</string>
+    <string name="text_update_failed_message">Ensure that your ring and phone are kept close to each other during the update process to avoid any issues.</string>
 </resources>

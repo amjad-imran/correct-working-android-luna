@@ -20,6 +20,7 @@ import com.noisefit.luna.databinding.FragmentOreoSleepDetailBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.ui.custom.NightTimeGraphViewOreo
 import com.noisefit_commans.ui.custom.SleepGraphViewOreo
@@ -336,7 +337,7 @@ class OreoSleepDetailFragment :
                     if (isInteracting) {
                         binding.lytHeartRate.tvSubtitle1.text = time ?: ""
                         binding.lytHeartRate.lytSubtitleValue1.tvValue.text =
-                            if (value > 0) "$value" else "_"
+                            if (value > 0) "$value" else "-"
 
                     } else {
                         setHrLowestHr()
@@ -434,7 +435,7 @@ class OreoSleepDetailFragment :
                     if (isInteracting) {
                         binding.lytHRVariability.tvSubtitle1.text = time ?: ""
                         binding.lytHRVariability.lytSubtitleValue1.tvValue.text =
-                            if (value > 0) "$value" else "_"
+                            if (value > 0) "$value" else "-"
 
                     } else {
                         setHrvMax()
@@ -825,6 +826,19 @@ class OreoSleepDetailFragment :
 
 
     override fun subscribeObservers() {
+        viewModel.sessionManager.syncCompleted.observe(this) {
+            it?.getContent()?.let { syncDataStatus ->
+                when (syncDataStatus) {
+                    SyncEvents.ServerSyncSuccess -> {
+                        mainViewModel.reloadTodaysData()
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+
+
         mainViewModel.sleepHistoryResponse.observe(viewLifecycleOwner) {
 
             if (it.isNullOrEmpty()) return@observe
@@ -1060,10 +1074,18 @@ class OreoSleepDetailFragment :
                 )
                 this.tvHour.text = "$hour"
                 this.tvMin.text = "$minute"
+
+                this.textHour.visible()
+                this.tvMin.visible()
+                this.textMin.visible()
+
             } else {
 
-                this.tvHour.text = "_"
-                this.tvMin.text = "_"
+                this.tvHour.text = "--"
+
+                this.textHour.gone()
+                this.tvMin.gone()
+                this.textMin.gone()
             }
 
         }

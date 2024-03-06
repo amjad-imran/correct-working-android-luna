@@ -122,24 +122,6 @@ class SummaryDataFragmentToday :
 
         val date = arguments?.getString(ARGS_DATE)
         viewModel.date = date
-
-
-        LOGS.d("CREATED_WITH_DATE $date")
-        LOGS.d(TAG, "Today onCreate Called")
-
-        /*navigate(
-            R.id.bottomSheetNapScore, bundleOf(
-                "napScoreData" to SlideUpNapScoreDataModel(
-                    napId = "8d60a64e-11c7-4453-acba-7417c90d4927",
-                    title = "dsfsdfsdfsd",
-                    description = "ksjdfkljsgdjkfgsdfjkgsjkdf kjgsd kfjgsd kfjg sdkfg sdkfg sdkf",
-                    oldSleepScore = 70,
-                    newSleepScore = 55,
-                    oldReadinessScore = 50,
-                    newReadinessScore = 35,
-                )
-            )
-        )*/
     }
 
     private fun setNapsPager() {
@@ -183,7 +165,8 @@ class SummaryDataFragmentToday :
         LOGS.d(TAG, "Today onResume called")
         loadData()
 
-        viewModel.checkAppVersion()
+        viewModel.checkForNewAppVersion()
+        viewModel.checkForNewOtaVersion()
 
 
     }
@@ -331,6 +314,11 @@ class SummaryDataFragmentToday :
         }
 
         binding.contentMain.lytOtaUpdate.btnUpdateNow.setOnClickListener {
+            val isConnected = viewModel.isDeviceConnected()
+            if (isConnected.not()) {
+                context.showShortToast("Ring not connected")
+                return@setOnClickListener
+            }
             navigate(R.id.appUpdateDetailFragment, bundleOf("launchMode" to UpdateLaunchMode.OTA))
         }
 
@@ -430,7 +418,7 @@ class SummaryDataFragmentToday :
 
         viewModel.sessionManager.checkForVersionUpdate.observe(viewLifecycleOwner) {
             it.getContent()?.let { pair ->
-                viewModel.checkAppVersionServer(pair)
+                viewModel.checkOtaVersionServer(pair)
             }
         }
 

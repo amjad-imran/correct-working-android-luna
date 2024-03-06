@@ -1,38 +1,104 @@
 package com.oreo.ui.home.summary.update
 
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
+import androidx.test.core.app.ApplicationProvider.getApplicationContext
+import com.noisefit.data.model.OtaUpdateModel
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentRingUpdateBinding
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.interfaces.QueryAction
-import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
 import com.noisefit_commans.models.UpdateStatus
 import com.noisefit_commans.models.WatchUpdateStatus
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.loadImageWithCache
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.share.ShareUtil
+import com.oreo.ui.helpsupport.questionaries.CALL_REQUEST_KEY
 import dagger.hilt.android.AndroidEntryPoint
+import eightbitlab.com.blurview.RenderEffectBlur
+import eightbitlab.com.blurview.RenderScriptBlur
+
 
 @AndroidEntryPoint
 class RingUpdateFragment :
     BaseFragment<FragmentRingUpdateBinding>(FragmentRingUpdateBinding::inflate) {
 
     private val viewModel: RingUpdateViewModel by viewModels()
+    private val args: RingUpdateFragmentArgs by navArgs()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.otaData = args.otaData
 
+        setBlur()
+        setUiOtaUpdate(args.otaData)
+
+        val device = viewModel.getConnectedDevice()
+        device?.let {
+            binding.ivRingImage.loadImage(binding.ivRingImage.context, it.ringInfo?.image)
+        }
 
         startUpdate()
+
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
+    }
+
+    val callback: OnBackPressedCallback =
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+
+            }
+        }
+
+    private fun setBlur() {
+        val radius = 30f
+        val decorView = binding.blurView
+        val rootView = binding.lytMain
+        val windowBackground = decorView.background
+
+        val blurAlgo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            RenderEffectBlur()
+        } else {
+            RenderScriptBlur(requireContext())
+        }
+        binding.blurView.setupWith(rootView, blurAlgo) // or RenderEffectBlur
+            .setFrameClearDrawable(windowBackground) // Optional
+            .setBlurRadius(radius)
+
+    }
+
+    private fun setUiOtaUpdate(otaUpdateModel: OtaUpdateModel) {
+        binding.lytBack.apply {
+            toolbar.tvTitle.text = getString(R.string.text_update_my_ring)
+            tvHeader.text = otaUpdateModel.description?.header
+            tvMessage.text = otaUpdateModel.description?.longDescription
+            ivBack.loadImageWithCache(ivBack.context, otaUpdateModel.imageUrl)
+            btnUpdateNow.gone()
+            tvRemindLater.gone()
+        }
     }
 
     private fun startUpdate() {
@@ -53,26 +119,20 @@ class RingUpdateFragment :
             }
 
 
-            val updateInfo =
-                viewModel.sessionManager.forceOtaResponseRing
-                    ?: return@tryCatch//TODO manage view repository
+            if (viewModel.otaData == null) return@tryCatch
 
-            val url = updateInfo.url
+            val url = viewModel.otaData!!.firmwareUrl
 
 
             if (url.isNullOrEmpty()) {
-                context.showShortToast("Update Failed")
+                //context.showShortToast("Update Failed")
+                showFailedDialog()
                 return@tryCatch
             }
             val fileName = url.split("/").last()
 
-            //TODO handle Downloading state
-            /*showProgressDialog(
-                getString(R.string.text_downloading_firmware),
-                getString(R.string.text_downloading_firmware_wait),
-                "Downloading..."
-            )
-            progressBottomSheet?.setProgress(0)*/
+            updateProgress(0)
+            binding.tvUpdating.text = getString(R.string.text_downloading_firmware)
 
             viewModel.downloadFirmware(
                 url,
@@ -84,12 +144,34 @@ class RingUpdateFragment :
 
     }
 
+    private fun showFailedDialog() {
+        setFragmentResultListener(UPDATE_FAILED) { _, bundle ->
+            val remindLater = bundle.getBoolean("remindLater")
+            val tryAgain = bundle.getBoolean("tryAgain")
+            if (remindLater) {
+                viewModel.ringDataStore.saveOtaRemindDate()
+                this@RingUpdateFragment.navigateUpSafe()
+            }
+            if (tryAgain) {
+                startUpdate()
+            }
+        }
+        navigate(R.id.bottomSheetUpdateFailed)
+    }
+
     override fun initListener() {
 
     }
 
 
     override fun subscribeObservers() {
+
+        viewModel.firmwareDownloadProgress.observe(viewLifecycleOwner) {
+            it.getContent()?.let {
+                val percent = it / 2
+                updateProgress(percent)
+            }
+        }
 
         viewModel.updateFirmware.observe(viewLifecycleOwner) {
             it.getContent()?.let { file ->
@@ -100,8 +182,8 @@ class RingUpdateFragment :
                         fileUri
                     )
                 )
-
-                binding.tvUpdatePercent.text = "0%"
+                updateProgress(50)
+                binding.tvUpdating.text = getString(R.string.text_updating_firmware)
             }
         }
 
@@ -141,34 +223,25 @@ class RingUpdateFragment :
     private fun updateFirmwareStatus(watchUpdateStatus: WatchUpdateStatus) {
         when (watchUpdateStatus.status) {
             UpdateStatus.STARTED, UpdateStatus.PROGRESS -> {
-                updateProgress(watchUpdateStatus.percentagePercentage ?: 0)
+                var percent = 50 + (watchUpdateStatus.percentagePercentage ?: 0) / 2
+                if (percent > 100) {
+                    percent = 100
+                }
+                updateProgress(percent)
             }
 
             UpdateStatus.COMPLETED -> {
-                context.showShortToast("Firmware Updated")
-
-
-                /*context?.let { viewModel.saveWatchUpdateLogs(it) }
-                viewModel.sessionManager.forceOtaFlowRunning = false
-                viewModel.sessionManager.forceOtaResponseRing = null
-                viewModel.resetPostOnDash()
-                progressBottomSheet?.dismiss()
-                viewModel.watchDataStore.setLastUpdatedTimeStamp(DateFormats.getTimeStamp())
-
-
+                viewModel.sessionManager.showCustomToast("Ring firmware is up to date")
+                viewModel.clearNewOtaUpdateData()
                 viewModel.sessionManager.sendQueryAction(QueryAction.QueryBatteryPower)
                 viewModel.sessionManager.sendQueryAction(QueryAction.QueryFirmwareVersion)
-
                 viewModel.deleteTempFile()
-                viewModel.setUpdateAvailable(false)
-                mShouldFetchInfo = true
-                viewModel.mShouldFetchInfo = true*/
-
-
+                navigateUpSafe()
             }
 
             UpdateStatus.ERROR -> {
-                context.showShortToast("Failed")
+                //context.showShortToast("Failed")
+                showFailedDialog()
                 viewModel.deleteTempFile()
             }
 
@@ -196,5 +269,4 @@ class RingUpdateFragment :
         )
 
     }
-
 }

@@ -16,6 +16,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoReadinessBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
+import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
@@ -273,7 +274,7 @@ class OreoReadinessFragment :
                     if (isInteracting) {
                         binding.lytHeartRate.tvSubtitle1.text = time ?: ""
                         binding.lytHeartRate.lytSubtitleValue1.tvValue.text =
-                            if (value > 0) "$value" else "_"
+                            if (value > 0) "$value" else "-"
 
                     } else {
                         setHrLowestHr()
@@ -372,7 +373,7 @@ class OreoReadinessFragment :
                     if (isInteracting) {
                         binding.lytHRVariability.tvSubtitle1.text = time ?: ""
                         binding.lytHRVariability.lytSubtitleValue1.tvValue.text =
-                            if (value > 0) "$value" else "_"
+                            if (value > 0) "$value" else "-"
 
                     } else {
                         setHrvMax()
@@ -635,6 +636,18 @@ class OreoReadinessFragment :
     }
 
     override fun subscribeObservers() {
+        mainViewModel.sessionManager.syncCompleted.observe(this) {
+            it?.getContent()?.let { syncDataStatus ->
+                when (syncDataStatus) {
+                    SyncEvents.ServerSyncSuccess -> {
+                        mainViewModel.reloadTodaysData()
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+
         mainViewModel.readinessHistoryResponse.observe(this) {
 
             if (it.isNullOrEmpty()) return@observe

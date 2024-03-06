@@ -196,6 +196,8 @@ private const val READINESS_NOTIFICATION = "READINESS_NOTIFICATION"
 
 
 private const val APP_VERSION_NEW = "APP_VERSION_NEW"
+private const val APP_VERSION_NEW_TIMESTAMP = "APP_VERSION_NEW_TIMESTAMP"
+private const val APP_VERSION_REMIND = "APP_VERSION_REMIND"
 private const val APP_VERSION_CURRENT = "APP_VERSION_CURRENT"
 
 private const val GFIT_USER_SYNC_KEY = "GFIT_USER_SYNC_KEY"
@@ -211,16 +213,32 @@ class DataStoredImpl
     override fun saveNewAppVersion(newAppData: String, currentVersion: Int) {
         mPrefs.edit()?.putString(APP_VERSION_NEW, newAppData)?.commit()
         mPrefs.edit()?.putInt(APP_VERSION_CURRENT, currentVersion)?.commit()
+        saveAppVersionCheckTimeStamp()
     }
 
-    override fun getNewAppVersion(): Pair<String, Int>? {
+    override fun saveAppVersionCheckTimeStamp() {
+        mPrefs.edit()?.putLong(APP_VERSION_NEW_TIMESTAMP, System.currentTimeMillis())?.commit()
+    }
+
+    override fun getAppVersionCheckTimeStamp(): Long {
+        return mPrefs.getLong(APP_VERSION_NEW_TIMESTAMP, 0)
+    }
+
+    /**
+     * update data
+     * check version
+     * timestamp of server check
+     */
+    override fun getNewAppVersion(): Triple<String, Int, Long>? {
         val gson = mPrefs.getString(APP_VERSION_NEW, null)
         return if (gson == null) {
             null
         } else {
-            Pair(
+            val timestamp = mPrefs.getLong(APP_VERSION_NEW_TIMESTAMP, 0L)
+            Triple(
                 gson,
-                mPrefs.getInt(APP_VERSION_CURRENT, -1)
+                mPrefs.getInt(APP_VERSION_CURRENT, -1),
+                timestamp
             )
         }
     }
@@ -228,6 +246,16 @@ class DataStoredImpl
     override fun cleaNewAppVersion() {
         mPrefs.edit()?.remove(APP_VERSION_NEW)?.commit()
         mPrefs.edit()?.remove(APP_VERSION_CURRENT)?.commit()
+        mPrefs.edit()?.remove(APP_VERSION_REMIND)?.commit()
+        mPrefs.edit()?.remove(APP_VERSION_NEW_TIMESTAMP)?.commit()
+    }
+
+    override fun saveAppRemindDate() {
+        mPrefs.edit()?.putString(APP_VERSION_REMIND, DateFormats.getCurrentDate())?.commit()
+    }
+
+    override fun getAppRemindDate(): String? {
+        return mPrefs.getString(APP_VERSION_REMIND, null)
     }
 
     override fun getReadinessNotificationTimeStamp(): Long {

@@ -54,7 +54,9 @@ class UpdateDetailFragment :
                 }
 
                 UpdateLaunchMode.OTA -> {
-                    navigate(UpdateDetailFragmentDirections.openRingUpdate())
+                    viewModel.otaUpdateInfo.value?.let {
+                        navigate(UpdateDetailFragmentDirections.openRingUpdate(it))
+                    } ?: navigateUpSafe()
                 }
 
                 null -> {
@@ -63,7 +65,21 @@ class UpdateDetailFragment :
             }
         }
         binding.tvRemindLater.setOnClickListener {
+            when (viewModel.launchMode) {
+                UpdateLaunchMode.APP -> {
+                    viewModel.appRemindLater()
+                    navigateUpSafe()
+                }
 
+                UpdateLaunchMode.OTA -> {
+                    viewModel.otaRemindLater()
+                    navigateUpSafe()
+                }
+
+                null -> {
+                    navigateUpSafe()
+                }
+            }
         }
 
 
