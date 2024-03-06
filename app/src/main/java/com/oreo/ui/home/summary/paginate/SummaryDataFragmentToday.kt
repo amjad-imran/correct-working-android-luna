@@ -122,24 +122,6 @@ class SummaryDataFragmentToday :
 
         val date = arguments?.getString(ARGS_DATE)
         viewModel.date = date
-
-
-        LOGS.d("CREATED_WITH_DATE $date")
-        LOGS.d(TAG, "Today onCreate Called")
-
-        /*navigate(
-            R.id.bottomSheetNapScore, bundleOf(
-                "napScoreData" to SlideUpNapScoreDataModel(
-                    napId = "8d60a64e-11c7-4453-acba-7417c90d4927",
-                    title = "dsfsdfsdfsd",
-                    description = "ksjdfkljsgdjkfgsdfjkgsjkdf kjgsd kfjgsd kfjg sdkfg sdkfg sdkf",
-                    oldSleepScore = 70,
-                    newSleepScore = 55,
-                    oldReadinessScore = 50,
-                    newReadinessScore = 35,
-                )
-            )
-        )*/
     }
 
     private fun setNapsPager() {

@@ -868,6 +868,11 @@ constructor(
                 return true
             }
 
+            if (appUpdateObj.second != BuildConfig.VERSION_CODE) {
+                localDataStore.cleaNewAppVersion()
+                return true
+            }
+
             val remindDate = localDataStore.getAppRemindDate()
 
             if (remindDate == null) {
@@ -910,7 +915,7 @@ constructor(
                 otaUpdateInfo.postValue(obj)
             }
             return false
-        }else{
+        } else {
             val lastCheckTimestamp = ringDataStore.getOtaVersionCheckTimeStamp()
             return if (lastCheckTimestamp == 0L) {
                 true
