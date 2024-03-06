@@ -54,9 +54,11 @@ import com.zhapp.ble.bean.OfflineTemperatureDataBean
 import com.zhapp.ble.bean.OverallDayMovementData
 import com.zhapp.ble.bean.PhoneSportDataBean
 import com.zhapp.ble.bean.RealTimeBean
+import com.zhapp.ble.bean.RingBodyBatteryBean
 import com.zhapp.ble.bean.RingHealthScoreBean
 import com.zhapp.ble.bean.RingSleepNapBean
 import com.zhapp.ble.bean.RingSleepResultBean
+import com.zhapp.ble.bean.RingStressDetectionBean
 import com.zhapp.ble.bean.SleepBean
 import com.zhapp.ble.bean.SportRequestBean
 import com.zhapp.ble.bean.SportResponseBean
@@ -811,6 +813,14 @@ constructor(
                 }
             }
 
+            override fun onRingBodyBatteryData(p0: RingBodyBatteryBean?) {
+                AppLogs.sendAppLogs("onRingBodyBatteryData ${Gson().toJson(p0)}")
+            }
+
+            override fun onRingStressDetectionData(p0: RingStressDetectionBean?) {
+                AppLogs.sendAppLogs("onRingStressDetectionData ${Gson().toJson(p0)}")
+
+            }
 
         }
 
