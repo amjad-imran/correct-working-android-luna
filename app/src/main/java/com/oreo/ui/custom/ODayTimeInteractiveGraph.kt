@@ -265,11 +265,11 @@ class ODayTimeInteractiveGraph : View {
                 list.addAll(it)
             }
         }
-        if (dayTimeDataModel?.sections.isNullOrEmpty()) {
+        /*if (dayTimeDataModel?.sections.isNullOrEmpty()) {
             topWith = 0f
         } else {
             topWith = dpToPx(40, context)
-        }
+        }*/
 
         postInvalidate()
     }
