@@ -64,7 +64,9 @@ constructor(
     }
 
     var postFirmwareDetailsOnDash: Boolean = false
+    var postFirmwareDetailsOnSetup: Boolean = false
     var checkForVersionUpdate = MutableLiveData<Event<Pair<Int, Int>>>()
+    var checkForVersionUpdateSetup = MutableLiveData<Event<Pair<Int, Int>>>()
     val customSuccessToast = MutableLiveData<Event<String>>()
 
     var lastOngoingWorkoutTimestamp: Long = 0L

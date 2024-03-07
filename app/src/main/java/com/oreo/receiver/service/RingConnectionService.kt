@@ -828,6 +828,7 @@ constructor() : LifecycleService() {
         statusFailedConnection = false
         val device = ringDataStore.getRingDevice()
         ringDataStore.clearConnectedDevice()
+        localDataStore.clearConnectedDevice()
         watchDataStore.clearWatchData()
         sessionManager.setConnectedDeviceRing(null)
         isStopServiceCalled = true
@@ -1626,6 +1627,16 @@ constructor() : LifecycleService() {
 
                     if (sessionManager.postFirmwareDetailsOnDash) {
                         sessionManager.checkForVersionUpdate.postValue(
+                            Event(
+                                Pair(
+                                    WatchInfoGlobals.firmwareVersionNumberRing,
+                                    WatchInfoGlobals.firmwareDeviceIdRing
+                                )
+                            )
+                        )
+                    }
+                    if(sessionManager.postFirmwareDetailsOnSetup){
+                        sessionManager.checkForVersionUpdateSetup.postValue(
                             Event(
                                 Pair(
                                     WatchInfoGlobals.firmwareVersionNumberRing,

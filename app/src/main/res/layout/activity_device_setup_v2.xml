@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/oreo_default_bg">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="16dp">
+
+            <ProgressBar
+                android:id="@+id/progressBar1"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="4dp"
+                android:layout_weight="1"
+                android:padding="0dp"
+                tools:progress="20"
+                android:progressDrawable="@drawable/setup_progress_bar"
+                android:secondaryProgress="100" />
+
+            <ProgressBar
+                android:id="@+id/progressBar2"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="4dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:padding="0dp"
+                tools:progress="20"
+                android:progressDrawable="@drawable/setup_progress_bar"
+                android:secondaryProgress="100" />
+
+            <ProgressBar
+                android:id="@+id/progressBar3"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="4dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:padding="0dp"
+                tools:progress="20"
+                android:progressDrawable="@drawable/setup_progress_bar"
+                android:secondaryProgress="100" />
+
+
+        </LinearLayout>
+
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/nav_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/navigation_device_setup" />
+
+        <include
+            android:id="@+id/progressBar"
+            layout="@layout/default_loader"
+            android:visibility="gone" />
+    </FrameLayout>
+</layout>

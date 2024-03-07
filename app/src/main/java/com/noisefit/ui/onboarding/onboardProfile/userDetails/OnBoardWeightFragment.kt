@@ -11,6 +11,7 @@ import com.noisefit.oreo.OreoMainActivity
 import com.noisefit.ui.onboarding.onboardProfile.GuestProfileSetupActivity
 import com.noisefit.ui.onboarding.onboardProfile.SetupProfileViewModel
 import com.noisefit.ui.onboarding.pairing.DeviceSetupActivity
+import com.noisefit.ui.onboarding.setup.DeviceSetupActivityV2
 import com.noisefit_commans.models.WeightUnitSystem
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
@@ -137,10 +138,8 @@ class OnBoardWeightFragment :
 
     private fun goToDeviceSetupActivity(openProfile: Boolean) {
         startActivity(
-            DeviceSetupActivity.getStartIntent(
-                requireContext(),
-                openProfile,
-                setupDevice = true
+            DeviceSetupActivityV2.getStartIntent(
+                requireContext()
             )
         )
         activity?.finish()

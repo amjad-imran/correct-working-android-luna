@@ -70,7 +70,7 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.localDataStore.setDeviceSetupPendingStatus(true)
+        viewModel.localDataStore.setDeviceSetupPendingStatus(false)
         deviceSetupViewModel.getDeviceType()
         viewModel.localDataStore.setPreviouslyPaired()
 

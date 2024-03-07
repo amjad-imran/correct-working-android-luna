@@ -10,6 +10,7 @@ import com.noisefit.oreo.OreoMainActivity
 import com.noisefit.ui.onboarding.onboardProfile.GuestProfileSetupActivity
 import com.noisefit.ui.onboarding.onboardProfile.SetupProfileViewModel
 import com.noisefit.ui.onboarding.pairing.DeviceSetupActivity
+import com.noisefit.ui.onboarding.setup.DeviceSetupActivityV2
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.showShortToast
@@ -113,7 +114,7 @@ class OnBoardCaloriesFragment :
     }
 
     private fun goToDeviceSetupActivity(openProfile: Boolean) {
-        startActivity(DeviceSetupActivity.getStartIntent(requireContext(), openProfile))
+        startActivity(DeviceSetupActivityV2.getStartIntent(requireContext()))
         activity?.finish()
     }
 }

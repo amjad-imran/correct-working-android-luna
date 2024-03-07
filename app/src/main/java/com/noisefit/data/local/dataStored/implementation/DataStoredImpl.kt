@@ -503,7 +503,7 @@ class DataStoredImpl
         mPrefs.edit()?.putBoolean(DEVICE_SETUP_STATUS, status)?.apply()
     }
 
-    override fun getDeviceSetupPendingStatus(): Boolean {
+    override fun isDeviceSetupDone(): Boolean {
         return mPrefs.getBoolean(DEVICE_SETUP_STATUS, false)
     }
 
@@ -1127,10 +1127,10 @@ class DataStoredImpl
     }
 
     override fun clearConnectedDevice() {
+        mPrefs.edit().remove(DEVICE_SETUP_STATUS).apply()
+       /*
         WatchInfoGlobals.hideBleCallingDialogForThisSession = false
         mPrefs.edit().remove(WF_RATING_KEY).commit()
-        mPrefs.edit().remove(NOISE_FIT_DEVICE).commit()
-        mPrefs.edit().remove(DIY_WALK_AROUND_KEY).commit()
         mPrefs.edit().remove(SLEEP_LOCAL_NOTIFICATION_KEY).commit()
         mPrefs.edit().remove(USER_LOCATION_MAPPED_KEY).commit()
         mPrefs.edit().remove(DEVICE_TOKEN).commit()
@@ -1155,7 +1155,7 @@ class DataStoredImpl
         clearRandomWatchFaceListResponse()
         clearNotificationAppList()
         setNotificationAlertStatus(false)
-        setWarrantyStatus(-1)
+        setWarrantyStatus(-1)*/
     }
 
     override fun getLastPeriodicDataSyncTime(): Long {

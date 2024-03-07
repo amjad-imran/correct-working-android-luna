@@ -1047,4 +1047,16 @@
     <string name="text_updating_ring">Updating ring</string>
     <string name="text_firmware_update_failed">Firmware update failed</string>
     <string name="text_update_failed_message">Ensure that your ring and phone are kept close to each other during the update process to avoid any issues.</string>
+    <string name="text_checking_for_firmware_update">Checking for firmware update</string>
+    <string name="text_checking_fw_message">Update your ring’s firmware to the latest version to access new features</string>
+    <string name="text_device_up_to_date">Device up to date</string>
+    <string name="text_fw_up_to_date">Update your ring’s firmware to the latest version to access new features</string>
+    <string name="text_setting_up_your_device">Setting up your device</string>
+    <string name="text_setting_up_device">Update your ring’s firmware to the latest version to access new features</string>
+    <string name="text_all_done_">All done!</string>
+    <string name="text_all_done_message">For the most accurate readings, wear the ring on your index finger with its sensors facing the palm side.</string>
+    <string name="text_update_available">Update available</string>
+    <string name="text_update_available_message">Update your ring’s firmware to the latest version to access new features</string>
+    <string name="text_low_battery_alert">Low battery alert</string>
+    <string name="text_low_battery_message">Your ring should have more than 20% battery to proceed further. Please charge your ring.</string>
 </resources>

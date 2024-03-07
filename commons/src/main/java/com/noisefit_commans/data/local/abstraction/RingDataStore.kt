@@ -72,4 +72,7 @@ interface RingDataStore {
     fun cleaNewOtaVersion()
     fun saveOtaRemindDate()
     fun getOtaRemindDate(): String?
+
+    fun isUpdateUserDeviceDone(): Boolean
+    fun setUpdateUserDeviceStatus(status: Boolean)
 }

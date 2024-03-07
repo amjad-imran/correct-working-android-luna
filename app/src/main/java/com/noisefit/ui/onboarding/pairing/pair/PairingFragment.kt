@@ -26,6 +26,7 @@ import com.noisefit.luna.databinding.FragmentPairingBinding
 import com.noisefit.session.SessionManager
 import com.noisefit.ui.onboarding.onboardProfile.ProfileSetupActivity
 import com.noisefit.ui.onboarding.pairing.DeviceSetupActivity
+import com.noisefit.ui.onboarding.setup.DeviceSetupActivityV2
 import com.noisefit.watch.ApplicationHandler
 import com.noisefit.watch.ConnectionHandler
 import com.noisefit_commans.common.copyToClipBoard
@@ -161,8 +162,10 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
     }
 
     private fun handlePairState() {
+        viewModel.localDataStore.setDeviceSetupPendingStatus(false)
+
         if (viewModel.isProfileSetupComplete()) {
-            startActivity(DeviceSetupActivity.getStartIntent(requireContext()))
+            startActivity(DeviceSetupActivityV2.getStartIntent(requireContext()))
             activity?.finish()
         } else {
             startActivity(ProfileSetupActivity.getStartIntent(requireContext()))

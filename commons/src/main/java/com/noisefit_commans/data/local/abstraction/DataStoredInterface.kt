@@ -270,7 +270,7 @@ interface DataStoredInterface {
     fun setLocalUserData(localUserData: LocalUserData?)
 
     fun setDeviceSetupPendingStatus(status: Boolean)
-    fun getDeviceSetupPendingStatus(): Boolean
+    fun isDeviceSetupDone(): Boolean
 
     fun setBatteryOptimisationStatus(status: Boolean)
     fun getBatteryOptimisationStatus(): Boolean

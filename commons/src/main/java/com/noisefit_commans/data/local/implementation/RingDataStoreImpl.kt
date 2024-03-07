@@ -38,6 +38,8 @@ private const val OTA_VERSION_NEW_TIMESTAMP = "OTA_VERSION_NEW_TIMESTAMP"
 private const val OTA_VERSION_REMIND = "OTA_VERSION_REMIND"
 private const val OTA_VERSION_CURRENT = "OTA_VERSION_CURRENT"
 
+private const val UPDATE_USER_DEVICE_STATUS = "UPDATE_USER_DEVICE_STATUS"
+
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
 
@@ -47,6 +49,13 @@ class RingDataStoreImpl
     private val mPrefs: SharedPreferences
 ) : RingDataStore {
 
+    override fun isUpdateUserDeviceDone(): Boolean {
+        return mPrefs.getBoolean(UPDATE_USER_DEVICE_STATUS, false)
+    }
+
+    override fun setUpdateUserDeviceStatus(status: Boolean) {
+        mPrefs.edit()?.putBoolean(UPDATE_USER_DEVICE_STATUS, status)?.commit()
+    }
 
     override fun saveNewOtaVersion(newOtaData: String?, currentVersion: Int) {
         mPrefs.edit()?.putString(OTA_VERSION_NEW, newOtaData)?.commit()
@@ -171,6 +180,7 @@ class RingDataStoreImpl
 
     override fun clearConnectedDevice() {
         mPrefs.edit().remove(RING_DEVICE_INFO).commit()
+        mPrefs.edit().remove(UPDATE_USER_DEVICE_STATUS).commit()
 
     }
 

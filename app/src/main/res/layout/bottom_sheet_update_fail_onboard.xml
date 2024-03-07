@@ -65,39 +65,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView99" />
 
-            <Button
-                android:id="@+id/btnRemindLater"
-                style="@style/SecondaryButtonStyle"
-                android:layout_width="0dp"
-                android:layout_marginStart="@dimen/dimen_24dp"
-                android:layout_marginTop="44dp"
-                android:layout_marginEnd="@dimen/dimen_12dp"
-                android:layout_marginBottom="@dimen/dimen_24dp"
-                android:text="@string/text_remind_me_later"
-                android:textSize="14sp"
-                app:backgroundTint="@null"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/btnTryAgain"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView103"
-                app:layout_constraintVertical_bias="0.0" />
 
             <Button
                 android:id="@+id/btnTryAgain"
                 style="@style/PrimaryButtonStyle"
-                android:layout_width="0dp"
-                android:layout_marginStart="@dimen/dimen_12dp"
+                android:layout_width="164dp"
                 android:layout_marginTop="44dp"
-                android:layout_marginEnd="@dimen/dimen_24dp"
                 android:layout_marginBottom="@dimen/dimen_24dp"
                 android:text="@string/text_try_again"
                 android:textSize="14sp"
                 app:backgroundTint="@null"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/btnRemindLater"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView103" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -41,7 +41,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PairDeviceViewModel @Inject constructor(
     private val deviceRepository: DeviceRepository,
-    private val localDataStore: DataStoredInterface,
+    val localDataStore: DataStoredInterface,
     private val authRepository: AuthenticationRepository,
     private val downloadRepository: DownloadRepository,
     private val userRepository: UserRepository,
@@ -199,6 +199,8 @@ class PairDeviceViewModel @Inject constructor(
                             localDataStore.updateUserToken(it.tokens)
 
                             saveColorFitDevice(colorFitDevice!!)
+
+                            ringDataStore.setUpdateUserDeviceStatus(true)
 
                             _deviceSetupSuccess.postValue(Event(true))
 

@@ -337,8 +337,14 @@ class SplashViewModel
             return
         }
 
-        _userOnBoardingFlow.value = (UserOnBoardingFlow.SHOW_OREO_DASHBOARD)
+        val isDeviceSetupDone = localDataStore.isDeviceSetupDone()
+        if (ringDataStore.getRingDevice() != null && isDeviceSetupDone.not()) {
+            _userOnBoardingFlow.value = (UserOnBoardingFlow.DEVICE_SETUP)
+            sendMessage("Device Setup")
+            return
+        }
 
+        _userOnBoardingFlow.value = (UserOnBoardingFlow.SHOW_OREO_DASHBOARD)
 
     }
 
@@ -356,5 +362,5 @@ class SplashViewModel
 }
 
 enum class UserOnBoardingFlow {
-    SHOW_OREO_DASHBOARD, SHOW_DASHBOARD, ASK_FOR_LOGIN, SETUP_PROFILE, ACCEPT_PRIVACY_POLICY, PAIR_DEVICE
+    SHOW_OREO_DASHBOARD, SHOW_DASHBOARD, ASK_FOR_LOGIN, SETUP_PROFILE, ACCEPT_PRIVACY_POLICY, PAIR_DEVICE, DEVICE_SETUP
 }

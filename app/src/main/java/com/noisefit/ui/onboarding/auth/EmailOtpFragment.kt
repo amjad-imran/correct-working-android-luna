@@ -9,6 +9,7 @@ import com.noisefit.luna.databinding.FragmentEmailOtpBinding
 import com.noisefit.ui.onboarding.onboardProfile.ProfileSetupActivity
 import com.noisefit.ui.onboarding.pairing.DeviceSetupActivity
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
+import com.noisefit.ui.onboarding.setup.DeviceSetupActivityV2
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.afterTextChanged
 import com.noisefit_commans.ui.disable
@@ -175,9 +176,8 @@ class EmailOtpFragment :
                     if (viewModel.isDevicePaired()) {
                         if (viewModel.isProfileSetupComplete()) {
                             startActivity(
-                                DeviceSetupActivity.getStartIntent(
-                                    requireContext(),
-                                    setupDevice = true
+                                DeviceSetupActivityV2.getStartIntent(
+                                    requireContext()
                                 )
                             )
                             activity?.finish()
