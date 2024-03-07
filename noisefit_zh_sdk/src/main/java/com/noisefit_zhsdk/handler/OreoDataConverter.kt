@@ -694,15 +694,15 @@ constructor(
             stepData.distance = dailyBean.distanceData[i]
             stepData.activeCalories = dailyBean.todaySportCalorieHourlyData[i]
             distance += dailyBean.distanceData[i]
-            activeCalories += dailyBean.todaySportCalorieHourlyData[i]
+            //activeCalories += dailyBean.todaySportCalorieHourlyData[i]
             steps += data
             stepArray.add(stepData)
         }
-        calories += dailyBean.todayOuraCalorieData
+        calories = dailyBean.todayOuraCalorieData
         dailyStepData.totalDistance = distance
         dailyStepData.totalCalories = calories
         dailyStepData.totalSteps = steps
-        dailyStepData.activeCalories = activeCalories
+        dailyStepData.activeCalories = dailyBean.todaySportCalorieData/*activeCalories*/
         dailyStepData.stepArray = stepArray
         LOGS.d("getStepsData $dailyStepData")
         return dailyStepData
@@ -929,8 +929,13 @@ constructor(
     fun parseNapData(naps: List<RingSleepNapBean>): List<OreoNapData> {
         val returnNaps = ArrayList<OreoNapData>()
 
-        val date = DateFormats.getDateFromTimeStamp(DateFormats.subtractDate(System.currentTimeMillis(),1))
-        val timestamp = DateFormats.convertDateTimeToTimeStamp(date?:"", DateFormats.dateFormat3)
+        val date = DateFormats.getDateFromTimeStamp(
+            DateFormats.subtractDate(
+                System.currentTimeMillis(),
+                1
+            )
+        )
+        val timestamp = DateFormats.convertDateTimeToTimeStamp(date ?: "", DateFormats.dateFormat3)
 
 
         naps.forEach {
