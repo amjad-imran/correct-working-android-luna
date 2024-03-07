@@ -95,7 +95,7 @@ constructor(
     var readinessScoreInfo = MutableLiveData<Event<String>>()
     var activityScoreInfo = MutableLiveData<Event<String>>()
     var appUpdateInfo = MutableLiveData<AppUpdateModel?>()
-    var otaUpdateInfo = MutableLiveData<Event<OtaUpdateModel?>>()
+    var otaUpdateInfo = MutableLiveData<OtaUpdateModel?>()
 
     val stateWorkouts = MutableLiveData<List<OActivityListModal>>()
 
@@ -839,7 +839,7 @@ constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val device = ringDataStore.getRingDevice()
             if (device == null) {
-                otaUpdateInfo.postValue(Event(null))
+                otaUpdateInfo.postValue(null)
                 return@launch
             }
 
@@ -910,10 +910,10 @@ constructor(
 
             if (remindDate == null) {
                 val obj = Gson().fromJson<OtaUpdateModel>(firmwareObj.first)
-                otaUpdateInfo.postValue(Event(obj))
+                otaUpdateInfo.postValue(obj)
             } else if (!remindDate.equals(DateFormats.getCurrentDate())) {
                 val obj = Gson().fromJson<OtaUpdateModel>(firmwareObj.first)
-                otaUpdateInfo.postValue(Event(obj))
+                otaUpdateInfo.postValue(obj)
             }
             return false
         } else {

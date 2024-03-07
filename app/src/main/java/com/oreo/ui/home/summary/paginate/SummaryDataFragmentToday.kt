@@ -436,8 +436,8 @@ class SummaryDataFragmentToday :
 
         }
         viewModel.otaUpdateInfo.observe(viewLifecycleOwner) {
-            it.getContent().let {
-                if (it == null) {
+
+            if (it == null) {
                     binding.contentMain.lytOtaUpdate.root.gone()
                 } else {
                     binding.contentMain.lytOtaUpdate.apply {
@@ -446,7 +446,7 @@ class SummaryDataFragmentToday :
                         this.imvBack.loadImageWithCache(this.imvBack.context, it.imageUrl)
                         root.visible()
                     }
-                }
+
             }
 
 
