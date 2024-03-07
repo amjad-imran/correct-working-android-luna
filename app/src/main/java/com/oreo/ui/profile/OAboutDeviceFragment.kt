@@ -2,6 +2,7 @@ package com.oreo.ui.profile
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -9,10 +10,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOAboutDeviceBinding
 import com.noisefit.ui.myDevice.manage.CheckForUpdatesViewModel
 import com.noisefit_commans.common.copyToClipBoard
-import com.noisefit_commans.common.decodeHex
 import com.noisefit_commans.constants.WatchInfoGlobals
-import com.noisefit_commans.data.local.abstraction.RingDataStore
-import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.QueryCallback
 import com.noisefit_commans.interfaces.connection.ConnectState
@@ -22,23 +20,14 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.LOGS
-import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
-import com.noisefit_commans.utils.RingSerialNoParser
+import com.oreo.ui.home.summary.update.UpdateLaunchMode
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class OAboutDeviceFragment :
     BaseFragment<FragmentOAboutDeviceBinding>(FragmentOAboutDeviceBinding::inflate) {
-    val mViewModel: OAboutDeviceViewModel by viewModels()
-
-    @Inject
-    lateinit var ringDataStore: RingDataStore
-
-    @Inject
-    lateinit var watchDataStore: WatchDataStore
+    private val viewModel: OAboutDeviceViewModel by viewModels()
 
 
     private val updateViewModel: CheckForUpdatesViewModel by activityViewModels()
@@ -53,10 +42,11 @@ class OAboutDeviceFragment :
         super.onViewCreated(view, savedInstanceState)
         updateViewModel.mShouldFetchInfo = false
         setUi()
+
     }
 
     private fun setUi() {
-        connectedDevice = ringDataStore.getRingDevice()
+        connectedDevice = updateViewModel.ringDataSore.getRingDevice()
         binding.ivDevice.loadImage(
             requireContext(), connectedDevice?.ringInfo?.image2
         )
@@ -93,7 +83,7 @@ class OAboutDeviceFragment :
             AboutDeviceData(
                 "Serial number",
                 if (connectedDevice.ringInfo?.serialNoRaw.isNullOrEmpty()) {
-                    val sNo = watchDataStore.getSerialNo()
+                    val sNo = updateViewModel.watchDataStore.getSerialNo()
                     sNo ?: "-"
                 } else {
                     connectedDevice.ringInfo?.serialNoRaw ?: "-"
@@ -114,17 +104,36 @@ class OAboutDeviceFragment :
 
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+    }
 
     override fun initListener() {
+        binding.btnCheckForUpdates.text = if (updateViewModel.isOtaUpdateAvailable) {
+            getString(R.string.text_update_available)
+        } else {
+            getString(R.string.text_check_for_an_update)
+        }
         binding.toolbar.tvTitle.text = getString(R.string.text_about_device)
         binding.toolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }
         binding.btnCheckForUpdates.setOnClickListener {
+            updateViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_aboutdevice_update_click)
+
             if (updateViewModel.sessionManager.isDeviceConnected()) {
-                updateViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_aboutdevice_update_click)
-                updateViewModel.checkForUpdates(false)
-            }else{
+                if (updateViewModel.isOtaUpdateAvailable) {
+                    updateViewModel.setUpdateAvailable(true)
+                } else {
+                    val pair = Pair(
+                        WatchInfoGlobals.firmwareVersionNumberRing,
+                        WatchInfoGlobals.firmwareDeviceIdRing
+                    )
+                    viewModel.checkOtaVersionServer(pair)
+                }
+
+            } else {
                 context.showShortToast("Ring not connected")
 
             }
@@ -137,6 +146,13 @@ class OAboutDeviceFragment :
 
     override fun subscribeObservers() {
 
+        viewModel.otaUpdateInfo.observe(this@OAboutDeviceFragment) {
+            it.getContent()?.let {
+                updateViewModel.isOtaUpdateAvailable = true
+                updateViewModel.setUpdateAvailable(true)
+            }
+
+        }
 
         updateViewModel.sessionManager.connectStateRing.observe(this) {
             when (it) {
@@ -163,17 +179,16 @@ class OAboutDeviceFragment :
         }
 
 
-        updateViewModel.getMessages().observe(this) {
+        updateViewModel.getMessages().observe(viewLifecycleOwner) {
             it.getContent()?.let { message ->
                 context.showShortToast(message)
             }
         }
 
-        mViewModel.getLoading().observe(viewLifecycleOwner) {
-            if (it) {
-                binding.progressBar.root.visible()
-            } else {
-                binding.progressBar.root.gone()
+
+        viewModel.noUpdateAvailable.observe(viewLifecycleOwner) {
+            it?.getContent()?.let {
+                uiController.onDisplayError(getString(R.string.text_no_update_available))
             }
         }
         updateViewModel.getLoading().observe(viewLifecycleOwner) {
@@ -184,17 +199,22 @@ class OAboutDeviceFragment :
             }
         }
 
-        updateViewModel.updateInfo.observe(viewLifecycleOwner) {
-            it.getContent()?.let { res ->
-                updateViewModel.sessionManager.forceOtaResponseRing = res
-                navigate(R.id.oreoUpdateRingFragment)
+
+        viewModel.getLoading().observe(viewLifecycleOwner) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
             }
         }
 
         updateViewModel.updateAvailable.observe(viewLifecycleOwner) {
             it.getContent()?.let { isAvailable ->
-                if (!isAvailable) {
-                    navigate(R.id.oreoBottomSheetNoUpdateAvailable)
+                if (isAvailable) {
+                    navigate(
+                        R.id.appUpdateDetailFragment,
+                        bundleOf("launchMode" to UpdateLaunchMode.OTA)
+                    )
                 }
             }
 

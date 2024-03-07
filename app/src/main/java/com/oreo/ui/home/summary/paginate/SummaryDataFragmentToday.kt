@@ -436,16 +436,19 @@ class SummaryDataFragmentToday :
 
         }
         viewModel.otaUpdateInfo.observe(viewLifecycleOwner) {
-            if (it == null) {
-                binding.contentMain.lytOtaUpdate.root.gone()
-            } else {
-                binding.contentMain.lytOtaUpdate.apply {
-                    this.tvTitle.text = it.description?.header
-                    this.tvMessage.text = it.description?.shortDescription
-                    this.imvBack.loadImageWithCache(this.imvBack.context, it.imageUrl)
-                    root.visible()
+            it.getContent().let {
+                if (it == null) {
+                    binding.contentMain.lytOtaUpdate.root.gone()
+                } else {
+                    binding.contentMain.lytOtaUpdate.apply {
+                        this.tvTitle.text = it.description?.header
+                        this.tvMessage.text = it.description?.shortDescription
+                        this.imvBack.loadImageWithCache(this.imvBack.context, it.imageUrl)
+                        root.visible()
+                    }
                 }
             }
+
 
         }
 

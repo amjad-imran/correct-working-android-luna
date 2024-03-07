@@ -12,6 +12,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import com.google.android.material.imageview.ShapeableImageView
 import com.noisefit_commans.R
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.visible
 
 class SettingsRow
 @JvmOverloads
@@ -25,6 +26,7 @@ constructor(
     var ivSettingsImage: ImageView? = null
     var tvSettingsTitle: TextView? = null
     var ivSettingsArrow: ImageView? = null
+    var ivSettingAppUpdate: ImageView? = null
     var tvStatus: TextView? = null
     var topLine: View? = null
     var view: View? = null
@@ -41,6 +43,7 @@ constructor(
         tvSettingsTitle = this.findViewById(R.id.tvSettingsTitle)
         ivSettingsArrow = this.findViewById(R.id.ivSettingsArrow)
         topLine = this.findViewById(R.id.topLine)
+        ivSettingAppUpdate = this.findViewById(R.id.ivAppUpdate)
         tvStatus = this.findViewById(R.id.tvStatus)
         val ta = context.obtainStyledAttributes(attrs, R.styleable.CustomViewSettings)
         try {
@@ -88,6 +91,16 @@ constructor(
         } else {
             tvStatus?.text = this.resources.getString(R.string.text_disabled)
             tvStatus?.setTextColor(this.resources.getColor(R.color.lightest_gray))
+        }
+        invalidate()
+    }
+
+    fun setUpdateAvailable(updateAvailable: Boolean = false) {
+
+        if (updateAvailable) {
+            ivSettingAppUpdate?.visible()
+        } else {
+            ivSettingAppUpdate?.gone()
         }
         invalidate()
     }

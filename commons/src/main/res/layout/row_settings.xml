@@ -29,6 +29,18 @@
         app:layout_constraintTop_toBottomOf="@+id/topLine"
         app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
 
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ivAppUpdate"
+        android:layout_width="6dp"
+        android:layout_height="6dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="2dp"
+        android:background="#ff6782"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/ivBackGround"
+        app:layout_constraintTop_toTopOf="@+id/ivBackGround"
+        app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+
     <ImageView
         android:id="@+id/ivSettingsImage"
         android:layout_width="@dimen/dimen_20dp"

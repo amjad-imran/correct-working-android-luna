@@ -432,4 +432,6 @@ interface DataStoredInterface {
     fun cleaNewAppVersion()
     fun saveAppRemindDate()
     fun getAppRemindDate(): String?
+
+    fun isNewAppVersionAvailable():Boolean
 }

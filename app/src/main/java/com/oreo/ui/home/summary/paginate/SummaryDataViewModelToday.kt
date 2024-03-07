@@ -95,7 +95,7 @@ constructor(
     var readinessScoreInfo = MutableLiveData<Event<String>>()
     var activityScoreInfo = MutableLiveData<Event<String>>()
     var appUpdateInfo = MutableLiveData<AppUpdateModel?>()
-    var otaUpdateInfo = MutableLiveData<OtaUpdateModel?>()
+    var otaUpdateInfo = MutableLiveData<Event<OtaUpdateModel?>>()
 
     val stateWorkouts = MutableLiveData<List<OActivityListModal>>()
 
@@ -839,7 +839,7 @@ constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val device = ringDataStore.getRingDevice()
             if (device == null) {
-                otaUpdateInfo.postValue(null)
+                otaUpdateInfo.postValue(Event(null))
                 return@launch
             }
 
@@ -895,6 +895,7 @@ constructor(
 
     private fun postUpdateOtaDataOffline(): Boolean {
         val firmwareObj = ringDataStore.getNewOtaVersion()
+        LOGS.d("postUpdateOtaDataOffline ${Gson().toJson(firmwareObj)}")
         if (firmwareObj?.first != null) {
 
             val lastSaveTimeStamp = firmwareObj.third
@@ -909,14 +910,16 @@ constructor(
 
             if (remindDate == null) {
                 val obj = Gson().fromJson<OtaUpdateModel>(firmwareObj.first)
-                otaUpdateInfo.postValue(obj)
+                otaUpdateInfo.postValue(Event(obj))
             } else if (!remindDate.equals(DateFormats.getCurrentDate())) {
                 val obj = Gson().fromJson<OtaUpdateModel>(firmwareObj.first)
-                otaUpdateInfo.postValue(obj)
+                otaUpdateInfo.postValue(Event(obj))
             }
             return false
         } else {
             val lastCheckTimestamp = ringDataStore.getOtaVersionCheckTimeStamp()
+            LOGS.d("" +
+                    " ${lastCheckTimestamp}")
             return if (lastCheckTimestamp == 0L) {
                 true
             } else {

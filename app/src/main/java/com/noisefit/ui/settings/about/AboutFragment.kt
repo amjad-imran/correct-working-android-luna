@@ -27,6 +27,12 @@ class AboutFragment : BaseFragment<FragmentAboutBinding>(FragmentAboutBinding::i
         binding.layoutToolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }
+
+        binding.btnCheckForUpdate.text = if (viewModel.localDataStore.isNewAppVersionAvailable()) {
+            getString(R.string.text_update_available)
+        } else {
+            getString(R.string.text_check_for_update)
+        }
         binding.rowTermsCondition.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_about_terms_conditions_click)
             startActivity(
@@ -47,7 +53,7 @@ class AboutFragment : BaseFragment<FragmentAboutBinding>(FragmentAboutBinding::i
                 )
             )
         }
-        binding.rowCheckForUpdate.setOnClickListener {
+        binding.btnCheckForUpdate.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_about_check_update_click)
             ShareUtil.openPlayStore(requireContext(), "com.noisefit.luna")
         }
