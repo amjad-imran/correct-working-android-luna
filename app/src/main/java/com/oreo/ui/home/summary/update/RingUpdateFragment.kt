@@ -3,6 +3,8 @@ package com.oreo.ui.home.summary.update
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.CountDownTimer
+import android.os.Handler
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -31,6 +33,8 @@ import com.noisefit_commans.ui.loadImageWithCache
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MiscUtil
 import com.noisefit_commans.utils.share.ShareUtil
 import com.oreo.ui.helpsupport.questionaries.CALL_REQUEST_KEY
 import dagger.hilt.android.AndroidEntryPoint
@@ -216,8 +220,10 @@ class RingUpdateFragment :
         }
     }
 
-    fun updateProgress(progress: Int) {
+    private fun updateProgress(progress: Int) {
         binding.tvUpdatePercent.text = "$progress%"
+        binding.lottieAnimationView.setMinAndMaxProgress(progress.toFloat() / 100,progress.toFloat() / 100)
+        binding.lottieAnimationView.playAnimation()
     }
 
     private fun updateFirmwareStatus(watchUpdateStatus: WatchUpdateStatus) {
