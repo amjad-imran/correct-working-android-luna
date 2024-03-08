@@ -898,7 +898,9 @@
     <string name="text_luna_cues" tools:ignore="ExtraTranslation">Luna cues</string>
     <string name="text_check_for_an_update">Check for an update</string>
     <string name="text_what_s_new">What’s new?</string>
+    <string name="text_update_available">Update available</string>
     <string name="text_new_update_available">New update available</string>
+    <string name="text_no_update_available">No update available</string>
     <string name="text_battery_low_ring">Your ring should have more than %d\%% battery to proceed further. Please charge your ring.</string>
     <string name="text_ring_battery_low">Low battery on ring</string>
     <string name="text_your_ring_is_up_to_date">Your ring is up to date</string>

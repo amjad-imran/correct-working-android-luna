@@ -306,14 +306,14 @@ class SummaryDataFragmentToday :
 
     override fun initListener() {
 
-        binding.contentMain.lytAppUpdate.btnUpdateNow.setOnClickListener {
+        binding.contentMain.lytAppUpdate.root.setOnClickListener {
             navigate(
                 R.id.appUpdateDetailFragment,
                 bundleOf("launchMode" to UpdateLaunchMode.APP)
             )
         }
 
-        binding.contentMain.lytOtaUpdate.btnUpdateNow.setOnClickListener {
+        binding.contentMain.lytOtaUpdate.root.setOnClickListener {
             val isConnected = viewModel.isDeviceConnected()
             if (isConnected.not()) {
                 context.showShortToast("Ring not connected")
@@ -436,16 +436,19 @@ class SummaryDataFragmentToday :
 
         }
         viewModel.otaUpdateInfo.observe(viewLifecycleOwner) {
+
             if (it == null) {
-                binding.contentMain.lytOtaUpdate.root.gone()
-            } else {
-                binding.contentMain.lytOtaUpdate.apply {
-                    this.tvTitle.text = it.description?.header
-                    this.tvMessage.text = it.description?.shortDescription
-                    this.imvBack.loadImageWithCache(this.imvBack.context, it.imageUrl)
-                    root.visible()
-                }
+                    binding.contentMain.lytOtaUpdate.root.gone()
+                } else {
+                    binding.contentMain.lytOtaUpdate.apply {
+                        this.tvTitle.text = it.description?.header
+                        this.tvMessage.text = it.description?.shortDescription
+                        this.imvBack.loadImageWithCache(this.imvBack.context, it.imageUrl)
+                        root.visible()
+                    }
+
             }
+
 
         }
 

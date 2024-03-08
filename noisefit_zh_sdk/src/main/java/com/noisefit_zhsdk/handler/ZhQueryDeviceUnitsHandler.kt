@@ -459,7 +459,6 @@ constructor(
                     TAG, "${deviceInfoBean.firmwareVersion} ${deviceInfoBean.equipmentNumber} " +
                             "S.No ${deviceInfoBean.serialNumber}"
                 )
-
                 if (noiseFitDevice?.deviceType.equals(DeviceType.NOISEFIT_LUNA.deviceType, true)) {
                     WatchInfoGlobals.firmwareVersionRing = deviceInfoBean.firmwareVersion
                     WatchInfoGlobals.serialNumberRing = deviceInfoBean.serialNumber

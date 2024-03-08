@@ -895,6 +895,7 @@ constructor(
 
     private fun postUpdateOtaDataOffline(): Boolean {
         val firmwareObj = ringDataStore.getNewOtaVersion()
+        LOGS.d("postUpdateOtaDataOffline ${Gson().toJson(firmwareObj)}")
         if (firmwareObj?.first != null) {
 
             val lastSaveTimeStamp = firmwareObj.third
@@ -917,6 +918,8 @@ constructor(
             return false
         } else {
             val lastCheckTimestamp = ringDataStore.getOtaVersionCheckTimeStamp()
+            LOGS.d("" +
+                    " ${lastCheckTimestamp}")
             return if (lastCheckTimestamp == 0L) {
                 true
             } else {

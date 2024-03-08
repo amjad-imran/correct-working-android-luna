@@ -51,15 +51,15 @@ class OreoDayTimeDataConvertor @Inject constructor() {
         workouts?.forEach {
 
             getWorkoutSections(it)?.let { pos ->
-                if (it.type == "manual") {
-                    workoutSectionIntensity.add(
-                        Triple(
-                            pos.first,
-                            pos.second,
-                            getWorkoutIntensity(it.intensity)
-                        )
-                    )
-                }
+             /*  if (it.type == "manual") {
+                   workoutSectionIntensity.add(
+                       Triple(
+                           pos.first,
+                           pos.second,
+                           getWorkoutIntensity(it.intensity)
+                       )
+                   )
+               }*/
 
                 sections.add(
                     Section(
@@ -109,7 +109,7 @@ class OreoDayTimeDataConvertor @Inject constructor() {
         }
         val combinedSection = combineSections(sections)
 
-        updateInactiveStateForWorkout(items, workoutSectionIntensity)
+        //updateInactiveStateForWorkout(items, workoutSectionIntensity)
 
         return DayTimeDataModel(
             sections = combinedSection,

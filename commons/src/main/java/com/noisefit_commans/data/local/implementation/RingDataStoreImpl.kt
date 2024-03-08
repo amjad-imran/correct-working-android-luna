@@ -290,4 +290,8 @@ class RingDataStoreImpl
     override fun setShowDeviceIntro(boolean: Boolean) {
         mPrefs.edit()?.putBoolean(DEVICE_INTRO, boolean)?.apply()
     }
+
+    override fun isNewOtaAvailable(): Boolean {
+        return getNewOtaVersion()?.first != null
+    }
 }

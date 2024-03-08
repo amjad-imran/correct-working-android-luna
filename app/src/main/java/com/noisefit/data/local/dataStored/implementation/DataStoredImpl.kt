@@ -258,6 +258,9 @@ class DataStoredImpl
         return mPrefs.getString(APP_VERSION_REMIND, null)
     }
 
+    override fun isNewAppVersionAvailable(): Boolean {
+        return getNewAppVersion()?.first != null
+    }
     override fun getReadinessNotificationTimeStamp(): Long {
         return mPrefs.getLong(READINESS_NOTIFICATION, 0)
     }

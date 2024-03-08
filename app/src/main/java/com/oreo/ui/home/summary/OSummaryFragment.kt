@@ -144,6 +144,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
     override fun initListener() {
 
+
         binding.tabLayout.setOnChartScrollChangedListener(this)
 
         /* binding.tabLayout.tvDateLeft.setOnClickListener {
@@ -440,6 +441,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 }
 
                 is ConnectState.UnPaired -> {
+                    binding.lytHeader.ivRingUpdate.gone()
                     viewModel.handleUnPairState()
                     viewModel.updateDeviceConnectedStatus()
                     binding.lytHeader.pbSync.gone()
@@ -514,6 +516,14 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             )
         }
 
+        nullableBinding?.lytHeader?.ivRingUpdate?.visibility =
+            if (mainViewModel.ringDataStore.isNewOtaAvailable()) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+
+
     }
 
     private fun setStateConnected(noiseFitDevice: ColorFitDevice) {
@@ -572,7 +582,12 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             shouldSync()
         }
         mainViewModel.shouldResetMasterDates()
-
+        nullableBinding?.lytHeader?.ivAppUpdate?.visibility =
+            if (mainViewModel.localDataStore.isNewAppVersionAvailable()) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
 
 //        viewModel.getRecentWorkoutList()
     }

@@ -14,6 +14,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,6 +48,7 @@ class OMyProfileFragment :
 
 
     override fun initListener() {
+        binding.rowAbout.setUpdateAvailable(viewModel.localDataStore.isNewAppVersionAvailable())
         binding.rowAbout.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_about_click)
             navigate(R.id.aboutFragment)

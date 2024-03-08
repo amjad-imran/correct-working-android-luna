@@ -620,12 +620,15 @@ class OreoActivityFragment :
 
     private fun resetDayTimeTopLevelUi() {
         val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(mViewModel.activeMinutes)
-        binding.lytDailyMovement.tvMovementType.text = getString(R.string.text_active_duration)
-        binding.lytDailyMovement.view1.gone()
-        binding.lytDailyMovement.tvStartTime.text = "$hour"
-        binding.lytDailyMovement.tvStartTimeUnit.text = "hr"
-        binding.lytDailyMovement.tvEndTime.text = "$minute"
-        binding.lytDailyMovement.tvEndTimeUnit.text = "min"
+        nullableBinding?.lytDailyMovement?.apply {
+            tvMovementType.text = getString(R.string.text_active_duration)
+            view1.gone()
+            tvStartTime.text = "$hour"
+            tvStartTimeUnit.text = "hr"
+            tvEndTime.text = "$minute"
+            tvEndTimeUnit.text = "min"
+        }
+
     }
 
     private fun updateDayTimeTopLabelUi(value: Int, position: Int) {

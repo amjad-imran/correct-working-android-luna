@@ -52,6 +52,10 @@ class OreoMyDeviceFragment :
     }
 
     override fun initListener() {
+
+        binding.rowAboutDevice.setUpdateAvailable(mViewModel.ringDataStore.isNewOtaAvailable())
+
+
         binding.backBtn.setOnClickListener { navigateUpSafe() }
         binding.rowSettings.setOnClickListener {
             navigate(R.id.deviceSettingsFragment)
