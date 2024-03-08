@@ -1015,6 +1015,7 @@ constructor(
         sleepData.light = bean.lightSleepTime
         sleepData.deep = bean.deepSleepTime
         sleepData.remCount = bean.rapidEyeMovementTime
+        sleepData.startTimeStamp = bean.entryTime.toLong() * 1000
 
         bean.sleepDistributionData.forEach { sleepDistributionData ->
             val sleepBreakup = OreoSleepData.OreoSleepDataBreakup(
