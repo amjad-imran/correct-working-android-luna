@@ -306,14 +306,14 @@ class SummaryDataFragmentToday :
 
     override fun initListener() {
 
-        binding.contentMain.lytAppUpdate.btnUpdateNow.setOnClickListener {
+        binding.contentMain.lytAppUpdate.root.setOnClickListener {
             navigate(
                 R.id.appUpdateDetailFragment,
                 bundleOf("launchMode" to UpdateLaunchMode.APP)
             )
         }
 
-        binding.contentMain.lytOtaUpdate.btnUpdateNow.setOnClickListener {
+        binding.contentMain.lytOtaUpdate.root.setOnClickListener {
             val isConnected = viewModel.isDeviceConnected()
             if (isConnected.not()) {
                 context.showShortToast("Ring not connected")

@@ -50,11 +50,13 @@
 
 
             <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/lottieAnimationView2"
+                android:id="@+id/lottieAnimationView"
                 android:layout_width="220dp"
                 android:layout_height="220dp"
                 app:layout_constraintBottom_toTopOf="@+id/tvUpdating"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:lottie_rawRes="@raw/anim_update_firmware"
+                app:lottie_repeatCount="0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView101"
                 app:layout_constraintVertical_chainStyle="packed" /><!--
@@ -65,10 +67,10 @@
                 android:id="@+id/ivRingImage"
                 android:layout_width="140dp"
                 android:layout_height="140dp"
-                app:layout_constraintBottom_toBottomOf="@+id/lottieAnimationView2"
-                app:layout_constraintEnd_toEndOf="@+id/lottieAnimationView2"
-                app:layout_constraintStart_toStartOf="@+id/lottieAnimationView2"
-                app:layout_constraintTop_toTopOf="@+id/lottieAnimationView2" />
+                app:layout_constraintBottom_toBottomOf="@+id/lottieAnimationView"
+                app:layout_constraintEnd_toEndOf="@+id/lottieAnimationView"
+                app:layout_constraintStart_toStartOf="@+id/lottieAnimationView"
+                app:layout_constraintTop_toTopOf="@+id/lottieAnimationView" />
 
 
             <TextView
@@ -80,7 +82,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/tvUpdatePercent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lottieAnimationView2"
+                app:layout_constraintTop_toBottomOf="@+id/lottieAnimationView"
                 tools:text="@string/text_updating_firmware" />
 
             <TextView
