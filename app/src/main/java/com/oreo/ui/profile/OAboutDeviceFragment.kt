@@ -20,6 +20,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.ui.home.summary.update.UpdateLaunchMode
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,9 +28,8 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class OAboutDeviceFragment :
     BaseFragment<FragmentOAboutDeviceBinding>(FragmentOAboutDeviceBinding::inflate) {
+
     private val viewModel: OAboutDeviceViewModel by viewModels()
-
-
     private val updateViewModel: CheckForUpdatesViewModel by activityViewModels()
 
     val adapter: AboutDeviceAdapter by lazy {
@@ -110,7 +110,8 @@ class OAboutDeviceFragment :
     }
 
     override fun initListener() {
-        binding.btnCheckForUpdates.text = if (updateViewModel.isOtaUpdateAvailable) {
+
+        binding.btnCheckForUpdates.text = if (viewModel.ringDataSore.isNewOtaAvailable()) {
             getString(R.string.text_update_available)
         } else {
             getString(R.string.text_check_for_an_update)
@@ -123,7 +124,7 @@ class OAboutDeviceFragment :
             updateViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_aboutdevice_update_click)
 
             if (updateViewModel.sessionManager.isDeviceConnected()) {
-                if (updateViewModel.isOtaUpdateAvailable) {
+                if (viewModel.ringDataSore.isNewOtaAvailable()) {
                     updateViewModel.setUpdateAvailable(true)
                 } else {
                     val pair = Pair(
@@ -148,7 +149,7 @@ class OAboutDeviceFragment :
 
         viewModel.otaUpdateInfo.observe(this@OAboutDeviceFragment) {
             it.getContent()?.let {
-                updateViewModel.isOtaUpdateAvailable = true
+//                updateViewModel.isOtaUpdateAvailable = true
                 updateViewModel.setUpdateAvailable(true)
             }
 

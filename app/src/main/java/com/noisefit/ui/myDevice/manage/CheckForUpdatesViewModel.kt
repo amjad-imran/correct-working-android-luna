@@ -45,7 +45,6 @@ class CheckForUpdatesViewModel @Inject constructor(
 
     var mShouldFetchInfo = false
 
-    var isOtaUpdateAvailable = ringDataSore.isNewOtaAvailable()
     var forceUpdate: Boolean = false
     private val _networkError = MutableLiveData<Event<Boolean>>()
     private val _updateAvailable = MutableLiveData<Event<Boolean>>()

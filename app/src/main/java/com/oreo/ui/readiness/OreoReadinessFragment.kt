@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoReadinessBinding
 import com.noisefit.oreo.OreoMainViewModel
@@ -569,7 +570,7 @@ class OreoReadinessFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.RESTING_HR
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "readiness")
-                putString("infoData", mViewModel.contributorInfo.value?.resting_hr)
+                putString("infoData", mViewModel.contributorInfo.value?.resting_hr_top)
                 putString("date", mainViewModel.selectedDate)
             })
             mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_resting_hr_click)
@@ -592,7 +593,7 @@ class OreoReadinessFragment :
             val baselineAvg =
                 mainViewModel.temperatureBaseLine ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE
             if (baselineAvg == mainViewModel.DEFAULT_TEMPERATURE_BASELINE) {
-                mViewModel.contributorInfo.value?.temp_balance?.let { content ->
+                mViewModel.contributorInfo.value?.temperature_readiness_top?.let { content ->
                     navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
                         this.putString("infoData", content)
                         this.putString("type", ViewItemClickType.BODY_TEMPERATURE.name)
