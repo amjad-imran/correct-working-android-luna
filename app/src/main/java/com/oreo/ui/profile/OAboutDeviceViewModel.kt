@@ -30,8 +30,10 @@ class OAboutDeviceViewModel
 constructor(
     val ringDataStore: RingDataStore,
     val sessionManager: SessionManager,
+    val ringDataSore: RingDataStore,
     val updateRepository: UpdateRepository
 ) : BaseViewModel() {
+
 
     var noUpdateAvailable = MutableLiveData<Event<Boolean>>()
     var otaUpdateInfo = MutableLiveData<Event<OtaUpdateModel?>>()

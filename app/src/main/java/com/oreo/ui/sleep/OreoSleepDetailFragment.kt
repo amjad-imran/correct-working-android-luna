@@ -760,7 +760,7 @@ class OreoSleepDetailFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.RESTING_HR
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
-                putString("infoData", viewModel.contributorInfo.value?.resting_hr)
+                putString("infoData", viewModel.contributorInfo.value?.resting_hr_top)
                 putString("date", mainViewModel.selectedDate)
             })
 

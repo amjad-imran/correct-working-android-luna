@@ -3,6 +3,7 @@ package com.oreo.ui.readiness
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
@@ -268,17 +269,17 @@ constructor(
             descriptionList.add(contributorInfo.value?.recoveryIndex ?: "")
             descriptionList.add(contributorInfo.value?.sleep_regularity ?: "")
             descriptionList.add(contributorInfo.value?.sleepBalance ?: "")
-            descriptionList.add(contributorInfo.value?.resting_hr ?: "")
+            descriptionList.add(contributorInfo.value?.resting_hr_bottom ?: "")
             descriptionList.add(contributorInfo.value?.activityBalance ?: "")
             descriptionList.add(contributorInfo.value?.hrvBalance ?: "")
-            descriptionList.add(contributorInfo.value?.temp_balance ?: "")
+            descriptionList.add(contributorInfo.value?.temperature_readiness_bottom ?: "")
         } else {
             descriptionList.add(contributorInfo.value?.yesterdaySleepDuration ?: "")
             descriptionList.add(contributorInfo.value?.sleepBalance ?: "")
             descriptionList.add(contributorInfo.value?.yesterdayActivity ?: "")
             descriptionList.add(contributorInfo.value?.activityBalance ?: "")
             descriptionList.add(contributorInfo.value?.hrvBalance ?: "")
-            descriptionList.add(contributorInfo.value?.resting_hr ?: "")
+            descriptionList.add(contributorInfo.value?.resting_hr_bottom ?: "")
             descriptionList.add(contributorInfo.value?.recoveryIndex ?: "")
         }
         return descriptionList
@@ -303,7 +304,6 @@ constructor(
             )
             contList.add(child)
         }
-
         return contList
     }
 
