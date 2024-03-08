@@ -59,7 +59,7 @@ class FirmwareUpdateFragment :
                     )
                 )
                 updateProgress(50)
-                binding.tvTitle.text = getString(R.string.text_updating_firmware)
+                binding.tvTitle.text = getString(R.string.text_updating_ring)
                 binding.tvUpdating.text = getString(R.string.text_updating_firmware)
             }
         }
