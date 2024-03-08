@@ -2,6 +2,8 @@ package com.noisefit.ui.onboarding.setup.firmware
 
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
@@ -57,6 +59,7 @@ class FirmwareUpdateFragment :
                     )
                 )
                 updateProgress(50)
+                binding.tvTitle.text = getString(R.string.text_updating_firmware)
                 binding.tvUpdating.text = getString(R.string.text_updating_firmware)
             }
         }
@@ -102,6 +105,7 @@ class FirmwareUpdateFragment :
             val fileName = url.split("/").last()
 
             updateProgress(0)
+            binding.tvTitle.text = getString(R.string.text_downloading_firmware)
             binding.tvUpdating.text = getString(R.string.text_downloading_firmware)
 
             viewModel.downloadFirmware(
@@ -115,13 +119,22 @@ class FirmwareUpdateFragment :
     }
 
     fun updateProgress(progress: Int) {
+
         binding.tvUpdatePercent.text = "$progress%"
 
-        if (progress > 20) {
-            viewModel.updateProgress2.postValue(progress)
-        } else {
-            viewModel.updateProgress2.postValue(20)
-        }
+        viewModel.updateProgress2.postValue(
+            if (progress > 20) {
+                progress
+            } else {
+                20
+            }
+        )
+
+        binding.lottieAnimationView.setMinAndMaxProgress(
+            progress.toFloat() / 100,
+            progress.toFloat() / 100
+        )
+        binding.lottieAnimationView.playAnimation()
     }
 
     private fun updateFirmwareStatus(watchUpdateStatus: WatchUpdateStatus) {
@@ -139,7 +152,14 @@ class FirmwareUpdateFragment :
                 viewModel.sessionManager.sendQueryAction(QueryAction.QueryFirmwareVersion)
                 viewModel.deleteTempFile()
 
-                navigate(FirmwareUpdateFragmentDirections.navigateToFirmwareUpdateSuccess())
+                try {
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        navigate(FirmwareUpdateFragmentDirections.navigateToFirmwareUpdateSuccess())
+                    }, 2000)
+
+                } catch (ignored: Exception) {
+                }
+
             }
 
             UpdateStatus.ERROR -> {

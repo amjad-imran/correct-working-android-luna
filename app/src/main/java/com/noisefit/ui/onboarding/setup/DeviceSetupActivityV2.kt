@@ -6,9 +6,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.noisefit.luna.databinding.ActivityDeviceSetupV2Binding
 import com.noisefit.ui.common.BaseActivity
-import com.noisefit.ui.onboarding.pairing.SETUP_DEVICE
 import com.noisefit_commans.databinding.DefaultLoaderBinding
-import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.InsiderAppEvents
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,7 +25,7 @@ class DeviceSetupActivityV2 : BaseActivity<ActivityDeviceSetupV2Binding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.localDataStore.setDeviceSetupPendingStatus(false)
+        viewModel.localDataStore.setDeviceSetupStatus(1)
         viewModel.localDataStore.setPreviouslyPaired()
         viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_device_setup_start)
 

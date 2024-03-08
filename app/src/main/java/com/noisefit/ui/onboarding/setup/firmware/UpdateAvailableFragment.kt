@@ -6,6 +6,7 @@ import androidx.fragment.app.activityViewModels
 import com.noisefit.luna.databinding.FragmentUpdateAvailableBinding
 import com.noisefit.ui.onboarding.setup.DeviceSetupSharedViewModel
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.loadImageWithCache
 
 class UpdateAvailableFragment :
     BaseFragment<FragmentUpdateAvailableBinding>(FragmentUpdateAvailableBinding::inflate) {
@@ -14,6 +15,8 @@ class UpdateAvailableFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.animView.loadImageWithCache(binding.animView.context,viewModel.getRingImage())
 
         viewModel.updateProgress2.postValue(20)
     }

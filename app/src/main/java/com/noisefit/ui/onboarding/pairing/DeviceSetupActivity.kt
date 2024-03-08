@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.activity.viewModels
-import com.airbnb.lottie.LottieDrawable
 import com.noisefit.data.local.AppStaticData
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ActivityDeviceSetupBinding
@@ -70,7 +69,7 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.localDataStore.setDeviceSetupPendingStatus(false)
+        viewModel.localDataStore.setDeviceSetupStatus(1)
         deviceSetupViewModel.getDeviceType()
         viewModel.localDataStore.setPreviouslyPaired()
 
@@ -171,7 +170,7 @@ class DeviceSetupActivity : BaseActivity<ActivityDeviceSetupBinding>() {
                     binding.layoutWatch.playAnimation()
                     deviceSetupViewModel.currentAnimation = 2*/
                     vibrationUtils.vibrate(LOW_VIBRATION)
-                    viewModel.localDataStore.setDeviceSetupPendingStatus(false)
+                    viewModel.localDataStore.setDeviceSetupStatus(2)
                     startMainActivity()
                 }
 

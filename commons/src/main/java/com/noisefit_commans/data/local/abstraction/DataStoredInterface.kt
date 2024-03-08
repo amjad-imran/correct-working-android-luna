@@ -269,8 +269,13 @@ interface DataStoredInterface {
     fun getLocalUserData(): LocalUserData?
     fun setLocalUserData(localUserData: LocalUserData?)
 
-    fun setDeviceSetupPendingStatus(status: Boolean)
-    fun isDeviceSetupDone(): Boolean
+    /**
+     * 0->No value stored
+     * 1-> setup pending
+     * 2->Setup Done
+     */
+    fun setDeviceSetupStatus(status: Int)
+    fun getDeviceSetupStatus(): Int
 
     fun setBatteryOptimisationStatus(status: Boolean)
     fun getBatteryOptimisationStatus(): Boolean
@@ -433,5 +438,5 @@ interface DataStoredInterface {
     fun saveAppRemindDate()
     fun getAppRemindDate(): String?
 
-    fun isNewAppVersionAvailable():Boolean
+    fun isNewAppVersionAvailable(): Boolean
 }

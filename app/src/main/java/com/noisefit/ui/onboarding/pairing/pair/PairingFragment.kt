@@ -25,7 +25,6 @@ import com.noisefit.luna.databinding.DialogResetingDeviceBinding
 import com.noisefit.luna.databinding.FragmentPairingBinding
 import com.noisefit.session.SessionManager
 import com.noisefit.ui.onboarding.onboardProfile.ProfileSetupActivity
-import com.noisefit.ui.onboarding.pairing.DeviceSetupActivity
 import com.noisefit.ui.onboarding.setup.DeviceSetupActivityV2
 import com.noisefit.watch.ApplicationHandler
 import com.noisefit.watch.ConnectionHandler
@@ -44,7 +43,6 @@ import com.noisefit_commans.interfaces.connection.ResetStates
 import com.noisefit_commans.interfaces.connection.WatchBindState
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.DeviceFirmware
-import com.noisefit_commans.models.DeviceType
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.utils.*
 import com.oreo.receiver.service.RingConnectionService
@@ -162,7 +160,7 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
     }
 
     private fun handlePairState() {
-        viewModel.localDataStore.setDeviceSetupPendingStatus(false)
+        viewModel.localDataStore.setDeviceSetupStatus(1)
 
         if (viewModel.isProfileSetupComplete()) {
             startActivity(DeviceSetupActivityV2.getStartIntent(requireContext()))

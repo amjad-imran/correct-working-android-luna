@@ -6,12 +6,14 @@ import android.os.Looper
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import com.airbnb.lottie.LottieDrawable
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSettingUpDeviceBinding
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.models.DeviceUnits
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.loadImageWithCache
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
@@ -43,15 +45,24 @@ class SettingUpDeviceFragment :
         super.onViewCreated(view, savedInstanceState)
 
 
+        binding.animView.repeatCount = LottieDrawable.INFINITE
+        binding.animView.setAnimation(R.raw.anim_pairing)
+        binding.animView.playAnimation()
+
+        binding.ivRingImage.loadImageWithCache(requireContext(), sharedViewModel.getRingImage2())
+
         Handler(Looper.getMainLooper()).postDelayed({
             if (viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
-                context.showShortToast(getString(R.string.text_no_device_connected))
-                activity?.finish()
+                if (viewModel.setupStarted.not()) {
+                    context.showShortToast(getString(R.string.text_no_device_connected))
+                    activity?.finish()
+                }
             }
         }, 5000)
     }
 
     override fun initListener() {
+
 
     }
 
@@ -106,7 +117,7 @@ class SettingUpDeviceFragment :
 
     private fun setupSuccess() {
         vibrationUtils.vibrate(LOW_VIBRATION)
-        viewModel.localDataStore.setDeviceSetupPendingStatus(true)
+        viewModel.localDataStore.setDeviceSetupStatus(2)
         tryCatch {
             navigate(SettingUpDeviceFragmentDirections.navigateToSetupSuccess())
         }

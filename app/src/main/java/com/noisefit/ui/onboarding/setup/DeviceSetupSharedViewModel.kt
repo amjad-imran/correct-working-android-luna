@@ -245,4 +245,12 @@ class DeviceSetupSharedViewModel @Inject constructor(
         }
     }
 
+    fun getRingImage(): String? {
+        return ringDataStore.getRingDevice()?.ringInfo?.image
+    }
+
+    fun getRingImage2(): String? {
+        return ringDataStore.getRingDevice()?.ringInfo?.image2
+    }
+
 }

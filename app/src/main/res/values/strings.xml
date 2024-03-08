@@ -1057,7 +1057,6 @@
     <string name="text_setting_up_device">Update your ring’s firmware to the latest version to access new features</string>
     <string name="text_all_done_">All done!</string>
     <string name="text_all_done_message">For the most accurate readings, wear the ring on your index finger with its sensors facing the palm side.</string>
-    <string name="text_update_available">Update available</string>
     <string name="text_update_available_message">Update your ring’s firmware to the latest version to access new features</string>
     <string name="text_low_battery_alert">Low battery alert</string>
     <string name="text_low_battery_message">Your ring should have more than 20% battery to proceed further. Please charge your ring.</string>

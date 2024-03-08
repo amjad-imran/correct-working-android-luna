@@ -27,7 +27,6 @@ import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DateFormats.checkTimeDifferenceMoreThanN
-import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -337,10 +336,9 @@ class SplashViewModel
             return
         }
 
-        val isDeviceSetupDone = localDataStore.isDeviceSetupDone()
-        if (ringDataStore.getRingDevice() != null && isDeviceSetupDone.not()) {
+        val deviceSetupStatus = localDataStore.getDeviceSetupStatus()
+        if (ringDataStore.getRingDevice() != null && deviceSetupStatus == 1) {
             _userOnBoardingFlow.value = (UserOnBoardingFlow.DEVICE_SETUP)
-            sendMessage("Device Setup")
             return
         }
 

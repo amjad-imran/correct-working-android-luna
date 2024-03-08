@@ -7,6 +7,7 @@ import com.noisefit.luna.databinding.FragmentFirmwareCheckBinding
 import com.noisefit.ui.onboarding.setup.DeviceSetupSharedViewModel
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.loadImageWithCache
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -18,6 +19,8 @@ class FirmwareCheckFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.animView.loadImageWithCache(binding.animView.context,viewModel.getRingImage())
 
         viewModel.sessionManager.postFirmwareDetailsOnSetup = true
         viewModel.sessionManager.sendQueryAction(QueryAction.QueryFirmwareVersion)
