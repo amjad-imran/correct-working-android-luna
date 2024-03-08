@@ -143,7 +143,7 @@ constructor(
 
     fun handleBatteryAlert(noiseFitDevice: ColorFitDevice) {
         viewModelScope.launch(Dispatchers.IO) {
-            val isAlertShown = localDataStore.getIsBatteryAlertShown()
+            val isAlertShown = false//localDataStore.getIsBatteryAlertShown()
             if (!isAlertShown) {
                 stateDashRingBattery.postValue(Pair(true, noiseFitDevice))
             } else {

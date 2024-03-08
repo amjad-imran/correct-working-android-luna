@@ -18,6 +18,7 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
+import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.data.model.User
 import com.noisefit_commans.interfaces.QueryAction
@@ -62,14 +63,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SummaryDataViewModelToday @Inject
-constructor(
+class SummaryDataViewModelToday @Inject constructor(
     val userRepository: OreoUserActivityRepository,
     val ringDataStore: RingDataStore,
     val localDataStore: DataStoredInterface,
     val sessionManager: SessionManager,
     val dataConverter: DataConverter,
     val screenUtils: ScreenUtils,
+    val watchDataStore: WatchDataStore,
     private val syncRepository: OreoSyncRepository,
     val userActivityRepository: OreoUserActivityRepository,
     val updateRepository: UpdateRepository,
@@ -121,8 +122,7 @@ constructor(
     fun initTodayData() {
 
         viewModelScope.launch(Dispatchers.IO) {
-            user = localDataStore.getUser()
-            /*stateHeaderCard.postValue(
+            user = localDataStore.getUser()/*stateHeaderCard.postValue(
                 Pair(
                     getGreetingMessageValue(),
                     DateFormats.getCurrentDate(DateFormats.dateTimeFormatWithWeekWithoutYear)
@@ -239,8 +239,7 @@ constructor(
 
 
             val newSleepArray = dataConverter.mergeSleepData(
-                healthData.sleep?.hourly_breakup,
-                healthData.sleep?.naps
+                healthData.sleep?.hourly_breakup, healthData.sleep?.naps
             )
 
 
@@ -284,10 +283,8 @@ constructor(
                                     OHealthOverview.Sleep(
                                         sleepModel,
                                         makeSleepArray(newSleepArray),
-                                        newSleepArray?.firstOrNull()?.start_time
-                                            ?: "",
-                                        newSleepArray?.lastOrNull()?.end_time
-                                            ?: ""
+                                        newSleepArray?.firstOrNull()?.start_time ?: "",
+                                        newSleepArray?.lastOrNull()?.end_time ?: ""
                                     )
                                 )
                             }
@@ -315,10 +312,8 @@ constructor(
                                     OHealthOverview.Sleep(
                                         sleepModel,
                                         makeSleepArray(newSleepArray),
-                                        newSleepArray?.firstOrNull()?.start_time
-                                            ?: "",
-                                        newSleepArray?.lastOrNull()?.end_time
-                                            ?: ""
+                                        newSleepArray?.firstOrNull()?.start_time ?: "",
+                                        newSleepArray?.lastOrNull()?.end_time ?: ""
                                     )
                                 )
                             }
@@ -338,16 +333,14 @@ constructor(
                             val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
                             userActivities.add(
                                 OHealthOverview.ActivityMinimal(
-                                    activityModal,
-                                    caloriesGoal
+                                    activityModal, caloriesGoal
                                 )
                             )
                         } else if (activeCalories >= 50) {
                             val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
                             userActivities.add(
                                 OHealthOverview.Activity(
-                                    activityModal,
-                                    caloriesGoal
+                                    activityModal, caloriesGoal
                                 )
                             )
                         } else {
@@ -369,10 +362,8 @@ constructor(
                                     OHealthOverview.Sleep(
                                         sleepModel,
                                         makeSleepArray(newSleepArray),
-                                        newSleepArray?.firstOrNull()?.start_time
-                                            ?: "",
-                                        newSleepArray?.lastOrNull()?.end_time
-                                            ?: ""
+                                        newSleepArray?.firstOrNull()?.start_time ?: "",
+                                        newSleepArray?.lastOrNull()?.end_time ?: ""
                                     )
                                 )
                             }
@@ -389,16 +380,14 @@ constructor(
                             val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
                             userActivities.add(
                                 OHealthOverview.ActivityMinimal(
-                                    activityModal,
-                                    caloriesGoal
+                                    activityModal, caloriesGoal
                                 )
                             )
                         } else {
                             val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
                             userActivities.add(
                                 OHealthOverview.Activity(
-                                    activityModal,
-                                    caloriesGoal
+                                    activityModal, caloriesGoal
                                 )
                             )
                         }
@@ -415,16 +404,14 @@ constructor(
                             val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
                             userActivities.add(
                                 OHealthOverview.ActivityMinimal(
-                                    activityModal,
-                                    caloriesGoal
+                                    activityModal, caloriesGoal
                                 )
                             )
                         } else {
                             val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
                             userActivities.add(
                                 OHealthOverview.Activity(
-                                    activityModal,
-                                    caloriesGoal
+                                    activityModal, caloriesGoal
                                 )
                             )
                         }
@@ -435,16 +422,14 @@ constructor(
                             if ((sleepModel.totalSleep ?: 0) > 0) {
                                 userActivities.add(
                                     OHealthOverview.SleepMinimal(
-                                        sleepModel,
-                                        makeSleepArray(newSleepArray)
+                                        sleepModel, makeSleepArray(newSleepArray)
                                     )
                                 )
                             }
                             if (nap.isNotEmpty()) {
                                 userActivities.add(
                                     OHealthOverview.NapDashCard(
-                                        nap,
-                                        healthData.date
+                                        nap, healthData.date
                                     )
                                 )
                             }
@@ -478,8 +463,7 @@ constructor(
                             if (nap.isNotEmpty()) {
                                 userActivities.add(
                                     OHealthOverview.NapDashCard(
-                                        nap,
-                                        healthData.date
+                                        nap, healthData.date
                                     )
                                 )
                             }
@@ -495,8 +479,7 @@ constructor(
 
             stateSleepAvgCard.postValue(
                 Pair(
-                    trendsData?.sleepScoreAvg,
-                    trendsData?.activityScoreAvg
+                    trendsData?.sleepScoreAvg, trendsData?.activityScoreAvg
                 )
             )
             stateReadinessAvgCard.postValue(trendsData?.readinessScoreAvg)
@@ -536,12 +519,10 @@ constructor(
         var suffix = ""
         if (hour > 11) {
             suffix = "pm"
-            if (hour > 12)
-                hour -= 12;
+            if (hour > 12) hour -= 12;
         } else {
             suffix = "am"
-            if (hour == 0)
-                hour = 12;
+            if (hour == 0) hour = 12;
         }
         return "$hour $suffix"
     }
@@ -918,8 +899,9 @@ constructor(
             return false
         } else {
             val lastCheckTimestamp = ringDataStore.getOtaVersionCheckTimeStamp()
-            LOGS.d("" +
-                    " ${lastCheckTimestamp}")
+            LOGS.d(
+                "" + " ${lastCheckTimestamp}"
+            )
             return if (lastCheckTimestamp == 0L) {
                 true
             } else {
@@ -940,8 +922,7 @@ constructor(
                         resource.data?.data?.let {
 
                             updateRepository.saveNewAppVersion(
-                                it.appVersion,
-                                BuildConfig.VERSION_CODE
+                                it.appVersion, BuildConfig.VERSION_CODE
                             )
                             postOfflineAppUpdateData()
                         }
@@ -998,18 +979,15 @@ constructor(
 
         return JsonObject().apply {
             addProperty(
-                "version",
-                pair.first
+                "version", pair.first
             )
             addProperty(
-                "firmware_id",
-                pair.second
+                "firmware_id", pair.second
             )
             addProperty("mac", ringDevice?.address)
             addProperty("device_type", deviceType)
             addProperty(
-                "isOTARequired",
-                sessionManager.needDfuUpdate.value?.peekContent() ?: false
+                "isOTARequired", sessionManager.needDfuUpdate.value?.peekContent() ?: false
             )
             addProperty("platform", "android")
         }
@@ -1106,6 +1084,18 @@ constructor(
             oldReadinessScore = nap.prevReadinessScore,
             newReadinessScore = nap.readinessScore,
         )
+    }
+
+    fun handleBatteryAlert(noiseFitDevice: ColorFitDevice) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val batteryPercentage = watchDataStore.getBatteryPercentRing()
+            if (batteryPercentage < 20) {
+                stateDashRingBattery.postValue(Pair(true, noiseFitDevice))
+            } else {
+                stateDashRingBattery.postValue(Pair(false, null))
+            }
+        }
+
     }
 
 

@@ -371,7 +371,7 @@ class SummaryDataFragmentToday :
 
         binding.contentMain.lytChargeRing.root.setOnClickListener {
             navigate(R.id.ringBatteryChargeFragment)
-            viewModel.setRingBatteryInfoState()
+            //viewModel.setRingBatteryInfoState()
         }
 
         binding.contentMain.lytPairDevice.btnPairDevice.setOnClickListener {
@@ -438,14 +438,14 @@ class SummaryDataFragmentToday :
         viewModel.otaUpdateInfo.observe(viewLifecycleOwner) {
 
             if (it == null) {
-                    binding.contentMain.lytOtaUpdate.root.gone()
-                } else {
-                    binding.contentMain.lytOtaUpdate.apply {
-                        this.tvTitle.text = it.description?.header
-                        this.tvMessage.text = it.description?.shortDescription
-                        this.imvBack.loadImageWithCache(this.imvBack.context, it.imageUrl)
-                        root.visible()
-                    }
+                binding.contentMain.lytOtaUpdate.root.gone()
+            } else {
+                binding.contentMain.lytOtaUpdate.apply {
+                    this.tvTitle.text = it.description?.header
+                    this.tvMessage.text = it.description?.shortDescription
+                    this.imvBack.loadImageWithCache(this.imvBack.context, it.imageUrl)
+                    root.visible()
+                }
 
             }
 
@@ -727,18 +727,22 @@ class SummaryDataFragmentToday :
             when (connectedState) {
                 is ConnectState.ConnectFailed -> {
                     viewModel.updateAlerts()
+                    viewModel.stateDashRingBattery.postValue(Pair(false, null))
                 }
 
                 is ConnectState.Connecting -> {
                     viewModel.updateAlerts()
+                    viewModel.stateDashRingBattery.postValue(Pair(false, null))
                 }
 
                 is ConnectState.ConnectSuccess -> {
                     viewModel.updateAlerts()
+                    viewModel.handleBatteryAlert(connectedState.noiseFitDevice)
                 }
 
                 is ConnectState.UnPaired -> {
                     viewModel.updateAlerts()
+                    viewModel.stateDashRingBattery.postValue(Pair(false, null))
                 }
 
                 else -> {}
