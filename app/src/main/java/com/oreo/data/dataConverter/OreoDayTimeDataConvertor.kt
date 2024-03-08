@@ -74,7 +74,7 @@ class OreoDayTimeDataConvertor @Inject constructor() {
             }
         }
 
-        getSleepSection(dayData.sleep)?.let { pos ->
+        getSleepSection(dayData.sleep, dayData.date)?.let { pos ->
             sections.add(
                 Section(
                     "sleep",
@@ -325,15 +325,15 @@ class OreoDayTimeDataConvertor @Inject constructor() {
      * "start_time":"2024-01-29 23:34:00",
      * "end_time":"2024-01-29 23:43:30",
      */
-    private fun getSleepSection(sleep: OreoSleepModel?): Pair<Int, Int>? {
+    private fun getSleepSection(sleep: OreoSleepModel?, date: String): Pair<Int, Int>? {
         val startTime = sleep?.hourly_breakup?.firstOrNull()?.start_time
         val endTime = sleep?.hourly_breakup?.lastOrNull()?.end_time
         if (startTime == null || endTime == null) return null
 
         val sleepStartDate = startTime.split(" ")[0]
-        val sleepEndDate = endTime.split(" ")[0]
+//        val sleepEndDate = endTime.split(" ")[0]
 
-        if (sleepStartDate.equals(sleepEndDate)) {
+        if (sleepStartDate.equals(date)) {
             //Same day Sleep
             val startTimeStamp = DateFormats.convertDateTimeToTimeStamp(
                 startTime,
