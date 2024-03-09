@@ -2,11 +2,9 @@ package com.noisefit.data.dataConverter
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
-import com.noisefit.watch.SDKWatchType
 import com.noisefit.watch.WatchesSDK
 import com.noisefit_commans.data.model.GoogleFitWorkoutData
 import com.noisefit_commans.data.model.OreoSleepData
-import com.noisefit_commans.models.DeviceType
 import com.noisefit_commans.models.SleepDataGoogleFit
 import com.noisefit_commans.models.SportsDataGoogleFit
 import com.noisefit_commans.models.SportsModeResponse
@@ -15,6 +13,7 @@ import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import javax.inject.Inject
+import kotlin.math.sign
 
 
 class OfflineDataMapper
@@ -118,7 +117,11 @@ class OfflineDataMapper
             return data[0]
         }
 
-        val watchType = watches.getWatchType()
+
+        return data[data.size - 1]
+
+
+        /*val watchType = watches.getWatchType()
         if (watchType == SDKWatchType.SDK_RYEEX) {
             return data[data.size - 1]
         }
@@ -182,7 +185,7 @@ class OfflineDataMapper
             sleepData.total = totalLight + totalDeep + totalRem
         } else {
             sleepData.total = totalLight + totalDeep + totalAwake + totalRem
-        }
+        }*/
 
 
         return sleepData
