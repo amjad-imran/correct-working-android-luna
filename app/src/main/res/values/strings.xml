@@ -107,7 +107,7 @@
     <string name="text_updating_ring_fw">Updating your Ring</string>
     <string name="text_updating_firmware_message_oreo">Please wait while we are updating your ring.</string>
     <string name="text_check_for_update">Check for Updates</string>
-    <string name="text_downloading_firmware">Downloading Firmware</string>
+    <string name="text_downloading_firmware">Downloading firmware</string>
     <string name="text_downloading_firmware_wait">Please wait while we are downloading Firmware</string>
     <string name="text_aerobic">Aerobic</string>
     <string name="text_extreme_workout">Extreme</string>
@@ -1048,16 +1048,16 @@
     <string name="text_this_can_be_because_there_s_not_enough_data_or_you_haven_t_worn_your_ring">This can be because there’s not enough data, or you haven’t worn your ring.</string>
     <string name="text_updating_ring">Updating ring</string>
     <string name="text_firmware_update_failed">Firmware update failed</string>
-    <string name="text_update_failed_message">Ensure that your ring and phone are kept close to each other during the update process to avoid any issues.</string>
+    <string name="text_update_failed_message">Make sure that your ring and phone are kept close to each other during the update process to avoid any issues.</string>
     <string name="text_checking_for_firmware_update">Checking for firmware update</string>
-    <string name="text_checking_fw_message">Update your ring’s firmware to the latest version to access new features</string>
+    <string name="text_checking_fw_message">Ensure that your ring and phone are kept close to each other.</string>
     <string name="text_device_up_to_date">Device up to date</string>
-    <string name="text_fw_up_to_date">Update your ring’s firmware to the latest version to access new features</string>
+    <string name="text_fw_up_to_date">Your ring is using the latest firmware and is ready to go!</string>
     <string name="text_setting_up_your_device">Setting up your device</string>
     <string name="text_setting_up_device">Update your ring’s firmware to the latest version to access new features</string>
     <string name="text_all_done_">All done!</string>
     <string name="text_all_done_message">For the most accurate readings, wear the ring on your index finger with its sensors facing the palm side.</string>
-    <string name="text_update_available_message">Update your ring’s firmware to the latest version to access new features</string>
+    <string name="text_update_available_message">Keep your ring and phone nearby during the update</string>
     <string name="text_low_battery_alert">Low battery alert</string>
-    <string name="text_low_battery_message">Your ring should have more than 20% battery to proceed further. Please charge your ring.</string>
+    <string name="text_low_battery_message">Your ring\'s battery is too low to update the firmware. Place the ring on the charger to proceed further.</string>
 </resources>

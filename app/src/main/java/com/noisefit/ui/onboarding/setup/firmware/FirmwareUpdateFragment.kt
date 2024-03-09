@@ -60,7 +60,7 @@ class FirmwareUpdateFragment :
                 )
                 updateProgress(50)
                 binding.tvTitle.text = getString(R.string.text_updating_ring)
-                binding.tvUpdating.text = getString(R.string.text_updating_firmware)
+                binding.tvUpdating.text = getString(R.string.text_updating_ring)
             }
         }
 
@@ -148,9 +148,12 @@ class FirmwareUpdateFragment :
             }
 
             UpdateStatus.COMPLETED -> {
+                viewModel.clearNewOtaUpdateData()
                 viewModel.sessionManager.sendQueryAction(QueryAction.QueryBatteryPower)
                 viewModel.sessionManager.sendQueryAction(QueryAction.QueryFirmwareVersion)
                 viewModel.deleteTempFile()
+
+
 
                 try {
                     Handler(Looper.getMainLooper()).postDelayed({

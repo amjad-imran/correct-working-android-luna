@@ -29,6 +29,7 @@ import com.noisefit.ui.APP_EXIT
 import com.noisefit.ui.APP_UPDATE
 import com.noisefit.ui.common.BaseActivity
 import com.noisefit.ui.onboarding.FirebaseUpdateViewModel
+import com.noisefit.ui.onboarding.setup.DeviceSetupActivityV2
 import com.noisefit.util.ApplicationUtils
 import com.noisefit.util.moveToServer.BatteryNotificationUtils
 import com.noisefit.util.notif.NotificationUtil

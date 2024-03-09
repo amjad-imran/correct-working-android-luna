@@ -29,7 +29,7 @@
         android:layout_marginEnd="32dp"
         android:gravity="center"
         android:lineSpacingExtra="6sp"
-        android:text="Update your ring’s firmware to the latest version to access new features"
+        android:text="Your ring is now using the latest firmware and is ready to go!"
         android:textColor="@color/white_64"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

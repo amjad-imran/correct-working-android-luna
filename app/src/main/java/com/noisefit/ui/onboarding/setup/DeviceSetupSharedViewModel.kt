@@ -253,4 +253,8 @@ class DeviceSetupSharedViewModel @Inject constructor(
         return ringDataStore.getRingDevice()?.ringInfo?.image2
     }
 
+    fun clearNewOtaUpdateData() {
+        ringDataStore.cleaNewOtaVersion()
+    }
+
 }
