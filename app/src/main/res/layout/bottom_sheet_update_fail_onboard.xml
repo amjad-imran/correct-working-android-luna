@@ -68,7 +68,7 @@
 
             <Button
                 android:id="@+id/btnTryAgain"
-                style="@style/PrimaryButtonStyle"
+                style="@style/PrimaryButtonStyle3"
                 android:layout_width="164dp"
                 android:layout_marginTop="44dp"
                 android:layout_marginBottom="@dimen/dimen_24dp"

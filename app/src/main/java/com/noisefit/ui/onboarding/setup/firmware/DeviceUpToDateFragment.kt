@@ -5,6 +5,8 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import com.airbnb.lottie.LottieDrawable
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentDeviceUpToDateBinding
 import com.noisefit.ui.onboarding.setup.DeviceSetupSharedViewModel
 import com.noisefit_commans.ui.BaseFragment
@@ -21,7 +23,10 @@ class DeviceUpToDateFragment :
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.updateProgress2.postValue(100)
-        binding.animView.loadImageWithCache(binding.animView.context,viewModel.getRingImage())
+        binding.vPlayer.repeatCount = LottieDrawable.INFINITE
+        binding.vPlayer.setAnimation(R.raw.anim_pairing)
+        binding.vPlayer.playAnimation()
+        binding.ivRingImage.loadImageWithCache(binding.ivRingImage.context,viewModel.getRingImage())
 
 
 

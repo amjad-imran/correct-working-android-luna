@@ -198,6 +198,11 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
             //binding.blurViewSelector.visible()
         }
+
+        /*binding.btnAddWorkout.setOnLongClickListener {
+            startActivity(DeviceSetupActivityV2.getStartIntent(this))
+            true
+        }*/
     }
 
     private fun showAddWorkout() {

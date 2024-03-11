@@ -36,7 +36,16 @@
         app:layout_constraintTop_toBottomOf="@+id/textView98" />
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/animView"
+        android:id="@+id/vPlayer"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivRingImage"
+        app:layout_constraintEnd_toEndOf="@+id/ivRingImage"
+        app:layout_constraintStart_toStartOf="@+id/ivRingImage"
+        app:layout_constraintTop_toTopOf="@+id/ivRingImage"/>
+
+    <ImageView
+        android:id="@+id/ivRingImage"
         android:layout_width="140dp"
         android:layout_height="140dp"
         app:layout_constraintBottom_toBottomOf="parent"

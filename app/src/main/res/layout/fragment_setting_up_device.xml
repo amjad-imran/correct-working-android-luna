@@ -46,8 +46,8 @@
 
     <ImageView
         android:id="@+id/ivRingImage"
-        android:layout_width="240dp"
-        android:layout_height="240dp"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
         app:layout_constraintBottom_toBottomOf="@+id/animView"
         app:layout_constraintEnd_toEndOf="@+id/animView"
         app:layout_constraintStart_toStartOf="@+id/animView"
