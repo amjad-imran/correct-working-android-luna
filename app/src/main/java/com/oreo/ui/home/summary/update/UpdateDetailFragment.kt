@@ -30,14 +30,14 @@ class UpdateDetailFragment :
         binding.toolbar.tvTitle.text = getString(R.string.text_update_my_app)
         binding.tvHeader.text = appUpdateModel.description?.header
         binding.tvMessage.text = appUpdateModel.description?.longDescription
-        binding.ivBack.loadImageWithCache(binding.ivBack.context, appUpdateModel.imageUrl)
+        binding.ivBack.loadImageWithCache(binding.ivBack.context, appUpdateModel.description?.imageUrl)
     }
 
     private fun setUiOtaUpdate(otaUpdateModel: OtaUpdateModel) {
         binding.toolbar.tvTitle.text = getString(R.string.text_update_my_ring)
         binding.tvHeader.text = otaUpdateModel.description?.header
         binding.tvMessage.text = otaUpdateModel.description?.longDescription
-        binding.ivBack.loadImageWithCache(binding.ivBack.context, otaUpdateModel.imageUrl)
+        binding.ivBack.loadImageWithCache(binding.ivBack.context, otaUpdateModel.description?.imageUrl)
     }
 
     override fun initListener() {

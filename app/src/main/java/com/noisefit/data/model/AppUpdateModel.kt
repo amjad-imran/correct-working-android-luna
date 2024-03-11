@@ -19,5 +19,7 @@ data class UpdateDescriptionModel(
     @SerializedName("short_description")
     val shortDescription: String? = null,
     @SerializedName("long_description")
-    val longDescription: String? = null
+    val longDescription: String? = null,
+    @SerializedName("image_url")
+    val imageUrl: String? = null,
 ) : Parcelable
