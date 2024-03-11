@@ -255,8 +255,18 @@ constructor(
     }
 
 
+    private fun updateDeviceDateTime() {
+        sessionManager.sendUpdateQueryAction(
+            UpdateDeviceAction.SetDeviceDateTime(
+                Calendar.getInstance(),
+                TimeFormat(TimeFormats.HOURS_12.type)
+            )
+        )
+    }
+
     private suspend fun getSyncData(success: () -> Unit, failed: () -> Unit) {
         LOGS.d(TAG, "getSyncData() ")
+        updateDeviceDateTime()
         sessionManager.setSyncCompletedState(Event(SyncEvents.Started(0, 0)))
         //sessionManager.setShowSyncOfflineData(Event(false))
 //        if (sessionManager == null || !sessionManager.isDeviceConnected()) {
