@@ -1626,6 +1626,7 @@ constructor() : LifecycleService() {
                     )
 
                     if (sessionManager.postFirmwareDetailsOnDash) {
+                        sessionManager.postFirmwareDetailsOnDash = false
                         sessionManager.checkForVersionUpdate.postValue(
                             Event(
                                 Pair(
@@ -1636,7 +1637,19 @@ constructor() : LifecycleService() {
                         )
                     }
                     if(sessionManager.postFirmwareDetailsOnSetup){
+                        sessionManager.postFirmwareDetailsOnSetup = false
                         sessionManager.checkForVersionUpdateSetup.postValue(
+                            Event(
+                                Pair(
+                                    WatchInfoGlobals.firmwareVersionNumberRing,
+                                    WatchInfoGlobals.firmwareDeviceIdRing
+                                )
+                            )
+                        )
+                    }
+                    if(sessionManager.postFirmwareDetailsOnAboutDevice){
+                        sessionManager.postFirmwareDetailsOnAboutDevice = false
+                        sessionManager.checkForVersionUpdateAbout.postValue(
                             Event(
                                 Pair(
                                     WatchInfoGlobals.firmwareVersionNumberRing,

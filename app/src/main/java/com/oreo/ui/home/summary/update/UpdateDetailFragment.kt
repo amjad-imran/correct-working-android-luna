@@ -59,6 +59,12 @@ class UpdateDetailFragment :
                     } ?: navigateUpSafe()
                 }
 
+                UpdateLaunchMode.OTA_DEVICE -> {
+                    viewModel.otaUpdateInfo.value?.let {
+                        navigate(UpdateDetailFragmentDirections.openRingUpdateAboutDevice(it))
+                    } ?: navigateUpSafe()
+                }
+
                 null -> {
                     navigateUpSafe()
                 }
@@ -71,7 +77,7 @@ class UpdateDetailFragment :
                     navigateUpSafe()
                 }
 
-                UpdateLaunchMode.OTA -> {
+                UpdateLaunchMode.OTA, UpdateLaunchMode.OTA_DEVICE -> {
                     viewModel.otaRemindLater()
                     navigateUpSafe()
                 }
@@ -108,5 +114,5 @@ class UpdateDetailFragment :
 }
 
 enum class UpdateLaunchMode {
-    APP, OTA
+    APP, OTA, OTA_DEVICE
 }

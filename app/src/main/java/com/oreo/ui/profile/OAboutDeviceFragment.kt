@@ -127,11 +127,7 @@ class OAboutDeviceFragment :
                 if (viewModel.ringDataSore.isNewOtaAvailable()) {
                     updateViewModel.setUpdateAvailable(true)
                 } else {
-                    val pair = Pair(
-                        WatchInfoGlobals.firmwareVersionNumberRing,
-                        WatchInfoGlobals.firmwareDeviceIdRing
-                    )
-                    viewModel.checkOtaVersionServer(pair)
+                    checkCurrentFirmwareVersion()
                 }
 
             } else {
@@ -145,7 +141,19 @@ class OAboutDeviceFragment :
         }
     }
 
+    private fun checkCurrentFirmwareVersion() {
+        viewModel.setLoading(true)
+        viewModel.sessionManager.postFirmwareDetailsOnAboutDevice = true
+        viewModel.sessionManager.sendQueryAction(QueryAction.QueryFirmwareVersion)
+    }
+
     override fun subscribeObservers() {
+        viewModel.sessionManager.checkForVersionUpdateAbout.observe(this) {
+            it.getContent()?.let {
+                viewModel.setLoading(false)
+                viewModel.checkOtaVersionServer(it)
+            }
+        }
 
         viewModel.otaUpdateInfo.observe(this@OAboutDeviceFragment) {
             it.getContent()?.let {
@@ -164,6 +172,7 @@ class OAboutDeviceFragment :
                         updateViewModel.mShouldFetchInfo = false
                     }
                 }
+
                 else -> {}
             }
         }
@@ -175,6 +184,7 @@ class OAboutDeviceFragment :
                         adapter.setDataSet(generateData(it))
                     }
                 }
+
                 else -> {}
             }
         }
@@ -212,9 +222,10 @@ class OAboutDeviceFragment :
         updateViewModel.updateAvailable.observe(viewLifecycleOwner) {
             it.getContent()?.let { isAvailable ->
                 if (isAvailable) {
+
                     navigate(
                         R.id.appUpdateDetailFragment,
-                        bundleOf("launchMode" to UpdateLaunchMode.OTA)
+                        bundleOf("launchMode" to UpdateLaunchMode.OTA_DEVICE)
                     )
                 }
             }

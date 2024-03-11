@@ -59,7 +59,7 @@ class UpdateDetailViewModel @Inject constructor(
                 getAppUpdateDetails()
             }
 
-            UpdateLaunchMode.OTA -> {
+            UpdateLaunchMode.OTA, UpdateLaunchMode.OTA_DEVICE -> {
                 getOtaUpdateDetails()
             }
         }

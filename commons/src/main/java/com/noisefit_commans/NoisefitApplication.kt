@@ -18,7 +18,6 @@ open class NoisefitApplication : MultiDexApplication() {
 
     companion object {
         var context: Application? = null
-        var localDataStore: DataStoredInterface? = null
     }
 
     override fun onCreate() {

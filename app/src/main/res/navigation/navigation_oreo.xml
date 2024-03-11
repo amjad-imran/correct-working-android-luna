@@ -585,6 +585,11 @@
             app:destination="@id/ringUpdateFragment"
             app:popUpTo="@id/appUpdateDetailFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/openRingUpdateAboutDevice"
+            app:destination="@id/ringUpdateFragment"
+            app:popUpTo="@id/OAboutDeviceFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/ringUpdateFragment"

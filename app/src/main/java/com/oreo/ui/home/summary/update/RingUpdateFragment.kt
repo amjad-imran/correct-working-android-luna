@@ -1,10 +1,12 @@
 package com.oreo.ui.home.summary.update
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
+import android.os.Looper
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +14,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -19,6 +23,7 @@ import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.noisefit.data.model.OtaUpdateModel
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentRingUpdateBinding
+import com.noisefit.oreo.OreoMainActivity
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.interfaces.QueryAction
@@ -33,10 +38,12 @@ import com.noisefit_commans.ui.loadImageWithCache
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MiscUtil
 import com.noisefit_commans.utils.share.ShareUtil
 import com.oreo.ui.helpsupport.questionaries.CALL_REQUEST_KEY
+import com.oreo.ui.workout.add.SELECT_REQUEST_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderEffectBlur
 import eightbitlab.com.blurview.RenderScriptBlur
@@ -68,6 +75,20 @@ class RingUpdateFragment :
         startUpdate()
 
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
+
+        /* var progress = 0
+         val timer = object : CountDownTimer(60000L, 1000L) {
+             override fun onTick(millisUntilFinished: Long) {
+                 updateProgress(progress)
+                 progress++
+             }
+
+             override fun onFinish() {
+
+             }
+         }
+
+         timer.start()*/
     }
 
     val callback: OnBackPressedCallback =
@@ -222,7 +243,15 @@ class RingUpdateFragment :
 
     private fun updateProgress(progress: Int) {
         binding.tvUpdatePercent.text = "$progress%"
-        binding.lottieAnimationView.setMinAndMaxProgress(progress.toFloat() / 100,progress.toFloat() / 100)
+
+        var calculatedProgress = progress
+        if (progress == 100) {
+            calculatedProgress = 99
+        }
+        binding.lottieAnimationView.setMinAndMaxProgress(
+            calculatedProgress.toFloat() / 100,
+            calculatedProgress.toFloat() / 100
+        )
         binding.lottieAnimationView.playAnimation()
     }
 
@@ -237,12 +266,12 @@ class RingUpdateFragment :
             }
 
             UpdateStatus.COMPLETED -> {
-                viewModel.sessionManager.showCustomToast("Ring firmware is up to date")
                 viewModel.clearNewOtaUpdateData()
                 viewModel.sessionManager.sendQueryAction(QueryAction.QueryBatteryPower)
                 viewModel.sessionManager.sendQueryAction(QueryAction.QueryFirmwareVersion)
                 viewModel.deleteTempFile()
                 navigateUpSafe()
+                viewModel.sessionManager.customSuccessToast.postValue(Event("Ring firmware is up to date"))
             }
 
             UpdateStatus.ERROR -> {
@@ -262,6 +291,7 @@ class RingUpdateFragment :
 
 
     private fun showBatteryWarning() {
+        //TODO change to new Dialog
         val alertMessage =
             getString(R.string.text_battery_low_ring, viewModel.getMinBatteryPercent())
         uiController.onApiErrorReceived(
