@@ -202,6 +202,7 @@ class FirmwareUpdateFragment :
         setFragmentResultListener(LOW_BATTERY_FIRMWARE) { _, bundle ->
             val tryAgain = bundle.getBoolean("tryAgain")
             if (tryAgain) {
+                viewModel.sessionManager.sendQueryAction(QueryAction.QueryBatteryPower)
                 startUpdate()
             }
         }
