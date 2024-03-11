@@ -264,7 +264,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         val shouldSync = viewModel.sessionManager.forceSyncData.value?.getContent() ?: false
 
-        if (shouldSync || kotlin.math.abs(DateFormats.getTimeStamp() - lastSyncTime) > 2 * 60 * 60 * 1000L) {
+        if (shouldSync || kotlin.math.abs(DateFormats.getTimeStamp() - lastSyncTime) > 5 * 60 * 1000L) {
             if (viewModel.sessionManager.bluetoothStateDash.value != false) {
                 binding.lytHeader.tvHeaderStatus.apply {
                     text = context.getString(R.string.text_syncing_dot)

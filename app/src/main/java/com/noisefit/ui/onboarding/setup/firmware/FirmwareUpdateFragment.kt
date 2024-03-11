@@ -84,13 +84,16 @@ class FirmwareUpdateFragment :
                 return@tryCatch
             }
 
-            if ((viewModel.sessionManager.batteryPercentRing.value
-                    ?: 0) <= viewModel.getMinBatteryPercent()
-            ) {
-                updateProgress(0)
-                showBatteryWarning()
-                return@tryCatch
+            val battery = viewModel.sessionManager.batteryPercentRing.value ?: 0
+            if (battery != 0) {
+                if (battery <= viewModel.getMinBatteryPercent()
+                ) {
+                    updateProgress(0)
+                    showBatteryWarning()
+                    return@tryCatch
+                }
             }
+
 
 
             if (viewModel.updateOtaData == null) return@tryCatch

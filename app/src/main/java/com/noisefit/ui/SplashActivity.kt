@@ -68,7 +68,6 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
         handleBackgroundNotifications(intent)
 
         if (viewModel.connectedDevice != null) {
-            viewModel.sessionManager.forceSyncData.postValue(Event(true))
             checkPermissionAndStartService()
         } else {
             startOnBoardFlow()

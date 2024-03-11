@@ -603,4 +603,8 @@
         android:id="@+id/bottomSheetUpdateFailed"
         android:name="com.oreo.ui.home.summary.update.BottomSheetUpdateFailed"
         android:label="BottomSheetUpdateFailed" />
+    <dialog
+        android:id="@+id/bottomSheetLowBatteryFirmware"
+        android:name="com.noisefit.ui.onboarding.setup.firmware.BottomSheetLowBatteryFirmware"
+        android:label="BottomSheetLowBatteryFirmware" />
 </navigation>

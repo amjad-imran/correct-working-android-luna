@@ -24,6 +24,7 @@ import com.noisefit.data.model.OtaUpdateModel
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentRingUpdateBinding
 import com.noisefit.oreo.OreoMainActivity
+import com.noisefit.ui.onboarding.setup.firmware.LOW_BATTERY_FIRMWARE
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.interfaces.QueryAction
@@ -136,12 +137,16 @@ class RingUpdateFragment :
                 return@tryCatch
             }
 
-            if ((viewModel.sessionManager.batteryPercentRing.value
-                    ?: 0) <= viewModel.getMinBatteryPercent()
-            ) {
-                showBatteryWarning()
-                return@tryCatch
+            val battery = viewModel.sessionManager.batteryPercentRing.value ?: 0
+
+            if (battery != 0) {
+                if (battery <= viewModel.getMinBatteryPercent()
+                ) {
+                    showBatteryWarning()
+                    return@tryCatch
+                }
             }
+
 
 
             if (viewModel.otaData == null) return@tryCatch
@@ -291,18 +296,12 @@ class RingUpdateFragment :
 
 
     private fun showBatteryWarning() {
-        //TODO change to new Dialog
-        val alertMessage =
-            getString(R.string.text_battery_low_ring, viewModel.getMinBatteryPercent())
-        uiController.onApiErrorReceived(
-            ErrorResponse(
-                UIComponentType.InfoAlertDialog(
-                    getString(
-                        R.string.text_ring_battery_low
-                    ), alertMessage, getString(R.string.text_got_it)
-                )
-            )
-        )
-
+        setFragmentResultListener(LOW_BATTERY_FIRMWARE) { _, bundle ->
+            val tryAgain = bundle.getBoolean("tryAgain")
+            if (tryAgain) {
+                startUpdate()
+            }
+        }
+        navigate(R.id.bottomSheetLowBatteryFirmware)
     }
 }

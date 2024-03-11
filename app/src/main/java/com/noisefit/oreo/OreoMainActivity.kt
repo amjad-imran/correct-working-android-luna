@@ -687,7 +687,6 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         super.onResume()
         navController?.addOnDestinationChangedListener(navListener)
         viewModel.ringDataStore.getRingDevice()?.let {
-            viewModel.sessionManager.forceSyncData.value = Event(true)
             if (viewModel.sessionManager.connectStateRing.value == null) {
                 viewModel.sessionManager.setConnectStateRing(ConnectState.Connecting(it))
                 ApplicationUtils.setRescueWorkManager(this)
