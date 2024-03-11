@@ -467,7 +467,7 @@ class LineChartView : View {
                 sum += it.value
                 count += 1
                 val avg = (sum / count)
-                println("lowestHr ---------------->lowest:- ${it.lowestValue}, highest:- ${it.highestValue}, current:- ${it.value}, avg:- $avg")
+                //println("lowestHr ---------------->lowest:- ${it.lowestValue}, highest:- ${it.highestValue}, current:- ${it.value}, avg:- $avg")
                 if (avg < avgMinValue) {
                     avgMinValue = avg
                     avgMinIndex = it.index
@@ -475,7 +475,7 @@ class LineChartView : View {
                 }
 
             }
-            println("index $avgMinIndex")
+            //println("index $avgMinIndex")
             return Pair(avgMinIndex, avgValue)
 
         }
@@ -1296,7 +1296,7 @@ class LineChartView : View {
 
         // Iterate and find the element
         // Iterate and find the element
-        val range = dip2px(2f)
+        val range = dip2px(3f)
         for (i in 0 until toolTipList.size) {
 
             // If K lies in the current range

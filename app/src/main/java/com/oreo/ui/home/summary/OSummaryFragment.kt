@@ -277,7 +277,8 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
     fun setTopBar() {
 
-        val it = mainViewModel.dashboard.value ?: return
+        val it = mainViewModel.dashboard.value
+        if (it.isNullOrEmpty()) return
 
         val topGraphData = viewModel.getPrefixAndSuffixList(it)
 
