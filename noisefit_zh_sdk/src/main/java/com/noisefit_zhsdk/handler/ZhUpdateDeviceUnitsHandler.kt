@@ -57,6 +57,7 @@ import com.noisefit_commans.models.WeatherData
 import com.noisefit_commans.models.Widget
 import com.noisefit_commans.models.WorldClocksPushData
 import com.noisefit_commans.models.WristLiftGesture
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.AgpsEvents
 import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.AppLogs
@@ -192,6 +193,13 @@ constructor(
         }
 
 
+    }
+
+    /**
+     * status->true -> enable
+     */
+    override fun setRealTimeDataState(status: Boolean) {
+        ControlBleTools.getInstance().realTimeDataSwitch(status, null)
     }
 
 

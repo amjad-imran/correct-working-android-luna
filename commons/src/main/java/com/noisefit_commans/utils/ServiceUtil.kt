@@ -251,6 +251,9 @@ object ServiceUtil {
             is UpdateDeviceAction.SetWatchPassword -> {
                 updateAction.setWatchPassword(it.watchPassword)
             }
+            is UpdateDeviceAction.SetRealTimeDataState -> {
+                updateAction.setRealTimeDataState(it.state)
+            }
             is UpdateDeviceAction.DeleteReminders -> {
                 updateAction.deleteReminders(it.reminderList)
             }

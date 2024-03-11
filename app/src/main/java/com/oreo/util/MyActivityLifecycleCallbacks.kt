@@ -5,10 +5,12 @@ import android.app.Application
 import android.os.Bundle
 import androidx.annotation.Nullable
 import com.noisefit.oreo.OreoMainActivity
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.utils.LOGS
 
 
-class MyActivityLifecycleCallbacks : Application.ActivityLifecycleCallbacks {
+class MyActivityLifecycleCallbacks(val sessionManager: SessionManager) :
+    Application.ActivityLifecycleCallbacks {
     private var activityCount = 0
     val TAG = "MyActivityLifecycleCallbacks"
     override fun onActivityCreated(activity: Activity, @Nullable savedInstanceState: Bundle?) {
@@ -29,7 +31,7 @@ class MyActivityLifecycleCallbacks : Application.ActivityLifecycleCallbacks {
         // Activity resumed
         LOGS.d(TAG, "onActivityResumed $activity")
         if (activity is OreoMainActivity) {
-            LOGS.d(TAG, "App in Foreground")
+            sessionManager.onAppInForeground()
         }
 
     }
@@ -50,7 +52,8 @@ class MyActivityLifecycleCallbacks : Application.ActivityLifecycleCallbacks {
         }
 
         if (activity is OreoMainActivity) {
-            LOGS.d(TAG, "App in background")
+            sessionManager.onAppInBackground()
+
         }
     }
 

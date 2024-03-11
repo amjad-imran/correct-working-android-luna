@@ -130,9 +130,15 @@ class FirmwareUpdateFragment :
             }
         )
 
+
+        var calculatedProgress = progress
+        if (progress == 100) {
+            calculatedProgress = 99
+        }
+
         binding.lottieAnimationView.setMinAndMaxProgress(
-            progress.toFloat() / 100,
-            progress.toFloat() / 100
+            calculatedProgress.toFloat() / 100,
+            calculatedProgress.toFloat() / 100
         )
         binding.lottieAnimationView.playAnimation()
     }

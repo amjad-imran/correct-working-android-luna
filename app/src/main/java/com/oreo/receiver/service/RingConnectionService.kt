@@ -704,6 +704,8 @@ constructor() : LifecycleService() {
                                 sessionManager.setConnectedDeviceRing(colorFitDevice)
                                 stateConnected(colorFitDevice)
 
+                                setRealTimeDataState()
+
                             }
 
                             is ConnectState.DisconnectSuccess -> {
@@ -780,6 +782,12 @@ constructor() : LifecycleService() {
 
             setISConnected(colorFitDevice)
         } ?: LOGS.d(TAG, "Connected device is null")
+    }
+
+    private fun setRealTimeDataState() {
+        sessionManager.sendUpdateQueryAction(
+            UpdateDeviceAction.SetRealTimeDataState(sessionManager.appInForeground)
+        )
     }
 
     private fun setPeriodicInfo() {
@@ -1636,7 +1644,7 @@ constructor() : LifecycleService() {
                             )
                         )
                     }
-                    if(sessionManager.postFirmwareDetailsOnSetup){
+                    if (sessionManager.postFirmwareDetailsOnSetup) {
                         sessionManager.postFirmwareDetailsOnSetup = false
                         sessionManager.checkForVersionUpdateSetup.postValue(
                             Event(
@@ -1647,7 +1655,7 @@ constructor() : LifecycleService() {
                             )
                         )
                     }
-                    if(sessionManager.postFirmwareDetailsOnAboutDevice){
+                    if (sessionManager.postFirmwareDetailsOnAboutDevice) {
                         sessionManager.postFirmwareDetailsOnAboutDevice = false
                         sessionManager.checkForVersionUpdateAbout.postValue(
                             Event(

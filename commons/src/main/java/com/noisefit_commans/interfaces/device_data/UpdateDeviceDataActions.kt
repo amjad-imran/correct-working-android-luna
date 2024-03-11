@@ -70,6 +70,7 @@ abstract class UpdateDeviceDataActions() :
     open fun setMedicineReminder(sedentaryData: SedentaryData) {}
     open fun setFactoryReset() {}
     open fun setStressData(sedentaryData: SedentaryData) {}
+    open fun setRealTimeDataState(status: Boolean) {}
 
     open fun getWatchFacePro3(type: String) {}
     open fun setSportSyncParamPro3() {}
