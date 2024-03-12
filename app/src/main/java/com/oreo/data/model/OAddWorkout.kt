@@ -6,6 +6,7 @@ data class OAddWorkout(
     var duration: Int = 0,
     var steps: Int = 0,
     var calories: Int = 0,
+    @SerializedName("extra_calories") var extraCalories: Int? = null,
     var startTimeIn24H: String = "",
     var endTimeIn24H: String = "",
     var intensity: String = "",

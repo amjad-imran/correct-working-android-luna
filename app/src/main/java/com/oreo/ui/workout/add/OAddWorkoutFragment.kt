@@ -295,7 +295,7 @@ class OAddWorkoutFragment :
             binding.lytCaloriesBurn.tvDurationValue.text = duration.toString()
         }
 
-        val calories = viewModel.getCaloriesBurnt().roundToInt()
+        val calories = viewModel.getCaloriesBurnt()
         viewModel.addWorkout.calories = calories
         binding.lytCaloriesBurn.tvCalBurnValue.text = if (calories > 0) {
             "$calories"
@@ -313,17 +313,6 @@ class OAddWorkoutFragment :
 
 
         enableSaveBtn()
-
-    }
-
-    private fun setCalories() {
-        val calories = viewModel.getCaloriesBurnt().roundToInt()
-        viewModel.addWorkout.calories = calories
-        binding.lytCaloriesBurn.tvCalBurnValue.text = if (calories > 0) {
-            "$calories"
-        } else {
-            "--"
-        }
 
     }
 

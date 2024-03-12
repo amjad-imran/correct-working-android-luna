@@ -30,6 +30,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 @HiltViewModel
 class OAddWorkoutViewModel
@@ -58,10 +59,15 @@ class OAddWorkoutViewModel
     var autoWorkoutId: Int? = null
     var movementList: List<Int>? = null
     var preFilledOreoAutoSportData: OreoAutoSportData? = null
+    var autoWorkoutUnitCalorie = 0f
 
 
     var isStartTimeSelected = false
     var isEndTimeSelected = false
+
+    fun isAutoWorkout(): Boolean {
+        return autoSport.value != null
+    }
 
 
     fun convertAutoSport(data: OreoAutoSportData?) {
@@ -78,6 +84,8 @@ class OAddWorkoutViewModel
         addWorkout.steps = data.steps
         addWorkout.date = DateFormats.convertTimestampToDate(endTime, DateFormats.dateFormat3)
         activityType = "Walking"/*data.type*/
+
+        autoWorkoutUnitCalorie = (addWorkout.calories).toFloat() / addWorkout.duration
 
         tryCatch {
             val startTime =
@@ -159,7 +167,13 @@ class OAddWorkoutViewModel
                 val isAuto = autoSport.value != null
 
                 if (isAuto) {
-                    this.addProperty("type", if (isDataSame()) "auto" else "automanual")
+                    if (isDataSame()) {
+                        this.addProperty("type", "auto")
+                    } else {
+                        this.addProperty("type", "automanual")
+                        this.addProperty("extraCalories", addWorkout.extraCalories)
+                    }
+
                     this.addProperty("date", addWorkout.date)
                 } else {
                     this.addProperty("type", "manual")
@@ -275,37 +289,46 @@ class OAddWorkoutViewModel
         }
     }
 
-    fun getCaloriesBurnt(): Float {
+    fun getCaloriesBurnt(): Int {
 
         LOGS.d("getCaloriesBurnt ${addWorkout.duration} ${addWorkout.intensity} ${workoutListModal}")
         if (addWorkout.duration == 0) {
-            return 0f
+            return 0
         }
 
         if (addWorkout.intensity.isEmpty()) {
-            return 0f
+            return 0
         }
 
+
+        if (isAutoWorkout()) {
+            val calculatedCalories = (autoWorkoutUnitCalorie * addWorkout.duration).roundToInt()
+            addWorkout.extraCalories = calculatedCalories - addWorkout.calories
+            return calculatedCalories
+        }
         if (workoutListModal == null) {
-            return 0f
+            return 0
         }
 
         val weight = localDatSource.getUser()?.userInfo?.weight ?: 1
 
         when (addWorkout.intensity.lowercase()) {
             "easy" -> {
-                return addWorkout.duration * (workoutListModal?.lowIntensity ?: 0f) * weight
+                return (addWorkout.duration * (workoutListModal?.lowIntensity
+                    ?: 0f) * weight).roundToInt()
             }
 
             "moderate" -> {
-                return addWorkout.duration * (workoutListModal?.mediumIntensity ?: 0f) * weight
+                return (addWorkout.duration * (workoutListModal?.mediumIntensity
+                    ?: 0f) * weight).roundToInt()
             }
 
             "hard" -> {
-                return addWorkout.duration * (workoutListModal?.highIntensity ?: 0f) * weight
+                return (addWorkout.duration * (workoutListModal?.highIntensity
+                    ?: 0f) * weight).roundToInt()
             }
         }
-        return 0f
+        return 0
     }
 
     fun getWorkoutList(postValue: Boolean) {
