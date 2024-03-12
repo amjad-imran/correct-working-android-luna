@@ -198,7 +198,7 @@ class RingUpdateFragment :
 
         viewModel.firmwareDownloadProgress.observe(viewLifecycleOwner) {
             it.getContent()?.let {
-                val percent = it / 2
+                val percent = ((it.toFloat() / 100) * 20).toInt()
                 updateProgress(percent)
             }
         }
@@ -212,7 +212,7 @@ class RingUpdateFragment :
                         fileUri
                     )
                 )
-                updateProgress(50)
+                updateProgress(20)
                 binding.tvUpdating.text = getString(R.string.text_updating_firmware)
             }
         }
@@ -263,7 +263,9 @@ class RingUpdateFragment :
     private fun updateFirmwareStatus(watchUpdateStatus: WatchUpdateStatus) {
         when (watchUpdateStatus.status) {
             UpdateStatus.STARTED, UpdateStatus.PROGRESS -> {
-                var percent = 50 + (watchUpdateStatus.percentagePercentage ?: 0) / 2
+                val percentToAdd =
+                    (((watchUpdateStatus.percentagePercentage ?: 0).toFloat() / 100) * 80).toInt()
+                var percent = 20 + percentToAdd
                 if (percent > 100) {
                     percent = 100
                 }
