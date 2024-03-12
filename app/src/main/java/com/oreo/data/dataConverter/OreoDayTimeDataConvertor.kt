@@ -1,6 +1,7 @@
 package com.oreo.data.dataConverter
 
 import android.graphics.Color
+import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit_commans.common.maxWithInvalidMovementValues
 import com.noisefit_commans.common.maxWithoutInvalidMovementValues
@@ -51,15 +52,13 @@ class OreoDayTimeDataConvertor @Inject constructor() {
         workouts?.forEach {
 
             getWorkoutSections(it)?.let { pos ->
-             /*  if (it.type == "manual") {
-                   workoutSectionIntensity.add(
-                       Triple(
-                           pos.first,
-                           pos.second,
-                           getWorkoutIntensity(it.intensity)
-                       )
-                   )
-               }*/
+                if (it.type == "manual") {
+                    workoutSectionIntensity.add(
+                        Triple(
+                            pos.first, pos.second, getWorkoutIntensity(it.intensity)
+                        )
+                    )
+                }
 
                 sections.add(
                     Section(
@@ -109,7 +108,7 @@ class OreoDayTimeDataConvertor @Inject constructor() {
         }
         val combinedSection = combineSections(sections)
 
-        //updateInactiveStateForWorkout(items, workoutSectionIntensity)
+        updateInactiveStateForWorkout(items, workoutSectionIntensity)
 
         return DayTimeDataModel(
             sections = combinedSection,
@@ -124,7 +123,6 @@ class OreoDayTimeDataConvertor @Inject constructor() {
     ) {
 
         workoutSectionIntensity.forEach { sectionWithIntensity ->
-
             var count = 0
             for (i in sectionWithIntensity.first..sectionWithIntensity.second) {
                 val item = itemList.getOrNull(i)
@@ -135,12 +133,9 @@ class OreoDayTimeDataConvertor @Inject constructor() {
 
                     }
                 }
-
-
             }
             val intervalSize =
                 (sectionWithIntensity.second + 1) - sectionWithIntensity.first //last value exclusive
-
             if (count == intervalSize) {
                 for (i in sectionWithIntensity.first..sectionWithIntensity.second) {
                     val item = itemList.getOrNull(i)
