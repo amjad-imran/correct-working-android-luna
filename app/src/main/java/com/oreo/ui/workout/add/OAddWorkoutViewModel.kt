@@ -171,7 +171,7 @@ class OAddWorkoutViewModel
                         this.addProperty("type", "auto")
                     } else {
                         this.addProperty("type", "automanual")
-                        this.addProperty("extraCalories", addWorkout.extraCalories)
+                        this.addProperty("extra_calories", addWorkout.extraCalories)
                     }
 
                     this.addProperty("date", addWorkout.date)
@@ -303,7 +303,8 @@ class OAddWorkoutViewModel
 
         if (isAutoWorkout()) {
             val calculatedCalories = (autoWorkoutUnitCalorie * addWorkout.duration).roundToInt()
-            addWorkout.extraCalories = calculatedCalories - addWorkout.calories
+            addWorkout.extraCalories =
+                calculatedCalories - (preFilledOreoAutoSportData?.calories ?: 0)
             return calculatedCalories
         }
         if (workoutListModal == null) {
