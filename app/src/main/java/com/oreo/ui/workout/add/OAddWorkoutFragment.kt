@@ -524,6 +524,9 @@ class OAddWorkoutFragment :
 
                 viewModel.sessionManager.saveSportsActivities(listOf(it.first))
 
+                mainViewModel.sessionManager.reloadTodayData.postValue(
+                    Event(true)
+                )
                 mainViewModel.sessionManager.forceSyncData.postValue(Event(true))
 
                 //mainViewModel.reloadTodaysData()

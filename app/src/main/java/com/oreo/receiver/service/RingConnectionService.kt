@@ -1318,6 +1318,9 @@ constructor() : LifecycleService() {
                             syncRepository.removeRecordedWorkouts().collect()
                             ringDataStore.removeRecordDeleteList()
                             delay(200)
+                            sessionManager.reloadTodayData.postValue(
+                                Event(true)
+                            )
                             sessionManager.forceSyncData.postValue(Event(true))
                         }
                     }
