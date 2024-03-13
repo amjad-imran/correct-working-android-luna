@@ -492,7 +492,7 @@ class OreoActivityViewModel @Inject constructor(
     }
 
     fun getStartTimeFromPosition(position: Int): String {
-        val minutes = (96 - position) * 15
+        val minutes = (95 - position) * 15
         val calendar = Calendar.getInstance()
         calendar[Calendar.HOUR_OF_DAY] = 0 //set hours to zero
         calendar[Calendar.MINUTE] = 0 // set minutes to zero
@@ -503,7 +503,7 @@ class OreoActivityViewModel @Inject constructor(
     }
 
     fun getEndTimeFromPosition(position: Int): String {
-        val minutes = (96 - position) * 15
+        val minutes = (95 - position) * 15
         val calendar = Calendar.getInstance()
         calendar[Calendar.HOUR_OF_DAY] = 0 //set hours to zero
         calendar[Calendar.MINUTE] = 0 // set minutes to zero

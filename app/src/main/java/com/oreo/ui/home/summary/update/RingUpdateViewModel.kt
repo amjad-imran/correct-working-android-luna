@@ -20,7 +20,9 @@ import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
 
@@ -105,8 +107,16 @@ class RingUpdateViewModel @Inject constructor(
         }
     }
 
-    fun clearNewOtaUpdateData() {
-        ringDataStore.cleaNewOtaVersion()
+    fun clearNewOtaUpdateData(onClearSuccess: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            ringDataStore.cleaNewOtaVersion()
+            deleteTempFile()
+            updateRepository.saveNewOtaVersion(null, null)
+            withContext(Dispatchers.Main) {
+                onClearSuccess()
+            }
+        }
+
     }
 
 

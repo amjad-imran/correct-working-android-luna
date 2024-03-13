@@ -561,7 +561,7 @@ class ODayTimeInteractiveGraph : View {
 
     private fun drawBarContent(canvas: Canvas) {
         if (list.size == 0) return
-        unitHLenth = (mWith.toFloat()) / (list.size - 1)
+        unitHLenth = (mWith.toFloat()) / (list.size)
         var x = 0f
         var barPaints: Paint?
         barStartEndXPosList = ArrayList()

@@ -273,12 +273,14 @@ class RingUpdateFragment :
             }
 
             UpdateStatus.COMPLETED -> {
-                viewModel.clearNewOtaUpdateData()
-                viewModel.sessionManager.sendQueryAction(QueryAction.QueryBatteryPower)
-                viewModel.sessionManager.sendQueryAction(QueryAction.QueryFirmwareVersion)
-                viewModel.deleteTempFile()
-                navigateUpSafe()
-                viewModel.sessionManager.customSuccessToast.postValue(Event("Ring firmware is up to date"))
+                viewModel.clearNewOtaUpdateData(onClearSuccess = {
+                    viewModel.sessionManager.sendQueryAction(QueryAction.QueryBatteryPower)
+                    viewModel.sessionManager.sendQueryAction(QueryAction.QueryFirmwareVersion)
+                    viewModel.sessionManager.customSuccessToast.postValue(Event("Ring firmware is up to date"))
+                    navigateUpSafe()
+                })
+
+
             }
 
             UpdateStatus.ERROR -> {

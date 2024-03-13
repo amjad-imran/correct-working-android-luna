@@ -159,20 +159,20 @@ class FirmwareUpdateFragment :
             }
 
             UpdateStatus.COMPLETED -> {
-                viewModel.clearNewOtaUpdateData()
-                viewModel.sessionManager.sendQueryAction(QueryAction.QueryBatteryPower)
-                viewModel.sessionManager.sendQueryAction(QueryAction.QueryFirmwareVersion)
-                viewModel.deleteTempFile()
+                viewModel.clearNewOtaUpdateData(onClearSuccess = {
+                    viewModel.sessionManager.sendQueryAction(QueryAction.QueryBatteryPower)
+                    viewModel.sessionManager.sendQueryAction(QueryAction.QueryFirmwareVersion)
 
+                    try {
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            navigate(FirmwareUpdateFragmentDirections.navigateToFirmwareUpdateSuccess())
+                        }, 2000)
 
+                    } catch (ignored: Exception) {
+                    }
 
-                try {
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        navigate(FirmwareUpdateFragmentDirections.navigateToFirmwareUpdateSuccess())
-                    }, 2000)
+                })
 
-                } catch (ignored: Exception) {
-                }
 
             }
 
