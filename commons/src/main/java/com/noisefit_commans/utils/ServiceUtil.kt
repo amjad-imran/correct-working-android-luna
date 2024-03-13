@@ -346,6 +346,9 @@ object ServiceUtil {
             is UpdateDeviceAction.SetAutoSleep -> {
                 updateAction.setAutoSleep(it.autoSleep)
             }
+            is UpdateDeviceAction.SetAutoWorkoutStatus -> {
+                updateAction.setAutoWorkoutStatus(it.status)
+            }
 
             is UpdateDeviceAction.SetScreenAwakeInterval -> {
                 updateAction.setScreenAwakeInterval(it.interval)

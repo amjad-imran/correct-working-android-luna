@@ -94,6 +94,7 @@ sealed class UpdateDeviceAction {
     class SetIncomingCallInfo(val incomingCall: IncomingCall) : UpdateDeviceAction()
     class UpdateCustomReply(val customReplyData: CustomReplyData) : UpdateDeviceAction()
     class SetAutoSleep(val autoSleep: AutoSleep) : UpdateDeviceAction()
+    class SetAutoWorkoutStatus(val status: Boolean) : UpdateDeviceAction()
     class SetWatchFaceLayout(watchFaceLayout: WatchFaceLayout) : UpdateDeviceAction()
     class SetFindMyPhone(val switchSetting: SwitchSetting) : UpdateDeviceAction()
     class OnMusicEventChanged(val event: String) : UpdateDeviceAction()

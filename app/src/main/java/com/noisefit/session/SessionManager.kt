@@ -610,6 +610,8 @@ class SessionManager
                         )
                     )
                 )
+            } else {
+                sendUpdateQueryAction(UpdateDeviceAction.SetAutoWorkoutStatus(true))
             }
         }
     }

@@ -47,6 +47,7 @@ abstract class UpdateDeviceDataActions() :
     open fun setIncomingCallInfo(incomingCall: IncomingCall) {}
     open fun updateCustomReply(customReplyData: CustomReplyData) {}
     open fun setAutoSleep(autoSleep: AutoSleep) {}
+    open fun setAutoWorkoutStatus(status: Boolean) {}
     open fun setWatchFaceLayout(watchFaceLayout: WatchFaceLayout, imagePath: Uri) {}
     open fun setFindMyPhone(switchSetting: SwitchSetting) {}
     open fun onMusicEventChanged(event: String) {

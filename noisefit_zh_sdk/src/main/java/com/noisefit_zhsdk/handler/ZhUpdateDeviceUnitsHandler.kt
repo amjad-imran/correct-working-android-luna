@@ -82,6 +82,7 @@ import com.zhapp.ble.bean.DoNotDisturbModeBean
 import com.zhapp.ble.bean.EmergencyContactBean
 import com.zhapp.ble.bean.EventInfoBean
 import com.zhapp.ble.bean.HeartRateMonitorBean
+import com.zhapp.ble.bean.RingAutoActiveSportConfigBean
 import com.zhapp.ble.bean.RingSportStatusBean
 import com.zhapp.ble.bean.SendRingSportStatusBean
 import com.zhapp.ble.bean.SettingTimeBean
@@ -315,6 +316,12 @@ constructor(
             })
     }
 
+    override fun setAutoWorkoutStatus(status: Boolean) {
+        ControlBleTools.getInstance().setRingAutoActiveSportConfig(
+            RingAutoActiveSportConfigBean(status), null
+        )
+    }
+
     override fun startWorkout(sportType: Int, sportStartTime: Long) {
         val bean = SendRingSportStatusBean(
             sportType,
@@ -326,6 +333,9 @@ constructor(
                 override fun onState(state: SendCmdState?) {
                     when (state) {
                         SendCmdState.SUCCEED -> {
+                            //turn off auto workout recording
+                            setAutoWorkoutStatus(false)
+
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.WorkoutStartState(true)
                             )
@@ -377,6 +387,7 @@ constructor(
                                     UpdateDeviceDataCallback.WorkoutStopped(true)
                                 )
                                 ControlBleTools.getInstance().getFitnessSportIdsData(null)
+                                setAutoWorkoutStatus(true)
                             }
                         }
                     }
@@ -400,6 +411,8 @@ constructor(
                                     UpdateDeviceDataCallback.WorkoutStopped(false)
                                 )
                                 ControlBleTools.getInstance().getFitnessSportIdsData(null)
+                                setAutoWorkoutStatus(true)
+
                             }
                         }
                     }
@@ -413,6 +426,7 @@ constructor(
         testUpdateDeviceDataCallback?.onUpdateDataReceived(
             UpdateDeviceDataCallback.WorkoutStoppedByRing(error)
         )
+        setAutoWorkoutStatus(true)
         //ControlBleTools.getInstance().getFitnessSportIdsData(null)
     }
 
@@ -436,6 +450,7 @@ constructor(
             }
 
             if (bean.startResult != RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_NONE.result) {
+                setAutoWorkoutStatus(true)
                 when (bean.startResult) {
                     RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_LOW_POWER.result -> {
                         /*testUpdateDeviceDataCallback?.onUpdateDataReceived(
@@ -467,6 +482,8 @@ constructor(
             }
 
             if (bean.sportStatus == RingSportCallBack.RingSportStatus.SPORT_STATUS_END.status) {
+                setAutoWorkoutStatus(true)
+
                 if (bean.endReason != RingSportCallBack.RingSportEndReason.SPORT_END_REASON_NONE.reason) {
                     when (bean.endReason) {
                         RingSportCallBack.RingSportEndReason.SPORT_END_REASON_LOW_POWER.reason -> {
@@ -1928,6 +1945,7 @@ constructor(
                 }
             })
     }
+
 
     override fun setAutoSleep(autoSleep: AutoSleep) {
 
