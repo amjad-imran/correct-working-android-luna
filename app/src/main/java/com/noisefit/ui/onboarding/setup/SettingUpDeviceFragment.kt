@@ -46,7 +46,7 @@ class SettingUpDeviceFragment :
 
 
         binding.animView.repeatCount = LottieDrawable.INFINITE
-        binding.animView.setAnimation(R.raw.anim_pairing)
+        binding.animView.setAnimation(R.raw.anim_pulsating_glow_blue)
         binding.animView.playAnimation()
 
         binding.ivRingImage.loadImageWithCache(requireContext(), sharedViewModel.getRingImage2())

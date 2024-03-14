@@ -22,9 +22,9 @@ class RingConnectingCheckFragment :
         super.onViewCreated(view, savedInstanceState)
 
 
-        binding.vPlayer.repeatCount = LottieDrawable.INFINITE
+       /* binding.vPlayer.repeatCount = LottieDrawable.INFINITE
         binding.vPlayer.setAnimation(R.raw.anim_pairing)
-        binding.vPlayer.playAnimation()
+        binding.vPlayer.playAnimation()*/
 
         binding.ivRingImage.loadImageWithCache(binding.ivRingImage.context,viewModel.getRingImage())
     }

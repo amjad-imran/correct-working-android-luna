@@ -42,7 +42,7 @@ class OreoSleepContributorAdapter(val mListener: ContributorItemClickListener) :
                 resultData.barColor
             )
 
-            binding.pbSteps.progress = resultData.barPercent
+            //binding.pbSteps.progress = resultData.barPercent
             binding.pbSteps.setIndicatorColor(
                 progressColor
             )

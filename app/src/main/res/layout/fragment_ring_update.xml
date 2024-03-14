@@ -38,12 +38,12 @@
 
 
             <TextView
-                android:id="@+id/textView101"
+                android:id="@+id/tvUpdatingTop"
                 style="@style/S18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="62dp"
-                android:text="@string/text_updating_ring"
+                android:text="@string/text_your_ring_is_evolving"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -51,15 +51,17 @@
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/lottieAnimationView"
-                android:layout_width="220dp"
-                android:layout_height="220dp"
-                app:layout_constraintBottom_toTopOf="@+id/tvUpdating"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:lottie_rawRes="@raw/anim_update_firmware"
-                app:lottie_repeatCount="0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView101"
-                app:layout_constraintVertical_chainStyle="packed" /><!--
+                app:layout_constraintTop_toBottomOf="@+id/tvUpdatingTop"
+                app:layout_constraintVertical_bias="0.25"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:lottie_rawRes="@raw/anim_criss_cross"
+                app:lottie_repeatCount="0" /><!--
                 app:lottie_autoPlay="true"
                 app:lottie_rawRes="@raw/anim_splash_screen" />-->
 
@@ -78,8 +80,7 @@
                 style="@style/S14"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
-                app:layout_constraintBottom_toTopOf="@+id/tvUpdatePercent"
+                android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lottieAnimationView"
@@ -91,7 +92,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/textView100"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvUpdating"

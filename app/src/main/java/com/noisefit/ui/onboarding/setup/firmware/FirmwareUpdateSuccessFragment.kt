@@ -1,5 +1,6 @@
 package com.noisefit.ui.onboarding.setup.firmware
 
+import android.animation.Animator
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -24,15 +25,42 @@ class FirmwareUpdateSuccessFragment :
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.updateProgress2.postValue(100)
-        binding.vPlayer.repeatCount = LottieDrawable.INFINITE
-        binding.vPlayer.setAnimation(R.raw.anim_pairing)
-        binding.vPlayer.playAnimation()
+
         binding.ivRingImage.loadImageWithCache(binding.ivRingImage.context, viewModel.getRingImage())
 
-        Handler(Looper.getMainLooper()).postDelayed({
+       /* Handler(Looper.getMainLooper()).postDelayed({
             checkAndNavigate()
-        }, 5000)
+        }, 5000)*/
+
+        startUpdateSuccessLottie(onFinish = {
+            checkAndNavigate()
+        })
     }
+
+    private fun startUpdateSuccessLottie(onFinish: () -> Unit) {
+        binding.vPlayer.repeatCount = 0
+        binding.vPlayer.setAnimation(R.raw.anim_bottom_fill_blue)
+        binding.vPlayer.playAnimation()
+        binding.vPlayer.addAnimatorListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animator) {
+                onFinish.invoke()
+            }
+
+            override fun onAnimationCancel(animation: Animator) {
+
+            }
+
+            override fun onAnimationRepeat(animation: Animator) {
+
+            }
+
+        })
+    }
+
 
     fun checkAndNavigate() {
         viewModel.sessionManager.connectStateRing.observe(viewLifecycleOwner) { connectedState ->

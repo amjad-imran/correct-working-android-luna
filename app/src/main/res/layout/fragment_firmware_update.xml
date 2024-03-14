@@ -29,23 +29,23 @@
         android:layout_marginEnd="32dp"
         android:gravity="center"
         android:lineSpacingExtra="6sp"
+        android:text="Keep your Luna ring close to your phone, until the update is complete"
         android:textColor="@color/white_64"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitle"
-        android:text="@string/text_update_available_message" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottieAnimationView"
-        android:layout_width="220dp"
-        android:layout_height="220dp"
-        app:layout_constraintBottom_toTopOf="@+id/tvUpdating"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvMessage"
-        app:layout_constraintVertical_bias="0.3"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        app:lottie_rawRes="@raw/anim_update_firmware"
+        app:lottie_rawRes="@raw/anim_criss_cross"
         app:lottie_repeatCount="0" />
 
     <ImageView
@@ -63,12 +63,12 @@
         style="@style/S14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
         android:textColor="@color/white_64"
         app:layout_constraintBottom_toTopOf="@+id/tvUpdatePercent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lottieAnimationView"
+        app:layout_constraintVertical_chainStyle="packed"
         tools:text="@string/text_updating_firmware" />
 
     <TextView

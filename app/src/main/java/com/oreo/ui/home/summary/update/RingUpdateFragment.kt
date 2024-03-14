@@ -1,5 +1,6 @@
 package com.oreo.ui.home.summary.update
 
+import android.animation.Animator
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -20,6 +21,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
+import com.airbnb.lottie.LottieDrawable
 import com.noisefit.data.model.OtaUpdateModel
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentRingUpdateBinding
@@ -77,19 +79,49 @@ class RingUpdateFragment :
 
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
 
-        /* var progress = 0
-         val timer = object : CountDownTimer(60000L, 1000L) {
-             override fun onTick(millisUntilFinished: Long) {
-                 updateProgress(progress)
-                 progress++
-             }
+        /*  var progress = 0
+          val timer = object : CountDownTimer(60000L, 1000L) {
+              override fun onTick(millisUntilFinished: Long) {
+                  updateProgress(progress)
+                  progress++
+              }
 
-             override fun onFinish() {
+              override fun onFinish() {
 
-             }
-         }
+              }
+          }
 
-         timer.start()*/
+          timer.start()*/
+    }
+
+    private fun startUpdateLottie() {
+        binding.lottieAnimationView.repeatCount = LottieDrawable.INFINITE
+        binding.lottieAnimationView.setAnimation(R.raw.anim_criss_cross)
+        binding.lottieAnimationView.playAnimation()
+    }
+
+    private fun startUpdateSuccessLottie(onFinish: () -> Unit) {
+        binding.lottieAnimationView.repeatCount = 0
+        binding.lottieAnimationView.setAnimation(R.raw.anim_bottom_filled_colored)
+        binding.lottieAnimationView.playAnimation()
+        binding.lottieAnimationView.addAnimatorListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animator) {
+                onFinish.invoke()
+            }
+
+            override fun onAnimationCancel(animation: Animator) {
+
+            }
+
+            override fun onAnimationRepeat(animation: Animator) {
+
+            }
+
+        })
     }
 
     val callback: OnBackPressedCallback =
@@ -161,6 +193,7 @@ class RingUpdateFragment :
             }
             val fileName = url.split("/").last()
 
+            startUpdateLottie()
             updateProgress(0)
             binding.tvUpdating.text = getString(R.string.text_downloading_firmware)
 
@@ -253,11 +286,11 @@ class RingUpdateFragment :
         if (progress == 100) {
             calculatedProgress = 99
         }
-        binding.lottieAnimationView.setMinAndMaxProgress(
+        /*binding.lottieAnimationView.setMinAndMaxProgress(
             calculatedProgress.toFloat() / 100,
             calculatedProgress.toFloat() / 100
         )
-        binding.lottieAnimationView.playAnimation()
+        binding.lottieAnimationView.playAnimation()*/
     }
 
     private fun updateFirmwareStatus(watchUpdateStatus: WatchUpdateStatus) {
@@ -276,8 +309,9 @@ class RingUpdateFragment :
                 viewModel.clearNewOtaUpdateData(onClearSuccess = {
                     viewModel.sessionManager.sendQueryAction(QueryAction.QueryBatteryPower)
                     viewModel.sessionManager.sendQueryAction(QueryAction.QueryFirmwareVersion)
-                    viewModel.sessionManager.customSuccessToast.postValue(Event("Ring firmware is up to date"))
-                    navigateUpSafe()
+                    onFirmwareUpdateSuccess()
+                    //viewModel.sessionManager.customSuccessToast.postValue(Event("Ring firmware is up to date"))
+                    //navigateUpSafe()
                 })
 
 
@@ -298,12 +332,23 @@ class RingUpdateFragment :
         }
     }
 
+    private fun onFirmwareUpdateSuccess() {
+        binding.tvUpdatingTop.text = getString(R.string.text_ring_successfully_updated)
+        binding.tvUpdating.gone()
+        binding.tvUpdatePercent.gone()
+        binding.textView100.gone()
+        startUpdateSuccessLottie(onFinish = {
+            navigateUpSafe()
+        })
+    }
+
 
     private fun showBatteryWarning() {
         setFragmentResultListener(LOW_BATTERY_FIRMWARE) { _, bundle ->
             val tryAgain = bundle.getBoolean("tryAgain")
             if (tryAgain) {
-                startUpdate()
+                this@RingUpdateFragment.navigateUpSafe()
+                //startUpdate()
             }
         }
         navigate(R.id.bottomSheetLowBatteryFirmware)

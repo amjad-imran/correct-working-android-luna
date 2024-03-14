@@ -1,5 +1,6 @@
 package com.noisefit.ui.onboarding.setup
 
+import android.animation.Animator
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -20,11 +21,34 @@ class SetupSuccessFragment :
         super.onViewCreated(view, savedInstanceState)
         viewModel.updateProgress3.postValue(100)
 
-        binding.vPlayer.repeatCount = LottieDrawable.INFINITE
-        binding.vPlayer.setAnimation(R.raw.anim_pairing)
-        binding.vPlayer.playAnimation()
-
         binding.ivRingImage.loadImage(requireContext(), viewModel.getRingImage2())
+        startUpdateSuccessLottie(onFinish = {
+
+        })
+    }
+
+    private fun startUpdateSuccessLottie(onFinish: () -> Unit) {
+        binding.animView.repeatCount = 0
+        binding.animView.setAnimation(R.raw.anim_bottom_filled_colored)
+        binding.animView.playAnimation()
+        binding.animView.addAnimatorListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animator) {
+                onFinish.invoke()
+            }
+
+            override fun onAnimationCancel(animation: Animator) {
+
+            }
+
+            override fun onAnimationRepeat(animation: Animator) {
+
+            }
+
+        })
     }
 
 

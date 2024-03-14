@@ -29,7 +29,7 @@
         android:layout_marginEnd="32dp"
         android:gravity="center"
         android:lineSpacingExtra="6sp"
-        android:text="Your ring is now using the latest firmware and is ready to go!"
+        android:text="Your ring is now using the latest firmware and is ready to go"
         android:textColor="@color/white_64"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,8 +37,9 @@
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/vPlayer"
-        android:layout_width="240dp"
-        android:layout_height="240dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1"
         app:layout_constraintBottom_toBottomOf="@+id/ivRingImage"
         app:layout_constraintEnd_toEndOf="@+id/ivRingImage"
         app:layout_constraintStart_toStartOf="@+id/ivRingImage"

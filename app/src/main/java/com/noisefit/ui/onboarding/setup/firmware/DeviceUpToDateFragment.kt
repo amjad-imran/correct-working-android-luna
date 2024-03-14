@@ -23,9 +23,9 @@ class DeviceUpToDateFragment :
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.updateProgress2.postValue(100)
-        binding.vPlayer.repeatCount = LottieDrawable.INFINITE
+       /* binding.vPlayer.repeatCount = LottieDrawable.INFINITE
         binding.vPlayer.setAnimation(R.raw.anim_pairing)
-        binding.vPlayer.playAnimation()
+        binding.vPlayer.playAnimation()*/
         binding.ivRingImage.loadImageWithCache(binding.ivRingImage.context,viewModel.getRingImage())
 
 

@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOAboutDeviceBinding
 import com.noisefit.ui.myDevice.manage.CheckForUpdatesViewModel
+import com.noisefit.ui.onboarding.setup.firmware.LOW_BATTERY_FIRMWARE
 import com.noisefit_commans.common.copyToClipBoard
 import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.interfaces.QueryAction
@@ -124,6 +126,17 @@ class OAboutDeviceFragment :
             updateViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_aboutdevice_update_click)
 
             if (updateViewModel.sessionManager.isDeviceConnected()) {
+
+                val battery = viewModel.sessionManager.batteryPercentRing.value ?: 0
+
+                if (battery != 0) {
+                    if (battery <= 20
+                    ) {
+                        showBatteryWarning()
+                        return@setOnClickListener
+                    }
+                }
+
                 if (viewModel.ringDataSore.isNewOtaAvailable()) {
                     updateViewModel.setUpdateAvailable(true)
                 } else {
@@ -139,6 +152,16 @@ class OAboutDeviceFragment :
             updateViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_aboutdevice_copy_mac_click)
             connectedDevice?.address?.copyToClipBoard()
         }
+    }
+
+    private fun showBatteryWarning() {
+        setFragmentResultListener(LOW_BATTERY_FIRMWARE) { _, bundle ->
+            val tryAgain = bundle.getBoolean("tryAgain")
+            if (tryAgain) {
+
+            }
+        }
+        navigate(R.id.bottomSheetLowBatteryFirmware)
     }
 
     private fun checkCurrentFirmwareVersion() {

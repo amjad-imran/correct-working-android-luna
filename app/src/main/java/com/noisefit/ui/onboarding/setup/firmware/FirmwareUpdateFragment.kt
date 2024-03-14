@@ -7,6 +7,7 @@ import android.os.Looper
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
+import com.airbnb.lottie.LottieDrawable
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentFirmwareUpdateBinding
 import com.noisefit.ui.onboarding.setup.DeviceSetupSharedViewModel
@@ -59,7 +60,7 @@ class FirmwareUpdateFragment :
                     )
                 )
                 updateProgress(20)
-                binding.tvTitle.text = getString(R.string.text_updating_ring)
+                binding.tvTitle.text = getString(R.string.text_your_ring_is_evolving)
                 binding.tvUpdating.text = getString(R.string.text_updating_ring)
             }
         }
@@ -107,6 +108,7 @@ class FirmwareUpdateFragment :
             }
             val fileName = url.split("/").last()
 
+            startUpdateLottie()
             updateProgress(0)
             binding.tvTitle.text = getString(R.string.text_downloading_firmware)
             binding.tvUpdating.text = getString(R.string.text_downloading_firmware)
@@ -119,6 +121,11 @@ class FirmwareUpdateFragment :
         }
 
 
+    }
+    private fun startUpdateLottie() {
+        binding.lottieAnimationView.repeatCount = LottieDrawable.INFINITE
+        binding.lottieAnimationView.setAnimation(R.raw.anim_criss_cross)
+        binding.lottieAnimationView.playAnimation()
     }
 
     fun updateProgress(progress: Int) {
@@ -134,16 +141,16 @@ class FirmwareUpdateFragment :
         )
 
 
-        var calculatedProgress = progress
+      /*  var calculatedProgress = progress
         if (progress == 100) {
             calculatedProgress = 99
-        }
+        }*/
 
-        binding.lottieAnimationView.setMinAndMaxProgress(
+       /* binding.lottieAnimationView.setMinAndMaxProgress(
             calculatedProgress.toFloat() / 100,
             calculatedProgress.toFloat() / 100
         )
-        binding.lottieAnimationView.playAnimation()
+        binding.lottieAnimationView.playAnimation()*/
     }
 
     private fun updateFirmwareStatus(watchUpdateStatus: WatchUpdateStatus) {

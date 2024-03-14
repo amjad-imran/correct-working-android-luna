@@ -35,13 +35,16 @@
         app:layout_constraintTop_toBottomOf="@+id/textView108" />
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/vPlayer"
-        android:layout_width="240dp"
-        android:layout_height="240dp"
-        app:layout_constraintBottom_toBottomOf="@+id/ivRingImage"
-        app:layout_constraintEnd_toEndOf="@+id/ivRingImage"
-        app:layout_constraintStart_toStartOf="@+id/ivRingImage"
-        app:layout_constraintTop_toTopOf="@+id/ivRingImage" />
+        android:id="@+id/animView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:lottie_autoPlay="true"
+        app:layout_constraintDimensionRatio="1"
+        app:lottie_rawRes="@raw/anim_pair_success_glow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/ivRingImage"
@@ -52,16 +55,7 @@
         app:layout_constraintStart_toStartOf="@+id/animView"
         app:layout_constraintTop_toTopOf="@+id/animView" />
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/animView"
-        android:layout_width="220dp"
-        android:layout_height="220dp"
-        app:lottie_autoPlay="true"
-        app:lottie_rawRes="@raw/anim_pair_success_glow"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
 
     <Button
         android:id="@+id/btnLetsGo"
