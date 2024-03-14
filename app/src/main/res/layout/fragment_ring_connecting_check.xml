@@ -39,7 +39,7 @@
         android:id="@+id/vPlayer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#473d5fa0"
+        android:src="@drawable/image_back_blue_glow"
         android:layout_marginHorizontal="28dp"
         app:layout_constraintDimensionRatio="1"
         app:layout_constraintBottom_toBottomOf="@+id/ivRingImage"
