@@ -25,11 +25,17 @@ class OreoSleepContributorAdapter(val mListener: ContributorItemClickListener) :
                 )
             )
 
-             if (resultData.barPercent == 0) {
+            if (resultData.barPercent == 0 && resultData.hasData) {
+                binding.pbSteps.progress = 1
+            } else {
+                binding.pbSteps.progress = resultData.barPercent
+            }
+
+            if (resultData.hasData) {
+                binding.backContributors.alpha = 1f
+            } else {
                 binding.backContributors.alpha = .5f
-            }else{
-                 binding.backContributors.alpha = 1f
-             }
+            }
 
             val progressColor = ContextCompat.getColor(
                 binding.pbSteps.context,
@@ -42,7 +48,7 @@ class OreoSleepContributorAdapter(val mListener: ContributorItemClickListener) :
             )
 
             binding.root.setOnClickListener {
-                mListener.onItemClick(mDataSet, bindingAdapterPosition,mVersion)
+                mListener.onItemClick(mDataSet, bindingAdapterPosition, mVersion)
             }
 
         }
@@ -72,7 +78,7 @@ class OreoSleepContributorAdapter(val mListener: ContributorItemClickListener) :
     }
 
     interface ContributorItemClickListener {
-        fun onItemClick(resultData: ArrayList<Contributors>, position: Int,version: Int)
+        fun onItemClick(resultData: ArrayList<Contributors>, position: Int, version: Int)
     }
 }
 

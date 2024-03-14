@@ -339,7 +339,8 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
-                    barPercent = 0,
+                     barPercent = 0,
+                    hasData = false,
                     backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
@@ -366,7 +367,8 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
-                    barPercent = 0,
+                     barPercent = 0,
+                    hasData = false,
                     backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
@@ -393,7 +395,8 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
-                    barPercent = 0,
+                     barPercent = 0,
+                    hasData = false,
                     backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
@@ -419,7 +422,8 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
-                    barPercent = 0,
+                     barPercent = 0,
+                    hasData = false,
                     backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
@@ -445,7 +449,8 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
-                    barPercent = 0,
+                     barPercent = 0,
+                    hasData = false,
                     backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
@@ -472,7 +477,8 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
-                    barPercent = 0,
+                     barPercent = 0,
+                    hasData = false,
                     backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
@@ -499,7 +505,8 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
-                    barPercent = 0,
+                     barPercent = 0,
+                    hasData = false,
                     backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
@@ -525,7 +532,8 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
-                    barPercent = 0,
+                     barPercent = 0,
+                    hasData = false,
                     backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
@@ -552,7 +560,8 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
-                    barPercent = 0,
+                     barPercent = 0,
+                    hasData = false,
                     backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )

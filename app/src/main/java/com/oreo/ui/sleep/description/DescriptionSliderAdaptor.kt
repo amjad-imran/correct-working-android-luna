@@ -22,7 +22,7 @@ class DescriptionSliderAdaptor : RecyclerView.Adapter<DescriptionSliderAdaptor.V
         fun bind(data: Contributors) {
             binding.lytTopSubItem.tvTitle.text = data.title
             binding.lytTopSubItem.tvRemark.text = data.leftText
-            if (data.barPercent == 0) {
+            if (data.hasData.not()) {
                 binding.lytContributor.root.visible()
                 binding.bgImv.visible()
 
@@ -50,7 +50,12 @@ class DescriptionSliderAdaptor : RecyclerView.Adapter<DescriptionSliderAdaptor.V
                 binding.bgImv.gone()
             }
 
-            binding.lytTopSubItem.pbSteps.progress = data.barPercent
+            binding.lytTopSubItem.pbSteps.progress = if (data.hasData && data.barPercent == 0) {
+                1
+            } else {
+                data.barPercent
+            }
+
             val progressColor = ContextCompat.getColor(
                 binding.lytTopSubItem.pbSteps.context,
                 data.barColor
@@ -87,7 +92,7 @@ class DescriptionSliderAdaptor : RecyclerView.Adapter<DescriptionSliderAdaptor.V
         holder.bind(mDataSet[position])
     }
 
-    fun setDataSet(dataSet: ArrayList<Contributors>,type:String?) {
+    fun setDataSet(dataSet: ArrayList<Contributors>, type: String?) {
         mDataSet.clear()
         this.type = type
         mDataSet.addAll(dataSet)

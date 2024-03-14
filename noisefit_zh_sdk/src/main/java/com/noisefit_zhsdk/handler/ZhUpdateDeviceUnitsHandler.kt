@@ -317,6 +317,7 @@ constructor(
     }
 
     override fun setAutoWorkoutStatus(status: Boolean) {
+        ControlBleTools.getInstance().getRingAutoActiveSportConfig(null)
         ControlBleTools.getInstance().setRingAutoActiveSportConfig(
             RingAutoActiveSportConfigBean(status), null
         )

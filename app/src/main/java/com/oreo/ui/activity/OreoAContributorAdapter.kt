@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.databinding.OreoItemSleepContributorBinding
 import com.oreo.data.model.Contributors
 
-class OreoAContributorAdapter(val mListener:ContributorItemClickListener) :
+class OreoAContributorAdapter(val mListener: ContributorItemClickListener) :
     RecyclerView.Adapter<OreoAContributorAdapter.ViewHolder>() {
     private var mDataSet = ArrayList<Contributors>()
 
@@ -25,13 +25,18 @@ class OreoAContributorAdapter(val mListener:ContributorItemClickListener) :
                     resultData.leftTextColor
                 )
             )
-            if (resultData.barPercent == 0) {
-                binding.backContributors.alpha = .5f
-            }else{
-                binding.backContributors.alpha = 1f
+            if (resultData.barPercent == 0 && resultData.hasData) {
+                binding.pbSteps.progress = 1
+            } else {
+                binding.pbSteps.progress = resultData.barPercent
             }
 
-            binding.pbSteps.progress = resultData.barPercent
+            if (resultData.hasData) {
+                binding.backContributors.alpha = 1f
+            } else {
+                binding.backContributors.alpha = .5f
+            }
+
             val progressColor = ContextCompat.getColor(
                 binding.pbSteps.context,
                 resultData.barColor
@@ -40,7 +45,7 @@ class OreoAContributorAdapter(val mListener:ContributorItemClickListener) :
                 progressColor
             )
             binding.root.setOnClickListener {
-                mListener.onItemClick(mDataSet,bindingAdapterPosition)
+                mListener.onItemClick(mDataSet, bindingAdapterPosition)
             }
         }
     }
@@ -66,8 +71,9 @@ class OreoAContributorAdapter(val mListener:ContributorItemClickListener) :
         mDataSet.addAll(resultData)
         notifyDataSetChanged()
     }
+
     interface ContributorItemClickListener {
-        fun onItemClick(resultData: ArrayList<Contributors>,position: Int)
+        fun onItemClick(resultData: ArrayList<Contributors>, position: Int)
     }
 }
 

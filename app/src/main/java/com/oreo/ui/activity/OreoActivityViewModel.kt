@@ -265,6 +265,7 @@ class OreoActivityViewModel @Inject constructor(
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_activity_bar_color,
                     barPercent = 0,
+                    hasData = false,
                     backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
@@ -292,6 +293,7 @@ class OreoActivityViewModel @Inject constructor(
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_activity_bar_color,
                     barPercent = 0,
+                    hasData = false,
                     backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
@@ -318,6 +320,7 @@ class OreoActivityViewModel @Inject constructor(
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_activity_bar_color,
                     barPercent = 0,
+                    hasData = false,
                     backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
@@ -345,6 +348,7 @@ class OreoActivityViewModel @Inject constructor(
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_activity_bar_color,
                     barPercent = 0,
+                    hasData = false,
                     backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
@@ -371,6 +375,7 @@ class OreoActivityViewModel @Inject constructor(
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_activity_bar_color,
                     barPercent = 0,
+                    hasData = false,
                     backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )

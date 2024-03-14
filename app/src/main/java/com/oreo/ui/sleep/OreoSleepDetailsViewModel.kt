@@ -280,6 +280,7 @@ constructor(
                 leftTextColor = ctList.leftTextColor,
                 barColor = ctList.barColor,
                 barPercent = ctList.barPercent,
+                hasData = ctList.hasData,
                 backgroundRes = ctList.backgroundRes,
                 description = desList[i]
             )
@@ -328,6 +329,7 @@ constructor(
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_sleep_bar_color,
                     barPercent = 0,
+                    hasData = false,
                     backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
@@ -354,6 +356,7 @@ constructor(
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_sleep_bar_color,
                     barPercent = 0,
+                    hasData = false,
                     backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
@@ -379,6 +382,7 @@ constructor(
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_sleep_bar_color,
                     barPercent = 0,
+                    hasData = false,
                     backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
@@ -413,6 +417,7 @@ constructor(
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_sleep_bar_color,
                     barPercent = 0,
+                    hasData = false,
                     backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
@@ -446,6 +451,7 @@ constructor(
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_sleep_bar_color,
                     barPercent = 0,
+                    hasData = false,
                     backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
@@ -479,6 +485,7 @@ constructor(
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_sleep_bar_color,
                     barPercent = 0,
+                    hasData = false,
                     backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
@@ -505,6 +512,7 @@ constructor(
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_sleep_bar_color,
                     barPercent = 0,
+                    hasData = false,
                     backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
