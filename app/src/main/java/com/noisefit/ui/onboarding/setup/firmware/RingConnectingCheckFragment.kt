@@ -22,9 +22,10 @@ class RingConnectingCheckFragment :
         super.onViewCreated(view, savedInstanceState)
 
 
-       /* binding.vPlayer.repeatCount = LottieDrawable.INFINITE
-        binding.vPlayer.setAnimation(R.raw.anim_pairing)
-        binding.vPlayer.playAnimation()*/
+        binding.vPlayer.repeatCount = LottieDrawable.INFINITE
+        binding.vPlayer.setAnimation(R.raw.anim_pulsating_glow_blue)
+        binding.vPlayer.playAnimation()
+
         viewModel.updateProgress1.postValue(50)
 
         binding.ivRingImage.loadImageWithCache(binding.ivRingImage.context,viewModel.getRingImage2())
@@ -41,8 +42,11 @@ class RingConnectingCheckFragment :
                 is ConnectState.ConnectSuccess -> {
                     if (!viewModel.connectionChecked) {
                         viewModel.connectionChecked = true
-
-                        navigate(RingConnectingCheckFragmentDirections.navigateToFirmwareCheck())
+                        if(viewModel.fullSetup){
+                            navigate(RingConnectingCheckFragmentDirections.navigateToFirmwareCheck())
+                        }else{
+                            navigate(RingConnectingCheckFragmentDirections.navigateToDeviceSetupFromConnectionCheck())
+                        }
                     }
 
                 }

@@ -201,12 +201,12 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         }
 
         //TODO comment after use
-        binding.btnAddWorkout.setOnLongClickListener {
+      /*  binding.btnAddWorkout.setOnLongClickListener {
             if (BuildConfig.DEBUG) {
-                startActivity(DeviceSetupActivityV2.getStartIntent(this))
+                startActivity(DeviceSetupActivityV2.getStartIntent(this,fullSetup = true),)
             }
             true
-        }
+        }*/
     }
 
     private fun showAddWorkout() {

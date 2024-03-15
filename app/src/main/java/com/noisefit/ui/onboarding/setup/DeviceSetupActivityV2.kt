@@ -7,7 +7,9 @@ import androidx.activity.viewModels
 import com.noisefit.luna.databinding.ActivityDeviceSetupV2Binding
 import com.noisefit.ui.common.BaseActivity
 import com.noisefit_commans.databinding.DefaultLoaderBinding
+import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.InsiderAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,9 +30,13 @@ class DeviceSetupActivityV2 : BaseActivity<ActivityDeviceSetupV2Binding>() {
         super.onCreate(savedInstanceState)
 
         val fullSetup = intent.getBooleanExtra("fullSetup", false)
-       /* if (fullSetup) {*///TODO handle - move to device setup directly hiding the top bars
+        viewModel.fullSetup = fullSetup
+        if (fullSetup) {//TODO handle - move to device setup directly hiding the top bars
             viewModel.localDataStore.setDeviceSetupStatus(1)
-        /*}*/
+            binding.layoutProgressTop.visible()
+        } else {
+            binding.layoutProgressTop.gone()
+        }
         viewModel.localDataStore.setPreviouslyPaired()
         viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_device_setup_start)
 

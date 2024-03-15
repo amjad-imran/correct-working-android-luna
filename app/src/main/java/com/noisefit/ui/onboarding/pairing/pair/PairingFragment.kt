@@ -163,7 +163,7 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
         viewModel.localDataStore.setDeviceSetupStatus(1)
 
         if (viewModel.isProfileSetupComplete()) {
-            startActivity(DeviceSetupActivityV2.getStartIntent(requireContext()))
+            startActivity(DeviceSetupActivityV2.getStartIntent(requireContext(), fullSetup = true))
             activity?.finish()
         } else {
             startActivity(ProfileSetupActivity.getStartIntent(requireContext()))
@@ -182,6 +182,7 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
             startConnectionService()
         }
     }
+
     private fun startConnectionService() {
         if (!viewModel.isMyServiceRunning(
                 RingConnectionService::class.java,
@@ -430,7 +431,6 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
                             }
 
                             AppLogs.sendAppLogs("Pairing ConnectState.ConnectFailed ${args.colorFitDevice.bluetoothName} | ${args.colorFitDevice.address}")
-
 
 
                             /*viewModel.shouldSendPairingFailLogs {
@@ -835,7 +835,8 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
         sessionManager.addUserAttributeToMoEngage(false, HashMap<String, Any>().apply {
             this[MoEngageAppEventAttributes.pair_device_name] = deviceData.bluetoothName.toString()
             this[MoEngageAppEventAttributes.pair_device_mac_address] = deviceData.address.toString()
-            this[MoEngageAppEventAttributes.pair_device_firmware_number] = deviceData.deviceId.toString()
+            this[MoEngageAppEventAttributes.pair_device_firmware_number] =
+                deviceData.deviceId.toString()
         })
 
     }

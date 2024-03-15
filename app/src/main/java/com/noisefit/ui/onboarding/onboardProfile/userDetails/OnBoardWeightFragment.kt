@@ -139,7 +139,7 @@ class OnBoardWeightFragment :
     private fun goToDeviceSetupActivity(openProfile: Boolean) {
         startActivity(
             DeviceSetupActivityV2.getStartIntent(
-                requireContext()
+                requireContext(),fullSetup = true
             )
         )
         activity?.finish()

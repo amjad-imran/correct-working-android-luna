@@ -52,7 +52,11 @@ class OreoDayTimeDataConvertor @Inject constructor() {
         workouts?.forEach {
 
             getWorkoutSections(it)?.let { pos ->
-                if (it.type == "manual") {
+                if (it.type.equals("manual", true) || it.type.equals(
+                        "automanual",
+                        true
+                    )
+                ) {//TODO test
                     workoutSectionIntensity.add(
                         Triple(
                             pos.first, pos.second, getWorkoutIntensity(it.intensity)

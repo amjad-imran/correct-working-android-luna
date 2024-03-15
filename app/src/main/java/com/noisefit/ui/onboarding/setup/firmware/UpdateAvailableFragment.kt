@@ -20,10 +20,14 @@ class UpdateAvailableFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-       /* binding.vPlayer.repeatCount = LottieDrawable.INFINITE
-        binding.vPlayer.setAnimation(R.raw.anim_pairing)
-        binding.vPlayer.playAnimation()*/
-        binding.ivRingImage.loadImageWithCache(binding.ivRingImage.context,viewModel.getRingImage2())
+        binding.vPlayer.repeatCount = LottieDrawable.INFINITE
+        binding.vPlayer.setAnimation(R.raw.anim_pulsating_glow_blue)
+        binding.vPlayer.playAnimation()
+
+        binding.ivRingImage.loadImageWithCache(
+            binding.ivRingImage.context,
+            viewModel.getRingImage2()
+        )
 
         viewModel.updateProgress1.postValue(100)
     }
@@ -44,6 +48,7 @@ class UpdateAvailableFragment :
             navigate(UpdateAvailableFragmentDirections.navigateToUpdateFrag())
         }
     }
+
     private fun showBatteryWarning() {
         setFragmentResultListener(LOW_BATTERY_FIRMWARE) { _, bundle ->
             val tryAgain = bundle.getBoolean("tryAgain")
@@ -57,8 +62,6 @@ class UpdateAvailableFragment :
     override fun subscribeObservers() {
 
     }
-
-
 
 
 }

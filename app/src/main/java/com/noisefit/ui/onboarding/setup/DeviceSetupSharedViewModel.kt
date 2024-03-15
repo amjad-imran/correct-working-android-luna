@@ -52,6 +52,7 @@ class DeviceSetupSharedViewModel @Inject constructor(
     val updateRepository: UpdateRepository
 ) : BaseViewModel() {
 
+    var fullSetup: Boolean = false
     var updateOtaData: OtaUpdateModel? = null
     var connectionChecked = false
 
@@ -127,7 +128,7 @@ class DeviceSetupSharedViewModel @Inject constructor(
         return JsonObject().apply {
             addProperty(
                 "version",
-                /*139*/pair.first
+                pair.first
             )
             addProperty(
                 "firmware_id",

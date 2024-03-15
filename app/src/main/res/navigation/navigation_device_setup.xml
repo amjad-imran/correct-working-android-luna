@@ -14,6 +14,11 @@
             app:destination="@id/firmwareCheckFragment"
             app:popUpTo="@id/ringConnectingCheckFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/navigateToDeviceSetupFromConnectionCheck"
+            app:destination="@id/settingUpDeviceFragment"
+            app:popUpTo="@id/ringConnectingCheckFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment

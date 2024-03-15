@@ -114,7 +114,7 @@ class OnBoardCaloriesFragment :
     }
 
     private fun goToDeviceSetupActivity(openProfile: Boolean) {
-        startActivity(DeviceSetupActivityV2.getStartIntent(requireContext()))
+        startActivity(DeviceSetupActivityV2.getStartIntent(requireContext(),fullSetup = true))
         activity?.finish()
     }
 }
