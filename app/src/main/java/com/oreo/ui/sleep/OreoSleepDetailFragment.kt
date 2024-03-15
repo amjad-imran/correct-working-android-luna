@@ -265,7 +265,6 @@ class OreoSleepDetailFragment :
             binding.lytHeartRate.tvSubtitle2.text = ""
         }
 
-
         val ssTime: String?
         val seTime: String?
         var breakUpData = ArrayList<Int>()

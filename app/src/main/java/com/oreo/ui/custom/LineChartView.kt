@@ -392,8 +392,10 @@ class LineChartView : View {
         LOGS.d("lowestHr fasdfsfdfsd $minValue")
         val minValueWithIndex = getMinValueWithIndex(minValue)
 
-        minValue = minValueWithIndex.second
-        lastMinValueIndex = minValueWithIndex.first
+        minValueWithIndex?.let {
+            minValue = minValueWithIndex.second
+            lastMinValueIndex = minValueWithIndex.first
+        }
 
         if (averageValue == null) {
             if (count > 0) {
@@ -420,66 +422,132 @@ class LineChartView : View {
         return list.size - lastMinValueIndex
     }
 
-
-    private fun getMinValueWithIndex(minValue: Int): Pair<Int, Int> {
-        val lowestPointHr = ArrayList<LowestIntervalValue>()
-
+    private fun getMinValueWithIndex(minValue: Int): Pair<Int, Int>? {
         if (list.isEmpty()) {
-            return Pair(0, 0)
+            return null
         }
 
-        for (index in list.indices) {
-            val current = list[index]?.value
-            if (current == minValue && current !=0) {
-                val lowestValueData = list.getOrNull(index - 1)
-                val highestValueData = list.getOrNull(index + 1)
-                var lowestValue = -1
-                if (lowestValueData != null) {
-                    lowestValue = lowestValueData.value
-                }
-                var highestValue = -1
-                if (highestValueData != null) {
-                    highestValue = highestValueData.value
-                }
+        if (list.size <= 3) {
+            return null
+        }
+        
+        var lowestPointAvg = 0.0f
+        var lowestPointMinValue = 0
+        var lowestPointIndex = 0
 
-                lowestPointHr.add(LowestIntervalValue(lowestValue, highestValue, current, index))
+        list.forEachIndexed { index, chartModel ->
+            val value = chartModel?.value!!
+            if (value != 0) {
+                if (index == 0) {
+                    val nextValue = list[index + 1]!!.value
+                    val avg = (value + nextValue).toFloat() / 2
+
+                    if (lowestPointAvg == 0.0f) {
+                        lowestPointAvg = avg
+                        lowestPointIndex = index
+                        lowestPointMinValue = value
+                    } else if (avg < lowestPointAvg) {
+                        lowestPointAvg = avg
+                        lowestPointIndex = index
+                        lowestPointMinValue = value
+                    }
+                } else if (index == list.size - 1) {
+                    val previousValue = list[index - 1]!!.value
+                    val avg = (value + previousValue).toFloat() / 2
+
+                    if (lowestPointAvg == 0.0f) {
+                        lowestPointAvg = avg
+                        lowestPointIndex = index
+                        lowestPointMinValue = value
+                    } else if (avg < lowestPointAvg) {
+                        lowestPointAvg = avg
+                        lowestPointIndex = index
+                        lowestPointMinValue = value
+                    }
+                } else {
+                    if (value == minValue) {
+                        val previousValue = list[index - 1]!!.value
+                        val nextValue = list[index + 1]!!.value
+
+                        val avg = (previousValue + value + nextValue).toFloat() / 3
+
+                        if (lowestPointAvg == 0.0f) {
+                            lowestPointAvg = avg
+                            lowestPointIndex = index
+                            lowestPointMinValue = value
+                        } else if (avg < lowestPointAvg) {
+                            lowestPointAvg = avg
+                            lowestPointIndex = index
+                            lowestPointMinValue = value
+                        }
+                    }
+                }
             }
-        }
-        var avgMinIndex = 0
-        var avgValue = 0
-
-        var avgMinValue = Int.MAX_VALUE
-        if (lowestPointHr.size == 1) {
-            avgMinIndex = lowestPointHr[0].index
-            return Pair(lowestPointHr[0].index, lowestPointHr[0].value)
-        } else {
-            lowestPointHr.forEach {
-                var count = 0
-                var sum = 0
-                if (it.lowestValue != -1) {
-                    sum += it.lowestValue
-                    count += 1
-                }
-                if (it.highestValue != -1) {
-                    sum += it.highestValue
-                    count += 1
-                }
-                sum += it.value
-                count += 1
-                val avg = (sum / count)
-                //println("lowestHr ---------------->lowest:- ${it.lowestValue}, highest:- ${it.highestValue}, current:- ${it.value}, avg:- $avg")
-                if (avg < avgMinValue) {
-                    avgMinValue = avg
-                    avgMinIndex = it.index
-                    avgValue = it.value
-                }
-
-            }
-            //println("index $avgMinIndex")
-            return Pair(avgMinIndex, avgValue)
 
         }
+        return Pair(lowestPointIndex, lowestPointMinValue)
     }
+
+
+    /* private fun getMinValueWithIndex(minValue: Int): Pair<Int, Int> {
+         val lowestPointHr = ArrayList<LowestIntervalValue>()
+
+         if (list.isEmpty()) {
+             return Pair(0, 0)
+         }
+
+         for (index in list.indices) {
+             val current = list[index]?.value
+             if (current == minValue && current !=0) {
+                 val lowestValueData = list.getOrNull(index - 1)
+                 val highestValueData = list.getOrNull(index + 1)
+                 var lowestValue = -1
+                 if (lowestValueData != null) {
+                     lowestValue = lowestValueData.value
+                 }
+                 var highestValue = -1
+                 if (highestValueData != null) {
+                     highestValue = highestValueData.value
+                 }
+
+                 lowestPointHr.add(LowestIntervalValue(lowestValue, highestValue, current, index))
+             }
+         }
+         var avgMinIndex = 0
+         var avgValue = 0
+
+         var avgMinValue = Int.MAX_VALUE
+         if (lowestPointHr.size == 1) {
+             avgMinIndex = lowestPointHr[0].index
+             return Pair(lowestPointHr[0].index, lowestPointHr[0].value)
+         } else {
+             lowestPointHr.forEach {
+                 var count = 0
+                 var sum = 0
+                 if (it.lowestValue != -1) {
+                     sum += it.lowestValue
+                     count += 1
+                 }
+                 if (it.highestValue != -1) {
+                     sum += it.highestValue
+                     count += 1
+                 }
+                 sum += it.value
+                 count += 1
+                 val avg = (sum / count)
+                 //println("lowestHr ---------------->lowest:- ${it.lowestValue}, highest:- ${it.highestValue}, current:- ${it.value}, avg:- $avg")
+                 if (avg < avgMinValue) {
+                     avgMinValue = avg
+                     avgMinIndex = it.index
+                     avgValue = it.value
+                 }
+
+             }
+             //println("index $avgMinIndex")
+             return Pair(avgMinIndex, avgValue)
+
+         }
+     }*/
 
 
     private var touchX = 0f
