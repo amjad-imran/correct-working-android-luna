@@ -416,6 +416,10 @@ class SummaryDataFragmentToday :
 
     override fun subscribeObservers() {
 
+        viewModel.sessionManager.isRingCharging.observe(this) {
+            viewModel.handleBatteryAlert()
+        }
+
         viewModel.sessionManager.checkForVersionUpdate.observe(viewLifecycleOwner) {
             it.getContent()?.let { pair ->
                 viewModel.checkOtaVersionServer(pair)
@@ -737,7 +741,7 @@ class SummaryDataFragmentToday :
 
                 is ConnectState.ConnectSuccess -> {
                     viewModel.updateAlerts()
-                    viewModel.handleBatteryAlert(connectedState.noiseFitDevice)
+                    viewModel.handleBatteryAlert()
                 }
 
                 is ConnectState.UnPaired -> {

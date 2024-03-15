@@ -1086,11 +1086,16 @@ class SummaryDataViewModelToday @Inject constructor(
         )
     }
 
-    fun handleBatteryAlert(noiseFitDevice: ColorFitDevice) {
+    fun handleBatteryAlert() {
         viewModelScope.launch(Dispatchers.IO) {
+            val device = ringDataStore.getRingDevice()
             val batteryPercentage = watchDataStore.getBatteryPercentRing()
             if (batteryPercentage < 20) {
-                stateDashRingBattery.postValue(Pair(true, noiseFitDevice))
+                if (sessionManager.isRingCharging.value == false) {
+                    stateDashRingBattery.postValue(Pair(true, device))
+                } else {
+                    stateDashRingBattery.postValue(Pair(false, null))
+                }
             } else {
                 stateDashRingBattery.postValue(Pair(false, null))
             }
