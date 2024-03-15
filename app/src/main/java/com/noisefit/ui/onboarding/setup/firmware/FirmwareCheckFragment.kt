@@ -28,13 +28,13 @@ class FirmwareCheckFragment :
          binding.vPlayer.playAnimation()*/
         binding.ivRingImage.loadImageWithCache(
             binding.ivRingImage.context,
-            viewModel.getRingImage()
+            viewModel.getRingImage2()
         )
 
         viewModel.sessionManager.postFirmwareDetailsOnSetup = true
         viewModel.sessionManager.sendQueryAction(QueryAction.QueryFirmwareVersion)
 
-        viewModel.updateProgress1.postValue(100)
+        viewModel.updateProgress1.postValue(50)
         startFirmwareCheckLottie(onAnimRepeat = {
             if (currentCheckState == 1) {
                 binding.vPlayer.cancelAnimation()

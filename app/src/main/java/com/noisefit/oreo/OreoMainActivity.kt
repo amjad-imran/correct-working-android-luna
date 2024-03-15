@@ -22,6 +22,7 @@ import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.noisefit.NoiseFitApplicationMain
+import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ActivityOreoMainBinding
 import com.noisefit.ui.APP_CONTINUE
@@ -199,10 +200,13 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             //binding.blurViewSelector.visible()
         }
 
-        /*binding.btnAddWorkout.setOnLongClickListener {
-            startActivity(DeviceSetupActivityV2.getStartIntent(this))
+        //TODO comment after use
+        binding.btnAddWorkout.setOnLongClickListener {
+            if (BuildConfig.DEBUG) {
+                startActivity(DeviceSetupActivityV2.getStartIntent(this))
+            }
             true
-        }*/
+        }
     }
 
     private fun showAddWorkout() {

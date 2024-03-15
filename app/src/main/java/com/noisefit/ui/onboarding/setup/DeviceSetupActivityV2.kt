@@ -17,15 +17,20 @@ class DeviceSetupActivityV2 : BaseActivity<ActivityDeviceSetupV2Binding>() {
     private val viewModel: DeviceSetupSharedViewModel by viewModels()
 
     companion object {
-        fun getStartIntent(context: Context): Intent {
-            return Intent(context, DeviceSetupActivityV2::class.java)
+        fun getStartIntent(context: Context, fullSetup: Boolean = false): Intent {
+            return Intent(context, DeviceSetupActivityV2::class.java).apply {
+                this.putExtra("fullSetup", fullSetup)
+            }
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.localDataStore.setDeviceSetupStatus(1)
+        val fullSetup = intent.getBooleanExtra("fullSetup", false)
+       /* if (fullSetup) {*///TODO handle - move to device setup directly hiding the top bars
+            viewModel.localDataStore.setDeviceSetupStatus(1)
+        /*}*/
         viewModel.localDataStore.setPreviouslyPaired()
         viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_device_setup_start)
 

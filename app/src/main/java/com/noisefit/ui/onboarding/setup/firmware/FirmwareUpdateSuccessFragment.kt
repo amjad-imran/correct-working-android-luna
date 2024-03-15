@@ -26,7 +26,7 @@ class FirmwareUpdateSuccessFragment :
 
         viewModel.updateProgress2.postValue(100)
 
-        binding.ivRingImage.loadImageWithCache(binding.ivRingImage.context, viewModel.getRingImage())
+        binding.ivRingImage.loadImageWithCache(binding.ivRingImage.context, viewModel.getRingImage2())
 
        /* Handler(Looper.getMainLooper()).postDelayed({
             checkAndNavigate()

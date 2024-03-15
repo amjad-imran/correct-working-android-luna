@@ -22,11 +22,12 @@ class DeviceUpToDateFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.updateProgress1.postValue(100)
         viewModel.updateProgress2.postValue(100)
        /* binding.vPlayer.repeatCount = LottieDrawable.INFINITE
         binding.vPlayer.setAnimation(R.raw.anim_pairing)
         binding.vPlayer.playAnimation()*/
-        binding.ivRingImage.loadImageWithCache(binding.ivRingImage.context,viewModel.getRingImage())
+        binding.ivRingImage.loadImageWithCache(binding.ivRingImage.context,viewModel.getRingImage2())
 
 
 

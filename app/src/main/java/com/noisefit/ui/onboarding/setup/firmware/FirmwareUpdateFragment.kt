@@ -133,11 +133,7 @@ class FirmwareUpdateFragment :
         binding.tvUpdatePercent.text = "$progress%"
 
         viewModel.updateProgress2.postValue(
-            if (progress > 20) {
-                progress
-            } else {
-                20
-            }
+            progress
         )
 
 
