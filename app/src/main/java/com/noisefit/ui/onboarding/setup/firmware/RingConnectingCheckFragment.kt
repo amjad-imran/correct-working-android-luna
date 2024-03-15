@@ -9,9 +9,7 @@ import com.noisefit.luna.databinding.FragmentRingConnectingCheckBinding
 import com.noisefit.ui.onboarding.setup.DeviceSetupSharedViewModel
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.loadImageWithCache
-import com.noisefit_commans.utils.LOGS
 
 class RingConnectingCheckFragment :
     BaseFragment<FragmentRingConnectingCheckBinding>(FragmentRingConnectingCheckBinding::inflate) {
@@ -23,7 +21,7 @@ class RingConnectingCheckFragment :
 
 
         binding.vPlayer.repeatCount = LottieDrawable.INFINITE
-        binding.vPlayer.setAnimation(R.raw.anim_pulsating_glow_blue)
+        binding.vPlayer.setAnimation(R.raw.anim_onboard_6)
         binding.vPlayer.playAnimation()
 
         viewModel.updateProgress1.postValue(50)

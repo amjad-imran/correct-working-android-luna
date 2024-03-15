@@ -21,7 +21,7 @@ class DeviceSetupActivityV2 : BaseActivity<ActivityDeviceSetupV2Binding>() {
     companion object {
         fun getStartIntent(context: Context, fullSetup: Boolean = false): Intent {
             return Intent(context, DeviceSetupActivityV2::class.java).apply {
-                this.putExtra("fullSetup", fullSetup)
+                this.putExtra("fullSetup", true)//set fullSetup after release
             }
         }
     }

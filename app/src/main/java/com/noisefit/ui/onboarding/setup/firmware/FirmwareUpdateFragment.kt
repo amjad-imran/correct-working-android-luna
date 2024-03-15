@@ -45,7 +45,7 @@ class FirmwareUpdateFragment :
     override fun subscribeObservers() {
         viewModel.firmwareDownloadProgress.observe(viewLifecycleOwner) {
             it.getContent()?.let {
-                val percent = ((it.toFloat() / 100) * 20).toInt()
+                val percent = ((it.toFloat() / 100) * 5).toInt()
                 updateProgress(percent)
             }
         }
@@ -59,7 +59,7 @@ class FirmwareUpdateFragment :
                         fileUri
                     )
                 )
-                updateProgress(20)
+                updateProgress(5)
                 binding.tvTitle.text = getString(R.string.text_your_ring_is_evolving)
                 binding.tvUpdating.text = getString(R.string.text_updating_ring)
             }
@@ -124,7 +124,7 @@ class FirmwareUpdateFragment :
     }
     private fun startUpdateLottie() {
         binding.lottieAnimationView.repeatCount = LottieDrawable.INFINITE
-        binding.lottieAnimationView.setAnimation(R.raw.anim_criss_cross)
+        binding.lottieAnimationView.setAnimation(R.raw.anim_onboard_1)
         binding.lottieAnimationView.playAnimation()
     }
 
@@ -153,8 +153,8 @@ class FirmwareUpdateFragment :
         when (watchUpdateStatus.status) {
             UpdateStatus.STARTED, UpdateStatus.PROGRESS -> {
                 val percentToAdd =
-                    (((watchUpdateStatus.percentagePercentage ?: 0).toFloat() / 100) * 80).toInt()
-                var percent = 20 + percentToAdd
+                    (((watchUpdateStatus.percentagePercentage ?: 0).toFloat() / 100) * 95).toInt()
+                var percent = 5 + percentToAdd
                 if (percent > 100) {
                     percent = 100
                 }

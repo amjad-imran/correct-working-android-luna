@@ -23,9 +23,6 @@ class FirmwareCheckFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.vPlayer.repeatCount = LottieDrawable.INFINITE
-        binding.vPlayer.setAnimation(R.raw.anim_pulsating_glow_blue)
-        binding.vPlayer.playAnimation()
         binding.ivRingImage.loadImageWithCache(
             binding.ivRingImage.context,
             viewModel.getRingImage2()
@@ -50,7 +47,7 @@ class FirmwareCheckFragment :
 
     private fun startFirmwareCheckLottie(onAnimRepeat: () -> Unit) {
         binding.vPlayer.repeatCount = LottieDrawable.INFINITE
-        binding.vPlayer.setAnimation(R.raw.anim_bottom_fill_blue)
+        binding.vPlayer.setAnimation(R.raw.anim_onboard_6)
         binding.vPlayer.playAnimation()
         binding.vPlayer.addAnimatorListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(animation: Animator) {

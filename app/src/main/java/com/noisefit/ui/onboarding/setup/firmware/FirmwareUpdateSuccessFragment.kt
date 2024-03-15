@@ -2,11 +2,8 @@ package com.noisefit.ui.onboarding.setup.firmware
 
 import android.animation.Animator
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import com.airbnb.lottie.LottieDrawable
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentFirmwareUpdateSuccessBinding
 import com.noisefit.ui.onboarding.setup.DeviceSetupSharedViewModel
@@ -39,7 +36,7 @@ class FirmwareUpdateSuccessFragment :
 
     private fun startUpdateSuccessLottie(onFinish: () -> Unit) {
         binding.vPlayer.repeatCount = 0
-        binding.vPlayer.setAnimation(R.raw.anim_bottom_fill_blue)
+        binding.vPlayer.setAnimation(R.raw.anim_onboard_2)
         binding.vPlayer.playAnimation()
         binding.vPlayer.addAnimatorListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(animation: Animator) {

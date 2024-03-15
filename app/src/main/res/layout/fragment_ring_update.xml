@@ -59,9 +59,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvUpdatingTop"
                 app:layout_constraintVertical_bias="0.25"
-                app:layout_constraintVertical_chainStyle="packed"
-                app:lottie_rawRes="@raw/anim_criss_cross"
-                app:lottie_repeatCount="0" /><!--
+                app:layout_constraintVertical_chainStyle="packed"/><!--
                 app:lottie_autoPlay="true"
                 app:lottie_rawRes="@raw/anim_splash_screen" />-->
 

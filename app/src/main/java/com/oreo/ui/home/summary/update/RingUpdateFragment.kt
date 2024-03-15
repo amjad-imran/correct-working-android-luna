@@ -1,34 +1,19 @@
 package com.oreo.ui.home.summary.update
 
 import android.animation.Animator
-import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.CountDownTimer
-import android.os.Handler
-import android.os.Looper
-import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.airbnb.lottie.LottieDrawable
 import com.noisefit.data.model.OtaUpdateModel
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentRingUpdateBinding
-import com.noisefit.oreo.OreoMainActivity
 import com.noisefit.ui.onboarding.setup.firmware.LOW_BATTERY_FIRMWARE
-import com.noisefit_commans.data.ErrorResponse
-import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
@@ -41,12 +26,6 @@ import com.noisefit_commans.ui.loadImageWithCache
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.Event
-import com.noisefit_commans.utils.LOGS
-import com.noisefit_commans.utils.MiscUtil
-import com.noisefit_commans.utils.share.ShareUtil
-import com.oreo.ui.helpsupport.questionaries.CALL_REQUEST_KEY
-import com.oreo.ui.workout.add.SELECT_REQUEST_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderEffectBlur
 import eightbitlab.com.blurview.RenderScriptBlur
@@ -72,7 +51,7 @@ class RingUpdateFragment :
 
         val device = viewModel.getConnectedDevice()
         device?.let {
-            binding.ivRingImage.loadImage(binding.ivRingImage.context, it.ringInfo?.image)
+            binding.ivRingImage.loadImage(binding.ivRingImage.context, it.ringInfo?.image2)
         }
 
         startUpdate()
@@ -96,13 +75,13 @@ class RingUpdateFragment :
 
     private fun startUpdateLottie() {
         binding.lottieAnimationView.repeatCount = LottieDrawable.INFINITE
-        binding.lottieAnimationView.setAnimation(R.raw.anim_criss_cross)
+        binding.lottieAnimationView.setAnimation(R.raw.anim_onboard_1)
         binding.lottieAnimationView.playAnimation()
     }
 
     private fun startUpdateSuccessLottie(onFinish: () -> Unit) {
         binding.lottieAnimationView.repeatCount = 0
-        binding.lottieAnimationView.setAnimation(R.raw.anim_bottom_filled_colored)
+        binding.lottieAnimationView.setAnimation(R.raw.anim_onboard_3)
         binding.lottieAnimationView.playAnimation()
         binding.lottieAnimationView.addAnimatorListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(animation: Animator) {
@@ -231,7 +210,7 @@ class RingUpdateFragment :
 
         viewModel.firmwareDownloadProgress.observe(viewLifecycleOwner) {
             it.getContent()?.let {
-                val percent = ((it.toFloat() / 100) * 20).toInt()
+                val percent = ((it.toFloat() / 100) * 5).toInt()
                 updateProgress(percent)
             }
         }
@@ -245,8 +224,8 @@ class RingUpdateFragment :
                         fileUri
                     )
                 )
-                updateProgress(20)
-                binding.tvUpdating.text = getString(R.string.text_updating_firmware)
+                updateProgress(5)
+                binding.tvUpdating.text = getString(R.string.text_updating_ring)
             }
         }
 
@@ -297,8 +276,8 @@ class RingUpdateFragment :
         when (watchUpdateStatus.status) {
             UpdateStatus.STARTED, UpdateStatus.PROGRESS -> {
                 val percentToAdd =
-                    (((watchUpdateStatus.percentagePercentage ?: 0).toFloat() / 100) * 80).toInt()
-                var percent = 20 + percentToAdd
+                    (((watchUpdateStatus.percentagePercentage ?: 0).toFloat() / 100) * 95).toInt()
+                var percent = 5 + percentToAdd
                 if (percent > 100) {
                     percent = 100
                 }

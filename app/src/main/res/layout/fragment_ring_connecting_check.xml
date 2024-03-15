@@ -14,7 +14,7 @@
         android:layout_marginTop="96dp"
         android:layout_marginEnd="24dp"
         android:gravity="center"
-        android:text="Connecting ring"
+        android:text="@string/text_checking_for_firmware_update"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,7 +29,7 @@
         android:layout_marginEnd="32dp"
         android:gravity="center"
         android:lineSpacingExtra="6sp"
-        android:text="Ensure that your ring and phone are kept close to each other."
+        android:text="@string/text_checking_fw_message"
         android:textColor="@color/white_64"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
