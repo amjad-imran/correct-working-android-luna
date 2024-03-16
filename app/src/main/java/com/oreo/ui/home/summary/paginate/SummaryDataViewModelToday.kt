@@ -6,8 +6,8 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.local.db.CacheResult
-import com.noisefit.data.model.AppUpdateModel
-import com.noisefit.data.model.OtaUpdateModel
+import com.oreo.data.model.AppUpdateModel
+import com.oreo.data.model.OtaUpdateModel
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UpdateRepository
 import com.noisefit.luna.BuildConfig

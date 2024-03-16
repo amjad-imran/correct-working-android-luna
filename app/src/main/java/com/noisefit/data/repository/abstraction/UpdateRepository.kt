@@ -1,15 +1,11 @@
 package com.noisefit.data.repository.abstraction
 
 import com.google.gson.JsonObject
-import com.noisefit.data.local.db.CacheResult
-import com.noisefit.data.model.AppUpdateModel
-import com.noisefit.data.model.OtaUpdateModel
-import com.noisefit.data.model.UpdateResponseV2
-import com.noisefit_commans.data.response.HelpAndSupportResponse
+import com.oreo.data.model.AppUpdateModel
+import com.oreo.data.model.OtaUpdateModel
+import com.oreo.data.model.UpdateResponseV2
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.response.BaseApiResponse
-import com.noisefit_commans.data.response.HelpAndSupportDetailResponse
-import com.noisefit_commans.data.response.VersionCheckResponse
 import kotlinx.coroutines.flow.Flow
 
 interface UpdateRepository {

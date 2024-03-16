@@ -1,6 +1,8 @@
-package com.noisefit.data.model
+package com.oreo.data.model
 
 import com.google.gson.annotations.SerializedName
+import com.oreo.data.model.AppUpdateModel
+import com.oreo.data.model.OtaUpdateModel
 
 data class UpdateResponseV2(
     @SerializedName("app_version")

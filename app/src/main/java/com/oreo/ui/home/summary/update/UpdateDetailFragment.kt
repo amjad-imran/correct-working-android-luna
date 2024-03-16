@@ -4,15 +4,15 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import androidx.room.RoomDatabase.QueryCallback
-import com.noisefit.data.model.AppUpdateModel
-import com.noisefit.data.model.OtaUpdateModel
+import com.google.gson.Gson
+import com.oreo.data.model.AppUpdateModel
+import com.oreo.data.model.OtaUpdateModel
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentUpdateDetailBinding
 import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.loadImageWithCache
-import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.share.ShareUtil
 import dagger.hilt.android.AndroidEntryPoint
 

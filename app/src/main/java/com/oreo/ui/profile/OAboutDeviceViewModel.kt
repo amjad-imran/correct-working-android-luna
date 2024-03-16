@@ -4,17 +4,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.noisefit.NoiseFitApplicationMain
-import com.noisefit.data.model.OtaUpdateModel
+import com.oreo.data.model.OtaUpdateModel
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UpdateRepository
-import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DateFormats.checkTimeDifferenceMoreThanN
 import com.noisefit_commans.utils.Event
@@ -71,7 +70,7 @@ constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             updateRepository.saveNewOtaVersion(it.firmwareVersion, pair.first)
-                            if(it.firmwareVersion == null){
+                            if (it.firmwareVersion == null) {
                                 noUpdateAvailable.postValue(Event(true))
                             }
 

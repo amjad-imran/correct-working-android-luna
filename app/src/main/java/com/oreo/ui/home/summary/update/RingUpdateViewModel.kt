@@ -4,7 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.noisefit.data.model.OtaUpdateModel
+import com.oreo.data.model.OtaUpdateModel
 import com.noisefit.data.repository.abstraction.DownloadRepository
 import com.noisefit.data.repository.abstraction.UpdateRepository
 import com.noisefit.data.repository.implementation.Download

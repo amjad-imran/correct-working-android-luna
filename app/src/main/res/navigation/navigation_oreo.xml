@@ -597,7 +597,7 @@
         android:label="fragment_ring_update" >
         <argument
             android:name="otaData"
-            app:argType="com.noisefit.data.model.OtaUpdateModel" />
+            app:argType="com.oreo.data.model.OtaUpdateModel" />
     </fragment>
     <dialog
         android:id="@+id/bottomSheetUpdateFailed"

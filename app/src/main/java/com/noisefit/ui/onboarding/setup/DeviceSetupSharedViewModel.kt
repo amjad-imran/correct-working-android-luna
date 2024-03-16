@@ -5,33 +5,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
-import com.noisefit.data.model.OtaUpdateModel
+import com.oreo.data.model.OtaUpdateModel
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.DownloadRepository
 import com.noisefit.data.repository.abstraction.UpdateRepository
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.data.repository.implementation.Download
 import com.noisefit.session.SessionManager
-import com.noisefit.ui.onboarding.onboardProfile.DefaultDate
-import com.noisefit.ui.onboarding.onboardProfile.DefaultHeightInCm
-import com.noisefit.ui.onboarding.onboardProfile.DefaultMonth
-import com.noisefit.ui.onboarding.onboardProfile.DefaultWeightInKg
-import com.noisefit.ui.onboarding.onboardProfile.DefaultYear
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
-import com.noisefit_commans.data.model.User
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.models.ColorFitDevice
-import com.noisefit_commans.models.Gender
-import com.noisefit_commans.models.UnitSystem
-import com.noisefit_commans.models.UserGoals
-import com.noisefit_commans.models.UserInfo
-import com.noisefit_commans.models.WeightUnitSystem
 import com.noisefit_commans.ui.BaseViewModel
-import com.noisefit_commans.ui.toMakeTwoDecimal
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,7 +28,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
-import kotlin.math.roundToInt
 
 @HiltViewModel
 class DeviceSetupSharedViewModel @Inject constructor(

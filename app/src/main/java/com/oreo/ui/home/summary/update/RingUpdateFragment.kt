@@ -10,7 +10,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.airbnb.lottie.LottieDrawable
-import com.noisefit.data.model.OtaUpdateModel
+import com.oreo.data.model.OtaUpdateModel
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentRingUpdateBinding
 import com.noisefit.ui.onboarding.setup.firmware.LOW_BATTERY_FIRMWARE

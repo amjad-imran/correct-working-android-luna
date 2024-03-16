@@ -2,9 +2,8 @@ package com.oreo.ui.home.summary.update
 
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
-import com.noisefit.data.model.AppUpdateModel
-import com.noisefit.data.model.OtaUpdateModel
-import com.noisefit.data.repository.abstraction.DownloadRepository
+import com.oreo.data.model.AppUpdateModel
+import com.oreo.data.model.OtaUpdateModel
 import com.noisefit.data.repository.abstraction.UpdateRepository
 import com.noisefit.session.SessionManager
 import com.noisefit.watch.WatchesSDK

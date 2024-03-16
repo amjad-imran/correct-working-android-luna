@@ -21,15 +21,12 @@ import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.models.WatchFace
 import com.noisefit_commans.response.SleepHistoryResponse
 import com.oreo.data.model.*
-import com.oreo.data.model.health.Nap
 import com.oreo.data.model.health.OreoActivityModel
 import com.oreo.data.model.health.OreoDashboardResponseModel
 import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.data.model.health.OreoSleepModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import org.json.JSONArray
-import org.json.JSONObject
 import retrofit2.http.*
 
 
