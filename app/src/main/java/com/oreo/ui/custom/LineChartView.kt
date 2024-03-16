@@ -446,7 +446,7 @@ class LineChartView : View {
                         lowestPointAvg = avg
                         lowestPointIndex = index
                         lowestPointMinValue = value
-                    } else if (avg < lowestPointAvg) {
+                    } else if (avg <= lowestPointAvg) {
                         lowestPointAvg = avg
                         lowestPointIndex = index
                         lowestPointMinValue = value
@@ -459,7 +459,7 @@ class LineChartView : View {
                         lowestPointAvg = avg
                         lowestPointIndex = index
                         lowestPointMinValue = value
-                    } else if (avg < lowestPointAvg) {
+                    } else if (avg <= lowestPointAvg) {
                         lowestPointAvg = avg
                         lowestPointIndex = index
                         lowestPointMinValue = value
@@ -475,7 +475,7 @@ class LineChartView : View {
                             lowestPointAvg = avg
                             lowestPointIndex = index
                             lowestPointMinValue = value
-                        } else if (avg < lowestPointAvg) {
+                        } else if (avg <= lowestPointAvg) {
                             lowestPointAvg = avg
                             lowestPointIndex = index
                             lowestPointMinValue = value
@@ -489,7 +489,7 @@ class LineChartView : View {
     }
 
 
-    /* private fun getMinValueWithIndex(minValue: Int): Pair<Int, Int> {
+   /*  private fun getMinValueWithIndex(minValue: Int): Pair<Int, Int> {
          val lowestPointHr = ArrayList<LowestIntervalValue>()
 
          if (list.isEmpty()) {
@@ -536,7 +536,7 @@ class LineChartView : View {
                  count += 1
                  val avg = (sum / count)
                  //println("lowestHr ---------------->lowest:- ${it.lowestValue}, highest:- ${it.highestValue}, current:- ${it.value}, avg:- $avg")
-                 if (avg < avgMinValue) {
+                 if (avg <= avgMinValue) {
                      avgMinValue = avg
                      avgMinIndex = it.index
                      avgValue = it.value
