@@ -430,7 +430,7 @@ class LineChartView : View {
         if (list.size <= 3) {
             return null
         }
-        
+
         var lowestPointAvg = 0.0f
         var lowestPointMinValue = 0
         var lowestPointIndex = 0
@@ -1364,7 +1364,7 @@ class LineChartView : View {
 
         // Iterate and find the element
         // Iterate and find the element
-        val range = dip2px(3f)
+        val range = unitHLenth / 2//dip2px(3f)
         for (i in 0 until toolTipList.size) {
 
             // If K lies in the current range
