@@ -2,17 +2,26 @@ package com.oreo.ui.home.summary.paginate
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.google.gson.JsonObject
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.local.db.CacheResult
+import com.oreo.data.model.AppUpdateModel
+import com.oreo.data.model.OtaUpdateModel
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.data.repository.abstraction.UpdateRepository
+import com.noisefit.luna.BuildConfig
 import com.noisefit.session.SessionManager
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
+import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.data.model.User
+import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.models.ColorFitDevice
@@ -20,6 +29,7 @@ import com.noisefit_commans.models.ManualMeasureType
 import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.DateFormats.checkTimeDifferenceMoreThanN
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.ScreenUtils
@@ -53,16 +63,17 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SummaryDataViewModelToday @Inject
-constructor(
+class SummaryDataViewModelToday @Inject constructor(
     val userRepository: OreoUserActivityRepository,
     val ringDataStore: RingDataStore,
     val localDataStore: DataStoredInterface,
     val sessionManager: SessionManager,
     val dataConverter: DataConverter,
     val screenUtils: ScreenUtils,
+    val watchDataStore: WatchDataStore,
     private val syncRepository: OreoSyncRepository,
     val userActivityRepository: OreoUserActivityRepository,
+    val updateRepository: UpdateRepository,
     private val userHealthDataDataSource: OreoUserHealthDataDataSource
 ) : BaseViewModel() {
 
@@ -84,6 +95,8 @@ constructor(
     var sleepScoreInfo = MutableLiveData<Event<String>>()
     var readinessScoreInfo = MutableLiveData<Event<String>>()
     var activityScoreInfo = MutableLiveData<Event<String>>()
+    var appUpdateInfo = MutableLiveData<AppUpdateModel?>()
+    var otaUpdateInfo = MutableLiveData<OtaUpdateModel?>()
 
     val stateWorkouts = MutableLiveData<List<OActivityListModal>>()
 
@@ -109,8 +122,7 @@ constructor(
     fun initTodayData() {
 
         viewModelScope.launch(Dispatchers.IO) {
-            user = localDataStore.getUser()
-            /*stateHeaderCard.postValue(
+            user = localDataStore.getUser()/*stateHeaderCard.postValue(
                 Pair(
                     getGreetingMessageValue(),
                     DateFormats.getCurrentDate(DateFormats.dateTimeFormatWithWeekWithoutYear)
@@ -192,10 +204,10 @@ constructor(
             }
         }
 
-        if (sessionManager.forceOtaResponseRing != null) {
-            dashAlert[AlertType.OTA_UPDATE] =
-                DashAlert("Ring firmware update available", false)
-        }
+        /* if (sessionManager.forceOtaResponseRing != null) {
+             dashAlert[AlertType.OTA_UPDATE] =
+                 DashAlert("Ring firmware update available", false)
+         }*/
 
 
         stateDashAlerts.postValue(dashAlert)
@@ -227,8 +239,7 @@ constructor(
 
 
             val newSleepArray = dataConverter.mergeSleepData(
-                healthData.sleep?.hourly_breakup,
-                healthData.sleep?.naps
+                healthData.sleep?.hourly_breakup, healthData.sleep?.naps
             )
 
 
@@ -272,10 +283,8 @@ constructor(
                                     OHealthOverview.Sleep(
                                         sleepModel,
                                         makeSleepArray(newSleepArray),
-                                        newSleepArray?.firstOrNull()?.start_time
-                                            ?: "",
-                                        newSleepArray?.lastOrNull()?.end_time
-                                            ?: ""
+                                        newSleepArray?.firstOrNull()?.start_time ?: "",
+                                        newSleepArray?.lastOrNull()?.end_time ?: ""
                                     )
                                 )
                             }
@@ -303,10 +312,8 @@ constructor(
                                     OHealthOverview.Sleep(
                                         sleepModel,
                                         makeSleepArray(newSleepArray),
-                                        newSleepArray?.firstOrNull()?.start_time
-                                            ?: "",
-                                        newSleepArray?.lastOrNull()?.end_time
-                                            ?: ""
+                                        newSleepArray?.firstOrNull()?.start_time ?: "",
+                                        newSleepArray?.lastOrNull()?.end_time ?: ""
                                     )
                                 )
                             }
@@ -326,16 +333,14 @@ constructor(
                             val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
                             userActivities.add(
                                 OHealthOverview.ActivityMinimal(
-                                    activityModal,
-                                    caloriesGoal
+                                    activityModal, caloriesGoal
                                 )
                             )
                         } else if (activeCalories >= 50) {
                             val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
                             userActivities.add(
                                 OHealthOverview.Activity(
-                                    activityModal,
-                                    caloriesGoal
+                                    activityModal, caloriesGoal
                                 )
                             )
                         } else {
@@ -357,10 +362,8 @@ constructor(
                                     OHealthOverview.Sleep(
                                         sleepModel,
                                         makeSleepArray(newSleepArray),
-                                        newSleepArray?.firstOrNull()?.start_time
-                                            ?: "",
-                                        newSleepArray?.lastOrNull()?.end_time
-                                            ?: ""
+                                        newSleepArray?.firstOrNull()?.start_time ?: "",
+                                        newSleepArray?.lastOrNull()?.end_time ?: ""
                                     )
                                 )
                             }
@@ -377,16 +380,14 @@ constructor(
                             val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
                             userActivities.add(
                                 OHealthOverview.ActivityMinimal(
-                                    activityModal,
-                                    caloriesGoal
+                                    activityModal, caloriesGoal
                                 )
                             )
                         } else {
                             val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
                             userActivities.add(
                                 OHealthOverview.Activity(
-                                    activityModal,
-                                    caloriesGoal
+                                    activityModal, caloriesGoal
                                 )
                             )
                         }
@@ -403,16 +404,14 @@ constructor(
                             val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
                             userActivities.add(
                                 OHealthOverview.ActivityMinimal(
-                                    activityModal,
-                                    caloriesGoal
+                                    activityModal, caloriesGoal
                                 )
                             )
                         } else {
                             val caloriesGoal = user?.userGoals?.caloriesGoal ?: 0
                             userActivities.add(
                                 OHealthOverview.Activity(
-                                    activityModal,
-                                    caloriesGoal
+                                    activityModal, caloriesGoal
                                 )
                             )
                         }
@@ -423,16 +422,14 @@ constructor(
                             if ((sleepModel.totalSleep ?: 0) > 0) {
                                 userActivities.add(
                                     OHealthOverview.SleepMinimal(
-                                        sleepModel,
-                                        makeSleepArray(newSleepArray)
+                                        sleepModel, makeSleepArray(newSleepArray)
                                     )
                                 )
                             }
                             if (nap.isNotEmpty()) {
                                 userActivities.add(
                                     OHealthOverview.NapDashCard(
-                                        nap,
-                                        healthData.date
+                                        nap, healthData.date
                                     )
                                 )
                             }
@@ -466,8 +463,7 @@ constructor(
                             if (nap.isNotEmpty()) {
                                 userActivities.add(
                                     OHealthOverview.NapDashCard(
-                                        nap,
-                                        healthData.date
+                                        nap, healthData.date
                                     )
                                 )
                             }
@@ -483,8 +479,7 @@ constructor(
 
             stateSleepAvgCard.postValue(
                 Pair(
-                    trendsData?.sleepScoreAvg,
-                    trendsData?.activityScoreAvg
+                    trendsData?.sleepScoreAvg, trendsData?.activityScoreAvg
                 )
             )
             stateReadinessAvgCard.postValue(trendsData?.readinessScoreAvg)
@@ -524,12 +519,10 @@ constructor(
         var suffix = ""
         if (hour > 11) {
             suffix = "pm"
-            if (hour > 12)
-                hour -= 12;
+            if (hour > 12) hour -= 12;
         } else {
             suffix = "am"
-            if (hour == 0)
-                hour = 12;
+            if (hour == 0) hour = 12;
         }
         return "$hour $suffix"
     }
@@ -809,6 +802,198 @@ constructor(
 
     }
 
+
+    fun checkForNewAppVersion() {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val callApi = postOfflineAppUpdateData()
+            if (callApi.not()) return@launch
+
+            checkAppVersionServer()
+
+        }
+
+
+    }
+
+    fun checkForNewOtaVersion() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val device = ringDataStore.getRingDevice()
+            if (device == null) {
+                otaUpdateInfo.postValue(null)
+                return@launch
+            }
+
+            val callApi = postUpdateOtaDataOffline()
+
+            if (callApi.not()) return@launch
+
+            sessionManager.postFirmwareDetailsOnDash = true
+            sessionManager.sendQueryAction(QueryAction.QueryFirmwareVersion)
+
+
+        }
+
+
+    }
+
+
+    fun postOfflineAppUpdateData(): Boolean {
+        val appUpdateObj = localDataStore.getNewAppVersion()
+        if (appUpdateObj?.first != null) {
+            val lastSaveTimeStamp = appUpdateObj.third
+
+            val isMoreThan2 = lastSaveTimeStamp.checkTimeDifferenceMoreThanN(2)
+            if (isMoreThan2) {
+                localDataStore.cleaNewAppVersion()
+                return true
+            }
+
+            if (appUpdateObj.second != BuildConfig.VERSION_CODE) {
+                localDataStore.cleaNewAppVersion()
+                return true
+            }
+
+            val remindDate = localDataStore.getAppRemindDate()
+
+            if (remindDate == null) {
+                val obj = Gson().fromJson<AppUpdateModel>(appUpdateObj.first)
+                appUpdateInfo.postValue(obj)
+            } else if (!remindDate.equals(DateFormats.getCurrentDate())) {
+                val obj = Gson().fromJson<AppUpdateModel>(appUpdateObj.first)
+                appUpdateInfo.postValue(obj)
+            }
+            return false
+        } else {
+            val lastCheckTimestamp = localDataStore.getAppVersionCheckTimeStamp()
+            return if (lastCheckTimestamp == 0L) {
+                true
+            } else {
+                lastCheckTimestamp.checkTimeDifferenceMoreThanN(2)
+            }
+        }
+    }
+
+    private fun postUpdateOtaDataOffline(): Boolean {
+        val firmwareObj = ringDataStore.getNewOtaVersion()
+        LOGS.d("postUpdateOtaDataOffline ${Gson().toJson(firmwareObj)}")
+        if (firmwareObj?.first != null) {
+
+            val lastSaveTimeStamp = firmwareObj.third
+
+            val isMoreThan2 = lastSaveTimeStamp.checkTimeDifferenceMoreThanN(2)
+            if (isMoreThan2) {
+                ringDataStore.cleaNewOtaVersion()
+                return true
+            }
+
+            val remindDate = ringDataStore.getOtaRemindDate()
+
+            if (remindDate == null) {
+                val obj = Gson().fromJson<OtaUpdateModel>(firmwareObj.first)
+                otaUpdateInfo.postValue(obj)
+            } else if (!remindDate.equals(DateFormats.getCurrentDate())) {
+                val obj = Gson().fromJson<OtaUpdateModel>(firmwareObj.first)
+                otaUpdateInfo.postValue(obj)
+            }
+            return false
+        } else {
+            val lastCheckTimestamp = ringDataStore.getOtaVersionCheckTimeStamp()
+            LOGS.d(
+                "" + " ${lastCheckTimestamp}"
+            )
+            return if (lastCheckTimestamp == 0L) {
+                true
+            } else {
+                lastCheckTimestamp.checkTimeDifferenceMoreThanN(2)
+            }
+        }
+    }
+
+
+    fun checkAppVersionServer() {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val request = getAppVersionRequest()
+            updateRepository.checkAppVersionV2(request).collect { resource ->
+                when (resource) {
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+
+                            updateRepository.saveNewAppVersion(
+                                it.appVersion, BuildConfig.VERSION_CODE
+                            )
+                            postOfflineAppUpdateData()
+                        }
+                    }
+
+                    else -> {
+
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * WatchInfoGlobals.firmwareVersionNumberRing,
+     *                                     WatchInfoGlobals.firmwareDeviceIdRing
+     */
+    fun checkOtaVersionServer(pair: Pair<Int, Int>) {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val request = getOtaVersionRequest(pair)
+            updateRepository.checkAppVersionV2(request).collect { resource ->
+                when (resource) {
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            updateRepository.saveNewOtaVersion(it.firmwareVersion, pair?.first)
+
+                            postUpdateOtaDataOffline()
+                        }
+                    }
+
+                    else -> {
+
+                    }
+                }
+            }
+        }
+
+
+    }
+
+
+    private fun getAppVersionRequest(): JsonObject {
+        return JsonObject().apply {
+            addProperty("platform", "android")
+            addProperty("app_version", BuildConfig.VERSION_CODE)
+        }
+    }
+
+    private fun getOtaVersionRequest(pair: Pair<Int, Int>): JsonObject {
+        val ringDevice = ringDataStore.getRingDevice()
+        val deviceType = ringDevice?.deviceType
+
+        return JsonObject().apply {
+            addProperty(
+                "version", pair.first
+            )
+            addProperty(
+                "firmware_id", pair.second
+            )
+            addProperty("mac", ringDevice?.address)
+            addProperty("device_type", deviceType)
+            addProperty(
+                "isOTARequired", sessionManager.needDfuUpdate.value?.peekContent() ?: false
+            )
+            addProperty("platform", "android")
+        }
+    }
+
+
     fun markWorkoutSyncedAll() {
         viewModelScope.launch {
             syncRepository.markWorkoutSyncedAll().collect { resource ->
@@ -899,6 +1084,23 @@ constructor(
             oldReadinessScore = nap.prevReadinessScore,
             newReadinessScore = nap.readinessScore,
         )
+    }
+
+    fun handleBatteryAlert() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val device = ringDataStore.getRingDevice()
+            val batteryPercentage = watchDataStore.getBatteryPercentRing()
+            if (batteryPercentage < 20) {
+                if (sessionManager.isRingCharging.value == false) {
+                    stateDashRingBattery.postValue(Pair(true, device))
+                } else {
+                    stateDashRingBattery.postValue(Pair(false, null))
+                }
+            } else {
+                stateDashRingBattery.postValue(Pair(false, null))
+            }
+        }
+
     }
 
 

@@ -249,6 +249,10 @@
             android:theme="@style/TransparentBgTheme" >
             <nav-graph android:value="@navigation/navigation_oreo" />
         </activity>
+        <activity
+            android:name="com.noisefit.ui.onboarding.setup.DeviceSetupActivityV2"
+            android:screenOrientation="portrait"
+            android:exported="false" />
     </application>
 
 </manifest>

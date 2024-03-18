@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:lineChart="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <!--
         <me.dkzwm.widget.srl.SmoothRefreshLayout
@@ -34,6 +35,51 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <com.oreo.ui.custom.TabLayoutCustom
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lytHeader"
+            lineChart:bgBottomColor="@android:color/transparent"
+            lineChart:bgColor="@android:color/transparent"
+            lineChart:bgLeftColor="@android:color/transparent"
+            lineChart:bgRightColor="@android:color/transparent"
+            lineChart:bgTopColor="@android:color/transparent"
+            lineChart:bottomWith="30dp"
+            lineChart:centerLineColor="@color/white_80"
+            lineChart:centerLineWidth="3dp"
+            lineChart:chartLineColor="@color/sleep_chart_line_color"
+            lineChart:chartLineWidth="2dp"
+            lineChart:fillColorEnd="@color/sleep_fill_end_color"
+            lineChart:fillColorStart="@color/sleep_fill_start_color"
+            lineChart:gridColor="@color/white_12"
+            lineChart:hCount="11"
+            lineChart:innerCircleColor="#e9d4ff"
+            lineChart:innerCircleRadius="4dp"
+            lineChart:leftWith="0dp"
+            lineChart:outCircleColor="#66aa5bff"
+            lineChart:outCircleRadius="1dp"
+            lineChart:rightWith="0dp"
+            lineChart:scaleColor="#ff000000"
+            lineChart:scaleLenth="4dp"
+            lineChart:scaleNodeColor="#FFFFFF"
+            lineChart:scaleNodeRadius="6dp"
+            lineChart:showGrid="true"
+            lineChart:topWith="40dp"
+            lineChart:vCount="2"
+            lineChart:xLineColor="#80FFFFFF"
+            lineChart:xMax="130"
+            lineChart:xMin="0"
+            lineChart:xTextColor="#FFFFFF"
+            lineChart:xTextSize="16sp"
+            lineChart:yLineColor="#00FFFFFF"
+            lineChart:yTextSize="12sp"
+
+
+            />
+
         <!--<com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
@@ -41,17 +87,18 @@
             app:tabIndicatorColor="@color/white"
             app:tabSelectedTextColor="@color/white"
             app:tabMode="scrollable"
+            app:tabGravity="center"
             app:tabTextColor="@color/white_64"
             app:layout_constraintTop_toBottomOf="@+id/lytHeader" />-->
 
-        <include
-            android:id="@+id/tabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            tools:visibility="visible"
-            app:layout_constraintTop_toBottomOf="@+id/lytHeader"
-            layout="@layout/layout_tabs_dash"/>
+        <!-- <include
+             android:id="@+id/tabLayout"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:visibility="gone"
+             tools:visibility="visible"
+             app:layout_constraintTop_toBottomOf="@+id/lytHeader"
+             layout="@layout/layout_tabs_dash"/>-->
 
 
         <androidx.viewpager2.widget.ViewPager2
@@ -60,7 +107,6 @@
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
-
 
 
         <include

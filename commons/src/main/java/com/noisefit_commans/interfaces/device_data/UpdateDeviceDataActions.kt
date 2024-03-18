@@ -47,6 +47,7 @@ abstract class UpdateDeviceDataActions() :
     open fun setIncomingCallInfo(incomingCall: IncomingCall) {}
     open fun updateCustomReply(customReplyData: CustomReplyData) {}
     open fun setAutoSleep(autoSleep: AutoSleep) {}
+    open fun setAutoWorkoutStatus(status: Boolean) {}
     open fun setWatchFaceLayout(watchFaceLayout: WatchFaceLayout, imagePath: Uri) {}
     open fun setFindMyPhone(switchSetting: SwitchSetting) {}
     open fun onMusicEventChanged(event: String) {
@@ -70,6 +71,7 @@ abstract class UpdateDeviceDataActions() :
     open fun setMedicineReminder(sedentaryData: SedentaryData) {}
     open fun setFactoryReset() {}
     open fun setStressData(sedentaryData: SedentaryData) {}
+    open fun setRealTimeDataState(status: Boolean) {}
 
     open fun getWatchFacePro3(type: String) {}
     open fun setSportSyncParamPro3() {}

@@ -9,8 +9,6 @@ import com.noisefit.data.remote.UserLocationUpdatedResponse
 import com.noisefit.data.remote.request.LoginRequest
 import com.noisefit.data.remote.request.RegistrationRequest
 import com.noisefit.data.remote.request.UpdateAdditionalDetailRequest
-import com.noisefit.data.remote.response.CatWiseWatchFacesItem
-import com.noisefit.data.remote.response.WatchFaceCustomListResponse
 import com.noisefit.data.remote.response.Watchface2
 import com.noisefit_commans.data.model.*
 import com.noisefit_commans.data.model.history.*
@@ -23,15 +21,12 @@ import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.models.WatchFace
 import com.noisefit_commans.response.SleepHistoryResponse
 import com.oreo.data.model.*
-import com.oreo.data.model.health.Nap
 import com.oreo.data.model.health.OreoActivityModel
 import com.oreo.data.model.health.OreoDashboardResponseModel
 import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.data.model.health.OreoSleepModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import org.json.JSONArray
-import org.json.JSONObject
 import retrofit2.http.*
 
 
@@ -43,6 +38,12 @@ interface NetworkService {
         @Url url: String,
         @Body jsonObject: JsonObject
     ): BaseApiResponse<VersionCheckResponse>
+
+    @POST
+    suspend fun checkAppVersionV2(
+        @Url url: String,
+        @Body jsonObject: JsonObject
+    ): BaseApiResponse<UpdateResponseV2>
 
 
     //Auth APIs
@@ -209,11 +210,6 @@ interface NetworkService {
     ): BaseApiResponse<DeviceFeatureResponse>
 
     @GET
-    suspend fun getWatchFaceCategory(
-        @Url url: String
-    ): BaseApiResponse<List<CatWiseWatchFacesItem>>
-
-    @GET
     suspend fun getWatchFacesByCategoryId(
         @Url url: String
     ): BaseApiResponse<List<WatchFace>>
@@ -232,12 +228,6 @@ interface NetworkService {
     suspend fun getWatchFaceById(
         @Url url: String,
     ): BaseApiResponse<WatchFaceResponse>
-
-    @GET
-    suspend fun getWatchFaceCustomData(
-        @Url url: String
-    ): BaseApiResponse<WatchFaceCustomListResponse>
-
 
     @POST("/watch_faces/v3/current")
     suspend fun setRecentWatchFace(
@@ -802,7 +792,7 @@ interface NetworkService {
     @POST
     suspend fun addWorkout(
         @Url url: String, @Body jsonObject: JsonObject
-    ): BaseApiResponseData<Any>
+    ): BaseApiResponseData<OActivityListModal>
 
     @POST
     suspend fun syncGoogleFitUserData(

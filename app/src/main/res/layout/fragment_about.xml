@@ -9,99 +9,105 @@
 
         <include
             android:id="@+id/layoutToolbar"
-            layout="@layout/layout_toolbar" />
+            layout="@layout/layout_toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.core.widget.NestedScrollView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:paddingBottom="@dimen/dimen_40dp"
             app:layout_constraintTop_toBottomOf="@+id/layoutToolbar">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <ImageView
+                android:id="@+id/ivLogo"
+                android:layout_width="@dimen/dimen_56dp"
+                android:layout_height="@dimen/dimen_56dp"
+                android:layout_marginTop="@dimen/dimen_32dp"
+                android:src="@mipmap/ic_launcher"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvAppName"
+                style="@style/H4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_32dp"
+                android:text="@string/app_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivLogo" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvAppVersion"
+                style="@style/H6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_12dp"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvAppName"
+                tools:text="V 2.1.0" />
+
+
+            <include
+                android:id="@+id/include5"
+                layout="@layout/layout_divider_modal_color"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginTop="@dimen/dimen_32dp"
+                android:layout_marginEnd="@dimen/side_margin"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAppVersion" />
+
+            <com.noisefit_commans.ui.custom.AboutRow
+                android:id="@+id/rowTermsCondition"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingBottom="@dimen/dimen_40dp">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_32dp"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/include5"
+                app:textAbout="@string/text_terms_and_condition_new" />
 
-                <ImageView
-                    android:id="@+id/ivLogo"
-                    android:layout_width="@dimen/dimen_56dp"
-                    android:layout_height="@dimen/dimen_56dp"
-                    android:layout_marginTop="@dimen/dimen_32dp"
-                    android:src="@mipmap/ic_launcher"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tvAppName"
-                    style="@style/H4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_32dp"
-                    android:text="@string/app_name"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ivLogo" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tvAppVersion"
-                    style="@style/H6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_12dp"
-                    android:textColor="@color/white"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvAppName"
-                    tools:text="V 2.1.0" />
+            <com.noisefit_commans.ui.custom.AboutRow
+                android:id="@+id/rowPrivacyPolicy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rowTermsCondition"
+                app:textAbout="@string/text_privacy_policy" />
 
 
-                <include
-                    android:id="@+id/include5"
-                    layout="@layout/layout_divider_modal_color"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="@dimen/side_margin"
-                    android:layout_marginTop="@dimen/dimen_32dp"
-                    android:layout_marginEnd="@dimen/side_margin"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvAppVersion" />
 
-                <com.noisefit_commans.ui.custom.AboutRow
-                    android:id="@+id/rowTermsCondition"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_32dp"
-                    android:visibility="visible"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/include5"
-                    app:textAbout="@string/text_terms_and_condition_new" />
+            <Button
+                android:id="@+id/btnCheckForUpdate"
+                style="@style/PrimaryButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginEnd="@dimen/side_margin"
+                android:layout_marginBottom="40dp"
+                android:text="@string/text_check_for_update"
+                app:backgroundTint="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-                <com.noisefit_commans.ui.custom.AboutRow
-                    android:id="@+id/rowPrivacyPolicy"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="visible"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/rowTermsCondition"
-                    app:textAbout="@string/text_privacy_policy" />
 
-                <com.noisefit_commans.ui.custom.AboutRow
-                    android:id="@+id/rowCheckForUpdate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="visible"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/rowPrivacyPolicy"
-                    app:textAbout="@string/text_check_for_update" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.core.widget.NestedScrollView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

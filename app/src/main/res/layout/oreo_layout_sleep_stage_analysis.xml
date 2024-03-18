@@ -19,6 +19,34 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <include
+            android:id="@+id/lytTotalSleep"
+            layout="@layout/layout_sleep_stage_total_sleep"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+
+        <include
+            android:id="@+id/lytSleepInteraction"
+            layout="@layout/layout_sleep_stage_interaction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+            tools:visibility="visible" />
+
         <ImageView
             android:id="@+id/ivInfo"
             android:layout_width="24dp"
@@ -36,7 +64,10 @@
             android:id="@+id/lytGraph"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:layout_margin="@dimen/side_margin"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="80dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:layout_marginBottom="@dimen/side_margin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTitle">

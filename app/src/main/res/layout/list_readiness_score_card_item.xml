@@ -43,6 +43,7 @@
         android:layout_height="@dimen/dimen_80dp"
         android:layout_margin="@dimen/dimen_16dp"
         app:alwaysShowCircle="false"
+        app:xTextSize2="12sp"
         app:bgBottomColor="@android:color/transparent"
         app:bgColor="@android:color/transparent"
         app:bgLeftColor="@android:color/transparent"

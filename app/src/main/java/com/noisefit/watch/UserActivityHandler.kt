@@ -42,7 +42,7 @@ constructor(
                 zhUserActivityDataActions.init()
                 zhUserActivityDataActions.attachCallbacks()
                 CommonGlobals.userActivityDataActions = zhUserActivityDataActions
-                AppLogs.sendAppLogs("ZH Sdk watch type")
+                //AppLogs.sendAppLogs("ZH Sdk watch type")
 
             }
             SDKWatchType.SDK_RYEEX->{

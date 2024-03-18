@@ -4,7 +4,6 @@ import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.local.db.CacheResult
@@ -16,7 +15,6 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
-import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.data.model.User
 import com.noisefit_commans.interfaces.connection.ConnectState
@@ -31,7 +29,6 @@ import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.TrendsData
 import com.oreo.data.model.health.OreoActivityModel
-import com.oreo.data.model.health.OreoDashboardResponseModel
 import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.data.model.health.OreoSleepModel
 import com.oreo.data.repository.abstraction.OreoSyncRepository
@@ -43,7 +40,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.selects.select
 import org.joda.time.Days
 import org.joda.time.LocalDate
 import javax.inject.Inject
@@ -122,6 +118,7 @@ constructor(
     //Activity Data
     private val _activityHistoryResponse = MutableLiveData<List<OreoActivityModel>>()
     val activityHistoryResponse: LiveData<List<OreoActivityModel>> = _activityHistoryResponse
+
     private val _dayActivityData = MutableLiveData<OreoActivityModel>()
     val dayActivityData: LiveData<OreoActivityModel> = _dayActivityData
 
@@ -134,6 +131,7 @@ constructor(
     }
 
     private fun resetMasterDates() {
+        LOGS.d("RESET_DATES resetMasterDates")
         mEndDate = DateFormats.getCurrentDateOreoFormat()
         mStartDate = DateFormats.getCurrentDateMinusDays(6)
         selectedDate = DateFormats.getCurrentDateOreoFormat()
@@ -141,11 +139,14 @@ constructor(
         getUserHealthData(mStartDate, mEndDate)
     }
 
-    fun shouldResetMasterDates() {
+    fun shouldResetMasterDates(): Boolean {
+        LOGS.d("RESET_DATES shouldResetMasterDates")
         val todayDate = DateFormats.getCurrentDateOreoFormat()
-        if (todayDate.equals(dateSetOn, true)) return
+        if (todayDate.equals(dateSetOn, true)) return false
         resetHealthCacheData()
         resetMasterDates()
+        LOGS.d("RESET_DATES shouldResetMasterDates done")
+        return true
     }
 
     private fun resetHealthCacheData() {
@@ -281,6 +282,8 @@ constructor(
         if (sleepHistoryResponse.value.isNullOrEmpty()) return false
 
         if (sleepHistoryResponse.value!!.size < 2) return false
+
+        if (selectedDate.isNullOrEmpty()) return false
 
         if ((sleepHistoryResponse.value!![1]).date.equals(selectedDate) || (sleepHistoryResponse.value!![0]).date.equals(
                 selectedDate
@@ -468,7 +471,6 @@ constructor(
 
     fun updateSelectedDateActivity(selectedDate: String?): String? {
         var returnSelectedDate: String? = null
-
         val dayData = _activityHistoryResponse.value?.firstOrNull() {
             it.date.equals(selectedDate, false)
         }
@@ -494,6 +496,10 @@ constructor(
         return DateFormats.getTodaysDateString(10)
     }
 
+    fun getDayMovementData(date: String?): ServerUserHealthData? {
+        return userHealthData[date]
+    }
+
     fun shouldSyncAutoLogs(): Boolean {
         val lastTimeStamp = ringDataStore.getAutoLogsTimeStamp()
         val logSyncInterval = localDataStore.getLogSyncInterval()
@@ -515,8 +521,11 @@ constructor(
     }
 
     fun reloadTodaysData() {
-        val todayDate = getTodayDate()
-        getUserHealthData(todayDate, todayDate)
+        val shouldRefresh = shouldResetMasterDates()
+        if (!shouldRefresh) {
+            val todayDate = getTodayDate()
+            getUserHealthData(todayDate, todayDate)
+        }
     }
 
     private fun showNotification(response: ServerUserHealthData?) {

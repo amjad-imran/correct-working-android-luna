@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/side_margin"
         android:layout_marginTop="28dp"
-        android:text="@string/text_average_oxygen_saturation"
+        android:text="@string/text_average_blood_oxygen"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

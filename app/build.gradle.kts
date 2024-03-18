@@ -310,6 +310,7 @@ dependencies {
     implementation(project(Modules.customProgress))
     implementation(WatchDog.watchDog)
     implementation(project(Modules.noisefit_zh_sdk))
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
 
     implementation(AndroidX.lifecycleProcess)
     implementation(Insider.plugin)

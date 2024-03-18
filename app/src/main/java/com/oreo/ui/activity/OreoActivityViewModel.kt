@@ -1,5 +1,6 @@
 package com.oreo.ui.activity
 
+import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -16,14 +17,17 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.LOGS
+import com.oreo.data.dataConverter.OreoDayTimeDataConvertor
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.OContributorResponseModal
+import com.oreo.data.model.ODayTimeActivitiesDataModel
+import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.health.OreoActivityModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,11 +35,12 @@ class OreoActivityViewModel @Inject constructor(
     private val userActivityRepository: OreoUserActivityRepository,
     val localDataStore: DataStoredInterface,
     val ringDataStore: RingDataStore,
-    val sessionManager: SessionManager
+    val sessionManager: SessionManager,
+    val dayTimeDataConvertor: OreoDayTimeDataConvertor
 ) : BaseViewModel() {
 
 
-
+    var activeMinutes: Int = 0
 
     private val _contributorInfo = MutableLiveData<OContributorResponseModal>()
     val contributorInfo: LiveData<OContributorResponseModal> = _contributorInfo
@@ -103,12 +108,12 @@ class OreoActivityViewModel @Inject constructor(
                 currentDayText = "Today, "
             }
 
-            val formattedDate = if(currentDayText.isEmpty()){
+            val formattedDate = if (currentDayText.isEmpty()) {
                 DateFormats.getOrdinalDate(
                     it.date,
                     DateFormats.dateFormat3,
                 )
-            }else{
+            } else {
                 DateFormats.getOrdinalDateToday(
                     it.date,
                     DateFormats.dateFormat3,
@@ -259,8 +264,9 @@ class OreoActivityViewModel @Inject constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_activity_bar_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                    barPercent = 0,
+                    hasData = false,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
@@ -286,8 +292,9 @@ class OreoActivityViewModel @Inject constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_activity_bar_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                    barPercent = 0,
+                    hasData = false,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
@@ -312,8 +319,9 @@ class OreoActivityViewModel @Inject constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_activity_bar_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                    barPercent = 0,
+                    hasData = false,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
@@ -339,8 +347,9 @@ class OreoActivityViewModel @Inject constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_activity_bar_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                    barPercent = 0,
+                    hasData = false,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
@@ -365,20 +374,42 @@ class OreoActivityViewModel @Inject constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_activity_bar_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                    barPercent = 0,
+                    hasData = false,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
         return result
     }
 
+    /**
+     * textColor, barColor, background
+     */
     private fun getContributorsColors(status: String): Triple<Int, Int, Int> {
         return if (status.equals("warning", true)) {
             Triple(
-                R.color.oreo_contributor_warning,
-                R.color.oreo_contributor_warning,
+                R.color.oreo_activity_text_color_warning,
+                R.color.oreo_activity_bar_color_warning,
                 com.noisefit_commans.R.drawable.back_modal_new_warning
+            )
+        } else if (status.equals("good", true)) {
+            Triple(
+                R.color.white,
+                R.color.oreo_activity_bar_color,
+                com.noisefit_commans.R.drawable.back_modal_new
+            )
+        } else if (status.equals("fair", true)) {
+            Triple(
+                R.color.white,
+                R.color.oreo_activity_bar_color_fair,
+                com.noisefit_commans.R.drawable.back_modal_new
+            )
+        } else if (status.equals("optimal", true)) {
+            Triple(
+                R.color.oreo_activity_text_color_optimal,
+                R.color.oreo_activity_bar_color_optimal,
+                com.noisefit_commans.R.drawable.back_modal_new_optimal_activity
             )
         } else {
             Triple(
@@ -463,6 +494,73 @@ class OreoActivityViewModel @Inject constructor(
             }
         }
         return combinedList
+    }
+
+    fun getStartTimeFromPosition(position: Int): String {
+        val minutes = (95 - position) * 15
+        val calendar = Calendar.getInstance()
+        calendar[Calendar.HOUR_OF_DAY] = 0 //set hours to zero
+        calendar[Calendar.MINUTE] = 0 // set minutes to zero
+        calendar[Calendar.SECOND] = 0 //set seconds to zero
+
+        calendar.set(Calendar.MINUTE, minutes)
+        return DateFormats.convertTimestampToDate(calendar.timeInMillis, DateFormats.timeFormat12)
+    }
+
+    fun getEndTimeFromPosition(position: Int): String {
+        val minutes = (95 - position) * 15
+        val calendar = Calendar.getInstance()
+        calendar[Calendar.HOUR_OF_DAY] = 0 //set hours to zero
+        calendar[Calendar.MINUTE] = 0 // set minutes to zero
+        calendar[Calendar.SECOND] = 0 //set seconds to zero
+
+        calendar.set(Calendar.MINUTE, minutes + 15)
+        return DateFormats.convertTimestampToDate(calendar.timeInMillis, DateFormats.timeFormat12)
+    }
+
+    fun formattedTime(receivedTime: String): Pair<String, String> {
+        val timeValue = receivedTime.split(" ")
+        val time = timeValue[0]
+        val timeUnit = timeValue[1].lowercase()
+        return Pair(time, timeUnit)
+    }
+
+    var stressActivityData: ArrayList<ODayTimeActivitiesDataModel>? = null
+    fun prepareStressActivityData(dayData: ServerUserHealthData) {
+        val workouts = dayData.activity?.workout
+        val sleep = dayData.sleep
+        val dataList = ArrayList<ODayTimeActivitiesDataModel>()
+        workouts?.forEach {
+            dataList.add(
+                ODayTimeActivitiesDataModel(
+                    type = "Workout",
+                    workoutData = it
+                )
+            )
+        }
+        if (sleep != null) {
+            if (sleep.hourly_breakup != null)
+                dataList.add(
+                    ODayTimeActivitiesDataModel(
+                        type = "Sleep",
+                        startTime = sleep.hourly_breakup?.firstOrNull()?.start_time,
+                        endTime = sleep.hourly_breakup?.lastOrNull()?.end_time,
+                    )
+                )
+        }
+
+        sleep?.naps?.forEach { it ->
+            dataList.add(
+                ODayTimeActivitiesDataModel(
+                    type = "Nap",
+                    id = it.id,
+                    startTime = it.startTime,
+                    endTime = it.endTime
+                )
+            )
+        }
+
+        stressActivityData = dataList
     }
 
 

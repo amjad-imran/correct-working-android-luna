@@ -26,6 +26,7 @@ import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
@@ -294,7 +295,7 @@ class OAddWorkoutFragment :
             binding.lytCaloriesBurn.tvDurationValue.text = duration.toString()
         }
 
-        val calories = viewModel.getCaloriesBurnt().roundToInt()
+        val calories = viewModel.getCaloriesBurnt()
         viewModel.addWorkout.calories = calories
         binding.lytCaloriesBurn.tvCalBurnValue.text = if (calories > 0) {
             "$calories"
@@ -312,17 +313,6 @@ class OAddWorkoutFragment :
 
 
         enableSaveBtn()
-
-    }
-
-    private fun setCalories() {
-        val calories = viewModel.getCaloriesBurnt().roundToInt()
-        viewModel.addWorkout.calories = calories
-        binding.lytCaloriesBurn.tvCalBurnValue.text = if (calories > 0) {
-            "$calories"
-        } else {
-            "--"
-        }
 
     }
 
@@ -521,13 +511,22 @@ class OAddWorkoutFragment :
         viewModel.addWorkoutResponse.observe(this) {
             it?.let {
 
-                viewModel.sessionManager.saveSportsActivities(listOf(it))
+                viewModel.sessionManager.saveSportsActivities(listOf(it.first))
 
-                mainViewModel.reloadTodaysData()
+                mainViewModel.sessionManager.reloadTodayData.postValue(
+                    Event(true)
+                )
+                mainViewModel.sessionManager.forceSyncData.postValue(Event(true))
+
+                //mainViewModel.reloadTodaysData()
 
                 setFragmentResult(
                     ADD_WORKOUT_REQUEST_KEY,
-                    bundleOf("allow" to true)
+                    bundleOf(
+                        "allow" to true,
+                        "workId" to it.second,
+                        "actName" to it.first.getFormattedActivityName()
+                    )
 
                 )
                 context.showShortToast("Workout Added Successfully")

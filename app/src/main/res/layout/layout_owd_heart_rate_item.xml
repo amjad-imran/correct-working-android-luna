@@ -35,7 +35,7 @@
 
         <include
             android:id="@+id/lytSubtitleValue1"
-            layout="@layout/oreo_layout_view_with_bpm"
+            layout="@layout/oreo_layout_view_with_bpm_small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -70,7 +70,7 @@
 
         <include
             android:id="@+id/lytSubtitleValue2"
-            layout="@layout/oreo_layout_view_with_bpm"
+            layout="@layout/oreo_layout_view_with_bpm_small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"

@@ -54,9 +54,11 @@ import com.zhapp.ble.bean.OfflineTemperatureDataBean
 import com.zhapp.ble.bean.OverallDayMovementData
 import com.zhapp.ble.bean.PhoneSportDataBean
 import com.zhapp.ble.bean.RealTimeBean
+import com.zhapp.ble.bean.RingBodyBatteryBean
 import com.zhapp.ble.bean.RingHealthScoreBean
 import com.zhapp.ble.bean.RingSleepNapBean
 import com.zhapp.ble.bean.RingSleepResultBean
+import com.zhapp.ble.bean.RingStressDetectionBean
 import com.zhapp.ble.bean.SleepBean
 import com.zhapp.ble.bean.SportRequestBean
 import com.zhapp.ble.bean.SportResponseBean
@@ -88,10 +90,11 @@ constructor(
     companion object {
         const val LOCATION_BROADCAST_RECEIVER = "LOCATION_BROADCAST_RECEIVER"
         const val LAT_LONG = "LAT_LONG"
+        val TRACK_TAG = "LUNA->"
     }
 
     private val TAG = "ZhUserActivityHandler"
-    private val TRACK_TAG = "LUNA->"
+
     private var userActivityDataCallbacks: IUserActivityDataCallback? = null
     private var sportModleInfoList = ArrayList<DevSportInfoBean>()
     private var isSyncProtoSportSyncing = false
@@ -750,12 +753,16 @@ constructor(
                 )*/
 
                 val sleepDataParsed = oreoDataConverter.parseSleepData(p0)
-                AppLogs.sendAppLogs("$TRACK_TAG Parsed Sleep Data $sleepDataParsed")
-                userActivityDataCallbacks?.onUserActivityDataReceived(
-                    UserActivityCallback.SleepDataObtainedOreo(
-                        sleepDataParsed
+
+                sleepDataParsed?.let {
+                    AppLogs.sendAppLogs("$TRACK_TAG Parsed Sleep Data $sleepDataParsed")
+                    userActivityDataCallbacks?.onUserActivityDataReceived(
+                        UserActivityCallback.SleepDataObtainedOreo(
+                            sleepDataParsed
+                        )
                     )
-                )
+                }
+
             }
 
             override fun onRingSleepNAP(p0: MutableList<RingSleepNapBean>?) {
@@ -806,6 +813,14 @@ constructor(
                 }
             }
 
+            override fun onRingBodyBatteryData(p0: RingBodyBatteryBean?) {
+                AppLogs.sendAppLogs("onRingBodyBatteryData ${Gson().toJson(p0)}")
+            }
+
+            override fun onRingStressDetectionData(p0: RingStressDetectionBean?) {
+                AppLogs.sendAppLogs("onRingStressDetectionData ${Gson().toJson(p0)}")
+
+            }
 
         }
 

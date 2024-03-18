@@ -85,6 +85,7 @@
             app:canScroll="false"
             app:centerLineColor="#80ffffff"
             app:centerLineWidth="5dp"
+            app:xTextSize2="12sp"
             app:chartLineColor="@color/sleep_chart_line_color"
             app:chartLineWidth="3dp"
             app:fillColorEnd="@color/sleep_fill_end_color"
@@ -257,7 +258,7 @@
             app:centerLineWidth="5dp"
             app:chartLineColor="@color/activity_chart_line_color"
             app:chartLineWidth="3dp"
-
+            app:xTextSize2="12sp"
             app:fillColorEnd="@color/activity_fill_end_color"
             app:fillColorStart="@color/activity_fill_start_color"
             app:gridColor="#80FFFFFF"

@@ -22,6 +22,7 @@ import com.noisefit.luna.databinding.FragmentJoinNoisefitBinding
 import com.noisefit.ui.onboarding.onboardProfile.ProfileSetupActivity
 import com.noisefit.ui.onboarding.pairing.DeviceSetupActivity
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
+import com.noisefit.ui.onboarding.setup.DeviceSetupActivityV2
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
@@ -91,9 +92,8 @@ class JoinNoisefitFragment :
                     if (authViewModel.isDevicePaired()) {
                         if (authViewModel.isProfileSetupComplete()) {
                             startActivity(
-                                DeviceSetupActivity.getStartIntent(
-                                    requireContext(),
-                                    setupDevice = true
+                                DeviceSetupActivityV2.getStartIntent(
+                                    requireContext()
                                 )
                             )
                             activity?.finish()

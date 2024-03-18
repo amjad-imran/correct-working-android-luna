@@ -59,8 +59,8 @@ class CheckForUpdatesViewModel @Inject constructor(
 
     val networkError: LiveData<Event<Boolean>> = _networkError
     val updateAvailable: LiveData<Event<Boolean>> = _updateAvailable
-    val updateInfo: LiveData<Event<UpdateResponse>> = _updateInfo
-    val updateInfoDash: LiveData<Event<UpdateResponse>> = _updateInfoDash
+//    val updateInfo: LiveData<Event<UpdateResponse>> = _updateInfo
+//    val updateInfoDash: LiveData<Event<UpdateResponse>> = _updateInfoDash
     val updateFirmware: LiveData<Event<File>> = _updateFirmware
     val visionUpdateFirmware: LiveData<Event<List<VisionOtaFiles>>> = _visionUpdateFirmware
     val agpsFile1: LiveData<Event<File>> = _agpsFile1
@@ -77,79 +77,79 @@ class CheckForUpdatesViewModel @Inject constructor(
         _updateAvailable.postValue(Event(status))
     }
 
-    fun checkForUpdates(postOnDash: Boolean) {
-        _networkError.postValue(Event(false))
-        val lastUpdateCheckTime = watchDataStore.getLastUpdateCheckTimeStamp()
-        val difference = kotlin.math.abs(DateFormats.getTimeStamp() - lastUpdateCheckTime)
-        if (difference < 30 * 1000L) {
-            setUpdateAvailable(false)
-            return
-        }
-
-        val ringDevice = ringDataSore.getRingDevice()
-        val deviceType = ringDevice?.deviceType
-
-        val requestObject = JsonObject().apply {
-            addProperty(
-                "version",
-                WatchInfoGlobals.firmwareVersionNumberRing
-            )
-            addProperty(
-                "firmware_id",
-                WatchInfoGlobals.firmwareDeviceIdRing
-            )
-            addProperty("mac", ringDevice?.address)
-            addProperty("device_type", deviceType)
-            addProperty("platform", "android")
-            addProperty("isOTARequired", sessionManager.needDfuUpdate.value?.peekContent() ?: false)
-        }
-
-        viewModelScope.launch {
-            deviceRepository.checkForUpdates(requestObject).collect { resource ->
-                when (resource) {
-                    is Resource.GenericError -> {
-                        sendMessage(resource.message)
-                    }
-
-                    is Resource.Loading -> {
-                        setLoading(resource.loading)
-                    }
-
-                    is Resource.NetworkError -> {
-                        _networkError.postValue(Event(true))
-                        setApiErrors(resource.response.apply {
-                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
-                                object : BinaryActionCallback {
-                                    override fun yes() {
-                                        checkForUpdates(postOnDash)
-                                    }
-
-                                    override fun no() {}
-                                }
-                        })
-                    }
-
-                    is Resource.Success -> {
-                        watchDataStore.setInitialOtaChecked(true)
-
-                        resource.data?.data.let { response ->
-                            if (response == null) {
-                                setUpdateAvailable(false)
-                            } else {
-                                if (postOnDash) {
-                                    setUpdateAvailable(true)
-                                    _updateInfoDash.postValue(Event(response))
-                                } else {
-                                    _updateInfo.postValue(Event(response))
-                                    setUpdateAvailable(true)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+//    fun checkForUpdates(postOnDash: Boolean) {
+//        _networkError.postValue(Event(false))
+//        val lastUpdateCheckTime = watchDataStore.getLastUpdateCheckTimeStamp()
+//        val difference = kotlin.math.abs(DateFormats.getTimeStamp() - lastUpdateCheckTime)
+//        if (difference < 30 * 1000L) {
+//            setUpdateAvailable(false)
+//            return
+//        }
+//
+//        val ringDevice = ringDataSore.getRingDevice()
+//        val deviceType = ringDevice?.deviceType
+//
+//        val requestObject = JsonObject().apply {
+//            addProperty(
+//                "version",
+//                WatchInfoGlobals.firmwareVersionNumberRing
+//            )
+//            addProperty(
+//                "firmware_id",
+//                WatchInfoGlobals.firmwareDeviceIdRing
+//            )
+//            addProperty("mac", ringDevice?.address)
+//            addProperty("device_type", deviceType)
+//            addProperty("platform", "android")
+//            addProperty("isOTARequired", sessionManager.needDfuUpdate.value?.peekContent() ?: false)
+//        }
+//
+//        viewModelScope.launch {
+//            deviceRepository.checkForUpdates(requestObject).collect { resource ->
+//                when (resource) {
+//                    is Resource.GenericError -> {
+//                        sendMessage(resource.message)
+//                    }
+//
+//                    is Resource.Loading -> {
+//                        setLoading(resource.loading)
+//                    }
+//
+//                    is Resource.NetworkError -> {
+//                        _networkError.postValue(Event(true))
+//                        setApiErrors(resource.response.apply {
+//                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+//                                object : BinaryActionCallback {
+//                                    override fun yes() {
+//                                        checkForUpdates(postOnDash)
+//                                    }
+//
+//                                    override fun no() {}
+//                                }
+//                        })
+//                    }
+//
+//                    is Resource.Success -> {
+//                        watchDataStore.setInitialOtaChecked(true)
+//
+//                        resource.data?.data.let { response ->
+//                            if (response == null) {
+//                                setUpdateAvailable(false)
+//                            } else {
+//                                if (postOnDash) {
+//                                    setUpdateAvailable(true)
+//                                    _updateInfoDash.postValue(Event(response))
+//                                } else {
+//                                    _updateInfo.postValue(Event(response))
+//                                    setUpdateAvailable(true)
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     fun downloadFirmware(url: String, file: File, fileName: String) {
         viewModelScope.launch {

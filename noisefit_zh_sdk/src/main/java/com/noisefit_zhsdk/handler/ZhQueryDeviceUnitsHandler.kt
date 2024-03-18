@@ -123,7 +123,7 @@ constructor(
         noiseFitDevice = colorFitDevice
 
         initLogListener()
-        AppLogs.sendAppLogs("Log listener initialized")
+        //AppLogs.sendAppLogs("Log listener initialized")
     }
 
 
@@ -436,7 +436,7 @@ constructor(
                         BatteryData(percentage = capacity, isCharging = isCharging)
                     )
                 )
-                AppLogs.sendAppLogs("Battery info get")
+                //AppLogs.sendAppLogs("Battery info get")
                 /*var state = "未知"
                 when (chargeStatus) {
                     0 -> {
@@ -459,7 +459,6 @@ constructor(
                     TAG, "${deviceInfoBean.firmwareVersion} ${deviceInfoBean.equipmentNumber} " +
                             "S.No ${deviceInfoBean.serialNumber}"
                 )
-
                 if (noiseFitDevice?.deviceType.equals(DeviceType.NOISEFIT_LUNA.deviceType, true)) {
                     WatchInfoGlobals.firmwareVersionRing = deviceInfoBean.firmwareVersion
                     WatchInfoGlobals.serialNumberRing = deviceInfoBean.serialNumber
@@ -492,7 +491,7 @@ constructor(
 
 
 
-                AppLogs.sendAppLogs("Get device info")
+                //AppLogs.sendAppLogs("Get device info")
             }
         }
 

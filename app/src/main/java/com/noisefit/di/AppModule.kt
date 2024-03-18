@@ -26,10 +26,10 @@ import com.noisefit_commans.interfaces.data.UserActivityDataActions
 import com.noisefit_commans.interfaces.device_data.QueryDeviceDataActions
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataActions
 import com.noisefit_commans.utils.EncryptUtils
+import com.oreo.data.dataConverter.OreoDayTimeDataConvertor
 import com.oreo.data.dataConverter.OreoOfflineDataMapper
 import com.oreo.data.dataConverter.OreoOnlineDataMapper
 import com.oreo.data.db.OreoDataBase
-import com.oreo.data.db.abstaction.OreoNapDataSource
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.db.implementation.OreoAutoSportDataImpl
 import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
@@ -102,7 +102,7 @@ object AppModule {
         keyValueDataSource: KeyValueDataSource,
         ringDataStore: RingDataStore
     ): DataConverter {
-        return DataConverter(keyValueDataSource,ringDataStore)
+        return DataConverter(keyValueDataSource, ringDataStore)
     }
 
 
@@ -184,6 +184,21 @@ object AppModule {
             napDataSource,
             dayTimeMovementDataSource,
             autoWorkoutDataSource,
+            gson
+        )
+
+    @Singleton
+    @Provides
+    fun provideUpdateRepository(
+        remoteDataSource: NetworkService,
+        ringDataStore: RingDataStore,
+        localDataStore: DataStoredInterface,
+        gson: Gson
+    ): UpdateRepository =
+        UpdateRepositoryImpl(
+            remoteDataSource,
+            ringDataStore,
+            localDataStore,
             gson
         )
 
@@ -403,5 +418,11 @@ object AppModule {
     @Provides
     fun provideTimelinePagingSource(remoteDataSource: NetworkService): TimelinePagingSource =
         TimelinePagingSource(remoteDataSource)
+
+    @Singleton
+    @Provides
+    fun provideOreoDayTimeDataConvertor(): OreoDayTimeDataConvertor {
+        return OreoDayTimeDataConvertor()
+    }
 
 }

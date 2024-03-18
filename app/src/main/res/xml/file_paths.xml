@@ -5,4 +5,7 @@
         name="external_files"
         path="."/>
     <external-path name="captures" path="."/>
+    <files-path
+        name="deviceLog"
+        path="deviceLog/" />
 </paths>

@@ -34,8 +34,9 @@ class DetectWorkoutFragment :
     private val detectWorkoutAdapter: DetectWorkoutAdapter by lazy {
         DetectWorkoutAdapter(object : DetectWorkoutListener {
             override fun onAddWorkout(data: OreoAutoSportData, position: Int) {
-                viewModel.addWorkout(data, onAddSuccess = {
+                viewModel.addWorkout(data, onAddSuccess = { workoutId ->
                     isWorkoutAdded = true
+                    navigateToDetailsWorkout(data, workoutId)
                     viewModel.markWorkoutSynced(data.id, position)
                 })
             }
@@ -71,6 +72,16 @@ class DetectWorkoutFragment :
                 )
             }
 
+        })
+    }
+
+    private fun navigateToDetailsWorkout(data: OreoAutoSportData, workoutId: String) {
+        val workoutName = data.type?.replace("_", " ")
+            ?.replaceFirstChar { if (it.isLowerCase()) it.titlecase(DateFormats.defaultLocale) else it.toString() }
+        navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
+            putString("workoutName", workoutName)
+            putString("workoutId", workoutId)
+            putInt("position", -1)
         })
     }
 

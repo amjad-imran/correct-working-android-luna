@@ -4,12 +4,12 @@
         <attr name="radius" format="dimension" />
     </declare-styleable>
     <declare-styleable name="SemiCircleArcProgressBar">
-        <attr name="progressPlaceHolderColor" format="color"/>
-        <attr name="progressBarStartColor" format="color"/>
-        <attr name="progressBarEndColor" format="color"/>
-        <attr name="progressPlaceHolderWidth" format="integer"/>
-        <attr name="progressBarWidth" format="integer"/>
-        <attr name="percent" format="integer"/>
+        <attr name="progressPlaceHolderColor" format="color" />
+        <attr name="progressBarStartColor" format="color" />
+        <attr name="progressBarEndColor" format="color" />
+        <attr name="progressPlaceHolderWidth" format="integer" />
+        <attr name="progressBarWidth" format="integer" />
+        <attr name="percent" format="integer" />
     </declare-styleable>
     <declare-styleable name="OTPView">
         <!-- Defines the next view to give focus to when the text is filled.-->
@@ -77,5 +77,7 @@
         <attr name="featureIsEnabled" format="boolean" />
         <attr name="featureHideLine" format="boolean" />
     </declare-styleable>
+
+
 
 </resources>

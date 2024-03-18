@@ -33,6 +33,7 @@ import com.noisefit.ui.onboarding.PrivacyBottomDialogFragment
 import com.noisefit.util.ApplicationUtils
 import com.noisefit.ui.onboarding.onboardProfile.ProfileSetupActivity
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
+import com.noisefit.ui.onboarding.setup.DeviceSetupActivityV2
 import com.noisefit.util.UniqueDiyWatchFaceSyncWorkName
 import com.noisefit.util.UniqueWatchFaceSyncWorkName
 import com.noisefit.util.notif.NotificationEventsClass.NOTIFICATION_BUNDLE_INDEX
@@ -67,7 +68,6 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
         handleBackgroundNotifications(intent)
 
         if (viewModel.connectedDevice != null) {
-            viewModel.sessionManager.forceSyncData.postValue(Event(true))
             checkPermissionAndStartService()
         } else {
             startOnBoardFlow()
@@ -315,6 +315,11 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
 
                     UserOnBoardingFlow.SHOW_OREO_DASHBOARD -> {
                         goToOreoDashboard()
+                    }
+
+                    UserOnBoardingFlow.DEVICE_SETUP -> {
+                        startActivity(DeviceSetupActivityV2.getStartIntent(this))
+                        finish()
                     }
                 }
             }

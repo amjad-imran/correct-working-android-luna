@@ -30,13 +30,22 @@ class GoogleFitTestFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACTIVITY_RECOGNITION)
-            != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(),
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACTIVITY_RECOGNITION
+            )
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
                 arrayOf(Manifest.permission.ACTIVITY_RECOGNITION),
-                2233)
+                2233
+            )
         }
     }
+
+
+
     override fun initListener() {
         binding.bSignIn.setOnClickListener {
             val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

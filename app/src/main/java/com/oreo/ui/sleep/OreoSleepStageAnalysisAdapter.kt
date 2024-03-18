@@ -33,7 +33,8 @@ class OreoSleepStageAnalysisAdapter :
                         100 - weightPercentValue
                 }
 
-            binding.tvDuration.text = returnRemark(sleepStageAnalysis.timeInMinutes)
+            binding.tvDuration.text =
+                returnRemark(sleepStageAnalysis.timeInMinutes, sleepStageAnalysis.percentage)
             if (weightPercentValue > 0)
                 binding.view1.visible()
             else
@@ -44,15 +45,15 @@ class OreoSleepStageAnalysisAdapter :
         }
     }
 
-    private fun returnRemark(value: Int): String {
+    private fun returnRemark(value: Int, percentage: Int): String {
         val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(value)
         val leftText: String = if (hour > 0)
             if (minute > 0)
-                "$hour h $minute min"
+                "$hour h $minute min${if (percentage > 0) ", $percentage%" else ""}"
             else
-                "$hour h"
+                "$hour h${if (percentage > 0) ", $percentage%" else ""}"
         else if (minute > 0) {
-            "$minute min"
+            "$minute min${if (percentage > 0) ", $percentage%" else ""}"
         } else {
             "-"
         }
