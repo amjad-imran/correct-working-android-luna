@@ -111,7 +111,7 @@ class RingUpdateFragment :
         }
 
     private fun setBlur() {
-        val radius = 30f
+        var radius = 30f
         val decorView = binding.blurView
         val rootView = binding.lytMain
         val windowBackground = decorView.background
@@ -119,6 +119,7 @@ class RingUpdateFragment :
         val blurAlgo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             RenderEffectBlur()
         } else {
+            radius = 25f
             RenderScriptBlur(requireContext())
         }
         binding.blurView.setupWith(rootView, blurAlgo) // or RenderEffectBlur
