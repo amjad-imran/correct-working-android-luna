@@ -1089,6 +1089,9 @@ class SummaryDataViewModelToday @Inject constructor(
     fun handleBatteryAlert() {
         viewModelScope.launch(Dispatchers.IO) {
             val device = ringDataStore.getRingDevice()
+            if (device == null) {
+                stateDashRingBattery.postValue(Pair(false, null))
+            }
             val batteryPercentage = watchDataStore.getBatteryPercentRing()
             if (batteryPercentage < 20) {
                 if (sessionManager.isRingCharging.value == false) {

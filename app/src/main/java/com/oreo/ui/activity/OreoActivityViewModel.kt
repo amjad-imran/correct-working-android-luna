@@ -128,13 +128,13 @@ class OreoActivityViewModel @Inject constructor(
         }
 
         list.reverse()
-        val lastDateFromList = dataList.last().date
+        val lastDateFromList = dataList.first().date
         val lastDate = DateFormats.subtractDateFormat3(lastDateFromList, 1)!!
         val suffixDatesList = DateFormats.getWeekDaysBetweenDates(
             DateFormats.subtractDateFormat3(lastDate, 14)!!, lastDate,
             DateFormats.dateFormat3, DateFormats.singleWeekDay
         )
-        val currentDateFromList = dataList.first().date
+        val currentDateFromList = dataList.last().date
         val currentDate = DateFormats.addDateFormat3(currentDateFromList, 1)!!
         val prefixDatesList = DateFormats.getWeekDaysBetweenDates(
             currentDate,
