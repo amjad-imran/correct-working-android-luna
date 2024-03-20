@@ -437,53 +437,47 @@ class LineChartView : View {
 
         list.forEachIndexed { index, chartModel ->
             val value = chartModel?.value!!
-            if (value != 0) {
+            if (value != 0 && value == minValue) {
                 if (index == 0) {
-                    if (value == minValue) {
-                        val nextValue = list[index + 1]!!.value
-                        val avg = (value + nextValue).toFloat() / 2
+                    val nextValue = list[index + 1]!!.value
+                    val avg = (value + nextValue).toFloat() / 2
 
-                        if (lowestPointAvg == 0.0f) {
-                            lowestPointAvg = avg
-                            lowestPointIndex = index
-                            lowestPointMinValue = value
-                        } else if (avg <= lowestPointAvg) {
-                            lowestPointAvg = avg
-                            lowestPointIndex = index
-                            lowestPointMinValue = value
-                        }
+                    if (lowestPointAvg == 0.0f) {
+                        lowestPointAvg = avg
+                        lowestPointIndex = index
+                        lowestPointMinValue = value
+                    } else if (avg <= lowestPointAvg) {
+                        lowestPointAvg = avg
+                        lowestPointIndex = index
+                        lowestPointMinValue = value
                     }
                 } else if (index == list.size - 1) {
-                    if (value == minValue) {
-                        val previousValue = list[index - 1]!!.value
-                        val avg = (value + previousValue).toFloat() / 2
+                    val previousValue = list[index - 1]!!.value
+                    val avg = (value + previousValue).toFloat() / 2
 
-                        if (lowestPointAvg == 0.0f) {
-                            lowestPointAvg = avg
-                            lowestPointIndex = index
-                            lowestPointMinValue = value
-                        } else if (avg <= lowestPointAvg) {
-                            lowestPointAvg = avg
-                            lowestPointIndex = index
-                            lowestPointMinValue = value
-                        }
+                    if (lowestPointAvg == 0.0f) {
+                        lowestPointAvg = avg
+                        lowestPointIndex = index
+                        lowestPointMinValue = value
+                    } else if (avg <= lowestPointAvg) {
+                        lowestPointAvg = avg
+                        lowestPointIndex = index
+                        lowestPointMinValue = value
                     }
                 } else {
-                    if (value == minValue) {
-                        val previousValue = list[index - 1]!!.value
-                        val nextValue = list[index + 1]!!.value
+                    val previousValue = list[index - 1]!!.value
+                    val nextValue = list[index + 1]!!.value
 
-                        val avg = (previousValue + value + nextValue).toFloat() / 3
+                    val avg = (previousValue + value + nextValue).toFloat() / 3
 
-                        if (lowestPointAvg == 0.0f) {
-                            lowestPointAvg = avg
-                            lowestPointIndex = index
-                            lowestPointMinValue = value
-                        } else if (avg <= lowestPointAvg) {
-                            lowestPointAvg = avg
-                            lowestPointIndex = index
-                            lowestPointMinValue = value
-                        }
+                    if (lowestPointAvg == 0.0f) {
+                        lowestPointAvg = avg
+                        lowestPointIndex = index
+                        lowestPointMinValue = value
+                    } else if (avg <= lowestPointAvg) {
+                        lowestPointAvg = avg
+                        lowestPointIndex = index
+                        lowestPointMinValue = value
                     }
                 }
             }
