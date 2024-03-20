@@ -183,12 +183,7 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713" />
-        <service android:name="com.moengage.firebase.MoEFireBaseMessagingService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
+
 
         <service
             android:name="com.noisefit.receiver.service.NotificationService"
@@ -254,6 +249,10 @@
             android:theme="@style/TransparentBgTheme" >
             <nav-graph android:value="@navigation/navigation_oreo" />
         </activity>
+        <activity
+            android:name="com.noisefit.ui.onboarding.setup.DeviceSetupActivityV2"
+            android:screenOrientation="portrait"
+            android:exported="false" />
     </application>
 
 </manifest>

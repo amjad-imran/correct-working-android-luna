@@ -58,9 +58,7 @@ class OreoOnlineDataMapper
         val bodyTemperature = parseBodyTemperature(userSyncActivities.bodyTemperature)
         val respiratory = parseRespiratoryData(userSyncActivities.respiratory)
 
-        val sleeps = parseSleepDataOreo(
-            userSyncActivities.sleepData
-        )
+        val sleeps = parseSleepDataOreo(userSyncActivities.sleepData)
 
         combinedData.activities = steps
         combinedData.stress = stress
@@ -80,6 +78,7 @@ class OreoOnlineDataMapper
         return combinedData
     }
 
+    @Deprecated("not in use")
     suspend fun getOreoSleepDataToPost(userSyncActivities: OreoUserSyncActivities): OreoUserDataPost {
         val sleeps = parseSleepDataOreo(
             userSyncActivities.sleepData

@@ -4,7 +4,6 @@ import android.content.Context
 import android.location.Geocoder
 import com.google.gson.Gson
 import com.noisefit_commans.common.averageWithoutZero
-import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.common.handleCaloriesData
 import com.noisefit_commans.common.handleHrData
 import com.noisefit_commans.common.upTo1Decimal
@@ -36,11 +35,11 @@ import com.noisefit_commans.models.SportsModeListGPS
 import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.models.Widget
 import com.noisefit_commans.models.WorldClockList
-import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_zhsdk.handler.ZhUserActivityHandler.Companion.TRACK_TAG
 import com.zhapp.ble.bean.ActiveMeasureParamsBean
 import com.zhapp.ble.bean.ClockInfoBean
 import com.zhapp.ble.bean.ContactBean
@@ -63,9 +62,7 @@ import com.zhapp.ble.bean.WorldClockBean
 import com.zhapp.ble.callback.ActiveMeasureCallBack
 import java.math.BigDecimal
 import java.text.DecimalFormat
-import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -571,7 +568,7 @@ constructor(
             stringBuilder.append("${pressureData[index]} -> $i\n")
         }
         //LOGS.w("filtered_data -> $stringBuilder")
-        AppLogs.sendAppLogs("geAveragedOutHrvData -> $stringBuilder")
+        //AppLogs.sendAppLogs("geAveragedOutHrvData -> $stringBuilder")
 
         return filteredData
     }
@@ -709,19 +706,19 @@ constructor(
         dailyBean.stepsData?.forEachIndexed { i, data ->
             val stepData = OreoStepsData.OreoStepDataBreakup(hourOfTheDay = i)
             stepData.steps = data
-            stepData.calories = dailyBean.calorieData[i]
+            stepData.calories = dailyBean.todayOuraCalorieHourlyData[i]
             stepData.distance = dailyBean.distanceData[i]
             stepData.activeCalories = dailyBean.todaySportCalorieHourlyData[i]
-            calories += dailyBean.calorieData[i]
             distance += dailyBean.distanceData[i]
-            activeCalories += dailyBean.todaySportCalorieHourlyData[i]
+            //activeCalories += dailyBean.todaySportCalorieHourlyData[i]
             steps += data
             stepArray.add(stepData)
         }
+        calories = dailyBean.todayOuraCalorieData
         dailyStepData.totalDistance = distance
         dailyStepData.totalCalories = calories
         dailyStepData.totalSteps = steps
-        dailyStepData.activeCalories = activeCalories
+        dailyStepData.activeCalories = dailyBean.todaySportCalorieData/*activeCalories*/
         dailyStepData.stepArray = stepArray
         LOGS.d("getStepsData $dailyStepData")
         return dailyStepData
@@ -948,8 +945,13 @@ constructor(
     fun parseNapData(naps: List<RingSleepNapBean>): List<OreoNapData> {
         val returnNaps = ArrayList<OreoNapData>()
 
-        val date = DateFormats.getDateFromTimeStamp(DateFormats.subtractDate(System.currentTimeMillis(),1))
-        val timestamp = DateFormats.convertDateTimeToTimeStamp(date?:"", DateFormats.dateFormat3)
+        val date = DateFormats.getDateFromTimeStamp(
+            DateFormats.subtractDate(
+                System.currentTimeMillis(),
+                1
+            )
+        )
+        val timestamp = DateFormats.convertDateTimeToTimeStamp(date ?: "", DateFormats.dateFormat3)
 
 
         naps.forEach {
@@ -991,11 +993,20 @@ constructor(
         return returnNaps
     }
 
-    fun parseSleepData(bean: RingSleepResultBean): OreoSleepData {
+    fun parseSleepData(bean: RingSleepResultBean): OreoSleepData? {
         val sleepData = OreoSleepData(availableSleepTypes = "deep;light;awake;rem")
 
         val sleepArray = ArrayList<OreoSleepData.OreoSleepDataBreakup>()
 
+        val sleepStartInBtw = DateFormats.convertTimestampToDate(
+            bean.entryTime.toLong() * 1000,
+            DateFormats.timeFormatHour
+        ).toInt() //00,01,02....23
+
+        if (sleepStartInBtw in 8..18) {
+            AppLogs.sendAppLogs("$TRACK_TAG Parsed Sleep Data invalid interval $bean")
+            return null
+        }
         sleepData.startTime = DateFormats.convertTimestampToDate(
             bean.entryTime.toLong() * 1000,
             DateFormats.timeFormatSleepTime
@@ -1020,6 +1031,7 @@ constructor(
         sleepData.light = bean.lightSleepTime
         sleepData.deep = bean.deepSleepTime
         sleepData.remCount = bean.rapidEyeMovementTime
+        sleepData.startTimeStamp = bean.entryTime.toLong() * 1000
 
         bean.sleepDistributionData.forEach { sleepDistributionData ->
             val sleepBreakup = OreoSleepData.OreoSleepDataBreakup(

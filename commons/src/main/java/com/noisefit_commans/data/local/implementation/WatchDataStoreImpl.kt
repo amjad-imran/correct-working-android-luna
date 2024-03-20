@@ -98,7 +98,7 @@ constructor(
     }
 
     override fun resetChargingNotificationData() {
-        mPrefs.edit().remove(CHARGING_NOTIFICATION).commit()
+        mPrefs.edit().remove(CHARGING_NOTIFICATION).apply()
     }
 
     override fun getChargingNotificationsShown(): HashMap<String, Boolean> {

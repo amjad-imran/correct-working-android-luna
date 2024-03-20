@@ -27,7 +27,6 @@ import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DateFormats.checkTimeDifferenceMoreThanN
-import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -337,8 +336,13 @@ class SplashViewModel
             return
         }
 
-        _userOnBoardingFlow.value = (UserOnBoardingFlow.SHOW_OREO_DASHBOARD)
+        val deviceSetupStatus = localDataStore.getDeviceSetupStatus()
+        if (ringDataStore.getRingDevice() != null && deviceSetupStatus == 1) {
+            _userOnBoardingFlow.value = (UserOnBoardingFlow.DEVICE_SETUP)
+            return
+        }
 
+        _userOnBoardingFlow.value = (UserOnBoardingFlow.SHOW_OREO_DASHBOARD)
 
     }
 
@@ -356,5 +360,5 @@ class SplashViewModel
 }
 
 enum class UserOnBoardingFlow {
-    SHOW_OREO_DASHBOARD, SHOW_DASHBOARD, ASK_FOR_LOGIN, SETUP_PROFILE, ACCEPT_PRIVACY_POLICY, PAIR_DEVICE
+    SHOW_OREO_DASHBOARD, SHOW_DASHBOARD, ASK_FOR_LOGIN, SETUP_PROFILE, ACCEPT_PRIVACY_POLICY, PAIR_DEVICE, DEVICE_SETUP
 }

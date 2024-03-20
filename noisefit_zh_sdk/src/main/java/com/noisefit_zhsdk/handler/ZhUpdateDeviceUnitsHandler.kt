@@ -57,6 +57,7 @@ import com.noisefit_commans.models.WeatherData
 import com.noisefit_commans.models.Widget
 import com.noisefit_commans.models.WorldClocksPushData
 import com.noisefit_commans.models.WristLiftGesture
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.AgpsEvents
 import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.AppLogs
@@ -81,6 +82,7 @@ import com.zhapp.ble.bean.DoNotDisturbModeBean
 import com.zhapp.ble.bean.EmergencyContactBean
 import com.zhapp.ble.bean.EventInfoBean
 import com.zhapp.ble.bean.HeartRateMonitorBean
+import com.zhapp.ble.bean.RingAutoActiveSportConfigBean
 import com.zhapp.ble.bean.RingSportStatusBean
 import com.zhapp.ble.bean.SendRingSportStatusBean
 import com.zhapp.ble.bean.SettingTimeBean
@@ -192,6 +194,13 @@ constructor(
         }
 
 
+    }
+
+    /**
+     * status->true -> enable
+     */
+    override fun setRealTimeDataState(status: Boolean) {
+        ControlBleTools.getInstance().realTimeDataSwitch(status, null)
     }
 
 
@@ -307,6 +316,13 @@ constructor(
             })
     }
 
+    override fun setAutoWorkoutStatus(status: Boolean) {
+        ControlBleTools.getInstance().getRingAutoActiveSportConfig(null)
+        ControlBleTools.getInstance().setRingAutoActiveSportConfig(
+            RingAutoActiveSportConfigBean(status), null
+        )
+    }
+
     override fun startWorkout(sportType: Int, sportStartTime: Long) {
         val bean = SendRingSportStatusBean(
             sportType,
@@ -318,6 +334,9 @@ constructor(
                 override fun onState(state: SendCmdState?) {
                     when (state) {
                         SendCmdState.SUCCEED -> {
+                            //turn off auto workout recording
+                            setAutoWorkoutStatus(false)
+
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.WorkoutStartState(true)
                             )
@@ -369,6 +388,7 @@ constructor(
                                     UpdateDeviceDataCallback.WorkoutStopped(true)
                                 )
                                 ControlBleTools.getInstance().getFitnessSportIdsData(null)
+                                setAutoWorkoutStatus(true)
                             }
                         }
                     }
@@ -392,6 +412,8 @@ constructor(
                                     UpdateDeviceDataCallback.WorkoutStopped(false)
                                 )
                                 ControlBleTools.getInstance().getFitnessSportIdsData(null)
+                                setAutoWorkoutStatus(true)
+
                             }
                         }
                     }
@@ -401,11 +423,12 @@ constructor(
 
     }
 
-    fun stopWorkout(){
+    fun stopWorkout(error: String) {
         testUpdateDeviceDataCallback?.onUpdateDataReceived(
-            UpdateDeviceDataCallback.WorkoutStopped(true)
+            UpdateDeviceDataCallback.WorkoutStoppedByRing(error)
         )
-        ControlBleTools.getInstance().getFitnessSportIdsData(null)
+        setAutoWorkoutStatus(true)
+        //ControlBleTools.getInstance().getFitnessSportIdsData(null)
     }
 
     private val ringSportCallback = object : RingSportCallBack {
@@ -428,13 +451,14 @@ constructor(
             }
 
             if (bean.startResult != RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_NONE.result) {
+                setAutoWorkoutStatus(true)
                 when (bean.startResult) {
                     RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_LOW_POWER.result -> {
                         /*testUpdateDeviceDataCallback?.onUpdateDataReceived(
                             UpdateDeviceDataCallback.WorkoutEndFromRingState("Low Battery")
                         )*/
                         AppLogs.sendAppLogs("Workout failed from ring Reason: Low Battery")
-                        stopWorkout()
+                        stopWorkout("Low Battery")
                     }
 
                     RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_UN_WEAR.result -> {
@@ -443,7 +467,7 @@ constructor(
                         )*/
                         AppLogs.sendAppLogs("Workout failed from ring Reason: Device not worn")
 
-                        stopWorkout()
+                        //stopWorkout("Device not worn")
                     }
 
                     RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_CHARGING.result -> {
@@ -452,13 +476,15 @@ constructor(
                         )*/
                         AppLogs.sendAppLogs("Workout failed from ring Reason: Ring on Charging")
 
-                        stopWorkout()
+                        //stopWorkout("Ring on Charging")
 
                     }
                 }
             }
 
             if (bean.sportStatus == RingSportCallBack.RingSportStatus.SPORT_STATUS_END.status) {
+                setAutoWorkoutStatus(true)
+
                 if (bean.endReason != RingSportCallBack.RingSportEndReason.SPORT_END_REASON_NONE.reason) {
                     when (bean.endReason) {
                         RingSportCallBack.RingSportEndReason.SPORT_END_REASON_LOW_POWER.reason -> {
@@ -467,7 +493,7 @@ constructor(
                             )*/
                             AppLogs.sendAppLogs("Workout failed from ring Reason: Low Battery")
 
-                            stopWorkout()
+                            stopWorkout("Low Battery")
                         }
 
                         RingSportCallBack.RingSportEndReason.SPORT_END_REASON_TIMEOUT.reason -> {
@@ -478,7 +504,7 @@ constructor(
                             )*/
                             AppLogs.sendAppLogs("Workout failed from ring Reason: Exercise 8 hours timeout")
 
-                            stopWorkout()
+                            //stopWorkout("Exercise 8 hours timeout")
 
                         }
 
@@ -490,7 +516,7 @@ constructor(
                             )*/
                             AppLogs.sendAppLogs("Workout failed from ring Reason: Insufficient device memory")
 
-                            stopWorkout()
+                            //stopWorkout("Insufficient device memory")
                         }
                     }
                 }
@@ -1920,6 +1946,7 @@ constructor(
                 }
             })
     }
+
 
     override fun setAutoSleep(autoSleep: AutoSleep) {
 

@@ -49,8 +49,7 @@ import javax.inject.Singleton
 
 @Singleton
 class SessionManager
-@Inject
-constructor(
+@Inject constructor(
     private val localDataStore: DataStoredInterface,
     private val ringDataStore: RingDataStore,
     private val userRepository: UserRepository,
@@ -62,6 +61,24 @@ constructor(
         val TAG = "SessionManager"
 
     }
+
+    /**
+     * Get app Foreground status
+     */
+    var appInForeground = true
+
+    /**
+     * For handling update firmware check via latest version
+     */
+    var postFirmwareDetailsOnDash: Boolean = false
+    var postFirmwareDetailsOnSetup: Boolean = false
+    var postFirmwareDetailsOnAboutDevice: Boolean = false
+    var checkForVersionUpdate = MutableLiveData<Event<Pair<Int, Int>>>()
+    var checkForVersionUpdateSetup = MutableLiveData<Event<Pair<Int, Int>>>()
+    var checkForVersionUpdateAbout = MutableLiveData<Event<Pair<Int, Int>>>()
+
+
+    val customSuccessToast = MutableLiveData<Event<String>>()
 
     var lastOngoingWorkoutTimestamp: Long = 0L
     val showWorkoutDetails = MutableLiveData<Event<String?>>()
@@ -366,12 +383,15 @@ constructor(
                         MoEAnalyticsHelper.setFirstName(context, value)
                         firebaseInstance.setUserProperty(key, value)
                     } else if (key.equals("gender", true)) {
-                        if (value.lowercase() == Gender.MALE.name.lowercase())
-                            MoEAnalyticsHelper.setGender(context, UserGender.MALE)
-                        else if (value.lowercase() == Gender.FEMALE.name.lowercase())
-                            MoEAnalyticsHelper.setGender(context, UserGender.FEMALE)
-                        else
-                            MoEAnalyticsHelper.setGender(context, UserGender.OTHER)
+                        if (value.lowercase() == Gender.MALE.name.lowercase()) MoEAnalyticsHelper.setGender(
+                            context,
+                            UserGender.MALE
+                        )
+                        else if (value.lowercase() == Gender.FEMALE.name.lowercase()) MoEAnalyticsHelper.setGender(
+                            context,
+                            UserGender.FEMALE
+                        )
+                        else MoEAnalyticsHelper.setGender(context, UserGender.OTHER)
                     } else if (key.equals("dob", true) && !value.equals("null", true)) {
                         tryCatch {
                             firebaseInstance.setUserProperty(key, value)
@@ -574,10 +594,7 @@ constructor(
     }
 
     fun onGoingWorkoutDetected(
-        duration: Int,
-        sportStatus: Int,
-        sportType: Int,
-        startTimeStamp: Long
+        duration: Int, sportStatus: Int, sportType: Int, startTimeStamp: Long
     ) {
         GlobalScope.launch(Dispatchers.IO) {
             val savedWorkout = ringDataStore.getOngoingRecordWorkout() ?: return@launch
@@ -588,15 +605,47 @@ constructor(
                     Event(
                         Pair(
                             DetectedOngoingWorkout(
-                                startTimeStamp,
-                                duration,
-                                sportStatus
-                            ),
-                            savedWorkout.second
+                                startTimeStamp, duration, sportStatus
+                            ), savedWorkout.second
                         )
                     )
                 )
+            } else {
+                sendUpdateQueryAction(UpdateDeviceAction.SetAutoWorkoutStatus(true))
             }
+        }
+    }
+
+    fun showCustomToast(message: String) {
+        customSuccessToast.postValue(Event(message))
+    }
+
+    fun onAppInForeground() {
+        LOGS.d(TAG, "App in Foreground")
+        appInForeground = true
+        GlobalScope.launch(Main) {
+            val isDeviceConnected = connectStateRing.value is ConnectState.ConnectSuccess
+            if (!isDeviceConnected) {
+                return@launch
+            }
+            sendUpdateQueryAction(
+                UpdateDeviceAction.SetRealTimeDataState(true)
+            )
+        }
+    }
+
+    fun onAppInBackground() {
+        LOGS.d(TAG, "App in background")
+        appInForeground = false
+
+        GlobalScope.launch(Main) {
+            val isDeviceConnected = connectStateRing.value is ConnectState.ConnectSuccess
+            if (!isDeviceConnected) {
+                return@launch
+            }
+            sendUpdateQueryAction(
+                UpdateDeviceAction.SetRealTimeDataState(false)
+            )
         }
     }
 }

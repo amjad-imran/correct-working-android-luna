@@ -299,7 +299,7 @@ constructor(
     fun convertHeartRateOverviewData(
         data: OreoHeartRate?
     ): OHealthOverview.HeartRate {
-        LOGS.d("Sdaljhsadjhsadjhjksda ${Gson().toJson(data)}")
+        //LOGS.d("Sdaljhsadjhsadjhjksda ${Gson().toJson(data)}")
 
         val list = data?.breakUp?.replace("255", "0")
         var breakupArray = Gson().fromJson<List<Int>>(list ?: "")
@@ -321,6 +321,7 @@ constructor(
         var hrCount = 0
         var lastHrValue: Pair<Int, Long>? = null//HR value,timer
 
+        //LOGS.w("convertHeartRateOverviewData ${data?.breakUp}")
 
         hRWithIntervalList.forEachIndexed { index, hrList ->
 
@@ -356,6 +357,7 @@ constructor(
                 if (value != 0) {
 
                     val indexMillis = ((index * 6) + index2) * 5 * 60L * 1000L
+                    //LOGS.w("convertHeartRateOverviewData $index $indexMillis")
 
                     lastHrValue = Pair(value, indexMillis)
                 }
@@ -421,10 +423,12 @@ constructor(
 
             val dayStartTimeStamp = cal.timeInMillis
             val hrTimestamp = dayStartTimeStamp + lastHrValue?.second!!
+            //LOGS.w("convertHeartRateOverviewData ${lastHrValue?.first} ${lastHrValue?.second} $hrTimestamp  $manualMeasureTime")
 
             if (hrTimestamp > manualMeasureTime) {
                 lastHr = lastHrValue?.first.toString()
                 manualMeasureTime = hrTimestamp
+                //LOGS.w("convertHeartRateOverviewData new HR set $dayStartTimeStamp + ${lastHrValue?.second} =  $hrTimestamp")
 
             }
 

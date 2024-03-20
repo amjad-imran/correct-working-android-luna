@@ -51,7 +51,7 @@ constructor(
         data.let { sleep ->
             ids.add(sleep.id)
         }
-        sleepDao.updateServerUnSyncStatus(ids,true)
+        sleepDao.updateGoogleFitStatus(ids,true)
     }
 
 

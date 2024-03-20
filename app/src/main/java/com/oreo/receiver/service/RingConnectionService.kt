@@ -704,6 +704,8 @@ constructor() : LifecycleService() {
                                 sessionManager.setConnectedDeviceRing(colorFitDevice)
                                 stateConnected(colorFitDevice)
 
+                                setRealTimeDataState()
+
                             }
 
                             is ConnectState.DisconnectSuccess -> {
@@ -782,6 +784,12 @@ constructor() : LifecycleService() {
         } ?: LOGS.d(TAG, "Connected device is null")
     }
 
+    private fun setRealTimeDataState() {
+        sessionManager.sendUpdateQueryAction(
+            UpdateDeviceAction.SetRealTimeDataState(sessionManager.appInForeground)
+        )
+    }
+
     private fun setPeriodicInfo() {
         updateDeviceDateTime()
         setUserInfo()
@@ -828,6 +836,7 @@ constructor() : LifecycleService() {
         statusFailedConnection = false
         val device = ringDataStore.getRingDevice()
         ringDataStore.clearConnectedDevice()
+        localDataStore.clearConnectedDevice()
         watchDataStore.clearWatchData()
         sessionManager.setConnectedDeviceRing(null)
         isStopServiceCalled = true
@@ -1309,6 +1318,9 @@ constructor() : LifecycleService() {
                             syncRepository.removeRecordedWorkouts().collect()
                             ringDataStore.removeRecordDeleteList()
                             delay(200)
+                            sessionManager.reloadTodayData.postValue(
+                                Event(true)
+                            )
                             sessionManager.forceSyncData.postValue(Event(true))
                         }
                     }
@@ -1592,6 +1604,10 @@ constructor() : LifecycleService() {
                     sessionManager.isRingCharging.postValue(queryCallback.batteryData.isCharging)
 
                     LOGS.d(TAG, "battery Level Ring : $percent")
+
+                    batteryNotificationUtils.handleBatteryNotification(
+                        percent
+                    )
                     /* val lastBatteryLevel = watchDataStore.getBatteryPercentRing()
                      batteryNotificationUtils.handleBatteryNotification(
                          percent,
@@ -1619,6 +1635,40 @@ constructor() : LifecycleService() {
                             WatchInfoGlobals.firmwareDeviceIdRing
                         )
                     )
+
+                    if (sessionManager.postFirmwareDetailsOnDash) {
+                        sessionManager.postFirmwareDetailsOnDash = false
+                        sessionManager.checkForVersionUpdate.postValue(
+                            Event(
+                                Pair(
+                                    WatchInfoGlobals.firmwareVersionNumberRing,
+                                    WatchInfoGlobals.firmwareDeviceIdRing
+                                )
+                            )
+                        )
+                    }
+                    if (sessionManager.postFirmwareDetailsOnSetup) {
+                        sessionManager.postFirmwareDetailsOnSetup = false
+                        sessionManager.checkForVersionUpdateSetup.postValue(
+                            Event(
+                                Pair(
+                                    WatchInfoGlobals.firmwareVersionNumberRing,
+                                    WatchInfoGlobals.firmwareDeviceIdRing
+                                )
+                            )
+                        )
+                    }
+                    if (sessionManager.postFirmwareDetailsOnAboutDevice) {
+                        sessionManager.postFirmwareDetailsOnAboutDevice = false
+                        sessionManager.checkForVersionUpdateAbout.postValue(
+                            Event(
+                                Pair(
+                                    WatchInfoGlobals.firmwareVersionNumberRing,
+                                    WatchInfoGlobals.firmwareDeviceIdRing
+                                )
+                            )
+                        )
+                    }
 
                     /*if (initDefaultValues) {
                         LOGS.d(TAG, "Settings Default values")

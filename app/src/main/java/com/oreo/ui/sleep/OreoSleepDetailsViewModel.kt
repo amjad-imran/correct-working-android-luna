@@ -3,6 +3,7 @@ package com.oreo.ui.sleep
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
@@ -19,7 +20,6 @@ import com.noisefit_commans.models.SleepMovementType
 import com.noisefit_commans.models.SleepType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.OContributorResponseModal
@@ -29,7 +29,6 @@ import com.oreo.data.model.health.SleepHourlyBreakup
 import com.oreo.data.model.health.SleepMovementBreakup
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.abs
@@ -40,7 +39,8 @@ class OreoSleepDetailsViewModel
 constructor(
     val userActivityRepository: OreoUserActivityRepository,
     val ringDataStore: RingDataStore,
-    val sessionManager: SessionManager
+    val sessionManager: SessionManager,
+    val resourcesProvider: ResourcesProvider
 ) : BaseViewModel() {
 
 
@@ -49,6 +49,9 @@ constructor(
 
     /*private val _daySleepData = MutableLiveData<OreoSleepModel>()
     val daySleepData: LiveData<OreoSleepModel> = _daySleepData*/
+
+    var lowestHr: Int? = null
+    var maxHrv: Int? = null
 
     private val _contributorInfo = MutableLiveData<OContributorResponseModal>()
     val contributorInfo: LiveData<OContributorResponseModal> = _contributorInfo
@@ -277,6 +280,7 @@ constructor(
                 leftTextColor = ctList.leftTextColor,
                 barColor = ctList.barColor,
                 barPercent = ctList.barPercent,
+                hasData = ctList.hasData,
                 backgroundRes = ctList.backgroundRes,
                 description = desList[i]
             )
@@ -324,8 +328,9 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_sleep_bar_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                    barPercent = 0,
+                    hasData = false,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
@@ -350,8 +355,9 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_sleep_bar_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                    barPercent = 0,
+                    hasData = false,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
@@ -375,8 +381,9 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_sleep_bar_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                    barPercent = 0,
+                    hasData = false,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
@@ -386,10 +393,11 @@ constructor(
             val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
                 dayData.remSleep!!.value ?: 0
             )
+
             val leftText: String = if (hour > 0) {
-                "$hour hr $minute min"
+                "$hour hr $minute min, ${dayData.remSleep?.value_percentage ?: 0}%"
             } else {
-                "$minute min"
+                "$minute min, ${dayData.remSleep?.value_percentage ?: 0}%"
             }
             result.add(
                 Contributors(
@@ -408,8 +416,9 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_sleep_bar_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                    barPercent = 0,
+                    hasData = false,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
@@ -420,9 +429,9 @@ constructor(
                 dayData.deepSleep?.value ?: 0
             )
             val leftText: String = if (hour > 0) {
-                "$hour hr $minute min"
+                "$hour hr $minute min, ${dayData.deepSleep?.value_percentage ?: 0}%"
             } else {
-                "$minute min"
+                "$minute min, ${dayData.deepSleep?.value_percentage ?: 0}%"
             }
             result.add(
                 Contributors(
@@ -441,8 +450,9 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_sleep_bar_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                    barPercent = 0,
+                    hasData = false,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
@@ -474,8 +484,9 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_sleep_bar_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                    barPercent = 0,
+                    hasData = false,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
@@ -500,8 +511,9 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.oreo_sleep_bar_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                    barPercent = 0,
+                    hasData = false,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
@@ -509,12 +521,33 @@ constructor(
         return result
     }
 
+    /**
+     * textColor, barColor, background
+     */
     private fun getContributorsColors(status: String): Triple<Int, Int, Int> {
         return if (status.equals("warning", true)) {
             Triple(
                 R.color.oreo_contributor_warning,
                 R.color.oreo_contributor_warning,
                 com.noisefit_commans.R.drawable.back_modal_new_warning
+            )
+        } else if (status.equals("good", true)) {
+            Triple(
+                R.color.white,
+                R.color.oreo_sleep_bar_good,
+                com.noisefit_commans.R.drawable.back_modal_new
+            )
+        } else if (status.equals("fair", true)) {
+            Triple(
+                R.color.white,
+                R.color.oreo_sleep_bar_color_fair,
+                com.noisefit_commans.R.drawable.back_modal_new
+            )
+        } else if (status.equals("optimal", true)) {
+            Triple(
+                R.color.oreo_sleep_text_color_optimal,
+                R.color.oreo_sleep_bar_color_optimal,
+                com.noisefit_commans.R.drawable.back_modal_new_optimal_sleep
             )
         } else {
             Triple(
@@ -573,7 +606,11 @@ constructor(
         return Pair(sleepArray, countCData)
     }
 
-    fun getMovementBreakup(sleepBreakup: List<SleepMovementBreakup>?): Pair<List<OreoSleepData.OreoSleepMovementDataBreakup>,
+    fun getMovementBreakup(
+        sleepBreakup: List<SleepMovementBreakup>?,
+        sleepStartTime: String?,
+        sleepEndTime: String?
+    ): Pair<List<OreoSleepData.OreoSleepMovementDataBreakup>,
             CountCardData> {
         val countCData = CountCardData(
             type = "Movement",
@@ -584,19 +621,19 @@ constructor(
         countCData.count = "_"
         countCData.countSubText = "sub"
 
-        val startTime = DateFormats.formatDate(
-            sleepBreakup?.firstOrNull()?.start_time ?: "",
-            DateFormats.dateTimeFormat5,
-            DateFormats.time12Meridian
-        )
-        val endTime = DateFormats.formatDate(
-            sleepBreakup?.lastOrNull()?.end_time ?: "",
-            DateFormats.dateTimeFormat5,
-            DateFormats.time12Meridian
-        )
+        /*  val startTime = DateFormats.formatDate(
+              sleepBreakup?.firstOrNull()?.start_time ?: "",
+              DateFormats.dateTimeFormat5,
+              DateFormats.time12Meridian
+          )
+          val endTime = DateFormats.formatDate(
+              sleepBreakup?.lastOrNull()?.end_time ?: "",
+              DateFormats.dateTimeFormat5,
+              DateFormats.time12Meridian
+          )*/
 
-        countCData.leftValue = startTime
-        countCData.rightValue = endTime
+        countCData.leftValue = sleepStartTime ?: ""
+        countCData.rightValue = sleepEndTime ?: ""
 
         val sleepArray = ArrayList<OreoSleepData.OreoSleepMovementDataBreakup>()
         sleepBreakup?.forEach { breakup ->
@@ -665,6 +702,7 @@ constructor(
         val dummyList = ArrayList<Int>()
         for (i in 0..287) {
             dummyList.add(0)
+            //dummyList.add((10..140).random())
         }
         return dummyList
 
@@ -673,6 +711,11 @@ constructor(
     fun getBloodOxygenNudge(oxy: CommonListDataModel?): String {
         val avg = oxy?.avg
         if (avg == null || avg == 0) return ""
+
+
+        if (avg < 95) {
+            return resourcesProvider.getString(R.string.text_b_o_95_less)
+        }
 
         var count = 0
         oxy.value.forEach {
@@ -685,9 +728,9 @@ constructor(
         }
 
         return when (count) {
-            in 0..2 -> "Your blood oxygen levels have shown consistency, indicating no breathing disturbances during sleep."
-            in 3..5 -> "Your blood oxygen levels had some variations. This may be because of occasional breathing disturbances during sleep."
-            else -> "Your blood oxygen levels had several variations. This may be because of significant breathing disturbances during sleep."
+            in 0..2 -> resourcesProvider.getString(R.string.text_bo_0_2)
+            in 3..5 -> resourcesProvider.getString(R.string.text_bo_3_5)
+            else -> resourcesProvider.getString(R.string.text_bo_else)
         }
     }
 

@@ -7,19 +7,21 @@ import android.os.Bundle
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.noisefit.luna.BuildConfig
+import com.moengage.core.internal.logger.Logger
+import com.moengage.firebase.MoEFireBaseHelper
+import com.moengage.pushbase.MoEPushHelper
 import com.noisefit.data.local.AppStaticData
-import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit.luna.BuildConfig
 import com.noisefit.session.SessionManager
 import com.noisefit.util.notif.NotificationEventsClass
 import com.noisefit.util.notif.NotificationEventsClass.NOTIFICATION_INDEX_EXTRA
 import com.noisefit.util.notif.NotificationEventsClass.NOTIFICATION_LINK
 import com.noisefit.util.notif.NotificationEventsClass.NOTIFICATION_TYPE_EXTRA
 import com.noisefit.util.notif.NotificationUtil
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.models.AppNotification
 import com.noisefit_commans.utils.LOGS
-import com.useinsider.insider.Insider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -49,6 +51,7 @@ constructor() : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         LOGS.d(TAG, "onNewToken event received $token")
+        MoEFireBaseHelper.getInstance().passPushToken(applicationContext,token)
         val newTokenEvent = Intent(NEW_TOKEN_EVENT)
         LocalBroadcastManager
             .getInstance(this)
@@ -59,18 +62,12 @@ constructor() : FirebaseMessagingService() {
 //        LOGS.d(TAG, "onMessageReceived event received ${Gson().toJson(message)}")
         message.data.apply {
             try {
-                if (message != null &&
-                    message.data.containsKey("source") &&
-                    message.data.get("source").equals("Insider")
-                ) {
-                    launchSendNotificationJob(
-                        message.notification?.title ?: "",
-                        message.notification?.body ?: ""
-                    )
-                    Insider.Instance.handleFCMNotification(applicationContext, message)
-                    return
-                }
-                if (size > 0) {
+                val pushPayload = message.data
+                if (MoEPushHelper.getInstance().isFromMoEngagePlatform(pushPayload)) {
+                    Logger.print { "$TAG onMessageReceived() : Will try to show push" }
+                    MoEFireBaseHelper.getInstance().passPushPayload(applicationContext, pushPayload)
+                } else {
+                    Logger.print { "$TAG onMessageReceived() : Not a MoEngage Payload." }
                     val extras = Bundle()
                     for ((key, value) in this) {
                         extras.putString(key, value)
@@ -108,9 +105,8 @@ constructor() : FirebaseMessagingService() {
                         message.notification?.title ?: "",
                         message.notification?.body ?: ""
                     )
-
                 }
-//                }
+
             } catch (t: Throwable) {
                 LOGS.e("MYFCMLIST", "Error parsing FCM message ${t.toString()}")
             }

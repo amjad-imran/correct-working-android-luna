@@ -2,6 +2,7 @@ package com.oreo.receiver.workManager
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.os.Looper
 import androidx.hilt.work.HiltWorker
 import androidx.work.ForegroundInfo
@@ -13,6 +14,7 @@ import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
@@ -224,15 +226,20 @@ constructor(
                 }
 
                 val logsSync = shouldSyncAutoLogs()
+                var isLogQuerySent = false
                 if (logsSync) {
                     val status = ApplicationUtils.startFeedbackSubmitWorker(context)
+                    isLogQuerySent = true
+                    sessionManager.sendQueryAction(QueryAction.GetFirmwareLogs)
+                }
+                if (BuildConfig.DEBUG && !isLogQuerySent) {
+                    sessionManager.sendQueryAction(QueryAction.GetFirmwareLogs)
                 }
 
                 AppLogs.sendAppLogs("OreoSyncDataWork server call complete")
 
                 ringDataStore.setLastSyncWithServer(DateFormats.getTimeStamp())
                 sessionManager.setSyncCompletedState(Event(SyncEvents.ServerSyncSuccess))
-                sessionManager.sendQueryAction(QueryAction.GetFirmwareLogs)
                 //sessionManager.setShowSyncOfflineData(Event(HealthOverviewDataType.SERVER_SYNC_SUCCESS))
 
                 if (::job.isInitialized) {
@@ -248,8 +255,18 @@ constructor(
     }
 
 
+    private fun updateDeviceDateTime() {
+        sessionManager.sendUpdateQueryAction(
+            UpdateDeviceAction.SetDeviceDateTime(
+                Calendar.getInstance(),
+                TimeFormat(TimeFormats.HOURS_12.type)
+            )
+        )
+    }
+
     private suspend fun getSyncData(success: () -> Unit, failed: () -> Unit) {
         LOGS.d(TAG, "getSyncData() ")
+        updateDeviceDateTime()
         sessionManager.setSyncCompletedState(Event(SyncEvents.Started(0, 0)))
         //sessionManager.setShowSyncOfflineData(Event(false))
 //        if (sessionManager == null || !sessionManager.isDeviceConnected()) {
@@ -391,11 +408,11 @@ constructor(
                                                     TAG,
                                                     "OreoSyncDataWork: nap ${resource.value}"
                                                 )
-                                               /* sessionManager.setShowSyncOfflineData(
-                                                    Event(
-                                                        HealthOverviewDataType.SLEEP
-                                                    )
-                                                )*/
+                                                /* sessionManager.setShowSyncOfflineData(
+                                                     Event(
+                                                         HealthOverviewDataType.SLEEP
+                                                     )
+                                                 )*/
 
                                             }
 

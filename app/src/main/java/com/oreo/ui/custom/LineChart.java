@@ -63,6 +63,7 @@ public class LineChart extends View {
     private float topWith;
 
     private float xTextSize;
+    private float xTextSize2;
     private float yTextSize;
 
     private float innerCircleRadius;
@@ -79,6 +80,7 @@ public class LineChart extends View {
     private Paint bgBottomPaint;
 
     private Paint xTextPaint;
+    private Paint xTextPaint2;
     private Paint xLinePaint;
     private Paint gridPaint;
     private Paint centerLinePaint;
@@ -162,6 +164,7 @@ public class LineChart extends View {
         xMax = ta.getInt(R.styleable.LineChart_xMax, 10);
         xMin = ta.getInt(R.styleable.LineChart_xMin, 0);
         xTextSize = ta.getDimension(R.styleable.LineChart_xTextSize, 8f);
+        xTextSize2 = ta.getDimension(R.styleable.LineChart_xTextSize2, 8f);
         yTextSize = ta.getDimension(R.styleable.LineChart_yTextSize, 8f);
         leftWith = ta.getDimension(R.styleable.LineChart_leftWith, 16f);
         rightWith = ta.getDimension(R.styleable.LineChart_rightWith, 8f);
@@ -220,6 +223,11 @@ public class LineChart extends View {
         xTextPaint.setTextSize(xTextSize);
         xTextPaint.setTypeface(fontGilroy);
         xTextPaint.setAntiAlias(true);
+
+        xTextPaint2 = new Paint();
+        xTextPaint2.setTextSize(xTextSize2);
+        xTextPaint2.setTypeface(fontGilroy);
+        xTextPaint2.setAntiAlias(true);
 
         xLinePaint = new Paint();
         xLinePaint.setColor(xLineColor);
@@ -717,9 +725,10 @@ public class LineChart extends View {
             if (showXAxis) {
                 String xText = list.get(i).getIndex();
 
-                xTextPaint.getTextBounds(xText, 0, xText.length(), xTextBounds);
+                xTextPaint2.getTextBounds(xText, 0, xText.length(), xTextBounds);
+                xTextPaint2.setColor(xTextColor & 0x80ffffff);
                 xTextPaint.setColor(xTextColor & 0x80ffffff);
-                canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 3, xTextPaint);
+                canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 3, xTextPaint2);
                 if (showSelectedIndicator && list.get(i).getFormattedDate() != null) {
                     String title = list.get(i).getFormattedDate();
                     float xInd = indicatorOffSet + (moveOffSet * list.size() * indicatorUnitLength / (list.size() * unitHLenth)) + (mWith - leftWith - rightWith) * divisor + leftWith - i * indicatorUnitLength;
@@ -765,8 +774,9 @@ public class LineChart extends View {
         if (moveOffSet == 0 && showXAxis) {
             String xText = list.get(position).getIndex();
             xTextPaint.setColor(xTextColor);
-            xTextPaint.getTextBounds(xText, 0, xText.length(), xTextBounds);
-            canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 3, xTextPaint);
+            xTextPaint2.setColor(xTextColor);
+            xTextPaint2.getTextBounds(xText, 0, xText.length(), xTextBounds);
+            canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 3, xTextPaint2);
 
             if (showSelectedIndicator && list.get(position).getFormattedDate() != null) {
                 String title = list.get(position).getFormattedDate();

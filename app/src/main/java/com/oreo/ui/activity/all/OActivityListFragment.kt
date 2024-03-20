@@ -57,7 +57,7 @@ class OActivityListFragment :
                 context.showShortToast("Please connect your ring to add a workout")
             }
         }
-        binding.lytEmptyView.btnAddWorkout.setOnClickListener {
+       /* binding.lytEmptyView.btnAddWorkout.setOnClickListener {
             if (viewModel.isDeviceConnected()) {
                 navigate(R.id.addWorkoutFragment)
             } else {
@@ -70,7 +70,7 @@ class OActivityListFragment :
             } else {
                 context.showShortToast("Please connect your ring to add a workout")
             }
-        }
+        }*/
 
         setFragmentResultListener(DELETE_WORKOUT_REQUEST_KEY) { _, bundle ->
             val allow = bundle.getBoolean("allow")

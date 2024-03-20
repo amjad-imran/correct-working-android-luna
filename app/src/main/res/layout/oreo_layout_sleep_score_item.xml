@@ -55,7 +55,7 @@
 
         <include
             android:id="@+id/lytBpmView"
-            layout="@layout/oreo_layout_view_with_bpm"
+            layout="@layout/oreo_layout_view_with_bpm_small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"

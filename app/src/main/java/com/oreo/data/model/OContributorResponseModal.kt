@@ -15,7 +15,8 @@ data class OContributorResponseModal(
     val hrv: String? = null,
     val avg_temp: String? = null,
     val temperature: String? = null,
-    val temp_balance: String? = null,
+    val temperature_readiness_top: String? = null,
+    val temperature_readiness_bottom: String? = null,
     val respiration: String? = null,
     val activity_score: String? = null,
     val active_calories: String? = null,
@@ -53,7 +54,8 @@ data class OContributorResponseModal(
     val activityBalance: String? = null,
     @SerializedName("hrv_balance")
     val hrvBalance: String? = null,
-    val resting_hr: String? = null,
+    val resting_hr_top: String? = null,
+    val resting_hr_bottom: String? = null,
     @SerializedName("heart_rate")
     val heartRate: String? = null,
     @SerializedName("recovery_index")

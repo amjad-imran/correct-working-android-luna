@@ -1,9 +1,24 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/bgImv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            tools:src="@drawable/bg_activity_contributor_disabled"
+            app:layout_constraintBottom_toBottomOf="@+id/divider1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:scaleType="fitXY"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:layout_constraintTop_toTopOf="@+id/lytTopSubItem" />
 
         <include
             android:id="@+id/lytTopSubItem"
@@ -16,6 +31,21 @@
             android:layout_width="match_parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+
+        <include
+            android:id="@+id/lytContributor"
+            layout="@layout/layout_contributor_value_missing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:layout_marginTop="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lytTopSubItem" />
+
+
+
         <include
             layout="@layout/layout_divider_modal_color"
             android:layout_width="match_parent"
@@ -24,7 +54,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="24dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lytTopSubItem" />
+            app:layout_constraintTop_toBottomOf="@+id/lytContributor" />
 
         <include
             android:id="@+id/lytBottomSubItem"

@@ -168,20 +168,38 @@ class WorkoutIntensityGraphOreo(var mContext: Context) : View(
                 }
             }
         } else {
-            canvas.drawText(
-                "12 am",
-                0f,
-                (sectionHeight * 5) - pxFromDp(context, 5.0f),
-                mTextPaint
-            )
+            if (xAxisList.size == 2) {
+                canvas.drawText(
+                    xAxisList[0].toString(),
+                    0f,
+                    (sectionHeight * 5) - pxFromDp(context, 5.0f),
+                    mTextPaint
+                )
 
-            val textWidth = mTextPaint.measureText("12 am")
-            canvas.drawText(
-                "12 am",
-                (width - textWidth - endPadding),
-                sectionHeight * 5 - pxFromDp(context, 5.0f),
-                mTextPaint
-            )
+                val textWidth = mTextPaint.measureText("12 am")
+                canvas.drawText(
+                    xAxisList[1].toString(),
+                    (width - textWidth - endPadding),
+                    sectionHeight * 5 - pxFromDp(context, 5.0f),
+                    mTextPaint
+                )
+            } else {
+                canvas.drawText(
+                    "12 am",
+                    0f,
+                    (sectionHeight * 5) - pxFromDp(context, 5.0f),
+                    mTextPaint
+                )
+
+                val textWidth = mTextPaint.measureText("12 am")
+                canvas.drawText(
+                    "12 am",
+                    (width - textWidth - endPadding),
+                    sectionHeight * 5 - pxFromDp(context, 5.0f),
+                    mTextPaint
+                )
+            }
+
         }
     }
 

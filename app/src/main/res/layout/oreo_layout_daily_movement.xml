@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/side_margin"
             android:layout_marginTop="24dp"
-            android:text="@string/text_daytime_movement"
+            android:text="@string/text_movement_analysis"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -32,45 +32,99 @@
             app:layout_constraintTop_toTopOf="@id/tvTitle"
             tools:ignore="ContentDescription" />
 
-
-        <HorizontalScrollView
-            android:id="@+id/rvMovements"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tvMovementType"
+            style="@style/H6"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/side_margin"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="@dimen/side_margin"
-            app:layout_constraintBottom_toTopOf="@id/lytDMGStatus"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:includeFontPadding="false"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvTitle">
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            tools:text="Inactive" />
 
-            <com.oreo.ui.custom.MovementChart
-                android:id="@+id/movementChart"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </HorizontalScrollView>
+        <TextView
+            android:id="@+id/tvStartTime"
+            style="@style/H2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="10dp"
+            android:includeFontPadding="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvMovementType"
+            tools:text="10:00" />
 
-        <!--  <androidx.recyclerview.widget.RecyclerView
-              android:id="@+id/rvMovements"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="16dp"
-              android:layout_marginStart="@dimen/side_margin"
-              android:layout_marginEnd="@dimen/side_margin"
-              app:layout_constraintBottom_toTopOf="@id/lytDMGStatus"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toBottomOf="@+id/tvTitle" />-->
+        <TextView
+            android:id="@+id/tvStartTimeUnit"
+            style="@style/H5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="14dp"
+            android:includeFontPadding="false"
+            android:textColor="@color/white_64"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tvStartTime"
+            app:layout_constraintStart_toEndOf="@id/tvStartTime"
+            app:layout_constraintTop_toBottomOf="@id/tvMovementType"
+            tools:text="am" />
 
+        <View
+            android:id="@+id/view1"
+            android:layout_width="9dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="8dp"
+            android:background="@color/white_64"
+            app:layout_constraintBottom_toBottomOf="@id/tvStartTime"
+            app:layout_constraintStart_toEndOf="@id/tvStartTimeUnit"
+            app:layout_constraintTop_toTopOf="@id/tvStartTime" />
+
+        <TextView
+            android:id="@+id/tvEndTime"
+            style="@style/H2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="14dp"
+            android:includeFontPadding="false"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tvStartTime"
+            app:layout_constraintStart_toEndOf="@+id/view1"
+            app:layout_constraintTop_toBottomOf="@id/tvMovementType"
+            tools:text="10:15" />
+
+        <TextView
+            android:id="@+id/tvEndTimeUnit"
+            style="@style/H5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="14dp"
+            android:includeFontPadding="false"
+            android:textColor="@color/white_64"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tvStartTime"
+            app:layout_constraintStart_toEndOf="@id/tvEndTime"
+            app:layout_constraintTop_toBottomOf="@id/tvMovementType"
+            tools:text="am" />
 
         <include
+            android:id="@+id/lytInteractiveGraph"
+            layout="@layout/item_daytime_interactive_graph"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvStartTime" />
+
+
+        <!--<include
             android:id="@+id/lytDMGStatus"
             layout="@layout/oreo_layout_d_m_graph_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@id/rvMovements" />
+            app:layout_constraintTop_toBottomOf="@id/rvMovements" />-->
 
         <include
             android:id="@+id/lytDMHigh"
@@ -78,18 +132,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/side_margin"
-            android:layout_marginEnd="@dimen/side_margin"
             android:layout_marginTop="24dp"
+            android:layout_marginEnd="@dimen/side_margin"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lytDMGStatus" />
+            app:layout_constraintTop_toBottomOf="@id/lytInteractiveGraph" />
 
         <include
             android:id="@+id/lytDMMed"
             layout="@layout/layout_daliy_activity_analysis_new"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="@dimen/side_margin"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lytDMHigh" />
@@ -99,8 +153,8 @@
             layout="@layout/layout_daliy_activity_analysis_new"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="@dimen/side_margin"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lytDMMed" />
@@ -110,10 +164,10 @@
             layout="@layout/layout_daliy_activity_analysis_new"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:layout_marginTop="16dp"
             android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="@dimen/side_margin"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lytDMLow" />
 

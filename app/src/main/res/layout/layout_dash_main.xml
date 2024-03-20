@@ -23,11 +23,33 @@
         <include
             android:id="@+id/lytConnectHelp"
             layout="@layout/layout_trouble_connecting_ring"
-            android:layout_marginStart="@dimen/side_margin"
-            android:layout_marginEnd="@dimen/side_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
             android:layout_marginTop="@dimen/dimen_24dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <include
+            android:id="@+id/lytAppUpdate"
+            layout="@layout/layout_dash_app_update"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <include
+            android:id="@+id/lytOtaUpdate"
+            layout="@layout/layout_dash_app_update"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="@dimen/side_margin"
             android:visibility="gone"
             tools:visibility="visible" />
 
@@ -44,10 +66,10 @@
             android:id="@+id/lytPairDevice"
             layout="@layout/list_o_pair_device"
             android:layout_width="match_parent"
-            android:layout_marginStart="@dimen/side_margin"
-            android:layout_marginEnd="@dimen/side_margin"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
             android:layout_marginTop="@dimen/dimen_24dp"
+            android:layout_marginEnd="@dimen/side_margin"
             android:visibility="gone"
             tools:visibility="visible" />
 
@@ -55,10 +77,10 @@
             android:id="@+id/lytAlerts"
             layout="@layout/list_o_alerts"
             android:layout_width="match_parent"
-            android:layout_marginStart="@dimen/side_margin"
-            android:layout_marginEnd="@dimen/side_margin"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
             android:layout_marginTop="@dimen/dimen_24dp"
+            android:layout_marginEnd="@dimen/side_margin"
             android:visibility="gone"
             tools:visibility="visible" />
 
@@ -66,10 +88,10 @@
             android:id="@+id/lytGoogleFit"
             layout="@layout/card_google_fit_dash"
             android:layout_width="match_parent"
-            android:layout_marginStart="@dimen/side_margin"
-            android:layout_marginEnd="@dimen/side_margin"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
             android:layout_marginTop="@dimen/dimen_24dp"
+            android:layout_marginEnd="@dimen/side_margin"
             android:visibility="gone"
             tools:visibility="visible" />
 
@@ -77,28 +99,28 @@
             android:id="@+id/lytChargeRing"
             layout="@layout/layout_ring_charge_info"
             android:layout_width="match_parent"
-            android:layout_marginStart="@dimen/side_margin"
-            android:layout_marginEnd="@dimen/side_margin"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
             android:layout_marginTop="@dimen/dimen_24dp"
+            android:layout_marginEnd="@dimen/side_margin"
             android:visibility="gone"
             tools:visibility="visible" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvHealthData"
-            android:layout_marginStart="@dimen/side_margin"
-            android:layout_marginEnd="@dimen/side_margin"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin" />
 
         <include
             android:id="@+id/lytHeartRate"
             layout="@layout/list_heart_rate_card_item"
             android:layout_width="match_parent"
-            android:layout_marginStart="@dimen/side_margin"
-            android:layout_marginEnd="@dimen/side_margin"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
             android:layout_marginTop="@dimen/dimen_24dp"
+            android:layout_marginEnd="@dimen/side_margin"
             android:visibility="gone"
             tools:visibility="visible" />
 
@@ -109,19 +131,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/side_margin"
-            android:layout_marginEnd="@dimen/side_margin"
             android:layout_marginTop="@dimen/dimen_24dp"
+            android:layout_marginEnd="@dimen/side_margin"
             android:visibility="gone"
             tools:visibility="visible" />
 
         <include
             android:id="@+id/lytReadinessAvg"
             layout="@layout/list_readiness_score_card_item"
-            android:layout_marginStart="@dimen/side_margin"
-            android:layout_marginEnd="@dimen/side_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
             android:layout_marginTop="@dimen/dimen_24dp"
+            android:layout_marginEnd="@dimen/side_margin"
             android:visibility="gone"
             tools:visibility="visible" />
 
@@ -131,17 +153,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/side_margin"
-            android:layout_marginEnd="@dimen/side_margin"
             android:layout_marginTop="@dimen/dimen_24dp"
+            android:layout_marginEnd="@dimen/side_margin"
             android:visibility="gone"
             tools:visibility="visible" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvViewedCards"
-            android:layout_marginStart="@dimen/side_margin"
-            android:layout_marginEnd="@dimen/side_margin"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin" />
 
         <include
             android:id="@+id/lytDummy"

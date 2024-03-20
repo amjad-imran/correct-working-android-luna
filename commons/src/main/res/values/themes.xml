@@ -52,6 +52,84 @@
         <item name="fontFamily">@font/gilroy_regular</item>
     </style>
 
+
+    <!--New Text Styles-->
+    <style name="S36" parent="BaseText">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">36sp</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="S28" parent="BaseText">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="S32" parent="BaseText">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="S24" parent="BaseText">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+
+    <style name="S22" parent="BaseText">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="S20" parent="BaseText">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+
+    <style name="S18" parent="BaseText">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+
+    <style name="S16" parent="BaseText">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+
+    <style name="S14" parent="BaseText">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+
+    <style name="S12" parent="BaseTextRegular">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+
+    <style name="S10" parent="BaseTextRegular">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+
+    <!--New Text Styles End-->
+
+
     <style name="H1" parent="BaseText">
 
         <item name="android:lineSpacingExtra">8sp</item>
@@ -105,6 +183,7 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">14sp</item>
     </style>
+
     <style name="H6_Regular" parent="BaseTextRegular">
         <item name="android:lineSpacingExtra">6sp</item>
         <item name="android:textColor">@color/white</item>

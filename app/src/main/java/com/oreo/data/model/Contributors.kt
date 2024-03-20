@@ -10,6 +10,7 @@ data class Contributors(
     val leftTextColor: Int,
     val barColor: Int,
     var barPercent: Int,
+    var hasData: Boolean = true,
     val backgroundRes: Int,
-    var description:String=""
-):Parcelable
+    var description: String = ""
+) : Parcelable

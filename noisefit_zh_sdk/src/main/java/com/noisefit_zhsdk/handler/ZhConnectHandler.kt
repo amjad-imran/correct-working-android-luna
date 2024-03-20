@@ -88,10 +88,10 @@ constructor(val zhApplicationHandler: ZhApplicationHandler) : ConnectionDataActi
                         )
                     ) {
                         ControlBleTools.getInstance().getAutoSportData(null)
-                        ControlBleTools.getInstance().realTimeDataSwitch(true, null)
+                        //ControlBleTools.getInstance().realTimeDataSwitch(true, null)
 
                     } else {
-                        ControlBleTools.getInstance().realTimeDataSwitch(true, null)
+                        //ControlBleTools.getInstance().realTimeDataSwitch(true, null)
                     }
 //                    }
 
@@ -233,6 +233,7 @@ constructor(val zhApplicationHandler: ZhApplicationHandler) : ConnectionDataActi
                 })
                 CallBackUtils.verifyUserIdCallBack = VerifyUserIdCallBack {
                     LOGS.d("$TAG verifyUserIdCallBack state=$it")
+                    AppLogs.sendAppLogs("verifyUserIdCallBack state=$it")
                     /*connectSuccess()
                     return@VerifyUserIdCallBack*/
                     //verify success

@@ -7,6 +7,7 @@ import com.noisefit.oreo.OreoMainActivity
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit.ui.onboarding.pairing.DeviceSetupActivity
+import com.noisefit.ui.onboarding.setup.DeviceSetupActivityV2
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.utils.InsiderAppEvents
@@ -90,7 +91,7 @@ class SetupProfileFragment :
             startActivity(OreoMainActivity.getStartIntent(requireContext()))
             activity?.finish()
         } else {
-            startActivity(DeviceSetupActivity.getStartIntent(requireContext(), setupDevice = true))
+            startActivity(DeviceSetupActivityV2.getStartIntent(requireContext()))
             activity?.finish()
         }
     }
