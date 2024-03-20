@@ -1045,7 +1045,6 @@
     <string name="text_bo_3_5">Your blood oxygen levels had some variations. This may be because of occasional breathing disturbances during sleep.</string>
     <string name="text_bo_else">Your blood oxygen levels had several variations. This may be because of significant breathing disturbances during sleep.</string>
     <string name="text_active_duration">Active duration</string>
-    <string name="text_activities">Activities</string>
     <string name="text_maximum">Maximum</string>
     <string name="text_ms">ms</string>
     <string name="text_remind_me_later">Remind me later</string>
