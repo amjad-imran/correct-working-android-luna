@@ -32,7 +32,6 @@ import com.noisefit_commans.models.StepsData
 import com.noisefit_commans.models.StressDataBreakup
 import com.noisefit_commans.models.Widget
 import com.noisefit_commans.models.WorldClockList
-import com.noisefit_commans.ui.checkDayDifferenceMoreOne
 import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
@@ -1119,6 +1118,15 @@ constructor(
         val date = DateFormats.convertTimestampToDate(
             it.reportSportStartTime, DateFormats.dateFormat3
         )
+
+        val sessionId = it.reportSportStartTime / 1000
+        LOGS.d("startWorkout result :: ${sessionId}")
+        watchDataStore.getLocationDataModel(sessionId)?.let {locationDataList ->
+//            sportsModeResponse.gpsCoordinate = Gson().toJson(parseGpsMapsData(locationDataList))
+            LOGS.d("startWorkout result :: ${Gson().toJson(locationDataList)}")
+            watchDataStore.clearLocationData(sessionId)
+        }
+
 
 
         return RecordedWorkoutData(

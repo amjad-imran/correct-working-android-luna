@@ -1,12 +1,20 @@
 package com.noisefit_zhsdk.handler
 
+import android.Manifest
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import androidx.core.app.ActivityCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.gson.Gson
 import com.noisefit_commans.NoisefitApplication
 import com.noisefit_commans.constants.CommonGlobals
@@ -35,6 +43,7 @@ import com.noisefit_commans.models.HeartRateAlert
 import com.noisefit_commans.models.HeartRateInterval
 import com.noisefit_commans.models.IncomingCall
 import com.noisefit_commans.models.Language
+import com.noisefit_commans.models.LocationDataModel
 import com.noisefit_commans.models.ManualMeasureType
 import com.noisefit_commans.models.ManualMeasurement
 import com.noisefit_commans.models.MenstrualData
@@ -57,13 +66,14 @@ import com.noisefit_commans.models.WeatherData
 import com.noisefit_commans.models.Widget
 import com.noisefit_commans.models.WorldClocksPushData
 import com.noisefit_commans.models.WristLiftGesture
-import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.AgpsEvents
 import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.AppLogs
+import com.noisefit_commans.utils.ConnectEvents
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.ImageUtil
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.LocationClientClass
 import com.noisefit_commans.utils.LogEvents
 import com.noisefit_commans.utils.WatchFaceEvents
 import com.noisefit_commans.utils.sizeInKb
@@ -123,11 +133,20 @@ constructor(
     var watchDataStore: WatchDataStore
 ) : UpdateDeviceDataActions() {
 
+
+    private var sessionId = 0L
+    private var currentGpsSportState = -1
+
+    companion object {
+        const val LOCATION_BROADCAST_RECEIVER = "LOCATION_BROADCAST_RECEIVER"
+        const val LAT_LONG = "LAT_LONG"
+    }
+
     private var zhService: ControlBleTools? = null
     private var updateDeviceDataCallbacks: UpdateDeviceDataCallbacks? = null
+    private var locationClientClass: LocationClientClass? = null
 
 
-    private var mobileNumber: String? = null
     private var colorFitDevice: ColorFitDevice? = null
 
     private var testUpdateDeviceDataCallback: IUpdateDeviceDataCallback? = null
@@ -159,15 +178,15 @@ constructor(
 
     private val activeMeasureCallBack: ActiveMeasureCallBack = object : ActiveMeasureCallBack {
         override fun onMeasureStatus(p0: ActiveMeasureStatusBean?) {
-            LOGS.d(TAG, "onMeasuring nMeasureStatus ${Gson().toJson(p0)}")
+//            LOGS.d(TAG, "onMeasuring nMeasureStatus ${Gson().toJson(p0)}")
         }
 
         override fun onMeasuring(p0: ActiveMeasuringBean?) {
-            LOGS.d(TAG, "onMeasuring ${Gson().toJson(p0)}")
+//            LOGS.d(TAG, "onMeasuring ${Gson().toJson(p0)}")
         }
 
         override fun onMeasureResult(p0: ActiveMeasureResultBean?) {
-            LOGS.d(TAG, "onMeasuring onMeasureResult ${Gson().toJson(p0)}")
+//            LOGS.d(TAG, "onMeasuring onMeasureResult ${Gson().toJson(p0)}")
 
             if (p0 == null) {
                 return
@@ -323,7 +342,107 @@ constructor(
         )
     }
 
+    private fun hasLocationPermission(): Boolean {
+        val permissionAccessCoarseLocationApproved =
+            (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED)
+
+        val backgroundLocationPermissionApproved =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED)
+            } else {
+                true
+            }
+
+        return permissionAccessCoarseLocationApproved && backgroundLocationPermissionApproved
+
+    }
+
+
+    private var locationReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            var isPause = true
+            if (currentGpsSportState == 1 || currentGpsSportState == 3) {
+                isPause = false
+            }
+
+            LOGS.d("startWorkout location inside isPause: $isPause ($currentGpsSportState) sessionId: $sessionId")
+            val locationArrayList =
+                intent.getParcelableArrayListExtra<LocationDataModel>(LAT_LONG)
+
+            if (locationArrayList.isNullOrEmpty()) {
+                return
+            }
+
+
+            locationArrayList.forEach {
+                it.isRunning = isPause
+
+            }
+
+            if(sessionId == 0L){
+                LOGS.d("workout sessionId can't be zero")
+                AppLogs.sendAppLogs("workout sessionId can't be zero")
+            }else{
+                watchDataStore.saveAndGetLocation(sessionId, locationArrayList)
+            }
+
+
+        }
+    }
+
+    private fun enableLocation() {
+        locationClientClass = LocationClientClass()
+        NoisefitApplication.context?.let {
+            locationClientClass?.initialize(it)
+            locationClientClass?.requestLocationUpdates(it)
+            LocalBroadcastManager
+                .getInstance(it)
+                .registerReceiver(
+                    locationReceiver,
+                    IntentFilter(LOCATION_BROADCAST_RECEIVER)
+                )
+        }
+        AppLogs.sendAppLogs(
+            LogEvents.Connect,
+            ConnectEvents.Other.apply { comment = "Location receiver register" })
+
+    }
+
+    private fun disableLocation() {
+        NoisefitApplication.context?.let {
+            locationClientClass?.apply {
+                removeLocationUpdates(it)
+                LocalBroadcastManager
+                    .getInstance(it)
+                    .unregisterReceiver(locationReceiver)
+                AppLogs.sendAppLogs(
+                    LogEvents.Connect,
+                    ConnectEvents.Failed.apply { comment = "Location receiver disabled" })
+            }
+        }
+    }
+
+
+    private fun isWorkOutNeedGps(sportType: Int): Boolean {
+        return sportType == 207 || sportType == 4
+    }
+
     override fun startWorkout(sportType: Int, sportStartTime: Long) {
+
+        LOGS.d("startWorkout init ${sportType} ")
+        val isGpsNeedAndHavePermission = isWorkOutNeedGps(sportType) && hasLocationPermission()
+        if (!isGpsNeedAndHavePermission) {
+            testUpdateDeviceDataCallback?.onUpdateDataReceived(
+                UpdateDeviceDataCallback.WorkoutStartState(false, "Need background location permission")
+            )
+            return
+        }
+
+
         val bean = SendRingSportStatusBean(
             sportType,
             RingSportCallBack.RingSportStatus.SPORT_STATUS_START.status,
@@ -337,12 +456,14 @@ constructor(
                             //turn off auto workout recording
                             setAutoWorkoutStatus(false)
 
+                            LOGS.d("startWorkout started ")
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.WorkoutStartState(true)
                             )
                         }
 
                         else -> {
+                            LOGS.d("startWorkout failed")
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.WorkoutStartState(false, "Failed")
                             )
@@ -353,11 +474,11 @@ constructor(
     }
 
     /**
-     * @param action 2->Pause. 3-> Resume 4->Stop
+     * @param action 1->start 2->Pause. 3-> Resume 4->Stop
      *
      */
     override fun updateOngoingWorkout(sportType: Int, sportTimeStamp: Long, action: Int) {
-
+        LOGS.d("startWorkout updateOngoingWorkout ${sportType} -------> $action")
         val status = when (action) {
             2 -> RingSportCallBack.RingSportStatus.SPORT_STATUS_PAUSE.status
             3 -> RingSportCallBack.RingSportStatus.SPORT_STATUS_RESUME.status
@@ -387,6 +508,7 @@ constructor(
                                 testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                     UpdateDeviceDataCallback.WorkoutStopped(true)
                                 )
+                                disableLocation()
                                 ControlBleTools.getInstance().getFitnessSportIdsData(null)
                                 setAutoWorkoutStatus(true)
                             }
@@ -411,6 +533,7 @@ constructor(
                                 testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                     UpdateDeviceDataCallback.WorkoutStopped(false)
                                 )
+                                disableLocation()
                                 ControlBleTools.getInstance().getFitnessSportIdsData(null)
                                 setAutoWorkoutStatus(true)
 
@@ -424,6 +547,7 @@ constructor(
     }
 
     fun stopWorkout(error: String) {
+        disableLocation()
         testUpdateDeviceDataCallback?.onUpdateDataReceived(
             UpdateDeviceDataCallback.WorkoutStoppedByRing(error)
         )
@@ -434,7 +558,20 @@ constructor(
     private val ringSportCallback = object : RingSportCallBack {
         override fun onRingSportStatus(bean: RingSportStatusBean?) {
             LOGS.d(TAG, "onRingSportStatus ${Gson().toJson(bean)}")
+            LOGS.d("startWorkout onRingSportStatus bean::::  ${Gson().toJson(bean)}")
             if (bean == null) return
+
+            sessionId = bean.startTime
+            currentGpsSportState = bean.sportStatus
+
+            if (isWorkOutNeedGps(bean.sportType)) {
+                if (!hasLocationPermission()) {
+                    //TODO: location permission needed message on UI
+                }
+                if (locationClientClass == null) {
+                    enableLocation()
+                }
+            }
 
 
             if (bean.startResult == RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_NONE.result && bean.isSporting &&
