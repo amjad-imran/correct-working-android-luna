@@ -233,6 +233,7 @@ constructor(val zhApplicationHandler: ZhApplicationHandler) : ConnectionDataActi
                 })
                 CallBackUtils.verifyUserIdCallBack = VerifyUserIdCallBack {
                     LOGS.d("$TAG verifyUserIdCallBack state=$it")
+                    AppLogs.sendAppLogs("verifyUserIdCallBack state=$it")
                     /*connectSuccess()
                     return@VerifyUserIdCallBack*/
                     //verify success
