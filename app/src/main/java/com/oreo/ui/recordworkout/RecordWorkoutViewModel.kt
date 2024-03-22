@@ -22,6 +22,8 @@ class RecordWorkoutViewModel @Inject constructor(
 ) : BaseViewModel() {
 
 
+    var gpsRequired: Boolean = false
+
     val showWorkoutStoppedByRingDialog = MutableLiveData<Event<Boolean>>()
     var markedDeleted: Boolean = false
     var workout: OWorkoutListModal? = null
@@ -110,6 +112,10 @@ class RecordWorkoutViewModel @Inject constructor(
 
     fun deleteOngoingRecordWorkout() {
         ringDataStore.deleteOngoingRecordWorkout()
+    }
+
+    fun requireGpsPermission(ringId: Int?): Boolean {
+        return ringId == 207/*Outdoor running*/ || ringId == 210/*Outdoor cycling*/
     }
 
 

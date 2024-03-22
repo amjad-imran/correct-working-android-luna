@@ -15,6 +15,7 @@ import com.google.gson.reflect.TypeToken
 import com.noisefit_commans.NoisefitApplication
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.constants.SyncEvents
+import com.noisefit_commans.data.db.abstraction.LocationDataSource
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.data.model.RecordedWorkoutData
@@ -72,6 +73,7 @@ import com.zhapp.ble.callback.RealTimeDataCallBack
 import com.zhapp.ble.callback.SportCallBack
 import com.zhapp.ble.parsing.ParsingStateManager.SendCmdStateListener
 import com.zhapp.ble.parsing.SendCmdState
+import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -162,9 +164,6 @@ constructor(
         }
 
     }
-
-
-
 
 
 //    private fun getTempFromLatLng(lat: Double, log: Double) {
@@ -585,7 +584,7 @@ constructor(
                 //onRingSleepNAP : [RingSleepNapBean{existSleepNap=true, asleepNapTime=1705284882, wakeupNapTime=1705286418, sleepNapDuration=1536, date='2024-01-15 00:00:00'}]
                 LOGS.d(TAG, "onRingSleepNAP : $p0")
                 //val dummyNap = Gson().fromJson<List<RingSleepNapBean>>("[{\"existSleepNap\":true, \"asleepNapTime\":1707108000, \"wakeupNapTime\":1707111600, \"sleepNapDuration\":3600, \"date\":\"2024-02-05 00:00:00\"},\n" +
-                  //      "{\"existSleepNap\":true, \"asleepNapTime\":1707049800, \"wakeupNapTime\":1707053400, \"sleepNapDuration\":3600, \"date\":\"2024-02-05 00:00:00\"}]")
+                //      "{\"existSleepNap\":true, \"asleepNapTime\":1707049800, \"wakeupNapTime\":1707053400, \"sleepNapDuration\":3600, \"date\":\"2024-02-05 00:00:00\"}]")
 
                 AppLogs.sendAppLogs("$TRACK_TAG onRingSleepNAP : $p0")
                 if (p0 == null) return
