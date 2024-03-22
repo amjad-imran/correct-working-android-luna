@@ -1301,10 +1301,10 @@ class OreoUserActivityRepositoryImpl(
 
     }
 
-    override suspend fun getSummaryAutoWorkoutCount(): Int {;
+    override suspend fun getSummaryAutoWorkoutCount(): Int {
         val timeStamp = DateFormats.lastClearDataTimeStamp(DELETE_DB_DAYS)
         oreoAutoSportDataImpl.deleteOldData(timeStamp)
-        return oreoAutoSportDataImpl.getAllNotAcceptingData()?.size ?: 0
+        return oreoAutoSportDataImpl.getAllNotAcceptingData(timeStamp)?.size ?: 0
     }
 
     override suspend fun getSummaryHRHealthOverview(): OHealthOverview.HeartRate? {

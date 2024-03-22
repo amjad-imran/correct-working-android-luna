@@ -11,8 +11,12 @@ import com.noisefit_commans.data.model.OreoAutoSportData
 @Dao
 interface OreoAutoSportDao : BaseDao<OreoAutoSportData> {
 
-    @Query("SELECT * FROM auto_sport where is_accepted = :isAccepted AND is_synced=:isSynced order by startTime DESC")
-    fun getAllNotAcceptingData(isAccepted: Boolean, isSynced: Int): List<OreoAutoSportData>?
+    @Query("SELECT * FROM auto_sport where is_accepted = :isAccepted AND is_synced=:isSynced AND startTime > :startTimeStamp order by startTime DESC")
+    fun getAllNotAcceptingData(
+        isAccepted: Boolean,
+        isSynced: Int,
+        startTimeStamp: Long
+    ): List<OreoAutoSportData>?
 //
 //
 //    @Query("UPDATE blood_oxygen SET break_up = :breakUp,is_synced = :is_synced  WHERE date = :date")
