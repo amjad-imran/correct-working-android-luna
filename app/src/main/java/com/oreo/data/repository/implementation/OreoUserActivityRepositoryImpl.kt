@@ -15,6 +15,7 @@ import com.noisefit.data.remote.abstraction.NetworkService
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.LastSyncItems
 import com.noisefit.data.repository.LastSyncProvider
+import com.noisefit.data.repository.implementation.DELETE_DB_DAYS
 import com.noisefit.data.safeApiCallFlow
 import com.noisefit.data.safeCacheCall
 import com.noisefit.luna.BuildConfig
@@ -1301,7 +1302,9 @@ class OreoUserActivityRepositoryImpl(
     }
 
     override suspend fun getSummaryAutoWorkoutCount(): Int {
-        return oreoAutoSportDataImpl.getAllNotAcceptingData()?.size ?: 0
+        val timeStamp = DateFormats.lastClearDataTimeStamp(DELETE_DB_DAYS)
+        oreoAutoSportDataImpl.deleteOldData(timeStamp)
+        return oreoAutoSportDataImpl.getAllNotAcceptingData(timeStamp)?.size ?: 0
     }
 
     override suspend fun getSummaryHRHealthOverview(): OHealthOverview.HeartRate? {

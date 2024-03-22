@@ -90,6 +90,15 @@ fun List<Int>.averageWithoutZero(): Int {
     }
 }
 
+fun List<Int>.averageDaytimeValues(): Int {
+    val newList = this.filter { it != 0 && it != 255 }
+    return if (newList.isNotEmpty()) {
+        newList.average().ceilRound()
+    } else {
+        0
+    }
+}
+
 fun List<Float>.averageWithoutZeroFloat(): Float {
     val newList = this.filter { it != 0.0f && it != 255.0f }
     return if (newList.isNotEmpty()) {

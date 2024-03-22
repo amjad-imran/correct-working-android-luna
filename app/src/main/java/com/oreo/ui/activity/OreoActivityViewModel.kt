@@ -549,15 +549,17 @@ class OreoActivityViewModel @Inject constructor(
                 )
         }
 
-        sleep?.naps?.forEach { it ->
-            dataList.add(
-                ODayTimeActivitiesDataModel(
-                    type = "Nap",
-                    id = it.id,
-                    startTime = it.startTime,
-                    endTime = it.endTime
+        sleep?.naps?.forEach { nap ->
+            if (nap.date.equals(dayData.date)) {
+                dataList.add(
+                    ODayTimeActivitiesDataModel(
+                        type = "Nap",
+                        id = nap.id,
+                        startTime = nap.startTime,
+                        endTime = nap.endTime
+                    )
                 )
-            )
+            }
         }
 
         stressActivityData = dataList

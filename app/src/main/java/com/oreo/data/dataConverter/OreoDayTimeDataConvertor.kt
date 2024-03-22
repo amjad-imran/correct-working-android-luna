@@ -270,7 +270,7 @@ class OreoDayTimeDataConvertor @Inject constructor() {
         val sleepStartDate = startTime.split(" ")[0]
         val sleepEndDate = endTime.split(" ")[0]
 
-        if (!sleepStartDate.equals(date)) return null
+        if (!nap.date.equals(date)) return null
 
         if (sleepStartDate.equals(sleepEndDate)) {
             //Same day Sleep
