@@ -627,4 +627,12 @@
         android:id="@+id/bottomSheetLowBatteryFirmware"
         android:name="com.noisefit.ui.onboarding.setup.firmware.BottomSheetLowBatteryFirmware"
         android:label="BottomSheetLowBatteryFirmware" />
+    <fragment
+        android:id="@+id/stressInternalParentOreo"
+        android:name="com.oreo.ui.stress.OStressInternalParentFragment"
+        android:label="StressInternalParentDetails">
+        <argument
+            android:name="date"
+            app:argType="string" />
+    </fragment>
 </navigation>

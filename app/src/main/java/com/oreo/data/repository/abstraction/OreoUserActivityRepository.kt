@@ -111,4 +111,8 @@ interface OreoUserActivityRepository {
     suspend fun getNapsToConfirm(): List<OreoNapData>?
 
     suspend fun removeNap(id: Int): Boolean
+    suspend fun getStressInternalPagesData(
+        selectDate: String,
+        filterType: String
+    ): Flow<Resource<BaseApiResponse<OInternalPageResponseModal>>>
 }

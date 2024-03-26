@@ -1,0 +1,52 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            style="@style/Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Stressed" />
+
+        <include
+            android:id="@+id/lytUnit"
+            layout="@layout/oreo_layout_top_hour_mn_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+        <View
+            android:id="@+id/view1"
+            android:layout_width="39dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"
+            android:background="@drawable/back_stress_indicator"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lytUnit" />
+
+        <TextView
+            style="@style/Small"
+            android:id="@+id/tvProgStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_arrow_up_stress"
+            android:drawablePadding="2dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/view1"
+            app:layout_constraintEnd_toEndOf="@id/view1"
+            app:layout_constraintStart_toStartOf="@id/view1"
+            app:layout_constraintTop_toTopOf="@id/view1"
+            tools:ignore="UseCompatTextViewDrawableXml"
+            tools:text="5%" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

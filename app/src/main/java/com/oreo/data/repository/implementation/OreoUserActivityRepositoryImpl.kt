@@ -28,7 +28,6 @@ import com.noisefit_commans.data.model.UserHealthData
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
 import com.noisefit_commans.ui.checkDayDifferenceMoreOne
-import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.dataConverter.OreoOfflineDataMapper
@@ -43,6 +42,7 @@ import com.oreo.data.db.implementation.OreoRespiratoryDataImpl
 import com.oreo.data.db.implementation.OreoSleepDataImpl
 import com.oreo.data.db.implementation.OreoStepsDataImpl
 import com.oreo.data.db.implementation.OreoStressDataImpl
+import com.oreo.data.model.AddWorkoutResponse
 import com.oreo.data.model.LearnModel
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
@@ -71,8 +71,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.joda.time.LocalDate
 import org.json.JSONObject
-import com.oreo.data.model.AddWorkoutResponse
-import com.oreo.data.model.health.Nap
 
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -1119,7 +1117,7 @@ class OreoUserActivityRepositoryImpl(
             HealthOverviewDataType.ACTIVITY -> {}
             HealthOverviewDataType.SERVER_SYNC_SUCCESS -> {}
             HealthOverviewDataType.AUTO_WORKOUT -> {}
-            HealthOverviewDataType.BODY_STRESS->{}
+            HealthOverviewDataType.BODY_STRESS -> {}
         }
 
         return Pair(hOverviewData, index)
@@ -1827,6 +1825,18 @@ class OreoUserActivityRepositoryImpl(
     override suspend fun removeNap(id: Int): Boolean {
         napDataImpl.removeNapById(id)
         return true
+    }
+
+    //todo endpoint, response, request format will change, once define
+    override suspend fun getStressInternalPagesData(
+        selectDate: String,
+        filterType: String
+    ): Flow<Resource<BaseApiResponse<OInternalPageResponseModal>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${BuildConfig.OREO_BASE_URL}/activity/v1/activity-contributors"
+            remoteDataSource.getStressInternalPageData(url, selectDate, filterType)
+        }
     }
 
 }
