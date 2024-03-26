@@ -2,16 +2,13 @@ package com.oreo.ui.stress
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import com.noisefit.data.remote.base.Resource
 import com.noisefit.session.SessionManager
-import com.noisefit_commans.data.BinaryActionCallback
-import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
-import com.oreo.data.model.OInternalPageResponseModal
+import com.oreo.data.model.OStressInternalPageResponseModal
+import com.oreo.data.model.StressData
+import com.oreo.data.model.StressShowData
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,13 +21,13 @@ class OSIDViewModel @Inject constructor(
     var dayType: String? = null
     var selectedDate: String? = null
 
-    private val _internalDetailsData = MutableLiveData<OInternalPageResponseModal>()
-    val internalDetailsData: LiveData<OInternalPageResponseModal>
+    private val _internalDetailsData = MutableLiveData<OStressInternalPageResponseModal>()
+    val internalDetailsData: LiveData<OStressInternalPageResponseModal>
         get() = _internalDetailsData
 
 
     fun getInternalDetailsData() {
-        viewModelScope.launch {
+        /*viewModelScope.launch {
             userActivityRepository.getStressInternalPagesData(
                 selectedDate!!, dayType.toString().lowercase()
             ).collect { resource ->
@@ -66,7 +63,17 @@ class OSIDViewModel @Inject constructor(
                     }
                 }
             }
-        }
+        }*/
+        val dummyData = OStressInternalPageResponseModal(
+            resultData = null, stressData = StressData(
+                focussed = StressShowData(duration = 368, 5),
+                calm = StressShowData(duration = 468, 5),
+                stressed = StressShowData(duration = 125, 14),
+                avgDuration = 425,
+                dspMsg = "You have spent an average of"
+            )
+        )
+        _internalDetailsData.postValue(dummyData)
     }
 
 }

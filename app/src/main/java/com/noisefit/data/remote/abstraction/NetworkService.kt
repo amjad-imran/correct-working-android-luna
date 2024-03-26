@@ -848,7 +848,7 @@ interface NetworkService {
         @Url url: String,
         @Query("date") selectDate: String,
         @Query("filter_type") filterType: String
-    ): BaseApiResponse<OInternalPageResponseModal>
+    ): BaseApiResponse<OStressInternalPageResponseModal>
     /**
      * ---------------------------------------------------------------------------------
      *                                Oreo Services End
