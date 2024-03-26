@@ -1,27 +1,102 @@
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <include
-            android:id="@+id/lytHrMn"
-            layout="@layout/oreo_layout_hour_mn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="162dp">
 
         <TextView
             android:id="@+id/tvCalm"
             style="@style/Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:textColor="#87c1ff"
-            app:layout_constraintStart_toStartOf="@id/lytHrMn"
-            app:layout_constraintTop_toBottomOf="@id/lytHrMn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="Calm" />
 
+        <include
+            android:id="@+id/lytHrMn"
+            layout="@layout/oreo_layout_hour_mn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvCalm" />
+
+        <View
+            android:id="@+id/view1"
+            android:layout_marginBottom="@dimen/dimen_16dp"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:background="@color/divider_color"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ProgressBar
+            android:id="@+id/pgBrToday"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="10dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="@dimen/dimen_8dp"
+            android:indeterminateOnly="false"
+            android:max="100"
+            android:progress="100"
+            android:progressDrawable="@drawable/grad_today_stressed"
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout7"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/pgBrPrevious"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="10dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="@dimen/dimen_8dp"
+            android:layout_marginTop="@dimen/dimen_18dp"
+            android:indeterminateOnly="false"
+            android:max="100"
+            android:progress="100"
+            android:progressDrawable="@drawable/grad_previous_stressed"
+            app:layout_constraintBottom_toBottomOf="@+id/pgBrToday"
+            app:layout_constraintStart_toEndOf="@+id/pgBrToday" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dimen_16dp"
+            android:background="@drawable/back_white_16"
+
+            android:padding="@dimen/dimen_4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:id="@+id/icTrend"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:src="@drawable/ic_arrow_up_with_corner"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/textView101"
+                style="@style/Tinny"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5 %"
+
+                app:layout_constraintBottom_toBottomOf="@+id/icTrend"
+                app:layout_constraintStart_toEndOf="@+id/icTrend"
+                app:layout_constraintTop_toTopOf="@+id/icTrend" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
