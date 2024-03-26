@@ -79,7 +79,7 @@ class OStressInternalDetailsFragment :
             "5%"//todo will update once response model define
         // for calm
         binding.lytTopView.lytCalm.tvTitle.text = getString(R.string.text_calm)
-        binding.lytTopView.lytFocussed.tvTitle.setTextColor(
+        binding.lytTopView.lytCalm.tvTitle.setTextColor(
             ContextCompat.getColor(
                 requireContext(),
                 R.color.stress_nap_calm
