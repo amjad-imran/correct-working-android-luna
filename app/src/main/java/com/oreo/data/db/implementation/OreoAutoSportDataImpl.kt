@@ -15,8 +15,8 @@ constructor(
         return true
     }
 
-    override suspend fun getAllNotAcceptingData(): List<OreoAutoSportData>? {
-        return oreoAutoSportDao.getAllNotAcceptingData(false,0)
+    override suspend fun getAllNotAcceptingData(startTimeStamp:Long): List<OreoAutoSportData>? {
+        return oreoAutoSportDao.getAllNotAcceptingData(false,0,startTimeStamp)
     }
 
     override suspend fun getWorkoutByTime(timeStamp:Long): OreoAutoSportData? {

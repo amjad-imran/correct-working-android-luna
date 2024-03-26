@@ -6,6 +6,7 @@ import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.abstraction.NetworkService
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.LastSyncProvider
+import com.noisefit.data.repository.implementation.DELETE_DB_DAYS
 import com.noisefit.data.safeApiCallFlow
 import com.noisefit.data.safeCacheCall
 import com.noisefit.luna.BuildConfig
@@ -95,7 +96,9 @@ class OreoSyncRepositoryImpl(
 
     override suspend fun getAutoWorkoutData(): Flow<CacheResult<List<OreoAutoSportData>?>> {
         return safeCacheCall(Dispatchers.IO) {
-            oreoAutoSportDataImpl.getAllNotAcceptingData()
+            val timeStamp = DateFormats.lastClearDataTimeStamp(DELETE_DB_DAYS)
+            oreoAutoSportDataImpl.deleteOldData(timeStamp)
+            oreoAutoSportDataImpl.getAllNotAcceptingData(timeStamp)
         }
     }
 
