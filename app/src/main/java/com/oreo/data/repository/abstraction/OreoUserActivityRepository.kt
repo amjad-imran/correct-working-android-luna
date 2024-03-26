@@ -15,6 +15,7 @@ import com.oreo.data.model.OHSModel
 import com.oreo.data.model.OHSQuestionariesResponseModel
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.OInternalPageResponseModal
+import com.oreo.data.model.OStressInternalPageResponseModal
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.model.OreoNapDetailsDataModel
 import com.oreo.data.model.RingCareResponse
@@ -111,4 +112,8 @@ interface OreoUserActivityRepository {
     suspend fun getNapsToConfirm(): List<OreoNapData>?
 
     suspend fun removeNap(id: Int): Boolean
+    suspend fun getStressInternalPagesData(
+        selectDate: String,
+        filterType: String
+    ): Flow<Resource<BaseApiResponse<OStressInternalPageResponseModal>>>
 }
