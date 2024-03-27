@@ -1,15 +1,12 @@
 package com.oreo.ui.stress
 
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import android.view.ViewConfiguration
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Animation
 import android.view.animation.RotateAnimation
-import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
@@ -23,7 +20,6 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.Stress
 import com.oreo.data.model.StressNudge
@@ -67,7 +63,10 @@ class OStressDataMovementFragment :
         handleMovementViews()
 
 
+
+
     }
+
 
     override fun onResume() {
         super.onResume()
@@ -243,9 +242,9 @@ class OStressDataMovementFragment :
         val height = 50// change if you change progress height in xml
         val percentageFactor = 100 / height
         val newProgress = progress/percentageFactor // because the height is 50
-        LOGS.d("fsdfdsdsffsd ${height}")
+
         val weightPercentValue = calculateWeightPercent(newProgress, height)
-        LOGS.d("fsdfdsdsffsd weightPercentValue ${weightPercentValue}")
+
         val params = pgbr.layoutParams
         params.height = weightPercentValue.toInt()
         pgbr.layoutParams = params
@@ -456,3 +455,6 @@ class OStressDataMovementFragment :
     }
 
 }
+
+
+

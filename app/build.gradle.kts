@@ -27,6 +27,7 @@ android {
 
         multiDexEnabled = true
         testInstrumentationRunner = AndroidXTest.instrumentationRunner
+
     }
 
     compileOptions {
@@ -37,8 +38,13 @@ android {
     kotlinOptions {
         jvmTarget = Java.java
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.11"
+    }
+
     buildFeatures {
         dataBinding = true
+        compose = true
         viewBinding = true
     }
     lint {
@@ -353,6 +359,5 @@ dependencies {
     implementation(moengage.pushAmp)
     implementation(moengage.geofence)
     implementation(moengage.inboxCore)
-
 
 }
