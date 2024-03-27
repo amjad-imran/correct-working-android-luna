@@ -91,7 +91,7 @@ class OStressInternalParentFragment :
     }
 
     override fun initListener() {
-        binding.lytToolbar.view1.visible()
+        binding.lytToolbar.view1.invisible()
         binding.lytToolbar.ivAddFriend.invisible()
         binding.lytToolbar.view1.loadImage(requireActivity(), R.drawable.ic_info_oreo)
         binding.lytToolbar.backBtn.setOnClickListener {
