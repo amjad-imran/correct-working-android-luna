@@ -94,10 +94,9 @@ class OSIDViewModel @Inject constructor(
     fun getPrefixAndSuffixList(
         dataList: ArrayList<ResultDataStress>,
         dayType: String?
-    ): Triple<Pair<ArrayList<ChartModelStress>, Int>, ArrayList<ChartModelStress>, ArrayList<ChartModelStress>> {
+    ): Triple<List<ChartModelStress>, List<ChartModelStress>, List<ChartModelStress>> {
         dataList.reversed()
         val list = ArrayList<ChartModelStress>()
-        var max = 10
         dataList.forEach {
 
 
@@ -121,18 +120,18 @@ class OSIDViewModel @Inject constructor(
 
 
         val suffix = ArrayList<ChartModelStress>()
-        for (i in 1..7) {
+        for (i in 0..6) {
             val chartModel = ChartModelStress(index = "")
             suffix.add(chartModel)
         }
 
         val prefix = ArrayList<ChartModelStress>()
-        for (i in 1..7) {
+        for (i in 0..6) {
             val chartModel = ChartModelStress(index = "")
             prefix.add(chartModel)
         }
 
-        return Triple(Pair(list, max), suffix, prefix)
+        return Triple(list, suffix, prefix)
     }
 
     fun lineGraphScoreColor(): Triple<Int, Int, Int> {

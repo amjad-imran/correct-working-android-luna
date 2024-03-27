@@ -15,9 +15,11 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.oreo.data.model.ChartModelStress
 import com.oreo.data.model.ResultDataStress
 import com.oreo.data.model.OStressInternalPageResponseModal
 import com.oreo.data.model.StressData
+import com.oreo.ui.custom.ScrollListenerStress
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.roundToInt
 
@@ -26,7 +28,8 @@ private const val DATE = "DATE"
 
 @AndroidEntryPoint
 class OStressInternalDetailsFragment :
-    BaseFragment<FragmentOStressInternalDetailsBinding>(FragmentOStressInternalDetailsBinding::inflate) {
+    BaseFragment<FragmentOStressInternalDetailsBinding>(FragmentOStressInternalDetailsBinding::inflate),
+    ScrollListenerStress {
     private val mViewModel: OSIDViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +58,7 @@ class OStressInternalDetailsFragment :
 
 
     override fun initListener() {
+        binding.stressChart.setOnChartScrollChangedListener(this)
 
     }
 
@@ -104,22 +108,23 @@ class OStressInternalDetailsFragment :
 
         handleProgressStatus(strData)
 
-
         setStressGraph()
 
     }
 
     private fun setStressGraph() {
         val dummyData =
-            "[ { \"date\": \"2024-03-20\", \"data\": { \"calm\":12, \"focussed\":8, \"stressed\":4 } }, { \"date\": \"2024-03-19\",  \"data\": { \"calm\":10, \"focussed\":6, \"stressed\":8 } }, { \"date\": \"2024-03-18\",  \"data\": { \"calm\":10, \"focussed\":8, \"stressed\":6 } }, { \"date\": \"2024-03-17\",  \"data\": { \"calm\":4, \"focussed\":4, \"stressed\":16 } }, { \"date\": \"2024-03-16\",  \"data\": { \"calm\":16, \"focussed\":4, \"stressed\":4 } }, { \"date\": \"2024-03-15\",  \"data\": { \"calm\":12, \"focussed\":12, \"stressed\":0 } }, { \"date\": \"2024-03-14\",  \"data\": { \"calm\":6, \"focussed\":6, \"stressed\":12 } }]"
+            "[ { \"date\": \"2024-03-20\", \"data\": { \"calm\":12, \"focussed\":8, \"stressed\":4 } }, { \"date\": \"2024-03-19\",  \"data\": { \"calm\":10, \"focussed\":6, \"stressed\":8 } }, { \"date\": \"2024-03-18\",  \"data\": { \"calm\":10, \"focussed\":8, \"stressed\":6 } }, { \"date\": \"2024-03-17\",  \"data\": { \"calm\":4, \"focussed\":8, \"stressed\":12 } }, { \"date\": \"2024-03-16\",  \"data\": { \"calm\":4, \"focussed\":6, \"stressed\":8 } }, { \"date\": \"2024-03-15\",  \"data\": { \"calm\":6, \"focussed\":12, \"stressed\":6 } }, { \"date\": \"2024-03-14\",  \"data\": { \"calm\":6, \"focussed\":6, \"stressed\":12 } }]"
+
         val data = Gson().fromJson<List<ResultDataStress>>(dummyData)
 
         val topGraphData = mViewModel.getPrefixAndSuffixList(
             data as ArrayList<ResultDataStress>,
-            mViewModel.dayType
+           /* mViewModel.dayType*/"day"
         )
+        binding.stressChart.visible()
         binding.stressChart.updateData(
-            topGraphData.first.first,
+            topGraphData.first,
             topGraphData.third,
             topGraphData.second
         )
@@ -223,5 +228,13 @@ class OStressInternalDetailsFragment :
                 binding.progressBar1.root.gone()
             }
         }
+    }
+
+    override fun onPositionSelected(position: Int, chartModel: ChartModelStress?) {
+
+    }
+
+    override fun onScrolling(position: Int, chartModel: ChartModelStress?) {
+
     }
 }
