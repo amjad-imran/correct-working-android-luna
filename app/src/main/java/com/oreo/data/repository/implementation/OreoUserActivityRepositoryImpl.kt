@@ -51,6 +51,7 @@ import com.oreo.data.model.OHSModel
 import com.oreo.data.model.OHSQuestionariesResponseModel
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.OInternalPageResponseModal
+import com.oreo.data.model.OStressInternalPageResponseModal
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.model.OreoNapDetailsDataModel
 import com.oreo.data.model.RingCareResponse
@@ -1834,7 +1835,7 @@ class OreoUserActivityRepositoryImpl(
     override suspend fun getStressInternalPagesData(
         selectDate: String,
         filterType: String
-    ): Flow<Resource<BaseApiResponse<OInternalPageResponseModal>>> {
+    ): Flow<Resource<BaseApiResponse<OStressInternalPageResponseModal>>> {
         return safeApiCallFlow(dispatcher) {
             val url =
                 "${BuildConfig.OREO_BASE_URL}/activity/v1/activity-contributors"
