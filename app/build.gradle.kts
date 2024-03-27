@@ -38,13 +38,8 @@ android {
     kotlinOptions {
         jvmTarget = Java.java
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.11"
-    }
-
     buildFeatures {
         dataBinding = true
-        compose = true
         viewBinding = true
     }
     lint {
