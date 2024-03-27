@@ -16,8 +16,8 @@ class ResultData(
     val year: String? = null
 )
 
-data class ResultDataStress(val date: String, val data: StressData, val year: String? = null)
-data class StressData(
+data class ResultDataStress(val date: String, val data: StressDataValues, val year: String? = null)
+data class StressDataValues(
     val calm: Int = 0,
     val focussed: Int = 0,
     val stressed: Int = 0
