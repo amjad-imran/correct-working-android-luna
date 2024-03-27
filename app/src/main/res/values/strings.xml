@@ -1063,4 +1063,6 @@
     <string name="text_your_ring_is_evolving">Your ring is evolving</string>
     <string name="text_ring_successfully_updated">Ring successfully updated</string>
     <string name="text_okay">Okay</string>
+    <string name="text_not_available">Not Available</string>
+    <string name="text_nap_scores_will_be_available_once_after_tonight_s_sleep_cycle_completes">Nap Scores will be available once after tonight’s sleep cycle completes</string>
 </resources>

@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
+import androidx.core.os.bundleOf
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -35,6 +36,15 @@ class OBottomSheetNoDataNapScore :
     }
 
     override fun initListener() {
+        binding.btnKnowMore.setOnClickListener {
+            navigateUpSafe()
+            mNapScoreDataModel?.napId?.let {
+                requireActivity().supportFragmentManager.setFragmentResult(
+                    BOTTOM_NAP_RESULT,
+                    bundleOf("napId" to it)
+                )
+            }
+        }
     }
 
     override fun subscribeObservers() {
