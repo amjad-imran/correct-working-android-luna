@@ -114,7 +114,7 @@ class OStressInternalDetailsFragment :
 
     private fun setStressGraph() {
         val dummyData =
-            "[ { \"date\": \"2024-03-20\", \"data\": { \"calm\":12, \"focussed\":8, \"stressed\":4 } }, { \"date\": \"2024-03-19\",  \"data\": { \"calm\":10, \"focussed\":6, \"stressed\":8 } }, { \"date\": \"2024-03-18\",  \"data\": { \"calm\":10, \"focussed\":8, \"stressed\":6 } }, { \"date\": \"2024-03-17\",  \"data\": { \"calm\":0, \"focussed\":0, \"stressed\":0 } }, { \"date\": \"2024-03-16\",  \"data\": { \"calm\":4, \"focussed\":6, \"stressed\":8 } }, { \"date\": \"2024-03-15\",  \"data\": { \"calm\":0, \"focussed\":0, \"stressed\":0 } }, { \"date\": \"2024-03-14\",  \"data\": { \"calm\":6, \"focussed\":6, \"stressed\":12 } }]"
+            "[ { \"date\": \"2024-03-20\", \"data\": { \"calm\":12, \"focussed\":8, \"stressed\":4 } }, { \"date\": \"2024-03-19\",  \"data\": { \"calm\":10, \"focussed\":6, \"stressed\":8 } }, { \"date\": \"2024-03-18\",  \"data\": { \"calm\":10, \"focussed\":8, \"stressed\":6 } }, { \"date\": \"2024-03-17\",  \"data\": { \"calm\":4, \"focussed\":8, \"stressed\":12 } }, { \"date\": \"2024-03-16\",  \"data\": { \"calm\":4, \"focussed\":6, \"stressed\":8 } }, { \"date\": \"2024-03-15\",  \"data\": { \"calm\":6, \"focussed\":12, \"stressed\":6 } }, { \"date\": \"2024-03-14\",  \"data\": { \"calm\":6, \"focussed\":6, \"stressed\":12 } }]"
 
         val data = Gson().fromJson<List<ResultDataStress>>(dummyData)
 

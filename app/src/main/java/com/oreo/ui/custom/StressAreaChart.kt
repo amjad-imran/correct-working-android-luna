@@ -496,6 +496,8 @@ class StressAreaChart : View {
                             offSet + moveOffSet + (mWith - leftWith - rightWith) * divisor + leftWith - (i + 1) * unitHLenth
                         val y1 =
                             getYAxisValue(next.calm + next.focussed + next.stressed)
+                        val nextYFocussed = getYAxisValue(next.calm+next.focussed)
+
                         LOGS.d("Y_VALUES Stressed -> $y1")
 
                         stressedPath.cubicTo(
@@ -508,8 +510,8 @@ class StressAreaChart : View {
                         )
                         stressedFillPath.addPath(stressedPath)
                         //draw fill first
-                        stressedFillPath.lineTo(x1, mHeight - bottomWith)
-                        stressedFillPath.lineTo(x, mHeight - bottomWith)
+                        stressedFillPath.lineTo(x1, nextYFocussed)
+                        stressedFillPath.lineTo(x, focussedY)
                         chartLineFillPaint!!.setShader(linearGradientStressed)
                         canvas.drawPath(stressedFillPath, chartLineFillPaint!!)
                         canvas.drawPath(stressedPath, lineStressedPaint!!)
@@ -517,6 +519,7 @@ class StressAreaChart : View {
                     if (current.focussed >= 0 && next.focussed >= 0) {
                         val x1 =
                             offSet + moveOffSet + (mWith - leftWith - rightWith) * divisor + leftWith - (i + 1) * unitHLenth
+                        val nextYCalm = getYAxisValue(next.calm)
                         val y1 = getYAxisValue(next.calm + next.focussed)
                         LOGS.d("Y_VALUES Focussed -> $y1")
 
@@ -530,8 +533,8 @@ class StressAreaChart : View {
                         )
                         focussedFillPath.addPath(focussedPath)
 
-                        focussedFillPath.lineTo(x1, mHeight - bottomWith)
-                        focussedFillPath.lineTo(x, mHeight - bottomWith)
+                        focussedFillPath.lineTo(x1, nextYCalm)
+                        focussedFillPath.lineTo(x, calmY)
                         chartLineFillPaint!!.setShader(linearGradientFocussed)
                         canvas.drawPath(focussedFillPath, chartLineFillPaint!!)
                         canvas.drawPath(focussedPath, lineFocussedPaint!!)
