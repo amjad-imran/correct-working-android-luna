@@ -45,7 +45,11 @@ data class Nap(
     val readinessScoreImpact: Int? = null,
     @SerializedName("end_time")
     val endTime: String,
-    val duration: Int? = null
+    val duration: Int? = null,
+    @SerializedName("is_next_day_nap")
+    val isNextDayNap: Boolean = false,
+    @SerializedName("is_day_nap")
+    val isDayNap: Boolean = false
 )
 
 @Parcelize

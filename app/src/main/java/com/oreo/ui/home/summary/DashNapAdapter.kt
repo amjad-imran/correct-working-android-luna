@@ -10,7 +10,6 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.health.Nap
-import java.lang.StringBuilder
 
 class DashNapAdapter(
     private val napList: List<Nap>,
@@ -22,6 +21,33 @@ class DashNapAdapter(
 
     inner class ViewHolder(val binding: RowNapDashBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(nap: Nap) {
+
+            if (nap.isNextDayNap) {
+                binding.ivMoveNext.visible()
+                binding.tvLabel.visible()
+                binding.ivSleepSeperator.gone()
+                binding.ivSleep.gone()
+                binding.tvSleepScoreChange.gone()
+                binding.ivReadinessSeparator.gone()
+                binding.ivReadiness.gone()
+                binding.tvReadinessScoreChange.gone()
+                //todo will update accurate once received
+                if (nap.isDayNap) {
+                    binding.rootContainer.setBackgroundResource(R.drawable.ic_nap_nudge_back)
+                } else {
+                    binding.rootContainer.setBackgroundResource(R.drawable.ic_nap_nudge_back)
+                }
+            } else {
+                binding.ivMoveNext.gone()
+                binding.tvLabel.gone()
+                binding.ivSleepSeperator.visible()
+                binding.ivSleep.visible()
+                binding.tvSleepScoreChange.visible()
+                binding.ivReadinessSeparator.visible()
+                binding.ivReadiness.visible()
+                binding.tvReadinessScoreChange.visible()
+                binding.rootContainer.setBackgroundResource(0)
+            }
 
             val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(nap.duration ?: 0)
             binding.tvDuration.text = if (hour == 0) {

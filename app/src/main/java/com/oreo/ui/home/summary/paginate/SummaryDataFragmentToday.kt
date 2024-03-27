@@ -110,6 +110,10 @@ class SummaryDataFragmentToday :
             override fun onNapRemoveClicked(nap: OreoNapData) {
                 showRemoveNapBottomSheet(nap)
             }
+
+            /*override fun onMoveDetails(nap: ONapDataModel) {
+                navigate(R.id.napDetails, bundleOf("napId" to nap.id))
+            }*/
         })
     }
 
