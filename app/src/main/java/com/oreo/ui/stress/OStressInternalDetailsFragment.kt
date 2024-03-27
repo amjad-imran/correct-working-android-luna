@@ -4,13 +4,17 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOStressInternalDetailsBinding
 import com.noisefit.luna.databinding.OreoLayoutTopHourMn20Binding
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.oreo.data.model.ResultData
+import com.oreo.data.model.ResultDataStress
 import dagger.hilt.android.AndroidEntryPoint
 
 private const val DAY_TYPE = "DAY_TYPE"
@@ -32,7 +36,7 @@ class OStressInternalDetailsFragment :
             mViewModel.selectedDate = it.getString(DATE)
         }
 
-        mViewModel.getInternalDetailsData()
+        //mViewModel.getInternalDetailsData()
         updateUI()
     }
 
@@ -92,7 +96,24 @@ class OStressInternalDetailsFragment :
 
         binding.tvMsg.text = "Dummy text"//todo will update once response model define
 
+        setStressGraph()
 
+    }
+
+    private fun setStressGraph() {
+        val dummyData = "[ { \"date\": \"2024-03-20\", \"data\": { \"calm\":12, \"focussed\":8, \"stressed\":4 } }, { \"date\": \"2024-03-19\",  \"data\": { \"calm\":10, \"focussed\":6, \"stressed\":8 } }, { \"date\": \"2024-03-18\",  \"data\": { \"calm\":10, \"focussed\":8, \"stressed\":6 } }, { \"date\": \"2024-03-17\",  \"data\": { \"calm\":4, \"focussed\":4, \"stressed\":16 } }, { \"date\": \"2024-03-16\",  \"data\": { \"calm\":16, \"focussed\":4, \"stressed\":4 } }, { \"date\": \"2024-03-15\",  \"data\": { \"calm\":12, \"focussed\":12, \"stressed\":0 } }, { \"date\": \"2024-03-14\",  \"data\": { \"calm\":6, \"focussed\":6, \"stressed\":12 } }]"
+        val data = Gson().fromJson<List<ResultDataStress>>(dummyData)
+
+        val topGraphData = mViewModel.getPrefixAndSuffixList(
+            data as ArrayList<ResultDataStress>,
+            mViewModel.dayType
+        )
+        binding.stressChart.updateData(
+            topGraphData.first.first,
+            topGraphData.third,
+            topGraphData.second
+
+        )
     }
 
     private fun handleUnitView(hour: Int, min: Int, view: OreoLayoutTopHourMn20Binding) {

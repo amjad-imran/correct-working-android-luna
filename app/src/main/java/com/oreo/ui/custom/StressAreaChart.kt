@@ -16,10 +16,9 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import com.noisefit.luna.R
-import com.noisefit_commans.utils.DistanceUtil.convertMeterToKm
-import com.noisefit_commans.utils.LOGS.d
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.LOGS.w
-import com.oreo.data.model.ChartModel
+import com.oreo.data.model.ChartModelStress
 import kotlin.math.min
 
 class StressAreaChart : View {
@@ -28,7 +27,6 @@ class StressAreaChart : View {
     private var bgRightColor = 0
     private var bgTopColor = 0
     private var bgBottomColor = 0
-    private var isDistanceGraph = false
     private var xTextColor = 0
     private var yTextColor = 0
     private var scaleColor = 0
@@ -37,7 +35,6 @@ class StressAreaChart : View {
     private var innerCircleColor = 0
     private var outCircleColor = 0
     private var chartLineColor = 0
-    private var chartLineWidth = 10f
     private var scaleNodeColor = 0
     private var gridColor = 0
     private var hCount = 0
@@ -67,42 +64,52 @@ class StressAreaChart : View {
     private var gridPaint: Paint? = null
     private var centerLinePaint: Paint? = null
     private var centerLineColor = 0
-    private var fillColorStart = 0
-    private var fillColorEnd = 0
     private var centerLineWidth = 0f
     private var innerCirclePaint: Paint? = null
     private var outCirclePaint: Paint? = null
-    private var chartLinePaint: Paint? = null
+
+    private var lineCalmPaint: Paint? = null
+    private var lineFocussedPaint: Paint? = null
+    private var lineStressedPaint: Paint? = null
+
     private var chartLineFillPaint: Paint? = null
     private var scaleNodePaint: Paint? = null
     private var glowDotBitmap: Bitmap? = null
-    private var onChartScrollChangedListener: ScrollListener? = null
-    private val path = Path()
-    private val fillPath = Path()
+    private var onChartScrollChangedListener: ScrollListenerStress? = null
+
+    private val calmPath = Path()
+    private val focussedPath = Path()
+    private val stressedPath = Path()
+
+    private val calmFillPath = Path()
+    private val focussedFillPath = Path()
+    private val stressedFillPath = Path()
+
     private var unitHLenth = 0f
     private var indicatorUnitLength = 0f
     private var showAvgValueText = false
     private var showExtremeLine = false
-    private var startFromRight = false
     private var alwaysShowCircle = true
     private var mWith = 0
     private var mHeight = 0
     private var offSet = 0f
     private var indicatorOffSet = 0f
     private var xTextBounds: Rect? = null
-    private val list: MutableList<ChartModel>? = ArrayList()
+    private val list: MutableList<ChartModelStress> = ArrayList()
     private var prefixCount = 0
     private var mCurrentPos = -1
     private var suffixCount = 0
     private var canScroll = true
     private var showXAxis = true
-    private var showSelectedIndicator = true
     private var titleWidth = 0f
+    
+    private val phase = 1.2f
 
     //    private int maxValue;
     //    private int minValue;
-    private var avgValue = 0
-    private var linearGradient: LinearGradient? = null
+    private var linearGradientCalm: LinearGradient? = null
+    private var linearGradientFocussed: LinearGradient? = null
+    private var linearGradientStressed: LinearGradient? = null
 
     constructor(context: Context?) : super(context) {
         initPaint()
@@ -150,21 +157,15 @@ class StressAreaChart : View {
         outCircleColor = ta.getColor(R.styleable.LineChart_outCircleColor, -0x1000000)
         innerCircleRadius = ta.getDimension(R.styleable.LineChart_innerCircleRadius, 2f)
         outCircleRadius = ta.getDimension(R.styleable.LineChart_outCircleRadius, 0f)
-        chartLineColor = ta.getColor(R.styleable.LineChart_chartLineColor, -0x1000000)
-        chartLineWidth = ta.getDimension(R.styleable.LineChart_chartLineWidth, 10f)
         scaleNodeColor = ta.getColor(R.styleable.LineChart_scaleNodeColor, -0x1000000)
         scaleNodeRadius = ta.getDimension(R.styleable.LineChart_scaleNodeRadius, 3f)
         centerLineWidth = ta.getDimension(R.styleable.LineChart_centerLineWidth, 10f)
         centerLineColor = ta.getColor(R.styleable.LineChart_centerLineColor, -0x1000000)
-        fillColorStart = ta.getColor(R.styleable.LineChart_fillColorStart, -0x7f000001)
-        fillColorEnd = ta.getColor(R.styleable.LineChart_fillColorEnd, 0x00000000)
         canScroll = ta.getBoolean(R.styleable.LineChart_canScroll, true)
         showXAxis = ta.getBoolean(R.styleable.LineChart_showXAxis, true)
-        showSelectedIndicator = ta.getBoolean(R.styleable.LineChart_showSelectedIndicator, true)
         titleWidth = ta.getDimension(R.styleable.LineChart_titleWidth, 0f)
         showAvgValueText = ta.getBoolean(R.styleable.LineChart_showAvgValue, false)
         showExtremeLine = ta.getBoolean(R.styleable.LineChart_showExtremeLine, true)
-        startFromRight = ta.getBoolean(R.styleable.LineChart_startFromRight, false)
         alwaysShowCircle = ta.getBoolean(R.styleable.LineChart_alwaysShowCircle, true)
         ta.recycle()
         initPaint()
@@ -211,11 +212,8 @@ class StressAreaChart : View {
         outCirclePaint = Paint()
         outCirclePaint!!.setColor(outCircleColor)
         outCirclePaint!!.isAntiAlias = true
-        chartLinePaint = Paint()
-        chartLinePaint!!.strokeWidth = chartLineWidth
-        chartLinePaint!!.setColor(chartLineColor)
-        chartLinePaint!!.isAntiAlias = true
-        chartLinePaint!!.style = Paint.Style.STROKE
+
+
         chartLineFillPaint = Paint()
         //        chartLineFillPaint.setColor(Color.GRAY);
         chartLineFillPaint!!.style = Paint.Style.FILL
@@ -230,209 +228,44 @@ class StressAreaChart : View {
         xTextBounds = Rect()
     }
 
-    /**
-     * set data points
-     *
-     * @param datas      real data point
-     * @param prefixList placeholder before real data point
-     * @param suffixList placeholder after real data point
-     */
+    private fun updateChartLineColor() {
+        lineCalmPaint = Paint().apply {
+            strokeWidth = dip2px(2f).toFloat()
+            setColor(Color.parseColor("#10c3a3"))
+            isAntiAlias = true
+            style = Paint.Style.STROKE
+        }
+        lineFocussedPaint = Paint().apply {
+            strokeWidth = dip2px(2f).toFloat()
+            setColor(Color.parseColor("#ffed91"))
+            isAntiAlias = true
+            style = Paint.Style.STROKE
+        }
+        lineStressedPaint = Paint().apply {
+            strokeWidth = dip2px(2f).toFloat()
+            setColor(Color.parseColor("#ffae62"))
+            isAntiAlias = true
+            style = Paint.Style.STROKE
+        }
+    }
+
     fun updateData(
-        datas: List<ChartModel>,
-        prefixList: List<ChartModel>,
-        suffixList: List<ChartModel>
+        datas: List<ChartModelStress>, prefixList: List<ChartModelStress>,
+        suffixList: List<ChartModelStress>
     ) {
-        list!!.clear()
+        list.clear()
         list.addAll(prefixList)
         list.addAll(datas)
         list.addAll(suffixList)
         prefixCount = prefixList.size
         suffixCount = suffixList.size
-        var item: ChartModel
-        var sum = 0
-        var count = 0
-        for (i in datas.indices) {
-            item = datas[i]
-            if (item.value == 0) {
-                continue
-            }
-            sum += item.value
-            count += 1
-        }
-        if (count != 0) {
-            avgValue = sum / count
-        }
-        postInvalidate()
-    }
 
-    fun updateChartLineColor() {
-        chartLinePaint = Paint()
-        chartLinePaint!!.strokeWidth = chartLineWidth
-        chartLinePaint!!.setColor(chartLineColor)
-        chartLinePaint!!.isAntiAlias = true
-        chartLinePaint!!.style = Paint.Style.STROKE
-    }
-
-    fun updateDataWithMax(
-        datas: List<ChartModel>, prefixList: List<ChartModel>,
-        suffixList: List<ChartModel>, xMax1: Int, lineColor: Int,
-        fillStartColor: Int, fillEndColor: Int
-    ) {
-        list!!.clear()
-        list.addAll(prefixList)
-        list.addAll(datas)
-        list.addAll(suffixList)
-        prefixCount = prefixList.size
-        suffixCount = suffixList.size
-        chartLineColor = lineColor
-        fillColorStart = fillStartColor
-        fillColorEnd = fillEndColor
         updateChartLineColor()
-        max = 0
-        var item: ChartModel
-        var sum = 0
-        var noneZeroValueCount = 0
-        var count = 0
-        for (i in datas.indices) {
-            item = datas[i]
-            if (item.value == 0) {
-                continue
-            }
-            noneZeroValueCount += 1
-            isDistanceGraph = datas[i].isDistanceGraph
-            if (max == 0) {
-                max = item.value
-            }
-            if (item.value > max) {
-                max = item.value
-            }
-            sum += item.value
-            count += 1
-        }
-        if (noneZeroValueCount <= datas.size / 2) {
-            avgValue = 0
-        } else {
-            if (count != 0) {
-                avgValue = sum / count
-            }
-        }
-        if (xMax1 == 100) {
-            max = xMax1
-        } else {
-            max = max + 5
-        }
-        d("NonZeroValuesxMax = " + max)
+        max = 24
         postInvalidate()
     }
 
-    fun updateDataWithMax(
-        datas: List<ChartModel>,
-        prefixList: List<ChartModel>,
-        suffixList: List<ChartModel>,
-        currentPos: Int
-    ) {
-        list!!.clear()
-        list.addAll(prefixList)
-        list.addAll(datas)
-        list.addAll(suffixList)
-        prefixCount = prefixList.size
-        suffixCount = suffixList.size
-        var noneZeroValueCount = 0
-        max = 0
-        var item: ChartModel
-        var sum = 0
-        var count = 0
-        for (i in datas.indices) {
-            item = datas[i]
-            if (item.value == 0) {
-                continue
-            }
-            isDistanceGraph = datas[i].isDistanceGraph
-            noneZeroValueCount += 1
-            if (max == 0) {
-                max = item.value
-            }
-            if (item.value > max) {
-                max = item.value
-            }
-            sum += item.value
-            count += 1
-        }
-        if (noneZeroValueCount <= datas.size / 2) {
-            avgValue = 0
-        } else {
-            if (count != 0) {
-                avgValue = sum / count
-            }
-        }
-
-
-//        if (xMax < 20) {
-//            xMax += 5;
-//        } else if (xMax < 100) {
-//            xMax += 50;
-//        } else if (xMax < 1000) {
-//            xMax += 500;
-//        }
-        max = 120
-        if (currentPos != -1) {
-            mCurrentPos = currentPos
-            moveToPosition(currentPos)
-        }
-        postInvalidate()
-    }
-
-    fun updateDataWithMaxMin(
-        datas: List<ChartModel>,
-        prefixList: List<ChartModel>,
-        suffixList: List<ChartModel>,
-        offSet: Int,
-        showLastCircle: Boolean
-    ) {
-        list!!.clear()
-        list.addAll(prefixList)
-        list.addAll(datas)
-        list.addAll(suffixList)
-        prefixCount = prefixList.size
-        suffixCount = suffixList.size
-        max = 0
-        var item: ChartModel
-        var sum = 0
-        var count = 0
-        for (i in datas.indices) {
-            item = datas[i]
-            if (item.value == 0) {
-                continue
-            }
-            if (max == 0) {
-                max = item.value
-            }
-            if (xMin == 0) {
-                xMin = item.value
-            }
-            if (item.value > max) {
-                max = item.value
-            }
-            if (item.value > 0 && item.value < xMin) {
-                xMin = item.value
-            }
-            sum += item.value
-            count += 1
-        }
-        if (count != 0) {
-            avgValue = sum / count
-        }
-        this.showLastCircle = showLastCircle
-        max += offSet
-        xMin -= offSet
-        if (xMin < 0) {
-            xMin = 0
-        }
-        d("dsasdasad " + avgValue + " " + max + " " + xMin)
-        postInvalidate()
-    }
-
-    fun setOnChartScrollChangedListener(listener: ScrollListener?) {
+    fun setOnChartScrollChangedListener(listener: ScrollListenerStress?) {
         onChartScrollChangedListener = listener
     }
 
@@ -456,13 +289,31 @@ class StressAreaChart : View {
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        linearGradient = LinearGradient(
+        linearGradientCalm = LinearGradient(
             0f,
             0f,
             0f,
             h.toFloat(),
-            fillColorStart,
-            fillColorEnd,
+            Color.parseColor("#CC155f61"),
+            Color.parseColor("#CC081e30"),
+            Shader.TileMode.CLAMP
+        )
+        linearGradientFocussed = LinearGradient(
+            0f,
+            0f,
+            0f,
+            h.toFloat(),
+            Color.parseColor("#CC6a6640"),
+            Color.parseColor("#CC19262c"),
+            Shader.TileMode.CLAMP
+        )
+        linearGradientStressed = LinearGradient(
+            0f,
+            0f,
+            0f,
+            h.toFloat(),
+            Color.parseColor("#CC866040"),
+            Color.parseColor("#CC26262b"),
             Shader.TileMode.CLAMP
         )
         mWith = w
@@ -511,33 +362,14 @@ class StressAreaChart : View {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         drawBg(canvas)
-        drawTop(canvas)
         drawBottom(canvas)
-        drawLeft(canvas)
+        //drawLeft(canvas)
         drawContent(canvas)
         drawRight(canvas)
     }
 
     private fun drawBg(canvas: Canvas) {
         canvas.drawRect(0f, 0f, mWith.toFloat(), mHeight.toFloat(), bgPaint!!)
-    }
-
-    private fun drawTop(canvas: Canvas) {
-        if (showSelectedIndicator) {
-            canvas.drawRect(0f, 0f, mWith.toFloat(), topWith, bgTopPaint!!)
-            //            selectedLinePath.moveTo(mWith / 2f - 2 * unitHLenth, topWith);
-//            selectedLinePath.lineTo(mWith / 2f - unitHLenth / 5f, topWith);
-//            selectedLinePath.lineTo(mWith / 2f, topWith + unitHLenth / 5f );
-//            selectedLinePath.lineTo(mWith / 2f + unitHLenth / 5f, topWith);
-//            selectedLinePath.lineTo(mWith / 2f + 2* unitHLenth, topWith);
-            bgTopSelectedPaint!!.style = Paint.Style.FILL
-            bgTopSelectedPaint!!.setColor(bgTopColor)
-            canvas.drawPath(selectedLinePath, bgTopSelectedPaint!!)
-            bgTopSelectedPaint!!.style = Paint.Style.STROKE
-            bgTopSelectedPaint!!.setColor(Color.WHITE)
-            bgTopSelectedPaint!!.strokeWidth = dip2px(1f).toFloat()
-            canvas.drawPath(selectedLinePath, bgTopSelectedPaint!!)
-        }
     }
 
     private fun drawRight(canvas: Canvas) {
@@ -561,15 +393,8 @@ class StressAreaChart : View {
     }
 
     private fun drawLeft(canvas: Canvas) {
-        val maxStr: String
-        val avgStr: String
-        if (isDistanceGraph) {
-            maxStr = convertMeterToKm(max)
-            avgStr = convertMeterToKm(avgValue)
-        } else {
-            maxStr = max.toString()
-            avgStr = avgValue.toString()
-        }
+        val maxStr = "24"
+
         val minStr = xMin.toString()
         xTextPaint!!.setColor(xTextColor and -0x7f000001)
         if (showExtremeLine) {
@@ -598,96 +423,136 @@ class StressAreaChart : View {
                 )
             }
         }
-        val avg =
-            mHeight - bottomWith - (avgValue - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
-        if (avgValue > 0) {
-            canvas.drawLine(leftWith, avg, mWith - rightWith, avg, centerLinePaint!!)
-        }
-        if (showAvgValueText && avgValue > 0) {
-            xTextPaint!!.getTextBounds(avgStr, 0, avgStr.length, xTextBounds)
-            canvas.drawText(
-                avgStr,
-                leftWith + dip2px(5f),
-                avg - xTextBounds!!.height(),
-                xTextPaint!!
-            )
-        }
+    }
+
+    private fun getYAxisValue(value: Int): Float {
+        return (mHeight - bottomWith - (value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin))
     }
 
     private fun drawContent(canvas: Canvas) {
-//        float unitVLenth = (mHeight - topWith - bottomWith) / vCount;
-//        drawGrid(canvas, unitVLenth);
-        if (null == list || list.size <= 0) {
+
+        if (list.size <= 0) {
             return
         }
         var firstPosition = 0
         val tempOffset = offSet + moveOffSet
-        var divisor = 0.5f
-        if (!showSelectedIndicator && startFromRight) {
-            divisor = (hCount - 1) * 1f / hCount
-        }
+        val divisor = 0.5f
+
         if (tempOffset > (mWith - leftWith - rightWith) * divisor + unitHLenth) {
             firstPosition =
                 ((tempOffset - (mWith - leftWith - rightWith) * divisor) / unitHLenth).toInt()
         }
         val lastPosition = min((firstPosition + hCount + 2).toDouble(), list.size.toDouble())
             .toInt()
-        var current: ChartModel
-        var next: ChartModel
+        var current: ChartModelStress
+        var next: ChartModelStress
         for (i in firstPosition until lastPosition) {
             current = list[i]
             val x =
                 offSet + moveOffSet + (mWith - leftWith - rightWith) * divisor + leftWith - i * unitHLenth
-            val y =
-                mHeight - bottomWith - (current.value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
-            path.reset()
-            fillPath.reset()
-            path.moveTo(x, y)
+            val calmY = getYAxisValue(current.calm)
+
+            val focussedY =
+                getYAxisValue(current.calm + current.focussed)
+
+            val stressedY =
+                getYAxisValue(current.calm + current.focussed + current.stressed)
+
+            LOGS.d("Y_VALUES $calmY - $focussedY - $stressedY")
+
+            calmPath.reset()
+            calmFillPath.reset()
+
+            focussedPath.reset()
+            focussedFillPath.reset()
+
+            stressedPath.reset()
+            stressedFillPath.reset()
+
+
+            calmPath.moveTo(x, calmY)
+            focussedPath.moveTo(x, focussedY)
+            stressedPath.moveTo(x, stressedY)
+
             if (i < list.size - 1) {
                 next = list[i + 1]
-                if (current.value > 0 && next.value > 0) {
+
+                if (current.stressed > 0 && next.stressed > 0) {
                     val x1 =
                         offSet + moveOffSet + (mWith - leftWith - rightWith) * divisor + leftWith - (i + 1) * unitHLenth
                     val y1 =
-                        mHeight - bottomWith - (next.value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
-                    path.cubicTo(x1 + (x - x1) / 4, y, x - (x - x1) / 4, y1, x1, y1)
-                    fillPath.addPath(path)
+                        getYAxisValue(next.calm + next.focussed + next.stressed)
+                    LOGS.d("Y_VALUES Stressed -> $y1")
+
+                    stressedPath.cubicTo(x1 + (x - x1) / phase, stressedY, x - (x - x1) / phase, y1, x1, y1)
+                    stressedFillPath.addPath(stressedPath)
                     //draw fill first
-                    fillPath.lineTo(x1, mHeight - bottomWith)
-                    fillPath.lineTo(x, mHeight - bottomWith)
-                    chartLineFillPaint!!.setShader(linearGradient)
-                    canvas.drawPath(fillPath, chartLineFillPaint!!)
-                    //draw chart line second, need to cover fill color
-                    canvas.drawPath(path, chartLinePaint!!)
+                    stressedFillPath.lineTo(x1, mHeight - bottomWith)
+                    stressedFillPath.lineTo(x, mHeight - bottomWith)
+                    chartLineFillPaint!!.setShader(linearGradientStressed)
+                    canvas.drawPath(stressedFillPath, chartLineFillPaint!!)
+                    canvas.drawPath(stressedPath, lineStressedPaint!!)
                 }
+                if (current.focussed > 0 && next.focussed > 0) {
+                    val x1 =
+                        offSet + moveOffSet + (mWith - leftWith - rightWith) * divisor + leftWith - (i + 1) * unitHLenth
+                    val y1 = getYAxisValue(next.calm + next.focussed)
+                    LOGS.d("Y_VALUES Focussed -> $y1")
+
+                    focussedPath.cubicTo(x1 + (x - x1) / phase, focussedY, x - (x - x1) / phase, y1, x1, y1)
+                    focussedFillPath.addPath(focussedPath)
+
+                    focussedFillPath.lineTo(x1, mHeight - bottomWith)
+                    focussedFillPath.lineTo(x, mHeight - bottomWith)
+                    chartLineFillPaint!!.setShader(linearGradientFocussed)
+                    canvas.drawPath(focussedFillPath, chartLineFillPaint!!)
+                    canvas.drawPath(focussedPath, lineFocussedPaint!!)
+                }
+
+                if (current.calm > 0 && next.calm > 0) {
+                    val x1 =
+                        offSet + moveOffSet + (mWith - leftWith - rightWith) * divisor + leftWith - (i + 1) * unitHLenth
+                    val y1 = getYAxisValue(next.calm)
+                    LOGS.d("Y_VALUES Calm -> $y1")
+                    calmPath.cubicTo(x1 + (x - x1) / phase, calmY, x - (x - x1) / phase, y1, x1, y1)
+                    calmFillPath.addPath(calmPath)
+                    //draw fill first
+                    calmFillPath.lineTo(x1, mHeight - bottomWith)
+                    calmFillPath.lineTo(x, mHeight - bottomWith)
+                    chartLineFillPaint!!.setShader(linearGradientCalm)
+                    canvas.drawPath(calmFillPath, chartLineFillPaint!!)
+                    canvas.drawPath(calmPath, lineCalmPaint!!)
+                }
+
+
             }
-            if (current.value > 0) {
+            /*if (current.calm > 0) {
                 if (alwaysShowCircle) {
-                    canvas.drawCircle(x, y, outCircleRadius, outCirclePaint!!)
-                    canvas.drawCircle(x, y, innerCircleRadius, innerCirclePaint!!)
+                    canvas.drawCircle(x, calmY, outCircleRadius, outCirclePaint!!)
+                    canvas.drawCircle(x, calmY, innerCircleRadius, innerCirclePaint!!)
                 } else {
                     if (i == firstPosition) {
                         next = list[i + 1]
-                        if (next.value == 0) {
-                            canvas.drawCircle(x, y, outCircleRadius, outCirclePaint!!)
-                            canvas.drawCircle(x, y, innerCircleRadius, innerCirclePaint!!)
+                        if (next.calm == 0) {
+                            canvas.drawCircle(x, calmY, outCircleRadius, outCirclePaint!!)
+                            canvas.drawCircle(x, calmY, innerCircleRadius, innerCirclePaint!!)
                         }
                     } else if (i == lastPosition - 1) {
                         val pre = list[i - 1]
-                        if (pre.value == 0) {
-                            canvas.drawCircle(x, y, outCircleRadius, outCirclePaint!!)
-                            canvas.drawCircle(x, y, innerCircleRadius, innerCirclePaint!!)
+                        if (pre.calm == 0) {
+                            canvas.drawCircle(x, calmY, outCircleRadius, outCirclePaint!!)
+                            canvas.drawCircle(x, calmY, innerCircleRadius, innerCirclePaint!!)
                         }
                     } else {
                         val pre = list[i - 1]
                         next = list[i + 1]
-                        if (pre.value == 0 && next.value == 0) {
-                            canvas.drawCircle(x, y, outCircleRadius, outCirclePaint!!)
-                            canvas.drawCircle(x, y, innerCircleRadius, innerCirclePaint!!)
+                        if (pre.calm == 0 && next.calm == 0) {
+                            canvas.drawCircle(x, calmY, outCircleRadius, outCirclePaint!!)
+                            canvas.drawCircle(x, calmY, innerCircleRadius, innerCirclePaint!!)
                         }
                     }
                 }
-            }
+            }*/
             if (showXAxis) {
                 val xText = list[i].index
                 xTextPaint2!!.getTextBounds(xText, 0, xText!!.length, xTextBounds)
@@ -699,7 +564,7 @@ class StressAreaChart : View {
                     mHeight - bottomWith / 3,
                     xTextPaint2!!
                 )
-                if (showSelectedIndicator && list[i].formattedDate != null) {
+                if (list[i].formattedDate != null) {
                     val title = list[i].formattedDate
                     val xInd =
                         indicatorOffSet + moveOffSet * list.size * indicatorUnitLength / (list.size * unitHLenth) + (mWith - leftWith - rightWith) * divisor + leftWith - i * indicatorUnitLength
@@ -714,10 +579,10 @@ class StressAreaChart : View {
             }
             canvas.drawLine(x, topWith, x, mHeight - bottomWith, gridPaint!!)
             if (showLastCircle) {
-                if (i == 1 && current.value > 0) {
+                if (i == 1 && current.calm > 0) {
                     val width = (glowDotBitmap!!.getWidth() / 2).toFloat()
                     val height = (glowDotBitmap!!.getHeight() / 2).toFloat()
-                    canvas.drawBitmap(glowDotBitmap!!, x - width, y - height, scaleNodePaint)
+                    canvas.drawBitmap(glowDotBitmap!!, x - width, calmY - height, scaleNodePaint)
 
                     //canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint);
                 }
@@ -732,14 +597,15 @@ class StressAreaChart : View {
         val x = (mWith - leftWith - rightWith) * divisor + leftWith
         val y: Float
         val y1 =
-            mHeight - bottomWith - (list[position].value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
-        if (list[position].value > 0 && (moveOffSet == 0f || offSet + moveOffSet == (list.size - 1) * unitHLenth)) {
+            mHeight - bottomWith - (list[position].calm - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
+       //Round bitmap code- to be changed to bar
+        /* if (list[position].calm > 0 && (moveOffSet == 0f || offSet + moveOffSet == (list.size - 1) * unitHLenth)) {
             y = y1
             val width = (glowDotBitmap!!.getWidth() / 2).toFloat()
             val height = (glowDotBitmap!!.getHeight() / 2).toFloat()
             canvas.drawBitmap(glowDotBitmap!!, x - width, y - height, scaleNodePaint)
             //canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint);
-        }
+        }*/
         if (moveOffSet == 0f && showXAxis) {
             val xText = list[position].index
             xTextPaint!!.setColor(xTextColor)
@@ -751,7 +617,7 @@ class StressAreaChart : View {
                 mHeight - bottomWith / 3,
                 xTextPaint2!!
             )
-            if (showSelectedIndicator && list[position].formattedDate != null) {
+            if (list[position].formattedDate != null) {
                 val title = list[position].formattedDate
                 val xInd =
                     indicatorOffSet + moveOffSet * list.size * indicatorUnitLength / (list.size * unitHLenth) + (mWith - leftWith - rightWith) * divisor + leftWith - position * indicatorUnitLength
@@ -857,3 +723,11 @@ class StressAreaChart : View {
         return (spValue * fontScale + 0.5f).toInt()
     }
 }
+
+
+interface ScrollListenerStress {
+    fun onPositionSelected(position: Int, chartModel: ChartModelStress?)
+    fun onScrolling(position: Int, chartModel: ChartModelStress?)
+}
+
+
