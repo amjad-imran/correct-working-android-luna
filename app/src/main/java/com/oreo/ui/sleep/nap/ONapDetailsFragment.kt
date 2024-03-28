@@ -15,6 +15,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.custom.SleepProgressbarView
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
@@ -90,7 +91,14 @@ class ONapDetailsFragment :
         //nap sleep score
         if (it.sleepScore == 0) {
             binding.lytNapTopView.lytImpact.root.gone()
-            binding.lytNapTopView.lytImpactNoData.root.visible()
+
+            binding.lytNapTopView.lytImpactNoData.apply {
+                tvNotAvail.text = it.na?.title ?: getString(R.string.text_not_available)
+                tvNapScoreMsg.setVisibilityByCondition(it.na?.text.isNullOrEmpty().not())
+                tvNapScoreMsg.text = it.na?.text
+                root.visible()
+            }
+
         } else {
             binding.lytNapTopView.lytImpact.root.visible()
             binding.lytNapTopView.lytImpactNoData.root.gone()
@@ -213,7 +221,7 @@ class ONapDetailsFragment :
                 ?: 0) == 0 && (it.prevReadinessScore ?: 0) == 0
         ) {
             binding.lytNapTopView.lytImpact.root.gone()
-            binding.lytNapTopView.rootView.setBackgroundResource(0)
+            //binding.lytNapTopView.rootView.setBackgroundResource(0)
         } else {
             binding.lytNapTopView.lytImpact.root.visible()
         }

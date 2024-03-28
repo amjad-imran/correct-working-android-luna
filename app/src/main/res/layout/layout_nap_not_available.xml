@@ -40,7 +40,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvNotAvail"
-            android:text="@string/text_nap_scores_will_be_available_once_after_tonight_s_sleep_cycle_completes" />
+            tools:text="@string/text_nap_scores_will_be_available_once_after_tonight_s_sleep_cycle_completes" />
 
         <include
             layout="@layout/layout_divider"

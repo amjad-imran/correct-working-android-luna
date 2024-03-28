@@ -32,4 +32,10 @@ data class OreoNapDetailsDataModel(
     var hrBreakup: UnitDataModelArray? = null,
     var hrvBreakUp: UnitDataModelArray? = null,
     var temperatureBreakup: UnitDataModelArrayFloat? = null,
+    var na: NotAvailableContent? = null
+)
+
+data class NotAvailableContent(
+    val title: String? = null,
+    val text: String? = null
 )

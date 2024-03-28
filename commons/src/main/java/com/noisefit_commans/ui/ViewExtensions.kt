@@ -93,18 +93,19 @@ fun Int.getColor(): Int {
 }
 
 fun String?.clearAmPm(): String? {
-    return this?.lowercase()?.replace("pm","")?.replace("am","")?.trim()
+    return this?.lowercase()?.replace("pm", "")?.replace("am", "")?.trim()
 }
 
 fun String.isValidUrl(): Boolean = Patterns.WEB_URL.matcher(this).matches()
 
- fun CollapsingToolbarLayout.setScrollBehavior(enabled: Boolean) {
+fun CollapsingToolbarLayout.setScrollBehavior(enabled: Boolean) {
     this.updateLayoutParams<AppBarLayout.LayoutParams> {
         scrollFlags =
             if (enabled) AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED
             else 0
     }
 }
+
 fun Context.openAppSystemSettings() {
     startActivity(Intent().apply {
         action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
@@ -285,6 +286,14 @@ fun View.gone() {
     visibility = View.GONE
 }
 
+fun View.setVisibilityByCondition(visible: Boolean) {
+    visibility = if (visible) {
+        View.VISIBLE
+    } else {
+        View.GONE
+    }
+}
+
 fun CheckBox.checked() {
     this.isChecked = true
 }
@@ -356,12 +365,14 @@ fun EditText.enableContentInteraction() {
 fun ImageView.loadImage(context: Context, url: String?) {
     Glide.with(context).load(url).into(this)
 }
+
 fun ImageView.loadImageWithCache(context: Context, url: String?) {
     Glide.with(context).load(url)
         .diskCacheStrategy(DiskCacheStrategy.ALL)
         .into(this)
 }
-fun ImageView.loadImageWithCache(context: Context, url: String?,placeHolder:Int) {
+
+fun ImageView.loadImageWithCache(context: Context, url: String?, placeHolder: Int) {
     Glide.with(context).load(url)
         .placeholder(placeHolder)
         .error(placeHolder)
@@ -420,12 +431,15 @@ fun ImageView.loadCircleEmoji(context: Context, type: String) {
         Emoji.EmojiHeart.emoji -> {
             emoji = ContextCompat.getDrawable(context, R.drawable.ic_heart_emoji)
         }
+
         Emoji.Emoji100.emoji -> {
             emoji = ContextCompat.getDrawable(context, R.drawable.ic_100_emoji)
         }
+
         Emoji.EmojiFire.emoji -> {
             emoji = ContextCompat.getDrawable(context, R.drawable.ic_fire_emoji)
         }
+
         Emoji.EmojiHand.emoji -> {
             emoji = ContextCompat.getDrawable(context, R.drawable.ic_strong_emoji)
         }
