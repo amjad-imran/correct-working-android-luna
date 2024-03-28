@@ -9,7 +9,7 @@ plugins {
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
     id("kotlin-parcelize")
-    id("com.huawei.agconnect")
+//    id("com.huawei.agconnect")
 
 }
 
@@ -313,12 +313,12 @@ dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
 
     implementation(AndroidX.lifecycleProcess)
-    implementation(Insider.plugin)
+//    implementation(Insider.plugin)
     implementation(PlayService.playServiceAdmob)
 
-    implementation(Insider.push)
-    implementation(Insider.identifier)
-    implementation(Insider.location)
+//    implementation(Insider.push)
+//    implementation(Insider.identifier)
+//    implementation(Insider.location)
     implementation("com.google.android.flexbox:flexbox:3.0.0")
     implementation("net.danlew:android.joda:2.12.1")
 
