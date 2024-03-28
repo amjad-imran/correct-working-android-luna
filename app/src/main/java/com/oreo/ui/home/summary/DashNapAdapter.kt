@@ -133,9 +133,6 @@ class DashNapAdapter(
                 binding.divider.root.visible()
             }
             binding.root.setOnClickListener {
-                if (nap.sleepScoreImpact == null || nap.readinessScoreImpact == null) return@setOnClickListener
-                if (nap.sleepScoreImpact == 0 && nap.readinessScoreImpact == 0) return@setOnClickListener
-
                 listener?.onNapSelected(nap.id)
             }
         }
