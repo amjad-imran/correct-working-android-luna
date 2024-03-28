@@ -1083,6 +1083,7 @@ class SummaryDataViewModelToday @Inject constructor(
             newSleepScore = nap.sleepScore,
             oldReadinessScore = nap.prevReadinessScore,
             newReadinessScore = nap.readinessScore,
+            scoreImpact = nap.scoreImpact
         )
     }
 

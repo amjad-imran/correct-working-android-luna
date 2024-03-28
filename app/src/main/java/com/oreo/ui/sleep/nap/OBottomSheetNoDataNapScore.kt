@@ -13,10 +13,13 @@ import com.noisefit.luna.databinding.BottomSheetNoDataONapScoreBinding
 import com.noisefit.luna.databinding.BottomSheetONapScoreBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import com.noisefit_commans.ui.loadImage
+import com.oreo.data.model.ScoreImpact
 import com.oreo.data.model.SlideUpNapScoreDataModel
 
 class OBottomSheetNoDataNapScore :
-    BaseBottomSheetWithTransparent<BottomSheetNoDataONapScoreBinding>(BottomSheetNoDataONapScoreBinding::inflate) {
+    BaseBottomSheetWithTransparent<BottomSheetNoDataONapScoreBinding>(
+        BottomSheetNoDataONapScoreBinding::inflate
+    ) {
     private val args: OBottomSheetNapScoreArgs by navArgs()
     private var mNapScoreDataModel: SlideUpNapScoreDataModel? = null
 
@@ -32,6 +35,11 @@ class OBottomSheetNoDataNapScore :
         binding.tvTitle.text = mNapScoreDataModel?.title
         binding.tvDescription.text = mNapScoreDataModel?.description
 
+        if (mNapScoreDataModel?.scoreImpact.equals(ScoreImpact.POSITIVE.name, true)) {
+            binding.ivScoreStatus.setImageResource(R.drawable.ic_bs_nap_score_up)
+        } else {
+            binding.ivScoreStatus.setImageResource(R.drawable.ic_bs_nap_score_down)
+        }
 
     }
 
