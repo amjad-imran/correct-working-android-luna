@@ -28,7 +28,7 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.OreoDataBase
-import com.useinsider.insider.Insider
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
@@ -90,7 +90,7 @@ class NetworkConnectionInterceptor(
 
 
         //Insider app event on device session expiry
-        Insider.Instance.currentUser.logout()
+
 
         appContext.startActivity(OnBoardActivity.getStartIntent(appContext, true).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

@@ -30,8 +30,7 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.FileLogsUtils
 import com.oreo.util.MyActivityLifecycleCallbacks
-import com.useinsider.insider.Insider
-import com.useinsider.insider.InsiderCallbackType
+
 import dagger.hilt.android.HiltAndroidApp
 import java.util.*
 import javax.inject.Inject
@@ -67,26 +66,8 @@ class NoiseFitApplicationMain : NoisefitApplication(), Configuration.Provider {
         initMoEngage()
         // TODO: Please change with your partner name.
         // Make sure that all the letters are lowercase.
-        Insider.Instance.init(this, BuildConfig.INSIDER_PARTNER)
 
 
-
-        Insider.Instance.registerInsiderCallback { data, callbackType ->
-            when (callbackType) {
-                InsiderCallbackType.NOTIFICATION_OPEN -> Log.d(
-                    "[INSIDER]",
-                    "[NOTIFICATION_OPEN]: $data"
-                )
-                InsiderCallbackType.TEMP_STORE_CUSTOM_ACTION -> Log.d(
-                    "[INSIDER]",
-                    "[TEMP_STORE_CUSTOM_ACTION]: $data"
-                )
-                else -> {}
-            }
-        }
-        Insider.Instance.setSplashActivity(SplashActivity::class.java)
-        Insider.Instance.enableIDFACollection(true)
-        Insider.Instance.currentUser.setLocale("tr_TR")
 
         if (BuildConfig.DEBUG) {
             ANRWatchDog().setIgnoreDebugger(true)
