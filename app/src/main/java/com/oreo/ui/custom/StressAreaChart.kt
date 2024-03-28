@@ -12,14 +12,20 @@ import android.graphics.Path
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Shader
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.noisefit.luna.R
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.LOGS.w
 import com.oreo.data.model.ChartModelStress
+import com.oreo.data.model.Section
+import com.oreo.data.model.StressDNDataModel
 import kotlin.math.min
 
 class StressAreaChart : View {
@@ -120,7 +126,18 @@ class StressAreaChart : View {
     private var linearGradientFocussed: LinearGradient? = null
     private var linearGradientStressed: LinearGradient? = null
 
+    //
+
+    lateinit var topCombinedPaint: Paint
+    private var combineTextSize = 0f
+    private var bitmapMap = HashMap<Int, Bitmap>()
+    private var workoutPaint: Paint? = null
+    private var rectF: RectF? = null
+    private var resMap: MutableMap<Int, Triple<LinearGradient, Bitmap?, String?>>? = null
+    private var stressDNDataModel: StressDNDataModel? = null
+
     constructor(context: Context?) : super(context) {
+        resMap = HashMap()
         initPaint()
         //        updateData();
     }
@@ -177,10 +194,12 @@ class StressAreaChart : View {
         showExtremeLine = ta.getBoolean(R.styleable.LineChart_showExtremeLine, true)
         alwaysShowCircle = ta.getBoolean(R.styleable.LineChart_alwaysShowCircle, true)
         ta.recycle()
+        resMap = HashMap()
         initPaint()
     }
 
     private fun initPaint() {
+        rectF = RectF()
         barCalmPaint = Paint().apply {
             setColor(Color.parseColor("#10c3a3"))
         }
@@ -369,11 +388,30 @@ class StressAreaChart : View {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        generateResMap()
         drawBg(canvas)
         drawBottom(canvas)
         //drawLeft(canvas)
         drawContent(canvas)
         drawRight(canvas)
+    }
+    private fun generateResMap() {
+        if (stressDNDataModel == null) return
+        var section: Section
+        for (i in stressDNDataModel!!.sections!!.indices) {
+            section = stressDNDataModel!!.sections!![i]
+            resMap!![i] = Triple(
+                LinearGradient(
+                    0f,
+                    0f,
+                    0f,
+                    mHeight - bottomWith,
+                    section.color,
+                    Color.TRANSPARENT,
+                    Shader.TileMode.CLAMP
+                ), BitmapFactory.decodeResource(resources, section.imageRes), section.imageUrl
+            )
+        }
     }
 
     private fun drawBg(canvas: Canvas) {
@@ -496,7 +534,7 @@ class StressAreaChart : View {
                             offSet + moveOffSet + (mWith - leftWith - rightWith) * divisor + leftWith - (i + 1) * unitHLenth
                         val y1 =
                             getYAxisValue(next.calm + next.focussed + next.stressed)
-                        val nextYFocussed = getYAxisValue(next.calm+next.focussed)
+                        val nextYFocussed = getYAxisValue(next.calm + next.focussed)
 
                         LOGS.d("Y_VALUES Stressed -> $y1")
 
@@ -639,6 +677,81 @@ class StressAreaChart : View {
                     topWith / 2 + xTextBounds!!.height() / 2f,
                     xTextPaint!!
                 )
+            }
+        }
+
+        //show combined top views
+        val imageSize = dip2px(16f)
+        for (i in stressDNDataModel!!.sections!!.indices) {
+            val section = stressDNDataModel!!.sections!![i]
+            val calculatedEnd = if (section.end < 95) {
+                section.end + 1
+            } else {
+                section.end
+            }
+
+
+            rectF?.left = section.start * unitHLenth
+            rectF?.top = topWith
+            rectF?.right = rectF!!.left + (calculatedEnd - section.start) * unitHLenth
+            rectF?.bottom = mHeight - bottomWith
+
+            chartLineFillPaint?.setShader(resMap!![i]!!.first)
+            chartLineFillPaint?.let { canvas.drawRect(rectF!!, it) }
+
+            rectF?.left = section.start * unitHLenth
+            rectF?.top = topWith - dip2px(1f)
+            rectF?.right = rectF!!.left + (calculatedEnd - section.start) * unitHLenth
+            rectF?.bottom = topWith + dip2px(1f)
+            gridPaint?.color = section.color
+            gridPaint?.let { canvas.drawRect(rectF!!, it) }
+
+
+
+
+            if (section.type.equals("combined", true)) {
+
+                val text = "${section.count}"
+                topCombinedPaint.getTextBounds(text, 0, text.length, xTextBounds)
+                canvas.drawText(
+                    text,
+                    (rectF!!.left + rectF!!.right) / 2 - xTextBounds!!.width() / 2f,
+                    rectF!!.top - xTextBounds!!.height(),
+                    topCombinedPaint
+                )
+
+            } else {
+                rectF!!.left = (rectF!!.right + rectF!!.left) / 2 - imageSize / 2f
+                rectF!!.top = topWith - imageSize - dip2px(10f)
+                rectF!!.right = rectF!!.left + imageSize
+                rectF!!.bottom = rectF!!.top + imageSize
+
+                val imageUrl = resMap!![i]?.third
+                val bitmap = bitmapMap[i]
+                if (bitmap != null) {
+                    canvas.drawBitmap(bitmap, null, rectF!!, workoutPaint)
+                } else {
+                    if (imageUrl.isNullOrEmpty()) {
+                        if (resMap!![i]!!.second != null) {
+                            canvas.drawBitmap(resMap!![i]!!.second!!, null, rectF!!, null)
+                        }
+                    } else {
+                        Glide.with(context)
+                            .asBitmap()
+                            .load(imageUrl)
+                            .into(object : CustomTarget<Bitmap?>(imageSize, imageSize) {
+                                override fun onResourceReady(
+                                    resource: Bitmap,
+                                    transition: Transition<in Bitmap?>?
+                                ) {
+                                    bitmapMap[i] = resource
+                                    postInvalidate()
+                                }
+
+                                override fun onLoadCleared(placeholder: Drawable?) {}
+                            })
+                    }
+                }
             }
         }
     }
