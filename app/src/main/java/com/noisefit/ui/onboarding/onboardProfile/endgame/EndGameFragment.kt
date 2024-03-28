@@ -6,9 +6,9 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.chip.Chip
 import com.noisefit.luna.R
-import com.noisefit_commans.data.model.Interest
 import com.noisefit.luna.databinding.FragmentEndGameBinding
 import com.noisefit.ui.onboarding.onboardProfile.SetupProfileViewModel
+import com.noisefit_commans.data.model.Interest
 import com.noisefit_commans.ui.*
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -65,13 +65,14 @@ class EndGameFragment : BaseFragment<FragmentEndGameBinding>(FragmentEndGameBind
     }
 
     override fun initListener() {
-
-        binding.cgInterests.setOnCheckedStateChangeListener { group, checkedIds ->
-            if (checkedIds.size > 5) {
-                val chip: Chip = binding.cgInterests.findViewById(checkedIds.last())
+//setOnCheckedStateChangeListener
+        binding.cgInterests.setOnCheckedChangeListener { group, checkedIds ->
+            val size = binding.cgInterests.checkedChipIds.size
+            if (size > 5) {
+                val chip: Chip = binding.cgInterests.findViewById(binding.cgInterests.checkedChipIds.last())
                 chip.isChecked = false
             } else {
-                updateSelectedCount(checkedIds.size)
+                updateSelectedCount(size)
             }
         }
 

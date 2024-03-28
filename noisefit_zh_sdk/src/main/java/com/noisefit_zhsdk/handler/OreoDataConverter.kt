@@ -136,15 +136,7 @@ constructor(
         return when (functionId) {
             3 -> SportActivityName.INDOOR_RUNNING
             66 -> {
-                when (noiseFitDevice.deviceType) {
-                    DeviceType.COLORFIT_PRO_4_ALPHA.deviceType -> {
-                        return SportActivityName.INDOOR_RUNNING
-                    }
-
-                    else -> {
-                        SportActivityName.TREADMILL
-                    }
-                }
+                SportActivityName.TREADMILL
             }
 
             2 -> SportActivityName.OUTDOOR_WALKING
@@ -266,18 +258,7 @@ constructor(
             82 -> SportActivityName.PARAGLIDER
             83 -> SportActivityName.CLIMB_THE_STAIRS
 
-            84 -> {
-                when (noiseFitDevice.deviceType) {
-                    DeviceType.NOISEFIT_ARC.deviceType, DeviceType.NOISEFIT_TWIST.deviceType, DeviceType.NOISEFIT_CURVE.deviceType -> {
-                        return SportActivityName.CROSS_TRAINING
-                    }
-
-                    else -> {
-                        SportActivityName.CROSS_TRAINING_CROSSFIT
-                    }
-                }
-
-            }
+            84 ->  SportActivityName.CROSS_TRAINING_CROSSFIT
 
             85 -> SportActivityName.AEROBICS
             86 -> SportActivityName.PHYSICAL_TRAINING
@@ -309,30 +290,10 @@ constructor(
             127 -> SportActivityName.CROSS_COUNTRY_SKIING
             128 -> SportActivityName.SNOWBOARDING
             129 -> SportActivityName.ALPINE_SKIING
-            130 -> {
-                when (noiseFitDevice.deviceType) {
-                    DeviceType.NOISEFIT_ARC.deviceType, DeviceType.NOISEFIT_TWIST.deviceType, DeviceType.NOISEFIT_CURVE.deviceType -> {
-                        return SportActivityName.DOUBLE_BOARD_SKATING
-                    }
-
-                    else -> {
-                        SportActivityName.DOUBLE_BOARD_SKIING
-                    }
-                }
-            }
+            130 -> SportActivityName.DOUBLE_BOARD_SKIING
 
             131 -> SportActivityName.FREE_EXERCISE
-            132 -> {
-                when (noiseFitDevice.deviceType) {
-                    DeviceType.NOISEFIT_ARC.deviceType, DeviceType.NOISEFIT_TWIST.deviceType, DeviceType.NOISEFIT_CURVE.deviceType -> {
-                        return SportActivityName.PADDLEBOARDS
-                    }
-
-                    else -> {
-                        SportActivityName.PADDLEBOARD_SURFING
-                    }
-                }
-            }
+            132 ->   SportActivityName.PADDLEBOARD_SURFING
 
             133 -> SportActivityName.KABADDI
             200 -> SportActivityName.POOL_SWIMMING

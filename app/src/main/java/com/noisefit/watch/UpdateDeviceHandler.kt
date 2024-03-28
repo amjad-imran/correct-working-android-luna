@@ -16,27 +16,15 @@ constructor(
 
     fun getQueryActions(connectedDevice: ColorFitDevice): UpdateDeviceDataActions? {
         when (watchesSdk.getWatchType(connectedDevice)) {
-            SDKWatchType.SDK_CF_PRO -> {
 
 
-            }
-            SDKWatchType.SDK_QUBE -> {
-
-            }
-            SDKWatchType.SDK_EVOLVE -> {
-            }
-            SDKWatchType.SDK_HYBRID -> {
-            }
-            SDKWatchType.SDK_NAV_PLUS -> {
-            }
             SDKWatchType.SDK_ZH->{
                 zhUpdateDeviceAction.init()
                 zhUpdateDeviceAction.attachCallbacks()
                 CommonGlobals.updateDeviceDataActions = zhUpdateDeviceAction
                 AppLogs.sendAppLogs("UpdateDevice Actions for ZH SDK")
             }
-            SDKWatchType.SDK_RYEEX->{
-            }
+
 
         }
         return CommonGlobals.updateDeviceDataActions
