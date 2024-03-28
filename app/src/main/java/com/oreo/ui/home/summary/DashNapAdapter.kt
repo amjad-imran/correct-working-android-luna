@@ -22,21 +22,24 @@ class DashNapAdapter(
     inner class ViewHolder(val binding: RowNapDashBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(nap: Nap) {
 
+            if (nap.isDayNap) {
+                binding.rootContainer.setBackgroundResource(R.drawable.ic_nap_nudge_back)//todo change - pending from design
+            } else {
+                binding.rootContainer.setBackgroundResource(R.drawable.ic_nap_nudge_back)//todo change - pending from design
+            }
+
             if (nap.isNextDayNap) {
                 binding.ivMoveNext.visible()
-                binding.tvLabel.visible()
+                binding.tvLabel.apply {
+                    text = this.context.getString(R.string.text_late_naps_effect)
+                    visible()
+                }
                 binding.ivSleepSeperator.gone()
                 binding.ivSleep.gone()
                 binding.tvSleepScoreChange.gone()
                 binding.ivReadinessSeparator.gone()
                 binding.ivReadiness.gone()
                 binding.tvReadinessScoreChange.gone()
-                //todo will update accurate once received
-                if (nap.isDayNap) {
-                    binding.rootContainer.setBackgroundResource(R.drawable.ic_nap_nudge_back)
-                } else {
-                    binding.rootContainer.setBackgroundResource(R.drawable.ic_nap_nudge_back)
-                }
             } else {
                 binding.ivMoveNext.gone()
                 binding.tvLabel.gone()
@@ -130,9 +133,6 @@ class DashNapAdapter(
                 binding.divider.root.visible()
             }
             binding.root.setOnClickListener {
-                if (nap.sleepScoreImpact == null || nap.readinessScoreImpact == null) return@setOnClickListener
-                if (nap.sleepScoreImpact == 0 && nap.readinessScoreImpact == 0) return@setOnClickListener
-
                 listener?.onNapSelected(nap.id)
             }
         }
