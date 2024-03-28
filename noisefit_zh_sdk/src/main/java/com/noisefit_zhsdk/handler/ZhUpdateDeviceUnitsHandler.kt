@@ -25,7 +25,6 @@ import com.noisefit_commans.models.AutoSleep
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.Contact
 import com.noisefit_commans.models.CustomReplyData
-import com.noisefit_commans.models.DeviceType
 import com.noisefit_commans.models.DeviceUnits
 import com.noisefit_commans.models.DiyCustomWatchFace
 import com.noisefit_commans.models.DoNotDisturb
@@ -57,7 +56,6 @@ import com.noisefit_commans.models.WeatherData
 import com.noisefit_commans.models.Widget
 import com.noisefit_commans.models.WorldClocksPushData
 import com.noisefit_commans.models.WristLiftGesture
-import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.AgpsEvents
 import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.AppLogs
@@ -1707,57 +1705,12 @@ constructor(
 
         var size = weatherDataList.size
 
-        colorFitDevice?.deviceType?.let { deviceType ->
-            if (deviceType == DeviceType.NOISEFIT_TWIST.deviceType ||
-                deviceType == DeviceType.NOISEFIT_ARC.deviceType ||
-                deviceType == DeviceType.NOISEFIT_CURVE.deviceType ||
-                deviceType == DeviceType.NOISEFIT_HALO.deviceType ||
-                deviceType == DeviceType.NOISEFIT_ORIGIN.deviceType ||
-                deviceType == DeviceType.NOISEFIT_EVOLVE_4.deviceType ||
-                deviceType == DeviceType.NOISEFIT_HALO_PLUS.deviceType ||
-                deviceType == DeviceType.COLORFIT_PRO_4.deviceType ||
-                deviceType == DeviceType.COLORFIT_PULSE_3.deviceType ||
-                deviceType == DeviceType.COLORFIT_PRIMUS.deviceType ||
-                deviceType == DeviceType.COLORFIT_PRO_4_GPS.deviceType ||
-                deviceType == DeviceType.COLORFIT_PRO_4_ALPHA.deviceType ||
-                deviceType == DeviceType.NOISEFIT_QUAD_CALL_MAX.deviceType ||
-                deviceType == DeviceType.VISION_2_BUZZ.deviceType ||
-                deviceType == DeviceType.COLORFIT_PULSE_2_MAX.deviceType ||
-                deviceType == DeviceType.COLORFIT_LOOP.deviceType ||
-                deviceType == DeviceType.COLORFIT_VICTOR.deviceType ||
-                deviceType == DeviceType.COLORFIT_CALIBER_2.deviceType ||
-                deviceType == DeviceType.COLORFIT_CALIBER_2_BUZZ.deviceType ||
-                deviceType == DeviceType.PULSE_GO_BUZZ.deviceType ||
-                deviceType == DeviceType.COLORFIT_CALIBER.deviceType ||
-                deviceType == DeviceType.NOISEFIT_FORCE_PLUS.deviceType ||
-                deviceType == DeviceType.NOISEFIT_EVOLVE_3.deviceType ||
-                deviceType == DeviceType.NOISEFIT_FUSE_PLUS.deviceType ||
-                deviceType == DeviceType.NOISEFIT_ARC_PLUS.deviceType ||
-                deviceType == DeviceType.NOISEFIT_FUSE.deviceType ||
-                deviceType == DeviceType.NOISEFIT_VORTEX.deviceType ||
-                deviceType == DeviceType.COLORFIT_ULTRA_2_BUZZ.deviceType ||
-                deviceType == DeviceType.COLORFIT_CALIBER_BUZZ.deviceType ||
-                deviceType == DeviceType.NOISEFIT_CREW.deviceType ||
-                deviceType == DeviceType.NOISEFIT_CREW_PRO.deviceType ||
-                deviceType == DeviceType.NOISEFIT_METTLE.deviceType ||
-                deviceType == DeviceType.NOISEFIT_TWIST_PRO.deviceType ||
-                deviceType == DeviceType.NOISEFIT_METALLIX.deviceType ||
-                deviceType == DeviceType.ULTRA_3.deviceType ||
-                deviceType == DeviceType.COLORFIT_VISION_3.deviceType ||
-                deviceType == DeviceType.COLORFIT_ORE.deviceType ||
-                deviceType == DeviceType.COLORFIT_PRO_5_47MM.deviceType ||
-                deviceType == DeviceType.COLORFIT_PRO_5_44MM.deviceType ||
-                deviceType == DeviceType.NOISEFIT_ACTIVE_2.deviceType ||
-                deviceType == DeviceType.COLORFIT_CHROME.deviceType ||
-                deviceType == DeviceType.NOISEFIT_ENDEAVOUR.deviceType
-            ) {
-                if (size > 6) {
-                    size = 6
-                }
-            } else {
-                if (size > 5) {
-                    size = 5
-                }
+        if (size > 6) {
+            size = 6
+
+        } else {
+            if (size > 5) {
+                size = 5
             }
         }
 

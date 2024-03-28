@@ -245,78 +245,14 @@ object AppStaticData {
         )
     }
 
-    fun getMaxQuickRepliesCount(connectedDevice: ColorFitDevice?): Int {
-        if (connectedDevice == null) return 5
 
-        return when (connectedDevice.deviceType) {
-            DeviceType.COLORFIT_VISION.deviceType -> {
-                3
-            }
-            DeviceType.QUBE_2.deviceType,DeviceType.COLORFIT_MACRO.deviceType -> {
-                4
-            }
-            else -> {
-                5
-            }
-        }
-    }
 
     fun getMaxQrCodes(): Int {
         return 8
     }
 
 
-    fun getMaxAlarmCount(connectedDevice: ColorFitDevice?): Int {
-        if (connectedDevice == null) return 5
-
-        return when (connectedDevice.deviceType) {
-            DeviceType.NOISE_ULTRA.deviceType,
-            DeviceType.COLORFIT_ULTRA_2.deviceType,
-            DeviceType.COLORFIT_ULTRA_BUZZ.deviceType,
-            DeviceType.COLORFIT_VISION_BUZZ.deviceType -> {
-                5
-            }
-            DeviceType.NOISEFIT_ACTIVE.deviceType,
-            DeviceType.COLORFIT_PRO_3.deviceType,
-            DeviceType.NOISE_EVOLVE_2.deviceType,
-            DeviceType.NOISEFIT_AGILE.deviceType,
-            DeviceType.COLORFIT_PULSE_2.deviceType,
-            DeviceType.COLORFIT_PULSE_2_BUZZ.deviceType,
-            DeviceType.NOISE_EVOLVE_2_PLAY.deviceType,
-            -> {
-                10
-            }
-            DeviceType.NOISE_QUBE_O2.deviceType,
-            DeviceType.NOISE_ICON_BUZZ.deviceType,
-            DeviceType.NOISE_ICON_PLUS.deviceType,
-            DeviceType.ICON_MAX.deviceType,
-            DeviceType.ICON_2.deviceType,
-            DeviceType.NOISE_THRIVE.deviceType,
-            DeviceType.COLORFIT_QUAD_CALL.deviceType,
-            DeviceType.COLORFIT_VIVID_CALL.deviceType,
-            DeviceType.ICON_3.deviceType,
-            DeviceType.NOISE_BOUNCE.deviceType,
-            DeviceType.NOISE_SPRINT.deviceType,
-            DeviceType.COLORFIT_SPARK.deviceType,
-            DeviceType.NOISEFIT_CANVAS.deviceType,
-            DeviceType.FORCE.deviceType,
-            DeviceType.COLORFIT_ICON_2_VISTA.deviceType,
-            DeviceType.NOISE_QUBE.deviceType,
-            DeviceType.QUBE_2.deviceType,
-            DeviceType.NOISEFIT_TRIUMPH.deviceType,
-            DeviceType.COLORFIT_THRILL.deviceType,
-            DeviceType.COLORFIT_CALIBER3_PLUS.deviceType,
-            DeviceType.COLORFIT_MACRO.deviceType,
-            DeviceType.NOISEFIT_VENTURE.deviceType-> {
-                3
-            }
-            else -> {
-                5
-            }
-        }
-    }
-
-
+   
     fun getNotificationTypeName(appType: String): String {
         return when (appType) {
             "com.whatsapp.w4b" -> ApplicationType.WHATS_APP_BUSINESS.type

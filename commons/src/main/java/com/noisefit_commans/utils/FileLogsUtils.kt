@@ -165,19 +165,7 @@ object FileLogsUtils {
     ): Uri? {
         var path = ""
         colorFitDevice?.deviceType?.let {
-            path = if (it == DeviceType.COLORFIT_2.deviceType ||
-                it == DeviceType.COLORFIT_PRO_2.deviceType ||
-                it == DeviceType.COLORFIT_PRO_3.deviceType ||
-                it == DeviceType.COLORFIT_PRO_2_OXY.deviceType ||
-                it == DeviceType.NOISEFIT_ACTIVE.deviceType ||
-                it == DeviceType.COLORFIT_MIGHTY.deviceType ||
-                it == DeviceType.NOISEFIT_NOVA.deviceType ||
-                it == DeviceType.NOISEFIT_AGILE.deviceType
-            ) {
-                "$LogsFolder/$logFileName"
-            } else {
-                "$LogsFolder/$LogsTxtFile"
-            }
+            path =  "$LogsFolder/$LogsTxtFile"
         }
 
         return getUri(path, context)
@@ -291,19 +279,7 @@ object FileLogsUtils {
     ): File? {
         var path = ""
         colorFitDevice?.deviceType?.let {
-            path = if (it == DeviceType.COLORFIT_2.deviceType ||
-                it == DeviceType.COLORFIT_PRO_2.deviceType ||
-                it == DeviceType.COLORFIT_PRO_3.deviceType ||
-                it == DeviceType.COLORFIT_PRO_2_OXY.deviceType ||
-                it == DeviceType.NOISEFIT_ACTIVE.deviceType ||
-                it == DeviceType.COLORFIT_MIGHTY.deviceType ||
-                it == DeviceType.NOISEFIT_NOVA.deviceType ||
-                it == DeviceType.NOISEFIT_AGILE.deviceType
-            ) {
-                "$LogsFolder/$logFileName"
-            } else {
-                "$LogsFolder/$LogsTxtFile"
-            }
+            path = "$LogsFolder/$LogsTxtFile"
         }
 
         return getFile(path, context)

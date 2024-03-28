@@ -30,5 +30,5 @@ include ':commons'
 include ':noisefit_libraries_zh'
 include ':MPChartLib'
 include(":noisefit_zh_sdk")
-include ':customprogress'
+
 
