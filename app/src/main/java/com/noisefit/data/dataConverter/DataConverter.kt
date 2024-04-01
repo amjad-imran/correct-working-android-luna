@@ -148,6 +148,9 @@ constructor(
                 jsonArray.add(
                     JsonObject(
                     ).apply {
+                        this.addProperty("distance", workout.distance)
+                        this.addProperty("cadence", workout.cadence)
+                        this.addProperty("recovery_time", workout.recoveryTime)
                         this.addProperty("duration", workout.duration)
                         this.addProperty("calories", workout.calories)
                         this.addProperty("activity_type", workoutTypeString)

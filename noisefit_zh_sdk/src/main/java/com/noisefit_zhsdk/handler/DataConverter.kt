@@ -1128,25 +1128,6 @@ constructor(
             cadence = ((it.reportTotalStep / duration) * 60)
         }
 
-
-//        val sportsModeResponse = SportsModeResponse(
-//            type = getSportName(p1.recordPointSportType, colorFitDevice),
-//            calories = p1.reportCal,
-//            avgStepStride = p1.reportRecoveryTime.toInt(),
-//            distance = p1.reportDistance,
-//            heartRateAvg = p1.reportAvgHeart,
-//            endTime = DateFormats.timeFormat.format(endCalendar.time),
-//            date = DateFormats.dateFormat.format(startCalendar.time),
-//            time = DateFormats.formatDateTime(
-//                startCalendar.time,
-//                DateFormats.dateTimeFormatISO
-//            ),
-//            cadence = cadence,
-//            duration = duration.toLong(),
-//            heartRateData = hrData.handleHrData(duration),
-//            calorieData = calorieData.handleCaloriesData(duration)
-//        )
-
         return RecordedWorkoutData(
             recoveryTime = it.reportRecoveryTime,
             distance = it.reportDistance,
