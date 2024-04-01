@@ -22,10 +22,12 @@ class OWorkoutHRZoneAdapter : RecyclerView.Adapter<OWorkoutHRZoneAdapter.ViewHol
 
             binding.tvTitle.text = detailData.title
             binding.tvRange.text = detailData.range
-            binding.tvPercentage.text = detailData.percentage
+            binding.tvPercentage.text = "${detailData.percentage}%"
             binding.tvDuration.text = detailData.duration
-            binding.tvTitle.setTextColor(Color.parseColor(detailData.color))
-
+            val color = Color.parseColor(detailData.color)
+            binding.tvTitle.setTextColor(color)
+            binding.percentageBar.percentageColor = color
+            binding.percentageBar.percentage = detailData.percentage
         }
     }
 

@@ -280,5 +280,13 @@
         <attr name="titleWidth" />
     </declare-styleable>
 
+    <declare-styleable name="PercentageBar">
+        <attr name="lineColor" format="color" />
+        <attr name="percentageColor" format="color" />
+        <attr name="interval" format="dimension" />
+        <attr name="max" format="integer" />
+        <attr name="percentage" format="integer" />
+        <attr name="lineWidth" format="dimension" />
+    </declare-styleable>
 
 </resources>
