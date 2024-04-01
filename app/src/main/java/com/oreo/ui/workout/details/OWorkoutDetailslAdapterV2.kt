@@ -3,8 +3,8 @@ package com.oreo.ui.workout.details
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.luna.R
 import com.noisefit.luna.databinding.RowOwdItemBinding
+import com.noisefit.luna.databinding.RowOwdItemV2Binding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
@@ -13,16 +13,13 @@ import com.oreo.data.model.OWDActivityData
 class OWorkoutDetailslAdapterV2 : RecyclerView.Adapter<OWorkoutDetailslAdapterV2.ViewHolder>() {
     private var mDataSet = ArrayList<OWDActivityData>()
 
-    inner class ViewHolder(val binding: RowOwdItemBinding) :
+    inner class ViewHolder(val binding: RowOwdItemV2Binding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(detailData: OWDActivityData) {
 
             binding.tvTitle.text = detailData.title
             binding.tvValue.text = detailData.value
             binding.tvUnitValue.text = detailData.unit
-//            binding.
-//            binding.tvUnitValue.setTextColor(binding..R.color.white_48)
-
 
             //Change code if workout params added
             if (itemCount > 2) {
@@ -38,7 +35,6 @@ class OWorkoutDetailslAdapterV2 : RecyclerView.Adapter<OWorkoutDetailslAdapterV2
             }
 
             binding.dividerVertical.gone()
-
         }
     }
 
@@ -46,8 +42,7 @@ class OWorkoutDetailslAdapterV2 : RecyclerView.Adapter<OWorkoutDetailslAdapterV2
         parent: ViewGroup,
         viewType: Int
     ): OWorkoutDetailslAdapterV2.ViewHolder {
-        val binding =
-            RowOwdItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = RowOwdItemV2Binding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 

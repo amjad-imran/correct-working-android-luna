@@ -72,10 +72,10 @@ class OWorkoutDetailsFragmentV2 : BaseFragment<FragmentOWorkoutDetailsV2Binding>
 
         binding.lytArrow.ivArrow.setOnClickListener {
             if (binding.llExpand.visibility == View.VISIBLE) {
-                binding.lytArrow.ivArrowImage.setImageResource(com.noisefit_commans.R.drawable.ic_arrow_up)
+                binding.lytArrow.ivArrowImage.rotation = 0f
                 binding.llExpand.gone()
             } else {
-                binding.lytArrow.ivArrowImage.setImageResource(com.noisefit_commans.R.drawable.ic_arrow_up)
+                binding.lytArrow.ivArrowImage.rotation = 180f
                 binding.llExpand.visible()
             }
         }
@@ -87,7 +87,7 @@ class OWorkoutDetailsFragmentV2 : BaseFragment<FragmentOWorkoutDetailsV2Binding>
         binding.lytActivityItem.tvDistanceTitle.text = getString(R.string.total_distance)
         binding.lytActivityItem.tvDistanceUnit.text = getString(R.string.text_km)
 
-        binding.lytArrow.ivArrowImage.setImageResource(com.noisefit_commans.R.drawable.ic_arrow_up)
+        binding.lytArrow.ivArrowImage.setImageResource(R.drawable.ic_arrow_down)
 
 
     }
@@ -164,7 +164,7 @@ class OWorkoutDetailsFragmentV2 : BaseFragment<FragmentOWorkoutDetailsV2Binding>
                 OWDActivityHRZoneData(
                     title = "Zone1",
                     range = "<60%",
-                    percentage = "30%",
+                    percentage = 30,
                     duration = "00:30",
                     color = "#3485ff",
                 )
@@ -173,7 +173,7 @@ class OWorkoutDetailsFragmentV2 : BaseFragment<FragmentOWorkoutDetailsV2Binding>
                 OWDActivityHRZoneData(
                     title = "Zone2",
                     range = "60-70%",
-                    percentage = "20%",
+                    percentage = 20,
                     duration = "00:10",
                     color = "#34f3ff",
                 )
@@ -182,7 +182,7 @@ class OWorkoutDetailsFragmentV2 : BaseFragment<FragmentOWorkoutDetailsV2Binding>
                 OWDActivityHRZoneData(
                     title = "Zone3",
                     range = "60-70%",
-                    percentage = "20%",
+                    percentage = 10,
                     duration = "00:10",
                     color = "#34f3ff",
                 )
@@ -208,7 +208,7 @@ class OWorkoutDetailsFragmentV2 : BaseFragment<FragmentOWorkoutDetailsV2Binding>
             activityList.add(
                 OWDActivityData(
                     getString(R.string.text_cadence),
-                    it.calories.toString(),
+                    "10",
                     "spm",
                 )
             )

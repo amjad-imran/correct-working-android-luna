@@ -64,7 +64,6 @@
                     android:visibility="gone"
                     tools:visibility="visible" />
 
-
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:id="@+id/llExpand"
                     android:layout_width="match_parent"
@@ -88,11 +87,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
-<!--                    <include-->
-<!--                        android:id="@+id/lytHeartRate"-->
-<!--                        layout="@layout/layout_workout_detail_heart_rate"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content" />-->
+                    <include
+                        android:id="@+id/lytTrainingEffects"
+                        layout="@layout/layout_workout_detail_effect"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </androidx.appcompat.widget.LinearLayoutCompat>

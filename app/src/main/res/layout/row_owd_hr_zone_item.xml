@@ -67,15 +67,16 @@
             tools:text="30%"
             tools:textColor="#3485ff" />
 
-        <View
+        <com.oreo.ui.custom.PercentageBar
             android:id="@+id/percentageBar"
             android:layout_width="0dp"
             android:layout_height="20dp"
             android:layout_marginTop="12dp"
+            app:lineWidth="1.5dp"
+            app:lineColor="@color/graph_line"
             app:layout_constraintEnd_toEndOf="@id/tvDuration"
             app:layout_constraintStart_toStartOf="@id/tvTitle"
-            app:layout_constraintTop_toBottomOf="@id/tvTitle"
-            tools:background="#3485ff" />
+            app:layout_constraintTop_toBottomOf="@id/tvTitle" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
