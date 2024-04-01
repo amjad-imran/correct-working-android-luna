@@ -887,9 +887,8 @@ object ApplicationUtils {
             (duration ?: 0L).toInt()
         )
 
-        val secs = 0
-        // Output like "00:00:00"
-        return String.format("%02d:%02d:%02d", hour, minute, secs)
+        // Output like "00:00"
+        return String.format("%02d:%02d", hour, minute)
     }
 
     fun getActivityDurationFormat2Seconds(duration: Long?): String {

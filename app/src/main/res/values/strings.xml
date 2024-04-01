@@ -79,6 +79,7 @@
     <string name="text_freqency">Frequency</string>
     <string name="text_time">Time</string>
     <string name="distance">Distance</string>
+    <string name="total_distance">Total distance</string>
     <string name="steps">Steps</string>
     <string name="calories">Calories</string>
     <string name="text_done">Done</string>
@@ -757,6 +758,7 @@
 
     <string name="text_lowest_hr">Lowest HR</string>
     <string name="text_max_hr">Max HR</string>
+    <string name="text_min_hr">Min HR</string>
     <string name="text_readiness">Readiness</string>
     <string name="text_activity_o">Activity</string>
     <string name="text_goal_progress">Goal progress</string>
@@ -836,6 +838,7 @@
     <string name="text_avg">Avg</string>
     <string name="text_distance_split">Distance split</string>
     <string name="text_time_km">Time/km</string>
+    <string name="text_km">km</string>
     <string name="text_hr">hr</string>
     <string name="text_pace">Pace</string>
     <string name="text_set_your_target_calorie_goal">Set your target calorie goal</string>
@@ -1063,4 +1066,11 @@
     <string name="text_your_ring_is_evolving">Your ring is evolving</string>
     <string name="text_ring_successfully_updated">Ring successfully updated</string>
     <string name="text_okay">Okay</string>
+
+    <string name="text_workout_detail" tools:ignore="ExtraTranslation">Workout details</string>
+    <string name="text_cadence" tools:ignore="ExtraTranslation">Cadence</string>
+    <string name="text_recovery_time" tools:ignore="ExtraTranslation">Recovery Time</string>
+    <string name="text_training_effects" tools:ignore="ExtraTranslation">Training Effects</string>
+
+
 </resources>

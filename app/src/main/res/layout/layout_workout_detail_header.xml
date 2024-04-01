@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingDefaultResource">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@drawable/back_workout_detail_header"
+        android:paddingBottom="16dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivActivity"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/back_modal_new_round"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+
+        <ImageView
+            android:id="@+id/ivWorkoutImage"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            app:layout_constraintBottom_toBottomOf="@+id/ivActivity"
+            app:layout_constraintEnd_toEndOf="@+id/ivActivity"
+            app:layout_constraintStart_toStartOf="@+id/ivActivity"
+            app:layout_constraintTop_toTopOf="@+id/ivActivity"
+            tools:src="@drawable/ic_o_workout" />
+
+        <TextView
+            android:id="@+id/tvActivityName"
+            style="@style/H28"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="@dimen/dimen_16dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            app:layout_constraintBottom_toBottomOf="@id/ivActivity"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivActivity"
+            app:layout_constraintTop_toTopOf="@+id/ivActivity"
+            tools:text="Strength Training" />
+
+        <TextView
+            android:id="@+id/tvDurationTitle"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toStartOf="@id/ivActivity"
+            app:layout_constraintTop_toBottomOf="@id/ivActivity"
+            tools:text="Duration" />
+
+        <TextView
+            android:id="@+id/tvDurationValue"
+            style="@style/H28"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@id/tvDurationTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvDurationTitle"
+            tools:text="01:03" />
+
+        <TextView
+            android:id="@+id/tvDurationUnit"
+            style="@style/H5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="2dp"
+            android:visibility="gone"
+            android:textColor="@color/white_48"
+            app:layout_constraintBottom_toBottomOf="@id/tvDurationValue"
+            app:layout_constraintStart_toEndOf="@id/tvDurationValue"
+            tools:text=":19" />
+
+        <View
+            android:id="@+id/divider1"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:background="@color/graph_line"
+            app:layout_constraintBottom_toBottomOf="@id/tvDurationValue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvDurationTitle" />
+
+
+        <TextView
+            android:id="@+id/tvDistanceTitle"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textColor="@color/white_64"
+            app:layout_constraintStart_toEndOf="@id/divider1"
+            app:layout_constraintTop_toTopOf="@id/tvDurationTitle"
+            tools:text="Total distance" />
+
+        <TextView
+            android:id="@+id/tvDistanceValue"
+            style="@style/H28"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@id/tvDistanceTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvDistanceTitle"
+            tools:text="8.9" />
+
+        <TextView
+            android:id="@+id/tvDistanceUnit"
+            style="@style/H5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="2dp"
+            android:textColor="@color/white_48"
+            app:layout_constraintBottom_toBottomOf="@id/tvDistanceValue"
+            app:layout_constraintStart_toEndOf="@id/tvDistanceValue"
+            tools:text="km" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

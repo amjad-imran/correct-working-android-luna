@@ -14,11 +14,12 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.OActivityListModal
-import com.oreo.ui.workout.details.DELETE_WORKOUT_REQUEST_KEY
 import dagger.hilt.android.AndroidEntryPoint
 
+const val DELETE_WORKOUT_REQUEST_KEY = "DELETE_WORKOUT_REQUEST_KEY"
 
 @AndroidEntryPoint
 class OActivityListFragment :
@@ -57,20 +58,20 @@ class OActivityListFragment :
                 context.showShortToast("Please connect your ring to add a workout")
             }
         }
-       /* binding.lytEmptyView.btnAddWorkout.setOnClickListener {
-            if (viewModel.isDeviceConnected()) {
-                navigate(R.id.addWorkoutFragment)
-            } else {
-                context.showShortToast("Please connect your ring to add a workout")
-            }
-        }
-        binding.lytEmptyView.view1.setOnClickListener {
-            if (viewModel.isDeviceConnected()) {
-                navigate(R.id.addWorkoutFragment)
-            } else {
-                context.showShortToast("Please connect your ring to add a workout")
-            }
-        }*/
+        /* binding.lytEmptyView.btnAddWorkout.setOnClickListener {
+             if (viewModel.isDeviceConnected()) {
+                 navigate(R.id.addWorkoutFragment)
+             } else {
+                 context.showShortToast("Please connect your ring to add a workout")
+             }
+         }
+         binding.lytEmptyView.view1.setOnClickListener {
+             if (viewModel.isDeviceConnected()) {
+                 navigate(R.id.addWorkoutFragment)
+             } else {
+                 context.showShortToast("Please connect your ring to add a workout")
+             }
+         }*/
 
         setFragmentResultListener(DELETE_WORKOUT_REQUEST_KEY) { _, bundle ->
             val allow = bundle.getBoolean("allow")
@@ -194,11 +195,25 @@ class OActivityListFragment :
 
 
     override fun onActivitySelected(activity: OActivityListModal, position: Int) {
-        navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
-            putString("workoutId", activity.id)
-            putInt("position", position)
-            putString("workoutName", activity.getFormattedActivityName())
-        })
+        LOGS.d("onActivitySelected activity=$activity")
+
+        when {
+            activity.type.equals("userworkout", true) -> {
+                navigate(R.id.oWorkoutDetailsFragmentV2, Bundle().apply {
+                    putString("workoutId", activity.id)
+                    putInt("position", position)
+                    putString("workoutName", activity.getFormattedActivityName())
+                })
+            }
+
+            else -> {
+                navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
+                    putString("workoutId", activity.id)
+                    putInt("position", position)
+                    putString("workoutName", activity.getFormattedActivityName())
+                })
+            }
+        }
     }
 
 
