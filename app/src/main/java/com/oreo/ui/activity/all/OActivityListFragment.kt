@@ -197,6 +197,13 @@ class OActivityListFragment :
     override fun onActivitySelected(activity: OActivityListModal, position: Int) {
         LOGS.d("onActivitySelected activity=$activity")
 
+        navigate(R.id.oWorkoutDetailsFragmentV2, Bundle().apply {
+            putString("workoutId", activity.id)
+            putInt("position", position)
+        })
+
+        return
+        /*
         when {
             activity.type.equals("userworkout", true) -> {
                 navigate(R.id.oWorkoutDetailsFragmentV2, Bundle().apply {
@@ -213,7 +220,7 @@ class OActivityListFragment :
                     putString("workoutName", activity.getFormattedActivityName())
                 })
             }
-        }
+        }*/
     }
 
 

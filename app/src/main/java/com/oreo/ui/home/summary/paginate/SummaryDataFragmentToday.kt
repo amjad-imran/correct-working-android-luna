@@ -960,8 +960,7 @@ class SummaryDataFragmentToday :
         )
         val adapter1 = OreoRWorkoutAdapter(object : OreoRWorkoutAdapter.OnItemClickListener {
             override fun onItemClick(data: OActivityListModal, position: Int) {
-                navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
-                    putString("workoutName", data.getFormattedActivityName())
+                navigate(R.id.oWorkoutDetailsFragmentV2, Bundle().apply {
                     putString("workoutId", data.id ?: "")
                     putInt("position", position)
                 })

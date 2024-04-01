@@ -32,10 +32,11 @@ import java.text.SimpleDateFormat
 
 
 @AndroidEntryPoint
-class OWorkoutDetailsFragmentV2 : BaseFragment<FragmentOWorkoutDetailsV2Binding>(FragmentOWorkoutDetailsV2Binding::inflate) {
+class OWorkoutDetailsFragmentV2 :
+    BaseFragment<FragmentOWorkoutDetailsV2Binding>(FragmentOWorkoutDetailsV2Binding::inflate) {
 
     private val mViewModel: OWorkoutDetailsViewModelV2 by viewModels()
-    private val args: OWorkoutDetailsFragmentArgs by navArgs()
+    private val args: OWorkoutDetailsFragmentV2Args by navArgs()
     private val mainViewModel: OreoMainViewModel by activityViewModels()
 
     private val mAdapter: OWorkoutDetailslAdapterV2 by lazy {
@@ -51,7 +52,6 @@ class OWorkoutDetailsFragmentV2 : BaseFragment<FragmentOWorkoutDetailsV2Binding>
         setRecycler()
         mViewModel.getWorkoutDetails(args.workoutId)
         mViewModel.position = args.position
-        LOGS.d("OWorkoutDetailsFragmentV2 workoutName=${args.workoutName}")
 
     }
 
@@ -82,7 +82,6 @@ class OWorkoutDetailsFragmentV2 : BaseFragment<FragmentOWorkoutDetailsV2Binding>
     }
 
     private fun setDefaultUiValue() {
-        binding.lytToolbar.tvTitle.text = args.workoutName
         binding.lytActivityItem.tvDurationTitle.text = getString(R.string.text_duration)
         binding.lytActivityItem.tvDistanceTitle.text = getString(R.string.total_distance)
         binding.lytActivityItem.tvDistanceUnit.text = getString(R.string.text_km)
@@ -111,7 +110,8 @@ class OWorkoutDetailsFragmentV2 : BaseFragment<FragmentOWorkoutDetailsV2Binding>
                 mainViewModel.reloadTodaysData()
 
                 setFragmentResult(
-                    DELETE_WORKOUT_REQUEST_KEY, bundleOf("allow" to true, "position" to mViewModel.position)
+                    DELETE_WORKOUT_REQUEST_KEY,
+                    bundleOf("allow" to true, "position" to mViewModel.position)
 
                 )
                 navigateUpSafe()
@@ -139,8 +139,9 @@ class OWorkoutDetailsFragmentV2 : BaseFragment<FragmentOWorkoutDetailsV2Binding>
         binding.rvActivityDetails.visible()
         binding.lytActivityItem.root.visible()
         binding.lytToolbar.tvTitle.text = DateFormats.formatActivityDate(it.date)
-        binding.lytActivityItem.tvActivityName.text = args.workoutName
-        binding.lytActivityItem.tvDurationValue.text = ApplicationUtils.getActivityDurationFormat2(it.duration)
+        binding.lytActivityItem.tvActivityName.text = it.getFormattedActivityName()
+        binding.lytActivityItem.tvDurationValue.text =
+            ApplicationUtils.getActivityDurationFormat2(it.duration)
         binding.lytActivityItem.tvDistanceValue.text = "8.9"//TODO replace
 
 
@@ -157,7 +158,8 @@ class OWorkoutDetailsFragmentV2 : BaseFragment<FragmentOWorkoutDetailsV2Binding>
 
         binding.lytHeartRate.tvAverageValue.text = it.hrAvg.toString()
         val maxHr = it.hrArray?.maxOrNull()
-        binding.lytHeartRate.tvMaxHR.text = "${getString(R.string.text_max_hr)} ${maxHr} ${getString(R.string.text_bpm_small)}"
+        binding.lytHeartRate.tvMaxHR.text =
+            "${getString(R.string.text_max_hr)} ${maxHr} ${getString(R.string.text_bpm_small)}"
 
         hrZoneAdapter.setDataSet(arrayListOf<OWDActivityHRZoneData>().apply {
             add(

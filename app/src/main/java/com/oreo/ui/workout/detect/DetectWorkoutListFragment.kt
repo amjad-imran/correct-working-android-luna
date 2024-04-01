@@ -136,8 +136,7 @@ class DetectWorkoutListFragment :
     }
 
     private fun navigateToDetailsWorkout(activityName: String, workoutId: String) {
-        navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
-            putString("workoutName", activityName)
+        navigate(R.id.oWorkoutDetailsFragmentV2, Bundle().apply {
             putString("workoutId", workoutId)
             putInt("position", -1)
         })

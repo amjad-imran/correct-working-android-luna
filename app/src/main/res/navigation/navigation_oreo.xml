@@ -330,9 +330,6 @@
         android:id="@+id/oWorkoutDetailsFragmentV2"
         android:name="com.oreo.ui.workout.details.OWorkoutDetailsFragmentV2"
         android:label="OWorkoutDetailsFragmentV2">
-        <argument
-            android:name="workoutName"
-            app:argType="string" />
 
         <argument
             android:name="workoutId"
