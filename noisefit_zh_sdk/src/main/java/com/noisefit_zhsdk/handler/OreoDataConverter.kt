@@ -923,13 +923,13 @@ constructor(
                 ).toInt()
 
                 if (it.asleepNapTime.toLong() * 1000 >= timestamp) {
-                    if (startHour in 10..19) {
+                   /* if (startHour in 10..19) {*/
                         returnNaps.add(nap)
-                    } else {
+                    /*} else {
                         AppLogs.sendAppLogs("Nap ignored $it")
-                    }
+                    }*/
                 } else {
-                    AppLogs.sendAppLogs("Nap ignored old $it ")
+                    AppLogs.sendAppLogs("Nap ignored old date $it ")
                 }
             } catch (exp: Exception) {
                 returnNaps.add(nap)

@@ -7,6 +7,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.RowNapDashBinding
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.health.Nap
@@ -22,14 +23,14 @@ class DashNapAdapter(
     inner class ViewHolder(val binding: RowNapDashBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(nap: Nap) {
 
-            if (nap.isDayNap) {
+           /* if (nap.isDayNap) {
                 binding.rootContainer.setBackgroundResource(R.drawable.ic_nap_nudge_back)//todo change - pending from design
             } else {
                 binding.rootContainer.setBackgroundResource(R.drawable.ic_nap_nudge_back)//todo change - pending from design
-            }
+            }*/
 
             if (nap.isNextDayNap) {
-                binding.ivMoveNext.visible()
+                binding.ivMoveNext.gone()
                 binding.tvLabel.apply {
                     text = this.context.getString(R.string.text_late_naps_effect)
                     visible()
@@ -128,7 +129,7 @@ class DashNapAdapter(
 
 
             if (bindingAdapterPosition == (napList.size - 1)) {
-                binding.divider.root.gone()
+                binding.divider.root.invisible()
             } else {
                 binding.divider.root.visible()
             }
