@@ -3,14 +3,20 @@ package com.oreo.ui.workout.details
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.noisefit.NoiseFitApplicationMain
+import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.luna.R
+import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.ceilRound
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.models.Units
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
+import com.oreo.data.model.OWDActivityData
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,10 +29,12 @@ import kotlin.math.ceil
 
 @HiltViewModel
 class OWorkoutDetailsViewModelV2 @Inject constructor(
+    val dataUnitConverter: DataUnitConverter,
     val userActivityRepository: OreoUserActivityRepository,
     private val userHealthDataDataSource: OreoUserHealthDataDataSource
 ) : BaseViewModel() {
 
+    var workoutDetailsExpanded = false
     var position: Int = -1
     private val _workoutDeletedResponse = MutableLiveData<Event<Boolean>>()
     val workoutDeletedResponse: LiveData<Event<Boolean>> = _workoutDeletedResponse
@@ -122,6 +130,98 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             }
         }
 
+    }
+
+    fun prepareDataForActivity(it: OWorkoutDetailsResponseModel): ArrayList<OWDActivityData> {
+        val activityList = ArrayList<OWDActivityData>()
+        val context = NoiseFitApplicationMain.context!!
+        if (it.calories != null && it.calories > 0) {
+            activityList.add(
+                OWDActivityData(
+                    context.getString(R.string.text_total_calories),
+                    it.calories.toString(),
+                    "kcal",
+                )
+            )
+        }
+
+
+        if (it.cadence != null && it.cadence > 0) {
+            activityList.add(
+                OWDActivityData(
+                    context.getString(R.string.text_cadence),
+                    it.cadence.toString(),
+                    "spm",
+                )
+            )
+        }
+
+        if (it.hrMax != null && it.hrMax > 0) {
+            activityList.add(
+                OWDActivityData(
+                    context.getString(R.string.text_max_hr),
+                    it.hrMax.toString(),
+                    "bpm",
+                )
+            )
+        }
+
+        if (it.hrLow != null && it.hrLow > 0) {
+            activityList.add(
+                OWDActivityData(
+                    context.getString(R.string.text_min_hr),
+                    it.hrLow.toString(),
+                    "bpm",
+                )
+            )
+        }
+
+
+        if (it.steps != null && it.steps > 0) {
+            activityList.add(
+                OWDActivityData(
+                    "Steps",
+                    it.steps.toString(),
+                    "",
+                )
+            )
+        }
+
+        if (it.recoveryTime != null && it.recoveryTime > 0) {
+            activityList.add(
+                OWDActivityData(
+                    context.getString(R.string.text_recovery_time),
+                    it.recoveryTime.toString(),
+                    "",
+                )
+            )
+        }
+
+        activityList.add(
+            OWDActivityData(
+                context.getString(R.string.text_recovery_time),
+                ApplicationUtils.getActivityDurationFormat2(it.duration),
+                "",
+            )
+        )
+
+        return activityList
+    }
+
+    fun getDistance(data: OWorkoutDetailsResponseModel): Pair<String, String> {
+        if (data.distance != null && data.distance > 0L) {
+
+            val distance = dataUnitConverter.formatDistance(
+                data.distance.toInt(),
+                Units.METRIC
+            )
+            return Pair(distance, "km")
+
+        } else if (data.calories != null && data.calories > 0L) {
+            return Pair(data.calories.toString(), "Kcal")
+        }
+
+        return Pair("", "")
     }
 
     fun getDummyBreakUpDataForTimeDisplay(): ArrayList<Int> {

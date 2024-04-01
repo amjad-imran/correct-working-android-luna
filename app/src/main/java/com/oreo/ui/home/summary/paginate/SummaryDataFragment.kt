@@ -68,8 +68,11 @@ class SummaryDataFragment :
         viewModel.user = mainViewModel.user
         LOGS.d("CREATED_WITH_DATE $date")
         loadData()
-
-
+        navigate(R.id.oWorkoutDetailsFragmentV2, Bundle().apply {
+            putString("workoutId", "edf92cf5-6964-48a7-b197-539540cd09d3")
+            putInt("position", -1)
+            putString("workoutName", "Cricket")
+        })
     }
 
     override fun onResume() {
