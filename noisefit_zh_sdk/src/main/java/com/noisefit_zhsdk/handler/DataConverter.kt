@@ -3,8 +3,6 @@ package com.noisefit_zhsdk.handler
 import android.content.Context
 import android.location.Geocoder
 import com.google.gson.Gson
-import com.noisefit_commans.common.handleCaloriesData
-import com.noisefit_commans.common.handleHrData
 import com.noisefit_commans.constants.CommonGlobals
 import com.noisefit_commans.constants.SportActivityName
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
@@ -26,13 +24,10 @@ import com.noisefit_commans.models.SedentaryData
 import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.models.SleepReminder
 import com.noisefit_commans.models.SleepType
-import com.noisefit_commans.models.SportsModeListGPS
-import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.models.StepsData
 import com.noisefit_commans.models.StressDataBreakup
 import com.noisefit_commans.models.Widget
 import com.noisefit_commans.models.WorldClockList
-import com.noisefit_commans.ui.checkDayDifferenceMoreOne
 import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
@@ -58,8 +53,6 @@ import com.zhapp.ble.bean.SleepBean
 import com.zhapp.ble.bean.WidgetBean
 import com.zhapp.ble.bean.WorldClockBean
 import java.math.BigDecimal
-import java.text.DecimalFormat
-import java.util.Calendar
 import javax.inject.Inject
 
 class DataConverter
@@ -867,98 +860,107 @@ constructor(
     }
 
 
-    fun parseSportsDataGPS(
-        p1: DevSportInfoBean,
-        colorFitDevice: ColorFitDevice
-    ): SportsModeListGPS {
-        val sportsModeList = SportsModeListGPS(responseType = "final")
-        val activities = ArrayList<SportsModeResponse>()
-//        LOGS.d("GPS_DATA", "getGPSData onfail" + Gson().toJson(p1))
-//        LOGS.d("GPS_DATA", "getGPSData onfail" + Gson().toJson(p1.map_data))
-//        LOGS.d("GPS_DATA", "getGPSData onfail" + Gson().toJson(p1.recordPointSportData))
-        p1.let {
-            val calorieData: ArrayList<Int> = ArrayList()
-            val hrData: ArrayList<Int> = ArrayList()
-
-            if (it.recordPointSportData != null && it.recordPointSportData.isNotEmpty()) {
-                it.recordPointSportData.forEach { recordPointSportData ->
-                    calorieData.add(recordPointSportData.cal)
-                    if (recordPointSportData.heart != 0) {
-                        hrData.add(recordPointSportData.heart)
-                    }
-                }
-            }
-
-            val startCalendar = Calendar.getInstance()
-            val calendar = Calendar.getInstance(DateFormats.defaultLocale);
-            val offset =
-                -(calendar.get(Calendar.ZONE_OFFSET) + calendar.get(Calendar.DST_OFFSET)) / (60 * 1000)
-            startCalendar.timeInMillis = (p1.reportSportStartTime + offset)
-            val endCalendar = Calendar.getInstance()
-            endCalendar.timeInMillis = (p1.reportSportEndTime)
-            val duration = p1.reportDuration.toInt()
-            val sportsModeResponse = SportsModeResponse(
-                type = getSportName(p1.recordPointSportType, colorFitDevice),
-                calories = p1.reportCal,
-                heartRateAvg = p1.reportAvgHeart,
-                endTime = DateFormats.timeFormat.format(endCalendar.time),
-                date = DateFormats.dateFormat.format(startCalendar.time),
-                time = DateFormats.formatDateTime(
-                    startCalendar.time,
-                    DateFormats.dateTimeFormatISO
-                ),
-                duration = duration.toLong(),
-                heartRateData = hrData.handleHrData(duration),
-                calorieData = calorieData.handleCaloriesData(duration)
-            )
-
-            //   val timeData = p1.recordGpsTime.split(",")
-
-//            val gpsDataLinkedList = getGpsMapsData(p1.map_data)
-            val gpsParseData = parseGpsMapsData(p1.map_data, p1.recordGpsTime)
-
-
-//            LOGS.d("gpsParseData ${Gson().toJson(gpsParseData)}")
-            //  watchDataStore.getWeatherDataModel(startCalendar.timeInMillis, endCalendar.timeInMillis)
-            if (gpsParseData.isEmpty()) {
-                sportsModeResponse.gpsCoordinate = null
-            } else {
-                sportsModeResponse.gpsCoordinate = listToJson(gpsParseData)
-            }
-
-
-
-
-            sportsModeResponse.hrZoneInSeconds = 1
-            sportsModeResponse.aerobic = (p1.reportHeartAerobic).toInt()
-            sportsModeResponse.anaerobic = (p1.reportHeartAnaerobic).toInt()
-            sportsModeResponse.fatBurn = (p1.reportHeartFatBurning).toInt()
-            sportsModeResponse.warmUp = (p1.reportHeartWarmUp).toInt()
-
-            if (p1.reportTotalStep.toInt() != 0) {
-                sportsModeResponse.cadence = p1.reportMaxStepSpeed
-                sportsModeResponse.steps = p1.reportTotalStep.toInt()
-            }
-
-            sportsModeResponse.distance = p1.reportDistance
-
-            if (p1.reportDistance.toInt() != 0 && duration != 0) {
-                val df = DecimalFormat("#.#")
-                val speed = p1.reportFastSpeed
-                sportsModeResponse.speed = df.format(speed)?.toFloat()
-            } else {
-                sportsModeResponse.speed = 0F
-                sportsModeResponse.cadence = 0
-            }
-
-
-            activities.add(sportsModeResponse)
-        }
-
-//        LOGS.d("GPS_DATA", "getGPSData onfail" + Gson().toJson(activities))
-        sportsModeList.activities = activities
-        return sportsModeList
-    }
+//    fun parseSportsDataGPS(
+//        p1: DevSportInfoBean,
+//        colorFitDevice: ColorFitDevice
+//    ): SportsModeListGPS {
+//        val sportsModeList = SportsModeListGPS(responseType = "final")
+//        val activities = ArrayList<SportsModeResponse>()
+////        LOGS.d("GPS_DATA", "getGPSData onfail" + Gson().toJson(p1))
+////        LOGS.d("GPS_DATA", "getGPSData onfail" + Gson().toJson(p1.map_data))
+////        LOGS.d("GPS_DATA", "getGPSData onfail" + Gson().toJson(p1.recordPointSportData))
+//        p1.let {
+//            val calorieData: ArrayList<Int> = ArrayList()
+//            val hrData: ArrayList<Int> = ArrayList()
+//
+//            if (it.recordPointSportData != null && it.recordPointSportData.isNotEmpty()) {
+//                it.recordPointSportData.forEach { recordPointSportData ->
+//                    calorieData.add(recordPointSportData.cal)
+//                    if (recordPointSportData.heart != 0) {
+//                        hrData.add(recordPointSportData.heart)
+//                    }
+//                }
+//            }
+//
+//            val startCalendar = Calendar.getInstance()
+//            val calendar = Calendar.getInstance(DateFormats.defaultLocale);
+//            val offset =
+//                -(calendar.get(Calendar.ZONE_OFFSET) + calendar.get(Calendar.DST_OFFSET)) / (60 * 1000)
+//            startCalendar.timeInMillis = (p1.reportSportStartTime + offset)
+//            val endCalendar = Calendar.getInstance()
+//            endCalendar.timeInMillis = (p1.reportSportEndTime)
+//            val duration = p1.reportDuration.toInt()
+//            var cadence = 0
+//            if(it.reportTotalStep != 0L){
+//                cadence = ((it.reportTotalStep / duration) * 60).toInt()
+//            }
+//
+//
+//            val sportsModeResponse = SportsModeResponse(
+//                type = getSportName(p1.recordPointSportType, colorFitDevice),
+//                calories = p1.reportCal,
+//                avgStepStride = p1.reportRecoveryTime.toInt(),
+//                distance = p1.reportDistance,
+//                heartRateAvg = p1.reportAvgHeart,
+//                endTime = DateFormats.timeFormat.format(endCalendar.time),
+//                date = DateFormats.dateFormat.format(startCalendar.time),
+//                time = DateFormats.formatDateTime(
+//                    startCalendar.time,
+//                    DateFormats.dateTimeFormatISO
+//                ),
+//                cadence = cadence,
+//                duration = duration.toLong(),
+//                heartRateData = hrData.handleHrData(duration),
+//                calorieData = calorieData.handleCaloriesData(duration)
+//            )
+//
+//            //   val timeData = p1.recordGpsTime.split(",")
+//
+////            val gpsDataLinkedList = getGpsMapsData(p1.map_data)
+//            val gpsParseData = parseGpsMapsData(p1.map_data, p1.recordGpsTime)
+//
+//
+////            LOGS.d("gpsParseData ${Gson().toJson(gpsParseData)}")
+//            //  watchDataStore.getWeatherDataModel(startCalendar.timeInMillis, endCalendar.timeInMillis)
+//            if (gpsParseData.isEmpty()) {
+//                sportsModeResponse.gpsCoordinate = null
+//            } else {
+//                sportsModeResponse.gpsCoordinate = listToJson(gpsParseData)
+//            }
+//
+//
+//
+//
+//            sportsModeResponse.hrZoneInSeconds = 1
+//            sportsModeResponse.aerobic = (p1.reportHeartAerobic).toInt()
+//            sportsModeResponse.anaerobic = (p1.reportHeartAnaerobic).toInt()
+//            sportsModeResponse.fatBurn = (p1.reportHeartFatBurning).toInt()
+//            sportsModeResponse.warmUp = (p1.reportHeartWarmUp).toInt()
+//
+//            if (p1.reportTotalStep.toInt() != 0) {
+//                sportsModeResponse.cadence = p1.reportMaxStepSpeed
+//                sportsModeResponse.steps = p1.reportTotalStep.toInt()
+//            }
+//
+//            sportsModeResponse.distance = p1.reportDistance
+//
+//            if (p1.reportDistance.toInt() != 0 && duration != 0) {
+//                val df = DecimalFormat("#.#")
+//                val speed = p1.reportFastSpeed
+//                sportsModeResponse.speed = df.format(speed)?.toFloat()
+//            } else {
+//                sportsModeResponse.speed = 0F
+//                sportsModeResponse.cadence = 0
+//            }
+//
+//
+//            activities.add(sportsModeResponse)
+//        }
+//
+////        LOGS.d("GPS_DATA", "getGPSData onfail" + Gson().toJson(activities))
+//        sportsModeList.activities = activities
+//        return sportsModeList
+//    }
 
 
     private fun parseGpsMapsData(
@@ -1121,7 +1123,34 @@ constructor(
         )
 
 
+        var cadence = 0L
+        if (it.reportTotalStep != 0L) {
+            cadence = ((it.reportTotalStep / duration) * 60)
+        }
+
+
+//        val sportsModeResponse = SportsModeResponse(
+//            type = getSportName(p1.recordPointSportType, colorFitDevice),
+//            calories = p1.reportCal,
+//            avgStepStride = p1.reportRecoveryTime.toInt(),
+//            distance = p1.reportDistance,
+//            heartRateAvg = p1.reportAvgHeart,
+//            endTime = DateFormats.timeFormat.format(endCalendar.time),
+//            date = DateFormats.dateFormat.format(startCalendar.time),
+//            time = DateFormats.formatDateTime(
+//                startCalendar.time,
+//                DateFormats.dateTimeFormatISO
+//            ),
+//            cadence = cadence,
+//            duration = duration.toLong(),
+//            heartRateData = hrData.handleHrData(duration),
+//            calorieData = calorieData.handleCaloriesData(duration)
+//        )
+
         return RecordedWorkoutData(
+            recoveryTime = it.reportRecoveryTime,
+            distance = it.reportDistance,
+            cadence = cadence,
             isSynced = false,
             isAccepted = false,
             duration = duration,

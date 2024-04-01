@@ -80,6 +80,9 @@ data class RecordedWorkoutData(
     @ColumnInfo(name = "steps") @SerializedName("steps") var steps: Int? = null,
     @ColumnInfo(name = "type") @SerializedName("type") var type: Int? = null,
     @ColumnInfo(name = "hr") @SerializedName("hr") var hrData: String? = null,
+    @ColumnInfo(name = "cadence") @SerializedName("cadence") var cadence: Long? = null,
+    @ColumnInfo(name = "distance") @SerializedName("distance") var distance: Long? = null,
+    @ColumnInfo(name = "recovery_time") @SerializedName("recovery_time") var recoveryTime: Long? = null,
     @ColumnInfo(name = "intensity_list") @SerializedName("intensity_list") var intensityList: String? = null,
     @SerializedName("date") var date: String? = null
 ) : ColorfitData(), Parcelable

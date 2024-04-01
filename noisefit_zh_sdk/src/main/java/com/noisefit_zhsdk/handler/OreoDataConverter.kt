@@ -72,29 +72,29 @@ constructor(
     var watchDataStore: WatchDataStore,
     private val geoCoder: Geocoder
 ) {
-    fun formatAlarmData(list: List<ClockInfoBean>): AlarmsList {
-        val alarmsList = ArrayList<AlarmsList.Alarm>()
-        list.forEach { alarmItem ->
-            alarmsList.add(
-                AlarmsList.Alarm(
-                    hour = alarmItem.data.time.hour,
-                    minute = alarmItem.data.time.minuter,
-                    status = alarmItem.data.isEnable,
-                    repeatDays = arrayListOf(
-                        alarmItem.data.isEnable,
-                        alarmItem.data.isMonday,
-                        alarmItem.data.isTuesday, alarmItem.data.isWednesday,
-                        alarmItem.data.isThursday, alarmItem.data.isFriday,
-                        alarmItem.data.isSaturday, alarmItem.data.isSunday
-                    ),
-                    id = alarmItem.id
-                )
-            )
-        }
-
-
-        return AlarmsList(alarms = alarmsList)
-    }
+//    fun formatAlarmData(list: List<ClockInfoBean>): AlarmsList {
+//        val alarmsList = ArrayList<AlarmsList.Alarm>()
+//        list.forEach { alarmItem ->
+//            alarmsList.add(
+//                AlarmsList.Alarm(
+//                    hour = alarmItem.data.time.hour,
+//                    minute = alarmItem.data.time.minuter,
+//                    status = alarmItem.data.isEnable,
+//                    repeatDays = arrayListOf(
+//                        alarmItem.data.isEnable,
+//                        alarmItem.data.isMonday,
+//                        alarmItem.data.isTuesday, alarmItem.data.isWednesday,
+//                        alarmItem.data.isThursday, alarmItem.data.isFriday,
+//                        alarmItem.data.isSaturday, alarmItem.data.isSunday
+//                    ),
+//                    id = alarmItem.id
+//                )
+//            )
+//        }
+//
+//
+//        return AlarmsList(alarms = alarmsList)
+//    }
 
     private fun getFunctionName(functionId: Int): String {
         return when (functionId) {
