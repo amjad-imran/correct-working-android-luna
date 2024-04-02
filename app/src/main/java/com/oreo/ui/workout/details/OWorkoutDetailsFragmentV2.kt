@@ -1,6 +1,7 @@
 package com.oreo.ui.workout.details
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
@@ -15,11 +16,20 @@ import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.VibrationUtils
+import com.oreo.data.model.ChartModel
+import com.oreo.data.model.GraphDummyModel
 import com.oreo.data.model.OWDActivityHRZoneData
 import com.oreo.data.model.OWorkoutDetailsResponseModel
+import com.oreo.data.model.SleepChartModel
 import com.oreo.data.model.WorkoutTypes
 import com.oreo.ui.activity.all.DELETE_WORKOUT_REQUEST_KEY
+import com.oreo.ui.custom.LineChartType
+import com.oreo.ui.custom.OnHeartRateChartClickAction
+import com.oreo.ui.custom.OnLinearChartClickAction
+import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -29,6 +39,9 @@ class OWorkoutDetailsFragmentV2 :
     private val viewModel: OWorkoutDetailsViewModelV2 by viewModels()
     private val args: OWorkoutDetailsFragmentV2Args by navArgs()
     private val mainViewModel: OreoMainViewModel by activityViewModels()
+
+    @Inject
+    lateinit var vibrationUtils: VibrationUtils
 
     private val workoutDetailsAdapter: OWorkoutDetailslAdapterV2 by lazy {
         OWorkoutDetailslAdapterV2()
@@ -206,8 +219,72 @@ class OWorkoutDetailsFragmentV2 :
                     "${getString(R.string.text_max_hr)} $maxHr ${getString(R.string.text_bpm_small)}"
 
                 hrZoneAdapter.setDataSet(
-                    viewModel.generateHrZones())
+                    viewModel.generateHrZones()
+                )
+            } else {
+                return
             }
+        } else {
+            return
+        }
+
+
+        val sleepChart = SleepChartModel()
+        val chartList = ArrayList<ChartModel>()
+        it.hrArray.forEachIndexed { index, data ->
+            val chartModel = ChartModel()
+
+            var value = data
+            if (value == 255) {
+                value = 0
+            }
+
+            chartModel.value = value
+            chartModel.index = ""
+            chartList.add(chartModel)
+        }
+
+
+        sleepChart.list = chartList
+
+        binding.lytHeartRate.heartRateChart.apply {
+            setVibrationUtil(vibrationUtils)
+            updateGraphColor(
+                Color.parseColor("#ff7f96"),
+                Color.parseColor("#844B60"),
+                Color.parseColor("#99ff718b"),
+                Color.parseColor("#0Dff718b")
+            )
+            val lowValueIndex = updateDataWithMax(
+                sleepChart, 5, false, false,
+                GraphDummyModel(
+                    false, 40, 100
+                ),
+                it.hrAvg,
+                "${it.date} ${it.startTime}",
+                "${it.date} ${it.endTime}"
+            )
+
+            setInteractiveMode(true)
+
+            setClickListener(object : OnHeartRateChartClickAction {
+                override fun onValueSelected(value: Int, isInteracting: Boolean, time: String?) {
+                    if (isInteracting) {
+                       /* binding.lytHeartRate.tvSubtitle1.text = time ?: ""
+                        binding.lytHeartRate.lytSubtitleValue1.tvValue.text =
+                            if (value > 0) "$value" else "-"*/
+
+                    } else {
+                        //setHrLowestHr()
+                    }
+                }
+
+                override fun onTopClicked() {
+
+                }
+
+            })
+
         }
 
 

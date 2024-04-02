@@ -90,7 +90,6 @@ class HeartRateChartView : View {
     private var sleepModel: SleepChartModel? = null
     private var startTime: String? = null
     private var endTime: String? = null
-    private var chartType = HeartRateChartType.HEART_RATE
     private var mHasDummyData = true
     private val list: MutableList<ChartModel?> = ArrayList()
     private var showXAxis = true
@@ -332,22 +331,13 @@ class HeartRateChartView : View {
         dummy: GraphDummyModel,
         averageValue: Int?,
         startTime: String?,
-        endTime: String?,
-        chartType: HeartRateChartType
+        endTime: String?
     ): Int {
-        this.chartType = chartType
 
-        when (chartType) {
-            HeartRateChartType.HEART_RATE -> {
-                dotBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_hr_dot)
-                dotBitmap2 = BitmapFactory.decodeResource(resources, R.drawable.ic_hr_lowest_dot)
-            }
+        dotBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_hr_dot)
+        dotBitmap2 = BitmapFactory.decodeResource(resources, R.drawable.ic_hr_lowest_dot)
 
-            HeartRateChartType.HRV -> {
-                dotBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_hrv_dot)
-                dotBitmap2 = BitmapFactory.decodeResource(resources, R.drawable.ic_hr_lowest_dot)
-            }
-        }
+
 
 
         this.startTime = startTime
@@ -688,40 +678,25 @@ class HeartRateChartView : View {
         val y =
             mHeight - bottomWith - (value.second - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
 
-        when (chartType) {
-            HeartRateChartType.HEART_RATE -> {
-                if (value.second != 0) {
+        if (value.second != 0) {
 
-                    val bitmap =
-                        if (lastMinValueIndex == value.first || (lastMinValueIndex - 1) == value.first
-                            || (lastMinValueIndex + 1) == value.first
-                        ) {
-                            dotBitmap2
-                        } else {
-                            dotBitmap
-                        }
-
-                    canvas.drawBitmap(
-                        bitmap,
-                        calculatedTouchX - dotBitmap.width / 2,
-                        y - dotBitmap.height / 2,
-                        null
-                    )
-                }
-            }
-
-            HeartRateChartType.HRV -> {
-                if (value.second != 0) {
-                    canvas.drawBitmap(
-                        dotBitmap,
-                        calculatedTouchX - dotBitmap.width / 2,
-                        y - dotBitmap.height / 2,
-                        null
-                    )
+            val bitmap =
+                if (lastMinValueIndex == value.first || (lastMinValueIndex - 1) == value.first
+                    || (lastMinValueIndex + 1) == value.first
+                ) {
+                    dotBitmap2
+                } else {
+                    dotBitmap
                 }
 
-            }
+            canvas.drawBitmap(
+                bitmap,
+                calculatedTouchX - dotBitmap.width / 2,
+                y - dotBitmap.height / 2,
+                null
+            )
         }
+
 
         if (listener != null) {
             val position = value.first
@@ -808,11 +783,7 @@ class HeartRateChartView : View {
             0f,
             0f,
             mHeight.toFloat(),
-            if (chartType == HeartRateChartType.HEART_RATE) {
-                Color.parseColor("#ff7f96")
-            } else {
-                Color.parseColor("#FF71D2")
-            },//intArrayOf(Color.parseColor("#99ff718b"), Color.parseColor("#00ff5f7c")),
+            Color.parseColor("#ff7f96"),//intArrayOf(Color.parseColor("#99ff718b"), Color.parseColor("#00ff5f7c")),
             Color.TRANSPARENT/*floatArrayOf(0.3f, 0.6f)*/,
             Shader.TileMode.CLAMP
         )
@@ -821,11 +792,7 @@ class HeartRateChartView : View {
             0f,
             0f,
             mHeight.toFloat(),
-            if (chartType == HeartRateChartType.HEART_RATE) {
-                Color.parseColor("#80ff7f96")
-            } else {
-                Color.parseColor("#80FF71D2")
-            },//intArrayOf(Color.parseColor("#99ff718b"), Color.parseColor("#00ff5f7c")),
+            Color.parseColor("#80ff7f96"),//intArrayOf(Color.parseColor("#99ff718b"), Color.parseColor("#00ff5f7c")),
             Color.TRANSPARENT/*floatArrayOf(0.3f, 0.6f)*/,
             Shader.TileMode.CLAMP
         )
@@ -834,34 +801,18 @@ class HeartRateChartView : View {
         var arrayDef = intArrayOf()
         var arrayDefI = intArrayOf()
 
-        when (chartType) {
-            HeartRateChartType.HEART_RATE -> {
 
-                arrayDef = intArrayOf(
-                    Color.parseColor("#ff7f96"),
-                    Color.parseColor("#fc3559"),
-                    Color.parseColor("#fc3559")
-                )
-                arrayDefI = intArrayOf(
-                    Color.parseColor("#844B60"),
-                    Color.parseColor("#833947"),
-                    Color.parseColor("#832930")
-                )
-            }
+        arrayDef = intArrayOf(
+            Color.parseColor("#ff7f96"),
+            Color.parseColor("#fc3559"),
+            Color.parseColor("#fc3559")
+        )
+        arrayDefI = intArrayOf(
+            Color.parseColor("#844B60"),
+            Color.parseColor("#833947"),
+            Color.parseColor("#832930")
+        )
 
-            HeartRateChartType.HRV -> {
-                arrayDef = intArrayOf(
-                    Color.parseColor("#FF7FD6"),
-                    Color.parseColor("#FD5ACA"),
-                    Color.parseColor("#FC35BD")
-                )
-                arrayDefI = intArrayOf(
-                    Color.parseColor("#844A7F"),
-                    Color.parseColor("#833878"),
-                    Color.parseColor("#822571")
-                )
-            }
-        }
 
         chartLineGradient = LinearGradient(
             0f,
