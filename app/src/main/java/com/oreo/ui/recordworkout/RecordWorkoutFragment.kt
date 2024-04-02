@@ -378,7 +378,6 @@ class RecordWorkoutFragment :
                         }
                         navigate(
                             RecordWorkoutFragmentDirections.actionRecordWorkoutFragmentToOWorkoutDetailsFragment(
-                                viewModel.workout?.getFormattedActivityName() ?: "",
                                 workoutId,
                                 -1
                             )

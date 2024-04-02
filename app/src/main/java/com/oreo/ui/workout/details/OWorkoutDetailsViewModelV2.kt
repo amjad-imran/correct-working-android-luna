@@ -191,37 +191,31 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             activityList.add(
                 OWDActivityData(
                     context.getString(R.string.text_recovery_time),
-                    it.recoveryTime.toString(),
+                    ApplicationUtils.getActivityDurationFormat2(it.recoveryTime),
                     "",
                 )
             )
         }
 
-        activityList.add(
-            OWDActivityData(
-                context.getString(R.string.text_recovery_time),
-                ApplicationUtils.getActivityDurationFormat2(it.duration),
-                "",
-            )
-        )
+
 
         return activityList
     }
 
-    fun getDistance(data: OWorkoutDetailsResponseModel): Pair<String, String> {
+    fun getDistance(data: OWorkoutDetailsResponseModel): Triple<String, String,String> {
         if (data.distance != null && data.distance > 0L) {
 
             val distance = dataUnitConverter.formatDistance(
                 data.distance.toInt(),
                 Units.METRIC
             )
-            return Pair(distance, "km")
+            return Triple(distance, "km","Total Distance")
 
         } else if (data.calories != null && data.calories > 0L) {
-            return Pair(data.calories.toString(), "Kcal")
+            return Triple(data.calories.toString(), "Kcal", "Total Calories")
         }
 
-        return Pair("", "")
+        return Triple("", "","")
     }
 
     fun getDummyBreakUpDataForTimeDisplay(): ArrayList<Int> {
