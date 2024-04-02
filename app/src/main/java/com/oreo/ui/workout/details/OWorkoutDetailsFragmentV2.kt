@@ -66,12 +66,7 @@ class OWorkoutDetailsFragmentV2 : BaseFragment<FragmentOWorkoutDetailsV2Binding>
     private fun setDefaultUiValue() {
         binding.lytToolbar.tvTitle.text = args.workoutName
         binding.lytActivityItem.tvDurationTitle.text = getString(R.string.text_duration)
-        binding.lytActivityItem.tvDistanceTitle.text = getString(R.string.total_distance)
-
-
         binding.lytArrow.ivArrowImage.setImageResource(R.drawable.ic_arrow_down)
-
-
     }
 
     override fun subscribeObservers() {
@@ -125,6 +120,7 @@ class OWorkoutDetailsFragmentV2 : BaseFragment<FragmentOWorkoutDetailsV2Binding>
         binding.lytActivityItem.tvDurationValue.text =
             ApplicationUtils.getActivityDurationFormat2(it.duration)
         val topValue = viewModel.getDistance(it)
+        binding.lytActivityItem.tvDistanceTitle.text = topValue.third
         binding.lytActivityItem.tvDistanceValue.text = topValue.first
         binding.lytActivityItem.tvDistanceUnit.text = topValue.second
 
