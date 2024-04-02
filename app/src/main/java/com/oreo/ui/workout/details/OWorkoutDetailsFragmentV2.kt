@@ -138,6 +138,11 @@ class OWorkoutDetailsFragmentV2 :
             binding.tvEdit.visible()
         }
 
+
+        binding.lytActivityItem.tvWorkoutTime.text =
+            DateFormats.getActivityDisplayDates(it.startTime, it.endTime)
+
+
         binding.rvActivityDetails.visible()
         binding.lytActivityItem.root.visible()
         binding.lytToolbar.tvTitle.text = DateFormats.formatActivityDate(it.date)
