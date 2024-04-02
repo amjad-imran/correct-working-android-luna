@@ -198,8 +198,13 @@ class OAddWorkoutFragment :
                 val minute = bundle.getInt("minute")
 
                 val calendar = Calendar.getInstance()
+                var isTodayWorkout = true
+                if (viewModel.isAutoWorkout()) {
+                    val todayData = DateFormats.getCurrentDate(DateFormats.dateFormat3)
+                    isTodayWorkout = viewModel.preFilledOreoAutoSportData?.date.equals(todayData)
+                }
 
-                if (DateFormats.compareTime(
+                if (isTodayWorkout && DateFormats.compareTime(
                         hourOfDay,
                         minute,
                         calendar.get(Calendar.HOUR_OF_DAY),
@@ -207,7 +212,10 @@ class OAddWorkoutFragment :
                     ) > 0
                 ) {
                     context.showShortToast(getString(R.string.text_end_time_greater_then_current_time))
-                } else if (DateFormats.compareTime(
+                    return@setFragmentResultListener
+                }
+
+                if (DateFormats.compareTime(
                         hourOfDay,
                         minute,
                         viewModel.addWorkout.startHour,
