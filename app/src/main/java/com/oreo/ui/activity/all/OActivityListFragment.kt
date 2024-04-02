@@ -197,22 +197,16 @@ class OActivityListFragment :
     override fun onActivitySelected(activity: OActivityListModal, position: Int) {
         LOGS.d("onActivitySelected activity=$activity")
 
-        when {
-            activity.type.equals("userworkout", true) -> {
-                navigate(R.id.oWorkoutDetailsFragmentV2, Bundle().apply {
-                    putString("workoutId", activity.id)
-                    putInt("position", position)
-                    putString("workoutName", activity.getFormattedActivityName())
-                })
-            }
-
-            else -> {
-                navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
-                    putString("workoutId", activity.id)
-                    putInt("position", position)
-                    putString("workoutName", activity.getFormattedActivityName())
-                })
-            }
+        if(activity.getDisplayVersionType()==2){
+            navigate(R.id.oWorkoutDetailsFragmentV2, Bundle().apply {
+                putString("workoutId", activity.id ?: "")
+                putInt("position", position)
+            })
+        }else{
+            navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
+                putString("workoutId", activity.id ?: "")
+                putInt("position", position)
+            })
         }
     }
 

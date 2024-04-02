@@ -34,22 +34,35 @@
 
         <TextView
             android:id="@+id/tvActivityName"
-            style="@style/H28"
+            style="@style/S28"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="@dimen/dimen_16dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
             android:ellipsize="end"
             android:singleLine="true"
-            app:layout_constraintBottom_toBottomOf="@id/ivActivity"
+            app:layout_constraintBottom_toTopOf="@+id/tvWorkoutTime"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ivActivity"
             app:layout_constraintTop_toTopOf="@+id/ivActivity"
             tools:text="Strength Training" />
 
         <TextView
+            android:id="@+id/tvWorkoutTime"
+            style="@style/S14"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/white_64"
+            app:layout_constraintBottom_toBottomOf="@+id/ivActivity"
+            app:layout_constraintEnd_toEndOf="@+id/tvActivityName"
+            app:layout_constraintStart_toStartOf="@+id/tvActivityName"
+            app:layout_constraintTop_toBottomOf="@+id/tvActivityName"
+            tools:text="10:00 am - 10:05 am" />
+
+        <TextView
             android:id="@+id/tvDurationTitle"
-            style="@style/H6"
+            style="@style/S14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -59,7 +72,7 @@
 
         <TextView
             android:id="@+id/tvDurationValue"
-            style="@style/H28"
+            style="@style/S28"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -74,8 +87,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginBottom="2dp"
-            android:visibility="gone"
             android:textColor="@color/white_48"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/tvDurationValue"
             app:layout_constraintStart_toEndOf="@id/tvDurationValue"
             tools:text=":19" />
@@ -93,18 +106,17 @@
 
         <TextView
             android:id="@+id/tvDistanceTitle"
-            style="@style/H6"
+            style="@style/S14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:textColor="@color/white_64"
             app:layout_constraintStart_toEndOf="@id/divider1"
             app:layout_constraintTop_toTopOf="@id/tvDurationTitle"
             tools:text="Total distance" />
 
         <TextView
             android:id="@+id/tvDistanceValue"
-            style="@style/H28"
+            style="@style/S28"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -117,7 +129,7 @@
             style="@style/H5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="6dp"
             android:layout_marginBottom="2dp"
             android:textColor="@color/white_48"
             app:layout_constraintBottom_toBottomOf="@id/tvDistanceValue"

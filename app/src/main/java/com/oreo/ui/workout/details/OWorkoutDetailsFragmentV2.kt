@@ -17,15 +17,17 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.OWDActivityHRZoneData
 import com.oreo.data.model.OWorkoutDetailsResponseModel
+import com.oreo.data.model.WorkoutTypes
 import com.oreo.ui.activity.all.DELETE_WORKOUT_REQUEST_KEY
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class OWorkoutDetailsFragmentV2 : BaseFragment<FragmentOWorkoutDetailsV2Binding>(FragmentOWorkoutDetailsV2Binding::inflate) {
+class OWorkoutDetailsFragmentV2 :
+    BaseFragment<FragmentOWorkoutDetailsV2Binding>(FragmentOWorkoutDetailsV2Binding::inflate) {
 
     private val viewModel: OWorkoutDetailsViewModelV2 by viewModels()
-    private val args: OWorkoutDetailsFragmentArgs by navArgs()
+    private val args: OWorkoutDetailsFragmentV2Args by navArgs()
     private val mainViewModel: OreoMainViewModel by activityViewModels()
 
     private val workoutDetailsAdapter: OWorkoutDetailslAdapterV2 by lazy {
@@ -41,7 +43,6 @@ class OWorkoutDetailsFragmentV2 : BaseFragment<FragmentOWorkoutDetailsV2Binding>
         setRecycler()
         viewModel.getWorkoutDetails(args.workoutId)
         viewModel.position = args.position
-        LOGS.d("OWorkoutDetailsFragmentV2 workoutName=${args.workoutName}")
 
     }
 
@@ -60,11 +61,14 @@ class OWorkoutDetailsFragmentV2 : BaseFragment<FragmentOWorkoutDetailsV2Binding>
             navigateUpSafe()
         }
 
-       
+        binding.tvEdit.setOnClickListener {
+            val id = viewModel.workoutDetailsResponse.value?.id
+            viewModel.deleteWorkout(id!!)
+        }
+
     }
 
     private fun setDefaultUiValue() {
-        binding.lytToolbar.tvTitle.text = args.workoutName
         binding.lytActivityItem.tvDurationTitle.text = getString(R.string.text_duration)
         binding.lytArrow.ivArrowImage.setImageResource(R.drawable.ic_arrow_down)
     }
@@ -88,7 +92,8 @@ class OWorkoutDetailsFragmentV2 : BaseFragment<FragmentOWorkoutDetailsV2Binding>
                 mainViewModel.reloadTodaysData()
 
                 setFragmentResult(
-                    DELETE_WORKOUT_REQUEST_KEY, bundleOf("allow" to true, "position" to viewModel.position)
+                    DELETE_WORKOUT_REQUEST_KEY,
+                    bundleOf("allow" to true, "position" to viewModel.position)
 
                 )
                 navigateUpSafe()
@@ -113,10 +118,30 @@ class OWorkoutDetailsFragmentV2 : BaseFragment<FragmentOWorkoutDetailsV2Binding>
     private fun updateUi(it: OWorkoutDetailsResponseModel) {
 //        binding.lytIntensity.tvIntensityType.text = it.intensity
 
+        if (it.date == DateFormats.getCurrentDate(DateFormats.dateFormat3) && !it.type.equals(
+                "auto",
+                true
+            ) && !it.type.equals(
+                "apple",
+                true
+            )
+            && !it.type.equals(
+                "google",
+                true
+            )
+        ) {
+            binding.tvEdit.visible()
+        }
+
+
+        binding.lytActivityItem.tvWorkoutTime.text =
+            DateFormats.getActivityDisplayDates(it.startTime, it.endTime)
+
+
         binding.rvActivityDetails.visible()
         binding.lytActivityItem.root.visible()
         binding.lytToolbar.tvTitle.text = DateFormats.formatActivityDate(it.date)
-        binding.lytActivityItem.tvActivityName.text = args.workoutName
+        binding.lytActivityItem.tvActivityName.text = it.getFormattedActivityName()
         binding.lytActivityItem.tvDurationValue.text =
             ApplicationUtils.getActivityDurationFormat2(it.duration)
         val topValue = viewModel.getDistance(it)
@@ -140,7 +165,7 @@ class OWorkoutDetailsFragmentV2 : BaseFragment<FragmentOWorkoutDetailsV2Binding>
         )
 
         val workoutDetailList = viewModel.prepareDataForActivity(it)
-        if(workoutDetailList.size > 4){
+        if (workoutDetailList.size > 4) {
             binding.lytArrow.root.visible()
             workoutDetailsAdapter.setDataSet(workoutDetailList.take(4))
             binding.lytArrow.ivArrow.setOnClickListener {
@@ -155,55 +180,63 @@ class OWorkoutDetailsFragmentV2 : BaseFragment<FragmentOWorkoutDetailsV2Binding>
 
                 }
             }
-        }else{
+        } else {
             binding.lytArrow.root.gone()
             workoutDetailsAdapter.setDataSet(workoutDetailList)
         }
 
 
-        if(!it.hrArray.isNullOrEmpty()){
-            binding.llExpand.visible()
-            binding.lytHeartRate.tvAverageValue.text = it.hrAvg.toString()
-            val maxHr = it.hrMax ?: 0
-            binding.lytHeartRate.tvMaxHR.text = "${getString(R.string.text_max_hr)} ${maxHr} ${getString(R.string.text_bpm_small)}"
+        if (it.type.equals(WorkoutTypes.USERWORKOUT.name, true)) {
+            if (!it.hrArray.isNullOrEmpty()) {
+                binding.llExpand.visible()
+                binding.lytHeartRate.tvAverageValue.text =
+                    if (it.hrAvg == null || it.hrAvg == 0 || it.hrAvg == 255) {
+                        "-"
+                    } else {
+                        it.hrAvg.toString()
+                    }
+                val maxHr = if (it.hrMax == null || it.hrMax == 0 || it.hrMax == 255) {
+                    "-"
+                } else {
+                    it.hrMax.toString()
+                }
+                binding.lytHeartRate.tvMaxHR.text =
+                    "${getString(R.string.text_max_hr)} $maxHr ${getString(R.string.text_bpm_small)}"
 
-            hrZoneAdapter.setDataSet(arrayListOf<OWDActivityHRZoneData>().apply {
-                add(
-                    OWDActivityHRZoneData(
-                        title = "Zone1",
-                        range = "<60%",
-                        percentage = 30,
-                        duration = "00:30",
-                        color = "#3485ff",
+                hrZoneAdapter.setDataSet(arrayListOf<OWDActivityHRZoneData>().apply {
+                    add(
+                        OWDActivityHRZoneData(
+                            title = "Zone1",
+                            range = "<60%",
+                            percentage = 30,
+                            duration = "00:30",
+                            color = "#3485ff",
+                        )
                     )
-                )
-                add(
-                    OWDActivityHRZoneData(
-                        title = "Zone2",
-                        range = "60-70%",
-                        percentage = 20,
-                        duration = "00:10",
-                        color = "#34f3ff",
+                    add(
+                        OWDActivityHRZoneData(
+                            title = "Zone2",
+                            range = "60-70%",
+                            percentage = 20,
+                            duration = "00:10",
+                            color = "#34f3ff",
+                        )
                     )
-                )
-                add(
-                    OWDActivityHRZoneData(
-                        title = "Zone3",
-                        range = "60-70%",
-                        percentage = 10,
-                        duration = "00:10",
-                        color = "#34f3ff",
+                    add(
+                        OWDActivityHRZoneData(
+                            title = "Zone3",
+                            range = "60-70%",
+                            percentage = 10,
+                            duration = "00:10",
+                            color = "#34f3ff",
+                        )
                     )
-                )
-            })
+                })
+            }
         }
 
 
-
-
     }
-
-
 
 
 }

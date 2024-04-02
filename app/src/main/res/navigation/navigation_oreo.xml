@@ -330,9 +330,6 @@
         android:id="@+id/oWorkoutDetailsFragmentV2"
         android:name="com.oreo.ui.workout.details.OWorkoutDetailsFragmentV2"
         android:label="OWorkoutDetailsFragmentV2">
-        <argument
-            android:name="workoutName"
-            app:argType="string" />
 
         <argument
             android:name="workoutId"
@@ -539,7 +536,7 @@
             app:nullable="true" />
         <action
             android:id="@+id/action_recordWorkoutFragment_to_oWorkoutDetailsFragment"
-            app:destination="@id/oWorkoutDetailsFragment"
+            app:destination="@id/oWorkoutDetailsFragmentV2"
             app:popUpTo="@id/recordWorkoutFragment"
             app:popUpToInclusive="true" />
 

@@ -68,11 +68,6 @@ class SummaryDataFragment :
         viewModel.user = mainViewModel.user
         LOGS.d("CREATED_WITH_DATE $date")
         loadData()
-        navigate(R.id.oWorkoutDetailsFragmentV2, Bundle().apply {
-            putString("workoutId", "edf92cf5-6964-48a7-b197-539540cd09d3")
-            putInt("position", -1)
-            putString("workoutName", "Cricket")
-        })
     }
 
     override fun onResume() {
@@ -247,11 +242,17 @@ class SummaryDataFragment :
         )
         val adapter1 = OreoRWorkoutAdapter(object : OreoRWorkoutAdapter.OnItemClickListener {
             override fun onItemClick(data: OActivityListModal, position: Int) {
-                navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
-                    putString("workoutName", data.getFormattedActivityName())
-                    putString("workoutId", data.id ?: "")
-                    putInt("position", position)
-                })
+                if(data.getDisplayVersionType()==2){
+                    navigate(R.id.oWorkoutDetailsFragmentV2, Bundle().apply {
+                        putString("workoutId", data.id ?: "")
+                        putInt("position", position)
+                    })
+                }else{
+                    navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
+                        putString("workoutId", data.id ?: "")
+                        putInt("position", position)
+                    })
+                }
             }
         })
 
