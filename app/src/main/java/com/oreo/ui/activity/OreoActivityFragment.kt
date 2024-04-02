@@ -79,10 +79,17 @@ class OreoActivityFragment :
     }
 
     private fun moveToDetailsScreen(data: OActivityListModal, position: Int) {
-        navigate(R.id.oWorkoutDetailsFragmentV2, Bundle().apply {
-            putString("workoutId", data.id)
-            putInt("position", position)
-        })
+        if(data.getDisplayVersionType()==2){
+            navigate(R.id.oWorkoutDetailsFragmentV2, Bundle().apply {
+                putString("workoutId", data.id ?: "")
+                putInt("position", position)
+            })
+        }else{
+            navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
+                putString("workoutId", data.id ?: "")
+                putInt("position", position)
+            })
+        }
     }
 
     private val mActivityAdapter: OreoAContributorAdapter by lazy {
