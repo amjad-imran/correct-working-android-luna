@@ -11,12 +11,14 @@ import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.ceilRound
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.models.Units
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.OWDActivityData
+import com.oreo.data.model.OWDActivityHRZoneData
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,11 +28,13 @@ import kotlinx.coroutines.launch
 import java.util.Calendar
 import javax.inject.Inject
 import kotlin.math.ceil
+import kotlin.math.roundToInt
 
 @HiltViewModel
 class OWorkoutDetailsViewModelV2 @Inject constructor(
     val dataUnitConverter: DataUnitConverter,
     val userActivityRepository: OreoUserActivityRepository,
+    val localDataStore: DataStoredInterface,
     private val userHealthDataDataSource: OreoUserHealthDataDataSource
 ) : BaseViewModel() {
 
@@ -202,20 +206,20 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         return activityList
     }
 
-    fun getDistance(data: OWorkoutDetailsResponseModel): Triple<String, String,String> {
+    fun getDistance(data: OWorkoutDetailsResponseModel): Triple<String, String, String> {
         if (data.distance != null && data.distance > 0L) {
 
             val distance = dataUnitConverter.formatDistance(
                 data.distance.toInt(),
                 Units.METRIC
             )
-            return Triple(distance, "km","Total Distance")
+            return Triple(distance, "km", "Total Distance")
 
         } else if (data.calories != null && data.calories > 0L) {
             return Triple(data.calories.toString(), "Kcal", "Total Calories")
         }
 
-        return Triple("", "","")
+        return Triple("", "", "")
     }
 
     fun getDummyBreakUpDataForTimeDisplay(): ArrayList<Int> {
@@ -326,5 +330,78 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         }
 
         return list
+    }
+
+    fun getHrValue(mhr: Double, hrValue: Int): Int {
+        return (mhr * (hrValue / 100)).roundToInt()
+    }
+
+    fun generateHrZones(): List<OWDActivityHRZoneData> {
+
+        val age = getUserAge()
+        val mhr = (208 - 0.7 * age)
+
+
+        return arrayListOf<OWDActivityHRZoneData>().apply {
+            add(
+                OWDActivityHRZoneData(
+                    title = "Restorative zone",
+                    range = "${getHrValue(mhr,50)}%",
+                    percentage = 10,
+                    duration = "00:10",
+                    color = "#34f3ff",
+                )
+            )
+            add(
+                OWDActivityHRZoneData(
+                    title = "Zone 1",
+                    range = "<60%",
+                    percentage = 30,
+                    duration = "00:30",
+                    color = "#3485ff",
+                )
+            )
+            add(
+                OWDActivityHRZoneData(
+                    title = "Zone 2",
+                    range = "60-70%",
+                    percentage = 20,
+                    duration = "00:10",
+                    color = "#34f3ff",
+                )
+            )
+            add(
+                OWDActivityHRZoneData(
+                    title = "Zone 3",
+                    range = "60-70%",
+                    percentage = 10,
+                    duration = "00:10",
+                    color = "#34f3ff",
+                )
+            )
+            add(
+                OWDActivityHRZoneData(
+                    title = "Zone 4",
+                    range = "60-70%",
+                    percentage = 10,
+                    duration = "00:10",
+                    color = "#34f3ff",
+                )
+            )
+            add(
+                OWDActivityHRZoneData(
+                    title = "Zone 5",
+                    range = "60-70%",
+                    percentage = 10,
+                    duration = "00:10",
+                    color = "#34f3ff",
+                )
+            )
+
+        }
+    }
+
+    fun getUserAge(): Int {
+        return localDataStore.getUser()?.userInfo?.age ?: 30
     }
 }

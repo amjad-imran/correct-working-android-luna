@@ -31,9 +31,7 @@ data class OActivityListModal(
         return if (type.equals(
                 WorkoutTypes.USERWORKOUT.name,
                 true
-            ) || type.equals(WorkoutTypes.MANUAL.name, true)
-            || type.equals(WorkoutTypes.AUTO.name, true)
-            || type.equals(WorkoutTypes.AUTOMANUAL.name, true)
+            )
         ) {
             2
         } else {

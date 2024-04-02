@@ -205,35 +205,8 @@ class OWorkoutDetailsFragmentV2 :
                 binding.lytHeartRate.tvMaxHR.text =
                     "${getString(R.string.text_max_hr)} $maxHr ${getString(R.string.text_bpm_small)}"
 
-                hrZoneAdapter.setDataSet(arrayListOf<OWDActivityHRZoneData>().apply {
-                    add(
-                        OWDActivityHRZoneData(
-                            title = "Zone1",
-                            range = "<60%",
-                            percentage = 30,
-                            duration = "00:30",
-                            color = "#3485ff",
-                        )
-                    )
-                    add(
-                        OWDActivityHRZoneData(
-                            title = "Zone2",
-                            range = "60-70%",
-                            percentage = 20,
-                            duration = "00:10",
-                            color = "#34f3ff",
-                        )
-                    )
-                    add(
-                        OWDActivityHRZoneData(
-                            title = "Zone3",
-                            range = "60-70%",
-                            percentage = 10,
-                            duration = "00:10",
-                            color = "#34f3ff",
-                        )
-                    )
-                })
+                hrZoneAdapter.setDataSet(
+                    viewModel.generateHrZones())
             }
         }
 
