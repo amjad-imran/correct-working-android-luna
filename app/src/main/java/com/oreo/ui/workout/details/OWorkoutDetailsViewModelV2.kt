@@ -3,10 +3,12 @@ package com.oreo.ui.workout.details
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
+import com.noisefit.ui.common.calculatePercentage
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.ceilRound
 import com.noisefit_commans.data.BinaryActionCallback
@@ -16,6 +18,7 @@ import com.noisefit_commans.models.Units
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.OWDActivityData
 import com.oreo.data.model.OWDActivityHRZoneData
@@ -332,32 +335,102 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         return list
     }
 
-    fun getHrValue(mhr: Double, hrValue: Int): Int {
-        return (mhr * (hrValue / 100)).roundToInt()
-    }
 
-    fun generateHrZones(): List<OWDActivityHRZoneData> {
 
+    fun generateHrZones(hrValue: List<Int>): List<OWDActivityHRZoneData> {
+        val zones = mutableMapOf<String, IntRange>()
+
+
+        val hrIntervalInSecond = 30L
         val age = getUserAge()
-        val mhr = (208 - 0.7 * age)
+        val HRmax = (208 - 0.7 * age)
+        // Zone 1 (50-60%)
+        val zone1Min = (0.5 * HRmax).toInt()
+        val zone1Max = (0.6 * HRmax).toInt()
+        zones["Zone 1"] = zone1Min..zone1Max
+
+        // Zone 2 (60-70%)
+        val zone2Min = (0.6 * HRmax).toInt()
+        val zone2Max = (0.7 * HRmax).toInt()
+        zones["Zone 2"] = zone2Min..zone2Max
+
+        // Zone 3 (70-80%)
+        val zone3Min = (0.7 * HRmax).toInt()
+        val zone3Max = (0.8 * HRmax).toInt()
+        zones["Zone 3"] = zone3Min..zone3Max
+
+        // Zone 4 (80-90%)
+        val zone4Min = (0.8 * HRmax).toInt()
+        val zone4Max = (0.9 * HRmax).toInt()
+        zones["Zone 4"] = zone4Min..zone4Max
+
+        // Zone 5 (90-100%)
+        val zone5Min = (0.9 * HRmax).toInt()
+        val zone5Max = HRmax.toInt()
+        zones["Zone 5"] = zone5Min..zone5Max
+
+        var zone1Frequency = 0L
+        var zone2Frequency = 0L
+        var zone3Frequency = 0L
+        var zone4Frequency = 0L
+        var zone5Frequency = 0L
+        var zoneRestorativeFrequency = 0
+
+        hrValue.forEach {
+            when (it) {
+                in zone1Min until zone1Max -> {
+                    zone1Frequency += 1
+                }
+
+                in zone2Min until zone2Max -> {
+                    zone2Frequency += 1
+                }
+
+                in zone3Min until zone3Max -> {
+                    zone3Frequency += 1
+                }
+
+                in zone4Min until zone4Max -> {
+                    zone4Frequency += 1
+                }
+
+                in zone5Min until zone5Max -> {
+                    zone5Frequency += 1
+                }
+
+                else -> {
+                    zoneRestorativeFrequency += 1
+                }
+
+            }
+        }
 
 
+        val duration =
+            zone1Frequency + zone2Frequency + zone3Frequency + zone4Frequency + zone5Frequency + zoneRestorativeFrequency
+
+//        zones.forEach { (zone, range) ->
+//            println("$zone: $range bpm zonesss")
+//        }
+//        LOGS.d("zonesss ${Gson().toJson(hrValue)}")
         return arrayListOf<OWDActivityHRZoneData>().apply {
             add(
                 OWDActivityHRZoneData(
                     title = "Restorative zone",
-                    range = "${getHrValue(mhr,50)}%",
-                    percentage = 10,
-                    duration = "00:10",
+                    range = "<50%",
+                    percentage = zoneRestorativeFrequency.toFloat()
+                        .calculatePercentage(duration.toFloat()).toInt(),
+                    duration = ApplicationUtils.getActivityDurationFormat2(zoneRestorativeFrequency * hrIntervalInSecond),
                     color = "#34f3ff",
                 )
             )
             add(
                 OWDActivityHRZoneData(
                     title = "Zone 1",
-                    range = "<60%",
-                    percentage = 30,
-                    duration = "00:30",
+                    range = "50-60%",
+                    percentage = zone1Frequency.toFloat().calculatePercentage(duration.toFloat())
+                        .toInt(),
+                    duration = ApplicationUtils.getActivityDurationFormat2(zone1Frequency * hrIntervalInSecond),
                     color = "#3485ff",
                 )
             )
@@ -365,41 +438,117 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
                 OWDActivityHRZoneData(
                     title = "Zone 2",
                     range = "60-70%",
-                    percentage = 20,
-                    duration = "00:10",
+                    percentage = zone2Frequency.toFloat().calculatePercentage(duration.toFloat())
+                        .toInt(),
+                    duration = ApplicationUtils.getActivityDurationFormat2(zone2Frequency * hrIntervalInSecond),
                     color = "#34f3ff",
                 )
             )
             add(
                 OWDActivityHRZoneData(
                     title = "Zone 3",
-                    range = "60-70%",
-                    percentage = 10,
-                    duration = "00:10",
-                    color = "#34f3ff",
+                    range = "70-80%",
+                    percentage = zone3Frequency.toFloat().calculatePercentage(duration.toFloat())
+                        .toInt(),
+                    duration = ApplicationUtils.getActivityDurationFormat2(zone3Frequency * hrIntervalInSecond),
+                    color = "#48ff7b",
                 )
             )
             add(
                 OWDActivityHRZoneData(
                     title = "Zone 4",
-                    range = "60-70%",
-                    percentage = 10,
-                    duration = "00:10",
-                    color = "#34f3ff",
+                    range = "80-90%",
+                    percentage = zone4Frequency.toFloat().calculatePercentage(duration.toFloat())
+                        .toInt(),
+                    duration = ApplicationUtils.getActivityDurationFormat2(zone4Frequency * hrIntervalInSecond),
+                    color = "#ff8934",
                 )
             )
             add(
                 OWDActivityHRZoneData(
                     title = "Zone 5",
-                    range = "60-70%",
-                    percentage = 10,
-                    duration = "00:10",
-                    color = "#34f3ff",
+                    range = "90-100%",
+                    percentage = zone5Frequency.toFloat().calculatePercentage(duration.toFloat())
+                        .toInt(),
+                    duration = ApplicationUtils.getActivityDurationFormat2(zone5Frequency * hrIntervalInSecond),
+                    color = "#ff3434",
                 )
             )
 
         }
     }
+
+
+//    fun generateHrZones(hrValue: List<Int>): List<OWDActivityHRZoneData> {
+//
+//        val heartRateZones = calculateHeartRateZones(hrValue)
+//
+//        heartRateZones.forEach { (zone, range) ->
+//            println("$zone: $range bpm lkjsdlkjadlkdsajlk")
+//        }
+//
+//        val age = getUserAge()
+//        val mhr = (208 - 0.7 * age)
+//
+//
+//        return arrayListOf<OWDActivityHRZoneData>().apply {
+//            add(
+//                OWDActivityHRZoneData(
+//                    title = "Restorative zone",
+//                    range = "${getHrValue(mhr, 50)}%",
+//                    percentage = 10,
+//                    duration = "00:10",
+//                    color = "#34f3ff",
+//                )
+//            )
+//            add(
+//                OWDActivityHRZoneData(
+//                    title = "Zone 1",
+//                    range = "<60%",
+//                    percentage = 30,
+//                    duration = "00:30",
+//                    color = "#3485ff",
+//                )
+//            )
+//            add(
+//                OWDActivityHRZoneData(
+//                    title = "Zone 2",
+//                    range = "60-70%",
+//                    percentage = 20,
+//                    duration = "00:10",
+//                    color = "#34f3ff",
+//                )
+//            )
+//            add(
+//                OWDActivityHRZoneData(
+//                    title = "Zone 3",
+//                    range = "60-70%",
+//                    percentage = 10,
+//                    duration = "00:10",
+//                    color = "#34f3ff",
+//                )
+//            )
+//            add(
+//                OWDActivityHRZoneData(
+//                    title = "Zone 4",
+//                    range = "60-70%",
+//                    percentage = 10,
+//                    duration = "00:10",
+//                    color = "#34f3ff",
+//                )
+//            )
+//            add(
+//                OWDActivityHRZoneData(
+//                    title = "Zone 5",
+//                    range = "60-70%",
+//                    percentage = 10,
+//                    duration = "00:10",
+//                    color = "#34f3ff",
+//                )
+//            )
+//
+//        }
+//    }
 
     fun getUserAge(): Int {
         return localDataStore.getUser()?.userInfo?.age ?: 30

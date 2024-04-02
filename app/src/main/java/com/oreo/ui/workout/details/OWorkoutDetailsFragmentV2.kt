@@ -219,7 +219,7 @@ class OWorkoutDetailsFragmentV2 :
                     "${getString(R.string.text_max_hr)} $maxHr ${getString(R.string.text_bpm_small)}"
 
                 hrZoneAdapter.setDataSet(
-                    viewModel.generateHrZones()
+                    viewModel.generateHrZones(it.hrArray)
                 )
             } else {
                 return
