@@ -115,6 +115,8 @@ class OWorkoutDetailsFragmentV2 :
 
     @SuppressLint("SetTextI18n")
     private fun updateUi(it: OWorkoutDetailsResponseModel) {
+        LOGS.d("OWorkoutDetailsFragmentV2 detail=$it")
+
 //        binding.lytIntensity.tvIntensityType.text = it.intensity
 
         binding.rvActivityDetails.visible()
@@ -168,7 +170,7 @@ class OWorkoutDetailsFragmentV2 :
             binding.llExpand.visible()
             binding.lytHeartRate.tvAverageValue.text = it.hrAvg.toString()
             val maxHr = it.hrMax ?: 0
-            binding.lytHeartRate.tvMaxHR.text = "${getString(R.string.text_max_hr)} ${maxHr} ${getString(R.string.text_bpm_small)}"
+            binding.lytHeartRate.tvMaxHR.text = "${getString(R.string.text_max_hr)} $maxHr ${getString(R.string.text_bpm_small)}"
 
             hrZoneAdapter.setDataSet(arrayListOf<OWDActivityHRZoneData>().apply {
                 add(
