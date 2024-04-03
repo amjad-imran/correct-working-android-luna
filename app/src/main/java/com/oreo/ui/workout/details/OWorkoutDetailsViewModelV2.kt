@@ -18,6 +18,7 @@ import com.noisefit_commans.models.Units
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.OWDActivityData
 import com.oreo.data.model.OWDActivityHRZoneData
@@ -40,6 +41,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
 ) : BaseViewModel() {
 
 
+    var avgValue: String = ""
     var workoutDetailsExpanded = false
     var position: Int = -1
     private val _workoutDeletedResponse = MutableLiveData<Event<Boolean>>()
@@ -335,6 +337,12 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
     }
 
 
+    private var zone1Indexes = ArrayList<Int>()
+    private var zone2Indexes = ArrayList<Int>()
+    private var zone3Indexes = ArrayList<Int>()
+    private var zone4Indexes = ArrayList<Int>()
+    private var zone5Indexes = ArrayList<Int>()
+    private var zoneRestorativeIndexes = ArrayList<Int>()
 
     fun generateHrZones(hrValue: List<Int>): List<OWDActivityHRZoneData> {
         val zones = mutableMapOf<String, IntRange>()
@@ -349,56 +357,46 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         zones["Zone 1"] = zone1Min..zone1Max
 
         // Zone 2 (60-70%)
-        val zone2Min = (0.6 * HRmax).toInt()
         val zone2Max = (0.7 * HRmax).toInt()
-        zones["Zone 2"] = zone2Min..zone2Max
+        zones["Zone 2"] = zone1Max..zone2Max
 
         // Zone 3 (70-80%)
-        val zone3Min = (0.7 * HRmax).toInt()
         val zone3Max = (0.8 * HRmax).toInt()
-        zones["Zone 3"] = zone3Min..zone3Max
+        zones["Zone 3"] = zone2Max..zone3Max
 
         // Zone 4 (80-90%)
-        val zone4Min = (0.8 * HRmax).toInt()
         val zone4Max = (0.9 * HRmax).toInt()
-        zones["Zone 4"] = zone4Min..zone4Max
+        zones["Zone 4"] = zone3Max..zone4Max
 
         // Zone 5 (90-100%)
-        val zone5Min = (0.9 * HRmax).toInt()
         val zone5Max = HRmax.toInt()
-        zones["Zone 5"] = zone5Min..zone5Max
+        zones["Zone 5"] = zone4Max..zone5Max
 
-        var zone1Frequency = 0L
-        var zone2Frequency = 0L
-        var zone3Frequency = 0L
-        var zone4Frequency = 0L
-        var zone5Frequency = 0L
-        var zoneRestorativeFrequency = 0
 
-        hrValue.forEach {
-            when (it) {
+        hrValue.forEachIndexed { index, value ->
+            when (value) {
                 in zone1Min until zone1Max -> {
-                    zone1Frequency += 1
+                    zone1Indexes.add(index)
                 }
 
-                in zone2Min until zone2Max -> {
-                    zone2Frequency += 1
+                in zone1Max until zone2Max -> {
+                    zone2Indexes.add(index)
                 }
 
-                in zone3Min until zone3Max -> {
-                    zone3Frequency += 1
+                in zone2Max until zone3Max -> {
+                    zone3Indexes.add(index)
                 }
 
-                in zone4Min until zone4Max -> {
-                    zone4Frequency += 1
+                in zone3Max until zone4Max -> {
+                    zone4Indexes.add(index)
                 }
 
-                in zone5Min until zone5Max -> {
-                    zone5Frequency += 1
+                in zone4Max until zone5Max -> {
+                    zone5Indexes.add(index)
                 }
 
                 else -> {
-                    zoneRestorativeFrequency += 1
+                    zoneRestorativeIndexes.add(index)
                 }
 
             }
@@ -406,7 +404,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
 
 
         val duration =
-            zone1Frequency + zone2Frequency + zone3Frequency + zone4Frequency + zone5Frequency + zoneRestorativeFrequency
+            zone1Indexes.size + zone2Indexes.size + zone3Indexes.size + zone4Indexes.size + zone5Indexes.size + zoneRestorativeIndexes.size
 
 //        zones.forEach { (zone, range) ->
 //            println("$zone: $range bpm zonesss")
@@ -418,70 +416,88 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
 
                     title = "Restorative zone",
                     range = "<50%",
-                    percentage = zoneRestorativeFrequency.toFloat()
+                    zone = 0,
+                    percentage = zoneRestorativeIndexes.size.toFloat()
                         .calculatePercentage(duration.toFloat()).toInt(),
-                    duration = ApplicationUtils.getActivityDurationFormat2(zoneRestorativeFrequency * hrIntervalInSecond),
-                    color = "#ACABAB",
+                    duration = ApplicationUtils.getActivityDurationFormat2(zoneRestorativeIndexes.size * hrIntervalInSecond),
+                    color = "#34f3ff",
                 )
             )
-//            add(
-//                OWDActivityHRZoneData(
-//
-//                    title = "Zone 1",
-//                    range = "(50-60%)",
-//                    percentage = zone1Frequency.toFloat().calculatePercentage(duration.toFloat())
-//                        .toInt(),
-//                    duration = ApplicationUtils.getActivityDurationFormat2(zone1Frequency * hrIntervalInSecond),
-//                    color = "#3485ff",
-//                )
-//            )
-//            add(
-//                OWDActivityHRZoneData(
-//
-//                    title = "Zone 2",
-//                    range = "(60-70%)",
-//                    percentage = zone2Frequency.toFloat().calculatePercentage(duration.toFloat())
-//                        .toInt(),
-//                    duration = ApplicationUtils.getActivityDurationFormat2(zone2Frequency * hrIntervalInSecond),
-//                    color = "#34f3ff",
-//                )
-//            )
-//            add(
-//                OWDActivityHRZoneData(
-//
-//                    title = "Zone 3",
-//                    range = "(70-80%)",
-//                    percentage = zone3Frequency.toFloat().calculatePercentage(duration.toFloat())
-//                        .toInt(),
-//                    duration = ApplicationUtils.getActivityDurationFormat2(zone3Frequency * hrIntervalInSecond),
-//                    color = "#48ff7b",
-//                )
-//            )
-//            add(
-//                OWDActivityHRZoneData(
-//                    title = "Zone 4",
-//                    range = "(80-90%)",
-//                    percentage = zone4Frequency.toFloat().calculatePercentage(duration.toFloat())
-//                        .toInt(),
-//                    duration = ApplicationUtils.getActivityDurationFormat2(zone4Frequency * hrIntervalInSecond),
-//                    color = "#ff8934",
-//                )
-//            )
-//            add(
-//                OWDActivityHRZoneData(
-//                    title = "Zone 5",
-//                    range = "(90-100%)",
-//                    percentage = zone5Frequency.toFloat().calculatePercentage(duration.toFloat())
-//                        .toInt(),
-//                    duration = ApplicationUtils.getActivityDurationFormat2(zone5Frequency * hrIntervalInSecond),
-//                    color = "#ff3434",
-//                )
-//            )
+            add(
+                OWDActivityHRZoneData(
 
+                    title = "Zone 1",
+                    zone = 1,
+                    range = "(50-60%)",
+                    percentage = zone1Indexes.size.toFloat().calculatePercentage(duration.toFloat())
+                        .toInt(),
+                    duration = ApplicationUtils.getActivityDurationFormat2(zone1Indexes.size * hrIntervalInSecond),
+                    color = "#3485ff",
+                )
+            )
+            add(
+                OWDActivityHRZoneData(
+
+                    title = "Zone 2",
+                    range = "(60-70%)",
+                    zone = 2,
+                    percentage = zone2Indexes.size.toFloat().calculatePercentage(duration.toFloat())
+                        .toInt(),
+                    duration = ApplicationUtils.getActivityDurationFormat2(zone2Indexes.size * hrIntervalInSecond),
+                    color = "#34f3ff",
+                )
+            )
+            add(
+                OWDActivityHRZoneData(
+
+                    title = "Zone 3",
+                    range = "(70-80%)",
+                    zone = 3,
+                    percentage = zone3Indexes.size.toFloat().calculatePercentage(duration.toFloat())
+                        .toInt(),
+                    duration = ApplicationUtils.getActivityDurationFormat2(zone3Indexes.size * hrIntervalInSecond),
+                    color = "#48ff7b",
+                )
+            )
+            add(
+                OWDActivityHRZoneData(
+                    title = "Zone 4",
+                    range = "(80-90%)",
+                    zone = 4,
+                    percentage = zone4Indexes.size.toFloat().calculatePercentage(duration.toFloat())
+                        .toInt(),
+                    duration = ApplicationUtils.getActivityDurationFormat2(zone4Indexes.size * hrIntervalInSecond),
+                    color = "#ff8934",
+                )
+            )
+            add(
+                OWDActivityHRZoneData(
+                    title = "Zone 5",
+                    range = "(90-100%)",
+                    zone = 5,
+                    percentage = zone5Indexes.size.toFloat().calculatePercentage(duration.toFloat())
+                        .toInt(),
+                    duration = ApplicationUtils.getActivityDurationFormat2(zone5Indexes.size * hrIntervalInSecond),
+                    color = "#ff3434",
+                )
+            )
         }
     }
 
     fun getUserAge(): Int {
         return localDataStore.getUser()?.userInfo?.age ?: 30
+    }
+
+
+    fun getIndexList(zone: Int): Pair<List<Int>, Int> {
+        return when (zone) {
+            0 -> Pair(zoneRestorativeIndexes, Color.parseColor("#34f3ff"))//pending from design
+            1 -> Pair(zone1Indexes, Color.parseColor("#3485ff"))
+            2 -> Pair(zone2Indexes, Color.parseColor("#34f3ff"))
+            3 -> Pair(zone3Indexes, Color.parseColor("#48ff7b"))
+            4 -> Pair(zone4Indexes, Color.parseColor("#ff8934"))
+            5 -> Pair(zone5Indexes, Color.parseColor("#ff3434"))
+            else -> Pair(ArrayList(), Color.parseColor("#000000"))
+        }
     }
 }

@@ -1125,7 +1125,7 @@ constructor(
 
         var cadence = 0L
         if (it.reportTotalStep != 0L) {
-            cadence = ((it.reportTotalStep / duration) * 60)
+            cadence = ((it.reportTotalStep / duration))
         }
 
         return RecordedWorkoutData(
