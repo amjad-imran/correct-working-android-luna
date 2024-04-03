@@ -21,20 +21,14 @@ import android.os.Message
 import android.os.SystemClock
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleService
-import androidx.lifecycle.viewModelScope
-import com.google.firebase.crashlytics.internal.model.CrashlyticsReport
-import com.google.gson.Gson
-import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.luna.R
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.local.db.CacheResult
-import com.noisefit.data.local.db.Converters
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.LastSyncProvider
 import com.noisefit.data.repository.abstraction.DeviceRepository
-import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
 import com.noisefit.util.FirebaseCrashlyticsUtils
@@ -48,11 +42,8 @@ import com.noisefit.watch.DeviceQueryHandler
 import com.noisefit.watch.UpdateDeviceHandler
 import com.noisefit.watch.UserActivityHandler
 import com.noisefit.watch.WatchesSDK
-import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.constants.WatchInfoGlobals
-import com.noisefit_commans.data.BinaryActionCallback
-import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.enums.Actions
 import com.noisefit_commans.data.enums.ServiceState
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -67,7 +58,6 @@ import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.connection.ConnectionCallbacks
 import com.noisefit_commans.interfaces.connection.ConnectionDataActions
 import com.noisefit_commans.interfaces.data.IUserActivityDataCallback
-import com.noisefit_commans.interfaces.data.UserActivityAction
 import com.noisefit_commans.interfaces.data.UserActivityCallback
 import com.noisefit_commans.interfaces.data.UserActivityDataActions
 import com.noisefit_commans.interfaces.device_data.IUpdateDeviceDataCallback
@@ -78,13 +68,11 @@ import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.DeviceFirmware
 import com.noisefit_commans.models.DeviceUnits
-import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.models.StepsData
 import com.noisefit_commans.models.TimeFormat
 import com.noisefit_commans.models.TimeFormats
 import com.noisefit_commans.models.UpdateStatus
 import com.noisefit_commans.models.WatchFirmwareDetails
-import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.CallHandler
@@ -1077,6 +1065,12 @@ constructor() : LifecycleService() {
 
                     is UserActivityCallback.AutoSportDataObtained -> {
                         LOGS.d(TAG, "SyncDataWork: onAutoSportData inside")
+                        it.data.firstOrNull()?.let {
+                            NotificationUtil.showWorkoutLocalNotification(
+                                this, it
+                            )
+                        }
+
 
                         GlobalScope.launch {
                             syncRepository.saveAutoWorkoutData(it.data)
