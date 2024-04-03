@@ -19,16 +19,11 @@ import com.noisefit_commans.models.Units
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.OWDActivityData
 import com.oreo.data.model.OWDActivityHRZoneData
 import com.oreo.data.model.OWorkoutDetailsResponseModel
-import com.oreo.data.model.Section
-import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
-import com.oreo.ui.custom.Item
-import com.oreo.ui.custom.WorkoutHeartRateGraphModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
