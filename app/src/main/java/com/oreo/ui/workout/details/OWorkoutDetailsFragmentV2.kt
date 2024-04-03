@@ -303,10 +303,6 @@ class OWorkoutDetailsFragmentV2 :
                     }
                 }
 
-                override fun onTopClicked() {
-
-                }
-
             })
 
         }
