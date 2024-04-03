@@ -421,62 +421,62 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
                     percentage = zoneRestorativeFrequency.toFloat()
                         .calculatePercentage(duration.toFloat()).toInt(),
                     duration = ApplicationUtils.getActivityDurationFormat2(zoneRestorativeFrequency * hrIntervalInSecond),
-                    color = "#34f3ff",
+                    color = "#ACABAB",
                 )
             )
-            add(
-                OWDActivityHRZoneData(
-
-                    title = "Zone 1",
-                    range = "(50-60%)",
-                    percentage = zone1Frequency.toFloat().calculatePercentage(duration.toFloat())
-                        .toInt(),
-                    duration = ApplicationUtils.getActivityDurationFormat2(zone1Frequency * hrIntervalInSecond),
-                    color = "#3485ff",
-                )
-            )
-            add(
-                OWDActivityHRZoneData(
-
-                    title = "Zone 2",
-                    range = "(60-70%)",
-                    percentage = zone2Frequency.toFloat().calculatePercentage(duration.toFloat())
-                        .toInt(),
-                    duration = ApplicationUtils.getActivityDurationFormat2(zone2Frequency * hrIntervalInSecond),
-                    color = "#34f3ff",
-                )
-            )
-            add(
-                OWDActivityHRZoneData(
-
-                    title = "Zone 3",
-                    range = "(70-80%)",
-                    percentage = zone3Frequency.toFloat().calculatePercentage(duration.toFloat())
-                        .toInt(),
-                    duration = ApplicationUtils.getActivityDurationFormat2(zone3Frequency * hrIntervalInSecond),
-                    color = "#48ff7b",
-                )
-            )
-            add(
-                OWDActivityHRZoneData(
-                    title = "Zone 4",
-                    range = "(80-90%)",
-                    percentage = zone4Frequency.toFloat().calculatePercentage(duration.toFloat())
-                        .toInt(),
-                    duration = ApplicationUtils.getActivityDurationFormat2(zone4Frequency * hrIntervalInSecond),
-                    color = "#ff8934",
-                )
-            )
-            add(
-                OWDActivityHRZoneData(
-                    title = "Zone 5",
-                    range = "(90-100%)",
-                    percentage = zone5Frequency.toFloat().calculatePercentage(duration.toFloat())
-                        .toInt(),
-                    duration = ApplicationUtils.getActivityDurationFormat2(zone5Frequency * hrIntervalInSecond),
-                    color = "#ff3434",
-                )
-            )
+//            add(
+//                OWDActivityHRZoneData(
+//
+//                    title = "Zone 1",
+//                    range = "(50-60%)",
+//                    percentage = zone1Frequency.toFloat().calculatePercentage(duration.toFloat())
+//                        .toInt(),
+//                    duration = ApplicationUtils.getActivityDurationFormat2(zone1Frequency * hrIntervalInSecond),
+//                    color = "#3485ff",
+//                )
+//            )
+//            add(
+//                OWDActivityHRZoneData(
+//
+//                    title = "Zone 2",
+//                    range = "(60-70%)",
+//                    percentage = zone2Frequency.toFloat().calculatePercentage(duration.toFloat())
+//                        .toInt(),
+//                    duration = ApplicationUtils.getActivityDurationFormat2(zone2Frequency * hrIntervalInSecond),
+//                    color = "#34f3ff",
+//                )
+//            )
+//            add(
+//                OWDActivityHRZoneData(
+//
+//                    title = "Zone 3",
+//                    range = "(70-80%)",
+//                    percentage = zone3Frequency.toFloat().calculatePercentage(duration.toFloat())
+//                        .toInt(),
+//                    duration = ApplicationUtils.getActivityDurationFormat2(zone3Frequency * hrIntervalInSecond),
+//                    color = "#48ff7b",
+//                )
+//            )
+//            add(
+//                OWDActivityHRZoneData(
+//                    title = "Zone 4",
+//                    range = "(80-90%)",
+//                    percentage = zone4Frequency.toFloat().calculatePercentage(duration.toFloat())
+//                        .toInt(),
+//                    duration = ApplicationUtils.getActivityDurationFormat2(zone4Frequency * hrIntervalInSecond),
+//                    color = "#ff8934",
+//                )
+//            )
+//            add(
+//                OWDActivityHRZoneData(
+//                    title = "Zone 5",
+//                    range = "(90-100%)",
+//                    percentage = zone5Frequency.toFloat().calculatePercentage(duration.toFloat())
+//                        .toInt(),
+//                    duration = ApplicationUtils.getActivityDurationFormat2(zone5Frequency * hrIntervalInSecond),
+//                    color = "#ff3434",
+//                )
+//            )
 
         }
     }

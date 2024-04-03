@@ -14,12 +14,16 @@ import com.noisefit_commans.utils.LOGS
 class PercentageBar : View {
     private val intervalCount = 10
     private var lineColor = 0
+    private var percentageColor = 0
     private var unitWidthLength = 0
-    private val intervalHeight = 20 // Height of each interval in pixels
     private var rectF: RectF? = null
     private var cornerLine = dp2px(10f).toFloat()
+    private var cornerProgressLine = dp2px(2f).toFloat()
     private var width = 0
     private val linePaint = Paint()
+    private val percentagePaint = Paint()
+    private var dataList = ArrayList<Int>()
+    private var isHighlighted = false
 
     constructor(context: Context?) : super(context) {
         initPaint()
@@ -46,17 +50,30 @@ class PercentageBar : View {
         init(attrs)
     }
 
+    fun setPercentageColor1(percentageColor: Int) {
+        this.percentageColor = percentageColor
+    }
+
     private fun initPaint() {
-        linePaint.color = lineColor
-        linePaint.style = Paint.Style.FILL
-        linePaint.isAntiAlias = true
+        linePaint.apply {
+            color = lineColor
+            style = Paint.Style.FILL
+            isAntiAlias = true
+        }
+
+        percentagePaint.apply {
+            color = percentageColor
+            style = Paint.Style.FILL
+            isAntiAlias = true
+        }
+
         rectF = RectF()
     }
 
     private fun init(attrs: AttributeSet?) {
         val ta = context.obtainStyledAttributes(attrs, R.styleable.PercentageBar)
         lineColor = ta.getColor(R.styleable.PercentageBar_lineColor, Color.GRAY)
-//        percentageColor = ta.getColor(R.styleable.PercentageBar_percentageColor, Color.RED)
+        percentageColor = ta.getColor(R.styleable.PercentageBar_percentageColor, Color.RED)
 //        interval = ta.getDimension(R.styleable.PercentageBar_interval, dp2px(2f).toFloat())
 //        max = ta.getInt(R.styleable.PercentageBar_max, 100)
 //        percentage = ta.getInt(R.styleable.PercentageBar_percentage, 50)
@@ -72,52 +89,139 @@ class PercentageBar : View {
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
+        drawBgLines(canvas)
+        drawProgress(canvas)
 
+    }
 
-        unitWidthLength =
-            ((width) / intervalCount)
+    private fun drawBgLines(canvas: Canvas?) {
+        unitWidthLength = ((width - 10) / intervalCount)
 
-
-
-        for (i in 0 until intervalCount) {
-
-//            rectF!!.left = i * intervalReal
-////                rectF!!.top = 0f
-////                rectF!!.right = rectF!!.left + lineWidth
-//                rectF!!.bottom = height.toFloat()
-//            val left = i * unitWidthLength
-//            val right = .1
-//            val top = 0
-//            val bottom = intervalHeight
-
-            LOGS.d("sadsdadsasdsad $left --> $right --> ${top} ---> $bottom")
+        for (i in 0..intervalCount) {
             rectF!!.left = (i * unitWidthLength).toFloat()
             rectF!!.top = 0f
-            rectF!!.right = rectF!!.left + unitWidthLength
+            rectF!!.right = rectF!!.left + (unitWidthLength) / 4
             rectF!!.bottom = height.toFloat()
-//            canvas?.drawRect(
-//                left.toFloat(),
-//                top.toFloat(),
-//                right.toFloat(),
-//                bottom.toFloat(),
-//                linePaint
-//            )
             canvas?.drawRoundRect(rectF!!, cornerLine, cornerLine, linePaint)
         }
     }
 
-    private fun calculateIntervalWidth(screenWidth: Int): Int {
-        // Adjust this formula as per your requirements
-        return (screenWidth * 0.6 / intervalCount).toInt() // 60% of screen width divided by interval count
+
+    fun updateData(dataList: ArrayList<Int>, isHighlighted: Boolean, color: Int) {
+        this.dataList = dataList
+        this.isHighlighted = isHighlighted
+        this.percentageColor = color
+        invalidate()
+    }
+
+
+    private fun drawProgress(canvas: Canvas?) {
+//        if (this.dataList.isEmpty()) {
+//            return
+//        }
+
+
+
+        val data = getData()
+
+
+        var right = 0f
+        var left = 0f
+
+        ///0,0,0,1,0,0,1,0
+        for (i in 0 until data.size) {
+            val next = data.getOrNull(i + 1) ?: 0
+            val current = data.getOrNull(i) ?: 0
+            LOGS.d("sadsdadsasdsad index $current ")
+            rectF!!.top = 10f
+            rectF!!.bottom = height.toFloat() - 10f
+            if (current == 0) {
+//                if (!hasLeft) {
+//                    hasLeft = false
+                left = (i * unitWidthLength).toFloat()
+                LOGS.d("sadsdadsasdsad index $i ---> left zero $left")
+
+//                }
+                continue
+            }
+
+            if (next == 0) {
+                left = (i * unitWidthLength).toFloat()
+                if (right == 0f) {
+                    right = left + unitWidthLength
+                } else {
+                    right += left
+                }
+                rectF!!.left = left
+                rectF!!.right = right
+                canvas?.drawRoundRect(
+                    rectF!!,
+                    cornerProgressLine,
+                    cornerProgressLine,
+                    percentagePaint
+                )
+                right = 0f
+            } else {
+                right += unitWidthLength
+            }
+
+
+//            if()
+//            if (next == 0) {
+//                rectF!!.left = (left)
+//                rectF!!.right = (right + unitWidthLength)
+//                canvas?.drawRoundRect(
+//                    rectF!!,
+//                    cornerProgressLine,
+//                    cornerProgressLine,
+//                    percentagePaint
+//                )
+//                left = 0f
+//                hasLeft = false
+//                LOGS.d("sadsdadsasdsad index $i ---> draw $width --> $unitWidthLength ===> ${rectF!!.left} --> ${rectF!!.right} ")
+//            } else {
+//                if (!hasLeft) {
+//                    hasLeft = true
+//                    left = (i * unitWidthLength).toFloat()
+//                    LOGS.d("sadsdadsasdsad index $i ---> left zero $left")
+//
+//                } else {
+//                    right = (i * unitWidthLength).toFloat()
+//                    LOGS.d("sadsdadsasdsad index $i ---> ignore left zero $right")
+//                }
+//            }
+
+
+//            canvas?.drawRoundRect(rectF!!, cornerLine, cornerLine, percentagePaint)
+        }
+
+
     }
 
     private fun dp2px(dpValue: Float): Int {
         val scale = context.resources.displayMetrics.density
         return (dpValue * scale + 0.5f).toInt()
     }
-//    private fun calculateTotalIntervalWidth(screenWidth: Int): Int {
-//        return (intervalCount * (calculateIntervalWidth(screenWidth) + intervalSpacing) - intervalSpacing)
-//    }
+
+    private fun getData(): ArrayList<Int> {
+        val data = ArrayList<Int>()
+//        for (i in 0..2) {
+//            data.add((1..10).random())
+//        }
+        data.add(0)
+        data.add(0)
+        data.add(0)
+        data.add(1)
+        data.add(0)
+        data.add(1)
+        data.add(0)
+//        data.add(1)
+//        data.add(1)
+//        data.add(1)
+//        data.add(0)
+        return data
+    }
+
 }
 
 //class PercentageBar : View {

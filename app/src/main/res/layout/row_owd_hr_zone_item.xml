@@ -69,7 +69,7 @@
         <com.oreo.ui.custom.PercentageBar
             android:id="@+id/percentageBar"
             android:layout_width="0dp"
-            android:layout_height="10dp"
+            android:layout_height="40dp"
             android:layout_marginTop="12dp"
             app:layout_constraintEnd_toEndOf="@id/tvDuration"
             app:layout_constraintStart_toStartOf="@id/tvTitle"

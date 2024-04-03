@@ -34,8 +34,8 @@ class OWorkoutHRZoneAdapter() :
             val color = Color.parseColor(detailData.color)
             binding.tvTitle.setTextColor(color)
             binding.tvPercentage.setTextColor(color)
-//            binding.percentageBar.percentageColor = color
-//            binding.percentageBar.percentage = detailData.percentage
+//            binding.percentageBar.setPercentageColor1(color)
+            binding.percentageBar.updateData(ArrayList(), false,color)
             binding.root.setOnClickListener {
                 LOGS.d("dasadsads ${detailData.isHighlighted}")
                 listener?.onClick(position, !detailData.isHighlighted, detailData)
