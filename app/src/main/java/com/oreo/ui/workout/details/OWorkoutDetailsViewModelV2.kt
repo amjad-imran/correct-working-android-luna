@@ -18,6 +18,7 @@ import com.noisefit_commans.models.Units
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.OWDActivityData
 import com.oreo.data.model.OWDActivityHRZoneData
@@ -372,8 +373,6 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         zones["Zone 5"] = zone4Max..zone5Max
 
 
-
-
         hrValue.forEachIndexed { index, value ->
             when (value) {
                 in zone1Min until zone1Max -> {
@@ -492,7 +491,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
 
     fun getIndexList(zone: Int): Pair<List<Int>, Int> {
         return when (zone) {
-            0 -> Pair(zoneRestorativeIndexes, Color.parseColor("#48ff7b"))//pending from design
+            0 -> Pair(zoneRestorativeIndexes, Color.parseColor("#34f3ff"))//pending from design
             1 -> Pair(zone1Indexes, Color.parseColor("#3485ff"))
             2 -> Pair(zone2Indexes, Color.parseColor("#34f3ff"))
             3 -> Pair(zone3Indexes, Color.parseColor("#48ff7b"))

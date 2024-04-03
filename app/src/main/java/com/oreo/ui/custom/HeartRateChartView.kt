@@ -293,7 +293,7 @@ class HeartRateChartView : View {
         }
 
         avgTextPaint = Paint().apply {
-            this.color = Color.parseColor("#9cbdff")
+            this.color = Color.parseColor("#ffffff")
             this.typeface = fontGilroy
             this.textSize = dip2px(14f).toFloat()
         }
@@ -463,11 +463,6 @@ class HeartRateChartView : View {
                 }
 
                 MotionEvent.ACTION_UP -> {
-                    if (!isInteracting) {
-                        if (event.y < dip2px(50f)) {
-                            listener?.onTopClicked()
-                        }
-                    }
                     resetState()
                     return super.onTouchEvent(event)
                 }
@@ -787,6 +782,7 @@ class HeartRateChartView : View {
                             fillPath.lineTo(x, mHeight - bottomWith)
                             chartLineFillPaint.setShader(linearGradientH)
                             canvas.drawPath(fillPath, chartLineFillPaint)
+                            chartLinePaint.setShader(linearGradientH)
                             chartLinePaint.color = highlightColor
                             fillPath.reset()
                         } else {
@@ -818,6 +814,7 @@ class HeartRateChartView : View {
                         canvas.drawPath(path, chartLinePaint)
                     } else {
                         if (highlightIndexs.contains(list.size - 1 - i)) {
+                            chartLinePaint.setShader(linearGradientH)
                             chartLinePaint.color = highlightColor
                         } else {
                             if (!isHighlighted /*highlightIndexs.isEmpty()*/) {
@@ -829,7 +826,7 @@ class HeartRateChartView : View {
                                 //                                chartLinePaint.setColor(chartLineColor);
                             } else {
                                 chartLinePaint.setShader(null)
-                                chartLinePaint.color = Color.parseColor("#FF0000")
+                                chartLinePaint.color = Color.parseColor("#596f80")
                             }
                         }
                         canvas.drawPoint(x, y, chartLinePaint)
@@ -1218,5 +1215,4 @@ class HeartRateChartView : View {
 
 interface OnHeartRateChartClickAction {
     fun onValueSelected(value: Int, isInteracting: Boolean, time: String? = null)
-    fun onTopClicked()
 }

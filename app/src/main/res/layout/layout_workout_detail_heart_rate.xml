@@ -96,7 +96,7 @@
             app:bgRightColor="@android:color/transparent"
             app:bgTopColor="@android:color/transparent"
             app:bottomWith="26dp"
-            app:centerLineColor="#88b0ff"
+            app:centerLineColor="#CCffffff"
             app:centerLineWidth="3dp"
             app:chartLineWidth="2dp"
             app:gridColor="#80FFFFFF"
