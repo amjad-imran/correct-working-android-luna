@@ -4,6 +4,7 @@ import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.remote.base.Resource
@@ -402,6 +403,8 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             }
         }
 
+        LOGS.d("khgkhgkgkk ${Gson().toJson(zone1Indexes)}")
+
 
         val duration =
             zone1Indexes.size + zone2Indexes.size + zone3Indexes.size + zone4Indexes.size + zone5Indexes.size + zoneRestorativeIndexes.size
@@ -415,12 +418,12 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
                 OWDActivityHRZoneData(
 
                     title = "Restorative zone",
-                    range = "<50%",
+                    range = "(<50%)",
                     zone = 0,
                     percentage = zoneRestorativeIndexes.size.toFloat()
                         .calculatePercentage(duration.toFloat()).toInt(),
                     duration = ApplicationUtils.getActivityDurationFormat2(zoneRestorativeIndexes.size * hrIntervalInSecond),
-                    color = "#34f3ff",
+                    color = "#ACABAB",
                 )
             )
             add(
@@ -491,7 +494,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
 
     fun getIndexList(zone: Int): Pair<List<Int>, Int> {
         return when (zone) {
-            0 -> Pair(zoneRestorativeIndexes, Color.parseColor("#34f3ff"))//pending from design
+            0 -> Pair(zoneRestorativeIndexes, Color.parseColor("#ACABAB"))//pending from design
             1 -> Pair(zone1Indexes, Color.parseColor("#3485ff"))
             2 -> Pair(zone2Indexes, Color.parseColor("#34f3ff"))
             3 -> Pair(zone3Indexes, Color.parseColor("#48ff7b"))

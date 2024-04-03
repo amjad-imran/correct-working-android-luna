@@ -127,9 +127,9 @@ class PercentageBar : View {
 
         var right = 0f
         var left = 0f
-
-        ///0,0,0,1,0,0,1,0
-        for (i in 0 until data.size) {
+        var hasLeft = false
+        ///0,0,0,1,1
+        for (i in 0 .. data.size) {
             val next = data.getOrNull(i + 1) ?: 0
             val current = data.getOrNull(i) ?: 0
             LOGS.d("sadsdadsasdsad index $current ")
@@ -140,13 +140,17 @@ class PercentageBar : View {
 //                    hasLeft = false
                 left = (i * unitWidthLength).toFloat()
                 LOGS.d("sadsdadsasdsad index $i ---> left zero $left")
-
 //                }
                 continue
             }
 
             if (next == 0) {
-                left = (i * unitWidthLength).toFloat()
+                left =  if(hasLeft){
+                    left
+                }else{
+                    (i * unitWidthLength).toFloat()
+                }
+
                 if (right == 0f) {
                     right = left + unitWidthLength
                 } else {
@@ -160,8 +164,15 @@ class PercentageBar : View {
                     cornerProgressLine,
                     percentagePaint
                 )
+                hasLeft = false
                 right = 0f
             } else {
+                if (!hasLeft) {
+                    hasLeft = true
+                    left = (i * unitWidthLength).toFloat()
+                    LOGS.d("sadsdadsasdsad index $i ---> left zero $left")
+
+                }
                 right += unitWidthLength
             }
 
@@ -212,9 +223,9 @@ class PercentageBar : View {
         data.add(0)
         data.add(0)
         data.add(1)
-        data.add(0)
         data.add(1)
-        data.add(0)
+//        data.add(1)
+//        data.add(0)
 //        data.add(1)
 //        data.add(1)
 //        data.add(1)
