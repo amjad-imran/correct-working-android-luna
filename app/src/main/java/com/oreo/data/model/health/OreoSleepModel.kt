@@ -37,6 +37,7 @@ data class Nap(
     @SerializedName("after_7pm") val after7pm: String,
     @SerializedName("readiness_score_impact") val readinessScoreImpact: Int? = null,
     @SerializedName("end_time") val endTime: String,
+    @SerializedName("msg") val msg: String? = null,
     val duration: Int? = null,
     @SerializedName("is_next_day_nap") val isNextDayNap: Boolean = false,
     @SerializedName("is_day_nap") val isDayNap: Boolean = false

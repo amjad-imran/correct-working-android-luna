@@ -8,6 +8,7 @@ import com.noisefit.luna.databinding.RowNapDashBinding
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.health.Nap
@@ -32,8 +33,8 @@ class DashNapAdapter(
             if (nap.isNextDayNap) {
                 binding.ivMoveNext.gone()
                 binding.tvLabel.apply {
-                    text = this.context.getString(R.string.text_late_naps_effect)
-                    visible()
+                    text = nap.msg
+                    setVisibilityByCondition(nap.msg.isNullOrEmpty().not())
                 }
                 binding.ivSleepSeperator.gone()
                 binding.ivSleep.gone()
