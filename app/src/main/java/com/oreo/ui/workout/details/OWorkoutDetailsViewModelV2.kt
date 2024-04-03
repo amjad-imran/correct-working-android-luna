@@ -1,5 +1,6 @@
 package com.oreo.ui.workout.details
 
+import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -481,78 +482,6 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
 
         }
     }
-
-
-//    fun generateHrZones(hrValue: List<Int>): List<OWDActivityHRZoneData> {
-//
-//        val heartRateZones = calculateHeartRateZones(hrValue)
-//
-//        heartRateZones.forEach { (zone, range) ->
-//            println("$zone: $range bpm lkjsdlkjadlkdsajlk")
-//        }
-//
-//        val age = getUserAge()
-//        val mhr = (208 - 0.7 * age)
-//
-//
-//        return arrayListOf<OWDActivityHRZoneData>().apply {
-//            add(
-//                OWDActivityHRZoneData(
-//                    title = "Restorative zone",
-//                    range = "${getHrValue(mhr, 50)}%",
-//                    percentage = 10,
-//                    duration = "00:10",
-//                    color = "#34f3ff",
-//                )
-//            )
-//            add(
-//                OWDActivityHRZoneData(
-//                    title = "Zone 1",
-//                    range = "<60%",
-//                    percentage = 30,
-//                    duration = "00:30",
-//                    color = "#3485ff",
-//                )
-//            )
-//            add(
-//                OWDActivityHRZoneData(
-//                    title = "Zone 2",
-//                    range = "60-70%",
-//                    percentage = 20,
-//                    duration = "00:10",
-//                    color = "#34f3ff",
-//                )
-//            )
-//            add(
-//                OWDActivityHRZoneData(
-//                    title = "Zone 3",
-//                    range = "60-70%",
-//                    percentage = 10,
-//                    duration = "00:10",
-//                    color = "#34f3ff",
-//                )
-//            )
-//            add(
-//                OWDActivityHRZoneData(
-//                    title = "Zone 4",
-//                    range = "60-70%",
-//                    percentage = 10,
-//                    duration = "00:10",
-//                    color = "#34f3ff",
-//                )
-//            )
-//            add(
-//                OWDActivityHRZoneData(
-//                    title = "Zone 5",
-//                    range = "60-70%",
-//                    percentage = 10,
-//                    duration = "00:10",
-//                    color = "#34f3ff",
-//                )
-//            )
-//
-//        }
-//    }
 
     fun getUserAge(): Int {
         return localDataStore.getUser()?.userInfo?.age ?: 30

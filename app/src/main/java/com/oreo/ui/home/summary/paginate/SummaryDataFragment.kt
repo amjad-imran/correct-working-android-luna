@@ -249,6 +249,7 @@ class SummaryDataFragment :
                     })
                 }else{
                     navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
+                        putString("workoutName", data.getFormattedActivityName())
                         putString("workoutId", data.id ?: "")
                         putInt("position", position)
                     })

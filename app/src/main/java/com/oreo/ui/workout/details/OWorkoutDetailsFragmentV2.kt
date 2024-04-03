@@ -76,6 +76,12 @@ class OWorkoutDetailsFragmentV2 :
             viewModel.deleteWorkout(id!!)
         }
 
+        binding.svMain.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            if (Math.abs(scrollY - oldScrollY) > 0) {
+                binding.lytHeartRate.heartRateChart.resetIfInteracting()
+            }
+        }
+
     }
 
     private fun setDefaultUiValue() {
@@ -278,9 +284,9 @@ class OWorkoutDetailsFragmentV2 :
             setClickListener(object : OnHeartRateChartClickAction {
                 override fun onValueSelected(value: Int, isInteracting: Boolean, time: String?) {
                     if (isInteracting) {
-                       /* binding.lytHeartRate.tvSubtitle1.text = time ?: ""
-                        binding.lytHeartRate.lytSubtitleValue1.tvValue.text =
-                            if (value > 0) "$value" else "-"*/
+                        /* binding.lytHeartRate.tvSubtitle1.text = time ?: ""
+                         binding.lytHeartRate.lytSubtitleValue1.tvValue.text =
+                             if (value > 0) "$value" else "-"*/
 
                     } else {
                         //setHrLowestHr()
@@ -297,6 +303,4 @@ class OWorkoutDetailsFragmentV2 :
 
 
     }
-
-
 }
