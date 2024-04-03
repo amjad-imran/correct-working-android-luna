@@ -13,6 +13,7 @@ class OWorkoutHRZoneAdapter() :
     RecyclerView.Adapter<OWorkoutHRZoneAdapter.ViewHolder>() {
     private var mDataSet = ArrayList<OWDActivityHRZoneData>()
     private var listener: OWorkoutHRZoneInteractionListener? = null
+    private var isHighlighted = false
 
     fun setListener(listener: OWorkoutHRZoneInteractionListener) {
         this.listener = listener
@@ -35,7 +36,7 @@ class OWorkoutHRZoneAdapter() :
             binding.tvTitle.setTextColor(color)
             binding.tvPercentage.setTextColor(color)
 //            binding.percentageBar.setPercentageColor1(color)
-            binding.percentageBar.updateData(ArrayList(), false,color)
+            binding.percentageBar.updateData(detailData.selectedIndexes,detailData.dataSize,color,isHighlighted)
             binding.root.setOnClickListener {
                 LOGS.d("dasadsads ${detailData.isHighlighted}")
                 listener?.onClick(position, !detailData.isHighlighted, detailData)
@@ -68,6 +69,7 @@ class OWorkoutHRZoneAdapter() :
             }
 
         }
+        this.isHighlighted = isHighlighted
 
         LOGS.d("dasadsads $position $isHighlighted ${Gson().toJson(mDataSet)}")
 //        mDataSet[position].isHighlighted = isDisable

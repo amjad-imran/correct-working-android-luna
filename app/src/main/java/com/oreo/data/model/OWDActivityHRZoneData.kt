@@ -8,5 +8,7 @@ data class OWDActivityHRZoneData(
     val percentage: Int,
     var isHighlighted: Boolean = false,
     var isDisable: Boolean = false,
-    val duration: String
+    val duration: String,
+    val dataSize: Int,
+    val selectedIndexes: List<Int>
 )

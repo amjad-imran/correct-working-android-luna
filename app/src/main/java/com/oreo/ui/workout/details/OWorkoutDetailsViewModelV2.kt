@@ -424,6 +424,8 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
                         .calculatePercentage(duration.toFloat()).toInt(),
                     duration = ApplicationUtils.getActivityDurationFormat2(zoneRestorativeIndexes.size * hrIntervalInSecond),
                     color = "#ACABAB",
+                    dataSize = hrValue.size,
+                    selectedIndexes = zoneRestorativeIndexes
                 )
             )
             add(
@@ -436,6 +438,8 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
                         .toInt(),
                     duration = ApplicationUtils.getActivityDurationFormat2(zone1Indexes.size * hrIntervalInSecond),
                     color = "#3485ff",
+                    dataSize = hrValue.size,
+                    selectedIndexes = zone1Indexes
                 )
             )
             add(
@@ -448,6 +452,8 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
                         .toInt(),
                     duration = ApplicationUtils.getActivityDurationFormat2(zone2Indexes.size * hrIntervalInSecond),
                     color = "#34f3ff",
+                    dataSize = hrValue.size,
+                    selectedIndexes = zone2Indexes
                 )
             )
             add(
@@ -460,6 +466,8 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
                         .toInt(),
                     duration = ApplicationUtils.getActivityDurationFormat2(zone3Indexes.size * hrIntervalInSecond),
                     color = "#48ff7b",
+                    dataSize = hrValue.size,
+                    selectedIndexes = zone3Indexes
                 )
             )
             add(
@@ -471,6 +479,8 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
                         .toInt(),
                     duration = ApplicationUtils.getActivityDurationFormat2(zone4Indexes.size * hrIntervalInSecond),
                     color = "#ff8934",
+                    dataSize = hrValue.size,
+                    selectedIndexes = zone4Indexes
                 )
             )
             add(
@@ -482,6 +492,8 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
                         .toInt(),
                     duration = ApplicationUtils.getActivityDurationFormat2(zone5Indexes.size * hrIntervalInSecond),
                     color = "#ff3434",
+                    dataSize = hrValue.size,
+                    selectedIndexes = zone5Indexes
                 )
             )
         }

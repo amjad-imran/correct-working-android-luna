@@ -23,6 +23,7 @@ class PercentageBar : View {
     private val linePaint = Paint()
     private val percentagePaint = Paint()
     private var dataList = ArrayList<Int>()
+    private var dataSize = 0
     private var isHighlighted = false
 
     constructor(context: Context?) : super(context) {
@@ -89,26 +90,35 @@ class PercentageBar : View {
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
+        initPaint()
         drawBgLines(canvas)
         drawProgress(canvas)
 
     }
 
     private fun drawBgLines(canvas: Canvas?) {
-        unitWidthLength = ((width - 10) / intervalCount)
+        unitWidthLength = (width / dataSize)
 
-        for (i in 0..intervalCount) {
-            rectF!!.left = (i * unitWidthLength).toFloat()
+        val dummyUnitLength = width / 100
+        for (i in 0..100) {
+            rectF!!.left = (i * dummyUnitLength).toFloat()
             rectF!!.top = 0f
-            rectF!!.right = rectF!!.left + (unitWidthLength) / 4
+            rectF!!.right = rectF!!.left + (dummyUnitLength) / 4
             rectF!!.bottom = height.toFloat()
             canvas?.drawRoundRect(rectF!!, cornerLine, cornerLine, linePaint)
         }
     }
 
 
-    fun updateData(dataList: ArrayList<Int>, isHighlighted: Boolean, color: Int) {
-        this.dataList = dataList
+    fun updateData(
+        dataList: List<Int>,
+        dataSize: Int,
+        color: Int,
+        isHighlighted: Boolean
+    ) {
+        this.dataList.clear()
+        this.dataList.addAll(dataList)
+        this.dataSize = dataSize
         this.isHighlighted = isHighlighted
         this.percentageColor = color
         invalidate()
@@ -120,8 +130,6 @@ class PercentageBar : View {
 //            return
 //        }
 
-
-
         val data = getData()
 
 
@@ -129,12 +137,12 @@ class PercentageBar : View {
         var left = 0f
         var hasLeft = false
         ///0,0,0,1,1
-        for (i in 0 .. data.size) {
+        for (i in 0 until data.size) {
             val next = data.getOrNull(i + 1) ?: 0
             val current = data.getOrNull(i) ?: 0
             LOGS.d("sadsdadsasdsad index $current ")
-            rectF!!.top = 10f
-            rectF!!.bottom = height.toFloat() - 10f
+            rectF!!.top = 0f
+            rectF!!.bottom = height.toFloat()
             if (current == 0) {
 //                if (!hasLeft) {
 //                    hasLeft = false
@@ -145,9 +153,9 @@ class PercentageBar : View {
             }
 
             if (next == 0) {
-                left =  if(hasLeft){
+                left = if (hasLeft) {
                     left
-                }else{
+                } else {
                     (i * unitWidthLength).toFloat()
                 }
 
@@ -216,20 +224,24 @@ class PercentageBar : View {
 
     private fun getData(): ArrayList<Int> {
         val data = ArrayList<Int>()
-//        for (i in 0..2) {
-//            data.add((1..10).random())
-//        }
-        data.add(0)
-        data.add(0)
-        data.add(0)
-        data.add(1)
-        data.add(1)
-//        data.add(1)
-//        data.add(0)
-//        data.add(1)
-//        data.add(1)
-//        data.add(1)
-//        data.add(0)
+        if (isHighlighted) {
+            for (i in 0 until dataSize) {
+                if (dataList.contains(i)) {
+                    data.add(1)
+                } else {
+                    data.add(0)
+                }
+            }
+        } else {
+            for (i in 0 until dataSize) {
+                if (i < dataList.size) {
+                    data.add(1)
+                } else {
+                    data.add(0)
+                }
+            }
+        }
+
         return data
     }
 
