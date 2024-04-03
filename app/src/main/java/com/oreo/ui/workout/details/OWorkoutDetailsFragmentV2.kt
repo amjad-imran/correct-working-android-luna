@@ -70,6 +70,15 @@ class OWorkoutDetailsFragmentV2 :
 
 
     override fun initListener() {
+        binding.lytActivityItem.root.setOnClickListener {
+
+            binding.lytHeartRate.heartRateChart.updateHighlight(
+                viewModel.getIndexList(1),
+                Color.parseColor("#00FF00")
+            )
+            context.showShortToast("Clicked")
+        }
+
         binding.lytToolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }

@@ -93,8 +93,8 @@ class HeartRateChartView : View {
     private var mHasDummyData = true
     private val list: MutableList<ChartModel?> = ArrayList()
     private var showXAxis = true
-    lateinit var calmDot: Bitmap
-    lateinit var avgBackBitmap: Bitmap
+    private lateinit var calmDot: Bitmap
+    private lateinit var avgBackBitmap: Bitmap
 
     //    private int xMax;
     //    private int xMin;
@@ -105,17 +105,18 @@ class HeartRateChartView : View {
     private var minValue = 0
     private var linearGradient: LinearGradient? = null
     private var linearGradientI: LinearGradient? = null
-    lateinit var paintCalm: Paint
-    lateinit var lowTopPaint: Paint
-    lateinit var avgTextPaint: Paint
+    private var linearGradientH: LinearGradient? = null
+    private lateinit var paintCalm: Paint
+    private lateinit var lowTopPaint: Paint
+    private lateinit var avgTextPaint: Paint
 
-    lateinit var bgLine: Paint
-    lateinit var dotBitmap: Bitmap
-    lateinit var dotBitmap2: Bitmap
+    private lateinit var bgLine: Paint
+    private lateinit var dotBitmap: Bitmap
+    private lateinit var dotBitmap2: Bitmap
 
-    lateinit var mTextPaint: Paint
-    lateinit var mTextPaintEdge: Paint
-    lateinit var edgeTextBackPaint: Paint
+    private lateinit var mTextPaint: Paint
+    private lateinit var mTextPaintEdge: Paint
+    private lateinit var edgeTextBackPaint: Paint
     private val effect =
         DashPathEffect(floatArrayOf(dip2px(1f).toFloat(), dip2px(2f).toFloat()), 0f)
 
@@ -125,7 +126,7 @@ class HeartRateChartView : View {
     private val highlightIndexs: MutableList<Int> = ArrayList()
     private var highlightColor = 0
     private var isHighlighted = false
-    lateinit var restLineColor: Paint
+    private lateinit var restLineColor: Paint
 
 
     constructor(context: Context?) : super(context) {
@@ -693,6 +694,16 @@ class HeartRateChartView : View {
             Shader.TileMode.CLAMP
         )
 
+        linearGradientH = LinearGradient(
+            0f,
+            0f,
+            0f,
+            mHeight.toFloat(),
+            Color.parseColor("#516cff47"),//intArrayOf(Color.parseColor("#99ff718b"), Color.parseColor("#00ff5f7c")),
+            Color.TRANSPARENT/*floatArrayOf(0.3f, 0.6f)*/,
+            Shader.TileMode.CLAMP
+        )
+
 
         var arrayDef = intArrayOf()
         var arrayDefI = intArrayOf()
@@ -771,7 +782,7 @@ class HeartRateChartView : View {
                             //draw fill first
                             fillPath.lineTo(x1, mHeight - bottomWith)
                             fillPath.lineTo(x, mHeight - bottomWith)
-                            chartLineFillPaint.setShader(linearGradient)
+                            chartLineFillPaint.setShader(linearGradientH)
                             canvas.drawPath(fillPath, chartLineFillPaint)
                             chartLinePaint.color = highlightColor
                             fillPath.reset()
@@ -779,33 +790,25 @@ class HeartRateChartView : View {
                             fillPath.addPath(path)
                             fillPath.lineTo(x1, mHeight - bottomWith)
                             fillPath.lineTo(x, mHeight - bottomWith)
-                            chartLineFillPaint!!.setShader(if (isInteracting) linearGradientI else linearGradient)
-                            canvas.drawPath(fillPath, chartLineFillPaint!!)
-                            //draw chart line second, need to cover fill color
-                            chartLinePaint?.color =
-                                if (isInteracting) chartLineColorI else chartLineColor
-
 
                             if (!isHighlighted) {
                                 if (isInteracting) {
                                     chartLinePaint.setShader(chartLineGradientInteracting)
+                                    chartLineFillPaint.setShader(linearGradientI)
+                                    chartLinePaint.color = chartLineColorI
                                 } else {
                                     chartLinePaint.setShader(chartLineGradient)
+                                    chartLineFillPaint.setShader(linearGradient)
+                                    chartLinePaint.color = chartLineColor
+
                                 }
                             } else {
+                                chartLineFillPaint.setShader(null)
                                 chartLinePaint.setShader(null)
-                                chartLinePaint.color = Color.parseColor("#FF0000")
+                                chartLinePaint.color = Color.parseColor("#596f80")
                             }
 
-
-                            /* if (isInteracting) {
-                                 chartLinePaint?.setShader(chartLineGradientInteracting)
-                             } else {
-                                 chartLinePaint?.setShader(chartLineGradient)
-                             }*/
-
-                            //canvas.drawPath(path, chartLinePaint!!)
-
+                            canvas.drawPath(fillPath, chartLineFillPaint)
 
                         }
                         //draw chart line second, need to cover fill color
@@ -889,39 +892,22 @@ class HeartRateChartView : View {
                 }
             } else {
                 if (lastIndex != -1) {
-                    if (Math.abs(i - lastIndex) < 4) {
+                    if (Math.abs(i - lastIndex) < 120 / (1440 / list.size)) {
                         val x = mWith - leftWith - rightWith + leftWith - i * unitHLenth
                         val y =
-                            mHeight - bottomWith - (current!!.value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
-
-                        path.reset()
-                        fillPath.reset()
-                        path.moveTo(x, y)
-
+                            mHeight - bottomWith - current.value * (mHeight - topWith - bottomWith) / (max - xMin)
                         val x1 = mWith - leftWith - rightWith + leftWith - lastIndex * unitHLenth
                         val y1 =
-                            mHeight - bottomWith - (list[lastIndex]!!.value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
-
-                        chartLinePaint?.setShader(null)
-                        chartLinePaint?.color = if (isInteracting) {
-                            chartLineColorI
+                            mHeight - bottomWith - list[lastIndex]!!.value * (mHeight - topWith - bottomWith) / (max - xMin)
+                        chartLinePaint.setShader(null)
+                        chartLinePaint.color = if (isHighlighted || isInteracting) {
+                            Color.GRAY
                         } else {
-                            chartLineColor
+                            Color.WHITE
                         }
-                        chartLinePaint?.setPathEffect(effect)
-                        canvas.drawLine(x, y, x1, y1, chartLinePaint!!)
-                        chartLinePaint?.setPathEffect(null)
-
-                        path.cubicTo(x1 + (x - x1) / 1.5f, y, x - (x - x1) / 1.5f, y1, x1, y1)
-
-                        fillPath.addPath(path)
-                        //draw fill first
-                        fillPath.lineTo(x1, mHeight - bottomWith)
-                        fillPath.lineTo(x, mHeight - bottomWith)
-                        chartLineFillPaint!!.setShader(if (isInteracting) linearGradientI else linearGradient)
-                        canvas.drawPath(fillPath, chartLineFillPaint!!)
-
-
+                        chartLinePaint.setPathEffect(effect)
+                        canvas.drawLine(x, y, x1, y1, chartLinePaint)
+                        chartLinePaint.setPathEffect(null)
                     }
                     lastIndex = -1
                 }
