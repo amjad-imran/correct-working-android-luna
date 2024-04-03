@@ -24,10 +24,7 @@ import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.model.SleepChartModel
 import com.oreo.data.model.WorkoutTypes
 import com.oreo.ui.activity.all.DELETE_WORKOUT_REQUEST_KEY
-import com.oreo.ui.custom.LineChartType
 import com.oreo.ui.custom.OnHeartRateChartClickAction
-import com.oreo.ui.custom.OnLinearChartClickAction
-import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -221,6 +218,17 @@ class OWorkoutDetailsFragmentV2 :
                 hrZoneAdapter.setDataSet(
                     viewModel.generateHrZones(it.hrArray)
                 )
+                hrZoneAdapter.setListener(object :
+                    OWorkoutHRZoneAdapter.OWorkoutHRZoneInteractionListener {
+                    override fun onClick(
+                        selectedPosition: Int,
+                        isHighlighted: Boolean,
+                        data: OWDActivityHRZoneData
+                    ) {
+                        hrZoneAdapter.updateData(selectedPosition, isHighlighted)
+                    }
+
+                })
             } else {
                 return
             }

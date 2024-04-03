@@ -3,7 +3,6 @@ package com.oreo.ui.workout.details
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.remote.base.Resource
@@ -18,7 +17,6 @@ import com.noisefit_commans.models.Units
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.OWDActivityData
 import com.oreo.data.model.OWDActivityHRZoneData
@@ -31,7 +29,6 @@ import kotlinx.coroutines.launch
 import java.util.Calendar
 import javax.inject.Inject
 import kotlin.math.ceil
-import kotlin.math.roundToInt
 
 @HiltViewModel
 class OWorkoutDetailsViewModelV2 @Inject constructor(
@@ -41,6 +38,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
     private val userHealthDataDataSource: OreoUserHealthDataDataSource
 ) : BaseViewModel() {
 
+    var hrSelectedPosition = -1
     var workoutDetailsExpanded = false
     var position: Int = -1
     private val _workoutDeletedResponse = MutableLiveData<Event<Boolean>>()
@@ -416,6 +414,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         return arrayListOf<OWDActivityHRZoneData>().apply {
             add(
                 OWDActivityHRZoneData(
+                    isHighlighted = true,
                     title = "Restorative zone",
                     range = "<50%",
                     percentage = zoneRestorativeFrequency.toFloat()
@@ -426,8 +425,9 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             )
             add(
                 OWDActivityHRZoneData(
+                    isHighlighted = true,
                     title = "Zone 1",
-                    range = "50-60%",
+                    range = "(50-60%)",
                     percentage = zone1Frequency.toFloat().calculatePercentage(duration.toFloat())
                         .toInt(),
                     duration = ApplicationUtils.getActivityDurationFormat2(zone1Frequency * hrIntervalInSecond),
@@ -436,8 +436,9 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             )
             add(
                 OWDActivityHRZoneData(
+                    isHighlighted = true,
                     title = "Zone 2",
-                    range = "60-70%",
+                    range = "(60-70%)",
                     percentage = zone2Frequency.toFloat().calculatePercentage(duration.toFloat())
                         .toInt(),
                     duration = ApplicationUtils.getActivityDurationFormat2(zone2Frequency * hrIntervalInSecond),
@@ -446,8 +447,9 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             )
             add(
                 OWDActivityHRZoneData(
+                    isHighlighted = true,
                     title = "Zone 3",
-                    range = "70-80%",
+                    range = "(70-80%)",
                     percentage = zone3Frequency.toFloat().calculatePercentage(duration.toFloat())
                         .toInt(),
                     duration = ApplicationUtils.getActivityDurationFormat2(zone3Frequency * hrIntervalInSecond),
@@ -456,8 +458,9 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             )
             add(
                 OWDActivityHRZoneData(
+                    isHighlighted = true,
                     title = "Zone 4",
-                    range = "80-90%",
+                    range = "(80-90%)",
                     percentage = zone4Frequency.toFloat().calculatePercentage(duration.toFloat())
                         .toInt(),
                     duration = ApplicationUtils.getActivityDurationFormat2(zone4Frequency * hrIntervalInSecond),
@@ -466,8 +469,9 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             )
             add(
                 OWDActivityHRZoneData(
+                    isHighlighted = true,
                     title = "Zone 5",
-                    range = "90-100%",
+                    range = "(90-100%)",
                     percentage = zone5Frequency.toFloat().calculatePercentage(duration.toFloat())
                         .toInt(),
                     duration = ApplicationUtils.getActivityDurationFormat2(zone5Frequency * hrIntervalInSecond),
