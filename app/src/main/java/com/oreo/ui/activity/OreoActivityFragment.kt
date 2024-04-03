@@ -87,6 +87,7 @@ class OreoActivityFragment :
         }else{
             navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
                 putString("workoutId", data.id ?: "")
+                putString("workoutName", data.getFormattedActivityName())
                 putInt("position", position)
             })
         }

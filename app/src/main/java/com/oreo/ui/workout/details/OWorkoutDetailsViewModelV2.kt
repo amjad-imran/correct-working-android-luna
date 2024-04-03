@@ -1,5 +1,6 @@
 package com.oreo.ui.workout.details
 
+import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -20,7 +21,11 @@ import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.OWDActivityData
 import com.oreo.data.model.OWDActivityHRZoneData
 import com.oreo.data.model.OWorkoutDetailsResponseModel
+import com.oreo.data.model.Section
+import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
+import com.oreo.ui.custom.Item
+import com.oreo.ui.custom.WorkoutHeartRateGraphModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -346,7 +351,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             add(
                 OWDActivityHRZoneData(
                     title = "Restorative zone",
-                    range = "${getHrValue(mhr,50)}%",
+                    range = "${getHrValue(mhr, 50)}%",
                     percentage = 10,
                     duration = "00:10",
                     color = "#34f3ff",
@@ -404,4 +409,26 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
     fun getUserAge(): Int {
         return localDataStore.getUser()?.userInfo?.age ?: 30
     }
+
+
+    fun getStressCombinedData(hrArray: List<Int>): WorkoutHeartRateGraphModel {
+
+        //val stressBreakup =
+        //    Gson().fromJson<List<Int>>("[10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,4,10,12,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,55,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44]")
+
+
+        val items = mutableListOf<Item>()
+
+        hrArray.forEachIndexed { index, i ->
+            items.add(Item(i, index))
+        }
+
+        return WorkoutHeartRateGraphModel(
+            sections = null,
+            items = items,
+            high = 70,
+            medium = 35
+        )
+    }
+
 }

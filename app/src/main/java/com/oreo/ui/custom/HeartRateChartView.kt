@@ -76,7 +76,7 @@ class HeartRateChartView : View {
     private var fillColorStart = 0
     private var fillColorEnd = 0
     private var centerLineWidth = 0f
-    private var chartLinePaint: Paint? = null
+    lateinit var chartLinePaint: Paint
     lateinit var chartLineFillPaint: Paint
     private var avgBackPaint: Paint? = null
     private var scaleNodePaint: Paint? = null
@@ -122,6 +122,11 @@ class HeartRateChartView : View {
     private var chartLineGradient: LinearGradient? = null
     private var chartLineGradientInteracting: LinearGradient? = null
 
+    private val highlightIndexs: MutableList<Int> = ArrayList()
+    private var highlightColor = 0
+    private var isHighlighted = false
+    lateinit var restLineColor: Paint
+
 
     constructor(context: Context?) : super(context) {
         initPaint()
@@ -158,6 +163,7 @@ class HeartRateChartView : View {
         val ta = context.obtainStyledAttributes(attrs, R.styleable.SleepLineChart)
         dotBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_hr_dot)
         dotBitmap2 = BitmapFactory.decodeResource(resources, R.drawable.ic_hr_lowest_dot)
+
 
         bgColor = ta.getColor(R.styleable.SleepLineChart_bgColor, -0x1)
         bgLeftColor = ta.getColor(R.styleable.SleepLineChart_bgLeftColor, -0x1)
@@ -210,6 +216,10 @@ class HeartRateChartView : View {
     private fun initPaint() {
         val fontGilroy =
             ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.gilroy_medium)
+
+        restLineColor = Paint().apply {
+            color = Color.parseColor("#ff0000")
+        }
 
         mTextPaint = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
         mTextPaint.color = ContextCompat.getColor(context, com.noisefit_commans.R.color.white_64)
@@ -323,6 +333,32 @@ class HeartRateChartView : View {
         outCirclePaint!!.isAntiAlias = true
     }
 
+
+    fun updateHighlight(indexList: List<Int>, color: Int) {
+        highlightIndexs.clear()
+        highlightIndexs.addAll(indexList)
+        highlightColor = color
+        if (mHeight > 0) {
+            linearGradient = LinearGradient(
+                0f,
+                0f,
+                0f,
+                mHeight - bottomWith,
+                highlightColor,
+                Color.TRANSPARENT,
+                Shader.TileMode.CLAMP
+            )
+        }
+        isHighlighted = true
+        postInvalidate()
+    }
+
+    fun removeHighlights() {
+        highlightIndexs.clear()
+        isHighlighted = false
+        postInvalidate()
+    }
+
     fun updateDataWithMax(
         datas: SleepChartModel?,
         maxOffset: Int,
@@ -336,7 +372,6 @@ class HeartRateChartView : View {
 
         dotBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_hr_dot)
         dotBitmap2 = BitmapFactory.decodeResource(resources, R.drawable.ic_hr_lowest_dot)
-
 
 
 
@@ -378,14 +413,6 @@ class HeartRateChartView : View {
             }
         }
 
-        LOGS.d("lowestHr fasdfsfdfsd $minValue")
-        val minValueWithIndex = getMinValueWithIndex(minValue)
-
-        minValueWithIndex?.let {
-            minValue = minValueWithIndex.second
-            lastMinValueIndex = minValueWithIndex.first
-        }
-
         if (averageValue == null) {
             if (count > 0) {
                 avgValue = sum / count
@@ -410,132 +437,6 @@ class HeartRateChartView : View {
 
         return list.size - lastMinValueIndex
     }
-
-    private fun getMinValueWithIndex(minValue: Int): Pair<Int, Int>? {
-        if (list.isEmpty()) {
-            return null
-        }
-
-        if (list.size <= 3) {
-            return null
-        }
-
-        var lowestPointAvg = 0.0f
-        var lowestPointMinValue = 0
-        var lowestPointIndex = 0
-
-        list.forEachIndexed { index, chartModel ->
-            val value = chartModel?.value!!
-            if (value != 0 && value == minValue) {
-                if (index == 0) {
-                    val nextValue = list[index + 1]!!.value
-                    val avg = (value + nextValue).toFloat() / 2
-
-                    if (lowestPointAvg == 0.0f) {
-                        lowestPointAvg = avg
-                        lowestPointIndex = index
-                        lowestPointMinValue = value
-                    } else if (avg <= lowestPointAvg) {
-                        lowestPointAvg = avg
-                        lowestPointIndex = index
-                        lowestPointMinValue = value
-                    }
-                } else if (index == list.size - 1) {
-                    val previousValue = list[index - 1]!!.value
-                    val avg = (value + previousValue).toFloat() / 2
-
-                    if (lowestPointAvg == 0.0f) {
-                        lowestPointAvg = avg
-                        lowestPointIndex = index
-                        lowestPointMinValue = value
-                    } else if (avg <= lowestPointAvg) {
-                        lowestPointAvg = avg
-                        lowestPointIndex = index
-                        lowestPointMinValue = value
-                    }
-                } else {
-                    val previousValue = list[index - 1]!!.value
-                    val nextValue = list[index + 1]!!.value
-
-                    val avg = (previousValue + value + nextValue).toFloat() / 3
-
-                    if (lowestPointAvg == 0.0f) {
-                        lowestPointAvg = avg
-                        lowestPointIndex = index
-                        lowestPointMinValue = value
-                    } else if (avg <= lowestPointAvg) {
-                        lowestPointAvg = avg
-                        lowestPointIndex = index
-                        lowestPointMinValue = value
-                    }
-                }
-            }
-
-        }
-        return Pair(lowestPointIndex, lowestPointMinValue)
-    }
-
-
-    /*  private fun getMinValueWithIndex(minValue: Int): Pair<Int, Int> {
-          val lowestPointHr = ArrayList<LowestIntervalValue>()
-
-          if (list.isEmpty()) {
-              return Pair(0, 0)
-          }
-
-          for (index in list.indices) {
-              val current = list[index]?.value
-              if (current == minValue && current !=0) {
-                  val lowestValueData = list.getOrNull(index - 1)
-                  val highestValueData = list.getOrNull(index + 1)
-                  var lowestValue = -1
-                  if (lowestValueData != null) {
-                      lowestValue = lowestValueData.value
-                  }
-                  var highestValue = -1
-                  if (highestValueData != null) {
-                      highestValue = highestValueData.value
-                  }
-
-                  lowestPointHr.add(LowestIntervalValue(lowestValue, highestValue, current, index))
-              }
-          }
-          var avgMinIndex = 0
-          var avgValue = 0
-
-          var avgMinValue = Int.MAX_VALUE
-          if (lowestPointHr.size == 1) {
-              avgMinIndex = lowestPointHr[0].index
-              return Pair(lowestPointHr[0].index, lowestPointHr[0].value)
-          } else {
-              lowestPointHr.forEach {
-                  var count = 0
-                  var sum = 0
-                  if (it.lowestValue != -1) {
-                      sum += it.lowestValue
-                      count += 1
-                  }
-                  if (it.highestValue != -1) {
-                      sum += it.highestValue
-                      count += 1
-                  }
-                  sum += it.value
-                  count += 1
-                  val avg = (sum / count)
-                  //println("lowestHr ---------------->lowest:- ${it.lowestValue}, highest:- ${it.highestValue}, current:- ${it.value}, avg:- $avg")
-                  if (avg <= avgMinValue) {
-                      avgMinValue = avg
-                      avgMinIndex = it.index
-                      avgValue = it.value
-                  }
-
-              }
-              //println("index $avgMinIndex")
-              return Pair(avgMinIndex, avgValue)
-
-          }
-      }*/
-
 
     private var touchX = 0f
     private var isInteracting = false
@@ -635,10 +536,6 @@ class HeartRateChartView : View {
         vibrationUtils?.vibrate(HAPTIC_VIBRATION)
         val parent = parent
         parent.requestDisallowInterceptTouchEvent(true)
-
-        /*rootView.performHapticFeedback(
-            HapticFeedbackConstants.LONG_PRESS
-        )*/
     }
 
     private fun getClickedValue(touchX: Float): Triple<Int, Int, String> {
@@ -681,8 +578,7 @@ class HeartRateChartView : View {
         if (value.second != 0) {
 
             val bitmap =
-                if (lastMinValueIndex == value.first || (lastMinValueIndex - 1) == value.first
-                    || (lastMinValueIndex + 1) == value.first
+                if (lastMinValueIndex == value.first
                 ) {
                     dotBitmap2
                 } else {
@@ -846,8 +742,6 @@ class HeartRateChartView : View {
 
         val firstPosition = 0
         val lastPosition = list.size
-        var leftTextEndPos = 0f
-        var endTextStartPos = 0f
         var current: ChartModel?
         var next: ChartModel?
 
@@ -864,30 +758,76 @@ class HeartRateChartView : View {
             path.moveTo(x, y)
             if (i < list.size - 1) {
                 next = list[i + 1]
-                if (current.value > 0 && next!!.value > 0) {
-                    val x1 = mWith - leftWith - rightWith + leftWith - (i + 1) * unitHLenth
-                    val y1 =
-                        mHeight - bottomWith - (next.value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
+                if (current.value > 0) {
+                    if (next!!.value > 0) {
+                        val x1 = mWith - leftWith - rightWith + leftWith - (i + 1) * unitHLenth
+                        val y1 =
+                            mHeight - bottomWith - (next.value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
 
 
-                    path.cubicTo(x1 + (x - x1) / 1.5f, y, x - (x - x1) / 1.5f, y1, x1, y1)
-                    fillPath.addPath(path)
-                    //draw fill first
-                    fillPath.lineTo(x1, mHeight - bottomWith)
-                    fillPath.lineTo(x, mHeight - bottomWith)
-                    chartLineFillPaint!!.setShader(if (isInteracting) linearGradientI else linearGradient)
-                    canvas.drawPath(fillPath, chartLineFillPaint!!)
-                    //draw chart line second, need to cover fill color
-                    chartLinePaint?.color = if (isInteracting) chartLineColorI else chartLineColor
+                        path.cubicTo(x1 + (x - x1) / 1.5f, y, x - (x - x1) / 1.5f, y1, x1, y1)
+                        if (highlightIndexs.contains(list.size - 1 - i)) {
+                            fillPath.addPath(path)
+                            //draw fill first
+                            fillPath.lineTo(x1, mHeight - bottomWith)
+                            fillPath.lineTo(x, mHeight - bottomWith)
+                            chartLineFillPaint.setShader(linearGradient)
+                            canvas.drawPath(fillPath, chartLineFillPaint)
+                            chartLinePaint.color = highlightColor
+                            fillPath.reset()
+                        } else {
+                            fillPath.addPath(path)
+                            fillPath.lineTo(x1, mHeight - bottomWith)
+                            fillPath.lineTo(x, mHeight - bottomWith)
+                            chartLineFillPaint!!.setShader(if (isInteracting) linearGradientI else linearGradient)
+                            canvas.drawPath(fillPath, chartLineFillPaint!!)
+                            //draw chart line second, need to cover fill color
+                            chartLinePaint?.color =
+                                if (isInteracting) chartLineColorI else chartLineColor
 
 
-                    if (isInteracting) {
-                        chartLinePaint?.setShader(chartLineGradientInteracting)
+                            if (!isHighlighted) {
+                                if (isInteracting) {
+                                    chartLinePaint.setShader(chartLineGradientInteracting)
+                                } else {
+                                    chartLinePaint.setShader(chartLineGradient)
+                                }
+                            } else {
+                                chartLinePaint.setShader(null)
+                                chartLinePaint.color = Color.parseColor("#FF0000")
+                            }
+
+
+                            /* if (isInteracting) {
+                                 chartLinePaint?.setShader(chartLineGradientInteracting)
+                             } else {
+                                 chartLinePaint?.setShader(chartLineGradient)
+                             }*/
+
+                            //canvas.drawPath(path, chartLinePaint!!)
+
+
+                        }
+                        //draw chart line second, need to cover fill color
+                        canvas.drawPath(path, chartLinePaint)
                     } else {
-                        chartLinePaint?.setShader(chartLineGradient)
+                        if (highlightIndexs.contains(list.size - 1 - i)) {
+                            chartLinePaint.color = highlightColor
+                        } else {
+                            if (!isHighlighted /*highlightIndexs.isEmpty()*/) {
+                                if (isInteracting) {
+                                    chartLinePaint.setShader(chartLineGradientInteracting)
+                                } else {
+                                    chartLinePaint.setShader(chartLineGradient)
+                                }
+                                //                                chartLinePaint.setColor(chartLineColor);
+                            } else {
+                                chartLinePaint.setShader(null)
+                                chartLinePaint.color = Color.parseColor("#FF0000")
+                            }
+                        }
+                        canvas.drawPoint(x, y, chartLinePaint)
                     }
-
-                    canvas.drawPath(path, chartLinePaint!!)
                 }
             }
 
@@ -923,88 +863,6 @@ class HeartRateChartView : View {
                         canvas.drawCircle(x, y, 1f, outCirclePaint!!)
                     }
                 }
-            }
-
-
-
-            if (!mHasDummyData) {
-                if (showHighCircle && i == lastMaxValueIndex && !isInteracting && maxValue != 0) {
-                    canvas.drawBitmap(
-                        dotBitmap2,
-                        x - dotBitmap.width / 2,
-                        y - dotBitmap.height / 2,
-                        null
-                    )
-                }
-
-                if (showLowCircle && i == lastMinValueIndex && !isInteracting && minValue != 0) {
-                    canvas.drawBitmap(
-                        dotBitmap2,
-                        x - dotBitmap.width / 2,
-                        y - dotBitmap.height / 2,
-                        null
-                    )
-                }
-
-                if (!showLowCircle && !showHighCircle && i == lastMinValueIndex) {
-
-                    chartLineFillPaint.setShader(
-                        LinearGradient(
-                            0f,
-                            0f,
-                            0f,
-                            mHeight - bottomWith,
-                            Color.parseColor("#66ffffff"),
-                            Color.TRANSPARENT,
-                            Shader.TileMode.CLAMP
-                        )
-                    )
-
-                    val offset = dip2px(unitHLenth) / 2
-                    val rectF = RectF().apply {
-                        this.left = x - offset
-                        this.right = x + offset
-                        this.top = topWith
-                        this.bottom = mHeight - bottomWith
-                    }
-
-                    canvas.drawRect(rectF, chartLineFillPaint)
-
-                    rectF.apply {
-                        this.left = x - offset
-                        this.right = x + offset
-                        this.top = topWith - dip2px(1f)
-                        this.bottom = topWith + dip2px(1f)
-                    }
-
-                    canvas.drawRect(rectF, lowTopPaint)
-
-
-                    rectF.apply {
-                        this.left = x - offset
-                        this.right = x + offset
-                        this.top = topWith - dip2px(1f)
-                        this.bottom = topWith + dip2px(1f)
-                    }
-
-                    xTextPaint!!.color = Color.WHITE
-
-                    val textWidth = xTextPaint!!.measureText("Lowest HR")
-
-                    var lowestHrPos = x - textWidth / 2
-
-                    if (lowestHrPos < leftWith) {
-                        lowestHrPos = leftWith
-                    }
-
-                    canvas.drawText(
-                        "Lowest HR",
-                        lowestHrPos,
-                        topWith - dip2px(8f),
-                        xTextPaint!!
-                    )
-                }
-
             }
         }
 
@@ -1081,47 +939,6 @@ class HeartRateChartView : View {
                 startTime,
                 endTime
             )
-
-            /*
-                            if (list[i] != null && list[i]!!.index != null && !list[i]!!.index!!.isEmpty()) {
-                                val xText = list[i]!!.index
-                                xTextPaint!!.getTextBounds(xText, 0, xText!!.length, xTextBounds)
-                                if (endTextStartPos == 0f) {
-                                    val text = list[0]!!.index
-                                    xTextPaint!!.color = Color.parseColor("#ffffff")
-                                    endTextStartPos = if (text != null) {
-                                        mWith - leftWith - xTextPaint!!.measureText(text)
-                                    } else {
-                                        mWith - leftWith - xTextPaint!!.measureText("00:00 am")
-                                    }
-                                }
-                                if (leftTextEndPos == 0f) {
-                                    val lastText = list[list.size - 1]!!.index
-                                    xTextPaint!!.color = Color.parseColor("#ffffff")
-                                    leftTextEndPos = leftWith + xTextPaint!!.measureText(lastText)
-                                }
-                                if (i == 0) {
-                                    xTextPaint!!.color = Color.parseColor("#ffffff")
-                                    canvas.drawText(
-                                        xText!!, x - xTextBounds!!.width(), mHeight - bottomWith / 4,
-                                        xTextPaint!!
-                                    )
-                                    //leftTextEndPos = xTextPaint.measureText(xText);
-                                } else if (i == list.size - 1) {
-                                    xTextPaint!!.color = Color.parseColor("#ffffff")
-                                    canvas.drawText(xText!!, x, mHeight - bottomWith / 4, xTextPaint!!)
-                                } else {
-                                    if (leftTextEndPos < x - xTextBounds!!.width() / 2f - dip2px(6f)
-                                        && x + xTextBounds!!.width() < endTextStartPos
-                                    ) {
-                                        xTextPaint!!.color = xTextColor and -0x7f000001
-                                        canvas.drawText(
-                                            xText!!, x - xTextBounds!!.width() / 2f, mHeight - bottomWith / 4,
-                                            xTextPaint!!
-                                        )
-                                    }
-                                }
-                            }*/
         }
 
     }
@@ -1135,25 +952,6 @@ class HeartRateChartView : View {
             mHeight.toFloat(),
             bgBottomPaint!!
         )
-        if (showXAxis) {
-            val endTime = ""
-            //            if(sleepModel!=null && sleepModel.getEndTime() != null){
-//                endTime = sleepModel.getEndTime();
-//            }
-//            String xText = endTime;
-//            xTextPaint.getTextBounds(xText, 0, xText.length(), xTextBounds);
-//            xTextPaint.setColor(Color.parseColor("#ffffff"));
-//            canvas.drawText(xText, mWith - rightWith - xTextBounds.width() - dip2px(5), mHeight - bottomWith / 4, xTextPaint);
-//
-//            String startTime = "";
-//            if(sleepModel!=null && sleepModel.getStartTime() != null){
-//                startTime = sleepModel.getStartTime();
-//            }
-//
-//            xText = startTime;
-//            xTextPaint.getTextBounds(xText, 0, xText.length(), xTextBounds);
-//            canvas.drawText(xText, leftWith + dip2px(5), mHeight - bottomWith / 4, xTextPaint);
-        }
     }
 
     private fun drawHorizontalTextWithLine(
@@ -1293,25 +1091,6 @@ class HeartRateChartView : View {
         toolTipList: List<Triple<Float, String, Int>>,
         touchX: Float
     ): Pair<Int, String> {
-
-//        LOGS.d("Dassdadsaasdasdas ${Gson().toJson(toolTipList)}")
-
-//        var low = 0
-//        var high = toolTipList.size - 1
-//        var mid: Int
-//        while (low <= high) {
-//            mid = low + ((high - low) / 2)
-//            when {
-//                eleToSearch > input[mid] -> low =
-//                    mid + 1    // element is greater than middle element of array, so it will be in right half of array
-//                eleToSearch == input[mid] -> return mid // found the element
-//                eleToSearch < input[mid] -> high =
-//                    mid - 1   //element is less than middle element of array, so it will be in left half of the array.
-//            }
-//        }
-
-        // Iterate and find the element
-        // Iterate and find the element
         val range = unitHLenth / 2//dip2px(3f)
         for (i in 0 until toolTipList.size) {
 
@@ -1320,30 +1099,6 @@ class HeartRateChartView : View {
                 return Pair(i, toolTipList.get(i).second)
             }
         }
-
-//        var low = 0
-//        var high = toolTipList.size - 1
-//        LOGS.d("Fsajfajfddsf size $low ---> $high")
-//        // Binary search
-//        while (low <= high) {
-//
-//            // Find the mid element
-//            val mid = low + ((high - low) / 2)
-//
-//            LOGS.d("Fsajfajfddsf mid value $mid")
-//            // If element is found
-//            if (touchX >= toolTipList[mid].second && touchX <= toolTipList[mid].first) {
-//                LOGS.d("Fsajfajfddsf 1 $mid")
-//                return mid
-//            } else if (touchX < toolTipList[mid].first) {
-//
-//                high = mid - 1
-//                LOGS.d("Fsajfajfddsf high $high")
-//            } else {
-//                low = mid + 1
-//                LOGS.d("Fsajfajfddsf low $low")
-//            }
-//        }
 
         // Not found
         return Pair(-1, "")
@@ -1512,9 +1267,6 @@ class HeartRateChartView : View {
     }
 }
 
-enum class HeartRateChartType {
-    HEART_RATE, HRV
-}
 
 interface OnHeartRateChartClickAction {
     fun onValueSelected(value: Int, isInteracting: Boolean, time: String? = null)
