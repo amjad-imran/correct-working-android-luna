@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.noisefit.luna.databinding.RowOwdHrZoneItemBinding
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.OWDActivityHRZoneData
 
@@ -30,14 +32,20 @@ class OWorkoutHRZoneAdapter() :
             binding.tvTitle.text = detailData.title
             binding.tvRange.text = detailData.range
             binding.tvPercentage.text = "${detailData.percentage}%"
-            binding.tvDuration.text = detailData.duration
             val color = Color.parseColor(detailData.color)
+            if (detailData.percentage == 0) {
+                binding.percentageBar.gone()
+            } else {
+                binding.percentageBar.visible()
+                binding.percentageBar.updateData(ArrayList(), false, color)
+            }
+            binding.tvDuration.text = detailData.duration
             binding.tvTitle.setTextColor(color)
             binding.tvPercentage.setTextColor(color)
-//            binding.percentageBar.setPercentageColor1(color)
-            binding.percentageBar.updateData(ArrayList(), false,color)
             binding.root.setOnClickListener {
-                LOGS.d("dasadsads ${detailData.isHighlighted}")
+                if(detailData.percentage ==0){
+                    return@setOnClickListener
+                }
                 listener?.onClick(position, !detailData.isHighlighted, detailData)
             }
         }
