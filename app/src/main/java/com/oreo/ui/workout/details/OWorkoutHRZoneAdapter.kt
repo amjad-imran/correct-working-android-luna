@@ -38,13 +38,12 @@ class OWorkoutHRZoneAdapter() :
                 binding.percentageBar.gone()
             } else {
                 binding.percentageBar.visible()
-                binding.percentageBar.updateData(ArrayList(), false, color)
+                binding.percentageBar.updateData(detailData.selectedIndexes,detailData.dataSize,color,isHighlighted)
             }
             binding.tvDuration.text = detailData.duration
             binding.tvTitle.setTextColor(color)
             binding.tvPercentage.setTextColor(color)
 //            binding.percentageBar.setPercentageColor1(color)
-            binding.percentageBar.updateData(detailData.selectedIndexes,detailData.dataSize,color,isHighlighted)
             binding.root.setOnClickListener {
                 if(detailData.percentage ==0){
                     return@setOnClickListener
