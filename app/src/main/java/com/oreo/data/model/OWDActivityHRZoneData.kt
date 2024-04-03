@@ -5,5 +5,6 @@ data class OWDActivityHRZoneData(
     val color: String,
     val range : String,
     val percentage : Int,
-    var isHighlighted : Boolean = true,
+    var isHighlighted : Boolean = false,
+    var isDisable : Boolean = false,
     val duration : String)

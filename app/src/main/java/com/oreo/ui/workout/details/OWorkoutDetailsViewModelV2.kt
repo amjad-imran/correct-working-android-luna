@@ -39,7 +39,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
     private val userHealthDataDataSource: OreoUserHealthDataDataSource
 ) : BaseViewModel() {
 
-    var hrSelectedPosition = -1
+
     var workoutDetailsExpanded = false
     var position: Int = -1
     private val _workoutDeletedResponse = MutableLiveData<Event<Boolean>>()
@@ -415,7 +415,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         return arrayListOf<OWDActivityHRZoneData>().apply {
             add(
                 OWDActivityHRZoneData(
-                    isHighlighted = true,
+
                     title = "Restorative zone",
                     range = "<50%",
                     percentage = zoneRestorativeFrequency.toFloat()
@@ -426,7 +426,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             )
             add(
                 OWDActivityHRZoneData(
-                    isHighlighted = true,
+
                     title = "Zone 1",
                     range = "(50-60%)",
                     percentage = zone1Frequency.toFloat().calculatePercentage(duration.toFloat())
@@ -437,7 +437,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             )
             add(
                 OWDActivityHRZoneData(
-                    isHighlighted = true,
+
                     title = "Zone 2",
                     range = "(60-70%)",
                     percentage = zone2Frequency.toFloat().calculatePercentage(duration.toFloat())
@@ -448,7 +448,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             )
             add(
                 OWDActivityHRZoneData(
-                    isHighlighted = true,
+
                     title = "Zone 3",
                     range = "(70-80%)",
                     percentage = zone3Frequency.toFloat().calculatePercentage(duration.toFloat())
@@ -459,7 +459,6 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             )
             add(
                 OWDActivityHRZoneData(
-                    isHighlighted = true,
                     title = "Zone 4",
                     range = "(80-90%)",
                     percentage = zone4Frequency.toFloat().calculatePercentage(duration.toFloat())
@@ -470,7 +469,6 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             )
             add(
                 OWDActivityHRZoneData(
-                    isHighlighted = true,
                     title = "Zone 5",
                     range = "(90-100%)",
                     percentage = zone5Frequency.toFloat().calculatePercentage(duration.toFloat())

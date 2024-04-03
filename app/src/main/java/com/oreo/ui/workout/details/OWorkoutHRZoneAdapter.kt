@@ -22,10 +22,10 @@ class OWorkoutHRZoneAdapter() :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(detailData: OWDActivityHRZoneData, position: Int) {
 
-            binding.root.alpha = if (detailData.isHighlighted) {
-                1f
-            } else {
+            binding.root.alpha = if (detailData.isDisable) {
                 0.5f
+            } else {
+                1f
             }
             binding.tvTitle.text = detailData.title
             binding.tvRange.text = detailData.range
@@ -34,9 +34,10 @@ class OWorkoutHRZoneAdapter() :
             val color = Color.parseColor(detailData.color)
             binding.tvTitle.setTextColor(color)
             binding.tvPercentage.setTextColor(color)
-            binding.percentageBar.percentageColor = color
-            binding.percentageBar.percentage = detailData.percentage
+//            binding.percentageBar.percentageColor = color
+//            binding.percentageBar.percentage = detailData.percentage
             binding.root.setOnClickListener {
+                LOGS.d("dasadsads ${detailData.isHighlighted}")
                 listener?.onClick(position, !detailData.isHighlighted, detailData)
             }
         }
@@ -58,10 +59,12 @@ class OWorkoutHRZoneAdapter() :
     fun updateData(position: Int, isHighlighted: Boolean) {
         mDataSet.forEachIndexed { index, owdActivityHRZoneData ->
 
-            if(!isHighlighted){
+            if(isHighlighted){
                 mDataSet[index].isHighlighted = index == position
+                mDataSet[index].isDisable = index != position
             }else{
-                mDataSet[index].isHighlighted = true
+                mDataSet[index].isHighlighted = false
+                mDataSet[index].isDisable = false
             }
 
         }
