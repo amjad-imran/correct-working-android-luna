@@ -494,10 +494,10 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         return when (zone) {
             0 -> zoneRestorativeIndexes
             1 -> zone1Indexes
-            2 -> zone1Indexes
-            3 -> zone1Indexes
-            4 -> zone1Indexes
-            5 -> zone1Indexes
+            2 -> zone2Indexes
+            3 -> zone3Indexes
+            4 -> zone4Indexes
+            5 -> zone5Indexes
             else -> ArrayList()
         }
     }

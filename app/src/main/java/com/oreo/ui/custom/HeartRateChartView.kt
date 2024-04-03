@@ -553,6 +553,7 @@ class HeartRateChartView : View {
     private fun drawOverlay(canvas: Canvas) {
         if (!isInteracting) return
 
+
         val calculatedTouchX = if (touchX < leftWith) {
             leftWith
         } else if (touchX > (mWith - rightWith)) {
@@ -563,12 +564,24 @@ class HeartRateChartView : View {
 
 
         /* if (touchX > leftWith && touchX < (mWith - rightWith)) {*/
+
+        val value = getClickedValue(calculatedTouchX)
+
+
+        var showOverlay = true
+        if(isHighlighted){
+            showOverlay = highlightIndexs.contains(list.size - 1 - value.first)
+        }
+
+        if(!showOverlay){
+            return
+        }
+
         val rectF = RectF()
         rectF.left = calculatedTouchX
         rectF.right = calculatedTouchX
         rectF.top = topWith
         rectF.bottom = mHeight - bottomWith
-        val value = getClickedValue(calculatedTouchX)
         overlayLinePaint!!.color = Color.WHITE
         canvas.drawRect(rectF, overlayLinePaint!!)
 
@@ -802,13 +815,13 @@ class HeartRateChartView : View {
                                     chartLinePaint.color = chartLineColor
 
                                 }
+                                canvas.drawPath(fillPath, chartLineFillPaint)
                             } else {
                                 chartLineFillPaint.setShader(null)
                                 chartLinePaint.setShader(null)
                                 chartLinePaint.color = Color.parseColor("#596f80")
                             }
 
-                            canvas.drawPath(fillPath, chartLineFillPaint)
 
                         }
                         //draw chart line second, need to cover fill color
