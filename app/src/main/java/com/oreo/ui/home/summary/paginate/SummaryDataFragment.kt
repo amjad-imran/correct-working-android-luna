@@ -69,11 +69,11 @@ class SummaryDataFragment :
         LOGS.d("CREATED_WITH_DATE $date")
         loadData()
 
-        navigate(R.id.oWorkoutDetailsFragmentV2, Bundle().apply {
-            putString("workoutId", "619415c3-7596-42b9-bd1a-70e1111db182")
-            putString("workoutName", "data.getFormattedActivityName()")
-            putInt("position", 1)
-        })
+//        navigate(R.id.oWorkoutDetailsFragmentV2, Bundle().apply {
+//            putString("workoutId", "619415c3-7596-42b9-bd1a-70e1111db182")
+//            putString("workoutName", "data.getFormattedActivityName()")
+//            putInt("position", 1)
+//        })
     }
 
     override fun onResume() {
