@@ -234,9 +234,10 @@ class OWorkoutDetailsFragmentV2 :
                     ) {
                         hrZoneAdapter.updateData(selectedPosition, isHighlighted)
                         if (isHighlighted) {
+                            val (indexes, color) = viewModel.getIndexList(data.zone)
                             binding.lytHeartRate.heartRateChart.updateHighlight(
-                                viewModel.getIndexList(data.zone),
-                                Color.parseColor("#00FF00")
+                                indexes,
+                                color
                             )
                         } else {
                             binding.lytHeartRate.heartRateChart.removeHighlights()

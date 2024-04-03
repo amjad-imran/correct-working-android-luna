@@ -490,15 +490,15 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
     }
 
 
-    fun getIndexList(zone: Int): List<Int> {
+    fun getIndexList(zone: Int): Pair<List<Int>, Int> {
         return when (zone) {
-            0 -> zoneRestorativeIndexes
-            1 -> zone1Indexes
-            2 -> zone2Indexes
-            3 -> zone3Indexes
-            4 -> zone4Indexes
-            5 -> zone5Indexes
-            else -> ArrayList()
+            0 -> Pair(zoneRestorativeIndexes, Color.parseColor("#48ff7b"))//pending from design
+            1 -> Pair(zone1Indexes, Color.parseColor("#3485ff"))
+            2 -> Pair(zone2Indexes, Color.parseColor("#34f3ff"))
+            3 -> Pair(zone3Indexes, Color.parseColor("#48ff7b"))
+            4 -> Pair(zone4Indexes, Color.parseColor("#ff8934"))
+            5 -> Pair(zone5Indexes, Color.parseColor("#ff3434"))
+            else -> Pair(ArrayList(), Color.parseColor("#000000"))
         }
     }
 }

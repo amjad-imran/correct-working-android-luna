@@ -1,5 +1,6 @@
 package com.oreo.ui.custom
 
+import android.R.attr.resource
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -9,6 +10,8 @@ import android.graphics.DashPathEffect
 import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Shader
@@ -23,7 +26,6 @@ import com.noisefit.luna.R
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.GraphDummyModel
@@ -125,6 +127,7 @@ class HeartRateChartView : View {
 
     private val highlightIndexs: MutableList<Int> = ArrayList()
     private var highlightColor = 0
+    private var highlightPaintDot: Paint? = null
     private var isHighlighted = false
     private lateinit var restLineColor: Paint
 
@@ -140,9 +143,7 @@ class HeartRateChartView : View {
     }
 
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
-        context,
-        attrs,
-        defStyleAttr
+        context, attrs, defStyleAttr
     ) {
         init(attrs)
         //        updateData();
@@ -201,15 +202,13 @@ class HeartRateChartView : View {
         val dimen = dip2px(30f)
         calmDot = Bitmap.createScaledBitmap(
             BitmapFactory.decodeResource(
-                res,
-                R.drawable.ic_pink_hot_dot
+                res, R.drawable.ic_pink_hot_dot
             ), dimen, dimen, true
         )
 
         avgBackBitmap = Bitmap.createScaledBitmap(
             BitmapFactory.decodeResource(
-                res,
-                R.drawable.image_blur_avg
+                res, R.drawable.image_blur_avg
             ), dimen, dimen, true
         )
     }
@@ -315,10 +314,7 @@ class HeartRateChartView : View {
     }
 
     fun updateGraphColor(
-        chartLineColor: Int,
-        chartLineColorI: Int,
-        fillColorStart: Int,
-        fillColorEnd: Int
+        chartLineColor: Int, chartLineColorI: Int, fillColorStart: Int, fillColorEnd: Int
     ) {
         this.chartLineColor = chartLineColor
         this.chartLineColorI = chartLineColorI
@@ -349,6 +345,9 @@ class HeartRateChartView : View {
                 Color.TRANSPARENT,
                 Shader.TileMode.CLAMP
             )
+        }
+        highlightPaintDot = Paint().apply {
+            setColorFilter(PorterDuffColorFilter(highlightColor, PorterDuff.Mode.SRC_IN))
         }
         isHighlighted = true
         postInvalidate()
@@ -569,11 +568,11 @@ class HeartRateChartView : View {
 
 
         var showOverlay = true
-        if(isHighlighted){
+        if (isHighlighted) {
             showOverlay = highlightIndexs.contains(list.size - 1 - value.first)
         }
 
-        if(!showOverlay){
+        if (!showOverlay) {
             return
         }
 
@@ -591,20 +590,22 @@ class HeartRateChartView : View {
 
         if (value.second != 0) {
 
-            val bitmap =
-                if (lastMinValueIndex == value.first
-                ) {
-                    dotBitmap2
-                } else {
-                    dotBitmap
-                }
+            val bitmap = if (lastMinValueIndex == value.first) {
+                dotBitmap2
+            } else {
+                dotBitmap
+            }
+
+            val paint = if (isHighlighted) {
+                highlightPaintDot
+            } else {
+                null
+            }
 
             canvas.drawBitmap(
-                bitmap,
-                calculatedTouchX - dotBitmap.width / 2,
-                y - dotBitmap.height / 2,
-                null
+                bitmap, calculatedTouchX - dotBitmap.width / 2, y - dotBitmap.height / 2, paint
             )
+
         }
 
 
@@ -623,8 +624,7 @@ class HeartRateChartView : View {
                     performHapticFeedbackCustom(selectedValue)
                 }
             }
-        }
-        /*}*/
+        }/*}*/
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -656,20 +656,14 @@ class HeartRateChartView : View {
         xTextPaint!!.color = Color.parseColor("#7affffff")
         xTextPaint!!.getTextBounds(maxStr, 0, maxStr.length, xTextBounds)
         canvas.drawText(
-            maxStr,
-            mWith - rightWith + dip2px(10f),
-            max + xTextBounds!!.height() / 2f,
-            xTextPaint!!
+            maxStr, mWith - rightWith + dip2px(10f), max + xTextBounds!!.height() / 2f, xTextPaint!!
         )
         val min =
             mHeight - bottomWith - (xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
         canvas.drawLine(leftWith, min, mWith - rightWith, min, gridPaint!!)
         xTextPaint!!.getTextBounds(maxStr, 0, maxStr.length, xTextBounds)
         canvas.drawText(
-            minStr,
-            mWith - rightWith + dip2px(10f),
-            min + xTextBounds!!.height() / 2f,
-            xTextPaint!!
+            minStr, mWith - rightWith + dip2px(10f), min + xTextBounds!!.height() / 2f, xTextPaint!!
         )
         val avg =
             mHeight - bottomWith - (avgValue - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
@@ -712,7 +706,7 @@ class HeartRateChartView : View {
             0f,
             0f,
             mHeight.toFloat(),
-            Color.parseColor("#516cff47"),//intArrayOf(Color.parseColor("#99ff718b"), Color.parseColor("#00ff5f7c")),
+            highlightColor,//intArrayOf(Color.parseColor("#99ff718b"), Color.parseColor("#00ff5f7c")),
             Color.TRANSPARENT/*floatArrayOf(0.3f, 0.6f)*/,
             Shader.TileMode.CLAMP
         )
@@ -723,14 +717,10 @@ class HeartRateChartView : View {
 
 
         arrayDef = intArrayOf(
-            Color.parseColor("#ff7f96"),
-            Color.parseColor("#fc3559"),
-            Color.parseColor("#fc3559")
+            Color.parseColor("#ff7f96"), Color.parseColor("#fc3559"), Color.parseColor("#fc3559")
         )
         arrayDefI = intArrayOf(
-            Color.parseColor("#844B60"),
-            Color.parseColor("#833947"),
-            Color.parseColor("#832930")
+            Color.parseColor("#844B60"), Color.parseColor("#833947"), Color.parseColor("#832930")
         )
 
 
@@ -882,61 +872,57 @@ class HeartRateChartView : View {
             }
         }
 
-        var start = 0
-        for (i in list.indices) {
-            if (list[i]!!.value > 0) {
-                start = i
-                break
-            }
-        }
-        var end = 0
-        for (i in list.indices.reversed()) {
-            if (list[i]!!.value > 0) {
-                end = i
-                break
-            }
-        }
-        var lastIndex = -1
-        for (i in start..end) {
-            current = list[i]
-            if (current!!.value == 0) {
-                if (i > 0 && lastIndex == -1) {
-                    lastIndex = i - 1
-                }
-            } else {
-                if (lastIndex != -1) {
-                    if (Math.abs(i - lastIndex) < 120 / (1440 / list.size)) {
-                        val x = mWith - leftWith - rightWith + leftWith - i * unitHLenth
-                        val y =
-                            mHeight - bottomWith - current.value * (mHeight - topWith - bottomWith) / (max - xMin)
-                        val x1 = mWith - leftWith - rightWith + leftWith - lastIndex * unitHLenth
-                        val y1 =
-                            mHeight - bottomWith - list[lastIndex]!!.value * (mHeight - topWith - bottomWith) / (max - xMin)
-                        chartLinePaint.setShader(null)
-                        chartLinePaint.color = if (isHighlighted || isInteracting) {
-                            Color.GRAY
-                        } else {
-                            Color.WHITE
-                        }
-                        chartLinePaint.setPathEffect(effect)
-                        canvas.drawLine(x, y, x1, y1, chartLinePaint)
-                        chartLinePaint.setPathEffect(null)
-                    }
-                    lastIndex = -1
-                }
-            }
-        }
+        /* var start = 0
+         for (i in list.indices) {
+             if (list[i]!!.value > 0) {
+                 start = i
+                 break
+             }
+         }
+         var end = 0
+         for (i in list.indices.reversed()) {
+             if (list[i]!!.value > 0) {
+                 end = i
+                 break
+             }
+         }
+         var lastIndex = -1
+         for (i in start..end) {
+             current = list[i]
+             if (current!!.value == 0) {
+                 if (i > 0 && lastIndex == -1) {
+                     lastIndex = i - 1
+                 }
+             } else {
+                 if (lastIndex != -1) {
+                     if (Math.abs(i - lastIndex) < 120 / (1440 / list.size)) {
+                         val x = mWith - leftWith - rightWith + leftWith - i * unitHLenth
+                         val y =
+                             mHeight - bottomWith - current.value * (mHeight - topWith - bottomWith) / (max - xMin)
+                         val x1 = mWith - leftWith - rightWith + leftWith - lastIndex * unitHLenth
+                         val y1 =
+                             mHeight - bottomWith - list[lastIndex]!!.value * (mHeight - topWith - bottomWith) / (max - xMin)
+                         chartLinePaint.setShader(null)
+                         chartLinePaint.color = if (isHighlighted || isInteracting) {
+                             Color.GRAY
+                         } else {
+                             Color.WHITE
+                         }
+                         chartLinePaint.setPathEffect(effect)
+                         canvas.drawLine(x, y, x1, y1, chartLinePaint)
+                         chartLinePaint.setPathEffect(null)
+                     }
+                     lastIndex = -1
+                 }
+             }
+         }*/
 
 
         val eachSecondsWidth = (width.toFloat() - rightWith - leftWith) / (list.size * 5 * 60)
         if (showXAxis) {
 
             drawXAxisTime(
-                canvas,
-                mHeight - bottomWith / 4,
-                eachSecondsWidth,
-                startTime,
-                endTime
+                canvas, mHeight - bottomWith / 4, eachSecondsWidth, startTime, endTime
             )
         }
 
@@ -945,11 +931,7 @@ class HeartRateChartView : View {
 
     private fun drawBottom(canvas: Canvas) {
         canvas.drawRect(
-            0f,
-            mHeight - bottomWith,
-            mWith.toFloat(),
-            mHeight.toFloat(),
-            bgBottomPaint!!
+            0f, mHeight - bottomWith, mWith.toFloat(), mHeight.toFloat(), bgBottomPaint!!
         )
     }
 
@@ -968,17 +950,13 @@ class HeartRateChartView : View {
             bottomHeight + xTextBounds!!.height() / 2f + dip2px(4f)
         } else if (isBottom) {
             bottomHeight + xTextBounds!!.height() / 2f - dip2px(4f)
-        } else
-            bottomHeight + xTextBounds!!.height() / 2f
+        } else bottomHeight + xTextBounds!!.height() / 2f
 
 
         val textStart = mWith.toFloat() - xTextBounds!!.width()
 
         canvas.drawText(
-            text,
-            textStart,
-            yPos,
-            xTextPaint!!
+            text, textStart, yPos, xTextPaint!!
         )
     }
 
@@ -1025,24 +1003,18 @@ class HeartRateChartView : View {
 
                 val padding = dip2px(8f)
                 canvas.drawBitmap(
-                    avgBackBitmap,
-                    null,
-                    RectF(
+                    avgBackBitmap, null, RectF(
                         leftWith + dip2px(5f) - padding,
                         avg - dip2px(3f) - xTextBounds!!.height() - padding,
                         leftWith + dip2px(5f) + xTextBounds!!.width() + padding,
                         avg - dip2px(6f) + padding
-                    ),
-                    null
+                    ), null
                 )
 
 
 
                 canvas.drawText(
-                    avgStr,
-                    leftWith + dip2px(5f),
-                    avg - dip2px(6f),
-                    avgTextPaint
+                    avgStr, leftWith + dip2px(5f), avg - dip2px(6f), avgTextPaint
                 )
             }
 
@@ -1087,8 +1059,7 @@ class HeartRateChartView : View {
 
 
     fun findNumber(
-        toolTipList: List<Triple<Float, String, Int>>,
-        touchX: Float
+        toolTipList: List<Triple<Float, String, Int>>, touchX: Float
     ): Pair<Int, String> {
         val range = unitHLenth / 2//dip2px(3f)
         for (i in 0 until toolTipList.size) {
@@ -1124,17 +1095,11 @@ class HeartRateChartView : View {
                 height.toFloat()
             )
             canvas.drawRoundRect(
-                rectF,
-                dip2px(4f).toFloat(),
-                dip2px(4f).toFloat(),
-                edgeTextBackPaint
+                rectF, dip2px(4f).toFloat(), dip2px(4f).toFloat(), edgeTextBackPaint
             )
 
             canvas.drawText(
-                startText,
-                leftWith + edgeTextPadding.toFloat(),
-                yPos + dip2px(2f),
-                mTextPaintEdge
+                startText, leftWith + edgeTextPadding.toFloat(), yPos + dip2px(2f), mTextPaintEdge
             )
 
 
@@ -1149,10 +1114,7 @@ class HeartRateChartView : View {
                 height.toFloat()
             )
             canvas.drawRoundRect(
-                rectF,
-                dip2px(4f).toFloat(),
-                dip2px(4f).toFloat(),
-                edgeTextBackPaint
+                rectF, dip2px(4f).toFloat(), dip2px(4f).toFloat(), edgeTextBackPaint
             )
 
             canvas.drawText(
@@ -1210,9 +1172,7 @@ class HeartRateChartView : View {
         val edgeTextPadding = dip2px(4f)
 
         val startText = DateFormats.formatDate(
-            startTimeStr,
-            DateFormats.dateTimeFormat5,
-            DateFormats.timeFormat12_2
+            startTimeStr, DateFormats.dateTimeFormat5, DateFormats.timeFormat12_2
         ).lowercase()
 
         var rectF = RectF(
@@ -1222,24 +1182,16 @@ class HeartRateChartView : View {
             height.toFloat()
         )
         canvas.drawRoundRect(
-            rectF,
-            dip2px(4f).toFloat(),
-            dip2px(4f).toFloat(),
-            edgeTextBackPaint
+            rectF, dip2px(4f).toFloat(), dip2px(4f).toFloat(), edgeTextBackPaint
         )
 
         canvas.drawText(
-            startText,
-            leftWith + edgeTextPadding.toFloat(),
-            yPos + dip2px(2f),
-            mTextPaintEdge
+            startText, leftWith + edgeTextPadding.toFloat(), yPos + dip2px(2f), mTextPaintEdge
         )
 
 
         val text = DateFormats.formatDate(
-            endTimeStr,
-            DateFormats.dateTimeFormat5,
-            DateFormats.timeFormat12_2
+            endTimeStr, DateFormats.dateTimeFormat5, DateFormats.timeFormat12_2
         ).lowercase()
         val textWidth = mTextPaintEdge.measureText(text)
 
@@ -1251,10 +1203,7 @@ class HeartRateChartView : View {
             height.toFloat()
         )
         canvas.drawRoundRect(
-            rectF,
-            dip2px(4f).toFloat(),
-            dip2px(4f).toFloat(),
-            edgeTextBackPaint
+            rectF, dip2px(4f).toFloat(), dip2px(4f).toFloat(), edgeTextBackPaint
         )
 
         canvas.drawText(
