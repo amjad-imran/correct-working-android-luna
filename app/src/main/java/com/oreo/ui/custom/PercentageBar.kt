@@ -100,10 +100,10 @@ class PercentageBar : View {
         unitWidthLength = (width / dataSize)
 
         val dummyUnitLength = width / 100
-        for (i in 0..100) {
+        for (i in 0..200 step 2) {
             rectF!!.left = (i * dummyUnitLength).toFloat()
             rectF!!.top = 0f
-            rectF!!.right = rectF!!.left + (dummyUnitLength) / 4
+            rectF!!.right = rectF!!.left + (dummyUnitLength)
             rectF!!.bottom = height.toFloat()
             canvas?.drawRoundRect(rectF!!, cornerLine, cornerLine, linePaint)
         }
