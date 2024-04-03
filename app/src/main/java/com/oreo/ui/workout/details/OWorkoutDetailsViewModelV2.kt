@@ -40,6 +40,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
 ) : BaseViewModel() {
 
 
+    var avgValue: String = ""
     var workoutDetailsExpanded = false
     var position: Int = -1
     private val _workoutDeletedResponse = MutableLiveData<Event<Boolean>>()
@@ -416,6 +417,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
 
                     title = "Restorative zone",
                     range = "<50%",
+                    zone = 0,
                     percentage = zoneRestorativeIndexes.size.toFloat()
                         .calculatePercentage(duration.toFloat()).toInt(),
                     duration = ApplicationUtils.getActivityDurationFormat2(zoneRestorativeIndexes.size * hrIntervalInSecond),
@@ -426,6 +428,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
                 OWDActivityHRZoneData(
 
                     title = "Zone 1",
+                    zone = 1,
                     range = "(50-60%)",
                     percentage = zone1Indexes.size.toFloat().calculatePercentage(duration.toFloat())
                         .toInt(),
@@ -438,6 +441,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
 
                     title = "Zone 2",
                     range = "(60-70%)",
+                    zone = 2,
                     percentage = zone2Indexes.size.toFloat().calculatePercentage(duration.toFloat())
                         .toInt(),
                     duration = ApplicationUtils.getActivityDurationFormat2(zone2Indexes.size * hrIntervalInSecond),
@@ -449,6 +453,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
 
                     title = "Zone 3",
                     range = "(70-80%)",
+                    zone = 3,
                     percentage = zone3Indexes.size.toFloat().calculatePercentage(duration.toFloat())
                         .toInt(),
                     duration = ApplicationUtils.getActivityDurationFormat2(zone3Indexes.size * hrIntervalInSecond),
@@ -459,6 +464,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
                 OWDActivityHRZoneData(
                     title = "Zone 4",
                     range = "(80-90%)",
+                    zone = 4,
                     percentage = zone4Indexes.size.toFloat().calculatePercentage(duration.toFloat())
                         .toInt(),
                     duration = ApplicationUtils.getActivityDurationFormat2(zone4Indexes.size * hrIntervalInSecond),
@@ -469,13 +475,13 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
                 OWDActivityHRZoneData(
                     title = "Zone 5",
                     range = "(90-100%)",
+                    zone = 5,
                     percentage = zone5Indexes.size.toFloat().calculatePercentage(duration.toFloat())
                         .toInt(),
                     duration = ApplicationUtils.getActivityDurationFormat2(zone5Indexes.size * hrIntervalInSecond),
                     color = "#ff3434",
                 )
             )
-
         }
     }
 

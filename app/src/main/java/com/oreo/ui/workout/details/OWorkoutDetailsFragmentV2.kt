@@ -67,14 +67,6 @@ class OWorkoutDetailsFragmentV2 :
 
 
     override fun initListener() {
-        binding.lytActivityItem.root.setOnClickListener {
-
-            binding.lytHeartRate.heartRateChart.updateHighlight(
-                viewModel.getIndexList(1),
-                Color.parseColor("#00FF00")
-            )
-            context.showShortToast("Clicked")
-        }
 
         binding.lytToolbar.backBtn.setOnClickListener {
             navigateUpSafe()
@@ -216,12 +208,12 @@ class OWorkoutDetailsFragmentV2 :
         if (it.type.equals(WorkoutTypes.USERWORKOUT.name, true)) {
             if (!it.hrArray.isNullOrEmpty()) {
                 binding.llExpand.visible()
-                binding.lytHeartRate.tvAverageValue.text =
-                    if (it.hrAvg == null || it.hrAvg == 0 || it.hrAvg == 255) {
-                        "-"
-                    } else {
-                        it.hrAvg.toString()
-                    }
+                viewModel.avgValue = if (it.hrAvg == null || it.hrAvg == 0 || it.hrAvg == 255) {
+                    "-"
+                } else {
+                    it.hrAvg.toString()
+                }
+                setAvgHr()
                 val maxHr = if (it.hrMax == null || it.hrMax == 0 || it.hrMax == 255) {
                     "-"
                 } else {
@@ -241,6 +233,14 @@ class OWorkoutDetailsFragmentV2 :
                         data: OWDActivityHRZoneData
                     ) {
                         hrZoneAdapter.updateData(selectedPosition, isHighlighted)
+                        if (isHighlighted) {
+                            binding.lytHeartRate.heartRateChart.updateHighlight(
+                                viewModel.getIndexList(data.zone),
+                                Color.parseColor("#00FF00")
+                            )
+                        } else {
+                            binding.lytHeartRate.heartRateChart.removeHighlights()
+                        }
                     }
 
                 })
@@ -293,12 +293,12 @@ class OWorkoutDetailsFragmentV2 :
             setClickListener(object : OnHeartRateChartClickAction {
                 override fun onValueSelected(value: Int, isInteracting: Boolean, time: String?) {
                     if (isInteracting) {
-                        /* binding.lytHeartRate.tvSubtitle1.text = time ?: ""
-                         binding.lytHeartRate.lytSubtitleValue1.tvValue.text =
-                             if (value > 0) "$value" else "-"*/
+                        binding.lytHeartRate.tvAverageTitle.text = time ?: ""
+                        binding.lytHeartRate.tvAverageValue.text =
+                            if (value > 0) "$value" else "-"
 
                     } else {
-                        //setHrLowestHr()
+                        setAvgHr()
                     }
                 }
 
@@ -311,5 +311,10 @@ class OWorkoutDetailsFragmentV2 :
         }
 
 
+    }
+
+    private fun setAvgHr() {
+        binding.lytHeartRate.tvAverageTitle.text = getString(R.string.text_resting_hr)
+        binding.lytHeartRate.tvAverageValue.text = viewModel.avgValue
     }
 }

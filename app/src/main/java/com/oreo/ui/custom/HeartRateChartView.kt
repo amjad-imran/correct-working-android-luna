@@ -839,7 +839,7 @@ class HeartRateChartView : View {
                 val formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
 
                 val startDateTime = LocalDateTime.parse(startTime, formatter)
-                var updatedTime = startDateTime.plusMinutes((list.size - i - 1) * 5)
+                var updatedTime = startDateTime.plusSeconds((list.size - i - 1) * 30)
                 val formatterDisplay = DateTimeFormat.forPattern("h:mm a")
 
                 val time = updatedTime.toString(formatterDisplay).lowercase()
