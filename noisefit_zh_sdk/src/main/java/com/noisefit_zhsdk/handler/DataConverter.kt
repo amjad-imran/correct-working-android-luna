@@ -54,6 +54,8 @@ import com.zhapp.ble.bean.WidgetBean
 import com.zhapp.ble.bean.WorldClockBean
 import java.math.BigDecimal
 import javax.inject.Inject
+import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 
 class DataConverter
 @Inject
@@ -1123,7 +1125,7 @@ constructor(
 
         var cadence = 0L
         if (it.reportTotalStep != 0L) {
-            cadence = ((it.reportTotalStep / duration))
+            cadence = ((it.reportTotalStep.toFloat() / duration)).roundToLong()
         }
 
         return RecordedWorkoutData(

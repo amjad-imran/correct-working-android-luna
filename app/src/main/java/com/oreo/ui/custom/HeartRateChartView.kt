@@ -640,39 +640,6 @@ class HeartRateChartView : View {
         canvas.drawRect(mWith - rightWith, 0f, mWith.toFloat(), mHeight.toFloat(), bgRightPaint!!)
     }
 
-    private fun drawLeft(canvas: Canvas) {
-        canvas.drawRect(0f, 0f, leftWith, mHeight.toFloat(), bgLeftPaint!!)
-        val maxStr = max.toString()
-        val minStr = xMin.toString()
-        val avgStr = avgValue.toString()
-        val max =
-            mHeight - bottomWith - (max - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
-        canvas.drawLine(leftWith, max, mWith - rightWith, max, gridPaint!!)
-        xTextPaint!!.color = Color.parseColor("#7affffff")
-        xTextPaint!!.getTextBounds(maxStr, 0, maxStr.length, xTextBounds)
-        canvas.drawText(
-            maxStr, mWith - rightWith + dip2px(10f), max + xTextBounds!!.height() / 2f, xTextPaint!!
-        )
-        val min =
-            mHeight - bottomWith - (xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
-        canvas.drawLine(leftWith, min, mWith - rightWith, min, gridPaint!!)
-        xTextPaint!!.getTextBounds(maxStr, 0, maxStr.length, xTextBounds)
-        canvas.drawText(
-            minStr, mWith - rightWith + dip2px(10f), min + xTextBounds!!.height() / 2f, xTextPaint!!
-        )
-        val avg =
-            mHeight - bottomWith - (avgValue - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
-        canvas.drawLine(leftWith, avg, mWith - rightWith, avg, centerLinePaint!!)
-        xTextPaint!!.getTextBounds(avgStr, 0, avgStr.length, xTextBounds)
-        xTextPaint!!.color = Color.WHITE
-
-//        float width = xTextPaint.measureText(avgStr)
-//        float padding = dip2px(2)
-//        canvas.drawRect(leftWith + dip2px(5) - padding, avg - dip2px(18),
-//                leftWith + dip2px(5) + width + padding, avg - dip2px(4),
-//                avgBackPaint)
-//        canvas.drawText(avgStr, leftWith + dip2px(5), avg - xTextBounds.height(), xTextPaint)
-    }
 
 
     fun initLineGradient() {
@@ -1068,31 +1035,31 @@ class HeartRateChartView : View {
 
 
             if (avgValue > 0) {
-                val avg =
-                    mHeight - bottomWith - (avgValue - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
-                avgTextPaint!!.getTextBounds(avgStr, 0, avgStr.length, xTextBounds)
-                //xTextPaint!!.color = Color.parseColor("#9cbdff")
-                avgBackPaint!!.color = Color.parseColor("#b3172941")
 
-                if (!isInteracting) {
+
+                if (!isInteracting && !isHighlighted) {
+                    val avg =
+                        mHeight - bottomWith - (avgValue - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
+                    avgTextPaint!!.getTextBounds(avgStr, 0, avgStr.length, xTextBounds)
+                    //xTextPaint!!.color = Color.parseColor("#9cbdff")
+                    avgBackPaint!!.color = Color.parseColor("#b3172941")
                     canvas.drawLine(leftWith, avg, mWith.toFloat(), avg, centerLinePaint!!)
+                    val padding = dip2px(8f)
+                    canvas.drawBitmap(
+                        avgBackBitmap, null, RectF(
+                            leftWith + dip2px(5f) - padding,
+                            avg - dip2px(3f) - xTextBounds!!.height() - padding,
+                            leftWith + dip2px(5f) + xTextBounds!!.width() + padding,
+                            avg - dip2px(6f) + padding
+                        ), null
+                    )
+
+
+
+                    canvas.drawText(
+                        avgStr, leftWith + dip2px(5f), avg - dip2px(6f), avgTextPaint
+                    )
                 }
-
-                val padding = dip2px(8f)
-                canvas.drawBitmap(
-                    avgBackBitmap, null, RectF(
-                        leftWith + dip2px(5f) - padding,
-                        avg - dip2px(3f) - xTextBounds!!.height() - padding,
-                        leftWith + dip2px(5f) + xTextBounds!!.width() + padding,
-                        avg - dip2px(6f) + padding
-                    ), null
-                )
-
-
-
-                canvas.drawText(
-                    avgStr, leftWith + dip2px(5f), avg - dip2px(6f), avgTextPaint
-                )
             }
 
         } else {

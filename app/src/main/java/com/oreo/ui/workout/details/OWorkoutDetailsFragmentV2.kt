@@ -156,10 +156,15 @@ class OWorkoutDetailsFragmentV2 :
         binding.lytActivityItem.tvWorkoutTime.text =
             DateFormats.getActivityDisplayDates(it.startTime, it.endTime)
 
+        val title = StringBuilder()
+        if(DateFormats.getTodaysDateString(10).equals(it.date)){
+            title.append("Today, ")
+        }
+        title.append(DateFormats.getOrdinalDateToday(it.date,DateFormats.dateFormat3,))
 
         binding.rvActivityDetails.visible()
         binding.lytActivityItem.root.visible()
-        binding.lytToolbar.tvTitle.text = DateFormats.formatActivityDate(it.date)
+        binding.lytToolbar.tvTitle.text = title.toString()
         binding.lytActivityItem.tvActivityName.text = it.getFormattedActivityName()
         binding.lytActivityItem.tvDurationValue.text =
             ApplicationUtils.getActivityDurationFormat2(it.duration)
