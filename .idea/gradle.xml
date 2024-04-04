@@ -13,15 +13,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/commons" />
-            <option value="$PROJECT_DIR$/customprogress" />
-            <option value="$PROJECT_DIR$/noisefit_colorfit2" />
-            <option value="$PROJECT_DIR$/noisefit_colorfit_pro" />
-            <option value="$PROJECT_DIR$/noisefit_evolve2" />
-            <option value="$PROJECT_DIR$/noisefit_hybrid" />
-            <option value="$PROJECT_DIR$/noisefit_libraries" />
             <option value="$PROJECT_DIR$/noisefit_libraries_zh" />
-            <option value="$PROJECT_DIR$/noisefit_nav_plus" />
-            <option value="$PROJECT_DIR$/noisefit_ryeex_sdk" />
             <option value="$PROJECT_DIR$/noisefit_zh_sdk" />
           </set>
         </option>

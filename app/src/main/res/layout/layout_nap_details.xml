@@ -22,10 +22,9 @@
             style="@style/H2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:includeFontPadding="false"
-            android:layout_marginStart="@dimen/side_margin"
             android:layout_marginTop="24dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:includeFontPadding="false"
+            app:layout_constraintStart_toStartOf="@+id/textView1"
             app:layout_constraintTop_toBottomOf="@id/textView1"
             tools:text="8" />
 

@@ -1,6 +1,0 @@
-com.noisefit_hybrid
-drawable ic_others_notifications
-drawable ic_skype_notification
-drawable ic_spo2
-drawable ic_twitter_notifications
-drawable ic_wechat_notification

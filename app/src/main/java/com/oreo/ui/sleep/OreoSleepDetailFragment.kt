@@ -1098,8 +1098,9 @@ class OreoSleepDetailFragment :
     }
 
     private fun setNapData(naps: List<Nap>?, date: String) {
+        val filteredNaps = naps?.filter { !it.isNextDayNap }
 
-        if (naps.isNullOrEmpty()) {
+        if (filteredNaps.isNullOrEmpty()) {
             binding.lytNaps.root.gone()
             return
         } else {
@@ -1108,7 +1109,7 @@ class OreoSleepDetailFragment :
 
         binding.lytNaps.lytNap.rvNap.layoutManager =
             LinearLayoutManager(binding.lytNaps.lytNap.rvNap.context)
-        binding.lytNaps.lytNap.rvNap.adapter = DashNapAdapter(naps, date, true).apply {
+        binding.lytNaps.lytNap.rvNap.adapter = DashNapAdapter(filteredNaps, date, true).apply {
 
             this.setOnNapSelectedListener(object : OnNapSelectedAction {
                 override fun onNapSelected(napId: String) {

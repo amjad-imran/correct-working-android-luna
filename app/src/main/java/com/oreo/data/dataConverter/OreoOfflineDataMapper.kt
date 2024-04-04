@@ -25,8 +25,6 @@ import com.noisefit_commans.models.HeartRate
 import com.noisefit_commans.models.HeartRateHistory
 import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.models.SleepDataGoogleFit
-import com.noisefit_commans.models.SportsDataGoogleFit
-import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.models.StepsData
 import com.noisefit_commans.models.StressData
 import com.noisefit_commans.models.StressDataBreakup
@@ -38,7 +36,6 @@ import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.implementation.OreoHeartRateDataImpl
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.TapMeasureState
-import org.joda.time.format.ISODateTimeFormat.hour
 import java.util.Calendar
 import java.util.TimeZone
 import javax.inject.Inject
@@ -609,9 +606,6 @@ constructor(
         }
 
         val watchType = watches.getWatchType()
-        if (watchType == SDKWatchType.SDK_RYEEX) {
-            return data[data.size - 1]
-        }
 
 
         val sleepArray = ArrayList<SleepData.SleepDataBreakup>()
@@ -661,9 +655,7 @@ constructor(
         sleepData.deep = totalDeep
         sleepData.awake = totalAwake
 
-        if (watches.getDevice()?.deviceType == DeviceType.COLORFIT_PULSE_2.deviceType || watches.getDevice()?.deviceType == DeviceType.COLORFIT_PULSE_2_BUZZ.deviceType) {
-            sleepData.total = totalLight + totalDeep + totalRem
-        } else if (watches.getWatchType()?.name == SDKWatchType.SDK_NAV_PLUS.name || watches.getWatchType()?.name == SDKWatchType.SDK_ZH.name) {
+        if (watches.getWatchType()?.name == SDKWatchType.SDK_ZH.name) {
             sleepData.total = totalLight + totalDeep + totalRem
         } else {
             sleepData.total = totalLight + totalDeep + totalAwake + totalRem
@@ -685,9 +677,6 @@ constructor(
         }
 
         val watchType = watches.getWatchType()
-        if (watchType == SDKWatchType.SDK_RYEEX) {
-            return data[data.size - 1]
-        }
 
 
         val sleepArray = ArrayList<OreoSleepData.OreoSleepDataBreakup>()
@@ -737,9 +726,7 @@ constructor(
         sleepData.deep = totalDeep
         sleepData.awake = totalAwake
 
-        if (watches.getDevice()?.deviceType == DeviceType.COLORFIT_PULSE_2.deviceType || watches.getDevice()?.deviceType == DeviceType.COLORFIT_PULSE_2_BUZZ.deviceType) {
-            sleepData.total = totalLight + totalDeep + totalRem
-        } else if (watches.getWatchType()?.name == SDKWatchType.SDK_NAV_PLUS.name || watches.getWatchType()?.name == SDKWatchType.SDK_ZH.name) {
+        if (watches.getWatchType()?.name == SDKWatchType.SDK_ZH.name) {
             sleepData.total = totalLight + totalDeep + totalRem
         } else {
             sleepData.total = totalLight + totalDeep + totalAwake + totalRem
@@ -751,19 +738,6 @@ constructor(
     }
 
 
-    fun getTotalSleep(total: Int, awake: Int): Int {
-        val device = watches.getDevice()
-        if (device?.deviceType == DeviceType.COLORFIT_PULSE_2.deviceType || device?.deviceType == DeviceType.COLORFIT_PULSE_2_BUZZ.deviceType) {
-            return (total + awake)
-        }
-
-        val watchType = watches.getWatchType()
-        return if (watchType?.name == SDKWatchType.SDK_NAV_PLUS.name || watchType?.name == SDKWatchType.SDK_ZH.name) {
-            (total + awake)
-        } else {
-            total
-        }
-    }
 
 
     fun convertUnSyncHeartRateDataListToObject(data: List<HeartRate>?): List<HeartRateHistory>? {

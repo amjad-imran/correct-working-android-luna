@@ -550,7 +550,7 @@ class OreoActivityViewModel @Inject constructor(
         }
 
         sleep?.naps?.forEach { nap ->
-            if (nap.date.equals(dayData.date)) {
+            if (nap.date.equals(dayData.date) && !nap.isNextDayNap) {
                 dataList.add(
                     ODayTimeActivitiesDataModel(
                         type = "Nap",

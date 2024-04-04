@@ -110,6 +110,10 @@ class SummaryDataFragmentToday :
             override fun onNapRemoveClicked(nap: OreoNapData) {
                 showRemoveNapBottomSheet(nap)
             }
+
+            /*override fun onMoveDetails(nap: ONapDataModel) {
+                navigate(R.id.napDetails, bundleOf("napId" to nap.id))
+            }*/
         })
     }
 
@@ -452,8 +456,6 @@ class SummaryDataFragmentToday :
                 }
 
             }
-
-
         }
 
         requireActivity().supportFragmentManager.setFragmentResultListener(
@@ -498,13 +500,13 @@ class SummaryDataFragmentToday :
                     return@observe
                 }
 
-                val hour = getHoursBasedOnDateTime(nap.startTime)
-                if (hour.toInt() >= 19) {
+               /* val hour = getHoursBasedOnDateTime(nap.startTime)
+                if (hour.toInt() >= 19) {*/
                     navigate(
                         R.id.bottomSheetNoDataNapScore,
                         bundleOf("napScoreData" to viewModel.getNapSlideUpObj(nap))
                     )
-                }
+                //}
             }
         }
 

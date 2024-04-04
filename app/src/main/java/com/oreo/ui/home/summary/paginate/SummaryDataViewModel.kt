@@ -104,11 +104,12 @@ constructor(
                     )
                 }
             }
+            val filteredNaps = nap.filter { !it.isNextDayNap }
 
             val newSleepArray =
                 dataConverter.mergeSleepData(
                     healthData.sleep?.hourly_breakup,
-                    healthData.sleep?.naps
+                    filteredNaps
                 )
 
             healthData.sleep.let {
@@ -134,8 +135,8 @@ constructor(
                 }
 
             }
-            if (nap.isNotEmpty()) {
-                userActivities.add(OHealthOverview.NapDashCard(nap, healthData.date))
+            if (filteredNaps.isNotEmpty()) {
+                userActivities.add(OHealthOverview.NapDashCard(filteredNaps, healthData.date))
             }
 
             healthData.activity.let {

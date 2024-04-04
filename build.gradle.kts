@@ -9,8 +9,8 @@ buildscript {
             classpath(PlayService.googleServices)
             classpath(Build.crashlyticsGradlePlugin)
             classpath(Build.daggerHiltPlugin)
-            classpath(Build.huaweiAgc)
-            classpath(Insider.agcpClassPath)
+//            classpath(Build.huaweiAgc)
+//            classpath(Insider.agcpClassPath)
             classpath("com.android.tools.build:gradle:7.3.1")
 //            classpath Build.daggerHiltPlugin
 //            classpath Build.kotlinGradlePlugin

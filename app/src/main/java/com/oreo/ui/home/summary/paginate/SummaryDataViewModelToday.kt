@@ -239,7 +239,8 @@ class SummaryDataViewModelToday @Inject constructor(
 
 
             val newSleepArray = dataConverter.mergeSleepData(
-                healthData.sleep?.hourly_breakup, healthData.sleep?.naps
+                healthData.sleep?.hourly_breakup,
+                healthData.sleep?.naps?.filter { !it.isNextDayNap }
             )
 
 
@@ -503,7 +504,7 @@ class SummaryDataViewModelToday @Inject constructor(
     fun loadNapsToConfirm() {
         viewModelScope.launch(Dispatchers.IO) {
             val naps = userActivityRepository.getNapsToConfirm()
-            napsList.postValue(naps ?: ArrayList())
+            napsList.postValue(naps)
         }
     }
 
@@ -1083,6 +1084,7 @@ class SummaryDataViewModelToday @Inject constructor(
             newSleepScore = nap.sleepScore,
             oldReadinessScore = nap.prevReadinessScore,
             newReadinessScore = nap.readinessScore,
+            scoreImpact = nap.scoreImpact
         )
     }
 

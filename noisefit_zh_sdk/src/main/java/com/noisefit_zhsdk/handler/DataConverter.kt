@@ -436,9 +436,7 @@ constructor(
         widgetList?.forEach { widgetBean ->
             LOGS.d("convertAppList ${getFunctionName(widgetBean.functionId)} ${widgetBean.functionId}")
 
-            if (noiseFitDevice?.deviceType == DeviceType.NOISEFIT_ORIGIN.deviceType &&
-                widgetBean.functionId != 10
-            ) {
+
                 appList.add(
                     Widget(
                         widgetBean.functionId,
@@ -451,7 +449,7 @@ constructor(
                 )
             }
 
-        }
+
         return appList
     }
 
