@@ -8,6 +8,8 @@ interface OreoSleepDataSource {
         data: OreoSleepData
     ): Boolean
 
+    suspend fun getSleepByStartTime(startTime: String): List<OreoSleepData>?
+
     suspend fun getTodayData(date: String): List<OreoSleepData>?
     suspend fun getServerUnSyncData(): List<OreoSleepData>?
 

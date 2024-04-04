@@ -504,7 +504,7 @@ class SummaryDataViewModelToday @Inject constructor(
     fun loadNapsToConfirm() {
         viewModelScope.launch(Dispatchers.IO) {
             val naps = userActivityRepository.getNapsToConfirm()
-            napsList.postValue(naps)
+            napsList.postValue(naps ?: ArrayList())
         }
     }
 

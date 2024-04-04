@@ -38,7 +38,7 @@ constructor(
         val sleeps = sleepDao.getTodayData(date)
         if (sleeps.isNullOrEmpty()) return
 
-        sleepDao.updateHealthScore(score,date)
+        sleepDao.updateHealthScore(score, date)
 
     }
 
@@ -51,13 +51,17 @@ constructor(
         data.let { sleep ->
             ids.add(sleep.id)
         }
-        sleepDao.updateGoogleFitStatus(ids,true)
+        sleepDao.updateGoogleFitStatus(ids, true)
     }
-
 
 
     override suspend fun getTodayData(date: String): List<OreoSleepData>? {
         return sleepDao.getTodayData(date)
+    }
+
+    override suspend fun getSleepByStartTime(startTime: String): List<OreoSleepData>? {
+        if (startTime.isEmpty()) return null
+        return sleepDao.getSleepByStartTime(startTime)
     }
 
     override suspend fun getServerUnSyncData(): List<OreoSleepData>? {
