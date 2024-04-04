@@ -38,14 +38,19 @@ class OWorkoutHRZoneAdapter() :
                 binding.percentageBar.gone()
             } else {
                 binding.percentageBar.visible()
-                binding.percentageBar.updateData(detailData.selectedIndexes,detailData.dataSize,color,isHighlighted)
+                binding.percentageBar.updateData(
+                    detailData.selectedIndexes,
+                    detailData.dataSize,
+                    color,
+                    isHighlighted
+                )
             }
             binding.tvDuration.text = detailData.duration
             binding.tvTitle.setTextColor(color)
             binding.tvPercentage.setTextColor(color)
 //            binding.percentageBar.setPercentageColor1(color)
             binding.root.setOnClickListener {
-                if(detailData.percentage ==0){
+                if (detailData.percentage == 0) {
                     return@setOnClickListener
                 }
                 listener?.onClick(position, !detailData.isHighlighted, detailData)
@@ -69,10 +74,10 @@ class OWorkoutHRZoneAdapter() :
     fun updateData(position: Int, isHighlighted: Boolean) {
         mDataSet.forEachIndexed { index, owdActivityHRZoneData ->
 
-            if(isHighlighted){
+            if (isHighlighted) {
                 mDataSet[index].isHighlighted = index == position
                 mDataSet[index].isDisable = index != position
-            }else{
+            } else {
                 mDataSet[index].isHighlighted = false
                 mDataSet[index].isDisable = false
             }
