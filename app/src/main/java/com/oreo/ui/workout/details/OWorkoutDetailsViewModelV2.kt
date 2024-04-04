@@ -397,13 +397,15 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
                 }
 
                 else -> {
-                    zoneRestorativeIndexes.add(index)
+                    if (value != 0 && value != 255 && value < zone5Max) {
+                        zoneRestorativeIndexes.add(index)
+                    }
                 }
 
             }
         }
 
-        LOGS.d("khgkhgkgkk ${Gson().toJson(zone1Indexes)}")
+        LOGS.d("khgkhgkgkk ${Gson().toJson(zones)}")
 
 
         val duration =

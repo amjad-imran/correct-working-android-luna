@@ -116,10 +116,6 @@ class PercentageBar : View {
         color: Int,
         isHighlighted: Boolean
     ) {
-       /* this.dataList.clear()
-        this.dataList.addAll(arrayListOf(0,1, 2, 3, 4))
-        this.dataSize = 10*/
-
         this.dataList.clear()
         this.dataList.addAll(dataList)
         this.dataSize = dataSize
@@ -136,7 +132,6 @@ class PercentageBar : View {
         rectF!!.top = 0f
         rectF!!.bottom = height.toFloat()
 
-        var right = 0f
         var left = 0f
         var hasLeft = false
         val halfUnitWidth = unitWidthLength / 2
@@ -148,19 +143,17 @@ class PercentageBar : View {
                     left = if (i == 0) {
                         0f
                     } else {
-                        (i * unitWidthLength) - halfUnitWidth
+                        (i * unitWidthLength) - unitWidthLength
                     }
                     hasLeft = true
-                    LOGS.d("PERCENTAGE_BAR $left ${i*unitWidthLength} $halfUnitWidth")
                 }
                 if (i == dataSize - 1 || next == 0) {
-                    right = if (i == dataSize - 1) {
-                        (i * unitWidthLength)
-                    } else {
-                        (i * unitWidthLength) + halfUnitWidth
-                    }
                     rectF!!.left = left
-                    rectF!!.right = right
+                    rectF!!.right = if (i == 0) {
+                        halfUnitWidth
+                    } else {
+                        (i * unitWidthLength)
+                    }
                     canvas?.drawRoundRect(
                         rectF!!,
                         cornerProgressLine,

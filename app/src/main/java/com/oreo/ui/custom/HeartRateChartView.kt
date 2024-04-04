@@ -739,6 +739,107 @@ class HeartRateChartView : View {
         )
     }
 
+    private fun calculateX(index: Int): Float {
+        return mWith - leftWith - rightWith + leftWith - index * unitHLenth
+    }
+
+    private fun calculateY(value: Int): Float {
+        return mHeight - bottomWith - (value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
+    }
+
+    private fun drawCubicLine(canvas: Canvas, index: Int, x: Float, y: Float, value: Int) {
+        val nextIndex = index + 1
+        val next = list[nextIndex]!!
+
+        if (value > 0 && next.value > 0) {
+            val x1 = calculateX(nextIndex)
+            val y1 = calculateY(next.value)
+
+            path.cubicTo(x1 + (x - x1) / 1.5f, y, x - (x - x1) / 1.5f, y1, x1, y1)
+            if (highlightIndexs.contains(list.size - 1 - index)) {
+                drawHighlightedFill(canvas, x, x1, y, y1)
+            } else {
+                drawRegularFill(canvas, x, x1, y, y1)
+            }
+            canvas.drawPath(path, chartLinePaint)
+        } else {
+            if (highlightIndexs.contains(list.size - 1 - index)) {
+                chartLinePaint.setShader(linearGradientH)
+                chartLinePaint.color = highlightColor
+            } else {
+                if (!isHighlighted) {
+                    if (isInteracting) {
+                        chartLinePaint.setShader(chartLineGradientInteracting)
+                    } else {
+                        chartLinePaint.setShader(chartLineGradient)
+                    }
+                } else {
+                    chartLinePaint.setShader(null)
+                    chartLinePaint.color = Color.parseColor("#596f80")
+                }
+            }
+            canvas.drawPoint(x, y, chartLinePaint)
+        }
+    }
+
+    private fun drawHighlightedFill(canvas: Canvas, x: Float, x1: Float, y: Float, y1: Float) {
+        fillPath.addPath(path)
+        fillPath.lineTo(x1, mHeight - bottomWith)
+        fillPath.lineTo(x, mHeight - bottomWith)
+        chartLineFillPaint.setShader(linearGradientH)
+        canvas.drawPath(fillPath, chartLineFillPaint)
+        chartLinePaint.setShader(linearGradientH)
+        chartLinePaint.color = highlightColor
+        fillPath.reset()
+    }
+
+    private fun drawRegularFill(canvas: Canvas, x: Float, x1: Float, y: Float, y1: Float) {
+        fillPath.addPath(path)
+        fillPath.lineTo(x1, mHeight - bottomWith)
+        fillPath.lineTo(x, mHeight - bottomWith)
+
+        if (!isHighlighted) {
+            if (isInteracting) {
+                chartLinePaint.setShader(chartLineGradientInteracting)
+                chartLineFillPaint.setShader(linearGradientI)
+                chartLinePaint.color = chartLineColorI
+            } else {
+                chartLinePaint.setShader(chartLineGradient)
+                chartLineFillPaint.setShader(linearGradient)
+                chartLinePaint.color = chartLineColor
+            }
+            canvas.drawPath(fillPath, chartLineFillPaint)
+        } else {
+            chartLineFillPaint.setShader(null)
+            chartLinePaint.setShader(null)
+            chartLinePaint.color = Color.parseColor("#596f80")
+        }
+    }
+
+    private fun addToolTip(index: Int, x: Float, value: Int) {
+        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
+        val startDateTime = LocalDateTime.parse(startTime, formatter)
+        val updatedTime = startDateTime.plusSeconds((list.size - index - 1) * 30)
+        val formatterDisplay = DateTimeFormat.forPattern("h:mm a")
+        val time = updatedTime.toString(formatterDisplay).lowercase()
+        toolTipList.add(Triple(x, time ?: "", value))
+    }
+
+    private fun drawCircleIfNecessary(canvas: Canvas, index: Int, value: Int) {
+        if (value > 0) {
+            val next = list.getOrNull(index + 1)
+            val prev = list.getOrNull(index - 1)
+
+            if (index == 0 && next?.value == 0) {
+                canvas.drawCircle(x, y, 1f, outCirclePaint!!)
+            } else if (index == list.size - 1 && prev?.value == 0) {
+                canvas.drawCircle(x, y, 1f, outCirclePaint!!)
+            } else if (prev?.value == 0 && next?.value == 0) {
+                canvas.drawCircle(x, y, 1f, outCirclePaint!!)
+            }
+        }
+    }
+
     private fun drawContent(canvas: Canvas) {
         if (list.size == 0) {
             return
@@ -749,75 +850,100 @@ class HeartRateChartView : View {
         //hack for touch and hold position
         graphOriginalWidth = (mWith - leftWith)
 
-        val firstPosition = 0
-        val lastPosition = list.size
-        var current: ChartModel?
-        var next: ChartModel?
-
+        /* val firstPosition = 0
+         val lastPosition = list.size
+         var current: ChartModel?
+         var next: ChartModel?*/
 
         toolTipList.clear()
+
         for (i in list.indices) {
-            current = list[i]
-            val x = mWith - leftWith - rightWith + leftWith - i * unitHLenth
-            val y =
-                mHeight - bottomWith - (current!!.value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
+            val current = list[i]!!
+            val x = calculateX(i)
+            val y = calculateY(current.value)
 
             path.reset()
             fillPath.reset()
             path.moveTo(x, y)
+
             if (i < list.size - 1) {
-                next = list[i + 1]
-                if (current.value > 0) {
-                    if (next!!.value > 0) {
-                        val x1 = mWith - leftWith - rightWith + leftWith - (i + 1) * unitHLenth
-                        val y1 =
-                            mHeight - bottomWith - (next.value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
+                drawCubicLine(canvas, i, x, y, current.value)
+            }
+
+            if (startTime != null) {
+                addToolTip(i, x, current.value)
+            }
+
+            if (current.value > 0) {
+                drawCircleIfNecessary(canvas, i, current.value)
+            }
+        }
+        /*
 
 
-                        path.cubicTo(x1 + (x - x1) / 1.5f, y, x - (x - x1) / 1.5f, y1, x1, y1)
-                        if (highlightIndexs.contains(list.size - 1 - i)) {
-                            fillPath.addPath(path)
-                            //draw fill first
-                            fillPath.lineTo(x1, mHeight - bottomWith)
-                            fillPath.lineTo(x, mHeight - bottomWith)
-                            chartLineFillPaint.setShader(linearGradientH)
-                            canvas.drawPath(fillPath, chartLineFillPaint)
-                            chartLinePaint.setShader(linearGradientH)
-                            chartLinePaint.color = highlightColor
-                            fillPath.reset()
-                        } else {
-                            fillPath.addPath(path)
-                            fillPath.lineTo(x1, mHeight - bottomWith)
-                            fillPath.lineTo(x, mHeight - bottomWith)
 
-                            if (!isHighlighted) {
-                                if (isInteracting) {
-                                    chartLinePaint.setShader(chartLineGradientInteracting)
-                                    chartLineFillPaint.setShader(linearGradientI)
-                                    chartLinePaint.color = chartLineColorI
+                for (i in list.indices) {
+                    current = list[i]
+                    val x = mWith - leftWith - rightWith + leftWith - i * unitHLenth
+                    val y =
+                        mHeight - bottomWith - (current!!.value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
+
+                    path.reset()
+                    fillPath.reset()
+                    path.moveTo(x, y)
+                    if (i < list.size - 1) {
+                        next = list[i + 1]
+                        if (current.value > 0) {
+                            if (next!!.value > 0) {
+                                val x1 = mWith - leftWith - rightWith + leftWith - (i + 1) * unitHLenth
+                                val y1 =
+                                    mHeight - bottomWith - (next.value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
+
+
+                                path.cubicTo(x1 + (x - x1) / 1.5f, y, x - (x - x1) / 1.5f, y1, x1, y1)
+                                if (highlightIndexs.contains(list.size - 1 - i)) {
+                                    fillPath.addPath(path)
+                                    //draw fill first
+                                    fillPath.lineTo(x1, mHeight - bottomWith)
+                                    fillPath.lineTo(x, mHeight - bottomWith)
+                                    chartLineFillPaint.setShader(linearGradientH)
+                                    canvas.drawPath(fillPath, chartLineFillPaint)
+                                    chartLinePaint.setShader(linearGradientH)
+                                    chartLinePaint.color = highlightColor
+                                    fillPath.reset()
                                 } else {
-                                    chartLinePaint.setShader(chartLineGradient)
-                                    chartLineFillPaint.setShader(linearGradient)
-                                    chartLinePaint.color = chartLineColor
+                                    fillPath.addPath(path)
+                                    fillPath.lineTo(x1, mHeight - bottomWith)
+                                    fillPath.lineTo(x, mHeight - bottomWith)
+
+                                    if (!isHighlighted) {
+                                        if (isInteracting) {
+                                            chartLinePaint.setShader(chartLineGradientInteracting)
+                                            chartLineFillPaint.setShader(linearGradientI)
+                                            chartLinePaint.color = chartLineColorI
+                                        } else {
+                                            chartLinePaint.setShader(chartLineGradient)
+                                            chartLineFillPaint.setShader(linearGradient)
+                                            chartLinePaint.color = chartLineColor
+
+                                        }
+                                        canvas.drawPath(fillPath, chartLineFillPaint)
+                                    } else {
+                                        chartLineFillPaint.setShader(null)
+                                        chartLinePaint.setShader(null)
+                                        chartLinePaint.color = Color.parseColor("#596f80")
+                                    }
+
 
                                 }
-                                canvas.drawPath(fillPath, chartLineFillPaint)
+                                //draw chart line second, need to cover fill color
+                                canvas.drawPath(path, chartLinePaint)
                             } else {
-                                chartLineFillPaint.setShader(null)
-                                chartLinePaint.setShader(null)
-                                chartLinePaint.color = Color.parseColor("#596f80")
-                            }
-
-
-                        }
-                        //draw chart line second, need to cover fill color
-                        canvas.drawPath(path, chartLinePaint)
-                    } else {
-                        if (highlightIndexs.contains(list.size - 1 - i)) {
-                            chartLinePaint.setShader(linearGradientH)
-                            chartLinePaint.color = highlightColor
-                        } else {
-                            if (!isHighlighted /*highlightIndexs.isEmpty()*/) {
+                                if (highlightIndexs.contains(list.size - 1 - i)) {
+                                    chartLinePaint.setShader(linearGradientH)
+                                    chartLinePaint.color = highlightColor
+                                } else {
+                                    if (!isHighlighted *//*highlightIndexs.isEmpty()*//*) {
                                 if (isInteracting) {
                                     chartLinePaint.setShader(chartLineGradientInteracting)
                                 } else {
@@ -867,53 +993,7 @@ class HeartRateChartView : View {
                     }
                 }
             }
-        }
-
-        /* var start = 0
-         for (i in list.indices) {
-             if (list[i]!!.value > 0) {
-                 start = i
-                 break
-             }
-         }
-         var end = 0
-         for (i in list.indices.reversed()) {
-             if (list[i]!!.value > 0) {
-                 end = i
-                 break
-             }
-         }
-         var lastIndex = -1
-         for (i in start..end) {
-             current = list[i]
-             if (current!!.value == 0) {
-                 if (i > 0 && lastIndex == -1) {
-                     lastIndex = i - 1
-                 }
-             } else {
-                 if (lastIndex != -1) {
-                     if (Math.abs(i - lastIndex) < 120 / (1440 / list.size)) {
-                         val x = mWith - leftWith - rightWith + leftWith - i * unitHLenth
-                         val y =
-                             mHeight - bottomWith - current.value * (mHeight - topWith - bottomWith) / (max - xMin)
-                         val x1 = mWith - leftWith - rightWith + leftWith - lastIndex * unitHLenth
-                         val y1 =
-                             mHeight - bottomWith - list[lastIndex]!!.value * (mHeight - topWith - bottomWith) / (max - xMin)
-                         chartLinePaint.setShader(null)
-                         chartLinePaint.color = if (isHighlighted || isInteracting) {
-                             Color.GRAY
-                         } else {
-                             Color.WHITE
-                         }
-                         chartLinePaint.setPathEffect(effect)
-                         canvas.drawLine(x, y, x1, y1, chartLinePaint)
-                         chartLinePaint.setPathEffect(null)
-                     }
-                     lastIndex = -1
-                 }
-             }
-         }*/
-
+        }*/
 
         val eachSecondsWidth = (width.toFloat() - rightWith - leftWith) / (list.size * 5 * 60)
         if (showXAxis) {

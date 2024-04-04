@@ -204,6 +204,7 @@ class OWorkoutDetailsFragmentV2 :
             workoutDetailsAdapter.setDataSet(workoutDetailList)
         }
 
+        //val dummyHrValues = arrayListOf(10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200)
 
         if (it.type.equals(WorkoutTypes.USERWORKOUT.name, true)) {
             if (!it.hrArray.isNullOrEmpty()) {
@@ -255,6 +256,8 @@ class OWorkoutDetailsFragmentV2 :
 
         val sleepChart = SleepChartModel()
         val chartList = ArrayList<ChartModel>()
+
+
         it.hrArray.forEachIndexed { index, data ->
             val chartModel = ChartModel()
 
