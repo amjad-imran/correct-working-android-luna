@@ -39,15 +39,15 @@ object NotificationUtil {
         NotificationHelper.createHighNotificationChannel(context)
 
         val channelInfo = NotificationHelper.getChannelInfo(notificationType)
-        /*val contentIntent = NotificationHelper.handleNotificationType(
+        val contentIntent = NotificationHelper.handleNotificationType(
             context,
             notificationType,
             notificationIndex,
             deepLink
-        )*/
-        val intent = Intent(context, SplashActivity::class.java)
+        )
+        /*val intent = Intent(context, SplashActivity::class.java)
         val contentIntent =
-            PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE)
+            PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE)*/
 
         val priority = NotificationHelper.getPriority(channelInfo.first)
 
@@ -93,7 +93,8 @@ object NotificationUtil {
             "$workoutName detected",
             "$workoutName was detected from $startTime to $endTime and is ready to review",
             LOCAL_NOTIFICATION_WORKOUT_KEY,
-            "1"
+            "1",
+            deepLink = ""
         )
     }
 

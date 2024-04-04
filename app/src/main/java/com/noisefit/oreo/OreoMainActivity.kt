@@ -33,6 +33,7 @@ import com.noisefit.ui.onboarding.FirebaseUpdateViewModel
 import com.noisefit.ui.onboarding.setup.DeviceSetupActivityV2
 import com.noisefit.util.ApplicationUtils
 import com.noisefit.util.moveToServer.BatteryNotificationUtils
+import com.noisefit.util.notif.NotificationEventsClass
 import com.noisefit.util.notif.NotificationUtil
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
@@ -45,6 +46,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
 import com.oreo.ui.recordworkout.SELECT_RECORD_WORKOUT
@@ -68,13 +70,17 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     private val REQUEST_ENABLE_BT = 133
 
     companion object {
+        val NOTIFICATION_TYPE = "NOTIFICATION_TYPE"
         fun getStartIntent(
             context: Context,
             notificationType: String? = null,
             notificationIndex: String? = null,
             deeplink: String? = null
         ): Intent {
-            return Intent(context, OreoMainActivity::class.java)
+
+            return Intent(context, OreoMainActivity::class.java).apply {
+                this.putExtra(NOTIFICATION_TYPE, notificationType)
+            }
         }
     }
 
@@ -89,6 +95,14 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         viewModel.sessionManager.getPairedState()
         checkBluetooth()
         firebaseViewModel.generateToken()
+
+        intent?.let {
+            Handler(Looper.getMainLooper()).postDelayed({
+                handleIntent(it)
+            }, 500)
+
+
+        }
     }
 
     private fun setBlurAddCta(radius: Float = 5f) {
@@ -207,6 +221,11 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             }
             true
         }*/
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
     }
 
     private fun showAddWorkout() {
@@ -707,8 +726,35 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             viewModel.syncRecordedWorkoutData()
         }
 
+
         //viewModel.shouldResetMasterDates()
 
+    }
+
+    private fun handleIntent(intent: Intent?) {
+        intent?.extras?.let { intentExtra ->
+            if (intentExtra.containsKey(NOTIFICATION_TYPE)) {
+                LOGS.d("NEW_NOTIFICATION_TYPE  ${intentExtra.getString(NOTIFICATION_TYPE)}")
+                handleNotificationType(
+                    intentExtra.getString(OreoMainActivity.NOTIFICATION_TYPE) ?: "",
+                    "0",
+                    ""
+                )
+                intent.putExtra(NOTIFICATION_TYPE, "")
+            }
+
+        }
+
+    }
+
+    private fun handleNotificationType(
+        notificationType: String,
+        notificationIndex: String,
+        deeplink: String?
+    ) {
+        if (notificationType.equals(NotificationEventsClass.LOCAL_NOTIFICATION_WORKOUT_KEY, true)) {
+            navController?.navigate(R.id.detectWorkoutListFragment)
+        }
     }
 
     override fun onPause() {
@@ -847,6 +893,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     override fun logAppEvent(eventName: String, data: HashMap<String, Any?>) {
 
     }
+
 }
 
 enum class BottomNavOption {
