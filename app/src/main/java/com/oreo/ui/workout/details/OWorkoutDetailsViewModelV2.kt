@@ -29,6 +29,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.Period
 import java.util.Calendar
 import javax.inject.Inject
 import kotlin.math.ceil
@@ -351,6 +353,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
 
         val hrIntervalInSecond = 30L
         val age = getUserAge()
+        LOGS.d("MY_AGE $age")
         val HRmax = (208 - 0.7 * age)
         // Zone 1 (50-60%)
         val zone1Min = (0.5 * HRmax).toInt()
@@ -424,7 +427,9 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
                     zone = 0,
                     percentage = zoneRestorativeIndexes.size.toFloat()
                         .calculatePercentage(duration.toFloat()).toInt(),
-                    duration = ApplicationUtils.getFormattedRecordedWorkoutFromSeconds(zoneRestorativeIndexes.size * hrIntervalInSecond),
+                    duration = ApplicationUtils.getFormattedRecordedWorkoutFromSeconds(
+                        zoneRestorativeIndexes.size * hrIntervalInSecond
+                    ),
                     color = "#ACABAB",
                     dataSize = hrValue.size,
                     selectedIndexes = zoneRestorativeIndexes
@@ -501,8 +506,16 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         }
     }
 
-    fun getUserAge(): Int {
-        return localDataStore.getUser()?.userInfo?.age ?: 30
+    private fun getUserAge(): Int {
+        val dob = localDataStore.getUser()?.userInfo?.dob ?: return 30
+
+        return try {
+            val dateOfBirth = LocalDate.parse(dob)
+            val currentDate = LocalDate.now()
+            Period.between(dateOfBirth, currentDate).years
+        } catch (exp: Exception) {
+            30
+        }
     }
 
 
