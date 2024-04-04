@@ -88,7 +88,8 @@ class OWorkoutHRZoneAdapter() :
     override fun getItemCount() = mDataSet.size
 
     fun setDataSet(data: List<OWDActivityHRZoneData>) {
-        mDataSet = data as ArrayList<OWDActivityHRZoneData>
+        mDataSet.clear()
+        mDataSet.addAll(data)
         notifyDataSetChanged()
     }
 
