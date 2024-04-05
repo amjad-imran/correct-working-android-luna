@@ -962,7 +962,8 @@ class HeartRateChartView : View {
             }
         }*/
 
-        val eachSecondsWidth = (width.toFloat() - rightWith - leftWith) / (list.size * 5 * 60)
+        //4 - > 120
+        val eachSecondsWidth = (width.toFloat() - rightWith - leftWith) / (list.size  * 30)
         if (showXAxis) {
 
             drawXAxisTime(
