@@ -58,6 +58,7 @@ class OreoRoomModule {
             .addMigrations(MIGRATION_5_6)
             .addMigrations(MIGRATION_6_7)
             .addMigrations(MIGRATION_7_8)
+            .addMigrations(MIGRATION_8_9)
             .build()
     }
 
@@ -161,7 +162,7 @@ class OreoRoomModule {
         }
     }
 
-    private val MIGRATION_7_8: Migration = object : Migration(7, 8) {
+    private val MIGRATION_8_9: Migration = object : Migration(8, 9) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL(
                 "CREATE TABLE IF NOT EXISTS `body_stress` " +

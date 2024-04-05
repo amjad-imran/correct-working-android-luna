@@ -41,7 +41,8 @@ import com.oreo.data.db.database.OreoUserHealthDataDao
     entities = [OreoStepsData::class, OreoHeartRate::class, OreoBloodOxygenBreakup::class,
         OreoBloodPressureData::class, OreoSleepData::class, OreoStressDataBreakup::class, OreoGoogleFitData::class,
         OreoBodyTemperatureBreakup::class, OreoRespiratoryData::class, DayTimeMovementBreakup::class,
-        OreoAutoSportData::class, RecordedWorkoutData::class, KeyValue::class, UserHealthData::class, OreoNapData::class, GoogleFitWorkoutData::class,OreoBodyStressData::class],
+        OreoAutoSportData::class, RecordedWorkoutData::class, KeyValue::class, UserHealthData::class, OreoNapData::class,
+        GoogleFitWorkoutData::class,OreoBodyStressData::class],
     version = 9, exportSchema = false
 )
 @TypeConverters(Converters::class)
