@@ -30,12 +30,14 @@ class DashNapAdapter(
                 binding.rootContainer.setBackgroundResource(R.drawable.ic_nap_nudge_back)//todo change - pending from design
             }*/
 
+            binding.tvLabel.apply {
+                text = nap.msg
+                setVisibilityByCondition(nap.msg.isNullOrEmpty().not())
+            }
+
             if (nap.isNextDayNap) {
                 binding.ivMoveNext.gone()
-                binding.tvLabel.apply {
-                    text = nap.msg
-                    setVisibilityByCondition(nap.msg.isNullOrEmpty().not())
-                }
+
                 binding.ivSleepSeperator.gone()
                 binding.ivSleep.gone()
                 binding.tvSleepScoreChange.gone()
@@ -44,7 +46,7 @@ class DashNapAdapter(
                 binding.tvReadinessScoreChange.gone()
             } else {
                 binding.ivMoveNext.gone()
-                binding.tvLabel.gone()
+                //binding.tvLabel.gone()
                 binding.ivSleepSeperator.visible()
                 binding.ivSleep.visible()
                 binding.tvSleepScoreChange.visible()

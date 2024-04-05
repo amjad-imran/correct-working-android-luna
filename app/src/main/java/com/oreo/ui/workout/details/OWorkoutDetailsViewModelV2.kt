@@ -146,15 +146,19 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
     fun prepareDataForActivity(it: OWorkoutDetailsResponseModel): ArrayList<OWDActivityData> {
         val activityList = ArrayList<OWDActivityData>()
         val context = NoiseFitApplicationMain.context!!
-        if (it.calories != null && it.calories > 0) {
-            activityList.add(
-                OWDActivityData(
-                    context.getString(R.string.text_total_calories),
-                    it.calories.toString(),
-                    "kcal",
+
+        if ((it.distance ?: 0) > 0) {
+            if (it.calories != null && it.calories > 0) {
+                activityList.add(
+                    OWDActivityData(
+                        context.getString(R.string.text_total_calories),
+                        it.calories.toString(),
+                        "kcal",
+                    )
                 )
-            )
+            }
         }
+
 
 
         if (it.cadence != null && it.cadence > 0) {
