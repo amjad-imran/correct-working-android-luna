@@ -25,11 +25,18 @@ class BottomSheetDayTimeActivities :
                 if (data.type.equals("workout", true)) {
                     if (data.workoutData == null) return
 
-                    navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
-                        putString("workoutName", data.workoutData.getFormattedActivityName())
-                        putString("workoutId", data.workoutData.id ?: "")
-                        putInt("position", -1)
-                    })
+                    if(data.workoutData.getDisplayVersionType()==2){
+                        navigate(R.id.oWorkoutDetailsFragmentV2, Bundle().apply {
+                            putString("workoutId", data.workoutData.id ?: "")
+                            putInt("position", -1)
+                        })
+                    }else{
+                        navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
+                            putString("workoutName", data.workoutData.getFormattedActivityName())
+                            putString("workoutId", data.workoutData.id ?: "")
+                            putInt("position", -1)
+                        })
+                    }
                 } else if (data.type.equals("sleep", true)) {
                     //viewModel.navigateTo(BottomNavOption.SLEEP)
                     navigateUpSafe()

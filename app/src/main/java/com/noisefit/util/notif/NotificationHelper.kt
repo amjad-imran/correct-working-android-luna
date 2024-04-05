@@ -168,6 +168,9 @@ object NotificationHelper {
             NotificationEventsClass.LOCAL_NOTIFICATION_KEY -> {
                 return Pair(NotificationEventsClass.NOISE_PUSH_CHANNEL_ID, 23122)
             }
+            NotificationEventsClass.LOCAL_NOTIFICATION_WORKOUT_KEY -> {
+                return Pair(NotificationEventsClass.NOISE_PUSH_CHANNEL_ID, 23125)
+            }
             NotificationEventsClass.APP_UPDATE_NOTIFICATION_KEY -> {
                 return Pair(NotificationEventsClass.NOISE_MISC_CHANNEL_ID, 23478)
             }

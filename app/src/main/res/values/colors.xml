@@ -213,4 +213,7 @@
     <color name="daytime_analysis_inactive_label_color">#a2bad1</color>
     <color name="daytime_low_movement_label_color">#33adcd</color>
     <color name="daytime_medium_movement_label_color">#8ed3f1</color>
+
+    <color name="text_light_blue">#9cbdff</color>
+
 </resources>

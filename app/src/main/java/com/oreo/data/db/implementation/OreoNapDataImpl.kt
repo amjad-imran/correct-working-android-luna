@@ -23,6 +23,12 @@ constructor(
         return true
     }
 
+    @Transaction
+    override suspend fun insertSingle(data: OreoNapData): Boolean {
+        napDao.insert(data)
+        return true
+    }
+
     override suspend fun getNaps(): List<OreoNapData>? {
         return napDao.getAllData()
     }

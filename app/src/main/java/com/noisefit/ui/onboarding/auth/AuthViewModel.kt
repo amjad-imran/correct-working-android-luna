@@ -184,7 +184,13 @@ class AuthViewModel @Inject constructor(
                                 return@let
                             }
 
-                            if (isOutSideIndia) {
+                            localDataStore.saveUserInfo(it.user!!)
+                            localDataStore.updateUserToken(it.token)
+                            ringDataStore.setUpdateUserDeviceStatus(false)
+                            authSuccess.postValue(Event(true))
+                            loginSuccessEvent()
+
+                           /* if (isOutSideIndia) {
                                 localDataStore.saveUserInfo(it.user!!)
                                 localDataStore.updateUserToken(it.token)
                                 ringDataStore.setUpdateUserDeviceStatus(false)
@@ -204,7 +210,7 @@ class AuthViewModel @Inject constructor(
                                 ringDataStore.setUpdateUserDeviceStatus(false)
                                 authSuccess.postValue(Event(true))
                                 loginSuccessEvent()
-                            }
+                            }*/
                             sendMessage("Otp Verified ")
                             //emailOtpGenerated.postValue(Event(true))
                         }
@@ -502,7 +508,15 @@ class AuthViewModel @Inject constructor(
                                 }
                                 return@let
                             }
-                            if (isOutSideIndia) {
+
+                            localDataStore.saveUserInfo(it.user!!)
+                            localDataStore.updateUserToken(it.token)
+                            ringDataStore.setUpdateUserDeviceStatus(false)
+                            authSuccess.postValue(Event(true))
+                            loginSuccessEvent()
+
+
+                           /* if (isOutSideIndia) {
                                 localDataStore.saveUserInfo(it.user!!)
                                 localDataStore.updateUserToken(it.token)
                                 ringDataStore.setUpdateUserDeviceStatus(false)
@@ -521,7 +535,7 @@ class AuthViewModel @Inject constructor(
                                 ringDataStore.setUpdateUserDeviceStatus(false)
                                 authSuccess.postValue(Event(true))
                                 loginSuccessEvent()
-                            }
+                            }*/
                         }
 
                     }

@@ -23,10 +23,19 @@ data class OreoNapDetailsDataModel(
     var id: String? = null,
     var title: String? = null,
 
+    @SerializedName("score_impact")//positive/negative
+    var scoreImpact: String? = null,
+
     @SerializedName("sub_title")
     var subtitle: String? = null,
     var nudges: List<Nudges>? = null,
     var hrBreakup: UnitDataModelArray? = null,
     var hrvBreakUp: UnitDataModelArray? = null,
     var temperatureBreakup: UnitDataModelArrayFloat? = null,
+    var na: NotAvailableContent? = null
+)
+
+data class NotAvailableContent(
+    val title: String? = null,
+    val text: String? = null
 )

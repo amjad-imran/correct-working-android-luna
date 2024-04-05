@@ -9,6 +9,10 @@ interface OreoNapDataSource {
         data: List<OreoNapData>
     ): Boolean
 
+    suspend fun insertSingle(
+        data: OreoNapData
+    ): Boolean
+
     suspend fun getNaps(): List<OreoNapData>?
 
     suspend fun removeNapById(id: Int)

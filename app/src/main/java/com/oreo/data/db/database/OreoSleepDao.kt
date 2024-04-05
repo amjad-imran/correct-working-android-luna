@@ -11,6 +11,9 @@ interface OreoSleepDao : BaseDao<OreoSleepData> {
     @Query("SELECT * FROM sleep_data where date = :date ")
     fun getTodayData(date: String): List<OreoSleepData>?
 
+    @Query("SELECT * FROM sleep_data where startTime = :startTime ")
+    fun getSleepByStartTime(startTime: String): List<OreoSleepData>?
+
     @Query("SELECT * FROM sleep_data where is_google_fit_sync = :isSyncGoogleFit limit 5")
     fun getUnSyncGoogleFitTodayData(isSyncGoogleFit: Boolean): List<OreoSleepData>?
 

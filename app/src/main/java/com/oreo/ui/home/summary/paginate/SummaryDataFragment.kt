@@ -69,7 +69,6 @@ class SummaryDataFragment :
         LOGS.d("CREATED_WITH_DATE $date")
         loadData()
 
-//        navigate(R.id.stressSplashFragment)
 
     }
 
@@ -249,11 +248,18 @@ class SummaryDataFragment :
         )
         val adapter1 = OreoRWorkoutAdapter(object : OreoRWorkoutAdapter.OnItemClickListener {
             override fun onItemClick(data: OActivityListModal, position: Int) {
-                navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
-                    putString("workoutName", data.getFormattedActivityName())
-                    putString("workoutId", data.id ?: "")
-                    putInt("position", position)
-                })
+                if(data.getDisplayVersionType()==2){
+                    navigate(R.id.oWorkoutDetailsFragmentV2, Bundle().apply {
+                        putString("workoutId", data.id ?: "")
+                        putInt("position", position)
+                    })
+                }else{
+                    navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
+                        putString("workoutName", data.getFormattedActivityName())
+                        putString("workoutId", data.id ?: "")
+                        putInt("position", position)
+                    })
+                }
             }
         })
 

@@ -92,8 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:textColor="@color/very_light_pink"
-                app:layout_constraintBottom_toTopOf="@+id/pbUpdateProgress"
-                app:layout_constraintStart_toStartOf="@+id/pbUpdateProgress"
+
                 tools:text="@string/text_updating" />
 
             <TextView
@@ -103,34 +102,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:textColor="@color/very_light_pink"
-                app:layout_constraintBottom_toTopOf="@+id/pbUpdateProgress"
-                app:layout_constraintEnd_toEndOf="@+id/pbUpdateProgress"
+
                 tools:text="25%" />
 
-            <com.noise.customprogress.StrippedProgressBar
-                android:id="@+id/pbUpdateProgress"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                android:layout_marginStart="@dimen/side_margin"
-                android:layout_marginTop="54dp"
-                android:layout_marginEnd="@dimen/side_margin"
-                android:layout_marginBottom="54dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvWatchFaceName"
-                app:pBrand="info"
-                app:pLineSpacing="15dp"
-                app:pMaxProgress="100"
-                app:pProgress="0"
-                app:pProgressBgColor="@color/stripped_window_gray_light"
-                app:pRoundedCorners="true"
-                app:pShowPercentage="false"
-                app:pStriped="true"
-                app:trackColor="@color/modal_color"
-                app:trackCornerRadius="12dp"
-                app:trackThickness="24dp"
-                tools:progress="30" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </RelativeLayout>

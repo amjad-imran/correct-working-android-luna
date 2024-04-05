@@ -242,7 +242,8 @@ class SummaryDataViewModelToday @Inject constructor(
 
 
             val newSleepArray = dataConverter.mergeSleepData(
-                healthData.sleep?.hourly_breakup, healthData.sleep?.naps
+                healthData.sleep?.hourly_breakup,
+                healthData.sleep?.naps?.filter { !it.isNextDayNap }
             )
 
 
@@ -1107,6 +1108,7 @@ class SummaryDataViewModelToday @Inject constructor(
             newSleepScore = nap.sleepScore,
             oldReadinessScore = nap.prevReadinessScore,
             newReadinessScore = nap.readinessScore,
+            scoreImpact = nap.scoreImpact
         )
     }
 

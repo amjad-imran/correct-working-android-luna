@@ -10,17 +10,12 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.noisefit.NoiseFitApplicationMain
-import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentUnpairBottomDialogBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
-import com.noisefit_commans.ui.showShortToast
-import com.noisefit.watch.CallingWatchUtils
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.interfaces.connection.ConnectState
-import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.Event
@@ -40,8 +35,8 @@ class UnpairBottomDialogFragment :
     @Inject
     lateinit var sessionManager: SessionManager
 
-    @Inject
-    lateinit var callingWatchUtils: CallingWatchUtils
+//    @Inject
+//    lateinit var callingWatchUtils: CallingWatchUtils
 
     @Inject
     lateinit var localDataStore: DataStoredInterface

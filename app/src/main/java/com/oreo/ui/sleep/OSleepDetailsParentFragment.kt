@@ -19,6 +19,7 @@ import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.OSleepScoreDetailsFragment
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
+import com.oreo.util.setSafeOnClickListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -195,7 +196,7 @@ class OSleepDetailsParentFragment :
             mViewModel.itemType = ""
             navigateUpSafe()
         }
-        binding.lytToolbar.view1.setOnClickListener {
+        binding.lytToolbar.view1.setSafeOnClickListener {
             mViewModel.sessionManager.logMoEngageAppEvent("${mViewModel.itemClickType}_" + MoEngageLunaAppEvents.info_click)
             args.infoData?.let{data->
                 navigate(R.id.bottomSheetDataMetrics, Bundle().apply {

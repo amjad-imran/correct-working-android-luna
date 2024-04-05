@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -17,16 +18,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/ivMoveNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/side_margin"
+        android:src="@drawable/ic_arrow_right_duotone"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/textView95"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textView95"
+        tools:visibility="visible" />
+
     <LinearLayout
         android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView95">
@@ -65,8 +76,8 @@
             android:id="@+id/ivSleep"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
             android:layout_gravity="center_vertical"
+            android:layout_marginStart="6dp"
             android:src="@drawable/ic_nap_sleep_score" />
 
         <TextView
@@ -88,8 +99,8 @@
             android:id="@+id/ivReadiness"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
             android:layout_gravity="center_vertical"
+            android:layout_marginStart="6dp"
             android:src="@drawable/ic_nap_readiness_score" />
 
         <TextView
@@ -101,13 +112,30 @@
             tools:text="-4" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tvLabel"
+        style="@style/H6"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/side_margin"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="@dimen/side_margin"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout4"
+        tools:text="Late naps impair next-day sleep and readiness."
+        tools:visibility="visible" />
+
     <include
         android:id="@+id/divider"
         layout="@layout/layout_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvLabel" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -110,6 +110,10 @@ class SummaryDataFragmentToday :
             override fun onNapRemoveClicked(nap: OreoNapData) {
                 showRemoveNapBottomSheet(nap)
             }
+
+            /*override fun onMoveDetails(nap: ONapDataModel) {
+                navigate(R.id.napDetails, bundleOf("napId" to nap.id))
+            }*/
         })
     }
 
@@ -455,8 +459,6 @@ class SummaryDataFragmentToday :
                 }
 
             }
-
-
         }
 
         requireActivity().supportFragmentManager.setFragmentResultListener(
@@ -501,13 +503,13 @@ class SummaryDataFragmentToday :
                     return@observe
                 }
 
-                val hour = getHoursBasedOnDateTime(nap.startTime)
-                if (hour.toInt() >= 19) {
+               /* val hour = getHoursBasedOnDateTime(nap.startTime)
+                if (hour.toInt() >= 19) {*/
                     navigate(
                         R.id.bottomSheetNoDataNapScore,
                         bundleOf("napScoreData" to viewModel.getNapSlideUpObj(nap))
                     )
-                }
+                //}
             }
         }
 
@@ -963,11 +965,18 @@ class SummaryDataFragmentToday :
         )
         val adapter1 = OreoRWorkoutAdapter(object : OreoRWorkoutAdapter.OnItemClickListener {
             override fun onItemClick(data: OActivityListModal, position: Int) {
-                navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
-                    putString("workoutName", data.getFormattedActivityName())
-                    putString("workoutId", data.id ?: "")
-                    putInt("position", position)
-                })
+                if (data.getDisplayVersionType() == 2) {
+                    navigate(R.id.oWorkoutDetailsFragmentV2, Bundle().apply {
+                        putString("workoutId", data.id ?: "")
+                        putInt("position", position)
+                    })
+                } else {
+                    navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
+                        putString("workoutName", data.getFormattedActivityName())
+                        putString("workoutId", data.id ?: "")
+                        putInt("position", position)
+                    })
+                }
             }
         })
 

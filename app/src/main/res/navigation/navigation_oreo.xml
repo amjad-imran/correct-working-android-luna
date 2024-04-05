@@ -326,6 +326,18 @@
             android:name="position"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/oWorkoutDetailsFragmentV2"
+        android:name="com.oreo.ui.workout.details.OWorkoutDetailsFragmentV2"
+        android:label="OWorkoutDetailsFragmentV2">
+
+        <argument
+            android:name="workoutId"
+            app:argType="string" />
+        <argument
+            android:name="position"
+            app:argType="integer" />
+    </fragment>
 
     <dialog
         android:id="@+id/appUpdateBottomSheet"
@@ -524,7 +536,7 @@
             app:nullable="true" />
         <action
             android:id="@+id/action_recordWorkoutFragment_to_oWorkoutDetailsFragment"
-            app:destination="@id/oWorkoutDetailsFragment"
+            app:destination="@id/oWorkoutDetailsFragmentV2"
             app:popUpTo="@id/recordWorkoutFragment"
             app:popUpToInclusive="true" />
 

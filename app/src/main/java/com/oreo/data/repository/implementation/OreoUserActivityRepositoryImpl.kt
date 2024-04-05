@@ -1820,10 +1820,19 @@ class OreoUserActivityRepositoryImpl(
 
     /**
      * delete naps more than 2 days and returns response
+     * Check if has naps similar to sleep start time
      */
     override suspend fun getNapsToConfirm(): List<OreoNapData>? {
         napDataImpl.deleteOldData(2)
-        return napDataImpl.getNaps()
+        val naps = napDataImpl.getNaps()
+        val filteredNaps = ArrayList<OreoNapData>()
+        naps?.forEach {
+            val sleep = sleepDataImpl.getSleepByStartTime(it.startTime ?: "")?.firstOrNull()
+            if (sleep == null) {
+                filteredNaps.add(it)
+            }
+        }
+        return if (filteredNaps.isEmpty()) return null else filteredNaps
     }
 
     override suspend fun removeNap(id: Int): Boolean {

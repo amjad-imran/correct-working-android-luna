@@ -172,14 +172,11 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
     }
 
     private fun checkNotificationPermission() {
+        startConnectionService()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (NotificationManagerCompat.from(requireContext()).areNotificationsEnabled()) {
-                startConnectionService()
-            } else {
+            if (!NotificationManagerCompat.from(requireContext()).areNotificationsEnabled()) {
                 notificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
-        } else {
-            startConnectionService()
         }
     }
 
@@ -198,35 +195,35 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
     private val notificationPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
-        if (isGranted) {
-            startConnectionService()
-        } else {
-            context.showShortToast("Notification permission required")
-            uiController.onApiErrorReceived(ErrorResponse(
-                UIComponentType.AreYouSureDialog(
-                    getString(R.string.text_permission_required),
-                    "Notification permission required",
-                    false,
-                    getString(R.string.text_allow),
-                    object : BinaryActionCallback {
-                        override fun yes() {
-                            checkNotificationPermission()
-                        }
-
-                        override fun no() {
-
-                        }
-
-                    }
-                )
-            ))
-
-            // Explain to the user that the feature is unavailable because the
-            // features requires a permission that the user has denied. At the
-            // same time, respect the user's decision. Don't link to system
-            // settings in an effort to convince the user to change their
-            // decision.
-        }
+//        if (isGranted) {
+//            startConnectionService()
+//        } else {
+//            context.showShortToast("Notification permission required")
+//            uiController.onApiErrorReceived(ErrorResponse(
+//                UIComponentType.AreYouSureDialog(
+//                    getString(R.string.text_permission_required),
+//                    "Notification permission required",
+//                    false,
+//                    getString(R.string.text_allow),
+//                    object : BinaryActionCallback {
+//                        override fun yes() {
+//                            checkNotificationPermission()
+//                        }
+//
+//                        override fun no() {
+//
+//                        }
+//
+//                    }
+//                )
+//            ))
+//
+//            // Explain to the user that the feature is unavailable because the
+//            // features requires a permission that the user has denied. At the
+//            // same time, respect the user's decision. Don't link to system
+//            // settings in an effort to convince the user to change their
+//            // decision.
+//        }
     }
 
     override fun subscribeObservers() {

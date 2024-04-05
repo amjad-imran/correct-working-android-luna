@@ -126,13 +126,6 @@ object AppModule {
     }
 
 
-    @Singleton
-    @Provides
-    fun provideCallingWatchUtils(
-        localDataStore: DataStoredInterface
-    ): CallingWatchUtils {
-        return CallingWatchUtils(localDataStore)
-    }
 
 
     /*@Singleton
