@@ -76,7 +76,10 @@ class DetectWorkoutFragment :
     }
 
     private fun navigateToDetailsWorkout(data: OreoAutoSportData, workoutId: String) {
-        navigate(R.id.oWorkoutDetailsFragmentV2, Bundle().apply {
+        val workoutName = data.type?.replace("_", " ")
+            ?.replaceFirstChar { if (it.isLowerCase()) it.titlecase(DateFormats.defaultLocale) else it.toString() }
+        navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
+            putString("workoutName", workoutName)
             putString("workoutId", workoutId)
             putInt("position", -1)
         })
