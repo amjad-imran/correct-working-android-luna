@@ -69,6 +69,7 @@ class SummaryDataFragment :
         LOGS.d("CREATED_WITH_DATE $date")
         loadData()
 
+//        navigate(R.id.stressUnderstandingFragment)
 
     }
 

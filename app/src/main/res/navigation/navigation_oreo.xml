@@ -635,4 +635,9 @@
             android:name="date"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/stressUnderstandingFragment"
+        android:name="com.oreo.ui.stress.help.StressUnderstandingFragment"
+        android:label="fragment_stress_understanding"
+        tools:layout="@layout/fragment_stress_understanding" />
 </navigation>
