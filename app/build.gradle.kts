@@ -27,6 +27,7 @@ android {
 
         multiDexEnabled = true
         testInstrumentationRunner = AndroidXTest.instrumentationRunner
+
     }
 
     compileOptions {
@@ -353,6 +354,5 @@ dependencies {
     implementation(moengage.pushAmp)
     implementation(moengage.geofence)
     implementation(moengage.inboxCore)
-
 
 }

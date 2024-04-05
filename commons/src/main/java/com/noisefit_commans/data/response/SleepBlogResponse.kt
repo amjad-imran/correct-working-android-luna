@@ -22,3 +22,11 @@ data class SleepBlogSubCategories (
     @SerializedName("description") val description : String,
     @SerializedName("sleep_category_id") val sleepCategoryId : Int
 ): Parcelable
+
+
+@Parcelize
+data class HowStressResponse (
+    @SerializedName("id") val id : Int,
+    @SerializedName("title") val title : String,
+    @SerializedName("image") val image : String,
+): Parcelable

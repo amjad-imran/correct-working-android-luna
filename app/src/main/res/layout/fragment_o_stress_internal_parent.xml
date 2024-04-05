@@ -3,6 +3,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:background="@drawable/low_stress_bg_1"
         android:layout_height="match_parent">
 
         <include

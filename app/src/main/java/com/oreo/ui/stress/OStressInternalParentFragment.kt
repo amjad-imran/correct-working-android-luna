@@ -6,13 +6,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.tabs.TabLayout
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOStressInternalParentBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -38,6 +38,46 @@ class OStressInternalParentFragment :
                 args.date
             )
         )
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when (tab?.position) {
+                    1 -> {
+                        loadFragment(
+                            OStressInternalDetailsFragment.newInstance(
+                                "Day",
+                                args.date
+                            )
+                        )
+                    }
+                    2 -> {
+                        loadFragment(
+                            OStressInternalDetailsFragment.newInstance(
+                                "Week",
+                                args.date
+                            )
+                        )
+                    }
+                    else -> {
+                        loadFragment(
+                            OStressInternalDetailsFragment.newInstance(
+                                "Month",
+                                args.date
+                            )
+                        )
+                    }
+                }
+
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+
+            }
+
+        })
 
 
     }
@@ -51,7 +91,7 @@ class OStressInternalParentFragment :
     }
 
     override fun initListener() {
-        binding.lytToolbar.view1.visible()
+        binding.lytToolbar.view1.invisible()
         binding.lytToolbar.ivAddFriend.invisible()
         binding.lytToolbar.view1.loadImage(requireActivity(), R.drawable.ic_info_oreo)
         binding.lytToolbar.backBtn.setOnClickListener {

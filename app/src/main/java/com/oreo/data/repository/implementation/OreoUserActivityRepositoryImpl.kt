@@ -15,6 +15,7 @@ import com.noisefit.data.remote.abstraction.NetworkService
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.LastSyncItems
 import com.noisefit.data.repository.LastSyncProvider
+import com.noisefit.data.repository.implementation.DELETE_DB_DAYS
 import com.noisefit.data.safeApiCallFlow
 import com.noisefit.data.safeCacheCall
 import com.noisefit.luna.BuildConfig
@@ -50,6 +51,7 @@ import com.oreo.data.model.OHSModel
 import com.oreo.data.model.OHSQuestionariesResponseModel
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.OInternalPageResponseModal
+import com.oreo.data.model.OStressInternalPageResponseModal
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.model.OreoNapDetailsDataModel
 import com.oreo.data.model.RingCareResponse
@@ -1300,7 +1302,9 @@ class OreoUserActivityRepositoryImpl(
     }
 
     override suspend fun getSummaryAutoWorkoutCount(): Int {
-        return oreoAutoSportDataImpl.getAllNotAcceptingData()?.size ?: 0
+        val timeStamp = DateFormats.lastClearDataTimeStamp(DELETE_DB_DAYS)
+        oreoAutoSportDataImpl.deleteOldData(timeStamp)
+        return oreoAutoSportDataImpl.getAllNotAcceptingData(timeStamp)?.size ?: 0
     }
 
     override suspend fun getSummaryHRHealthOverview(): OHealthOverview.HeartRate? {
@@ -1831,7 +1835,7 @@ class OreoUserActivityRepositoryImpl(
     override suspend fun getStressInternalPagesData(
         selectDate: String,
         filterType: String
-    ): Flow<Resource<BaseApiResponse<OInternalPageResponseModal>>> {
+    ): Flow<Resource<BaseApiResponse<OStressInternalPageResponseModal>>> {
         return safeApiCallFlow(dispatcher) {
             val url =
                 "${BuildConfig.OREO_BASE_URL}/activity/v1/activity-contributors"

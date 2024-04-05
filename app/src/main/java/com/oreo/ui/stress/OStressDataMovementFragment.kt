@@ -1,15 +1,14 @@
 package com.oreo.ui.stress
 
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import android.view.ViewConfiguration
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Animation
 import android.view.animation.RotateAnimation
-import android.widget.LinearLayout
+import android.widget.ProgressBar
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.noisefit.luna.R
@@ -64,7 +63,10 @@ class OStressDataMovementFragment :
         handleMovementViews()
 
 
+
+
     }
+
 
     override fun onResume() {
         super.onResume()
@@ -236,6 +238,17 @@ class OStressDataMovementFragment :
         }
     }
 
+    private fun handleProgress(pgbr:ProgressBar,progress: Int){
+        val height = 50// change if you change progress height in xml
+        val percentageFactor = 100 / height
+        val newProgress = progress/percentageFactor // because the height is 50
+
+        val weightPercentValue = calculateWeightPercent(newProgress, height)
+
+        val params = pgbr.layoutParams
+        params.height = weightPercentValue.toInt()
+        pgbr.layoutParams = params
+    }
     private fun handleStressProgressView(stress: Stress?) {
 
         val (calm, focused, stressed) = viewModel.getStressMinutes(stress)
@@ -250,6 +263,11 @@ class OStressDataMovementFragment :
             lytCalm.lytHrMn.tvMinute.text = "$minuteCalm"
             lytCalm.tvCalm.setTextColor(resources.getColor(R.color.stress_nap_calm, null))
             lytCalm.tvCalm.text = getString(R.string.text_calm)
+            lytCalm.pgBrToday.progressDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.grad_today_calm)
+            lytCalm.pgBrPrevious.progressDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.grad_previous_calm)
+            handleProgress( lytCalm.pgBrToday,50)
+            handleProgress( lytCalm.pgBrPrevious,10)
+
 
 
             val (hourFocused, minuteFocused) = ApplicationUtils.getFormattedSleepDuration(
@@ -259,6 +277,8 @@ class OStressDataMovementFragment :
             lytFocussed.lytHrMn.tvMinute.text = "$minuteFocused"
             lytFocussed.tvCalm.setTextColor(resources.getColor(R.color.stress_nap_focussed, null))
             lytFocussed.tvCalm.text = getString(R.string.text_focussed)
+            lytFocussed.pgBrToday.progressDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.grad_today_focused)
+            lytFocussed.pgBrPrevious.progressDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.grad_previous_focused)
 
 
             val (hourStressed, minuteStressed) = ApplicationUtils.getFormattedSleepDuration(
@@ -268,41 +288,12 @@ class OStressDataMovementFragment :
             lytStressed.lytHrMn.tvMinute.text = "$minuteStressed"
             lytStressed.tvCalm.setTextColor(resources.getColor(R.color.stress_nap_stressed, null))
             lytStressed.tvCalm.text = getString(R.string.text_stressed)
+            lytStressed.view1.gone()
+            lytStressed.pgBrToday.progressDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.grad_today_stressed)
+            lytStressed.pgBrPrevious.progressDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.grad_previous_stressed)
 
         }
 
-        binding.lytStressHeader.lytStressProgress.apply {
-
-            viewCalm.layoutParams =
-                viewCalm.layoutParams.apply {
-                    (this as LinearLayout.LayoutParams).weight =
-                        calculateWeightPercent(calm, total)
-                }
-
-            viewFocused.layoutParams =
-                viewFocused.layoutParams.apply {
-                    if (calm == 0 || focused == 0) {
-                        (this as LinearLayout.LayoutParams).marginStart = 0
-                    } else {
-                        (this as LinearLayout.LayoutParams).marginStart =
-                            viewModel.screenUtils.dpToPx(2, viewFocused.context).toInt()
-                    }
-                    (this as LinearLayout.LayoutParams).weight =
-                        calculateWeightPercent(focused, total)
-                }
-            viewStressed.layoutParams =
-                viewStressed.layoutParams.apply {
-                    if (focused == 0 || stressed == 0) {
-                        (this as LinearLayout.LayoutParams).marginStart = 0
-                    } else {
-                        (this as LinearLayout.LayoutParams).marginStart =
-                            viewModel.screenUtils.dpToPx(2, viewFocused.context).toInt()
-                    }
-
-                    (this as LinearLayout.LayoutParams).weight =
-                        calculateWeightPercent(stressed, total)
-                }
-        }
 
     }
 
@@ -464,3 +455,6 @@ class OStressDataMovementFragment :
     }
 
 }
+
+
+
