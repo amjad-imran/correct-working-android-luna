@@ -47,6 +47,13 @@ data class Stress(
     val stressValue: StressValue? = null,
     val nudges: List<StressNudge>? = null,
 
+    @SerializedName("typical_calm")
+    val typicalCalm: Int? = null,
+    @SerializedName("typical_focused")
+    val typicalFocused: Int? = null,
+    @SerializedName("typical_stressed")
+    val typicalStressed: Int? = null,
+
 )
 
 data class StressValue(

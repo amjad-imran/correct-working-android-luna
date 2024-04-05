@@ -79,19 +79,18 @@
                 android:id="@+id/icTrend"
                 android:layout_width="10dp"
                 android:layout_height="10dp"
-                android:src="@drawable/ic_arrow_up_with_corner"
+                tools:src="@drawable/ic_arrow_up_with_corner"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
 
             <TextView
-                android:id="@+id/textView101"
+                android:id="@+id/tvDifference"
                 style="@style/Tinny"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="5 %"
-
+                tools:text="5 %"
                 app:layout_constraintBottom_toBottomOf="@+id/icTrend"
                 app:layout_constraintStart_toEndOf="@+id/icTrend"
                 app:layout_constraintTop_toTopOf="@+id/icTrend" />

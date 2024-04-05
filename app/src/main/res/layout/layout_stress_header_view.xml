@@ -11,7 +11,7 @@
             style="@style/S16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Overall stress"
+            android:text="@string/text_overall_stress"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -19,14 +19,14 @@
             android:id="@+id/tvSubTitle"
             style="@style/S14"
             android:layout_width="0dp"
-            android:lineSpacingExtra="6sp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_4dp"
+            android:lineSpacingExtra="6sp"
             android:textColor="@color/white_64"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvTitle"
-            android:text="(Definition of overall stress) seems to be higher than previous day. Allow yourself sufficient time." />
+            tools:text="(Definition of overall stress) seems to be higher than previous day. Allow yourself sufficient time." />
 
 
         <ImageView
@@ -47,9 +47,9 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/dimen_12dp"
-            android:paddingBottom="@dimen/dimen_16dp"
-
             android:background="@drawable/back_ios_style"
+
+            android:paddingBottom="@dimen/dimen_16dp"
             app:layout_constraintBottom_toBottomOf="@+id/lytCalm"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -69,15 +69,16 @@
             app:layout_constraintTop_toTopOf="@+id/view32" />
 
         <TextView
+            android:id="@+id/tvTypical"
             style="@style/S14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dimen_4dp"
-            android:text="vs typical tuesday"
             android:textColor="@color/white_64"
             app:layout_constraintBottom_toBottomOf="@+id/tvHeader"
             app:layout_constraintStart_toEndOf="@+id/tvHeader"
-            app:layout_constraintTop_toTopOf="@+id/tvHeader" />
+            app:layout_constraintTop_toTopOf="@+id/tvHeader"
+            tools:text="vs typical tuesday" />
 
         <include
             android:id="@+id/lytCalm"

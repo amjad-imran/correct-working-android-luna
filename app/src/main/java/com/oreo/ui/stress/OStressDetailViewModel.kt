@@ -1,9 +1,6 @@
 package com.oreo.ui.stress
 
-import android.graphics.Color
-import com.google.gson.Gson
 import com.noisefit.luna.R
-import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.common.maxWithInvalidMovementValues
 import com.noisefit_commans.common.maxWithoutInvalidMovementValues
 import com.noisefit_commans.data.enums.StressType
@@ -12,20 +9,13 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.ScreenUtils
 import com.oreo.data.dataConverter.OreoStressDataConvertor
-import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OStressActivitiesDataModel
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.Stress
-import com.oreo.data.model.health.OreoSleepModel
-import com.oreo.ui.custom.Item
-import com.oreo.ui.custom.Section
-import com.oreo.ui.custom.StressCombineModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Calendar
 import javax.inject.Inject
-import kotlin.math.abs
-import kotlin.math.floor
-import kotlin.time.Duration.Companion.minutes
+import kotlin.math.roundToInt
 
 @HiltViewModel
 class OStressDetailViewModel @Inject
@@ -207,6 +197,19 @@ constructor(
             3 -> R.color.white
             else -> R.color.no_movement_color
         }
+    }
+
+    fun getBarPercent(calm: Int): Int {
+        return ((calm.toFloat() / 1440) * 100).roundToInt()
+        //return if (percent < 10) 10 else percent
+    }
+
+    fun getDifference(today: Int, typicalDay: Int): Int {
+        val difference = today - typicalDay
+        if (difference == 0) return 0
+        val diff = ((difference.toFloat() / today) * 100).roundToInt()
+        return diff
+
     }
 
 
