@@ -26,3 +26,9 @@ data class StressUnderstandingSubList(
     val title: String,
     val image: Int
 )
+
+data class StressSplashModel(
+    val title: String,
+    val image: Int,
+    val description: String
+)

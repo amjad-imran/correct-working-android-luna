@@ -640,4 +640,9 @@
         android:name="com.oreo.ui.stress.help.StressUnderstandingFragment"
         android:label="fragment_stress_understanding"
         tools:layout="@layout/fragment_stress_understanding" />
+    <fragment
+        android:id="@+id/stressSplashFragment"
+        android:name="com.oreo.ui.stress.splash.StressSplashFragment"
+        android:label="fragment_stress_splash"
+        tools:layout="@layout/fragment_stress_splash" />
 </navigation>
