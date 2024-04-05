@@ -20,10 +20,8 @@ import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.data.model.OreoStepsData
 import com.noisefit_commans.data.model.OreoStressDataBreakup
 import com.noisefit_commans.enums.ApplicationType
-import com.noisefit_commans.models.AlarmsList
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.Contact
-import com.noisefit_commans.models.DeviceType
 import com.noisefit_commans.models.DoNotDisturb
 import com.noisefit_commans.models.ManualMeasureType
 import com.noisefit_commans.models.ReminderList
@@ -40,7 +38,6 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_zhsdk.handler.ZhUserActivityHandler.Companion.TRACK_TAG
 import com.zhapp.ble.bean.ActiveMeasureParamsBean
-import com.zhapp.ble.bean.ClockInfoBean
 import com.zhapp.ble.bean.ContactBean
 import com.zhapp.ble.bean.ContinuousBloodOxygenBean
 import com.zhapp.ble.bean.ContinuousHeartRateBean
@@ -258,7 +255,7 @@ constructor(
             82 -> SportActivityName.PARAGLIDER
             83 -> SportActivityName.CLIMB_THE_STAIRS
 
-            84 ->  SportActivityName.CROSS_TRAINING_CROSSFIT
+            84 -> SportActivityName.CROSS_TRAINING_CROSSFIT
 
             85 -> SportActivityName.AEROBICS
             86 -> SportActivityName.PHYSICAL_TRAINING
@@ -293,7 +290,7 @@ constructor(
             130 -> SportActivityName.DOUBLE_BOARD_SKIING
 
             131 -> SportActivityName.FREE_EXERCISE
-            132 ->   SportActivityName.PADDLEBOARD_SURFING
+            132 -> SportActivityName.PADDLEBOARD_SURFING
 
             133 -> SportActivityName.KABADDI
             200 -> SportActivityName.POOL_SWIMMING
@@ -889,6 +886,7 @@ constructor(
     // wakeupNapTime=1705286418, sleepNapDuration=1536, date='2024-01-15 00:00:00'}]
     fun parseNapData(naps: List<RingSleepNapBean>): List<OreoNapData> {
         val returnNaps = ArrayList<OreoNapData>()
+        val napAddedTimeStamps = HashMap<Long, Int>()
 
         val date = DateFormats.getDateFromTimeStamp(
             DateFormats.subtractDate(
@@ -896,13 +894,15 @@ constructor(
                 1
             )
         )
-        val timestamp = DateFormats.convertDateTimeToTimeStamp(date ?: "", DateFormats.dateFormat3)
-
+        val minTimestamp =
+            DateFormats.convertDateTimeToTimeStamp(date ?: "", DateFormats.dateFormat3)
 
         naps.forEach {
+            val startTimeStamp = it.asleepNapTime.toLong() * 1000
+
             val nap = OreoNapData().apply {
                 this.startTime = DateFormats.convertTimestampToDate(
-                    it.asleepNapTime.toLong() * 1000,
+                    startTimeStamp,
                     DateFormats.dateTimeFormat5
                 )
                 this.endTime = DateFormats.convertTimestampToDate(
@@ -916,24 +916,51 @@ constructor(
                 )
             }
 
-            try {
+            if (startTimeStamp >= minTimestamp) {
+                val oldDuration = napAddedTimeStamps[startTimeStamp]
+                if (oldDuration != null) {
+                    val newDuration = nap.duration
+
+                    if (newDuration > oldDuration) {
+
+                        val removeIndex = returnNaps.indexOfFirst {
+                            it.startTime.equals(nap.startTime)
+                        }
+                        if (removeIndex != -1) {
+                            returnNaps.removeAt(removeIndex)
+                            returnNaps.add(nap)
+                            napAddedTimeStamps[startTimeStamp] = newDuration
+                            AppLogs.sendAppLogs("Nap replaced, $newDuration - $oldDuration ")
+                        }
+                    } else {
+                        AppLogs.sendAppLogs("Nap ignored Duration low $startTimeStamp")
+                    }
+                } else {
+                    returnNaps.add(nap)
+                    napAddedTimeStamps[startTimeStamp] = nap.duration
+                }
+            } else {
+                AppLogs.sendAppLogs("Nap ignored old date $it ")
+            }
+
+            /*try {
                 val startHour = DateFormats.convertTimestampToDate(
                     it.asleepNapTime.toLong() * 1000,
                     DateFormats.timeFormatHour
                 ).toInt()
 
                 if (it.asleepNapTime.toLong() * 1000 >= timestamp) {
-                   /* if (startHour in 10..19) {*/
+                   *//* if (startHour in 10..19) {*//*
                         returnNaps.add(nap)
-                    /*} else {
+                    *//*} else {
                         AppLogs.sendAppLogs("Nap ignored $it")
-                    }*/
+                    }*//*
                 } else {
                     AppLogs.sendAppLogs("Nap ignored old date $it ")
                 }
             } catch (exp: Exception) {
                 returnNaps.add(nap)
-            }
+            }*///OLD condition
         }
         return returnNaps
     }
