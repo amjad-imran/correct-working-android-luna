@@ -43,7 +43,6 @@ import com.oreo.data.db.implementation.OreoRespiratoryDataImpl
 import com.oreo.data.db.implementation.OreoSleepDataImpl
 import com.oreo.data.db.implementation.OreoStepsDataImpl
 import com.oreo.data.db.implementation.OreoStressDataImpl
-import com.oreo.data.model.AddWorkoutResponse
 import com.oreo.data.model.LearnModel
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
