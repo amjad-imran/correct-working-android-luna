@@ -1093,6 +1093,7 @@ class SummaryDataViewModelToday @Inject constructor(
             val device = ringDataStore.getRingDevice()
             if (device == null) {
                 stateDashRingBattery.postValue(Pair(false, null))
+                return@launch
             }
             val batteryPercentage = watchDataStore.getBatteryPercentRing()
             if (batteryPercentage < 20) {

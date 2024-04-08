@@ -182,7 +182,7 @@
         android:label="testDataFragment">
         <argument
             android:name="data"
-            app:argType="com.oreo.ui.TestUserData" />
+            app:argType="com.oreo.data.model.TestUserData" />
     </fragment>
 
     <fragment
@@ -191,7 +191,7 @@
         android:label="TestDataActivityFragment">
         <argument
             android:name="data"
-            app:argType="com.oreo.ui.TestUserData" />
+            app:argType="com.oreo.data.model.TestUserData" />
     </fragment>
 
 

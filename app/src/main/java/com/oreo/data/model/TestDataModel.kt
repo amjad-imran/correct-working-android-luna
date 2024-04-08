@@ -1,6 +1,9 @@
 package com.oreo.data.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import com.oreo.ui.DataType
+import kotlinx.parcelize.Parcelize
 
 data class TestDataModel(
     @SerializedName("today_graph_data")
@@ -14,6 +17,13 @@ data class TestDataModel(
     @SerializedName("heart_rate_variability")
     val heartRateVariability: HearRateVariability? = null
 )
+
+@Parcelize
+data class TestUserData(
+    val type: DataType,
+    val time: String? = null,
+    val data: String
+) : Parcelable
 
 data class GraphData(val data: String)
 data class ScoreData(
