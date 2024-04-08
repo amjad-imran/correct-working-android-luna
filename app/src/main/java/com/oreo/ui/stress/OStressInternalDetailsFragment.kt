@@ -222,37 +222,6 @@ class OStressInternalDetailsFragment :
     override fun subscribeObservers() {
         mViewModel.selectedData.observe(this) { data ->
 
-            context.showShortToast("Data changed")
-
-            val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
-                data?.data?.stressed?.duration?.toFloat()?.roundToInt() ?: 0
-            )
-
-            handleUnitView(hour, minute, binding.lytTopView.lytStressed.lytUnit)
-            // for focussed
-            binding.lytTopView.lytFocussed.tvTitle.text = getString(R.string.text_focussed)
-            binding.lytTopView.lytFocussed.tvTitle.setTextColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.stress_nap_focussed
-                )
-            )
-            val (hour1, minute1) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
-                data?.data?.focused?.duration?.toFloat()?.roundToInt() ?: 0
-            )
-            handleUnitView(hour1, minute1, binding.lytTopView.lytFocussed.lytUnit)
-            // for calm
-            binding.lytTopView.lytCalm.tvTitle.text = getString(R.string.text_calm)
-            binding.lytTopView.lytCalm.tvTitle.setTextColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    R.color.stress_nap_calm
-                )
-            )
-            val (hour2, minute2) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
-                data?.data?.focused?.duration?.toFloat()?.roundToInt() ?: 0
-            )
-            handleUnitView(hour2, minute2, binding.lytTopView.lytCalm.lytUnit)
             binding.tvMsg.text = Html.fromHtml(data?.message?:"")
 
             handleProgressStatus(data)
@@ -286,6 +255,7 @@ class OStressInternalDetailsFragment :
     }
 
     override fun onPositionSelected(position: Int, chartModel: ChartModelStress?) {
+        context.showShortToast("Data changed")
         val data = mViewModel.getDataByDate(chartModel?.date)
         data?.let{
             mViewModel.selectedData.postValue(it)
