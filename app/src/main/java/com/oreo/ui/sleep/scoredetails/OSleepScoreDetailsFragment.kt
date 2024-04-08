@@ -1307,7 +1307,8 @@ class OSleepScoreDetailsFragment :
             binding.lytScoreOverview.lytYesterday.pbSteps.progress = showYesPer
 //            binding.lytAllTimeAvg.pbSteps.progress = showAllPer
 
-        } else if (yesterdayTrendProg > todayTrendProg /*&& yesterdayTrendProg > allTimeTrendProg*/) {
+        }
+        else if (yesterdayTrendProg > todayTrendProg /*&& yesterdayTrendProg > allTimeTrendProg*/) {
             binding.lytScoreOverview.lytYesterday.pbSteps.progress = 100
             updateProgressColor(1)
             val showTodayPer = todayTrendProg.toFloat().times(100).div(yesterdayTrendProg).toInt()

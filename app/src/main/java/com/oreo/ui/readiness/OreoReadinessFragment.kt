@@ -72,11 +72,27 @@ class OreoReadinessFragment :
                 version: Int
             ) {
                 openContributorBottomSheet(resultData, position, version)
-            }
+                handleEvent(resultData[position].title)
+                }
 
         })
     }
+    private fun handleEvent(title: String) {
+        var eventName =""
+        when (title) {
+            "Sleep score" -> eventName = MoEngageLunaAppEvents.luna_readiness_contrib_sscore_click
+            "Activity Score" -> eventName = MoEngageLunaAppEvents.luna_readiness_contrib_activity_click
+            "Recovery index" -> eventName = MoEngageLunaAppEvents.luna_readiness_contrib_recovery_click
+            "Sleep regularity" -> eventName = MoEngageLunaAppEvents.luna_readiness_contrib_regularity_click
+            "Sleep balance" -> eventName = MoEngageLunaAppEvents.luna_readiness_contrib_sbalance_click
+            "Average HR" -> eventName = MoEngageLunaAppEvents.luna_readiness_contrib_heartrate_click
+            "Activity balance" -> eventName = MoEngageLunaAppEvents.luna_readiness_contrib_abalance_click
+            "HRV balance" -> eventName = MoEngageLunaAppEvents.luna_readiness_contrib_hrv_balance_click
+            "Skin temperature" -> eventName = MoEngageLunaAppEvents.luna_readiness_contrib_skin_temp_click
+        }
+        mViewModel.sessionManager.logMoEngageAppEvent(eventName)
 
+    }
     private fun openContributorBottomSheet(
         resultData: ArrayList<Contributors>,
         position: Int,
@@ -506,6 +522,7 @@ class OreoReadinessFragment :
 
 
         binding.lytHeartRate.bInfo.setOnClickListener {
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_heart_rate_info_click)
             mViewModel.contributorInfo.value?.hr_graph?.let { content ->
                 navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
                     this.putString("infoData", content)
@@ -513,6 +530,7 @@ class OreoReadinessFragment :
             }
         }
         binding.lytHRVariability.bInfo.setOnClickListener {
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_hrv_info_click)
             mViewModel.contributorInfo.value?.hrv_graph?.let { content ->
                 navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
                     this.putString("infoData", content)
@@ -614,7 +632,7 @@ class OreoReadinessFragment :
                     putString("infoData", mViewModel.contributorInfo.value?.avg_temp ?: "")
                 })
 
-                mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_body_temp_click)
+                mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_skin_temp_click)
 
             }
 

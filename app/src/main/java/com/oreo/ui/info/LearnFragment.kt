@@ -9,6 +9,8 @@ import com.noisefit.luna.databinding.FragmentLearnBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.MoEngageAppEventParams
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.LearnModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -16,7 +18,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class LearnFragment : BaseFragment<FragmentLearnBinding>(FragmentLearnBinding::inflate) {
 
     val viewModel: LearnViewModel by viewModels()
-
     private val mAdapter by lazy {
         LearnAdapter(object : LearnAdapterActions {
             override fun onClicked(data: LearnModel) {
@@ -30,6 +31,11 @@ class LearnFragment : BaseFragment<FragmentLearnBinding>(FragmentLearnBinding::i
                     })
 
                 }
+                viewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.luna_learnmore_card_click,
+                    HashMap<String, Any>().apply {
+                        this[MoEngageAppEventParams.card_title] = data.title ?: ""
+                    })
             }
         })
     }

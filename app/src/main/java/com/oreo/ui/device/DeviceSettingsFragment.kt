@@ -109,7 +109,7 @@ class DeviceSettingsFragment :
                     })
                 }*/
             }
-            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_device_settings_pair_new_click)
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_device_settings_pair_ring_click)
             navigate(R.id.unpairBottomDialogFragment, Bundle().apply {
                 this.putBoolean("forceUnpair", true)
             })

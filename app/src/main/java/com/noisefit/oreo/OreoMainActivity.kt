@@ -13,7 +13,6 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -22,7 +21,6 @@ import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.noisefit.NoiseFitApplicationMain
-import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ActivityOreoMainBinding
 import com.noisefit.ui.APP_CONTINUE
@@ -30,9 +28,7 @@ import com.noisefit.ui.APP_EXIT
 import com.noisefit.ui.APP_UPDATE
 import com.noisefit.ui.common.BaseActivity
 import com.noisefit.ui.onboarding.FirebaseUpdateViewModel
-import com.noisefit.ui.onboarding.setup.DeviceSetupActivityV2
 import com.noisefit.util.ApplicationUtils
-import com.noisefit.util.moveToServer.BatteryNotificationUtils
 import com.noisefit.util.notif.NotificationEventsClass
 import com.noisefit.util.notif.NotificationUtil
 import com.noisefit_commans.data.BinaryActionCallback
@@ -45,7 +41,6 @@ import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
@@ -53,8 +48,6 @@ import com.oreo.ui.recordworkout.SELECT_RECORD_WORKOUT
 import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderEffectBlur
 import eightbitlab.com.blurview.RenderScriptBlur
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
@@ -187,9 +180,17 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         }
 
         binding.lytAddWorkoutSelector.tvAddWorkout.setOnClickListener {
+            if (viewModel.isActivityWorkAdd)
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_add_workout_add_click)
+            else
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_add_workout_add_click)
             showAddWorkout()
         }
         binding.lytAddWorkoutSelector.ivAddWorkoutManual.setOnClickListener {
+            if (viewModel.isActivityWorkAdd)
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_add_workout_add_click)
+            else
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_add_workout_add_click)
             showAddWorkout()
         }
 
@@ -199,28 +200,40 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         }
 
         binding.lytAddWorkoutSelector.tvRecordWorkout.setOnClickListener {
+            if (viewModel.isActivityWorkAdd)
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_add_workout_record_click)
+            else
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_add_workout_record_click)
             showRecordWorkout()
         }
         binding.lytAddWorkoutSelector.ivRecordWorkout.setOnClickListener {
+            if (viewModel.isActivityWorkAdd)
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_add_workout_record_click)
+            else
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_add_workout_record_click)
             showRecordWorkout()
         }
 
         binding.btnAddWorkout.setOnClickListener {
             setBlurAddCta()
-
+            if (viewModel.isActivityWorkAdd)
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_add_workout_click)
+            else
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_add_workout_click)
             viewModel.addWorkoutCtaVisibility.postValue(false)
+            viewModel.isActivityWorkAdd = false
             animateFabUp()
 
             //binding.blurViewSelector.visible()
         }
 
         //TODO comment after use
-      /*  binding.btnAddWorkout.setOnLongClickListener {
-            if (BuildConfig.DEBUG) {
-                startActivity(DeviceSetupActivityV2.getStartIntent(this,fullSetup = true),)
-            }
-            true
-        }*/
+        /*  binding.btnAddWorkout.setOnLongClickListener {
+              if (BuildConfig.DEBUG) {
+                  startActivity(DeviceSetupActivityV2.getStartIntent(this,fullSetup = true),)
+              }
+              true
+          }*/
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -681,6 +694,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                         viewModel.handleAddWorkoutVisibility()
                     } else {
                         viewModel.addWorkoutCtaVisibility.postValue(false)
+                        viewModel.isActivityWorkAdd = false
                     }
 
                     //binding.btnAddWorkout.visible()//todo add today condition
@@ -692,6 +706,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
                     if (viewModel.isDevicePaired() != null) {
                         viewModel.addWorkoutCtaVisibility.postValue(true)
+                        viewModel.isActivityWorkAdd = true
                     }
                 }
 
@@ -699,6 +714,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     binding.view27.gone()
                     binding.navView.root.gone()
                     viewModel.addWorkoutCtaVisibility.postValue(false)
+                    viewModel.isActivityWorkAdd = false
 
                 }
             }
