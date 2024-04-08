@@ -1827,7 +1827,16 @@ class OreoUserActivityRepositoryImpl(
         val naps = napDataImpl.getNaps()
         val filteredNaps = ArrayList<OreoNapData>()
         naps?.forEach {
-            val sleep = sleepDataImpl.getSleepByStartTime(it.startTime ?: "")?.firstOrNull()
+            val newSleepFormat = try {
+                DateFormats.formatDate(
+                    it.startTime,
+                    DateFormats.dateTimeFormat5,
+                    DateFormats.dateTimeFormat6
+                )
+            } catch (exp: Exception) {
+                ""
+            }
+            val sleep = sleepDataImpl.getSleepByStartTime(newSleepFormat ?: "")?.firstOrNull()
             if (sleep == null) {
                 filteredNaps.add(it)
             }
