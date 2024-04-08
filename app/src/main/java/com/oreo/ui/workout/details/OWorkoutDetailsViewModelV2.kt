@@ -202,11 +202,12 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             )
         }
 
-        if (it.recoveryTime != null && it.recoveryTime > 0) {
+        if (it.recoveryTime != null && it.recoveryTime > 59) {
+            val recoveryTimeMin = it.recoveryTime/60
             activityList.add(
                 OWDActivityData(
                     context.getString(R.string.text_recovery_time),
-                    ApplicationUtils.getActivityDurationFormat2(it.recoveryTime),
+                    ApplicationUtils.getActivityDurationFormat2(recoveryTimeMin),
                     "",
                 )
             )
@@ -220,7 +221,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
     fun getDistance(data: OWorkoutDetailsResponseModel): Triple<String, String, String> {
         if (data.distance != null && data.distance > 0L) {
 
-            val distance = dataUnitConverter.formatDistance(
+            val distance = dataUnitConverter.formatActivityDistance(
                 data.distance.toInt(),
                 Units.METRIC
             )

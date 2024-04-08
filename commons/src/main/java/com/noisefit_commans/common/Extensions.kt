@@ -200,6 +200,11 @@ fun Double.roundToNearestDecimal(): String {
     df.roundingMode = RoundingMode.HALF_EVEN
     return df.format(this)
 }
+fun Double.roundToNearestSingleDecimal(): String {
+    val df = DecimalFormat("0.0")
+    df.roundingMode = RoundingMode.HALF_EVEN
+    return df.format(this)
+}
 
 fun Float.roundToNearestDecimalUp(): Float {
     return BigDecimal(this.toString()).setScale(2, BigDecimal.ROUND_HALF_UP).toFloat()
