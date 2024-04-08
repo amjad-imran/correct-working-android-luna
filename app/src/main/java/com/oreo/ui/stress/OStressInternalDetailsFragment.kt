@@ -272,12 +272,10 @@ class OStressInternalDetailsFragment :
     }
 
     override fun onPositionSelected(position: Int, chartModel: ChartModelStress?) {
-        context.showShortToast("Data changed")
         val data = mViewModel.getDataByDate(chartModel?.date)
         data?.let {
             mViewModel.selectedData.postValue(it)
         }
-
         LOGS.d("dsfsdfsdfsf $data")
     }
 
