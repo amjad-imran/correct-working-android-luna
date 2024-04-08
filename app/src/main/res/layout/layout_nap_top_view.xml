@@ -6,7 +6,7 @@
         android:id="@+id/rootView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/ic_nap_top_bg_positive">
+        tools:background="@drawable/ic_nap_top_bg_positive">
 
         <include
             android:id="@+id/lytToolbar"

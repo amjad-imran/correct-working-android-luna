@@ -63,7 +63,6 @@ import com.oreo.data.model.TrendsData
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import com.oreo.ui.DataType
-import com.oreo.ui.TestUserData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -73,6 +72,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.joda.time.LocalDate
 import org.json.JSONObject
+import com.oreo.data.model.AddWorkoutResponse
+import com.oreo.data.model.TestUserData
+import com.oreo.data.model.health.Nap
 
 
 private inline fun <reified T> Gson.fromJson(json: String) =

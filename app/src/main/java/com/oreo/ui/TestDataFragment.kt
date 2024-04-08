@@ -16,6 +16,7 @@ import com.noisefit.luna.databinding.TestUserDataBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.DateFormats
+import com.oreo.data.model.TestUserData
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -94,12 +95,7 @@ class TestDataFragment : BaseFragment<FragmentTestDataBinding>(FragmentTestDataB
 
 }
 
-@Parcelize
-data class TestUserData(
-    val type: DataType,
-    val time: String? = null,
-    val data: String
-) : Parcelable
+
 
 enum class DataType {
     HEART_RATE, HRV, BLOOD_OXYGEN, RESPIRATORY, TEMP, SLEEP, ACTIVITY

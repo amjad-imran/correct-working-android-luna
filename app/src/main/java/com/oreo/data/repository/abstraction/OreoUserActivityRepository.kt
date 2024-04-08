@@ -21,9 +21,9 @@ import com.oreo.data.model.OreoNapDetailsDataModel
 import com.oreo.data.model.RingCareResponse
 import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthResponse
+import com.oreo.data.model.TestUserData
 import com.oreo.data.model.health.Nap
 import com.oreo.receiver.workManager.HealthOverviewDataType
-import com.oreo.ui.TestUserData
 import kotlinx.coroutines.flow.Flow
 
 interface OreoUserActivityRepository {

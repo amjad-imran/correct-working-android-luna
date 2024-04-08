@@ -673,6 +673,7 @@ class SummaryDataFragmentToday :
 
                 } else {
                     this.root.gone()
+                    viewModel.stateDashRingBattery.postValue(Pair(false, null))
                 }
             }
         }
@@ -752,6 +753,7 @@ class SummaryDataFragmentToday :
                 is ConnectState.UnPaired -> {
                     viewModel.updateAlerts()
                     viewModel.stateDashRingBattery.postValue(Pair(false, null))
+
                 }
 
                 else -> {}

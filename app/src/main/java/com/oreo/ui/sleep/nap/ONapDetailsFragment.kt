@@ -221,7 +221,7 @@ class ONapDetailsFragment :
                 ?: 0) == 0 && (it.prevReadinessScore ?: 0) == 0
         ) {
             binding.lytNapTopView.lytImpact.root.gone()
-            //binding.lytNapTopView.rootView.setBackgroundResource(0)
+            binding.lytNapTopView.rootView.setBackgroundResource(0)
         } else {
             binding.lytNapTopView.lytImpact.root.visible()
         }
