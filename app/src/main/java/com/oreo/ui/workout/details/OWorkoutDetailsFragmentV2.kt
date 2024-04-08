@@ -157,10 +157,15 @@ class OWorkoutDetailsFragmentV2 :
             DateFormats.getActivityDisplayDates(it.startTime, it.endTime)
 
         val title = StringBuilder()
-        if(DateFormats.getTodaysDateString(10).equals(it.date)){
+        if (DateFormats.getTodaysDateString(10).equals(it.date)) {
             title.append("Today, ")
         }
-        title.append(DateFormats.getOrdinalDateToday(it.date,DateFormats.dateFormat3,))
+
+        if (title.isEmpty()) {
+            title.append(DateFormats.getOrdinalDate(it.date, DateFormats.dateFormat3))
+        } else {
+            title.append(DateFormats.getOrdinalDateToday(it.date, DateFormats.dateFormat3))
+        }
 
         binding.rvActivityDetails.visible()
         binding.lytActivityItem.root.visible()

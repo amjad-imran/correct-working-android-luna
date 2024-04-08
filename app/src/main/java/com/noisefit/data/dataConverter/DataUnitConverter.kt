@@ -116,8 +116,8 @@ constructor(
     fun formatActivityDistance(distanceInMeter: Int, unit: Units?): String {
 
         var finalDistance =
-            DistanceUtil.getDistanceForPulse(distanceInMeter, unit ?: Units.METRIC)
-                .toDouble().roundDownDecimal()
+            DistanceUtil.getDistanceFromMeters(distanceInMeter, unit ?: Units.METRIC)
+               .roundToNearestSingleDecimal()
 
         LOGS.d("formatDistance $finalDistance")
         return finalDistance
