@@ -203,8 +203,10 @@
                 android:layout_marginStart="@dimen/dimen_16dp"
                 android:layout_marginTop="@dimen/dimen_16dp"
                 android:text="@string/text_how_it_works"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/divider3" />
+                app:layout_constraintTop_toBottomOf="@id/divider3"
+                tools:visibility="visible" />
 
 
             <androidx.recyclerview.widget.RecyclerView
@@ -212,13 +214,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dimen_16dp"
                 android:layout_marginTop="@dimen/dimen_20dp"
-                tools:itemCount="1"
-                tools:listitem="@layout/item_how_stress_list"
                 android:layout_marginBottom="50dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvHow" />
+                app:layout_constraintTop_toBottomOf="@id/tvHow"
+                tools:itemCount="1"
+                tools:listitem="@layout/item_how_stress_list"
+                tools:visibility="visible" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

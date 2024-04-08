@@ -27,8 +27,8 @@ class OStressDetailsFragment :
     private var pagerAdapter: StressPagerAdapter? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.lytHeader.view1.visible()
         sharedViewModel.lastSelectedStressType = StressType.NO_DATA
-        binding.lytHeader.view1.invisible()//TODO un comment on receiving i data
         setViewPager()
     }
 
@@ -129,6 +129,10 @@ class OStressDetailsFragment :
 
         binding.lytHeader.backBtn.setOnClickListener {
             navigateUpSafe()
+        }
+
+        binding.lytHeader.view1.setOnClickListener {
+            navigate(R.id.stressUnderstandingFragment)
         }
 
         binding.tabLayout.tvDateLeft.setOnClickListener {

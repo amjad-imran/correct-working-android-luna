@@ -90,7 +90,7 @@ class StressCombinedChart : View {
     private val shadowWidth = dip2px(100f)
     private var interactiveMode = false
     private var isInteracting = false
-    private var touchX: Float? = null
+    private var touchX = 0f
     lateinit var overlayLinePaint: Paint
     lateinit var topCombinedPaint: Paint
     lateinit var stressDot: Bitmap
@@ -100,6 +100,8 @@ class StressCombinedChart : View {
     private var lastSentValuePos: Int? = null
     private val effect =
         DashPathEffect(floatArrayOf(dip2px(1f).toFloat(), dip2px(5f).toFloat()), 0f)
+    private val toolTipList = ArrayList<Triple<Float, String, Int>>()
+
 
     constructor(context: Context?) : super(context) {
         resMap = HashMap()
@@ -172,9 +174,6 @@ class StressCombinedChart : View {
         )
     }
 
-    fun setClickListener(listener: OnStressClickAction?) {
-        this.listener = listener
-    }
 
     private fun initPaint() {
         workoutPaint = Paint()
@@ -448,6 +447,8 @@ class StressCombinedChart : View {
     }
 
     private fun drawContent(canvas: Canvas) {
+        toolTipList.clear()
+
         if (list.size == 0) {
             return
         }
@@ -486,7 +487,7 @@ class StressCombinedChart : View {
                 canvas.drawText(
                     text,
                     (rectF.left + rectF.right) / 2 - xTextBounds!!.width() / 2f,
-                    rectF.top-xTextBounds!!.height(),
+                    rectF.top - xTextBounds!!.height(),
                     topCombinedPaint
                 )
 
@@ -583,6 +584,8 @@ class StressCombinedChart : View {
                         canvas.drawPoint(x, y, chartLinePaint)
                     }
                 }
+                toolTipList.add(Triple(x, "Time", current.value))
+
             }
 
             /*if (showXAxis && i % interval == 0 && i > 0 && i < 4 * interval) {
@@ -638,6 +641,10 @@ class StressCombinedChart : View {
         }
     }
 
+    fun setClickListener(listener: OnStressClickAction?) {
+        this.listener = listener
+    }
+
     private fun drawDot(canvas: Canvas, value: Int) {
 
         val dotBitmap = when (value) {
@@ -662,35 +669,41 @@ class StressCombinedChart : View {
 
     private fun drawOverlay(canvas: Canvas) {
         if (!isInteracting) return
-        if (touchX != null) {
-            if (touchX!! > 0 && touchX!! < mWith) {
-                val rectF = RectF()
-                rectF.left = touchX!! - 2
-                rectF.right = touchX!! + 2
-                rectF.top = topWith
-                rectF.bottom = mHeight - bottomWith
 
-                val value: Pair<Int, Int> = getClickedValue(touchX!!)
-                canvas.drawRect(rectF, overlayLinePaint)
-                if (value.second != 0) {
+        val calculatedTouchX = if (touchX < leftWith) {
+            leftWith
+        } else if (touchX > (mWith - rightWith)) {
+            (mWith - rightWith)
+        } else {
+            touchX
+        }
 
-                    drawDot(canvas, value.second)
 
-                }
-                if (listener != null) {
-                    val position = value.first as Int
-                    val selectedValue = value.second as Int
-                    if (lastSentValuePos == null) {
-                        listener?.onValueSelected(selectedValue, position)
-                        lastSentValuePos = position
-                        performHapticFeedbackCustom(selectedValue)
-                    } else {
-                        if (lastSentValuePos != position) {
-                            listener?.onValueSelected(selectedValue, position)
-                            lastSentValuePos = position
-                            performHapticFeedbackCustom(selectedValue)
-                        }
-                    }
+        val rectF = RectF()
+        rectF.left = calculatedTouchX - 2
+        rectF.right = calculatedTouchX + 2
+        rectF.top = topWith
+        rectF.bottom = mHeight - bottomWith
+
+        val value: Pair<Int, Int> = getClickedValue(calculatedTouchX)
+        canvas.drawRect(rectF, overlayLinePaint)
+        if (value.second != 0) {
+
+            drawDot(canvas, value.second)
+
+        }
+        if (listener != null) {
+            val position = value.first as Int
+            val selectedValue = value.second as Int
+            if (lastSentValuePos == null) {
+                listener?.onValueSelected(selectedValue, position)
+                lastSentValuePos = position
+                performHapticFeedbackCustom(selectedValue)
+            } else {
+                if (lastSentValuePos != position) {
+                    listener?.onValueSelected(selectedValue, position)
+                    lastSentValuePos = position
+                    performHapticFeedbackCustom(selectedValue)
                 }
             }
         }
@@ -705,7 +718,15 @@ class StressCombinedChart : View {
     }
 
     private fun getClickedValue(touchX: Float): Pair<Int, Int> {
-        var sectionLast = 0f
+        val index = findNumber(toolTipList, touchX)
+        return if (index.first < 0) {
+            lastSentValuePos = null
+            Pair(0, 0)
+        } else {
+            Pair(index.first, list[index.first]!!.value)
+        }
+
+      /*  var sectionLast = 0f
         var position = -1
         for (i in list.size - 1 downTo 1) {
             val sectionEnd = sectionLast + unitHLenth
@@ -719,8 +740,24 @@ class StressCombinedChart : View {
             Pair(0, 0)
         } else {
             Pair(position, list[position].value)
-        }
+        }*/
     }
+
+    fun findNumber(
+        toolTipList: List<Triple<Float, String, Int>>,
+        touchX: Float
+    ): kotlin.Pair<Int, String> {
+        val range = unitHLenth / 2//dip2px(3f)
+        for (i in 0 until toolTipList.size) {
+
+            if (touchX in (toolTipList.get(i).first - range)..(toolTipList.get(i).first + range)) {
+                return kotlin.Pair(i, toolTipList.get(i).second)
+            }
+        }
+
+        return kotlin.Pair(-1, "")
+    }
+
 
     private fun getDotHeight(value: Int): Float {
         return mHeight - bottomWith - value * (mHeight - topWith - bottomWith) / (max - xMin)

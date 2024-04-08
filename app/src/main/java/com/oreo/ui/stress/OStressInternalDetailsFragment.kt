@@ -72,6 +72,23 @@ class OStressInternalDetailsFragment :
             )
         )
 
+        binding.lytTopView.lytFocussed.tvTitle.text = getString(R.string.text_focussed)
+        binding.lytTopView.lytFocussed.tvTitle.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.stress_nap_focussed
+            )
+        )
+        binding.lytTopView.lytCalm.tvTitle.text = getString(R.string.text_calm)
+        binding.lytTopView.lytCalm.tvTitle.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.stress_nap_calm
+            )
+        )
+
+
+
         setStressGraph(stressData)
 
         val todayData = stressData.firstOrNull()
@@ -222,7 +239,7 @@ class OStressInternalDetailsFragment :
     override fun subscribeObservers() {
         mViewModel.selectedData.observe(this) { data ->
 
-            binding.tvMsg.text = Html.fromHtml(data?.message?:"")
+            binding.tvMsg.text = Html.fromHtml(data?.message ?: "")
 
             handleProgressStatus(data)
 
@@ -257,7 +274,7 @@ class OStressInternalDetailsFragment :
     override fun onPositionSelected(position: Int, chartModel: ChartModelStress?) {
         context.showShortToast("Data changed")
         val data = mViewModel.getDataByDate(chartModel?.date)
-        data?.let{
+        data?.let {
             mViewModel.selectedData.postValue(it)
         }
 

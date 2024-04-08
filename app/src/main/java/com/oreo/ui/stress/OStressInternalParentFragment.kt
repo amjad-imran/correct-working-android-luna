@@ -23,6 +23,7 @@ class OStressInternalParentFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.lytToolbar.view1.visible()
         setViewPager()
     }
 
@@ -98,7 +99,7 @@ class OStressInternalParentFragment :
             navigateUpSafe()
         }
         binding.lytToolbar.view1.setOnClickListener {
-            //todo will open info screen
+            navigate(R.id.stressUnderstandingFragment)
         }
 
     }
