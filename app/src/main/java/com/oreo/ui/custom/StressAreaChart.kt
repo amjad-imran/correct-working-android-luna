@@ -506,7 +506,6 @@ class StressAreaChart : View {
             val stressedY =
                 getYAxisValue(current.calm + current.focussed + current.stressed)
 
-            LOGS.d("Y_VALUES $calmY - $focussedY - $stressedY")
 
             calmPath.reset()
             calmFillPath.reset()
@@ -537,7 +536,6 @@ class StressAreaChart : View {
                             getYAxisValue(next.calm + next.focussed + next.stressed)
                         val nextYFocussed = getYAxisValue(next.calm + next.focussed)
 
-                        LOGS.d("Y_VALUES Stressed -> $y1")
 
                         stressedPath.cubicTo(
                             x1 + (x - x1) / phase,
@@ -560,7 +558,6 @@ class StressAreaChart : View {
                             offSet + moveOffSet + (mWith - leftWith - rightWith) * divisor + leftWith - (i + 1) * unitHLenth
                         val nextYCalm = getYAxisValue(next.calm)
                         val y1 = getYAxisValue(next.calm + next.focussed)
-                        LOGS.d("Y_VALUES Focussed -> $y1")
 
                         focussedPath.cubicTo(
                             x1 + (x - x1) / phase,
@@ -583,7 +580,6 @@ class StressAreaChart : View {
                         val x1 =
                             offSet + moveOffSet + (mWith - leftWith - rightWith) * divisor + leftWith - (i + 1) * unitHLenth
                         val y1 = getYAxisValue(next.calm)
-                        LOGS.d("Y_VALUES Calm -> $y1")
                         calmPath.cubicTo(
                             x1 + (x - x1) / phase,
                             calmY,
@@ -682,81 +678,81 @@ class StressAreaChart : View {
         }
 
         return
-
-        //show combined top views
-        val imageSize = dip2px(16f)
-        for (i in stressDNDataModel!!.sections!!.indices) {
-            val section = stressDNDataModel!!.sections!![i]
-            val calculatedEnd = if (section.end < 95) {
-                section.end + 1
-            } else {
-                section.end
-            }
-
-
-            rectF?.left = section.start * unitHLenth
-            rectF?.top = topWith
-            rectF?.right = rectF!!.left + (calculatedEnd - section.start) * unitHLenth
-            rectF?.bottom = mHeight - bottomWith
-
-            chartLineFillPaint?.setShader(resMap!![i]!!.first)
-            chartLineFillPaint?.let { canvas.drawRect(rectF!!, it) }
-
-            rectF?.left = section.start * unitHLenth
-            rectF?.top = topWith - dip2px(1f)
-            rectF?.right = rectF!!.left + (calculatedEnd - section.start) * unitHLenth
-            rectF?.bottom = topWith + dip2px(1f)
-            gridPaint?.color = section.color
-            gridPaint?.let { canvas.drawRect(rectF!!, it) }
-
-
-
-
-            if (section.type.equals("combined", true)) {
-
-                val text = "${section.count}"
-                topCombinedPaint.getTextBounds(text, 0, text.length, xTextBounds)
-                canvas.drawText(
-                    text,
-                    (rectF!!.left + rectF!!.right) / 2 - xTextBounds!!.width() / 2f,
-                    rectF!!.top - xTextBounds!!.height(),
-                    topCombinedPaint
-                )
-
-            } else {
-                rectF!!.left = (rectF!!.right + rectF!!.left) / 2 - imageSize / 2f
-                rectF!!.top = topWith - imageSize - dip2px(10f)
-                rectF!!.right = rectF!!.left + imageSize
-                rectF!!.bottom = rectF!!.top + imageSize
-
-                val imageUrl = resMap!![i]?.third
-                val bitmap = bitmapMap[i]
-                if (bitmap != null) {
-                    canvas.drawBitmap(bitmap, null, rectF!!, workoutPaint)
-                } else {
-                    if (imageUrl.isNullOrEmpty()) {
-                        if (resMap!![i]!!.second != null) {
-                            canvas.drawBitmap(resMap!![i]!!.second!!, null, rectF!!, null)
-                        }
+        /*
+                //show combined top views
+                val imageSize = dip2px(16f)
+                for (i in stressDNDataModel!!.sections!!.indices) {
+                    val section = stressDNDataModel!!.sections!![i]
+                    val calculatedEnd = if (section.end < 95) {
+                        section.end + 1
                     } else {
-                        Glide.with(context)
-                            .asBitmap()
-                            .load(imageUrl)
-                            .into(object : CustomTarget<Bitmap?>(imageSize, imageSize) {
-                                override fun onResourceReady(
-                                    resource: Bitmap,
-                                    transition: Transition<in Bitmap?>?
-                                ) {
-                                    bitmapMap[i] = resource
-                                    postInvalidate()
-                                }
-
-                                override fun onLoadCleared(placeholder: Drawable?) {}
-                            })
+                        section.end
                     }
-                }
-            }
-        }
+
+
+                    rectF?.left = section.start * unitHLenth
+                    rectF?.top = topWith
+                    rectF?.right = rectF!!.left + (calculatedEnd - section.start) * unitHLenth
+                    rectF?.bottom = mHeight - bottomWith
+
+                    chartLineFillPaint?.setShader(resMap!![i]!!.first)
+                    chartLineFillPaint?.let { canvas.drawRect(rectF!!, it) }
+
+                    rectF?.left = section.start * unitHLenth
+                    rectF?.top = topWith - dip2px(1f)
+                    rectF?.right = rectF!!.left + (calculatedEnd - section.start) * unitHLenth
+                    rectF?.bottom = topWith + dip2px(1f)
+                    gridPaint?.color = section.color
+                    gridPaint?.let { canvas.drawRect(rectF!!, it) }
+
+
+
+
+                    if (section.type.equals("combined", true)) {
+
+                        val text = "${section.count}"
+                        topCombinedPaint.getTextBounds(text, 0, text.length, xTextBounds)
+                        canvas.drawText(
+                            text,
+                            (rectF!!.left + rectF!!.right) / 2 - xTextBounds!!.width() / 2f,
+                            rectF!!.top - xTextBounds!!.height(),
+                            topCombinedPaint
+                        )
+
+                    } else {
+                        rectF!!.left = (rectF!!.right + rectF!!.left) / 2 - imageSize / 2f
+                        rectF!!.top = topWith - imageSize - dip2px(10f)
+                        rectF!!.right = rectF!!.left + imageSize
+                        rectF!!.bottom = rectF!!.top + imageSize
+
+                        val imageUrl = resMap!![i]?.third
+                        val bitmap = bitmapMap[i]
+                        if (bitmap != null) {
+                            canvas.drawBitmap(bitmap, null, rectF!!, workoutPaint)
+                        } else {
+                            if (imageUrl.isNullOrEmpty()) {
+                                if (resMap!![i]!!.second != null) {
+                                    canvas.drawBitmap(resMap!![i]!!.second!!, null, rectF!!, null)
+                                }
+                            } else {
+                                Glide.with(context)
+                                    .asBitmap()
+                                    .load(imageUrl)
+                                    .into(object : CustomTarget<Bitmap?>(imageSize, imageSize) {
+                                        override fun onResourceReady(
+                                            resource: Bitmap,
+                                            transition: Transition<in Bitmap?>?
+                                        ) {
+                                            bitmapMap[i] = resource
+                                            postInvalidate()
+                                        }
+
+                                        override fun onLoadCleared(placeholder: Drawable?) {}
+                                    })
+                            }
+                        }
+                    }
+                }*/
     }
 
     private fun showDataBar(canvas: Canvas, current: ChartModelStress, currentX: Float) {

@@ -486,6 +486,10 @@ class OreoSyncRepositoryImpl(
         data.boData?.let {
             bloodOxygenDataImpl.updateServerSyncData(it, todayTimeStamp)
         }
+
+        data.bodyStressData?.let {
+            bodyStressDataImpl.updateServerSyncData(it, todayTimeStamp)
+        }
     }
 
     override suspend fun deleteServerSyncData(data: OreoUserSyncRawData) {
