@@ -168,6 +168,12 @@ class OStressDataMovementFragment :
 
     override fun initListener() {
 
+        binding.lytStressHeader.root.setOnClickListener {
+            navigate(R.id.stressInternalParentOreo, Bundle().apply {
+                putString("date", mainViewModel.selectedDate)
+            })
+        }
+
         binding.lytStressMidGraph.graphStress.setClickListener(object : OnStressClickAction {
 
             override fun onValueSelected(value: Int, position: Int) {
@@ -188,6 +194,8 @@ class OStressDataMovementFragment :
             }
 
             override fun onTopClicked() {
+                if (viewModel.stressActivityData.isNullOrEmpty()) return
+
                 viewModel.stressActivityData?.toTypedArray()?.let { it1 ->
                     navigate(
                         OStressDetailsFragmentDirections.actionStressDetailFragmentToBottomSheetStressActivity(

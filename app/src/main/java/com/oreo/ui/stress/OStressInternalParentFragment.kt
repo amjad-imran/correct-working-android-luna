@@ -41,7 +41,7 @@ class OStressInternalParentFragment :
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab?.position) {
-                    1 -> {
+                    0 -> {
                         loadFragment(
                             OStressInternalDetailsFragment.newInstance(
                                 "Day",
@@ -49,7 +49,7 @@ class OStressInternalParentFragment :
                             )
                         )
                     }
-                    2 -> {
+                    1 -> {
                         loadFragment(
                             OStressInternalDetailsFragment.newInstance(
                                 "Week",

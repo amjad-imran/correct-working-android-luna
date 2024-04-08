@@ -15,12 +15,12 @@ import com.oreo.data.model.OHSModel
 import com.oreo.data.model.OHSQuestionariesResponseModel
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.OInternalPageResponseModal
-import com.oreo.data.model.OStressInternalPageResponseModal
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.model.OreoNapDetailsDataModel
 import com.oreo.data.model.RingCareResponse
 import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthResponse
+import com.oreo.data.model.StressResultData
 import com.oreo.data.model.TestUserData
 import com.oreo.data.model.health.Nap
 import com.oreo.receiver.workManager.HealthOverviewDataType
@@ -115,5 +115,5 @@ interface OreoUserActivityRepository {
     suspend fun getStressInternalPagesData(
         selectDate: String,
         filterType: String
-    ): Flow<Resource<BaseApiResponse<OStressInternalPageResponseModal>>>
+    ): Flow<Resource<BaseApiResponse<List<StressResultData>>>>
 }

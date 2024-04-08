@@ -847,8 +847,8 @@ interface NetworkService {
     suspend fun getStressInternalPageData(
         @Url url: String,
         @Query("date") selectDate: String,
-        @Query("filter_type") filterType: String
-    ): BaseApiResponse<OStressInternalPageResponseModal>
+        @Query("type") filterType: String
+    ): BaseApiResponse<List<StressResultData>>
     /**
      * ---------------------------------------------------------------------------------
      *                                Oreo Services End

@@ -50,7 +50,6 @@ import com.oreo.data.model.OHSModel
 import com.oreo.data.model.OHSQuestionariesResponseModel
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.OInternalPageResponseModal
-import com.oreo.data.model.OStressInternalPageResponseModal
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.model.OreoNapDetailsDataModel
 import com.oreo.data.model.RingCareResponse
@@ -72,6 +71,7 @@ import kotlinx.coroutines.withContext
 import org.joda.time.LocalDate
 import org.json.JSONObject
 import com.oreo.data.model.AddWorkoutResponse
+import com.oreo.data.model.StressResultData
 import com.oreo.data.model.TestUserData
 import com.oreo.data.model.health.Nap
 
@@ -1845,10 +1845,11 @@ class OreoUserActivityRepositoryImpl(
     override suspend fun getStressInternalPagesData(
         selectDate: String,
         filterType: String
-    ): Flow<Resource<BaseApiResponse<OStressInternalPageResponseModal>>> {
+    ): Flow<Resource<BaseApiResponse<List<StressResultData>>>> {
+        ///luna/stress/v1/stress?type=day&date=2024-04-05
         return safeApiCallFlow(dispatcher) {
             val url =
-                "${BuildConfig.OREO_BASE_URL}/activity/v1/activity-contributors"
+                "${BuildConfig.OREO_BASE_URL}/stress/v1/stress"
             remoteDataSource.getStressInternalPageData(url, selectDate, filterType)
         }
     }

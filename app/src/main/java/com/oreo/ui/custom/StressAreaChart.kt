@@ -306,7 +306,7 @@ class StressAreaChart : View {
         prefixCount = prefixList.size
         suffixCount = suffixList.size
 
-        max = 24
+        max = 1440
         postInvalidate()
     }
 
@@ -395,23 +395,24 @@ class StressAreaChart : View {
         drawContent(canvas)
         drawRight(canvas)
     }
+
     private fun generateResMap() {
-        if (stressDNDataModel == null) return
-        var section: Section
-        for (i in stressDNDataModel!!.sections!!.indices) {
-            section = stressDNDataModel!!.sections!![i]
-            resMap!![i] = Triple(
-                LinearGradient(
-                    0f,
-                    0f,
-                    0f,
-                    mHeight - bottomWith,
-                    section.color,
-                    Color.TRANSPARENT,
-                    Shader.TileMode.CLAMP
-                ), BitmapFactory.decodeResource(resources, section.imageRes), section.imageUrl
-            )
-        }
+        /* if (stressDNDataModel?.sections == null) return
+         var section: Section
+         for (i in stressDNDataModel!!.sections!!.indices) {
+             section = stressDNDataModel!!.sections!![i]
+             resMap!![i] = Triple(
+                 LinearGradient(
+                     0f,
+                     0f,
+                     0f,
+                     mHeight - bottomWith,
+                     section.color,
+                     Color.TRANSPARENT,
+                     Shader.TileMode.CLAMP
+                 ), BitmapFactory.decodeResource(resources, section.imageRes), section.imageUrl
+             )
+         }*/
     }
 
     private fun drawBg(canvas: Canvas) {
@@ -679,6 +680,8 @@ class StressAreaChart : View {
                 )
             }
         }
+
+        return
 
         //show combined top views
         val imageSize = dip2px(16f)

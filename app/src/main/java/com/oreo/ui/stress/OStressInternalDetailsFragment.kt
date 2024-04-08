@@ -5,22 +5,21 @@ import android.text.Html
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOStressInternalDetailsBinding
 import com.noisefit.luna.databinding.OreoLayoutTopHourMn20Binding
-import com.noisefit_commans.common.fromJson
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModelStress
-import com.oreo.data.model.ResultDataStress
-import com.oreo.data.model.OStressInternalPageResponseModal
-import com.oreo.data.model.StressData
+import com.oreo.data.model.StressResultData
 import com.oreo.ui.custom.ScrollListenerStress
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.math.abs
 import kotlin.math.roundToInt
 
 private const val DAY_TYPE = "DAY_TYPE"
@@ -62,7 +61,7 @@ class OStressInternalDetailsFragment :
 
     }
 
-    private fun updateUI(responseData: OStressInternalPageResponseModal) {
+    private fun updateUI(stressData: List<StressResultData>) {
 
         //for stressed
         binding.lytTopView.lytStressed.tvTitle.text = getString(R.string.text_stressed)
@@ -72,55 +71,20 @@ class OStressInternalDetailsFragment :
                 R.color.stress_nap_stressed
             )
         )
-        if (responseData.stressData == null)
-            return
-        val strData = responseData.stressData
-        val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
-            strData.stressed?.duration?.toFloat()?.roundToInt() ?: 0
-        )
 
-        handleUnitView(hour, minute, binding.lytTopView.lytStressed.lytUnit)
-        // for focussed
-        binding.lytTopView.lytFocussed.tvTitle.text = getString(R.string.text_focussed)
-        binding.lytTopView.lytFocussed.tvTitle.setTextColor(
-            ContextCompat.getColor(
-                requireContext(),
-                R.color.stress_nap_focussed
-            )
-        )
-        val (hour1, minute1) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
-            strData.focussed?.duration?.toFloat()?.roundToInt() ?: 0
-        )
-        handleUnitView(hour1, minute1, binding.lytTopView.lytFocussed.lytUnit)
-        // for calm
-        binding.lytTopView.lytCalm.tvTitle.text = getString(R.string.text_calm)
-        binding.lytTopView.lytCalm.tvTitle.setTextColor(
-            ContextCompat.getColor(
-                requireContext(),
-                R.color.stress_nap_calm
-            )
-        )
-        val (hour2, minute2) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
-            strData.focussed?.duration?.toFloat()?.roundToInt() ?: 0
-        )
-        handleUnitView(hour2, minute2, binding.lytTopView.lytCalm.lytUnit)
-        binding.tvMsg.text = Html.fromHtml(strData.dspMsg)
+        setStressGraph(stressData)
 
-        handleProgressStatus(strData)
-
-        setStressGraph()
+        val todayData = stressData.firstOrNull()
+        mViewModel.selectedData.postValue(todayData)
 
     }
 
-    private fun setStressGraph() {
-        val dummyData =
-            "[ { \"date\": \"2024-03-20\", \"data\": { \"calm\":12, \"focussed\":8, \"stressed\":4 } }, { \"date\": \"2024-03-19\",  \"data\": { \"calm\":10, \"focussed\":6, \"stressed\":8 } }, { \"date\": \"2024-03-18\",  \"data\": { \"calm\":10, \"focussed\":8, \"stressed\":6 } }, { \"date\": \"2024-03-17\",  \"data\": { \"calm\":4, \"focussed\":8, \"stressed\":12 } }, { \"date\": \"2024-03-16\",  \"data\": { \"calm\":4, \"focussed\":6, \"stressed\":8 } }, { \"date\": \"2024-03-15\",  \"data\": { \"calm\":6, \"focussed\":12, \"stressed\":6 } }, { \"date\": \"2024-03-14\",  \"data\": { \"calm\":6, \"focussed\":6, \"stressed\":12 } }]"
+    private fun setStressGraph(stressData: List<StressResultData>) {
 
-        val data = Gson().fromJson<List<ResultDataStress>>(dummyData)
 
         val topGraphData = mViewModel.getPrefixAndSuffixList(
-            data as ArrayList<ResultDataStress>,
-           /* mViewModel.dayType*/"day"
+            stressData,
+            mViewModel.dayType
         )
         binding.stressChart.visible()
         binding.stressChart.updateData(
@@ -130,30 +94,81 @@ class OStressInternalDetailsFragment :
         )
     }
 
-    private fun handleProgressStatus(strData: StressData) {
-        if (strData.stressed?.score != null || (strData.stressed?.score ?: 0) > 0) {
-            binding.lytTopView.lytStressed.view1.visible()
-            binding.lytTopView.lytStressed.tvProgStatus.visible()
-            binding.lytTopView.lytStressed.tvProgStatus.text = "${strData.stressed?.score} %"
-        } else {
-            binding.lytTopView.lytStressed.view1.gone()
-            binding.lytTopView.lytStressed.tvProgStatus.gone()
+    private fun handleProgressStatus(strData: StressResultData?) {
+
+        binding.lytTopView.lytCalm.apply {
+            val diffCalm = mViewModel.getDifference(
+                strData?.data?.calm?.duration ?: 0,
+                strData?.data?.calm?.typicalDay ?: 0
+            )
+            val (hourCalm, minuteCalm) = ApplicationUtils.getFormattedSleepDuration(
+                strData?.data?.calm?.duration ?: 0
+            )
+            lytUnit.tvHour.text = "$hourCalm"
+            lytUnit.tvHourUnit.text = getString(R.string.text_hr)
+            lytUnit.tvMinute.text = "$minuteCalm"
+            lytUnit.tvMinuteUnit.text = getString(R.string.text_mins)
+
+            tvDifference.text = "${abs(diffCalm)}%"
+            if (diffCalm > 0) {
+                icTrend.visible()
+                icTrend.rotation = 0f
+            } else if (diffCalm < 0) {
+                icTrend.visible()
+                icTrend.rotation = 180f
+            } else {
+                icTrend.invisible()
+            }
         }
-        if (strData.focussed?.score != null || (strData.focussed?.score ?: 0) > 0) {
-            binding.lytTopView.lytFocussed.view1.visible()
-            binding.lytTopView.lytFocussed.tvProgStatus.visible()
-            binding.lytTopView.lytFocussed.tvProgStatus.text = "${strData.focussed?.score} %"
-        } else {
-            binding.lytTopView.lytFocussed.view1.gone()
-            binding.lytTopView.lytFocussed.tvProgStatus.gone()
+
+        binding.lytTopView.lytFocussed.apply {
+            val diffFocussed = mViewModel.getDifference(
+                strData?.data?.focused?.duration ?: 0,
+                strData?.data?.focused?.typicalDay ?: 0
+            )
+            val (hourCalm, minuteCalm) = ApplicationUtils.getFormattedSleepDuration(
+                strData?.data?.focused?.duration ?: 0
+            )
+            lytUnit.tvHour.text = "$hourCalm"
+            lytUnit.tvHourUnit.text = getString(R.string.text_hr)
+            lytUnit.tvMinute.text = "$minuteCalm"
+            lytUnit.tvMinuteUnit.text = getString(R.string.text_mins)
+
+            tvDifference.text = "${abs(diffFocussed)}%"
+            if (diffFocussed > 0) {
+                icTrend.visible()
+                icTrend.rotation = 0f
+            } else if (diffFocussed < 0) {
+                icTrend.visible()
+                icTrend.rotation = 180f
+            } else {
+                icTrend.invisible()
+            }
         }
-        if (strData.calm?.score != null || (strData.focussed?.score ?: 0) > 0) {
-            binding.lytTopView.lytCalm.view1.visible()
-            binding.lytTopView.lytCalm.tvProgStatus.visible()
-            binding.lytTopView.lytCalm.tvProgStatus.text = "${strData.calm?.score} %"
-        } else {
-            binding.lytTopView.lytCalm.view1.gone()
-            binding.lytTopView.lytCalm.tvProgStatus.gone()
+
+        binding.lytTopView.lytStressed.apply {
+            val diffStressed = mViewModel.getDifference(
+                strData?.data?.stressed?.duration ?: 0,
+                strData?.data?.stressed?.typicalDay ?: 0
+            )
+            val (hourCalm, minuteCalm) = ApplicationUtils.getFormattedSleepDuration(
+                strData?.data?.stressed?.duration ?: 0
+            )
+            lytUnit.tvHour.text = "$hourCalm"
+            lytUnit.tvHourUnit.text = getString(R.string.text_hr)
+            lytUnit.tvMinute.text = "$minuteCalm"
+            lytUnit.tvMinuteUnit.text = getString(R.string.text_mins)
+
+            tvDifference.text = "${abs(diffStressed)}%"
+            if (diffStressed > 0) {
+                icTrend.visible()
+                icTrend.rotation = 0f
+            } else if (diffStressed < 0) {
+                icTrend.visible()
+                icTrend.rotation = 180f
+            } else {
+                icTrend.invisible()
+            }
         }
     }
 
@@ -205,6 +220,46 @@ class OStressInternalDetailsFragment :
 
 
     override fun subscribeObservers() {
+        mViewModel.selectedData.observe(this) { data ->
+
+            context.showShortToast("Data changed")
+
+            val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
+                data?.data?.stressed?.duration?.toFloat()?.roundToInt() ?: 0
+            )
+
+            handleUnitView(hour, minute, binding.lytTopView.lytStressed.lytUnit)
+            // for focussed
+            binding.lytTopView.lytFocussed.tvTitle.text = getString(R.string.text_focussed)
+            binding.lytTopView.lytFocussed.tvTitle.setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.stress_nap_focussed
+                )
+            )
+            val (hour1, minute1) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
+                data?.data?.focused?.duration?.toFloat()?.roundToInt() ?: 0
+            )
+            handleUnitView(hour1, minute1, binding.lytTopView.lytFocussed.lytUnit)
+            // for calm
+            binding.lytTopView.lytCalm.tvTitle.text = getString(R.string.text_calm)
+            binding.lytTopView.lytCalm.tvTitle.setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.stress_nap_calm
+                )
+            )
+            val (hour2, minute2) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
+                data?.data?.focused?.duration?.toFloat()?.roundToInt() ?: 0
+            )
+            handleUnitView(hour2, minute2, binding.lytTopView.lytCalm.lytUnit)
+            binding.tvMsg.text = Html.fromHtml(data?.message?:"")
+
+            handleProgressStatus(data)
+
+
+        }
+
         mViewModel.internalDetailsData.observe(this) {
             if (it != null) {
                 updateUI(it)
@@ -231,7 +286,12 @@ class OStressInternalDetailsFragment :
     }
 
     override fun onPositionSelected(position: Int, chartModel: ChartModelStress?) {
+        val data = mViewModel.getDataByDate(chartModel?.date)
+        data?.let{
+            mViewModel.selectedData.postValue(it)
+        }
 
+        LOGS.d("dsfsdfsdfsf $data")
     }
 
     override fun onScrolling(position: Int, chartModel: ChartModelStress?) {

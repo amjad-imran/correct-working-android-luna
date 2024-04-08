@@ -7,24 +7,18 @@ import androidx.lifecycle.viewModelScope
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
-import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.NoisefitApplication
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
-import com.oreo.data.model.ChartModel
 import com.oreo.data.model.ChartModelStress
-import com.oreo.data.model.OInternalPageResponseModal
-import com.oreo.data.model.ResultData
-import com.oreo.data.model.ResultDataStress
-import com.oreo.data.model.OStressInternalPageResponseModal
-import com.oreo.data.model.StressData
-import com.oreo.data.model.StressShowData
+import com.oreo.data.model.StressResultData
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
-import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 @HiltViewModel
 class OSIDViewModel @Inject constructor(
@@ -33,16 +27,18 @@ class OSIDViewModel @Inject constructor(
 ) : BaseViewModel() {
 
 
+    var selectedData = MutableLiveData<StressResultData>()
+
     var dayType: String? = null
     var selectedDate: String? = null
 
-    private val _internalDetailsData = MutableLiveData<OStressInternalPageResponseModal>()
-    val internalDetailsData: LiveData<OStressInternalPageResponseModal>
+    private val _internalDetailsData = MutableLiveData<List<StressResultData>>()
+    val internalDetailsData: LiveData<List<StressResultData>>
         get() = _internalDetailsData
 
 
     fun getInternalDetailsData() {
-        /*viewModelScope.launch {
+        viewModelScope.launch {
             userActivityRepository.getStressInternalPagesData(
                 selectedDate!!, dayType.toString().lowercase()
             ).collect { resource ->
@@ -78,21 +74,21 @@ class OSIDViewModel @Inject constructor(
                     }
                 }
             }
-        }*/
-        val dummyData = OStressInternalPageResponseModal(
-            resultData = null, stressData = StressData(
-                focussed = StressShowData(duration = 368, 5),
-                calm = StressShowData(duration = 468, 5),
-                stressed = StressShowData(duration = 125, 14),
-                avgDuration = 425,
-                dspMsg = "You have spent an average of"
-            )
-        )
-        _internalDetailsData.postValue(dummyData)
+        }
+        /* val dummyData = OStressInternalPageResponseModal(
+             resultData = null, stressData = StressData(
+                 focussed = StressShowData(duration = 368, 5),
+                 calm = StressShowData(duration = 468, 5),
+                 stressed = StressShowData(duration = 125, 14),
+                 avgDuration = 425,
+                 dspMsg = "You have spent an average of"
+             )
+         )
+         _internalDetailsData.postValue(dummyData)*/
     }
 
     fun getPrefixAndSuffixList(
-        dataList: ArrayList<ResultDataStress>,
+        dataList: List<StressResultData>,
         dayType: String?
     ): Triple<List<ChartModelStress>, List<ChartModelStress>, List<ChartModelStress>> {
         dataList.reversed()
@@ -111,9 +107,9 @@ class OSIDViewModel @Inject constructor(
             val chartModel = ChartModelStress(
                 date = it.date,
                 index = index,
-                calm = it.data.calm,
-                focussed = it.data.focussed,
-                stressed = it.data.stressed,
+                calm = it.data?.calm?.duration ?: 0,
+                focussed = it.data?.focused?.duration ?: 0,
+                stressed = it.data?.stressed?.duration ?: 0,
             )
             list.add(chartModel)
         }
@@ -154,6 +150,22 @@ class OSIDViewModel @Inject constructor(
 
         return Triple(lineColor, fillColorStart, fillColorEnd)
 
+    }
+
+    fun getDifference(today: Int, typicalDay: Int): Int {
+        val difference = today - typicalDay
+        if (difference == 0) return 0
+        val diff = ((difference.toFloat() / today) * 100).roundToInt()
+        return diff
+
+    }
+
+    fun getDataByDate(date: String?): StressResultData? {
+        if (date.isNullOrEmpty()) return null
+
+        return internalDetailsData.value?.firstOrNull {
+            it.date.equals(date, true)
+        }
     }
 
 

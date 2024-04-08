@@ -2,16 +2,22 @@ package com.oreo.data.model
 
 import com.google.gson.annotations.SerializedName
 
-data class OStressInternalPageResponseModal(
-    val resultData: List<StressResultData>? = null,
-    val stressData: StressData? = null,
+data class StressResultData(
+    val date: String,
+    val data: SRData? = null,
+    val year: String? = null,
+    val message: String? = null
 )
 
-data class StressResultData(val date: String, val data: SRData, val year: String? = null)
 data class SRData(
-    val stressed: Int = 0,
-    val calm: Int = 0,
-    val focussed: Int = 0
+    val stressed: TypicalData? = null,
+    val calm: TypicalData? = null,
+    val focused: TypicalData? = null
+)
+
+data class TypicalData(
+    val duration: Int? = null,
+    @SerializedName("typical_day") val typicalDay: Int? = null,
 )
 
 data class StressData(
