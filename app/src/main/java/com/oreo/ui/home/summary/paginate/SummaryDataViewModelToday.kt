@@ -6,8 +6,6 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.local.db.CacheResult
-import com.oreo.data.model.AppUpdateModel
-import com.oreo.data.model.OtaUpdateModel
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UpdateRepository
 import com.noisefit.luna.BuildConfig
@@ -36,12 +34,14 @@ import com.noisefit_commans.utils.ScreenUtils
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.AlertType
+import com.oreo.data.model.AppUpdateModel
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.DashAlert
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.OreoNapDetailsDataModel
+import com.oreo.data.model.OtaUpdateModel
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.SlideUpNapScoreDataModel
 import com.oreo.data.model.TapMeasureState
@@ -60,6 +60,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.time.LocalTime
+import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
@@ -116,6 +118,14 @@ class SummaryDataViewModelToday @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             localDataStore.setBatteryAlertShown()
         }
+    }
+
+    fun checkBeforeTime():Boolean{
+        val calendar: Calendar = Calendar.getInstance()
+        val hour24hrs: Int = calendar.get(Calendar.HOUR_OF_DAY)
+        val time1 = LocalTime.of(hour24hrs, 0)
+        val time2 = LocalTime.of(21, 0)
+        return time1.isBefore(time2)
     }
 
 

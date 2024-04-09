@@ -696,6 +696,13 @@ class SummaryDataFragmentToday :
                     requireContext(),
                     it.second?.ringInfo?.image2
                 )
+                if (viewModel.checkBeforeTime()) {
+                    binding.contentMain.lytChargeRing.textView84.text =
+                        getString(R.string.text_before_9_pm_battery_charge_msg)
+                } else {
+                    binding.contentMain.lytChargeRing.textView84.text =
+                        getString(R.string.text_after_9_pm_battery_charge_msg)
+                }
             } else {
                 binding.contentMain.lytChargeRing.root.gone()
             }
