@@ -31,6 +31,7 @@ import com.noisefit.ui.onboarding.FirebaseUpdateViewModel
 import com.noisefit.util.ApplicationUtils
 import com.noisefit.util.notif.NotificationEventsClass
 import com.noisefit.util.notif.NotificationUtil
+import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
@@ -39,6 +40,8 @@ import com.noisefit_commans.data.response.VersionCheckResponse
 import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
@@ -670,6 +673,105 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                         selectMenuItem(BottomNavOption.ACTIVITY)
                     }
                 }
+            }
+        }
+
+        viewModel.sessionManager.syncCompleted.observe(this) {
+            it?.getContent()?.let { syncDataStatus ->
+                when (syncDataStatus) {
+                    SyncEvents.Failed -> {
+                        viewModel.syncProgressBarState.value = null
+                        viewModel.syncTextState.value = null
+                    }
+
+                    is SyncEvents.InProgress -> {
+                        LOGS.d("Progress_____________ ${syncDataStatus.progress}")
+                        viewModel.syncProgressBarState.value =
+                            Pair(syncDataStatus.progress, syncDataStatus.total)
+                        viewModel.syncTextState.value = getString(R.string.text_syncing_dot)
+
+                        /*binding.lytHeader.pbSync.max = syncDataStatus.total
+                        binding.lytHeader.pbSync.progress = syncDataStatus.progress
+                        binding.lytHeader.pbSync.visible()
+                        binding.lytHeader.tvHeaderStatus.apply {
+                            text = getString(R.string.text_syncing_dot)
+                            visible()
+                        }*/
+                    }
+
+                    is SyncEvents.Started -> {
+                        viewModel.syncProgressBarState.value =
+                            Pair(syncDataStatus.progress, syncDataStatus.total)
+                        viewModel.syncTextState.value = getString(R.string.text_syncing_dot)
+
+
+                        /*   binding.lytHeader.pbSync.max = syncDataStatus.total
+                           binding.lytHeader.pbSync.progress = syncDataStatus.progress
+                           binding.lytHeader.pbSync.visible()
+                           binding.lytHeader.tvHeaderStatus.apply {
+                               text = getString(R.string.text_syncing_dot)
+                               visible()
+                           }*/
+                    }
+
+                    is SyncEvents.Success -> {
+                        viewModel.syncProgressBarState.value = null
+                        viewModel.syncTextState.value = null
+
+                        /* binding.lytHeader.pbSync.max = syncDataStatus.total
+                         binding.lytHeader.pbSync.progress = syncDataStatus.progress
+                         binding.lytHeader.tvHeaderStatus.gone()
+                         binding.lytHeader.pbSync.gone()
+                         resetSwipeLoadingAnim()*/
+                    }
+
+                    SyncEvents.ServerSyncStarted -> {
+                        binding.progressBar.root.visible()
+                    }
+
+                    SyncEvents.ServerSyncSuccess -> {
+                        binding.progressBar.root.gone()
+
+                        viewModel.reloadTodaysData()
+                        //sendLogs()
+                    }
+                }
+            }
+        }
+
+        viewModel.sessionManager.connectStateRing.observe(this) { connectedState ->
+            when (connectedState) {
+                is ConnectState.ConnectFailed -> {
+                    viewModel.syncProgressBarState.value = null
+                    viewModel.syncTextState.value = null
+                }
+
+                is ConnectState.Connecting -> {
+                    viewModel.syncProgressBarState.value = null
+                    viewModel.syncTextState.value = null
+                }
+
+                is ConnectState.ConnectSuccess -> {
+
+                }
+
+                is ConnectState.UnPaired -> {
+                    viewModel.syncProgressBarState.value = null
+                    viewModel.syncTextState.value = null
+                }
+
+                else -> {}
+            }
+        }
+
+        viewModel.syncProgressBarState.observe(this) {
+            if (it == null) {
+                binding.pbSync.gone()
+            } else {
+                val (progress, total) = it
+                binding.pbSync.visible()
+                binding.pbSync.max = total
+                binding.pbSync.progress = progress
             }
         }
     }
