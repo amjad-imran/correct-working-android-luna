@@ -260,16 +260,15 @@ class OreoSleepDetailFragment :
         }
     }
 
-    private fun setHrvMax() {
-
-        binding.lytHRVariability.tvSubtitle1.text = getString(R.string.text_maximum)
-        if (viewModel.maxHrv == null || viewModel.maxHrv == 0 || viewModel.maxHrv == 255) {
-            binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "-"
-            binding.lytHRVariability.lytSubtitleValue1.tvUnit.gone()
-        } else {
-            binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "${viewModel.maxHrv}"
+    private fun setHrvAvg() {
+        binding.lytHRVariability.tvSubtitle1.text = getString(R.string.text_average)
+        if (viewModel.avgHrv != null && viewModel.avgHrv != 0) {
+            binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "${viewModel.avgHrv}"
             binding.lytHRVariability.lytSubtitleValue1.tvUnit.text = getString(R.string.text_ms)
             binding.lytHRVariability.lytSubtitleValue1.tvUnit.visible()
+        } else {
+            binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "-"
+            binding.lytHRVariability.lytSubtitleValue1.tvUnit.gone()
         }
     }
 
@@ -389,14 +388,15 @@ class OreoSleepDetailFragment :
 
         binding.lytHRVariability.tvTitle.text = getString(R.string.text_heart_rate_variability)
 
-        viewModel.maxHrv = heartRateData?.hrv?.max
-        setHrvMax()
-
-        if (heartRateData?.hrv?.avg != null && heartRateData?.hrv?.avg != 0) {
-            binding.lytHRVariability.tvSubtitle2.text = "Average ${heartRateData?.hrv?.avg} ms"
-        } else {
+//        viewModel.maxHrv = heartRateData?.hrv?.max
+        viewModel.avgHrv=heartRateData?.hrv?.avg
+        setHrvAvg()
+        if (heartRateData?.hrv?.max == null || heartRateData.hrv?.max == 0 || heartRateData.hrv?.max == 255) {
             binding.lytHRVariability.tvSubtitle2.text = ""
+        } else {
+            binding.lytHRVariability.tvSubtitle2.text = "Maximum ${heartRateData?.hrv?.max} ms"
         }
+
 
         val ssTime: String?
         val seTime: String?
@@ -464,7 +464,7 @@ class OreoSleepDetailFragment :
                             if (value > 0) "$value" else "-"
 
                     } else {
-                        setHrvMax()
+                       setHrvAvg()
                     }
                 }
 
