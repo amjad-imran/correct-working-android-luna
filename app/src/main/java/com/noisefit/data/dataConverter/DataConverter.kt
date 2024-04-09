@@ -165,8 +165,12 @@ constructor(
                             intensityArray.add(it)
                         }
 
-                        val intensity = intArray.average().ceilRound()
-
+                        val intensity = try {
+                            intArray.average().ceilRound()
+                        } catch (exp: Exception) {
+                            //NAN case, all other cases
+                            0
+                        }
                         this.addProperty(
                             "intensity",
                             getIntensity(intensity)
