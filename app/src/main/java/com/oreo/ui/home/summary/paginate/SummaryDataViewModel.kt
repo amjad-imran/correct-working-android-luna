@@ -279,7 +279,7 @@ constructor(
             )
         }
 
-        val average = avgList.average().toFloat()
+        val average = if(avgList.isEmpty()) 0.0f else avgList.average().toFloat()
 
 
 

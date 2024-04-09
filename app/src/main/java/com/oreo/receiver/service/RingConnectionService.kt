@@ -29,6 +29,7 @@ import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.LastSyncProvider
 import com.noisefit.data.repository.abstraction.DeviceRepository
+import com.noisefit.data.repository.implementation.DELETE_DB_DAYS
 import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
 import com.noisefit.util.FirebaseCrashlyticsUtils
@@ -1066,9 +1067,14 @@ constructor() : LifecycleService() {
                     is UserActivityCallback.AutoSportDataObtained -> {
                         LOGS.d(TAG, "SyncDataWork: onAutoSportData inside")
                         it.data.firstOrNull()?.let {
-                            NotificationUtil.showWorkoutLocalNotification(
-                                this, it
-                            )
+                            val timeStamp = DateFormats.lastClearDataTimeStamp(DELETE_DB_DAYS)
+                            val workoutTimeStamp = it.startTime
+                            if (workoutTimeStamp > timeStamp) {
+                                NotificationUtil.showWorkoutLocalNotification(
+                                    this, it
+                                )
+                            }
+
                         }
 
 

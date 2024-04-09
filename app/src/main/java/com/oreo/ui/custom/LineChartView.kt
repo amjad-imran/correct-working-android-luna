@@ -581,6 +581,14 @@ class LineChartView : View {
                     resetState()
                     return super.onTouchEvent(event)
                 }
+                MotionEvent.ACTION_CANCEL->{
+                    if (!isInteracting) {
+                        if (event.y < dip2px(50f)) {
+                            listener?.onTopClicked()
+                        }
+                    }
+                    resetState()
+                }
             }
         } else {
             return super.onTouchEvent(event)
