@@ -79,12 +79,10 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         navController = findNavController(R.id.o_nav_host_fragment)
         setNavViewListeners()
         setBlur()
         setBlurAddCta()
-
         viewModel.sessionManager.getPairedState()
         checkBluetooth()
         firebaseViewModel.generateToken()
