@@ -40,8 +40,6 @@ import com.noisefit_commans.data.response.VersionCheckResponse
 import com.noisefit_commans.databinding.DefaultLoaderBinding
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.invisible
-import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
@@ -78,6 +76,16 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 this.putExtra(NOTIFICATION_TYPE, notificationType)
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LOGS.d("App killed on destroy")
+        NotificationUtil.sendForcePushNotification(
+            this,
+            getString(R.string.text_open_luna_ring_app),
+            getString(R.string.text_keep_the_luna_ring_app_running_so_your_data_can_stay_upto_date)
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -848,6 +856,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         //viewModel.shouldResetMasterDates()
 
     }
+
 
     private fun handleIntent(intent: Intent?) {
         intent?.extras?.let { intentExtra ->

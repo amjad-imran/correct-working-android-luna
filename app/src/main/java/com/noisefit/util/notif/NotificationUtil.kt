@@ -1,19 +1,24 @@
 package com.noisefit.util.notif
 
+import android.Manifest
 import android.app.Notification
 import android.app.Notification.DEFAULT_SOUND
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.os.Build
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.noisefit.data.local.AppStaticData
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
-import com.noisefit.data.local.AppStaticData
-import com.noisefit.ui.SplashActivity
+import com.noisefit.oreo.OreoMainActivity
 import com.noisefit.util.notif.NotificationEventsClass.APP_UPDATE_NOTIFICATION_KEY
 import com.noisefit.util.notif.NotificationEventsClass.FIND_PHONE_NOTIFICATION_KEY
 import com.noisefit.util.notif.NotificationEventsClass.LOCAL_NOTIFICATION_KEY
@@ -214,6 +219,55 @@ object NotificationUtil {
             NotificationEventsClass.NOTIFICATION_TYPE_AGPS_FORCE_UPDATE,
             "1"
         )
+    }
+
+    /*
+    * handle force user notification
+    * */
+    fun sendForcePushNotification(context: Context, title: String, descriptionText: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(
+                NotificationEventsClass.LUNA_FORCE_KILL_CHANNEL_ID,
+                title,
+                importance
+            ).apply {
+                description = descriptionText
+            }
+
+            // Register the channel with the system
+            val notificationManager: NotificationManager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        // Create an explicit intent for an activity in your app
+        val intent = Intent(context, OreoMainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val pendingIntent: PendingIntent =
+            PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE)
+
+        // Build the notification
+        val builder =
+            NotificationCompat.Builder(context, NotificationEventsClass.LUNA_FORCE_KILL_CHANNEL_ID)
+                .setSmallIcon(R.drawable.icon_transparent)
+                .setContentTitle(title)
+                .setContentText(descriptionText)
+                .setContentIntent(pendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+        // Show the notification
+        with(NotificationManagerCompat.from(context)) {
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return
+            }
+            notify(1, builder.build())
+        }
     }
 
 }
