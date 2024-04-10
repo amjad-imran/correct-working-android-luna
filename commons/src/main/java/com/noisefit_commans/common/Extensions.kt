@@ -41,6 +41,15 @@ fun Int?.convertMinuteIntoSeconds(): Int {
 
 }
 
+fun Int.px(): Float {
+    return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        this.toFloat(),
+        NoisefitApplication.context?.resources?.displayMetrics
+    )
+}
+
+
 fun Context.dpToPx(px: Int): Int {
     return TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_DIP, px.toFloat(), this.resources.displayMetrics
@@ -81,6 +90,15 @@ fun List<Int>.averageWithoutZero(): Int {
     }
 }
 
+fun List<Int>.averageDaytimeValues(): Int {
+    val newList = this.filter { it != 0 && it != 255 }
+    return if (newList.isNotEmpty()) {
+        newList.average().ceilRound()
+    } else {
+        0
+    }
+}
+
 fun List<Float>.averageWithoutZeroFloat(): Float {
     val newList = this.filter { it != 0.0f && it != 255.0f }
     return if (newList.isNotEmpty()) {
@@ -89,6 +107,7 @@ fun List<Float>.averageWithoutZeroFloat(): Float {
         0.0f
     }
 }
+
 fun List<Int>.averageIntWithoutZeroFloat(): Float {
     val newList = this.filter { it != 0 && it != 255 }
     return if (newList.isNotEmpty()) {
@@ -164,7 +183,7 @@ fun Double.roundDownDecimal(): String {
     return df.format(this)
 }
 
-fun Double.ceilRound():Int{
+fun Double.ceilRound(): Int {
     return DecimalFormat("#").apply {
         roundingMode = RoundingMode.CEILING
     }.format(this).toInt()
@@ -178,6 +197,11 @@ fun Double.roundUpDecimal(): String {
 
 fun Double.roundToNearestDecimal(): String {
     val df = DecimalFormat("0.00")
+    df.roundingMode = RoundingMode.HALF_EVEN
+    return df.format(this)
+}
+fun Double.roundToNearestSingleDecimal(): String {
+    val df = DecimalFormat("0.0")
     df.roundingMode = RoundingMode.HALF_EVEN
     return df.format(this)
 }

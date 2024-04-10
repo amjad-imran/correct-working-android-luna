@@ -19,36 +19,16 @@ constructor(
 
     fun getUserActivityActions(connectedDevice: ColorFitDevice): UserActivityDataActions? {
         when (watchesSdk.getWatchType(connectedDevice)) {
-            SDKWatchType.SDK_CF_PRO -> {
 
 
-            }
-            SDKWatchType.SDK_QUBE -> {
-
-            }
-            SDKWatchType.SDK_EVOLVE -> {
-
-
-            }
-            SDKWatchType.SDK_HYBRID -> {
-
-
-            }
-            SDKWatchType.SDK_NAV_PLUS -> {
-
-
-            }
             SDKWatchType.SDK_ZH->{
                 zhUserActivityDataActions.init()
                 zhUserActivityDataActions.attachCallbacks()
                 CommonGlobals.userActivityDataActions = zhUserActivityDataActions
-                AppLogs.sendAppLogs("ZH Sdk watch type")
+                //AppLogs.sendAppLogs("ZH Sdk watch type")
 
             }
-            SDKWatchType.SDK_RYEEX->{
 
-
-            }
 
         }
         return CommonGlobals.userActivityDataActions

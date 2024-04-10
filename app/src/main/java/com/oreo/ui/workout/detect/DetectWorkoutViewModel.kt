@@ -17,7 +17,6 @@ import com.noisefit_commans.ui.getParseList
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.OAddWorkout
 import com.oreo.data.repository.abstraction.OreoSyncRepository
@@ -26,9 +25,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.time.Instant
-import java.time.ZoneId
-import java.time.temporal.ChronoUnit
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -171,7 +167,7 @@ constructor(
         }
     }
 
-    fun addWorkout(data: OreoAutoSportData, onAddSuccess: () -> Unit) {
+    fun addWorkout(data: OreoAutoSportData, onAddSuccess: (id: String) -> Unit) {
         val addWorkout = OAddWorkout().apply {
             duration = TimeUnit.SECONDS.toMinutes(data.duration.toLong()).toInt()
             val endTime = DateFormats.addMinuteToTimeStamp(data.startTime, duration)
@@ -268,8 +264,7 @@ constructor(
                             sessionManager.saveSportsActivities(listOf(sportObj))
 
                             delay(100)
-
-                            onAddSuccess.invoke()
+                            it.id?.let { it1 -> onAddSuccess.invoke(it1) }
                         }
                     }
                 }

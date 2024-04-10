@@ -41,7 +41,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PairDeviceViewModel @Inject constructor(
     private val deviceRepository: DeviceRepository,
-    private val localDataStore: DataStoredInterface,
+    val localDataStore: DataStoredInterface,
     private val authRepository: AuthenticationRepository,
     private val downloadRepository: DownloadRepository,
     private val userRepository: UserRepository,
@@ -200,6 +200,8 @@ class PairDeviceViewModel @Inject constructor(
 
                             saveColorFitDevice(colorFitDevice!!)
 
+                            ringDataStore.setUpdateUserDeviceStatus(true)
+
                             _deviceSetupSuccess.postValue(Event(true))
 
 
@@ -240,33 +242,7 @@ class PairDeviceViewModel @Inject constructor(
         tempColorFitDevice = colorFitDevice
         val requestObject = JsonObject().apply {
             addProperty("version", 1)
-            if (colorFitDevice.deviceType == DeviceType.NOISEFIT_ACTIVE_OTA.deviceType) {
-                addProperty("firmware_id", 7252/*WatchInfoGlobals.firmwareDeviceId*/)
-                addProperty("device_type", "noisefit_active"/*colorFitDevice.deviceType*/)
-            } else if (colorFitDevice.deviceType == DeviceType.NOISE_EVOLVE_2.deviceType) {
-                addProperty("version", version)
-                addProperty("isOTARequired", true)
-                addProperty("firmware_id", WatchInfoGlobals.EVOLVE_2_FIRMWARE_CONST_VERSION)
-                addProperty("device_type", DeviceType.NOISE_EVOLVE_2.deviceType)
-            } else if (colorFitDevice.deviceType == DeviceType.NOISE_EVOLVE_2_PLAY.deviceType) {
-                addProperty("version", version)
-                addProperty("isOTARequired", true)
-                addProperty("firmware_id", WatchInfoGlobals.EVOLVE_PLAY_FIRMWARE_CONST_VERSION)
-                addProperty("device_type", DeviceType.NOISE_EVOLVE_2_PLAY.deviceType)
-            } else if (colorFitDevice.deviceType == DeviceType.COLORFIT_PULSE_2.deviceType) {
-                addProperty("version", version)
-                addProperty("isOTARequired", true)
-                addProperty("firmware_id", WatchInfoGlobals.PULSE_2_FIRMWARE_CONST_VERSION)
-                addProperty("device_type", DeviceType.COLORFIT_PULSE_2.deviceType)
-            } else if (colorFitDevice.deviceType == DeviceType.COLORFIT_PULSE_2_BUZZ.deviceType) {
-                addProperty("version", version)
-                addProperty("isOTARequired", true)
-                addProperty("firmware_id", WatchInfoGlobals.PULSE_2_FIRMWARE_CONST_VERSION)
-                addProperty("device_type", DeviceType.COLORFIT_PULSE_2_BUZZ.deviceType)
-            } else {
-                addProperty("firmware_id", 7375/*WatchInfoGlobals.firmwareDeviceId*/)
-                addProperty("device_type", "noisefit_agile"/*colorFitDevice.deviceType*/)
-            }
+
             addProperty("platform", "android")
         }
 

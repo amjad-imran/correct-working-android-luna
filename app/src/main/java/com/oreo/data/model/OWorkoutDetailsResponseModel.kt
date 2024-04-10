@@ -1,6 +1,7 @@
 package com.oreo.data.model
 
 import com.google.gson.annotations.SerializedName
+import com.noisefit_commans.utils.StringUtils.capitalizeWords
 
 data class OWorkoutDetailsResponseModel(
     val id: String,
@@ -27,8 +28,30 @@ data class OWorkoutDetailsResponseModel(
     val hrAvg: Int? = null,
     @SerializedName("hr_low")
     val hrLow: Int? = null,
+    @SerializedName("hr_max")
+    val hrMax: Int? = null,
+    @SerializedName("distance")
+    val distance: Long? = null,
+    @SerializedName("cadence")
+    val cadence: Long? = null,
+    @SerializedName("recovery_time")
+    val recoveryTime: Long? = null,
     @SerializedName("icon_url")
     val iconUrl: String? = null,
+    @SerializedName("nudge")
+    val nudge: WorkoutNudge? = null,
     @SerializedName("daytime_movement")
     val movement: List<Int>?=null//change key as per server response
+){
+    fun getFormattedActivityName(): String {
+        val activityName =  activityType ?: return ""
+        val actNameTemp = activityName.replace("_", " ")
+        return actNameTemp.capitalizeWords()
+    }
+}
+data class WorkoutNudge(
+    @SerializedName("title")
+    val title: String? = null,
+    @SerializedName("description")
+    val description: String? = null,
 )

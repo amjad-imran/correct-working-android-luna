@@ -65,8 +65,9 @@
                 lineChart:xLineColor="#80FFFFFF"
                 lineChart:xMax="130"
                 lineChart:xMin="0"
+                lineChart:xTextSize="16sp"
+                lineChart:xTextSize2="12sp"
                 lineChart:xTextColor="#FFFFFF"
-                lineChart:xTextSize="12sp"
                 lineChart:yLineColor="#00FFFFFF"
                 lineChart:yTextSize="12sp" />
 
@@ -141,7 +142,7 @@
 
                     <include
                         android:id="@+id/lytHeartRate"
-                        layout="@layout/oreo_layout_sleep_movement"
+                        layout="@layout/oreo_layout_sleep_details_movement"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -158,7 +159,7 @@
 
                     <include
                         android:id="@+id/lytHRVariability"
-                        layout="@layout/oreo_layout_sleep_movement"
+                        layout="@layout/oreo_layout_sleep_details_movement"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -178,6 +179,7 @@
                         layout="@layout/oreo_layout_sleep_movement"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/divider5" />

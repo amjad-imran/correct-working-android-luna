@@ -4,7 +4,7 @@ import com.noisefit_commans.data.model.OreoAutoSportData
 
 interface OreoAutoSportDataSource {
 
-    suspend fun getAllNotAcceptingData(): List<OreoAutoSportData>?
+    suspend fun getAllNotAcceptingData(startTimeStamp: Long): List<OreoAutoSportData>?
 
     suspend fun getWorkoutByTime(timeStamp: Long): OreoAutoSportData?
 

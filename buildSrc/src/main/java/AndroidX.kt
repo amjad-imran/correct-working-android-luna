@@ -7,7 +7,7 @@ object AndroidX {
     private const val appCompatVersion = "1.3.0"
     const val appCompat = "androidx.appcompat:appcompat:$appCompatVersion"
 
-    private const val lifecycleVmKtxVersion = "2.4.1"
+    private const val lifecycleVmKtxVersion = "2.6.1"
     const val lifecycleVmKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVmKtxVersion"
     const val livedataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVmKtxVersion"
 
@@ -45,7 +45,7 @@ object AndroidX {
     const val hiltLifecycleViewModel =
         "androidx.hilt:hilt-lifecycle-viewmodel:$hiltViewModelVersion"
 
-    private const val fragmentKtxVersion = "1.5.2"
+    private const val fragmentKtxVersion = "1.5.6"
     const val fragmentKtx = "androidx.fragment:fragment-ktx:$fragmentKtxVersion"
 
     private const val constraintLayoutVersion = "2.1.3"

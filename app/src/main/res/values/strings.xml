@@ -79,6 +79,7 @@
     <string name="text_freqency">Frequency</string>
     <string name="text_time">Time</string>
     <string name="distance">Distance</string>
+    <string name="total_distance">Total distance</string>
     <string name="steps">Steps</string>
     <string name="calories">Calories</string>
     <string name="text_done">Done</string>
@@ -107,7 +108,7 @@
     <string name="text_updating_ring_fw">Updating your Ring</string>
     <string name="text_updating_firmware_message_oreo">Please wait while we are updating your ring.</string>
     <string name="text_check_for_update">Check for Updates</string>
-    <string name="text_downloading_firmware">Downloading Firmware</string>
+    <string name="text_downloading_firmware">Downloading firmware</string>
     <string name="text_downloading_firmware_wait">Please wait while we are downloading Firmware</string>
     <string name="text_aerobic">Aerobic</string>
     <string name="text_extreme_workout">Extreme</string>
@@ -757,6 +758,7 @@
 
     <string name="text_lowest_hr">Lowest HR</string>
     <string name="text_max_hr">Max HR</string>
+    <string name="text_min_hr">Min HR</string>
     <string name="text_readiness">Readiness</string>
     <string name="text_activity_o">Activity</string>
     <string name="text_goal_progress">Goal progress</string>
@@ -836,6 +838,7 @@
     <string name="text_avg">Avg</string>
     <string name="text_distance_split">Distance split</string>
     <string name="text_time_km">Time/km</string>
+    <string name="text_km">km</string>
     <string name="text_hr">hr</string>
     <string name="text_pace">Pace</string>
     <string name="text_set_your_target_calorie_goal">Set your target calorie goal</string>
@@ -870,7 +873,7 @@
     <string name="text_view_community_guidelines">View community guidelines</string>
     <string name="text_remind_later">Remind later</string>
     <string name="text_app_update_msg">We have brought something new ✨, Update the Luna Ring app now to experience the latest features!</string>
-    <string name="text_noisefit_update">Luna Ring Update</string>
+    <string name="text_noisefit_update">App update available</string>
     <string name="text_favourite_watchface">favourite watchface</string>
     <string name="text_create_your_own">Create your own</string>
     <string name="text_new">New</string>
@@ -898,7 +901,9 @@
     <string name="text_luna_cues" tools:ignore="ExtraTranslation">Luna cues</string>
     <string name="text_check_for_an_update">Check for an update</string>
     <string name="text_what_s_new">What’s new?</string>
+    <string name="text_update_available">Update available</string>
     <string name="text_new_update_available">New update available</string>
+    <string name="text_no_update_available">No update available</string>
     <string name="text_battery_low_ring">Your ring should have more than %d\%% battery to proceed further. Please charge your ring.</string>
     <string name="text_ring_battery_low">Low battery on ring</string>
     <string name="text_your_ring_is_up_to_date">Your ring is up to date</string>
@@ -1023,4 +1028,51 @@
     <string name="text_wear_ring_for">Wear your ring consistently for 15 days to see deviation in your skin temperature from your personalised baseline.</string>
     <string name="text_intensity_not_capture">Could not capture intensity data for this workout because of either an improper fit of the ring or lack of movement.</string>
     <string name="text_ring_lo_battert_stop_message">Your workout has ended because your ring battery is low. Make sure your ring is charged and on your finger, and within range of your device.</string>
+    <string name="text_deep_sleep">Deep sleep</string>
+    <string name="text_light_sleep">Light sleep</string>
+    <string name="text_rem_sleep">REM sleep</string>
+    <string name="text_awake">Awake</string>
+    <string name="text_movement_analysis">Movement analysis</string>
+    <string name="text_average_blood_oxygen">Average blood oxygen</string>
+    <string name="text_b_o_95_less">Your average blood oxygen level was low last night. This may be because of stuffy nose, sleeping environment, some underlying conditions like allergy or your overall health.</string>
+    <string name="text_bo_0_2">Your blood oxygen levels have shown consistency, indicating no breathing disturbances during sleep.</string>
+    <string name="text_bo_3_5">Your blood oxygen levels had some variations. This may be because of occasional breathing disturbances during sleep.</string>
+    <string name="text_bo_else">Your blood oxygen levels had several variations. This may be because of significant breathing disturbances during sleep.</string>
+    <string name="text_active_duration">Active duration</string>
+    <string name="text_activities">Activities</string>
+    <string name="text_maximum">Maximum</string>
+    <string name="text_ms">ms</string>
+    <string name="text_remind_me_later">Remind me later</string>
+    <string name="text_update_my_app">Update my app</string>
+    <string name="text_update_my_ring">Update my ring</string>
+    <string name="text_ring_update_alert_message">Please keep your ring and phone close to each other during the firmware update. The update will take a couple of minutes.</string>
+    <string name="text_updating_firmware">Updating firmware</string>
+    <string name="text_contributor_value_missing">Contributor value missing</string>
+    <string name="text_this_can_be_because_there_s_not_enough_data_or_you_haven_t_worn_your_ring">This can be because there’s not enough data, or you haven’t worn your ring.</string>
+    <string name="text_updating_ring">Updating ring</string>
+    <string name="text_firmware_update_failed">Firmware update failed</string>
+    <string name="text_update_failed_message">Make sure that your ring and phone are kept close to each other during the update process to avoid any issues.</string>
+    <string name="text_checking_for_firmware_update">Checking for firmware update</string>
+    <string name="text_checking_fw_message">Keep your Luna ring close to your phone, until the update is complete</string>
+    <string name="text_device_up_to_date">Device up to date</string>
+    <string name="text_fw_up_to_date">Your ring is using the latest firmware and is ready to go</string>
+    <string name="text_setting_up_your_device">Setting up your device</string>
+    <string name="text_setting_up_device">Keep your Luna ring close to your phone, until the update is complete</string>
+    <string name="text_all_done_">All done!</string>
+    <string name="text_all_done_message">Get ready to embark on a journey of self-discovery and wellness</string>
+    <string name="text_update_available_message">Update to the latest firmware version for new and improved features</string>
+    <string name="text_low_battery_alert">Low battery alert</string>
+    <string name="text_low_battery_message">Updating firmware requires your ring to have at least 20% battery. Please charge your device and try again.</string>
+    <string name="text_your_ring_is_evolving">Your ring is evolving</string>
+    <string name="text_ring_successfully_updated">Ring successfully updated</string>
+    <string name="text_okay">Okay</string>
+    <string name="text_not_available">Not Available</string>
+    <string name="text_nap_scores_will_be_available_once_after_tonight_s_sleep_cycle_completes">Nap Scores will be available once after tonight’s sleep cycle completes</string>
+    <string name="text_late_naps_effect">Late naps impair next-day sleep and readiness.</string>
+    <string name="text_workout_detail" tools:ignore="ExtraTranslation">Workout details</string>
+    <string name="text_cadence" tools:ignore="ExtraTranslation">Cadence</string>
+    <string name="text_recovery_time" tools:ignore="ExtraTranslation">Recovery Time</string>
+    <string name="text_training_effects" tools:ignore="ExtraTranslation">Training Effects</string>
+
+
 </resources>

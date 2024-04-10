@@ -165,19 +165,7 @@ object FileLogsUtils {
     ): Uri? {
         var path = ""
         colorFitDevice?.deviceType?.let {
-            path = if (it == DeviceType.COLORFIT_2.deviceType ||
-                it == DeviceType.COLORFIT_PRO_2.deviceType ||
-                it == DeviceType.COLORFIT_PRO_3.deviceType ||
-                it == DeviceType.COLORFIT_PRO_2_OXY.deviceType ||
-                it == DeviceType.NOISEFIT_ACTIVE.deviceType ||
-                it == DeviceType.COLORFIT_MIGHTY.deviceType ||
-                it == DeviceType.NOISEFIT_NOVA.deviceType ||
-                it == DeviceType.NOISEFIT_AGILE.deviceType
-            ) {
-                "$LogsFolder/$logFileName"
-            } else {
-                "$LogsFolder/$LogsTxtFile"
-            }
+            path =  "$LogsFolder/$LogsTxtFile"
         }
 
         return getUri(path, context)
@@ -194,7 +182,29 @@ object FileLogsUtils {
         return getUri(path, context)
     }
 
-    private fun getUri(path: String, context: Context): Uri? {
+    fun geFirmwareLogsUri(path: String, context: Context):Uri?{
+        val file = getFileDirect(path)
+        if (!file.exists()) {
+            return null
+        }
+        try {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                context.let {
+                    return FileProvider.getUriForFile(
+                        it,
+                        AppLogs.FILE_PROVIDER,
+                        file
+                    )
+                }
+            } else {
+                Uri.fromFile(file)
+            }
+        } catch (exp: Exception) {
+            return null
+        }
+    }
+
+    fun getUri(path: String, context: Context): Uri? {
         val file = getFile(path, context)
         if (!file.exists()) {
             return null
@@ -242,6 +252,21 @@ object FileLogsUtils {
         return file
     }
 
+    fun getFromFilesDir(logFilePath: String, context: Context): File {
+        val file = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            File(context.getExternalFilesDir(null)?.absolutePath, logFilePath)
+        } else {
+            File(Environment.getExternalStorageDirectory().toString(), logFilePath)
+
+        }
+//        if (!file.exists()) {
+//            file.mkdirs()
+//
+//        }
+
+        return file
+    }
+
     fun getFileDirect(logFilePath: String): File {
         val file =
             File(logFilePath)
@@ -254,19 +279,7 @@ object FileLogsUtils {
     ): File? {
         var path = ""
         colorFitDevice?.deviceType?.let {
-            path = if (it == DeviceType.COLORFIT_2.deviceType ||
-                it == DeviceType.COLORFIT_PRO_2.deviceType ||
-                it == DeviceType.COLORFIT_PRO_3.deviceType ||
-                it == DeviceType.COLORFIT_PRO_2_OXY.deviceType ||
-                it == DeviceType.NOISEFIT_ACTIVE.deviceType ||
-                it == DeviceType.COLORFIT_MIGHTY.deviceType ||
-                it == DeviceType.NOISEFIT_NOVA.deviceType ||
-                it == DeviceType.NOISEFIT_AGILE.deviceType
-            ) {
-                "$LogsFolder/$logFileName"
-            } else {
-                "$LogsFolder/$LogsTxtFile"
-            }
+            path = "$LogsFolder/$LogsTxtFile"
         }
 
         return getFile(path, context)

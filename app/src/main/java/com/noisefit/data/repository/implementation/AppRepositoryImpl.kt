@@ -10,6 +10,7 @@ import com.noisefit_commans.data.response.VersionCheckResponse
 import com.noisefit.data.repository.abstraction.AppRepository
 import com.noisefit.data.safeApiCallFlow
 import com.noisefit.data.safeCacheCall
+import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.implementation.OreoAutoSportDataImpl
@@ -27,6 +28,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 
 const val DELETE_DB_DAYS = 5
+
 class AppRepositoryImpl(
     private val remoteDataSource: NetworkService,
     private val heartRateDataSource: OreoHeartRateDataImpl,
@@ -46,8 +48,7 @@ class AppRepositoryImpl(
     override suspend fun checkAppVersion(request: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<VersionCheckResponse>>> {
         return safeApiCallFlow(dispatcher) {
             remoteDataSource.checkAppVersion(
-                "${BuildConfig.BASE_URL_NEW}/core/ring/app_version",
-                request
+                "${BuildConfig.BASE_URL_NEW}/core/ring/app_version", request
             )
         }
     }

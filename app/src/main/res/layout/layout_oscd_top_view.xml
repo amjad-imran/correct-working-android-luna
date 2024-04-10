@@ -60,7 +60,7 @@
 
         <include
             android:id="@+id/lytLabelValue2"
-            layout="@layout/oreo_layout_view_with_bpm"
+            layout="@layout/oreo_layout_view_with_bpm_small"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/side_margin"
@@ -102,6 +102,7 @@
             lineChart:fillColorStart="#80d6a700"
             lineChart:gridColor="@color/white_12"
             lineChart:hCount="11"
+            lineChart:xTextSize2="12sp"
             lineChart:showAvgValue="true"
             lineChart:innerCircleColor="#ffffff"
             lineChart:innerCircleRadius="4dp"

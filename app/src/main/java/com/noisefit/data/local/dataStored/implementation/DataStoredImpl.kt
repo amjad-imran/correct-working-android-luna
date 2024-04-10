@@ -123,7 +123,7 @@ private const val ENABLE_BG_PERMISSION = "ENABLE_BG_PERMISSION"
 private const val EDIT_DASHBOARD_LIST = "EDIT_DASHBOARD_LIST1"
 private const val END_GAME_LIST = "END_GAME_LIST"
 private const val END_GAME_VALUE = "END_GAME_VALUE"
-private const val DEVICE_SETUP_STATUS = "DEVICE_SETUP_STATUS"
+private const val DEVICE_SETUP_STATUS_NEW = "DEVICE_SETUP_STATUS_NEW"
 private const val NPL_WINS_COUNT = "NPL_WINS_COUNT"
 
 private const val LOCAL_USER_DATA = "LOCAL_USER_DATA"
@@ -194,6 +194,12 @@ private const val BATTERY_DASH_ALERT = "BATTERY_DASH_ALERT"
 private const val SLEEP_NOTIFICATION = "SLEEP_NOTIFICATION"
 private const val READINESS_NOTIFICATION = "READINESS_NOTIFICATION"
 
+
+private const val APP_VERSION_NEW = "APP_VERSION_NEW"
+private const val APP_VERSION_NEW_TIMESTAMP = "APP_VERSION_NEW_TIMESTAMP"
+private const val APP_VERSION_REMIND = "APP_VERSION_REMIND"
+private const val APP_VERSION_CURRENT = "APP_VERSION_CURRENT"
+
 private const val GFIT_USER_SYNC_KEY = "GFIT_USER_SYNC_KEY"
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -203,6 +209,58 @@ class DataStoredImpl
 @Inject constructor(
     private val gson: Gson, private val mPrefs: SharedPreferences
 ) : DataStoredInterface {
+
+    override fun saveNewAppVersion(newAppData: String, currentVersion: Int) {
+        mPrefs.edit()?.putString(APP_VERSION_NEW, newAppData)?.commit()
+        mPrefs.edit()?.putInt(APP_VERSION_CURRENT, currentVersion)?.commit()
+        saveAppVersionCheckTimeStamp()
+    }
+
+    override fun saveAppVersionCheckTimeStamp() {
+        mPrefs.edit()?.putLong(APP_VERSION_NEW_TIMESTAMP, System.currentTimeMillis())?.commit()
+    }
+
+    override fun getAppVersionCheckTimeStamp(): Long {
+        return mPrefs.getLong(APP_VERSION_NEW_TIMESTAMP, 0)
+    }
+
+    /**
+     * update data
+     * check version
+     * timestamp of server check
+     */
+    override fun getNewAppVersion(): Triple<String, Int, Long>? {
+        val gson = mPrefs.getString(APP_VERSION_NEW, null)
+        return if (gson == null) {
+            null
+        } else {
+            val timestamp = mPrefs.getLong(APP_VERSION_NEW_TIMESTAMP, 0L)
+            Triple(
+                gson,
+                mPrefs.getInt(APP_VERSION_CURRENT, -1),
+                timestamp
+            )
+        }
+    }
+
+    override fun cleaNewAppVersion() {
+        mPrefs.edit()?.remove(APP_VERSION_NEW)?.commit()
+        mPrefs.edit()?.remove(APP_VERSION_CURRENT)?.commit()
+        mPrefs.edit()?.remove(APP_VERSION_REMIND)?.commit()
+        mPrefs.edit()?.remove(APP_VERSION_NEW_TIMESTAMP)?.commit()
+    }
+
+    override fun saveAppRemindDate() {
+        mPrefs.edit()?.putString(APP_VERSION_REMIND, DateFormats.getCurrentDate())?.commit()
+    }
+
+    override fun getAppRemindDate(): String? {
+        return mPrefs.getString(APP_VERSION_REMIND, null)
+    }
+
+    override fun isNewAppVersionAvailable(): Boolean {
+        return getNewAppVersion()?.first != null
+    }
 
     override fun getReadinessNotificationTimeStamp(): Long {
         return mPrefs.getLong(READINESS_NOTIFICATION, 0)
@@ -445,12 +503,12 @@ class DataStoredImpl
         mPrefs.edit().remove(RANDOM_WATCH_FACE_SYNC_TIME).apply()
     }
 
-    override fun setDeviceSetupPendingStatus(status: Boolean) {
-        mPrefs.edit()?.putBoolean(DEVICE_SETUP_STATUS, status)?.apply()
+    override fun setDeviceSetupStatus(status: Int) {
+        mPrefs.edit()?.putInt(DEVICE_SETUP_STATUS_NEW, status)?.apply()
     }
 
-    override fun getDeviceSetupPendingStatus(): Boolean {
-        return mPrefs.getBoolean(DEVICE_SETUP_STATUS, false)
+    override fun getDeviceSetupStatus(): Int {
+        return mPrefs.getInt(DEVICE_SETUP_STATUS_NEW, 0)
     }
 
     override fun setBatteryOptimisationStatus(status: Boolean) {
@@ -1073,35 +1131,35 @@ class DataStoredImpl
     }
 
     override fun clearConnectedDevice() {
-        WatchInfoGlobals.hideBleCallingDialogForThisSession = false
-        mPrefs.edit().remove(WF_RATING_KEY).commit()
-        mPrefs.edit().remove(NOISE_FIT_DEVICE).commit()
-        mPrefs.edit().remove(DIY_WALK_AROUND_KEY).commit()
-        mPrefs.edit().remove(SLEEP_LOCAL_NOTIFICATION_KEY).commit()
-        mPrefs.edit().remove(USER_LOCATION_MAPPED_KEY).commit()
-        mPrefs.edit().remove(DEVICE_TOKEN).commit()
-        mPrefs.edit().remove(LAST_SYNC).commit()
-        mPrefs.edit().remove(ADDED_RECOMMENDED_NOTIFICATION).commit()
-        mPrefs.edit().remove(WATCH_FACE_CATEGORY_RESPONSE).commit()
-        mPrefs.edit().remove(LAST_WATCHFACE).commit()
-        mPrefs.edit().remove(LAST_SYNC_WEATHER).commit()
-        mPrefs.edit().remove(DEVICE_FEATURE_SYNC_TIME).commit()
-        mPrefs.edit().remove(STEPS_LAST_SYNC_WITH_SERVER).commit()
-        mPrefs.edit().remove(DEVICE_FEATURES).commit()
-        mPrefs.edit().remove(EDIT_DASHBOARD_LIST).commit()
-        mPrefs.edit().remove(PROMITONAL_BANNER_STATE).commit()
-        mPrefs.edit().remove(WATCH_UPDATE_LOGS).apply()
-        mPrefs.edit().remove(BLUETOOTH_ENABLE_DIALOG).apply()
-        mPrefs.edit().remove(LAST_INFO_FETCH_TIME).apply()
-        mPrefs.edit().remove(BATTERY_NOTIFICATION_KEY).apply()
-        mPrefs.edit().remove(CHARGE_O_NIGHT_NOTIFICATION_KEY).apply()
-        mPrefs.edit().remove(BATTERY_NOTIFICATION_LAST_STATE_KEY).apply()
-        mPrefs.edit().remove(AGPS_STATE_KEY).apply()
-        clearLastWatchFace()
-        clearRandomWatchFaceListResponse()
-        clearNotificationAppList()
-        setNotificationAlertStatus(false)
-        setWarrantyStatus(-1)
+        mPrefs.edit().remove(DEVICE_SETUP_STATUS_NEW).apply()
+        /*
+         WatchInfoGlobals.hideBleCallingDialogForThisSession = false
+         mPrefs.edit().remove(WF_RATING_KEY).commit()
+         mPrefs.edit().remove(SLEEP_LOCAL_NOTIFICATION_KEY).commit()
+         mPrefs.edit().remove(USER_LOCATION_MAPPED_KEY).commit()
+         mPrefs.edit().remove(DEVICE_TOKEN).commit()
+         mPrefs.edit().remove(LAST_SYNC).commit()
+         mPrefs.edit().remove(ADDED_RECOMMENDED_NOTIFICATION).commit()
+         mPrefs.edit().remove(WATCH_FACE_CATEGORY_RESPONSE).commit()
+         mPrefs.edit().remove(LAST_WATCHFACE).commit()
+         mPrefs.edit().remove(LAST_SYNC_WEATHER).commit()
+         mPrefs.edit().remove(DEVICE_FEATURE_SYNC_TIME).commit()
+         mPrefs.edit().remove(STEPS_LAST_SYNC_WITH_SERVER).commit()
+         mPrefs.edit().remove(DEVICE_FEATURES).commit()
+         mPrefs.edit().remove(EDIT_DASHBOARD_LIST).commit()
+         mPrefs.edit().remove(PROMITONAL_BANNER_STATE).commit()
+         mPrefs.edit().remove(WATCH_UPDATE_LOGS).apply()
+         mPrefs.edit().remove(BLUETOOTH_ENABLE_DIALOG).apply()
+         mPrefs.edit().remove(LAST_INFO_FETCH_TIME).apply()
+         mPrefs.edit().remove(BATTERY_NOTIFICATION_KEY).apply()
+         mPrefs.edit().remove(CHARGE_O_NIGHT_NOTIFICATION_KEY).apply()
+         mPrefs.edit().remove(BATTERY_NOTIFICATION_LAST_STATE_KEY).apply()
+         mPrefs.edit().remove(AGPS_STATE_KEY).apply()
+         clearLastWatchFace()
+         clearRandomWatchFaceListResponse()
+         clearNotificationAppList()
+         setNotificationAlertStatus(false)
+         setWarrantyStatus(-1)*/
     }
 
     override fun getLastPeriodicDataSyncTime(): Long {

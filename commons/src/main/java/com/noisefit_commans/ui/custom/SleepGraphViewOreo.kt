@@ -3,8 +3,12 @@ package com.noisefit_commans.ui.custom
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
+import android.os.Handler
+import android.os.Looper
+import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewConfiguration
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.noisefit_commans.R
@@ -12,7 +16,12 @@ import com.noisefit_commans.data.model.CountCardData
 import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.VibrationUtils
+import org.joda.time.Duration
+import org.joda.time.LocalDateTime
+import org.joda.time.format.DateTimeFormat
 import java.util.Calendar
 import java.util.Date
 
@@ -28,8 +37,21 @@ class SleepGraphViewOreo(var mContext: Context) : View(
     private lateinit var deepPaint: Paint
     private lateinit var lightPaint: Paint
     private lateinit var awakePaint: Paint
+
+    private lateinit var remPaintInteracting: Paint
+    private lateinit var deepPaintInteracting: Paint
+    private lateinit var lightPaintInteracting: Paint
+    private lateinit var awakePaintInteracting: Paint
+
+    var overlayLinePaint: Paint
+    var edgeTextBackPaint: Paint
+
+    var lastSelectedEntry: ToolTipEntry? = null
+
+
     private var mTextPaint: Paint
     private var mTextPaintEdge: Paint
+    private var vibrationUtils: VibrationUtils? = null
 
     //    private var toolTipPaint: Paint = Paint()
 //    private var toolTipTextPaint: Paint
@@ -37,6 +59,12 @@ class SleepGraphViewOreo(var mContext: Context) : View(
     private var sleepArray: ArrayList<SleepData.SleepDataBreakup>? = ArrayList()
     private var tooltipEntryArray: ArrayList<ToolTipEntry>? = ArrayList()
 //    private var toolEntry: ToolTipEntry? = null
+
+    private var interactiveMode = true
+    private var isInteracting = false
+    private var listener: SleepStageAction? = null
+    private var touchX: Float? = null
+
 
     var endPadding = 0.0f
 
@@ -46,73 +74,138 @@ class SleepGraphViewOreo(var mContext: Context) : View(
 
     var previousRect: RectF? = null
 
+    init {
+//        toolTipPaint.color = ContextCompat.getColor(mContext, R.color.white)
+//        toolTipPaint.style = Paint.Style.FILL
+//        toolTipTextPaint = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
+//        toolTipTextPaint.color = ContextCompat.getColor(mContext, R.color.blood_oxygen_color)
+//        toolTipTextPaint.textSize = pxFromDp( 10f)
+//        toolTipTextPaint.textAlign = Paint.Align.CENTER
+        val fontGilroy = ResourcesCompat.getFont(this.context, R.font.gilroy_medium)
+
+        mPaint = Paint()
+        mPaint.isAntiAlias = true
+        mPaint.style = Paint.Style.STROKE
+        mPaint.color = Color.parseColor("#1effffff")
+        mPaint.strokeWidth = pxFromDp(1f)
+        mPaint2 = Paint()
+        mPaint2.isAntiAlias = true
+        mPaint2.style = Paint.Style.STROKE
+        mPaint2.color = ContextCompat.getColor(mContext, R.color.sleep_graph_line)
+        mPaint2.strokeWidth = pxFromDp(2f)
+
+        mTextPaint = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
+        mTextPaint.color = ContextCompat.getColor(mContext, R.color.white_64)
+        mTextPaint.textSize = pxFromDp(10f)
+        mTextPaint.setTypeface(fontGilroy)
+
+        outerPaint = Paint()
+        outerPaint.style = Paint.Style.FILL
+        outerPaint.color = Color.TRANSPARENT
+
+
+        mTextPaintEdge = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
+        mTextPaintEdge.color = ContextCompat.getColor(mContext, R.color.white)
+        mTextPaintEdge.setTypeface(fontGilroy)
+        mTextPaintEdge.textSize = pxFromDp(10f)
+
+        overlayLinePaint = Paint()
+        overlayLinePaint.color = Color.parseColor("#bad4f2")
+
+        edgeTextBackPaint = Paint()
+        edgeTextBackPaint.color = Color.parseColor("#394653")
+
+    }
+
+
     @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        previousRect = null
-
         val sectionHeight = height.toFloat() / 5
+        drawBackGrid(canvas, sectionHeight)
+        drawYAxis(canvas, sectionHeight)
+        drawOverlay(canvas, sectionHeight)
+        drawContent(canvas, sectionHeight)
+    }
 
-        val textXPos = (width.toFloat() - endPadding + pxFromDp(mContext, 14f))
+    private fun drawOverlay(canvas: Canvas, sectionHeight: Float) {
+        if (!isInteracting) return
+        if (touchX != null) {
+            val textXPos = (width.toFloat() - endPadding)
+
+            val calculatedTouchX = if (touchX!! < 0) {
+                0f
+            } else if (touchX!! > textXPos) {
+                textXPos
+            } else {
+                touchX!!
+            }
+
+            //if (touchX!! > 0 && touchX!! < textXPos) {
+            val rectF = RectF()
+            rectF.left = calculatedTouchX!! - 2
+            rectF.right = calculatedTouchX!! + 2
+            rectF.top = 0f
+            rectF.bottom = sectionHeight * 4
+
+            canvas.drawRect(rectF, overlayLinePaint)
+
+            if (listener != null && calculatedTouchX != null) {
+
+                if (tooltipEntryArray != null && tooltipEntryArray?.size!! > 0) {
+
+                    val x = calculatedTouchX!!.toFloat()
+
+                    val entry =
+                        tooltipEntryArray!!.filter { it1 -> x > it1.x1 && x < it1.x2 }
+                    if (entry.isNotEmpty()) {
+
+                        if (lastSelectedEntry == null || lastSelectedEntry != entry.first()) {
+                            lastSelectedEntry = entry.first()
+                            listener?.onValueSelected(entry.first())
+
+                            vibrationUtils?.vibrate(HAPTIC_VIBRATION)
+
+
+                            /*this.performHapticFeedback(
+                                HapticFeedbackConstants.LONG_PRESS
+                            )*/
+                            postInvalidate()
+                        }
+
+                        //sleepGraphInteractionListener?.onSleepGraphSelected(entry[0])
+                    } else {
+                        //sleepGraphInteractionListener?.onSleepGraphSelected(null)
+                    }
+                }
+
+
+            }
+
+            /* if (listener != null) {
+                 val position = value.first as Int
+                 val selectedValue = value.second as Int
+                 if (lastSentValuePos == null) {
+                     listener?.onValueSelected(selectedValue, position)
+                     lastSentValuePos = position
+                     performHapticFeedbackCustom(selectedValue)
+                 } else {
+                     if (lastSentValuePos != position) {
+                         listener?.onValueSelected(selectedValue, position)
+                         lastSentValuePos = position
+                         performHapticFeedbackCustom(selectedValue)
+                     }
+                 }
+             }*/
+            //}
+        }
+    }
+
+    private fun drawContent(canvas: Canvas, sectionHeight: Float) {
+        previousRect = null
         tooltipEntryArray = ArrayList()
-        val textPosOffset = pxFromDp(mContext, 10f)
-
-        if (!isDisable) {
-            canvas.drawText("Awake", textXPos, (sectionHeight * 1 - textPosOffset), mTextPaint)
-            canvas.drawText("Rem", textXPos, (sectionHeight * 2 - textPosOffset), mTextPaint)
-            canvas.drawText("Light", textXPos, (sectionHeight * 3 - textPosOffset), mTextPaint)
-            canvas.drawText("Deep", textXPos, (sectionHeight * 4 - textPosOffset), mTextPaint)
-        }
-
-
-        for (i in 0 until 5) {
-            canvas.drawLine(
-                0f,
-                sectionHeight * i,
-                width.toFloat() - endPadding,
-                sectionHeight * i,
-                mPaint
-            )
-        }
-
 
         if (sleepArray != null && sleepArray!!.size > 0) {
-
-            countCardData?.leftValue?.let { startTime ->
-                canvas.drawText(
-                    DateFormats.formatDate(
-                        startTime,
-                        DateFormats.dateTimeFormat5,
-                        DateFormats.time12Meridian
-                    ).lowercase(),
-                    0f,
-                    (sectionHeight * 5) - pxFromDp(context, 5.0f),
-                    mTextPaintEdge
-                )
-            }
-
-            countCardData?.rightValue?.let { endTime ->
-
-                val text = DateFormats.formatDate(
-                    endTime,
-                    DateFormats.dateTimeFormat5,
-                    DateFormats.time12Meridian
-                )
-                val textWidth = mTextPaintEdge.measureText(text)
-
-
-                canvas.drawText(
-                    DateFormats.formatDate(
-                        endTime,
-                        DateFormats.dateTimeFormat5,
-                        DateFormats.time12Meridian
-                    ).lowercase(),
-                    (width - textWidth - endPadding),
-                    sectionHeight * 5 - pxFromDp(context, 5.0f),
-                    mTextPaintEdge
-                )
-            }
-
 
             var totalDuration = 0
             for (i in sleepArray!!.indices) {
@@ -121,51 +214,73 @@ class SleepGraphViewOreo(var mContext: Context) : View(
             if (totalDuration != 0) {
                 val eachSecondsWidth = (width.toFloat() - endPadding) / totalDuration
 
-                drawMidPoints(
+                drawXAxisTime(
                     canvas,
                     sectionHeight,
                     eachSecondsWidth,
                     countCardData?.leftValue,
                     countCardData?.rightValue
                 )
-                val lineWidth = pxFromDp(mContext, 1f)
+
+                val lineWidth = pxFromDp(1f)
 
                 var start = 0f
                 var end: Float
                 var top = 0f
                 var bottom = 0f
-                val barHeight = pxFromDp(mContext, 16f)
+                val barHeight = pxFromDp(12f)
+
 
                 for (i in sleepArray!!.indices) {
                     var paint: Paint? = null
                     val rowData = sleepArray!![i]
+
+
                     end = start + eachSecondsWidth * rowData.duration
                     if (rowData.sleepType == "deep") {
-                        paint = deepPaint
+                        paint = if (isInteracting) deepPaintInteracting else deepPaint
                         top = sectionHeight * 3 + barHeight / 2
                         bottom = sectionHeight * 4 - barHeight / 2
                     }
                     if (rowData.sleepType == "light") {
-                        paint = lightPaint
+                        paint = if (isInteracting) lightPaintInteracting else lightPaint
                         top = sectionHeight * 2 + barHeight / 2
                         bottom = sectionHeight * 3 - barHeight / 2
                     }
                     if (rowData.sleepType == "rem") {
-                        paint = remPaint
+                        paint = if (isInteracting) remPaintInteracting else remPaint
                         top = sectionHeight * 1 + barHeight / 2
                         bottom = sectionHeight * 2 - barHeight / 2
                     }
                     if (rowData.sleepType == "awake") {
-                        paint = awakePaint
+                        paint = if (isInteracting) awakePaintInteracting else awakePaint
                         top = barHeight / 2
                         bottom = sectionHeight * 1 - barHeight / 2
                     }
+
+                    if (lastSelectedEntry != null) {
+                        if (rowData.startTime.equals(lastSelectedEntry?.startTime, true)
+                            && rowData.endTime.equals(lastSelectedEntry?.endTime, true)
+                        ) {
+                            if (lastSelectedEntry?.type.equals("deep", true)) {
+                                paint = deepPaint
+                            } else if (lastSelectedEntry?.type.equals("light", true)) {
+                                paint = lightPaint
+                            } else if (lastSelectedEntry?.type.equals("rem", true)) {
+                                paint = remPaint
+                            } else if (lastSelectedEntry?.type.equals("awake", true)) {
+                                paint = awakePaint
+                            }
+                        }
+                    }
+
+
                     if (paint != null) {
                         val rectF = RectF(start, top, end + lineWidth, bottom)
                         /* canvas.drawRoundRect(
                              rectF,
-                             pxFromDp(mContext, 4f),
-                             pxFromDp(mContext, 4f),
+                             pxFromDp( 4f),
+                             pxFromDp( 4f),
                              paint
                          )*/
 
@@ -182,7 +297,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                             null
                         }
 
-                        val radius = pxFromDp(mContext, 4f)
+                        val radius = pxFromDp(2f)
                         var topLeftRadius = radius
                         var topRightRadius = radius
                         var bottomRightRadius = radius
@@ -245,45 +360,53 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                                 "deep" -> {
                                     topLeftRadius = 0f
                                     startColor =
-                                        mContext.getColor(R.color.deep_start_oreo)
+                                        if (isInteracting) mContext.getColor(R.color.deep_start_oreo_i) else
+                                            mContext.getColor(R.color.deep_start_oreo)
                                     when (previousElement.sleepType) {
                                         "light" -> {
                                             endColor =
-                                                mContext.getColor(R.color.light_start_oreo)
+                                                if (isInteracting) mContext.getColor(R.color.light_start_oreo_i) else
+                                                    mContext.getColor(R.color.light_start_oreo)
                                         }
 
                                         "rem" -> {
                                             endColor =
-                                                mContext.getColor(R.color.rem_start_oreo)
+                                                if (isInteracting) mContext.getColor(R.color.rem_start_oreo_i) else
+                                                    mContext.getColor(R.color.rem_start_oreo)
                                         }
 
                                         "awake" -> {
                                             endColor =
-                                                mContext.getColor(R.color.awake_start_oreo)
+                                                if (isInteracting) mContext.getColor(R.color.awake_start_oreo_i) else
+                                                    mContext.getColor(R.color.awake_start_oreo)
                                         }
                                     }
                                 }
 
                                 "light" -> {
                                     startColor =
-                                        mContext.getColor(R.color.light_start_oreo)
+                                        if (isInteracting) mContext.getColor(R.color.light_start_oreo_i) else
+                                            mContext.getColor(R.color.light_start_oreo)
                                     when (previousElement.sleepType) {
                                         "deep" -> {
                                             bottomLeftRadius = 0f
 
                                             endColor =
-                                                mContext.getColor(R.color.deep_start_oreo)
+                                                if (isInteracting) mContext.getColor(R.color.deep_start_oreo_i) else
+                                                    mContext.getColor(R.color.deep_start_oreo)
                                         }
 
                                         "rem" -> {
                                             topLeftRadius = 0f
                                             endColor =
-                                                mContext.getColor(R.color.rem_start_oreo)
+                                                if (isInteracting) mContext.getColor(R.color.rem_start_oreo_i) else
+                                                    mContext.getColor(R.color.rem_start_oreo)
                                         }
 
                                         "awake" -> {
                                             endColor =
-                                                mContext.getColor(R.color.awake_start_oreo)
+                                                if (isInteracting) mContext.getColor(R.color.awake_start_oreo_i) else
+                                                    mContext.getColor(R.color.awake_start_oreo)
                                             topLeftRadius = 0f
                                         }
 
@@ -292,24 +415,28 @@ class SleepGraphViewOreo(var mContext: Context) : View(
 
                                 "rem" -> {
                                     startColor =
-                                        mContext.getColor(R.color.rem_start_oreo)
+                                        if (isInteracting) mContext.getColor(R.color.rem_start_oreo_i) else
+                                            mContext.getColor(R.color.rem_start_oreo)
                                     when (previousElement.sleepType) {
                                         "deep" -> {
                                             bottomLeftRadius = 0f
                                             endColor =
-                                                mContext.getColor(R.color.deep_start_oreo)
+                                                if (isInteracting) mContext.getColor(R.color.deep_start_oreo_i) else
+                                                    mContext.getColor(R.color.deep_start_oreo)
                                         }
 
                                         "light" -> {
                                             bottomLeftRadius = 0f
                                             endColor =
-                                                mContext.getColor(R.color.light_start_oreo)
+                                                if (isInteracting) mContext.getColor(R.color.light_start_oreo_i) else
+                                                    mContext.getColor(R.color.light_start_oreo)
                                         }
 
                                         "awake" -> {
                                             topLeftRadius = 0f
                                             endColor =
-                                                mContext.getColor(R.color.awake_start_oreo)
+                                                if (isInteracting) mContext.getColor(R.color.awake_start_oreo_i) else
+                                                    mContext.getColor(R.color.awake_start_oreo)
                                         }
 
                                     }
@@ -319,21 +446,25 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                                     bottomLeftRadius = 0f
 
                                     startColor =
-                                        mContext.getColor(R.color.awake_start_oreo)
+                                        if (isInteracting) mContext.getColor(R.color.awake_start_oreo_i) else
+                                            mContext.getColor(R.color.awake_start_oreo)
                                     when (previousElement.sleepType) {
                                         "deep" -> {
                                             endColor =
-                                                mContext.getColor(R.color.deep_start_oreo)
+                                                if (isInteracting) mContext.getColor(R.color.deep_start_oreo_i) else
+                                                    mContext.getColor(R.color.deep_start_oreo)
                                         }
 
                                         "rem" -> {
                                             endColor =
-                                                mContext.getColor(R.color.rem_start_oreo)
+                                                if (isInteracting) mContext.getColor(R.color.rem_start_oreo_i) else
+                                                    mContext.getColor(R.color.rem_start_oreo)
                                         }
 
                                         "light" -> {
                                             endColor =
-                                                mContext.getColor(R.color.light_start_oreo)
+                                                if (isInteracting) mContext.getColor(R.color.light_start_oreo_i) else
+                                                    mContext.getColor(R.color.light_start_oreo)
                                         }
 
                                     }
@@ -407,39 +538,222 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                         canvas.drawPath(path, paint)
                         previousRect = rectF
 
+
                     }
-                    val range = sleepArray!![i].startTime + " - " + sleepArray!![i].endTime
 
                     tooltipEntryArray!!.add(
                         ToolTipEntry(
-                            start,
-                            end,
-                            top,
-                            bottom,
-                            rowData.duration,
-                            rowData.sleepType,
-                            range
+                            x1 = start,
+                            x2 = end,
+                            y1 = top,
+                            y2 = bottom,
+                            duration = rowData.duration,
+                            type = rowData.sleepType,
+                            startTime = sleepArray!![i].startTime,
+                            endTime = sleepArray!![i].endTime
                         )
                     )
                     start = end
                 }
             }
         } else {
-            canvas.drawText(
-                "12 am",
+
+            val edgeTextPadding = pxFromDp(4f)
+
+
+            var rectF = RectF(
                 0f,
-                (sectionHeight * 5) - pxFromDp(context, 5.0f),
-                mTextPaint
+                (sectionHeight * 4) + pxFromDp(8f),
+                mTextPaintEdge.measureText("12 am") + edgeTextPadding * 2,
+                height.toFloat()
+            )
+            canvas.drawRoundRect(
+                rectF,
+                pxFromDp(4f),
+                pxFromDp(4f),
+                edgeTextBackPaint
             )
 
-            val textWidth = mTextPaint.measureText("12 am")
             canvas.drawText(
                 "12 am",
-                (width - textWidth - endPadding),
-                sectionHeight * 5 - pxFromDp(context, 5.0f),
-                mTextPaint
+                edgeTextPadding,
+                (sectionHeight * 5) - pxFromDp(5.0f),
+                mTextPaintEdge
+            )
+
+
+            val text = "12 am"
+            val textWidth = mTextPaintEdge.measureText(text)
+            rectF = RectF(
+                (width - textWidth - endPadding) - edgeTextPadding * 2,
+                (sectionHeight * 4) + pxFromDp(8f),
+                width - endPadding,
+                height.toFloat()
+            )
+            canvas.drawRoundRect(
+                rectF,
+                pxFromDp(4f),
+                pxFromDp(4f),
+                edgeTextBackPaint
+            )
+
+            canvas.drawText(
+                text,
+                (width - textWidth - endPadding) - edgeTextPadding,
+                sectionHeight * 5 - pxFromDp(5.0f),
+                mTextPaintEdge
             )
         }
+    }
+
+    private fun drawXAxisTime(
+        canvas: Canvas,
+        sectionHeight: Float,
+        eachSecondsWidth: Float,
+        startTimeStr: String?,
+        endTimeStr: String?
+    ) {
+
+        if (startTimeStr == null || endTimeStr == null) return
+
+        tryCatch {
+            val formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
+
+            val startDateTime = LocalDateTime.parse(startTimeStr, formatter)
+            val endDateTime = LocalDateTime.parse(endTimeStr, formatter)
+
+            var currentDateTime = startDateTime
+
+            while (currentDateTime < endDateTime) {
+                var nextEvenHour =
+                    currentDateTime.plusHours(1).withMinuteOfHour(0).withSecondOfMinute(0)
+                if (nextEvenHour.hourOfDay % 2 != 0) {
+                    nextEvenHour = nextEvenHour.plusHours(1)
+                }
+
+                currentDateTime = nextEvenHour
+                if (nextEvenHour > endDateTime) {
+                    break
+                }
+
+                val formatterDisplay = DateTimeFormat.forPattern("h a")
+                val duration = Duration(startDateTime.toDateTime(), currentDateTime.toDateTime())
+                val secondsDifference = duration.toStandardSeconds().seconds
+                val startX = secondsDifference * eachSecondsWidth
+                val textWidth =
+                    mTextPaint.measureText(currentDateTime.toString(formatterDisplay).lowercase())
+
+                val maxWidth = width - endPadding
+                if (startX + textWidth < maxWidth) {
+                    canvas.drawText(
+                        currentDateTime.toString(formatterDisplay).lowercase(),
+                        startX - textWidth / 2,
+                        sectionHeight * 5 - pxFromDp(5.0f),
+                        mTextPaint
+                    )
+                }
+            }
+        }
+
+        val edgeTextPadding = pxFromDp(4f)
+
+        countCardData?.leftValue?.let { startTime ->
+
+            val startText = DateFormats.formatDate(
+                startTime,
+                DateFormats.dateTimeFormat5,
+                DateFormats.timeFormat12_2
+            ).lowercase()
+
+            val rectF = RectF(
+                0f,
+                (sectionHeight * 4) + pxFromDp(8f),
+                mTextPaintEdge.measureText(startText) + edgeTextPadding * 2,
+                height.toFloat()
+            )
+            canvas.drawRoundRect(
+                rectF,
+                pxFromDp(4f),
+                pxFromDp(4f),
+                edgeTextBackPaint
+            )
+
+            canvas.drawText(
+                startText,
+                edgeTextPadding,
+                (sectionHeight * 5) - pxFromDp(5.0f),
+                mTextPaintEdge
+            )
+
+
+        }
+
+        countCardData?.rightValue?.let { endTime ->
+
+            val text = DateFormats.formatDate(
+                endTime,
+                DateFormats.dateTimeFormat5,
+                DateFormats.timeFormat12_2
+            )
+            val textWidth = mTextPaintEdge.measureText(text)
+
+
+            val rectF = RectF(
+                (width - textWidth - endPadding) - edgeTextPadding * 2,
+                (sectionHeight * 4) + pxFromDp(8f),
+                width - endPadding,
+                height.toFloat()
+            )
+            canvas.drawRoundRect(
+                rectF,
+                pxFromDp(4f),
+                pxFromDp(4f),
+                edgeTextBackPaint
+            )
+
+            canvas.drawText(
+                DateFormats.formatDate(
+                    endTime,
+                    DateFormats.dateTimeFormat5,
+                    DateFormats.timeFormat12_2
+                ).lowercase(),
+                (width - textWidth - endPadding) - edgeTextPadding,
+                sectionHeight * 5 - pxFromDp(5.0f),
+                mTextPaintEdge
+            )
+        }
+
+    }
+
+    private fun drawBackGrid(canvas: Canvas, sectionHeight: Float) {
+        for (i in 0 until 5) {
+            canvas.drawLine(
+                0f,
+                sectionHeight * i,
+                width.toFloat() - endPadding,
+                sectionHeight * i,
+                mPaint
+            )
+        }
+    }
+
+    private fun drawYAxis(canvas: Canvas, sectionHeight: Float) {
+
+        val textXPos = (width.toFloat() - pxFromDp(6f))
+        val textPosOffset = pxFromDp(10f)
+
+
+        canvas.drawText(
+            "Awake",
+            textXPos - mTextPaint.measureText("Awake"),
+            (sectionHeight * 1 - textPosOffset),
+            mTextPaint
+        )
+        canvas.drawText("REM", textXPos- mTextPaint.measureText("REM"), (sectionHeight * 2 - textPosOffset), mTextPaint)
+        canvas.drawText("Light", textXPos- mTextPaint.measureText("Light"), (sectionHeight * 3 - textPosOffset), mTextPaint)
+        canvas.drawText("Deep", textXPos- mTextPaint.measureText("Deep"), (sectionHeight * 4 - textPosOffset), mTextPaint)
+
+
     }
 
     private fun drawMidPoints(
@@ -474,7 +788,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                 canvas.drawText(
                     DateFormats.time12Meridian.format(midLeftTIme).lowercase(),
                     center / 2 - textWidth1 / 2,
-                    sectionHeight * 5 - pxFromDp(context, 5.0f),
+                    sectionHeight * 5 - pxFromDp(5.0f),
                     mTextPaint
                 )
 
@@ -485,7 +799,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                 canvas.drawText(
                     DateFormats.time12Meridian.format(midTime).lowercase(),
                     center - textWidthCenter / 2,
-                    sectionHeight * 5 - pxFromDp(context, 5.0f),
+                    sectionHeight * 5 - pxFromDp(5.0f),
                     mTextPaint
                 )
                 val textWidth2 = mTextPaint.measureText(
@@ -494,7 +808,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                 canvas.drawText(
                     DateFormats.time12Meridian.format(midRightTIme).lowercase(),
                     center + (center / 2) - textWidth2 / 2,
-                    sectionHeight * 5 - pxFromDp(context, 5.0f),
+                    sectionHeight * 5 - pxFromDp(5.0f),
                     mTextPaint
                 )
 
@@ -508,7 +822,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
                 canvas.drawText(
                     DateFormats.time12Meridian.format(midTime).lowercase(),
                     center - textWidthCenter / 2,
-                    sectionHeight * 5 - pxFromDp(context, 5.0f),
+                    sectionHeight * 5 - pxFromDp(5.0f),
                     mTextPaint
                 )
             }
@@ -539,7 +853,134 @@ class SleepGraphViewOreo(var mContext: Context) : View(
 
     }
 
-    @SuppressLint("ClickableViewAccessibility")
+
+    fun setData(sleepArray: ArrayList<SleepData.SleepDataBreakup>?) {
+        this.sleepArray?.clear()
+        this.sleepArray = sleepArray?.filterNot {
+            it.duration == 0
+        } as ArrayList<SleepData.SleepDataBreakup>
+    }
+
+    fun setData(countCardData: CountCardData?) {
+        this.countCardData = countCardData
+    }
+
+    private fun pxFromDp(dp: Float): Float {
+        return dp * this.resources.displayMetrics.density
+    }
+
+
+    fun toggleStatus(isDisable: Boolean) {
+        previousRect = null
+        this.isDisable = isDisable
+        setPaint()
+        invalidate()
+    }
+
+    private fun setPaint() {
+
+        deepPaint = Paint().apply {
+            shader = LinearGradient(
+                0f,
+                0f,
+                0f,
+                pxFromDp(10f),
+                ContextCompat.getColor(mContext, R.color.deep_start_oreo),
+                ContextCompat.getColor(mContext, R.color.deep_start_oreo),
+                Shader.TileMode.CLAMP
+            )
+        }
+        lightPaint = Paint().apply {
+            shader = LinearGradient(
+                0f,
+                0f,
+                0f,
+                pxFromDp(10f),
+                ContextCompat.getColor(mContext, R.color.light_start_oreo),
+                ContextCompat.getColor(mContext, R.color.light_start_oreo),
+                Shader.TileMode.CLAMP
+            )
+        }
+        remPaint = Paint().apply {
+            shader = LinearGradient(
+                0f,
+                0f,
+                0f,
+                pxFromDp(10f),
+                ContextCompat.getColor(mContext, R.color.rem_start_oreo),
+                ContextCompat.getColor(mContext, R.color.rem_start_oreo),
+                Shader.TileMode.CLAMP
+            )
+        }
+        awakePaint = Paint().apply {
+            shader = LinearGradient(
+                0f,
+                0f,
+                0f,
+                pxFromDp(10f),
+                ContextCompat.getColor(mContext, R.color.awake_start_oreo),
+                ContextCompat.getColor(mContext, R.color.awake_start_oreo),
+                Shader.TileMode.CLAMP
+            )
+        }
+
+
+        deepPaintInteracting = Paint().apply {
+            shader = LinearGradient(
+                0f,
+                0f,
+                0f,
+                pxFromDp(10f),
+                ContextCompat.getColor(mContext, R.color.deep_start_oreo_i),
+                ContextCompat.getColor(mContext, R.color.deep_start_oreo_i),
+                Shader.TileMode.CLAMP
+            )
+        }
+
+        lightPaintInteracting = Paint().apply {
+            shader = LinearGradient(
+                0f,
+                0f,
+                0f,
+                pxFromDp(10f),
+                ContextCompat.getColor(mContext, R.color.light_start_oreo_i),
+                ContextCompat.getColor(mContext, R.color.light_start_oreo_i),
+                Shader.TileMode.CLAMP
+            )
+        }
+        remPaintInteracting = Paint().apply {
+            shader = LinearGradient(
+                0f,
+                0f,
+                0f,
+                pxFromDp(10f),
+                ContextCompat.getColor(mContext, R.color.rem_start_oreo_i),
+                ContextCompat.getColor(mContext, R.color.rem_start_oreo_i),
+                Shader.TileMode.CLAMP
+            )
+        }
+        awakePaintInteracting = Paint().apply {
+            shader = LinearGradient(
+                0f,
+                0f,
+                0f,
+                pxFromDp(10f),
+                ContextCompat.getColor(mContext, R.color.awake_start_oreo_i),
+                ContextCompat.getColor(mContext, R.color.awake_start_oreo_i),
+                Shader.TileMode.CLAMP
+            )
+        }
+    }
+
+    fun init(isDisable: Boolean) {
+        previousRect = null
+        this.isDisable = isDisable
+        setPaint()
+        endPadding = pxFromDp(40f)
+    }
+
+
+    /*@SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         super.onTouchEvent(event)
         val x = event!!.x
@@ -556,180 +997,90 @@ class SleepGraphViewOreo(var mContext: Context) : View(
             }
         }
         return true
+    }*/
+
+    fun enableInteractiveMode(mode: Boolean) {
+        interactiveMode = mode
     }
 
-    fun setData(sleepArray: ArrayList<SleepData.SleepDataBreakup>?) {
-        this.sleepArray?.clear()
-        this.sleepArray = sleepArray?.filterNot {
-            it.duration == 0
-        } as ArrayList<SleepData.SleepDataBreakup>
+    fun setClickListener(listener: SleepStageAction?) {
+        this.listener = listener
     }
 
-    fun setData(countCardData: CountCardData?) {
-        this.countCardData = countCardData
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        if (interactiveMode) {
+            /* val parent = parent
+             parent.requestDisallowInterceptTouchEvent(true)*/
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    touchX = event.x
+                    handler.postDelayed(
+                        mLongPressed,
+                        ViewConfiguration.getLongPressTimeout().toLong()
+                    )
+                    return true//super.onTouchEvent(event)
+                }
+
+                MotionEvent.ACTION_MOVE -> {
+                    if (isInteracting) {
+                        touchX = event.x
+                        invalidate()
+                        return true
+                    }
+                    return super.onTouchEvent(event)
+                }
+
+                MotionEvent.ACTION_UP -> {
+                    resetState()
+                    return super.onTouchEvent(event)
+                }
+            }
+        } else {
+            return super.onTouchEvent(event)
+        }
+        return super.onTouchEvent(event)
+
+//        return false
     }
 
-    companion object {
-        fun pxFromDp(context: Context, dp: Float): Float {
-            return dp * context.resources.displayMetrics.density
+    fun setVibrationUtil(vibrationUtils: VibrationUtils) {
+        this.vibrationUtils = vibrationUtils
+    }
+
+    fun resetIfInteracting() {
+        handler.removeCallbacks(mLongPressed)
+        if (isInteracting) {
+            isInteracting = false
+            lastSelectedEntry = null
+            listener?.isInteractionOnGoing(false)
+            touchX = 0.0f
+            invalidate()
         }
     }
 
-
-    init {
-//        toolTipPaint.color = ContextCompat.getColor(mContext, R.color.white)
-//        toolTipPaint.style = Paint.Style.FILL
-//        toolTipTextPaint = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
-//        toolTipTextPaint.color = ContextCompat.getColor(mContext, R.color.blood_oxygen_color)
-//        toolTipTextPaint.textSize = pxFromDp(mContext, 10f)
-//        toolTipTextPaint.textAlign = Paint.Align.CENTER
-        val fontGilroy = ResourcesCompat.getFont(this.context, R.font.gilroy_medium)
-
-        mPaint = Paint()
-        mPaint.isAntiAlias = true
-        mPaint.style = Paint.Style.STROKE
-        mPaint.color = Color.parseColor("#1effffff")
-        mPaint.strokeWidth = pxFromDp(mContext, 1f)
-        mPaint2 = Paint()
-        mPaint2.isAntiAlias = true
-        mPaint2.style = Paint.Style.STROKE
-        mPaint2.color = ContextCompat.getColor(mContext, R.color.sleep_graph_line)
-        mPaint2.strokeWidth = pxFromDp(mContext, 2f)
-
-        mTextPaint = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
-        mTextPaint.color = ContextCompat.getColor(mContext, R.color.white_64)
-        mTextPaint.textSize = pxFromDp(mContext, 10f)
-        mTextPaint.setTypeface(fontGilroy)
-
-        outerPaint = Paint()
-        outerPaint.style = Paint.Style.FILL
-        outerPaint.color = Color.TRANSPARENT
-
-
-        mTextPaintEdge = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
-        mTextPaintEdge.color = ContextCompat.getColor(mContext, R.color.white)
-        mTextPaintEdge.setTypeface(fontGilroy)
-        mTextPaintEdge.textSize = pxFromDp(mContext, 10f)
-
-    }
-
-    fun toggleStatus(isDisable: Boolean) {
-        previousRect = null
-        this.isDisable = isDisable
-        setPaint()
+    fun resetState() {
+        handler.removeCallbacks(mLongPressed)
+        isInteracting = false
+        lastSelectedEntry = null
+        listener?.isInteractionOnGoing(false)
+        touchX = 0.0f
         invalidate()
     }
 
-    private fun setPaint() {
-        val shaderDeep = if (isDisable) {
-            LinearGradient(
-                0f,
-                0f,
-                0f,
-                pxFromDp(mContext, 10f),
-                ContextCompat.getColor(mContext, R.color.sleep_gray),
-                ContextCompat.getColor(mContext, R.color.sleep_gray),
-                Shader.TileMode.CLAMP
-            )
-        } else {
-            LinearGradient(
-                0f,
-                0f,
-                0f,
-                pxFromDp(mContext, 10f),
-                ContextCompat.getColor(mContext, R.color.deep_start_oreo),
-                ContextCompat.getColor(mContext, R.color.deep_start_oreo),
-                Shader.TileMode.CLAMP
-            )
-        }
 
+    private val handler = Handler(Looper.getMainLooper())
+    private var mLongPressed = Runnable {
+        isInteracting = true
+        invalidate()
+        listener?.isInteractionOnGoing(true)
+        vibrationUtils?.vibrate(HAPTIC_VIBRATION)
 
-        deepPaint = Paint()
-        deepPaint.shader = shaderDeep
+        val parent = parent
+        parent.requestDisallowInterceptTouchEvent(true)
 
-        val shaderLight = if (isDisable) {
-            LinearGradient(
-                0f,
-                0f,
-                0f,
-                pxFromDp(mContext, 10f),
-                ContextCompat.getColor(mContext, R.color.sleep_gray),
-                ContextCompat.getColor(mContext, R.color.sleep_gray),
-                Shader.TileMode.CLAMP
-            )
-        } else {
-            LinearGradient(
-                0f,
-                0f,
-                0f,
-                pxFromDp(mContext, 10f),
-                ContextCompat.getColor(mContext, R.color.light_start_oreo),
-                ContextCompat.getColor(mContext, R.color.light_start_oreo),
-                Shader.TileMode.CLAMP
-            )
-        }
-
-
-        lightPaint = Paint()
-        lightPaint.shader = shaderLight
-        val shaderAwake = if (isDisable) {
-            LinearGradient(
-                0f,
-                0f,
-                0f,
-                pxFromDp(mContext, 10f),
-                ContextCompat.getColor(mContext, R.color.sleep_gray),
-                ContextCompat.getColor(mContext, R.color.sleep_gray),
-                Shader.TileMode.CLAMP
-            )
-        } else {
-            LinearGradient(
-                0f,
-                0f,
-                0f,
-                pxFromDp(mContext, 10f),
-                ContextCompat.getColor(mContext, R.color.awake_start_oreo),
-                ContextCompat.getColor(mContext, R.color.awake_start_oreo),
-                Shader.TileMode.CLAMP
-            )
-        }
-
-
-        awakePaint = Paint()
-        awakePaint.shader = shaderAwake
-
-
-        val shaderRem = if (isDisable) {
-            LinearGradient(
-                0f,
-                0f,
-                0f,
-                pxFromDp(mContext, 10f),
-                ContextCompat.getColor(mContext, R.color.sleep_gray),
-                ContextCompat.getColor(mContext, R.color.sleep_gray),
-                Shader.TileMode.CLAMP
-            )
-        } else {
-            LinearGradient(
-                0f,
-                0f,
-                0f,
-                pxFromDp(mContext, 10f),
-                ContextCompat.getColor(mContext, R.color.rem_start_oreo),
-                ContextCompat.getColor(mContext, R.color.rem_start_oreo),
-                Shader.TileMode.CLAMP
-            )
-        }
-
-
-        remPaint = Paint()
-        remPaint.shader = shaderRem
-    }
-
-    fun init(isDisable: Boolean) {
-        previousRect = null
-        this.isDisable = isDisable
-        setPaint()
-        endPadding = pxFromDp(mContext, 48f)
+        /*rootView.performHapticFeedback(
+            HapticFeedbackConstants.LONG_PRESS
+        )*/
     }
 }

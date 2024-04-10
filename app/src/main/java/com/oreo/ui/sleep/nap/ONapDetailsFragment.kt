@@ -15,6 +15,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.custom.SleepProgressbarView
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
@@ -23,8 +24,6 @@ import com.oreo.data.model.GraphDummyModel
 import com.oreo.data.model.OreoNapDetailsDataModel
 import com.oreo.data.model.SleepChartModel
 import com.oreo.data.model.health.Nudges
-import com.oreo.data.model.health.UnitDataModelArray
-import com.oreo.data.model.health.UnitDataModelArrayFloat
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
@@ -90,6 +89,20 @@ class ONapDetailsFragment :
 
     private fun updateUi(it: OreoNapDetailsDataModel) {
         //nap sleep score
+        if (it.sleepScore == 0) {
+            binding.lytNapTopView.lytImpact.root.gone()
+
+            binding.lytNapTopView.lytImpactNoData.apply {
+                tvNotAvail.text = it.na?.title ?: getString(R.string.text_not_available)
+                tvNapScoreMsg.setVisibilityByCondition(it.na?.text.isNullOrEmpty().not())
+                tvNapScoreMsg.text = it.na?.text
+                root.visible()
+            }
+
+        } else {
+            binding.lytNapTopView.lytImpact.root.visible()
+            binding.lytNapTopView.lytImpactNoData.root.gone()
+        }
         binding.lytNapTopView.lytImpact.tvOldSScore.text = "${it.prevSleepScore ?: 0}"
         binding.lytNapTopView.lytImpact.tvNewSScore.text = "${it.sleepScore ?: 0}"
         mViewModel.setTextGradient(

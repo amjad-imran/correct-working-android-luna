@@ -1337,6 +1337,7 @@ class OSleepScoreDetailsFragment :
         }*/
         else {
             if (todayTrendProg > 0) {
+                updateProgressColor(2)
                 binding.lytScoreOverview.lytToday.pbSteps.progress = 100
                 binding.lytScoreOverview.lytYesterday.pbSteps.progress =
                     100
@@ -1524,6 +1525,9 @@ class OSleepScoreDetailsFragment :
 
     }
 
+    /**
+     * 2-> equal
+     */
     private fun updateProgressColor(type: Int) {
         val todayColor: Int
         val yesterdayColor: Int
@@ -1550,7 +1554,7 @@ class OSleepScoreDetailsFragment :
 
             2 -> {
                 todayColor = returnColor().first
-                yesterdayColor = returnColor().second
+                yesterdayColor = returnColor().first
                 allTimeColor = ContextCompat.getColor(
                     requireContext(),
                     R.color.white

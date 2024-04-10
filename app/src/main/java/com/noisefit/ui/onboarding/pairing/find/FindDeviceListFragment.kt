@@ -40,7 +40,7 @@ import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.ui.onboarding.pairing.pair.NearbyDevicesAdapter
 import com.noisefit.ui.onboarding.pairing.pair.NearbyDevicesClickListener
 import com.noisefit.util.ApplicationUtils
-import com.noisefit.util.DeviceUtil
+
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
@@ -81,8 +81,7 @@ class FindDeviceListFragment :
     private var bluetoothLeScanner: BluetoothLeScanner? = null
 
 
-    @Inject
-    lateinit var deviceUtil: DeviceUtil
+
 
     private var scanCount = 0
 
@@ -351,14 +350,13 @@ class FindDeviceListFragment :
             }
 
         }
-//        if (BuildConfig.DEBUG) {
-//            binding.bPairLater.visible()
-//        } else
-//            binding.bPairLater.gone()
-//        binding.bPairLater.setOnClickListener {
-//            pairLater()
-//        }
-
+        if (BuildConfig.DEBUG) {
+            binding.bPairLater.visible()
+        } else
+            binding.bPairLater.gone()
+        binding.bPairLater.setOnClickListener {
+            pairLater()
+        }
         /*binding.layoutSearchAgain.root.setOnClickListener {
             checkPermissionAndScan()
         }*/

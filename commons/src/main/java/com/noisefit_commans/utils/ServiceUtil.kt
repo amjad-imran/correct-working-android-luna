@@ -251,6 +251,9 @@ object ServiceUtil {
             is UpdateDeviceAction.SetWatchPassword -> {
                 updateAction.setWatchPassword(it.watchPassword)
             }
+            is UpdateDeviceAction.SetRealTimeDataState -> {
+                updateAction.setRealTimeDataState(it.state)
+            }
             is UpdateDeviceAction.DeleteReminders -> {
                 updateAction.deleteReminders(it.reminderList)
             }
@@ -342,6 +345,9 @@ object ServiceUtil {
             }
             is UpdateDeviceAction.SetAutoSleep -> {
                 updateAction.setAutoSleep(it.autoSleep)
+            }
+            is UpdateDeviceAction.SetAutoWorkoutStatus -> {
+                updateAction.setAutoWorkoutStatus(it.status)
             }
 
             is UpdateDeviceAction.SetScreenAwakeInterval -> {

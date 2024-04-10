@@ -4,7 +4,6 @@ import android.content.Context
 import android.location.Geocoder
 import com.google.gson.Gson
 import com.noisefit_commans.common.averageWithoutZero
-import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.common.handleCaloriesData
 import com.noisefit_commans.common.handleHrData
 import com.noisefit_commans.common.upTo1Decimal
@@ -21,10 +20,8 @@ import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.data.model.OreoStepsData
 import com.noisefit_commans.data.model.OreoStressDataBreakup
 import com.noisefit_commans.enums.ApplicationType
-import com.noisefit_commans.models.AlarmsList
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.Contact
-import com.noisefit_commans.models.DeviceType
 import com.noisefit_commans.models.DoNotDisturb
 import com.noisefit_commans.models.ManualMeasureType
 import com.noisefit_commans.models.ReminderList
@@ -35,13 +32,12 @@ import com.noisefit_commans.models.SportsModeListGPS
 import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.models.Widget
 import com.noisefit_commans.models.WorldClockList
-import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_zhsdk.handler.ZhUserActivityHandler.Companion.TRACK_TAG
 import com.zhapp.ble.bean.ActiveMeasureParamsBean
-import com.zhapp.ble.bean.ClockInfoBean
 import com.zhapp.ble.bean.ContactBean
 import com.zhapp.ble.bean.ContinuousBloodOxygenBean
 import com.zhapp.ble.bean.ContinuousHeartRateBean
@@ -61,9 +57,7 @@ import com.zhapp.ble.bean.WorldClockBean
 import com.zhapp.ble.callback.ActiveMeasureCallBack
 import java.math.BigDecimal
 import java.text.DecimalFormat
-import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -75,29 +69,29 @@ constructor(
     var watchDataStore: WatchDataStore,
     private val geoCoder: Geocoder
 ) {
-    fun formatAlarmData(list: List<ClockInfoBean>): AlarmsList {
-        val alarmsList = ArrayList<AlarmsList.Alarm>()
-        list.forEach { alarmItem ->
-            alarmsList.add(
-                AlarmsList.Alarm(
-                    hour = alarmItem.data.time.hour,
-                    minute = alarmItem.data.time.minuter,
-                    status = alarmItem.data.isEnable,
-                    repeatDays = arrayListOf(
-                        alarmItem.data.isEnable,
-                        alarmItem.data.isMonday,
-                        alarmItem.data.isTuesday, alarmItem.data.isWednesday,
-                        alarmItem.data.isThursday, alarmItem.data.isFriday,
-                        alarmItem.data.isSaturday, alarmItem.data.isSunday
-                    ),
-                    id = alarmItem.id
-                )
-            )
-        }
-
-
-        return AlarmsList(alarms = alarmsList)
-    }
+//    fun formatAlarmData(list: List<ClockInfoBean>): AlarmsList {
+//        val alarmsList = ArrayList<AlarmsList.Alarm>()
+//        list.forEach { alarmItem ->
+//            alarmsList.add(
+//                AlarmsList.Alarm(
+//                    hour = alarmItem.data.time.hour,
+//                    minute = alarmItem.data.time.minuter,
+//                    status = alarmItem.data.isEnable,
+//                    repeatDays = arrayListOf(
+//                        alarmItem.data.isEnable,
+//                        alarmItem.data.isMonday,
+//                        alarmItem.data.isTuesday, alarmItem.data.isWednesday,
+//                        alarmItem.data.isThursday, alarmItem.data.isFriday,
+//                        alarmItem.data.isSaturday, alarmItem.data.isSunday
+//                    ),
+//                    id = alarmItem.id
+//                )
+//            )
+//        }
+//
+//
+//        return AlarmsList(alarms = alarmsList)
+//    }
 
     private fun getFunctionName(functionId: Int): String {
         return when (functionId) {
@@ -139,15 +133,7 @@ constructor(
         return when (functionId) {
             3 -> SportActivityName.INDOOR_RUNNING
             66 -> {
-                when (noiseFitDevice.deviceType) {
-                    DeviceType.COLORFIT_PRO_4_ALPHA.deviceType -> {
-                        return SportActivityName.INDOOR_RUNNING
-                    }
-
-                    else -> {
-                        SportActivityName.TREADMILL
-                    }
-                }
+                SportActivityName.TREADMILL
             }
 
             2 -> SportActivityName.OUTDOOR_WALKING
@@ -269,18 +255,7 @@ constructor(
             82 -> SportActivityName.PARAGLIDER
             83 -> SportActivityName.CLIMB_THE_STAIRS
 
-            84 -> {
-                when (noiseFitDevice.deviceType) {
-                    DeviceType.NOISEFIT_ARC.deviceType, DeviceType.NOISEFIT_TWIST.deviceType, DeviceType.NOISEFIT_CURVE.deviceType -> {
-                        return SportActivityName.CROSS_TRAINING
-                    }
-
-                    else -> {
-                        SportActivityName.CROSS_TRAINING_CROSSFIT
-                    }
-                }
-
-            }
+            84 -> SportActivityName.CROSS_TRAINING_CROSSFIT
 
             85 -> SportActivityName.AEROBICS
             86 -> SportActivityName.PHYSICAL_TRAINING
@@ -312,30 +287,10 @@ constructor(
             127 -> SportActivityName.CROSS_COUNTRY_SKIING
             128 -> SportActivityName.SNOWBOARDING
             129 -> SportActivityName.ALPINE_SKIING
-            130 -> {
-                when (noiseFitDevice.deviceType) {
-                    DeviceType.NOISEFIT_ARC.deviceType, DeviceType.NOISEFIT_TWIST.deviceType, DeviceType.NOISEFIT_CURVE.deviceType -> {
-                        return SportActivityName.DOUBLE_BOARD_SKATING
-                    }
-
-                    else -> {
-                        SportActivityName.DOUBLE_BOARD_SKIING
-                    }
-                }
-            }
+            130 -> SportActivityName.DOUBLE_BOARD_SKIING
 
             131 -> SportActivityName.FREE_EXERCISE
-            132 -> {
-                when (noiseFitDevice.deviceType) {
-                    DeviceType.NOISEFIT_ARC.deviceType, DeviceType.NOISEFIT_TWIST.deviceType, DeviceType.NOISEFIT_CURVE.deviceType -> {
-                        return SportActivityName.PADDLEBOARDS
-                    }
-
-                    else -> {
-                        SportActivityName.PADDLEBOARD_SURFING
-                    }
-                }
-            }
+            132 -> SportActivityName.PADDLEBOARD_SURFING
 
             133 -> SportActivityName.KABADDI
             200 -> SportActivityName.POOL_SWIMMING
@@ -565,7 +520,7 @@ constructor(
             stringBuilder.append("${pressureData[index]} -> $i\n")
         }
         //LOGS.w("filtered_data -> $stringBuilder")
-        AppLogs.sendAppLogs("geAveragedOutHrvData -> $stringBuilder")
+        //AppLogs.sendAppLogs("geAveragedOutHrvData -> $stringBuilder")
 
         return filteredData
     }
@@ -693,19 +648,19 @@ constructor(
         dailyBean.stepsData?.forEachIndexed { i, data ->
             val stepData = OreoStepsData.OreoStepDataBreakup(hourOfTheDay = i)
             stepData.steps = data
-            stepData.calories = dailyBean.calorieData[i]
+            stepData.calories = dailyBean.todayOuraCalorieHourlyData[i]
             stepData.distance = dailyBean.distanceData[i]
             stepData.activeCalories = dailyBean.todaySportCalorieHourlyData[i]
-            calories += dailyBean.calorieData[i]
             distance += dailyBean.distanceData[i]
-            activeCalories += dailyBean.todaySportCalorieHourlyData[i]
+            //activeCalories += dailyBean.todaySportCalorieHourlyData[i]
             steps += data
             stepArray.add(stepData)
         }
+        calories = dailyBean.todayOuraCalorieData
         dailyStepData.totalDistance = distance
         dailyStepData.totalCalories = calories
         dailyStepData.totalSteps = steps
-        dailyStepData.activeCalories = activeCalories
+        dailyStepData.activeCalories = dailyBean.todaySportCalorieData/*activeCalories*/
         dailyStepData.stepArray = stepArray
         LOGS.d("getStepsData $dailyStepData")
         return dailyStepData
@@ -931,15 +886,23 @@ constructor(
     // wakeupNapTime=1705286418, sleepNapDuration=1536, date='2024-01-15 00:00:00'}]
     fun parseNapData(naps: List<RingSleepNapBean>): List<OreoNapData> {
         val returnNaps = ArrayList<OreoNapData>()
+        val napAddedTimeStamps = HashMap<Long, Int>()
 
-        val date = DateFormats.getDateFromTimeStamp(DateFormats.subtractDate(System.currentTimeMillis(),1))
-        val timestamp = DateFormats.convertDateTimeToTimeStamp(date?:"", DateFormats.dateFormat3)
-
+        val date = DateFormats.getDateFromTimeStamp(
+            DateFormats.subtractDate(
+                System.currentTimeMillis(),
+                1
+            )
+        )
+        val minTimestamp =
+            DateFormats.convertDateTimeToTimeStamp(date ?: "", DateFormats.dateFormat3)
 
         naps.forEach {
+            val startTimeStamp = it.asleepNapTime.toLong() * 1000
+
             val nap = OreoNapData().apply {
                 this.startTime = DateFormats.convertTimestampToDate(
-                    it.asleepNapTime.toLong() * 1000,
+                    startTimeStamp,
                     DateFormats.dateTimeFormat5
                 )
                 this.endTime = DateFormats.convertTimestampToDate(
@@ -953,33 +916,69 @@ constructor(
                 )
             }
 
-            try {
+            if (startTimeStamp >= minTimestamp) {
+                val oldDuration = napAddedTimeStamps[startTimeStamp]
+                if (oldDuration != null) {
+                    val newDuration = nap.duration
+
+                    if (newDuration > oldDuration) {
+
+                        val removeIndex = returnNaps.indexOfFirst {
+                            it.startTime.equals(nap.startTime)
+                        }
+                        if (removeIndex != -1) {
+                            returnNaps.removeAt(removeIndex)
+                            returnNaps.add(nap)
+                            napAddedTimeStamps[startTimeStamp] = newDuration
+                            AppLogs.sendAppLogs("Nap replaced, $newDuration - $oldDuration ")
+                        }
+                    } else {
+                        AppLogs.sendAppLogs("Nap ignored Duration low $startTimeStamp")
+                    }
+                } else {
+                    returnNaps.add(nap)
+                    napAddedTimeStamps[startTimeStamp] = nap.duration
+                }
+            } else {
+                AppLogs.sendAppLogs("Nap ignored old date $it ")
+            }
+
+            /*try {
                 val startHour = DateFormats.convertTimestampToDate(
                     it.asleepNapTime.toLong() * 1000,
                     DateFormats.timeFormatHour
                 ).toInt()
 
                 if (it.asleepNapTime.toLong() * 1000 >= timestamp) {
-                    if (startHour in 10..19) {
+                   *//* if (startHour in 10..19) {*//*
                         returnNaps.add(nap)
-                    } else {
+                    *//*} else {
                         AppLogs.sendAppLogs("Nap ignored $it")
-                    }
+                    }*//*
                 } else {
-                    AppLogs.sendAppLogs("Nap ignored old $it ")
+                    AppLogs.sendAppLogs("Nap ignored old date $it ")
                 }
             } catch (exp: Exception) {
                 returnNaps.add(nap)
-            }
+            }*///OLD condition
         }
         return returnNaps
     }
 
-    fun parseSleepData(bean: RingSleepResultBean): OreoSleepData {
+    fun parseSleepData(bean: RingSleepResultBean): OreoSleepData? {
         val sleepData = OreoSleepData(availableSleepTypes = "deep;light;awake;rem")
 
         val sleepArray = ArrayList<OreoSleepData.OreoSleepDataBreakup>()
 
+        val sleepStartInBtw = DateFormats.convertTimestampToDate(
+            bean.entryTime.toLong() * 1000,
+            DateFormats.timeFormatHour
+        ).toInt() //00,01,02....23
+
+        if (sleepStartInBtw in 8..18) {
+            AppLogs.sendAppLogs("$TRACK_TAG Parsed Sleep Data invalid interval $bean")
+            return null
+        }
         sleepData.startTime = DateFormats.convertTimestampToDate(
             bean.entryTime.toLong() * 1000,
             DateFormats.timeFormatSleepTime
@@ -1004,6 +1003,7 @@ constructor(
         sleepData.light = bean.lightSleepTime
         sleepData.deep = bean.deepSleepTime
         sleepData.remCount = bean.rapidEyeMovementTime
+        sleepData.startTimeStamp = bean.entryTime.toLong() * 1000
 
         bean.sleepDistributionData.forEach { sleepDistributionData ->
             val sleepBreakup = OreoSleepData.OreoSleepDataBreakup(

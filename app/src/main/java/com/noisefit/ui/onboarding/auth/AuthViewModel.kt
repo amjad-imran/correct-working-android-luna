@@ -184,9 +184,16 @@ class AuthViewModel @Inject constructor(
                                 return@let
                             }
 
-                            if (isOutSideIndia) {
+                            localDataStore.saveUserInfo(it.user!!)
+                            localDataStore.updateUserToken(it.token)
+                            ringDataStore.setUpdateUserDeviceStatus(false)
+                            authSuccess.postValue(Event(true))
+                            loginSuccessEvent()
+
+                           /* if (isOutSideIndia) {
                                 localDataStore.saveUserInfo(it.user!!)
                                 localDataStore.updateUserToken(it.token)
+                                ringDataStore.setUpdateUserDeviceStatus(false)
                                 authSuccess.postValue(Event(true))
                                 loginSuccessForOutSideIndiaUserEvent()
                                 return@let
@@ -200,9 +207,10 @@ class AuthViewModel @Inject constructor(
                             } else {
                                 localDataStore.saveUserInfo(it.user!!)
                                 localDataStore.updateUserToken(it.token)
+                                ringDataStore.setUpdateUserDeviceStatus(false)
                                 authSuccess.postValue(Event(true))
                                 loginSuccessEvent()
-                            }
+                            }*/
                             sendMessage("Otp Verified ")
                             //emailOtpGenerated.postValue(Event(true))
                         }
@@ -310,6 +318,7 @@ class AuthViewModel @Inject constructor(
                                     if (it.user != null) {
                                         localDataStore.saveUserInfo(it.user!!)
                                         localDataStore.updateUserToken(it.token)
+                                        ringDataStore.setUpdateUserDeviceStatus(false)
                                         authSuccess.postValue(Event(true))
                                         loginSuccessEvent()
                                     }
@@ -321,6 +330,7 @@ class AuthViewModel @Inject constructor(
                                     } else {
                                         localDataStore.saveUserInfo(user)
                                         localDataStore.updateUserToken(it.token)
+                                        ringDataStore.setUpdateUserDeviceStatus(false)
                                         authSuccess.postValue(Event(true))
                                         loginSuccessEvent()
                                     }
@@ -498,9 +508,18 @@ class AuthViewModel @Inject constructor(
                                 }
                                 return@let
                             }
-                            if (isOutSideIndia) {
+
+                            localDataStore.saveUserInfo(it.user!!)
+                            localDataStore.updateUserToken(it.token)
+                            ringDataStore.setUpdateUserDeviceStatus(false)
+                            authSuccess.postValue(Event(true))
+                            loginSuccessEvent()
+
+
+                           /* if (isOutSideIndia) {
                                 localDataStore.saveUserInfo(it.user!!)
                                 localDataStore.updateUserToken(it.token)
+                                ringDataStore.setUpdateUserDeviceStatus(false)
                                 authSuccess.postValue(Event(true))
                                 loginSuccessForOutSideIndiaUserEvent()
                                 return@let
@@ -513,9 +532,10 @@ class AuthViewModel @Inject constructor(
                             } else {
                                 localDataStore.saveUserInfo(it.user!!)
                                 localDataStore.updateUserToken(it.token)
+                                ringDataStore.setUpdateUserDeviceStatus(false)
                                 authSuccess.postValue(Event(true))
                                 loginSuccessEvent()
-                            }
+                            }*/
                         }
 
                     }
@@ -562,6 +582,7 @@ class AuthViewModel @Inject constructor(
                         resource.data?.data?.let {
                             localDataStore.saveUserInfo(it.user!!)
                             localDataStore.updateUserToken(it.token)
+                            ringDataStore.setUpdateUserDeviceStatus(false)
                             authSuccess.postValue(Event(true))
                             registerSuccessForOutSideIndiaUserEvent()
                         }

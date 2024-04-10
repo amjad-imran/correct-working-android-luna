@@ -1,1 +1,0 @@
-com.noisefit_ryeex_sdk

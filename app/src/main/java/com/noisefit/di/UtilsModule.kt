@@ -46,11 +46,7 @@ object UtilsModule {
         return EncryptUtils()
     }
 
-    @Singleton
-    @Provides
-    fun provideDeviceUtil(): DeviceUtil {
-        return DeviceUtil()
-    }
+
 
     @Singleton
     @Provides

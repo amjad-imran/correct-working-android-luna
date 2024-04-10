@@ -3,17 +3,24 @@ package com.noisefit.util.notif
 import android.app.Notification
 import android.app.Notification.DEFAULT_SOUND
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
+import android.content.Intent
 import android.graphics.BitmapFactory
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.data.local.AppStaticData
+import com.noisefit.ui.SplashActivity
 import com.noisefit.util.notif.NotificationEventsClass.APP_UPDATE_NOTIFICATION_KEY
 import com.noisefit.util.notif.NotificationEventsClass.FIND_PHONE_NOTIFICATION_KEY
 import com.noisefit.util.notif.NotificationEventsClass.LOCAL_NOTIFICATION_KEY
+import com.noisefit.util.notif.NotificationEventsClass.LOCAL_NOTIFICATION_WORKOUT_KEY
+import com.noisefit_commans.data.model.OreoAutoSportData
+import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.StringUtils.capitalizeWords
 
 
 object NotificationUtil {
@@ -38,6 +45,10 @@ object NotificationUtil {
             notificationIndex,
             deepLink
         )
+        /*val intent = Intent(context, SplashActivity::class.java)
+        val contentIntent =
+            PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE)*/
+
         val priority = NotificationHelper.getPriority(channelInfo.first)
 
         val builder = NotificationCompat.Builder(context, channelInfo.first)
@@ -67,6 +78,24 @@ object NotificationUtil {
 
     fun showLocalNotification(context: Context, title: String, content: String) {
         pushNotification(context, title, content, LOCAL_NOTIFICATION_KEY, "1")
+    }
+
+    fun showWorkoutLocalNotification(context: Context, data: OreoAutoSportData) {
+        val workoutName = data.type?.lowercase()?.capitalizeWords() ?: "Workout"
+        val startTime = DateFormats.convertTimestampToDate(data.startTime, DateFormats.timeFormat12)
+        val endTime = DateFormats.convertTimestampToDate(
+            data.startTime + data.duration * 1000,
+            DateFormats.timeFormat12
+        )
+
+        pushNotification(
+            context,
+            "$workoutName detected",
+            "$workoutName was detected from $startTime to $endTime and is ready to review",
+            LOCAL_NOTIFICATION_WORKOUT_KEY,
+            "1",
+            deepLink = ""
+        )
     }
 
 

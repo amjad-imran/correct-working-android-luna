@@ -28,12 +28,6 @@ constructor(
                     AppLogs.sendAppLogs("Init ZH SDK")
                 }
 
-                SDKWatchType.SDK_NAV_PLUS -> TODO()
-                SDKWatchType.SDK_HYBRID -> TODO()
-                SDKWatchType.SDK_QUBE -> TODO()
-                SDKWatchType.SDK_EVOLVE -> TODO()
-                SDKWatchType.SDK_CF_PRO -> TODO()
-                SDKWatchType.SDK_RYEEX -> TODO()
             }
         }
         return baseInitializeInterface
@@ -48,12 +42,7 @@ constructor(
                     AppLogs.sendAppLogs("Un init ZH SDK")
                 }
 
-                SDKWatchType.SDK_NAV_PLUS -> TODO()
-                SDKWatchType.SDK_HYBRID -> TODO()
-                SDKWatchType.SDK_QUBE -> TODO()
-                SDKWatchType.SDK_EVOLVE -> TODO()
-                SDKWatchType.SDK_CF_PRO -> TODO()
-                SDKWatchType.SDK_RYEEX -> TODO()
+
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.noisefit
 
+//import com.clevertap.android.sdk.ActivityLifecycleCallback
 import android.app.Application
 import android.app.UiModeManager.MODE_NIGHT_YES
 import android.content.Context
@@ -7,12 +8,10 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
-//import com.clevertap.android.sdk.ActivityLifecycleCallback
 import com.github.anrwatchdog.ANRWatchDog
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.moengage.core.DataCenter
 import com.moengage.core.LogLevel
-import com.moengage.core.MoECoreHelper
 import com.moengage.core.MoEngage
 import com.moengage.core.config.FcmConfig
 import com.moengage.core.config.GeofenceConfig
@@ -23,14 +22,15 @@ import com.moengage.core.ktx.MoEngageBuilderKtx
 import com.moengage.pushbase.MoEPushHelper
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
+import com.noisefit.session.SessionManager
 import com.noisefit.ui.SplashActivity
 import com.noisefit.watch.ApplicationHandler
 import com.noisefit_commans.NoisefitApplication
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.FileLogsUtils
-import com.useinsider.insider.Insider
-import com.useinsider.insider.InsiderCallbackType
+import com.oreo.util.MyActivityLifecycleCallbacks
+
 import dagger.hilt.android.HiltAndroidApp
 import java.util.*
 import javax.inject.Inject
@@ -47,6 +47,9 @@ class NoiseFitApplicationMain : NoisefitApplication(), Configuration.Provider {
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
 
+    @Inject
+    lateinit var sessionManager: SessionManager
+
     companion object {
         var context: Application? = null
     }
@@ -56,31 +59,15 @@ class NoiseFitApplicationMain : NoisefitApplication(), Configuration.Provider {
         super.onCreate()
         AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
         context = this
+        registerActivityLifecycleCallbacks(MyActivityLifecycleCallbacks(sessionManager))
         FileLogsUtils.initLogs(applicationContext)
         AppLogs.initAppLogs(applicationContext)
         setDefaultLanguage(this)
         initMoEngage()
         // TODO: Please change with your partner name.
         // Make sure that all the letters are lowercase.
-        Insider.Instance.init(this, BuildConfig.INSIDER_PARTNER)
 
 
-        Insider.Instance.registerInsiderCallback { data, callbackType ->
-            when (callbackType) {
-                InsiderCallbackType.NOTIFICATION_OPEN -> Log.d(
-                    "[INSIDER]",
-                    "[NOTIFICATION_OPEN]: $data"
-                )
-                InsiderCallbackType.TEMP_STORE_CUSTOM_ACTION -> Log.d(
-                    "[INSIDER]",
-                    "[TEMP_STORE_CUSTOM_ACTION]: $data"
-                )
-                else -> {}
-            }
-        }
-        Insider.Instance.setSplashActivity(SplashActivity::class.java)
-        Insider.Instance.enableIDFACollection(true)
-        Insider.Instance.currentUser.setLocale("tr_TR")
 
         if (BuildConfig.DEBUG) {
             ANRWatchDog().setIgnoreDebugger(true)
@@ -89,8 +76,6 @@ class NoiseFitApplicationMain : NoisefitApplication(), Configuration.Provider {
                     error?.let { FirebaseCrashlytics.getInstance().recordException(it) }
                 }.start();
         }
-
-        NoisefitApplication.localDataStore = localDataStore
     }
 
     private fun initMoEngage() {

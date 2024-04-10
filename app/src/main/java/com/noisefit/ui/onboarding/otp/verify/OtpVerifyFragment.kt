@@ -19,6 +19,7 @@ import com.noisefit.ui.onboarding.onboardProfile.ProfileSetupActivity
 import com.noisefit.ui.onboarding.otp.OtpViewModel
 import com.noisefit.ui.onboarding.pairing.DeviceSetupActivity
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
+import com.noisefit.ui.onboarding.setup.DeviceSetupActivityV2
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.utils.InsiderAppEvents
 import com.noisefit_commans.utils.LOGS
@@ -188,7 +189,7 @@ class OtpVerifyFragment :
                 if (value) {
                     if (authViewModel.isDevicePaired()) {
                         if (authViewModel.isProfileSetupComplete()) {
-                            startActivity(DeviceSetupActivity.getStartIntent(requireContext(), setupDevice = true))
+                            startActivity(DeviceSetupActivityV2.getStartIntent(requireContext()))
                             activity?.finish()
                         } else {
                             startActivity(ProfileSetupActivity.getStartIntent(requireContext()))

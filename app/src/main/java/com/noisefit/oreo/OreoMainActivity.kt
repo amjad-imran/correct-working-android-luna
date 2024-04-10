@@ -13,15 +13,16 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.noisefit.NoiseFitApplicationMain
+import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ActivityOreoMainBinding
 import com.noisefit.ui.APP_CONTINUE
@@ -29,8 +30,10 @@ import com.noisefit.ui.APP_EXIT
 import com.noisefit.ui.APP_UPDATE
 import com.noisefit.ui.common.BaseActivity
 import com.noisefit.ui.onboarding.FirebaseUpdateViewModel
+import com.noisefit.ui.onboarding.setup.DeviceSetupActivityV2
 import com.noisefit.util.ApplicationUtils
 import com.noisefit.util.moveToServer.BatteryNotificationUtils
+import com.noisefit.util.notif.NotificationEventsClass
 import com.noisefit.util.notif.NotificationUtil
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
@@ -42,7 +45,7 @@ import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
@@ -67,13 +70,17 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     private val REQUEST_ENABLE_BT = 133
 
     companion object {
+        val NOTIFICATION_TYPE = "NOTIFICATION_TYPE"
         fun getStartIntent(
             context: Context,
             notificationType: String? = null,
             notificationIndex: String? = null,
             deeplink: String? = null
         ): Intent {
-            return Intent(context, OreoMainActivity::class.java)
+
+            return Intent(context, OreoMainActivity::class.java).apply {
+                this.putExtra(NOTIFICATION_TYPE, notificationType)
+            }
         }
     }
 
@@ -86,6 +93,14 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         viewModel.sessionManager.getPairedState()
         checkBluetooth()
         firebaseViewModel.generateToken()
+
+        intent?.let {
+            Handler(Looper.getMainLooper()).postDelayed({
+                handleIntent(it)
+            }, 500)
+
+
+        }
     }
 
     private fun setBlurAddCta(radius: Float = 5f) {
@@ -196,6 +211,19 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
             //binding.blurViewSelector.visible()
         }
+
+        //TODO comment after use
+      /*  binding.btnAddWorkout.setOnLongClickListener {
+            if (BuildConfig.DEBUG) {
+                startActivity(DeviceSetupActivityV2.getStartIntent(this,fullSetup = true),)
+            }
+            true
+        }*/
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
     }
 
     private fun showAddWorkout() {
@@ -472,13 +500,13 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         if (versionCheckResponse.upgradeType?.lowercase() == "force_upgrade") {
             return true
-        } else if (versionCheckResponse.upgradeType?.lowercase() == "soft_upgrade") {
+        }/* else if (versionCheckResponse.upgradeType?.lowercase() == "soft_upgrade") {
             val ignoredVersion = viewModel.localDataStore.getIgnoreVersion()
             if (ignoredVersion != versionCheckResponse.currentVersion) {
                 return true
             }
 
-        }
+        }*/
         return false
     }
 
@@ -509,6 +537,12 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
     override fun observeSubscriber() {
+
+        viewModel.sessionManager.customSuccessToast.observe(this) {
+            it.getContent()?.let {
+                showCustomSuccessToast(it)
+            }
+        }
 
         viewModel.sessionManager.reloadTodayData.observe(this) {
             it.getContent()?.let {
@@ -625,6 +659,15 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         }
     }
 
+    private fun showCustomSuccessToast(message: String) {
+        binding.lytToastSuccess.tvText.text = message
+        binding.lytToastSuccess.root.visible()
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.lytToastSuccess.root.gone()
+        }, 3000)
+
+    }
+
     private val navListener =
         NavController.OnDestinationChangedListener { controller, destination, arguments ->
             when (destination.id) {
@@ -681,8 +724,35 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             viewModel.syncRecordedWorkoutData()
         }
 
-        viewModel.shouldResetMasterDates()
 
+        //viewModel.shouldResetMasterDates()
+
+    }
+
+    private fun handleIntent(intent: Intent?) {
+        intent?.extras?.let { intentExtra ->
+            if (intentExtra.containsKey(NOTIFICATION_TYPE)) {
+                LOGS.d("NEW_NOTIFICATION_TYPE  ${intentExtra.getString(NOTIFICATION_TYPE)}")
+                handleNotificationType(
+                    intentExtra.getString(OreoMainActivity.NOTIFICATION_TYPE) ?: "",
+                    "0",
+                    ""
+                )
+                intent.putExtra(NOTIFICATION_TYPE, "")
+            }
+
+        }
+
+    }
+
+    private fun handleNotificationType(
+        notificationType: String,
+        notificationIndex: String,
+        deeplink: String?
+    ) {
+        if (notificationType.equals(NotificationEventsClass.LOCAL_NOTIFICATION_WORKOUT_KEY, true)) {
+            navController?.navigate(R.id.detectWorkoutListFragment)
+        }
     }
 
     override fun onPause() {
@@ -821,6 +891,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     override fun logAppEvent(eventName: String, data: HashMap<String, Any?>) {
 
     }
+
 }
 
 enum class BottomNavOption {

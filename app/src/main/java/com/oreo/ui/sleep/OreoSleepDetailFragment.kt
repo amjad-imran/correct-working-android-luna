@@ -15,24 +15,29 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoSleepDetailBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.ui.custom.NightTimeGraphViewOreo
 import com.noisefit_commans.ui.custom.SleepGraphViewOreo
-import com.noisefit_commans.utils.AppLogs
+import com.noisefit_commans.ui.custom.SleepStageAction
+import com.noisefit_commans.ui.custom.ToolTipEntry
+import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
+import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.GraphDummyModel
 import com.oreo.data.model.SleepChartModel
 import com.oreo.data.model.health.*
+import com.oreo.ui.custom.LineChartType
+import com.oreo.ui.custom.OnLinearChartClickAction
 import com.oreo.ui.custom.ScrollListener
 import com.oreo.ui.home.summary.DashNapAdapter
 import com.oreo.ui.home.summary.OnNapSelectedAction
@@ -43,6 +48,7 @@ import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -56,6 +62,9 @@ class OreoSleepDetailFragment :
     private var sleepDayGraphView: SleepGraphViewOreo? = null
 
     private val TAG = "OreoSleepDetailFragment"
+
+    @Inject
+    lateinit var vibrationUtils: VibrationUtils
 
 
     private val mSleepStageAdapter: OreoSleepStageAnalysisAdapter by lazy {
@@ -79,7 +88,10 @@ class OreoSleepDetailFragment :
         val desListData = viewModel.prepareDataForDescriptionArray(resultData)
         navigate(
             OreoSleepDetailFragmentDirections.actionNavigationSleepDetailsFragToDescriptionPopUpBottomDialogFragment(
-                position, desListData.toTypedArray(), resultData[position].title
+                position,
+                desListData.toTypedArray(),
+                resultData[position].title,
+                ClickViewType.SLEEP.name
             )
         )
 
@@ -208,96 +220,65 @@ class OreoSleepDetailFragment :
         )
     }
 
-    private fun showHeartRateVariabilityGraph(
-        hrv: CommonListDataModel?,
-        sleepStartTime: String?,
-        sleepEndTime: String?
-    ) {
+    private fun setHrLowestHr() {
 
-//        if (hrv?.value.isNullOrEmpty()) {
-//            binding.lytHRVariability.lineChart.gone()
-//            return
-//        }
-
-        val ssTime: String?
-        val seTime: String?
-        var breakUpData = ArrayList<Int>()
-        var hasDummyData = true
-        if (hrv?.value.isNullOrEmpty()) {
-            breakUpData = viewModel.getDummyBreakUpDataForTimeDisplay()
-            ssTime = null
-            seTime = null
+        binding.lytHeartRate.tvSubtitle1.text = getString(R.string.text_lowest_hr)
+        if (viewModel.lowestHr == null || viewModel.lowestHr == 0 || viewModel.lowestHr == 255) {
+            binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
+            binding.lytHeartRate.lytSubtitleValue1.tvUnit.gone()
         } else {
-            hasDummyData = false
-            seTime = sleepEndTime
-            ssTime = sleepStartTime
-            breakUpData = hrv?.value as ArrayList<Int>
+            binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "${viewModel.lowestHr}"
+            binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = getString(R.string.text_bpm_small)
+            binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
         }
+    }
 
-        /* val baseTimeList =
-             UtilClass.graphTwoHoursInterval(ssTime, seTime, breakUpData.size ?: 288)*/
+    private fun setHrvMax() {
 
-        val baseTimeListNew =
-            UtilClass.getXAxisPoints(ssTime, seTime, breakUpData.size ?: 288)
-
-        binding.lytHRVariability.lineChart.visible()
-        val sleepChart = SleepChartModel()
-        val chartList: MutableList<ChartModel> = java.util.ArrayList()
-
-        breakUpData.forEachIndexed { index, it ->
-            val chartModel = ChartModel()
-
-            var value = it
-            if (value == 255) {
-                value = 0
-            }
-
-            chartModel.value = value
-            chartModel.index = baseTimeListNew[index]//baseTimeList[index]
-            chartModel.date = ""
-            chartList.add(chartModel)
+        binding.lytHRVariability.tvSubtitle1.text = getString(R.string.text_maximum)
+        if (viewModel.maxHrv == null || viewModel.maxHrv == 0 || viewModel.maxHrv == 255) {
+            binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "-"
+            binding.lytHRVariability.lytSubtitleValue1.tvUnit.gone()
+        } else {
+            binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "${viewModel.maxHrv}"
+            binding.lytHRVariability.lytSubtitleValue1.tvUnit.text = getString(R.string.text_ms)
+            binding.lytHRVariability.lytSubtitleValue1.tvUnit.visible()
         }
-
-        sleepChart.list = chartList
-
-        AppLogs.sendAppLogs("lineChart ${Gson().toJson(sleepChart)}")
-
-        binding.lytHRVariability.lineChart.updateGraphColor(
-            Color.parseColor("#ff80e3"),
-            Color.parseColor("#CCff59da"),
-            Color.parseColor("#0Dff59da")
-        )
-        binding.lytHRVariability.lineChart.updateDataWithMax(
-            sleepChart, 5, true, false, GraphDummyModel(
-                hasDummyData, 0, 200
-            ),
-            hrv?.avg
-        )
     }
 
 
     private fun showHeartRateGraph(
-        heartRateList: CommonListDataModel?,
+        heartRateData: OreoSleepModel?,
         sleepStartTime: String?,
         sleepEndTime: String?,
     ) {
-//        if ((heartRateList?.value?.size ?: 0) <= 1) {
-//            binding.lytHeartRate.lineChart.gone()
-//            return
-//        }
+
+        binding.lytHeartRate.tvTitle.text = getString(R.string.text_heart_rate)
+
+
+        viewModel.lowestHr = heartRateData?.hr?.low
+        setHrLowestHr()
+
+        if (heartRateData?.hr?.avg != null && heartRateData?.hr?.avg != 0) {
+            binding.lytHeartRate.tvSubtitle2.text = "Average ${heartRateData?.hr?.avg} bpm"
+        } else {
+            binding.lytHeartRate.tvSubtitle2.text = ""
+        }
+
         val ssTime: String?
         val seTime: String?
         var breakUpData = ArrayList<Int>()
-        var hasDummyData = true
-        if (heartRateList?.value.isNullOrEmpty()) {
+        var hasDummyData = false
+        if (heartRateData?.hr?.value.isNullOrEmpty()) {
             breakUpData = viewModel.getDummyBreakUpDataForTimeDisplay()
             ssTime = null
             seTime = null
+            hasDummyData = true
         } else {
             hasDummyData = false
             seTime = sleepEndTime
             ssTime = sleepStartTime
-            breakUpData = heartRateList?.value as ArrayList<Int>
+            breakUpData = heartRateData?.hr?.value as ArrayList<Int>
         }
 
 
@@ -322,6 +303,103 @@ class OreoSleepDetailFragment :
                 value = 0
             }
 
+            chartModel.value = value
+            chartModel.index = baseTimeListNew[index]
+            chartList.add(chartModel)
+        }
+
+
+        sleepChart.list = chartList
+        binding.lytHeartRate.lineChart.apply {
+            setVibrationUtil(vibrationUtils)
+            updateGraphColor(
+                Color.parseColor("#ff7f96"),
+                Color.parseColor("#844B60"),
+                Color.parseColor("#99ff718b"),
+                Color.parseColor("#0Dff718b")
+            )
+            val lowValueIndex = updateDataWithMax(
+                sleepChart, 5, false, false,
+                GraphDummyModel(
+                    hasDummyData, 40, 100
+                ),
+                heartRateData?.hr?.avg,
+                sleepStartTime,
+                sleepEndTime,
+                LineChartType.HEART_RATE
+            )
+
+            setInteractiveMode(!hasDummyData)
+
+            setClickListener(object : OnLinearChartClickAction {
+                override fun onValueSelected(value: Int, isInteracting: Boolean, time: String?) {
+                    if (isInteracting) {
+                        binding.lytHeartRate.tvSubtitle1.text = time ?: ""
+                        binding.lytHeartRate.lytSubtitleValue1.tvValue.text =
+                            if (value > 0) "$value" else "-"
+
+                    } else {
+                        setHrLowestHr()
+                    }
+                }
+
+                override fun onTopClicked() {
+
+                }
+
+            })
+
+        }
+
+
+    }
+
+    private fun showHeartRateVariabilityGraph(
+        heartRateData: OreoSleepModel?,
+        sleepStartTime: String?,
+        sleepEndTime: String?,
+    ) {
+
+        binding.lytHRVariability.tvTitle.text = getString(R.string.text_heart_rate_variability)
+
+        viewModel.maxHrv = heartRateData?.hrv?.max
+        setHrvMax()
+
+        if (heartRateData?.hrv?.avg != null && heartRateData?.hrv?.avg != 0) {
+            binding.lytHRVariability.tvSubtitle2.text = "Average ${heartRateData?.hrv?.avg} ms"
+        } else {
+            binding.lytHRVariability.tvSubtitle2.text = ""
+        }
+
+        val ssTime: String?
+        val seTime: String?
+        var breakUpData = ArrayList<Int>()
+        var hasDummyData = false
+        if (heartRateData?.hrv?.value.isNullOrEmpty()) {
+            breakUpData = viewModel.getDummyBreakUpDataForTimeDisplay()
+            ssTime = null
+            seTime = null
+            hasDummyData = true
+        } else {
+            hasDummyData = false
+            seTime = sleepEndTime
+            ssTime = sleepStartTime
+            breakUpData = heartRateData?.hrv?.value as ArrayList<Int>
+        }
+
+        val baseTimeListNew =
+            UtilClass.getXAxisPoints(ssTime, seTime, breakUpData.size ?: 288)
+
+        binding.lytHRVariability.lineChart.visible()
+        val sleepChart = SleepChartModel()
+        val chartList = ArrayList<ChartModel>()
+        breakUpData.forEachIndexed { index, data ->
+            val chartModel = ChartModel()
+
+            var value = data
+            if (value == 255) {
+                value = 0
+            }
 
             chartModel.value = value
             chartModel.index = baseTimeListNew[index]
@@ -330,26 +408,128 @@ class OreoSleepDetailFragment :
 
 
         sleepChart.list = chartList
-        binding.lytHeartRate.lineChart.updateGraphColor(
-            Color.parseColor("#ff6b86"),
-            Color.parseColor("#CCff6581"),
-            Color.parseColor("#0Dff6581")
-        )
+        binding.lytHRVariability.lineChart.apply {
+            setVibrationUtil(vibrationUtils)
+            updateGraphColor(
+                Color.parseColor("#ff7fd6"),
+                Color.parseColor("#844A7E"),
+                Color.parseColor("#99FF71D2"),
+                Color.parseColor("#0DFF5FCC")
+            )
+            val lowValueIndex = updateDataWithMax(
+                sleepChart, 5, true, false,
+                GraphDummyModel(
+                    hasDummyData, 0, 200
+                ),
+                heartRateData?.hrv?.avg,
+                sleepStartTime,
+                sleepEndTime,
+                LineChartType.HRV
+            )
 
-        binding.lytHeartRate.lineChart.updateDataWithMax(
-            sleepChart, 5, false, true,
-            GraphDummyModel(
-                hasDummyData, 40, 100
-            ),
-            heartRateList?.avg
-        )
+            setInteractiveMode(!hasDummyData)
 
+            setClickListener(object : OnLinearChartClickAction {
+                override fun onValueSelected(value: Int, isInteracting: Boolean, time: String?) {
+                    if (isInteracting) {
+                        binding.lytHRVariability.tvSubtitle1.text = time ?: ""
+                        binding.lytHRVariability.lytSubtitleValue1.tvValue.text =
+                            if (value > 0) "$value" else "-"
+
+                    } else {
+                        setHrvMax()
+                    }
+                }
+
+                override fun onTopClicked() {
+
+                }
+
+            })
+
+        }
+
+
+    }
+
+    fun setInteractionDate(data: ToolTipEntry) {
+        binding.lytSSAnalysis.lytSleepInteraction.apply {
+
+            if (data.type.equals("deep", true)) {
+                this.tvSleepType.text = getString(R.string.text_deep_sleep)
+                this.tvSleepType.setTextColor(Color.parseColor("#a882ff"))
+
+            } else if (data.type.equals("light", true)) {
+                this.tvSleepType.text = getString(R.string.text_light_sleep)
+                this.tvSleepType.setTextColor(Color.parseColor("#cc9cfb"))
+
+            } else if (data.type.equals("rem", true)) {
+                this.tvSleepType.text = getString(R.string.text_rem_sleep)
+                this.tvSleepType.setTextColor(Color.parseColor("#cbade8"))
+
+            } else if (data.type.equals("awake", true)) {
+                this.tvSleepType.text = getString(R.string.text_awake)
+                this.tvSleepType.setTextColor(Color.parseColor("#e5dafa"))
+            }
+
+            val startTime = DateFormats.formatDate(
+                data.startTime,
+                DateFormats.dateTimeFormat5,
+                DateFormats.timeFormat12_2
+            )
+            val startTimeUnit = DateFormats.formatDate(
+                data.startTime,
+                DateFormats.dateTimeFormat5,
+                DateFormats.timeFormat12_unit
+            )
+            val endTime = DateFormats.formatDate(
+                data.endTime,
+                DateFormats.dateTimeFormat5,
+                DateFormats.timeFormat12_2
+            )
+            val endTimeUnit = DateFormats.formatDate(
+                data.endTime,
+                DateFormats.dateTimeFormat5,
+                DateFormats.timeFormat12_unit
+            )
+
+            this.tvStartTime.text = startTime
+            this.tvStartUnit.text = startTimeUnit.lowercase()
+            this.tvEndTime.text = endTime
+            this.tvEndUnit.text = endTimeUnit.lowercase()
+
+        }
     }
 
 
     private fun initSleepAnalysisGraph(hourlyBreakup: List<SleepHourlyBreakup>?) {
 
         sleepDayGraphView = SleepGraphViewOreo(requireContext())
+        sleepDayGraphView?.setClickListener(object : SleepStageAction {
+            override fun onValueSelected(data: ToolTipEntry) {
+                setInteractionDate(data)
+            }
+
+            override fun isInteractionOnGoing(onGoing: Boolean) {
+                if (onGoing) {
+                    binding.lytSSAnalysis.lytSleepInteraction.root.visible()
+                    binding.lytSSAnalysis.lytTotalSleep.root.gone()
+                } else {
+                    binding.lytSSAnalysis.lytSleepInteraction.root.gone()
+                    binding.lytSSAnalysis.lytTotalSleep.root.visible()
+                }
+            }
+        })
+
+        if (hourlyBreakup.isNullOrEmpty()) {
+            sleepDayGraphView?.enableInteractiveMode(false)
+        } else {
+            sleepDayGraphView?.enableInteractiveMode(true)
+        }
+
+        sleepDayGraphView?.setVibrationUtil(vibrationUtils)
+
+
         binding.lytSSAnalysis.flSleepGraph.removeAllViews()
         binding.lytSSAnalysis.flSleepGraph.addView(sleepDayGraphView)
 
@@ -440,6 +620,14 @@ class OreoSleepDetailFragment :
         binding.lytToolbar.view1.visible()
         binding.lytToolbar.ivAddFriend.visible()
         binding.lytToolbar.ivAddFriend.setImageResource(R.drawable.ic_calenders)
+
+        binding.svMain.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            if (Math.abs(scrollY - oldScrollY) > 0) {
+                sleepDayGraphView?.resetIfInteracting()
+                binding.lytHeartRate.lineChart.resetIfInteracting()
+                binding.lytHRVariability.lineChart.resetIfInteracting()
+            }
+        }
 
 
         binding.lytSSAnalysis.lytNightMovement.bInfo.setOnClickListener {
@@ -571,7 +759,7 @@ class OreoSleepDetailFragment :
             mSharedViewModel.itemClickType = ViewItemClickType.RESTING_HR
             navigate(R.id.sleepDetailsParentOreo, Bundle().apply {
                 putString("viewType", "sleep")
-                putString("infoData", viewModel.contributorInfo.value?.resting_hr)
+                putString("infoData", viewModel.contributorInfo.value?.resting_hr_top)
                 putString("date", mainViewModel.selectedDate)
             })
 
@@ -613,14 +801,18 @@ class OreoSleepDetailFragment :
         }
     }
 
-    private fun showNightTimeMovementGraph(nightMovementBreakUp: List<SleepMovementBreakup>?) {
+    private fun showNightTimeMovementGraph(
+        nightMovementBreakUp: List<SleepMovementBreakup>?,
+        sleepStartTime: String?,
+        sleepEndTime: String?
+    ) {
 
         val nightTimeMovementGraph = NightTimeGraphViewOreo(requireContext())
         binding.lytSSAnalysis.lytNightMovement.flNightTimeMovement.removeAllViews()
         binding.lytSSAnalysis.lytNightMovement.flNightTimeMovement.addView(nightTimeMovementGraph)
 
         val sleepData =
-            viewModel.getMovementBreakup(nightMovementBreakUp)
+            viewModel.getMovementBreakup(nightMovementBreakUp, sleepStartTime, sleepEndTime)
         nightTimeMovementGraph.init(false)
 
         nightTimeMovementGraph.setData(sleepData.second)
@@ -633,6 +825,19 @@ class OreoSleepDetailFragment :
 
 
     override fun subscribeObservers() {
+        viewModel.sessionManager.syncCompleted.observe(this) {
+            it?.getContent()?.let { syncDataStatus ->
+                when (syncDataStatus) {
+                    SyncEvents.ServerSyncSuccess -> {
+                        mainViewModel.reloadTodaysData()
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+
+
         mainViewModel.sleepHistoryResponse.observe(viewLifecycleOwner) {
 
             if (it.isNullOrEmpty()) return@observe
@@ -724,9 +929,6 @@ class OreoSleepDetailFragment :
                 }*/
     }
 
-    private fun setScrollDate() {
-
-    }
 
     private fun setSleepScore(sleepScoreData: CommonDataModel) {
         binding.lytSleepScore.lytSleepAvg.tvValue.text = sleepScoreData.value.toString()
@@ -852,119 +1054,53 @@ class OreoSleepDetailFragment :
         binding.lytSSAnalysis.lytNightMovement.tvTitle.text =
             getString(R.string.text_night_time_movement)
 
-        val sleepStartTime = dayData.hourly_breakup?.first()?.start_time /*DateFormats.formatDate(
-            dayData.hourly_breakup?.first()?.start_time,
-            DateFormats.dateTimeFormat5,
-            DateFormats.time12Meridian
-        )*/
-        val sleepEndTime = dayData.hourly_breakup?.last()?.end_time/*DateFormats.formatDate(
-            dayData.hourly_breakup?.last()?.end_time,
-            DateFormats.dateTimeFormat5,
-            DateFormats.time12Meridian
-        )*/
-        //heart rate
-        binding.lytHeartRate.tvTitle.text = getString(R.string.text_heart_rate)
-        binding.lytHeartRate.tvSubtitle1.text = getString(R.string.text_lowest_hr)
-        binding.lytHeartRate.tvSubtitle2.text = getString(R.string.text_average_hr)
-        val heartRateData = dayData.hr
-        if (heartRateData != null) {
-            if (heartRateData.avg != null) {
-                if (heartRateData.avg == 0 || heartRateData.avg == 255) {
-                    binding.lytHeartRate.lytSubtitleValue2.tvValue.text = "-"
-                    binding.lytHeartRate.lytSubtitleValue2.tvUnit.gone()
-                } else {
-                    binding.lytHeartRate.lytSubtitleValue2.tvValue.text =
-                        heartRateData.avg.toString()
-                    binding.lytHeartRate.lytSubtitleValue2.tvUnit.visible()
-                    binding.lytHeartRate.lytSubtitleValue2.tvUnit.text = "bpm"
-                }
-            } else {
-                binding.lytHeartRate.lytSubtitleValue2.tvValue.text = "-"
-                binding.lytHeartRate.lytSubtitleValue2.tvUnit.gone()
-            }
-            if (heartRateData.low != null) {
-                if (heartRateData.low == 0 || heartRateData.low == 255) {
-                    binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
-                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.gone()
-                } else {
-                    binding.lytHeartRate.lytSubtitleValue1.tvValue.text =
-                        heartRateData.low.toString()
-                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
-                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
-                }
-            } else {
-                binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
-                binding.lytHeartRate.lytSubtitleValue1.tvUnit.gone()
-            }
-        } else {
-            binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
-            binding.lytHeartRate.lytSubtitleValue2.tvValue.text = "-"
-            binding.lytHeartRate.lytSubtitleValue2.tvUnit.gone()
-            binding.lytHeartRate.lytSubtitleValue1.tvUnit.gone()
-        }
-        showHeartRateGraph(dayData.hr, sleepStartTime, sleepEndTime)
+        val sleepStartTime = dayData.hourly_breakup?.first()?.start_time
+        val sleepEndTime = dayData.hourly_breakup?.last()?.end_time
 
-        //heart variability
-        binding.lytHRVariability.tvTitle.text = getString(R.string.text_heart_rate_variability)
-        binding.lytHRVariability.tvSubtitle1.text =
-            getString(R.string.text_average_hrv)
-        binding.lytHRVariability.tvSubtitle2.text =
-            getString(R.string.text_max)
-        val heartVariabilityData = dayData.hrv
-        if (heartVariabilityData != null) {
-            if (heartVariabilityData.avg != null) {
-                if (heartVariabilityData.avg == 0 || heartVariabilityData.avg == 255) {
-                    binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "-"
-                    binding.lytHRVariability.lytSubtitleValue1.tvUnit.gone()
-                } else {
-                    binding.lytHRVariability.lytSubtitleValue1.tvValue.text =
-                        heartVariabilityData.avg.toString()
-                    binding.lytHRVariability.lytSubtitleValue1.tvUnit.visible()
-                    binding.lytHRVariability.lytSubtitleValue1.tvUnit.text = "ms"
-                }
-            } else {
-                binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "-"
-                binding.lytHRVariability.lytSubtitleValue1.tvUnit.gone()
-            }
-            if (heartVariabilityData.max != null) {
-                if (heartVariabilityData.max == 0 || heartVariabilityData.max == 255) {
-                    binding.lytHRVariability.lytSubtitleValue2.tvValue.text = "-"
-                    binding.lytHRVariability.lytSubtitleValue2.tvUnit.gone()
-                } else {
-                    binding.lytHRVariability.lytSubtitleValue2.tvValue.text =
-                        heartVariabilityData.max.toString()
-                    binding.lytHRVariability.lytSubtitleValue2.tvUnit.visible()
-                    binding.lytHRVariability.lytSubtitleValue2.tvUnit.text = "ms"
-                }
-            } else {
-                binding.lytHRVariability.lytSubtitleValue2.tvValue.text = "-"
-                binding.lytHRVariability.lytSubtitleValue2.tvUnit.gone()
-            }
-        } else {
-//            binding.lytHRVariability.lineChart.gone()
-            binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "-"
-            binding.lytHRVariability.lytSubtitleValue2.tvValue.text = "-"
-            binding.lytHRVariability.lytSubtitleValue2.tvUnit.gone()
-            binding.lytHRVariability.lytSubtitleValue1.tvUnit.gone()
-        }
-        showHeartRateVariabilityGraph(dayData.hrv, sleepStartTime, sleepEndTime)
+        showHeartRateGraph(dayData, sleepStartTime, sleepEndTime)
 
-        //showBloodOxygenGraph(dayData.oxy, sleepStartTime, sleepEndTime)
+        showHeartRateVariabilityGraph(dayData, sleepStartTime, sleepEndTime)
 
         showAverageBloodOxygen(dayData.oxy)
 
         mSleepStageAdapter.setData(viewModel.getStepAnalysisData(dayData))
+
+        binding.lytSSAnalysis.lytTotalSleep.apply {
+
+            if (dayData.totalSleep != null) {
+                val (hour, minute) = ApplicationUtils.getFormattedSleepDurationFromSeconds(
+                    dayData.totalSleep?.value ?: 0
+                )
+                this.tvHour.text = "$hour"
+                this.tvMin.text = "$minute"
+
+                this.textHour.visible()
+                this.tvMin.visible()
+                this.textMin.visible()
+
+            } else {
+
+                this.tvHour.text = "--"
+
+                this.textHour.gone()
+                this.tvMin.gone()
+                this.textMin.gone()
+            }
+
+        }
+
         initSleepAnalysisGraph(dayData.hourly_breakup)
 
-        setNightTimeMovement(dayData.night_time_movement)
+        setNightTimeMovement(dayData.night_time_movement, sleepStartTime, sleepEndTime)
 
-        setNapData(dayData.naps,dayData.date)
+        setNapData(dayData.naps, dayData.date)
 
     }
 
     private fun setNapData(naps: List<Nap>?, date: String) {
+        val filteredNaps = naps?.filter { !it.isNextDayNap }
 
-        if (naps.isNullOrEmpty()) {
+        if (filteredNaps.isNullOrEmpty()) {
             binding.lytNaps.root.gone()
             return
         } else {
@@ -973,7 +1109,7 @@ class OreoSleepDetailFragment :
 
         binding.lytNaps.lytNap.rvNap.layoutManager =
             LinearLayoutManager(binding.lytNaps.lytNap.rvNap.context)
-        binding.lytNaps.lytNap.rvNap.adapter = DashNapAdapter(naps,date,true).apply {
+        binding.lytNaps.lytNap.rvNap.adapter = DashNapAdapter(filteredNaps, date, true).apply {
 
             this.setOnNapSelectedListener(object : OnNapSelectedAction {
                 override fun onNapSelected(napId: String) {
@@ -983,8 +1119,12 @@ class OreoSleepDetailFragment :
         }
     }
 
-    private fun setNightTimeMovement(hourlyBreakup: List<SleepMovementBreakup>?) {
-        showNightTimeMovementGraph(hourlyBreakup)
+    private fun setNightTimeMovement(
+        hourlyBreakup: List<SleepMovementBreakup>?,
+        sleepStartTime: String?,
+        sleepEndTime: String?
+    ) {
+        showNightTimeMovementGraph(hourlyBreakup, sleepStartTime, sleepEndTime)
     }
 
     private fun totalSleepDataView() {

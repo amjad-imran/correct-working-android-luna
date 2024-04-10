@@ -52,6 +52,10 @@ class OreoMyDeviceFragment :
     }
 
     override fun initListener() {
+
+        binding.rowAboutDevice.setUpdateAvailable(mViewModel.ringDataStore.isNewOtaAvailable())
+
+
         binding.backBtn.setOnClickListener { navigateUpSafe() }
         binding.rowSettings.setOnClickListener {
             navigate(R.id.deviceSettingsFragment)
@@ -81,6 +85,20 @@ class OreoMyDeviceFragment :
                 HashMap<String, Any>().apply {
                     this[MoEngageAppEventParams.star_rating] = "luna"
                 })
+        }
+        binding.rowShareFirmwareLogs.setOnClickListener {
+
+
+            if (mViewModel.firmwareLogFile?.exists() == true) {
+                context?.let { ctx ->
+                    ShareUtil.shareFile(
+                        ctx,
+                        FileLogsUtils.geFirmwareLogsUri(mViewModel.firmwareLogFile!!.path, ctx)
+                    )
+                }
+            } else {
+                context.showShortToast("No logs")
+            }
         }
 
         binding.btnSoftReset.setOnClickListener {
@@ -113,9 +131,9 @@ class OreoMyDeviceFragment :
             mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_mydevices_about_click)
             navigate(R.id.OAboutDeviceFragment)
         }
-          binding.rowGoogleFit.setOnClickListener {
-              navigate(R.id.googleFitFragmentOreo)
-          }
+        binding.rowGoogleFit.setOnClickListener {
+            navigate(R.id.googleFitFragmentOreo)
+        }
 
         binding.rowWarrantyRegistration.setOnClickListener {
             //navigate(R.id.warrantyFragmentOreo)

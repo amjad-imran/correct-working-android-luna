@@ -25,7 +25,7 @@ import com.noisefit.luna.databinding.DialogResetingDeviceBinding
 import com.noisefit.luna.databinding.FragmentPairingBinding
 import com.noisefit.session.SessionManager
 import com.noisefit.ui.onboarding.onboardProfile.ProfileSetupActivity
-import com.noisefit.ui.onboarding.pairing.DeviceSetupActivity
+import com.noisefit.ui.onboarding.setup.DeviceSetupActivityV2
 import com.noisefit.watch.ApplicationHandler
 import com.noisefit.watch.ConnectionHandler
 import com.noisefit_commans.common.copyToClipBoard
@@ -43,7 +43,6 @@ import com.noisefit_commans.interfaces.connection.ResetStates
 import com.noisefit_commans.interfaces.connection.WatchBindState
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.DeviceFirmware
-import com.noisefit_commans.models.DeviceType
 import com.noisefit_commans.ui.*
 import com.noisefit_commans.utils.*
 import com.oreo.receiver.service.RingConnectionService
@@ -161,8 +160,10 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
     }
 
     private fun handlePairState() {
+        viewModel.localDataStore.setDeviceSetupStatus(1)
+
         if (viewModel.isProfileSetupComplete()) {
-            startActivity(DeviceSetupActivity.getStartIntent(requireContext()))
+            startActivity(DeviceSetupActivityV2.getStartIntent(requireContext(), fullSetup = true))
             activity?.finish()
         } else {
             startActivity(ProfileSetupActivity.getStartIntent(requireContext()))
@@ -171,16 +172,14 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
     }
 
     private fun checkNotificationPermission() {
+        startConnectionService()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (NotificationManagerCompat.from(requireContext()).areNotificationsEnabled()) {
-                startConnectionService()
-            } else {
+            if (!NotificationManagerCompat.from(requireContext()).areNotificationsEnabled()) {
                 notificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
-        } else {
-            startConnectionService()
         }
     }
+
     private fun startConnectionService() {
         if (!viewModel.isMyServiceRunning(
                 RingConnectionService::class.java,
@@ -196,35 +195,35 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
     private val notificationPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
-        if (isGranted) {
-            startConnectionService()
-        } else {
-            context.showShortToast("Notification permission required")
-            uiController.onApiErrorReceived(ErrorResponse(
-                UIComponentType.AreYouSureDialog(
-                    getString(R.string.text_permission_required),
-                    "Notification permission required",
-                    false,
-                    getString(R.string.text_allow),
-                    object : BinaryActionCallback {
-                        override fun yes() {
-                            checkNotificationPermission()
-                        }
-
-                        override fun no() {
-
-                        }
-
-                    }
-                )
-            ))
-
-            // Explain to the user that the feature is unavailable because the
-            // features requires a permission that the user has denied. At the
-            // same time, respect the user's decision. Don't link to system
-            // settings in an effort to convince the user to change their
-            // decision.
-        }
+//        if (isGranted) {
+//            startConnectionService()
+//        } else {
+//            context.showShortToast("Notification permission required")
+//            uiController.onApiErrorReceived(ErrorResponse(
+//                UIComponentType.AreYouSureDialog(
+//                    getString(R.string.text_permission_required),
+//                    "Notification permission required",
+//                    false,
+//                    getString(R.string.text_allow),
+//                    object : BinaryActionCallback {
+//                        override fun yes() {
+//                            checkNotificationPermission()
+//                        }
+//
+//                        override fun no() {
+//
+//                        }
+//
+//                    }
+//                )
+//            ))
+//
+//            // Explain to the user that the feature is unavailable because the
+//            // features requires a permission that the user has denied. At the
+//            // same time, respect the user's decision. Don't link to system
+//            // settings in an effort to convince the user to change their
+//            // decision.
+//        }
     }
 
     override fun subscribeObservers() {
@@ -429,7 +428,6 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
                             }
 
                             AppLogs.sendAppLogs("Pairing ConnectState.ConnectFailed ${args.colorFitDevice.bluetoothName} | ${args.colorFitDevice.address}")
-
 
 
                             /*viewModel.shouldSendPairingFailLogs {
@@ -834,7 +832,8 @@ class PairingFragment : BaseFragment<FragmentPairingBinding>(FragmentPairingBind
         sessionManager.addUserAttributeToMoEngage(false, HashMap<String, Any>().apply {
             this[MoEngageAppEventAttributes.pair_device_name] = deviceData.bluetoothName.toString()
             this[MoEngageAppEventAttributes.pair_device_mac_address] = deviceData.address.toString()
-            this[MoEngageAppEventAttributes.pair_device_firmware_number] = deviceData.deviceId.toString()
+            this[MoEngageAppEventAttributes.pair_device_firmware_number] =
+                deviceData.deviceId.toString()
         })
 
     }

@@ -1,0 +1,134 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            style="@style/H5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Heart Rate" />
+
+        <ImageView
+            android:id="@+id/bInfo"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:background="@drawable/circle_black"
+            android:gravity="center"
+            android:src="@drawable/ic_info_oreo"
+            app:layout_constraintBottom_toBottomOf="@id/tvTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvTitle"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tvSubtitle1"
+            style="@style/H6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_20dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tvTitle"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+            tools:text="4:45 am" />
+
+        <include
+            android:id="@+id/lytSubtitleValue1"
+            layout="@layout/oreo_layout_view_with_bpm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_8dp"
+            android:layout_marginBottom="8dp"
+
+            app:layout_constraintStart_toStartOf="@id/tvSubtitle1"
+            app:layout_constraintTop_toBottomOf="@+id/tvSubtitle1" />
+
+
+        <TextView
+            android:id="@+id/tvSubtitle2"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dimen_16dp"
+            android:layout_marginBottom="@dimen/dimen_4dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="#9cbdff"
+
+            app:layout_constraintBottom_toBottomOf="@+id/lytSubtitleValue1"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Average 67 ms" />
+
+
+        <com.oreo.ui.custom.LineChartView
+            android:id="@+id/lineChart"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/dimen_12dp"
+            android:visibility="visible"
+            app:bgBottomColor="@android:color/transparent"
+            app:bgColor="@android:color/transparent"
+            app:bgLeftColor="@android:color/transparent"
+            app:bgRightColor="@android:color/transparent"
+            app:bgTopColor="@android:color/transparent"
+            app:bottomWith="26dp"
+            app:centerLineColor="#88b0ff"
+            app:centerLineWidth="3dp"
+            app:chartLineWidth="2dp"
+            app:gridColor="#80FFFFFF"
+            app:innerCircleColor="#ffffff"
+            app:innerCircleRadius="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lytSubtitleValue1"
+            app:leftWith="@dimen/dimen_16dp"
+            app:lineNormalColor="#fff"
+            app:noDataSize="12dp"
+            app:rightWith="32dp"
+            app:scaleColor="#ff000000"
+            app:scaleNodeColor="#FFFFFF"
+            app:scaleNodeRadius="6dp"
+            app:showGrid="false"
+            app:showSelectedIndicator="true"
+            app:topWith="20dp"
+            app:vCount="4"
+            app:xLineColor="@color/white_12"
+            app:xMax="100"
+            app:xMin="0"
+            app:xTextColor="#FFFFFF"
+            app:xTextSize="12sp"
+            app:yLineColor="#00FFFFFF"
+            app:yTextColor="@color/white_64"
+            app:yTextSize="10sp"
+            tools:visibility="visible" />
+
+
+        <com.github.mikephil.charting.charts.CombinedChart
+            android:id="@+id/candleChart"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lineChart"
+            tools:visibility="visible" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

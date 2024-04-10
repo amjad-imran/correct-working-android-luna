@@ -12,10 +12,5 @@ constructor(
     private var localDataStore: DataStoredInterface
 ) {
 
-    fun saveHrHash(): Boolean {
-        if (watchesSDK.getWatchType() == SDKWatchType.SDK_QUBE && localDataStore.getIsTestModeOn()) {
-            return false
-        }
-        return true
-    }
+
 }

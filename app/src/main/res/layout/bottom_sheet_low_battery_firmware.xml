@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_12dp"
+            tools:context=".ui.onboarding.PrivacyBottomDialogFragment"
+            tools:listitem="@layout/fragment_privacy_bottom_dialog_list_dialog_item">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/image_update_failed_back"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize28dpTop" />
+
+            <View
+                android:id="@+id/view31"
+                android:layout_width="80dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="4dp"
+                android:alpha="0.5"
+                android:background="@drawable/back_bottom_sheet_drag"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/oreoStatus"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="50dp"
+                android:background="@drawable/back_modal_new_round"
+                android:src="@drawable/ic_ring_default_silver_new"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/batteryStatus"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:indeterminate="false"
+                app:indicatorSize="64dp"
+                app:layout_constraintBottom_toBottomOf="@+id/oreoStatus"
+                app:layout_constraintEnd_toEndOf="@+id/oreoStatus"
+                app:layout_constraintStart_toStartOf="@+id/oreoStatus"
+                app:layout_constraintTop_toTopOf="@+id/oreoStatus"
+                app:trackColor="#1effffff"
+                app:trackThickness="1dp" />
+
+
+            <TextView
+                android:id="@+id/textView99"
+                style="@style/S24"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/text_low_battery_alert"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/batteryStatus" />
+
+            <TextView
+                android:id="@+id/textView103"
+                style="@style/S16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:layout_marginEnd="32dp"
+                android:text="@string/text_low_battery_message"
+                android:textColor="@color/white_64"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView99" />
+
+
+            <Button
+                android:id="@+id/btnTryAgain"
+                style="@style/PrimaryButtonStyle3"
+                android:layout_width="164dp"
+                android:layout_marginTop="44dp"
+                android:layout_marginBottom="@dimen/dimen_24dp"
+                android:text="@string/text_okay"
+                android:textSize="14sp"
+                app:backgroundTint="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView103" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+</layout>

@@ -7,7 +7,6 @@ import com.noisefit.luna.databinding.RowNapConfirmBinding
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.utils.DateFormats
-import java.lang.StringBuilder
 
 class NapsConfirmAdapter(val listener: NapConfirmAction) :
     RecyclerView.Adapter<NapsConfirmAdapter.ViewHolder>() {
@@ -18,7 +17,6 @@ class NapsConfirmAdapter(val listener: NapConfirmAction) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(nap: OreoNapData) {
-
             val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(nap.duration ?: 0)
             val time = if (hour == 0) {
                 "$minute min"

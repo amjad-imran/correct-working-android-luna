@@ -3,6 +3,7 @@ package com.oreo.ui.readiness
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
@@ -32,6 +33,9 @@ constructor(
     val ringDataStore: RingDataStore,
     val sessionManager: SessionManager
 ) : BaseViewModel() {
+
+    var lowestHr: Int? = null
+    var maxHrv: Int? = null
 
     private val _contributorInfo = MutableLiveData<OContributorResponseModal>()
     val contributorInfo: LiveData<OContributorResponseModal> = _contributorInfo
@@ -161,13 +165,13 @@ constructor(
         }
 
         list.reverse()
-        val lastDateFromList = dataList.last().date
+        val lastDateFromList = dataList.first().date
         val lastDate = DateFormats.subtractDateFormat3(lastDateFromList, 1)!!
         val suffixDatesList = DateFormats.getWeekDaysBetweenDates(
             DateFormats.subtractDateFormat3(lastDate, 14)!!, lastDate,
             DateFormats.dateFormat3, DateFormats.singleWeekDay
         )
-        val currentDateFromList = dataList.first().date
+        val currentDateFromList = dataList.last().date
         val currentDate = DateFormats.addDateFormat3(currentDateFromList, 1)!!
         val prefixDatesList = DateFormats.getWeekDaysBetweenDates(
             currentDate,
@@ -265,17 +269,17 @@ constructor(
             descriptionList.add(contributorInfo.value?.recoveryIndex ?: "")
             descriptionList.add(contributorInfo.value?.sleep_regularity ?: "")
             descriptionList.add(contributorInfo.value?.sleepBalance ?: "")
-            descriptionList.add(contributorInfo.value?.resting_hr ?: "")
+            descriptionList.add(contributorInfo.value?.resting_hr_bottom ?: "")
             descriptionList.add(contributorInfo.value?.activityBalance ?: "")
             descriptionList.add(contributorInfo.value?.hrvBalance ?: "")
-            descriptionList.add(contributorInfo.value?.temp_balance ?: "")
+            descriptionList.add(contributorInfo.value?.temperature_readiness_bottom ?: "")
         } else {
             descriptionList.add(contributorInfo.value?.yesterdaySleepDuration ?: "")
             descriptionList.add(contributorInfo.value?.sleepBalance ?: "")
             descriptionList.add(contributorInfo.value?.yesterdayActivity ?: "")
             descriptionList.add(contributorInfo.value?.activityBalance ?: "")
             descriptionList.add(contributorInfo.value?.hrvBalance ?: "")
-            descriptionList.add(contributorInfo.value?.resting_hr ?: "")
+            descriptionList.add(contributorInfo.value?.resting_hr_bottom ?: "")
             descriptionList.add(contributorInfo.value?.recoveryIndex ?: "")
         }
         return descriptionList
@@ -300,7 +304,6 @@ constructor(
             )
             contList.add(child)
         }
-
         return contList
     }
 
@@ -336,8 +339,9 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                     barPercent = 0,
+                    hasData = false,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
@@ -363,8 +367,9 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                     barPercent = 0,
+                    hasData = false,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
@@ -390,8 +395,9 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                     barPercent = 0,
+                    hasData = false,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
@@ -416,8 +422,9 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                     barPercent = 0,
+                    hasData = false,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
@@ -442,8 +449,9 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                     barPercent = 0,
+                    hasData = false,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
@@ -469,8 +477,9 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                     barPercent = 0,
+                    hasData = false,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
@@ -496,8 +505,9 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                     barPercent = 0,
+                    hasData = false,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
@@ -522,8 +532,9 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                     barPercent = 0,
+                    hasData = false,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
@@ -549,8 +560,9 @@ constructor(
                     leftText = "",
                     leftTextColor = R.color.white,
                     barColor = R.color.readiness_progress_color,
-                    barPercent = 1,
-                    backgroundRes = com.noisefit_commans.R.drawable.back_modal_new
+                     barPercent = 0,
+                    hasData = false,
+                    backgroundRes = R.drawable.back_modal_new_disabled
                 )
             )
         }
@@ -744,12 +756,33 @@ constructor(
         return result
     }
 
+    /**
+     * textColor, barColor, background
+     */
     private fun getContributorsColors(status: String): Triple<Int, Int, Int> {
         return if (status.equals("warning", true)) {
             Triple(
-                R.color.oreo_contributor_warning,
-                R.color.oreo_contributor_warning,
+                R.color.readiness_warning_text,
+                R.color.readiness_warning_bar,
                 com.noisefit_commans.R.drawable.back_modal_new_warning
+            )
+        } else if (status.equals("good", true)) {
+            Triple(
+                R.color.white,
+                R.color.oreo_readiness_bar_color,
+                com.noisefit_commans.R.drawable.back_modal_new
+            )
+        } else if (status.equals("fair", true)) {
+            Triple(
+                R.color.white,
+                R.color.oreo_readiness_bar_color_fair,
+                com.noisefit_commans.R.drawable.back_modal_new
+            )
+        } else if (status.equals("optimal", true)) {
+            Triple(
+                R.color.oreo_readiness_text_color_optimal,
+                R.color.oreo_readiness_bar_color_optimal,
+                com.noisefit_commans.R.drawable.back_modal_new_optimal_readiness
             )
         } else {
             Triple(

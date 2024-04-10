@@ -15,6 +15,7 @@ import com.noisefit.data.remote.abstraction.NetworkService
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.LastSyncItems
 import com.noisefit.data.repository.LastSyncProvider
+import com.noisefit.data.repository.implementation.DELETE_DB_DAYS
 import com.noisefit.data.safeApiCallFlow
 import com.noisefit.data.safeCacheCall
 import com.noisefit.luna.BuildConfig
@@ -61,7 +62,6 @@ import com.oreo.data.model.TrendsData
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import com.oreo.ui.DataType
-import com.oreo.ui.TestUserData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -72,6 +72,7 @@ import kotlinx.coroutines.withContext
 import org.joda.time.LocalDate
 import org.json.JSONObject
 import com.oreo.data.model.AddWorkoutResponse
+import com.oreo.data.model.TestUserData
 import com.oreo.data.model.health.Nap
 
 
@@ -1301,7 +1302,9 @@ class OreoUserActivityRepositoryImpl(
     }
 
     override suspend fun getSummaryAutoWorkoutCount(): Int {
-        return oreoAutoSportDataImpl.getAllNotAcceptingData()?.size ?: 0
+        val timeStamp = DateFormats.lastClearDataTimeStamp(DELETE_DB_DAYS)
+        oreoAutoSportDataImpl.deleteOldData(timeStamp)
+        return oreoAutoSportDataImpl.getAllNotAcceptingData(timeStamp)?.size ?: 0
     }
 
     override suspend fun getSummaryHRHealthOverview(): OHealthOverview.HeartRate? {
@@ -1327,7 +1330,7 @@ class OreoUserActivityRepositoryImpl(
         )
     }
 
-    override suspend fun addWorkout(request: JsonObject): Flow<Resource<BaseApiResponseData<Any>>> {
+    override suspend fun addWorkout(request: JsonObject): Flow<Resource<BaseApiResponseData<OActivityListModal>>> {
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.OREO_BASE_URL}/activity/v1/add_workout"
             /* keyValueDataSource.removeDataByType(KeyValueDataType.ACTIVITY)
@@ -1817,10 +1820,28 @@ class OreoUserActivityRepositoryImpl(
 
     /**
      * delete naps more than 2 days and returns response
+     * Check if has naps similar to sleep start time
      */
     override suspend fun getNapsToConfirm(): List<OreoNapData>? {
         napDataImpl.deleteOldData(2)
-        return napDataImpl.getNaps()
+        val naps = napDataImpl.getNaps()
+        val filteredNaps = ArrayList<OreoNapData>()
+        naps?.forEach {
+            val newSleepFormat = try {
+                DateFormats.formatDate(
+                    it.startTime,
+                    DateFormats.dateTimeFormat5,
+                    DateFormats.dateTimeFormat6
+                )
+            } catch (exp: Exception) {
+                ""
+            }
+            val sleep = sleepDataImpl.getSleepByStartTime(newSleepFormat ?: "")?.firstOrNull()
+            if (sleep == null) {
+                filteredNaps.add(it)
+            }
+        }
+        return if (filteredNaps.isEmpty()) return null else filteredNaps
     }
 
     override suspend fun removeNap(id: Int): Boolean {

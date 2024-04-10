@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView64"
+        style="@style/H6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_total_sleep"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvHour"
+        style="@style/H2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:includeFontPadding="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView64"
+        tools:text="1" />
+
+    <TextView
+        android:id="@+id/textHour"
+        style="@style/H5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:includeFontPadding="false"
+        android:text="@string/text_hr"
+        android:textColor="@color/white_64"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tvHour"
+        app:layout_constraintStart_toEndOf="@+id/tvHour" />
+
+    <TextView
+        android:id="@+id/tvMin"
+        style="@style/H2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:includeFontPadding="false"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tvHour"
+        app:layout_constraintStart_toEndOf="@+id/textHour"
+        tools:text="42" />
+
+    <TextView
+        android:id="@+id/textMin"
+        style="@style/H5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:includeFontPadding="false"
+        android:text="@string/text_min"
+        android:textColor="@color/white_64"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tvHour"
+        app:layout_constraintStart_toEndOf="@+id/tvMin" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

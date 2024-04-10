@@ -148,6 +148,9 @@ constructor(
                 jsonArray.add(
                     JsonObject(
                     ).apply {
+                        this.addProperty("distance", workout.distance)
+                        this.addProperty("cadence", workout.cadence)
+                        this.addProperty("recovery_time", workout.recoveryTime)
                         this.addProperty("duration", workout.duration)
                         this.addProperty("calories", workout.calories)
                         this.addProperty("activity_type", workoutTypeString)
@@ -162,8 +165,12 @@ constructor(
                             intensityArray.add(it)
                         }
 
-                        val intensity = intArray.average().ceilRound()
-
+                        val intensity = try {
+                            intArray.average().ceilRound()
+                        } catch (exp: Exception) {
+                            //NAN case, all other cases
+                            0
+                        }
                         this.addProperty(
                             "intensity",
                             getIntensity(intensity)

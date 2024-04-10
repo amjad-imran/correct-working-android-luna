@@ -227,7 +227,7 @@ class OWorkoutDetailsViewModel @Inject constructor(
                     0
                 } else it
             }
-            val data = newList.average().ceilRound()
+            val data = if(newList.isEmpty()) 0 else newList.average().ceilRound()
             list.add(data)
         }
 

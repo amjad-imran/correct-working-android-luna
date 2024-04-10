@@ -7,8 +7,6 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,8 +17,6 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSummaryDataTodayBinding
 import com.noisefit.oreo.BottomNavOption
 import com.noisefit.oreo.OreoMainViewModel
-import com.noisefit.ui.APP_UPDATE
-import com.noisefit.ui.common.bottomSheet.ALERT_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.DELETE_REQ_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.NAP_REQUEST_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
@@ -32,6 +28,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.loadImageWithCache
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
@@ -40,12 +37,10 @@ import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.getHoursBasedOnDateTime
-import com.noisefit_commans.utils.share.ShareUtil
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
-import com.oreo.data.model.SlideUpNapScoreDataModel
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TrendsData
 import com.oreo.data.model.VideoInfoType
@@ -59,11 +54,11 @@ import com.oreo.ui.home.summary.HomeRecyclerViewHolder
 import com.oreo.ui.home.summary.OSummaryHealthOverviewAdapter
 import com.oreo.ui.home.summary.OSummaryHealthOverviewClickEnum
 import com.oreo.ui.home.summary.OreoRWorkoutAdapter
+import com.oreo.ui.home.summary.update.UpdateLaunchMode
 import com.oreo.ui.sleep.nap.BOTTOM_NAP_RESULT
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
-import com.oreo.ui.workout.detect.DetectWorkoutListFragmentDirections
 import com.oreo.util.graph.OCombineChartUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -115,6 +110,10 @@ class SummaryDataFragmentToday :
             override fun onNapRemoveClicked(nap: OreoNapData) {
                 showRemoveNapBottomSheet(nap)
             }
+
+            /*override fun onMoveDetails(nap: ONapDataModel) {
+                navigate(R.id.napDetails, bundleOf("napId" to nap.id))
+            }*/
         })
     }
 
@@ -127,24 +126,6 @@ class SummaryDataFragmentToday :
 
         val date = arguments?.getString(ARGS_DATE)
         viewModel.date = date
-
-
-        LOGS.d("CREATED_WITH_DATE $date")
-        LOGS.d(TAG, "Today onCreate Called")
-
-        /*navigate(
-            R.id.bottomSheetNapScore, bundleOf(
-                "napScoreData" to SlideUpNapScoreDataModel(
-                    napId = "8d60a64e-11c7-4453-acba-7417c90d4927",
-                    title = "dsfsdfsdfsd",
-                    description = "ksjdfkljsgdjkfgsdfjkgsjkdf kjgsd kfjgsd kfjg sdkfg sdkfg sdkf",
-                    oldSleepScore = 70,
-                    newSleepScore = 55,
-                    oldReadinessScore = 50,
-                    newReadinessScore = 35,
-                )
-            )
-        )*/
     }
 
     private fun setNapsPager() {
@@ -187,6 +168,9 @@ class SummaryDataFragmentToday :
         LOGS.d("SUMMART_TODAY on resume")
         LOGS.d(TAG, "Today onResume called")
         loadData()
+
+        viewModel.checkForNewAppVersion()
+        viewModel.checkForNewOtaVersion()
 
 
     }
@@ -326,6 +310,22 @@ class SummaryDataFragmentToday :
 
     override fun initListener() {
 
+        binding.contentMain.lytAppUpdate.root.setOnClickListener {
+            navigate(
+                R.id.appUpdateDetailFragment,
+                bundleOf("launchMode" to UpdateLaunchMode.APP)
+            )
+        }
+
+        binding.contentMain.lytOtaUpdate.root.setOnClickListener {
+            val isConnected = viewModel.isDeviceConnected()
+            if (isConnected.not()) {
+                context.showShortToast("Ring not connected")
+                return@setOnClickListener
+            }
+            navigate(R.id.appUpdateDetailFragment, bundleOf("launchMode" to UpdateLaunchMode.OTA))
+        }
+
         binding.contentMain.lytGoogleFit.tvGoogleFitTurnOn.setOnClickListener {
             navigate(R.id.googleFitFragmentOreo)
         }
@@ -375,7 +375,7 @@ class SummaryDataFragmentToday :
 
         binding.contentMain.lytChargeRing.root.setOnClickListener {
             navigate(R.id.ringBatteryChargeFragment)
-            viewModel.setRingBatteryInfoState()
+            //viewModel.setRingBatteryInfoState()
         }
 
         binding.contentMain.lytPairDevice.btnPairDevice.setOnClickListener {
@@ -420,6 +420,44 @@ class SummaryDataFragmentToday :
 
     override fun subscribeObservers() {
 
+        viewModel.sessionManager.isRingCharging.observe(this) {
+            viewModel.handleBatteryAlert()
+        }
+
+        viewModel.sessionManager.checkForVersionUpdate.observe(viewLifecycleOwner) {
+            it.getContent()?.let { pair ->
+                viewModel.checkOtaVersionServer(pair)
+            }
+        }
+
+        viewModel.appUpdateInfo.observe(viewLifecycleOwner) {
+            if (it == null) {
+                binding.contentMain.lytAppUpdate.root.gone()
+            } else {
+                binding.contentMain.lytAppUpdate.apply {
+                    this.tvTitle.text = it.description?.header
+                    this.tvMessage.text = it.description?.shortDescription
+                    this.imvBack.loadImageWithCache(this.imvBack.context, it.imageUrl)
+                    root.visible()
+                }
+            }
+
+        }
+        viewModel.otaUpdateInfo.observe(viewLifecycleOwner) {
+
+            if (it == null) {
+                binding.contentMain.lytOtaUpdate.root.gone()
+            } else {
+                binding.contentMain.lytOtaUpdate.apply {
+                    this.tvTitle.text = it.description?.header
+                    this.tvMessage.text = it.description?.shortDescription
+                    this.imvBack.loadImageWithCache(this.imvBack.context, it.imageUrl)
+                    root.visible()
+                }
+
+            }
+        }
+
         requireActivity().supportFragmentManager.setFragmentResultListener(
             BOTTOM_NAP_RESULT,
             this
@@ -462,13 +500,13 @@ class SummaryDataFragmentToday :
                     return@observe
                 }
 
-                val hour = getHoursBasedOnDateTime(nap.startTime)
-                if (hour.toInt() >= 19) {
+               /* val hour = getHoursBasedOnDateTime(nap.startTime)
+                if (hour.toInt() >= 19) {*/
                     navigate(
                         R.id.bottomSheetNoDataNapScore,
                         bundleOf("napScoreData" to viewModel.getNapSlideUpObj(nap))
                     )
-                }
+                //}
             }
         }
 
@@ -632,6 +670,7 @@ class SummaryDataFragmentToday :
 
                 } else {
                     this.root.gone()
+                    viewModel.stateDashRingBattery.postValue(Pair(false, null))
                 }
             }
         }
@@ -695,18 +734,23 @@ class SummaryDataFragmentToday :
             when (connectedState) {
                 is ConnectState.ConnectFailed -> {
                     viewModel.updateAlerts()
+                    viewModel.stateDashRingBattery.postValue(Pair(false, null))
                 }
 
                 is ConnectState.Connecting -> {
                     viewModel.updateAlerts()
+                    viewModel.stateDashRingBattery.postValue(Pair(false, null))
                 }
 
                 is ConnectState.ConnectSuccess -> {
                     viewModel.updateAlerts()
+                    viewModel.handleBatteryAlert()
                 }
 
                 is ConnectState.UnPaired -> {
                     viewModel.updateAlerts()
+                    viewModel.stateDashRingBattery.postValue(Pair(false, null))
+
                 }
 
                 else -> {}
@@ -920,11 +964,18 @@ class SummaryDataFragmentToday :
         )
         val adapter1 = OreoRWorkoutAdapter(object : OreoRWorkoutAdapter.OnItemClickListener {
             override fun onItemClick(data: OActivityListModal, position: Int) {
-                navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
-                    putString("workoutName", data.getFormattedActivityName())
-                    putString("workoutId", data.id ?: "")
-                    putInt("position", position)
-                })
+                if (data.getDisplayVersionType() == 2) {
+                    navigate(R.id.oWorkoutDetailsFragmentV2, Bundle().apply {
+                        putString("workoutId", data.id ?: "")
+                        putInt("position", position)
+                    })
+                } else {
+                    navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
+                        putString("workoutName", data.getFormattedActivityName())
+                        putString("workoutId", data.id ?: "")
+                        putInt("position", position)
+                    })
+                }
             }
         })
 

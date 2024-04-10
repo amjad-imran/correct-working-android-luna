@@ -9,9 +9,9 @@
         <attr name="colorClickableText" format="color" />
         <attr name="trimLines" format="integer" />
         <attr name="trimMode">
-            <enum name="trimModeLine" value="0"/>
-            <enum name="trimModeLength" value="1"/>
-            <enum name="trimModeIgnore" value="2"/>
+            <enum name="trimModeLine" value="0" />
+            <enum name="trimModeLength" value="1" />
+            <enum name="trimModeIgnore" value="2" />
         </attr>
     </declare-styleable>
     <declare-styleable name="CustomViewSettings">
@@ -41,9 +41,9 @@
     </declare-styleable>
 
     <declare-styleable name="SleepLineChart">
-        <attr name="bgColor"/>
-        <attr name="bgLeftColor"/>
-        <attr name="bgRightColor"/>
+        <attr name="bgColor" />
+        <attr name="bgLeftColor" />
+        <attr name="bgRightColor" />
         <attr name="bgTopColor" />
         <attr name="bgBottomColor" />
         <attr name="xTextColor" />
@@ -62,18 +62,18 @@
         <attr name="scaleNodeRadius" />
         <attr name="centerLineWidth" />
         <attr name="centerLineColor" />
-        <attr name="fillColorStart"/>
-        <attr name="fillColorEnd"/>
-        <attr name="showXAxis"/>
-        <attr name="showSelectedIndicator"/>
-        <attr name="titleWidth"/>
+        <attr name="fillColorStart" />
+        <attr name="fillColorEnd" />
+        <attr name="showXAxis" />
+        <attr name="showSelectedIndicator" />
+        <attr name="titleWidth" />
     </declare-styleable>
     <declare-styleable name="BarChart">
-        <attr name="bgColor"/>
+        <attr name="bgColor" />
         <attr name="showAvgValue" />
-        <attr name="showSelectedIndicator"/>
-        <attr name="bgLeftColor"/>
-        <attr name="bgRightColor"/>
+        <attr name="showSelectedIndicator" />
+        <attr name="bgLeftColor" />
+        <attr name="bgRightColor" />
         <attr name="bgTopColor" />
         <attr name="bgBottomColor" />
         <attr name="xTextColor" />
@@ -101,15 +101,15 @@
 
         <attr name="centerLineWidth" />
         <attr name="centerLineColor" />
-        <attr name="titleWidth" format="dimension"/>
+        <attr name="titleWidth" format="dimension" />
         <attr name="lineNormalColor" format="color" />
-        <attr name="lineSelectColor" format="color"/>
+        <attr name="lineSelectColor" format="color" />
     </declare-styleable>
 
     <declare-styleable name="LineChart">
-        <attr name="bgColor"/>
-        <attr name="bgLeftColor"/>
-        <attr name="bgRightColor"/>
+        <attr name="bgColor" />
+        <attr name="bgLeftColor" />
+        <attr name="bgRightColor" />
         <attr name="bgTopColor" />
         <attr name="bgBottomColor" />
         <attr name="xTextColor" />
@@ -129,6 +129,7 @@
         <attr name="xMax" />
         <attr name="xMin" />
         <attr name="xTextSize" />
+        <attr name="xTextSize2" />
         <attr name="yTextSize" />
         <attr name="leftWith" />
         <attr name="rightWith" />
@@ -141,16 +142,16 @@
         <attr name="scaleNodeRadius" />
         <attr name="centerLineWidth" />
         <attr name="centerLineColor" />
-        <attr name="fillColorStart" format="color"/>
-        <attr name="fillColorEnd" format="color"/>
-        <attr name="canScroll"/>
-        <attr name="showXAxis"/>
+        <attr name="fillColorStart" format="color" />
+        <attr name="fillColorEnd" format="color" />
+        <attr name="canScroll" />
+        <attr name="showXAxis" />
         <attr name="showAvgValue" />
-        <attr name="showSelectedIndicator"/>
-        <attr name="titleWidth"/>
-        <attr name="showExtremeLine"/>
-        <attr name="hideMaxMinValueText"/>
-        <attr name="startFromRight"/>
+        <attr name="showSelectedIndicator" />
+        <attr name="titleWidth" />
+        <attr name="showExtremeLine" />
+        <attr name="hideMaxMinValueText" />
+        <attr name="startFromRight" />
     </declare-styleable>
 
     <declare-styleable name="ColorSeekBar">
@@ -162,61 +163,60 @@
     </declare-styleable>
 
 
-
-
     <attr name="circularProgressBarStyle" format="reference" />
 
 
-    <attr name="bgColor" format="color"/>
-    <attr name="bgLeftColor" format="color"/>
-    <attr name="bgRightColor" format="color"/>
-    <attr name="bgTopColor" format="color"/>
-    <attr name="bgBottomColor" format="color"/>
-    <attr name="xTextColor" format="color"/>
-    <attr name="yTextColor" format="color"/>
-    <attr name="scaleColor" format="color"/>
-    <attr name="xLineColor" format="color"/>
-    <attr name="yLineColor" format="color"/>
-    <attr name="alwaysShowCircle" format="boolean"/>
-    <attr name="innerCircleColor" format="color"/>
-    <attr name="outCircleColor" format="color"/>
-    <attr name="chartLineColor" format="color"/>
-    <attr name="chartLineWidth" format="dimension"/>
-    <attr name="scaleNodeColor" format="color"/>
-    <attr name="showGrid" format="boolean"/>
-    <attr name="gridColor" format="color"/>
-    <attr name="vCount" format="integer"/>
-    <attr name="hCount" format="integer"/>
-    <attr name="xMax" format="integer"/>
-    <attr name="xMin" format="integer"/>
-    <attr name="xTextSize" format="dimension"/>
-    <attr name="noDataSize" format="dimension"/>
-    <attr name="yTextSize" format="dimension"/>
-    <attr name="leftWith" format="dimension"/>
-    <attr name="rightWith" format="dimension"/>
-    <attr name="bottomWith" format="dimension"/>
-    <attr name="topWith" format="dimension"/>
+    <attr name="bgColor" format="color" />
+    <attr name="bgLeftColor" format="color" />
+    <attr name="bgRightColor" format="color" />
+    <attr name="bgTopColor" format="color" />
+    <attr name="bgBottomColor" format="color" />
+    <attr name="xTextColor" format="color" />
+    <attr name="yTextColor" format="color" />
+    <attr name="scaleColor" format="color" />
+    <attr name="xLineColor" format="color" />
+    <attr name="yLineColor" format="color" />
+    <attr name="alwaysShowCircle" format="boolean" />
+    <attr name="innerCircleColor" format="color" />
+    <attr name="outCircleColor" format="color" />
+    <attr name="chartLineColor" format="color" />
+    <attr name="chartLineWidth" format="dimension" />
+    <attr name="scaleNodeColor" format="color" />
+    <attr name="showGrid" format="boolean" />
+    <attr name="gridColor" format="color" />
+    <attr name="vCount" format="integer" />
+    <attr name="hCount" format="integer" />
+    <attr name="xMax" format="integer" />
+    <attr name="xMin" format="integer" />
+    <attr name="xTextSize" format="dimension" />
+    <attr name="xTextSize2" format="dimension" />
+    <attr name="noDataSize" format="dimension" />
+    <attr name="yTextSize" format="dimension" />
+    <attr name="leftWith" format="dimension" />
+    <attr name="rightWith" format="dimension" />
+    <attr name="bottomWith" format="dimension" />
+    <attr name="topWith" format="dimension" />
 
-    <attr name="scaleLenth" format="dimension"/>
-    <attr name="innerCircleRadius" format="dimension"/>
-    <attr name="outCircleRadius" format="dimension"/>
-    <attr name="scaleNodeRadius" format="dimension"/>
-    <attr name="centerLineWidth" format="dimension"/>
-    <attr name="centerLineColor" format="color"/>
-    <attr name="canScroll" format="boolean"/>
-    <attr name="showXAxis" format="boolean"/>
-    <attr name="showAvgValue" format="boolean"/>
-    <attr name="showSelectedIndicator" format="boolean"/>
-    <attr name="hideMaxMinValueText" format="boolean"/>
-    <attr name="showExtremeLine" format="boolean"/>
-    <attr name="startFromRight" format="boolean"/>
-
+    <attr name="scaleLenth" format="dimension" />
+    <attr name="innerCircleRadius" format="dimension" />
+    <attr name="outCircleRadius" format="dimension" />
+    <attr name="scaleNodeRadius" format="dimension" />
+    <attr name="centerLineWidth" format="dimension" />
+    <attr name="centerLineColor" format="color" />
+    <attr name="canScroll" format="boolean" />
+    <attr name="showXAxis" format="boolean" />
+    <attr name="showAvgValue" format="boolean" />
+    <attr name="showSelectedIndicator" format="boolean" />
+    <attr name="hideMaxMinValueText" format="boolean" />
+    <attr name="showExtremeLine" format="boolean" />
+    <attr name="startFromRight" format="boolean" />
+    <attr name="combineTextSize" format="dimension" />
 
 
     <declare-styleable name="CandleChart">
-        <attr name="bgColor"/>
-        <attr name="bgLeftColor"/>
-        <attr name="bgRightColor"/>
+        <attr name="bgColor" />
+        <attr name="bgLeftColor" />
+        <attr name="bgRightColor" />
         <attr name="bgTopColor" />
         <attr name="bgBottomColor" />
         <attr name="xTextColor" />
@@ -246,5 +246,47 @@
         <attr name="centerLineColor" />
     </declare-styleable>
 
+    <declare-styleable name="CombineLineChart">
+        <attr name="bgColor" />
+        <attr name="bgLeftColor" />
+        <attr name="bgRightColor" />
+        <attr name="bgTopColor" />
+        <attr name="bgBottomColor" />
+        <attr name="xTextColor" />
+        <attr name="yTextColor" />
+        <attr name="restLineColor" format="color" />
+        <attr name="highColor" format="color" />
+        <attr name="mediumColor" format="color" />
+        <attr name="lowColor" format="color" />
+        <attr name="chartLineWidth" />
+        <attr name="scaleNodeColor" />
+        <attr name="gridColor" />
+        <attr name="xMax" />
+        <attr name="xMin" />
+        <attr name="xTextSize" />
+        <attr name="yTextSize" />
+        <attr name="combineTextSize" />
+        <attr name="leftWith" />
+        <attr name="rightWith" />
+        <attr name="bottomWith" />
+        <attr name="topWith" />
+        <attr name="scaleNodeRadius" />
+        <attr name="centerLineWidth" />
+        <attr name="centerLineColor" />
+        <attr name="fillColorStart" />
+        <attr name="fillColorEnd" />
+        <attr name="showXAxis" />
+        <attr name="showSelectedIndicator" />
+        <attr name="titleWidth" />
+    </declare-styleable>
+
+    <declare-styleable name="PercentageBar">
+        <attr name="lineColor" format="color" />
+        <attr name="percentageColor" format="color" />
+        <attr name="interval" format="dimension" />
+        <attr name="max" format="integer" />
+        <attr name="percentage" format="integer" />
+        <attr name="lineWidth" format="dimension" />
+    </declare-styleable>
 
 </resources>

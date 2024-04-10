@@ -8,6 +8,7 @@ import com.noisefit_commans.NoisefitApplication
 import javax.inject.Inject
 
 const val LOW_VIBRATION = 200L
+const val HAPTIC_VIBRATION = 60L
 
 class VibrationUtils
 @Inject

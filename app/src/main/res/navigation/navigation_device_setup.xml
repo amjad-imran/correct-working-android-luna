@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_device_setup"
+    app:startDestination="@id/ringConnectingCheckFragment">
+
+    <fragment
+        android:id="@+id/ringConnectingCheckFragment"
+        android:name="com.noisefit.ui.onboarding.setup.firmware.RingConnectingCheckFragment"
+        android:label="RingConnectingCheckFragment" >
+        <action
+            android:id="@+id/navigateToFirmwareCheck"
+            app:destination="@id/firmwareCheckFragment"
+            app:popUpTo="@id/ringConnectingCheckFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/navigateToDeviceSetupFromConnectionCheck"
+            app:destination="@id/settingUpDeviceFragment"
+            app:popUpTo="@id/ringConnectingCheckFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/firmwareCheckFragment"
+        android:name="com.noisefit.ui.onboarding.setup.firmware.FirmwareCheckFragment"
+        android:label="fragment_firmware_check">
+        <action
+            android:id="@+id/navigateToDeviceUpToDate"
+            app:destination="@id/deviceUpToDateFragment"
+            app:popUpTo="@id/firmwareCheckFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/navigateToUpdateAvailable"
+            app:destination="@id/updateAvailableFragment"
+            app:popUpTo="@id/firmwareCheckFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/deviceUpToDateFragment"
+        android:name="com.noisefit.ui.onboarding.setup.firmware.DeviceUpToDateFragment"
+        android:label="fragment_device_up_to_date">
+        <action
+            android:id="@+id/navigateToSetupDevice"
+            app:destination="@id/settingUpDeviceFragment"
+            app:popUpTo="@id/deviceUpToDateFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/updateAvailableFragment"
+        android:name="com.noisefit.ui.onboarding.setup.firmware.UpdateAvailableFragment"
+        android:label="fragment_update_available">
+        <action
+            android:id="@+id/navigateToUpdateFrag"
+            app:destination="@id/firmwareUpdateFragment"
+            app:popUpTo="@id/updateAvailableFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingUpDeviceFragment"
+        android:name="com.noisefit.ui.onboarding.setup.SettingUpDeviceFragment"
+        android:label="fragment_setting_up_device">
+        <action
+            android:id="@+id/navigateToSetupSuccess"
+            app:destination="@id/setupSuccessFragment"
+            app:popUpTo="@id/settingUpDeviceFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/setupSuccessFragment"
+        android:name="com.noisefit.ui.onboarding.setup.SetupSuccessFragment"
+        android:label="fragment_setup_success" />
+    <fragment
+        android:id="@+id/firmwareUpdateFragment"
+        android:name="com.noisefit.ui.onboarding.setup.firmware.FirmwareUpdateFragment"
+        android:label="fragment_firmware_update">
+        <action
+            android:id="@+id/navigateToFirmwareUpdateSuccess"
+            app:destination="@id/firmwareUpdateSuccessFragment"
+            app:popUpTo="@id/firmwareUpdateFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <dialog
+        android:id="@+id/bottomSheetUpdateFailedOnboard"
+        android:name="com.noisefit.ui.onboarding.setup.firmware.BottomSheetUpdateFailed"
+        android:label="BottomSheetUpdateFailed" />
+    <dialog
+        android:id="@+id/bottomSheetLowBatteryFirmware"
+        android:name="com.noisefit.ui.onboarding.setup.firmware.BottomSheetLowBatteryFirmware"
+        android:label="BottomSheetLowBatteryFirmware" />
+    <fragment
+        android:id="@+id/firmwareUpdateSuccessFragment"
+        android:name="com.noisefit.ui.onboarding.setup.firmware.FirmwareUpdateSuccessFragment"
+        android:label="FirmwareUpdateSuccessFragment" >
+        <action
+            android:id="@+id/navigateToSetupSuccessFromFirmware"
+            app:destination="@id/settingUpDeviceFragment"
+            app:popUpTo="@id/firmwareUpdateSuccessFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+
+
+</navigation>

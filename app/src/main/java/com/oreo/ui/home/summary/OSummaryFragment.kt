@@ -3,9 +3,7 @@ package com.oreo.ui.home.summary
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.viewModelScope
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
@@ -25,18 +23,19 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
+import com.oreo.data.model.ChartModel
 import com.oreo.receiver.workManager.HealthOverviewDataType
+import com.oreo.ui.custom.ScrollListener
 import com.oreo.ui.home.summary.paginate.SummaryPagerAdapter
-import com.oreo.ui.info.CALL_GOT_IT
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.time.LocalDate
 
 
 @AndroidEntryPoint
-class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOBinding::inflate) {
+class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOBinding::inflate),
+    ScrollListener {
 
     private val mainViewModel: OreoMainViewModel by activityViewModels()
     private val viewModel: OSummaryViewModel by viewModels()
@@ -62,9 +61,9 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         binding.viewPagerSummary.adapter = pagerAdapter
         binding.viewPagerSummary.offscreenPageLimit = 1
 
-        /* TabLayoutMediator(binding.tabLayout, binding.viewPagerSummary) { tab, position ->
-             tab.text = pagerAdapter.getDate(position)
-         }.attach()*/
+        /*TabLayoutMediator(binding.tabLayout, binding.viewPagerSummary) { tab, position ->
+            tab.text = pagerAdapter!!.getDate(position)
+        }.attach()*/
 
         binding.viewPagerSummary.registerOnPageChangeCallback(object : OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -72,7 +71,11 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
                 mainViewModel.selectedDate = pagerAdapter?.getDate(position)
                 mainViewModel.handleAddWorkoutVisibility()
-                setTabDates(position)
+
+                if (!binding.tabLayout.isInteracting) {
+                    setTopBar()
+                }
+                //setTabDates(mainViewModel.selectedDate)
 
                 if (mainViewModel.shouldLoadMoreData()) {
                     LOGS.w("Loading more data")
@@ -81,76 +84,82 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         })
     }
 
-    private fun setTabDates(position: Int) {
-        var currentDayText = ""
-        val centerDate = pagerAdapter?.getDate(position)
-        if (centerDate.equals(DateFormats.getCurrentDate(DateFormats.dateFormat3))) {
-            currentDayText = "Today, "
-        }
-        LocalDate.MAX
-        binding.tabLayout.tvSelectedDate.text = "$currentDayText${
-            if (currentDayText.isEmpty()) {
-                DateFormats.getOrdinalDate(
-                    centerDate,
-                    DateFormats.dateFormat3
-                )
-            } else {
-                DateFormats.getOrdinalDateToday(
-                    centerDate,
-                    DateFormats.dateFormat3,
-                )
-            }
-        }"
-        val leftDate = pagerAdapter?.getDate(position - 1)
-        if (leftDate == null) {
-            binding.tabLayout.tvDateLeft.gone()
-        } else {
-            binding.tabLayout.tvDateLeft.visible()
-            binding.tabLayout.tvDateLeft.text = DateFormats.getOrdinalDate(
-                leftDate,
-                DateFormats.dateFormat3,
-            )
-        }
-        val rightDate = pagerAdapter?.getDate(position + 1)
-        if (rightDate == null) {
-            binding.tabLayout.tvDateRight.gone()
-        } else {
-            var rightTodayText = ""
-            if (rightDate.equals(DateFormats.getCurrentDate(DateFormats.dateFormat3))) {
-                rightTodayText = "Today, "
-            }
-            binding.tabLayout.tvDateRight.visible()
-            binding.tabLayout.tvDateRight.text = "$rightTodayText${
-                if (rightTodayText.isEmpty()) {
-                    DateFormats.getOrdinalDate(
-                        rightDate,
-                        DateFormats.dateFormat3,
-                    )
-                } else {
+    private fun setTabDates(date: String?) {
 
-                    DateFormats.getOrdinalDateToday(
-                        rightDate,
-                        DateFormats.dateFormat3,
-                    )
-                }
-            }"
-        }
+
+        /* var currentDayText = ""
+         val centerDate = pagerAdapter?.getDate(position)
+         if (centerDate.equals(DateFormats.getCurrentDate(DateFormats.dateFormat3))) {
+             currentDayText = "Today, "
+         }
+         LocalDate.MAX
+         binding.tabLayout.tvSelectedDate.text = "$currentDayText${
+             if (currentDayText.isEmpty()) {
+                 DateFormats.getOrdinalDate(
+                     centerDate,
+                     DateFormats.dateFormat3
+                 )
+             } else {
+                 DateFormats.getOrdinalDateToday(
+                     centerDate,
+                     DateFormats.dateFormat3,
+                 )
+             }
+         }"
+         val leftDate = pagerAdapter?.getDate(position - 1)
+         if (leftDate == null) {
+             binding.tabLayout.tvDateLeft.gone()
+         } else {
+             binding.tabLayout.tvDateLeft.visible()
+             binding.tabLayout.tvDateLeft.text = DateFormats.getOrdinalDate(
+                 leftDate,
+                 DateFormats.dateFormat3,
+             )
+         }
+         val rightDate = pagerAdapter?.getDate(position + 1)
+         if (rightDate == null) {
+             binding.tabLayout.tvDateRight.gone()
+         } else {
+             var rightTodayText = ""
+             if (rightDate.equals(DateFormats.getCurrentDate(DateFormats.dateFormat3))) {
+                 rightTodayText = "Today, "
+             }
+             binding.tabLayout.tvDateRight.visible()
+             binding.tabLayout.tvDateRight.text = "$rightTodayText${
+                 if (rightTodayText.isEmpty()) {
+                     DateFormats.getOrdinalDate(
+                         rightDate,
+                         DateFormats.dateFormat3,
+                     )
+                 } else {
+
+                     DateFormats.getOrdinalDateToday(
+                         rightDate,
+                         DateFormats.dateFormat3,
+                     )
+                 }
+             }"
+         }*/
     }
 
     override fun initListener() {
-        binding.tabLayout.tvDateLeft.setOnClickListener {
-            val currentItem = binding.viewPagerSummary.currentItem
-            if (currentItem == 0) return@setOnClickListener
-            binding.viewPagerSummary.setCurrentItem((currentItem - 1), true)
-        }
-        binding.tabLayout.tvDateRight.setOnClickListener {
-            if (pagerAdapter == null) return@setOnClickListener
-            val currentItem = binding.viewPagerSummary.currentItem
-            if (currentItem == (pagerAdapter!!.itemCount - 1)) {
-                return@setOnClickListener
-            }
-            binding.viewPagerSummary.setCurrentItem((currentItem + 1), true)
-        }
+
+
+        binding.tabLayout.setOnChartScrollChangedListener(this)
+
+        /* binding.tabLayout.tvDateLeft.setOnClickListener {
+             val currentItem = binding.viewPagerSummary.currentItem
+             if (currentItem == 0) return@setOnClickListener
+             binding.viewPagerSummary.setCurrentItem((currentItem - 1), true)
+         }
+         binding.tabLayout.tvDateRight.setOnClickListener {
+             if (pagerAdapter == null) return@setOnClickListener
+             val currentItem = binding.viewPagerSummary.currentItem
+             if (currentItem == (pagerAdapter!!.itemCount - 1)) {
+                 return@setOnClickListener
+             }
+             binding.viewPagerSummary.setCurrentItem((currentItem + 1), true)
+         }*/
 
 
         binding.lytHeader.oreoStatus.setOnClickListener {
@@ -230,16 +239,16 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         }
 
 
-       /* //handle device intro
-        if (!mainViewModel.ringDataStore.isShowDeviceIntro()) {
-            setFragmentResultListener(CALL_GOT_IT) { _, bundle ->
-                val isSelected = bundle.getBoolean("isSelected")
-                if (isSelected) {
-                    mainViewModel.ringDataStore.setShowDeviceIntro(true)
-                }
-            }
-            navigate(R.id.myDeviceIntroBottomSheet)
-        }*/
+        /* //handle device intro
+         if (!mainViewModel.ringDataStore.isShowDeviceIntro()) {
+             setFragmentResultListener(CALL_GOT_IT) { _, bundle ->
+                 val isSelected = bundle.getBoolean("isSelected")
+                 if (isSelected) {
+                     mainViewModel.ringDataStore.setShowDeviceIntro(true)
+                 }
+             }
+             navigate(R.id.myDeviceIntroBottomSheet)
+         }*/
 
     }
 
@@ -255,8 +264,8 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         val shouldSync = viewModel.sessionManager.forceSyncData.value?.getContent() ?: false
 
-        if (shouldSync || kotlin.math.abs(DateFormats.getTimeStamp() - lastSyncTime) > 2 * 60 * 60 * 1000L) {
-            if(viewModel.sessionManager.bluetoothStateDash.value != false){
+        if (shouldSync || kotlin.math.abs(DateFormats.getTimeStamp() - lastSyncTime) > 5 * 60 * 1000L) {
+            if (viewModel.sessionManager.bluetoothStateDash.value != false) {
                 binding.lytHeader.tvHeaderStatus.apply {
                     text = context.getString(R.string.text_syncing_dot)
                     visible()
@@ -266,17 +275,43 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         }
     }
 
+    fun setTopBar() {
+
+        val it = mainViewModel.dashboard.value
+        if (it.isNullOrEmpty()) return
+
+        val topGraphData = viewModel.getPrefixAndSuffixList(it)
+
+        var moveToPos = -1
+
+        if (mainViewModel.selectedDate != null) {
+            val index = it?.indexOfFirst { data ->
+                data.equals(mainViewModel.selectedDate, true)
+            }
+            if (index != null) {
+                moveToPos = 15 + (it.size - index - 1)
+            }
+        }
+
+        binding.tabLayout.updateDataWithMax(
+            topGraphData.first,
+            topGraphData.third,
+            topGraphData.second,
+            moveToPos
+        )
+    }
+
 
     override fun subscribeObservers() {
         mainViewModel.dashboard.observe(viewLifecycleOwner) {
-            LOGS.w("Setting_data size ${it.size}")
+            setTopBar()
             pagerAdapter?.setDataSet(it)
 
             val pos = pagerAdapter?.getPositionForDate(mainViewModel.selectedDate) ?: (it.size - 1)
 
             binding.viewPagerSummary.setCurrentItem(pos, false)
-            binding.tabLayout.root.visible()
-            setTabDates(pos)
+            binding.tabLayout.visible()
+            //setTabDates(pos)
 
         }
 
@@ -285,14 +320,14 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
 
 
-        viewModel.sessionManager.showSyncOfflineData.observe(viewLifecycleOwner) {
+       /* viewModel.sessionManager.showSyncOfflineData.observe(viewLifecycleOwner) {
             it.getContent()?.let { event ->
                 if (event == HealthOverviewDataType.AUTO_WORKOUT) {
                     //viewModel.getDashboardDataFromServer(false)
                 }
             }
 
-        }
+        }*/
 
 
 
@@ -407,6 +442,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 }
 
                 is ConnectState.UnPaired -> {
+                    binding.lytHeader.ivRingUpdate.gone()
                     viewModel.handleUnPairState()
                     viewModel.updateDeviceConnectedStatus()
                     binding.lytHeader.pbSync.gone()
@@ -449,7 +485,6 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
     }
 
 
-
     private fun stateBluetoothOff() {
         binding.lytHeader.batteryStatus.gone()
         binding.lytHeader.lottieAnimView.gone()
@@ -481,6 +516,14 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                 R.drawable.ic_ring_default_silver_new
             )
         }
+
+        nullableBinding?.lytHeader?.ivRingUpdate?.visibility =
+            if (mainViewModel.ringDataStore.isNewOtaAvailable()) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+
 
     }
 
@@ -539,6 +582,13 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         if (viewModel.isDeviceConnected()) {
             shouldSync()
         }
+        mainViewModel.shouldResetMasterDates()
+        nullableBinding?.lytHeader?.ivAppUpdate?.visibility =
+            if (mainViewModel.localDataStore.isNewAppVersionAvailable()) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
 
 //        viewModel.getRecentWorkoutList()
     }
@@ -546,6 +596,33 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
     private fun logFirebaseAppEvent(eventName: String, params: HashMap<String, Any>) {
         viewModel.sessionManager.logFirebaseEvent(eventName, params)
+    }
+
+    override fun onPositionSelected(position: Int, chartModel: ChartModel?) {
+        LOGS.w("moveToPosition onPositionSelected ${chartModel?.date}")
+        if (mainViewModel.selectedDate == chartModel?.date!!) {
+            return
+        }
+        mainViewModel.selectedDate = chartModel.date!!
+        mainViewModel.handleAddWorkoutVisibility()
+
+        val returnDate = mainViewModel.updateSelectedDate(mainViewModel.selectedDate)
+        if (returnDate != null) {
+            mainViewModel.selectedDate = returnDate
+        }
+
+        val pos = pagerAdapter?.getPositionForDate(mainViewModel.selectedDate)
+        if (pos != null && pos != -1) {
+            binding.viewPagerSummary.setCurrentItem(pos, false)
+        }
+
+        if (mainViewModel.shouldLoadMoreData()) {
+            LOGS.w("Loading more data")
+        }
+    }
+
+    override fun onScrolling(position: Int, chartModel: ChartModel?) {
+
     }
 
 }

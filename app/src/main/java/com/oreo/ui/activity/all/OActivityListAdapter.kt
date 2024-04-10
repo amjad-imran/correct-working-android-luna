@@ -1,14 +1,10 @@
 package com.oreo.ui.activity.all
 
-import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.core.text.buildSpannedString
-import androidx.core.text.inSpans
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.luna.R

@@ -25,7 +25,6 @@ import com.noisefit_commans.models.AutoSleep
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.Contact
 import com.noisefit_commans.models.CustomReplyData
-import com.noisefit_commans.models.DeviceType
 import com.noisefit_commans.models.DeviceUnits
 import com.noisefit_commans.models.DiyCustomWatchFace
 import com.noisefit_commans.models.DoNotDisturb
@@ -81,6 +80,7 @@ import com.zhapp.ble.bean.DoNotDisturbModeBean
 import com.zhapp.ble.bean.EmergencyContactBean
 import com.zhapp.ble.bean.EventInfoBean
 import com.zhapp.ble.bean.HeartRateMonitorBean
+import com.zhapp.ble.bean.RingAutoActiveSportConfigBean
 import com.zhapp.ble.bean.RingSportStatusBean
 import com.zhapp.ble.bean.SendRingSportStatusBean
 import com.zhapp.ble.bean.SettingTimeBean
@@ -192,6 +192,13 @@ constructor(
         }
 
 
+    }
+
+    /**
+     * status->true -> enable
+     */
+    override fun setRealTimeDataState(status: Boolean) {
+        ControlBleTools.getInstance().realTimeDataSwitch(status, null)
     }
 
 
@@ -307,6 +314,13 @@ constructor(
             })
     }
 
+    override fun setAutoWorkoutStatus(status: Boolean) {
+        ControlBleTools.getInstance().getRingAutoActiveSportConfig(null)
+        ControlBleTools.getInstance().setRingAutoActiveSportConfig(
+            RingAutoActiveSportConfigBean(status), null
+        )
+    }
+
     override fun startWorkout(sportType: Int, sportStartTime: Long) {
         val bean = SendRingSportStatusBean(
             sportType,
@@ -318,6 +332,9 @@ constructor(
                 override fun onState(state: SendCmdState?) {
                     when (state) {
                         SendCmdState.SUCCEED -> {
+                            //turn off auto workout recording
+                            setAutoWorkoutStatus(false)
+
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.WorkoutStartState(true)
                             )
@@ -369,6 +386,7 @@ constructor(
                                     UpdateDeviceDataCallback.WorkoutStopped(true)
                                 )
                                 ControlBleTools.getInstance().getFitnessSportIdsData(null)
+                                setAutoWorkoutStatus(true)
                             }
                         }
                     }
@@ -392,6 +410,8 @@ constructor(
                                     UpdateDeviceDataCallback.WorkoutStopped(false)
                                 )
                                 ControlBleTools.getInstance().getFitnessSportIdsData(null)
+                                setAutoWorkoutStatus(true)
+
                             }
                         }
                     }
@@ -405,6 +425,7 @@ constructor(
         testUpdateDeviceDataCallback?.onUpdateDataReceived(
             UpdateDeviceDataCallback.WorkoutStoppedByRing(error)
         )
+        setAutoWorkoutStatus(true)
         //ControlBleTools.getInstance().getFitnessSportIdsData(null)
     }
 
@@ -428,6 +449,7 @@ constructor(
             }
 
             if (bean.startResult != RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_NONE.result) {
+                setAutoWorkoutStatus(true)
                 when (bean.startResult) {
                     RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_LOW_POWER.result -> {
                         /*testUpdateDeviceDataCallback?.onUpdateDataReceived(
@@ -459,6 +481,8 @@ constructor(
             }
 
             if (bean.sportStatus == RingSportCallBack.RingSportStatus.SPORT_STATUS_END.status) {
+                setAutoWorkoutStatus(true)
+
                 if (bean.endReason != RingSportCallBack.RingSportEndReason.SPORT_END_REASON_NONE.reason) {
                     when (bean.endReason) {
                         RingSportCallBack.RingSportEndReason.SPORT_END_REASON_LOW_POWER.reason -> {
@@ -1681,57 +1705,12 @@ constructor(
 
         var size = weatherDataList.size
 
-        colorFitDevice?.deviceType?.let { deviceType ->
-            if (deviceType == DeviceType.NOISEFIT_TWIST.deviceType ||
-                deviceType == DeviceType.NOISEFIT_ARC.deviceType ||
-                deviceType == DeviceType.NOISEFIT_CURVE.deviceType ||
-                deviceType == DeviceType.NOISEFIT_HALO.deviceType ||
-                deviceType == DeviceType.NOISEFIT_ORIGIN.deviceType ||
-                deviceType == DeviceType.NOISEFIT_EVOLVE_4.deviceType ||
-                deviceType == DeviceType.NOISEFIT_HALO_PLUS.deviceType ||
-                deviceType == DeviceType.COLORFIT_PRO_4.deviceType ||
-                deviceType == DeviceType.COLORFIT_PULSE_3.deviceType ||
-                deviceType == DeviceType.COLORFIT_PRIMUS.deviceType ||
-                deviceType == DeviceType.COLORFIT_PRO_4_GPS.deviceType ||
-                deviceType == DeviceType.COLORFIT_PRO_4_ALPHA.deviceType ||
-                deviceType == DeviceType.NOISEFIT_QUAD_CALL_MAX.deviceType ||
-                deviceType == DeviceType.VISION_2_BUZZ.deviceType ||
-                deviceType == DeviceType.COLORFIT_PULSE_2_MAX.deviceType ||
-                deviceType == DeviceType.COLORFIT_LOOP.deviceType ||
-                deviceType == DeviceType.COLORFIT_VICTOR.deviceType ||
-                deviceType == DeviceType.COLORFIT_CALIBER_2.deviceType ||
-                deviceType == DeviceType.COLORFIT_CALIBER_2_BUZZ.deviceType ||
-                deviceType == DeviceType.PULSE_GO_BUZZ.deviceType ||
-                deviceType == DeviceType.COLORFIT_CALIBER.deviceType ||
-                deviceType == DeviceType.NOISEFIT_FORCE_PLUS.deviceType ||
-                deviceType == DeviceType.NOISEFIT_EVOLVE_3.deviceType ||
-                deviceType == DeviceType.NOISEFIT_FUSE_PLUS.deviceType ||
-                deviceType == DeviceType.NOISEFIT_ARC_PLUS.deviceType ||
-                deviceType == DeviceType.NOISEFIT_FUSE.deviceType ||
-                deviceType == DeviceType.NOISEFIT_VORTEX.deviceType ||
-                deviceType == DeviceType.COLORFIT_ULTRA_2_BUZZ.deviceType ||
-                deviceType == DeviceType.COLORFIT_CALIBER_BUZZ.deviceType ||
-                deviceType == DeviceType.NOISEFIT_CREW.deviceType ||
-                deviceType == DeviceType.NOISEFIT_CREW_PRO.deviceType ||
-                deviceType == DeviceType.NOISEFIT_METTLE.deviceType ||
-                deviceType == DeviceType.NOISEFIT_TWIST_PRO.deviceType ||
-                deviceType == DeviceType.NOISEFIT_METALLIX.deviceType ||
-                deviceType == DeviceType.ULTRA_3.deviceType ||
-                deviceType == DeviceType.COLORFIT_VISION_3.deviceType ||
-                deviceType == DeviceType.COLORFIT_ORE.deviceType ||
-                deviceType == DeviceType.COLORFIT_PRO_5_47MM.deviceType ||
-                deviceType == DeviceType.COLORFIT_PRO_5_44MM.deviceType ||
-                deviceType == DeviceType.NOISEFIT_ACTIVE_2.deviceType ||
-                deviceType == DeviceType.COLORFIT_CHROME.deviceType ||
-                deviceType == DeviceType.NOISEFIT_ENDEAVOUR.deviceType
-            ) {
-                if (size > 6) {
-                    size = 6
-                }
-            } else {
-                if (size > 5) {
-                    size = 5
-                }
+        if (size > 6) {
+            size = 6
+
+        } else {
+            if (size > 5) {
+                size = 5
             }
         }
 
@@ -1920,6 +1899,7 @@ constructor(
                 }
             })
     }
+
 
     override fun setAutoSleep(autoSleep: AutoSleep) {
 

@@ -20,9 +20,9 @@ import com.oreo.data.model.OreoNapDetailsDataModel
 import com.oreo.data.model.RingCareResponse
 import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthResponse
+import com.oreo.data.model.TestUserData
 import com.oreo.data.model.health.Nap
 import com.oreo.receiver.workManager.HealthOverviewDataType
-import com.oreo.ui.TestUserData
 import kotlinx.coroutines.flow.Flow
 
 interface OreoUserActivityRepository {
@@ -54,7 +54,7 @@ interface OreoUserActivityRepository {
         healthOverviewData: ArrayList<OHealthOverview>?
     ): Pair<ArrayList<OHealthOverview>?, Int?>
 
-    suspend fun addWorkout(request: JsonObject): Flow<Resource<BaseApiResponseData<Any>>>
+    suspend fun addWorkout(request: JsonObject): Flow<Resource<BaseApiResponseData<OActivityListModal>>>
     suspend fun addGFitWorkout(request: JsonArray): Flow<Resource<BaseApiResponseData<Any>>>
     suspend fun syncGoogleFitUserData(request: JsonObject): Flow<Resource<BaseApiResponseData<Any>>>
     suspend fun getWorkoutDetails(id: String): Flow<Resource<BaseApiResponse<OWorkoutDetailsResponseModel>>>

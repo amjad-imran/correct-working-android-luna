@@ -33,6 +33,13 @@ private const val RECORD_WORKOUT_MODEL = "RECORD_WORKOUT_MODEL"
 private const val TEMP_BASE_LINE = "TEMP_BASE_LINE"
 private const val GOOGLE_FIT_CROSSED = "GOOGLE_FIT_CROSSED"
 
+private const val OTA_VERSION_NEW = "OTA_VERSION_NEW"
+private const val OTA_VERSION_NEW_TIMESTAMP = "OTA_VERSION_NEW_TIMESTAMP"
+private const val OTA_VERSION_REMIND = "OTA_VERSION_REMIND"
+private const val OTA_VERSION_CURRENT = "OTA_VERSION_CURRENT"
+
+private const val UPDATE_USER_DEVICE_STATUS = "UPDATE_USER_DEVICE_STATUS"
+
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
 
@@ -41,6 +48,58 @@ class RingDataStoreImpl
     private val gson: Gson,
     private val mPrefs: SharedPreferences
 ) : RingDataStore {
+
+    override fun isUpdateUserDeviceDone(): Boolean {
+        return mPrefs.getBoolean(UPDATE_USER_DEVICE_STATUS, false)
+    }
+
+    override fun setUpdateUserDeviceStatus(status: Boolean) {
+        mPrefs.edit()?.putBoolean(UPDATE_USER_DEVICE_STATUS, status)?.commit()
+    }
+
+    override fun saveNewOtaVersion(newOtaData: String?, currentVersion: Int) {
+        mPrefs.edit()?.putString(OTA_VERSION_NEW, newOtaData)?.commit()
+        mPrefs.edit()?.putInt(OTA_VERSION_CURRENT, currentVersion)?.commit()
+        saveOtaVersionCheckTimeStamp()
+    }
+
+    override fun getNewOtaVersion(): Triple<String, Int, Long>? {
+        val gson = mPrefs.getString(OTA_VERSION_NEW, null)
+        return if (gson == null) {
+            null
+        } else {
+            val timestamp = mPrefs.getLong(OTA_VERSION_NEW_TIMESTAMP, 0L)
+
+            Triple(
+                gson,
+                mPrefs.getInt(OTA_VERSION_CURRENT, -1),
+                timestamp
+            )
+        }
+    }
+
+    override fun saveOtaVersionCheckTimeStamp() {
+        mPrefs.edit()?.putLong(OTA_VERSION_NEW_TIMESTAMP, System.currentTimeMillis())?.commit()
+    }
+
+    override fun getOtaVersionCheckTimeStamp(): Long {
+        return mPrefs.getLong(OTA_VERSION_NEW_TIMESTAMP, 0)
+    }
+
+    override fun cleaNewOtaVersion() {
+        mPrefs.edit()?.remove(OTA_VERSION_NEW)?.commit()
+        mPrefs.edit()?.remove(OTA_VERSION_CURRENT)?.commit()
+        mPrefs.edit()?.remove(OTA_VERSION_REMIND)?.commit()
+        mPrefs.edit()?.remove(OTA_VERSION_NEW_TIMESTAMP)?.commit()
+    }
+
+    override fun saveOtaRemindDate() {
+        mPrefs.edit()?.putString(OTA_VERSION_REMIND, DateFormats.getCurrentDate())?.commit()
+    }
+
+    override fun getOtaRemindDate(): String? {
+        return mPrefs.getString(OTA_VERSION_REMIND, null)
+    }
 
     override fun isGoogleFitCrossed(): Boolean {
         return mPrefs.getBoolean(GOOGLE_FIT_CROSSED, false)
@@ -121,6 +180,7 @@ class RingDataStoreImpl
 
     override fun clearConnectedDevice() {
         mPrefs.edit().remove(RING_DEVICE_INFO).commit()
+        mPrefs.edit().remove(UPDATE_USER_DEVICE_STATUS).commit()
 
     }
 
@@ -229,5 +289,9 @@ class RingDataStoreImpl
 
     override fun setShowDeviceIntro(boolean: Boolean) {
         mPrefs.edit()?.putBoolean(DEVICE_INTRO, boolean)?.apply()
+    }
+
+    override fun isNewOtaAvailable(): Boolean {
+        return getNewOtaVersion()?.first != null
     }
 }

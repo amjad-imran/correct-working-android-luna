@@ -23,11 +23,11 @@ import com.oreo.data.model.OWDActivityData
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.model.SleepChartModel
 import com.oreo.data.model.health.CommonListDataModel
+import com.oreo.ui.activity.all.DELETE_WORKOUT_REQUEST_KEY
 import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 
-const val DELETE_WORKOUT_REQUEST_KEY = "DELETE_WORKOUT_REQUEST_KEY"
 
 @AndroidEntryPoint
 class OWorkoutDetailsFragment :
@@ -405,7 +405,7 @@ class OWorkoutDetailsFragment :
 
     private fun prepareDataForActivity(it: OWorkoutDetailsResponseModel) {
         val activityList = ArrayList<OWDActivityData>()
-        val duration = ApplicationUtils.getActivityDurationFormat2(it.duration)
+        val duration = ApplicationUtils.getActivityDurationFormat2Seconds(it.duration)
         activityList.add(
             OWDActivityData(
                 "Duration", duration, ""
