@@ -22,10 +22,12 @@ import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.Stress
 import com.oreo.data.model.StressNudge
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -38,6 +40,8 @@ class OStressDataMovementFragment :
     private val viewModel: OStressDetailViewModel by viewModels()
     private val ARGS_DATE = "ARGS_DATE"
 
+    @Inject
+    lateinit var vibrationUtils: VibrationUtils
 
     private val setBackHandler = Handler(Looper.getMainLooper())
 
@@ -168,11 +172,19 @@ class OStressDataMovementFragment :
 
     override fun initListener() {
 
+        binding.svMain.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            if (Math.abs(scrollY - oldScrollY) > 0) {
+                binding.lytStressMidGraph.graphStress.resetIfInteracting()
+            }
+        }
+
         binding.lytStressHeader.root.setOnClickListener {
             navigate(R.id.stressInternalParentOreo, Bundle().apply {
                 putString("date", mainViewModel.selectedDate)
             })
         }
+
+        binding.lytStressMidGraph.graphStress.setVibrationUtil(vibrationUtils)
 
         binding.lytStressMidGraph.graphStress.setClickListener(object : OnStressClickAction {
 

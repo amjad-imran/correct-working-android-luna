@@ -62,13 +62,15 @@ constructor(
         }
 
         dayData.sleep?.naps?.forEach { nap ->
-            getNapSection(nap)?.let {
-                Section(
-                    "nap",
-                    it.first,
-                    it.second,
-                    Color.parseColor("#4cc5a8ed"),
-                    R.drawable.icon_stress_sleep
+            getNapSection(nap,dayData.date)?.let {
+                sections.add(
+                    Section(
+                        "nap",
+                        it.first,
+                        it.second,
+                        Color.parseColor("#4cc5a8ed"),
+                        R.drawable.icon_stress_sleep
+                    )
                 )
             }
         }
@@ -178,13 +180,15 @@ constructor(
         return Triple(startPos, calculatedDuration.toInt(), it.iconUrl)
     }
 
-    private fun getNapSection(nap: Nap): Pair<Int, Int>? {
+    private fun getNapSection(nap: Nap, date: String): Pair<Int, Int>? {
 
         val startTime = nap.startTime
         val endTime = nap.endTime
 
         val sleepStartDate = startTime.split(" ")[0]
         val sleepEndDate = endTime.split(" ")[0]
+
+        if (!nap.date.equals(date) || nap.isNextDayNap) return null
 
         if (sleepStartDate.equals(sleepEndDate)) {
             //Same day Sleep
