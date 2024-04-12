@@ -13,12 +13,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOStressDataMovementBinding
+import com.noisefit.luna.databinding.LayoutStressHeaderSubItemBinding
+import com.noisefit.luna.databinding.OreoLayoutHourMnBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.enums.StressType
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
@@ -223,6 +224,7 @@ class OStressDataMovementFragment :
         }
         binding.ivClose.setOnClickListener {
             handleMovementViews(false)
+            removeMovementHighlights()
         }
 
         binding.lytHighMovement.root.setOnClickListener {
@@ -239,14 +241,18 @@ class OStressDataMovementFragment :
         }
     }
 
+    fun removeMovementHighlights() {
+        setMovementData(viewModel.dayTimeMovement, false, -1)
+        viewModel.isSelectedMode = false
+        viewModel.lastSelectedType = -1
+        binding.lytStressMidGraph.graphStress.removeHighlights()
+    }
+
     private fun handleMovementClick(type: Int) {
         val lastSelected = viewModel.lastSelectedType
 
         if (lastSelected == type) {
-            setMovementData(viewModel.dayTimeMovement, false, -1)
-            viewModel.isSelectedMode = false
-            viewModel.lastSelectedType = -1
-            binding.lytStressMidGraph.graphStress.removeHighlights()
+            removeMovementHighlights()
         } else {
             setMovementData(viewModel.dayTimeMovement, true, type)
             viewModel.isSelectedMode = true
@@ -275,105 +281,112 @@ class OStressDataMovementFragment :
         pgbr.layoutParams = params
     }
 
+    private fun handleComparisonsBar(
+        layout: LayoutStressHeaderSubItemBinding,
+        todayValue: Int,
+        typicalValue: Int
+    ) {
+        layout.pgBrToday.progressDrawable =
+            ContextCompat.getDrawable(requireContext(), R.drawable.grad_today_calm)
+        layout.pgBrPrevious.progressDrawable =
+            ContextCompat.getDrawable(requireContext(), R.drawable.grad_previous_calm)
+
+        handleProgress(layout.pgBrToday, viewModel.getBarPercent(todayValue))
+        handleProgress(layout.pgBrPrevious, viewModel.getBarPercent(typicalValue))
+        val diff = viewModel.getDifference(todayValue, typicalValue)
+        layout.tvDifference.text = "${abs(diff)}%"
+        if (diff > 0) {
+            layout.icTrend.visible()
+            layout.icTrend.rotation = 0f
+        } else if (diff < 0) {
+            layout.icTrend.visible()
+            layout.icTrend.rotation = 180f
+        } else {
+            layout.icTrend.gone()
+            layout.tvDifference.text = "No change"
+        }
+
+    }
+
+    private fun setHourMin(
+        layout: OreoLayoutHourMnBinding,
+        total: Int,
+        hour: Int,
+        minute: Int
+    ) {
+        if (total == 0) {
+            layout.tvHour.text = "--"
+
+            layout.tvHour.visible()
+            layout.tvHourUnit.gone()
+            layout.tvMinute.gone()
+            layout.tvMinuteUnit.gone()
+        } else {
+            layout.tvHour.text = "$hour"
+            layout.tvMinute.text = "$minute"
+
+            layout.tvHour.visible()
+            layout.tvHourUnit.visible()
+            layout.tvMinute.visible()
+            layout.tvMinuteUnit.visible()
+        }
+
+    }
+
     private fun handleStressProgressView(stress: Stress?) {
 
         val (calm, focused, stressed) = viewModel.getStressMinutes(stress)
         val total = calm + focused + stressed
 
-
         binding.lytStressHeader.apply {
+            val hasComparisonData =
+                (stress?.typicalCalm != null && stress.typicalFocused != null && stress.typicalStressed != null)
+
             val (hourCalm, minuteCalm) = ApplicationUtils.getFormattedSleepDuration(
                 calm
             )
-            lytCalm.lytHrMn.tvHour.text = "$hourCalm"
-            lytCalm.lytHrMn.tvMinute.text = "$minuteCalm"
+            setHourMin(lytCalm.lytHrMn, total, hourCalm, minuteCalm)
+
             lytCalm.tvCalm.setTextColor(resources.getColor(R.color.stress_nap_calm, null))
             lytCalm.tvCalm.text = getString(R.string.text_calm)
-            lytCalm.pgBrToday.progressDrawable =
-                ContextCompat.getDrawable(requireContext(), R.drawable.grad_today_calm)
-            lytCalm.pgBrPrevious.progressDrawable =
-                ContextCompat.getDrawable(requireContext(), R.drawable.grad_previous_calm)
-
-            handleProgress(lytCalm.pgBrToday, viewModel.getBarPercent(calm))
-            handleProgress(lytCalm.pgBrPrevious, viewModel.getBarPercent(stress?.typicalCalm ?: 0))
-            val diff = viewModel.getDifference(calm, stress?.typicalCalm ?: 0)
-            lytCalm.tvDifference.text = "${abs(diff)}%"
-            if (diff > 0) {
-                lytCalm.icTrend.visible()
-                lytCalm.icTrend.rotation = 0f
-            } else if (diff < 0) {
-                lytCalm.icTrend.visible()
-                lytCalm.icTrend.rotation = 180f
-            } else {
-                lytCalm.icTrend.invisible()
-            }
-
 
             val (hourFocused, minuteFocused) = ApplicationUtils.getFormattedSleepDuration(
                 focused
             )
-            lytFocussed.lytHrMn.tvHour.text = "$hourFocused"
-            lytFocussed.lytHrMn.tvMinute.text = "$minuteFocused"
+
+            setHourMin(lytFocussed.lytHrMn, total, hourFocused, minuteFocused)
+
             lytFocussed.tvCalm.setTextColor(resources.getColor(R.color.stress_nap_focussed, null))
             lytFocussed.tvCalm.text = getString(R.string.text_focussed)
-            lytFocussed.pgBrToday.progressDrawable =
-                ContextCompat.getDrawable(requireContext(), R.drawable.grad_today_focused)
-            lytFocussed.pgBrPrevious.progressDrawable =
-                ContextCompat.getDrawable(requireContext(), R.drawable.grad_previous_focused)
-
-            handleProgress(lytFocussed.pgBrToday, viewModel.getBarPercent(focused))
-            handleProgress(
-                lytFocussed.pgBrPrevious,
-                viewModel.getBarPercent(stress?.typicalFocused ?: 0)
-            )
-
-            val diffFocussed = viewModel.getDifference(focused, stress?.typicalFocused ?: 0)
-            lytFocussed.tvDifference.text = "${abs(diffFocussed)}%"
-            if (diffFocussed > 0) {
-                lytFocussed.icTrend.visible()
-                lytFocussed.icTrend.rotation = 0f
-            } else if (diffFocussed < 0) {
-                lytFocussed.icTrend.visible()
-                lytFocussed.icTrend.rotation = 180f
-            } else {
-                lytFocussed.icTrend.invisible()
-            }
-
 
             val (hourStressed, minuteStressed) = ApplicationUtils.getFormattedSleepDuration(
                 stressed
             )
-            lytStressed.lytHrMn.tvHour.text = "$hourStressed"
-            lytStressed.lytHrMn.tvMinute.text = "$minuteStressed"
+            setHourMin(lytStressed.lytHrMn, total, hourStressed, minuteStressed)
+
             lytStressed.tvCalm.setTextColor(resources.getColor(R.color.stress_nap_stressed, null))
             lytStressed.tvCalm.text = getString(R.string.text_stressed)
+
             lytStressed.view1.gone()
-            lytStressed.pgBrToday.progressDrawable =
-                ContextCompat.getDrawable(requireContext(), R.drawable.grad_today_stressed)
-            lytStressed.pgBrPrevious.progressDrawable =
-                ContextCompat.getDrawable(requireContext(), R.drawable.grad_previous_stressed)
 
-            handleProgress(lytStressed.pgBrToday, viewModel.getBarPercent(stressed))
-            handleProgress(
-                lytStressed.pgBrPrevious,
-                viewModel.getBarPercent(stress?.typicalStressed ?: 0)
-            )
-
-            val diffStressed = viewModel.getDifference(stressed, stress?.typicalStressed ?: 0)
-            lytStressed.tvDifference.text = "${abs(diffStressed)}%"
-            if (diffStressed > 0) {
-                lytStressed.icTrend.visible()
-                lytStressed.icTrend.rotation = 0f
-            } else if (diffStressed < 0) {
-                lytStressed.icTrend.visible()
-                lytStressed.icTrend.rotation = 180f
+            if (hasComparisonData) {
+                lytCalm.lytComparison.visible()
+                lytFocussed.lytComparison.visible()
+                lytStressed.lytComparison.visible()
             } else {
-                lytStressed.icTrend.invisible()
+                lytCalm.lytComparison.gone()
+                lytCalm.view1.gone()
+                lytFocussed.lytComparison.gone()
+                lytFocussed.view1.gone()
+                lytStressed.lytComparison.gone()
+                lytStressed.view1.gone()
+                return@apply
             }
 
+            handleComparisonsBar(lytCalm, calm, stress?.typicalCalm ?: 0)
+            handleComparisonsBar(lytFocussed, focused, stress?.typicalFocused ?: 0)
+            handleComparisonsBar(lytStressed, focused, stress?.typicalStressed ?: 0)
         }
-
-
     }
 
     private fun calculateWeightPercent(progress: Float, total: Float): Int {
