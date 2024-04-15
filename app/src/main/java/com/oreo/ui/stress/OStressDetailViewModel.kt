@@ -9,6 +9,7 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.ScreenUtils
 import com.oreo.data.dataConverter.OreoStressDataConvertor
+import com.oreo.data.model.ODayTimeActivitiesDataModel
 import com.oreo.data.model.OStressActivitiesDataModel
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.Stress
@@ -82,6 +83,20 @@ constructor(
                     )
                 )
         }
+
+        sleep?.naps?.forEach { nap ->
+            if (nap.date.equals(dayData.date) && !nap.isNextDayNap) {
+                dataList.add(
+                    OStressActivitiesDataModel(
+                        type = "Nap",
+                        id = nap.id,
+                        startTime = nap.startTime,
+                        endTime = nap.endTime
+                    )
+                )
+            }
+        }
+
         stressActivityData = dataList
     }
 

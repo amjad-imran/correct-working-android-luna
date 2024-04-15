@@ -3,6 +3,7 @@ package com.oreo.ui.stress
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,15 +34,26 @@ class BottomSheetStressActivities :
                 if (data.type.equals("workout", true)) {
                     if (data.workoutData == null) return
 
-                    navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
-                        putString("workoutName", data.workoutData.getFormattedActivityName())
-                        putString("workoutId", data.workoutData.id ?: "")
-                        putInt("position", -1)
-                    })
+                    if (data.workoutData.getDisplayVersionType() == 2) {
+                        navigate(R.id.oWorkoutDetailsFragmentV2, Bundle().apply {
+                            putString("workoutId", data.workoutData.id ?: "")
+                            putInt("position", -1)
+                        })
+                    } else {
+                        navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
+                            putString("workoutName", data.workoutData.getFormattedActivityName())
+                            putString("workoutId", data.workoutData.id ?: "")
+                            putInt("position", -1)
+                        })
+                    }
                 } else if (data.type.equals("sleep", true)) {
                     //viewModel.navigateTo(BottomNavOption.SLEEP)
+                    navigateUpSafe()
                 } else if (data.type.equals("nap", true)) {
                     //viewModel.navigateTo(BottomNavOption.SLEEP)
+                    data.id?.let {
+                        navigate(R.id.napDetails, bundleOf("napId" to data.id))
+                    }
                 }
             }
         })

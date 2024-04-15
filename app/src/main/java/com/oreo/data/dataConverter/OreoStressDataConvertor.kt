@@ -62,7 +62,7 @@ constructor(
         }
 
         dayData.sleep?.naps?.forEach { nap ->
-            getNapSection(nap,dayData.date)?.let {
+            getNapSection(nap, dayData.date)?.let {
                 sections.add(
                     Section(
                         "nap",
@@ -79,6 +79,12 @@ constructor(
 
         dayData.stress?.breakUp?.forEachIndexed { index, i ->
             items.add(Item(i, index))
+        }
+
+        if (items.isEmpty()) {
+            for (i in 0 until 96) {
+                items.add(Item(0, i))
+            }
         }
 
 

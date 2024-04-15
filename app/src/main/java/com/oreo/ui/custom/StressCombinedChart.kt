@@ -368,7 +368,7 @@ class StressCombinedChart : View {
             bgBottomPaint
         )
         if (showXAxis) {
-            var xText = "23:59"
+            var xText = "12:00 am"
             xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
             xTextPaint.color = Color.parseColor("#a3ffffff")
             canvas.drawText(
@@ -377,7 +377,7 @@ class StressCombinedChart : View {
                 mHeight - bottomWith / 3,
                 xTextPaint
             )
-            xText = "00:00"
+            xText = "12:00 am"
             xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
             canvas.drawText(xText, leftWith + dip2px(5f), mHeight - bottomWith / 3, xTextPaint)
         }
