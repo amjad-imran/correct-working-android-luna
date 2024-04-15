@@ -157,6 +157,9 @@ class SummaryDataFragment :
         binding.lytHeartRate.bInfo.setOnClickListener {
             viewModel.getContributorInfo("hr")
         }
+        binding.lytHeartRate.root.setOnClickListener {
+            navigate(R.id.fragmentHeartRateDetails)
+        }
 
     }
 
