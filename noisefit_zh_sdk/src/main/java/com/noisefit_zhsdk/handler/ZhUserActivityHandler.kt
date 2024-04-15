@@ -752,6 +752,10 @@ constructor(
                     testDataString
                 )*/
 
+                if(p0.isExistSleep.not()){
+                    AppLogs.sendAppLogs("$TRACK_TAG Sleep exists : false")
+                    return
+                }
                 val sleepDataParsed = oreoDataConverter.parseSleepData(p0)
 
                 sleepDataParsed?.let {
