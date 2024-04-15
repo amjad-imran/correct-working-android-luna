@@ -1,6 +1,7 @@
 package com.oreo.ui.recordworkout
 
 import androidx.lifecycle.MutableLiveData
+import com.noisefit.data.repository.implementation.WeatherRepository
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
@@ -9,6 +10,7 @@ import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Timer
 import java.util.TimerTask
@@ -18,6 +20,7 @@ import javax.inject.Inject
 class RecordWorkoutViewModel @Inject constructor(
     val sessionManager: SessionManager,
     val watchDataStore: WatchDataStore,
+    val weatherRepository: WeatherRepository,
     val ringDataStore: RingDataStore
 ) : BaseViewModel() {
 
@@ -110,6 +113,21 @@ class RecordWorkoutViewModel @Inject constructor(
 
     fun deleteOngoingRecordWorkout() {
         ringDataStore.deleteOngoingRecordWorkout()
+    }
+
+    private suspend fun getWeatherData(lat: Double, lng: Double) {
+        val unit = "metric"
+        weatherRepository.getWeatherData(
+            lat,
+            lng,
+            unit
+        ).collect { resource ->
+            resource?.let {
+
+                LOGS.i("weather data $it")
+
+            }
+        }
     }
 
 

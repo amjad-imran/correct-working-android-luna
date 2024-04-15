@@ -268,17 +268,6 @@ object ApplicationUtils {
         WorkManager.getInstance(context).enqueue(request)
     }
 
-    fun stopWeatherScheduler(context: Context) {
-        LOGS.d("$UniqueWeatherWorkName: inside stopWeatherScheduler ")
-        WorkManager.getInstance(context).cancelUniqueWork(UniqueWeatherWorkName)
-    }
-
-    fun stopSportScheduler(context: Context) {
-        LOGS.d("$UniqueSportSyncWorkName: inside stopSportScheduler ")
-        WorkManager.getInstance(context).cancelUniqueWork(UniqueSportSyncWorkName)
-    }
-
-
     fun clearJobs(context: Context) {
         WorkManager.getInstance(context).cancelAllWork()
     }
