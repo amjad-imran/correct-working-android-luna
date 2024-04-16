@@ -2,7 +2,6 @@ package com.oreo.ui.recordworkout
 
 import android.Manifest
 import android.animation.Animator
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -27,7 +26,6 @@ import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
-import com.noisefit_commans.location.LocationService
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -238,7 +236,7 @@ class RecordWorkoutFragment :
             if (!viewModel.isDeviceConnected()) {
                 return@setOnClickListener
             }
-            if (viewModel.requireGpsPermission(viewModel.workout?.ringId)) {
+            if (viewModel.requireGps()) {
                 if (!hasGpsPermission()) {
                     showLocationPermissionDialog()
                     return@setOnClickListener

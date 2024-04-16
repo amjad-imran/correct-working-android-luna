@@ -132,8 +132,8 @@ class RecordWorkoutViewModel @Inject constructor(
         }
     }
 
-    fun requireGpsPermission(ringId: Int?): Boolean {
-        return ringId == 207/*Outdoor running*/ || ringId == 210/*Outdoor cycling*/
+    fun requireGps(): Boolean {
+        return true
     }
 
 
