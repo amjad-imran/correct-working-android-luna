@@ -12,12 +12,15 @@ import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOHeartRateDataBinding
 import com.noisefit.oreo.OreoMainViewModel
+import com.noisefit_commans.common.maxWithoutZero
+import com.noisefit_commans.common.minWithoutZero
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.LearnMoreDataModel
+import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.ui.sleep.banner.OreoSleepBannerFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,7 +53,7 @@ class OHeartRateDataFragment :
         viewModel.date?.let {
             mainViewModel.getDashBoardData(it)?.let { dash ->
                 setUi()
-                initHeartRateGraph(dash.first)
+                viewModel.summaryHealthData = dash.first
             }
         }
     }
@@ -60,7 +63,6 @@ class OHeartRateDataFragment :
     }
 
     companion object {
-
         @JvmStatic
         fun newInstance(date: String) = OHeartRateDataFragment().apply {
             arguments = Bundle().apply {
@@ -91,48 +93,43 @@ class OHeartRateDataFragment :
         viewModel.heartRateData.observe(viewLifecycleOwner) {
             if (it != null) {
                 LOGS.d(TAG, Gson().toJson(it))
-//                initHeartRateGraph(it)
-//                setHearRateUi(it)
+                updateUI(it)
+                initHeartRateGraph(viewModel.summaryHealthData, it)
             }
-            LOGS.d(TAG, Gson().toJson(it))
         }
     }
 
-    private fun initHeartRateGraph(dayData: ServerUserHealthData) {
+    private fun updateUI(it: OHealthOverview.HeartRateDataModel) {
+        if (it.average.toInt() != 0) {
+            binding.lytHeartRate.lytSubtitleValue1.tvValue.text = it.average.toInt().toString()
+            binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
+            binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
+        } else {
+            binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
+            binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
+        }
+        var maxValue: Int = 0
+        var minValue: Int = 0
+        it.listData?.forEach {
+            maxValue = it.values?.maxWithoutZero() ?: 0
+            minValue = it.values?.minWithoutZero() ?: 0
+        }
+        binding.lytHeartRate.tvSubtitle2.text = "Range $minValue-$maxValue bpm"
+
+
+    }
+
+    private fun initHeartRateGraph(
+        dayData: ServerUserHealthData?,
+        heartRate: OHealthOverview.HeartRateDataModel
+    ) {
         binding.lytHeartRate.candleChart.enableInteractiveMode(true)
         binding.lytHeartRate.candleChart.updateData(
-            viewModel.getStressCombinedData(
-                dayData
-            )
+            viewModel.hrDataConvertor.getHrCombinedData(
+                dayData, heartRate
+            ), 5
         )
     }
-
-    /*private fun setHearRateUi(data: OHealthOverview.HeartRate) {
-        val lytHeartRate = binding.lytHeartRate
-        lytHeartRate.root.visible()
-        val chart = lytHeartRate.candleChart
-
-        OCombineChartUtils.setChart(chart, data.xLabelList, data.axisMinimum, data.average)
-
-        val combinedData = CombinedData()
-        if (data.lineData.first.isNotEmpty() && data.lineData.first.size > 1) {
-            combinedData.setData(
-                OCombineChartUtils.generateLineData(
-                    data.lineData.first,
-                    lytHeartRate.candleChart,
-                    data.lineData.second,
-                    data.axisMinimum
-                )
-            )
-            combinedData.setData(
-                OCombineChartUtils.generateCandleData(
-                    data.candleValue, R.color.o_heart_bg
-                )
-            )
-            chart.data = combinedData
-            chart.invalidate()
-        }
-    }*/
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

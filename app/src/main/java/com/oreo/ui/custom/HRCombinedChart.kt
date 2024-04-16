@@ -78,7 +78,6 @@ class HRCombinedChart : View {
     private var isHighlighted = false
     private var highlightColor = 0
     private var showXAxis = true
-    private var interval = 0
     lateinit var rectF: RectF
     lateinit var workoutPaint: Paint
     private var linearGradient: LinearGradient? = null
@@ -93,15 +92,14 @@ class HRCombinedChart : View {
     private var touchX = 0f
     lateinit var overlayLinePaint: Paint
     lateinit var topCombinedPaint: Paint
-    lateinit var stressDot: Bitmap
     lateinit var calmDot: Bitmap
-    lateinit var focusedDot: Bitmap
     private var listener: OnHRClickAction? = null
     private var lastSentValuePos: Int? = null
     private val effect =
         DashPathEffect(floatArrayOf(dip2px(1f).toFloat(), dip2px(5f).toFloat()), 0f)
     private val toolTipList = ArrayList<Triple<Float, String, Int>>()
     lateinit var bgLine: Paint
+    var yAxisCount: Int = 3
 
     constructor(context: Context?) : super(context) {
         resMap = HashMap()
@@ -160,18 +158,7 @@ class HRCombinedChart : View {
                 R.drawable.ic_hr_graph_dots
             ), dimen, dimen, true
         )
-        focusedDot = Bitmap.createScaledBitmap(
-            BitmapFactory.decodeResource(
-                res,
-                R.drawable.ic_hr_graph_dots
-            ), dimen, dimen, true
-        )
-        stressDot = Bitmap.createScaledBitmap(
-            BitmapFactory.decodeResource(
-                res,
-                R.drawable.ic_hr_graph_dots
-            ), dimen, dimen, true
-        )
+
     }
 
 
@@ -240,12 +227,12 @@ class HRCombinedChart : View {
         rectF = RectF()
     }
 
-    fun updateData(datas: HRCombineModel?) {
+    fun updateData(datas: HRCombineModel?, yAxisCount: Int) {
         combineModel = datas
         list.clear()
         datas?.items?.let { list.addAll(it) }
         list.reverse()
-        interval = (list.size / 4f).toInt()
+        this.yAxisCount = yAxisCount
         postInvalidate()
     }
 
@@ -288,9 +275,9 @@ class HRCombinedChart : View {
         )
         chartLineGradientInteracting = LinearGradient(
             0f, topWith, 0f, mHeight - bottomWith, intArrayOf(
-                Color.parseColor("#80ff922d"),
-                Color.parseColor("#80ffe762"),
-                Color.parseColor("#8012cba9")
+                Color.parseColor("#ff3371"),
+                Color.parseColor("#ff3371"),
+                Color.parseColor("#ff3371")
             ), floatArrayOf(0f, 0.5f, 1f), Shader.TileMode.CLAMP
         )
         linearGradient = LinearGradient(
@@ -308,7 +295,7 @@ class HRCombinedChart : View {
             mWith - rightWith,
             mHeight / 2f,
             Color.TRANSPARENT,
-            Color.parseColor("#C0000000"),
+            Color.parseColor("#26ff3371"),
             Shader.TileMode.CLAMP
         )
     }
@@ -383,33 +370,93 @@ class HRCombinedChart : View {
 
     private fun drawLeft(canvas: Canvas) {
         gridPaint.color = gridColor
-        val maxStrValue = handleMaxNearestRound10(max).toString()
-        val minStrValue = handleMinRoundDown10(xMin).toString()
-        val sectionH = ((max - xMin).toFloat() / 4).roundToInt()
-        val max =
-            mHeight - bottomWith - (max - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
+        if (yAxisCount > 3) {
+            val yaxisData = calculateYAxisValue(yAxisCount)
+            val maxStrValue = handleMaxNearestRound10(max).toString()
+            val minStrValue = handleMinRoundDown10(xMin).toString()
+            val sectionH = ((max - xMin).toFloat() / 4).roundToInt()
+            val max =
+                mHeight - bottomWith - (max - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
 
-        drawHorizontalTextWithLine(canvas, maxStrValue, max, true, false)
+            drawHorizontalTextWithLine(
+                canvas,
+                yaxisData[4].toString(),
+                max,
+                true,
+                false
+            )
 
-        val min =
-            mHeight - bottomWith - (xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
+            val min =
+                mHeight - bottomWith - (xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
 
-        drawHorizontalTextWithLine(canvas, minStrValue, min, false, true)
+            drawHorizontalTextWithLine(canvas, yaxisData[0].toString(), min, false, true)
 
-        val xAxis2 =
-            mHeight - bottomWith - (sectionH + xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
+            val xAxis2 =
+                mHeight - bottomWith - (sectionH + xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
 
-        drawHorizontalTextWithLine(canvas, (xMin + sectionH).toString(), xAxis2)
+            drawHorizontalTextWithLine(canvas, yaxisData[1].toString(), xAxis2)
 
-        val xAxis3 =
-            mHeight - bottomWith - ((sectionH * 2) + xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
+            val xAxis3 =
+                mHeight - bottomWith - ((sectionH * 2) + xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
 
-        drawHorizontalTextWithLine(canvas, (xMin + sectionH * 2).toString(), xAxis3)
-        val xAxis4 =
-            mHeight - bottomWith - ((sectionH * 3) + xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
+            drawHorizontalTextWithLine(canvas, yaxisData[2].toString(), xAxis3)
+            val xAxis4 =
+                mHeight - bottomWith - ((sectionH * 3) + xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
 
-        drawHorizontalTextWithLine(canvas, (xMin + sectionH * 3).toString(), xAxis4)
+            drawHorizontalTextWithLine(canvas, yaxisData[3].toString(), xAxis4)
+        } else {
+            val yaxisData = calculateYAxisValue(yAxisCount)
+            val maxStrValue = handleMaxNearestRound10(max).toString()
+            val minStrValue = handleMinRoundDown10(xMin).toString()
+            val sectionH = ((max - xMin).toFloat() / 3).roundToInt()
+            val max =
+                mHeight - bottomWith - (max - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
 
+            drawHorizontalTextWithLine(
+                canvas,
+                yaxisData[2].toString(),
+                max,
+                true,
+                false
+            )
+
+            val min =
+                mHeight - bottomWith - (xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
+
+            drawHorizontalTextWithLine(canvas, yaxisData[0].toString(), min, false, true)
+
+            val xAxis2 = (max + min) / 2
+
+            drawHorizontalTextWithLine(canvas, yaxisData[1].toString(), xAxis2)
+        }
+
+    }
+
+    private fun calculateYAxisValue(yAxisCount: Int): ArrayList<Int> {
+        var minHrValue = 0
+        var maxHrValue = 100
+        if (minHrValue == 0) {
+            maxHrValue = 120
+        } else if (minHrValue < 40) {
+            maxHrValue = 120
+            minHrValue = 0
+        } else if (maxHrValue < 120) {
+            maxHrValue = 120
+        } else if (maxHrValue < 160) {
+            maxHrValue = 160
+        } else if (maxHrValue < 200) {
+            maxHrValue = 200
+        }
+        return getPointsBetween(minHrValue, maxHrValue, yAxisCount)
+    }
+
+    private fun getPointsBetween(start: Int, end: Int, numPoints: Int): ArrayList<Int> {
+        val interval = (end - start) / (numPoints + 1)
+        val points = ArrayList<Int>()
+        for (i in 0..numPoints) {
+            points.add(start + interval * i)
+        }
+        return points
     }
 
     private fun handleMaxNearestRound10(max: Int): Int {
@@ -700,13 +747,7 @@ class HRCombinedChart : View {
 
     private fun drawDot(canvas: Canvas, value: Int) {
 
-        val dotBitmap = when (value) {
-            in 1..34 -> calmDot
-            in 35..69 -> focusedDot
-            in 70..100 -> stressDot
-            else -> calmDot
-        }
-
+        val dotBitmap = calmDot
         val width = dotBitmap.width.toFloat() / 2
         val height = dotBitmap.height.toFloat() / 2
 

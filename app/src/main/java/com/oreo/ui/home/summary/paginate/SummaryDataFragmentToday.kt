@@ -11,7 +11,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.github.mikephil.charting.data.CombinedData
 import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSummaryDataTodayBinding
@@ -36,7 +35,6 @@ import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
-import com.noisefit_commans.utils.getHoursBasedOnDateTime
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
@@ -59,7 +57,6 @@ import com.oreo.ui.sleep.nap.BOTTOM_NAP_RESULT
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
-import com.oreo.util.graph.OCombineChartUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -180,6 +177,7 @@ class SummaryDataFragmentToday :
         viewModel.date?.let {
             mainViewModel.getDashBoardData(it)?.let { dash ->
                 viewModel.registerDate = mainViewModel.registerDate
+                viewModel.serverUserHealthData = dash.first
                 setUi(dash.first, dash.second)
             }
         }
@@ -503,12 +501,12 @@ class SummaryDataFragmentToday :
                     return@observe
                 }
 
-               /* val hour = getHoursBasedOnDateTime(nap.startTime)
-                if (hour.toInt() >= 19) {*/
-                    navigate(
-                        R.id.bottomSheetNoDataNapScore,
-                        bundleOf("napScoreData" to viewModel.getNapSlideUpObj(nap))
-                    )
+                /* val hour = getHoursBasedOnDateTime(nap.startTime)
+                 if (hour.toInt() >= 19) {*/
+                navigate(
+                    R.id.bottomSheetNoDataNapScore,
+                    bundleOf("napScoreData" to viewModel.getNapSlideUpObj(nap))
+                )
                 //}
             }
         }
@@ -1024,16 +1022,15 @@ class SummaryDataFragmentToday :
 
     }
 
-    private fun setHearRateCardUi(data: OHealthOverview.HeartRate) {
+    private fun setHearRateCardUi(data: OHealthOverview.HeartRateDataModel) {
         val lytHeartRate = binding.contentMain.lytHeartRate
         lytHeartRate.root.visible()
-        val chart = lytHeartRate.candleChart
-
-        OCombineChartUtils.setChart(chart, data.xLabelList, data.axisMinimum, data.average)
-
-        val combinedData = CombinedData()
-
-
+        lytHeartRate.candleChart.enableInteractiveMode(true)
+        lytHeartRate.candleChart.updateData(
+            viewModel.hrDataConvertor.getHrCombinedData(
+                viewModel.serverUserHealthData, data
+            ), 3
+        )
 
         when (data.measureState) {
             TapMeasureState.NO_DEVICE -> {
@@ -1114,24 +1111,6 @@ class SummaryDataFragmentToday :
                 lytHeartRate.tvHeartValue.gone()
             }
         }
-        if (data.lineData.first.isNotEmpty() && data.lineData.first.size > 1) {
-            combinedData.setData(
-                OCombineChartUtils.generateLineData(
-                    data.lineData.first,
-                    lytHeartRate.candleChart,
-                    data.lineData.second,
-                    data.axisMinimum
-                )
-            )
-            combinedData.setData(
-                OCombineChartUtils.generateCandleData(
-                    data.candleValue, R.color.o_heart_bg
-                )
-            )
-            chart.data = combinedData
-            chart.invalidate()
-        }
-
         lytHeartRate.imvHrMeasure.setOnClickListener {
 
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_hr_refresh_click)

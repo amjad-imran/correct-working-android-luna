@@ -1,7 +1,5 @@
 package com.oreo.data.model
 
-import com.github.mikephil.charting.data.CandleEntry
-import com.github.mikephil.charting.data.Entry
 import com.noisefit_commans.models.SleepData
 import com.oreo.data.model.health.InfoTextData
 import com.oreo.data.model.health.InfoVideoData
@@ -56,14 +54,21 @@ sealed class OHealthOverview {
         val caloriesGoal: Int
     ) : OHealthOverview()
 
-    class HeartRate(
-        var value: String,
-        var lastTime: String,
-        val candleValue: ArrayList<CandleEntry> = ArrayList(),
-        val lineData: Pair<ArrayList<Entry>, ArrayList<Int>>,
-        val xLabelList: ArrayList<String> = ArrayList(),
-        val axisMinimum: Float,
+    //    class HeartRate(
+//        var value: String,
+//        var lastTime: String,
+//        val candleValue: ArrayList<CandleEntry> = ArrayList(),
+//        val lineData: Pair<ArrayList<Entry>, ArrayList<Int>>,
+//        val xLabelList: ArrayList<String> = ArrayList(),
+//        val axisMinimum: Float,
+//        val average: Float,
+//        var measureState: TapMeasureState = TapMeasureState.DEFAULT
+//    ) : OHealthOverview()
+    class HeartRateDataModel(
+        val listData: ArrayList<HRModel>? = null,
         val average: Float,
+        var lastTime: String? = "",
+        var value: String? = "",
         var measureState: TapMeasureState = TapMeasureState.DEFAULT
     ) : OHealthOverview()
 
@@ -82,7 +87,6 @@ sealed class OHealthOverview {
         val trend: Int? = null,
         val value: List<ChartModel>? = ArrayList()
     ) : OHealthOverview()
-
 
 }
 

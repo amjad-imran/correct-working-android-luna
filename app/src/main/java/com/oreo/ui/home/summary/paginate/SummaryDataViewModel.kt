@@ -2,49 +2,32 @@ package com.oreo.ui.home.summary.paginate
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.github.mikephil.charting.data.CandleEntry
-import com.github.mikephil.charting.data.Entry
 import com.google.gson.Gson
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.remote.base.Resource
-import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
-import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.common.maxWithoutZero
 import com.noisefit_commans.common.minWithoutZero
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
-import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.User
-import com.noisefit_commans.interfaces.connection.ConnectState
-import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
-import com.noisefit_commans.models.ColorFitDevice
-import com.noisefit_commans.models.ManualMeasureType
 import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.BaseViewModel
-import com.noisefit_commans.ui.getColor
-import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
-import com.oreo.data.model.AlertType
-import com.oreo.data.model.ChartModel
-import com.oreo.data.model.DashAlert
+import com.oreo.data.dataConverter.OreoHRDataConvertor
+import com.oreo.data.model.HRModel
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.TapMeasureState
-import com.oreo.data.model.VideoInfoType
-import com.oreo.data.model.health.Nap
 import com.oreo.data.model.health.ODashboardActivityModel
-import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessModel
-import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepModel
-import com.oreo.data.model.health.ODashboardSleepScoreModel
 import com.oreo.data.model.health.SleepHourlyBreakup
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -60,13 +43,15 @@ constructor(
     val localDataStore: DataStoredInterface,
     val sessionManager: SessionManager,
     val dataConverter: DataConverter,
-    val userActivityRepository: OreoUserActivityRepository
+    val userActivityRepository: OreoUserActivityRepository,
+    val hrDataConvertor: OreoHRDataConvertor
 ) : BaseViewModel() {
 
 
+    var serverUserHealthData: ServerUserHealthData? = null
     var date: String? = null
     val healthOverviewData = MutableLiveData<ArrayList<OHealthOverview>>()
-    val stateHeartRateCard = MutableLiveData<OHealthOverview.HeartRate?>()
+    val stateHeartRateCard = MutableLiveData<OHealthOverview.HeartRateDataModel?>()
 
     val stateWorkouts = MutableLiveData<List<OActivityListModal>>()
 
@@ -166,8 +151,8 @@ constructor(
         }
     }
 
-    private fun parseHrData(data: ServerUserHealthData): OHealthOverview.HeartRate {
-
+    private fun parseHrData(data: ServerUserHealthData): OHealthOverview.HeartRateDataModel {
+        LOGS.d("HeartRateData ${Gson().toJson(data.heart)}")
         var breakupArray = data.heart?.break_up
         if (breakupArray.isNullOrEmpty()) {
             val dummyArray = ArrayList<Int>()
@@ -177,19 +162,14 @@ constructor(
             breakupArray = dummyArray
         }
         val hRWithIntervalList = breakupArray.chunked(6)
-        val lineChartList: ArrayList<Entry> = ArrayList()
-        val candleChartList: ArrayList<CandleEntry> = ArrayList()
-        val lineColorList: ArrayList<Int> = ArrayList()
-        val xLabelList = ArrayList<String>()
         val avgList = ArrayList<Int>()
         var overAllMinValue = Int.MAX_VALUE
         var overAllMaxValue = -1
         var hrCount = 0
         var lastHrValue: Pair<Int, Long>? = null//HR value,timer
 
-
+        val listData = ArrayList<HRModel>()
         hRWithIntervalList.forEachIndexed { index, hrList ->
-
 
             val minValue = hrList.minWithoutZero()
 
@@ -209,10 +189,10 @@ constructor(
             val avg = (min + max) / 2
             if (avg != 0) {
                 if (min < overAllMinValue) {
-                    overAllMinValue = min;
+                    overAllMinValue = min
                 }
                 if (max > overAllMaxValue) {
-                    overAllMaxValue = max;
+                    overAllMaxValue = max
                 }
                 avgList.add(avg)
 
@@ -224,61 +204,29 @@ constructor(
                     lastHrValue = Pair(value, indexMillis)
                 }
             }
-
             //if any change chunk value then divide 12 by that chunk value to get below correct xlabel list
             if (index % 2 == 0) {
                 hrCount += 1
 
             }
-
-
-            xLabelList.add(handleHrFormat(hrCount))
-
-            candleChartList.add(
-                CandleEntry(
-                    index.toFloat(),
-                    max.toFloat(),
-                    min.toFloat(),
-                    max.toFloat(),
-                    min.toFloat()
-                )
-            )
-
-            if (index % 2 == 0) {
-                lineColorList.add(R.color.color_error.getColor())
-            } else {
-                lineColorList.add(R.color.white.getColor())
-            }
-            lineChartList.add(
-                Entry(
-                    index.toFloat(),
-                    avg.toFloat()
+            listData.add(
+                HRModel(
+                    maxValues = overAllMaxValue,
+                    minValues = overAllMinValue,
+                    values = hrList,
+                    midValues = avgList.average().toFloat()
                 )
             )
         }
-
         val average = avgList.average().toFloat()
 
 
-
-
-        if (overAllMinValue == Int.MAX_VALUE) {
-            overAllMinValue = 69
-        }
-
-        if (overAllMinValue != 0) {
-            overAllMinValue -= 9
-        }
-
         val measureState = TapMeasureState.HIDE
-
-
-        return OHealthOverview.HeartRate(
-            "",
-            "",
-            candleChartList,
-            Pair(lineChartList, lineColorList),
-            xLabelList, overAllMinValue.toFloat(), average,
+        return OHealthOverview.HeartRateDataModel(
+            listData,
+            average = average,
+            "0",
+            value = "",
             measureState
         )
     }
