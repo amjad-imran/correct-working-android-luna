@@ -423,8 +423,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     if (lastUpdatedTimestamp == 0L) {
                         binding.tvLastUpdate.text = ""
                     } else {
-                        binding.tvLastUpdate.text =
-                            DateFormats.getRelativeTime(lastUpdatedTimestamp)
+                        binding.tvLastUpdate.text ="Updated ${DateFormats.getRelativeTime(lastUpdatedTimestamp)}"
                     }
                 } else {
                     binding.tvLastUpdate.text = ""

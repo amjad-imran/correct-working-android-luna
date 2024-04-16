@@ -86,6 +86,10 @@ class OStressDataMovementFragment :
 
                 viewModel.isSelectedMode = false
 
+
+                val day = viewModel.getDayFromDate(dayData.date)
+                binding.lytStressHeader.tvTypical.text = "vs typical $day"
+
                 viewModel.defaultMeterData = Pair(
                     dayData.stress?.stressValue?.value,
                     dayData.stress?.stressValue?.lastUpdated
@@ -284,12 +288,14 @@ class OStressDataMovementFragment :
     private fun handleComparisonsBar(
         layout: LayoutStressHeaderSubItemBinding,
         todayValue: Int,
-        typicalValue: Int
+        typicalValue: Int,
+        drawableToday: Int,
+        drawableCompare: Int
     ) {
         layout.pgBrToday.progressDrawable =
-            ContextCompat.getDrawable(requireContext(), R.drawable.grad_today_calm)
+            ContextCompat.getDrawable(requireContext(), drawableToday)
         layout.pgBrPrevious.progressDrawable =
-            ContextCompat.getDrawable(requireContext(), R.drawable.grad_previous_calm)
+            ContextCompat.getDrawable(requireContext(), drawableCompare)
 
         handleProgress(layout.pgBrToday, viewModel.getBarPercent(todayValue))
         handleProgress(layout.pgBrPrevious, viewModel.getBarPercent(typicalValue))
@@ -383,9 +389,23 @@ class OStressDataMovementFragment :
                 return@apply
             }
 
-            handleComparisonsBar(lytCalm, calm, stress?.typicalCalm ?: 0)
-            handleComparisonsBar(lytFocussed, focused, stress?.typicalFocused ?: 0)
-            handleComparisonsBar(lytStressed, focused, stress?.typicalStressed ?: 0)
+            handleComparisonsBar(
+                lytCalm,
+                calm,
+                stress?.typicalCalm ?: 0,
+                R.drawable.grad_today_calm,
+                R.drawable.grad_previous_calm
+            )
+            handleComparisonsBar(
+                lytFocussed, focused, stress?.typicalFocused ?: 0,
+                R.drawable.grad_today_focused,
+                R.drawable.grad_previous_focused
+            )
+            handleComparisonsBar(
+                lytStressed, focused, stress?.typicalStressed ?: 0,
+                R.drawable.grad_today_stressed,
+                R.drawable.grad_previous_stressed
+            )
         }
     }
 

@@ -14,6 +14,7 @@ import com.oreo.data.model.OStressActivitiesDataModel
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.Stress
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.LocalDate
 import java.util.Calendar
 import javax.inject.Inject
 import kotlin.math.roundToInt
@@ -225,6 +226,14 @@ constructor(
         val diff = ((difference.toFloat() / today) * 100).roundToInt()
         return diff
 
+    }
+
+    fun getDayFromDate(date: String): String {
+        return try {
+            LocalDate.parse(date).dayOfWeek.name.lowercase()
+        } catch (exp: Exception) {
+            ""
+        }
     }
 
 
