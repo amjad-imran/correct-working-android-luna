@@ -8,7 +8,7 @@ data class HRCombineModel(
     val medium: Int = 0
 )
 
-data class Item(
+/*data class Item(
     val `value`: Int,
     val index: Int
 )
@@ -21,4 +21,4 @@ data class Section(
     val imageRes: Int,
     val imageUrl: String? = null,
     var count: Int? = null
-)
+)*/

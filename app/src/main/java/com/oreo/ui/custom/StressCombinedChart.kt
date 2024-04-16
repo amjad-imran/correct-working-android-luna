@@ -29,6 +29,7 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.noisefit.luna.R
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.LOGS.d
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.ui.stress.OnStressClickAction
@@ -630,9 +631,9 @@ class StressCombinedChart : View {
                         canvas.drawPoint(x, y, chartLinePaint)
                     }
                 }
-                toolTipList.add(Triple(x, "Time", current.value))
 
             }
+            toolTipList.add(Triple(x, "Time", current.value))
 
             /*if (showXAxis && i % interval == 0 && i > 0 && i < 4 * interval) {
                 String xText = String.valueOf(list.get(i).getIndex());
@@ -691,7 +692,7 @@ class StressCombinedChart : View {
         this.listener = listener
     }
 
-    private fun drawDot(canvas: Canvas, value: Int) {
+    private fun drawDot(canvas: Canvas, value: Int, calculatedTouchX: Float) {
 
         val dotBitmap = when (value) {
             in 1..34 -> calmDot
@@ -705,7 +706,7 @@ class StressCombinedChart : View {
 
         canvas.drawBitmap(
             dotBitmap,
-            touchX!! - width,
+            calculatedTouchX - width,
             getDotHeight(value) - height,
             paintStressed
         )
@@ -735,7 +736,7 @@ class StressCombinedChart : View {
         canvas.drawRect(rectF, overlayLinePaint)
         if (value.second != 0) {
 
-            drawDot(canvas, value.second)
+            drawDot(canvas, value.second, calculatedTouchX)
 
         }
         if (listener != null) {
