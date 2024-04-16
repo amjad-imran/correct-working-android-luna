@@ -29,6 +29,7 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.noisefit.luna.R
 import com.oreo.ui.heartrate.OnHRClickAction
+import kotlin.math.roundToInt
 
 
 class HRCombinedChart : View {
@@ -71,7 +72,7 @@ class HRCombinedChart : View {
     private var mWith = 0
     private var mHeight = 0
     private var xTextBounds: Rect? = null
-    private var combineModel: StressCombineModel? = null
+    private var combineModel: HRCombineModel? = null
     private val list = ArrayList<Item>()
     private val highlightIndexs: MutableList<Int> = ArrayList()
     private var isHighlighted = false
@@ -100,7 +101,7 @@ class HRCombinedChart : View {
     private val effect =
         DashPathEffect(floatArrayOf(dip2px(1f).toFloat(), dip2px(5f).toFloat()), 0f)
     private val toolTipList = ArrayList<Triple<Float, String, Int>>()
-
+    lateinit var bgLine: Paint
 
     constructor(context: Context?) : super(context) {
         resMap = HashMap()
@@ -188,6 +189,9 @@ class HRCombinedChart : View {
             textSize = combineTextSize
             typeface = fontGilroy
         }
+        bgLine = Paint().apply {
+            this.color = Color.parseColor("#19ffffff")
+        }
 
         overlayLinePaint = Paint()
         overlayLinePaint.color = Color.parseColor("#939aa3")
@@ -236,7 +240,7 @@ class HRCombinedChart : View {
         rectF = RectF()
     }
 
-    fun updateData(datas: StressCombineModel?) {
+    fun updateData(datas: HRCombineModel?) {
         combineModel = datas
         list.clear()
         datas?.items?.let { list.addAll(it) }
@@ -318,7 +322,7 @@ class HRCombinedChart : View {
         drawRight(canvas)
         drawLeft(canvas)
         drawContent(canvas)
-        drawDesc(canvas)
+//        drawDesc(canvas)
         drawOverlay(canvas)
     }
 
@@ -379,25 +383,75 @@ class HRCombinedChart : View {
 
     private fun drawLeft(canvas: Canvas) {
         gridPaint.color = gridColor
-        canvas.drawLine(leftWith, topWith, mWith - rightWith, topWith, gridPaint!!)
+        val maxStrValue = handleMaxNearestRound10(max).toString()
+        val minStrValue = handleMinRoundDown10(xMin).toString()
+        val sectionH = ((max - xMin).toFloat() / 4).roundToInt()
+        val max =
+            mHeight - bottomWith - (max - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
+
+        drawHorizontalTextWithLine(canvas, maxStrValue, max, true, false)
+
+        val min =
+            mHeight - bottomWith - (xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
+
+        drawHorizontalTextWithLine(canvas, minStrValue, min, false, true)
+
+        val xAxis2 =
+            mHeight - bottomWith - (sectionH + xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
+
+        drawHorizontalTextWithLine(canvas, (xMin + sectionH).toString(), xAxis2)
+
+        val xAxis3 =
+            mHeight - bottomWith - ((sectionH * 2) + xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
+
+        drawHorizontalTextWithLine(canvas, (xMin + sectionH * 2).toString(), xAxis3)
+        val xAxis4 =
+            mHeight - bottomWith - ((sectionH * 3) + xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
+
+        drawHorizontalTextWithLine(canvas, (xMin + sectionH * 3).toString(), xAxis4)
+
+    }
+
+    private fun handleMaxNearestRound10(max: Int): Int {
+        return (max + 5) / 10 * 10
+    }
+
+    private fun handleMinRoundDown10(min: Int): Int {
+        return (min / 10) * 10
+    }
+
+    private fun drawHorizontalTextWithLine(
+        canvas: Canvas,
+        text: String,
+        bottomHeight: Float,
+        isTop: Boolean = false,
+        isBottom: Boolean = false
+    ) {
+
         canvas.drawLine(
             leftWith,
-            mHeight - bottomWith,
+            bottomHeight,
             mWith - rightWith,
-            mHeight - bottomWith,
-            gridPaint
+            bottomHeight,
+            bgLine
         )
-        if (combineModel == null) return
-        if (combineModel!!.high > 0) {
-            val high =
-                mHeight - bottomWith - combineModel!!.high * 1f / max * (mHeight - bottomWith - topWith)
-            canvas.drawLine(leftWith, high, mWith - rightWith, high, gridPaint)
-        }
-        if (combineModel!!.medium > 0) {
-            val medium =
-                mHeight - bottomWith - combineModel!!.medium * 1f / max * (mHeight - bottomWith - topWith)
-            canvas.drawLine(leftWith, medium, mWith - rightWith, medium, gridPaint)
-        }
+        xTextPaint.color = Color.parseColor("#a3ffffff")
+        xTextPaint.getTextBounds(text, 0, text.length, xTextBounds)
+        val yPos: Float = if (isTop) {
+            bottomHeight + xTextBounds!!.height() / 2f + dip2px(4f)
+        } else if (isBottom) {
+            bottomHeight + xTextBounds!!.height() / 2f - dip2px(4f)
+        } else
+            bottomHeight + xTextBounds!!.height() / 2f
+
+        val textStart = mWith.toFloat() - xTextBounds!!.width()
+
+        canvas.drawText(
+            text,
+            textStart,
+            yPos,
+            xTextPaint!!
+        )
     }
 
     private fun drawDesc(canvas: Canvas) {
@@ -725,21 +779,21 @@ class HRCombinedChart : View {
             Pair(index.first, list[index.first]!!.value)
         }
 
-      /*  var sectionLast = 0f
-        var position = -1
-        for (i in list.size - 1 downTo 1) {
-            val sectionEnd = sectionLast + unitHLenth
-            if (touchX < sectionEnd) {
-                position = i
-                break
-            }
-            sectionLast = sectionEnd
-        }
-        return if (position == -1) {
-            Pair(0, 0)
-        } else {
-            Pair(position, list[position].value)
-        }*/
+        /*  var sectionLast = 0f
+          var position = -1
+          for (i in list.size - 1 downTo 1) {
+              val sectionEnd = sectionLast + unitHLenth
+              if (touchX < sectionEnd) {
+                  position = i
+                  break
+              }
+              sectionLast = sectionEnd
+          }
+          return if (position == -1) {
+              Pair(0, 0)
+          } else {
+              Pair(position, list[position].value)
+          }*/
     }
 
     fun findNumber(

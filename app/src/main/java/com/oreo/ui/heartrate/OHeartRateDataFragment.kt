@@ -7,7 +7,6 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
-import com.github.mikephil.charting.data.CombinedData
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
 import com.noisefit.luna.R
@@ -19,9 +18,8 @@ import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.LearnMoreDataModel
-import com.oreo.data.model.OHealthOverview
+import com.oreo.data.model.ServerUserHealthData
 import com.oreo.ui.sleep.banner.OreoSleepBannerFragment
-import com.oreo.util.graph.OCombineChartUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -52,6 +50,7 @@ class OHeartRateDataFragment :
         viewModel.date?.let {
             mainViewModel.getDashBoardData(it)?.let { dash ->
                 setUi()
+                initHeartRateGraph(dash.first)
             }
         }
     }
@@ -71,6 +70,20 @@ class OHeartRateDataFragment :
     }
 
     override fun initListener() {
+        binding.lytHeartRate.candleChart.setClickListener(object : OnHRClickAction {
+
+            override fun onValueSelected(value: Int, position: Int) {
+
+            }
+
+            override fun isInteractionOnGoing(onGoing: Boolean) {
+
+            }
+
+            override fun onTopClicked() {
+
+            }
+        })
 
     }
 
@@ -78,13 +91,23 @@ class OHeartRateDataFragment :
         viewModel.heartRateData.observe(viewLifecycleOwner) {
             if (it != null) {
                 LOGS.d(TAG, Gson().toJson(it))
-                setHearRateUi(it)
+//                initHeartRateGraph(it)
+//                setHearRateUi(it)
             }
             LOGS.d(TAG, Gson().toJson(it))
         }
     }
 
-    private fun setHearRateUi(data: OHealthOverview.HeartRate) {
+    private fun initHeartRateGraph(dayData: ServerUserHealthData) {
+        binding.lytHeartRate.candleChart.enableInteractiveMode(true)
+        binding.lytHeartRate.candleChart.updateData(
+            viewModel.getStressCombinedData(
+                dayData
+            )
+        )
+    }
+
+    /*private fun setHearRateUi(data: OHealthOverview.HeartRate) {
         val lytHeartRate = binding.lytHeartRate
         lytHeartRate.root.visible()
         val chart = lytHeartRate.candleChart
@@ -109,7 +132,7 @@ class OHeartRateDataFragment :
             chart.data = combinedData
             chart.invalidate()
         }
-    }
+    }*/
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
