@@ -25,6 +25,8 @@ class RecordWorkoutViewModel @Inject constructor(
 ) : BaseViewModel() {
 
 
+    var gpsRequired: Boolean = false
+
     val showWorkoutStoppedByRingDialog = MutableLiveData<Event<Boolean>>()
     var markedDeleted: Boolean = false
     var workout: OWorkoutListModal? = null
@@ -128,6 +130,10 @@ class RecordWorkoutViewModel @Inject constructor(
 
             }
         }
+    }
+
+    fun requireGps(): Boolean {
+        return true
     }
 
 

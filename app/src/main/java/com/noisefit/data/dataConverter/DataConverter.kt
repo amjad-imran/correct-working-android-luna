@@ -7,6 +7,7 @@ import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.local.db.fromJson
 import com.noisefit_commans.common.ceilRound
+import com.noisefit_commans.data.db.abstraction.LocationDataSource
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.model.RecordedWorkoutData
@@ -24,7 +25,8 @@ class DataConverter
 @Inject
 constructor(
     val keyValueDataSource: KeyValueDataSource,
-    val ringDataStore: RingDataStore
+    val ringDataStore: RingDataStore,
+    val locationDataSource: LocationDataSource
 ) {
 
     fun mergeSleepData(
@@ -145,6 +147,10 @@ constructor(
                     DateFormats.convertTimestampToDate(workout.endTime, DateFormats.timeFormat)
 
 
+                val locationData =
+                    locationDataSource.getLocations(workout.startTime, workout.endTime)
+
+
                 jsonArray.add(
                     JsonObject(
                     ).apply {
@@ -156,6 +162,20 @@ constructor(
                         this.addProperty("activity_type", workoutTypeString)
                         this.addProperty("start_time", startTime)
                         this.addProperty("end_time", endTime)
+
+
+                        val locationArray = JsonArray()
+
+                        locationData.forEach { location ->
+                            locationArray.add(JsonObject().apply {
+                                this.addProperty("lat", location.lat)
+                                this.addProperty("long", location.longitude)
+                                this.addProperty("timestamp", location.timeStamp)
+                            })
+                        }
+                        if (locationArray.isEmpty.not()) {
+                            this.add("location", locationArray)
+                        }
 
                         val intensityArray = JsonArray()
 

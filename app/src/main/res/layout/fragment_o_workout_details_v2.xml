@@ -6,12 +6,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/lytToolbar"
-            layout="@layout/layout_toolbar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <androidx.core.widget.NestedScrollView
             android:id="@+id/svMain"
             android:layout_width="match_parent"
@@ -19,7 +13,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lytToolbar">
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
@@ -27,37 +21,10 @@
                 android:orientation="vertical">
 
                 <include
-                    android:id="@+id/lytActivityItem"
-                    layout="@layout/layout_workout_detail_header"
-                    android:visibility="gone"
-                    tools:visibility="visible" />
-
-                <include
-                    android:id="@+id/lytCues"
-                    layout="@layout/layout_workout_detail_cues"
-                    android:visibility="gone"
-                    tools:visibility="visible" />
-
-                <TextView
-                    style="@style/H5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="24dp"
-                    android:text="@string/text_workout_detail" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvActivityDetails"
+                    android:id="@+id/lytTop"
+                    layout="@layout/layout_workout_top_with_map"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"
-                    android:orientation="vertical"
-                    android:visibility="gone"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:spanCount="2"
-                    tools:itemCount="5"
-                    tools:listitem="@layout/row_owd_item"
-                    tools:visibility="visible" />
+                    android:layout_height="wrap_content" />
 
                 <include
                     android:id="@+id/lytArrow"
@@ -104,8 +71,8 @@
                         android:layout_marginTop="24dp"
                         android:layout_marginBottom="28dp"
                         android:text="@string/text_delete_workout"
-                        android:visibility="invisible"
                         android:textColor="#ff5b79"
+                        android:visibility="invisible"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/divider4" />
