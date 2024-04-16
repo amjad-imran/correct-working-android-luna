@@ -79,6 +79,11 @@ class OHeartRateDataFragment :
             }
 
             override fun isInteractionOnGoing(onGoing: Boolean) {
+                if (onGoing) {
+                    binding.lytHeartRate.tvSubtitle2.gone()
+                } else {
+                    binding.lytHeartRate.tvSubtitle2.visible()
+                }
 
             }
 
@@ -127,7 +132,7 @@ class OHeartRateDataFragment :
         binding.lytHeartRate.candleChart.updateData(
             viewModel.hrDataConvertor.getHrCombinedData(
                 dayData, heartRate
-            ), 5
+            ), 5,heartRate.minValues,heartRate.maxValues
         )
     }
 

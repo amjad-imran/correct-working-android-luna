@@ -65,10 +65,12 @@ sealed class OHealthOverview {
 //        var measureState: TapMeasureState = TapMeasureState.DEFAULT
 //    ) : OHealthOverview()
     class HeartRateDataModel(
-        val listData: ArrayList<HRModel>? = null,
+        val listData: List<HRModel>? = null,
         val average: Float,
         var lastTime: String? = "",
         var value: String? = "",
+        var maxValues: Int,
+        var minValues: Int,
         var measureState: TapMeasureState = TapMeasureState.DEFAULT
     ) : OHealthOverview()
 

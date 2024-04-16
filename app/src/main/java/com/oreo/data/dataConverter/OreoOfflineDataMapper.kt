@@ -363,35 +363,12 @@ constructor(
             }
 
 
-//            xLabelList.add(handleHrFormat(hrCount))
-
-            /*candleChartList.add(
-                CandleEntry(
-                    index.toFloat(),
-                    max.toFloat(),
-                    min.toFloat(),
-                    max.toFloat(),
-                    min.toFloat()
-                )
-            )*/
-
-            /*if (index % 2 == 0) {
-                lineColorList.add(R.color.color_error.getColor())
-            } else {
-                lineColorList.add(R.color.white.getColor())
-            }
-            lineChartList.add(
-                Entry(
-                    index.toFloat(),
-                    avg.toFloat()
-                )
-            )*/
             listData.add(
                 HRModel(
                     maxValues = overAllMaxValue,
                     minValues = overAllMinValue,
                     values = hrList,
-                    midValues = avgList.average().toFloat()
+                    midValues = hrList.average().toFloat()
                 )
             )
         }
@@ -456,11 +433,14 @@ constructor(
             "Last measured ${DateFormats.getRelativeTime(manualMeasureTime).lowercase()}"
         }
 
+
         return OHealthOverview.HeartRateDataModel(
             listData,
-            average=average,
+            average = average,
             lastTime = measureText,
             value = "",
+            maxValues = breakupArray.maxWithoutZero(),
+            minValues = breakupArray.minWithoutZero(),
             measureState
         )
     }

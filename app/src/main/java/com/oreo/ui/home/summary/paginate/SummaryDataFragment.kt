@@ -286,7 +286,7 @@ class SummaryDataFragment :
         lytHeartRate.candleChart.updateData(
             viewModel.hrDataConvertor.getHrCombinedData(
                 viewModel.serverUserHealthData, data
-            ),3
+            ), 3, data.minValues, data.maxValues
         )
 
         lytHeartRate.lottieAnimView.gone()

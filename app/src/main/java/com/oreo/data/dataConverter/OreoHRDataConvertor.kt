@@ -1,8 +1,6 @@
 package com.oreo.data.dataConverter
 
 import android.graphics.Color
-import com.google.gson.Gson
-import com.noisefit.data.local.db.fromJson
 import com.noisefit.luna.R
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
@@ -30,8 +28,27 @@ constructor(
         hearRate: OHealthOverview.HeartRateDataModel
     ): HRCombineModel {
 
-        val hrBreakup =
-            Gson().fromJson<List<Int>>("[10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,4,10,12,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,55,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44]")
+//        val hrBreakup =
+//            Gson().fromJson<List<Int>>("[10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,4,10,12,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,55,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44]")
+
+        var breakUpData = ArrayList<Int>()
+        if (dayData?.date == DateFormats.getCurrentDate(DateFormats.dateFormat3)) {
+            if (hearRate.listData.isNullOrEmpty()) {
+                breakUpData = ArrayList()
+            } else {
+                hearRate.listData.forEach {
+                    breakUpData.add(it.midValues.toInt())
+                }
+            }
+        } else {
+            if (dayData?.heart?.break_up.isNullOrEmpty()) {
+                breakUpData = ArrayList()
+            } else {
+                dayData?.heart?.break_up?.forEach {
+                    breakUpData.add(it)
+                }
+            }
+        }
 
         val workouts = dayData?.activity?.workout
 
@@ -75,9 +92,8 @@ constructor(
             }
         }
 
-        val items: MutableList<Item> = ArrayList<Item>()
-
-        hrBreakup.forEachIndexed { index, i ->
+        val items: MutableList<Item> = ArrayList()
+        breakUpData.forEachIndexed { index, i ->
             items.add(Item(i, index))
         }
 

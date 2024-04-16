@@ -1319,6 +1319,8 @@ class OreoUserActivityRepositoryImpl(
             listData = ArrayList(),
             average = 0.0f,
             lastTime = "0",
+            maxValues = 0,
+            minValues = 0,
             measureState = TapMeasureState.DEFAULT
         )
     }

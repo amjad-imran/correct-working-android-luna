@@ -227,6 +227,8 @@ constructor(
             average = average,
             "0",
             value = "",
+            maxValues = breakupArray.maxWithoutZero(),
+            minValues = breakupArray.minWithoutZero(),
             measureState
         )
     }

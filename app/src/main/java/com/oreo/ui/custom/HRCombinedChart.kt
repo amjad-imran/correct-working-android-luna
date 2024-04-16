@@ -28,6 +28,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.noisefit.luna.R
+import com.noisefit_commans.utils.LOGS
 import com.oreo.ui.heartrate.OnHRClickAction
 import kotlin.math.roundToInt
 
@@ -100,6 +101,8 @@ class HRCombinedChart : View {
     private val toolTipList = ArrayList<Triple<Float, String, Int>>()
     lateinit var bgLine: Paint
     var yAxisCount: Int = 3
+    var minYAxis: Int = 0
+    var maxYAxis: Int = 0
 
     constructor(context: Context?) : super(context) {
         resMap = HashMap()
@@ -227,12 +230,14 @@ class HRCombinedChart : View {
         rectF = RectF()
     }
 
-    fun updateData(datas: HRCombineModel?, yAxisCount: Int) {
+    fun updateData(datas: HRCombineModel?, yAxisCount: Int, minYAxis: Int, maxYAxis: Int) {
         combineModel = datas
         list.clear()
         datas?.items?.let { list.addAll(it) }
         list.reverse()
         this.yAxisCount = yAxisCount
+        this.minYAxis = minYAxis
+        this.maxYAxis = maxYAxis
         postInvalidate()
     }
 
@@ -433,8 +438,10 @@ class HRCombinedChart : View {
     }
 
     private fun calculateYAxisValue(yAxisCount: Int): ArrayList<Int> {
-        var minHrValue = 0
-        var maxHrValue = 100
+        var minHrValue = minYAxis
+        var maxHrValue = maxYAxis
+        LOGS.d("MIN hr value ${minHrValue}")
+        LOGS.d("MIN hr max value ${maxHrValue}")
         if (minHrValue == 0) {
             maxHrValue = 120
         } else if (minHrValue < 40) {
@@ -453,7 +460,7 @@ class HRCombinedChart : View {
     private fun getPointsBetween(start: Int, end: Int, numPoints: Int): ArrayList<Int> {
         val interval = (end - start) / (numPoints + 1)
         val points = ArrayList<Int>()
-        for (i in 0..numPoints) {
+        for (i in 1..numPoints) {
             points.add(start + interval * i)
         }
         return points
