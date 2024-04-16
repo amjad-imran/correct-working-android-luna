@@ -15,6 +15,7 @@ import com.google.gson.reflect.TypeToken
 import com.noisefit_commans.NoisefitApplication
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.constants.SyncEvents
+import com.noisefit_commans.data.db.abstraction.LocationDataSource
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.data.model.RecordedWorkoutData
@@ -72,6 +73,7 @@ import com.zhapp.ble.callback.RealTimeDataCallBack
 import com.zhapp.ble.callback.SportCallBack
 import com.zhapp.ble.parsing.ParsingStateManager.SendCmdStateListener
 import com.zhapp.ble.parsing.SendCmdState
+import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -88,8 +90,6 @@ constructor(
 ) : UserActivityDataActions() {
 
     companion object {
-        const val LOCATION_BROADCAST_RECEIVER = "LOCATION_BROADCAST_RECEIVER"
-        const val LAT_LONG = "LAT_LONG"
         val TRACK_TAG = "LUNA->"
     }
 
@@ -98,20 +98,6 @@ constructor(
     private var userActivityDataCallbacks: IUserActivityDataCallback? = null
     private var sportModleInfoList = ArrayList<DevSportInfoBean>()
     private var isSyncProtoSportSyncing = false
-
-    private var isPause = false
-    private var locationClientClass: LocationClientClass? = null
-    private var firstLocation = false
-    private var currentGpsSportState = -1
-    private var mLatitude = 0.0
-    private var mLongitude = 0.0
-
-    //上次发送辅助定位数据的时间戳,经纬度
-    private var mLastTime = 0L
-
-    //上次发送的定位经纬度
-    private var mLastLat = 0.0
-    private var mLastLon = 0.0
 
 
     override fun <T> callbackListener(callback: T) {
@@ -145,7 +131,6 @@ constructor(
 
             override fun onSportRequest(requestBean: SportRequestBean) {
                 LOGS.d(TAG, "onSportRequest $requestBean")
-                deviceRequest(requestBean)
                 AppLogs.sendAppLogs("RECORD_WORKOUT onSportRequest-> $requestBean")
             }
         })
@@ -180,77 +165,6 @@ constructor(
 
     }
 
-    private fun deviceRequest(devSportRequest: SportRequestBean) {
-        //{"sportType":1,"state":0,"supportVersions":0,"timestamp":1637229490}
-        //GPS开启定位，进行预定位
-        if (devSportRequest.state == 0) {
-            // 回复设备SportResponseBean
-            sendSportResponseBean()
-        }
-        when (devSportRequest.state) {
-            1 -> {
-                currentGpsSportState = 0
-
-                isPause = false
-                //未定位，开启定位
-                /*if(!LocationService.binder.service.isLocationDoing){
-                    LocationService.binder.service.startLocation()
-                }*/
-                enableLocation()
-
-            }
-
-            2 -> {
-                currentGpsSportState = 1
-                isPause = true
-            }
-
-            3 -> {
-                currentGpsSportState = 2
-                isPause = false
-                //未定位，开启定位
-                /*if(!LocationService.binder.service.isLocationDoing){
-                    LocationService.binder.service.startLocation()
-                }*/enableLocation()
-            }
-
-            4 -> {
-                currentGpsSportState = -1
-
-                isPause = false
-                //不在app运动，关闭定位
-                /*if(!LocationService.binder.service.isAppSport){
-                    LocationService.binder.service.stopLocation()
-                }*/disableLocation()
-                /*mLastTime = 0L
-                mLastLat = 0.0
-                mLastLon = 0.0*/
-            }
-        }
-    }
-
-    private fun hasPermission(): Boolean {
-        val permissionAccessCoarseLocationApproved =
-            (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED)
-
-        val backgroundLocationPermissionApproved =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                (ActivityCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED)
-            } else {
-                true
-            }
-
-        if (permissionAccessCoarseLocationApproved && backgroundLocationPermissionApproved) {
-            return true
-        }
-
-        return false
-
-    }
 
 //    private fun getTempFromLatLng(lat: Double, log: Double) {
 //
@@ -280,72 +194,44 @@ constructor(
 
     }
 
-    private fun enableLocation() {
-        locationClientClass = LocationClientClass()
-        NoisefitApplication.context?.let {
-            locationClientClass?.initialize(it)
-            locationClientClass?.requestLocationUpdates(it)
-            LocalBroadcastManager
-                .getInstance(it)
-                .registerReceiver(
-                    locationReceiver,
-                    IntentFilter(LOCATION_BROADCAST_RECEIVER)
-                )
-        }
-        AppLogs.sendAppLogs(
-            LogEvents.Connect,
-            ConnectEvents.Other.apply { comment = "Location receiver register" })
-
-    }
-
-    private fun disableLocation() {
-        NoisefitApplication.context?.let {
-            locationClientClass?.removeLocationUpdates(it)
-            LocalBroadcastManager
-                .getInstance(it)
-                .unregisterReceiver(locationReceiver)
-        }
-        AppLogs.sendAppLogs(
-            LogEvents.Connect,
-            ConnectEvents.Failed.apply { comment = "Location receiver disabled" })
-
-    }
 
     /**
      * 回复设备当前状态
      */
-    private fun sendSportResponseBean() {
-        val response = SportResponseBean()
-        response.code = getResponseCode()
-        response.gpsAccuracy = 1
-        ControlBleTools.getInstance()
-            .replyDevSportRequest(response, object : SendCmdStateListener(null) {
-                override fun onState(state: SendCmdState) {
-                    LOGS.d(TAG, "$state")
-                }
-            })
-        //开始辅助运动
-        if (response.code == 0) {
 
-            if (hasPermission()) {
-                firstLocation = false
-                currentGpsSportState = 0
-                LOGS.d("GPS Started")
-                enableLocation()
-                sendErrorMessageToApp(
-                    "Please make sure before starting a new run your phone must not be in low battery mode and battery optimization should be turn off for noiseFit app.",
-                    "Alert"
-                )
-            } else {
-                sendErrorMessageToApp(
-                    "Please enable location permission from activity screen in app, before starting a new run.",
-                    "Alert"
-                )
-                watchDataStore.setAskForPermission(true)
 
-            }
-        }
-    }
+//    private fun sendSportResponseBean() {
+//        val response = SportResponseBean()
+//        response.code = getResponseCode()
+//        response.gpsAccuracy = 1
+//        ControlBleTools.getInstance()
+//            .replyDevSportRequest(response, object : SendCmdStateListener(null) {
+//                override fun onState(state: SendCmdState) {
+//                    LOGS.d(TAG, "$state")
+//                }
+//            })
+//        //开始辅助运动
+//        if (response.code == 0) {
+//
+//            if (hasPermission()) {
+//                firstLocation = false
+//                currentGpsSportState = 0
+//                LOGS.d("GPS Started")
+//                enableLocation()
+//                sendErrorMessageToApp(
+//                    "Please make sure before starting a new run your phone must not be in low battery mode and battery optimization should be turn off for noiseFit app.",
+//                    "Alert"
+//                )
+//            } else {
+//                sendErrorMessageToApp(
+//                    "Please enable location permission from activity screen in app, before starting a new run.",
+//                    "Alert"
+//                )
+//                watchDataStore.setAskForPermission(true)
+//
+//            }
+//        }
+//    }
 
     private fun sendErrorMessageToApp(message: String, title: String) {
 
@@ -364,90 +250,19 @@ constructor(
      * 回复状态码
      * @return
      */
-    private fun getResponseCode(): Int {
-        //状态回应 0 OK; 1 设备正忙; 2 恢复/暂停类型不匹配; 3 没有位置权限;
-        // 4 运动不支持; 5 精确gps关闭或后台无gps许可; 6 充电中; 7 低电量 ; 10 未知
-        return if (currentGpsSportState == 0 || currentGpsSportState == 2) {
-            2
-        } else 0
-        //        if (!PermissionUtils.isGranted(*PermissionUtils.PERMISSION_GROUP_LOCATION)) {
-//            return 3
-//        }
-//        if(!AppUtils.isGPSOpen(BaseApplication.mContext)){
-//            return 5
-//        }
-    }
-
-    private var locationReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            if (currentGpsSportState == 0 || currentGpsSportState == 2) {
-                val locationArrayList =
-                    intent.getParcelableArrayListExtra<LocationDataModel>(LAT_LONG)
-
-                if (locationArrayList.isNullOrEmpty()) {
-                    return
-                }
-
-                locationArrayList.forEach { location ->
-                    mLatitude = location.latitude
-                    mLongitude = location.longitude
-
-//                    if (!firstLocation) {
-//                        getTempFromLatLng(mLatitude, mLongitude)
-//                        firstLocation = true
-//                    }
-
-                    var phoneSportDataBean: PhoneSportDataBean? = null
-
-                    if (mLastTime == 0L || mLastLat == 0.0 || mLastLon == 0.0) {
-                        //初次定位发送
-                        phoneSportDataBean = PhoneSportDataBean()
-                        phoneSportDataBean.gpsAccuracy = 1
-                        phoneSportDataBean.timestamp = (System.currentTimeMillis() / 1000).toInt()
-                        phoneSportDataBean.latitude = mLatitude
-                        phoneSportDataBean.longitude = mLongitude
-                    } else {
-                        //5s | 定位有变化
-                        if (System.currentTimeMillis() - mLastTime >= 5000 ||
-                            mLatitude != mLastLat || mLongitude != mLastLon
-                        ) {
-                            phoneSportDataBean = PhoneSportDataBean()
-                            phoneSportDataBean.gpsAccuracy = 1
-                            phoneSportDataBean.timestamp =
-                                (System.currentTimeMillis() / 1000).toInt()
-                            phoneSportDataBean.latitude = mLatitude
-                            phoneSportDataBean.longitude = mLongitude
-                        }
-                    }
-
-
-                    if (phoneSportDataBean != null) {
-                        mLastTime = System.currentTimeMillis()
-                        mLastLat = mLatitude
-                        mLastLon = mLongitude
-                        ControlBleTools.getInstance().sendPhoneSportData(
-                            phoneSportDataBean,
-                            object : SendCmdStateListener(null) {
-                                override fun onState(state: SendCmdState) {
-                                    when (state) {
-                                        SendCmdState.SUCCEED ->
-                                            LOGS.d(TAG, "Location sent $mLatitude $mLongitude")
-
-                                        else -> {
-                                            LOGS.d(TAG, "Failed location setting")
-                                        }
-                                    }
-                                }
-                            })
-                    }
-
-                }
-
-
-            }
-
-        }
-    }
+//    private fun getResponseCode(): Int {
+//        //状态回应 0 OK; 1 设备正忙; 2 恢复/暂停类型不匹配; 3 没有位置权限;
+//        // 4 运动不支持; 5 精确gps关闭或后台无gps许可; 6 充电中; 7 低电量 ; 10 未知
+//        return if (currentGpsSportState == 0 || currentGpsSportState == 2) {
+//            2
+//        } else 0
+//        //        if (!PermissionUtils.isGranted(*PermissionUtils.PERMISSION_GROUP_LOCATION)) {
+////            return 3
+////        }
+////        if(!AppUtils.isGPSOpen(BaseApplication.mContext)){
+////            return 5
+////        }
+//    }
 
     private val autoSportsCallback: AutoSportDataCallBack = AutoSportDataCallBack { p0 ->
 
@@ -772,8 +587,8 @@ constructor(
             override fun onRingSleepNAP(p0: MutableList<RingSleepNapBean>?) {
                 //onRingSleepNAP : [RingSleepNapBean{existSleepNap=true, asleepNapTime=1705284882, wakeupNapTime=1705286418, sleepNapDuration=1536, date='2024-01-15 00:00:00'}]
                 LOGS.d(TAG, "onRingSleepNAP : $p0")
-                //val dummyNap =
-                //    Gson().fromJson<List<RingSleepNapBean>>("[{\"existSleepNap\":true, \"asleepNapTime\":1711983600, \"wakeupNapTime\":1711983900, \"sleepNapDuration\":300, \"date\":\"2024-04-01 00:00:00\"}]")
+                //val dummyNap = Gson().fromJson<List<RingSleepNapBean>>("[{\"existSleepNap\":true, \"asleepNapTime\":1707108000, \"wakeupNapTime\":1707111600, \"sleepNapDuration\":3600, \"date\":\"2024-02-05 00:00:00\"},\n" +
+                //      "{\"existSleepNap\":true, \"asleepNapTime\":1707049800, \"wakeupNapTime\":1707053400, \"sleepNapDuration\":3600, \"date\":\"2024-02-05 00:00:00\"}]")
 
                 AppLogs.sendAppLogs("$TRACK_TAG onRingSleepNAP : $p0")
                 if (p0 == null) return

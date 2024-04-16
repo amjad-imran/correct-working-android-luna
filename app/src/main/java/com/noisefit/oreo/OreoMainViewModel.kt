@@ -83,6 +83,7 @@ constructor(
     var user: User? = null
 
     var addWorkoutCtaVisibility = MutableLiveData<Boolean>()
+    var isActivityWorkAdd = false
 
     val userHealthData = HashMap<String, ServerUserHealthData?>()
     var trendsData: TrendsData? = null
@@ -93,6 +94,9 @@ constructor(
     fun navigateTo(option: BottomNavOption) {
         bottomNavigation.postValue(Event(option))
     }
+
+    val syncTextState = MutableLiveData<String?>()//if has text show, else hide
+    val syncProgressBarState = MutableLiveData<Pair<Int, Int>?>()//Pair(currentValue,total)
 
     var mEndDate: String? = null
     var mStartDate: String? = null
@@ -749,8 +753,10 @@ constructor(
             }
             if (selectedDate == DateFormats.getCurrentDateOreoFormat()) {
                 addWorkoutCtaVisibility.postValue(true)
+                isActivityWorkAdd = true
             } else {
                 addWorkoutCtaVisibility.postValue(false)
+                isActivityWorkAdd = false
             }
         }
     }

@@ -11,5 +11,7 @@ object MoEngageAppEventParams {
     const val star_rating="star_rating"
     const val log_type="log_type"
     const val status="status"
+    const val card_title="card_title"
+    const val cue_position="cue_position"
 
 }

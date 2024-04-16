@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /> <!-- <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/> -->
 
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -28,6 +29,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
 
     <!--<uses-feature android:name="android.software.companion_device_setup"/>-->
@@ -42,6 +44,9 @@
         android:theme="@style/Theme.NoiseFit"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
+
+        <service android:name="com.noisefit_commans.location.LocationService" android:foregroundServiceType="location" />
+
         <activity
             android:name="com.noisefit.ui.onboarding.onboardProfile.GuestProfileSetupActivity"
             android:exported="false"

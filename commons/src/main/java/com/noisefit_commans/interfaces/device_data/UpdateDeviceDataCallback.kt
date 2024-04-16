@@ -9,7 +9,7 @@ import com.noisefit_commans.models.WatchUpdateStatus
 
 sealed class UpdateDeviceDataCallback {
 
-    class WorkoutStartState(val success: Boolean, val errorMessage: String? = null) :
+    class WorkoutStartState(val success: Boolean, val failReason: WorkoutFailReason? = null) :
         UpdateDeviceDataCallback()
 
     class WorkoutEndFromRingState(val errorMessage: String? = null) :
@@ -108,4 +108,9 @@ sealed class UpdateDeviceDataCallback {
         UpdateDeviceDataCallback()
 
     class SleepReminderUpdated(val success: Boolean) : UpdateDeviceDataCallback()
+}
+
+enum class WorkoutFailReason {
+    FROM_RING,
+    LOCATION_PERM_MISSING
 }

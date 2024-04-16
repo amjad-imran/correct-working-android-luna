@@ -18,6 +18,7 @@ import com.noisefit.data.repository.implementation.*
 import com.noisefit.data.repository.pagingSource.TimelinePagingSource
 import com.noisefit.util.TestModeUtils
 import com.noisefit.watch.*
+import com.noisefit_commans.data.db.abstraction.LocationDataSource
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.interfaces.base.BaseInitializeInterface
@@ -110,9 +111,10 @@ object AppModule {
     @Provides
     fun provideDataConverter(
         keyValueDataSource: KeyValueDataSource,
-        ringDataStore: RingDataStore
+        ringDataStore: RingDataStore,
+        locationDataSource: LocationDataSource
     ): DataConverter {
-        return DataConverter(keyValueDataSource, ringDataStore)
+        return DataConverter(keyValueDataSource, ringDataStore, locationDataSource)
     }
 
 
@@ -124,8 +126,6 @@ object AppModule {
     ): WatchesSDK {
         return WatchesSDK(localDataStore, ringDataStore)
     }
-
-
 
 
     /*@Singleton

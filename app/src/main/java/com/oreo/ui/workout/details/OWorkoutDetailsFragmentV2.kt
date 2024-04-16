@@ -1,6 +1,7 @@
 package com.oreo.ui.workout.details
 
 import android.annotation.SuppressLint
+import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -9,12 +10,25 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapsInitializer
+import com.google.android.gms.maps.OnMapsSdkInitializedCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOWorkoutDetailsV2Binding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.util.ApplicationUtils
-import com.noisefit_commans.ui.*
+import com.noisefit_commans.models.LocationDataNetwork
+import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.paintText
+import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.GoogleMapsUtil
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.ChartModel
@@ -26,12 +40,17 @@ import com.oreo.data.model.WorkoutTypes
 import com.oreo.ui.activity.all.DELETE_WORKOUT_REQUEST_KEY
 import com.oreo.ui.custom.OnHeartRateChartClickAction
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+private const val maxLatLngPadding = 180
 
 @AndroidEntryPoint
 class OWorkoutDetailsFragmentV2 :
-    BaseFragment<FragmentOWorkoutDetailsV2Binding>(FragmentOWorkoutDetailsV2Binding::inflate) {
+    BaseFragment<FragmentOWorkoutDetailsV2Binding>(FragmentOWorkoutDetailsV2Binding::inflate),
+    OnMapsSdkInitializedCallback {
 
     private val viewModel: OWorkoutDetailsViewModelV2 by viewModels()
     private val args: OWorkoutDetailsFragmentV2Args by navArgs()
@@ -40,11 +59,19 @@ class OWorkoutDetailsFragmentV2 :
     @Inject
     lateinit var vibrationUtils: VibrationUtils
 
+    private var googleMap: GoogleMap? = null
+
+
     private val workoutDetailsAdapter: OWorkoutDetailslAdapterV2 by lazy {
         OWorkoutDetailslAdapterV2()
     }
     private val hrZoneAdapter: OWorkoutHRZoneAdapter by lazy {
         OWorkoutHRZoneAdapter()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        MapsInitializer.initialize(requireContext(), MapsInitializer.Renderer.LATEST, this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,7 +84,7 @@ class OWorkoutDetailsFragmentV2 :
     }
 
     private fun setRecycler() {
-        with(binding.rvActivityDetails) {
+        with(binding.lytTop.rvActivityDetails) {
             adapter = workoutDetailsAdapter
         }
         with(binding.lytHeartRate.ryvHrZone) {
@@ -68,7 +95,7 @@ class OWorkoutDetailsFragmentV2 :
 
     override fun initListener() {
 
-        binding.lytToolbar.backBtn.setOnClickListener {
+        binding.lytTop.lytToolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }
 
@@ -86,7 +113,7 @@ class OWorkoutDetailsFragmentV2 :
     }
 
     private fun setDefaultUiValue() {
-        binding.lytActivityItem.tvDurationTitle.text = getString(R.string.text_duration)
+        binding.lytTop.lytActivityItem.tvDurationTitle.text = getString(R.string.text_duration)
         binding.lytArrow.ivArrowImage.setImageResource(R.drawable.ic_arrow_down)
     }
 
@@ -153,7 +180,7 @@ class OWorkoutDetailsFragmentV2 :
         }
 
 
-        binding.lytActivityItem.tvWorkoutTime.text =
+        binding.lytTop.lytActivityItem.tvWorkoutTime.text =
             DateFormats.getActivityDisplayDates(it.startTime, it.endTime)
 
         val title = StringBuilder()
@@ -167,19 +194,26 @@ class OWorkoutDetailsFragmentV2 :
             title.append(DateFormats.getOrdinalDateToday(it.date, DateFormats.dateFormat3))
         }
 
-        binding.rvActivityDetails.visible()
-        binding.lytActivityItem.root.visible()
-        binding.lytToolbar.tvTitle.text = title.toString()
-        binding.lytActivityItem.tvActivityName.text = it.getFormattedActivityName()
-        binding.lytActivityItem.tvDurationValue.text =
+        binding.lytTop.rvActivityDetails.visible()
+        binding.lytTop.lytActivityItem.root.visible()
+        binding.lytTop.lytToolbar.tvTitle.text = title.toString()
+        binding.lytTop.lytActivityItem.tvActivityName.text = it.getFormattedActivityName()
+        binding.lytTop.lytActivityItem.tvDurationValue.text =
             ApplicationUtils.getActivityDurationFormat2(it.duration)
+
+
+        binding.lytTop.lytActivityItem.tvDurationValue.paintText()
+
         val topValue = viewModel.getDistance(it)
-        binding.lytActivityItem.tvDistanceTitle.text = topValue.third
-        binding.lytActivityItem.tvDistanceValue.text = topValue.first
-        binding.lytActivityItem.tvDistanceUnit.text = topValue.second
+        binding.lytTop.lytActivityItem.tvDistanceTitle.text = topValue.third
+        binding.lytTop.lytActivityItem.tvDistanceValue.text = topValue.first
+        binding.lytTop.lytActivityItem.tvDistanceUnit.text = topValue.second
+
+        binding.lytTop.lytActivityItem.tvDistanceValue.paintText()
+
 
         if (it.nudge != null && !it.nudge.title.isNullOrEmpty()) {
-            binding.lytCues.apply {
+            binding.lytTop.lytCues.apply {
                 root.visible()
                 tvCuesTitle.text = it.nudge.title
                 tvCuesDesc.text = it.nudge.description
@@ -187,9 +221,7 @@ class OWorkoutDetailsFragmentV2 :
         }
 
 
-
-
-        binding.lytActivityItem.ivWorkoutImage.loadImage(
+        binding.lytTop.lytActivityItem.ivWorkoutImage.loadImage(
             requireContext(), it.iconUrl
         )
 
@@ -320,11 +352,113 @@ class OWorkoutDetailsFragmentV2 :
 
         }
 
+//,
+        setUpMaps(
+            listOf(
+                LocationDataNetwork(
+                    lat = 28.437432,
+                    long = 77.104564
+                ),
+                LocationDataNetwork(
+                    28.437808, 77.106358,
+                ),
+                LocationDataNetwork(
+                    28.438060, 77.107771
+                ),
+                LocationDataNetwork(
+                    28.437152, 77.108330
+                ),
+                LocationDataNetwork(
+                    28.436463, 77.108501
+                ),
+                LocationDataNetwork(
+                    28.435766, 77.108679
+                ),
+                LocationDataNetwork(
+                    28.434531, 77.107297
+                )
+            )
+        )
+
+        return
+        it.location?.let {
+            setUpMaps(it)
+        }
+
 
     }
 
     private fun setAvgHr() {
         binding.lytHeartRate.tvAverageTitle.text = getString(R.string.text_resting_hr)
         binding.lytHeartRate.tvAverageValue.text = viewModel.avgValue
+    }
+
+    private fun setMap(map: GoogleMap) {
+        try {
+            val success: Boolean = map.setMapStyle(
+                MapStyleOptions.loadRawResourceStyle(
+                    requireContext(), R.raw.google_maps_workout
+                )
+            )
+            if (!success) {
+                LOGS.e("Style parsing failed.")
+            }
+        } catch (e: Resources.NotFoundException) {
+            e.printStackTrace()
+            LOGS.e("Can't find style. Error: $e")
+        }
+
+        map.uiSettings.apply {
+            isCompassEnabled = false
+            isZoomControlsEnabled = false
+            isMyLocationButtonEnabled = false
+            isMapToolbarEnabled = false
+            isZoomGesturesEnabled = false
+            isScrollGesturesEnabledDuringRotateOrZoom = false
+            isScrollGesturesEnabled = false
+        }
+    }
+
+    private fun setUpMaps(locationData: List<LocationDataNetwork>) {
+        val mapFragment: SupportMapFragment =
+            childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+
+        if (locationData.size <= 2) {
+            mapFragment.view?.gone()
+            return
+        }
+        mapFragment.view?.visible()
+
+        mapFragment.getMapAsync { googleMap ->
+            setMap(googleMap)
+            this.googleMap = googleMap
+            scope.launch {
+                GoogleMapsUtil().plotLocationModalGoogleMaps(
+                    requireActivity(), googleMap, locationData
+                ).collect {
+                    withContext(Dispatchers.Main) {
+
+                        //googleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
+                        googleMap.animateCamera(
+                            CameraUpdateFactory.newLatLngBounds(it, maxLatLngPadding)
+                        )
+
+                        nullableBinding?.lytTop?.map?.visible()
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onMapsSdkInitialized(renderer: MapsInitializer.Renderer) {
+        when (renderer) {
+            MapsInitializer.Renderer.LATEST -> LOGS.d(
+                "MapsDemo", "The latest version of the renderer is used."
+            )
+
+            MapsInitializer.Renderer.LEGACY -> LOGS.d(
+                "MapsDemo", "The legacy version of the renderer is used."
+            )
+        }
     }
 }

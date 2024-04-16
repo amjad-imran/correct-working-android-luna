@@ -68,6 +68,7 @@ class OreoActivityFragment :
     private val mWorkoutAdapter: OreoAWorkoutAdapter by lazy {
         OreoAWorkoutAdapter(object : OreoAWorkoutAdapter.OnItemClickListener {
             override fun onItemClick(data: OActivityListModal, position: Int) {
+                mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_workouts_item_click)
                 moveToDetailsScreen(data, position)
             }
 
@@ -98,9 +99,23 @@ class OreoActivityFragment :
             override fun onItemClick(resultData: ArrayList<Contributors>, position: Int) {
 //                if (resultData[position].barPercent > 0) {
                 openContributorBottomSheet(resultData, position)
-//                }
+                handleEvent(resultData[position].title)
+                //                }
             }
         })
+    }
+
+    private fun handleEvent(title: String) {
+        var eventName =""
+        when (title) {
+            "Stay active" -> eventName = MoEngageLunaAppEvents.luna_activity_contributors_stay_click
+            "Move every hour" -> eventName = MoEngageLunaAppEvents.luna_activity_contributors_move_click
+            "Calorie goal" -> eventName = MoEngageLunaAppEvents.luna_activity_contributors_calorie_click
+            "Training frequency" -> eventName = MoEngageLunaAppEvents.luna_activity_contributors_tfreq_click
+            "Training volume" -> eventName = MoEngageLunaAppEvents.luna_activity_contributors_tvol_click
+            }
+        mViewModel.sessionManager.logMoEngageAppEvent(eventName)
+
     }
 
     private fun openContributorBottomSheet(resultData: ArrayList<Contributors>, position: Int) {
@@ -727,6 +742,7 @@ class OreoActivityFragment :
         })
 
         binding.lytDailyMovement.bInfo.setOnClickListener {
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_movement_info_click)
             mViewModel.contributorInfo.value?.daytime_movement?.let {
                 navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
                     this.putString("infoData", it)
@@ -759,7 +775,6 @@ class OreoActivityFragment :
         }
 
         binding.lytWorkouts.viewAddWorkout.setOnClickListener {
-            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_add_workout_click)
             navigate(R.id.addWorkoutFragment)
         }
 
@@ -809,7 +824,7 @@ class OreoActivityFragment :
                 putString("infoData", mViewModel.contributorInfo.value?.total_steps)
                 putString("date", mainViewModel.selectedDate)
             })
-            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_activity_score_click)
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_steps_click)
         }
         binding.lytAScoreData.lytSec4.root.setOnClickListener {
             mSharedViewModel.selectedTab = 0

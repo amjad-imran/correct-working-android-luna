@@ -33,7 +33,13 @@ abstract class UpdateDeviceDataActions() :
     open fun setWatchFaceCustomHybrid(watchFace: WatchFacesCustomHybrid) {}
     open fun setSwitchSetting(switchSetting: SwitchSetting) {}
     open fun setWeatherData(weatherDataList: List<WeatherData>, unit: String) {}
-    open fun setWeatherDataHourly(weatherDataList: List<WeatherData>, hourlyWeatherList: List<WeatherDataHourly>, unit: String) {}
+    open fun setWeatherDataHourly(
+        weatherDataList: List<WeatherData>,
+        hourlyWeatherList: List<WeatherDataHourly>,
+        unit: String
+    ) {
+    }
+
     open fun updateMenstrualData(menstrualData: MenstrualData) {}
     open fun setStartDayOfWeek(startDayOfWeek: StartDayOfWeek) {}
     open fun setMusicSwitch(musicSwitch: SwitchSetting) {}
@@ -92,7 +98,7 @@ abstract class UpdateDeviceDataActions() :
     open fun setQuickEyeMovementSwitch(status: Boolean) {}
 
     open fun closeFindPhoneFromWatch(status: Boolean) {}
-    open fun startWorkout(sportType: Int, sportStartTime: Long) {}
+    open fun startWorkout(sportType: Int, sportStartTime: Long, startGps: Boolean) {}
     open fun checkOngoingWorkout() {}
     open fun updateOngoingWorkout(sportType: Int, sportTimeStamp: Long, action: Int) {}
 

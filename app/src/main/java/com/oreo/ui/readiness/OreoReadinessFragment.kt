@@ -12,7 +12,6 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoReadinessBinding
 import com.noisefit.oreo.OreoMainViewModel
@@ -34,8 +33,6 @@ import com.oreo.data.model.SleepChartModel
 import com.oreo.data.model.health.CommonDataModel
 import com.oreo.data.model.health.Nudges
 import com.oreo.data.model.health.OreoReadinessModel
-import com.oreo.data.model.health.OreoSleepModel
-import com.oreo.data.model.health.UnitDataModelArray
 import com.oreo.data.model.health.UnitDataModelArrayFloat
 import com.oreo.ui.custom.LineChartType
 import com.oreo.ui.custom.OnLinearChartClickAction
@@ -72,9 +69,40 @@ class OreoReadinessFragment :
                 version: Int
             ) {
                 openContributorBottomSheet(resultData, position, version)
+                handleEvent(resultData[position].title)
             }
 
         })
+    }
+
+    private fun handleEvent(title: String) {
+        var eventName = ""
+        when (title) {
+            "Sleep score" -> eventName = MoEngageLunaAppEvents.luna_readiness_contrib_sscore_click
+            "Activity Score" -> eventName =
+                MoEngageLunaAppEvents.luna_readiness_contrib_activity_click
+
+            "Recovery index" -> eventName =
+                MoEngageLunaAppEvents.luna_readiness_contrib_recovery_click
+
+            "Sleep regularity" -> eventName =
+                MoEngageLunaAppEvents.luna_readiness_contrib_regularity_click
+
+            "Sleep balance" -> eventName =
+                MoEngageLunaAppEvents.luna_readiness_contrib_sbalance_click
+
+            "Average HR" -> eventName = MoEngageLunaAppEvents.luna_readiness_contrib_heartrate_click
+            "Activity balance" -> eventName =
+                MoEngageLunaAppEvents.luna_readiness_contrib_abalance_click
+
+            "HRV balance" -> eventName =
+                MoEngageLunaAppEvents.luna_readiness_contrib_hrv_balance_click
+
+            "Skin temperature" -> eventName =
+                MoEngageLunaAppEvents.luna_readiness_contrib_skin_temp_click
+        }
+        mViewModel.sessionManager.logMoEngageAppEvent(eventName)
+
     }
 
     private fun openContributorBottomSheet(
@@ -85,7 +113,10 @@ class OreoReadinessFragment :
         val descList = mViewModel.prepareDataForDescriptionArray(resultData, contriVer)
         navigate(
             OreoReadinessFragmentDirections.actionNavigationReadinessDetailsFragToDescriptionPopUpBottomDialogFragment(
-                position, descList.toTypedArray(), resultData[position].title,ClickViewType.READINESS.name
+                position,
+                descList.toTypedArray(),
+                resultData[position].title,
+                ClickViewType.READINESS.name
             )
         )
 
@@ -169,16 +200,16 @@ class OreoReadinessFragment :
         }
     }
 
-    private fun setHrvMax() {
+    private fun setHrvAvg() {
 
-        binding.lytHRVariability.tvSubtitle1.text = getString(R.string.text_maximum)
-        if (mViewModel.maxHrv == null || mViewModel.maxHrv == 0 || mViewModel.maxHrv == 255) {
-            binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "-"
-            binding.lytHRVariability.lytSubtitleValue1.tvUnit.gone()
-        } else {
-            binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "${mViewModel.maxHrv}"
+        binding.lytHRVariability.tvSubtitle1.text = getString(R.string.text_average)
+        if (mViewModel.avgHrv != null && mViewModel.avgHrv != 0) {
+            binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "${mViewModel.avgHrv}"
             binding.lytHRVariability.lytSubtitleValue1.tvUnit.text = getString(R.string.text_ms)
             binding.lytHRVariability.lytSubtitleValue1.tvUnit.visible()
+        } else {
+            binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "-"
+            binding.lytHRVariability.lytSubtitleValue1.tvUnit.gone()
         }
     }
 
@@ -302,13 +333,12 @@ class OreoReadinessFragment :
 
         binding.lytHRVariability.tvTitle.text = getString(R.string.text_heart_rate_variability)
 
-        mViewModel.maxHrv = data?.hrvBreakUp?.max
-        setHrvMax()
-
-        if (data?.hrvBreakUp?.avg != null && data?.hrvBreakUp?.avg != 0) {
-            binding.lytHRVariability.tvSubtitle2.text = "Average ${data?.hrvBreakUp?.avg} ms"
-        } else {
+        mViewModel.avgHrv = data?.hrvBreakUp?.avg
+        setHrvAvg()
+        if (data?.hrvBreakUp?.max == null || data.hrvBreakUp.max == 0 || data.hrvBreakUp.max == 255) {
             binding.lytHRVariability.tvSubtitle2.text = ""
+        } else {
+            binding.lytHRVariability.tvSubtitle2.text = "Maximum ${data?.hrvBreakUp?.max} ms"
         }
 
         val ssTime: String?
@@ -370,14 +400,18 @@ class OreoReadinessFragment :
             setInteractiveMode(!hasDummyData)
 
             setClickListener(object : OnLinearChartClickAction {
-                override fun onValueSelected(value: Int, isInteracting: Boolean, time: String?) {
+                override fun onValueSelected(
+                    value: Int,
+                    isInteracting: Boolean,
+                    time: String?
+                ) {
                     if (isInteracting) {
                         binding.lytHRVariability.tvSubtitle1.text = time ?: ""
                         binding.lytHRVariability.lytSubtitleValue1.tvValue.text =
                             if (value > 0) "$value" else "-"
 
                     } else {
-                        setHrvMax()
+                        setHrvAvg()
                     }
                 }
 
@@ -489,7 +523,10 @@ class OreoReadinessFragment :
                 mainViewModel.onCalendarDateSelected(selectedDate)
                 LOGS.d("moveToPosition Selected Date  :${selectedDate}")
 
-                mainViewModel.getUserHealthData(mainViewModel.mStartDate, mainViewModel.mEndDate)
+                mainViewModel.getUserHealthData(
+                    mainViewModel.mStartDate,
+                    mainViewModel.mEndDate
+                )
 
 
             }
@@ -506,6 +543,7 @@ class OreoReadinessFragment :
 
 
         binding.lytHeartRate.bInfo.setOnClickListener {
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_heart_rate_info_click)
             mViewModel.contributorInfo.value?.hr_graph?.let { content ->
                 navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
                     this.putString("infoData", content)
@@ -513,6 +551,7 @@ class OreoReadinessFragment :
             }
         }
         binding.lytHRVariability.bInfo.setOnClickListener {
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_hrv_info_click)
             mViewModel.contributorInfo.value?.hrv_graph?.let { content ->
                 navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
                     this.putString("infoData", content)
@@ -614,7 +653,7 @@ class OreoReadinessFragment :
                     putString("infoData", mViewModel.contributorInfo.value?.avg_temp ?: "")
                 })
 
-                mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_body_temp_click)
+                mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_skin_temp_click)
 
             }
 
@@ -686,7 +725,8 @@ class OreoReadinessFragment :
             setScrollDate()
             mViewModel.getContributorInfo()
 
-            val returnDate = mainViewModel.updateSelectedDateReadiness(mainViewModel.selectedDate)
+            val returnDate =
+                mainViewModel.updateSelectedDateReadiness(mainViewModel.selectedDate)
             if (returnDate != null) {
                 mainViewModel.selectedDate = returnDate
             }
@@ -839,7 +879,8 @@ class OreoReadinessFragment :
         } else {
             if ((it.temperature?.value ?: 0) != 0) {
                 val baselineAvg =
-                    mainViewModel.temperatureBaseLine ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE
+                    mainViewModel.temperatureBaseLine
+                        ?: mainViewModel.DEFAULT_TEMPERATURE_BASELINE
 
                 binding.lytRScoreData.lytSec3.lytHrMn.root.gone()
                 binding.lytRScoreData.lytSec3.tvPercentValue.visible()

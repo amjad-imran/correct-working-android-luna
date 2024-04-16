@@ -86,6 +86,7 @@ class OMyProfileFragment :
         }
 
         binding.rowLearn.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_learnmore_click)
             navigate(R.id.learnFragment)
         }
 

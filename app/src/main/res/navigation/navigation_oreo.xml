@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_oreo"
     app:startDestination="@id/navigation_oreo_home">
 
@@ -608,7 +607,7 @@
     <fragment
         android:id="@+id/appUpdateDetailFragment"
         android:name="com.oreo.ui.home.summary.update.UpdateDetailFragment"
-        android:label="fragment_app_update_detail" >
+        android:label="fragment_app_update_detail">
         <argument
             android:name="launchMode"
             app:argType="com.oreo.ui.home.summary.update.UpdateLaunchMode" />
@@ -626,7 +625,7 @@
     <fragment
         android:id="@+id/ringUpdateFragment"
         android:name="com.oreo.ui.home.summary.update.RingUpdateFragment"
-        android:label="fragment_ring_update" >
+        android:label="fragment_ring_update">
         <argument
             android:name="otaData"
             app:argType="com.oreo.data.model.OtaUpdateModel" />
@@ -657,4 +656,16 @@
         android:name="com.oreo.ui.stress.splash.StressSplashFragment"
         android:label="fragment_stress_splash"
         tools:layout="@layout/fragment_stress_splash" />
+    <fragment
+        android:id="@+id/fragmentHeartRateDetails"
+        android:name="com.oreo.ui.heartrate.OHeartRateDetailsFragment"
+        android:label="HeartRateDetails" />
+    <fragment
+        android:id="@+id/fragmentLearMoreDetails"
+        android:name="com.oreo.ui.heartrate.LearnMoreDetailsFragment"
+        android:label="LearnMoreDetails">
+        <argument
+            android:name="data"
+            app:argType="com.oreo.data.model.LearnMoreDataModel" />
+    </fragment>
 </navigation>

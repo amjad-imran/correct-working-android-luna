@@ -34,7 +34,7 @@
 
         <TextView
             android:id="@+id/tvActivityName"
-            style="@style/S28"
+            style="@style/S18"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="12dp"

@@ -1,0 +1,37 @@
+R_DEF: Internal format may change without notice
+local
+attr? pAnimated
+attr pBrand
+attr? pLineSpacing
+attr? pMaxProgress
+attr? pProgress
+attr? pProgressBgColor
+attr? pRoundedCorners
+attr? pShowPercentage
+attr pSize
+attr? pStriped
+color colorPrimaryDark
+color stripped_brand_primary
+color stripped_brand_secondary_fill
+color stripped_brand_secondary_text
+color stripped_gray_light
+color stripped_line_color
+color stripped_window_gray_light
+dimen stripped_button_default_font_size
+dimen stripped_progress_bar_default_font_size
+dimen stripped_progress_bar_height
+id danger
+id info
+id lg
+id md
+id primary
+id regular
+id secondary
+id sm
+id success
+id warning
+id xl
+id xs
+string app_name
+styleable StrippedProgressBar pStriped pAnimated pProgress pProgressBgColor pLineSpacing pMaxProgress pShowPercentage pRoundedCorners pBrand pSize
+styleable StrippedProgressBarGroup pMaxProgress pSize pRoundedCorners

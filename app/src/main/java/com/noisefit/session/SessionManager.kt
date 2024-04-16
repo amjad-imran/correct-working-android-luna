@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ktx.Firebase
+import com.google.gson.Gson
 import com.moengage.core.Properties
 import com.moengage.core.analytics.MoEAnalyticsHelper
 import com.moengage.core.model.UserGender
@@ -486,6 +487,7 @@ class SessionManager
         }
         MoEAnalyticsHelper.trackEvent(context, newEventName, properties)
         Firebase.analytics.logEvent(newEventName, ApplicationUtils.convertMapToBundle(data))
+        LOGS.d("LOGS_MO_ENGAGE_EVENT $newEventName ${Gson().toJson(properties)}")
     }
 
 
