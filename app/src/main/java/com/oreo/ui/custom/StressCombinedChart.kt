@@ -153,9 +153,11 @@ class StressCombinedChart : View {
         initPaint()
         initBitmap()
     }
+
     fun setVibrationUtil(vibrationUtils: VibrationUtils) {
         this.vibrationUtils = vibrationUtils
     }
+
     private fun initBitmap() {
         val res = resources
         val dimen = dip2px(30f)
@@ -368,18 +370,57 @@ class StressCombinedChart : View {
             bgBottomPaint
         )
         if (showXAxis) {
-            var xText = "12:00 am"
+            var xText = "12 am"
             xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
             xTextPaint.color = Color.parseColor("#a3ffffff")
+
+            val start = mWith - rightWith - xTextBounds!!.width() - dip2px(5f)
             canvas.drawText(
                 xText,
-                mWith - rightWith - xTextBounds!!.width() - dip2px(5f),
+                start,
                 mHeight - bottomWith / 3,
                 xTextPaint
             )
-            xText = "12:00 am"
+
+            xText = "12 am"
+            val end = leftWith + dip2px(5f)
             xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
-            canvas.drawText(xText, leftWith + dip2px(5f), mHeight - bottomWith / 3, xTextPaint)
+            canvas.drawText(xText, end, mHeight - bottomWith / 3, xTextPaint)
+
+
+            xText = "12 pm"
+            xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
+            val center = (mWith - rightWith - leftWith) / 2 - xTextBounds!!.width() / 2
+            canvas.drawText(
+                xText,
+                center,
+                mHeight - bottomWith / 3,
+                xTextPaint
+            )
+
+
+            xText = "6 am"
+            xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
+            val centerLeft = (mWith - rightWith - leftWith) / 4 - xTextBounds!!.width() / 2
+            canvas.drawText(
+                xText,
+                centerLeft,
+                mHeight - bottomWith / 3,
+                xTextPaint
+            )
+
+            xText = "6 pm"
+            xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
+            val centerRight =
+                (mWith - rightWith - leftWith) * (3.0f / 4.0f) - xTextBounds!!.width() / 2
+            canvas.drawText(
+                xText,
+                centerRight,
+                mHeight - bottomWith / 3,
+                xTextPaint
+            )
+
+
         }
     }
 
@@ -816,7 +857,8 @@ class StressCombinedChart : View {
                     resetState()
                     return super.onTouchEvent(event)
                 }
-                MotionEvent.ACTION_CANCEL->{
+
+                MotionEvent.ACTION_CANCEL -> {
                     if (!isInteracting) {
                         if (event.y < dip2px(50f)) {
                             listener?.onTopClicked()
@@ -861,8 +903,8 @@ class StressCombinedChart : View {
         vibrationUtils?.vibrate(HAPTIC_VIBRATION)
 
         listener?.isInteractionOnGoing(true)
-       /* rootView.performHapticFeedback(
-            HapticFeedbackConstants.LONG_PRESS
-        )*/
+        /* rootView.performHapticFeedback(
+             HapticFeedbackConstants.LONG_PRESS
+         )*/
     }
 }
