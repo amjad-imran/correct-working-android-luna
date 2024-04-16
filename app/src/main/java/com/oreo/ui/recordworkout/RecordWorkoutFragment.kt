@@ -1,17 +1,20 @@
 package com.oreo.ui.recordworkout
 
+import android.Manifest
 import android.animation.Animator
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentRecordWorkoutBinding
-import com.noisefit.ui.common.bottomSheet.DELETE_REQ_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.WORKOUT_STOP_KEY
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.data.UserActivityAction
@@ -21,12 +24,10 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
-import com.noisefit_commans.ui.playAnimation
-import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.location.LocationService
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -53,7 +54,7 @@ class RecordWorkoutFragment :
         navArgs.onGoingWorkout?.let {
             viewModel.workoutDuration = it.duration.toLong()
             if (it.sportStatus == 1 || it.sportStatus == 3) {
-                startWorkout()
+                startWorkoutUi()
             } else if (it.sportStatus == 2) {
                 pauseWorkout()
                 viewModel.updateTimer()
@@ -72,7 +73,7 @@ class RecordWorkoutFragment :
         }
 
 
-    private fun startWorkout() {
+    private fun startWorkoutUi() {
         viewModel.currentWorkoutState = 1
         binding.btnStartWorkout.gone()
         binding.btnPauseResume.apply {
@@ -220,7 +221,8 @@ class RecordWorkoutFragment :
         viewModel.sessionManager.sendUpdateQueryAction(
             UpdateDeviceAction.StartWorkout(
                 sportId,
-                viewModel.sportStartTime
+                viewModel.sportStartTime,
+                viewModel.gpsRequired
             )
         )
     }
@@ -236,9 +238,17 @@ class RecordWorkoutFragment :
             if (!viewModel.isDeviceConnected()) {
                 return@setOnClickListener
             }
+            if (viewModel.requireGpsPermission(viewModel.workout?.ringId)) {
+                if (!hasGpsPermission()) {
+                    showLocationPermissionDialog()
+                    return@setOnClickListener
+                } else {
+                    viewModel.gpsRequired = true
+                    LOGS.d("LOCATION_PERM Has all required permisison")
+                }
+            }
 
             binding.btnStartWorkout.gone()
-
 
             startWorkoutAnim()
 
@@ -306,6 +316,67 @@ class RecordWorkoutFragment :
         }
 
     }
+
+    private fun hasGpsPermission(): Boolean {
+        val permissionAccessCoarseLocationApproved =
+            (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+                    == PackageManager.PERMISSION_GRANTED)
+
+        val backgroundLocationPermissionApproved =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                (ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED)
+            } else {
+                true
+            }
+
+        return permissionAccessCoarseLocationApproved && backgroundLocationPermissionApproved
+    }
+
+    private fun showLocationPermissionDialog() {
+        //TODO show custom dialog first
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            locationPermissionRequest.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                )
+            )
+        } else {
+            locationPermissionRequest.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
+            )
+        }
+
+    }
+
+    val locationPermissionRequest = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+
+        when {
+            permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
+                LOGS.d("LOCATION_PERM FINE LOCATION GRANTED")
+            }
+
+            permissions.getOrDefault(Manifest.permission.ACCESS_BACKGROUND_LOCATION, false) -> {
+                LOGS.d("LOCATION_PERM Background LOCATION GRANTED")
+            }
+
+            else -> {
+                // No location access granted.
+            }
+        }
+    }
+
 
     private fun setStateConnected() {
         binding.lytRingConnecting.root.gone()
@@ -407,7 +478,7 @@ class RecordWorkoutFragment :
 
                     is UpdateDeviceDataCallback.WorkoutStartState -> {
                         if (it.success) {
-                            startWorkout()
+                            startWorkoutUi()
                         } else {
                             //context.showShortToast("Workout started : ${it.success}")
                         }

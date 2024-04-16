@@ -1,8 +1,10 @@
 package com.noisefit_commans.common
 
+import android.Manifest
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
 import android.content.res.Resources
 import android.graphics.Bitmap
@@ -18,6 +20,7 @@ import android.widget.TextView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.noisefit_commans.NoisefitApplication
 import com.noisefit_commans.utils.DateFormats
 import java.math.BigDecimal
@@ -28,6 +31,17 @@ import java.util.Calendar
 import java.util.Locale
 import kotlin.math.roundToInt
 
+
+fun Context.hasLocationPermission(): Boolean {
+    return ContextCompat.checkSelfPermission(
+        this,
+        Manifest.permission.ACCESS_COARSE_LOCATION
+    ) == PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+}
 
 inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)

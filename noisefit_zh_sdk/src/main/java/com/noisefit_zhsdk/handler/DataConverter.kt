@@ -1122,6 +1122,15 @@ constructor(
             it.reportSportStartTime, DateFormats.dateFormat3
         )
 
+        val sessionId = it.reportSportStartTime / 1000
+        LOGS.d("startWorkout result :: ${sessionId}")
+        watchDataStore.getLocationDataModel(sessionId)?.let {locationDataList ->
+//            sportsModeResponse.gpsCoordinate = Gson().toJson(parseGpsMapsData(locationDataList))
+            LOGS.d("startWorkout result :: ${Gson().toJson(locationDataList)}")
+            watchDataStore.clearLocationData(sessionId)
+        }
+
+
 
         var cadence = 0L
         if (it.reportTotalStep != 0L) {
