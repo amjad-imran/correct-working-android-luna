@@ -1,7 +1,7 @@
 package com.oreo.ui.custom;
 
 
-data class StressCombineModel(
+data class HRCombineModel(
     val sections: List<Section>? = null,
     val items: List<Item>? = null,
     val high: Int = 0,
