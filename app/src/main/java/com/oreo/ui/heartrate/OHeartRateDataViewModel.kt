@@ -216,6 +216,18 @@ class OHeartRateDataViewModel @Inject constructor(
                     )
                 )
         }
+        sleep?.naps?.forEach { nap ->
+            if (nap.date.equals(dayData.date) && !nap.isNextDayNap) {
+                dataList.add(
+                    ODayTimeActivitiesDataModel(
+                        type = "Nap",
+                        id = nap.id,
+                        startTime = nap.startTime,
+                        endTime = nap.endTime
+                    )
+                )
+            }
+        }
         activityData = dataList
     }
 
