@@ -445,8 +445,6 @@ class HRCombinedChart : View {
         gridPaint.color = gridColor
         if (yAxisCount > 3) {
             val yaxisData = calculateYAxisValue(yAxisCount)
-            val maxStrValue = handleMaxNearestRound10(max).toString()
-            val minStrValue = handleMinRoundDown10(xMin).toString()
             val sectionH = ((max - xMin).toFloat() / 4).roundToInt()
             val max =
                 mHeight - bottomWith - (max - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
@@ -479,9 +477,6 @@ class HRCombinedChart : View {
             drawHorizontalTextWithLine(canvas, yaxisData[3].toString(), xAxis4)
         } else {
             val yaxisData = calculateYAxisValue(yAxisCount)
-            val maxStrValue = handleMaxNearestRound10(max).toString()
-            val minStrValue = handleMinRoundDown10(xMin).toString()
-            val sectionH = ((max - xMin).toFloat() / 3).roundToInt()
             val max =
                 mHeight - bottomWith - (max - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
 
@@ -531,25 +526,25 @@ class HRCombinedChart : View {
         for (i in 1..numPoints) {
             when (i) {
                 1 -> {
-                    points.add(handleMinRoundDown10(start))
+                    points.add(roundNearest(start))
                 }
 
                 numPoints -> {
-                    points.add(handleMaxNearestRound10(end))
+                    points.add(roundNearest(end))
                 }
 
-                else -> points.add(start + interval * i)
+                else -> points.add(roundNearest(start + interval * i))
             }
         }
         return points
     }
-
-    private fun handleMaxNearestRound10(max: Int): Int {
-        return (max + 5) / 10 * 10
-    }
-
-    private fun handleMinRoundDown10(min: Int): Int {
-        return (min / 10) * 10
+    private fun roundNearest(n: Int): Int {
+        // Smaller multiple
+        val a = n / 10 * 10
+        // Larger multiple
+        val b = a + 10
+        // Return of closest of two
+        return if (n - a > b - n) b else a
     }
 
     private fun drawHorizontalTextWithLine(
