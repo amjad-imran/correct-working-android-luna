@@ -14,5 +14,8 @@ data class LocationModel(
     @ColumnInfo(name = "longitude") var longitude: Double? = null,
     @ColumnInfo(name = "altitude") var altitude: Double? = null,
     @ColumnInfo(name = "is_running") var isRunning: Boolean = true,
-    @ColumnInfo(name = "timestamp") var timeStamp: Long = 0
+    @ColumnInfo(name = "timestamp") var timeStamp: Long = 0,
+    @ColumnInfo(name = "temperature") var temperature: Double? = null,
+    @ColumnInfo(name = "weather_status") var weatherStatus: Int? = null,
+
 )

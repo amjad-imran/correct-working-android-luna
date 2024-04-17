@@ -370,13 +370,11 @@ constructor(
 
     private fun startLocationTracking() {
         LOGS.d("LOCATION_lOG Start Location tracking")
-        AppLogs.sendAppLogs("Start Location tracking")
         LocationUtils.startLocationService()
     }
 
     private fun stopLocationTracking() {
         LOGS.d("LOCATION_lOG Stop Location tracking")
-        AppLogs.sendAppLogs("Stop Location tracking")
         LocationUtils.stopLocationService()
     }
 
@@ -522,6 +520,7 @@ constructor(
 
             if (bean.startResult != RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_NONE.result) {
                 setAutoWorkoutStatus(true)
+                stopLocationTracking()
                 when (bean.startResult) {
                     RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_LOW_POWER.result -> {
                         /*testUpdateDeviceDataCallback?.onUpdateDataReceived(
@@ -554,6 +553,7 @@ constructor(
 
             if (bean.sportStatus == RingSportCallBack.RingSportStatus.SPORT_STATUS_END.status) {
                 setAutoWorkoutStatus(true)
+                stopLocationTracking()
 
                 if (bean.endReason != RingSportCallBack.RingSportEndReason.SPORT_END_REASON_NONE.reason) {
                     when (bean.endReason) {

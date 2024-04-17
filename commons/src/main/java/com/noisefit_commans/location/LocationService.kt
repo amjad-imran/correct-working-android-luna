@@ -1,25 +1,32 @@
 package com.noisefit_commans.location
 
+import android.R.attr.data
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.nfc.NfcAdapter.EXTRA_DATA
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.MutableLiveData
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.LocationServices
 import com.noisefit_commans.R
 import com.noisefit_commans.data.db.LocationModel
 import com.noisefit_commans.data.db.abstraction.LocationDataSource
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -27,6 +34,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class LocationService : Service() {
@@ -104,7 +112,8 @@ class LocationService : Service() {
 
                 locationDataSource.insertData(model)
 
-                DateFormats.getTimeStamp()
+                locationBroadCast.postValue(Event(Pair(lat, long)))
+
                 val updatedNotification = notification.setContentText(
                     "Location: ($lat, $long)\nTime ${
                         SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
@@ -135,5 +144,8 @@ class LocationService : Service() {
     companion object {
         const val ACTION_START = "ACTION_START"
         const val ACTION_STOP = "ACTION_STOP"
+
+        //Think of any other way
+        val locationBroadCast = MutableLiveData<Event<Pair<Double, Double>>>()
     }
 }

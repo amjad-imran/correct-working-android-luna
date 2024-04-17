@@ -440,8 +440,6 @@ class HRCombinedChart : View {
     private fun calculateYAxisValue(yAxisCount: Int): ArrayList<Int> {
         var minHrValue = minYAxis
         var maxHrValue = maxYAxis
-        LOGS.d("MIN hr value ${minHrValue}")
-        LOGS.d("MIN hr max value ${maxHrValue}")
         if (minHrValue == 0) {
             maxHrValue = 120
         } else if (minHrValue < 40) {

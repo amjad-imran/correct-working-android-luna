@@ -19,6 +19,7 @@ import com.oreo.data.model.AddWorkoutResponse
 import com.oreo.data.model.health.Nap
 import com.oreo.data.model.health.SleepHourlyBreakup
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 
 class DataConverter
@@ -148,7 +149,9 @@ constructor(
 
 
                 val locationData =
-                    locationDataSource.getLocations(workout.startTime, workout.endTime)
+                    locationDataSource.getLocations(workout.startTime, workout.endTime).sortedBy {
+                        it.timeStamp
+                    }
 
 
                 jsonArray.add(
@@ -165,16 +168,28 @@ constructor(
 
 
                         val locationArray = JsonArray()
+                        var temp: Double? = null
+                        var weatherStatus: Int? = null
 
                         locationData.forEach { location ->
                             locationArray.add(JsonObject().apply {
                                 this.addProperty("lat", location.lat)
                                 this.addProperty("long", location.longitude)
-                                this.addProperty("timestamp", location.timeStamp)
+                                this.addProperty("timestamp", location.timeStamp / 1000)
                             })
+                            if (temp == null) {
+                                temp = location.temperature
+                                weatherStatus = location.weatherStatus
+                            }
                         }
                         if (locationArray.isEmpty.not()) {
                             this.add("location", locationArray)
+                        }
+                        if (temp != null) {
+                            this.add("weather", JsonObject().apply {
+                                this.addProperty("temp", temp?.roundToInt())
+                                this.addProperty("status", weatherStatus)
+                            })
                         }
 
                         val intensityArray = JsonArray()
