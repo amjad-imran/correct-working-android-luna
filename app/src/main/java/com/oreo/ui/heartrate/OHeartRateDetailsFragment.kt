@@ -27,6 +27,10 @@ class OHeartRateDetailsFragment :
         binding.lytHeader.view1.loadImage(requireActivity(), R.drawable.ic_info_oreo)
         binding.lytHeader.tvTitle.text = getString(R.string.text_heart_rate)
 
+        binding.lytHeader.view1.setOnClickListener {
+            navigate(R.id.fragmentHrInfo)
+        }
+
         binding.lytHeader.backBtn.setOnClickListener {
             navigateUpSafe()
         }
