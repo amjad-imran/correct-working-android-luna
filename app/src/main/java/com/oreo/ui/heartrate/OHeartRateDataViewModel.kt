@@ -8,17 +8,14 @@ import com.noisefit_commans.common.minWithoutZero
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
-import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.data.dataConverter.OreoHRDataConvertor
 import com.oreo.data.model.HRModel
 import com.oreo.data.model.LearnMoreDataModel
+import com.oreo.data.model.ODayTimeActivitiesDataModel
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.health.Nudges
-import com.oreo.data.model.health.ODashboardActivityModel
-import com.oreo.data.model.health.ODashboardReadinessModel
-import com.oreo.data.model.health.ODashboardSleepModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -196,7 +193,31 @@ class OHeartRateDataViewModel @Inject constructor(
             measureState
         )
     }
-
+    var activityData: ArrayList<ODayTimeActivitiesDataModel>? = null
+    fun prepareActivityData(dayData: ServerUserHealthData) {
+        val workouts = dayData.activity?.workout
+        val sleep = dayData.sleep
+        val dataList = ArrayList<ODayTimeActivitiesDataModel>()
+        workouts?.forEach {
+            dataList.add(
+                ODayTimeActivitiesDataModel(
+                    type = "Workout",
+                    workoutData = it
+                )
+            )
+        }
+        if (sleep != null) {
+            if (sleep.hourly_breakup != null)
+                dataList.add(
+                    ODayTimeActivitiesDataModel(
+                        type = "Sleep",
+                        startTime = sleep.hourly_breakup?.firstOrNull()?.start_time,
+                        endTime = sleep.hourly_breakup?.lastOrNull()?.end_time,
+                    )
+                )
+        }
+        activityData = dataList
+    }
 
 
 }

@@ -14,8 +14,6 @@ import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOHeartRateDataBinding
 import com.noisefit.oreo.OreoMainViewModel
-import com.noisefit_commans.common.maxWithoutZero
-import com.noisefit_commans.common.minWithoutZero
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
@@ -56,6 +54,7 @@ class OHeartRateDataFragment :
         viewModel.date?.let {
             mainViewModel.getDashBoardData(it)?.let { dash ->
                 viewModel.summaryHealthData = dash.first
+                viewModel.prepareActivityData(dash.first)
                 setUi()
 
             }
@@ -84,7 +83,14 @@ class OHeartRateDataFragment :
         binding.lytHeartRate.candleChart.setClickListener(object : OnHRClickAction {
 
             override fun onValueSelected(value: Int, position: Int) {
-
+                if (value != 0) {
+                    binding.lytHeartRate.lytSubtitleValue1.tvValue.text = value.toString()
+                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
+                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
+                } else {
+                    binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
+                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
+                }
             }
 
             override fun isInteractionOnGoing(onGoing: Boolean) {
@@ -92,11 +98,20 @@ class OHeartRateDataFragment :
                     binding.lytHeartRate.tvSubtitle2.gone()
                 } else {
                     binding.lytHeartRate.tvSubtitle2.visible()
+                    viewModel.heartRateData.value?.let { updateUI(it) }
                 }
 
             }
 
             override fun onTopClicked() {
+                if (viewModel.activityData?.isNotEmpty() == true)
+                    viewModel.activityData?.toTypedArray()?.let { it1 ->
+                        navigate(
+                            OHeartRateDetailsFragmentDirections.actionNavigationHrDetailsFragToDayTimeActivitiesBottomSheet(
+                                it1
+                            )
+                        )
+                    }
 
             }
         })
@@ -142,9 +157,10 @@ class OHeartRateDataFragment :
         }
         var maxValue: Int = 0
         var minValue: Int = 0
+        LOGS.d("LIST data ${Gson().toJson(it.listData)}")
         it.listData?.forEach {
-            maxValue = it.values?.maxWithoutZero() ?: 0
-            minValue = it.values?.minWithoutZero() ?: 0
+            maxValue = it.maxValues
+            minValue = it.minValues
         }
         binding.lytHeartRate.tvSubtitle2.text = "Range $minValue-$maxValue bpm"
 
