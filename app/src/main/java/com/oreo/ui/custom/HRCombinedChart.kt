@@ -23,6 +23,7 @@ import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
@@ -166,6 +167,13 @@ class HRCombinedChart : View {
 
 
     private fun initPaint() {
+
+        edgeTextBackPaint = Paint()
+        edgeTextBackPaint.color = Color.parseColor("#394653")
+        mTextPaintEdge = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
+        mTextPaintEdge.color = ContextCompat.getColor(context, com.noisefit_commans.R.color.white)
+        mTextPaintEdge.textSize = dip2px(12f).toFloat()
+
         workoutPaint = Paint()
         workoutPaint.setColorFilter(PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN))
 
@@ -349,6 +357,73 @@ class HRCombinedChart : View {
         canvas.drawRect(mWith - rightWith, 0f, mWith.toFloat(), mHeight.toFloat(), bgRightPaint!!)
     }
 
+    lateinit var edgeTextBackPaint: Paint
+
+    lateinit var mTextPaintEdge: Paint
+    private fun drawXAxisTime(
+        canvas: Canvas,
+        yPos: Float
+    ) {
+
+        val edgeTextPadding = dip2px(4f)
+
+        val startText = "12 am"
+
+        var rectF = RectF(
+            leftWith,
+            yPos - dip2px(10f),
+            leftWith + mTextPaintEdge.measureText(startText) + edgeTextPadding * 2,
+            height.toFloat()
+        )
+        canvas.drawRoundRect(
+            rectF,
+            dip2px(4f).toFloat(),
+            dip2px(4f).toFloat(),
+            edgeTextBackPaint
+        )
+
+        canvas.drawText(
+            startText,
+            leftWith + edgeTextPadding.toFloat(),
+            yPos + dip2px(2f),
+            mTextPaintEdge
+        )
+
+
+        val text = "12 am"
+        val textWidth = mTextPaintEdge.measureText(text)
+
+        rectF = RectF(
+            (width - textWidth - rightWith) - edgeTextPadding * 2,
+            yPos - dip2px(10f),
+            width - rightWith,
+            height.toFloat()
+        )
+        canvas.drawRoundRect(
+            rectF,
+            dip2px(4f).toFloat(),
+            dip2px(4f).toFloat(),
+            edgeTextBackPaint
+        )
+
+        canvas.drawText(
+            text,
+            (width - textWidth - rightWith) - edgeTextPadding,
+            yPos + dip2px(2f),
+            mTextPaintEdge
+        )
+
+        //show center value
+        val midText = "12 pm"
+        val centerPoint = (width - rightWith - leftWith) / 2
+        canvas.drawText(
+            midText,
+            centerPoint + edgeTextPadding.toFloat(),
+            yPos + dip2px(2f),
+            mTextPaintEdge
+        )
+    }
+
     private fun drawBottom(canvas: Canvas) {
         canvas.drawRect(
             0f,
@@ -358,18 +433,10 @@ class HRCombinedChart : View {
             bgBottomPaint
         )
         if (showXAxis) {
-            var xText = "23:59"
-            xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
-            xTextPaint.color = Color.parseColor("#a3ffffff")
-            canvas.drawText(
-                xText,
-                mWith - rightWith - xTextBounds!!.width() - dip2px(5f),
-                mHeight - bottomWith / 3,
-                xTextPaint
+            drawXAxisTime(
+                canvas,
+                mHeight - bottomWith / 3
             )
-            xText = "00:00"
-            xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
-            canvas.drawText(xText, leftWith + dip2px(5f), mHeight - bottomWith / 3, xTextPaint)
         }
     }
 
@@ -441,7 +508,7 @@ class HRCombinedChart : View {
         var minHrValue = minYAxis
         var maxHrValue = maxYAxis
         LOGS.d("MIN hr value ${minHrValue}")
-        LOGS.d("MIN hr max value ${maxHrValue}")
+        LOGS.d("MIN hr max value ${max}")
         if (minHrValue == 0) {
             maxHrValue = 120
         } else if (minHrValue < 40) {
