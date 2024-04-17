@@ -27,6 +27,7 @@ import com.noisefit_commans.interfaces.data.UserActivityAction
 import com.noisefit_commans.interfaces.data.UserActivityCallback
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
+import com.noisefit_commans.location.LocationUtils
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.Gender
 import com.noisefit_commans.models.SportsModeRequest
@@ -612,7 +613,11 @@ class SessionManager
                         )
                     )
                 )
+                if (savedWorkout.second.isGpsRequired == 1) {
+                    LocationUtils.startLocationService()
+                }
             } else {
+                LocationUtils.stopLocationService()
                 sendUpdateQueryAction(UpdateDeviceAction.SetAutoWorkoutStatus(true))
             }
         }

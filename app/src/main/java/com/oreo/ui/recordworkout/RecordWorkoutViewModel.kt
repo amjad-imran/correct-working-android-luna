@@ -1,8 +1,11 @@
 package com.oreo.ui.recordworkout
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.implementation.WeatherRepository
 import com.noisefit.session.SessionManager
+import com.noisefit_commans.data.db.abstraction.LocationDataSource
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.data.model.OWorkoutListModal
@@ -12,6 +15,8 @@ import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.Timer
 import java.util.TimerTask
 import javax.inject.Inject
@@ -20,12 +25,11 @@ import javax.inject.Inject
 class RecordWorkoutViewModel @Inject constructor(
     val sessionManager: SessionManager,
     val watchDataStore: WatchDataStore,
+    val locationDataSource: LocationDataSource,
     val weatherRepository: WeatherRepository,
     val ringDataStore: RingDataStore
 ) : BaseViewModel() {
 
-
-    var gpsRequired: Boolean = false
 
     val showWorkoutStoppedByRingDialog = MutableLiveData<Event<Boolean>>()
     var markedDeleted: Boolean = false
@@ -118,23 +122,62 @@ class RecordWorkoutViewModel @Inject constructor(
     }
 
     private suspend fun getWeatherData(lat: Double, lng: Double) {
-        val unit = "metric"
-        weatherRepository.getWeatherData(
-            lat,
-            lng,
-            unit
-        ).collect { resource ->
-            resource?.let {
 
-                LOGS.i("weather data $it")
+    }
 
+    fun requireGps(): Boolean {
+        return workout?.isGpsRequired == 1
+    }
+
+    fun getWeatherDetails(lat: Double, lng: Double) {
+        if (workout == null || sportStartTime == 0L) return
+        if (lat == 0.0 || lng == 0.0) return
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val unit = "metric"
+            weatherRepository.getWeatherData(
+                lat,
+                lng,
+                unit
+            ).collect { resource ->
+                when (resource) {
+                    is Resource.NetworkError -> {
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.let { weather ->
+                            if (sportStartTime != 0L && workout != null) {
+                                locationDataSource.updateWeatherInfoForLatLong(
+                                    lat,
+                                    lng,
+                                    weather.current.temp,
+                                    1
+                                )
+                                val newModel = workout!!.apply {
+                                    this.isTempSet = true
+                                }
+                                ringDataStore.saveOngoingRecordWorkout(
+                                    Pair(
+                                        sportStartTime,
+                                        newModel
+                                    )
+                                )
+                                workout = newModel
+
+                            }
+                            LOGS.i("weather data $weather")
+                        }
+                    }
+
+                    else -> {}
+                }
             }
         }
     }
 
-    fun requireGps(): Boolean {
-        return true
+    fun shouldCheckWeather(): Boolean {
+        if (sportStartTime == 0L || workout == null) return false
+        if (workout?.isGpsRequired == 1 && workout?.isTempSet == false) return true
+        return false
     }
-
-
 }

@@ -348,7 +348,7 @@ class OWorkoutDetailsFragmentV2 :
         }
 
 //,
-        setUpMaps(
+        /*setUpMaps(
             listOf(
                 LocationDataNetwork(
                     lat = 28.437432,
@@ -373,13 +373,17 @@ class OWorkoutDetailsFragmentV2 :
                     28.434531, 77.107297
                 )
             )
-        )
-
-        return
-        it.location?.let {
-            setUpMaps(it)
+        )*/
+        if (it.location.isNullOrEmpty()) {
+            binding.lytTop.vMapOverlay.gone()
+            binding.lytTop.vMapGradientTop.gone()
+            binding.lytTop.vMapGradientBottom.gone()
+        } else {
+            binding.lytTop.vMapOverlay.visible()
+            binding.lytTop.vMapGradientTop.visible()
+            binding.lytTop.vMapGradientBottom.visible()
+            setUpMaps(it.location)
         }
-
 
     }
 
