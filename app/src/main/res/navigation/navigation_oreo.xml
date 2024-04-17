@@ -621,11 +621,16 @@
     <fragment
         android:id="@+id/fragmentHeartRateDetails"
         android:name="com.oreo.ui.heartrate.OHeartRateDetailsFragment"
-        android:label="HeartRateDetails" />
+        android:label="HeartRateDetails" >
+        <action
+            android:id="@+id/action_navigation_hr_details_frag_to_dayTimeActivitiesBottomSheet"
+            app:destination="@id/bottomSheetDayTimeActivity" />
+    </fragment>
     <fragment
         android:id="@+id/fragmentLearMoreDetails"
         android:name="com.oreo.ui.heartrate.LearnMoreDetailsFragment"
         android:label="LearnMoreDetails">
+
         <argument
             android:name="data"
             app:argType="com.oreo.data.model.LearnMoreDataModel" />
