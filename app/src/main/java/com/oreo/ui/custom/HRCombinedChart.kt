@@ -104,6 +104,8 @@ class HRCombinedChart : View {
     var yAxisCount: Int = 3
     var minYAxis: Int = 0
     var maxYAxis: Int = 0
+    lateinit var edgeTextBackPaint: Paint
+    lateinit var mTextPaintEdge: Paint
 
     constructor(context: Context?) : super(context) {
         resMap = HashMap()
@@ -357,9 +359,6 @@ class HRCombinedChart : View {
         canvas.drawRect(mWith - rightWith, 0f, mWith.toFloat(), mHeight.toFloat(), bgRightPaint!!)
     }
 
-    lateinit var edgeTextBackPaint: Paint
-
-    lateinit var mTextPaintEdge: Paint
     private fun drawXAxisTime(
         canvas: Canvas,
         yPos: Float
@@ -394,9 +393,9 @@ class HRCombinedChart : View {
         val textWidth = mTextPaintEdge.measureText(text)
 
         rectF = RectF(
-            (width - textWidth - rightWith) - edgeTextPadding * 2,
+            (width - textWidth - rightWith - dip2px(20f)) - edgeTextPadding * 2,
             yPos - dip2px(10f),
-            width - rightWith,
+            width - rightWith - dip2px(20f),
             height.toFloat()
         )
         canvas.drawRoundRect(
@@ -408,7 +407,7 @@ class HRCombinedChart : View {
 
         canvas.drawText(
             text,
-            (width - textWidth - rightWith) - edgeTextPadding,
+            (width - textWidth - rightWith) - edgeTextPadding - dip2px(20f),
             yPos + dip2px(2f),
             mTextPaintEdge
         )
@@ -528,7 +527,15 @@ class HRCombinedChart : View {
         val interval = (end - start) / (numPoints + 1)
         val points = ArrayList<Int>()
         for (i in 1..numPoints) {
-            points.add(start + interval * i)
+            when (i) {
+                1 -> {
+                    points.add(handleMinRoundDown10(start))
+                }
+                numPoints -> {
+                    points.add(handleMaxNearestRound10(end))
+                }
+                else -> points.add(start + interval * i)
+            }
         }
         return points
     }
@@ -552,7 +559,7 @@ class HRCombinedChart : View {
         canvas.drawLine(
             leftWith,
             bottomHeight,
-            mWith - rightWith,
+            mWith - rightWith - dip2px(24f),
             bottomHeight,
             bgLine
         )
@@ -566,7 +573,6 @@ class HRCombinedChart : View {
             bottomHeight + xTextBounds!!.height() / 2f
 
         val textStart = mWith.toFloat() - xTextBounds!!.width()
-
         canvas.drawText(
             text,
             textStart,
