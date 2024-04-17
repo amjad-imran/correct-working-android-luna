@@ -56,6 +56,7 @@ class OreoRoomModule {
             .addMigrations(MIGRATION_5_6)
             .addMigrations(MIGRATION_6_7)
             .addMigrations(MIGRATION_7_8)
+            .addMigrations(MIGRATION_8_9)
             .build()
     }
 
@@ -77,6 +78,11 @@ class OreoRoomModule {
             database.execSQL("Alter TABLE `recorded_workout` ADD COLUMN cadence INTEGER")
             database.execSQL("Alter TABLE `recorded_workout` ADD COLUMN distance INTEGER")
             database.execSQL("Alter TABLE `recorded_workout` ADD COLUMN recovery_time INTEGER")
+        }
+    }
+    private val MIGRATION_8_9: Migration = object : Migration(8, 9) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL("Alter TABLE `recorded_workout` ADD COLUMN duration_seconds INTEGER")
         }
     }
 

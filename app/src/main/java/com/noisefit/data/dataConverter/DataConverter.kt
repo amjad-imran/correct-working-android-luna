@@ -161,6 +161,7 @@ constructor(
                         this.addProperty("cadence", workout.cadence)
                         this.addProperty("recovery_time", workout.recoveryTime)
                         this.addProperty("duration", workout.duration)
+                        this.addProperty("duration_seconds", workout.durationSeconds)
                         this.addProperty("calories", workout.calories)
                         this.addProperty("activity_type", workoutTypeString)
                         this.addProperty("start_time", startTime)

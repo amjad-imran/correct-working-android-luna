@@ -193,9 +193,18 @@ class OWorkoutDetailsFragmentV2 :
         binding.lytTop.lytActivityItem.root.visible()
         binding.lytTop.lytToolbar.tvTitle.text = title.toString()
         binding.lytTop.lytActivityItem.tvActivityName.text = it.getFormattedActivityName()
-        binding.lytTop.lytActivityItem.tvDurationValue.text =
-            ApplicationUtils.getActivityDurationFormat2(it.duration)
 
+        if (it.durationSeconds == null || it.durationSeconds == 0L) {
+            binding.lytTop.lytActivityItem.tvDurationValue.text =
+                ApplicationUtils.getActivityDurationFormat2(it.duration)
+
+            binding.lytTop.lytActivityItem.tvDurationUnit.text = "00"
+        } else {
+            val (hour, minute, seconds) = ApplicationUtils.getFormattedDuration(it.durationSeconds)
+            binding.lytTop.lytActivityItem.tvDurationValue.text =
+                String.format("%02d:%02d", hour, minute)
+            binding.lytTop.lytActivityItem.tvDurationUnit.text = String.format("%02d", seconds)
+        }
 
         binding.lytTop.lytActivityItem.tvDurationValue.paintText()
 
@@ -382,6 +391,16 @@ class OWorkoutDetailsFragmentV2 :
             binding.lytTop.vMapOverlay.visible()
             binding.lytTop.vMapGradientTop.visible()
             binding.lytTop.vMapGradientBottom.visible()
+
+            if (it.weather?.temp != null) {
+                binding.lytTop.apply {
+                    tvTemp.text = "${it.weather.temp}°C"
+                    groupTemp.visible()
+                }
+            } else {
+                binding.lytTop.groupTemp.gone()
+            }
+
             setUpMaps(it.location)
         }
 

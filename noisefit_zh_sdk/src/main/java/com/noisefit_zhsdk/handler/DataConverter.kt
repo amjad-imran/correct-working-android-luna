@@ -439,17 +439,17 @@ constructor(
             LOGS.d("convertAppList ${getFunctionName(widgetBean.functionId)} ${widgetBean.functionId}")
 
 
-                appList.add(
-                    Widget(
-                        widgetBean.functionId,
-                        getFunctionName(widgetBean.functionId),
-                        widgetBean.haveHide,
-                        widgetBean.isEnable,
-                        widgetBean.order,
-                        widgetBean.sortable
-                    )
+            appList.add(
+                Widget(
+                    widgetBean.functionId,
+                    getFunctionName(widgetBean.functionId),
+                    widgetBean.haveHide,
+                    widgetBean.isEnable,
+                    widgetBean.order,
+                    widgetBean.sortable
                 )
-            }
+            )
+        }
 
 
         return appList
@@ -1124,12 +1124,11 @@ constructor(
 
         val sessionId = it.reportSportStartTime / 1000
         LOGS.d("startWorkout result :: ${sessionId}")
-        watchDataStore.getLocationDataModel(sessionId)?.let {locationDataList ->
+        watchDataStore.getLocationDataModel(sessionId)?.let { locationDataList ->
 //            sportsModeResponse.gpsCoordinate = Gson().toJson(parseGpsMapsData(locationDataList))
             LOGS.d("startWorkout result :: ${Gson().toJson(locationDataList)}")
             watchDataStore.clearLocationData(sessionId)
         }
-
 
 
         var cadence = 0L
@@ -1144,6 +1143,7 @@ constructor(
             isSynced = false,
             isAccepted = false,
             duration = duration,
+            durationSeconds = it.reportDuration,
             intensity = 0,
             calories = it.reportCal.toInt(),
             startTime = it.reportSportStartTime,

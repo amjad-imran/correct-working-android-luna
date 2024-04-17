@@ -11,6 +11,7 @@ data class OWorkoutDetailsResponseModel(
     @SerializedName("device_id")
     val deviceId: String,
     val duration: Long? = null,
+    @SerializedName("duration_seconds") val durationSeconds: Long? = null,
     val calories: Int? = null,
     val hrArray: List<Int>? = null,
     val steps: Int? = null,
@@ -44,7 +45,8 @@ data class OWorkoutDetailsResponseModel(
     @SerializedName("daytime_movement")
     val movement: List<Int>? = null,
 
-    val location: List<LocationDataNetwork>? = null
+    val location: List<LocationDataNetwork>? = null,
+    val weather: Weather? = null
 ) {
     fun getFormattedActivityName(): String {
         val activityName = activityType ?: return ""
@@ -52,6 +54,8 @@ data class OWorkoutDetailsResponseModel(
         return actNameTemp.capitalizeWords()
     }
 }
+
+data class Weather(val temp: Int? = null, val status: Int? = null)
 
 data class WorkoutNudge(
     @SerializedName("title")
