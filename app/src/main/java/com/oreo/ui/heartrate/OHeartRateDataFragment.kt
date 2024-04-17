@@ -1,9 +1,11 @@
 package com.oreo.ui.heartrate
 
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
@@ -78,6 +80,7 @@ class OHeartRateDataFragment :
     }
 
     override fun initListener() {
+
         binding.lytHeartRate.candleChart.setClickListener(object : OnHRClickAction {
 
             override fun onValueSelected(value: Int, position: Int) {
@@ -98,6 +101,24 @@ class OHeartRateDataFragment :
             }
         })
 
+        binding.lytLearnMore.vRecycler.addOnItemTouchListener(object :
+            RecyclerView.OnItemTouchListener {
+
+            override fun onTouchEvent(view: RecyclerView, event: MotionEvent) {}
+
+            override fun onInterceptTouchEvent(view: RecyclerView, event: MotionEvent): Boolean {
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        binding.lytLearnMore.vRecycler.parent?.requestDisallowInterceptTouchEvent(
+                            true
+                        )
+                    }
+                }
+                return false
+            }
+
+            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+        })
     }
 
     override fun subscribeObservers() {
@@ -154,8 +175,10 @@ class OHeartRateDataFragment :
 
     private fun setRecycler() {
         with(binding.lytLearnMore.vRecycler) {
+            isNestedScrollingEnabled = false
             adapter = learnMoreAdapter
         }
+
         learnMoreAdapter.setData(viewModel.getLearnMoreData())
     }
 
