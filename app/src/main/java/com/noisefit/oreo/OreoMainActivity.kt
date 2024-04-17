@@ -55,6 +55,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     private val viewModel: OreoMainViewModel by viewModels()
     private var navController: NavController? = null
+    private val TAG = "oreoMainActivity"
 
     private val btAdapter by lazy {
         BluetoothAdapter.getDefaultAdapter()
@@ -80,12 +81,13 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     override fun onDestroy() {
         super.onDestroy()
-        LOGS.d("App killed on destroy")
-        NotificationUtil.sendForcePushNotification(
-            this,
-            getString(R.string.text_open_luna_ring_app),
-            getString(R.string.text_keep_the_luna_ring_app_running_so_your_data_can_stay_upto_date)
-        )
+        LOGS.d(TAG, "App killed on destroy")
+        if (viewModel.sessionManager.connectStateRing.value != null)
+            NotificationUtil.sendForcePushNotification(
+                this,
+                getString(R.string.text_open_luna_ring_app),
+                getString(R.string.text_keep_the_luna_ring_app_running_so_your_data_can_stay_upto_date)
+            )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
