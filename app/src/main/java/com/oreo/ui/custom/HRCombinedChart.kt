@@ -28,6 +28,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit_commans.utils.LOGS
 import com.oreo.ui.heartrate.OnHRClickAction
@@ -249,6 +250,7 @@ class HRCombinedChart : View {
         this.minYAxis = minYAxis
         this.maxYAxis = maxYAxis
         postInvalidate()
+        LOGS.d("HR data ${Gson().toJson(list)}")
     }
 
     fun updateHighlight(indexList: List<Int>, color: Int) {
@@ -370,7 +372,7 @@ class HRCombinedChart : View {
 
         var rectF = RectF(
             leftWith,
-            yPos - dip2px(10f),
+            yPos - dip2px(13f),
             leftWith + mTextPaintEdge.measureText(startText) + edgeTextPadding * 2,
             height.toFloat()
         )
@@ -394,7 +396,7 @@ class HRCombinedChart : View {
 
         rectF = RectF(
             (width - textWidth - rightWith - dip2px(20f)) - edgeTextPadding * 2,
-            yPos - dip2px(10f),
+            yPos - dip2px(13f),
             width - rightWith - dip2px(20f),
             height.toFloat()
         )
@@ -414,7 +416,7 @@ class HRCombinedChart : View {
 
         //show center value
         val midText = "12 pm"
-        val centerPoint = (width - rightWith - leftWith) / 2
+        val centerPoint = (width - rightWith - leftWith - textWidth * 2) / 2
         canvas.drawText(
             midText,
             centerPoint + edgeTextPadding.toFloat(),
@@ -531,9 +533,11 @@ class HRCombinedChart : View {
                 1 -> {
                     points.add(handleMinRoundDown10(start))
                 }
+
                 numPoints -> {
                     points.add(handleMaxNearestRound10(end))
                 }
+
                 else -> points.add(start + interval * i)
             }
         }

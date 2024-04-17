@@ -163,6 +163,11 @@ class OHeartRateDataViewModel @Inject constructor(
                     lastHrValue = Pair(value, indexMillis)
                 }
             }
+            val filteredArray = ArrayList<Int>()
+            hrList.forEach {
+                if (it != 0 && it != 255)
+                    filteredArray.add(it)
+            }
             //if any change chunk value then divide 12 by that chunk value to get below correct xlabel list
             if (index % 2 == 0) {
                 hrCount += 1
@@ -172,8 +177,8 @@ class OHeartRateDataViewModel @Inject constructor(
                 HRModel(
                     maxValues = overAllMaxValue,
                     minValues = overAllMinValue,
-                    values = hrList,
-                    midValues = avgList.average().toFloat()
+                    values = filteredArray,
+                    midValues = (maxValue+minValue)/2
                 )
             )
         }
