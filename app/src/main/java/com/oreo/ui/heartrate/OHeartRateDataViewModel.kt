@@ -2,13 +2,23 @@ package com.oreo.ui.heartrate
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.noisefit_commans.common.maxWithoutZero
+import com.noisefit_commans.common.minWithoutZero
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.data.dataConverter.OreoHRDataConvertor
+import com.oreo.data.model.HRModel
 import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
+import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.health.Nudges
+import com.oreo.data.model.health.ODashboardActivityModel
+import com.oreo.data.model.health.ODashboardReadinessModel
+import com.oreo.data.model.health.ODashboardSleepModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -97,6 +107,91 @@ class OHeartRateDataViewModel @Inject constructor(
             })
         }
     }
+    fun parseHealthData(healthData: ServerUserHealthData) {
+            heartRateData.postValue(parseHrData(healthData))
+    }
+    private fun parseHrData(data: ServerUserHealthData): OHealthOverview.HeartRateDataModel {
+        LOGS.d("HeartRateData ${Gson().toJson(data.heart)}")
+        var breakupArray = data.heart?.break_up
+        if (breakupArray.isNullOrEmpty()) {
+            val dummyArray = ArrayList<Int>()
+            for (i in 0..287) {
+                dummyArray.add(0)
+            }
+            breakupArray = dummyArray
+        }
+        val hRWithIntervalList = breakupArray.chunked(6)
+        val avgList = ArrayList<Int>()
+        var overAllMinValue = Int.MAX_VALUE
+        var overAllMaxValue = -1
+        var hrCount = 0
+        var lastHrValue: Pair<Int, Long>? = null//HR value,timer
+
+        val listData = ArrayList<HRModel>()
+        hRWithIntervalList.forEachIndexed { index, hrList ->
+
+            val minValue = hrList.minWithoutZero()
+
+            val maxValue = hrList.maxWithoutZero()
+
+            var min = minValue
+            var max = maxValue
+
+            if (min == 0 && max != 0) {
+                min = max
+            }
+
+            if (max == 0 && min != 0) {
+                max = min
+            }
+
+            val avg = (min + max) / 2
+            if (avg != 0) {
+                if (min < overAllMinValue) {
+                    overAllMinValue = min
+                }
+                if (max > overAllMaxValue) {
+                    overAllMaxValue = max
+                }
+                avgList.add(avg)
+
+            }
+
+            hrList.forEachIndexed { index2, value ->
+                if (value != 0) {
+                    val indexMillis = ((index * 6) + index2) * 5 * 60L * 1000L
+                    lastHrValue = Pair(value, indexMillis)
+                }
+            }
+            //if any change chunk value then divide 12 by that chunk value to get below correct xlabel list
+            if (index % 2 == 0) {
+                hrCount += 1
+
+            }
+            listData.add(
+                HRModel(
+                    maxValues = overAllMaxValue,
+                    minValues = overAllMinValue,
+                    values = hrList,
+                    midValues = avgList.average().toFloat()
+                )
+            )
+        }
+        val average = avgList.average().toFloat()
+
+
+        val measureState = TapMeasureState.HIDE
+        return OHealthOverview.HeartRateDataModel(
+            listData,
+            average = average,
+            "0",
+            value = "",
+            maxValues = breakupArray.maxWithoutZero(),
+            minValues = breakupArray.minWithoutZero(),
+            measureState
+        )
+    }
+
 
 
 }

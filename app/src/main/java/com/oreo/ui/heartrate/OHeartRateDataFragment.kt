@@ -18,6 +18,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.data.model.OHealthOverview
@@ -52,14 +53,19 @@ class OHeartRateDataFragment :
         LOGS.d(TAG, "Today Load data")
         viewModel.date?.let {
             mainViewModel.getDashBoardData(it)?.let { dash ->
-                setUi()
                 viewModel.summaryHealthData = dash.first
+                setUi()
+
             }
         }
     }
 
     private fun setUi() {
-        viewModel.getTodayHeartRate()
+        if (viewModel.summaryHealthData?.date == DateFormats.getCurrentDate(DateFormats.dateFormat3))
+            viewModel.getTodayHeartRate()
+        else
+            viewModel.summaryHealthData?.let { viewModel.parseHealthData(it) }
+
     }
 
     companion object {
@@ -132,7 +138,7 @@ class OHeartRateDataFragment :
         binding.lytHeartRate.candleChart.updateData(
             viewModel.hrDataConvertor.getHrCombinedData(
                 dayData, heartRate
-            ), 5,heartRate.minValues,heartRate.maxValues
+            ), 5, heartRate.minValues, heartRate.maxValues
         )
     }
 
