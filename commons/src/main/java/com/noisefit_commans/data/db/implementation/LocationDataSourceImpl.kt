@@ -33,7 +33,7 @@ constructor(
         lat: Double,
         lng: Double,
         temp: Double,
-        status: Int
+        status: Int?
     ) {
         locationDao.updateWeatherInfoForLatLong(lat, lng, temp, status)
     }

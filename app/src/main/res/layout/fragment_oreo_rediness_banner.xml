@@ -7,6 +7,7 @@
         android:id="@+id/rootView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="12dp"
         android:background="@drawable/ic_nudge_readiness"
         android:layout_marginBottom="16dp">
 
@@ -32,14 +33,12 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="12dp"
-            android:layout_marginBottom="12dp"
-            android:textColor="@color/white_48"
             android:lineSpacingExtra="6sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textColor="@color/white_48"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvTitle"
-            tools:text="A poor sleep score could be caused by insufficien\nt or ex\ntrane\nous s\nleep, or due to frequent dreams." />
+            tools:text="A poor sleep score could be caused by\n\n\n insufficien\nt or ex\ntrane\nous s\nleep, or due to frequent dreams." />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

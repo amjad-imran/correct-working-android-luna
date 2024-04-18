@@ -15,6 +15,6 @@ interface LocationDataSource {
 
     suspend fun deleteAll()
 
-    suspend fun updateWeatherInfoForLatLong(lat: Double, lng: Double, temp: Double, status: Int)
+    suspend fun updateWeatherInfoForLatLong(lat: Double, lng: Double, temp: Double, status: Int?)
 
 }

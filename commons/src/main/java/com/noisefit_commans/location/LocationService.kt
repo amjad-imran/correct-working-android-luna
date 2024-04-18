@@ -85,7 +85,6 @@ class LocationService : Service() {
         locationClient
             .getLocationUpdates(LOCATION_UPDATE_INTERVAL)
             .catch { e ->
-                LOGS.d("LOCATION_lOG Exception ${e.message}")
                 e.printStackTrace()
             }
             .onEach { location ->
