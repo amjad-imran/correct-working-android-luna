@@ -304,10 +304,6 @@ constructor(
             breakupArray = dummyArray
         }
         val hRWithIntervalList = breakupArray.chunked(6)
-        /*val lineChartList: ArrayList<Entry> = ArrayList()
-        val candleChartList: ArrayList<CandleEntry> = ArrayList()
-        val lineColorList: ArrayList<Int> = ArrayList()
-        val xLabelList = ArrayList<String>()*/
         val avgList = ArrayList<Int>()
         var overAllMinValue = Int.MAX_VALUE
         var overAllMaxValue = -1
@@ -317,11 +313,10 @@ constructor(
         //LOGS.w("convertHeartRateOverviewData ${data?.breakUp}")
         val listData = ArrayList<HRModel>()
         hRWithIntervalList.forEachIndexed { index, hrList ->
+            val sortedBreakUpList = hrList.sorted()
 
-
-            val minValue = hrList.minWithoutZero()
-
-            val maxValue = hrList.maxWithoutZero()
+            val minValue = sortedBreakUpList.minWithoutZero()
+            val maxValue = sortedBreakUpList.maxWithoutZero()
 
             var min = minValue
             var max = maxValue
@@ -337,44 +332,38 @@ constructor(
             val avg = (min + max) / 2
             if (avg != 0) {
                 if (min < overAllMinValue) {
-                    overAllMinValue = min;
+                    overAllMinValue = min
                 }
                 if (max > overAllMaxValue) {
-                    overAllMaxValue = max;
+                    overAllMaxValue = max
                 }
                 avgList.add(avg)
-
             }
 
-            hrList.forEachIndexed { index2, value ->
-                if (value != 0) {
-
-                    val indexMillis = ((index * 6) + index2) * 5 * 60L * 1000L
-                    //LOGS.w("convertHeartRateOverviewData $index $indexMillis")
-
-                    lastHrValue = Pair(value, indexMillis)
-                }
-            }
-            val filteredArray = ArrayList<Int>()
-            hrList.forEach {
-                if (it != 0 && it != 255)
-                    filteredArray.add(it)
+            var chunkCumulativeValue = 0
+            sortedBreakUpList.forEach { value ->
+                chunkCumulativeValue += value
             }
 
+            sortedBreakUpList.forEachIndexed { index2, value ->
+                val indexMillis = ((index * 6) + index2) * 5 * 60L * 1000L
+                lastHrValue = Pair(value, indexMillis)
+
+            }
             //if any change chunk value then divide 12 by that chunk value to get below correct xlabel list
             if (index % 2 == 0) {
                 hrCount += 1
+
             }
             listData.add(
                 HRModel(
                     maxValues = overAllMaxValue,
                     minValues = overAllMinValue,
-                    values = filteredArray,
+                    values = sortedBreakUpList,
                     midValues = (maxValue + minValue) / 2
                 )
             )
         }
-
         val average = avgList.average().toFloat()
 
 
@@ -440,7 +429,7 @@ constructor(
             listData,
             average = average,
             lastTime = measureText,
-            value = "",
+            value = lastHr,
             maxValues = breakupArray.maxWithoutZero(),
             minValues = breakupArray.minWithoutZero(),
             measureState

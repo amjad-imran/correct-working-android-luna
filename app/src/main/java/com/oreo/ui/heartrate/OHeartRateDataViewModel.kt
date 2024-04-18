@@ -104,9 +104,11 @@ class OHeartRateDataViewModel @Inject constructor(
             })
         }
     }
+
     fun parseHealthData(healthData: ServerUserHealthData) {
-            heartRateData.postValue(parseHrData(healthData))
+        heartRateData.postValue(parseHrData(healthData))
     }
+
     private fun parseHrData(data: ServerUserHealthData): OHealthOverview.HeartRateDataModel {
         LOGS.d("HeartRateData ${Gson().toJson(data.heart)}")
         var breakupArray = data.heart?.break_up
@@ -117,7 +119,16 @@ class OHeartRateDataViewModel @Inject constructor(
             }
             breakupArray = dummyArray
         }
-        val hRWithIntervalList = breakupArray.chunked(6)
+
+        val excludeDataList = arrayListOf<Int>()
+        breakupArray.forEach { value ->
+            if (value == 255) {
+                excludeDataList.add(0)
+            } else
+                excludeDataList.add(value)
+        }
+
+        val hRWithIntervalList = excludeDataList.chunked(6)
         val avgList = ArrayList<Int>()
         var overAllMinValue = Int.MAX_VALUE
         var overAllMaxValue = -1
@@ -126,10 +137,10 @@ class OHeartRateDataViewModel @Inject constructor(
 
         val listData = ArrayList<HRModel>()
         hRWithIntervalList.forEachIndexed { index, hrList ->
+            val sortedBreakUpList = hrList.sorted()
 
-            val minValue = hrList.minWithoutZero()
-
-            val maxValue = hrList.maxWithoutZero()
+            val minValue = sortedBreakUpList.minWithoutZero()
+            val maxValue = sortedBreakUpList.maxWithoutZero()
 
             var min = minValue
             var max = maxValue
@@ -151,19 +162,17 @@ class OHeartRateDataViewModel @Inject constructor(
                     overAllMaxValue = max
                 }
                 avgList.add(avg)
-
             }
 
-            hrList.forEachIndexed { index2, value ->
-                if (value != 0) {
-                    val indexMillis = ((index * 6) + index2) * 5 * 60L * 1000L
-                    lastHrValue = Pair(value, indexMillis)
-                }
+            var chunkCumulativeValue = 0
+            sortedBreakUpList.forEach { value ->
+                chunkCumulativeValue += value
             }
-            val filteredArray = ArrayList<Int>()
-            hrList.forEach {
-                if (it != 0 && it != 255)
-                    filteredArray.add(it)
+
+            sortedBreakUpList.forEachIndexed { index2, value ->
+                val indexMillis = ((index * 6) + index2) * 5 * 60L * 1000L
+                lastHrValue = Pair(value, indexMillis)
+
             }
             //if any change chunk value then divide 12 by that chunk value to get below correct xlabel list
             if (index % 2 == 0) {
@@ -174,8 +183,8 @@ class OHeartRateDataViewModel @Inject constructor(
                 HRModel(
                     maxValues = overAllMaxValue,
                     minValues = overAllMinValue,
-                    values = filteredArray,
-                    midValues = (maxValue+minValue)/2
+                    values = sortedBreakUpList,
+                    midValues = (maxValue + minValue) / 2
                 )
             )
         }
@@ -187,12 +196,13 @@ class OHeartRateDataViewModel @Inject constructor(
             listData,
             average = average,
             "0",
-            value = "",
+            value = lastHrValue?.first.toString(),
             maxValues = breakupArray.maxWithoutZero(),
             minValues = breakupArray.minWithoutZero(),
             measureState
         )
     }
+
     var activityData: ArrayList<ODayTimeActivitiesDataModel>? = null
     fun prepareActivityData(dayData: ServerUserHealthData) {
         val workouts = dayData.activity?.workout

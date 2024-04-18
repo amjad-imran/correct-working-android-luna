@@ -12,6 +12,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSummaryDataTodayBinding
 import com.noisefit.oreo.BottomNavOption
@@ -657,6 +658,7 @@ class SummaryDataFragmentToday :
 
         viewModel.stateHeartRateCard.observe(viewLifecycleOwner) {
             if (it != null) {
+                LOGS.d("today ${Gson().toJson(it)}")
                 setHearRateCardUi(it)
             }
         }
@@ -1025,7 +1027,7 @@ class SummaryDataFragmentToday :
     private fun setHearRateCardUi(data: OHealthOverview.HeartRateDataModel) {
         val lytHeartRate = binding.contentMain.lytHeartRate
         lytHeartRate.root.visible()
-        lytHeartRate.candleChart.enableInteractiveMode(true)
+        lytHeartRate.candleChart.enableInteractiveMode(false)
         lytHeartRate.candleChart.updateData(
             viewModel.hrDataConvertor.getHrCombinedData(
                 viewModel.serverUserHealthData, data
