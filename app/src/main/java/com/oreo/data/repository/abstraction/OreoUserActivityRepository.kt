@@ -43,7 +43,7 @@ interface OreoUserActivityRepository {
 //    suspend fun getActivityHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoActivityModel>>>>
 //    suspend fun getReadinessHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoReadinessModel>>>>
 
-    suspend fun getSummaryHRHealthOverview(): OHealthOverview.HeartRate?
+    suspend fun getSummaryHRHealthOverview(): OHealthOverview.HeartRateDataModel?
 
     suspend fun getSummaryAutoWorkoutCount(): Int
     suspend fun getTestData(): List<TestUserData>

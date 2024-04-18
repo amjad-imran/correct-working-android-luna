@@ -9,11 +9,13 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.location.LocationServices
 import com.noisefit_commans.R
 import com.noisefit_commans.data.db.LocationModel
 import com.noisefit_commans.data.db.abstraction.LocationDataSource
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -23,10 +25,8 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class LocationService : Service() {
@@ -65,7 +65,7 @@ class LocationService : Service() {
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("Tracking location...")
             //.setContentText("Location: null")
-            .setSmallIcon(R.drawable.ic_map_loc_start)
+            .setSmallIcon(R.drawable.icon_transparent)
             .setOngoing(true)
 
         val notificationManager =
@@ -85,7 +85,6 @@ class LocationService : Service() {
         locationClient
             .getLocationUpdates(LOCATION_UPDATE_INTERVAL)
             .catch { e ->
-                LOGS.d("LOCATION_lOG Exception ${e.message}")
                 e.printStackTrace()
             }
             .onEach { location ->
@@ -104,13 +103,14 @@ class LocationService : Service() {
 
                 locationDataSource.insertData(model)
 
-                DateFormats.getTimeStamp()
-                val updatedNotification = notification.setContentText(
-                    "Location: ($lat, $long)\nTime ${
-                        SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
-                    }"
-                )
-                notificationManager.notify(1, updatedNotification.build())
+                locationBroadCast.postValue(Event(Pair(lat, long)))
+
+                /* val updatedNotification = notification.setContentText(
+                     "Location: ($lat, $long)\nTime ${
+                         SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
+                     }"
+                 )
+                 notificationManager.notify(1, updatedNotification.build())*/
             }
             .launchIn(serviceScope)
 
@@ -119,6 +119,10 @@ class LocationService : Service() {
     }
 
     private fun stop() {
+        val notificationManager =
+            applicationContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.cancel(NOTIFICATION_ID)
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             stopForeground(STOP_FOREGROUND_REMOVE)
         } else {
@@ -135,5 +139,8 @@ class LocationService : Service() {
     companion object {
         const val ACTION_START = "ACTION_START"
         const val ACTION_STOP = "ACTION_STOP"
+
+        //Think of any other way
+        val locationBroadCast = MutableLiveData<Event<Pair<Double, Double>>>()
     }
 }

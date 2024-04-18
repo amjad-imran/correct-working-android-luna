@@ -6,13 +6,14 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.github.mikephil.charting.data.CombinedData
+import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSummaryDataBinding
 import com.noisefit.oreo.BottomNavOption
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
@@ -26,7 +27,6 @@ import com.oreo.ui.home.summary.OreoRWorkoutAdapter
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
-import com.oreo.util.graph.OCombineChartUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -86,6 +86,7 @@ class SummaryDataFragment :
     private fun loadData() {
         viewModel.date?.let {
             mainViewModel.getDashBoardData(it)?.let { dash ->
+                viewModel.serverUserHealthData = dash.first
                 setUi(dash.first)
             }
         }
@@ -153,6 +154,7 @@ class SummaryDataFragment :
 
 
     override fun initListener() {
+        binding.lytHeartRate.bInfo.invisible()
 
         binding.lytHeartRate.bInfo.setOnClickListener {
             viewModel.getContributorInfo("hr")
@@ -220,6 +222,7 @@ class SummaryDataFragment :
 
         viewModel.stateHeartRateCard.observe(viewLifecycleOwner) {
             if (it != null) {
+                LOGS.d("previous day ${Gson().toJson(it)}")
                 setHearRateCardUi(it)
             }
         }
@@ -251,12 +254,12 @@ class SummaryDataFragment :
         )
         val adapter1 = OreoRWorkoutAdapter(object : OreoRWorkoutAdapter.OnItemClickListener {
             override fun onItemClick(data: OActivityListModal, position: Int) {
-                if(data.getDisplayVersionType()==2){
+                if (data.getDisplayVersionType() == 2) {
                     navigate(R.id.oWorkoutDetailsFragmentV2, Bundle().apply {
                         putString("workoutId", data.id ?: "")
                         putInt("position", position)
                     })
-                }else{
+                } else {
                     navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
                         putString("workoutName", data.getFormattedActivityName())
                         putString("workoutId", data.id ?: "")
@@ -280,14 +283,15 @@ class SummaryDataFragment :
 
     }
 
-    private fun setHearRateCardUi(data: OHealthOverview.HeartRate) {
+    private fun setHearRateCardUi(data: OHealthOverview.HeartRateDataModel) {
         val lytHeartRate = binding.lytHeartRate
         lytHeartRate.root.visible()
-        val chart = lytHeartRate.candleChart
-
-        OCombineChartUtils.setChart(chart, data.xLabelList, data.axisMinimum, data.average)
-
-        val combinedData = CombinedData()
+        lytHeartRate.candleChart.enableInteractiveMode(false)
+        lytHeartRate.candleChart.updateData(
+            viewModel.hrDataConvertor.getHrCombinedData(
+                viewModel.serverUserHealthData, data
+            ), 3, data.minValues, data.maxValues
+        )
 
         lytHeartRate.lottieAnimView.gone()
         lytHeartRate.imvHrMeasure.gone()
@@ -296,23 +300,6 @@ class SummaryDataFragment :
         lytHeartRate.tvEmptyConnect.gone()
         lytHeartRate.tvHeartValue.gone()
 
-        if (data.lineData.first.isNotEmpty() && data.lineData.first.size > 1) {
-            combinedData.setData(
-                OCombineChartUtils.generateLineData(
-                    data.lineData.first,
-                    lytHeartRate.candleChart,
-                    data.lineData.second,
-                    data.axisMinimum
-                )
-            )
-            combinedData.setData(
-                OCombineChartUtils.generateCandleData(
-                    data.candleValue, R.color.o_heart_bg
-                )
-            )
-            chart.data = combinedData
-            chart.invalidate()
-        }
 
     }
 }

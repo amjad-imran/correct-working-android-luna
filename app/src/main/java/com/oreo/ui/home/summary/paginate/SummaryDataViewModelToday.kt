@@ -33,6 +33,7 @@ import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.ScreenUtils
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
+import com.oreo.data.dataConverter.OreoHRDataConvertor
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.dataConverter.OreoStressDataConvertor
 import com.oreo.data.model.AlertType
@@ -79,7 +80,8 @@ class SummaryDataViewModelToday @Inject constructor(
     val oreoStressDataConvertor: OreoStressDataConvertor,
     val userActivityRepository: OreoUserActivityRepository,
     val updateRepository: UpdateRepository,
-    private val userHealthDataDataSource: OreoUserHealthDataDataSource
+    private val userHealthDataDataSource: OreoUserHealthDataDataSource,
+    val hrDataConvertor: OreoHRDataConvertor
 ) : BaseViewModel() {
 
 
@@ -109,11 +111,12 @@ class SummaryDataViewModelToday @Inject constructor(
     val stateReadinessAvgCard = MutableLiveData<ODashboardReadinessScoreModel?>()
     val stateSleepAvgCard =
         MutableLiveData<Pair<ODashboardSleepScoreModel?, ODashboardActivityScoreModel?>>()
-    val stateHeartRateCard = MutableLiveData<OHealthOverview.HeartRate?>()
+    val stateHeartRateCard = MutableLiveData<OHealthOverview.HeartRateDataModel?>()
 
     var user: User? = null
     var registerDate: Int = -1
     var onNapAddSuccess = MutableLiveData<Event<OreoNapDetailsDataModel>>()
+    var serverUserHealthData: ServerUserHealthData? = null
 
 
     fun setRingBatteryInfoState() {
@@ -123,7 +126,7 @@ class SummaryDataViewModelToday @Inject constructor(
         }
     }
 
-    fun checkBeforeTime():Boolean{
+    fun checkBeforeTime(): Boolean {
         val calendar: Calendar = Calendar.getInstance()
         val hour24hrs: Int = calendar.get(Calendar.HOUR_OF_DAY)
         val time1 = LocalTime.of(hour24hrs, 0)

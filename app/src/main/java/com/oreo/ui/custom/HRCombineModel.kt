@@ -3,14 +3,14 @@ package com.oreo.ui.custom;
 
 data class HRCombineModel(
     val sections: List<Section>? = null,
-    val items: List<Item>? = null,
-    val high: Int = 0,
-    val medium: Int = 0
+    val items: List<Item>? = null
 )
 
 /*data class Item(
     val `value`: Int,
-    val index: Int
+    val index: Int,
+    val minValue:Int=0,
+    val maxValue:Int=0
 )
 
 data class Section(

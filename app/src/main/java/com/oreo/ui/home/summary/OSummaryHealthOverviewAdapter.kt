@@ -316,7 +316,7 @@ class OSummaryHealthOverviewAdapter() :
 
 
             is OHealthOverview.AutoSport -> R.layout.list_o_w_alert_card_item
-            is OHealthOverview.HeartRate -> 0
+            is OHealthOverview.HeartRateDataModel -> 0
             is OHealthOverview.InfoVideo -> R.layout.list_video_info_card
             is OHealthOverview.StressGraph -> R.layout.item_stress_graph
             is OHealthOverview.InfoRingCare -> R.layout.list_ring_care

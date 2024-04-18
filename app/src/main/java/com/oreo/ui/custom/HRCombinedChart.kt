@@ -18,17 +18,21 @@ import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
-import android.util.Pair
-import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.noisefit.luna.R
+import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.HAPTIC_VIBRATION
+import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.ui.heartrate.OnHRClickAction
+import org.joda.time.LocalDateTime
+import org.joda.time.format.DateTimeFormat
 import kotlin.math.roundToInt
 
 
@@ -78,7 +82,6 @@ class HRCombinedChart : View {
     private var isHighlighted = false
     private var highlightColor = 0
     private var showXAxis = true
-    private var interval = 0
     lateinit var rectF: RectF
     lateinit var workoutPaint: Paint
     private var linearGradient: LinearGradient? = null
@@ -93,15 +96,19 @@ class HRCombinedChart : View {
     private var touchX = 0f
     lateinit var overlayLinePaint: Paint
     lateinit var topCombinedPaint: Paint
-    lateinit var stressDot: Bitmap
     lateinit var calmDot: Bitmap
-    lateinit var focusedDot: Bitmap
     private var listener: OnHRClickAction? = null
     private var lastSentValuePos: Int? = null
     private val effect =
         DashPathEffect(floatArrayOf(dip2px(1f).toFloat(), dip2px(5f).toFloat()), 0f)
     private val toolTipList = ArrayList<Triple<Float, String, Int>>()
     lateinit var bgLine: Paint
+    var yAxisCount: Int = 3
+    lateinit var edgeTextBackPaint: Paint
+    lateinit var mTextPaintEdge: Paint
+    private var vibrationUtils: VibrationUtils? = null
+    lateinit var activeBarPaint: Paint
+    lateinit var inActiveBarPaintI: Paint
 
     constructor(context: Context?) : super(context) {
         resMap = HashMap()
@@ -160,22 +167,18 @@ class HRCombinedChart : View {
                 R.drawable.ic_hr_graph_dots
             ), dimen, dimen, true
         )
-        focusedDot = Bitmap.createScaledBitmap(
-            BitmapFactory.decodeResource(
-                res,
-                R.drawable.ic_hr_graph_dots
-            ), dimen, dimen, true
-        )
-        stressDot = Bitmap.createScaledBitmap(
-            BitmapFactory.decodeResource(
-                res,
-                R.drawable.ic_hr_graph_dots
-            ), dimen, dimen, true
-        )
+
     }
 
 
     private fun initPaint() {
+
+        edgeTextBackPaint = Paint()
+        edgeTextBackPaint.color = Color.parseColor("#394653")
+        mTextPaintEdge = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
+        mTextPaintEdge.color = ContextCompat.getColor(context, com.noisefit_commans.R.color.white)
+        mTextPaintEdge.textSize = dip2px(12f).toFloat()
+
         workoutPaint = Paint()
         workoutPaint.setColorFilter(PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN))
 
@@ -238,14 +241,40 @@ class HRCombinedChart : View {
         chartLineFillPaint.isAntiAlias = true
         xTextBounds = Rect()
         rectF = RectF()
+
+        activeBarPaint = Paint().apply {
+            color =
+                Color.parseColor("#59ff3371")
+        }
+
+        inActiveBarPaintI = Paint().apply {
+            color =
+                Color.parseColor("#26ff3371")
+        }
     }
 
-    fun updateData(datas: HRCombineModel?) {
+    fun updateData(datas: HRCombineModel?, yAxisCount: Int, minYAxis: Int, maxYAxis: Int) {
         combineModel = datas
         list.clear()
         datas?.items?.let { list.addAll(it) }
         list.reverse()
-        interval = (list.size / 4f).toInt()
+        this.yAxisCount = yAxisCount
+        xMin = 40
+        max = maxYAxis
+
+
+        if (minYAxis in 1..39) {
+            xMin = 0
+            max = 120
+        }
+
+        if (maxYAxis < 120) {
+            max = 120
+        } else if (maxYAxis < 160) {
+            max = 160
+        } else if (maxYAxis < 200) {
+            max = 200
+        }
         postInvalidate()
     }
 
@@ -282,15 +311,19 @@ class HRCombinedChart : View {
             topWith,
             0f,
             mHeight - bottomWith,
-            intArrayOf(highColor, mediumColor, lowColor),
+            intArrayOf(
+                Color.parseColor("#ff3371"),
+                Color.parseColor("#ff3371"),
+                Color.parseColor("#ff3371")
+            ),
             floatArrayOf(0f, 0.5f, 1f),
             Shader.TileMode.CLAMP
         )
         chartLineGradientInteracting = LinearGradient(
             0f, topWith, 0f, mHeight - bottomWith, intArrayOf(
-                Color.parseColor("#80ff922d"),
-                Color.parseColor("#80ffe762"),
-                Color.parseColor("#8012cba9")
+                Color.parseColor("#ff3371"),
+                Color.parseColor("#ff3371"),
+                Color.parseColor("#ff3371")
             ), floatArrayOf(0f, 0.5f, 1f), Shader.TileMode.CLAMP
         )
         linearGradient = LinearGradient(
@@ -308,7 +341,7 @@ class HRCombinedChart : View {
             mWith - rightWith,
             mHeight / 2f,
             Color.TRANSPARENT,
-            Color.parseColor("#C0000000"),
+            Color.parseColor("#26ff3371"),
             Shader.TileMode.CLAMP
         )
     }
@@ -359,65 +392,188 @@ class HRCombinedChart : View {
 
     private fun drawBottom(canvas: Canvas) {
         canvas.drawRect(
-            0f,
-            mHeight - bottomWith,
-            mWith.toFloat(),
-            mHeight.toFloat(),
-            bgBottomPaint
+            0f, mHeight - bottomWith, mWith.toFloat(), mHeight.toFloat() - dip2px(9f), bgBottomPaint
         )
         if (showXAxis) {
-            var xText = "23:59"
+            val halfWidth = (mWith - leftWith - rightWith) / 2
+            val leftHalf = halfWidth / 2
+            val edgeTextPadding = dip2px(4f)
+            //end point
+            var xText = "12 am"
+            val textWidth = mTextPaintEdge.measureText(xText)
+            rectF = RectF(
+                (mWith - textWidth - rightWith) - edgeTextPadding * 2,
+                mHeight - bottomWith / 3 - dip2px(13f),
+                mWith - rightWith,
+                height.toFloat()
+            )
+            canvas.drawRoundRect(
+                rectF,
+                dip2px(4f).toFloat(),
+                dip2px(4f).toFloat(),
+                edgeTextBackPaint
+            )
+            canvas.drawText(
+                xText,
+                (mWith - textWidth - rightWith) - edgeTextPadding,
+                mHeight - bottomWith / 3 + dip2px(2f),
+                mTextPaintEdge
+            )
+            xText = "6 am"
             xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
             xTextPaint.color = Color.parseColor("#a3ffffff")
             canvas.drawText(
                 xText,
-                mWith - rightWith - xTextBounds!!.width() - dip2px(5f),
+                (leftHalf - xTextBounds?.width()!! / 2).toFloat(),
                 mHeight - bottomWith / 3,
                 xTextPaint
             )
-            xText = "00:00"
+            xText = "12 pm"
             xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
-            canvas.drawText(xText, leftWith + dip2px(5f), mHeight - bottomWith / 3, xTextPaint)
+            xTextPaint.color = Color.parseColor("#a3ffffff")
+            canvas.drawText(
+                xText,
+                (halfWidth - xTextBounds?.width()!! / 2).toFloat(),
+                mHeight - bottomWith / 3,
+                xTextPaint
+            )
+            xText = "6 pm"
+            xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
+            xTextPaint.color = Color.parseColor("#a3ffffff")
+            canvas.drawText(
+                xText,
+                ((halfWidth + leftHalf - xTextBounds?.width()!! / 2).toFloat()),
+                mHeight - bottomWith / 3,
+                xTextPaint
+            )
+
+            xText = "12 am"
+            val rectF = RectF(
+                leftWith,
+                mHeight - bottomWith / 3 - dip2px(13f),
+                leftWith + mTextPaintEdge.measureText(xText) + edgeTextPadding * 2,
+                height.toFloat()
+            )
+            canvas.drawRoundRect(
+                rectF,
+                dip2px(4f).toFloat(),
+                dip2px(4f).toFloat(),
+                edgeTextBackPaint
+            )
+            canvas.drawText(
+                xText,
+                leftWith + edgeTextPadding.toFloat(),
+                mHeight - bottomWith / 3 + dip2px(2f),
+                mTextPaintEdge
+            )
         }
     }
 
     private fun drawLeft(canvas: Canvas) {
         gridPaint.color = gridColor
-        val maxStrValue = handleMaxNearestRound10(max).toString()
-        val minStrValue = handleMinRoundDown10(xMin).toString()
-        val sectionH = ((max - xMin).toFloat() / 4).roundToInt()
-        val max =
-            mHeight - bottomWith - (max - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
+        if (yAxisCount > 3) {
+            val yaxisData = calculateYAxisValue(yAxisCount)
+            val sectionH = ((max - xMin).toFloat() / 4).roundToInt()
+            val max =
+                mHeight - bottomWith - (max - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
 
-        drawHorizontalTextWithLine(canvas, maxStrValue, max, true, false)
+            drawHorizontalTextWithLine(
+                canvas,
+                yaxisData[4].toString(),
+                max,
+                true,
+                false
+            )
 
-        val min =
-            mHeight - bottomWith - (xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
+            val min =
+                mHeight - bottomWith - (xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
 
-        drawHorizontalTextWithLine(canvas, minStrValue, min, false, true)
+            drawHorizontalTextWithLine(canvas, yaxisData[0].toString(), min, false, true)
 
-        val xAxis2 =
-            mHeight - bottomWith - (sectionH + xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
+            val xAxis2 =
+                mHeight - bottomWith - (sectionH + xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
 
-        drawHorizontalTextWithLine(canvas, (xMin + sectionH).toString(), xAxis2)
+            drawHorizontalTextWithLine(canvas, yaxisData[1].toString(), xAxis2)
 
-        val xAxis3 =
-            mHeight - bottomWith - ((sectionH * 2) + xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
+            val xAxis3 =
+                mHeight - bottomWith - ((sectionH * 2) + xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
 
-        drawHorizontalTextWithLine(canvas, (xMin + sectionH * 2).toString(), xAxis3)
-        val xAxis4 =
-            mHeight - bottomWith - ((sectionH * 3) + xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
+            drawHorizontalTextWithLine(canvas, yaxisData[2].toString(), xAxis3)
+            val xAxis4 =
+                mHeight - bottomWith - ((sectionH * 3) + xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
 
-        drawHorizontalTextWithLine(canvas, (xMin + sectionH * 3).toString(), xAxis4)
+            drawHorizontalTextWithLine(canvas, yaxisData[3].toString(), xAxis4)
+        } else {
+            val yaxisData = calculateYAxisValue(yAxisCount)
+            val max =
+                mHeight - bottomWith - (max - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
+
+            drawHorizontalTextWithLine(
+                canvas,
+                yaxisData[2].toString(),
+                max,
+                true,
+                false
+            )
+
+            val min =
+                mHeight - bottomWith - (xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
+
+            drawHorizontalTextWithLine(canvas, yaxisData[0].toString(), min, false, true)
+
+            val xAxis2 = (max + min) / 2
+
+            drawHorizontalTextWithLine(canvas, yaxisData[1].toString(), xAxis2)
+        }
 
     }
 
-    private fun handleMaxNearestRound10(max: Int): Int {
-        return (max + 5) / 10 * 10
+    private fun calculateYAxisValue(yAxisCount: Int): ArrayList<Int> {
+        var minHrValue = xMin
+        var maxHrValue = max
+        return getPointsBetween(maxHrValue, yAxisCount)
     }
 
-    private fun handleMinRoundDown10(min: Int): Int {
-        return (min / 10) * 10
+    private fun getPointsBetween(end: Int, numPoints: Int): ArrayList<Int> {
+        val points = ArrayList<Int>()
+        if (end == 120) {
+            if (numPoints == 3) {
+                points.add(40)
+                points.add(80)
+                points.add(120)
+            } else {
+                points.add(40)
+                points.add(60)
+                points.add(80)
+                points.add(100)
+                points.add(120)
+            }
+        } else if (end == 160) {
+            if (numPoints == 3) {
+                points.add(40)
+                points.add(100)
+                points.add(160)
+            } else {
+                points.add(40)
+                points.add(70)
+                points.add(100)
+                points.add(130)
+                points.add(160)
+            }
+        } else {
+            if (numPoints == 3) {
+                points.add(40)
+                points.add(120)
+                points.add(200)
+            } else {
+                points.add(40)
+                points.add(80)
+                points.add(120)
+                points.add(160)
+                points.add(200)
+            }
+        }
+        return points
     }
 
     private fun drawHorizontalTextWithLine(
@@ -445,7 +601,6 @@ class HRCombinedChart : View {
             bottomHeight + xTextBounds!!.height() / 2f
 
         val textStart = mWith.toFloat() - xTextBounds!!.width()
-
         canvas.drawText(
             text,
             textStart,
@@ -454,50 +609,6 @@ class HRCombinedChart : View {
         )
     }
 
-    private fun drawDesc(canvas: Canvas) {
-        if (isInteracting) return
-        rectF.left = mWith - rightWith - shadowWidth
-        rectF.top = topWith
-        rectF.right = mWith - rightWith
-        rectF.bottom = mHeight - bottomWith
-
-        chartLineFillPaint.setShader(linearGradientShadow)
-        canvas.drawRect(rectF, chartLineFillPaint)
-        var high = 0f
-        if (combineModel == null) return
-        if (combineModel!!.high > 0) {
-            high =
-                mHeight - bottomWith - combineModel!!.high * 1f / max * (mHeight - bottomWith - topWith)
-            val highText = "Stressed"
-            paintStressed.getTextBounds(highText, 0, highText.length, xTextBounds)
-            canvas.drawText(
-                highText,
-                mWith - rightWith - xTextBounds!!.width() - dip2px(5f),
-                (high + topWith) / 2 + xTextBounds!!.height() / 2f,
-                paintStressed
-            )
-        }
-        if (combineModel!!.medium > 0) {
-            val medium =
-                mHeight - bottomWith - combineModel!!.medium * 1f / max * (mHeight - bottomWith - topWith)
-            val mediumText = "Focussed"
-            paintFocussed.getTextBounds(mediumText, 0, mediumText.length, xTextBounds)
-            canvas.drawText(
-                mediumText,
-                mWith - rightWith - xTextBounds!!.width() - dip2px(5f),
-                (medium + high) / 2 + xTextBounds!!.height() / 2f,
-                paintFocussed
-            )
-            val lowText = "Calm"
-            paintCalm.getTextBounds(lowText, 0, lowText.length, xTextBounds)
-            canvas.drawText(
-                lowText,
-                mWith - rightWith - xTextBounds!!.width() - dip2px(5f),
-                (medium + mHeight - bottomWith) / 2 + xTextBounds!!.height() / 2f,
-                paintCalm
-            )
-        }
-    }
 
     private fun drawContent(canvas: Canvas) {
         toolTipList.clear()
@@ -506,16 +617,15 @@ class HRCombinedChart : View {
             return
         }
         unitHLenth = (mWith - leftWith - rightWith) / (list.size - 1)
+
         val imageSize = dip2px(16f)
         for (i in combineModel!!.sections!!.indices) {
             val section = combineModel!!.sections!![i]
-            val calculatedEnd = if (section.end < 95) {
+            val calculatedEnd = if (section.end < 47) {
                 section.end + 1
             } else {
                 section.end
             }
-
-
             rectF.left = section.start * unitHLenth + leftWith
             rectF.top = topWith
             rectF.right = rectF.left + (calculatedEnd - section.start) * unitHLenth
@@ -584,17 +694,50 @@ class HRCombinedChart : View {
             current = list[i]
             val x = mWith - leftWith - rightWith + leftWith - i * unitHLenth
             val y =
-                mHeight - bottomWith - current!!.value * (mHeight - topWith - bottomWith) / (max - xMin)
+                mHeight - bottomWith - (current!!.value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
+
             path.reset()
             path.moveTo(x, y)
+
+            //for bar draw
+            val barPaints: Paint = if (isInteracting)
+                inActiveBarPaintI
+            else
+                activeBarPaint
+            val corners = floatArrayOf(
+                80f, 80f,   // Top left radius in px
+                80f, 80f,   // Top right radius in px
+                80f, 80f,     // Bottom right radius in px
+                80f, 80f      // Bottom left radius in px
+            )
+            val yTop =mHeight - bottomWith - (current!!.minValue - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
+            val yBottom =mHeight - bottomWith - (current!!.maxValue - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
+
+            if (current.value > 0) {
+                val rectBar = RectF(
+                    x - 5,
+                    yTop,
+                    x + 5,
+                    yBottom
+                )
+                barPaints.let {
+                    canvas.drawRoundRect(rectBar, dip2px(20f).toFloat(), dip2px(20f).toFloat(), it)
+                    val path = Path()
+                    path.addRoundRect(rectBar, corners, Path.Direction.CW)
+                    canvas.drawPath(path, barPaints)
+                }
+            }
+            //end bar draw
+
             if (i < list.size - 1) {
                 next = list[i + 1]
                 if (current.value > 0) {
                     if (next!!.value > 0) {
                         val x1 = mWith - leftWith - rightWith + leftWith - (i + 1) * unitHLenth
                         val y1 =
-                            mHeight - bottomWith - next.value * (mHeight - topWith - bottomWith) / (max - xMin)
-                        path.cubicTo(x1 + (x - x1) / 4, y, x - (x - x1) / 4, y1, x1, y1)
+                            mHeight - bottomWith - (next.value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
+
+                        path.cubicTo(x1 + (x - x1) / 1.5f, y, x - (x - x1) / 1.5f, y1, x1, y1)
                         if (highlightIndexs.contains(list.size - 1 - i)) {
                             fillPath.addPath(path)
                             //draw fill first
@@ -637,9 +780,15 @@ class HRCombinedChart : View {
                         canvas.drawPoint(x, y, chartLinePaint)
                     }
                 }
-                toolTipList.add(Triple(x, "Time", current.value))
-
             }
+
+            val startTime = DateFormats.getMidnightDateTime()
+            val formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
+            val startDateTime = LocalDateTime.parse(startTime, formatter)
+            var updatedTime = startDateTime.plusMinutes((list.size - i) * 30)
+            val formatterDisplay = DateTimeFormat.forPattern("h:mm a")
+            val time = updatedTime.toString(formatterDisplay).lowercase()
+            toolTipList.add(Triple(x, time ?: "", current.value))
 
             /*if (showXAxis && i % interval == 0 && i > 0 && i < 4 * interval) {
                 String xText = String.valueOf(list.get(i).getIndex());
@@ -671,13 +820,14 @@ class HRCombinedChart : View {
                 }
             } else {
                 if (lastIndex != -1) {
-                    if (Math.abs(i - lastIndex) < 120 / (1440 / list.size)) {
+                    if (Math.abs(i - lastIndex) < 4) {//TODO check logic
                         val x = mWith - leftWith - rightWith + leftWith - i * unitHLenth
                         val y =
-                            mHeight - bottomWith - current.value * (mHeight - topWith - bottomWith) / (max - xMin)
+                            mHeight - bottomWith - (current!!.value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
+
                         val x1 = mWith - leftWith - rightWith + leftWith - lastIndex * unitHLenth
                         val y1 =
-                            mHeight - bottomWith - list[lastIndex]!!.value * (mHeight - topWith - bottomWith) / (max - xMin)
+                            mHeight - bottomWith - (list[lastIndex]!!.value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
                         chartLinePaint.setShader(null)
                         chartLinePaint.color = if (isHighlighted || isInteracting) {
                             Color.GRAY
@@ -698,21 +848,15 @@ class HRCombinedChart : View {
         this.listener = listener
     }
 
-    private fun drawDot(canvas: Canvas, value: Int) {
+    private fun drawDot(canvas: Canvas, value: Int, calculatedTouchX: Float) {
 
-        val dotBitmap = when (value) {
-            in 1..34 -> calmDot
-            in 35..69 -> focusedDot
-            in 70..100 -> stressDot
-            else -> calmDot
-        }
-
+        val dotBitmap = calmDot
         val width = dotBitmap.width.toFloat() / 2
         val height = dotBitmap.height.toFloat() / 2
 
         canvas.drawBitmap(
             dotBitmap,
-            touchX!! - width,
+            calculatedTouchX - width,
             getDotHeight(value) - height,
             paintStressed
         )
@@ -738,23 +882,23 @@ class HRCombinedChart : View {
         rectF.top = topWith
         rectF.bottom = mHeight - bottomWith
 
-        val value: Pair<Int, Int> = getClickedValue(calculatedTouchX)
+        val value: Triple<Int, Int, String> = getClickedValue(calculatedTouchX)
         canvas.drawRect(rectF, overlayLinePaint)
         if (value.second != 0) {
 
-            drawDot(canvas, value.second)
+            drawDot(canvas, value.second, calculatedTouchX)
 
         }
         if (listener != null) {
             val position = value.first as Int
             val selectedValue = value.second as Int
             if (lastSentValuePos == null) {
-                listener?.onValueSelected(selectedValue, position)
+                listener?.onValueSelected(selectedValue, position, value.third)
                 lastSentValuePos = position
                 performHapticFeedbackCustom(selectedValue)
             } else {
                 if (lastSentValuePos != position) {
-                    listener?.onValueSelected(selectedValue, position)
+                    listener?.onValueSelected(selectedValue, position, value.third)
                     lastSentValuePos = position
                     performHapticFeedbackCustom(selectedValue)
                 }
@@ -764,19 +908,17 @@ class HRCombinedChart : View {
 
     fun performHapticFeedbackCustom(value: Int) {
         if (value != 0) {
-            this.performHapticFeedback(
-                HapticFeedbackConstants.KEYBOARD_TAP
-            )
+            vibrationUtils?.vibrate(HAPTIC_VIBRATION)
         }
     }
 
-    private fun getClickedValue(touchX: Float): Pair<Int, Int> {
+    private fun getClickedValue(touchX: Float): Triple<Int, Int, String> {
         val index = findNumber(toolTipList, touchX)
         return if (index.first < 0) {
             lastSentValuePos = null
-            Pair(0, 0)
+            Triple(0, 0, "")
         } else {
-            Pair(index.first, list[index.first]!!.value)
+            Triple(index.first, list[index.first]!!.value, index.second)
         }
 
         /*  var sectionLast = 0f
@@ -813,7 +955,7 @@ class HRCombinedChart : View {
 
 
     private fun getDotHeight(value: Int): Float {
-        return mHeight - bottomWith - value * (mHeight - topWith - bottomWith) / (max - xMin)
+        return mHeight - bottomWith - (value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
     }
 
     private fun dip2px(dpValue: Float): Int {
@@ -879,9 +1021,15 @@ class HRCombinedChart : View {
         if (isHighlighted) return@Runnable
         isInteracting = true
         invalidate()
+
+        vibrationUtils?.vibrate(HAPTIC_VIBRATION)
         listener?.isInteractionOnGoing(true)
-        rootView.performHapticFeedback(
+        /*rootView.performHapticFeedback(
             HapticFeedbackConstants.LONG_PRESS
-        )
+        )*/
+    }
+
+    fun setVibrationUtil(vibrationUtils: VibrationUtils) {
+        this.vibrationUtils = vibrationUtils
     }
 }

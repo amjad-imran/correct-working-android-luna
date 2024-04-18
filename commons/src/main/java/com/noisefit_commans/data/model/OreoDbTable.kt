@@ -73,6 +73,7 @@ data class RecordedWorkoutData(
     @ColumnInfo(name = "is_synced") var isSynced: Boolean = false,
     @ColumnInfo(name = "is_accepted") var isAccepted: Boolean = false,
     @ColumnInfo(name = "duration") var duration: Int? = null,
+    @ColumnInfo(name = "duration_seconds") var durationSeconds: Long? = null,
     @ColumnInfo(name = "intensity") @SerializedName("intensity") var intensity: Int? = null,
     @ColumnInfo(name = "calories") @SerializedName("calories") var calories: Int? = null,
     @ColumnInfo(name = "startTime") @SerializedName("startTime") var startTime: Long = 0,

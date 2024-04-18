@@ -14,9 +14,11 @@ data class OWorkoutListModal(
     @SerializedName("low") val lowIntensity: Float? = null,
     @SerializedName("medium") val mediumIntensity: Float? = null,
     @SerializedName("high") val highIntensity: Float? = null,
+    @SerializedName("gps") val isGpsRequired: Int = 0,
+    var isTempSet: Boolean = false
 ) : Parcelable {
     fun getFormattedActivityName(): String {
-        val activityName =  activityType ?: return ""
+        val activityName = activityType ?: return ""
         val actNameTemp = activityName.replace("_", " ")
         return actNameTemp.capitalizeWords()
     }

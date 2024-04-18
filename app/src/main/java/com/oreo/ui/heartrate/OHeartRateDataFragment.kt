@@ -1,9 +1,11 @@
 package com.oreo.ui.heartrate
 
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
@@ -16,11 +18,14 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.LearnMoreDataModel
+import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.ui.sleep.banner.OreoSleepBannerFragment
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class OHeartRateDataFragment :
@@ -29,6 +34,9 @@ class OHeartRateDataFragment :
     private val viewModel: OHeartRateDataViewModel by viewModels()
     private val ARGS_DATE = "ARGS_DATE"
     private val TAG = "HeartRateDataFragment"
+
+    @Inject
+    lateinit var vibrationUtils: VibrationUtils
     private val learnMoreAdapter: OHRLearnMoreAdapter by lazy {
         OHRLearnMoreAdapter(object : OnItemClickListener {
             override fun onItemClick(item: LearnMoreDataModel) {
@@ -46,21 +54,25 @@ class OHeartRateDataFragment :
     }
 
     private fun loadData() {
-        LOGS.d(TAG, "Today Load data")
         viewModel.date?.let {
             mainViewModel.getDashBoardData(it)?.let { dash ->
+                viewModel.summaryHealthData = dash.first
+                viewModel.prepareActivityData(dash.first)
                 setUi()
-                initHeartRateGraph(dash.first)
+
             }
         }
     }
 
     private fun setUi() {
-        viewModel.getTodayHeartRate()
+
+        if (viewModel.summaryHealthData?.date == DateFormats.getCurrentDate(DateFormats.dateFormat3))
+            viewModel.getTodayHeartRate()
+        else
+            viewModel.summaryHealthData?.let { viewModel.parseHealthData(it) }
     }
 
     companion object {
-
         @JvmStatic
         fun newInstance(date: String) = OHeartRateDataFragment().apply {
             arguments = Bundle().apply {
@@ -70,75 +82,108 @@ class OHeartRateDataFragment :
     }
 
     override fun initListener() {
+
         binding.lytHeartRate.candleChart.setClickListener(object : OnHRClickAction {
 
-            override fun onValueSelected(value: Int, position: Int) {
-
+            override fun onValueSelected(value: Int, position: Int, time: String?) {
+                if (value != 0) {
+                    binding.lytHeartRate.lytSubtitleValue1.tvValue.text = value.toString()
+                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
+                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
+                    binding.lytHeartRate.tvSubtitle1.text = time
+                } else {
+                    binding.lytHeartRate.tvSubtitle1.text = "-"
+                    binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
+                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
+                }
             }
 
             override fun isInteractionOnGoing(onGoing: Boolean) {
+                if (onGoing) {
+                    binding.lytHeartRate.tvSubtitle2.gone()
+                } else {
+                    binding.lytHeartRate.tvSubtitle1.text = getString(R.string.text_average_hr)
+                    binding.lytHeartRate.tvSubtitle2.visible()
+                    viewModel.heartRateData.value?.let { updateUI(it) }
+                }
 
             }
 
             override fun onTopClicked() {
+                if (viewModel.activityData?.isNotEmpty() == true)
+                    viewModel.activityData?.toTypedArray()?.let { it1 ->
+                        navigate(
+                            OHeartRateDetailsFragmentDirections.actionNavigationHrDetailsFragToDayTimeActivitiesBottomSheet(
+                                it1
+                            )
+                        )
+                    }
 
             }
         })
 
+
+
+        binding.lytLearnMore.vRecycler.addOnItemTouchListener(object :
+            RecyclerView.OnItemTouchListener {
+
+            override fun onTouchEvent(view: RecyclerView, event: MotionEvent) {}
+
+            override fun onInterceptTouchEvent(view: RecyclerView, event: MotionEvent): Boolean {
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        binding.lytLearnMore.vRecycler.parent?.requestDisallowInterceptTouchEvent(
+                            true
+                        )
+                    }
+                }
+                return false
+            }
+
+            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+        })
     }
 
     override fun subscribeObservers() {
         viewModel.heartRateData.observe(viewLifecycleOwner) {
             if (it != null) {
-                LOGS.d(TAG, Gson().toJson(it))
-//                initHeartRateGraph(it)
-//                setHearRateUi(it)
+                updateUI(it)
+                initHeartRateGraph(viewModel.summaryHealthData, it)
             }
-            LOGS.d(TAG, Gson().toJson(it))
         }
     }
 
-    private fun initHeartRateGraph(dayData: ServerUserHealthData) {
+    private fun updateUI(it: OHealthOverview.HeartRateDataModel) {
+        if (it.average.toInt() != 0) {
+            binding.lytHeartRate.lytSubtitleValue1.tvValue.text = it.average.toInt().toString()
+            binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
+            binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
+        } else {
+            binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
+            binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
+        }
+        binding.lytHeartRate.tvSubtitle2.text = "Range ${it.minValues}-${it.maxValues} bpm"
+
+
+    }
+
+    private fun initHeartRateGraph(
+        dayData: ServerUserHealthData?,
+        heartRate: OHealthOverview.HeartRateDataModel
+    ) {
         binding.lytHeartRate.candleChart.enableInteractiveMode(true)
+        binding.lytHeartRate.candleChart.setVibrationUtil(vibrationUtils)
         binding.lytHeartRate.candleChart.updateData(
-            viewModel.getStressCombinedData(
-                dayData
-            )
+            viewModel.hrDataConvertor.getHrCombinedData(
+                dayData, heartRate
+            ), 5, heartRate.minValues, heartRate.maxValues
         )
     }
-
-    /*private fun setHearRateUi(data: OHealthOverview.HeartRate) {
-        val lytHeartRate = binding.lytHeartRate
-        lytHeartRate.root.visible()
-        val chart = lytHeartRate.candleChart
-
-        OCombineChartUtils.setChart(chart, data.xLabelList, data.axisMinimum, data.average)
-
-        val combinedData = CombinedData()
-        if (data.lineData.first.isNotEmpty() && data.lineData.first.size > 1) {
-            combinedData.setData(
-                OCombineChartUtils.generateLineData(
-                    data.lineData.first,
-                    lytHeartRate.candleChart,
-                    data.lineData.second,
-                    data.axisMinimum
-                )
-            )
-            combinedData.setData(
-                OCombineChartUtils.generateCandleData(
-                    data.candleValue, R.color.o_heart_bg
-                )
-            )
-            chart.data = combinedData
-            chart.invalidate()
-        }
-    }*/
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val date = arguments?.getString(ARGS_DATE)
-        LOGS.d("Current data $date")
         viewModel.date = date
 //        setHRBannerViewPager()
         setRecycler()
@@ -146,8 +191,10 @@ class OHeartRateDataFragment :
 
     private fun setRecycler() {
         with(binding.lytLearnMore.vRecycler) {
+            isNestedScrollingEnabled = false
             adapter = learnMoreAdapter
         }
+
         learnMoreAdapter.setData(viewModel.getLearnMoreData())
     }
 

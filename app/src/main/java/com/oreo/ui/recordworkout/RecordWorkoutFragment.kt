@@ -19,6 +19,7 @@ import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.data.UserActivityAction
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
+import com.noisefit_commans.location.LocationService
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
@@ -220,7 +221,7 @@ class RecordWorkoutFragment :
             UpdateDeviceAction.StartWorkout(
                 sportId,
                 viewModel.sportStartTime,
-                viewModel.gpsRequired
+                viewModel.requireGps()
             )
         )
     }
@@ -241,7 +242,6 @@ class RecordWorkoutFragment :
                     showLocationPermissionDialog()
                     return@setOnClickListener
                 } else {
-                    viewModel.gpsRequired = true
                     LOGS.d("LOCATION_PERM Has all required permisison")
                 }
             }
@@ -405,6 +405,14 @@ class RecordWorkoutFragment :
     }
 
     override fun subscribeObservers() {
+
+        LocationService.locationBroadCast.observe(this) {
+            it.getContent()?.let {
+                if (viewModel.shouldCheckWeather()) {
+                    viewModel.getWeatherDetails(it.first, it.second)
+                }
+            }
+        }
 
         viewModel.showWorkoutStoppedByRingDialog.observe(viewLifecycleOwner) {
             it.getContent()?.let {

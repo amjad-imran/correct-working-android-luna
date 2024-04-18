@@ -1,6 +1,5 @@
 package com.oreo.data.repository.implementation
 
-import com.github.mikephil.charting.data.Entry
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -57,6 +56,7 @@ import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.ServerUserHealthResponse
 import com.oreo.data.model.TapMeasureState
+import com.oreo.data.model.TestUserData
 import com.oreo.data.model.TrendsData
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.receiver.workManager.HealthOverviewDataType
@@ -72,7 +72,6 @@ import org.joda.time.LocalDate
 import org.json.JSONObject
 import com.oreo.data.model.AddWorkoutResponse
 import com.oreo.data.model.StressResultData
-import com.oreo.data.model.TestUserData
 import com.oreo.data.model.health.Nap
 
 
@@ -1064,7 +1063,7 @@ class OreoUserActivityRepositoryImpl(
             HealthOverviewDataType.HEART -> {
 
                 index = hOverviewData.indexOfFirst {
-                    it is OHealthOverview.HeartRate
+                    it is OHealthOverview.HeartRateDataModel
                 }
                 if (index != -1) {
 
@@ -1308,7 +1307,7 @@ class OreoUserActivityRepositoryImpl(
         return oreoAutoSportDataImpl.getAllNotAcceptingData(timeStamp)?.size ?: 0
     }
 
-    override suspend fun getSummaryHRHealthOverview(): OHealthOverview.HeartRate? {
+    override suspend fun getSummaryHRHealthOverview(): OHealthOverview.HeartRateDataModel {
         try {
             val todayDate = DateFormats.getTodaysDateString(10)
             return offlineDataMapper.convertHeartRateOverviewData(
@@ -1319,14 +1318,12 @@ class OreoUserActivityRepositoryImpl(
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        return OHealthOverview.HeartRate(
-            value = "0",
+        return OHealthOverview.HeartRateDataModel(
+            listData = ArrayList(),
+            average = 0.0f,
             lastTime = "0",
-            candleValue = ArrayList(),
-            lineData = Pair(ArrayList<Entry>(), ArrayList<Int>()),
-            xLabelList = ArrayList(),
-            axisMinimum = 0f,
-            average = 0f,
+            maxValues = 0,
+            minValues = 0,
             measureState = TapMeasureState.DEFAULT
         )
     }
