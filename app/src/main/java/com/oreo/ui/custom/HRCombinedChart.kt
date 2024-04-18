@@ -358,95 +358,13 @@ class HRCombinedChart : View {
     private fun drawRight(canvas: Canvas) {
         canvas.drawRect(mWith - rightWith, 0f, mWith.toFloat(), mHeight.toFloat(), bgRightPaint!!)
     }
-
-    private fun drawXAxisTime(
-        canvas: Canvas,
-        yPos: Float
-    ) {
-
-        val edgeTextPadding = dip2px(4f)
-
-        val startText = "12 am"
-
-        var rectF = RectF(
-            leftWith,
-            yPos - dip2px(13f),
-            leftWith + mTextPaintEdge.measureText(startText) + edgeTextPadding * 2,
-            height.toFloat()
-        )
-        canvas.drawRoundRect(
-            rectF,
-            dip2px(4f).toFloat(),
-            dip2px(4f).toFloat(),
-            edgeTextBackPaint
-        )
-
-        canvas.drawText(
-            startText,
-            leftWith + edgeTextPadding.toFloat(),
-            yPos + dip2px(2f),
-            mTextPaintEdge
-        )
-
-
-        val text = "12 am"
-        val textWidth = mTextPaintEdge.measureText(text)
-
-        rectF = RectF(
-            (width - textWidth - rightWith - dip2px(20f)) - edgeTextPadding * 2,
-            yPos - dip2px(13f),
-            width - rightWith - dip2px(20f),
-            height.toFloat()
-        )
-        canvas.drawRoundRect(
-            rectF,
-            dip2px(4f).toFloat(),
-            dip2px(4f).toFloat(),
-            edgeTextBackPaint
-        )
-
-        canvas.drawText(
-            text,
-            (width - textWidth - rightWith) - edgeTextPadding - dip2px(20f),
-            yPos + dip2px(2f),
-            mTextPaintEdge
-        )
-
-        //show center value
-        val midText = "12 pm"
-        val centerPoint = (width - rightWith - leftWith - textWidth * 2) / 2
-        canvas.drawText(
-            midText,
-            centerPoint + edgeTextPadding.toFloat(),
-            yPos + dip2px(2f),
-            mTextPaintEdge
-        )
-    }
-
     private fun drawBottom(canvas: Canvas) {
-        /*canvas.drawRect(
-            0f,
-            mHeight - bottomWith,
-            mWith.toFloat(),
-            mHeight.toFloat(),
-            bgBottomPaint
-        )
-        if (showXAxis) {
-            drawXAxisTime(
-                canvas,
-                mHeight - bottomWith / 3
-            )
-        }*/
         canvas.drawRect(
             0f, mHeight - bottomWith, mWith.toFloat(), mHeight.toFloat() - dip2px(9f), bgBottomPaint
         )
         if (showXAxis) {
-
-//            drawLeftRect(canvas)
-//            drawRightRect(canvas)
             val halfWidth = (mWith - leftWith - rightWith) / 2
             val leftHalf = halfWidth / 2
-
             val edgeTextPadding = dip2px(4f)
             //end point
             var xText = "12 am"
@@ -518,7 +436,6 @@ class HRCombinedChart : View {
             )
         }
     }
-
 
     private fun drawLeft(canvas: Canvas) {
         gridPaint.color = gridColor
