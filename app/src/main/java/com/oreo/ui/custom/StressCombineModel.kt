@@ -10,7 +10,9 @@ data class StressCombineModel(
 
 data class Item(
     val `value`: Int,
-    val index: Int
+    val index: Int,
+    val minValue: Int = 0,
+    val maxValue: Int = 0
 )
 
 data class Section(
