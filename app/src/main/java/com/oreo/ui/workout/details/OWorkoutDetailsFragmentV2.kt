@@ -208,7 +208,7 @@ class OWorkoutDetailsFragmentV2 :
             val (hour, minute, seconds) = ApplicationUtils.getFormattedDuration(it.durationSeconds)
             binding.lytTop.lytActivityItem.tvDurationValue.text =
                 String.format("%02d:%02d", hour, minute)
-            binding.lytTop.lytActivityItem.tvDurationUnit.text = String.format("%02d", seconds)
+            binding.lytTop.lytActivityItem.tvDurationUnit.text = String.format(":%02d", seconds)
         }
 
         //binding.lytTop.lytActivityItem.tvDurationValue.paintText()

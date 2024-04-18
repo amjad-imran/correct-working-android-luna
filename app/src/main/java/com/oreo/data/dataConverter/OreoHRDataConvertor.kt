@@ -123,9 +123,6 @@ constructor(
             it.start
         }
 
-        LOGS.d("SECTIONS___ Sorted $sortedSection")
-
-
         val combinedSection = ArrayList<Section>()
 
         var current = 0
@@ -173,8 +170,6 @@ constructor(
 
             current++
         }
-
-        LOGS.d("SECTIONS___ $sortedSection \n $combinedSection")
 
         return combinedSection
 

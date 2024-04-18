@@ -2,6 +2,7 @@ package com.oreo.ui.workout.details
 
 import android.os.Bundle
 import android.view.View
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoRedinessBannerBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.oreo.data.model.health.Nudges
@@ -40,7 +41,7 @@ class WorkoutNudgeFragment : BaseFragment<FragmentOreoRedinessBannerBinding>(
     }
 
     private fun setUi(bannerData: Nudges?) {
-        binding.rootView.setBackgroundResource(0)
+        binding.rootView.setBackgroundResource(R.drawable.ic_nudge_activity)
         binding.tvTitle.text = bannerData?.label
         binding.tvDescription.text = bannerData?.message
     }

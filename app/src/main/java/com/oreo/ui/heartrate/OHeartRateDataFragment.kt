@@ -19,7 +19,6 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.data.model.OHealthOverview
@@ -88,7 +87,6 @@ class OHeartRateDataFragment :
 
             override fun onValueSelected(value: Int, position: Int, time: String?) {
                 if (value != 0) {
-                    LOGS.d("time to display $time")
                     binding.lytHeartRate.lytSubtitleValue1.tvValue.text = value.toString()
                     binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
                     binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
@@ -149,7 +147,6 @@ class OHeartRateDataFragment :
     override fun subscribeObservers() {
         viewModel.heartRateData.observe(viewLifecycleOwner) {
             if (it != null) {
-                LOGS.d(TAG, Gson().toJson(it))
                 updateUI(it)
                 initHeartRateGraph(viewModel.summaryHealthData, it)
             }
