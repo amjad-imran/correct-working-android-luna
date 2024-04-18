@@ -42,6 +42,8 @@ data class OWorkoutDetailsResponseModel(
     val recoveryTime: Long? = null,
     @SerializedName("icon_url")
     val iconUrl: String? = null,
+    @SerializedName("gps_distance")
+    val gpsDistance: Long? = null,
     val nudges: List<WorkoutNudge>? = null,
     @SerializedName("daytime_movement")
     val movement: List<Int>? = null,
@@ -64,4 +66,4 @@ data class WorkoutNudge(
     val title: String? = null,
     @SerializedName("description")
     val description: String? = null,
-):Parcelable
+) : Parcelable
