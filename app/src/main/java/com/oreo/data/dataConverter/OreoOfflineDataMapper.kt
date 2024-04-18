@@ -350,6 +350,7 @@ constructor(
                 lastHrValue = Pair(value, indexMillis)
 
             }
+
             //if any change chunk value then divide 12 by that chunk value to get below correct xlabel list
             if (index % 2 == 0) {
                 hrCount += 1

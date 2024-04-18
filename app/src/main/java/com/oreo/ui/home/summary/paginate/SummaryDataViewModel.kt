@@ -36,8 +36,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SummaryDataViewModel @Inject
-constructor(
+class SummaryDataViewModel @Inject constructor(
     val userRepository: OreoUserActivityRepository,
     val ringDataStore: RingDataStore,
     val localDataStore: DataStoredInterface,
@@ -91,11 +90,9 @@ constructor(
             }
             val filteredNaps = nap.filter { !it.isNextDayNap }
 
-            val newSleepArray =
-                dataConverter.mergeSleepData(
-                    healthData.sleep?.hourly_breakup,
-                    filteredNaps
-                )
+            val newSleepArray = dataConverter.mergeSleepData(
+                healthData.sleep?.hourly_breakup, filteredNaps
+            )
 
             healthData.sleep.let {
                 if ((it?.sleepScore?.value ?: 0) > 0) {
@@ -135,8 +132,7 @@ constructor(
                                 inactiveMinutes = it?.activityContributors?.stayActive?.value,
                                 status = it?.activityScore?.level?.capitalizeWords(),
                                 nudges = it?.dash_nudges
-                            ),
-                            caloriesGoal
+                            ), caloriesGoal
                         )
                     )
                 }
@@ -166,8 +162,7 @@ constructor(
         breakupArray.forEach { value ->
             if (value == 255) {
                 excludeDataList.add(0)
-            } else
-                excludeDataList.add(value)
+            } else excludeDataList.add(value)
         }
 
         val hRWithIntervalList = excludeDataList.chunked(6)
@@ -256,12 +251,10 @@ constructor(
         var suffix = ""
         if (hour > 11) {
             suffix = "pm"
-            if (hour > 12)
-                hour -= 12;
+            if (hour > 12) hour -= 12;
         } else {
             suffix = "am"
-            if (hour == 0)
-                hour = 12;
+            if (hour == 0) hour = 12;
         }
         return "$hour $suffix"
     }

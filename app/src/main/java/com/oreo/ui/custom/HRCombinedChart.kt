@@ -28,10 +28,12 @@ import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.google.gson.Gson
 import com.noisefit.luna.R
+import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.ui.heartrate.OnHRClickAction
+import org.joda.time.LocalDateTime
+import org.joda.time.format.DateTimeFormat
 import kotlin.math.roundToInt
 
 
@@ -248,7 +250,6 @@ class HRCombinedChart : View {
         xMin = 40
         max = maxYAxis
         postInvalidate()
-        LOGS.d("HR data ${Gson().toJson(list)}")
     }
 
     fun updateHighlight(indexList: List<Int>, color: Int) {
@@ -358,6 +359,7 @@ class HRCombinedChart : View {
     private fun drawRight(canvas: Canvas) {
         canvas.drawRect(mWith - rightWith, 0f, mWith.toFloat(), mHeight.toFloat(), bgRightPaint!!)
     }
+
     private fun drawBottom(canvas: Canvas) {
         canvas.drawRect(
             0f, mHeight - bottomWith, mWith.toFloat(), mHeight.toFloat() - dip2px(9f), bgBottomPaint
@@ -606,6 +608,7 @@ class HRCombinedChart : View {
         if (list.size == 0) {
             return
         }
+        LOGS.d("List size ${list.size}")
         unitHLenth = (mWith - leftWith - rightWith - dip2px(20f)) / (list.size - 1)
         val imageSize = dip2px(16f)
         for (i in combineModel!!.sections!!.indices) {
@@ -615,8 +618,6 @@ class HRCombinedChart : View {
             } else {
                 section.end
             }
-
-
             rectF.left = section.start * unitHLenth + leftWith
             rectF.top = topWith
             rectF.right = rectF.left + (calculatedEnd - section.start) * unitHLenth
@@ -738,7 +739,20 @@ class HRCombinedChart : View {
                         canvas.drawPoint(x, y, chartLinePaint)
                     }
                 }
-                toolTipList.add(Triple(x, "Time", current.value))
+
+
+                val startTime = DateFormats.getMidnightDateTime()
+                val formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
+
+                val startDateTime = LocalDateTime.parse(startTime, formatter)
+                var updatedTime = startDateTime.plusMinutes((list.size - i - 1) * 5)
+                val formatterDisplay = DateTimeFormat.forPattern("h:mm a")
+
+                val time = updatedTime.toString(formatterDisplay).lowercase()
+
+                toolTipList.add(Triple(x, time ?: "", current.value))
+
+//                toolTipList.add(Triple(x, "Time", current.value))
 
             }
 
@@ -833,7 +847,7 @@ class HRCombinedChart : View {
         rectF.top = topWith
         rectF.bottom = mHeight - bottomWith
 
-        val value: Pair<Int, Int> = getClickedValue(calculatedTouchX)
+        val value: Triple<Int, Int,String> = getClickedValue(calculatedTouchX)
         canvas.drawRect(rectF, overlayLinePaint)
         if (value.second != 0) {
 
@@ -844,7 +858,7 @@ class HRCombinedChart : View {
             val position = value.first as Int
             val selectedValue = value.second as Int
             if (lastSentValuePos == null) {
-                listener?.onValueSelected(selectedValue, position)
+                listener?.onValueSelected(selectedValue, position,)
                 lastSentValuePos = position
                 performHapticFeedbackCustom(selectedValue)
             } else {
@@ -865,13 +879,13 @@ class HRCombinedChart : View {
         }
     }
 
-    private fun getClickedValue(touchX: Float): Pair<Int, Int> {
+    private fun getClickedValue(touchX: Float): Triple<Int, Int,String> {
         val index = findNumber(toolTipList, touchX)
         return if (index.first < 0) {
             lastSentValuePos = null
-            Pair(0, 0)
+            Triple(0, 0,"")
         } else {
-            Pair(index.first, list[index.first]!!.value)
+            Triple(index.first, list[index.first]!!.value,index.second)
         }
 
         /*  var sectionLast = 0f

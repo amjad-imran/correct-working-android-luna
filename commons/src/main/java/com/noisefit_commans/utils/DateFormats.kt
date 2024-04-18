@@ -226,6 +226,17 @@ object DateFormats {
         return df.format(c)
     }
 
+    fun getMidnightDateTime(): String {
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        return dateFormat.format(calendar.time)
+    }
+
     fun getYesterdayDate(): String {
         val c = Calendar.getInstance().apply {
             add(Calendar.DAY_OF_YEAR, -1)

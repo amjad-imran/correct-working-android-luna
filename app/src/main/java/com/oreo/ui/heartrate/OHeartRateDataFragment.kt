@@ -82,11 +82,12 @@ class OHeartRateDataFragment :
 
         binding.lytHeartRate.candleChart.setClickListener(object : OnHRClickAction {
 
-            override fun onValueSelected(value: Int, position: Int) {
+            override fun onValueSelected(value: Int, position: Int, time: String?) {
                 if (value != 0) {
                     binding.lytHeartRate.lytSubtitleValue1.tvValue.text = value.toString()
                     binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
                     binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
+                    binding.lytHeartRate.tvSubtitle1.text = time
                 } else {
                     binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
                     binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
@@ -98,7 +99,7 @@ class OHeartRateDataFragment :
                     binding.lytHeartRate.tvSubtitle2.gone()
                 } else {
                     binding.lytHeartRate.tvSubtitle2.visible()
-                    viewModel.heartRateData.value?.let { updateUI(it) }
+                    viewModel.heartRateData.value?.let { updateUI(it, true) }
                 }
 
             }
@@ -115,6 +116,8 @@ class OHeartRateDataFragment :
 
             }
         })
+
+
 
         binding.lytLearnMore.vRecycler.addOnItemTouchListener(object :
             RecyclerView.OnItemTouchListener {
@@ -140,13 +143,13 @@ class OHeartRateDataFragment :
         viewModel.heartRateData.observe(viewLifecycleOwner) {
             if (it != null) {
                 LOGS.d(TAG, Gson().toJson(it))
-                updateUI(it)
+                updateUI(it, false)
                 initHeartRateGraph(viewModel.summaryHealthData, it)
             }
         }
     }
 
-    private fun updateUI(it: OHealthOverview.HeartRateDataModel) {
+    private fun updateUI(it: OHealthOverview.HeartRateDataModel, isAvgShown: Boolean) {
         if (it.average.toInt() != 0) {
             binding.lytHeartRate.lytSubtitleValue1.tvValue.text = it.average.toInt().toString()
             binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()

@@ -1,7 +1,6 @@
 package com.oreo.data.dataConverter
 
 import android.graphics.Color
-import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit_commans.common.maxWithInvalidMovementValues
 import com.noisefit_commans.common.maxWithoutInvalidMovementValues
@@ -35,27 +34,15 @@ constructor(
 //            Gson().fromJson<List<Int>>("[10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,4,10,12,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,55,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44]")
 
         var breakUpData = ArrayList<Int>()
-        if (dayData?.date == DateFormats.getCurrentDate(DateFormats.dateFormat3)) {
-            if (hearRate.listData.isNullOrEmpty()) {
-                breakUpData = ArrayList()
-            } else {
-                hearRate.listData.forEach {
-                    breakUpData.add(it.midValues.toInt())
-                }
-            }
+
+        if (hearRate.listData.isNullOrEmpty()) {
+            breakUpData = ArrayList()
         } else {
-            if (dayData?.heart?.break_up.isNullOrEmpty()) {
-                breakUpData = ArrayList()
-            } else {
-                dayData?.heart?.break_up?.forEach {
-                    breakUpData.add(it)
-                }
-                LOGS.d("Previous day ${Gson().toJson(breakUpData)}")
+            hearRate.listData.forEach {
+                breakUpData.add(it.midValues.toInt())
             }
         }
-
         val workouts = dayData?.activity?.workout
-
         val sections: MutableList<Section> = ArrayList()
         workouts?.forEach {
             getWorkoutSections(it)?.let { pos ->
@@ -204,11 +191,11 @@ constructor(
         val day1Minutes =
             DateFormats.getDayElapsedMinutesFromTimeStamp(startTimeStamp) ?: return null
 
-        val day1MinutesCeil = 15 * (floor(abs(day1Minutes.toDouble() / 15)))
+        val day1MinutesCeil = 30 * (floor(abs(day1Minutes.toDouble() / 30)))
 
-        val startPos = (day1MinutesCeil / 15 - 1).toInt()
+        val startPos = (day1MinutesCeil / 30 - 1).toInt()
 
-        var calculatedDuration = startPos + (it.duration ?: 0) / 15
+        var calculatedDuration = startPos + (it.duration ?: 0) / 30
         if (calculatedDuration > 95) {
             calculatedDuration = 95
         }
@@ -232,8 +219,8 @@ constructor(
             ) ?: return null
             val day1Minutes =
                 DateFormats.getDayElapsedMinutesFromTimeStamp(startTimeStamp) ?: return null
-            val day1MinutesCeil = 15 * (floor(abs(day1Minutes.toDouble() / 15)))
-            val startPos = (day1MinutesCeil / 15 - 1).toInt()
+            val day1MinutesCeil = 30 * (floor(abs(day1Minutes.toDouble() / 30)))
+            val startPos = (day1MinutesCeil / 30 - 1).toInt()
 
 
             val endTimeStamp = DateFormats.convertDateTimeToTimeStamp(
@@ -242,10 +229,10 @@ constructor(
             ) ?: return null
             val day1EndMinutes =
                 DateFormats.getDayElapsedMinutesFromTimeStamp(endTimeStamp) ?: return null
-            val day1EndMinutesCeil = 15 * (floor(abs(day1EndMinutes.toDouble() / 15)))
-            var endPos = (day1EndMinutesCeil / 15 - 1).toInt()
-            if (endPos > 95) {
-                endPos = 95
+            val day1EndMinutesCeil = 30 * (floor(abs(day1EndMinutes.toDouble() / 30)))
+            var endPos = (day1EndMinutesCeil / 30 - 1).toInt()
+            if (endPos > 47) {
+                endPos = 47
             }
 
             return Pair(startPos, endPos)
@@ -260,10 +247,10 @@ constructor(
             ) ?: return null
             val day1EndMinutes =
                 DateFormats.getDayElapsedMinutesFromTimeStamp(endTimeStamp) ?: return null
-            val day1EndMinutesCeil = 15 * (floor(abs(day1EndMinutes.toDouble() / 15)))
-            var endPos = (day1EndMinutesCeil / 15 - 1).toInt()
-            if (endPos > 95) {
-                endPos = 95
+            val day1EndMinutesCeil = 30 * (floor(abs(day1EndMinutes.toDouble() / 30)))
+            var endPos = (day1EndMinutesCeil / 30 - 1).toInt()
+            if (endPos > 47) {
+                endPos = 47
             }
 
             return Pair(0, endPos)
@@ -292,8 +279,8 @@ constructor(
             ) ?: return null
             val day1Minutes =
                 DateFormats.getDayElapsedMinutesFromTimeStamp(startTimeStamp) ?: return null
-            val day1MinutesCeil = 15 * (floor(abs(day1Minutes.toDouble() / 15)))
-            val startPos = (day1MinutesCeil / 15 - 1).toInt()
+            val day1MinutesCeil = 30 * (floor(abs(day1Minutes.toDouble() / 30)))
+            val startPos = (day1MinutesCeil / 30 - 1).toInt()
 
 
             val endTimeStamp = DateFormats.convertDateTimeToTimeStamp(
@@ -302,10 +289,10 @@ constructor(
             ) ?: return null
             val day1EndMinutes =
                 DateFormats.getDayElapsedMinutesFromTimeStamp(endTimeStamp) ?: return null
-            val day1EndMinutesCeil = 15 * (floor(abs(day1EndMinutes.toDouble() / 15)))
-            var endPos = (day1EndMinutesCeil / 15 - 1).toInt()
-            if (endPos > 95) {
-                endPos = 95
+            val day1EndMinutesCeil = 30 * (floor(abs(day1EndMinutes.toDouble() / 30)))
+            var endPos = (day1EndMinutesCeil / 30 - 1).toInt()
+            if (endPos > 47) {
+                endPos = 47
             }
 
             return Pair(startPos, endPos)
@@ -320,10 +307,10 @@ constructor(
             ) ?: return null
             val day1EndMinutes =
                 DateFormats.getDayElapsedMinutesFromTimeStamp(endTimeStamp) ?: return null
-            val day1EndMinutesCeil = 15 * (floor(abs(day1EndMinutes.toDouble() / 15)))
-            var endPos = (day1EndMinutesCeil / 15 - 1).toInt()
-            if (endPos > 95) {
-                endPos = 95
+            val day1EndMinutesCeil = 30 * (floor(abs(day1EndMinutes.toDouble() / 30)))
+            var endPos = (day1EndMinutesCeil / 30 - 1).toInt()
+            if (endPos > 47) {
+                endPos = 47
             }
 
             return Pair(0, endPos)
