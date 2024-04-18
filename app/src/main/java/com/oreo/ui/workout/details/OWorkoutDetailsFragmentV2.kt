@@ -176,15 +176,11 @@ class OWorkoutDetailsFragmentV2 :
 //        binding.lytIntensity.tvIntensityType.text = it.intensity
 
         if (it.date == DateFormats.getCurrentDate(DateFormats.dateFormat3) && !it.type.equals(
-                "auto",
-                true
+                "auto", true
             ) && !it.type.equals(
-                "apple",
-                true
-            )
-            && !it.type.equals(
-                "google",
-                true
+                "apple", true
+            ) && !it.type.equals(
+                "google", true
             )
         ) {
             binding.tvEdit.visible()
@@ -278,16 +274,13 @@ class OWorkoutDetailsFragmentV2 :
                 hrZoneAdapter.setListener(object :
                     OWorkoutHRZoneAdapter.OWorkoutHRZoneInteractionListener {
                     override fun onClick(
-                        selectedPosition: Int,
-                        isHighlighted: Boolean,
-                        data: OWDActivityHRZoneData
+                        selectedPosition: Int, isHighlighted: Boolean, data: OWDActivityHRZoneData
                     ) {
                         hrZoneAdapter.updateData(selectedPosition, isHighlighted)
                         if (isHighlighted) {
                             val (indexes, color) = viewModel.getIndexList(data.zone)
                             binding.lytHeartRate.heartRateChart.updateHighlight(
-                                indexes,
-                                color
+                                indexes, color
                             )
                         } else {
                             binding.lytHeartRate.heartRateChart.removeHighlights()
@@ -332,13 +325,9 @@ class OWorkoutDetailsFragmentV2 :
                 Color.parseColor("#0Dff718b")
             )
             val lowValueIndex = updateDataWithMax(
-                sleepChart, 5, false, false,
-                GraphDummyModel(
+                sleepChart, 5, false, false, GraphDummyModel(
                     false, 40, 100
-                ),
-                it.hrAvg,
-                "${it.date} ${it.startTime}",
-                "${it.date} ${it.endTime}"
+                ), it.hrAvg, "${it.date} ${it.startTime}", "${it.date} ${it.endTime}"
             )
 
             setInteractiveMode(true)
@@ -347,8 +336,7 @@ class OWorkoutDetailsFragmentV2 :
                 override fun onValueSelected(value: Int, isInteracting: Boolean, time: String?) {
                     if (isInteracting) {
                         binding.lytHeartRate.tvAverageTitle.text = time ?: ""
-                        binding.lytHeartRate.tvAverageValue.text =
-                            if (value > 0) "$value" else "-"
+                        binding.lytHeartRate.tvAverageValue.text = if (value > 0) "$value" else "-"
 
                     } else {
                         setAvgHr()
@@ -359,33 +347,6 @@ class OWorkoutDetailsFragmentV2 :
 
         }
 
-//,
-        /*setUpMaps(
-            listOf(
-                LocationDataNetwork(
-                    lat = 28.437432,
-                    long = 77.104564
-                ),
-                LocationDataNetwork(
-                    28.437808, 77.106358,
-                ),
-                LocationDataNetwork(
-                    28.438060, 77.107771
-                ),
-                LocationDataNetwork(
-                    28.437152, 77.108330
-                ),
-                LocationDataNetwork(
-                    28.436463, 77.108501
-                ),
-                LocationDataNetwork(
-                    28.435766, 77.108679
-                ),
-                LocationDataNetwork(
-                    28.434531, 77.107297
-                )
-            )
-        )*/
         if (it.location.isNullOrEmpty()) {
             binding.lytTop.vMapOverlay.gone()
             binding.lytTop.vMapGradientTop.gone()
@@ -400,6 +361,7 @@ class OWorkoutDetailsFragmentV2 :
                     tvTemp.text = "${it.weather.temp}°C"
                     groupTemp.visible()
                 }
+                binding.lytTop.ivWeatherImage.setImageResource(viewModel.getWeatherImage(it.weather.status))
             } else {
                 binding.lytTop.groupTemp.gone()
             }
@@ -419,8 +381,7 @@ class OWorkoutDetailsFragmentV2 :
         data.forEach {
             fragments.add(WorkoutNudgeFragment.newInstance(it))
         }
-        val sleepBannerAdapter =
-            OreoSleepBannerAdapter(childFragmentManager, lifecycle, fragments)
+        val sleepBannerAdapter = OreoSleepBannerAdapter(childFragmentManager, lifecycle, fragments)
         binding.lytTop.lytCues.vpBannerSlider.apply {
             clipToPadding = false
             clipChildren = false
@@ -432,8 +393,7 @@ class OWorkoutDetailsFragmentV2 :
         }
 
         TabLayoutMediator(
-            binding.lytTop.lytCues.tabLayout,
-            binding.lytTop.lytCues.vpBannerSlider
+            binding.lytTop.lytCues.tabLayout, binding.lytTop.lytCues.vpBannerSlider
         ) { _, _ -> }.attach()
 
         if (fragments.size > 1) {
