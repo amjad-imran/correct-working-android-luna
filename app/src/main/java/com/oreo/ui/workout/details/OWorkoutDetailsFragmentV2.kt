@@ -369,7 +369,7 @@ class OWorkoutDetailsFragmentV2 :
         }
     }
 
-    private fun setNudgesViewPager(data: List<WorkoutNudge>?) {
+    private fun setNudgesViewPager(data: List<Nudges>?) {
 
         if (data.isNullOrEmpty()) {
             binding.lytTop.lytCues.root.gone()
