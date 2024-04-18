@@ -107,6 +107,8 @@ class HRCombinedChart : View {
     lateinit var edgeTextBackPaint: Paint
     lateinit var mTextPaintEdge: Paint
     private var vibrationUtils: VibrationUtils? = null
+    lateinit var activeBarPaint: Paint
+    lateinit var inActiveBarPaintI: Paint
 
     constructor(context: Context?) : super(context) {
         resMap = HashMap()
@@ -239,6 +241,16 @@ class HRCombinedChart : View {
         chartLineFillPaint.isAntiAlias = true
         xTextBounds = Rect()
         rectF = RectF()
+
+        activeBarPaint = Paint().apply {
+            color =
+                Color.parseColor("#59ff3371")
+        }
+
+        inActiveBarPaintI = Paint().apply {
+            color =
+                Color.parseColor("#26ff3371")
+        }
     }
 
     fun updateData(datas: HRCombineModel?, yAxisCount: Int, minYAxis: Int, maxYAxis: Int) {
@@ -299,7 +311,11 @@ class HRCombinedChart : View {
             topWith,
             0f,
             mHeight - bottomWith,
-            intArrayOf(highColor, mediumColor, lowColor),
+            intArrayOf(
+                Color.parseColor("#ff3371"),
+                Color.parseColor("#ff3371"),
+                Color.parseColor("#ff3371")
+            ),
             floatArrayOf(0f, 0.5f, 1f),
             Shader.TileMode.CLAMP
         )
@@ -682,12 +698,44 @@ class HRCombinedChart : View {
 
             path.reset()
             path.moveTo(x, y)
+
+            //for bar draw
+            val barPaints: Paint = if (isInteracting)
+                inActiveBarPaintI
+            else
+                activeBarPaint
+            val corners = floatArrayOf(
+                80f, 80f,   // Top left radius in px
+                80f, 80f,   // Top right radius in px
+                80f, 80f,     // Bottom right radius in px
+                80f, 80f      // Bottom left radius in px
+            )
+            val yTop =
+                mHeight - bottomWith - current.minValue * (mHeight - topWith - bottomWith) / (max - xMin)
+            val yBottom =
+                mHeight - bottomWith - current.maxValue * (mHeight - topWith - bottomWith) / (max - xMin)
+
+            if (current.value > 0) {
+                val rectBar = RectF(
+                    x - 5,
+                    yTop,
+                    x + 5,
+                    yBottom
+                )
+                barPaints.let {
+                    canvas.drawRoundRect(rectBar, dip2px(20f).toFloat(), dip2px(20f).toFloat(), it)
+                    val path = Path()
+                    path.addRoundRect(rectBar, corners, Path.Direction.CW)
+                    canvas.drawPath(path, barPaints)
+                }
+            }
+            //end bar draw
+
             if (i < list.size - 1) {
                 next = list[i + 1]
                 if (current.value > 0) {
                     if (next!!.value > 0) {
                         val x1 = mWith - leftWith - rightWith + leftWith - (i + 1) * unitHLenth
-
                         val y1 =
                             mHeight - bottomWith - (next.value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
 
@@ -840,7 +888,7 @@ class HRCombinedChart : View {
         canvas.drawRect(rectF, overlayLinePaint)
         if (value.second != 0) {
 
-            drawDot(canvas, value.second,calculatedTouchX)
+            drawDot(canvas, value.second, calculatedTouchX)
 
         }
         if (listener != null) {

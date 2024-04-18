@@ -148,7 +148,6 @@ class SummaryDataViewModel @Inject constructor(
     }
 
     private fun parseHrData(data: ServerUserHealthData): OHealthOverview.HeartRateDataModel {
-        LOGS.d("HeartRateData ${Gson().toJson(data.heart)}")
         var breakupArray = data.heart?.break_up
         if (breakupArray.isNullOrEmpty()) {
             val dummyArray = ArrayList<Int>()
@@ -218,8 +217,8 @@ class SummaryDataViewModel @Inject constructor(
             }
             listData.add(
                 HRModel(
-                    maxValues = overAllMaxValue,
-                    minValues = overAllMinValue,
+                    maxValues = maxValue,
+                    minValues = minValue,
                     values = sortedBreakUpList,
                     midValues = (maxValue + minValue) / 2
                 )

@@ -308,6 +308,7 @@ class SummaryDataFragmentToday :
 
 
     override fun initListener() {
+        binding.contentMain.lytHeartRate.bInfo.invisible()
         binding.contentMain.lytHeartRate.root.setOnClickListener {
             navigate(R.id.fragmentHeartRateDetails)
         }
