@@ -21,7 +21,7 @@ class OWorkoutDetailslAdapterV2 : RecyclerView.Adapter<OWorkoutDetailslAdapterV2
 
             binding.tvTitle.text = detailData.title
             binding.tvValue.text = detailData.value
-            binding.tvValue.paintText(TEXT_GRADIENT_STYLE_2)
+            //binding.tvValue.paintText(TEXT_GRADIENT_STYLE_2)
 
             binding.tvUnitValue.text = detailData.unit
 

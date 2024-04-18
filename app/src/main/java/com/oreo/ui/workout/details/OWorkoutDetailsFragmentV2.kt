@@ -3,6 +3,7 @@ package com.oreo.ui.workout.details
 import android.annotation.SuppressLint
 import android.content.res.Resources
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
@@ -48,6 +49,8 @@ import com.oreo.ui.custom.OnHeartRateChartClickAction
 import com.oreo.ui.readiness.OreoReadinessBannerFragment
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import eightbitlab.com.blurview.RenderEffectBlur
+import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -214,14 +217,14 @@ class OWorkoutDetailsFragmentV2 :
             binding.lytTop.lytActivityItem.tvDurationUnit.text = String.format("%02d", seconds)
         }
 
-        binding.lytTop.lytActivityItem.tvDurationValue.paintText()
+        //binding.lytTop.lytActivityItem.tvDurationValue.paintText()
 
         val topValue = viewModel.getDistance(it)
         binding.lytTop.lytActivityItem.tvDistanceTitle.text = topValue.third
         binding.lytTop.lytActivityItem.tvDistanceValue.text = topValue.first
         binding.lytTop.lytActivityItem.tvDistanceUnit.text = topValue.second
 
-        binding.lytTop.lytActivityItem.tvDistanceValue.paintText()
+        //binding.lytTop.lytActivityItem.tvDistanceValue.paintText()
 
         setNudgesViewPager(it.nudges)
 
@@ -400,10 +403,8 @@ class OWorkoutDetailsFragmentV2 :
             } else {
                 binding.lytTop.groupTemp.gone()
             }
-
             setUpMaps(it.location)
         }
-
     }
 
     private fun setNudgesViewPager(data: List<WorkoutNudge>?) {
