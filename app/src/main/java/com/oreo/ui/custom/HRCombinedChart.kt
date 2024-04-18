@@ -18,8 +18,6 @@ import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
-import android.util.Pair
-import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
@@ -30,7 +28,9 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.noisefit.luna.R
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.ui.heartrate.OnHRClickAction
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
@@ -107,6 +107,7 @@ class HRCombinedChart : View {
     var yAxisCount: Int = 3
     lateinit var edgeTextBackPaint: Paint
     lateinit var mTextPaintEdge: Paint
+    private var vibrationUtils: VibrationUtils? = null
 
     constructor(context: Context?) : super(context) {
         resMap = HashMap()
@@ -743,17 +744,11 @@ class HRCombinedChart : View {
 
                 val startTime = DateFormats.getMidnightDateTime()
                 val formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
-
                 val startDateTime = LocalDateTime.parse(startTime, formatter)
-                var updatedTime = startDateTime.plusMinutes((list.size - i - 1) * 5)
+                var updatedTime = startDateTime.plusMinutes((list.size - i - 1) * 30)
                 val formatterDisplay = DateTimeFormat.forPattern("h:mm a")
-
                 val time = updatedTime.toString(formatterDisplay).lowercase()
-
                 toolTipList.add(Triple(x, time ?: "", current.value))
-
-//                toolTipList.add(Triple(x, "Time", current.value))
-
             }
 
             /*if (showXAxis && i % interval == 0 && i > 0 && i < 4 * interval) {
@@ -847,7 +842,7 @@ class HRCombinedChart : View {
         rectF.top = topWith
         rectF.bottom = mHeight - bottomWith
 
-        val value: Triple<Int, Int,String> = getClickedValue(calculatedTouchX)
+        val value: Triple<Int, Int, String> = getClickedValue(calculatedTouchX)
         canvas.drawRect(rectF, overlayLinePaint)
         if (value.second != 0) {
 
@@ -858,12 +853,12 @@ class HRCombinedChart : View {
             val position = value.first as Int
             val selectedValue = value.second as Int
             if (lastSentValuePos == null) {
-                listener?.onValueSelected(selectedValue, position,)
+                listener?.onValueSelected(selectedValue, position, value.third)
                 lastSentValuePos = position
                 performHapticFeedbackCustom(selectedValue)
             } else {
                 if (lastSentValuePos != position) {
-                    listener?.onValueSelected(selectedValue, position)
+                    listener?.onValueSelected(selectedValue, position, value.third)
                     lastSentValuePos = position
                     performHapticFeedbackCustom(selectedValue)
                 }
@@ -873,19 +868,17 @@ class HRCombinedChart : View {
 
     fun performHapticFeedbackCustom(value: Int) {
         if (value != 0) {
-            this.performHapticFeedback(
-                HapticFeedbackConstants.KEYBOARD_TAP
-            )
+            vibrationUtils?.vibrate(HAPTIC_VIBRATION)
         }
     }
 
-    private fun getClickedValue(touchX: Float): Triple<Int, Int,String> {
+    private fun getClickedValue(touchX: Float): Triple<Int, Int, String> {
         val index = findNumber(toolTipList, touchX)
         return if (index.first < 0) {
             lastSentValuePos = null
-            Triple(0, 0,"")
+            Triple(0, 0, "")
         } else {
-            Triple(index.first, list[index.first]!!.value,index.second)
+            Triple(index.first, list[index.first]!!.value, index.second)
         }
 
         /*  var sectionLast = 0f
@@ -988,9 +981,14 @@ class HRCombinedChart : View {
         if (isHighlighted) return@Runnable
         isInteracting = true
         invalidate()
+
+        vibrationUtils?.vibrate(HAPTIC_VIBRATION)
         listener?.isInteractionOnGoing(true)
-        rootView.performHapticFeedback(
+        /*rootView.performHapticFeedback(
             HapticFeedbackConstants.LONG_PRESS
-        )
+        )*/
+    }
+    fun setVibrationUtil(vibrationUtils: VibrationUtils) {
+        this.vibrationUtils = vibrationUtils
     }
 }

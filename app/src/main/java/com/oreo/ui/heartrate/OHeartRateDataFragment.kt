@@ -20,11 +20,13 @@ import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.ui.sleep.banner.OreoSleepBannerFragment
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class OHeartRateDataFragment :
@@ -33,6 +35,9 @@ class OHeartRateDataFragment :
     private val viewModel: OHeartRateDataViewModel by viewModels()
     private val ARGS_DATE = "ARGS_DATE"
     private val TAG = "HeartRateDataFragment"
+
+    @Inject
+    lateinit var vibrationUtils: VibrationUtils
     private val learnMoreAdapter: OHRLearnMoreAdapter by lazy {
         OHRLearnMoreAdapter(object : OnItemClickListener {
             override fun onItemClick(item: LearnMoreDataModel) {
@@ -84,11 +89,13 @@ class OHeartRateDataFragment :
 
             override fun onValueSelected(value: Int, position: Int, time: String?) {
                 if (value != 0) {
+                    LOGS.d("time to display $time")
                     binding.lytHeartRate.lytSubtitleValue1.tvValue.text = value.toString()
                     binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
                     binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
                     binding.lytHeartRate.tvSubtitle1.text = time
                 } else {
+                    binding.lytHeartRate.tvSubtitle1.text = "-"
                     binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
                     binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
                 }
@@ -98,6 +105,7 @@ class OHeartRateDataFragment :
                 if (onGoing) {
                     binding.lytHeartRate.tvSubtitle2.gone()
                 } else {
+                    binding.lytHeartRate.tvSubtitle1.text = getString(R.string.text_average_hr)
                     binding.lytHeartRate.tvSubtitle2.visible()
                     viewModel.heartRateData.value?.let { updateUI(it, true) }
                 }
@@ -175,6 +183,7 @@ class OHeartRateDataFragment :
         heartRate: OHealthOverview.HeartRateDataModel
     ) {
         binding.lytHeartRate.candleChart.enableInteractiveMode(true)
+        binding.lytHeartRate.candleChart.setVibrationUtil(vibrationUtils)
         binding.lytHeartRate.candleChart.updateData(
             viewModel.hrDataConvertor.getHrCombinedData(
                 dayData, heartRate
