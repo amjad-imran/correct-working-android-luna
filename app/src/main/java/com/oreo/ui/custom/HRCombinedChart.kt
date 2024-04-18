@@ -424,7 +424,7 @@ class HRCombinedChart : View {
     }
 
     private fun drawBottom(canvas: Canvas) {
-        canvas.drawRect(
+        /*canvas.drawRect(
             0f,
             mHeight - bottomWith,
             mWith.toFloat(),
@@ -436,8 +436,89 @@ class HRCombinedChart : View {
                 canvas,
                 mHeight - bottomWith / 3
             )
+        }*/
+        canvas.drawRect(
+            0f, mHeight - bottomWith, mWith.toFloat(), mHeight.toFloat() - dip2px(9f), bgBottomPaint
+        )
+        if (showXAxis) {
+
+//            drawLeftRect(canvas)
+//            drawRightRect(canvas)
+            val halfWidth = (mWith - leftWith - rightWith) / 2
+            val leftHalf = halfWidth / 2
+
+            val edgeTextPadding = dip2px(4f)
+            //end point
+            var xText = "12 am"
+            val textWidth = mTextPaintEdge.measureText(xText)
+            rectF = RectF(
+                (mWith - textWidth - rightWith - dip2px(20f)) - edgeTextPadding * 2,
+                mHeight - bottomWith / 3 - dip2px(13f),
+                mWith - rightWith - dip2px(20f),
+                height.toFloat()
+            )
+            canvas.drawRoundRect(
+                rectF,
+                dip2px(4f).toFloat(),
+                dip2px(4f).toFloat(),
+                edgeTextBackPaint
+            )
+            canvas.drawText(
+                xText,
+                (mWith - textWidth - rightWith) - edgeTextPadding - dip2px(20f),
+                mHeight - bottomWith / 3 + dip2px(2f),
+                mTextPaintEdge
+            )
+            xText = "6 am"
+            xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
+            xTextPaint.color = Color.parseColor("#a3ffffff")
+            canvas.drawText(
+                xText,
+                (leftHalf - xTextBounds?.width()!! / 2).toFloat(),
+                mHeight - bottomWith / 3,
+                xTextPaint
+            )
+            xText = "12 pm"
+            xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
+            xTextPaint.color = Color.parseColor("#a3ffffff")
+            canvas.drawText(
+                xText,
+                (halfWidth - xTextBounds?.width()!! / 2).toFloat(),
+                mHeight - bottomWith / 3,
+                xTextPaint
+            )
+            xText = "6 pm"
+            xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
+            xTextPaint.color = Color.parseColor("#a3ffffff")
+            canvas.drawText(
+                xText,
+                ((halfWidth + leftHalf - xTextBounds?.width()!! / 2 - dip2px(10f)).toFloat()),
+                mHeight - bottomWith / 3,
+                xTextPaint
+            )
+
+            xText = "12 am"
+            val rectF = RectF(
+                leftWith,
+                mHeight - bottomWith / 3 - dip2px(13f),
+                leftWith + mTextPaintEdge.measureText(xText) + edgeTextPadding * 2,
+                height.toFloat()
+            )
+            canvas.drawRoundRect(
+                rectF,
+                dip2px(4f).toFloat(),
+                dip2px(4f).toFloat(),
+                edgeTextBackPaint
+            )
+            canvas.drawText(
+                xText,
+                leftWith + edgeTextPadding.toFloat(),
+                mHeight - bottomWith / 3 + dip2px(2f),
+                mTextPaintEdge
+            )
         }
     }
+
 
     private fun drawLeft(canvas: Canvas) {
         gridPaint.color = gridColor
