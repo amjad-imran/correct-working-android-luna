@@ -41,7 +41,6 @@ import com.oreo.data.model.GraphDummyModel
 import com.oreo.data.model.OWDActivityHRZoneData
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.model.SleepChartModel
-import com.oreo.data.model.WorkoutNudge
 import com.oreo.data.model.WorkoutTypes
 import com.oreo.data.model.health.Nudges
 import com.oreo.ui.activity.all.DELETE_WORKOUT_REQUEST_KEY

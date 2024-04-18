@@ -6,6 +6,7 @@ import com.noisefit_commans.common.maxWithInvalidMovementValues
 import com.noisefit_commans.common.maxWithoutInvalidMovementValues
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.model.HRModel
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
@@ -33,13 +34,13 @@ constructor(
 //        val hrBreakup =
 //            Gson().fromJson<List<Int>>("[10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,4,10,12,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,55,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44]")
 
-        var breakUpData = ArrayList<Int>()
+        var breakUpData = ArrayList<HRModel>()
 
         if (hearRate.listData.isNullOrEmpty()) {
             breakUpData = ArrayList()
         } else {
             hearRate.listData.forEach {
-                breakUpData.add(it.midValues.toInt())
+                breakUpData.add(it)
             }
         }
         val workouts = dayData?.activity?.workout
@@ -85,7 +86,7 @@ constructor(
 
         val items: MutableList<Item> = ArrayList()
         breakUpData.forEachIndexed { index, i ->
-            items.add(Item(i, index))
+            items.add(Item(i.midValues, index, i.minValues, i.maxValues))
         }
         val combinedSection = combineSections(sections)
         return HRCombineModel(

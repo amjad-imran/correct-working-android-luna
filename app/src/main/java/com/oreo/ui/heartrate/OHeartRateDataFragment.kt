@@ -55,7 +55,6 @@ class OHeartRateDataFragment :
     }
 
     private fun loadData() {
-        LOGS.d(TAG, "Today Load data")
         viewModel.date?.let {
             mainViewModel.getDashBoardData(it)?.let { dash ->
                 viewModel.summaryHealthData = dash.first
@@ -107,7 +106,7 @@ class OHeartRateDataFragment :
                 } else {
                     binding.lytHeartRate.tvSubtitle1.text = getString(R.string.text_average_hr)
                     binding.lytHeartRate.tvSubtitle2.visible()
-                    viewModel.heartRateData.value?.let { updateUI(it, true) }
+                    viewModel.heartRateData.value?.let { updateUI(it) }
                 }
 
             }
@@ -151,13 +150,13 @@ class OHeartRateDataFragment :
         viewModel.heartRateData.observe(viewLifecycleOwner) {
             if (it != null) {
                 LOGS.d(TAG, Gson().toJson(it))
-                updateUI(it, false)
+                updateUI(it)
                 initHeartRateGraph(viewModel.summaryHealthData, it)
             }
         }
     }
 
-    private fun updateUI(it: OHealthOverview.HeartRateDataModel, isAvgShown: Boolean) {
+    private fun updateUI(it: OHealthOverview.HeartRateDataModel) {
         if (it.average.toInt() != 0) {
             binding.lytHeartRate.lytSubtitleValue1.tvValue.text = it.average.toInt().toString()
             binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
@@ -166,14 +165,7 @@ class OHeartRateDataFragment :
             binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
             binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
         }
-        var maxValue: Int = 0
-        var minValue: Int = 0
-        LOGS.d("LIST data ${Gson().toJson(it.listData)}")
-        it.listData?.forEach {
-            maxValue = it.maxValues
-            minValue = it.minValues
-        }
-        binding.lytHeartRate.tvSubtitle2.text = "Range $minValue-$maxValue bpm"
+        binding.lytHeartRate.tvSubtitle2.text = "Range ${it.minValues}-${it.maxValues} bpm"
 
 
     }
@@ -195,7 +187,6 @@ class OHeartRateDataFragment :
         super.onViewCreated(view, savedInstanceState)
 
         val date = arguments?.getString(ARGS_DATE)
-        LOGS.d("Current data $date")
         viewModel.date = date
 //        setHRBannerViewPager()
         setRecycler()

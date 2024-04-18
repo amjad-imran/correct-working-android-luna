@@ -29,7 +29,6 @@ import com.bumptech.glide.request.transition.Transition
 import com.noisefit.luna.R
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.ui.heartrate.OnHRClickAction
 import org.joda.time.LocalDateTime
@@ -108,6 +107,8 @@ class HRCombinedChart : View {
     lateinit var edgeTextBackPaint: Paint
     lateinit var mTextPaintEdge: Paint
     private var vibrationUtils: VibrationUtils? = null
+    lateinit var activeBarPaint: Paint
+    lateinit var inActiveBarPaintI: Paint
 
     constructor(context: Context?) : super(context) {
         resMap = HashMap()
@@ -240,6 +241,16 @@ class HRCombinedChart : View {
         chartLineFillPaint.isAntiAlias = true
         xTextBounds = Rect()
         rectF = RectF()
+
+        activeBarPaint = Paint().apply {
+            color =
+                Color.parseColor("#59ff3371")
+        }
+
+        inActiveBarPaintI = Paint().apply {
+            color =
+                Color.parseColor("#26ff3371")
+        }
     }
 
     fun updateData(datas: HRCombineModel?, yAxisCount: Int, minYAxis: Int, maxYAxis: Int) {
@@ -286,7 +297,11 @@ class HRCombinedChart : View {
             topWith,
             0f,
             mHeight - bottomWith,
-            intArrayOf(highColor, mediumColor, lowColor),
+            intArrayOf(
+                Color.parseColor("#ff3371"),
+                Color.parseColor("#ff3371"),
+                Color.parseColor("#ff3371")
+            ),
             floatArrayOf(0f, 0.5f, 1f),
             Shader.TileMode.CLAMP
         )
@@ -502,8 +517,6 @@ class HRCombinedChart : View {
     private fun calculateYAxisValue(yAxisCount: Int): ArrayList<Int> {
         var minHrValue = xMin
         var maxHrValue = max
-        LOGS.d("MIN hr value ${xMin}")
-        LOGS.d("MIN hr max value ${max}")
         xMin = 40
         if (minHrValue in 1..39) {
             maxHrValue = 120
@@ -520,8 +533,6 @@ class HRCombinedChart : View {
         xMin = minHrValue
         max = maxHrValue
 
-        LOGS.d("MIN hr value after ${xMin}")
-        LOGS.d("MIN hr max value after ${max}")
 
 
         return getPointsBetween(maxHrValue, yAxisCount)
@@ -609,7 +620,7 @@ class HRCombinedChart : View {
         if (list.size == 0) {
             return
         }
-        LOGS.d("List size ${list.size}")
+
         unitHLenth = (mWith - leftWith - rightWith - dip2px(20f)) / (list.size - 1)
         val imageSize = dip2px(16f)
         for (i in combineModel!!.sections!!.indices) {
@@ -690,6 +701,39 @@ class HRCombinedChart : View {
                 mHeight - bottomWith - current!!.value * (mHeight - topWith - bottomWith) / (max - xMin)
             path.reset()
             path.moveTo(x, y)
+
+            //for bar draw
+            val barPaints: Paint = if (isInteracting)
+                inActiveBarPaintI
+            else
+                activeBarPaint
+            val corners = floatArrayOf(
+                80f, 80f,   // Top left radius in px
+                80f, 80f,   // Top right radius in px
+                80f, 80f,     // Bottom right radius in px
+                80f, 80f      // Bottom left radius in px
+            )
+            val yTop =
+                mHeight - bottomWith - current.minValue * (mHeight - topWith - bottomWith) / (max - xMin)
+            val yBottom =
+                mHeight - bottomWith - current.maxValue * (mHeight - topWith - bottomWith) / (max - xMin)
+
+            if (current.value > 0) {
+                val rectBar = RectF(
+                    x - 5,
+                    yTop,
+                    x + 5,
+                    yBottom
+                )
+                barPaints.let {
+                    canvas.drawRoundRect(rectBar, dip2px(20f).toFloat(), dip2px(20f).toFloat(), it)
+                    val path = Path()
+                    path.addRoundRect(rectBar, corners, Path.Direction.CW)
+                    canvas.drawPath(path, barPaints)
+                }
+            }
+            //end bar draw
+
             if (i < list.size - 1) {
                 next = list[i + 1]
                 if (current.value > 0) {
@@ -740,8 +784,6 @@ class HRCombinedChart : View {
                         canvas.drawPoint(x, y, chartLinePaint)
                     }
                 }
-
-
                 val startTime = DateFormats.getMidnightDateTime()
                 val formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
                 val startDateTime = LocalDateTime.parse(startTime, formatter)
@@ -988,6 +1030,7 @@ class HRCombinedChart : View {
             HapticFeedbackConstants.LONG_PRESS
         )*/
     }
+
     fun setVibrationUtil(vibrationUtils: VibrationUtils) {
         this.vibrationUtils = vibrationUtils
     }

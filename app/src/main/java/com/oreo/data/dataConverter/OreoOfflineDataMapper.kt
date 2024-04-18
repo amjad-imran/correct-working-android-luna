@@ -358,8 +358,8 @@ constructor(
             }
             listData.add(
                 HRModel(
-                    maxValues = overAllMaxValue,
-                    minValues = overAllMinValue,
+                    maxValues = maxValue,
+                    minValues = minValue,
                     values = sortedBreakUpList,
                     midValues = (maxValue + minValue) / 2
                 )
