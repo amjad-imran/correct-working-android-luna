@@ -2,7 +2,6 @@ package com.oreo.ui.home.summary.paginate
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.session.SessionManager
@@ -16,7 +15,6 @@ import com.noisefit_commans.data.model.User
 import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.data.dataConverter.OreoHRDataConvertor
 import com.oreo.data.model.HRModel
@@ -156,6 +154,12 @@ class SummaryDataViewModel @Inject constructor(
             }
             breakupArray = dummyArray
         }
+        var lastHrValue: Pair<Int, Long>? = null//HR value,timer
+        breakupArray.forEachIndexed { index2, value ->
+            if (value != 0 && value != 255)
+                lastHrValue = Pair(value, 0)
+
+        }
 
         val excludeDataList = arrayListOf<Int>()
         breakupArray.forEach { value ->
@@ -169,7 +173,7 @@ class SummaryDataViewModel @Inject constructor(
         var overAllMinValue = Int.MAX_VALUE
         var overAllMaxValue = -1
         var hrCount = 0
-        var lastHrValue: Pair<Int, Long>? = null//HR value,timer
+//        var lastHrValue: Pair<Int, Long>? = null//HR value,timer
 
         val listData = ArrayList<HRModel>()
         hRWithIntervalList.forEachIndexed { index, hrList ->
@@ -200,16 +204,11 @@ class SummaryDataViewModel @Inject constructor(
                 avgList.add(avg)
             }
 
-            var chunkCumulativeValue = 0
-            sortedBreakUpList.forEach { value ->
-                chunkCumulativeValue += value
-            }
+            /* sortedBreakUpList.forEachIndexed { index2, value ->
+                 val indexMillis = ((index * 6) + index2) * 5 * 60L * 1000L
+                 lastHrValue = Pair(value, indexMillis)
 
-            sortedBreakUpList.forEachIndexed { index2, value ->
-                val indexMillis = ((index * 6) + index2) * 5 * 60L * 1000L
-                lastHrValue = Pair(value, indexMillis)
-
-            }
+             }*/
             //if any change chunk value then divide 12 by that chunk value to get below correct xlabel list
             if (index % 2 == 0) {
                 hrCount += 1

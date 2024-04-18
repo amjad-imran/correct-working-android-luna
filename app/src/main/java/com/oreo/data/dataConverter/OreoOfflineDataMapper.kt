@@ -303,6 +303,12 @@ constructor(
             }
             breakupArray = dummyArray
         }
+        var lastHr = "0"
+        breakupArray.forEachIndexed { index2, value ->
+            if (value != 0 && value != 255)
+                lastHr = value.toString()
+
+        }
         val hRWithIntervalList = breakupArray.chunked(6)
         val avgList = ArrayList<Int>()
         var overAllMinValue = Int.MAX_VALUE
@@ -368,7 +374,6 @@ constructor(
         val average = avgList.average().toFloat()
 
 
-        var lastHr = "0"
         /*if ((lastHrValue ?: 0) > 0) {
             lastHr = lastHrValue.toString()
         }*/

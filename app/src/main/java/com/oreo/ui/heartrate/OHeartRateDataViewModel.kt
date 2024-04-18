@@ -119,7 +119,12 @@ class OHeartRateDataViewModel @Inject constructor(
             }
             breakupArray = dummyArray
         }
+        var lastHrValue: Pair<Int, Long>? = null//HR value,timer
+        breakupArray.forEachIndexed { index2, value ->
+            if (value != 0 && value != 255)
+                lastHrValue = Pair(value, 0)
 
+        }
         val excludeDataList = arrayListOf<Int>()
         breakupArray.forEach { value ->
             if (value == 255) {
@@ -133,7 +138,6 @@ class OHeartRateDataViewModel @Inject constructor(
         var overAllMinValue = Int.MAX_VALUE
         var overAllMaxValue = -1
         var hrCount = 0
-        var lastHrValue: Pair<Int, Long>? = null//HR value,timer
 
         val listData = ArrayList<HRModel>()
         hRWithIntervalList.forEachIndexed { index, hrList ->
@@ -164,16 +168,7 @@ class OHeartRateDataViewModel @Inject constructor(
                 avgList.add(avg)
             }
 
-            var chunkCumulativeValue = 0
-            sortedBreakUpList.forEach { value ->
-                chunkCumulativeValue += value
-            }
 
-            sortedBreakUpList.forEachIndexed { index2, value ->
-                val indexMillis = ((index * 6) + index2) * 5 * 60L * 1000L
-                lastHrValue = Pair(value, indexMillis)
-
-            }
             //if any change chunk value then divide 12 by that chunk value to get below correct xlabel list
             if (index % 2 == 0) {
                 hrCount += 1
