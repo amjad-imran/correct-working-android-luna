@@ -10,12 +10,15 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.OnMapsSdkInitializedCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOWorkoutDetailsV2Binding
 import com.noisefit.oreo.OreoMainViewModel
@@ -23,6 +26,7 @@ import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.models.LocationDataNetwork
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.paintText
 import com.noisefit_commans.ui.showShortToast
@@ -36,9 +40,13 @@ import com.oreo.data.model.GraphDummyModel
 import com.oreo.data.model.OWDActivityHRZoneData
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.model.SleepChartModel
+import com.oreo.data.model.WorkoutNudge
 import com.oreo.data.model.WorkoutTypes
+import com.oreo.data.model.health.Nudges
 import com.oreo.ui.activity.all.DELETE_WORKOUT_REQUEST_KEY
 import com.oreo.ui.custom.OnHeartRateChartClickAction
+import com.oreo.ui.readiness.OreoReadinessBannerFragment
+import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -215,15 +223,7 @@ class OWorkoutDetailsFragmentV2 :
 
         binding.lytTop.lytActivityItem.tvDistanceValue.paintText()
 
-
-        if (it.nudge != null && !it.nudge.title.isNullOrEmpty()) {
-            binding.lytTop.lytCues.apply {
-                root.visible()
-                tvCuesTitle.text = it.nudge.title
-                tvCuesDesc.text = it.nudge.description
-            }
-        }
-
+        setNudgesViewPager(it.nudges)
 
         binding.lytTop.lytActivityItem.ivWorkoutImage.loadImage(
             requireContext(), it.iconUrl
@@ -405,6 +405,43 @@ class OWorkoutDetailsFragmentV2 :
         }
 
     }
+
+    private fun setNudgesViewPager(data: List<WorkoutNudge>?) {
+
+        if (data.isNullOrEmpty()) {
+            binding.lytTop.lytCues.root.gone()
+            return
+        } else {
+            binding.lytTop.lytCues.root.visible()
+        }
+        val fragments = ArrayList<WorkoutNudgeFragment>()
+        data.forEach {
+            fragments.add(WorkoutNudgeFragment.newInstance(it))
+        }
+        val sleepBannerAdapter =
+            OreoSleepBannerAdapter(childFragmentManager, lifecycle, fragments)
+        binding.lytTop.lytCues.vpBannerSlider.apply {
+            clipToPadding = false
+            clipChildren = false
+            offscreenPageLimit = 3
+            setPageTransformer(CompositePageTransformer().apply {
+                addTransformer(MarginPageTransformer(40))
+            })
+            adapter = sleepBannerAdapter
+        }
+
+        TabLayoutMediator(
+            binding.lytTop.lytCues.tabLayout,
+            binding.lytTop.lytCues.vpBannerSlider
+        ) { _, _ -> }.attach()
+
+        if (fragments.size > 1) {
+            binding.lytTop.lytCues.tabLayout.visible()
+        } else {
+            binding.lytTop.lytCues.tabLayout.invisible()
+        }
+    }
+
 
     private fun setAvgHr() {
         binding.lytHeartRate.tvAverageTitle.text = getString(R.string.text_resting_hr)

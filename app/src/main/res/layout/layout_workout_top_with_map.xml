@@ -65,11 +65,11 @@
         android:id="@+id/vMapOverlay"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:visibility="gone"
         android:clickable="true"
         android:elevation="20dp"
         android:focusable="true"
         android:focusableInTouchMode="true"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lytActivityItem"
@@ -110,7 +110,7 @@
 
     <include
         android:id="@+id/lytCues"
-        layout="@layout/layout_workout_detail_cues"
+        layout="@layout/oreo_layout_score_banner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

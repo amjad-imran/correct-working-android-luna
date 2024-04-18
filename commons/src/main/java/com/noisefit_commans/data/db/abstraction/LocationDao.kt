@@ -21,5 +21,5 @@ interface LocationDao {
 
 
     @Query("UPDATE location SET temperature = :temp, weather_status = :status WHERE lat =:lat AND longitude =:lng")
-    fun updateWeatherInfoForLatLong(lat: Double, lng: Double, temp: Double, status: Int)
+    fun updateWeatherInfoForLatLong(lat: Double, lng: Double, temp: Double, status: Int?)
 }
