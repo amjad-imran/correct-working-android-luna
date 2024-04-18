@@ -74,6 +74,7 @@
             lineChart:combineTextSize="16sp"
             lineChart:gridColor="#80FFFFFF"
             lineChart:highColor="#ff3371"
+            lineChart:rightWith="30dp"
             lineChart:layout_constraintBottom_toBottomOf="parent"
             lineChart:layout_constraintEnd_toEndOf="parent"
             lineChart:layout_constraintStart_toStartOf="parent"
@@ -82,8 +83,6 @@
             lineChart:mediumColor="#ff3371"
             lineChart:restLineColor="#40FFFFFF"
             lineChart:topWith="30dp"
-            lineChart:xMax="100"
-            lineChart:xMin="0"
             lineChart:xTextColor="#FFFFFF"
             lineChart:xTextSize="12sp"
             lineChart:yTextSize="12sp" />

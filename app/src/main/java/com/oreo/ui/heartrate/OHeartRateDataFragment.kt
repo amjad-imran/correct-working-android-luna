@@ -66,11 +66,11 @@ class OHeartRateDataFragment :
     }
 
     private fun setUi() {
+
         if (viewModel.summaryHealthData?.date == DateFormats.getCurrentDate(DateFormats.dateFormat3))
             viewModel.getTodayHeartRate()
         else
             viewModel.summaryHealthData?.let { viewModel.parseHealthData(it) }
-
     }
 
     companion object {
