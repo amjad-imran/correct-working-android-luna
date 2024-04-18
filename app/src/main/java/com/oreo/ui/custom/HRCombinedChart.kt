@@ -710,10 +710,8 @@ class HRCombinedChart : View {
                 80f, 80f,     // Bottom right radius in px
                 80f, 80f      // Bottom left radius in px
             )
-            val yTop =
-                mHeight - bottomWith - current.minValue * (mHeight - topWith - bottomWith) / (max - xMin)
-            val yBottom =
-                mHeight - bottomWith - current.maxValue * (mHeight - topWith - bottomWith) / (max - xMin)
+            val yTop =mHeight - bottomWith - (current!!.minValue - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
+            val yBottom =mHeight - bottomWith - (current!!.maxValue - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
 
             if (current.value > 0) {
                 val rectBar = RectF(
