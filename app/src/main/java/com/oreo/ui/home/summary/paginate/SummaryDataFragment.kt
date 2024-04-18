@@ -6,6 +6,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSummaryDataBinding
 import com.noisefit.oreo.BottomNavOption
@@ -219,6 +220,7 @@ class SummaryDataFragment :
 
         viewModel.stateHeartRateCard.observe(viewLifecycleOwner) {
             if (it != null) {
+                LOGS.d("previous day ${Gson().toJson(it)}")
                 setHearRateCardUi(it)
             }
         }
@@ -282,7 +284,7 @@ class SummaryDataFragment :
     private fun setHearRateCardUi(data: OHealthOverview.HeartRateDataModel) {
         val lytHeartRate = binding.lytHeartRate
         lytHeartRate.root.visible()
-        lytHeartRate.candleChart.enableInteractiveMode(true)
+        lytHeartRate.candleChart.enableInteractiveMode(false)
         lytHeartRate.candleChart.updateData(
             viewModel.hrDataConvertor.getHrCombinedData(
                 viewModel.serverUserHealthData, data

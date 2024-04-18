@@ -103,8 +103,6 @@ class HRCombinedChart : View {
     private val toolTipList = ArrayList<Triple<Float, String, Int>>()
     lateinit var bgLine: Paint
     var yAxisCount: Int = 3
-    var minYAxis: Int = 0
-    var maxYAxis: Int = 0
     lateinit var edgeTextBackPaint: Paint
     lateinit var mTextPaintEdge: Paint
 
@@ -247,8 +245,8 @@ class HRCombinedChart : View {
         datas?.items?.let { list.addAll(it) }
         list.reverse()
         this.yAxisCount = yAxisCount
-        this.minYAxis = minYAxis
-        this.maxYAxis = maxYAxis
+        xMin = 40
+        max = maxYAxis
         postInvalidate()
         LOGS.d("HR data ${Gson().toJson(list)}")
     }
@@ -501,50 +499,73 @@ class HRCombinedChart : View {
     }
 
     private fun calculateYAxisValue(yAxisCount: Int): ArrayList<Int> {
-        var minHrValue = minYAxis
-        var maxHrValue = maxYAxis
-        LOGS.d("MIN hr value ${minHrValue}")
+        var minHrValue = xMin
+        var maxHrValue = max
+        LOGS.d("MIN hr value ${xMin}")
         LOGS.d("MIN hr max value ${max}")
-        if (minHrValue == 0) {
-            maxHrValue = 120
-        } else if (minHrValue < 40) {
+        xMin = 40
+        if (minHrValue in 1..39) {
             maxHrValue = 120
             minHrValue = 0
-        } else if (maxHrValue < 120) {
+        }
+
+        if (maxHrValue < 120) {
             maxHrValue = 120
         } else if (maxHrValue < 160) {
             maxHrValue = 160
         } else if (maxHrValue < 200) {
             maxHrValue = 200
         }
-        return getPointsBetween(minHrValue, maxHrValue, yAxisCount)
+        xMin = minHrValue
+        max = maxHrValue
+
+        LOGS.d("MIN hr value after ${xMin}")
+        LOGS.d("MIN hr max value after ${max}")
+
+
+        return getPointsBetween(maxHrValue, yAxisCount)
     }
 
-    private fun getPointsBetween(start: Int, end: Int, numPoints: Int): ArrayList<Int> {
-        val interval = (end - start) / (numPoints + 1)
+    private fun getPointsBetween(end: Int, numPoints: Int): ArrayList<Int> {
         val points = ArrayList<Int>()
-        for (i in 1..numPoints) {
-            when (i) {
-                1 -> {
-                    points.add(roundNearest(start))
-                }
-
-                numPoints -> {
-                    points.add(roundNearest(end))
-                }
-
-                else -> points.add(roundNearest(start + interval * i))
+        if (end == 120) {
+            if (numPoints == 3) {
+                points.add(40)
+                points.add(80)
+                points.add(120)
+            } else {
+                points.add(40)
+                points.add(60)
+                points.add(80)
+                points.add(100)
+                points.add(120)
+            }
+        } else if (end == 160) {
+            if (numPoints == 3) {
+                points.add(40)
+                points.add(100)
+                points.add(160)
+            } else {
+                points.add(40)
+                points.add(70)
+                points.add(100)
+                points.add(130)
+                points.add(160)
+            }
+        } else {
+            if (numPoints == 3) {
+                points.add(40)
+                points.add(120)
+                points.add(200)
+            } else {
+                points.add(40)
+                points.add(80)
+                points.add(120)
+                points.add(160)
+                points.add(200)
             }
         }
         return points
-    }
-    private fun roundNearest(n: Int): Int {
-        // Smaller multiple
-        val a = n / 10 * 10
-        // Larger multiple
-        val b = a + 10
-        // Return of closest of two
-        return if (n - a > b - n) b else a
     }
 
     private fun drawHorizontalTextWithLine(
@@ -580,50 +601,6 @@ class HRCombinedChart : View {
         )
     }
 
-    private fun drawDesc(canvas: Canvas) {
-        if (isInteracting) return
-        rectF.left = mWith - rightWith - shadowWidth
-        rectF.top = topWith
-        rectF.right = mWith - rightWith
-        rectF.bottom = mHeight - bottomWith
-
-        chartLineFillPaint.setShader(linearGradientShadow)
-        canvas.drawRect(rectF, chartLineFillPaint)
-        var high = 0f
-        if (combineModel == null) return
-        if (combineModel!!.high > 0) {
-            high =
-                mHeight - bottomWith - combineModel!!.high * 1f / max * (mHeight - bottomWith - topWith)
-            val highText = "Stressed"
-            paintStressed.getTextBounds(highText, 0, highText.length, xTextBounds)
-            canvas.drawText(
-                highText,
-                mWith - rightWith - xTextBounds!!.width() - dip2px(5f),
-                (high + topWith) / 2 + xTextBounds!!.height() / 2f,
-                paintStressed
-            )
-        }
-        if (combineModel!!.medium > 0) {
-            val medium =
-                mHeight - bottomWith - combineModel!!.medium * 1f / max * (mHeight - bottomWith - topWith)
-            val mediumText = "Focussed"
-            paintFocussed.getTextBounds(mediumText, 0, mediumText.length, xTextBounds)
-            canvas.drawText(
-                mediumText,
-                mWith - rightWith - xTextBounds!!.width() - dip2px(5f),
-                (medium + high) / 2 + xTextBounds!!.height() / 2f,
-                paintFocussed
-            )
-            val lowText = "Calm"
-            paintCalm.getTextBounds(lowText, 0, lowText.length, xTextBounds)
-            canvas.drawText(
-                lowText,
-                mWith - rightWith - xTextBounds!!.width() - dip2px(5f),
-                (medium + mHeight - bottomWith) / 2 + xTextBounds!!.height() / 2f,
-                paintCalm
-            )
-        }
-    }
 
     private fun drawContent(canvas: Canvas) {
         toolTipList.clear()
@@ -631,7 +608,7 @@ class HRCombinedChart : View {
         if (list.size == 0) {
             return
         }
-        unitHLenth = (mWith - leftWith - rightWith) / (list.size - 1)
+        unitHLenth = (mWith - leftWith - rightWith - dip2px(20f)) / (list.size - 1)
         val imageSize = dip2px(16f)
         for (i in combineModel!!.sections!!.indices) {
             val section = combineModel!!.sections!![i]
