@@ -659,7 +659,6 @@ class SummaryDataFragmentToday :
 
         viewModel.stateHeartRateCard.observe(viewLifecycleOwner) {
             if (it != null) {
-                LOGS.d("today ${Gson().toJson(it)}")
                 setHearRateCardUi(it)
             }
         }

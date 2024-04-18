@@ -346,11 +346,6 @@ constructor(
                 avgList.add(avg)
             }
 
-            var chunkCumulativeValue = 0
-            sortedBreakUpList.forEach { value ->
-                chunkCumulativeValue += value
-            }
-
             sortedBreakUpList.forEachIndexed { index2, value ->
                 val indexMillis = ((index * 6) + index2) * 5 * 60L * 1000L
                 lastHrValue = Pair(value, indexMillis)
@@ -382,9 +377,8 @@ constructor(
         /*if (lastHr == "0") {*/
         val lastMeasureValue = ringDataStore.getManualMeasurementValue()
         if (lastMeasureValue != null && (lastMeasureValue.timeStamp) + (60 * 60 * 1000) > System.currentTimeMillis() && lastMeasureValue.value > 0) {
-            lastHr = lastMeasureValue.value.toString()
+//            lastHr = lastMeasureValue.value.toString()
             manualMeasureTime = lastMeasureValue.timeStamp
-
         }
         //}
 
@@ -401,7 +395,7 @@ constructor(
             //LOGS.w("convertHeartRateOverviewData ${lastHrValue?.first} ${lastHrValue?.second} $hrTimestamp  $manualMeasureTime")
 
             if (hrTimestamp > manualMeasureTime) {
-                lastHr = lastHrValue?.first.toString()
+//                lastHr = lastHrValue?.first.toString()
                 manualMeasureTime = hrTimestamp
                 //LOGS.w("convertHeartRateOverviewData new HR set $dayStartTimeStamp + ${lastHrValue?.second} =  $hrTimestamp")
 

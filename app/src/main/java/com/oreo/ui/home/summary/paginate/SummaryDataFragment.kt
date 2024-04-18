@@ -13,6 +13,7 @@ import com.noisefit.oreo.BottomNavOption
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
@@ -153,6 +154,7 @@ class SummaryDataFragment :
 
 
     override fun initListener() {
+        binding.lytHeartRate.bInfo.invisible()
 
         binding.lytHeartRate.bInfo.setOnClickListener {
             viewModel.getContributorInfo("hr")
