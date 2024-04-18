@@ -4,6 +4,7 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.noisefit_commans.models.LocationDataNetwork
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
+import com.oreo.data.model.health.Nudges
 import kotlinx.parcelize.Parcelize
 
 data class OWorkoutDetailsResponseModel(
@@ -44,7 +45,7 @@ data class OWorkoutDetailsResponseModel(
     val iconUrl: String? = null,
     @SerializedName("gps_distance")
     val gpsDistance: Long? = null,
-    val nudges: List<WorkoutNudge>? = null,
+    val nudges: List<Nudges>? = null,
     @SerializedName("daytime_movement")
     val movement: List<Int>? = null,
 
@@ -59,11 +60,3 @@ data class OWorkoutDetailsResponseModel(
 }
 
 data class Weather(val temp: Int? = null, val status: Int? = null)
-
-@Parcelize
-data class WorkoutNudge(
-    @SerializedName("title")
-    val title: String? = null,
-    @SerializedName("description")
-    val description: String? = null,
-) : Parcelable

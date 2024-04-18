@@ -221,8 +221,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         if (data.distance != null && data.distance > 0L) {
 
             val distance = dataUnitConverter.formatDistance(
-                data.distance.toInt(),
-                Units.METRIC
+                data.distance.toInt(), Units.METRIC
             )
             return Triple(distance, "km", "Total Distance")
 
@@ -243,29 +242,20 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
     }
 
     fun getXAxisList(
-        movementList: List<Int>?,
-        startTime: String,
-        endTime: String,
-        duration: Long?
+        movementList: List<Int>?, startTime: String, endTime: String, duration: Long?
     ): List<String?> {
         if (movementList.isNullOrEmpty()) {
-            return MutableList<String>(2, { "" })
-                .apply {
+            return MutableList<String>(2, { "" }).apply {
                     this[0] = startTime.lowercase()
-                    this[1] =
-                        endTime.lowercase()
-                }
-                .toList()
+                    this[1] = endTime.lowercase()
+                }.toList()
         }
 
         val list = arrayOfNulls<String>(movementList.size)
 
-        val startTimeFull =
-            DateFormats.convertTimeIntoTime(
-                startTime,
-                DateFormats.timeFormat12,
-                DateFormats.timeFormat
-            ).split(":")
+        val startTimeFull = DateFormats.convertTimeIntoTime(
+            startTime, DateFormats.timeFormat12, DateFormats.timeFormat
+        ).split(":")
 
 
         val startHr = startTimeFull[0].toInt()
@@ -274,12 +264,9 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         startMin = (5 * (Math.floor(Math.abs(startMin.toDouble() / 5)))).toInt()
 
 
-        val endTimeFull =
-            DateFormats.convertTimeIntoTime(
-                endTime,
-                DateFormats.timeFormat12,
-                DateFormats.timeFormat
-            ).split(":")
+        val endTimeFull = DateFormats.convertTimeIntoTime(
+            endTime, DateFormats.timeFormat12, DateFormats.timeFormat
+        ).split(":")
 
 
         val endHr = endTimeFull[0].toInt()
@@ -309,13 +296,10 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         }
 
 
-        return list
-            .apply {
+        return list.apply {
                 this[0] = startTime.lowercase()
-                this[movementList.size - 1] =
-                    endTime.lowercase()
-            }
-            .toList()
+                this[movementList.size - 1] = endTime.lowercase()
+            }.toList()
     }
 
     fun getCombinedMovement(movement: List<Int>): List<Int> {
@@ -532,6 +516,29 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             4 -> Pair(zone4Indexes, Color.parseColor("#ff8934"))
             5 -> Pair(zone5Indexes, Color.parseColor("#ff3434"))
             else -> Pair(ArrayList(), Color.parseColor("#000000"))
+        }
+    }
+
+
+    /**
+     * 0-> Clear
+     * 2->Thunderstorm
+     * 3->Drizzle
+     * 5->Rain
+     * 6->Snow
+     * 7->Atmosphere
+     * 8->Clouds
+     */
+    fun getWeatherImage(status: Int?): Int {
+        return when (status) {
+            0 -> R.drawable.weather_clear
+            2 -> R.drawable.weather_thunder
+            3 -> R.drawable.weather_drizzle
+            5 -> R.drawable.weather_rainy
+            6 -> R.drawable.weather_snow
+            7 -> R.drawable.weather_haze
+            8 -> R.drawable.weather_cloudy
+            else -> R.drawable.weather_haze
         }
     }
 }
