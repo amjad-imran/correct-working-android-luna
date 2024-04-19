@@ -360,6 +360,7 @@ class OStressDataMovementFragment :
         val total = calm + focused + stressed
 
         binding.lytStressHeader.apply {
+            tvTitle.text = getString(R.string.text_overall_stress)
             tvSubTitle.text = getString(R.string.text_active_stress_definition)
             val hasComparisonData =
                 (stress?.typicalCalm != null && stress.typicalFocused != null && stress.typicalStressed != null)
@@ -427,14 +428,12 @@ class OStressDataMovementFragment :
 
     private fun handleNonActiveStressProgressView(stress: Stress?) {
         LOGS.d("Stress data ${Gson().toJson(stress?.nonActive)}")
-        if (stress?.nonActive == null)
-            return
 
 //        val (calm, focused, stressed) = viewModel.getStressMinutes(stress)
-        val nonActiveData = stress.nonActive
-        val calm = nonActiveData.nonActiveCalm
-        val focused = nonActiveData.nonActiveFocused
-        val stressed = nonActiveData.nonActiveStressed
+        val nonActiveData = stress?.nonActive
+        val calm = nonActiveData?.nonActiveCalm ?: 0
+        val focused = nonActiveData?.nonActiveFocused ?: 0
+        val stressed = nonActiveData?.nonActiveStressed ?: 0
         val total =
             calm + focused + stressed
 
@@ -442,7 +441,7 @@ class OStressDataMovementFragment :
             tvSubTitle.text = getString(R.string.text_inactive_stress_definition)
             tvTitle.text = getString(R.string.text_non_active_stress)
             val hasComparisonData =
-                (nonActiveData.typicalNonActiveCalm != null && nonActiveData.typicalNonActiveFocused != null && nonActiveData.typicalNonActivestressed != null)
+                (nonActiveData?.typicalNonActiveCalm != null && nonActiveData.typicalNonActiveFocused != null && nonActiveData.typicalNonActivestressed != null)
 
             val (hourCalm, minuteCalm) = ApplicationUtils.getFormattedSleepDuration(
                 calm
@@ -488,17 +487,17 @@ class OStressDataMovementFragment :
             handleComparisonsBar(
                 lytCalm,
                 calm,
-                nonActiveData.typicalNonActiveCalm ?: 0,
+                nonActiveData?.typicalNonActiveCalm ?: 0,
                 R.drawable.grad_today_calm,
                 R.drawable.grad_previous_calm
             )
             handleComparisonsBar(
-                lytFocussed, focused, nonActiveData.typicalNonActiveFocused ?: 0,
+                lytFocussed, focused, nonActiveData?.typicalNonActiveFocused ?: 0,
                 R.drawable.grad_today_focused,
                 R.drawable.grad_previous_focused
             )
             handleComparisonsBar(
-                lytStressed, focused, nonActiveData.typicalNonActivestressed ?: 0,
+                lytStressed, focused, nonActiveData?.typicalNonActivestressed ?: 0,
                 R.drawable.grad_today_stressed,
                 R.drawable.grad_previous_stressed
             )
