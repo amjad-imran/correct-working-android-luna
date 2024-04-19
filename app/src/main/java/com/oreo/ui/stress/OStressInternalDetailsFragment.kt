@@ -23,6 +23,7 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 
 private const val DAY_TYPE = "DAY_TYPE"
+private const val FILTER_TYPE = "FILTER_TYPE"
 private const val DATE = "DATE"
 
 @AndroidEntryPoint
@@ -39,17 +40,18 @@ class OStressInternalDetailsFragment :
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
             mViewModel.dayType = it.getString(DAY_TYPE).toString()
+            mViewModel.filterType = it.getString(FILTER_TYPE).toString()
             mViewModel.selectedDate = it.getString(DATE)
         }
-
         mViewModel.getInternalDetailsData()
     }
 
     companion object {
-        fun newInstance(dayType: String, date: String) =
+        fun newInstance(dayType: String, date: String,filterType:String) =
             OStressInternalDetailsFragment().apply {
                 arguments = Bundle().apply {
                     putString(DAY_TYPE, dayType)
+                    putString(FILTER_TYPE, filterType)
                     putString(DATE, date)
                 }
             }

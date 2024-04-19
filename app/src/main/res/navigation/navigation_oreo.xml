@@ -645,6 +645,9 @@
         <argument
             android:name="date"
             app:argType="string" />
+        <argument
+            android:name="cameFrom"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/stressUnderstandingFragment"

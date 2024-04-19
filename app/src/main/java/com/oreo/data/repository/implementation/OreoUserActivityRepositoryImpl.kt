@@ -1850,13 +1850,14 @@ class OreoUserActivityRepositoryImpl(
     //todo endpoint, response, request format will change, once define
     override suspend fun getStressInternalPagesData(
         selectDate: String,
+        dayType: String,
         filterType: String
     ): Flow<Resource<BaseApiResponse<List<StressResultData>>>> {
         ///luna/stress/v1/stress?type=day&date=2024-04-05
         return safeApiCallFlow(dispatcher) {
             val url =
                 "${BuildConfig.OREO_BASE_URL}/stress/v1/stress"
-            remoteDataSource.getStressInternalPageData(url, selectDate, filterType)
+            remoteDataSource.getStressInternalPageData(url, selectDate, dayType,filterType)
         }
     }
 

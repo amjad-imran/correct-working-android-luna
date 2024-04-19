@@ -11,6 +11,7 @@ import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOStressDataMovementBinding
 import com.noisefit.luna.databinding.LayoutStressHeaderSubItemBinding
@@ -89,6 +90,7 @@ class OStressDataMovementFragment :
 
                 val day = viewModel.getDayFromDate(dayData.date)
                 binding.lytStressHeader.tvTypical.text = "vs typical $day"
+                binding.lytInactiveStressHeader.tvTypical.text = "vs typical $day"
 
                 viewModel.defaultMeterData = Pair(
                     dayData.stress?.stressValue?.value,
@@ -109,6 +111,7 @@ class OStressDataMovementFragment :
 
                 setMovementData(combinedData, viewModel.isSelectedMode, -1)
                 handleStressProgressView(dayData.stress)
+                handleNonActiveStressProgressView(dayData.stress)
                 //viewModel.prepareStressActivityData(dayData)
 
                 setNudge(dayData.stress?.nudges)
@@ -186,6 +189,13 @@ class OStressDataMovementFragment :
         binding.lytStressHeader.root.setOnClickListener {
             navigate(R.id.stressInternalParentOreo, Bundle().apply {
                 putString("date", mainViewModel.selectedDate)
+                putString("cameFrom", "active")
+            })
+        }
+        binding.lytInactiveStressHeader.root.setOnClickListener {
+            navigate(R.id.stressInternalParentOreo, Bundle().apply {
+                putString("date", mainViewModel.selectedDate)
+                putString("cameFrom", "inactive")
             })
         }
 
@@ -340,11 +350,86 @@ class OStressDataMovementFragment :
     }
 
     private fun handleStressProgressView(stress: Stress?) {
+        LOGS.d("Stress data ${Gson().toJson(stress)}")
 
         val (calm, focused, stressed) = viewModel.getStressMinutes(stress)
         val total = calm + focused + stressed
 
         binding.lytStressHeader.apply {
+            tvSubTitle.text=getString(R.string.text_active_stress_definition)
+            val hasComparisonData =
+                (stress?.typicalCalm != null && stress.typicalFocused != null && stress.typicalStressed != null)
+
+            val (hourCalm, minuteCalm) = ApplicationUtils.getFormattedSleepDuration(
+                calm
+            )
+            setHourMin(lytCalm.lytHrMn, total, hourCalm, minuteCalm)
+
+            lytCalm.tvCalm.setTextColor(resources.getColor(R.color.stress_nap_calm, null))
+            lytCalm.tvCalm.text = getString(R.string.text_calm)
+
+            val (hourFocused, minuteFocused) = ApplicationUtils.getFormattedSleepDuration(
+                focused
+            )
+
+            setHourMin(lytFocussed.lytHrMn, total, hourFocused, minuteFocused)
+
+            lytFocussed.tvCalm.setTextColor(resources.getColor(R.color.stress_nap_focussed, null))
+            lytFocussed.tvCalm.text = getString(R.string.text_focussed)
+
+            val (hourStressed, minuteStressed) = ApplicationUtils.getFormattedSleepDuration(
+                stressed
+            )
+            setHourMin(lytStressed.lytHrMn, total, hourStressed, minuteStressed)
+
+            lytStressed.tvCalm.setTextColor(resources.getColor(R.color.stress_nap_stressed, null))
+            lytStressed.tvCalm.text = getString(R.string.text_stressed)
+
+            lytStressed.view1.gone()
+
+            if (hasComparisonData) {
+                lytCalm.lytComparison.visible()
+                lytFocussed.lytComparison.visible()
+                lytStressed.lytComparison.visible()
+            } else {
+                lytCalm.lytComparison.gone()
+                lytCalm.view1.gone()
+                lytFocussed.lytComparison.gone()
+                lytFocussed.view1.gone()
+                lytStressed.lytComparison.gone()
+                lytStressed.view1.gone()
+                return@apply
+            }
+
+            handleComparisonsBar(
+                lytCalm,
+                calm,
+                stress?.typicalCalm ?: 0,
+                R.drawable.grad_today_calm,
+                R.drawable.grad_previous_calm
+            )
+            handleComparisonsBar(
+                lytFocussed, focused, stress?.typicalFocused ?: 0,
+                R.drawable.grad_today_focused,
+                R.drawable.grad_previous_focused
+            )
+            handleComparisonsBar(
+                lytStressed, focused, stress?.typicalStressed ?: 0,
+                R.drawable.grad_today_stressed,
+                R.drawable.grad_previous_stressed
+            )
+        }
+    }
+
+    private fun handleNonActiveStressProgressView(stress: Stress?) {
+        LOGS.d("Stress data ${Gson().toJson(stress)}")
+
+        val (calm, focused, stressed) = viewModel.getStressMinutes(stress)
+        val total = calm + focused + stressed
+
+        binding.lytInactiveStressHeader.apply {
+            tvSubTitle.text=getString(R.string.text_inactive_stress_definition)
+            tvTitle.text = getString(R.string.text_non_active_stress)
             val hasComparisonData =
                 (stress?.typicalCalm != null && stress.typicalFocused != null && stress.typicalStressed != null)
 

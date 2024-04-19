@@ -31,12 +31,16 @@ class OStressInternalParentFragment :
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Day"))
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Week"))
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Month"))
-        binding.lytToolbar.tvTitle.text = getString(R.string.text_overall_stress)
+        if (args.cameFrom == "active")
+            binding.lytToolbar.tvTitle.text = getString(R.string.text_overall_stress)
+        else
+            binding.lytToolbar.tvTitle.text = getString(R.string.text_non_active_stress)
 
         loadFragment(
             OStressInternalDetailsFragment.newInstance(
                 "Day",
-                args.date
+                args.date,
+                args.cameFrom
             )
         )
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -46,23 +50,28 @@ class OStressInternalParentFragment :
                         loadFragment(
                             OStressInternalDetailsFragment.newInstance(
                                 "Day",
-                                args.date
+                                args.date,
+                                args.cameFrom
                             )
                         )
                     }
+
                     1 -> {
                         loadFragment(
                             OStressInternalDetailsFragment.newInstance(
                                 "Week",
-                                args.date
+                                args.date,
+                                args.cameFrom
                             )
                         )
                     }
+
                     else -> {
                         loadFragment(
                             OStressInternalDetailsFragment.newInstance(
                                 "Month",
-                                args.date
+                                args.date,
+                                args.cameFrom
                             )
                         )
                     }

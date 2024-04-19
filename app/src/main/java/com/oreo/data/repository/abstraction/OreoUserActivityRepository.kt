@@ -114,6 +114,7 @@ interface OreoUserActivityRepository {
     suspend fun removeNap(id: Int): Boolean
     suspend fun getStressInternalPagesData(
         selectDate: String,
+        dayType: String,
         filterType: String
     ): Flow<Resource<BaseApiResponse<List<StressResultData>>>>
 }

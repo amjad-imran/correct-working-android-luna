@@ -196,6 +196,27 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/lytStressHeader" />
 
+            <include
+                android:id="@+id/lytInactiveStressHeader"
+                layout="@layout/layout_stress_header_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/side_margin"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="@dimen/side_margin"
+                app:layout_constraintTop_toBottomOf="@id/divider3" />
+
+
+            <View
+                android:id="@+id/divider4"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="24dp"
+                android:background="@color/divider_color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lytInactiveStressHeader" />
+
             <TextView
                 android:id="@+id/tvHow"
                 style="@style/S16"
@@ -206,7 +227,7 @@
                 android:text="@string/text_how_it_works"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/divider3"
+                app:layout_constraintTop_toBottomOf="@id/divider4"
                 tools:visibility="visible" />
 
 

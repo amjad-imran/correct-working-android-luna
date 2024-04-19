@@ -847,7 +847,8 @@ interface NetworkService {
     suspend fun getStressInternalPageData(
         @Url url: String,
         @Query("date") selectDate: String,
-        @Query("type") filterType: String
+        @Query("type") dayType: String,
+        @Query("filter_type") filterType: String
     ): BaseApiResponse<List<StressResultData>>
     /**
      * ---------------------------------------------------------------------------------

@@ -30,6 +30,7 @@ class OSIDViewModel @Inject constructor(
     var selectedData = MutableLiveData<StressResultData>()
 
     var dayType: String? = null
+    var filterType: String? = null
     var selectedDate: String? = null
 
     private val _internalDetailsData = MutableLiveData<List<StressResultData>>()
@@ -40,7 +41,7 @@ class OSIDViewModel @Inject constructor(
     fun getInternalDetailsData() {
         viewModelScope.launch {
             userActivityRepository.getStressInternalPagesData(
-                selectedDate!!, dayType.toString().lowercase()
+                selectedDate!!, dayType.toString().lowercase(), filterType.toString().lowercase()
             ).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
