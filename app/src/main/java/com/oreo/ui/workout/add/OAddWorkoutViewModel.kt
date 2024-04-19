@@ -1,5 +1,6 @@
 package com.oreo.ui.workout.add
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -21,6 +22,7 @@ import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.OAddWorkout
+import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,6 +30,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.joda.time.Interval
+import org.joda.time.LocalDateTime
+import org.joda.time.format.DateTimeFormat
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.math.roundToInt
@@ -41,6 +46,8 @@ class OAddWorkoutViewModel
     private val userHealthDataDataSource: OreoUserHealthDataDataSource,
     val sessionManager: SessionManager
 ) : BaseViewModel() {
+
+    var userDayData: ServerUserHealthData? = null
 
     val minimumWorkoutTime = 20
     val maxWorkoutTime = 180
@@ -102,6 +109,7 @@ class OAddWorkoutViewModel
                 addWorkout.endMinute = endArray[1].toInt()
             }
         }
+
         autoSport.postValue(true)
     }
 
@@ -151,6 +159,89 @@ class OAddWorkoutViewModel
         }
     }
 
+    fun checkIfAnyEventExists(startTime: String, endTime: String): String? {
+
+        LOGS.d(
+            "checkIfAndEventExists() called with: startTime = $startTime, endTime = $endTime"
+        )
+
+        if (userDayData == null) return null
+
+        val formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
+
+        val workoutStartTime = LocalDateTime.parse("${userDayData!!.date} $startTime:00", formatter)
+        val workoutEndTime = LocalDateTime.parse("${userDayData!!.date} $endTime:00", formatter)
+
+
+        var hasOverlappingWorkout = false
+        userDayData?.activity?.workout?.forEach {
+            LOGS.d("checkIfAndEventExists   Workouts->  ${it.startTime}  ${it.endTime}")
+
+            val wStartTime = LocalDateTime.parse("${it.date} ${it.startTime}", formatter)
+            val wEndTime = LocalDateTime.parse("${it.date} ${it.endTime}", formatter)
+
+            if (workoutStartTime in wStartTime..wEndTime || workoutEndTime in wStartTime..wEndTime) {
+                hasOverlappingWorkout = true
+                return@forEach
+            }
+
+            if (wStartTime in workoutStartTime..workoutEndTime || wEndTime in workoutStartTime..workoutEndTime) {
+                hasOverlappingWorkout = true
+                return@forEach
+            }
+        }
+        if (hasOverlappingWorkout) {
+            return "Workout in this time frame already exists."
+        }
+
+        var hasOverlappingNap = false
+        userDayData?.sleep?.naps?.forEach {
+            LOGS.d("checkIfAndEventExists   Naps->  ${it.startTime}  ${it.endTime}")
+
+            val wStartTime = LocalDateTime.parse(it.startTime, formatter)
+            val wEndTime = LocalDateTime.parse(it.endTime, formatter)
+
+            if (workoutStartTime in wStartTime..wEndTime || workoutEndTime in wStartTime..wEndTime) {
+                hasOverlappingNap = true
+                return@forEach
+            }
+
+            if (wStartTime in workoutStartTime..workoutEndTime || wEndTime in workoutStartTime..workoutEndTime) {
+                hasOverlappingNap = true
+                return@forEach
+            }
+        }
+        if (hasOverlappingNap) {
+            return "Nap in this time frame already exists."
+        }
+
+        var hasOverlappingSleep = false
+        userDayData?.sleep?.let {
+
+            val sleepStart = it.hourly_breakup?.firstOrNull()?.start_time
+            val sleepEnd = it.hourly_breakup?.lastOrNull()?.end_time
+
+            if (sleepStart != null && sleepEnd != null) {
+                LOGS.d("checkIfAndEventExists   Sleep->  ${sleepStart}  ${sleepEnd}")
+                val wStartTime = LocalDateTime.parse(sleepStart, formatter)
+                val wEndTime = LocalDateTime.parse(sleepEnd, formatter)
+
+                if (workoutStartTime in wStartTime..wEndTime || workoutEndTime in wStartTime..wEndTime) {
+                    hasOverlappingSleep = true
+                }
+
+                if (wStartTime in workoutStartTime..workoutEndTime || wEndTime in workoutStartTime..workoutEndTime) {
+                    hasOverlappingSleep = true
+                }
+            }
+        }
+
+        if (hasOverlappingSleep) {
+            return "Sleep in this time frame already exists."
+        }
+        return null
+    }
+
     fun addWorkout() {
 
         val type = if (workoutListModal?.activityType?.isNotEmpty() == true) {
@@ -158,6 +249,14 @@ class OAddWorkoutViewModel
         } else {
             activityType
         }
+
+        val existMessage = checkIfAnyEventExists(addWorkout.startTimeIn24H, addWorkout.endTimeIn24H)
+
+        if (existMessage.isNullOrEmpty().not()) {
+            sendMessage(existMessage)
+            return
+        }
+
         viewModelScope.launch(Dispatchers.IO) {
             val requestObject = JsonObject().apply {
                 this.addProperty("duration", addWorkout.duration)

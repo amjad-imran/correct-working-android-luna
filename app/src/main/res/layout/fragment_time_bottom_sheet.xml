@@ -22,6 +22,7 @@
             tools:listitem="@layout/fragment_privacy_bottom_dialog_list_dialog_item">
 
             <View
+                android:id="@+id/view33"
                 android:layout_width="40dp"
                 android:layout_height="2dp"
                 android:layout_marginTop="8dp"
@@ -57,13 +58,44 @@
                 app:layout_constraintStart_toStartOf="@+id/tvTitle"
                 app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
+            <LinearLayout
+                android:id="@+id/lytMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:orientation="horizontal"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/timePicker">
+
+
+                <TextView
+                    style="@style/S12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_note"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/tvMessage"
+                    style="@style/S12"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textColor="@color/white_64"
+                    tools:text="Workout in this time frame already exists." />
+
+            </LinearLayout>
+
 
             <Button
                 android:id="@+id/btnCancel"
                 style="@style/SecondaryButtonStyle"
                 android:layout_width="0dp"
                 android:layout_marginStart="@dimen/side_margin"
-                android:layout_marginTop="@dimen/dimen_16dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginEnd="@dimen/dimen_12dp"
                 android:layout_marginBottom="@dimen/dimen_24dp"
                 android:text="@string/text_cancel"
@@ -81,7 +113,7 @@
                 style="@style/PrimaryButtonStyle"
                 android:layout_width="0dp"
                 android:layout_marginStart="@dimen/dimen_12dp"
-                android:layout_marginTop="@dimen/dimen_16dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginEnd="@dimen/dimen_24dp"
                 android:layout_marginBottom="@dimen/dimen_24dp"
                 android:text="@string/text_done"

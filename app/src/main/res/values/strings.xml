@@ -1093,6 +1093,7 @@
     <string name="text_non_active_stress">Non-active stress</string>
     <string name="text_active_stress_definition">Overall stress measures your body’s physiological stress throughout the day, including while exercising or sleeping.</string>
     <string name="text_inactive_stress_definition">Non active stress measures your body’s physiological stress outside of sleep and exercise.</string>
+    <string name="text_note">Note</string>
 
 
 </resources>
