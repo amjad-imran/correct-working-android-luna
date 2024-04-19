@@ -419,7 +419,7 @@ class OStressDataMovementFragment :
                 R.drawable.grad_previous_focused
             )
             handleComparisonsBar(
-                lytStressed, focused, stress?.typicalStressed ?: 0,
+                lytStressed, stressed, stress?.typicalStressed ?: 0,
                 R.drawable.grad_today_stressed,
                 R.drawable.grad_previous_stressed
             )
@@ -497,7 +497,7 @@ class OStressDataMovementFragment :
                 R.drawable.grad_previous_focused
             )
             handleComparisonsBar(
-                lytStressed, focused, nonActiveData?.typicalNonActivestressed ?: 0,
+                lytStressed, stressed, nonActiveData?.typicalNonActivestressed ?: 0,
                 R.drawable.grad_today_stressed,
                 R.drawable.grad_previous_stressed
             )
