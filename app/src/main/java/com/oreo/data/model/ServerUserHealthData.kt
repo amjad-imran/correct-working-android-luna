@@ -55,8 +55,10 @@ data class Stress(
     val typicalFocused: Int? = null,
     @SerializedName("typical_stressed")
     val typicalStressed: Int? = null,
+    @SerializedName("non_active")
+    val nonActive: NonActive? = null
 
-    )
+)
 
 data class StressValue(
     val value: Int? = null,
@@ -74,4 +76,19 @@ data class StressNudge(
 
 data class DataBreakup(
     val break_up: List<Int>
+)
+
+data class NonActive(
+    @SerializedName("non_active_calm")
+    val nonActiveCalm: Int,
+    @SerializedName("non_active_focused")
+    val nonActiveFocused: Int,
+    @SerializedName("non_active_stressed")
+    val nonActiveStressed: Int,
+    @SerializedName("typical_non_active_calm")
+    val typicalNonActiveCalm: Int?=null,
+    @SerializedName("typical_non_active_focused")
+    val typicalNonActiveFocused: Int?=null,
+    @SerializedName("typical_non_active_stressed")
+    val typicalNonActivestressed: Int?=null
 )

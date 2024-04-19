@@ -22,22 +22,17 @@ import com.noisefit.luna.databinding.LayoutStressHeaderSubItemBinding
 import com.noisefit.luna.databinding.OreoLayoutHourMnBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.util.ApplicationUtils
-import com.noisefit_commans.data.enums.StressType
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
-import com.noisefit_commans.utils.MoEngageAppEventParams
-import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.Stress
 import com.oreo.data.model.StressNudge
-import com.oreo.data.model.health.Nudges
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
-import com.oreo.ui.sleep.banner.OreoSleepBannerFragment
 import com.oreo.ui.stress.banner.OreoStressBannerFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -365,7 +360,7 @@ class OStressDataMovementFragment :
         val total = calm + focused + stressed
 
         binding.lytStressHeader.apply {
-            tvSubTitle.text=getString(R.string.text_active_stress_definition)
+            tvSubTitle.text = getString(R.string.text_active_stress_definition)
             val hasComparisonData =
                 (stress?.typicalCalm != null && stress.typicalFocused != null && stress.typicalStressed != null)
 
@@ -431,16 +426,23 @@ class OStressDataMovementFragment :
     }
 
     private fun handleNonActiveStressProgressView(stress: Stress?) {
-        LOGS.d("Stress data ${Gson().toJson(stress)}")
+        LOGS.d("Stress data ${Gson().toJson(stress?.nonActive)}")
+        if (stress?.nonActive == null)
+            return
 
-        val (calm, focused, stressed) = viewModel.getStressMinutes(stress)
-        val total = calm + focused + stressed
+//        val (calm, focused, stressed) = viewModel.getStressMinutes(stress)
+        val nonActiveData = stress.nonActive
+        val calm = nonActiveData.nonActiveCalm
+        val focused = nonActiveData.nonActiveFocused
+        val stressed = nonActiveData.nonActiveStressed
+        val total =
+            calm + focused + stressed
 
         binding.lytInactiveStressHeader.apply {
-            tvSubTitle.text=getString(R.string.text_inactive_stress_definition)
+            tvSubTitle.text = getString(R.string.text_inactive_stress_definition)
             tvTitle.text = getString(R.string.text_non_active_stress)
             val hasComparisonData =
-                (stress?.typicalCalm != null && stress.typicalFocused != null && stress.typicalStressed != null)
+                (nonActiveData.typicalNonActiveCalm != null && nonActiveData.typicalNonActiveFocused != null && nonActiveData.typicalNonActivestressed != null)
 
             val (hourCalm, minuteCalm) = ApplicationUtils.getFormattedSleepDuration(
                 calm
@@ -486,17 +488,17 @@ class OStressDataMovementFragment :
             handleComparisonsBar(
                 lytCalm,
                 calm,
-                stress?.typicalCalm ?: 0,
+                nonActiveData.typicalNonActiveCalm ?: 0,
                 R.drawable.grad_today_calm,
                 R.drawable.grad_previous_calm
             )
             handleComparisonsBar(
-                lytFocussed, focused, stress?.typicalFocused ?: 0,
+                lytFocussed, focused, nonActiveData.typicalNonActiveFocused ?: 0,
                 R.drawable.grad_today_focused,
                 R.drawable.grad_previous_focused
             )
             handleComparisonsBar(
-                lytStressed, focused, stress?.typicalStressed ?: 0,
+                lytStressed, focused, nonActiveData.typicalNonActivestressed ?: 0,
                 R.drawable.grad_today_stressed,
                 R.drawable.grad_previous_stressed
             )
