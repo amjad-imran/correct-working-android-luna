@@ -259,6 +259,18 @@
         <argument
             android:name="minute"
             app:argType="integer" />
+
+        <argument
+            android:name="hourOther"
+            app:argType="integer" />
+        <argument
+            android:name="minuteOther"
+            app:argType="integer" />
+
+        <argument
+            android:name="isStart"
+            app:argType="integer" />
+
         <argument
             android:name="unitPosition"
             app:argType="integer" />

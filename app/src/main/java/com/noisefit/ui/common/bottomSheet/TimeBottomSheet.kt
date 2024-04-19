@@ -4,9 +4,16 @@ import android.os.Bundle
 import android.view.View
 import android.widget.DatePicker
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.viewModels
 import com.noisefit.luna.databinding.FragmentTimeBottomSheetBinding
+import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.DateFormats
+import com.oreo.ui.workout.add.OAddWorkoutViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 const val TIME_REQUEST_KEY = "TIME_REQUEST_KEY"
@@ -16,11 +23,18 @@ class TimeBottomSheet : BaseBottomSheetWithTransparent<FragmentTimeBottomSheetBi
     FragmentTimeBottomSheetBinding::inflate
 ) {
 
+    private val viewModel: OAddWorkoutViewModel by viewModels()
+    private val mainViewModel: OreoMainViewModel by activityViewModels()
+
 
     private var mHour: Int = 0
     private var title: String = ""
     private var mMinute: Int = 0
     private var mUnitPosition = 0
+
+    private var mHourOther: Int = 0
+    private var mMinuteOther: Int = 0
+    private var isStart: Int = 0
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -31,7 +45,14 @@ class TimeBottomSheet : BaseBottomSheetWithTransparent<FragmentTimeBottomSheetBi
             mMinute = args.minute
             mHour = args.hour
             title = args.title
+            mHourOther = args.hourOther
+            mMinuteOther = args.minuteOther
+            isStart = args.isStart
             mUnitPosition = args.unitPosition
+
+           /* viewModel.userDayData =
+                mainViewModel.userHealthData[DateFormats.getTodaysDateString(10)]*/
+
             initUi()
         }
 
@@ -57,6 +78,31 @@ class TimeBottomSheet : BaseBottomSheetWithTransparent<FragmentTimeBottomSheetBi
             navigateUpSafe()
         }
         binding.btnAllow.setOnClickListener {
+
+           /* val existMessage =
+                if (isStart == 1) {
+                    viewModel.checkIfAnyEventExists(
+                        String.format("%02d:%02d", mHour, mMinute),
+                        String.format("%02d:%02d", mHourOther, mMinuteOther)
+                    )
+                } else {
+                    viewModel.checkIfAnyEventExists(
+                        String.format(
+                            "%02d:%02d",
+                            mHourOther,
+                            mMinuteOther
+                        ), String.format("%02d:%02d", mHour, mMinute)
+                    )
+                }
+
+            if (existMessage.isNullOrEmpty().not()) {
+                binding.lytMessage.visible()
+                binding.tvMessage.text = existMessage
+                return@setOnClickListener
+            } else {
+                binding.lytMessage.gone()
+            }*/
+
             setFragmentResult(
                 TIME_REQUEST_KEY,
                 bundleOf("hour" to mHour, "minute" to mMinute, "unit" to mUnitPosition)

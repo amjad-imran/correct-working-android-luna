@@ -1079,6 +1079,7 @@
     <string name="text_keep_the_luna_ring_app_running_so_your_data_can_stay_upto_date">Keep the Luna ring app running so your data can stay upto date</string>
     <string name="text_learn_more_desc1">Stress encompasses both physical and mental responses to internal and external factors. When managed well, stress can foster personal growth in productivity, creativity, and resilience. \n\nStress tracking via Luna Ring relies on understanding of the autonomic nervous system (ANS), indicating stress levels and recovery processes. For instance, a lower-than-usual HRV may indicate an overworked sympathetic nervous system, while a faster resting heart rate may signify a stress response. \n\nApart from stress zones, you can examine the correlation between activity and physiological stress. Access this feature by tapping the downward arrow on your stress graph. For instance, it helps you identify times when stress occurred despite absence of medium or high-intensity movement. \n\nYour Luna ring measures physiological stress your body experiences over the course of the entire day. Non-Activity stress measures stress experienced outside of sleep workouts. Reviewing this breakdown can provide insights into how your body accumulates and manages stress triggered by emotional or interpersonal factors.</string>
     <string name="text_heart_rate_graph">Heart rate graph</string>
+    <string name="text_note">Note</string>
 
 
 </resources>
