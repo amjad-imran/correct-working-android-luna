@@ -3,7 +3,6 @@ package com.oreo.ui.workout.details
 import android.annotation.SuppressLint
 import android.content.res.Resources
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
@@ -29,7 +28,6 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
-import com.noisefit_commans.ui.paintText
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
@@ -45,10 +43,9 @@ import com.oreo.data.model.WorkoutTypes
 import com.oreo.data.model.health.Nudges
 import com.oreo.ui.activity.all.DELETE_WORKOUT_REQUEST_KEY
 import com.oreo.ui.custom.OnHeartRateChartClickAction
+import com.oreo.ui.custom.WorkaroundMapFragment
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import eightbitlab.com.blurview.RenderEffectBlur
-import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

@@ -33,10 +33,11 @@ class DefaultLocationClient(
             val isNetworkEnabled =
                 locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
             if (!isGpsEnabled && !isNetworkEnabled) {
-                throw LocationClient.LocationException("GPS is disabled")
+                throw LocationClient.LocationException("GPS/Network is disabled")
             }
 
             val request = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(interval)
                 .setFastestInterval(interval)
 

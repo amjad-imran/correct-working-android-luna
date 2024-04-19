@@ -246,9 +246,9 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
     ): List<String?> {
         if (movementList.isNullOrEmpty()) {
             return MutableList<String>(2, { "" }).apply {
-                    this[0] = startTime.lowercase()
-                    this[1] = endTime.lowercase()
-                }.toList()
+                this[0] = startTime.lowercase()
+                this[1] = endTime.lowercase()
+            }.toList()
         }
 
         val list = arrayOfNulls<String>(movementList.size)
@@ -297,9 +297,9 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
 
 
         return list.apply {
-                this[0] = startTime.lowercase()
-                this[movementList.size - 1] = endTime.lowercase()
-            }.toList()
+            this[0] = startTime.lowercase()
+            this[movementList.size - 1] = endTime.lowercase()
+        }.toList()
     }
 
     fun getCombinedMovement(movement: List<Int>): List<Int> {
