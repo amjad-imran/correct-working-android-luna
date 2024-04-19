@@ -1,8 +1,6 @@
 package com.oreo.data.dataConverter
 
 import android.graphics.Color
-import com.google.gson.Gson
-import com.noisefit.data.local.db.fromJson
 import com.noisefit.luna.R
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
@@ -75,21 +73,23 @@ constructor(
             }
         }
 
+        var hasData = false
         val items: MutableList<Item> = ArrayList<Item>()
 
         dayData.stress?.breakUp?.forEachIndexed { index, i ->
+            hasData = true
             items.add(Item(i, index))
         }
 
         if (items.isEmpty()) {
+            hasData = false
             for (i in 0 until 96) {
                 items.add(Item(0, i))
             }
         }
 
 
-        val combinedSection = combineSections(sections)
-
+        val combinedSection = if (hasData) combineSections(sections) else ArrayList()
 
         return StressCombineModel(
             sections = combinedSection,
