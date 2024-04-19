@@ -142,28 +142,16 @@
                 android:layout_marginTop="24dp"
                 app:layout_constraintTop_toBottomOf="@id/viewClose" />
 
-            <TextView
-                android:id="@+id/tvBannerHeader"
-                style="@style/H5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/side_margin"
-                android:layout_marginTop="24dp"
-                android:text="@string/text_luna_cues"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/divider1" />
-
-            <include
+     <include
                 android:id="@+id/lytStressBanner"
-                layout="@layout/layout_stress_banner_item"
+                layout="@layout/oreo_layout_score_banner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/side_margin"
-                android:layout_marginTop="12dp"
                 android:layout_marginEnd="@dimen/side_margin"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvBannerHeader" />
+                app:layout_constraintTop_toBottomOf="@id/divider1" />
 
             <View
                 android:id="@+id/divider2"

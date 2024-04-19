@@ -11,6 +11,10 @@ import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOStressDataMovementBinding
@@ -21,13 +25,20 @@ import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.enums.StressType
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageAppEventParams
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.Stress
 import com.oreo.data.model.StressNudge
+import com.oreo.data.model.health.Nudges
+import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
+import com.oreo.ui.sleep.banner.OreoSleepBannerFragment
+import com.oreo.ui.stress.banner.OreoStressBannerFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.math.abs
@@ -113,9 +124,7 @@ class OStressDataMovementFragment :
                 handleStressProgressView(dayData.stress)
                 handleNonActiveStressProgressView(dayData.stress)
                 //viewModel.prepareStressActivityData(dayData)
-
-                setNudge(dayData.stress?.nudges)
-
+                setStressBannerViewPager(dayData.stress?.nudges)
                 viewModel.prepareStressActivityData(dayData)
 
             }
@@ -498,30 +507,59 @@ class OStressDataMovementFragment :
         return (progress / total).times(100).roundToInt()
     }
 
-    private fun setNudge(nudges: List<StressNudge>?) {
-        if (nudges.isNullOrEmpty()) {
+    private fun setStressBannerViewPager(data: List<StressNudge>?) {
+        if (data.isNullOrEmpty()) {
             binding.lytStressBanner.root.gone()
-            binding.tvBannerHeader.gone()
             binding.divider1.root.gone()
             return
-        }
-        binding.tvBannerHeader.visible()
-        binding.lytStressBanner.root.visible()
-        binding.divider1.root.visible()
-
-        val stressType = nudges.first().value?.lowercase()
-        if (stressType.equals(StressType.CALM.name.lowercase())) {
-            binding.lytStressBanner.rootView.setBackgroundResource(R.drawable.ic_st_calm_cue_bg)
-        } else if (stressType.equals(StressType.FOCUSED.name.lowercase())) {
-            binding.lytStressBanner.rootView.setBackgroundResource(R.drawable.ic_st_focus_cue_bg)
-        } else if (stressType.equals(StressType.STRESSED.name.lowercase())) {
-            binding.lytStressBanner.rootView.setBackgroundResource(R.drawable.ic_st_stress_cue_bg)
         } else {
-            binding.lytStressBanner.rootView.setBackgroundResource(com.noisefit_commans.R.drawable.back_modal_new)
+            binding.lytStressBanner.root.visible()
+            binding.divider1.root.visible()
         }
 
-        binding.lytStressBanner.tvTitle.text = nudges.first().label
-        binding.lytStressBanner.tvDescription.text = nudges.first().message
+        val fragments = ArrayList<OreoStressBannerFragment>()
+
+        data.forEach {
+            fragments.add(OreoStressBannerFragment.newInstance(it))
+        }
+
+        val winsAdapter =
+            OreoSleepBannerAdapter(childFragmentManager, lifecycle, fragments)
+        binding.lytStressBanner.vpBannerSlider.apply {
+            clipToPadding = false
+            clipChildren = false
+            offscreenPageLimit = 3
+            setPageTransformer(CompositePageTransformer().apply {
+                addTransformer(MarginPageTransformer(40))
+            })
+            adapter = winsAdapter
+        }
+
+        TabLayoutMediator(
+            binding.lytStressBanner.tabLayout,
+            binding.lytStressBanner.vpBannerSlider
+        ) { _, _ -> }.attach()
+
+        binding.lytStressBanner.vpBannerSlider.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+
+
+            }
+
+        })
+
+        if (fragments.size > 1) {
+            binding.lytStressBanner.tabLayout.visible()
+        } else {
+            binding.lytStressBanner.tabLayout.invisible()
+        }
+
 
     }
 
