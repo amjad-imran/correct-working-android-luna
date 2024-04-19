@@ -7,9 +7,11 @@ apply {
 plugins {
     id("com.android.library")
     id("kotlin-android")
+    kotlin("android")
+    id("kotlin-kapt")
 }
-android{
-    buildFeatures{
+android {
+    buildFeatures {
         dataBinding = true
         viewBinding = true
     }
@@ -25,7 +27,7 @@ dependencies {
     "implementation"(XLog.log)
     "implementation"(Retrofit.retrofit)
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    "annotationProcessor"(Room.Compiler)
+    kapt(Room.Compiler)
     "implementation"(Room.ktx)
     "implementation"(Maps.mapUtils)
     "implementation"("net.danlew:android.joda:2.12.1")

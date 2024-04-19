@@ -34,7 +34,7 @@
 
         <TextView
             android:id="@+id/tvActivityName"
-            style="@style/S28"
+            style="@style/S18"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="12dp"
@@ -88,7 +88,6 @@
             android:layout_marginStart="4dp"
             android:layout_marginBottom="2dp"
             android:textColor="@color/white_48"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/tvDurationValue"
             app:layout_constraintStart_toEndOf="@id/tvDurationValue"
             tools:text=":19" />

@@ -23,12 +23,12 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleService
 import com.google.gson.JsonObject
 import com.noisefit.data.dataConverter.DataConverter
-import com.noisefit.luna.R
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.LastSyncProvider
 import com.noisefit.data.repository.abstraction.DeviceRepository
+import com.noisefit.luna.R
 import com.noisefit.data.repository.implementation.DELETE_DB_DAYS
 import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils

@@ -18,6 +18,7 @@ import com.noisefit.data.repository.implementation.*
 import com.noisefit.data.repository.pagingSource.TimelinePagingSource
 import com.noisefit.util.TestModeUtils
 import com.noisefit.watch.*
+import com.noisefit_commans.data.db.abstraction.LocationDataSource
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.interfaces.base.BaseInitializeInterface
@@ -27,6 +28,7 @@ import com.noisefit_commans.interfaces.device_data.QueryDeviceDataActions
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataActions
 import com.noisefit_commans.utils.EncryptUtils
 import com.oreo.data.dataConverter.OreoDayTimeDataConvertor
+import com.oreo.data.dataConverter.OreoHRDataConvertor
 import com.oreo.data.dataConverter.OreoOfflineDataMapper
 import com.oreo.data.dataConverter.OreoOnlineDataMapper
 import com.oreo.data.dataConverter.OreoStressDataConvertor
@@ -110,9 +112,10 @@ object AppModule {
     @Provides
     fun provideDataConverter(
         keyValueDataSource: KeyValueDataSource,
-        ringDataStore: RingDataStore
+        ringDataStore: RingDataStore,
+        locationDataSource: LocationDataSource
     ): DataConverter {
-        return DataConverter(keyValueDataSource, ringDataStore)
+        return DataConverter(keyValueDataSource, ringDataStore, locationDataSource)
     }
 
 
@@ -124,8 +127,6 @@ object AppModule {
     ): WatchesSDK {
         return WatchesSDK(localDataStore, ringDataStore)
     }
-
-
 
 
     /*@Singleton
@@ -428,6 +429,13 @@ object AppModule {
     @Provides
     fun provideOreoDayTimeDataConvertor(): OreoDayTimeDataConvertor {
         return OreoDayTimeDataConvertor()
+    }
+
+    @Singleton
+    @Provides
+    fun provideOreoHrDataConvertor(
+    ): OreoHRDataConvertor {
+        return OreoHRDataConvertor()
     }
 
 }

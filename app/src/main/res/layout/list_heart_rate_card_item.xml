@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:lineChart="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/ModalStyleTransparentOreo"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="20dp"
-    android:layout_marginTop="24dp">
+    android:layout_marginTop="24dp"
+    android:paddingBottom="20dp">
 
     <TextView
         android:id="@+id/textView"
@@ -47,16 +48,31 @@
         app:layout_constraintTop_toTopOf="@+id/textView" />
 
 
-    <com.github.mikephil.charting.charts.CombinedChart
+    <com.oreo.ui.custom.HRCombinedChart
         android:id="@+id/candleChart"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_marginStart="@dimen/dimen_16dp"
+        android:layout_height="150dp"
         android:layout_marginTop="24dp"
+        lineChart:bottomWith="30dp"
         android:layout_marginEnd="@dimen/side_margin"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        android:layout_marginStart="@dimen/side_margin"
+        lineChart:chartLineColor="#FFFFFF"
+        lineChart:chartLineWidth="2dp"
+        lineChart:combineTextSize="16sp"
+        lineChart:gridColor="#80FFFFFF"
+        lineChart:highColor="#ff3371"
+        lineChart:layout_constraintEnd_toEndOf="parent"
+        lineChart:layout_constraintStart_toStartOf="parent"
+        lineChart:layout_constraintTop_toBottomOf="@id/textView"
+        lineChart:lowColor="#ff3371"
+        lineChart:mediumColor="#ff3371"
+        lineChart:restLineColor="#40FFFFFF"
+        lineChart:topWith="30dp"
+        lineChart:xMax="100"
+        lineChart:xMin="0"
+        lineChart:xTextColor="#FFFFFF"
+        lineChart:xTextSize="12sp"
+        lineChart:yTextSize="12sp" />
 
     <!--    <com.github.mikephil.charting.charts.LineChart-->
     <!--        android:id="@+id/lineChart"-->

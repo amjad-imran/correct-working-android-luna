@@ -12,6 +12,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
 import com.noisefit_commans.R
 import com.noisefit_commans.models.GPSDataResponse
+import com.noisefit_commans.models.LocationDataNetwork
 import com.noisefit_commans.utils.LOGS
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -25,82 +26,82 @@ class GoogleMapsUtil
 constructor() {
 
 
-    suspend fun plotLocationModalGoogleMaps(
-        activity: Activity,
-        googleMap: GoogleMap,
-        result: List<GPSDataResponse>
-    ): Flow<LatLngBounds> {
-        return flow {
-            val startingLtnLng = LatLng(result[0].latitude, result[0].longitude)
-            withContext(Dispatchers.Main) {
-                googleMap.addMarker(
-                    MarkerOptions()
-                        .position(startingLtnLng)
-                        .draggable(false)
-                        .flat(false)
-                        .icon(
-                            BitmapDescriptorFactory.fromBitmap(
-                                createStoreMarker(
-                                    activity,
-                                    "",
-                                    R.drawable.baseline_place_red_500_24dp
-                                )
-                            )
-                        )
-                )
-            }
+    /*   suspend fun plotLocationModalGoogleMaps(
+           activity: Activity,
+           googleMap: GoogleMap,
+           result: List<GPSDataResponse>
+       ): Flow<LatLngBounds> {
+           return flow {
+               val startingLtnLng = LatLng(result[0].latitude, result[0].longitude)
+               withContext(Dispatchers.Main) {
+                   googleMap.addMarker(
+                       MarkerOptions()
+                           .position(startingLtnLng)
+                           .draggable(false)
+                           .flat(false)
+                           .icon(
+                               BitmapDescriptorFactory.fromBitmap(
+                                   createStoreMarker(
+                                       activity,
+                                       "",
+                                       R.drawable.baseline_place_red_500_24dp
+                                   )
+                               )
+                           )
+                   )
+               }
 
-            val builder = LatLngBounds.Builder()
-            builder.include(startingLtnLng)
-            for (i in 1 until result.size) {
-                val currentLtnLng = LatLng(result[i].latitude, result[i].longitude)
-                val lastLtnLng = LatLng(result[i - 1].latitude, result[i - 1].longitude)
-                builder.include(currentLtnLng)
-                val color = "#ffcc0000"
+               val builder = LatLngBounds.Builder()
+               builder.include(startingLtnLng)
+               for (i in 1 until result.size) {
+                   val currentLtnLng = LatLng(result[i].latitude, result[i].longitude)
+                   val lastLtnLng = LatLng(result[i - 1].latitude, result[i - 1].longitude)
+                   builder.include(currentLtnLng)
+                   val color = "#ffcc0000"
 
-                val options =
-                    PolylineOptions()
-                        .width(10f)
-                        .color(Color.parseColor(color))
-                        .geodesic(true)
+                   val options =
+                       PolylineOptions()
+                           .width(10f)
+                           .color(Color.parseColor(color))
+                           .geodesic(true)
 
-                options.add(lastLtnLng)
-                options.add(currentLtnLng)
-                withContext(Dispatchers.Main) {
-                    val line = googleMap.addPolyline(options)
-                    line.endCap = RoundCap()
-                }
+                   options.add(lastLtnLng)
+                   options.add(currentLtnLng)
+                   withContext(Dispatchers.Main) {
+                       val line = googleMap.addPolyline(options)
+                       line.endCap = RoundCap()
+                   }
 
-            }
-            if (result.size > 1) {
-                val lastLtnLng = LatLng(
-                    result[result.size - 1].latitude,
-                    result[result.size - 1].longitude
-                )
-                withContext(Dispatchers.Main) {
-                    googleMap.addMarker(
-                        MarkerOptions()
-                            .position(lastLtnLng)
-                            .draggable(false)
-                            .flat(false)
-                            .icon(
-                                BitmapDescriptorFactory.fromBitmap(
-                                    createStoreMarker(
-                                        activity,
-                                        "",
-                                        R.drawable.baseline_place_green_500_24dp
-                                    )
-                                )
-                            )
-                    )
-                }
+               }
+               if (result.size > 1) {
+                   val lastLtnLng = LatLng(
+                       result[result.size - 1].latitude,
+                       result[result.size - 1].longitude
+                   )
+                   withContext(Dispatchers.Main) {
+                       googleMap.addMarker(
+                           MarkerOptions()
+                               .position(lastLtnLng)
+                               .draggable(false)
+                               .flat(false)
+                               .icon(
+                                   BitmapDescriptorFactory.fromBitmap(
+                                       createStoreMarker(
+                                           activity,
+                                           "",
+                                           R.drawable.baseline_place_green_500_24dp
+                                       )
+                                   )
+                               )
+                       )
+                   }
 
-            }
+               }
 
-            emit(builder.build())
+               emit(builder.build())
 
-        }
-    }
+           }
+       }*/
 
     suspend fun plotLocationCyclingGoogleMaps(
         activity: Activity,
@@ -201,13 +202,13 @@ constructor() {
     suspend fun plotLocationModalGoogleMaps(
         activity: Activity,
         googleMap: GoogleMap,
-        result: ArrayList<DoubleArray>
+        locationData: List<LocationDataNetwork>
     ): Flow<LatLngBounds> {
         return flow {
-            val startingLatLng = result[0]
+            val startingLatLng = locationData.first()
             val builder = LatLngBounds.Builder()
-            if (!startingLatLng[0].isNaN() && !startingLatLng[1].isNaN()) {
-                val startingLtnLng = LatLng(startingLatLng[0], startingLatLng[1])
+            if (!startingLatLng.lat!!.isNaN() && !startingLatLng.long!!.isNaN()) {
+                val startingLtnLng = LatLng(startingLatLng.lat, startingLatLng.long)
                 withContext(Dispatchers.Main) {
                     googleMap.addMarker(
                         MarkerOptions().position(startingLtnLng)
@@ -227,23 +228,23 @@ constructor() {
 
                 builder.include(startingLtnLng)
             }
-            for (i in 1 until result.size) {
+            for (i in 1 until locationData.size) {
 
-                val current = result[i]
-                val last = result[i - 1]
+                val current = locationData[i]
+                val last = locationData[i - 1]
                 var currentLtnLng: LatLng? = null
                 var lastLtnLng: LatLng? = null
-                if (!current[0].isNaN() && !current[1].isNaN()) {
-                    currentLtnLng = LatLng(current[0], current[1])
+                if (!current.lat!!.isNaN() && !current.long!!.isNaN()) {
+                    currentLtnLng = LatLng(current.lat, current.long)
                     builder.include(currentLtnLng)
                 }
 
-                if (!last[0].isNaN() && !last[1].isNaN()) {
-                    lastLtnLng = LatLng(last[0], last[1])
+                if (!last.lat!!.isNaN() && !last.long!!.isNaN()) {
+                    lastLtnLng = LatLng(last.lat, last.long)
                 }
 
                 if (currentLtnLng != null && lastLtnLng != null) {
-                    val color = "#ffca99ff"
+                    val color = "#8ed3f1"
                     val options =
                         PolylineOptions()
                             .width(10f)
@@ -255,15 +256,18 @@ constructor() {
                     withContext(Dispatchers.Main) {
                         val line = googleMap.addPolyline(options)
                         line.endCap = RoundCap()
+                        if (i == 1) {
+                            line.startCap = RoundCap()
+                        }
                     }
 
                 }
 
             }
-            if (result.size > 1) {
-                val current = result[result.size - 1]
-                if (!current[0].isNaN() && !current[1].isNaN()) {
-                    val currentLtnLng = LatLng(current[0], current[1])
+            if (locationData.size > 1) {
+                val current = locationData[locationData.size - 1]
+                if (!current.lat!!.isNaN() && !current.long!!.isNaN()) {
+                    val currentLtnLng = LatLng(current.lat, current.long)
                     withContext(Dispatchers.Main) {
                         googleMap.addMarker(
                             MarkerOptions()

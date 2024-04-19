@@ -35,7 +35,7 @@ constructor(
 ) : BaseViewModel() {
 
     var lowestHr: Int? = null
-    var maxHrv: Int? = null
+    var avgHrv: Int? = null
 
     private val _contributorInfo = MutableLiveData<OContributorResponseModal>()
     val contributorInfo: LiveData<OContributorResponseModal> = _contributorInfo

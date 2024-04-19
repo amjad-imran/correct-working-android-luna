@@ -35,6 +35,21 @@
             app:layout_constraintTop_toTopOf="parent"
             app:navGraph="@navigation/navigation_oreo" />
 
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/pbSync"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            tools:progress="40"
+            app:indicatorColor="#e6667ced"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:trackColor="#19ffffff"
+            app:trackCornerRadius="1dp"
+            app:trackThickness="1dp" />
+
         <include
             android:id="@+id/layoutRetry"
             layout="@layout/layout_api_failed_retry"

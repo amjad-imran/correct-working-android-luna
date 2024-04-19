@@ -4,7 +4,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.LinearGradient
 import android.graphics.PorterDuff
+import android.graphics.Shader
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -57,6 +59,39 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.net.URLDecoder
 import java.text.NumberFormat
 import java.util.*
+
+
+val TEXT_GRADIENT_STYLE_1 = intArrayOf(
+    Color.parseColor("#ffffff"),
+    Color.parseColor("#ffd230")
+)
+val TEXT_GRADIENT_STYLE_2 = intArrayOf(
+    Color.parseColor("#ffffff"),
+    Color.parseColor("#88ebeb")
+)
+
+fun TextView.paintText(
+    colorList: IntArray = TEXT_GRADIENT_STYLE_1
+) {
+    this.viewTreeObserver.addOnGlobalLayoutListener(object :
+        ViewTreeObserver.OnGlobalLayoutListener {
+        override fun onGlobalLayout() {
+            this@paintText.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            val height = this@paintText.height.toFloat()
+
+            val textShader: Shader = LinearGradient(
+                0f,
+                0f,
+                0f,
+                height,
+                colorList,
+                null,
+                Shader.TileMode.CLAMP
+            )
+            this@paintText.paint.shader = textShader
+        }
+    })
+}
 
 fun SnapHelper.getSnapPosition(recyclerView: RecyclerView): Int {
     val layoutManager = recyclerView.layoutManager ?: return RecyclerView.NO_POSITION

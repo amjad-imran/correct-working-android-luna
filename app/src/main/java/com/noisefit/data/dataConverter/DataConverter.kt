@@ -1,5 +1,6 @@
 package com.noisefit.data.dataConverter
 
+import android.location.Location
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -7,10 +8,11 @@ import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.local.db.fromJson
 import com.noisefit_commans.common.ceilRound
+import com.noisefit_commans.data.db.LocationModel
+import com.noisefit_commans.data.db.abstraction.LocationDataSource
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.model.RecordedWorkoutData
-import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
@@ -18,13 +20,19 @@ import com.oreo.data.model.AddWorkoutResponse
 import com.oreo.data.model.health.Nap
 import com.oreo.data.model.health.SleepHourlyBreakup
 import javax.inject.Inject
+import kotlin.math.acos
+import kotlin.math.cos
+import kotlin.math.roundToInt
+import kotlin.math.roundToLong
+import kotlin.math.sin
 
 
 class DataConverter
 @Inject
 constructor(
     val keyValueDataSource: KeyValueDataSource,
-    val ringDataStore: RingDataStore
+    val ringDataStore: RingDataStore,
+    val locationDataSource: LocationDataSource
 ) {
 
     fun mergeSleepData(
@@ -145,6 +153,12 @@ constructor(
                     DateFormats.convertTimestampToDate(workout.endTime, DateFormats.timeFormat)
 
 
+                val locationData =
+                    locationDataSource.getLocations(workout.startTime, workout.endTime).sortedBy {
+                        it.timeStamp
+                    }
+
+
                 jsonArray.add(
                     JsonObject(
                     ).apply {
@@ -152,10 +166,41 @@ constructor(
                         this.addProperty("cadence", workout.cadence)
                         this.addProperty("recovery_time", workout.recoveryTime)
                         this.addProperty("duration", workout.duration)
+                        this.addProperty("duration_seconds", workout.durationSeconds)
                         this.addProperty("calories", workout.calories)
                         this.addProperty("activity_type", workoutTypeString)
                         this.addProperty("start_time", startTime)
                         this.addProperty("end_time", endTime)
+
+
+                        val locationArray = JsonArray()
+                        var temp: Double? = null
+                        var weatherStatus: Int? = null
+
+                        locationData.forEach { location ->
+                            locationArray.add(JsonObject().apply {
+                                this.addProperty("lat", location.lat)
+                                this.addProperty("long", location.longitude)
+                                this.addProperty("timestamp", location.timeStamp / 1000)
+                            })
+                            if (temp == null) {
+                                temp = location.temperature
+                                weatherStatus = location.weatherStatus
+                            }
+                        }
+
+                        val gpsDistanceInMeters = getGpsDistance(locationData)
+
+                        if (locationArray.isEmpty.not()) {
+                            this.add("location", locationArray)
+                            this.addProperty("gps_distance", gpsDistanceInMeters)
+                        }
+                        if (temp != null) {
+                            this.add("weather", JsonObject().apply {
+                                this.addProperty("temp", temp?.roundToInt())
+                                this.addProperty("status", weatherStatus)
+                            })
+                        }
 
                         val intensityArray = JsonArray()
 
@@ -190,6 +235,47 @@ constructor(
             }
         }
         return jsonArray
+    }
+
+    private fun getGpsDistance(locationData: List<LocationModel>): Long {
+        if (locationData.size <= 1) return 0
+
+        var distance = 0L
+        for (pos in 1 until locationData.size) {
+            val location1 = locationData[pos - 1]
+            val location2 = locationData[pos]
+
+            if (location1.lat != null && location1.longitude != null && location2.lat != null && location2.longitude != null) {
+                distance += calculateDistance(
+                    location1.lat!!,
+                    location1.longitude!!,
+                    location2.lat!!,
+                    location2.longitude!!
+                )
+            }
+        }
+        return distance
+    }
+
+    private fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Long {
+
+        val loc1 = Location("start")
+        loc1.latitude = lat1
+        loc1.longitude = lon1
+
+        val loc2 = Location("end")
+        loc2.latitude = lat2
+        loc2.longitude = lon2
+
+        return loc1.distanceTo(loc2).roundToLong()
+    }
+
+    private fun deg2rad(deg: Double): Double {
+        return deg * Math.PI / 180.0
+    }
+
+    private fun rad2deg(rad: Double): Double {
+        return rad * 180.0 / Math.PI
     }
 
     private fun getWorkoutType(type: Int?, workoutsList: List<OWorkoutListModal>): String? {

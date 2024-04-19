@@ -555,6 +555,9 @@ class LineChartView : View {
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (interactiveMode) {
+            val parent = parent
+            parent.requestDisallowInterceptTouchEvent(true)
+
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     touchX = event.x

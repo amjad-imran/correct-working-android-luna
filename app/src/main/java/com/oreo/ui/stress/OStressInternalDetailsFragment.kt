@@ -114,10 +114,7 @@ class OStressInternalDetailsFragment :
     private fun handleProgressStatus(strData: StressResultData?) {
 
         binding.lytTopView.lytCalm.apply {
-            val diffCalm = mViewModel.getDifference(
-                strData?.data?.calm?.duration ?: 0,
-                strData?.data?.calm?.typicalDay ?: 0
-            )
+
             val (hourCalm, minuteCalm) = ApplicationUtils.getFormattedSleepDuration(
                 strData?.data?.calm?.duration ?: 0
             )
@@ -126,23 +123,31 @@ class OStressInternalDetailsFragment :
             lytUnit.tvMinute.text = "$minuteCalm"
             lytUnit.tvMinuteUnit.text = getString(R.string.text_mins)
 
-            tvDifference.text = "${abs(diffCalm)}%"
-            if (diffCalm > 0) {
-                icTrend.visible()
-                icTrend.rotation = 0f
-            } else if (diffCalm < 0) {
-                icTrend.visible()
-                icTrend.rotation = 180f
+            if (strData?.data?.calm?.typicalDay != null) {
+                val diffCalm = mViewModel.getDifference(
+                    strData.data.calm.duration ?: 0,
+                    strData.data.calm.typicalDay ?: 0
+                )
+                tvDifference.text = "${abs(diffCalm)}%"
+                if (diffCalm > 0) {
+                    icTrend.visible()
+                    icTrend.rotation = 0f
+                } else if (diffCalm < 0) {
+                    icTrend.visible()
+                    icTrend.rotation = 180f
+                } else {
+                    icTrend.invisible()
+                }
+                lytDifference.visible()
             } else {
-                icTrend.invisible()
+                lytDifference.gone()
             }
+
+
         }
 
         binding.lytTopView.lytFocussed.apply {
-            val diffFocussed = mViewModel.getDifference(
-                strData?.data?.focused?.duration ?: 0,
-                strData?.data?.focused?.typicalDay ?: 0
-            )
+
             val (hourCalm, minuteCalm) = ApplicationUtils.getFormattedSleepDuration(
                 strData?.data?.focused?.duration ?: 0
             )
@@ -151,23 +156,31 @@ class OStressInternalDetailsFragment :
             lytUnit.tvMinute.text = "$minuteCalm"
             lytUnit.tvMinuteUnit.text = getString(R.string.text_mins)
 
-            tvDifference.text = "${abs(diffFocussed)}%"
-            if (diffFocussed > 0) {
-                icTrend.visible()
-                icTrend.rotation = 0f
-            } else if (diffFocussed < 0) {
-                icTrend.visible()
-                icTrend.rotation = 180f
+            if (strData?.data?.focused?.typicalDay != null) {
+                val diffFocussed = mViewModel.getDifference(
+                    strData?.data?.focused?.duration ?: 0,
+                    strData?.data?.focused?.typicalDay ?: 0
+                )
+                tvDifference.text = "${abs(diffFocussed)}%"
+                if (diffFocussed > 0) {
+                    icTrend.visible()
+                    icTrend.rotation = 0f
+                } else if (diffFocussed < 0) {
+                    icTrend.visible()
+                    icTrend.rotation = 180f
+                } else {
+                    icTrend.invisible()
+                }
+                lytDifference.visible()
             } else {
-                icTrend.invisible()
+                lytDifference.gone()
             }
+
+
         }
 
         binding.lytTopView.lytStressed.apply {
-            val diffStressed = mViewModel.getDifference(
-                strData?.data?.stressed?.duration ?: 0,
-                strData?.data?.stressed?.typicalDay ?: 0
-            )
+
             val (hourCalm, minuteCalm) = ApplicationUtils.getFormattedSleepDuration(
                 strData?.data?.stressed?.duration ?: 0
             )
@@ -176,16 +189,28 @@ class OStressInternalDetailsFragment :
             lytUnit.tvMinute.text = "$minuteCalm"
             lytUnit.tvMinuteUnit.text = getString(R.string.text_mins)
 
-            tvDifference.text = "${abs(diffStressed)}%"
-            if (diffStressed > 0) {
-                icTrend.visible()
-                icTrend.rotation = 0f
-            } else if (diffStressed < 0) {
-                icTrend.visible()
-                icTrend.rotation = 180f
-            } else {
-                icTrend.invisible()
+            if (strData?.data?.stressed?.typicalDay != null) {
+                val diffStressed = mViewModel.getDifference(
+                    strData?.data?.stressed?.duration ?: 0,
+                    strData?.data?.stressed?.typicalDay ?: 0
+                )
+                tvDifference.text = "${abs(diffStressed)}%"
+                if (diffStressed > 0) {
+                    icTrend.visible()
+                    icTrend.rotation = 0f
+                } else if (diffStressed < 0) {
+                    icTrend.visible()
+                    icTrend.rotation = 180f
+                } else {
+                    icTrend.invisible()
+                }
+                lytDifference.visible()
+            }else{
+                lytDifference.gone()
+
             }
+
+
         }
     }
 

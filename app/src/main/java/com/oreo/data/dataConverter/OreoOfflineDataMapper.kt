@@ -1,10 +1,7 @@
 package com.oreo.data.dataConverter
 
-import com.github.mikephil.charting.data.CandleEntry
-import com.github.mikephil.charting.data.Entry
 import com.google.gson.Gson
 import com.noisefit.data.dataConverter.DataUnitConverter
-import com.noisefit.luna.R
 import com.noisefit.ui.common.calculatePercentage
 import com.noisefit.watch.SDKWatchType
 import com.noisefit.watch.WatchesSDK
@@ -20,7 +17,6 @@ import com.noisefit_commans.models.BloodOxygen
 import com.noisefit_commans.models.BloodOxygenBreakup
 import com.noisefit_commans.models.BodyTemperature
 import com.noisefit_commans.models.BodyTemperatureBreakup
-import com.noisefit_commans.models.DeviceType
 import com.noisefit_commans.models.HeartRate
 import com.noisefit_commans.models.HeartRateHistory
 import com.noisefit_commans.models.SleepData
@@ -30,10 +26,10 @@ import com.noisefit_commans.models.StressData
 import com.noisefit_commans.models.StressDataBreakup
 import com.noisefit_commans.models.Units
 import com.noisefit_commans.models.UserGoals
-import com.noisefit_commans.ui.getColor
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.implementation.OreoHeartRateDataImpl
+import com.oreo.data.model.HRModel
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.TapMeasureState
 import java.util.Calendar
@@ -295,7 +291,7 @@ constructor(
 
     fun convertHeartRateOverviewData(
         data: OreoHeartRate?
-    ): OHealthOverview.HeartRate {
+    ): OHealthOverview.HeartRateDataModel {
         //LOGS.d("Sdaljhsadjhsadjhjksda ${Gson().toJson(data)}")
 
         val list = data?.breakUp?.replace("255", "0")
@@ -307,11 +303,13 @@ constructor(
             }
             breakupArray = dummyArray
         }
+        var lastHr = "0"
+        breakupArray.forEachIndexed { index2, value ->
+            if (value != 0 && value != 255)
+                lastHr = value.toString()
+
+        }
         val hRWithIntervalList = breakupArray.chunked(6)
-        val lineChartList: ArrayList<Entry> = ArrayList()
-        val candleChartList: ArrayList<CandleEntry> = ArrayList()
-        val lineColorList: ArrayList<Int> = ArrayList()
-        val xLabelList = ArrayList<String>()
         val avgList = ArrayList<Int>()
         var overAllMinValue = Int.MAX_VALUE
         var overAllMaxValue = -1
@@ -319,13 +317,12 @@ constructor(
         var lastHrValue: Pair<Int, Long>? = null//HR value,timer
 
         //LOGS.w("convertHeartRateOverviewData ${data?.breakUp}")
-
+        val listData = ArrayList<HRModel>()
         hRWithIntervalList.forEachIndexed { index, hrList ->
+            val sortedBreakUpList = hrList.sorted()
 
-
-            val minValue = hrList.minWithoutZero()
-
-            val maxValue = hrList.maxWithoutZero()
+            val minValue = sortedBreakUpList.minWithoutZero()
+            val maxValue = sortedBreakUpList.maxWithoutZero()
 
             var min = minValue
             var max = maxValue
@@ -341,23 +338,18 @@ constructor(
             val avg = (min + max) / 2
             if (avg != 0) {
                 if (min < overAllMinValue) {
-                    overAllMinValue = min;
+                    overAllMinValue = min
                 }
                 if (max > overAllMaxValue) {
-                    overAllMaxValue = max;
+                    overAllMaxValue = max
                 }
                 avgList.add(avg)
-
             }
 
-            hrList.forEachIndexed { index2, value ->
-                if (value != 0) {
+            sortedBreakUpList.forEachIndexed { index2, value ->
+                val indexMillis = ((index * 6) + index2) * 5 * 60L * 1000L
+                lastHrValue = Pair(value, indexMillis)
 
-                    val indexMillis = ((index * 6) + index2) * 5 * 60L * 1000L
-                    //LOGS.w("convertHeartRateOverviewData $index $indexMillis")
-
-                    lastHrValue = Pair(value, indexMillis)
-                }
             }
 
             //if any change chunk value then divide 12 by that chunk value to get below correct xlabel list
@@ -365,29 +357,12 @@ constructor(
                 hrCount += 1
 
             }
-
-
-            xLabelList.add(handleHrFormat(hrCount))
-
-            candleChartList.add(
-                CandleEntry(
-                    index.toFloat(),
-                    max.toFloat(),
-                    min.toFloat(),
-                    max.toFloat(),
-                    min.toFloat()
-                )
-            )
-
-            if (index % 2 == 0) {
-                lineColorList.add(R.color.color_error.getColor())
-            } else {
-                lineColorList.add(R.color.white.getColor())
-            }
-            lineChartList.add(
-                Entry(
-                    index.toFloat(),
-                    avg.toFloat()
+            listData.add(
+                HRModel(
+                    maxValues = maxValue,
+                    minValues = minValue,
+                    values = sortedBreakUpList,
+                    midValues = (maxValue + minValue) / 2
                 )
             )
         }
@@ -395,7 +370,6 @@ constructor(
         val average = if(avgList.isEmpty()) 0.0f else avgList.average().toFloat()
 
 
-        var lastHr = "0"
         /*if ((lastHrValue ?: 0) > 0) {
             lastHr = lastHrValue.toString()
         }*/
@@ -404,9 +378,8 @@ constructor(
         /*if (lastHr == "0") {*/
         val lastMeasureValue = ringDataStore.getManualMeasurementValue()
         if (lastMeasureValue != null && (lastMeasureValue.timeStamp) + (60 * 60 * 1000) > System.currentTimeMillis() && lastMeasureValue.value > 0) {
-            lastHr = lastMeasureValue.value.toString()
+//            lastHr = lastMeasureValue.value.toString()
             manualMeasureTime = lastMeasureValue.timeStamp
-
         }
         //}
 
@@ -423,7 +396,7 @@ constructor(
             //LOGS.w("convertHeartRateOverviewData ${lastHrValue?.first} ${lastHrValue?.second} $hrTimestamp  $manualMeasureTime")
 
             if (hrTimestamp > manualMeasureTime) {
-                lastHr = lastHrValue?.first.toString()
+//                lastHr = lastHrValue?.first.toString()
                 manualMeasureTime = hrTimestamp
                 //LOGS.w("convertHeartRateOverviewData new HR set $dayStartTimeStamp + ${lastHrValue?.second} =  $hrTimestamp")
 
@@ -452,12 +425,14 @@ constructor(
             "Last measured ${DateFormats.getRelativeTime(manualMeasureTime).lowercase()}"
         }
 
-        return OHealthOverview.HeartRate(
-            lastHr,
-            measureText,
-            candleChartList,
-            Pair(lineChartList, lineColorList),
-            xLabelList, overAllMinValue.toFloat(), average,
+
+        return OHealthOverview.HeartRateDataModel(
+            listData,
+            average = average,
+            lastTime = measureText,
+            value = lastHr,
+            maxValues = breakupArray.maxWithoutZero(),
+            minValues = breakupArray.minWithoutZero(),
             measureState
         )
     }
@@ -736,8 +711,6 @@ constructor(
         return sleepData
 
     }
-
-
 
 
     fun convertUnSyncHeartRateDataListToObject(data: List<HeartRate>?): List<HeartRateHistory>? {

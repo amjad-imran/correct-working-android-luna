@@ -9,10 +9,12 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.ScreenUtils
 import com.oreo.data.dataConverter.OreoStressDataConvertor
+import com.oreo.data.model.ODayTimeActivitiesDataModel
 import com.oreo.data.model.OStressActivitiesDataModel
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.Stress
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.LocalDate
 import java.util.Calendar
 import javax.inject.Inject
 import kotlin.math.roundToInt
@@ -82,6 +84,20 @@ constructor(
                     )
                 )
         }
+
+        sleep?.naps?.forEach { nap ->
+            if (nap.date.equals(dayData.date) && !nap.isNextDayNap) {
+                dataList.add(
+                    OStressActivitiesDataModel(
+                        type = "Nap",
+                        id = nap.id,
+                        startTime = nap.startTime,
+                        endTime = nap.endTime
+                    )
+                )
+            }
+        }
+
         stressActivityData = dataList
     }
 
@@ -210,6 +226,14 @@ constructor(
         val diff = ((difference.toFloat() / today) * 100).roundToInt()
         return diff
 
+    }
+
+    fun getDayFromDate(date: String): String {
+        return try {
+            LocalDate.parse(date).dayOfWeek.name.lowercase()
+        } catch (exp: Exception) {
+            ""
+        }
     }
 
 

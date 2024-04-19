@@ -25,23 +25,25 @@
             app:layout_constraintTop_toBottomOf="@id/tvTitle" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout7"
+            android:id="@+id/lytDifference"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dimen_16dp"
+            android:background="@drawable/back_white_16"
+            android:padding="@dimen/dimen_4dp"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lytUnit"
-            android:background="@drawable/back_white_16"
-            android:padding="@dimen/dimen_4dp">
+            tools:visibility="visible">
 
             <ImageView
                 android:id="@+id/icTrend"
                 android:layout_width="10dp"
                 android:layout_height="10dp"
-                tools:src="@drawable/ic_arrow_up_with_corner"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_arrow_up_with_corner" />
 
 
             <TextView
@@ -49,10 +51,10 @@
                 style="@style/Tinny"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="5 %"
                 app:layout_constraintBottom_toBottomOf="@+id/icTrend"
                 app:layout_constraintStart_toEndOf="@+id/icTrend"
-                app:layout_constraintTop_toTopOf="@+id/icTrend" />
+                app:layout_constraintTop_toTopOf="@+id/icTrend"
+                tools:text="5 %" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

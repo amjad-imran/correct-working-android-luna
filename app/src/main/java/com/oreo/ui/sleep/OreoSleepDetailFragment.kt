@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoSleepDetailBinding
@@ -21,11 +22,15 @@ import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.constants.SyncEvents
-import com.noisefit_commans.ui.*
+import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.custom.NightTimeGraphViewOreo
 import com.noisefit_commans.ui.custom.SleepGraphViewOreo
 import com.noisefit_commans.ui.custom.SleepStageAction
 import com.noisefit_commans.ui.custom.ToolTipEntry
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
@@ -35,7 +40,13 @@ import com.oreo.data.model.ChartModel
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.GraphDummyModel
 import com.oreo.data.model.SleepChartModel
-import com.oreo.data.model.health.*
+import com.oreo.data.model.health.CommonDataModel
+import com.oreo.data.model.health.CommonListDataModel
+import com.oreo.data.model.health.Nap
+import com.oreo.data.model.health.Nudges
+import com.oreo.data.model.health.OreoSleepModel
+import com.oreo.data.model.health.SleepHourlyBreakup
+import com.oreo.data.model.health.SleepMovementBreakup
 import com.oreo.ui.custom.LineChartType
 import com.oreo.ui.custom.OnLinearChartClickAction
 import com.oreo.ui.custom.ScrollListener
@@ -79,9 +90,25 @@ class OreoSleepDetailFragment :
             ) {
 //                if (resultData[position].barPercent > 0) {
                 openContributorBottomSheet(resultData, position)
-//                }
+                handleEvent(resultData[position].title)
+                //                }
             }
         })
+    }
+
+    private fun handleEvent(title: String) {
+        var eventName =""
+        when (title) {
+            "Sleep duration" -> eventName = MoEngageLunaAppEvents.luna_sleep_contributor_duration_click
+            "Efficiency" -> eventName = MoEngageLunaAppEvents.luna_sleep_contributor_efficiency_click
+            "Restfulness" -> eventName = MoEngageLunaAppEvents.luna_sleep_contributor_restfulness_click
+            "REM sleep" -> eventName = MoEngageLunaAppEvents.luna_sleep_contributor_remsleep_click
+            "Deep sleep" -> eventName = MoEngageLunaAppEvents.luna_sleep_contributor_deepsleep_click
+            "Latency" -> eventName = MoEngageLunaAppEvents.luna_sleep_contributor_latency_click
+            "Timing" -> eventName = MoEngageLunaAppEvents.luna_sleep_contributor_timing_click
+        }
+        viewModel.sessionManager.logMoEngageAppEvent(eventName)
+
     }
 
     private fun openContributorBottomSheet(resultData: ArrayList<Contributors>, position: Int) {
@@ -233,16 +260,15 @@ class OreoSleepDetailFragment :
         }
     }
 
-    private fun setHrvMax() {
-
-        binding.lytHRVariability.tvSubtitle1.text = getString(R.string.text_maximum)
-        if (viewModel.maxHrv == null || viewModel.maxHrv == 0 || viewModel.maxHrv == 255) {
-            binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "-"
-            binding.lytHRVariability.lytSubtitleValue1.tvUnit.gone()
-        } else {
-            binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "${viewModel.maxHrv}"
+    private fun setHrvAvg() {
+        binding.lytHRVariability.tvSubtitle1.text = getString(R.string.text_average)
+        if (viewModel.avgHrv != null && viewModel.avgHrv != 0) {
+            binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "${viewModel.avgHrv}"
             binding.lytHRVariability.lytSubtitleValue1.tvUnit.text = getString(R.string.text_ms)
             binding.lytHRVariability.lytSubtitleValue1.tvUnit.visible()
+        } else {
+            binding.lytHRVariability.lytSubtitleValue1.tvValue.text = "-"
+            binding.lytHRVariability.lytSubtitleValue1.tvUnit.gone()
         }
     }
 
@@ -362,14 +388,15 @@ class OreoSleepDetailFragment :
 
         binding.lytHRVariability.tvTitle.text = getString(R.string.text_heart_rate_variability)
 
-        viewModel.maxHrv = heartRateData?.hrv?.max
-        setHrvMax()
-
-        if (heartRateData?.hrv?.avg != null && heartRateData?.hrv?.avg != 0) {
-            binding.lytHRVariability.tvSubtitle2.text = "Average ${heartRateData?.hrv?.avg} ms"
-        } else {
+//        viewModel.maxHrv = heartRateData?.hrv?.max
+        viewModel.avgHrv=heartRateData?.hrv?.avg
+        setHrvAvg()
+        if (heartRateData?.hrv?.max == null || heartRateData.hrv?.max == 0 || heartRateData.hrv?.max == 255) {
             binding.lytHRVariability.tvSubtitle2.text = ""
+        } else {
+            binding.lytHRVariability.tvSubtitle2.text = "Maximum ${heartRateData?.hrv?.max} ms"
         }
+
 
         val ssTime: String?
         val seTime: String?
@@ -437,7 +464,7 @@ class OreoSleepDetailFragment :
                             if (value > 0) "$value" else "-"
 
                     } else {
-                        setHrvMax()
+                       setHrvAvg()
                     }
                 }
 
@@ -576,6 +603,24 @@ class OreoSleepDetailFragment :
             binding.lytSleepScore.lytSleepScoreBanner.vpBannerSlider
         ) { _, _ -> }.attach()
 
+        binding.lytSleepScore.lytSleepScoreBanner.vpBannerSlider.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+                viewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.luna_sleep_cues_view,
+                    HashMap<String, Any>().apply {
+                        this[MoEngageAppEventParams.cue_position] = position
+                    })
+
+            }
+
+        })
+
         if (fragments.size > 1) {
             binding.lytSleepScore.lytSleepScoreBanner.tabLayout.visible()
         } else {
@@ -639,6 +684,7 @@ class OreoSleepDetailFragment :
         }
 
         binding.lytHeartRate.bInfo.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_sleep_contributor_heartrate_click)
             viewModel.contributorInfo.value?.hr_graph?.let { content ->
                 navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
                     this.putString("infoData", content)
@@ -646,6 +692,7 @@ class OreoSleepDetailFragment :
             }
         }
         binding.lytHRVariability.bInfo.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_sleep_contributor_hrv_click)
             viewModel.contributorInfo.value?.hrv_graph?.let { content ->
                 navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
                     this.putString("infoData", content)
@@ -653,6 +700,7 @@ class OreoSleepDetailFragment :
             }
         }
         binding.lytBloodOxygenGraph.bInfo.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_sleep_contributor_spo2_click)
             viewModel.contributorInfo.value?.oxy_graph?.let { content ->
                 navigate(R.id.bottomSheetDataMetrics, Bundle().apply {
                     this.putString("infoData", content)

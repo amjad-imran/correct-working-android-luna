@@ -287,10 +287,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         if (shouldSync || kotlin.math.abs(DateFormats.getTimeStamp() - lastSyncTime) > 5 * 60 * 1000L) {
             if (viewModel.sessionManager.bluetoothStateDash.value != false) {
-                binding.lytHeader.tvHeaderStatus.apply {
-                    text = context.getString(R.string.text_syncing_dot)
-                    visible()
-                }
+                mainViewModel.syncTextState.value = context?.getString(R.string.text_syncing_dot)
             }
             syncData()
         }
@@ -324,6 +321,17 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
 
     override fun subscribeObservers() {
+        mainViewModel.syncTextState.observe(this) {
+            if (it.isNullOrEmpty()) {
+                binding.lytHeader.tvHeaderStatus.gone()
+            } else {
+                binding.lytHeader.tvHeaderStatus.apply {
+                    text = getString(R.string.text_syncing_dot)
+                    visible()
+                }
+            }
+        }
+
         mainViewModel.dashboard.observe(viewLifecycleOwner) {
             setTopBar()
             pagerAdapter?.setDataSet(it)
@@ -337,18 +345,14 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         }
 
 
+        /* viewModel.sessionManager.showSyncOfflineData.observe(viewLifecycleOwner) {
+             it.getContent()?.let { event ->
+                 if (event == HealthOverviewDataType.AUTO_WORKOUT) {
+                     //viewModel.getDashboardDataFromServer(false)
+                 }
+             }
 
-
-
-
-       /* viewModel.sessionManager.showSyncOfflineData.observe(viewLifecycleOwner) {
-            it.getContent()?.let { event ->
-                if (event == HealthOverviewDataType.AUTO_WORKOUT) {
-                    //viewModel.getDashboardDataFromServer(false)
-                }
-            }
-
-        }*/
+         }*/
 
 
 
@@ -375,7 +379,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             }
         }
 
-        viewModel.sessionManager.syncCompleted.observe(this) {
+        /*viewModel.sessionManager.syncCompleted.observe(this) {
             it?.getContent()?.let { syncDataStatus ->
                 when (syncDataStatus) {
                     SyncEvents.Failed -> {
@@ -425,7 +429,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                     }
                 }
             }
-        }
+        }*/
 
         viewModel.sessionManager.isRingCharging.observe(this) {
             if (viewModel.sessionManager.connectStateRing.value is ConnectState.ConnectSuccess) {
@@ -438,15 +442,15 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
             when (connectedState) {
                 is ConnectState.ConnectFailed -> {
                     setConnectingState(true)
-                    binding.lytHeader.pbSync.gone()
-                    binding.lytHeader.tvHeaderStatus.gone()
+                    //binding.lytHeader.pbSync.gone()
+                    //binding.lytHeader.tvHeaderStatus.gone()
 
                 }
 
                 is ConnectState.Connecting -> {
                     setConnectingState(true)
-                    binding.lytHeader.pbSync.gone()
-                    binding.lytHeader.tvHeaderStatus.gone()
+                    //binding.lytHeader.pbSync.gone()
+                    //binding.lytHeader.tvHeaderStatus.gone()
 
                 }
 
@@ -466,7 +470,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                     binding.lytHeader.ivRingUpdate.gone()
                     viewModel.handleUnPairState()
                     viewModel.updateDeviceConnectedStatus()
-                    binding.lytHeader.pbSync.gone()
+                    //binding.lytHeader.pbSync.gone()
                 }
 
                 else -> {}
@@ -510,7 +514,8 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         binding.lytHeader.batteryStatus.gone()
         binding.lytHeader.lottieAnimView.gone()
         binding.lytHeader.oreoStatus.visible()
-        binding.lytHeader.tvHeaderStatus.gone()
+        mainViewModel.syncTextState.value = null
+        //binding.lytHeader.tvHeaderStatus.gone()
 
         binding.lytHeader.oreoStatus.loadImage(
             requireContext(),
@@ -526,7 +531,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         if (viewModel.sessionManager.bluetoothStateDash.value == false) {
             ApplicationUtils.stopOreSyncScheduler(requireContext())
             stateBluetoothOff()
-            binding.lytHeader.pbSync.gone()
+            //binding.lytHeader.pbSync.gone()
         } else {
 
             binding.lytHeader.batteryStatus.invisible()

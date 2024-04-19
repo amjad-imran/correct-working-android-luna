@@ -28,7 +28,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.noisefit.luna.R
+import com.noisefit_commans.utils.HAPTIC_VIBRATION
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.LOGS.d
+import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.ui.stress.OnStressClickAction
 
 
@@ -101,6 +104,7 @@ class StressCombinedChart : View {
     private val effect =
         DashPathEffect(floatArrayOf(dip2px(1f).toFloat(), dip2px(5f).toFloat()), 0f)
     private val toolTipList = ArrayList<Triple<Float, String, Int>>()
+    private var vibrationUtils: VibrationUtils? = null
 
 
     constructor(context: Context?) : super(context) {
@@ -149,6 +153,10 @@ class StressCombinedChart : View {
         resMap = HashMap()
         initPaint()
         initBitmap()
+    }
+
+    fun setVibrationUtil(vibrationUtils: VibrationUtils) {
+        this.vibrationUtils = vibrationUtils
     }
 
     private fun initBitmap() {
@@ -363,18 +371,57 @@ class StressCombinedChart : View {
             bgBottomPaint
         )
         if (showXAxis) {
-            var xText = "23:59"
+            var xText = "12 am"
             xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
             xTextPaint.color = Color.parseColor("#a3ffffff")
+
+            val start = mWith - rightWith - xTextBounds!!.width() - dip2px(5f)
             canvas.drawText(
                 xText,
-                mWith - rightWith - xTextBounds!!.width() - dip2px(5f),
+                start,
                 mHeight - bottomWith / 3,
                 xTextPaint
             )
-            xText = "00:00"
+
+            xText = "12 am"
+            val end = leftWith + dip2px(5f)
             xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
-            canvas.drawText(xText, leftWith + dip2px(5f), mHeight - bottomWith / 3, xTextPaint)
+            canvas.drawText(xText, end, mHeight - bottomWith / 3, xTextPaint)
+
+
+            xText = "12 pm"
+            xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
+            val center = (mWith - rightWith - leftWith) / 2 - xTextBounds!!.width() / 2
+            canvas.drawText(
+                xText,
+                center,
+                mHeight - bottomWith / 3,
+                xTextPaint
+            )
+
+
+            xText = "6 am"
+            xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
+            val centerLeft = (mWith - rightWith - leftWith) / 4 - xTextBounds!!.width() / 2
+            canvas.drawText(
+                xText,
+                centerLeft,
+                mHeight - bottomWith / 3,
+                xTextPaint
+            )
+
+            xText = "6 pm"
+            xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
+            val centerRight =
+                (mWith - rightWith - leftWith) * (3.0f / 4.0f) - xTextBounds!!.width() / 2
+            canvas.drawText(
+                xText,
+                centerRight,
+                mHeight - bottomWith / 3,
+                xTextPaint
+            )
+
+
         }
     }
 
@@ -584,9 +631,9 @@ class StressCombinedChart : View {
                         canvas.drawPoint(x, y, chartLinePaint)
                     }
                 }
-                toolTipList.add(Triple(x, "Time", current.value))
 
             }
+            toolTipList.add(Triple(x, "Time", current.value))
 
             /*if (showXAxis && i % interval == 0 && i > 0 && i < 4 * interval) {
                 String xText = String.valueOf(list.get(i).getIndex());
@@ -645,7 +692,7 @@ class StressCombinedChart : View {
         this.listener = listener
     }
 
-    private fun drawDot(canvas: Canvas, value: Int) {
+    private fun drawDot(canvas: Canvas, value: Int, calculatedTouchX: Float) {
 
         val dotBitmap = when (value) {
             in 1..34 -> calmDot
@@ -659,7 +706,7 @@ class StressCombinedChart : View {
 
         canvas.drawBitmap(
             dotBitmap,
-            touchX!! - width,
+            calculatedTouchX - width,
             getDotHeight(value) - height,
             paintStressed
         )
@@ -689,7 +736,7 @@ class StressCombinedChart : View {
         canvas.drawRect(rectF, overlayLinePaint)
         if (value.second != 0) {
 
-            drawDot(canvas, value.second)
+            drawDot(canvas, value.second, calculatedTouchX)
 
         }
         if (listener != null) {
@@ -711,9 +758,11 @@ class StressCombinedChart : View {
 
     fun performHapticFeedbackCustom(value: Int) {
         if (value != 0) {
-            this.performHapticFeedback(
+            vibrationUtils?.vibrate(HAPTIC_VIBRATION)
+
+            /*this.performHapticFeedback(
                 HapticFeedbackConstants.KEYBOARD_TAP
-            )
+            )*/
         }
     }
 
@@ -726,21 +775,21 @@ class StressCombinedChart : View {
             Pair(index.first, list[index.first]!!.value)
         }
 
-      /*  var sectionLast = 0f
-        var position = -1
-        for (i in list.size - 1 downTo 1) {
-            val sectionEnd = sectionLast + unitHLenth
-            if (touchX < sectionEnd) {
-                position = i
-                break
-            }
-            sectionLast = sectionEnd
-        }
-        return if (position == -1) {
-            Pair(0, 0)
-        } else {
-            Pair(position, list[position].value)
-        }*/
+        /*  var sectionLast = 0f
+          var position = -1
+          for (i in list.size - 1 downTo 1) {
+              val sectionEnd = sectionLast + unitHLenth
+              if (touchX < sectionEnd) {
+                  position = i
+                  break
+              }
+              sectionLast = sectionEnd
+          }
+          return if (position == -1) {
+              Pair(0, 0)
+          } else {
+              Pair(position, list[position].value)
+          }*/
     }
 
     fun findNumber(
@@ -796,7 +845,7 @@ class StressCombinedChart : View {
                         touchX = event.x
                         invalidate()
                     }
-                    return true
+                    return super.onTouchEvent(event)
                 }
 
                 MotionEvent.ACTION_UP -> {
@@ -806,12 +855,17 @@ class StressCombinedChart : View {
                         }
                     }
 
-                    handler.removeCallbacks(mLongPressed)
-                    isInteracting = false
-                    listener?.isInteractionOnGoing(false)
-                    touchX = 0.0f
-                    invalidate()
-                    return true
+                    resetState()
+                    return super.onTouchEvent(event)
+                }
+
+                MotionEvent.ACTION_CANCEL -> {
+                    if (!isInteracting) {
+                        if (event.y < dip2px(50f)) {
+                            listener?.onTopClicked()
+                        }
+                    }
+                    resetState()
                 }
             }
         } else {
@@ -820,15 +874,38 @@ class StressCombinedChart : View {
         return false
     }
 
+    fun resetState() {
+        handler.removeCallbacks(mLongPressed)
+        isInteracting = false
+        listener?.isInteractionOnGoing(false)
+        touchX = 0.0f
+        invalidate()
+    }
+
+    fun resetIfInteracting() {
+        handler.removeCallbacks(mLongPressed)
+        if (isInteracting) {
+            lastSentValuePos = null
+            isInteracting = false
+            listener?.onValueSelected(0, 0)
+            touchX = 0.0f
+            invalidate()
+        }
+    }
+
 
     private val handler = Handler(Looper.getMainLooper())
     private var mLongPressed = Runnable {
         if (isHighlighted) return@Runnable
         isInteracting = true
         invalidate()
+        val parent = parent
+        parent.requestDisallowInterceptTouchEvent(true)
+        vibrationUtils?.vibrate(HAPTIC_VIBRATION)
+
         listener?.isInteractionOnGoing(true)
-        rootView.performHapticFeedback(
-            HapticFeedbackConstants.LONG_PRESS
-        )
+        /* rootView.performHapticFeedback(
+             HapticFeedbackConstants.LONG_PRESS
+         )*/
     }
 }
