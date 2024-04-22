@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.luna.R
+import com.noisefit.luna.databinding.BottomSheetDaytimeActivitiesBinding
 import com.noisefit.luna.databinding.BottomSheetStressActivitiesBinding
 import com.noisefit.oreo.BottomNavOption
 import com.noisefit.oreo.OreoMainViewModel
@@ -19,8 +20,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class BottomSheetStressActivities :
-    BaseBottomSheetWithTransparent<BottomSheetStressActivitiesBinding>(
-        BottomSheetStressActivitiesBinding::inflate
+    BaseBottomSheetWithTransparent<BottomSheetDaytimeActivitiesBinding>(
+        BottomSheetDaytimeActivitiesBinding::inflate
     ) {
 
     private val viewModel: OreoMainViewModel by viewModels()
