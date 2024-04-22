@@ -150,7 +150,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         val activityList = ArrayList<OWDActivityData>()
         val context = NoiseFitApplicationMain.context!!
 
-        if ((it.distance ?: 0) > 0) {
+        if (showDistance(it)) {
             if (it.calories != null && it.calories > 0) {
                 activityList.add(
                     OWDActivityData(
@@ -220,11 +220,19 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         return activityList
     }
 
-    fun getDistance(data: OWorkoutDetailsResponseModel): Triple<String, String, String> {
-        if (data.distance != null && data.distance > 0L) {
 
+    private fun showDistance(data: OWorkoutDetailsResponseModel): Boolean {
+        return data.distance != null && data.distance > 0L && data.dataType != null && data.dataType.equals(
+            "distance", true
+        )
+    }
+
+    fun getDistance(data: OWorkoutDetailsResponseModel): Triple<String, String, String> {
+        if (showDistance(data)) {
+            val distanceToUse =
+                if (data.dataPriority.equals("app")) data.gpsDistance ?: 0 else data.distance
             val distance = dataUnitConverter.formatDistance(
-                data.distance.toInt(), Units.METRIC
+                distanceToUse?.toInt() ?: 0, Units.METRIC
             )
             return Triple(distance, "km", "Total Distance")
 
