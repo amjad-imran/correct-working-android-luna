@@ -314,7 +314,6 @@ constructor(
         hRWithIntervalList.forEachIndexed { index, hrList ->
             val sortedBreakUpList = hrList.sorted()
             val minValue = sortedBreakUpList.minWithoutZero()
-
             val maxValue = sortedBreakUpList.maxWithoutZero()
 
             var min = minValue
@@ -328,8 +327,7 @@ constructor(
                 max = min
             }
             if (min == max) {
-                min = 0
-                max = maxValue
+                min = max
             }
 
             val avg = (min + max) / 2
@@ -359,7 +357,7 @@ constructor(
             listData.add(
                 HRModel(
                     maxValues = max,
-                    minValues = min,
+                    minValues = minValue,
                     values = sortedBreakUpList,
                     midValues = avg
                 )
