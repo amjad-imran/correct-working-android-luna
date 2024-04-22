@@ -843,7 +843,7 @@ class OreoActivityFragment :
 
     override fun subscribeObservers() {
 
-        mainViewModel.sessionManager.syncCompleted.observe(this) {
+       /* mainViewModel.sessionManager.syncCompleted.observe(this) {
             it?.getContent()?.let { syncDataStatus ->
                 when (syncDataStatus) {
                     SyncEvents.ServerSyncSuccess -> {
@@ -853,7 +853,7 @@ class OreoActivityFragment :
                     else -> {}
                 }
             }
-        }
+        }*/
 
         mainViewModel.activityHistoryResponse.observe(this) {
             if (it.isNullOrEmpty()) return@observe
