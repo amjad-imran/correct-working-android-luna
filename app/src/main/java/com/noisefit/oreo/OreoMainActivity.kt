@@ -740,6 +740,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     }
 
                     SyncEvents.ServerSyncSuccess -> {
+                        viewModel.syncProgressBarState.value = null
+                        viewModel.syncTextState.value = null
                         binding.progressBar.root.gone()
 
                         viewModel.reloadTodaysData()
