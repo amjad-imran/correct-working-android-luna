@@ -15,6 +15,8 @@ data class OWorkoutListModal(
     @SerializedName("medium") val mediumIntensity: Float? = null,
     @SerializedName("high") val highIntensity: Float? = null,
     @SerializedName("gps") val isGpsRequired: Int = 0,
+    @SerializedName("data_type") val dataType: String? = null,
+    @SerializedName("data_priority") val dataPriority: String? = null,
     var isTempSet: Boolean = false
 ) : Parcelable {
     fun getFormattedActivityName(): String {
