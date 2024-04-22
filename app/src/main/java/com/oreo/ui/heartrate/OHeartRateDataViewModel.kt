@@ -157,8 +157,7 @@ class OHeartRateDataViewModel @Inject constructor(
                 max = min
             }
             if (min==max){
-                min=0
-                max=maxValue
+                min=max
             }
 
             val avg = (min + max) / 2
