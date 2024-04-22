@@ -676,7 +676,7 @@ class OreoReadinessFragment :
     }
 
     override fun subscribeObservers() {
-        mainViewModel.sessionManager.syncCompleted.observe(this) {
+       /* mainViewModel.sessionManager.syncCompleted.observe(this) {
             it?.getContent()?.let { syncDataStatus ->
                 when (syncDataStatus) {
                     SyncEvents.ServerSyncSuccess -> {
@@ -686,7 +686,7 @@ class OreoReadinessFragment :
                     else -> {}
                 }
             }
-        }
+        }*/
 
         mainViewModel.readinessHistoryResponse.observe(this) {
 

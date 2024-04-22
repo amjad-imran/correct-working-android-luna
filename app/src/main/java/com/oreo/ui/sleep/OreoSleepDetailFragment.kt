@@ -873,7 +873,7 @@ class OreoSleepDetailFragment :
 
 
     override fun subscribeObservers() {
-        viewModel.sessionManager.syncCompleted.observe(this) {
+       /* viewModel.sessionManager.syncCompleted.observe(this) {
             it?.getContent()?.let { syncDataStatus ->
                 when (syncDataStatus) {
                     SyncEvents.ServerSyncSuccess -> {
@@ -883,7 +883,7 @@ class OreoSleepDetailFragment :
                     else -> {}
                 }
             }
-        }
+        }*/
 
 
         mainViewModel.sleepHistoryResponse.observe(viewLifecycleOwner) {

@@ -13,6 +13,8 @@ import com.google.android.gms.maps.model.*
 import com.noisefit_commans.R
 import com.noisefit_commans.models.GPSDataResponse
 import com.noisefit_commans.models.LocationDataNetwork
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -45,7 +47,7 @@ constructor() {
                                 googleMap,
                                 currentLtnLng,
                                 activity,
-                                R.drawable.ic_map_loc_start
+                                R.drawable.ic_profile_my_goals
                             )
                         }
                     } else if (i == (result.size - 1)) {
@@ -54,7 +56,7 @@ constructor() {
                                 googleMap,
                                 currentLtnLng,
                                 activity,
-                                R.drawable.ic_map_loc_end
+                                R.drawable.ic_profile_help
                             )
                         }
                     }
@@ -101,7 +103,12 @@ constructor() {
         val markerImage: ImageView = markerLayout.findViewById(R.id.marker_image) as ImageView
         val markerRating = markerLayout.findViewById(R.id.marker_text) as TextView
         markerImage.setImageResource(drawable)
-        markerRating.text = text
+        if (text.isEmpty()) {
+            markerRating.gone()
+        } else {
+            markerRating.text = text
+            markerRating.visible()
+        }
         markerLayout.measure(
             View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
             View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)

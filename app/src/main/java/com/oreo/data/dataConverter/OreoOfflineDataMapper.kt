@@ -293,7 +293,6 @@ constructor(
         data: OreoHeartRate?
     ): OHealthOverview.HeartRateDataModel {
         //LOGS.d("Sdaljhsadjhsadjhjksda ${Gson().toJson(data)}")
-
         val list = data?.breakUp?.replace("255", "0")
         var breakupArray = Gson().fromJson<List<Int>>(list ?: "")
         if (breakupArray.isNullOrEmpty()) {
@@ -302,12 +301,6 @@ constructor(
                 dummyArray.add(0)
             }
             breakupArray = dummyArray
-        }
-        var lastHr = "0"
-        breakupArray.forEachIndexed { index2, value ->
-            if (value != 0 && value != 255)
-                lastHr = value.toString()
-
         }
         val hRWithIntervalList = breakupArray.chunked(6)
         val avgList = ArrayList<Int>()
@@ -320,8 +313,8 @@ constructor(
         val listData = ArrayList<HRModel>()
         hRWithIntervalList.forEachIndexed { index, hrList ->
             val sortedBreakUpList = hrList.sorted()
-
             val minValue = sortedBreakUpList.minWithoutZero()
+
             val maxValue = sortedBreakUpList.maxWithoutZero()
 
             var min = minValue
@@ -334,22 +327,28 @@ constructor(
             if (max == 0 && min != 0) {
                 max = min
             }
+            if (min == max) {
+                min = 0
+                max = maxValue
+            }
 
             val avg = (min + max) / 2
             if (avg != 0) {
                 if (min < overAllMinValue) {
-                    overAllMinValue = min
+                    overAllMinValue = min;
                 }
                 if (max > overAllMaxValue) {
-                    overAllMaxValue = max
+                    overAllMaxValue = max;
                 }
                 avgList.add(avg)
+
             }
 
             sortedBreakUpList.forEachIndexed { index2, value ->
-                val indexMillis = ((index * 6) + index2) * 5 * 60L * 1000L
-                lastHrValue = Pair(value, indexMillis)
-
+                if (value != 0) {
+                    val indexMillis = ((index * 6) + index2) * 5 * 60L * 1000L
+                    lastHrValue = Pair(value, indexMillis)
+                }
             }
 
             //if any change chunk value then divide 12 by that chunk value to get below correct xlabel list
@@ -359,10 +358,10 @@ constructor(
             }
             listData.add(
                 HRModel(
-                    maxValues = maxValue,
-                    minValues = minValue,
+                    maxValues = max,
+                    minValues = min,
                     values = sortedBreakUpList,
-                    midValues = (maxValue + minValue) / 2
+                    midValues = avg
                 )
             )
         }
@@ -370,6 +369,8 @@ constructor(
         val average = if(avgList.isEmpty()) 0.0f else avgList.average().toFloat()
 
 
+        val average = if (avgList.isEmpty()) 0.0f else avgList.average().toFloat()
+        var lastHr = "0"
         /*if ((lastHrValue ?: 0) > 0) {
             lastHr = lastHrValue.toString()
         }*/
@@ -378,34 +379,27 @@ constructor(
         /*if (lastHr == "0") {*/
         val lastMeasureValue = ringDataStore.getManualMeasurementValue()
         if (lastMeasureValue != null && (lastMeasureValue.timeStamp) + (60 * 60 * 1000) > System.currentTimeMillis() && lastMeasureValue.value > 0) {
-//            lastHr = lastMeasureValue.value.toString()
+            lastHr = lastMeasureValue.value.toString()
             manualMeasureTime = lastMeasureValue.timeStamp
+
         }
         //}
-
-
         if (lastHrValue != null) {
             val cal = Calendar.getInstance(TimeZone.getDefault())
             cal.set(Calendar.HOUR_OF_DAY, 0)
             cal.set(Calendar.MINUTE, 0)
             cal.set(Calendar.SECOND, 0)
             cal.set(Calendar.MILLISECOND, 0)
-
             val dayStartTimeStamp = cal.timeInMillis
             val hrTimestamp = dayStartTimeStamp + lastHrValue?.second!!
             //LOGS.w("convertHeartRateOverviewData ${lastHrValue?.first} ${lastHrValue?.second} $hrTimestamp  $manualMeasureTime")
-
             if (hrTimestamp > manualMeasureTime) {
-//                lastHr = lastHrValue?.first.toString()
+                lastHr = lastHrValue?.first.toString()
                 manualMeasureTime = hrTimestamp
                 //LOGS.w("convertHeartRateOverviewData new HR set $dayStartTimeStamp + ${lastHrValue?.second} =  $hrTimestamp")
-
             }
 
         }
-
-
-
 
         if (overAllMinValue == Int.MAX_VALUE) {
             overAllMinValue = 69
@@ -414,17 +408,13 @@ constructor(
         if (overAllMinValue != 0) {
             overAllMinValue -= 9
         }
-
-        //LOGS.d("Sdaljhsadjhsadjhjksda ${Gson().toJson(lineChartList)}")
         var measureState = TapMeasureState.DEFAULT
-
         val measureText = if (manualMeasureTime == 0L) {
             ""
         } else {
             measureState = TapMeasureState.LAST_MEASURED
             "Last measured ${DateFormats.getRelativeTime(manualMeasureTime).lowercase()}"
         }
-
 
         return OHealthOverview.HeartRateDataModel(
             listData,

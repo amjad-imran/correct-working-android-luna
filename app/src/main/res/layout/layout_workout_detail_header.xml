@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:background="@drawable/back_workout_detail_header"
+        android:background="@drawable/back_modal_new"
         android:paddingBottom="16dp">
 
         <com.google.android.material.imageview.ShapeableImageView

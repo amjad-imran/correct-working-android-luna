@@ -43,7 +43,6 @@ import com.oreo.data.model.WorkoutTypes
 import com.oreo.data.model.health.Nudges
 import com.oreo.ui.activity.all.DELETE_WORKOUT_REQUEST_KEY
 import com.oreo.ui.custom.OnHeartRateChartClickAction
-import com.oreo.ui.custom.WorkaroundMapFragment
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -361,7 +360,7 @@ class OWorkoutDetailsFragmentV2 :
                     tvTemp.text = "${it.weather.temp}°C"
                     groupTemp.visible()
                 }
-                binding.lytTop.ivWeatherImage.setImageResource(viewModel.getWeatherImage(it.weather.status))
+                binding.lytTop.ivWeatherImage.setImageResource(viewModel.getWeatherImage(it.weather.status,it.startTime))
             } else {
                 binding.lytTop.groupTemp.gone()
             }

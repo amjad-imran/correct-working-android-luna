@@ -1,6 +1,7 @@
 package com.oreo.ui.workout.details
 
 import android.graphics.Color
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -29,6 +30,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.joda.time.LocalDateTime
+import org.joda.time.format.DateTimeFormat
 import java.time.LocalDate
 import java.time.Period
 import java.util.Calendar
@@ -147,7 +150,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         val activityList = ArrayList<OWDActivityData>()
         val context = NoiseFitApplicationMain.context!!
 
-        if ((it.distance ?: 0) > 0) {
+        if (showDistance(it) && it.dataType != null) {
             if (it.calories != null && it.calories > 0) {
                 activityList.add(
                     OWDActivityData(
@@ -218,11 +221,19 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         return activityList
     }
 
-    fun getDistance(data: OWorkoutDetailsResponseModel): Triple<String, String, String> {
-        if (data.distance != null && data.distance > 0L) {
 
+    private fun showDistance(data: OWorkoutDetailsResponseModel): Boolean {
+        return data.distance != null && data.distance > 0L && data.dataType != null && data.dataType.equals(
+            "distance", true
+        )
+    }
+
+    fun getDistance(data: OWorkoutDetailsResponseModel): Triple<String, String, String> {
+        if (showDistance(data)) {
+            val distanceToUse =
+                if (data.dataPriority.equals("app")) data.gpsDistance ?: 0 else data.distance
             val distance = dataUnitConverter.formatDistance(
-                data.distance.toInt(), Units.METRIC
+                distanceToUse?.toInt() ?: 0, Units.METRIC
             )
             return Triple(distance, "km", "Total Distance")
 
@@ -530,15 +541,23 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
      * 7->Atmosphere
      * 8->Clouds
      */
-    fun getWeatherImage(status: Int?): Int {
+    fun getWeatherImage(status: Int?, startTime: String?): Int {
+        val isDay = try {
+            val start = LocalDateTime.parse(startTime, DateTimeFormat.forPattern("HH:mm:ss"))
+            val hourOFDay = start.hourOfDay
+            hourOFDay in 6..19
+        } catch (exp: Exception) {
+            true
+        }
+
         return when (status) {
-            0 -> R.drawable.weather_clear
+            0 -> if (isDay) R.drawable.weather_clear else R.drawable.weather_clear_night
             2 -> R.drawable.weather_thunder
             3 -> R.drawable.weather_drizzle
             5 -> R.drawable.weather_rainy
             6 -> R.drawable.weather_snow
             7 -> R.drawable.weather_haze
-            8 -> R.drawable.weather_cloudy
+            8 -> if (isDay) R.drawable.weather_cloudy else R.drawable.weather_cloudy_night
             else -> R.drawable.weather_haze
         }
     }
