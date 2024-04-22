@@ -126,6 +126,10 @@ class RecordWorkoutFragment :
             navigateUpSafe()
         } else {
 
+            if (viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
+                return
+            }
+
             if (viewModel.workoutDuration < 60) {
 
                 setFragmentResultListener(

@@ -47,7 +47,11 @@ class OAddWorkoutFragment :
         viewModel.movementList = args.movementList?.toList()
         if (args.autoSport != null) {
             viewModel.convertAutoSport(args.autoSport)
+        } else {
+            viewModel.userDayData =
+                mainViewModel.userHealthData[DateFormats.getTodaysDateString(10)]
         }
+
 
         viewModel.getWorkoutList(false)
 
@@ -181,6 +185,9 @@ class OAddWorkoutFragment :
                 OAddWorkoutFragmentDirections.actionAddWorkoutFragmentToTimeBottomSheet(
                     viewModel.addWorkout.startHour,
                     viewModel.addWorkout.startMinute,
+                    viewModel.addWorkout.endHour,
+                    viewModel.addWorkout.endMinute,
+                    1,
                     1,
                     getString(R.string.text_start_time)
                 )
@@ -266,6 +273,9 @@ class OAddWorkoutFragment :
                 OAddWorkoutFragmentDirections.actionAddWorkoutFragmentToTimeBottomSheet(
                     viewModel.addWorkout.endHour,
                     viewModel.addWorkout.endMinute,
+                    viewModel.addWorkout.startHour,
+                    viewModel.addWorkout.startMinute,
+                    0,
                     1,
                     getString(R.string.text_end_time)
                 )
@@ -499,6 +509,7 @@ class OAddWorkoutFragment :
         viewModel.autoSport.observe(this) {
             it?.let {
                 if (it) {
+                    viewModel.userDayData = mainViewModel.userHealthData[viewModel.addWorkout.date]
                     setPrefillData()
                     //disableSelection()
                 }
