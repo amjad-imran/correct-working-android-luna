@@ -97,7 +97,6 @@ class OHeartRateDataFragment :
                         binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
                         binding.lytHeartRate.tvSubtitle1.text = time
                     } else {
-                        binding.lytHeartRate.tvSubtitle1.text = "-"
                         binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
                         binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
                     }
@@ -112,9 +111,7 @@ class OHeartRateDataFragment :
             }
 
             override fun isInteractionOnGoing(onGoing: Boolean) {
-                if (onGoing) {
-                    binding.lytHeartRate.tvSubtitle2.visible()
-                } else {
+                if (!onGoing) {
                     binding.lytHeartRate.tvSubtitle1.text = getString(R.string.text_average_hr)
                     binding.lytHeartRate.tvSubtitle2.visible()
                     viewModel.heartRateData.value?.let { updateUI(it) }
