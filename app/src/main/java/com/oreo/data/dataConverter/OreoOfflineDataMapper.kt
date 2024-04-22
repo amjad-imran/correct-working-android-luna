@@ -1,7 +1,5 @@
 package com.oreo.data.dataConverter
 
-import com.github.mikephil.charting.data.CandleEntry
-import com.github.mikephil.charting.data.Entry
 import com.google.gson.Gson
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.ui.common.calculatePercentage
@@ -360,10 +358,10 @@ constructor(
             }
             listData.add(
                 HRModel(
-                    maxValues = maxValue,
-                    minValues = minValue,
+                    maxValues = max,
+                    minValues = min,
                     values = sortedBreakUpList,
-                    midValues = (maxValue + minValue) / 2
+                    midValues = avg
                 )
             )
         }
