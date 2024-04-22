@@ -101,7 +101,10 @@ class HRCombinedChart : View {
     private var lastSentValuePos: Int? = null
     private val effect =
         DashPathEffect(floatArrayOf(dip2px(1f).toFloat(), dip2px(5f).toFloat()), 0f)
+
     private val toolTipList = ArrayList<Triple<Float, String, Int>>()
+
+    //    private val toolTipList = ArrayList<Triple<Float, String, Item>>()
     lateinit var bgLine: Paint
     var yAxisCount: Int = 3
     lateinit var edgeTextBackPaint: Paint
@@ -397,28 +400,17 @@ class HRCombinedChart : View {
         if (showXAxis) {
             val halfWidth = (mWith - leftWith - rightWith) / 2
             val leftHalf = halfWidth / 2
-            val edgeTextPadding = dip2px(4f)
             //end point
             var xText = "12 am"
             val textWidth = mTextPaintEdge.measureText(xText)
-            rectF = RectF(
-                (mWith - textWidth - rightWith) - edgeTextPadding * 2,
-                mHeight - bottomWith / 3 - dip2px(13f),
-                mWith - rightWith,
-                height.toFloat()
-            )
-            canvas.drawRoundRect(
-                rectF,
-                dip2px(4f).toFloat(),
-                dip2px(4f).toFloat(),
-                edgeTextBackPaint
-            )
+            xTextPaint.color = Color.parseColor("#a3ffffff")
             canvas.drawText(
                 xText,
-                (mWith - textWidth - rightWith) - edgeTextPadding,
-                mHeight - bottomWith / 3 + dip2px(2f),
-                mTextPaintEdge
+                (mWith - textWidth - rightWith),
+                mHeight - bottomWith / 3,
+                xTextPaint
             )
+
             xText = "6 am"
             xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
             xTextPaint.color = Color.parseColor("#a3ffffff")
@@ -446,25 +438,13 @@ class HRCombinedChart : View {
                 mHeight - bottomWith / 3,
                 xTextPaint
             )
-
             xText = "12 am"
-            val rectF = RectF(
-                leftWith,
-                mHeight - bottomWith / 3 - dip2px(13f),
-                leftWith + mTextPaintEdge.measureText(xText) + edgeTextPadding * 2,
-                height.toFloat()
-            )
-            canvas.drawRoundRect(
-                rectF,
-                dip2px(4f).toFloat(),
-                dip2px(4f).toFloat(),
-                edgeTextBackPaint
-            )
+            xTextPaint.color = Color.parseColor("#a3ffffff")
             canvas.drawText(
                 xText,
-                leftWith + edgeTextPadding.toFloat(),
-                mHeight - bottomWith / 3 + dip2px(2f),
-                mTextPaintEdge
+                leftWith,
+                mHeight - bottomWith / 3,
+                xTextPaint
             )
         }
     }
@@ -710,8 +690,10 @@ class HRCombinedChart : View {
                 80f, 80f,     // Bottom right radius in px
                 80f, 80f      // Bottom left radius in px
             )
-            val yTop =mHeight - bottomWith - (current!!.minValue - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
-            val yBottom =mHeight - bottomWith - (current!!.maxValue - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
+            val yTop =
+                mHeight - bottomWith - (current!!.minValue - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
+            val yBottom =
+                mHeight - bottomWith - (current!!.maxValue - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
 
             if (current.value > 0) {
                 val rectBar = RectF(
@@ -882,25 +864,32 @@ class HRCombinedChart : View {
         rectF.top = topWith
         rectF.bottom = mHeight - bottomWith
 
-        val value: Triple<Int, Int, String> = getClickedValue(calculatedTouchX)
+        val value: Triple<Int, Item?, String> = getClickedValue(calculatedTouchX)
         canvas.drawRect(rectF, overlayLinePaint)
-        if (value.second != 0) {
+        if (value.second != null) {
 
-            drawDot(canvas, value.second, calculatedTouchX)
+            drawDot(canvas, value.second?.value ?: 0, calculatedTouchX)
 
         }
         if (listener != null) {
-            val position = value.first as Int
-            val selectedValue = value.second as Int
+            val position = value.first
+            val item = value.second
+//            val selectedValue = item?.value ?: 0
             if (lastSentValuePos == null) {
-                listener?.onValueSelected(selectedValue, position, value.third)
+                listener?.onValueSelected(
+                    item,
+                    position,
+                    value.third
+                )
                 lastSentValuePos = position
-                performHapticFeedbackCustom(selectedValue)
+                performHapticFeedbackCustom(item?.value ?: 0)
             } else {
                 if (lastSentValuePos != position) {
-                    listener?.onValueSelected(selectedValue, position, value.third)
+                    listener?.onValueSelected(
+                        item, position, value.third
+                    )
                     lastSentValuePos = position
-                    performHapticFeedbackCustom(selectedValue)
+                    performHapticFeedbackCustom(item?.value ?: 0)
                 }
             }
         }
@@ -912,13 +901,13 @@ class HRCombinedChart : View {
         }
     }
 
-    private fun getClickedValue(touchX: Float): Triple<Int, Int, String> {
+    private fun getClickedValue(touchX: Float): Triple<Int, Item?, String> {
         val index = findNumber(toolTipList, touchX)
         return if (index.first < 0) {
             lastSentValuePos = null
-            Triple(0, 0, "")
+            Triple(0, null, "")
         } else {
-            Triple(index.first, list[index.first]!!.value, index.second)
+            Triple(index.first, list[index.first], index.second)
         }
 
         /*  var sectionLast = 0f

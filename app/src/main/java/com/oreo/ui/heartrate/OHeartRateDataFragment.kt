@@ -10,7 +10,6 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOHeartRateDataBinding
 import com.noisefit.oreo.OreoMainViewModel
@@ -23,6 +22,7 @@ import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.LearnMoreDataModel
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
+import com.oreo.ui.custom.Item
 import com.oreo.ui.sleep.banner.OreoSleepBannerFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -85,22 +85,35 @@ class OHeartRateDataFragment :
 
         binding.lytHeartRate.candleChart.setClickListener(object : OnHRClickAction {
 
-            override fun onValueSelected(value: Int, position: Int, time: String?) {
-                if (value != 0) {
-                    binding.lytHeartRate.lytSubtitleValue1.tvValue.text = value.toString()
-                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
-                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
-                    binding.lytHeartRate.tvSubtitle1.text = time
-                } else {
-                    binding.lytHeartRate.tvSubtitle1.text = "-"
-                    binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
-                    binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
+            override fun onValueSelected(
+                item: Item?,
+                position: Int,
+                time: String?
+            ) {
+                if (item != null) {
+                    if (item.value != 0) {
+                        binding.lytHeartRate.lytSubtitleValue1.tvValue.text = item.value.toString()
+                        binding.lytHeartRate.lytSubtitleValue1.tvUnit.visible()
+                        binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
+                        binding.lytHeartRate.tvSubtitle1.text = time
+                    } else {
+                        binding.lytHeartRate.tvSubtitle1.text = "-"
+                        binding.lytHeartRate.lytSubtitleValue1.tvValue.text = "-"
+                        binding.lytHeartRate.lytSubtitleValue1.tvUnit.text = "bpm"
+                    }
+                    if (item.maxValue != 0 && item.minValue != 0) {
+                        binding.lytHeartRate.tvSubtitle2.visible()
+                        binding.lytHeartRate.tvSubtitle2.text =
+                            "Range ${item.minValue}-${item.maxValue} bpm"
+                    } else {
+                        binding.lytHeartRate.tvSubtitle2.gone()
+                    }
                 }
             }
 
             override fun isInteractionOnGoing(onGoing: Boolean) {
                 if (onGoing) {
-                    binding.lytHeartRate.tvSubtitle2.gone()
+                    binding.lytHeartRate.tvSubtitle2.visible()
                 } else {
                     binding.lytHeartRate.tvSubtitle1.text = getString(R.string.text_average_hr)
                     binding.lytHeartRate.tvSubtitle2.visible()

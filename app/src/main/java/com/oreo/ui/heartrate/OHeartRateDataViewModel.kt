@@ -180,10 +180,10 @@ class OHeartRateDataViewModel @Inject constructor(
             }
             listData.add(
                 HRModel(
-                    maxValues = maxValue,
-                    minValues = minValue,
+                    maxValues = max,
+                    minValues = min,
                     values = sortedBreakUpList,
-                    midValues = (maxValue + minValue) / 2
+                    midValues = avg
                 )
             )
         }
