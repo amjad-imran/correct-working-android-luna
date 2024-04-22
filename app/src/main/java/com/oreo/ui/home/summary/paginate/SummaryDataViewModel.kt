@@ -192,6 +192,10 @@ class SummaryDataViewModel @Inject constructor(
             if (max == 0 && min != 0) {
                 max = min
             }
+            if (min==max){
+                min=0
+                max=maxValue
+            }
 
             val avg = (min + max) / 2
             if (avg != 0) {

@@ -69,10 +69,11 @@
         lineChart:restLineColor="#40FFFFFF"
         lineChart:topWith="30dp"
         lineChart:xMax="100"
+        lineChart:rightWith="30dp"
         lineChart:xMin="0"
         lineChart:xTextColor="#FFFFFF"
-        lineChart:xTextSize="12sp"
-        lineChart:yTextSize="12sp" />
+        lineChart:xTextSize="11sp"
+        lineChart:yTextSize="11sp" />
 
     <!--    <com.github.mikephil.charting.charts.LineChart-->
     <!--        android:id="@+id/lineChart"-->

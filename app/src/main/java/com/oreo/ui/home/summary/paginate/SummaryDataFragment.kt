@@ -222,7 +222,6 @@ class SummaryDataFragment :
 
         viewModel.stateHeartRateCard.observe(viewLifecycleOwner) {
             if (it != null) {
-                LOGS.d("previous day ${Gson().toJson(it)}")
                 setHearRateCardUi(it)
             }
         }
