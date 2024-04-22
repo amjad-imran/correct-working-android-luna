@@ -366,9 +366,6 @@ constructor(
             )
         }
 
-        val average = if(avgList.isEmpty()) 0.0f else avgList.average().toFloat()
-
-
         val average = if (avgList.isEmpty()) 0.0f else avgList.average().toFloat()
         var lastHr = "0"
         /*if ((lastHrValue ?: 0) > 0) {
