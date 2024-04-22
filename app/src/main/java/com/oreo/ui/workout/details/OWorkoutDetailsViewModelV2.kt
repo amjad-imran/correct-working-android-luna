@@ -150,7 +150,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         val activityList = ArrayList<OWDActivityData>()
         val context = NoiseFitApplicationMain.context!!
 
-        if (showDistance(it)) {
+        if (showDistance(it) && it.dataType != null) {
             if (it.calories != null && it.calories > 0) {
                 activityList.add(
                     OWDActivityData(
