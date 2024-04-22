@@ -84,7 +84,7 @@
             lineChart:restLineColor="#40FFFFFF"
             lineChart:topWith="30dp"
             lineChart:xTextColor="#FFFFFF"
-            lineChart:xTextSize="12sp"
-            lineChart:yTextSize="12sp" />
+            lineChart:xTextSize="11sp"
+            lineChart:yTextSize="11sp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
