@@ -6,10 +6,8 @@ import com.noisefit_commans.common.maxWithoutInvalidMovementValues
 import com.noisefit_commans.data.enums.StressType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.ScreenUtils
 import com.oreo.data.dataConverter.OreoStressDataConvertor
-import com.oreo.data.model.ODayTimeActivitiesDataModel
 import com.oreo.data.model.OStressActivitiesDataModel
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.Stress
@@ -221,9 +219,10 @@ constructor(
     }
 
     fun getDifference(today: Int, typicalDay: Int): Int {
-        val difference = today - typicalDay
+        val tempTypicalDay = if (typicalDay == 0) 1 else typicalDay
+        val difference = today - tempTypicalDay
         if (difference == 0) return 0
-        val diff = ((difference.toFloat() / typicalDay) * 100).roundToInt()
+        val diff = ((difference.toFloat() / tempTypicalDay) * 100).roundToInt()
         return diff
 
     }

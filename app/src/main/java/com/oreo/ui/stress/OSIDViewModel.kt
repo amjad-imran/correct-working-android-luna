@@ -154,9 +154,13 @@ class OSIDViewModel @Inject constructor(
     }
 
     fun getDifference(today: Int, typicalDay: Int): Int {
-        val difference = today - typicalDay
+        val tempTypicalDay = if (typicalDay==0)
+            1
+        else
+            typicalDay
+        val difference = today - tempTypicalDay
         if (difference == 0) return 0
-        val diff = ((difference.toFloat() / typicalDay) * 100).roundToInt()
+        val diff = ((difference.toFloat() / tempTypicalDay) * 100).roundToInt()
         return diff
 
     }
