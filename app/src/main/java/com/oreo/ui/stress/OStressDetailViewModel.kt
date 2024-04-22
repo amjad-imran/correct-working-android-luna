@@ -61,6 +61,9 @@ constructor(
 
     var stressActivityData: ArrayList<OStressActivitiesDataModel>? = null
     fun prepareStressActivityData(dayData: ServerUserHealthData) {
+        if (dayData.stress?.breakUp.isNullOrEmpty()) return
+        if (dayData.stress?.breakUp!!.sum() > 0) return
+
         val workouts = dayData.activity?.workout
         val sleep = dayData.sleep
         val dataList = ArrayList<OStressActivitiesDataModel>()
