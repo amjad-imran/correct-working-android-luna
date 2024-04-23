@@ -222,9 +222,15 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
 
 
     private fun showDistance(data: OWorkoutDetailsResponseModel): Boolean {
-        return data.distance != null && data.distance > 0L && data.dataType != null && data.dataType.equals(
-            "distance", true
-        )
+        return if (data.dataType.equals("distance", true)) {
+            if (data.dataPriority.equals("app", true)) {
+                (data.gpsDistance ?: 0) > 0
+            } else {
+                data.distance != null && data.distance > 0L
+            }
+        } else {
+            false
+        }
     }
 
     fun getDistance(data: OWorkoutDetailsResponseModel): Triple<String, String, String> {
