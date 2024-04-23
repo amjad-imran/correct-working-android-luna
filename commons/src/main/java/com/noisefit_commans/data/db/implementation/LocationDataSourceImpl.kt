@@ -37,4 +37,8 @@ constructor(
     ) {
         locationDao.updateWeatherInfoForLatLong(lat, lng, temp, status)
     }
+
+    override suspend fun updateCityForLatLong(lat: Double, lng: Double, location: String) {
+        locationDao.updateCityForLatLong(lat, lng, location)
+    }
 }

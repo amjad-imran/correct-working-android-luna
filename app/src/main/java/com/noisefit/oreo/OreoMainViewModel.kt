@@ -13,6 +13,7 @@ import com.noisefit.util.notif.NotificationEventsClass
 import com.noisefit_commans.common.checkDayDifferenceMoreNMinutes
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.db.abstraction.LocationDataSource
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.RecordedWorkoutData
@@ -57,6 +58,7 @@ constructor(
     val syncRepository: OreoSyncRepository,
     val userHealthDataDataSource: OreoUserHealthDataDataSource,
     val dataConverter: DataConverter,
+    val locationDataSource: LocationDataSource,
     val userActivityRepository: OreoUserActivityRepository
 ) : BaseViewModel() {
 
@@ -692,6 +694,7 @@ constructor(
                 }
                 userHealthDataDataSource.clearDataByDates(dates.toList())
                 syncRepository.removeRecordedWorkouts().collect()
+                locationDataSource.deleteAll()
                 ringDataStore.removeRecordDeleteList()
                 return@launch
             }
@@ -713,6 +716,7 @@ constructor(
                             }
                             userHealthDataDataSource.clearDataByDates(dates.toList())
                             syncRepository.removeRecordedWorkouts().collect()
+                            locationDataSource.deleteAll()
                             ringDataStore.removeRecordDeleteList()
                             delay(200)
 

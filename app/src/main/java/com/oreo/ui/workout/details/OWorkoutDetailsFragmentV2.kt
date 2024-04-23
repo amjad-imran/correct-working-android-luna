@@ -184,6 +184,13 @@ class OWorkoutDetailsFragmentV2 :
         binding.lytTop.lytActivityItem.tvWorkoutTime.text =
             DateFormats.getActivityDisplayDates(it.startTime, it.endTime)
 
+        if (it.startLocation.isNullOrEmpty().not()) {
+            binding.lytTop.lytActivityItem.tvWorkoutCity.text = ""
+            binding.lytTop.lytActivityItem.tvWorkoutCity.visible()
+        } else {
+            binding.lytTop.lytActivityItem.tvWorkoutCity.gone()
+        }
+
         val title = StringBuilder()
         if (DateFormats.getTodaysDateString(10).equals(it.date)) {
             title.append("Today, ")
@@ -355,7 +362,12 @@ class OWorkoutDetailsFragmentV2 :
                     tvTemp.text = "${it.weather.temp}°C"
                     groupTemp.visible()
                 }
-                binding.lytTop.ivWeatherImage.setImageResource(viewModel.getWeatherImage(it.weather.status,it.startTime))
+                binding.lytTop.ivWeatherImage.setImageResource(
+                    viewModel.getWeatherImage(
+                        it.weather.status,
+                        it.startTime
+                    )
+                )
             } else {
                 binding.lytTop.groupTemp.gone()
             }

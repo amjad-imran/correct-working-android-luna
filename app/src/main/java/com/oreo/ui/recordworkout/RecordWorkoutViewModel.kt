@@ -1,5 +1,7 @@
 package com.oreo.ui.recordworkout
 
+import android.location.Geocoder
+import android.os.Build
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit.data.remote.base.Resource
@@ -28,7 +30,8 @@ class RecordWorkoutViewModel @Inject constructor(
     val watchDataStore: WatchDataStore,
     val locationDataSource: LocationDataSource,
     val weatherRepository: WeatherRepository,
-    val ringDataStore: RingDataStore
+    val ringDataStore: RingDataStore,
+    val geoCoder: Geocoder
 ) : BaseViewModel() {
 
 
@@ -168,7 +171,7 @@ class RecordWorkoutViewModel @Inject constructor(
                                 workout = newModel
 
                             }
-                            LOGS.i("weather data $weather")
+                            //LOGS.i("weather data $weather")
                         }
                     }
 
@@ -206,5 +209,53 @@ class RecordWorkoutViewModel @Inject constructor(
         if (sportStartTime == 0L || workout == null) return false
         if (workout?.isGpsRequired == 1 && workout?.isTempSet == false) return true
         return false
+    }
+
+    fun shouldCheckCity(): Boolean {
+        if (sportStartTime == 0L || workout == null) return false
+        if (workout?.isGpsRequired == 1 && workout?.isCitySet == false) return true
+        return false
+    }
+
+    fun getAddress(lat: Double, long: Double) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            geoCoder.getFromLocation(
+                lat, long, 1
+            ) { addresses ->
+                val address = addresses.getOrNull(0)
+                viewModelScope.launch(Dispatchers.IO) {
+                    updateCity(address?.locality, lat, long)
+                }
+            }
+        } else {
+            val addresses = geoCoder.getFromLocation(lat, long, 1)
+            val address = addresses?.getOrNull(0)
+            viewModelScope.launch(Dispatchers.IO) {
+                updateCity(address?.locality, lat, long)
+            }
+        }
+    }
+
+    private suspend fun updateCity(locality: String?, lat: Double, long: Double) {
+
+        if (sportStartTime != 0L && workout != null) {
+
+            locationDataSource.updateCityForLatLong(
+                lat,
+                long,
+                locality ?: ""
+            )
+            val newModel = workout!!.apply {
+                this.isCitySet = true
+            }
+            ringDataStore.saveOngoingRecordWorkout(
+                Pair(
+                    sportStartTime,
+                    newModel
+                )
+            )
+            workout = newModel
+        }
+
     }
 }

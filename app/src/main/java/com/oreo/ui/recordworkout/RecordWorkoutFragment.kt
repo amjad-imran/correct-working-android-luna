@@ -415,6 +415,9 @@ class RecordWorkoutFragment :
                 if (viewModel.shouldCheckWeather()) {
                     viewModel.getWeatherDetails(it.first, it.second)
                 }
+                if (viewModel.shouldCheckCity()) {
+                    viewModel.getAddress(it.first, it.second)
+                }
             }
         }
 
