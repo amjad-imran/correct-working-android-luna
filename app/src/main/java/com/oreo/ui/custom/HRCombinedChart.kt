@@ -26,9 +26,11 @@ import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.ui.heartrate.OnHRClickAction
 import org.joda.time.LocalDateTime
@@ -634,7 +636,8 @@ class HRCombinedChart : View {
                     topCombinedPaint
                 )
 
-            } else {
+            }
+            else {
                 rectF.left = (rectF.right + rectF.left) / 2 - imageSize / 2f
                 rectF.top = topWith - imageSize - dip2px(10f)
                 rectF.right = rectF.left + imageSize
@@ -779,6 +782,7 @@ class HRCombinedChart : View {
                 canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 4, xTextPaint);
             }*/
         }
+
         var start = 0
         for (i in list.indices) {
             if (list[i]!!.value > 0) {
@@ -802,7 +806,8 @@ class HRCombinedChart : View {
                 }
             } else {
                 if (lastIndex != -1) {
-                    if (Math.abs(i - lastIndex) < 4) {//TODO check logic
+                    //show dot line on 3 hour interval
+                    if (Math.abs(i - lastIndex) <= 6) {//TODO check logic
                         val x = mWith - leftWith - rightWith + leftWith - i * unitHLenth
                         val y =
                             mHeight - bottomWith - (current!!.value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
@@ -811,11 +816,8 @@ class HRCombinedChart : View {
                         val y1 =
                             mHeight - bottomWith - (list[lastIndex]!!.value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
                         chartLinePaint.setShader(null)
-                        chartLinePaint.color = if (isHighlighted || isInteracting) {
-                            Color.GRAY
-                        } else {
-                            Color.WHITE
-                        }
+                        chartLinePaint.color =
+                            ContextCompat.getColor(context, R.color.color_hr_cubic_line)
                         chartLinePaint.setPathEffect(effect)
                         canvas.drawLine(x, y, x1, y1, chartLinePaint)
                         chartLinePaint.setPathEffect(null)

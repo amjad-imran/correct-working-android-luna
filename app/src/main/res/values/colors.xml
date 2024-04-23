@@ -211,5 +211,6 @@
     <color name="daytime_medium_movement_label_color">#8ed3f1</color>
 
     <color name="text_light_blue">#9cbdff</color>
+    <color name="color_hr_cubic_line">#ff3371</color>
 
 </resources>
