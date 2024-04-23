@@ -36,6 +36,7 @@ data class OWorkoutDetailsResponseModel(
 
     @SerializedName("data_type") val dataType: String? = null,//distance/calories, default -> calories
     @SerializedName("data_priority") val dataPriority: String? = null,//ring/app. default-> ring
+    @SerializedName("start_location") val startLocation: String? = null,//ring/app. default-> ring
 
     val location: List<LocationDataNetwork>? = null,
     val weather: Weather? = null

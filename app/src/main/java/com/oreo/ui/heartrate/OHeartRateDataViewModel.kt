@@ -54,36 +54,29 @@ class OHeartRateDataViewModel @Inject constructor(
         val dataList = ArrayList<LearnMoreDataModel>()
         dataList.add(
             LearnMoreDataModel(
-                label = "2 min read",
-                msg = "Article name is goes off",
+                label = "3 mins read",
+                msg = "General heart rate terms",
                 img = "https://images.unsplash.com/photo-1696961305234-c56d9af60e34?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             )
         )
         dataList.add(
             LearnMoreDataModel(
-                label = "2 min read",
-                msg = "Article name is goes off",
+                label = "2 mins read",
+                msg = "What’s a normal heart rate for my age?",
                 img = "https://images.unsplash.com/photo-1696961305234-c56d9af60e34?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             )
         )
         dataList.add(
             LearnMoreDataModel(
-                label = "2 min read",
-                msg = "Article name is goes off",
+                label = "2 mins read",
+                msg = "What are heart rate zones and how do they work?",
                 img = "https://images.unsplash.com/photo-1696961305234-c56d9af60e34?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             )
         )
         dataList.add(
             LearnMoreDataModel(
-                label = "2 min read",
-                msg = "Article name is goes off",
-                img = "https://images.unsplash.com/photo-1696961305234-c56d9af60e34?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            )
-        )
-        dataList.add(
-            LearnMoreDataModel(
-                label = "2 min read",
-                msg = "Article name is goes off",
+                label = "2 mins read",
+                msg = "Understanding Sleeping Heart Rate",
                 img = "https://images.unsplash.com/photo-1696961305234-c56d9af60e34?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             )
         )
@@ -156,9 +149,7 @@ class OHeartRateDataViewModel @Inject constructor(
             if (max == 0 && min != 0) {
                 max = min
             }
-            if (min==max){
-                min=max
-            }
+
 
             val avg = (min + max) / 2
             if (avg != 0) {

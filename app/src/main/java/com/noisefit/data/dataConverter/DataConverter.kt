@@ -170,6 +170,7 @@ class DataConverter
 
                     val locationArray = JsonArray()
                     var temp: Double? = null
+                    var city: String? = null
                     var weatherStatus: Int? = null
 
                     locationData.forEach { location ->
@@ -182,6 +183,9 @@ class DataConverter
                             temp = location.temperature
                             weatherStatus = location.weatherStatus
                         }
+                        if (city == null) {
+                            city = location.location
+                        }
                     }
 
                     val gpsDistanceInMeters = getGpsDistance(locationData)
@@ -189,6 +193,7 @@ class DataConverter
                     if (locationArray.isEmpty.not()) {
                         this.add("location", locationArray)
                         this.addProperty("gps_distance", gpsDistanceInMeters)
+                        this.addProperty("start_location", city)
                     }
                     if (temp != null) {
                         this.add("weather", JsonObject().apply {

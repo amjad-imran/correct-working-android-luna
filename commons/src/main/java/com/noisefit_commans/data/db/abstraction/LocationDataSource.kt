@@ -17,4 +17,5 @@ interface LocationDataSource {
 
     suspend fun updateWeatherInfoForLatLong(lat: Double, lng: Double, temp: Double, status: Int?)
 
+    suspend fun updateCityForLatLong(lat: Double, lng: Double, city: String)
 }
