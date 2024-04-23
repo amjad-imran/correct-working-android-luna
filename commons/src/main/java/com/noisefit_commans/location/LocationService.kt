@@ -92,7 +92,7 @@ class LocationService : Service() {
                 val long = location.longitude
                 val altitude = location.altitude
 
-                LOGS.d("LOCATION_lOG Lat->$lat Long->$long  altitude ->$altitude | timestamp ${DateFormats.getTimeStamp()}")
+                LOGS.d("LOCATION_lOG Lat->$lat Long->$long Accuracy->${location.accuracy} altitude ->$altitude | timestamp ${DateFormats.getTimeStamp()}")
                 val model = LocationModel(
                     lat = lat,
                     longitude = long,
