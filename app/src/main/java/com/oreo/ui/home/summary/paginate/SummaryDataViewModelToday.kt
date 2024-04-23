@@ -115,6 +115,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
     var user: User? = null
     var registerDate: Int = -1
+    var shouldShowStressCard = false
     var onNapAddSuccess = MutableLiveData<Event<OreoNapDetailsDataModel>>()
     var serverUserHealthData: ServerUserHealthData? = null
 
@@ -493,17 +494,19 @@ class SummaryDataViewModelToday @Inject constructor(
                     }
                 }
             }
-            val combinedData = oreoStressDataConvertor.getStressCombinedData(healthData)
-            userActivities.add(
-                OHealthOverview.StressGraph(
-                    combinedData,
-                    healthData.stress?.stressValue?.value ?: 0,
-                    healthData.stress?.stressValue?.lastUpdated ?: 0L,
-                    getStressStatus(healthData.stress?.stressValue?.value ?: 0),
-                    true
-                )
-            )
 
+            if(shouldShowStressCard){
+                val combinedData = oreoStressDataConvertor.getStressCombinedData(healthData)
+                userActivities.add(
+                    OHealthOverview.StressGraph(
+                        combinedData,
+                        healthData.stress?.stressValue?.value ?: 0,
+                        healthData.stress?.stressValue?.lastUpdated ?: 0L,
+                        getStressStatus(healthData.stress?.stressValue?.value ?: 0),
+                        true
+                    )
+                )
+            }
 
             stateSleepAvgCard.postValue(
                 Pair(

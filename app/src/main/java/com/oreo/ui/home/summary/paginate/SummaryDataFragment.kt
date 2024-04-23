@@ -87,6 +87,7 @@ class SummaryDataFragment :
         viewModel.date?.let {
             mainViewModel.getDashBoardData(it)?.let { dash ->
                 viewModel.serverUserHealthData = dash.first
+                viewModel.shouldShowStressCard = mainViewModel.shouldShowStressCard(it)
                 setUi(dash.first)
             }
         }

@@ -35,6 +35,8 @@ import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.joda.time.LocalDateTime
+import org.joda.time.format.DateTimeFormat
 import javax.inject.Inject
 
 @HiltViewModel
@@ -52,6 +54,7 @@ class SummaryDataViewModel @Inject constructor(
 
     var serverUserHealthData: ServerUserHealthData? = null
     var date: String? = null
+    var shouldShowStressCard = false
     val healthOverviewData = MutableLiveData<ArrayList<OHealthOverview>>()
     val stateHeartRateCard = MutableLiveData<OHealthOverview.HeartRateDataModel?>()
 
@@ -140,16 +143,18 @@ class SummaryDataViewModel @Inject constructor(
                     )
                 }
             }
-            userActivities.add(
-                OHealthOverview.StressGraph(
-                    oreoStressDataConvertor.getStressCombinedData(healthData),
-                    healthData.stress?.stressValue?.value ?: 0,
-                    healthData.stress?.stressValue?.lastUpdated ?: 0L,
-                    getStressStatus(healthData.stress?.stressValue?.value ?: 0),
-                    false
-                )
-            )
 
+            if (shouldShowStressCard) {
+                userActivities.add(
+                    OHealthOverview.StressGraph(
+                        oreoStressDataConvertor.getStressCombinedData(healthData),
+                        healthData.stress?.stressValue?.value ?: 0,
+                        healthData.stress?.stressValue?.lastUpdated ?: 0L,
+                        getStressStatus(healthData.stress?.stressValue?.value ?: 0),
+                        false
+                    )
+                )
+            }
 
             healthOverviewData.postValue(userActivities)
 
@@ -160,7 +165,7 @@ class SummaryDataViewModel @Inject constructor(
         }
     }
 
-    fun getStressStatus(value: Int?): String {
+    private fun getStressStatus(value: Int?): String {
         return when (value) {
             0 -> ""
             in 1..34 -> "Calm"
@@ -249,7 +254,7 @@ class SummaryDataViewModel @Inject constructor(
             )
         }
 
-        val average = if(avgList.isEmpty()) 0.0f else avgList.average().toFloat()
+        val average = if (avgList.isEmpty()) 0.0f else avgList.average().toFloat()
 
 
         val measureState = TapMeasureState.HIDE

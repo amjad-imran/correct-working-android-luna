@@ -19,6 +19,9 @@ data class ServerUserHealthResponse(
     @SerializedName("register_date")
     val registerDate: Int? = null,
 
+    @SerializedName("first_stress")
+    val firstStress: String? = null,//2024-02-07
+
     @SerializedName("temp_base")
     val tempBaseLine: Float? = null,
 ) : ColorfitData()
@@ -86,9 +89,9 @@ data class NonActive(
     @SerializedName("non_active_stressed")
     val nonActiveStressed: Int,
     @SerializedName("typical_non_active_calm")
-    val typicalNonActiveCalm: Int?=null,
+    val typicalNonActiveCalm: Int? = null,
     @SerializedName("typical_non_active_focused")
-    val typicalNonActiveFocused: Int?=null,
+    val typicalNonActiveFocused: Int? = null,
     @SerializedName("typical_non_active_stressed")
-    val typicalNonActivestressed: Int?=null
+    val typicalNonActivestressed: Int? = null
 )

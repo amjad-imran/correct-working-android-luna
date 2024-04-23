@@ -52,6 +52,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.joda.time.Days
 import org.joda.time.LocalDate
+import org.joda.time.LocalDateTime
+import org.joda.time.format.DateTimeFormat
 import javax.inject.Inject
 import kotlin.math.abs
 import kotlin.math.floor
@@ -89,6 +91,7 @@ constructor(
 
     val userHealthData = HashMap<String, ServerUserHealthData?>()
     var trendsData: TrendsData? = null
+    var stressFirstDate: String? = null
     val dataReload = MutableLiveData<Event<List<String>>>()
     val dashTodayReload = MutableLiveData<Event<Boolean>>()
 
@@ -174,6 +177,7 @@ constructor(
     private fun resetHealthCacheData() {
         userHealthData.clear()
         trendsData = null
+        stressFirstDate = null
         _dashboard.value = ArrayList()
         _sleepHistoryResponse.value = ArrayList()
         _readinessHistoryResponse.value = ArrayList()
@@ -254,6 +258,7 @@ constructor(
                         resource.data?.data?.let {
 
                             registerDate = it.registerDate ?: -1
+                            stressFirstDate = it.firstStress
                             temperatureBaseLine = it.tempBaseLine ?: DEFAULT_TEMPERATURE_BASELINE
 
                             it.data.forEach { data ->
@@ -690,6 +695,20 @@ constructor(
                 }
 
 
+        }
+    }
+
+    fun shouldShowStressCard(date: String): Boolean {
+        if (stressFirstDate == null) return false
+
+        return try {
+            val stressDate =
+                LocalDateTime.parse(stressFirstDate, DateTimeFormat.forPattern("yyyy-MM-dd"))
+            val currentDate = LocalDateTime.parse(date, DateTimeFormat.forPattern("yyyy-MM-dd"))
+            currentDate >= stressDate
+        } catch (exp: Exception) {
+            //formatting exception
+            false
         }
     }
 

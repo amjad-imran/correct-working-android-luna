@@ -59,6 +59,9 @@ class OStressDetailsFragment :
                 mainViewModel.selectedDate = pagerAdapter?.getDate(position)
                 setTabDates(position)
 
+                val shouldShow = mainViewModel.shouldShowStressCard(mainViewModel.selectedDate!!)
+                if (shouldShow.not()) return
+
                 if (mainViewModel.shouldLoadMoreData()) {
                     LOGS.w("Loading more data")
                 }
@@ -155,9 +158,14 @@ class OStressDetailsFragment :
     override fun subscribeObservers() {
         mainViewModel.dashboard.observe(viewLifecycleOwner) {
             LOGS.w("Setting_data size ${it.size}")
-            pagerAdapter?.setDataSet(it)
 
-            val pos = pagerAdapter?.getPositionForDate(mainViewModel.selectedDate) ?: (it.size - 1)
+            val filteredDates = it.filter {
+                mainViewModel.shouldShowStressCard(it)
+            }
+
+            pagerAdapter?.setDataSet(filteredDates)
+
+            val pos = pagerAdapter?.getPositionForDate(mainViewModel.selectedDate) ?: (filteredDates.size - 1)
 
             binding.viewPagerStress.setCurrentItem(pos, false)
             binding.tabLayout.root.visible()
