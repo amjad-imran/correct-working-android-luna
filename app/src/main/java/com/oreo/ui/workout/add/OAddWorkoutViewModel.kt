@@ -174,6 +174,7 @@ class OAddWorkoutViewModel
 
 
         var hasOverlappingWorkout = false
+        var workoutName = "Workout"
         userDayData?.activity?.workout?.forEach {
             LOGS.d("checkIfAndEventExists   Workouts->  ${it.startTime}  ${it.endTime}")
 
@@ -182,16 +183,18 @@ class OAddWorkoutViewModel
 
             if (workoutStartTime in wStartTime..wEndTime || workoutEndTime in wStartTime..wEndTime) {
                 hasOverlappingWorkout = true
+                workoutName = it.getFormattedActivityName()
                 return@forEach
             }
 
             if (wStartTime in workoutStartTime..workoutEndTime || wEndTime in workoutStartTime..workoutEndTime) {
+                workoutName = it.getFormattedActivityName()
                 hasOverlappingWorkout = true
                 return@forEach
             }
         }
         if (hasOverlappingWorkout) {
-            return "Workout in this time frame already exists."
+            return "$workoutName in this time frame already exists."
         }
 
         var hasOverlappingNap = false
