@@ -191,9 +191,13 @@ class DataConverter
                     val gpsDistanceInMeters = getGpsDistance(locationData)
 
                     if (locationArray.isEmpty.not()) {
-                        this.add("location", locationArray)
+                        val locObject = JsonObject().apply {
+                            this.add("locations", locationArray)
+                            this.addProperty("start_location", city)
+                        }
+
+                        this.add("location", locObject)
                         this.addProperty("gps_distance", gpsDistanceInMeters)
-                        this.addProperty("start_location", city)
                     }
                     if (temp != null) {
                         this.add("weather", JsonObject().apply {

@@ -184,8 +184,8 @@ class OWorkoutDetailsFragmentV2 :
         binding.lytTop.lytActivityItem.tvWorkoutTime.text =
             DateFormats.getActivityDisplayDates(it.startTime, it.endTime)
 
-        if (it.startLocation.isNullOrEmpty().not()) {
-            binding.lytTop.lytActivityItem.tvWorkoutCity.text = ""
+        if (it.location?.startLocation.isNullOrEmpty().not()) {
+            binding.lytTop.lytActivityItem.tvWorkoutCity.text = it.location?.startLocation ?: ""
             binding.lytTop.lytActivityItem.tvWorkoutCity.visible()
         } else {
             binding.lytTop.lytActivityItem.tvWorkoutCity.gone()
@@ -348,7 +348,7 @@ class OWorkoutDetailsFragmentV2 :
 
         }
 
-        if (it.location.isNullOrEmpty()) {
+        if (it.location?.locations.isNullOrEmpty()) {
             binding.lytTop.vMapOverlay.gone()
             binding.lytTop.vMapGradientTop.gone()
             binding.lytTop.vMapGradientBottom.gone()
@@ -371,7 +371,7 @@ class OWorkoutDetailsFragmentV2 :
             } else {
                 binding.lytTop.groupTemp.gone()
             }
-            setUpMaps(it.location)
+            setUpMaps(it.location?.locations!!)
         }
     }
 
