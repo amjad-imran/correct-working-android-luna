@@ -37,6 +37,7 @@ import java.time.Period
 import java.util.Calendar
 import javax.inject.Inject
 import kotlin.math.ceil
+import kotlin.math.roundToInt
 
 @HiltViewModel
 class OWorkoutDetailsViewModelV2 @Inject constructor(
@@ -358,27 +359,27 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
 
         val hrIntervalInSecond = 30L
         val age = getUserAge()
-        LOGS.d("MY_AGE $age")
+        //LOGS.d("MY_AGE $age")
         val HRmax = (208 - 0.7 * age)
         // Zone 1 (50-60%)
-        val zone1Min = (0.5 * HRmax).toInt()
-        val zone1Max = (0.6 * HRmax).toInt()
+        val zone1Min = (0.5 * HRmax).roundToInt()
+        val zone1Max = (0.6 * HRmax).roundToInt()
         zones["Zone 1"] = zone1Min..zone1Max
 
         // Zone 2 (60-70%)
-        val zone2Max = (0.7 * HRmax).toInt()
+        val zone2Max = (0.7 * HRmax).roundToInt()
         zones["Zone 2"] = zone1Max..zone2Max
 
         // Zone 3 (70-80%)
-        val zone3Max = (0.8 * HRmax).toInt()
+        val zone3Max = (0.8 * HRmax).roundToInt()
         zones["Zone 3"] = zone2Max..zone3Max
 
         // Zone 4 (80-90%)
-        val zone4Max = (0.9 * HRmax).toInt()
+        val zone4Max = (0.9 * HRmax).roundToInt()
         zones["Zone 4"] = zone3Max..zone4Max
 
         // Zone 5 (90-100%)
-        val zone5Max = HRmax.toInt()
+        val zone5Max = HRmax.roundToInt()
         zones["Zone 5"] = zone4Max..zone5Max
 
 
@@ -413,11 +414,11 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             }
         }
 
-        LOGS.d("khgkhgkgkk ${Gson().toJson(zones)}")
-
 
         val duration =
             zone1Indexes.size + zone2Indexes.size + zone3Indexes.size + zone4Indexes.size + zone5Indexes.size + zoneRestorativeIndexes.size
+
+        LOGS.d("$zone1Indexes $zone2Indexes $zone3Indexes $zone4Indexes $zone5Indexes $zoneRestorativeIndexes")
 
 //        zones.forEach { (zone, range) ->
 //            println("$zone: $range bpm zonesss")

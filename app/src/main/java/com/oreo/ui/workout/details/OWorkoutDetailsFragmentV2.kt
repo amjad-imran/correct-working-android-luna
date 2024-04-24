@@ -429,6 +429,7 @@ class OWorkoutDetailsFragmentV2 :
             e.printStackTrace()
             LOGS.e("Can't find style. Error: $e")
         }
+        map.isBuildingsEnabled = false
 
         map.uiSettings.apply {
             isCompassEnabled = false
