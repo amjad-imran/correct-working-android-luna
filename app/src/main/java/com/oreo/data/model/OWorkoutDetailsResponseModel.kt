@@ -33,12 +33,9 @@ data class OWorkoutDetailsResponseModel(
     @SerializedName("gps_distance") val gpsDistance: Long? = null,
     val nudges: List<Nudges>? = null,
     @SerializedName("daytime_movement") val movement: List<Int>? = null,
-
+    val location: LocationObj? = null,
     @SerializedName("data_type") val dataType: String? = null,//distance/calories, default -> calories
     @SerializedName("data_priority") val dataPriority: String? = null,//ring/app. default-> ring
-    @SerializedName("start_location") val startLocation: String? = null,//ring/app. default-> ring
-
-    val location: List<LocationDataNetwork>? = null,
     val weather: Weather? = null
 ) {
     fun getFormattedActivityName(): String {
@@ -47,5 +44,10 @@ data class OWorkoutDetailsResponseModel(
         return actNameTemp.capitalizeWords()
     }
 }
+
+data class LocationObj(
+    val locations: List<LocationDataNetwork>? = null,
+    @SerializedName("start_location") val startLocation: String? = null,//ring/app. default-> ring
+)
 
 data class Weather(val temp: Int? = null, val status: Int? = null)
