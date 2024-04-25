@@ -1,6 +1,5 @@
 package com.oreo.ui.custom
 
-import android.R.attr.resource
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -26,6 +25,7 @@ import com.noisefit.luna.R
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.GraphDummyModel
@@ -548,7 +548,7 @@ class HeartRateChartView : View {
         if (!isInteracting) return
 
 
-        val calculatedTouchX = if (touchX < leftWith) {
+        var calculatedTouchX = if (touchX < leftWith) {
             leftWith
         } else if (touchX > (mWith - rightWith)) {
             (mWith - rightWith)
@@ -565,6 +565,14 @@ class HeartRateChartView : View {
         var showOverlay = true
         if (isHighlighted) {
             showOverlay = highlightIndexs.contains(list.size - 1 - value.first)
+            /*if (showOverlay.not()) {
+                val newTouchValue = getNextValue(highlightIndexs, list.size - 1 - value.first)
+                if (newTouchValue != null) {
+                    calculatedTouchX = newTouchValue
+                    showOverlay = true
+                }
+            }*/
+
         }
 
         if (!showOverlay) {
@@ -622,6 +630,30 @@ class HeartRateChartView : View {
         }/*}*/
     }
 
+    private fun getNextValue(highlightIndex: MutableList<Int>, value: Int): Float? {
+        var min: Int? = null
+        var pos: Int? = null
+        highlightIndex.forEachIndexed { index, i ->
+            val diff = i - value
+
+            if (diff > 0) {
+                if (min == null) {
+                    pos = i
+                    min = diff
+                } else if (diff < min!! && diff >= 0) {
+                    pos = i
+                    min = diff
+                }
+            }
+        }
+
+        if (pos == null) return null
+
+        val range = unitHLenth / 2//dip2px(3f)
+
+        return toolTipList.get(list.size - 1 - pos!!).first + range
+    }
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
 
         mWith = w
@@ -639,7 +671,6 @@ class HeartRateChartView : View {
     private fun drawRight(canvas: Canvas) {
         canvas.drawRect(mWith - rightWith, 0f, mWith.toFloat(), mHeight.toFloat(), bgRightPaint!!)
     }
-
 
 
     fun initLineGradient() {
@@ -963,7 +994,7 @@ class HeartRateChartView : View {
         }*/
 
         //4 - > 120
-        val eachSecondsWidth = (width.toFloat() - rightWith - leftWith) / (list.size  * 30)
+        val eachSecondsWidth = (width.toFloat() - rightWith - leftWith) / (list.size * 30)
         if (showXAxis) {
 
             drawXAxisTime(

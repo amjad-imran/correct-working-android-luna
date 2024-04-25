@@ -93,7 +93,6 @@ class OStressDataMovementFragment :
 
                 viewModel.isSelectedMode = false
 
-
                 val day = viewModel.getDayFromDate(dayData.date)
                 binding.lytStressHeader.tvTypical.text = "vs typical $day"
                 binding.lytInactiveStressHeader.tvTypical.text = "vs typical $day"
@@ -103,10 +102,7 @@ class OStressDataMovementFragment :
                     dayData.stress?.stressValue?.lastUpdated
                 )
 
-                setTopMeter(
-                    dayData.stress?.stressValue?.value,
-                    dayData.stress?.stressValue?.lastUpdated
-                )
+
                 initCombineChart(dayData)
                 val combinedData =
                     viewModel.getCombinedMovementData(
@@ -121,6 +117,11 @@ class OStressDataMovementFragment :
                 //viewModel.prepareStressActivityData(dayData)
                 setStressBannerViewPager(dayData.stress?.nudges)
                 viewModel.prepareStressActivityData(dayData)
+
+                setTopMeter(
+                    dayData.stress?.stressValue?.value,
+                    dayData.stress?.stressValue?.lastUpdated
+                )
 
             }
         }

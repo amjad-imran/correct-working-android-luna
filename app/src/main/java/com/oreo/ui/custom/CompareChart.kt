@@ -24,7 +24,7 @@ class CompareChart(context: Context, attrs: AttributeSet?) : View(context, attrs
 
 
         inactivePaint.color = Color.parseColor("#19ffffff")
-        inactivePaint.alpha = 50
+        //inactivePaint.alpha = 50
         inactivePaint.isAntiAlias = true
 
         barPaint.color = Color.parseColor("#ffffff")

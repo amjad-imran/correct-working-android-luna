@@ -17,10 +17,10 @@
 
         <TextView
             android:id="@+id/tvSubTitle"
-            style="@style/S14"
+            style="@style/S12"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_4dp"
+            android:layout_marginTop="8dp"
             android:lineSpacingExtra="6sp"
             android:textColor="@color/white_64"
             app:layout_constraintEnd_toEndOf="parent"

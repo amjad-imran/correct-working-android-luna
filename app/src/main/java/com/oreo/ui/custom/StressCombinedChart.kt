@@ -293,9 +293,9 @@ class StressCombinedChart : View {
         )
         chartLineGradientInteracting = LinearGradient(
             0f, topWith, 0f, mHeight - bottomWith, intArrayOf(
-                Color.parseColor("#80ff922d"),
-                Color.parseColor("#80ffe762"),
-                Color.parseColor("#8012cba9")
+                Color.parseColor("#83674e"),
+                Color.parseColor("#6c6c42"),
+                Color.parseColor("#0f6261")
             ), floatArrayOf(0f, 0.5f, 1f), Shader.TileMode.CLAMP
         )
         linearGradient = LinearGradient(
@@ -313,7 +313,7 @@ class StressCombinedChart : View {
             mWith - rightWith,
             mHeight / 2f,
             Color.TRANSPARENT,
-            Color.parseColor("#C0000000"),
+            Color.parseColor("#cc0b1a2e"),
             Shader.TileMode.CLAMP
         )
     }
@@ -400,7 +400,7 @@ class StressCombinedChart : View {
             )
 
 
-            xText = "6 am"
+            /*xText = "6 am"
             xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
             val centerLeft = (mWith - rightWith - leftWith) / 4 - xTextBounds!!.width() / 2
             canvas.drawText(
@@ -419,7 +419,7 @@ class StressCombinedChart : View {
                 centerRight,
                 mHeight - bottomWith / 3,
                 xTextPaint
-            )
+            )*/
 
 
         }
@@ -588,7 +588,7 @@ class StressCombinedChart : View {
                         val x1 = mWith - leftWith - rightWith + leftWith - (i + 1) * unitHLenth
                         val y1 =
                             mHeight - bottomWith - next.value * (mHeight - topWith - bottomWith) / (max - xMin)
-                        path.cubicTo(x1 + (x - x1) / 4, y, x - (x - x1) / 4, y1, x1, y1)
+                        path.cubicTo(x1 + (x - x1) / 1.5f, y, x - (x - x1) / 1.5f, y1, x1, y1)
                         if (highlightIndexs.contains(list.size - 1 - i)) {
                             fillPath.addPath(path)
                             //draw fill first
