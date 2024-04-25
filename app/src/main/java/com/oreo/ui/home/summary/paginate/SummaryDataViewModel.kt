@@ -168,7 +168,7 @@ class SummaryDataViewModel @Inject constructor(
     private fun getStressStatus(value: Int?): String {
         return when (value) {
             0 -> ""
-            in 1..34 -> "Calm"
+            in 1..34 -> "Relaxed"
             in 35..69 -> "Focussed"
             in 70..100 -> "Stressed"
             else -> ""

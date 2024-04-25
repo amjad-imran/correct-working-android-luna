@@ -51,6 +51,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.joda.time.Days
+import org.joda.time.Duration
 import org.joda.time.LocalDate
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
@@ -709,6 +710,22 @@ constructor(
         } catch (exp: Exception) {
             //formatting exception
             false
+        }
+    }
+
+    fun stressDaysFromCurrent(date: String?): Int {
+        if (date.isNullOrEmpty()) return -1
+        if (stressFirstDate == null) return -1
+
+        return try {
+            val stressDate =
+                LocalDateTime.parse(stressFirstDate, DateTimeFormat.forPattern("yyyy-MM-dd"))
+            val currentDate = LocalDateTime.parse(date, DateTimeFormat.forPattern("yyyy-MM-dd"))
+
+            val difference = Days.daysBetween(stressDate,currentDate)
+            return difference.days
+        } catch (exp: Exception) {
+            -1
         }
     }
 

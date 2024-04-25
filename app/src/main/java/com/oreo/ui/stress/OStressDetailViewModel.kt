@@ -222,6 +222,7 @@ constructor(
     }
 
     fun getDifference(today: Int, typicalDay: Int): Int {
+        if (typicalDay == 0 && today == 0) return 0
         val tempTypicalDay = if (typicalDay == 0) 1 else typicalDay
         val difference = today - tempTypicalDay
         if (difference == 0) return 0

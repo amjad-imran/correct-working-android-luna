@@ -81,7 +81,7 @@ class OStressInternalDetailsFragment :
                 R.color.stress_nap_focussed
             )
         )
-        binding.lytTopView.lytCalm.tvTitle.text = getString(R.string.text_calm)
+        binding.lytTopView.lytCalm.tvTitle.text = getString(R.string.text_relaxed)
         binding.lytTopView.lytCalm.tvTitle.setTextColor(
             ContextCompat.getColor(
                 requireContext(),

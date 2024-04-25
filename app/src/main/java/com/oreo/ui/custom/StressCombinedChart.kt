@@ -482,7 +482,7 @@ class StressCombinedChart : View {
                 (medium + high) / 2 + xTextBounds!!.height() / 2f,
                 paintFocussed
             )
-            val lowText = "Calm"
+            val lowText = "Relaxed"
             paintCalm.getTextBounds(lowText, 0, lowText.length, xTextBounds)
             canvas.drawText(
                 lowText,

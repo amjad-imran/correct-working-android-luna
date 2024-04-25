@@ -359,11 +359,17 @@ class OStressDataMovementFragment :
         val (calm, focused, stressed) = viewModel.getStressMinutes(stress)
         val total = calm + focused + stressed
 
+        val stressDays = mainViewModel.stressDaysFromCurrent(viewModel.date)
+
         binding.lytStressHeader.apply {
             tvTitle.text = getString(R.string.text_overall_stress)
             tvSubTitle.text = getString(R.string.text_active_stress_definition)
-            val hasComparisonData =
+            var hasComparisonData =
                 (stress?.typicalCalm != null && stress.typicalFocused != null && stress.typicalStressed != null)
+
+            if (stressDays < 7) {
+                hasComparisonData = false
+            }
 
             val (hourCalm, minuteCalm) = ApplicationUtils.getFormattedSleepDuration(
                 calm
@@ -371,7 +377,7 @@ class OStressDataMovementFragment :
             setHourMin(lytCalm.lytHrMn, total, hourCalm, minuteCalm)
 
             lytCalm.tvCalm.setTextColor(resources.getColor(R.color.stress_nap_calm, null))
-            lytCalm.tvCalm.text = getString(R.string.text_calm)
+            lytCalm.tvCalm.text = getString(R.string.text_relaxed)
 
             val (hourFocused, minuteFocused) = ApplicationUtils.getFormattedSleepDuration(
                 focused
@@ -436,12 +442,17 @@ class OStressDataMovementFragment :
         val stressed = nonActiveData?.nonActiveStressed ?: 0
         val total =
             calm + focused + stressed
+        val stressDays = mainViewModel.stressDaysFromCurrent(viewModel.date)
 
         binding.lytInactiveStressHeader.apply {
             tvSubTitle.text = getString(R.string.text_inactive_stress_definition)
             tvTitle.text = getString(R.string.text_non_active_stress)
-            val hasComparisonData =
+            var hasComparisonData =
                 (nonActiveData?.typicalNonActiveCalm != null && nonActiveData.typicalNonActiveFocused != null && nonActiveData.typicalNonActivestressed != null)
+
+            if (stressDays < 7) {
+                hasComparisonData = false
+            }
 
             val (hourCalm, minuteCalm) = ApplicationUtils.getFormattedSleepDuration(
                 calm
@@ -449,7 +460,7 @@ class OStressDataMovementFragment :
             setHourMin(lytCalm.lytHrMn, total, hourCalm, minuteCalm)
 
             lytCalm.tvCalm.setTextColor(resources.getColor(R.color.stress_nap_calm, null))
-            lytCalm.tvCalm.text = getString(R.string.text_calm)
+            lytCalm.tvCalm.text = getString(R.string.text_relaxed)
 
             val (hourFocused, minuteFocused) = ApplicationUtils.getFormattedSleepDuration(
                 focused
