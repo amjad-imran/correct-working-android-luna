@@ -99,6 +99,7 @@ class StressCombinedChart : View {
     lateinit var stressDot: Bitmap
     lateinit var calmDot: Bitmap
     lateinit var focusedDot: Bitmap
+    lateinit var rightBackBitmap: Bitmap
     private var listener: OnStressClickAction? = null
     private var lastSentValuePos: Int? = null
     private val effect =
@@ -180,6 +181,11 @@ class StressCombinedChart : View {
                 R.drawable.ic_stress_stressed_dot
             ), dimen, dimen, true
         )
+        rightBackBitmap =
+            BitmapFactory.decodeResource(
+                res,
+                R.drawable.back_stress_left
+            )
     }
 
 
@@ -452,11 +458,12 @@ class StressCombinedChart : View {
         if (isInteracting) return
         rectF.left = mWith - rightWith - shadowWidth
         rectF.top = topWith
-        rectF.right = mWith - rightWith
+        rectF.right = mWith.toFloat()// - rightWith
         rectF.bottom = mHeight - bottomWith
 
         chartLineFillPaint.setShader(linearGradientShadow)
-        canvas.drawRect(rectF, chartLineFillPaint)
+        //canvas.drawRect(rectF, chartLineFillPaint)
+        canvas.drawBitmap(rightBackBitmap, null, rectF, null)
         var high = 0f
         if (combineModel == null) return
         if (combineModel!!.high > 0) {

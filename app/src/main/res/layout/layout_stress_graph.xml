@@ -13,6 +13,8 @@
         lineChart:chartLineWidth="2dp"
         lineChart:gridColor="#80FFFFFF"
         lineChart:highColor="#ff922d"
+        lineChart:rightWith="26dp"
+        android:layout_marginStart="26dp"
         lineChart:layout_constraintBottom_toBottomOf="parent"
         lineChart:layout_constraintEnd_toEndOf="parent"
         lineChart:layout_constraintStart_toStartOf="parent"
