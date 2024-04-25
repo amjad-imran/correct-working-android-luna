@@ -78,4 +78,7 @@ interface RingDataStore {
 
     fun isNewOtaAvailable():Boolean
 
+    fun getFirstStressDay(): String?
+    fun setFirstStressDay(firstStress: String?)
+
 }

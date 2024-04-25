@@ -146,6 +146,7 @@ class OreoUserActivityRepositoryImpl(
             val todayDate = DateFormats.getTodaysDateString(10)
             var resultTrendsData: TrendsData? = null
             var registerDate: Int? = null
+            var firstStress: String? = null
             var tempBaseLine: Float? = null
 
             var apiStartDate: String? = startDate
@@ -229,6 +230,7 @@ class OreoUserActivityRepositoryImpl(
                                 data = resultData!!,
                                 trends = resultTrendsData,
                                 registerDate = ringDataStore.getRegisterDay(),
+                                firstStress = ringDataStore.getFirstStressDay(),
                                 tempBaseLine = ringDataStore.getTempBaseLine()
                             ),
                             message = "",
@@ -266,6 +268,8 @@ class OreoUserActivityRepositoryImpl(
                             resultTrendsData = response.trends
                             registerDate = response.registerDate
                             tempBaseLine = response.tempBaseLine
+                            firstStress = response.firstStress
+                            ringDataStore.setFirstStressDay(response.firstStress)
                             ringDataStore.setTempBaseLine(tempBaseLine ?: 98.6f)
 
                             ringDataStore.setRegisterDay(registerDate ?: -1)
@@ -302,7 +306,8 @@ class OreoUserActivityRepositoryImpl(
                                             data = resultData!!,
                                             trends = resultTrendsData,
                                             registerDate = registerDate,
-                                            tempBaseLine = tempBaseLine
+                                            tempBaseLine = tempBaseLine,
+                                            firstStress = firstStress
                                         ),
                                         message = "",
                                     )
@@ -1857,7 +1862,7 @@ class OreoUserActivityRepositoryImpl(
         return safeApiCallFlow(dispatcher) {
             val url =
                 "${BuildConfig.OREO_BASE_URL}/stress/v1/stress"
-            remoteDataSource.getStressInternalPageData(url, selectDate, dayType,filterType)
+            remoteDataSource.getStressInternalPageData(url, selectDate, dayType, filterType)
         }
     }
 

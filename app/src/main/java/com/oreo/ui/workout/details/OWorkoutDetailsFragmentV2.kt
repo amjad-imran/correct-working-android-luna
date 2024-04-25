@@ -83,7 +83,7 @@ class OWorkoutDetailsFragmentV2 :
         super.onViewCreated(view, savedInstanceState)
         setDefaultUiValue()
         setRecycler()
-        viewModel.getWorkoutDetails(args.workoutId)
+        viewModel.getWorkoutDetails("ed661b42-bff4-41fe-b435-e322b71f8433"/*args.workoutId*/)
         viewModel.position = args.position
 
     }
