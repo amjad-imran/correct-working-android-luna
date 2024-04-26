@@ -16,7 +16,7 @@ sealed class StressUnderstandingOverview {
     class TextWithAdapter(
         val title: String,
         val description: String,
-        var subList: ArrayList<StressUnderstandingSubList> = ArrayList(),
+        var subList: List<String> = ArrayList(),
         var showBottomLine: Boolean
     ) : StressUnderstandingOverview()
 

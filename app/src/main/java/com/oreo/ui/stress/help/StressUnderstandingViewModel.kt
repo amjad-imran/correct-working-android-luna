@@ -64,7 +64,7 @@ constructor() : BaseViewModel() {
             StressUnderstandingOverview.TextWithAdapter(
                 "Managing acute stress (Short term)",
                 "Acute stress typically arises in response to immediate threats or challenges and tends to subside once the situation is addressed. Strategies for managing acute stress include:",
-                getShortTermList(),
+                getShortTermListText(),
                 true
             )
         )
@@ -73,7 +73,7 @@ constructor() : BaseViewModel() {
             StressUnderstandingOverview.TextWithAdapter(
                 "Managing chronic stress (Long term)",
                 "Chronic stress persists over an extended period and can stem from various sources, including job loss, financial worries, or serious illness. Strategies for managing chronic stress include:",
-                getLongTermList(),
+                getLongTermListText(),
                 false
             )
         )
@@ -93,6 +93,18 @@ constructor() : BaseViewModel() {
         dataList.add(StressUnderstandingSubList("Exercise", R.drawable.bg_dummy_placeholder))
         return dataList
     }
+    private fun getShortTermListText(): List<String> {
+        val dataList = ArrayList<String>()
+        dataList.add("Cultivating new lifestyle habits")
+        dataList.add("Practicing breathwork")
+        dataList.add("Meditating")
+        dataList.add("Exercising")
+        dataList.add("Connecting with loved ones")
+        dataList.add("Spending time in nature")
+        dataList.add("Ensuring high-quality sleep")
+        dataList.add("Exploring new hobbies")
+        return dataList
+    }
 
     private fun getLongTermList(): ArrayList<StressUnderstandingSubList> {
         val dataList = ArrayList<StressUnderstandingSubList>()
@@ -103,6 +115,15 @@ constructor() : BaseViewModel() {
                 R.drawable.bg_dummy_placeholder
             )
         )
+        return dataList
+    }
+
+    private fun getLongTermListText(): List<String> {
+        val dataList = ArrayList<String>()
+        dataList.add("Engaging in regular exercise")
+        dataList.add("Incorporating cold exposure, such as cold showers or ice baths")
+        dataList.add("Deliberate heat exposure, like saunas")
+        dataList.add("Experimenting with intermittent fasting to regulate metabolism and promote overall well-being")
         return dataList
     }
 }

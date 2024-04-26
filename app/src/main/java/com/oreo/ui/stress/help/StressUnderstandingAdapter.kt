@@ -122,7 +122,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.rv.apply {
                 layoutManager = LinearLayoutManager(
                     binding.rv.context,
-                    LinearLayoutManager.HORIZONTAL,
+                    LinearLayoutManager.VERTICAL,
                     false
                 )
                 setRecycledViewPool(RecyclerView.RecycledViewPool())

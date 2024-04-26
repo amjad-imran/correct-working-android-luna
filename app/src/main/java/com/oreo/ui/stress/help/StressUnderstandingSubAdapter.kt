@@ -12,14 +12,13 @@ class StressUnderstandingSubAdapter() :
     RecyclerView.Adapter<StressUnderstandingSubAdapter.ViewHolder>() {
 
 
-    private var mDataSet = ArrayList<StressUnderstandingSubList>()
+    private var mDataSet = ArrayList<String>()
 
     inner class ViewHolder(val binding: ItemStressUnderstandingSubListBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: StressUnderstandingSubList, position: Int) {
+        fun bind(data: String, position: Int) {
 
-            binding.tvTitle.text = data.title
-            binding.imv.loadImage(binding.imv.context,data.image)
+            binding.tvContent.text = data
         }
 
     }
@@ -39,7 +38,7 @@ class StressUnderstandingSubAdapter() :
     }
 
     override fun getItemCount() = mDataSet.size
-    fun setDataSet(list: List<StressUnderstandingSubList>) {
+    fun setDataSet(list: List<String>) {
         mDataSet.clear()
         mDataSet.addAll(list)
         notifyDataSetChanged()
