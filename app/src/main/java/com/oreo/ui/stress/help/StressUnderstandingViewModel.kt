@@ -19,7 +19,7 @@ constructor() : BaseViewModel() {
         dataList.add(
             StressUnderstandingOverview.ImageWithText(
                 "What is stress?",
-                R.drawable.bg_dummy_placeholder,
+                R.drawable.image_what_is_stress,
                 "Stress is the body’s natural response to physical or mental challenges. It's commonly known that stress can have negative impacts on the body and brain, but healthy levels can actually enhance focus, memory, and overall performance.<br><br>Luna Ring measures your heart rate, HRV & motion, aiding in tracking physiological stress for effective understanding, management, and recovery."
             )
         )
@@ -27,7 +27,7 @@ constructor() : BaseViewModel() {
         dataList.add(
             StressUnderstandingOverview.ImageWithText(
                 "What are the different Stress Zones?",
-                R.drawable.bg_dummy_placeholder,
+                R.drawable.image_stress_zone,
                 "<font color='#3fe8b5'>Calm</font> (0-32)<br>Your body is currently resting and recharging itself. You may feel calm, at ease, or relaxed.<br><br>" +
                         "<font color='#ffed91'>Focussed</font> (33-74)<br>There are some indications of stress, yet this state may be advantageous for work as it is in either a neutral, alert, or slightly stimulated state.<br><br>" +
                         "<font color='#ffad60'>Stressed</font> (75-100)<br>It represents the highest level of stress. Excitation, tension, or high activity are typical and normal, but they indicate the need for relaxation."
@@ -37,7 +37,7 @@ constructor() : BaseViewModel() {
         dataList.add(
             StressUnderstandingOverview.ImageWithText(
                 "Making Sense of Stress Tracking",
-                R.drawable.bg_dummy_placeholder,
+                R.drawable.image_stress_tracking,
                 "Stress encompasses both physical and mental responses to internal and external factors. When managed well, stress can foster personal growth in productivity, creativity, and resilience.<br><br>" +
                         "Stress tracking via Luna Ring relies on understanding of the autonomic nervous system (ANS), indicating stress levels and recovery processes. For instance, a lower-than-usual HRV may indicate an overworked sympathetic nervous system, while a faster resting heart rate may signify a stress response."
 

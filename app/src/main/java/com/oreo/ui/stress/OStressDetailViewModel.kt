@@ -6,6 +6,7 @@ import com.noisefit_commans.common.maxWithoutInvalidMovementValues
 import com.noisefit_commans.data.enums.StressType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.ScreenUtils
 import com.oreo.data.dataConverter.OreoStressDataConvertor
 import com.oreo.data.model.OStressActivitiesDataModel
@@ -61,8 +62,9 @@ constructor(
 
     var stressActivityData: ArrayList<OStressActivitiesDataModel>? = null
     fun prepareStressActivityData(dayData: ServerUserHealthData) {
+
         if (dayData.stress?.breakUp.isNullOrEmpty()) return
-        if (dayData.stress?.breakUp!!.sum() > 0) return
+        if (dayData.stress?.breakUp!!.sum() == 0) return
 
         val workouts = dayData.activity?.workout
         val sleep = dayData.sleep
