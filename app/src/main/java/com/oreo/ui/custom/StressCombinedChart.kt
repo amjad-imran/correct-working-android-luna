@@ -252,6 +252,7 @@ class StressCombinedChart : View {
     }
 
     fun updateData(datas: StressCombineModel?) {
+        LOGS.d("sdfhksjdfhksjdfh updating")
         combineModel = datas
         list.clear()
         datas?.items?.let { list.addAll(it) }
@@ -378,10 +379,10 @@ class StressCombinedChart : View {
         )
         if (showXAxis) {
             var xText = "12 am"
-            xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
             xTextPaint.color = Color.parseColor("#a3ffffff")
+            xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
 
-            val start = mWith - rightWith - xTextBounds!!.width() - dip2px(5f)
+            val start = mWith - rightWith - xTextBounds!!.width() - dip2px(2f)
             canvas.drawText(
                 xText,
                 start,
@@ -390,7 +391,7 @@ class StressCombinedChart : View {
             )
 
             xText = "12 am"
-            val end = leftWith + dip2px(5f)
+            val end = leftWith /*+ dip2px(5f)*/
             xTextPaint.getTextBounds(xText, 0, xText.length, xTextBounds)
             canvas.drawText(xText, end, mHeight - bottomWith / 3, xTextPaint)
 
@@ -466,35 +467,40 @@ class StressCombinedChart : View {
         canvas.drawBitmap(rightBackBitmap, null, rectF, null)
         var high = 0f
         if (combineModel == null) return
+
+
+
         if (combineModel!!.high > 0) {
             high =
                 mHeight - bottomWith - combineModel!!.high * 1f / max * (mHeight - bottomWith - topWith)
             val highText = "Stressed"
+
             paintStressed.getTextBounds(highText, 0, highText.length, xTextBounds)
             canvas.drawText(
                 highText,
-                mWith - rightWith - xTextBounds!!.width() - dip2px(5f),
-                (high + topWith) / 2 + xTextBounds!!.height() / 2f,
+                mWith - rightWith - paintStressed.measureText(highText) /*- dip2px(5f)*/,
+                high - dip2px(8f),
                 paintStressed
             )
         }
         if (combineModel!!.medium > 0) {
-            val medium =
-                mHeight - bottomWith - combineModel!!.medium * 1f / max * (mHeight - bottomWith - topWith)
+             val medium =
+                 mHeight - bottomWith - combineModel!!.medium * 1f / max * (mHeight - bottomWith - topWith)
             val mediumText = "Focussed"
             paintFocussed.getTextBounds(mediumText, 0, mediumText.length, xTextBounds)
             canvas.drawText(
                 mediumText,
-                mWith - rightWith - xTextBounds!!.width() - dip2px(5f),
-                (medium + high) / 2 + xTextBounds!!.height() / 2f,
+                mWith - rightWith - paintFocussed.measureText(mediumText) /*- dip2px(5f)*/,
+                medium - dip2px(8f),
                 paintFocussed
             )
+
             val lowText = "Relaxed"
             paintCalm.getTextBounds(lowText, 0, lowText.length, xTextBounds)
             canvas.drawText(
                 lowText,
-                mWith - rightWith - xTextBounds!!.width() - dip2px(5f),
-                (medium + mHeight - bottomWith) / 2 + xTextBounds!!.height() / 2f,
+                mWith - rightWith - paintCalm.measureText(lowText) /*- dip2px(5f)*/,
+                mHeight - bottomWith - dip2px(8f),
                 paintCalm
             )
         }

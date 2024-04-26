@@ -98,7 +98,7 @@ class OSIDViewModel @Inject constructor(
 
 
             val index = if (dayType?.lowercase() == "day")
-                DateFormats.shortFormatWeek(it.date)
+                (DateFormats.shortFormatWeek(it.date).firstOrNull() ?: "").toString()
             else if (dayType?.lowercase() == "month")
                 DateFormats.getMonth(it.date.toInt() - 1)
             else {
@@ -154,7 +154,9 @@ class OSIDViewModel @Inject constructor(
     }
 
     fun getDifference(today: Int, typicalDay: Int): Int {
-        val tempTypicalDay = if (typicalDay==0)
+        if (typicalDay == 0 && today == 0) return 0
+
+        val tempTypicalDay = if (typicalDay == 0)
             1
         else
             typicalDay

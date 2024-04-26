@@ -201,15 +201,15 @@ class StressAreaChart : View {
     private fun initPaint() {
         rectF = RectF()
         barCalmPaint = Paint().apply {
-            setColor(Color.parseColor("#10c3a3"))
+            setColor(Color.parseColor("#2be6c5"))
         }
 
         barFocussedPaint = Paint().apply {
-            setColor(Color.parseColor("#ffed91"))
+            setColor(Color.parseColor("#FFED91"))
         }
 
         barStressedPaint = Paint().apply {
-            setColor(Color.parseColor("#ffae62"))
+            setColor(Color.parseColor("#ffc590"))
         }
 
         paintVerticalBar = Paint().apply {
@@ -763,7 +763,7 @@ class StressAreaChart : View {
                 left = currentX - widthHalf
                 right = currentX + widthHalf
                 bottom = mHeight - bottomWith
-                top = getYAxisValue(current.calm)
+                top = getYAxisValue(current.calm) - dip2px(1f)
             }
             canvas.drawRoundRect(calmRect, 10f, 10f, barCalmPaint)
         }
@@ -772,8 +772,8 @@ class StressAreaChart : View {
             val calmRect = RectF().apply {
                 left = currentX - widthHalf
                 right = currentX + widthHalf
-                bottom = getYAxisValue(current.calm) - dip2px(2f)
-                top = getYAxisValue(current.calm + current.focussed)
+                bottom = getYAxisValue(current.calm) - dip2px(1f)
+                top = getYAxisValue(current.calm + current.focussed) - dip2px(2f)
             }
             canvas.drawRoundRect(calmRect, 10f, 10f, barFocussedPaint)
         }
@@ -783,7 +783,7 @@ class StressAreaChart : View {
                 left = currentX - widthHalf
                 right = currentX + widthHalf
                 bottom = getYAxisValue(current.calm + current.focussed) - dip2px(2f)
-                top = getYAxisValue(current.calm + current.focussed + current.stressed)
+                top = getYAxisValue(current.calm + current.focussed + current.stressed) - dip2px(1f)
             }
             canvas.drawRoundRect(calmRect, 10f, 10f, barStressedPaint)
         }
@@ -797,7 +797,7 @@ class StressAreaChart : View {
                     left = currentX - dip2px(2f)
                     right = currentX + dip2px(2f)
                     bottom = mHeight - bottomWith
-                    top = getYAxisValue(current.calm)
+                    top = getYAxisValue(current.calm) - dip2px(1f)
                 }
                 canvas.drawRoundRect(calmRect, 10f, 10f, barCalmPaint)
             }
@@ -807,7 +807,7 @@ class StressAreaChart : View {
                     left = currentX - dip2px(2f)
                     right = currentX + dip2px(2f)
                     bottom = getYAxisValue(current.calm) - dip2px(2f)
-                    top = getYAxisValue(current.calm + current.focussed)
+                    top = getYAxisValue(current.calm + current.focussed) - dip2px(1f)
                 }
                 canvas.drawRoundRect(calmRect, 10f, 10f, barFocussedPaint)
             }
@@ -816,8 +816,11 @@ class StressAreaChart : View {
                 val calmRect = RectF().apply {
                     left = currentX - dip2px(2f)
                     right = currentX + dip2px(2f)
-                    bottom = getYAxisValue(current.calm + current.focussed) - dip2px(2f)
-                    top = getYAxisValue(current.calm + current.focussed + current.stressed)
+                    bottom = getYAxisValue(current.calm + current.focussed) - dip2px(1f)
+                    top =
+                        getYAxisValue(current.calm + current.focussed + current.stressed) - dip2px(
+                            2f
+                        )
                 }
                 canvas.drawRoundRect(calmRect, 10f, 10f, barStressedPaint)
             }
@@ -913,6 +916,10 @@ class StressAreaChart : View {
     private fun sp2px(spValue: Float): Int {
         val fontScale = context.resources.displayMetrics.scaledDensity
         return (spValue * fontScale + 0.5f).toInt()
+    }
+
+    fun setHCount(hCount: Int) {
+        this.hCount = hCount
     }
 }
 

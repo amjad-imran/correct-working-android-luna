@@ -4,16 +4,19 @@ import android.os.Bundle
 import android.text.Html
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOStressInternalDetailsBinding
 import com.noisefit.luna.databinding.OreoLayoutTopHourMn20Binding
+import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChartModelStress
 import com.oreo.data.model.StressResultData
@@ -31,6 +34,8 @@ class OStressInternalDetailsFragment :
     BaseFragment<FragmentOStressInternalDetailsBinding>(FragmentOStressInternalDetailsBinding::inflate),
     ScrollListenerStress {
     private val mViewModel: OSIDViewModel by viewModels()
+    private val mainViewModel: OreoMainViewModel by activityViewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -47,7 +52,7 @@ class OStressInternalDetailsFragment :
     }
 
     companion object {
-        fun newInstance(dayType: String, date: String,filterType:String) =
+        fun newInstance(dayType: String, date: String, filterType: String) =
             OStressInternalDetailsFragment().apply {
                 arguments = Bundle().apply {
                     putString(DAY_TYPE, dayType)
@@ -106,6 +111,15 @@ class OStressInternalDetailsFragment :
             mViewModel.dayType
         )
         binding.stressChart.visible()
+        val hCount = if (mViewModel.dayType?.lowercase() == "day")
+            12
+        else if (mViewModel.dayType?.lowercase() == "month")
+            7
+        else {
+            10
+        }
+        binding.stressChart.setHCount(hCount)
+
         binding.stressChart.updateData(
             topGraphData.first,
             topGraphData.third,
@@ -114,6 +128,8 @@ class OStressInternalDetailsFragment :
     }
 
     private fun handleProgressStatus(strData: StressResultData?) {
+
+        val stressDays = mainViewModel.stressDaysFromCurrent(strData?.date)
 
         binding.lytTopView.lytCalm.apply {
 
@@ -125,7 +141,7 @@ class OStressInternalDetailsFragment :
             lytUnit.tvMinute.text = "$minuteCalm"
             lytUnit.tvMinuteUnit.text = getString(R.string.text_mins)
 
-            if (strData?.data?.calm?.typicalDay != null) {
+            if (strData?.data?.calm?.typicalDay != null && stressDays > 7) {
                 val diffCalm = mViewModel.getDifference(
                     strData.data.calm.duration ?: 0,
                     strData.data.calm.typicalDay ?: 0
@@ -138,7 +154,8 @@ class OStressInternalDetailsFragment :
                     icTrend.visible()
                     icTrend.rotation = 180f
                 } else {
-                    icTrend.invisible()
+                    icTrend.gone()
+                    tvDifference.text = "No change"
                 }
                 lytDifference.visible()
             } else {
@@ -158,7 +175,7 @@ class OStressInternalDetailsFragment :
             lytUnit.tvMinute.text = "$minuteCalm"
             lytUnit.tvMinuteUnit.text = getString(R.string.text_mins)
 
-            if (strData?.data?.focused?.typicalDay != null) {
+            if (strData?.data?.focused?.typicalDay != null && stressDays > 7) {
                 val diffFocussed = mViewModel.getDifference(
                     strData?.data?.focused?.duration ?: 0,
                     strData?.data?.focused?.typicalDay ?: 0
@@ -171,7 +188,8 @@ class OStressInternalDetailsFragment :
                     icTrend.visible()
                     icTrend.rotation = 180f
                 } else {
-                    icTrend.invisible()
+                    icTrend.gone()
+                    tvDifference.text = "No change"
                 }
                 lytDifference.visible()
             } else {
@@ -191,7 +209,8 @@ class OStressInternalDetailsFragment :
             lytUnit.tvMinute.text = "$minuteCalm"
             lytUnit.tvMinuteUnit.text = getString(R.string.text_mins)
 
-            if (strData?.data?.stressed?.typicalDay != null) {
+
+            if (strData?.data?.stressed?.typicalDay != null && stressDays > 7) {
                 val diffStressed = mViewModel.getDifference(
                     strData?.data?.stressed?.duration ?: 0,
                     strData?.data?.stressed?.typicalDay ?: 0
@@ -204,10 +223,11 @@ class OStressInternalDetailsFragment :
                     icTrend.visible()
                     icTrend.rotation = 180f
                 } else {
-                    icTrend.invisible()
+                    icTrend.gone()
+                    tvDifference.text = "No change"
                 }
                 lytDifference.visible()
-            }else{
+            } else {
                 lytDifference.gone()
 
             }
