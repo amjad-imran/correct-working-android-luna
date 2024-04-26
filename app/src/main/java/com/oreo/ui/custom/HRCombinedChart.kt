@@ -582,12 +582,12 @@ class HRCombinedChart : View {
         } else
             bottomHeight + xTextBounds!!.height() / 2f
 
-        val textStart = mWith.toFloat() - xTextBounds!!.width()
+        val textStart = mWith.toFloat() - xTextBounds!!.width()-dip2px(2f)
         canvas.drawText(
             text,
             textStart,
             yPos,
-            xTextPaint!!
+            xTextPaint
         )
     }
 

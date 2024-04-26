@@ -115,6 +115,7 @@ class HeartRateChartView : View {
     private lateinit var bgLine: Paint
     private lateinit var dotBitmap: Bitmap
     private lateinit var dotBitmap2: Bitmap
+    lateinit var rightBackBitmap: Bitmap
 
     private lateinit var mTextPaint: Paint
     private lateinit var mTextPaintEdge: Paint
@@ -211,6 +212,11 @@ class HeartRateChartView : View {
                 res, R.drawable.image_blur_avg
             ), dimen, dimen, true
         )
+        rightBackBitmap =
+            BitmapFactory.decodeResource(
+                res,
+                R.drawable.back_stress_left
+            )
     }
 
     private fun initPaint() {
@@ -1115,6 +1121,16 @@ class HeartRateChartView : View {
                 gridPaint!!
             )
         }
+
+        val rectF = RectF().apply {
+            left = mWith - dip2px(70f).toFloat()
+            top = topWith
+            right = mWith.toFloat()// - rightWith
+            bottom = mHeight - bottomWith
+        }
+
+        canvas.drawBitmap(rightBackBitmap, null, rectF, null)
+
     }
 
 
