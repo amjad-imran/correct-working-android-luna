@@ -213,7 +213,7 @@ class StressAreaChart : View {
         }
 
         paintVerticalBar = Paint().apply {
-            setColor(Color.parseColor("#51ffffff"))
+            setColor(Color.parseColor("#28ffffff"))
         }
         paintHorizontalBar = Paint().apply {
             setColor(Color.parseColor("#19ffffff"))
@@ -434,7 +434,7 @@ class StressAreaChart : View {
         )
         if (showXAxis) {
             canvas.drawLine(
-                leftWith, mHeight - bottomWith, mWith - rightWith, mHeight - bottomWith,
+                leftWith, mHeight - bottomWith, mWith.toFloat(), mHeight - bottomWith,
                 xLinePaint!!
             )
         }

@@ -117,13 +117,13 @@ class OSIDViewModel @Inject constructor(
 
 
         val suffix = ArrayList<ChartModelStress>()
-        for (i in 0..6) {
+        for (i in 0..10) {
             val chartModel = ChartModelStress(index = "")
             suffix.add(chartModel)
         }
 
         val prefix = ArrayList<ChartModelStress>()
-        for (i in 0..6) {
+        for (i in 0..10) {
             val chartModel = ChartModelStress(index = "")
             prefix.add(chartModel)
         }

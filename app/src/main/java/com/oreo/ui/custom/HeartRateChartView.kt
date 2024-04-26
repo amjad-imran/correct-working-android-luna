@@ -1028,14 +1028,14 @@ class HeartRateChartView : View {
         canvas.drawLine(leftWith, bottomHeight, mWith - rightWith, bottomHeight, bgLine)
         xTextPaint!!.color = Color.parseColor("#a3ffffff")
         xTextPaint!!.getTextBounds(text, 0, text.length, xTextBounds)
-        val yPos: Float = if (isTop) {
-            bottomHeight + xTextBounds!!.height() / 2f + dip2px(4f)
-        } else if (isBottom) {
+        val yPos: Float = /*if (isTop) {*/
+            bottomHeight + xTextBounds!!.height() + dip2px(4f)
+       /* } else if (isBottom) {
             bottomHeight + xTextBounds!!.height() / 2f - dip2px(4f)
-        } else bottomHeight + xTextBounds!!.height() / 2f
+        } else bottomHeight + xTextBounds!!.height() / 2f*/
 
 
-        val textStart = mWith.toFloat() - xTextBounds!!.width()
+        val textStart = mWith.toFloat()- leftWith - xTextBounds!!.width()
 
         canvas.drawText(
             text, textStart, yPos, xTextPaint!!
@@ -1046,6 +1046,14 @@ class HeartRateChartView : View {
         canvas.drawRect(0f, 0f, leftWith, mHeight.toFloat(), bgLeftPaint!!)
         val maxStr = max.toString()
         val minStr = xMin.toString()
+
+       /* val rectF = RectF().apply {
+            left = mWith - dip2px(70f).toFloat()
+            top = topWith
+            right = mWith.toFloat()// - rightWith
+            bottom = mHeight - bottomWith
+        }
+        canvas.drawBitmap(rightBackBitmap, null, rectF, null)*/
 
         val sectionH = ((max - xMin).toFloat() / 3).roundToInt()
 
@@ -1059,7 +1067,7 @@ class HeartRateChartView : View {
         val min =
             mHeight - bottomWith - (xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
 
-        drawHorizontalTextWithLine(canvas, minStr, min, false, true)
+        drawHorizontalTextWithLine(canvas, "", min, false, true)
 
         if (!mHasDummyData) {
             val xAxis2 =
@@ -1081,7 +1089,7 @@ class HeartRateChartView : View {
                     avgTextPaint!!.getTextBounds(avgStr, 0, avgStr.length, xTextBounds)
                     //xTextPaint!!.color = Color.parseColor("#9cbdff")
                     avgBackPaint!!.color = Color.parseColor("#b3172941")
-                    canvas.drawLine(leftWith, avg, mWith.toFloat(), avg, centerLinePaint!!)
+                    canvas.drawLine(leftWith, avg, mWith.toFloat()-leftWith, avg, centerLinePaint!!)
                     val padding = dip2px(8f)
                     canvas.drawBitmap(
                         avgBackBitmap, null, RectF(
@@ -1122,14 +1130,8 @@ class HeartRateChartView : View {
             )
         }
 
-        val rectF = RectF().apply {
-            left = mWith - dip2px(70f).toFloat()
-            top = topWith
-            right = mWith.toFloat()// - rightWith
-            bottom = mHeight - bottomWith
-        }
 
-        canvas.drawBitmap(rightBackBitmap, null, rectF, null)
+
 
     }
 
