@@ -216,8 +216,8 @@ constructor(
         }
     }
 
-    fun getBarPercent(calm: Int): Int {
-        return ((calm.toFloat() / 1440) * 100).roundToInt()
+    fun getBarPercent(calm: Int, maxValue: Int): Int {
+        return ((calm.toFloat() / maxValue) * 100).roundToInt()
         //return if (percent < 10) 10 else percent
     }
 

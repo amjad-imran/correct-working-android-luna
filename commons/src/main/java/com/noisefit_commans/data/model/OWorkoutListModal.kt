@@ -14,7 +14,7 @@ data class OWorkoutListModal(
     @SerializedName("low") val lowIntensity: Float? = null,
     @SerializedName("medium") val mediumIntensity: Float? = null,
     @SerializedName("high") val highIntensity: Float? = null,
-    @SerializedName("gps") val isGpsRequired: Int = 0,
+    @SerializedName("gps") var isGpsRequired: Int = 0,
     @SerializedName("data_type") val dataType: String? = null,
     @SerializedName("data_priority") val dataPriority: String? = null,
     var isTempSet: Boolean = false,

@@ -690,4 +690,8 @@
         android:id="@+id/fragmentHrInfo"
         android:name="com.oreo.ui.heartrate.OHRInfoFragment"
         android:label="HR info fragment" />
+    <dialog
+        android:id="@+id/bottomSheetLocationPermissionRequest"
+        android:name="com.oreo.ui.recordworkout.BottomSheetLocationPermissionRequest"
+        android:label="BottomSheetLocationPermissionRequest" />
 </navigation>

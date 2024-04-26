@@ -1094,6 +1094,9 @@
     <string name="text_active_stress_definition">Overall stress measures your body’s physiological stress throughout the day, including while exercising or sleeping.</string>
     <string name="text_inactive_stress_definition">Non active stress measures your body’s physiological stress outside of sleep and exercise.</string>
     <string name="text_note">Note</string>
+    <string name="text_allow_location_access">Allow location access</string>
+    <string name="text_location_perm_message">Before we start we will need to access your location so we can track your activities while you are using the app. Is that ok with you ?</string>
+    <string name="text_no">No</string>
 
 
 </resources>

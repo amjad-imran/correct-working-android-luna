@@ -305,15 +305,16 @@ class OStressDataMovementFragment :
         todayValue: Int,
         typicalValue: Int,
         drawableToday: Int,
-        drawableCompare: Int
+        drawableCompare: Int,
+        maxValue: Int
     ) {
         layout.pgBrToday.progressDrawable =
             ContextCompat.getDrawable(requireContext(), drawableToday)
         layout.pgBrPrevious.progressDrawable =
             ContextCompat.getDrawable(requireContext(), drawableCompare)
 
-        handleProgress(layout.pgBrToday, viewModel.getBarPercent(todayValue))
-        handleProgress(layout.pgBrPrevious, viewModel.getBarPercent(typicalValue))
+        handleProgress(layout.pgBrToday, viewModel.getBarPercent(todayValue,maxValue))
+        handleProgress(layout.pgBrPrevious, viewModel.getBarPercent(typicalValue,maxValue))
         val diff = viewModel.getDifference(todayValue, typicalValue)
         layout.tvDifference.text = "${abs(diff)}%"
         if (diff > 0) {
@@ -413,22 +414,34 @@ class OStressDataMovementFragment :
                 return@apply
             }
 
+            val maxValue = arrayListOf(
+                calm,
+                stress?.typicalCalm ?: 0,
+                focused,
+                stress?.typicalFocused ?: 0,
+                stressed,
+                stress?.typicalStressed ?: 0
+            ).max()
+
             handleComparisonsBar(
                 lytCalm,
                 calm,
                 stress?.typicalCalm ?: 0,
                 R.drawable.grad_today_calm,
-                R.drawable.grad_previous_calm
+                R.drawable.grad_previous_calm,
+                maxValue
             )
             handleComparisonsBar(
                 lytFocussed, focused, stress?.typicalFocused ?: 0,
                 R.drawable.grad_today_focused,
-                R.drawable.grad_previous_focused
+                R.drawable.grad_previous_focused,
+                maxValue
             )
             handleComparisonsBar(
                 lytStressed, stressed, stress?.typicalStressed ?: 0,
                 R.drawable.grad_today_stressed,
-                R.drawable.grad_previous_stressed
+                R.drawable.grad_previous_stressed,
+                maxValue
             )
         }
     }
@@ -495,23 +508,34 @@ class OStressDataMovementFragment :
                 lytStressed.view1.gone()
                 return@apply
             }
+            val maxValue = arrayListOf(
+                calm,
+                nonActiveData?.typicalNonActiveCalm ?: 0,
+                focused,
+                nonActiveData?.typicalNonActiveFocused ?: 0,
+                stressed,
+                nonActiveData?.typicalNonActivestressed ?: 0
+            ).max()
 
             handleComparisonsBar(
                 lytCalm,
                 calm,
                 nonActiveData?.typicalNonActiveCalm ?: 0,
                 R.drawable.grad_today_calm,
-                R.drawable.grad_previous_calm
+                R.drawable.grad_previous_calm,
+                maxValue
             )
             handleComparisonsBar(
                 lytFocussed, focused, nonActiveData?.typicalNonActiveFocused ?: 0,
                 R.drawable.grad_today_focused,
-                R.drawable.grad_previous_focused
+                R.drawable.grad_previous_focused,
+                maxValue
             )
             handleComparisonsBar(
                 lytStressed, stressed, nonActiveData?.typicalNonActivestressed ?: 0,
                 R.drawable.grad_today_stressed,
-                R.drawable.grad_previous_stressed
+                R.drawable.grad_previous_stressed,
+                maxValue
             )
         }
     }

@@ -2,19 +2,24 @@ package com.oreo.ui.recordworkout
 
 import android.Manifest
 import android.animation.Animator
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentRecordWorkoutBinding
 import com.noisefit.ui.common.bottomSheet.WORKOUT_STOP_KEY
+import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.data.UserActivityAction
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
@@ -24,9 +29,13 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.oreo.ui.sleep.nap.BOTTOM_NAP_RESULT
+import com.oreo.ui.workout.add.SELECT_REQUEST_KEY
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -243,7 +252,7 @@ class RecordWorkoutFragment :
             }
             if (viewModel.requireGps()) {
                 if (!hasGpsPermission()) {
-                    showLocationPermissionDialog()
+                    showPermDetailsDialog()
                     return@setOnClickListener
                 } else {
                     LOGS.d("LOCATION_PERM Has all required permisison")
@@ -319,8 +328,22 @@ class RecordWorkoutFragment :
 
     }
 
+    private fun showPermDetailsDialog() {
+        setFragmentResultListener(LOCATION_PERM_REQUEST) { _, bundle ->
+            val allow = bundle.getBoolean("allow")
+            if (allow) {
+                this@RecordWorkoutFragment.showLocationPermissionDialog()
+            } else {
+                binding.btnStartWorkout.gone()
+                viewModel.workout?.isGpsRequired = 0
+                this@RecordWorkoutFragment.startWorkoutAnim()
+            }
+        }
+        navigate(R.id.bottomSheetLocationPermissionRequest)
+    }
+
     private fun hasGpsPermission(): Boolean {
-        val permissionAccessCoarseLocationApproved =
+        val permissionAccessFineLocationApproved =
             (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -337,11 +360,10 @@ class RecordWorkoutFragment :
                 true
             }
 
-        return permissionAccessCoarseLocationApproved && backgroundLocationPermissionApproved
+        return permissionAccessFineLocationApproved && backgroundLocationPermissionApproved
     }
 
     private fun showLocationPermissionDialog() {
-        //TODO show custom dialog first
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             locationPermissionRequest.launch(
@@ -364,17 +386,43 @@ class RecordWorkoutFragment :
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
 
-        when {
-            permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
-                LOGS.d("LOCATION_PERM FINE LOCATION GRANTED")
-            }
+        var openSettings = false
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            when {
+                permissions.getOrDefault(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    false
+                ) && permissions.getOrDefault(
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                    false
+                ) -> {
+                    LOGS.d("LOCATION_PERM LOCATION GRANTED")
+                }
 
-            permissions.getOrDefault(Manifest.permission.ACCESS_BACKGROUND_LOCATION, false) -> {
-                LOGS.d("LOCATION_PERM Background LOCATION GRANTED")
+                else -> {
+                    openSettings = true
+                }
             }
+        } else {
+            when {
+                permissions.getOrDefault(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    false
+                ) -> {
+                    LOGS.d("LOCATION_PERM LOCATION GRANTED")
+                }
 
-            else -> {
-                // No location access granted.
+                else -> {
+                    openSettings = true
+                }
+            }
+        }
+        if (openSettings) {
+            tryCatch {
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri = Uri.fromParts("package", requireContext().packageName, null)
+                intent.data = uri
+                startActivity(intent)
             }
         }
     }
