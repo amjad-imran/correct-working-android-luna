@@ -47,7 +47,7 @@ constructor() {
                                 googleMap,
                                 currentLtnLng,
                                 activity,
-                                R.drawable.ic_profile_my_goals
+                                R.drawable.ic_workout_start_marker
                             )
                         }
                     } else if (i == (result.size - 1)) {
@@ -56,7 +56,7 @@ constructor() {
                                 googleMap,
                                 currentLtnLng,
                                 activity,
-                                R.drawable.ic_profile_help
+                                R.drawable.ic_workout_end_marker
                             )
                         }
                     }
