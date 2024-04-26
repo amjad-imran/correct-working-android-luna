@@ -3,6 +3,7 @@ package com.oreo.ui.recordworkout
 import android.Manifest
 import android.animation.Animator
 import android.content.Intent
+import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
@@ -16,9 +17,19 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.LocationSettingsResponse
+import com.google.android.gms.location.LocationSettingsStatusCodes
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentRecordWorkoutBinding
 import com.noisefit.ui.common.bottomSheet.WORKOUT_STOP_KEY
+import com.noisefit.ui.onboarding.pairing.find.FindDeviceListFragment
+import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.data.UserActivityAction
@@ -40,7 +51,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class RecordWorkoutFragment :
-    BaseFragment<FragmentRecordWorkoutBinding>(FragmentRecordWorkoutBinding::inflate) {
+    BaseFragment<FragmentRecordWorkoutBinding>(FragmentRecordWorkoutBinding::inflate),
+    OnCompleteListener<LocationSettingsResponse> {
 
     val navArgs: RecordWorkoutFragmentArgs by navArgs()
     val viewModel: RecordWorkoutViewModel by viewModels()
@@ -255,6 +267,9 @@ class RecordWorkoutFragment :
                     showPermDetailsDialog()
                     return@setOnClickListener
                 } else {
+                    if (!isGpsTurnedOn()) {
+                        return@setOnClickListener
+                    }
                     LOGS.d("LOCATION_PERM Has all required permisison")
                 }
             }
@@ -340,6 +355,25 @@ class RecordWorkoutFragment :
             }
         }
         navigate(R.id.bottomSheetLocationPermissionRequest)
+    }
+
+    fun isGpsTurnedOn(): Boolean {
+        if (!ApplicationUtils.isLocationProviderEnabled(requireContext())) {
+            val locationRequest: LocationRequest = LocationRequest.create()
+            locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            locationRequest.interval = 10000
+            locationRequest.fastestInterval = 5000
+            val builder: LocationSettingsRequest.Builder =
+                LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
+            builder.setAlwaysShow(true)
+            val task: Task<LocationSettingsResponse> =
+                LocationServices.getSettingsClient(requireActivity())
+                    .checkLocationSettings(builder.build())
+            task.addOnCompleteListener(this)
+            return false
+        } else {
+            return true
+        }
     }
 
     private fun hasGpsPermission(): Boolean {
@@ -593,4 +627,44 @@ class RecordWorkoutFragment :
         }
 
     }
+
+    override fun onComplete(task: Task<LocationSettingsResponse>) {
+        try {
+            task.getResult(ApiException::class.java)
+            //startScan()
+        } catch (exception: ApiException) {
+            when (exception.statusCode) {
+                LocationSettingsStatusCodes.RESOLUTION_REQUIRED -> try {
+
+                    try {
+                        startIntentSenderForResult(
+                            exception.status.resolution?.intentSender,
+                            REQUEST_CHECK_SETTINGS,
+                            null,
+                            0,
+                            0,
+                            0,
+                            null
+                        )
+                    } catch (exp: Exception) {
+                        //CASE : For handling Fragment not attached to Activity
+                    }
+
+                } catch (sendEx: IntentSender.SendIntentException) {
+                    LOGS.d("Failed to show dialog")
+                } catch (classCast: ClassCastException) {
+                }
+
+                LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE -> {
+
+                }
+            }
+        }
+    }
+
+    companion object {
+        private const val REQUEST_CHECK_SETTINGS = 42
+
+    }
+
 }
