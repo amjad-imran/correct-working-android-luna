@@ -28,6 +28,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.noisefit.luna.R
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.LOGS.d
@@ -484,8 +485,8 @@ class StressCombinedChart : View {
             )
         }
         if (combineModel!!.medium > 0) {
-             val medium =
-                 mHeight - bottomWith - combineModel!!.medium * 1f / max * (mHeight - bottomWith - topWith)
+            val medium =
+                mHeight - bottomWith - combineModel!!.medium * 1f / max * (mHeight - bottomWith - topWith)
             val mediumText = "Focussed"
             paintFocussed.getTextBounds(mediumText, 0, mediumText.length, xTextBounds)
             canvas.drawText(
@@ -730,7 +731,7 @@ class StressCombinedChart : View {
     private fun drawOverlay(canvas: Canvas) {
         if (!isInteracting) return
 
-        val calculatedTouchX = if (touchX < leftWith) {
+        var calculatedTouchX = if (touchX < leftWith) {
             leftWith
         } else if (touchX > (mWith - rightWith)) {
             (mWith - rightWith)
@@ -739,22 +740,46 @@ class StressCombinedChart : View {
         }
 
 
+        val value: Pair<Int, Int> = getClickedValue(calculatedTouchX)
+        var selectedPos = value.first
+        //var time = value.third
+        var hrValue = value.second
+
+
+        var showOverlay = true
+
+
+        if (isHighlighted) {
+            showOverlay = highlightIndexs.contains(list.size - 1 - value.first)
+            if (showOverlay.not()) {
+                val newTouchValue = getNextValue(highlightIndexs, list.size - 1 - value.first)
+                if (newTouchValue != null) {
+                    calculatedTouchX = newTouchValue.first
+                    selectedPos = newTouchValue.second.first
+                    //time = newTouchValue.second.third
+                    hrValue = newTouchValue.second.second
+                    showOverlay = true
+                }
+            }
+
+        }
+
+        if (!showOverlay) {
+            return
+        }
+
         val rectF = RectF()
         rectF.left = calculatedTouchX - 2
         rectF.right = calculatedTouchX + 2
         rectF.top = topWith
         rectF.bottom = mHeight - bottomWith
-
-        val value: Pair<Int, Int> = getClickedValue(calculatedTouchX)
         canvas.drawRect(rectF, overlayLinePaint)
-        if (value.second != 0) {
-
-            drawDot(canvas, value.second, calculatedTouchX)
-
+        if (hrValue != 0) {
+            drawDot(canvas, hrValue, calculatedTouchX)
         }
         if (listener != null) {
-            val position = value.first as Int
-            val selectedValue = value.second as Int
+            val position = selectedPos as Int
+            val selectedValue = hrValue as Int
             if (lastSentValuePos == null) {
                 listener?.onValueSelected(selectedValue, position)
                 lastSentValuePos = position
@@ -767,6 +792,31 @@ class StressCombinedChart : View {
                 }
             }
         }
+    }
+
+    /**
+     * Pair(new touch position,Triple(newpos,value,time))
+     */
+    private fun getNextValue(
+        highlightIndex: MutableList<Int>,
+        value: Int
+    ): kotlin.Pair<Float, Triple<Int, Int, String>>? {
+        var selectedPos: Int? = null
+
+        for (i in 0 until highlightIndex.size) {
+            if (highlightIndex[i] >= value) {
+                selectedPos = highlightIndex[i]
+                break
+            }
+        }
+
+        if (selectedPos == null) return null
+        val range = unitHLenth / 2//dip2px(3f)
+        val selected = toolTipList.get(list.size - 1 - selectedPos!!)
+        return kotlin.Pair(
+            selected.first - range,
+            Triple(list.size - 1 - selectedPos!!, selected.third, selected.second)
+        )
     }
 
     fun performHapticFeedbackCustom(value: Int) {
@@ -909,7 +959,7 @@ class StressCombinedChart : View {
 
     private val handler = Handler(Looper.getMainLooper())
     private var mLongPressed = Runnable {
-        if (isHighlighted) return@Runnable
+        //if (isHighlighted) return@Runnable
         isInteracting = true
         invalidate()
         val parent = parent
