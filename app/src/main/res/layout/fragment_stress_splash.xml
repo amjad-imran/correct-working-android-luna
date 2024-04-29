@@ -3,64 +3,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorRed2"
+    android:background="@drawable/bg_walkthrough_stress"
     tools:context="com.oreo.ui.stress.splash.StressSplashFragment">
 
-
-    <ImageView
-        android:id="@+id/bClose"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dimen_8dp"
-        android:padding="@dimen/dimen_4dp"
-        android:src="@drawable/baseline_clear_white_24dp"
-        app:layout_constraintEnd_toEndOf="parent"
+    <ImageButton
+        android:id="@+id/backBtn"
+        style="@style/ToolbarBackButton"
+        android:layout_margin="@dimen/side_margin"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <include
+        android:id="@+id/lytProgress"
+        layout="@layout/layout_onboard_progress"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/backBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/backBtn" />
+
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/vpImageSlider"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="@dimen/dimen_16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/tabLayout"
+        app:layout_constraintBottom_toTopOf="@+id/bNext"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bClose" />
-
-    <ImageView
-        android:id="@+id/ivPrevious"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="@dimen/dimen_24dp"
-        android:src="@drawable/ic_des_backwrd"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/backBtn" />
 
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="@+id/ivNext"
-        app:layout_constraintEnd_toStartOf="@+id/ivNext"
-        app:layout_constraintStart_toEndOf="@+id/ivPrevious"
-        app:layout_constraintTop_toTopOf="@+id/ivNext"
-        app:tabBackground="@drawable/tab_selector"
-        app:tabGravity="center"
-        app:tabIndicatorHeight="0dp"
-        app:tabPaddingEnd="8dp"
-        app:tabPaddingStart="8dp" />
-
-    <ImageView
-        android:id="@+id/ivNext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/dimen_32dp"
-        android:layout_marginBottom="@dimen/dimen_24dp"
-        android:src="@drawable/ic_des_forwrd"
+    <Button
+        android:id="@+id/bNext"
+        style="@style/PrimaryButtonStyle"
+        android:layout_width="164dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="44dp"
+        android:text="@string/text_next"
+        app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

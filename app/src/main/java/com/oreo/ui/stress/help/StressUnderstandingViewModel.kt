@@ -45,17 +45,17 @@ constructor() : BaseViewModel() {
         )
 
         dataList.add(
-            StressUnderstandingOverview.ImageWithText(
+            StressUnderstandingOverview.LottieWithText(
                 "Correlating Movement & stress",
-                R.drawable.bg_dummy_placeholder,
+                R.raw.anim_correlating_movement,
                 "Apart from stress zones, you can examine the correlation between activity and physiological stress. Access this feature by tapping the downward arrow on your stress graph. For instance, it helps you identify times when stress occurred despite absence of medium or high-intensity movement."
             )
         )
 
         dataList.add(
-            StressUnderstandingOverview.ImageWithText(
+            StressUnderstandingOverview.LottieWithText(
                 "Mapping out Non-Activity stress",
-                R.drawable.bg_dummy_placeholder,
+                R.raw.anim_mapping_non_activity,
                 "Your Luna ring measures physiological stress your body experiences over the course of the entire day. Non-Activity stress measures stress experienced outside of sleep & workouts. Reviewing this breakdown can provide insights into how your body accumulates and manages stress triggered by emotional or interpersonal factors."
             )
         )
@@ -93,6 +93,7 @@ constructor() : BaseViewModel() {
         dataList.add(StressUnderstandingSubList("Exercise", R.drawable.bg_dummy_placeholder))
         return dataList
     }
+
     private fun getShortTermListText(): List<String> {
         val dataList = ArrayList<String>()
         dataList.add("Cultivating new lifestyle habits")

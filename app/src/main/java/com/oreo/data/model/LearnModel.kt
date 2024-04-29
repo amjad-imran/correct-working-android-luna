@@ -13,6 +13,12 @@ sealed class StressUnderstandingOverview {
         val description: String
     ) : StressUnderstandingOverview()
 
+    class LottieWithText(
+        val title: String,
+        val lottie: Int,
+        val description: String
+    ) : StressUnderstandingOverview()
+
     class TextWithAdapter(
         val title: String,
         val description: String,

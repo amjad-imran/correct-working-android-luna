@@ -403,7 +403,8 @@ constructor(
                         }
 
                         else -> {
-                            LOGS.d("startWorkout failed")
+                            AppLogs.sendAppLogs("startWorkout failed  ${state}")
+                            LOGS.d("startWorkout failed ${state}")
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.WorkoutStartState(
                                     false,

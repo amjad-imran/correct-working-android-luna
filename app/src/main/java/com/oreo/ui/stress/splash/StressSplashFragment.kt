@@ -11,6 +11,7 @@ import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.Contributors
 import com.oreo.data.model.StressSplashModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class StressSplashFragment :
@@ -19,10 +20,7 @@ class StressSplashFragment :
     private val stressSplashDescriptionAdapter by lazy {
         StressSplashDescriptionAdapter()
     }
-    private var pos: Int = -1
-    private var isLast: Boolean = false
-    private var isFirst: Boolean = false
-    private var dataList: ArrayList<StressSplashModel>  = ArrayList()
+    private var dataList: ArrayList<StressSplashModel> = ArrayList()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,17 +36,12 @@ class StressSplashFragment :
             adapter = stressSplashDescriptionAdapter
 
         }
-        TabLayoutMediator(
-            binding.tabLayout,
-            binding.vpImageSlider
-        ) { _, _ -> }.attach()
+
         dataList.let { stressSplashDescriptionAdapter.setDataSet(it) }
         binding.vpImageSlider.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
             override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
+                position: Int, positionOffset: Float, positionOffsetPixels: Int
             ) {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels)
 
@@ -56,9 +49,9 @@ class StressSplashFragment :
 
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                LOGS.d("onPageScrolled $position")
-                isLast = position == dataList.size - 1
-                isFirst = position == 0
+
+                setProgress(position)
+
 
             }
 
@@ -67,37 +60,34 @@ class StressSplashFragment :
             }
         })
 
-        if (pos == 0) {
-            isFirst = true
-        }
-        binding.vpImageSlider.setCurrentItem(pos, false)
-
+        binding.vpImageSlider.setCurrentItem(0, false)
 
     }
 
-    private fun getItem(i: Int): Int {
-        return binding.vpImageSlider.currentItem + i
+    private fun setProgress(position: Int) {
+        val max = dataList.size
+
+        binding.lytProgress.apply {
+            pgBr.progress = (((position + 1).toFloat() / max) * 100).roundToInt()
+            tvCount.text = "${position + 1}"
+        }
+    }
+
+    private fun getNext(): Int {
+        return binding.vpImageSlider.currentItem + 1
     }
 
     override fun initListener() {
-        binding.bClose.setOnClickListener {
+        binding.backBtn.setOnClickListener {
             navigateUpSafe()
         }
-        binding.ivNext.setOnClickListener {
-            if (isLast) {
+        binding.bNext.setOnClickListener {
+            val current = binding.vpImageSlider.currentItem
+            if (current == (dataList.size - 1)) {
                 navigateUpSafe()
                 return@setOnClickListener
             }
-            binding.vpImageSlider.setCurrentItem(getItem(+1), true)
-
-
-        }
-        binding.ivPrevious.setOnClickListener {
-            if (isFirst) {
-                navigateUpSafe()
-                return@setOnClickListener
-            }
-            binding.vpImageSlider.setCurrentItem(getItem(-1), true)
+            binding.vpImageSlider.setCurrentItem(getNext(), true)
         }
     }
 
@@ -110,40 +100,41 @@ class StressSplashFragment :
 
         dataList.add(
             StressSplashModel(
-                "What is stress?",
-                R.drawable.bg_dummy_placeholder,
+                "What is Stress?",
+                R.drawable.image_stress_w_1,
                 "Stress is the body’s natural response to challenges. While commonly seen negatively, healthy levels can enhance focus, memory, and overall performance."
             )
         )
         dataList.add(
             StressSplashModel(
-                "What is stress?",
-                R.drawable.bg_dummy_placeholder,
-                "Stress is the body’s natural response to challenges. While commonly seen negatively, healthy levels can enhance focus, memory, and overall performance."
+                "How does the Luna Ring measure stress?",
+                R.drawable.image_stress_w_2,
+                "Stress affects mental and physical well-being, leading to physiological changes like increased heart rate or lowered HRV. Recognizing this connection allows for holistic stress management."
             )
         )
         dataList.add(
             StressSplashModel(
-                "What is stress?",
-                R.drawable.bg_dummy_placeholder,
-                "Stress is the body’s natural response to challenges. While commonly seen negatively, healthy levels can enhance focus, memory, and overall performance."
-            )
-        )
-        dataList.add(
-            StressSplashModel(
-                "What is stress?",
-                R.drawable.bg_dummy_placeholder,
-                "Stress is the body’s natural response to challenges. While commonly seen negatively, healthy levels can enhance focus, memory, and overall performance."
-            )
-        )
-        dataList.add(
-            StressSplashModel(
-                "What is stress?",
-                R.drawable.bg_dummy_placeholder,
-                "Stress is the body’s natural response to challenges. While commonly seen negatively, healthy levels can enhance focus, memory, and overall performance."
+                "Embracing the Journey",
+                R.drawable.image_stress_w_3,
+                "By monitoring stress, identify patterns and adjust routines. View stress as an opportunity for growth and resilience. For instance, facing challenges can boost personal development and confidence."
             )
         )
 
+        dataList.add(
+            StressSplashModel(
+                "Managing Stress",
+                R.drawable.image_stress_w_4,
+                "Distinguish between short-term and long-term stress. Engage in activities like exercise and seek social support for effective stress management."
+            )
+        )
+
+        dataList.add(
+            StressSplashModel(
+                "Harness Your Stress",
+                R.drawable.image_stress_w_5,
+                "Approach stress management with mindfulness and intention. Navigate challenges with grace, supported by mindfulness practices, social connections, and enjoyable activities."
+            )
+        )
         return dataList
     }
 }
