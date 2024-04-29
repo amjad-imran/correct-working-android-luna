@@ -1581,6 +1581,13 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
+    override suspend fun getWorkoutDetailsV2(id: String): Flow<Resource<BaseApiResponse<OWorkoutDetailsResponseModel>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/activity/v2/workout_detail/${id}"
+            remoteDataSource.getWorkoutDetails(url)
+        }
+    }
+
     private fun shouldCallBannerApi(
         serverTime: Long,
         localTime: Long

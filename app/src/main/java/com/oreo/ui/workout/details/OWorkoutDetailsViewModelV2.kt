@@ -57,7 +57,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
     val workoutDetailsResponse: LiveData<OWorkoutDetailsResponseModel> = _workoutDetailsResponse
     fun getWorkoutDetails(workoutId: String) {
         viewModelScope.launch {
-            userActivityRepository.getWorkoutDetails(
+            userActivityRepository.getWorkoutDetailsV2(
                 workoutId
             ).collect { resource ->
                 when (resource) {
