@@ -2,15 +2,15 @@ package com.oreo.ui.stress.splash
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentStressSplashBinding
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.utils.LOGS
-import com.oreo.data.model.Contributors
 import com.oreo.data.model.StressSplashModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlin.math.roundToInt
 
 @AndroidEntryPoint
@@ -22,11 +22,25 @@ class StressSplashFragment :
     }
     private var dataList: ArrayList<StressSplashModel> = ArrayList()
 
+    @Inject
+    lateinit var localDataStore: DataStoredInterface
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
+
         dataList = getData()
         setViewpager()
     }
+
+    val callback: OnBackPressedCallback =
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                localDataStore.setStressWalkthroughShown(true)
+                navigateUpSafe()
+            }
+        }
 
     private fun setViewpager() {
         binding.vpImageSlider.apply {
@@ -79,11 +93,13 @@ class StressSplashFragment :
 
     override fun initListener() {
         binding.backBtn.setOnClickListener {
+            localDataStore.setStressWalkthroughShown(true)
             navigateUpSafe()
         }
         binding.bNext.setOnClickListener {
             val current = binding.vpImageSlider.currentItem
             if (current == (dataList.size - 1)) {
+                localDataStore.setStressWalkthroughShown(true)
                 navigateUpSafe()
                 return@setOnClickListener
             }
