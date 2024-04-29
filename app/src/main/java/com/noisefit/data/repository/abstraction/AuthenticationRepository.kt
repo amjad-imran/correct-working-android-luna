@@ -13,27 +13,11 @@ import kotlinx.coroutines.flow.Flow
 interface AuthenticationRepository {
 
 
-    suspend fun signup(signup: RegistrationRequest): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<RegistrationResponse>>>
-
     suspend fun loginUser(login: LoginRequest): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<RegistrationResponse>>>
 
     suspend fun logoutUser(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<String?>>>
 
     suspend fun deleteUser(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<String?>>>
-
-
-
-    suspend fun generateOtp(
-        jsonObject: JsonObject
-    ): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<MessageResponse>>>
-
-    suspend fun changeMobileNumber(
-        jsonObject: JsonObject
-    ): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<MessageResponse>>>
-
-    suspend fun changeEmail(
-        jsonObject: JsonObject
-    ): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<MessageResponse>>>
 
     suspend fun sendOtp(
         jsonObject: JsonObject
@@ -42,10 +26,6 @@ interface AuthenticationRepository {
     suspend fun createInternationalUser(jsonObject: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<RegistrationResponse>>>
 
     suspend fun verifyOtp(jsonObject: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<UserResponse>>>
-
-    suspend fun resetPassword(jsonObject: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<MessageResponse>>>
-
-    suspend fun updatePassword(jsonObject: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<MessageResponse>>>
 
     /**
      * @param forceReplaceLocal ->Forcefully replace the locally stored goals and info

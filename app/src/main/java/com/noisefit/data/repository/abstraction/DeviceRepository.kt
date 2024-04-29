@@ -46,8 +46,6 @@ interface DeviceRepository {
 
     suspend fun getVendorAgpsFileUrl(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<com.noisefit_commans.data.response.AgpsFileResponse>>>
 
-    suspend fun checkWarranty(number: String): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<WarrantyResponse>>>
-
     suspend fun getMarketPlacesOld(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<List<String>>>>
     suspend fun checkWatchTokenExist(macAddress: String): Flow<Resource<BaseApiResponse<WatchTokenResponse>>>
 
@@ -57,17 +55,6 @@ interface DeviceRepository {
 
 
     suspend fun addWarrantyOld(jsonObject: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<String?>>>
-
-
-    suspend fun getMarketPlaces(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<List<MarketPlace>>>>
-
-    suspend fun getWarrantyWatchList(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<List<WarrantyWatchesResponse>>>>
-
-    suspend fun addWarranty(jsonObject: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<String?>>>
-
-    suspend fun checkWarranty(jsonObject: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<Boolean>>>
-
-    suspend fun getConfig(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<ConfigResponse>>>
 
     suspend fun submitFeedback(
         feedback: Feedback,

@@ -110,26 +110,6 @@ class AuthenticationRepositoryImpl(
         database.clearAllTables()
     }
 
-    override suspend fun resetPassword(jsonObject: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<MessageResponse>>> {
-        return safeApiCallFlow(Dispatchers.IO) {
-            remoteDataSource.resetPassword(jsonObject)
-        }
-    }
-
-    override suspend fun updatePassword(jsonObject: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<MessageResponse>>> {
-        return safeApiCallFlow(Dispatchers.IO) {
-            remoteDataSource.updatePassword(jsonObject)
-        }
-    }
-
-
-    override suspend fun signup(signup: RegistrationRequest): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<RegistrationResponse>>> {
-        return safeApiCallFlow(Dispatchers.IO) {
-            remoteDataSource.signup(signup)
-        }
-    }
-
-
     override suspend fun loginUser(login: LoginRequest): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<RegistrationResponse>>> {
         return safeApiCallFlow(dispatcher) {
             remoteDataSource.loginUser("${BuildConfig.BASE_URL_NEW}/auth_v2/login", login)
@@ -148,28 +128,6 @@ class AuthenticationRepositoryImpl(
             remoteDataSource.deleteUser()
         }
     }
-
-
-    override suspend fun generateOtp(
-        jsonObject: JsonObject
-    ): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<MessageResponse>>> {
-        return safeApiCallFlow(Dispatchers.IO) {
-            remoteDataSource.generateOtp(jsonObject)
-        }
-    }
-
-    override suspend fun changeMobileNumber(jsonObject: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<MessageResponse>>> {
-        return safeApiCallFlow(Dispatchers.IO) {
-            remoteDataSource.changeMobileNumber(jsonObject)
-        }
-    }
-
-    override suspend fun changeEmail(jsonObject: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<MessageResponse>>> {
-        return safeApiCallFlow(Dispatchers.IO) {
-            remoteDataSource.changeEmail(jsonObject)
-        }
-    }
-
 
     companion object {
         val SIGN_UP_SUCCESS = "Signup success"

@@ -17,7 +17,7 @@ plugins {
 android {
     compileSdk = Android.compileSdk
     ndkVersion = Android.ndk
-    
+
     defaultConfig {
         applicationId = Android.appId
         minSdk = Android.minSdk
@@ -93,13 +93,13 @@ android {
             //versionNameSuffix ".release"
         }
         getByName("debug") {
-             /*isMinifyEnabled = true
-              isShrinkResources = true
-            isDebuggable = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )*/
+            /*isMinifyEnabled = true
+             isShrinkResources = true
+           isDebuggable = false
+           proguardFiles(
+               getDefaultProguardFile("proguard-android-optimize.txt"),
+               "proguard-rules.pro"
+           )*/
 //            buildConfigField("String", "CLEVERTAP_ACCOUNT_ID", "\"TEST-794-RRK-595Z98\"")
 //            buildConfigField("String", "CLEVERTAP_TOKEN", "\"TEST-322-4ca89\"")
 
@@ -126,62 +126,35 @@ android {
         create("uat") {
             buildConfigField("String", "BASE_URL", "\"https://app-micro-uat.gonoise.com\"")
             buildConfigField("String", "BASE_URL_NEW", "\"https://uat-app.gonoise.com\"")
-            buildConfigField("String", "STEPS_URL", "\"https://uat-step.gonoise.com\"")
-            buildConfigField("String", "TEMPERATURE_URL", "\"https://uat-temp.gonoise.com\"")
-            buildConfigField("String", "SHOP_API_URL", "\"https://stage-pre-order.gonoise.in\"")
             buildConfigField("String", "API_URL_WEATHER", "\"http://api.openweathermap.org\"")
-            buildConfigField("String", "API_URL_STOCK", "\"https://api.twelvedata.com\"")
-            buildConfigField("String", "BASE_URL_NOISE_CONNECT", "\"https://noise-connect-stage.gonoise.in\"")
-            buildConfigField("String", "NOISE_CONNECT_KEY", "\"d8f021fd65e25982003ddce3cac2225e\"")
-            buildConfigField("String", "INSIDER_PARTNER", "\"gonoiselunaapp\"")
 
             //Oreo URLs
             buildConfigField("String", "OREO_BASE_URL", "\"https://uat-app.gonoise.com/luna\"")
 
-
             versionNameSuffix = ".uat"
             manifestPlaceholders["crashlyticsCollectionEnabled"] = "true"
-            manifestPlaceholders["partner"] = "gonoiselunaapp"
         }
         create("staging") {
             buildConfigField("String", "BASE_URL", "\"https://app-micro-staging.gonoise.com\"")
             buildConfigField("String", "BASE_URL_NEW", "\"https://stage-app.gonoise.com\"")
-            buildConfigField("String", "STEPS_URL", "\"https://stage-step.gonoise.com\"")
-            buildConfigField("String", "TEMPERATURE_URL", "\"https://stage-temp.gonoise.com\"")
-            buildConfigField("String", "SHOP_API_URL", "\"https://stage-pre-order.gonoise.in\"")
             buildConfigField("String", "API_URL_WEATHER", "\"http://api.openweathermap.org\"")
-            buildConfigField("String", "API_URL_STOCK", "\"https://api.twelvedata.com\"")
-            buildConfigField("String", "BASE_URL_NOISE_CONNECT", "\"https://noise-connect-stage.gonoise.in\"")
-            buildConfigField("String", "NOISE_CONNECT_KEY", "\"d8f021fd65e25982003ddce3cac2225e\"")
-            buildConfigField("String", "INSIDER_PARTNER", "\"gonoiselunaapp\"")
 
             //Oreo URLs
             buildConfigField("String", "OREO_BASE_URL", "\"https://stage-app.gonoise.com/luna\"")
 
-
             versionNameSuffix = ".staging.luna"
             manifestPlaceholders["crashlyticsCollectionEnabled"] = "false"
-            manifestPlaceholders["partner"] = "gonoiselunaapp"
 
         }
         create("live") {
-            buildConfigField("String", "STEPS_URL", "\"https://step-activities.gonoise.com\"")
-            buildConfigField("String", "BASE_URL_NEW", "\"https://app.gonoise.com\"")
             buildConfigField("String", "BASE_URL", "\"https://backend.gonoise.com\"")
-            buildConfigField("String", "TEMPERATURE_URL", "\"https://temp.gonoise.com\"")
-            buildConfigField("String", "SHOP_API_URL", "\"https://pre-order.gonoise.com\"")
+            buildConfigField("String", "BASE_URL_NEW", "\"https://app.gonoise.com\"")
             buildConfigField("String", "API_URL_WEATHER", "\"http://api.openweathermap.org\"")
-            buildConfigField("String", "API_URL_STOCK", "\"https://api.twelvedata.com\"")
-            buildConfigField("String", "INSIDER_PARTNER", "\"gonoiselunaapp\"")
-            buildConfigField("String", "NOISE_CONNECT_KEY", "\"d8f021fd65e25982003ddce3cac2225e\"")
-            buildConfigField("String", "BASE_URL_NOISE_CONNECT", "\"https://noise-connect.gonoise.com\"")
 
             //Oreo URLs
             buildConfigField("String", "OREO_BASE_URL", "\"https://app.gonoise.com/luna\"")
 
-
             manifestPlaceholders["crashlyticsCollectionEnabled"] = "true"
-            manifestPlaceholders["partner"] = "gonoiselunaapp"
         }
 
 
@@ -316,7 +289,7 @@ dependencies {
     implementation(AndroidX.lifecycleProcess)
 
     implementation(PlayService.playServiceAdmob)
-    
+
     implementation("com.google.android.flexbox:flexbox:3.0.0")
     implementation("net.danlew:android.joda:2.12.1")
 

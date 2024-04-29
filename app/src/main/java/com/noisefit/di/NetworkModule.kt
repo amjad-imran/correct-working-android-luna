@@ -170,27 +170,6 @@ object NetworkModule {
     fun provideRestService(retrofit: Retrofit): NetworkService =
         retrofit.create(NetworkService::class.java)
 
-
-    @Named("RetrofitShop")
-    @Singleton
-    @Provides
-    fun provideShopRetroFit(@Named("HttpClientShop") client: OkHttpClient): Retrofit =
-        Retrofit.Builder()
-            .baseUrl(BuildConfig.SHOP_API_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client)
-            .build()
-
-    @Named("RetrofitSport")
-    @Singleton
-    @Provides
-    fun provideSportApi(@Named("HttpClientSport") client: OkHttpClient): Retrofit =
-        Retrofit.Builder()
-            .baseUrl(BuildConfig.API_URL_WEATHER)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client)
-            .build()
-
     @Named("RetrofitWeather")
     @Singleton
     @Provides
@@ -200,15 +179,6 @@ object NetworkModule {
         .client(client)
         .build()
 
-
-    @Named("RetrofitStock")
-    @Singleton
-    @Provides
-    fun provideStockRetroFit(client: OkHttpClient): Retrofit = Retrofit.Builder()
-        .baseUrl(BuildConfig.API_URL_STOCK)
-        .addConverterFactory(GsonConverterFactory.create())
-        .client(client)
-        .build()
 
     @Named("RetrofitDownload")
     @Singleton
@@ -224,20 +194,6 @@ object NetworkModule {
     fun provideWeatherRestService(@Named("RetrofitWeather") retrofit: Retrofit): WeatherService =
         retrofit.create(WeatherService::class.java)
 
-    @Singleton
-    @Provides
-    fun provideShopRestService(@Named("RetrofitShop") retrofit: Retrofit): ShopService =
-        retrofit.create(ShopService::class.java)
-
-    @Singleton
-    @Provides
-    fun provideSportRestService(@Named("RetrofitSport") retrofit: Retrofit): SportService =
-        retrofit.create(SportService::class.java)
-
-    @Singleton
-    @Provides
-    fun provideStockRestService(@Named("RetrofitStock") retrofit: Retrofit): StockService =
-        retrofit.create(StockService::class.java)
 
     @Singleton
     @Provides
