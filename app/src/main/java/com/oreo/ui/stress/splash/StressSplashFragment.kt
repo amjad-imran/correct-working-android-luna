@@ -116,41 +116,41 @@ class StressSplashFragment :
 
         dataList.add(
             StressSplashModel(
-                "What is Stress?",
+                getString(R.string.text_stress_w_title_1),
                 R.drawable.image_stress_w_1,
-                "Stress is the body’s natural response to challenges. While commonly seen negatively, healthy levels can enhance focus, memory, and overall performance."
+                getString(R.string.text_stress_w_content_1)
             )
         )
         dataList.add(
             StressSplashModel(
-                "How does the Luna Ring measure stress?",
+                getString(R.string.text_stress_w_title_2),
                 R.drawable.image_stress_w_2,
-                "Stress affects mental and physical well-being, leading to physiological changes like increased heart rate or lowered HRV. Recognizing this connection allows for holistic stress management."
+                getString(R.string.text_stress_w_content_2)
             )
         )
         dataList.add(
             StressSplashModel(
-                "Embracing the Journey",
-                R.drawable.image_stress_w_3,
-                "By monitoring stress, identify patterns and adjust routines. View stress as an opportunity for growth and resilience. For instance, facing challenges can boost personal development and confidence."
-            )
-        )
-
-        dataList.add(
-            StressSplashModel(
-                "Managing Stress",
+                getString(R.string.text_stress_w_title_4),
                 R.drawable.image_stress_w_4,
-                "Distinguish between short-term and long-term stress. Engage in activities like exercise and seek social support for effective stress management."
+                getString(R.string.text_stress_w_content_4)
+            )
+        )
+        dataList.add(
+            StressSplashModel(
+                getString(R.string.text_stress_w_title_5),
+                R.drawable.image_stress_w_5,
+                getString(R.string.text_stress_w_content_5)
             )
         )
 
         dataList.add(
             StressSplashModel(
-                "Harness Your Stress",
-                R.drawable.image_stress_w_5,
-                "Approach stress management with mindfulness and intention. Navigate challenges with grace, supported by mindfulness practices, social connections, and enjoyable activities."
+                getString(R.string.text_stress_w_title_3),
+                R.drawable.image_stress_w_3,
+                getString(R.string.text_stress_w_content_3)
             )
         )
+
         return dataList
     }
 }
