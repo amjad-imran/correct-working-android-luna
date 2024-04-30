@@ -704,4 +704,8 @@
         android:id="@+id/femaleHealthSplashFragment"
         android:name="com.oreo.ui.femalehealth.splash.FemaleHealthSplashFragment"
         android:label="fragment_female_splash" />
+    <fragment
+        android:id="@+id/femaleHealthOnboardingFragment"
+        android:name="com.oreo.ui.femalehealth.onboarding.FMHOnboardingFragment"
+        android:label="fragment_female_onboarding" />
 </navigation>

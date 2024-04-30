@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_walkthrough_fmh"
-    tools:context="com.oreo.ui.stress.splash.StressSplashFragment">
+    android:background="@drawable/bg_walkthrough_fmh">
 
     <ImageButton
         android:id="@+id/backBtn"
@@ -45,7 +44,7 @@
 
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/vpImageSlider"
+        android:id="@+id/vpFmhOnboard"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"

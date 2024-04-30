@@ -10,7 +10,6 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.StressSplashModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -41,6 +40,7 @@ class FemaleHealthSplashFragment :
             clipChildren = false
             offscreenPageLimit = 3
             adapter = fmhSplashDescriptionAdapter
+            setOnTouchListener(null)
 
         }
 
@@ -86,7 +86,6 @@ class FemaleHealthSplashFragment :
         val max = dataList.size
         if (position == max - 1) binding.lytProgress.root.gone() else
             binding.lytProgress.root.visible()
-
         binding.lytProgress.apply {
             pgBr.progress = (((position + 1).toFloat() / max) * 100).roundToInt()
             tvCount.text = "0${position + 1}"
@@ -96,35 +95,49 @@ class FemaleHealthSplashFragment :
     val callback: OnBackPressedCallback =
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                localDataStore.setFMHWalkthroughShown(true)
-                navigateUpSafe()
+                onBackPress()
             }
         }
 
     override fun initListener() {
+        binding.vLeft.setOnClickListener {
+            onBackPress()
+        }
+        binding.vRight.setOnClickListener {
+            onNextPress()
+        }
 
         binding.backBtn.setOnClickListener {
-            localDataStore.setFMHWalkthroughShown(true)
-            navigateUpSafe()
+            onBackPress()
         }
         binding.bNext.setOnClickListener {
-            val current = binding.vpImageSlider.currentItem
-            if (current == (dataList.size - 1)) {
-                localDataStore.setFMHWalkthroughShown(true)
-                navigateUpSafe()
-                return@setOnClickListener
-            }
-            binding.vpImageSlider.setCurrentItem(getNext(), true)
+            onNextPress()
+        }
+
+    }
+
+    fun onBackPress() {
+        val current = binding.vpImageSlider.currentItem
+        if (current != 0) {
+            binding.vpImageSlider.setCurrentItem(current - 1, true)
+        } else {
+            navigateUpSafe()
+        }
+    }
+
+    private fun onNextPress() {
+        val current = binding.vpImageSlider.currentItem
+        if (current == (dataList.size - 1)) {
+            localDataStore.setFMHWalkthroughShown(true)
+            navigate(R.id.femaleHealthOnboardingFragment)
+        } else {
+            binding.vpImageSlider.setCurrentItem(current + 1, true)
         }
     }
 
 
     override fun subscribeObservers() {
 
-    }
-
-    private fun getNext(): Int {
-        return binding.vpImageSlider.currentItem + 1
     }
 
     private fun getData(): ArrayList<StressSplashModel> {
