@@ -37,8 +37,7 @@ class StressSplashFragment :
     val callback: OnBackPressedCallback =
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                localDataStore.setStressWalkthroughShown(true)
-                navigateUpSafe()
+                onBackPress()
             }
         }
 
@@ -48,8 +47,9 @@ class StressSplashFragment :
             clipChildren = false
             offscreenPageLimit = 3
             adapter = stressSplashDescriptionAdapter
-
+            setOnTouchListener(null)
         }
+
 
         dataList.let { stressSplashDescriptionAdapter.setDataSet(it) }
         binding.vpImageSlider.registerOnPageChangeCallback(object :
@@ -83,7 +83,7 @@ class StressSplashFragment :
 
         binding.lytProgress.apply {
             pgBr.progress = (((position + 1).toFloat() / max) * 100).roundToInt()
-            tvCount.text = "${position + 1}"
+            tvCount.text = "0${position + 1}"
         }
     }
 
@@ -92,18 +92,38 @@ class StressSplashFragment :
     }
 
     override fun initListener() {
+
+        binding.vLeft.setOnClickListener {
+            onBackPress()
+        }
+        binding.vRight.setOnClickListener {
+            onNextPress()
+        }
+
         binding.backBtn.setOnClickListener {
-            localDataStore.setStressWalkthroughShown(true)
-            navigateUpSafe()
+            onBackPress()
         }
         binding.bNext.setOnClickListener {
-            val current = binding.vpImageSlider.currentItem
-            if (current == (dataList.size - 1)) {
-                localDataStore.setStressWalkthroughShown(true)
-                navigateUpSafe()
-                return@setOnClickListener
-            }
-            binding.vpImageSlider.setCurrentItem(getNext(), true)
+            onNextPress()
+        }
+    }
+
+    fun onBackPress() {
+        val current = binding.vpImageSlider.currentItem
+        if (current != 0) {
+            binding.vpImageSlider.setCurrentItem(current - 1, true)
+        } else {
+            navigateUpSafe()
+        }
+    }
+
+    fun onNextPress() {
+        val current = binding.vpImageSlider.currentItem
+        if (current == (dataList.size - 1)) {
+            localDataStore.setStressWalkthroughShown(true)
+            navigate(StressSplashFragmentDirections.actionStressSplashFragmentToFragmentOStressDetails())
+        } else {
+            binding.vpImageSlider.setCurrentItem(current + 1, true)
         }
     }
 

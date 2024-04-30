@@ -30,7 +30,6 @@ class OStressDetailsFragment :
         binding.lytHeader.view1.visible()
         sharedViewModel.lastSelectedStressType = StressType.NO_DATA
         setViewPager()
-        sharedViewModel.checkWalkthroughStatus()
     }
 
 
@@ -157,11 +156,6 @@ class OStressDetailsFragment :
     }
 
     override fun subscribeObservers() {
-        sharedViewModel.showWalkthrough.observe(this) {
-            it.getContent()?.let {
-                navigate(R.id.stressSplashFragment)
-            }
-        }
 
         mainViewModel.dashboard.observe(viewLifecycleOwner) {
             LOGS.w("Setting_data size ${it.size}")

@@ -668,7 +668,13 @@
     <fragment
         android:id="@+id/stressSplashFragment"
         android:name="com.oreo.ui.stress.splash.StressSplashFragment"
-        android:label="fragment_stress_splash" />
+        android:label="fragment_stress_splash">
+        <action
+            android:id="@+id/action_stressSplashFragment_to_fragmentOStressDetails"
+            app:destination="@id/fragmentOStressDetails"
+            app:popUpTo="@id/stressSplashFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/fragmentHeartRateDetails"
         android:name="com.oreo.ui.heartrate.OHeartRateDetailsFragment"

@@ -127,6 +127,10 @@ class SummaryDataViewModelToday @Inject constructor(
         }
     }
 
+    fun getStressWalkthroughShownStatus(): Boolean {
+        return localDataStore.getStressWalkthroughShownStatus()
+    }
+
     fun checkBeforeTime(): Boolean {
         val calendar: Calendar = Calendar.getInstance()
         val hour24hrs: Int = calendar.get(Calendar.HOUR_OF_DAY)
@@ -495,7 +499,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 }
             }
 
-            if(shouldShowStressCard){
+            if (shouldShowStressCard) {
                 val combinedData = oreoStressDataConvertor.getStressCombinedData(healthData)
                 userActivities.add(
                     OHealthOverview.StressGraph(

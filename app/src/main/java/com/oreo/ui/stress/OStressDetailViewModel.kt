@@ -1,18 +1,24 @@
 package com.oreo.ui.stress
 
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.noisefit.luna.R
 import com.noisefit_commans.common.maxWithInvalidMovementValues
 import com.noisefit_commans.common.maxWithoutInvalidMovementValues
 import com.noisefit_commans.data.enums.StressType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.ScreenUtils
 import com.oreo.data.dataConverter.OreoStressDataConvertor
 import com.oreo.data.model.OStressActivitiesDataModel
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.Stress
+import com.oreo.ui.stress.help.StressImageModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.util.Calendar
 import javax.inject.Inject
@@ -36,6 +42,38 @@ constructor(
 
     var date: String? = null
 
+
+    val howItWorksDataList = MutableLiveData<List<StressImageModel>>()
+
+    init {
+        initHowItWorksData()
+    }
+
+    private fun initHowItWorksData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            howItWorksDataList.postValue(
+                arrayListOf(
+                    StressImageModel(
+                        "What is stress?",
+                        "Stress is the body’s natural response to a physical or mental challenge.",
+                        R.drawable.image_s_hw_1
+                    ), StressImageModel(
+                        "How does the Luna Ring measure stress?",
+                        "Your stress data is updated every 15 minutes and categorised as relaxed, focused, or stressed.",
+                        R.drawable.image_s_hw_2
+                    ), StressImageModel(
+                        "How to manage acute (short-term) stress?",
+                        "Acute stress typically arises in response to immediate threats or challenges.",
+                        R.drawable.image_s_hw_3
+                    ), StressImageModel(
+                        "How to manage chronic (long-term) stress?",
+                        "Chronic stress persists over time and can result from various factors or even a serious illness.",
+                        R.drawable.image_s_hw_4
+                    )
+                )
+            )
+        }
+    }
 
     fun getCombinedMovementData(
         originalList: List<Int>?,
