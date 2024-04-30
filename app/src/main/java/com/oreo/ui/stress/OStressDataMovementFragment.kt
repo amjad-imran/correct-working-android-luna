@@ -11,6 +11,7 @@ import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
@@ -34,6 +35,7 @@ import com.oreo.data.model.Stress
 import com.oreo.data.model.StressNudge
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.stress.banner.OreoStressBannerFragment
+import com.oreo.ui.stress.help.StressUnderstandingImageAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.math.abs
@@ -52,6 +54,9 @@ class OStressDataMovementFragment :
     lateinit var vibrationUtils: VibrationUtils
 
     private val setBackHandler = Handler(Looper.getMainLooper())
+    private val howItWorksAdapter: StressUnderstandingImageAdapter by lazy {
+        StressUnderstandingImageAdapter()
+    }
 
     private var setBackRunnable = Runnable {
         sharedViewModel.setSelectedType(viewModel.getStressType(viewModel.lastStressValue))
@@ -77,8 +82,15 @@ class OStressDataMovementFragment :
         viewModel.checkIsToday(date)
 
         handleMovementViews()
+        setHowItWorksRecycler()
 
 
+    }
+
+    private fun setHowItWorksRecycler() {
+        binding.rvHowItWorks.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.rvHowItWorks.adapter = howItWorksAdapter
     }
 
 
@@ -98,17 +110,14 @@ class OStressDataMovementFragment :
                 binding.lytInactiveStressHeader.tvTypical.text = "vs typical $day"
 
                 viewModel.defaultMeterData = Pair(
-                    dayData.stress?.stressValue?.value,
-                    dayData.stress?.stressValue?.lastUpdated
+                    dayData.stress?.stressValue?.value, dayData.stress?.stressValue?.lastUpdated
                 )
 
 
                 initCombineChart(dayData)
-                val combinedData =
-                    viewModel.getCombinedMovementData(
-                        dayData.activity?.daytimeMovement?.movement,
-                        true
-                    )
+                val combinedData = viewModel.getCombinedMovementData(
+                    dayData.activity?.daytimeMovement?.movement, true
+                )
                 viewModel.dayTimeMovement = combinedData
 
                 setMovementData(combinedData, viewModel.isSelectedMode, -1)
@@ -119,8 +128,7 @@ class OStressDataMovementFragment :
                 viewModel.prepareStressActivityData(dayData)
 
                 setTopMeter(
-                    dayData.stress?.stressValue?.value,
-                    dayData.stress?.stressValue?.lastUpdated
+                    dayData.stress?.stressValue?.value, dayData.stress?.stressValue?.lastUpdated
                 )
 
             }
@@ -128,9 +136,7 @@ class OStressDataMovementFragment :
     }
 
     private fun setTopMeter(
-        value: Int? = null,
-        lastUpdated: Long? = null,
-        selectedValueTime: String? = null
+        value: Int? = null, lastUpdated: Long? = null, selectedValueTime: String? = null
     ) {
 
         binding.lytTopStressGraph.tvStressValue.text = if (value == null || value == 0) {
@@ -185,6 +191,10 @@ class OStressDataMovementFragment :
 
     override fun initListener() {
 
+        binding.ivHowItWorks.setOnClickListener {
+            navigate(R.id.stressUnderstandingFragment)
+        }
+
         binding.svMain.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
             if (Math.abs(scrollY - oldScrollY) > 0) {
                 binding.lytStressMidGraph.graphStress.resetIfInteracting()
@@ -218,8 +228,7 @@ class OStressDataMovementFragment :
                 if (!onGoing) {
                     if (viewModel.defaultMeterData != null) {
                         setTopMeter(
-                            viewModel.defaultMeterData?.first,
-                            viewModel.defaultMeterData?.second
+                            viewModel.defaultMeterData?.first, viewModel.defaultMeterData?.second
                         )
                     }
                 }
@@ -279,16 +288,14 @@ class OStressDataMovementFragment :
             val highlights = viewModel.getHighlights(type, viewModel.dayTimeMovement)
             val color = viewModel.getMovementColor(type)
             binding.lytStressMidGraph.graphStress.updateHighlight(
-                highlights,
-                resources.getColor(color, null)
+                highlights, resources.getColor(color, null)
             )
         }
     }
 
     private fun handleProgress(pgbr: ProgressBar, progress: Int) {
         val height = viewModel.screenUtils.dpToPx(
-            50,
-            pgbr.context
+            50, pgbr.context
         )// change if you change progress height in xml
         val percentageFactor = 100 / height
         val newProgress = progress.toFloat() / percentageFactor // because the height is 50
@@ -313,8 +320,8 @@ class OStressDataMovementFragment :
         layout.pgBrPrevious.progressDrawable =
             ContextCompat.getDrawable(requireContext(), drawableCompare)
 
-        handleProgress(layout.pgBrToday, viewModel.getBarPercent(todayValue,maxValue))
-        handleProgress(layout.pgBrPrevious, viewModel.getBarPercent(typicalValue,maxValue))
+        handleProgress(layout.pgBrToday, viewModel.getBarPercent(todayValue, maxValue))
+        handleProgress(layout.pgBrPrevious, viewModel.getBarPercent(typicalValue, maxValue))
         val diff = viewModel.getDifference(todayValue, typicalValue)
         layout.tvDifference.text = "${abs(diff)}%"
         if (diff > 0) {
@@ -331,10 +338,7 @@ class OStressDataMovementFragment :
     }
 
     private fun setHourMin(
-        layout: OreoLayoutHourMnBinding,
-        total: Int,
-        hour: Int,
-        minute: Int
+        layout: OreoLayoutHourMnBinding, total: Int, hour: Int, minute: Int
     ) {
         if (total == 0) {
             layout.tvHour.text = "--"
@@ -432,13 +436,17 @@ class OStressDataMovementFragment :
                 maxValue
             )
             handleComparisonsBar(
-                lytFocussed, focused, stress?.typicalFocused ?: 0,
+                lytFocussed,
+                focused,
+                stress?.typicalFocused ?: 0,
                 R.drawable.grad_today_focused,
                 R.drawable.grad_previous_focused,
                 maxValue
             )
             handleComparisonsBar(
-                lytStressed, stressed, stress?.typicalStressed ?: 0,
+                lytStressed,
+                stressed,
+                stress?.typicalStressed ?: 0,
                 R.drawable.grad_today_stressed,
                 R.drawable.grad_previous_stressed,
                 maxValue
@@ -454,8 +462,7 @@ class OStressDataMovementFragment :
         val calm = nonActiveData?.nonActiveCalm ?: 0
         val focused = nonActiveData?.nonActiveFocused ?: 0
         val stressed = nonActiveData?.nonActiveStressed ?: 0
-        val total =
-            calm + focused + stressed
+        val total = calm + focused + stressed
         val stressDays = mainViewModel.stressDaysFromCurrent(viewModel.date)
 
         binding.lytInactiveStressHeader.apply {
@@ -526,13 +533,17 @@ class OStressDataMovementFragment :
                 maxValue
             )
             handleComparisonsBar(
-                lytFocussed, focused, nonActiveData?.typicalNonActiveFocused ?: 0,
+                lytFocussed,
+                focused,
+                nonActiveData?.typicalNonActiveFocused ?: 0,
                 R.drawable.grad_today_focused,
                 R.drawable.grad_previous_focused,
                 maxValue
             )
             handleComparisonsBar(
-                lytStressed, stressed, nonActiveData?.typicalNonActivestressed ?: 0,
+                lytStressed,
+                stressed,
+                nonActiveData?.typicalNonActivestressed ?: 0,
                 R.drawable.grad_today_stressed,
                 R.drawable.grad_previous_stressed,
                 maxValue
@@ -560,8 +571,7 @@ class OStressDataMovementFragment :
             fragments.add(OreoStressBannerFragment.newInstance(it))
         }
 
-        val winsAdapter =
-            OreoSleepBannerAdapter(childFragmentManager, lifecycle, fragments)
+        val winsAdapter = OreoSleepBannerAdapter(childFragmentManager, lifecycle, fragments)
         binding.lytStressBanner.vpBannerSlider.apply {
             clipToPadding = false
             clipChildren = false
@@ -573,16 +583,13 @@ class OStressDataMovementFragment :
         }
 
         TabLayoutMediator(
-            binding.lytStressBanner.tabLayout,
-            binding.lytStressBanner.vpBannerSlider
+            binding.lytStressBanner.tabLayout, binding.lytStressBanner.vpBannerSlider
         ) { _, _ -> }.attach()
 
         binding.lytStressBanner.vpBannerSlider.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
             override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
+                position: Int, positionOffset: Float, positionOffsetPixels: Int
             ) {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels)
 
@@ -601,13 +608,13 @@ class OStressDataMovementFragment :
     }
 
     override fun subscribeObservers() {
-
+        viewModel.howItWorksDataList.observe(this) {
+            howItWorksAdapter.setDataSet(it)
+        }
     }
 
     private fun setMovementData(
-        combinedData: List<Int>?,
-        isSelectedMode: Boolean,
-        selectedType: Int
+        combinedData: List<Int>?, isSelectedMode: Boolean, selectedType: Int
     ) {
 
         binding.lytHighMovement.apply {
