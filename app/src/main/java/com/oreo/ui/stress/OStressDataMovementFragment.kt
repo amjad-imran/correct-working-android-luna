@@ -29,6 +29,7 @@ import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.Stress
@@ -106,7 +107,10 @@ class OStressDataMovementFragment :
                 viewModel.isSelectedMode = false
 
                 val day = viewModel.getDayFromDate(dayData.date)
+                binding.lytStressHeader.tvHeader.text  = if(viewModel.isToday) getString(R.string.text_today) else day.capitalizeWords()
                 binding.lytStressHeader.tvTypical.text = "vs typical $day"
+
+                binding.lytInactiveStressHeader.tvHeader.text  = if(viewModel.isToday) getString(R.string.text_today) else day.capitalizeWords()
                 binding.lytInactiveStressHeader.tvTypical.text = "vs typical $day"
 
                 viewModel.defaultMeterData = Pair(
@@ -610,6 +614,9 @@ class OStressDataMovementFragment :
     override fun subscribeObservers() {
         viewModel.howItWorksDataList.observe(this) {
             howItWorksAdapter.setDataSet(it)
+            binding.tvHow.visible()
+            binding.ivHowItWorks.visible()
+            binding.rvHowItWorks.visible()
         }
     }
 

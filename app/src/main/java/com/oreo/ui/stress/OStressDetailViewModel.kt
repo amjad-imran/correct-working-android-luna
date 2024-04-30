@@ -45,10 +45,6 @@ constructor(
 
     val howItWorksDataList = MutableLiveData<List<StressImageModel>>()
 
-    init {
-        initHowItWorksData()
-    }
-
     private fun initHowItWorksData() {
         viewModelScope.launch(Dispatchers.IO) {
             howItWorksDataList.postValue(
@@ -192,6 +188,9 @@ constructor(
         }
         val todayDate = DateFormats.getCurrentDate(DateFormats.dateFormat3)
         isToday = todayDate.equals(date, true)
+        if (isToday) {
+            initHowItWorksData()
+        }
     }
 
     fun getStressType(value: Int?): StressType {
