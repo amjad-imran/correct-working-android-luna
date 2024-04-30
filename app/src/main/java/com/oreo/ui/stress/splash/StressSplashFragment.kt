@@ -83,7 +83,7 @@ class StressSplashFragment :
 
         binding.lytProgress.apply {
             pgBr.progress = (((position + 1).toFloat() / max) * 100).roundToInt()
-            tvCount.text = "${position + 1}"
+            tvCount.text = "0${position + 1}"
         }
     }
 
