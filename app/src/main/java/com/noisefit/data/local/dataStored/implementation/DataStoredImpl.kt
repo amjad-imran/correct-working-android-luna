@@ -194,6 +194,7 @@ private const val BATTERY_DASH_ALERT = "BATTERY_DASH_ALERT"
 private const val SLEEP_NOTIFICATION = "SLEEP_NOTIFICATION"
 private const val READINESS_NOTIFICATION = "READINESS_NOTIFICATION"
 private const val STRESS_WALKRHTOUGH = "STRESS_WALKRHTOUGH"
+private const val FMH_WALKRHTOUGH = "FMH_WALKRHTOUGH"
 
 
 private const val APP_VERSION_NEW = "APP_VERSION_NEW"
@@ -210,7 +211,13 @@ class DataStoredImpl
 @Inject constructor(
     private val gson: Gson, private val mPrefs: SharedPreferences
 ) : DataStoredInterface {
+    override fun getFMHWalkthroughShownStatus(): Boolean {
+        return mPrefs.getBoolean(FMH_WALKRHTOUGH, false)
+    }
 
+    override fun setFMHWalkthroughShown(isShown: Boolean) {
+        mPrefs.edit()?.putBoolean(FMH_WALKRHTOUGH, isShown)?.commit()
+    }
     override fun getStressWalkthroughShownStatus(): Boolean {
         return mPrefs.getBoolean(STRESS_WALKRHTOUGH, false)
     }

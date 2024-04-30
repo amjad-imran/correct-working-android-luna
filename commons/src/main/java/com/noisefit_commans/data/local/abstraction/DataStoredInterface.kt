@@ -442,4 +442,9 @@ interface DataStoredInterface {
     fun setStressWalkthroughShown(isShown: Boolean)
 
     fun getStressWalkthroughShownStatus(): Boolean
+    fun setFMHWalkthroughShown(isShown: Boolean)
+
+    fun getFMHWalkthroughShownStatus(): Boolean
+
+
 }

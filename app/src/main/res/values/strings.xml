@@ -1109,6 +1109,19 @@
     <string name="text_stress_w_content_4">Distinguish between short-term and long-term stress. Engage in activities like exercise and seek social support for effective stress management.</string>
     <string name="text_stress_w_content_5">Approach stress management with mindfulness and intention. Navigate challenges with grace, supported by mindfulness practices, social connections, and enjoyable activities.</string>
     <string name="text_stress_w_content_3">By monitoring stress, identify patterns and adjust routines. View stress as an opportunity for growth and resilience. For instance, facing challenges can boost personal development and confidence.</string>
+    <string name="text_track_your_cycle">Track your cycle</string>
+    <string name="text_track_your_cycle_desc">Unlock personalised insights, from predicting your next period to tracking ovulation</string>
+
+    <string name="text_fmh_w_title_1">Introducing CycleTracker</string>
+    <string name="text_fmh_w_title_2">Why track your period?</string>
+    <string name="text_fmh_w_title_3">Understanding your cycle through temperature variation</string>
+    <string name="text_fmh_w_title_4">Securing your data</string>
+    <string name="text_fmh_w_title_5">Embracing the Journey</string>
+    <string name="text_fmh_w_content_1">Stay connected to your body with CycleTracker. It offers personalized insights, from period predictions to ovulation tracking. Get support and guidance for each cycle phase to stay informed and prepared.</string>
+    <string name="text_fmh_w_content_2">Period tracking: Essential for body awareness, health management, and confidence. Empower yourself with self-care and proactive tracking.</string>
+    <string name="text_fmh_w_content_4">Your privacy is our priority. We use top-notch security measures to protect your data. Trust us to keep your information safe while you track your cycle.</string>
+    <string name="text_fmh_w_content_5">You are all set to get personalised insights for your reproductive journey, from predicting your next period to tracking ovulation, so you can plan ahead.</string>
+    <string name="text_fmh_w_content_3">Menstruation cools, follicular phase warms. Pre-ovulation dips, post-ovulation spikes. Luteal phase stays hot. App predicts fertile days, aids planning. Track temp for personalized periods.</string>
 
 
 </resources>

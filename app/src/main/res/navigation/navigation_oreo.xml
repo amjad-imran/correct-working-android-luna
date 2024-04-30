@@ -664,11 +664,11 @@
     <fragment
         android:id="@+id/stressUnderstandingFragment"
         android:name="com.oreo.ui.stress.help.StressUnderstandingFragment"
-        android:label="fragment_stress_understanding"/>
+        android:label="fragment_stress_understanding" />
     <fragment
         android:id="@+id/stressSplashFragment"
         android:name="com.oreo.ui.stress.splash.StressSplashFragment"
-        android:label="fragment_stress_splash"/>
+        android:label="fragment_stress_splash" />
     <fragment
         android:id="@+id/fragmentHeartRateDetails"
         android:name="com.oreo.ui.heartrate.OHeartRateDetailsFragment"
@@ -694,4 +694,8 @@
         android:id="@+id/bottomSheetLocationPermissionRequest"
         android:name="com.oreo.ui.recordworkout.BottomSheetLocationPermissionRequest"
         android:label="BottomSheetLocationPermissionRequest" />
+    <fragment
+        android:id="@+id/femaleHealthSplashFragment"
+        android:name="com.oreo.ui.femalehealth.splash.FemaleHealthSplashFragment"
+        android:label="fragment_female_splash" />
 </navigation>

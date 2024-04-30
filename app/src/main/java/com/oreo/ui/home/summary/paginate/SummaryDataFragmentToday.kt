@@ -12,7 +12,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSummaryDataTodayBinding
 import com.noisefit.oreo.BottomNavOption
@@ -297,6 +296,7 @@ class SummaryDataFragmentToday :
                     viewModel.localDataStore.setDashCardClickState(DashInfoCard.WELCOME, true)
                     navigate(R.id.ringWelcomeFragment)
                 }
+
                 OSummaryHealthOverviewClickEnum.StressGraphClicked -> {
                     navigate(R.id.fragmentOStressDetails)
                 }
@@ -312,6 +312,10 @@ class SummaryDataFragmentToday :
 
 
     override fun initListener() {
+
+        binding.contentMain.lytTrackFmHealth.btnGetStarted.setOnClickListener {
+            navigate(R.id.femaleHealthSplashFragment)
+        }
         binding.contentMain.lytHeartRate.bInfo.invisible()
         /*binding.contentMain.lytHeartRate.root.setOnClickListener {
             navigate(R.id.fragmentHeartRateDetails)

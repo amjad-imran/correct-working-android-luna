@@ -229,6 +229,21 @@
         <item name="android:background">@drawable/btn_secondary_nap_bg_selector</item>
         <item name="android:textColor">@drawable/btn_secondary_color_selector</item>
     </style>
+    <style name="SecondaryFMHButtonStyle" parent="ThemeOverlay.Material3.Button.TextButton">
+        <item name="shapeAppearance">@style/ButtonAppearance</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">36dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontFamily">@font/gilroy_medium</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:background">@drawable/btn_secondary_fmh_bg_selector</item>
+        <item name="android:textColor">@drawable/btn_secondary_color_selector</item>
+    </style>
 
     <style name="TextButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:layout_width">wrap_content</item>
