@@ -703,7 +703,13 @@
     <fragment
         android:id="@+id/femaleHealthSplashFragment"
         android:name="com.oreo.ui.femalehealth.splash.FemaleHealthSplashFragment"
-        android:label="fragment_female_splash" />
+        android:label="fragment_female_splash" >
+        <action
+            android:id="@+id/action_fmhSplashFragment_to_fragmentFemaleOnboarding"
+            app:destination="@id/femaleHealthOnboardingFragment"
+            app:popUpTo="@id/femaleHealthSplashFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/femaleHealthOnboardingFragment"
         android:name="com.oreo.ui.femalehealth.onboarding.FMHOnboardingFragment"
