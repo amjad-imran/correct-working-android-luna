@@ -297,8 +297,13 @@ class SummaryDataFragmentToday :
                     viewModel.localDataStore.setDashCardClickState(DashInfoCard.WELCOME, true)
                     navigate(R.id.ringWelcomeFragment)
                 }
+
                 OSummaryHealthOverviewClickEnum.StressGraphClicked -> {
-                    navigate(R.id.fragmentOStressDetails)
+                    if (viewModel.getStressWalkthroughShownStatus()) {
+                        navigate(R.id.fragmentOStressDetails)
+                    } else {
+                        navigate(R.id.stressSplashFragment)
+                    }
                 }
 
                 is OSummaryHealthOverviewClickEnum.OnNapClicked -> {

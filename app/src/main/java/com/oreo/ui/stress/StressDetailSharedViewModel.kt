@@ -18,7 +18,6 @@ constructor(
 ) : BaseViewModel() {
 
     val selectedStressLevel = MutableLiveData<StressType>()
-    val showWalkthrough = MutableLiveData<Event<Boolean>>()
 
     fun setSelectedType(type: StressType) {
         val lastValue = selectedStressLevel.value
@@ -27,13 +26,7 @@ constructor(
         }
     }
 
-    fun checkWalkthroughStatus() {
-        viewModelScope.launch(Dispatchers.IO) {
-            if (localDataStore.getStressWalkthroughShownStatus().not()) {
-                showWalkthrough.postValue(Event(true))
-            }
-        }
-    }
+
 
     var lastSelectedStressType: StressType = StressType.CALM
 
