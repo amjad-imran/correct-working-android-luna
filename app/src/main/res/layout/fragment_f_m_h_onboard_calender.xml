@@ -17,9 +17,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <View
+        <include
+            android:id="@+id/lytCalender"
+            layout="@layout/layout_fmh_onboard_calendar"
             android:layout_width="match_parent"
-            android:layout_height="406dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/side_margin"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="@dimen/side_margin"
