@@ -36,6 +36,7 @@ import com.noisefit_commans.ui.getColor
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
@@ -406,6 +407,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         ) {
             binding.graphStress.updateData(data.data)
 
+            binding.tvBeta.setVisibilityByCondition(data.isBeta)
+            binding.ivBackBeta.setVisibilityByCondition(data.isBeta)
+
+
             if (data.value == 0) {
                 binding.tvStressValue.gone()
                 binding.tvStressStatus.gone()
@@ -423,7 +428,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     if (lastUpdatedTimestamp == 0L) {
                         binding.tvLastUpdate.text = ""
                     } else {
-                        binding.tvLastUpdate.text ="Updated ${DateFormats.getRelativeTime(lastUpdatedTimestamp)}"
+                        binding.tvLastUpdate.text =
+                            "Updated ${DateFormats.getRelativeTime(lastUpdatedTimestamp)}"
                     }
                 } else {
                     binding.tvLastUpdate.text = ""

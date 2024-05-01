@@ -93,6 +93,7 @@ constructor(
     val userHealthData = HashMap<String, ServerUserHealthData?>()
     var trendsData: TrendsData? = null
     var stressFirstDate: String? = null
+    var stressBeta: Boolean = false
     val dataReload = MutableLiveData<Event<List<String>>>()
     val dashTodayReload = MutableLiveData<Event<Boolean>>()
 
@@ -179,6 +180,7 @@ constructor(
         userHealthData.clear()
         trendsData = null
         stressFirstDate = null
+        stressBeta = false
         _dashboard.value = ArrayList()
         _sleepHistoryResponse.value = ArrayList()
         _readinessHistoryResponse.value = ArrayList()
@@ -260,6 +262,7 @@ constructor(
 
                             registerDate = it.registerDate ?: -1
                             stressFirstDate = it.firstStress
+                            stressBeta = it.stressBeta ?: false
                             temperatureBaseLine = it.tempBaseLine ?: DEFAULT_TEMPERATURE_BASELINE
 
                             it.data.forEach { data ->
@@ -722,7 +725,7 @@ constructor(
                 LocalDateTime.parse(stressFirstDate, DateTimeFormat.forPattern("yyyy-MM-dd"))
             val currentDate = LocalDateTime.parse(date, DateTimeFormat.forPattern("yyyy-MM-dd"))
 
-            val difference = Days.daysBetween(stressDate,currentDate)
+            val difference = Days.daysBetween(stressDate, currentDate)
             return difference.days
         } catch (exp: Exception) {
             -1

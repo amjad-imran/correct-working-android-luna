@@ -147,6 +147,7 @@ class OreoUserActivityRepositoryImpl(
             var resultTrendsData: TrendsData? = null
             var registerDate: Int? = null
             var firstStress: String? = null
+            var stressBeta: Boolean? = null
             var tempBaseLine: Float? = null
 
             var apiStartDate: String? = startDate
@@ -231,6 +232,7 @@ class OreoUserActivityRepositoryImpl(
                                 trends = resultTrendsData,
                                 registerDate = ringDataStore.getRegisterDay(),
                                 firstStress = ringDataStore.getFirstStressDay(),
+                                stressBeta = ringDataStore.getStressBetaState(),
                                 tempBaseLine = ringDataStore.getTempBaseLine()
                             ),
                             message = "",
@@ -269,7 +271,9 @@ class OreoUserActivityRepositoryImpl(
                             registerDate = response.registerDate
                             tempBaseLine = response.tempBaseLine
                             firstStress = response.firstStress
+                            stressBeta = response.stressBeta
                             ringDataStore.setFirstStressDay(response.firstStress)
+                            ringDataStore.setStressBetaState(response.stressBeta)
                             ringDataStore.setTempBaseLine(tempBaseLine ?: 98.6f)
 
                             ringDataStore.setRegisterDay(registerDate ?: -1)
@@ -307,7 +311,8 @@ class OreoUserActivityRepositoryImpl(
                                             trends = resultTrendsData,
                                             registerDate = registerDate,
                                             tempBaseLine = tempBaseLine,
-                                            firstStress = firstStress
+                                            firstStress = firstStress,
+                                            stressBeta = stressBeta
                                         ),
                                         message = "",
                                     )

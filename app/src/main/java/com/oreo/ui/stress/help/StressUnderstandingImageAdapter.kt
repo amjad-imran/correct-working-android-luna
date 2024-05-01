@@ -9,7 +9,7 @@ import com.noisefit_commans.ui.loadImage
 import com.oreo.data.model.StressUnderstandingSubList
 
 
-class StressUnderstandingImageAdapter() :
+class StressUnderstandingImageAdapter(val listener: StressInfoCardAction) :
     RecyclerView.Adapter<StressUnderstandingImageAdapter.ViewHolder>() {
 
 
@@ -23,6 +23,10 @@ class StressUnderstandingImageAdapter() :
 
             binding.tvTitle.text = data.title
             binding.tvMessage.text = data.content
+
+            binding.root.setOnClickListener {
+                listener.onStressInfoCardClicked()
+            }
         }
 
     }
@@ -47,6 +51,9 @@ class StressUnderstandingImageAdapter() :
         mDataSet.addAll(list)
         notifyDataSetChanged()
     }
+}
+interface StressInfoCardAction {
+    fun onStressInfoCardClicked()
 }
 
 data class StressImageModel(

@@ -7,12 +7,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/tvDate"
+            style="@style/S14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:textColor="#a3ffffff"
+            android:textSize="14sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="15 April 2024"
+            tools:visibility="visible" />
+
         <include
             android:id="@+id/lytTopView"
             layout="@layout/layout_stress_internal_top_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/tvDate" />
 
         <TextView
             android:id="@+id/tvMsg"
@@ -35,7 +53,6 @@
             android:layout_height="220dp"
             android:layout_marginTop="16dp"
             android:visibility="gone"
-            tools:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvMsg"
@@ -72,7 +89,8 @@
             lineChart:xTextSize="12sp"
             lineChart:xTextSize2="12sp"
             lineChart:yLineColor="#00FFFFFF"
-            lineChart:yTextSize="12sp" />
+            lineChart:yTextSize="12sp"
+            tools:visibility="visible" />
 
         <include
             android:id="@+id/progressBar1"
