@@ -121,13 +121,6 @@ class SummaryDataViewModelToday @Inject constructor(
     var serverUserHealthData: ServerUserHealthData? = null
 
 
-    fun setRingBatteryInfoState() {
-        stateDashRingBattery.postValue(Pair(false, null))
-        viewModelScope.launch(Dispatchers.IO) {
-            localDataStore.setBatteryAlertShown()
-        }
-    }
-
     fun getStressWalkthroughShownStatus(): Boolean {
         return localDataStore.getStressWalkthroughShownStatus()
     }

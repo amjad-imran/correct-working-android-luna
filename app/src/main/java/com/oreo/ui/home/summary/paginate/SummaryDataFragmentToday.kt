@@ -680,10 +680,9 @@ class SummaryDataFragmentToday :
                     this.root.setOnClickListener {
                         startActivity(PairDeviceActivity.getStartIntent(requireContext(), true))
                     }
-
+                    viewModel.stateDashRingBattery.postValue(Pair(false, null))
                 } else {
                     this.root.gone()
-                    viewModel.stateDashRingBattery.postValue(Pair(false, null))
                 }
             }
         }
