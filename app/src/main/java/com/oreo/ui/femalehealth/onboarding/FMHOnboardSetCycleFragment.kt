@@ -4,15 +4,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import com.noisefit.luna.databinding.FragmentFMHOnboardSetPeriodBinding
+import com.noisefit.luna.databinding.FragmentFMHOnboardSetCycleBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.WheelAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
-class FMHOnboardSetPeriodFragment :
-    BaseFragment<FragmentFMHOnboardSetPeriodBinding>(FragmentFMHOnboardSetPeriodBinding::inflate) {
+class FMHOnboardSetCycleFragment :
+    BaseFragment<FragmentFMHOnboardSetCycleBinding>(FragmentFMHOnboardSetCycleBinding::inflate) {
     private val mViewModel: FMHOnboardingViewModel by activityViewModels()
     private val wheelAdapter: WheelAdapter<String> by lazy {
         WheelAdapter()
@@ -25,18 +24,19 @@ class FMHOnboardSetPeriodFragment :
 
     private fun setWheelPicker() {
         binding.wheelPicker.visibleItemCount = 5//it could not be less then 3
-        wheelAdapter.data = mViewModel.getPeriodDayData()
+        wheelAdapter.data = mViewModel.getPeriodCycleDayData()
         wheelAdapter.setOnItemSelectedListener { item ->
             Log.d(
                 "TAG",
                 "onItemSelected: ${item.split(" ").get(0)}"
             )
             Log.d("TAG", "get current item ${wheelAdapter.currentItemPosition}")
-            mViewModel.updatePeriodDayIndex(wheelAdapter.currentItemPosition)
+            mViewModel.updatePeriodCycleDayIndex(wheelAdapter.currentItemPosition)
         }
         wheelAdapter.bind(binding.wheelPicker)
         wheelAdapter.selectedItemPosition = mViewModel.getPeriodDayIndex()
     }
+
 
     override fun initListener() {
 

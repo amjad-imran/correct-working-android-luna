@@ -1,60 +1,43 @@
 package com.oreo.ui.femalehealth.onboarding
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import com.noisefit.luna.R
+import androidx.fragment.app.activityViewModels
+import com.noisefit.data.model.DiagnoseDataItem
+import com.noisefit.luna.databinding.FragmentFMHOnboardSetDignosisBinding
+import com.noisefit_commans.ui.BaseFragment
+import dagger.hilt.android.AndroidEntryPoint
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+@AndroidEntryPoint
+class FMHOnboardSetDignosisFragment :
+    BaseFragment<FragmentFMHOnboardSetDignosisBinding>(FragmentFMHOnboardSetDignosisBinding::inflate) {
+    private val mViewModel: FMHOnboardingViewModel by activityViewModels()
 
-/**
- * A simple [Fragment] subclass.
- * Use the [FMHOnboardSetDignosisFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class FMHOnboardSetDignosisFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private val mAdapter: FMHDiagnoseAdapter by lazy {
+        FMHDiagnoseAdapter(object : FMHDiagnoseAdapter.OnItemClickListener {
+            override fun onItemClick(data: DiagnoseDataItem, position: Int) {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_f_m_h_onboard_set_dignosis, container, false)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FMHOnboardSetDignosisFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FMHOnboardSetDignosisFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
             }
+        })
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setRecycler()
+    }
+
+    private fun setRecycler() {
+        with(binding.rvDiagnose) {
+            adapter = mAdapter
+        }
+        mAdapter.setData(mViewModel.getDiagnoseData())
+    }
+
+    override fun initListener() {
+
+    }
+
+    override fun subscribeObservers() {
+
     }
 }

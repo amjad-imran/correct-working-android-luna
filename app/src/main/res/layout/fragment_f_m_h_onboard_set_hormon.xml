@@ -1,13 +1,50 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.oreo.ui.femalehealth.onboarding.FMHOnboardSetHormonFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/tvHeader"
+            style="@style/H2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:text="@string/text_do_you_use_hormonal_contraceptives_or_other_hormones"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvPrivacy"
+            style="@style/H6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:textColor="@color/white_60"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvHeader"
+            android:text="@string/text_select_from_the_provided_options" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvHormon"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:layout_marginBottom="80dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvPrivacy"
+            tools:itemCount="5"
+            tools:listitem="@layout/layout_fmh_diagnose_item" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
