@@ -19,6 +19,7 @@ class FMHOnboardSetHormonFragment :
         FMHDiagnoseAdapter(object : FMHDiagnoseAdapter.OnItemClickListener {
             override fun onItemClick(data: DiagnoseDataItem, position: Int) {
                 mAdapter.updateItem(position, data)
+                mViewModel.selectedHormoneListData = mAdapter.getUpdatedSelectedListData()
             }
         })
     }

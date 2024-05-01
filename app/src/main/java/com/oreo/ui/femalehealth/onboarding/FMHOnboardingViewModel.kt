@@ -9,6 +9,7 @@ import com.noisefit_commans.utils.WheelItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
+
 const val DefaultPeriodDays = 7
 const val MinPeriodDays = 1
 const val MaxPeriodDays = 45
@@ -23,6 +24,10 @@ class FMHOnboardingViewModel @Inject constructor() : BaseViewModel() {
 
     private var periodDays = ArrayList<Int>()
     private var periodCycleDays = ArrayList<Int>()
+    var goalTypeSelected: String = ""
+    var selectedDiagnoseListData = ArrayList<String>()
+    var selectedHormoneListData = ArrayList<String>()
+    val updateFMHDate = MutableLiveData<Event<Boolean>>()
 
     init {
         for (i in MinPeriodDays..MaxPeriodDays) {
@@ -70,7 +75,7 @@ class FMHOnboardingViewModel @Inject constructor() : BaseViewModel() {
     }
 
     fun updatePeriodCycleDayIndex(index: Int) {
-        pcDays = getPeriodDay(index)
+        pcDays = getPeriodCycleDay(index)
     }
 
     private fun getPeriodDay(index: Int): Int {
@@ -103,4 +108,14 @@ class FMHOnboardingViewModel @Inject constructor() : BaseViewModel() {
         return listData
     }
 
+
+    fun updateFemaleHealthData() {
+        //will do here api call
+        updateFMHDate.postValue(Event(true))
+    }
+
+}
+
+enum class GoalType {
+    TRACK_CYCLE, TRACK_CONCEIVE, TRACK_PREGNANCY
 }

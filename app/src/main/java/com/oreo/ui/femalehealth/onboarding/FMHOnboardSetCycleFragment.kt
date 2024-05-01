@@ -34,7 +34,7 @@ class FMHOnboardSetCycleFragment :
             mViewModel.updatePeriodCycleDayIndex(wheelAdapter.currentItemPosition)
         }
         wheelAdapter.bind(binding.wheelPicker)
-        wheelAdapter.selectedItemPosition = mViewModel.getPeriodDayIndex()
+        wheelAdapter.selectedItemPosition = mViewModel.getPeriodCycleDayIndex()
     }
 
 

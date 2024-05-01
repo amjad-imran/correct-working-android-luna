@@ -16,16 +16,19 @@ class FMHOnboardGoalFragment :
         binding.lytTrackCycle.root.setOnClickListener {
             updateBackground(1)
             mViewModel.isGoalSelected.postValue(Event(true))
+            mViewModel.goalTypeSelected = GoalType.TRACK_CYCLE.name
 
         }
         binding.lytConceive.root.setOnClickListener {
             updateBackground(2)
             mViewModel.isGoalSelected.postValue(Event(true))
+            mViewModel.goalTypeSelected = GoalType.TRACK_CONCEIVE.name
 
         }
         binding.lytPregnancy.root.setOnClickListener {
             updateBackground(3)
             mViewModel.isGoalSelected.postValue(Event(true))
+            mViewModel.goalTypeSelected = GoalType.TRACK_PREGNANCY.name
         }
 
 

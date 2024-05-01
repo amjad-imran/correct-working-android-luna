@@ -61,5 +61,15 @@ class FMHDiagnoseAdapter(val mListener: OnItemClickListener) :
         mDataSet[pos] = data
         notifyItemChanged(pos)
     }
+
+    fun getUpdatedSelectedListData(): ArrayList<String> {
+        val selectedList = ArrayList<String>()
+        mDataSet.forEach {
+            if (it.isChecked) {
+                selectedList.add(it.title ?: "")
+            }
+        }
+        return selectedList
+    }
 }
 

@@ -121,13 +121,20 @@ class FMHOnboardingFragment :
     private fun onNextPress() {
         val current = binding.vpFmhOnboard.currentItem
         if (current == (mViewModel.fragmentSize - 1)) {
-            navigate(R.id.navigation_oreo_home)
+            mViewModel.updateFemaleHealthData()
+
         } else {
             binding.vpFmhOnboard.setCurrentItem(current + 1, true)
         }
     }
 
     override fun subscribeObservers() {
+        mViewModel.updateFMHDate.observe(this) { it1 ->
+            it1?.getContent()?.let {
+                navigate(R.id.navigation_oreo_home)
+            }
+
+        }
         mViewModel.isGoalSelected.observe(this) { it1 ->
             it1?.getContent()?.let {
                 binding.bNext.isEnabled = it
