@@ -15,7 +15,7 @@ const val MaxPeriodDays = 45
 
 @HiltViewModel
 class FMHOnboardingViewModel @Inject constructor() : BaseViewModel() {
-    val fragmentSize = 6
+    val fragmentSize = 7
 
     var isGoalSelected = MutableLiveData<Event<Boolean>>()
     private var pDays = 0

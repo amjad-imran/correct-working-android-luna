@@ -25,6 +25,7 @@ class FMHFragmentAdapter(
             3 -> FMHOnboardCalenderFragment()
             4 -> FMHOnboardSetDignosisFragment()
             5 -> FMHOnboardSetHormonFragment()
+            6 -> FMHOnboardingAllDoneFragment()
             else -> FMHOnboardGoalFragment()
         }
     }

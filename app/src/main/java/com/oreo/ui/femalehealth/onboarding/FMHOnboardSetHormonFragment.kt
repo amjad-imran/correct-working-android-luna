@@ -18,7 +18,7 @@ class FMHOnboardSetHormonFragment :
     private val mAdapter: FMHDiagnoseAdapter by lazy {
         FMHDiagnoseAdapter(object : FMHDiagnoseAdapter.OnItemClickListener {
             override fun onItemClick(data: DiagnoseDataItem, position: Int) {
-
+                mAdapter.updateItem(position, data)
             }
         })
     }

@@ -2,6 +2,7 @@ package com.oreo.ui.femalehealth.onboarding
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.noisefit.luna.R
@@ -18,8 +19,16 @@ class FMHOnboardingFragment :
     private val mViewModel: FMHOnboardingViewModel by activityViewModels()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
         setViewpager()
     }
+
+    val callback: OnBackPressedCallback =
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                onBackPress()
+            }
+        }
 
     private fun setViewpager() {
 
@@ -50,6 +59,11 @@ class FMHOnboardingFragment :
                     binding.bNotSure.visible()
                 } else
                     binding.bNotSure.gone()
+                if (position == mViewModel.fragmentSize - 1)
+                    binding.bNext.text = getString(R.string.text_done)
+                else
+                    binding.bNext.text = getString(R.string.text_next)
+
                 setProgress(position)
 
 
@@ -86,6 +100,9 @@ class FMHOnboardingFragment :
             onBackPress()
         }
         binding.bNext.setOnClickListener {
+            onNextPress()
+        }
+        binding.bNotSure.setOnClickListener {
             onNextPress()
         }
 

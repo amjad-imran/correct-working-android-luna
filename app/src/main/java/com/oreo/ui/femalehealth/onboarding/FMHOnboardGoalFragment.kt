@@ -14,16 +14,44 @@ class FMHOnboardGoalFragment :
     override fun initListener() {
         initUiData()
         binding.lytTrackCycle.root.setOnClickListener {
+            updateBackground(1)
             mViewModel.isGoalSelected.postValue(Event(true))
+
         }
         binding.lytConceive.root.setOnClickListener {
+            updateBackground(2)
             mViewModel.isGoalSelected.postValue(Event(true))
+
         }
         binding.lytPregnancy.root.setOnClickListener {
+            updateBackground(3)
             mViewModel.isGoalSelected.postValue(Event(true))
         }
 
 
+    }
+
+    private fun updateBackground(type: Int) {
+        when (type) {
+            1 -> {
+                binding.lytTrackCycle.root.setBackgroundResource(R.drawable.back_modal_new_fmh_selected)
+                binding.lytConceive.root.setBackgroundResource(com.noisefit_commans.R.drawable.back_modal_new)
+                binding.lytPregnancy.root.setBackgroundResource(com.noisefit_commans.R.drawable.back_modal_new)
+            }
+
+            2 -> {
+                binding.lytConceive.root.setBackgroundResource(R.drawable.back_modal_new_fmh_selected)
+                binding.lytTrackCycle.root.setBackgroundResource(com.noisefit_commans.R.drawable.back_modal_new)
+                binding.lytPregnancy.root.setBackgroundResource(com.noisefit_commans.R.drawable.back_modal_new)
+            }
+
+            else -> {
+                binding.lytPregnancy.root.setBackgroundResource(R.drawable.back_modal_new_fmh_selected)
+                binding.lytTrackCycle.root.setBackgroundResource(com.noisefit_commans.R.drawable.back_modal_new)
+                binding.lytConceive.root.setBackgroundResource(com.noisefit_commans.R.drawable.back_modal_new)
+
+            }
+        }
     }
 
     override fun subscribeObservers() {

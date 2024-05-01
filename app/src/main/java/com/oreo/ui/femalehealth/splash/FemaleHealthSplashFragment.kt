@@ -58,13 +58,8 @@ class FemaleHealthSplashFragment :
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 when (position) {
-                    dataList.size - 2 -> {
+                    dataList.size - 1 ->
                         binding.bNext.text = getString(R.string.text_continue)
-                    }
-
-                    dataList.size - 1 -> {
-                        binding.bNext.text = getString(R.string.text_done)
-                    }
 
                     else -> binding.bNext.text = getString(R.string.text_next)
                 }
@@ -171,16 +166,6 @@ class FemaleHealthSplashFragment :
                 getString(R.string.text_fmh_w_content_4)
             )
         )
-        dataList.add(
-            StressSplashModel(
-                getString(R.string.text_fmh_w_title_5),
-                R.drawable.image_stress_w_5,
-                getString(R.string.text_fmh_w_content_5)
-            )
-        )
-
-
-
         return dataList
     }
 }

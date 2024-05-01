@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.data.model.DiagnoseDataItem
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.LayoutFmhDiagnoseItemBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
@@ -16,10 +17,13 @@ class FMHDiagnoseAdapter(val mListener: OnItemClickListener) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: DiagnoseDataItem) {
             binding.tvHeader.text = data.title
-            if (data.isChecked)
+            if (data.isChecked) {
                 binding.ivChecked.visible()
-            else
+                binding.container.setBackgroundResource(R.drawable.back_modal_new_fmh_selected)
+            } else {
+                binding.container.setBackgroundResource(com.noisefit_commans.R.drawable.back_modal_new)
                 binding.ivChecked.gone()
+            }
             binding.root.setOnClickListener {
                 mListener.onItemClick(data, bindingAdapterPosition)
             }
@@ -50,6 +54,12 @@ class FMHDiagnoseAdapter(val mListener: OnItemClickListener) :
 
     interface OnItemClickListener {
         fun onItemClick(data: DiagnoseDataItem, position: Int)
+    }
+
+    fun updateItem(pos: Int, data: DiagnoseDataItem) {
+        data.isChecked = !data.isChecked
+        mDataSet[pos] = data
+        notifyItemChanged(pos)
     }
 }
 
