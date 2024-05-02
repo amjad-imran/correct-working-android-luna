@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_oreo"
     app:startDestination="@id/navigation_oreo_home">
 
@@ -664,7 +665,7 @@
     <fragment
         android:id="@+id/stressUnderstandingFragment"
         android:name="com.oreo.ui.stress.help.StressUnderstandingFragment"
-        android:label="fragment_stress_understanding"/>
+        android:label="fragment_stress_understanding" />
     <fragment
         android:id="@+id/stressSplashFragment"
         android:name="com.oreo.ui.stress.splash.StressSplashFragment"
@@ -700,4 +701,8 @@
         android:id="@+id/bottomSheetLocationPermissionRequest"
         android:name="com.oreo.ui.recordworkout.BottomSheetLocationPermissionRequest"
         android:label="BottomSheetLocationPermissionRequest" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.noisefit.ui.settings.SettingsFragment"
+        android:label="fragment_settings" />
 </navigation>
