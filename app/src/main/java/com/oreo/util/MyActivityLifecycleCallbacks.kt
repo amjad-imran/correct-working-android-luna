@@ -4,8 +4,11 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import androidx.annotation.Nullable
+import com.noisefit.NoiseFitApplicationMain
+import com.noisefit.luna.R
 import com.noisefit.oreo.OreoMainActivity
 import com.noisefit.session.SessionManager
+import com.noisefit.util.notif.NotificationUtil
 import com.noisefit_commans.utils.LOGS
 
 
@@ -48,6 +51,12 @@ class MyActivityLifecycleCallbacks(val sessionManager: SessionManager) :
             // App went to background
             // Handle background state
             LOGS.d(TAG, "onActivityStopped $activity")
+            if (sessionManager.connectStateRing.value != null)
+                NotificationUtil.sendForcePushNotification(
+                    NoiseFitApplicationMain.context!!,
+                    NoiseFitApplicationMain.context!!.getString(R.string.text_open_luna_ring_app),
+                    NoiseFitApplicationMain.context!!.getString(R.string.text_keep_the_luna_ring_app_running_so_your_data_can_stay_upto_date)
+                )
 
         }
 
