@@ -367,6 +367,7 @@ object DateFormats {
         return String.format("%02d:%02d %s", formattedHours, remainingMinutes, amPm)
 
     }
+
     fun getCurrentHour(): Int {
         val cal = Calendar.getInstance()
         cal.add(Calendar.HOUR, 1)
@@ -1072,6 +1073,7 @@ object DateFormats {
         return SimpleDateFormat("dd/MM/yyyyHH:mm", defaultLocale).parse("$date$time").time
 
     }
+
     fun convertDateTimeToTimeStamp(time: String): Long {
         return dateTimeFormat6.parse(time).time
 
@@ -1179,7 +1181,6 @@ object DateFormats {
         //LOGS.d(TAG,"new time stamp ${convertTimeStampToStartOfDay(subtractDate(currentTimeStamp,7))}")
         return convertTimeStampToPrevious12ofDay(subtractDate(currentTimeStamp, PastSyncData))
     }
-
 
 
     fun convertTimeStampToPrevious12ofDay(timestamp: Long): Long {
@@ -2062,6 +2063,17 @@ object DateFormats {
         val duration = Duration(startTimeParsed.toDateTime(), endTimeParsed.toDateTime())
         return duration.toStandardMinutes().minutes
     }
+
+    fun getDaysAgo(daysAgo: Int): Date {
+        LOGS.d("start day ago ${daysAgo}")
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, daysAgo)
+        return calendar.time
+    }
+
+    fun convertDateToLocalDate(date: Date): LocalDate {
+        return LocalDate.parse(SimpleDateFormat("yyyy-MM-dd").format(date))
+    }
 }
 
 
@@ -2103,6 +2115,7 @@ fun String.convertToYYYY_MM_DD(): String {
     } catch (exp: Exception) {
         ""
     }
+
 }
 
 fun getHoursBasedOnDateTime(startTime: String): String {
@@ -2118,4 +2131,7 @@ fun String.to12HourFormat(): String {
         ""
     }
 }
+
+
+
 

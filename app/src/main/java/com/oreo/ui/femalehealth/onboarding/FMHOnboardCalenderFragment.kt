@@ -3,6 +3,8 @@ package com.oreo.ui.femalehealth.onboarding
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
+import com.google.gson.Gson
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.DayOwner
@@ -10,12 +12,16 @@ import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthScrollListener
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarview.utils.yearMonth
-import com.noisefit.luna.databinding.CalendarDayStreakBinding
+import com.noisefit.luna.databinding.CalendarDayFmhOnboardBinding
 import com.noisefit.luna.databinding.FragmentFMHOnboardCalenderBinding
+import com.noisefit_commans.common.ContinuousSelectionHelper.getSelection
+import com.noisefit_commans.common.DateSelection
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DateFormats.daysOfWeekFromLocale
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -24,7 +30,11 @@ import java.time.YearMonth
 @AndroidEntryPoint
 class FMHOnboardCalenderFragment :
     BaseFragment<FragmentFMHOnboardCalenderBinding>(FragmentFMHOnboardCalenderBinding::inflate) {
+    private var currentSelectedMonth: CalendarMonth? = null
+    private val mViewModel: FMHOnboardingViewModel by activityViewModels()
+    private val TAG="calenderFragment"
 
+    private var selection = DateSelection()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initCalender()
@@ -41,7 +51,29 @@ class FMHOnboardCalenderFragment :
         )
         class DayViewContainer(view: View) : ViewContainer(view) {
             lateinit var day: CalendarDay
-            val binding = CalendarDayStreakBinding.bind(view)
+            val binding = CalendarDayFmhOnboardBinding.bind(view)
+
+            init {
+
+                binding.root.setOnClickListener {
+                    if (day.owner == DayOwner.THIS_MONTH) {
+                        if (mViewModel.selectedEndDate == null)
+                            mViewModel.selectedEndDate =
+                                DateFormats.convertDateToLocalDate(DateFormats.getDaysAgo(mViewModel.calenderDayRange()))
+                        LOGS.d("start end date ${mViewModel.selectedEndDate}")
+
+                        selection = getSelection(
+                            clickedDate = day.date,
+                            dateSelection = selection,
+                            selectionStartDate = day.date,
+                            selectionEndDate = mViewModel.selectedEndDate!!
+                        )
+                        LOGS.d("start selection ${Gson().toJson(selection)}")
+                        this@FMHOnboardCalenderFragment.binding.lytCalender.calendar.notifyCalendarChanged()
+//                        LOGS.d("Selected Date ${day.date}")
+                    }
+                }
+            }
 
         }
 
@@ -52,11 +84,20 @@ class FMHOnboardCalenderFragment :
                 val textView = container.binding.tvDay
                 val dayLayoutMain = container.binding.dayLayoutMain
                 textView.text = day.date.dayOfMonth.toString()
+                val (startDate, endDate) = selection
 
+                LOGS.d("start date $startDate")
+                LOGS.d("start end date $endDate")
                 if (day.owner == DayOwner.THIS_MONTH) {
                     when (day.date) {
-                        currentDay -> {
+                        startDate -> {
                             container.binding.tvDay.setTextColor(Color.parseColor("#ffffff"))
+                            container.binding.ivBackStart.visible()
+                        }
+
+                        endDate -> {
+                            container.binding.tvDay.setTextColor(Color.parseColor("#ffffff"))
+                            container.binding.ivBackStart.visible()
                         }
                     }
 
@@ -68,7 +109,7 @@ class FMHOnboardCalenderFragment :
 
         binding.lytCalender.calendar.monthScrollListener = object : MonthScrollListener {
             override fun invoke(month: CalendarMonth) {
-
+                currentSelectedMonth = month
                 nullableBinding?.lytCalender?.tvMonth?.text =
                     "${month.yearMonth.month.name.lowercase().capitalizeWords()} ${month.year}"
             }
@@ -78,6 +119,16 @@ class FMHOnboardCalenderFragment :
     }
 
     override fun initListener() {
+        binding.lytCalender.ivArrowLeft.setOnClickListener {
+            currentSelectedMonth?.let {
+                binding.lytCalender.calendar.smoothScrollToMonth(it.yearMonth.minusMonths(1))
+            }
+        }
+        binding.lytCalender.ivArrowRight.setOnClickListener {
+            currentSelectedMonth?.let {
+                binding.lytCalender.calendar.smoothScrollToMonth(it.yearMonth.plusMonths(1))
+            }
+        }
 
     }
 

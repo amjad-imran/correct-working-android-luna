@@ -7,6 +7,7 @@ import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.WheelItem
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.LocalDate
 import javax.inject.Inject
 
 
@@ -28,6 +29,7 @@ class FMHOnboardingViewModel @Inject constructor() : BaseViewModel() {
     var selectedDiagnoseListData = ArrayList<String>()
     var selectedHormoneListData = ArrayList<String>()
     val updateFMHDate = MutableLiveData<Event<Boolean>>()
+    var selectedEndDate: LocalDate? = null
 
     init {
         for (i in MinPeriodDays..MaxPeriodDays) {
@@ -112,6 +114,16 @@ class FMHOnboardingViewModel @Inject constructor() : BaseViewModel() {
     fun updateFemaleHealthData() {
         //will do here api call
         updateFMHDate.postValue(Event(true))
+    }
+
+    fun calenderDayRange(): Int {
+        val dayDiff = pcDays - pDays
+        val dayRange: Int = if (dayDiff > 0) {
+            dayDiff
+        } else {
+            0
+        }
+        return dayRange
     }
 
 }

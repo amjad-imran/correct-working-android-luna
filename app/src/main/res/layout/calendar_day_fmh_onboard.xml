@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dayLayoutMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <ImageView
+            android:id="@+id/ivBackStart"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:visibility="gone"
+            tools:background="@drawable/back_streak_day_highlight_start"
+            app:layout_constraintBottom_toBottomOf="@+id/tvDay"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tvDay"
+            app:layout_constraintTop_toTopOf="@+id/tvDay" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivBackToday"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@color/accent_color_purple"
+            app:layout_constraintBottom_toBottomOf="@+id/tvDay"
+            app:layout_constraintEnd_toEndOf="@+id/tvDay"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@+id/tvDay"
+            app:layout_constraintTop_toTopOf="@+id/tvDay"
+            app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
+
+
+        <ImageView
+            android:id="@+id/ivBackEnd"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:visibility="gone"
+            tools:background="@drawable/back_streak_day_highlight_end"
+            app:layout_constraintBottom_toBottomOf="@+id/tvDay"
+            app:layout_constraintEnd_toEndOf="@+id/tvDay"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvDay" />
+
+        <ImageView
+            android:id="@+id/ivBackMid"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:visibility="gone"
+            tools:background="@drawable/back_streak_day_highlight_mid"
+            app:layout_constraintBottom_toBottomOf="@+id/tvDay"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvDay" />
+        <ImageView
+            android:id="@+id/ivBackSingle"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:visibility="gone"
+            tools:background="@drawable/back_streak_day_highlight_mid"
+            app:layout_constraintBottom_toBottomOf="@+id/tvDay"
+            app:layout_constraintEnd_toEndOf="@+id/tvDay"
+            app:layout_constraintStart_toStartOf="@+id/tvDay"
+            app:layout_constraintTop_toTopOf="@+id/tvDay" />
+        <ImageView
+            android:id="@+id/ivBackMilestone"
+            android:layout_width="28dp"
+            android:layout_height="30dp"
+            android:visibility="gone"
+            android:background="@drawable/back_streak_level"
+            app:layout_constraintBottom_toBottomOf="@+id/tvDay"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvDay" />
+
+
+        <TextView
+            android:id="@+id/tvDay"
+            style="@style/Body"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="22" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
