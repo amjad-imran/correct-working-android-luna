@@ -114,10 +114,12 @@ class OStressDataMovementFragment :
                 viewModel.isSelectedMode = false
 
                 val day = viewModel.getDayFromDate(dayData.date)
-                binding.lytStressHeader.tvHeader.text  = if(viewModel.isToday) getString(R.string.text_today) else day.capitalizeWords()
+                binding.lytStressHeader.tvHeader.text =
+                    if (viewModel.isToday) getString(R.string.text_today) else day.capitalizeWords()
                 binding.lytStressHeader.tvTypical.text = "vs typical $day"
 
-                binding.lytInactiveStressHeader.tvHeader.text  = if(viewModel.isToday) getString(R.string.text_today) else day.capitalizeWords()
+                binding.lytInactiveStressHeader.tvHeader.text =
+                    if (viewModel.isToday) getString(R.string.text_today) else day.capitalizeWords()
                 binding.lytInactiveStressHeader.tvTypical.text = "vs typical $day"
 
                 viewModel.defaultMeterData = Pair(
@@ -586,18 +588,24 @@ class OStressDataMovementFragment :
     }
 
     private fun setStressBannerViewPager(data: List<StressNudge>?) {
+        val nudgeList = ArrayList<StressNudge>()
         if (data.isNullOrEmpty()) {
-            binding.lytStressBanner.root.gone()
-            binding.divider1.root.gone()
-            return
-        } else {
-            binding.lytStressBanner.root.visible()
-            binding.divider1.root.visible()
+            nudgeList.add(
+                StressNudge(
+                    label = "No summary available",
+                    message = "There wasn’t enough data to give a full-day summary. Remember to wear your ring to track your stress"
+                )
+            )
+        }else{
+            nudgeList.addAll(data)
         }
+
+        binding.lytStressBanner.root.visible()
+        binding.divider1.root.visible()
 
         val fragments = ArrayList<OreoStressBannerFragment>()
 
-        data.forEach {
+        nudgeList.forEach {
             fragments.add(OreoStressBannerFragment.newInstance(it))
         }
 

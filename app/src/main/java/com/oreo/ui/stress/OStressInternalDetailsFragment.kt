@@ -129,7 +129,11 @@ class OStressInternalDetailsFragment :
 
     private fun handleProgressStatus(strData: StressResultData?) {
 
-        val stressDays = mainViewModel.stressDaysFromCurrent(strData?.date)
+        val stressDays = if (mViewModel.dayType.equals("day", true)) {
+            mainViewModel.stressDaysFromCurrent(strData?.date)
+        } else {
+            8
+        }
 
         binding.lytTopView.lytCalm.apply {
 
@@ -292,7 +296,7 @@ class OStressInternalDetailsFragment :
                 binding.tvDate.text = DateFormats.formatDateTime(
                     data.date,
                     DateFormats.dateFormat3,
-                    DateFormats.dateFormat6
+                    DateFormats.dateFormat2
                 )
                 binding.tvDate.visible()
             } else {

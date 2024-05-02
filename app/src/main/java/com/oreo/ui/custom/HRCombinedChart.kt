@@ -28,6 +28,7 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.gson.Gson
 import com.noisefit.luna.R
+import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.LOGS
@@ -582,7 +583,7 @@ class HRCombinedChart : View {
         } else
             bottomHeight + xTextBounds!!.height() / 2f
 
-        val textStart = mWith.toFloat() - xTextBounds!!.width()-dip2px(2f)
+        val textStart = mWith.toFloat() - xTextBounds!!.width() - dip2px(2f)
         canvas.drawText(
             text,
             textStart,
@@ -636,8 +637,7 @@ class HRCombinedChart : View {
                     topCombinedPaint
                 )
 
-            }
-            else {
+            } else {
                 rectF.left = (rectF.right + rectF.left) / 2 - imageSize / 2f
                 rectF.top = topWith - imageSize - dip2px(10f)
                 rectF.right = rectF.left + imageSize
