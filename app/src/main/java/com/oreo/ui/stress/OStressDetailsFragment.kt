@@ -234,6 +234,9 @@ class OStressDetailsFragment :
             binding.viewPagerStress.setCurrentItem(pos, false)
         }
 
+        val shouldShow = mainViewModel.shouldShowStressCard(mainViewModel.selectedDate!!)
+        if (shouldShow.not()) return
+
         if (mainViewModel.shouldLoadMoreData()) {
             LOGS.w("Loading more data")
         }
