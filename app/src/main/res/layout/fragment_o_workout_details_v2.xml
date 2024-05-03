@@ -4,8 +4,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:background="#031326"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#031326">
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/svMain"
@@ -25,7 +25,9 @@
                     android:id="@+id/lytTop"
                     layout="@layout/layout_workout_top_with_map"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
 
                 <include
                     android:id="@+id/lytArrow"
