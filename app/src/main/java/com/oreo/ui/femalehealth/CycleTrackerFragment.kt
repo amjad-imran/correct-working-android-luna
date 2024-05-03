@@ -32,6 +32,7 @@ class CycleTrackerFragment :
         super.onViewCreated(view, savedInstanceState)
         initCalender()
         setRecycler()
+
     }
 
     private fun initCalender() {
@@ -70,12 +71,11 @@ class CycleTrackerFragment :
                 bind.exSevenDateText.setTextColor(colorRes)
             }
         }
-        binding.lytTrackerTop.vCalendar.weekCalender.dayBinder = object : WeekDayBinder<DayViewContainer> {
-            override fun create(view: View) = DayViewContainer(view)
-            override fun bind(container: DayViewContainer, data: WeekDay) = container.bind(data)
-        }
-
-
+        binding.lytTrackerTop.vCalendar.weekCalender.dayBinder =
+            object : WeekDayBinder<DayViewContainer> {
+                override fun create(view: View) = DayViewContainer(view)
+                override fun bind(container: DayViewContainer, data: WeekDay) = container.bind(data)
+            }
         val currentMonth = YearMonth.now()
         binding.lytTrackerTop.vCalendar.weekCalender.setup(
             currentMonth.minusMonths(5).atStartOfMonth(),
@@ -94,6 +94,17 @@ class CycleTrackerFragment :
     }
 
     override fun initListener() {
+        initInsightUI()
+    }
+
+    private fun initInsightUI() {
+        binding.lytInsight.lytCycleLength.tvValue.text = "37"
+        binding.lytInsight.lytCycleLength.tvUnit.text = "days"
+        binding.lytInsight.lytCycleLength.tvStatus.text = "Abnormal"
+        binding.lytInsight.lytPeriodLength.tvValue.text = "6"
+        binding.lytInsight.lytPeriodLength.tvUnit.text = "days"
+        binding.lytInsight.lytPeriodLength.tvStatus.text = "Normal"
+
 
     }
 

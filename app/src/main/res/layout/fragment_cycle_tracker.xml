@@ -14,9 +14,9 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:fillViewport="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="24dp"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <include
                 android:id="@+id/divider2"
@@ -58,7 +58,7 @@
                 layout="@layout/layout_card_cycle_prediction"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <include
                 android:id="@+id/divider3"
@@ -74,8 +74,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/side_margin"
                 android:layout_marginTop="24dp"
-                android:visibility="gone"
-                android:layout_marginEnd="@dimen/side_margin" />
+                android:layout_marginEnd="@dimen/side_margin"
+                android:visibility="visible" />
 
             <include
                 android:id="@+id/divider4"
@@ -85,13 +85,13 @@
                 android:layout_marginTop="24dp" />
 
             <include
+                android:id="@+id/lytCycleHistory"
                 layout="@layout/layout_cycle_history"
                 android:layout_width="match_parent"
-                android:layout_marginTop="24dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/side_margin"
-                android:id="@+id/lytCycleHistory"
-                android:layout_marginEnd="@dimen/side_margin"
-                android:layout_height="wrap_content" />
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="@dimen/side_margin" />
 
 
         </LinearLayout>
