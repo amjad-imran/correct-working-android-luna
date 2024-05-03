@@ -651,6 +651,7 @@ class SetupProfileViewModel
         val userObject = JsonObject().apply {
             addProperty("first_name", userName.value)
             addProperty("end_game", endGame.value?.id ?: -1)
+            addProperty("notifications_enabled_luna", 1)
         }
 
 
@@ -661,6 +662,7 @@ class SetupProfileViewModel
             addProperty("calories_goals", caloriesGoal)
             addProperty("distance_goals", distanceGoal)
             addProperty("unit_system", weightUnitSystem.type)
+            addProperty("unit_system_luna", weightUnitSystem.type)
         }
         userObject.add("goal", userGoals)
 
