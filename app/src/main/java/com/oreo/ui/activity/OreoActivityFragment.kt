@@ -23,6 +23,7 @@ import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.px
 import com.noisefit_commans.constants.SyncEvents
+import com.noisefit_commans.models.Units
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
@@ -80,12 +81,12 @@ class OreoActivityFragment :
     }
 
     private fun moveToDetailsScreen(data: OActivityListModal, position: Int) {
-        if(data.getDisplayVersionType()==2){
+        if (data.getDisplayVersionType() == 2) {
             navigate(R.id.oWorkoutDetailsFragmentV2, Bundle().apply {
                 putString("workoutId", data.id ?: "")
                 putInt("position", position)
             })
-        }else{
+        } else {
             navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
                 putString("workoutId", data.id ?: "")
                 putString("workoutName", data.getFormattedActivityName())
@@ -106,14 +107,21 @@ class OreoActivityFragment :
     }
 
     private fun handleEvent(title: String) {
-        var eventName =""
+        var eventName = ""
         when (title) {
             "Stay active" -> eventName = MoEngageLunaAppEvents.luna_activity_contributors_stay_click
-            "Move every hour" -> eventName = MoEngageLunaAppEvents.luna_activity_contributors_move_click
-            "Calorie goal" -> eventName = MoEngageLunaAppEvents.luna_activity_contributors_calorie_click
-            "Training frequency" -> eventName = MoEngageLunaAppEvents.luna_activity_contributors_tfreq_click
-            "Training volume" -> eventName = MoEngageLunaAppEvents.luna_activity_contributors_tvol_click
-            }
+            "Move every hour" -> eventName =
+                MoEngageLunaAppEvents.luna_activity_contributors_move_click
+
+            "Calorie goal" -> eventName =
+                MoEngageLunaAppEvents.luna_activity_contributors_calorie_click
+
+            "Training frequency" -> eventName =
+                MoEngageLunaAppEvents.luna_activity_contributors_tfreq_click
+
+            "Training volume" -> eventName =
+                MoEngageLunaAppEvents.luna_activity_contributors_tvol_click
+        }
         mViewModel.sessionManager.logMoEngageAppEvent(eventName)
 
     }
@@ -297,9 +305,15 @@ class OreoActivityFragment :
                     binding.lytAScoreData.lytSec4.tvPercentValue.gone()
                     binding.lytAScoreData.lytSec4.lytBpmView.root.visible()
                     binding.lytAScoreData.lytSec4.lytBpmView.tvUnit.visible()
-                    binding.lytAScoreData.lytSec4.lytBpmView.tvValue.text =
-                        DistanceUtil.convertMeterToKm(it.distance)
-                    binding.lytAScoreData.lytSec4.lytBpmView.tvUnit.text = "km"
+                    if (mViewModel.sessionManager.isMetric()) {
+                        binding.lytAScoreData.lytSec4.lytBpmView.tvValue.text =
+                            DistanceUtil.convertMeterToKm(it.distance)
+                        binding.lytAScoreData.lytSec4.lytBpmView.tvUnit.text = "km"
+                    } else {
+                        binding.lytAScoreData.lytSec4.lytBpmView.tvValue.text =
+                            DistanceUtil.convertMeterToMiles(it.distance)
+                        binding.lytAScoreData.lytSec4.lytBpmView.tvUnit.text = "mi"
+                    }
                 }
 
             } else {
@@ -362,8 +376,6 @@ class OreoActivityFragment :
     }
 
 
-
-
     private fun handleMovementNewViews(it: OreoActivityModel) {
         var dayTimeDataModel: DayTimeDataModel? = null
         val dayData = mainViewModel.getDayMovementData(mainViewModel.selectedDate)
@@ -411,7 +423,7 @@ class OreoActivityFragment :
         newListInvalid.forEachIndexed { index, data ->
             var uData = data
             val updatedDayTimeData = dayTimeDataModel?.items?.getOrNull(index)
-            if(updatedDayTimeData?.value != 255){
+            if (updatedDayTimeData?.value != 255) {
                 uData = updatedDayTimeData?.value ?: data
             }
             when (uData) {
@@ -843,17 +855,17 @@ class OreoActivityFragment :
 
     override fun subscribeObservers() {
 
-       /* mainViewModel.sessionManager.syncCompleted.observe(this) {
-            it?.getContent()?.let { syncDataStatus ->
-                when (syncDataStatus) {
-                    SyncEvents.ServerSyncSuccess -> {
-                        mainViewModel.reloadTodaysData()
-                    }
+        /* mainViewModel.sessionManager.syncCompleted.observe(this) {
+             it?.getContent()?.let { syncDataStatus ->
+                 when (syncDataStatus) {
+                     SyncEvents.ServerSyncSuccess -> {
+                         mainViewModel.reloadTodaysData()
+                     }
 
-                    else -> {}
-                }
-            }
-        }*/
+                     else -> {}
+                 }
+             }
+         }*/
 
         mainViewModel.activityHistoryResponse.observe(this) {
             if (it.isNullOrEmpty()) return@observe

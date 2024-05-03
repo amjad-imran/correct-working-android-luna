@@ -1117,6 +1117,8 @@
     <string name="text_imperial">Imperial</string>
     <string name="text_metric_message">Measures in meters, kilograms, and litres.</string>
     <string name="text_message_imperial">Measures in feet, inches, and pounds.</string>
+    <string name="text_enable_notifications">Enable notifications</string>
+    <string name="text_notification_message">Allow LUNA to update you about: battery level, inactivity alerts, activity progress, bedtime reminders, and personalised insights.</string>
 
 
 </resources>

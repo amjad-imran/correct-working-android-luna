@@ -29,6 +29,9 @@ data class User(
     @SerializedName("notifications_enabled")
     @Expose
     var notificationsEnabled: Int? = null,
+    @SerializedName("notifications_enabled_luna")
+    @Expose
+    var notificationsEnabledLuna: Int? = null,
     @SerializedName("is_verified")
     @Expose
     var isVerified: Int? = null,

@@ -260,6 +260,7 @@ class OSCDViewModel @Inject constructor(
 
                 ViewItemClickType.DISTANCE.name -> {
                     chartModel.isDistanceGraph = true
+                    chartModel.isMetric = sessionManager.isMetric()
                     chartModel.value = it.data.toInt()
                 }
 
@@ -347,12 +348,13 @@ class OSCDViewModel @Inject constructor(
         }
         return Triple(Pair(list, max), suffix, prefix)
     }
+
     fun getPrefixAndSuffixListTempDummy(
     ): Triple<Pair<ArrayList<ChartModel>, Int>, ArrayList<ChartModel>, ArrayList<ChartModel>> {
         val list = java.util.ArrayList<ChartModel>()
         var max = 10
 
-        for (i in 1..15){
+        for (i in 1..15) {
             val chartModel = ChartModel()
             chartModel.index = "$i"
             chartModel.value = 0

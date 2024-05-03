@@ -87,6 +87,7 @@ class ProfileEditViewModel
     var email = MutableLiveData<String?>()
     var profileLink = MutableLiveData<String?>()
     var unit = MutableLiveData<Units>()
+    var notificationSetting = MutableLiveData<Int>()
     var unitList = ArrayList<String>()
     var dobValue = MutableLiveData(false)
     var localUser: User? = null
@@ -103,6 +104,9 @@ class ProfileEditViewModel
         setGender(localUser?.userInfo?.gender)
         phoneNumber.value = localUser?.mobile
         unit.value = localDataStore.getUnit()
+        notificationSetting.value = 1
+
+
         email.value = localUser?.email
         interests.value = if (localUser?.interests != null) {
             localUser?.interests as ArrayList<Interest>
@@ -467,6 +471,7 @@ class ProfileEditViewModel
         val userObject = JsonObject().apply {
             addProperty("first_name", userName.value)
             addProperty("image_url", profileLink.value)
+            addProperty("notifications_enabled_luna", notificationSetting.value)
         }
 
 
@@ -543,6 +548,7 @@ class ProfileEditViewModel
 //            addProperty("calories_goals", localUser?.userGoals?.caloriesGoal)
             addProperty("distance_goals", getDistanceInMeter(localUser?.userGoals?.distanceGoal))
             addProperty("unit_system", unit.value?.name)
+            addProperty("unit_system_luna", unit.value?.name)
         }
         userObject.add("goal", userGoals)
 

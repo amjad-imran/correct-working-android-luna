@@ -2,11 +2,11 @@ package com.noisefit.ui.settings.options
 
 import android.os.Bundle
 import android.view.View
+import android.widget.CompoundButton
 import androidx.fragment.app.viewModels
 import com.noisefit.luna.R
-import com.noisefit.luna.databinding.FragmentUnitSelectionBinding
+import com.noisefit.luna.databinding.FragmentNotificationSettingBinding
 import com.noisefit.ui.profile.ProfileEditViewModel
-import com.noisefit_commans.models.Units
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
@@ -14,34 +14,19 @@ import com.noisefit_commans.ui.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class UnitSelectionFragment :
-    BaseFragment<FragmentUnitSelectionBinding>(FragmentUnitSelectionBinding::inflate) {
+class NotificationSettingFragment :
+    BaseFragment<FragmentNotificationSettingBinding>(FragmentNotificationSettingBinding::inflate) {
 
     private val viewModel: ProfileEditViewModel by viewModels()
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.toolbar.tvTitle.text = getString(R.string.text_units)
+        binding.toolbar.tvTitle.text = getString(R.string.text_notification)
 
-        binding.lytMetric.apply {
-            tvTitle.text = getString(R.string.text_metric)
-            tvMessage.text = getString(R.string.text_metric_message)
-        }
-        binding.lytImperial.apply {
-            tvTitle.text = getString(R.string.text_imperial)
-            tvMessage.text = getString(R.string.text_message_imperial)
-        }
-    }
-
-    private fun updateRadioButtons() {
-        if (viewModel.isMetric()) {
-            binding.lytMetric.ivRadioButton.setImageResource(R.drawable.ic_radio_selected)
-            binding.lytImperial.ivRadioButton.setImageResource(R.drawable.ic_radio_deselected)
-        } else {
-            binding.lytMetric.ivRadioButton.setImageResource(R.drawable.ic_radio_deselected)
-            binding.lytImperial.ivRadioButton.setImageResource(R.drawable.ic_radio_selected)
+        binding.lytNotificationMain.apply {
+            tvTitle.text = getString(R.string.text_enable_notifications)
+            tvMessage.text = getString(R.string.text_notification_message)
         }
     }
 
@@ -50,14 +35,21 @@ class UnitSelectionFragment :
             navigateUpSafe()
         }
 
-        binding.lytMetric.root.setOnClickListener {
-            viewModel.unit.value = Units.METRIC
+        binding.lytNotificationMain.switchMain.setOnCheckedChangeListener { buttonView, isChecked ->
+
+            if (!buttonView.isPressed) return@setOnCheckedChangeListener
+
+            if (isChecked) {
+                viewModel.notificationSetting.value = 1
+            } else {
+                viewModel.notificationSetting.value = 0
+            }
             viewModel.updateUserProfile()
         }
-        binding.lytImperial.root.setOnClickListener {
-            viewModel.unit.value = Units.IMPERIAL
-            viewModel.updateUserProfile()
-        }
+
+    }
+
+    override fun subscribeObservers() {
 
         viewModel.getApiErrors().observe(this) {
             it?.getContent()?.let { response ->
@@ -76,16 +68,12 @@ class UnitSelectionFragment :
                 context.showShortToast(message)
             }
         }
-
         viewModel.userDetailsUpdated.observe(this) {
             it.getContent()?.let {
-                updateRadioButtons()
+
             }
         }
     }
 
-    override fun subscribeObservers() {
-
-    }
 
 }

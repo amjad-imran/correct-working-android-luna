@@ -32,6 +32,7 @@ import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.Gender
 import com.noisefit_commans.models.SportsModeRequest
 import com.noisefit_commans.models.SportsModeResponse
+import com.noisefit_commans.models.Units
 import com.noisefit_commans.models.UserLocation
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.ui.tryCatch
@@ -118,6 +119,9 @@ class SessionManager
      * Handle App Updates
      */
     val versionCheckData = MutableLiveData<VersionCheckResponse>()
+
+    var unit: Units = Units.IMPERIAL//TODO set
+
 
 
     /**
@@ -447,6 +451,10 @@ class SessionManager
 
         }
 
+    }
+
+    fun isMetric(): Boolean {
+        return unit == Units.METRIC
     }
 
     fun logMoEngageAppEvent(eventName: String) {

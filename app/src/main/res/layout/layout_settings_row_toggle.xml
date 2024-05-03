@@ -21,21 +21,21 @@
         android:layout_height="48dp"
         android:gravity="center_vertical"
         android:paddingStart="@dimen/side_margin"
-        tools:text="@string/text_metric"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/text_metric" />
 
-
-    <ImageView
-        android:id="@+id/ivRadioButton"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="16dp"
-        android:src="@drawable/ic_radio_deselected"
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switchMain"
+        style="@style/CustomSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/side_margin"
         app:layout_constraintBottom_toBottomOf="@+id/tvTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tvTitle" />
+
 
     <TextView
         android:id="@+id/tvMessage"

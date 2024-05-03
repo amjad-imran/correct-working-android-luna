@@ -25,11 +25,12 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(FragmentSettingsB
             navigate(R.id.unitSelectionFragment)
         }
         binding.lytGroup1.tvNotifications.setOnClickListener {
-
+            navigate(R.id.notificationSettingFragment)
         }
         binding.lytGroup2.tvGoogleFit.setOnClickListener {
             navigate(R.id.googleFitFragmentOreo)
         }
+
 
     }
 

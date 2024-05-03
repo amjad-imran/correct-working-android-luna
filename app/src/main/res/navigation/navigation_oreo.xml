@@ -709,4 +709,8 @@
         android:id="@+id/unitSelectionFragment"
         android:name="com.noisefit.ui.settings.options.UnitSelectionFragment"
         android:label="fragment_unit_selection" />
+    <fragment
+        android:id="@+id/notificationSettingFragment"
+        android:name="com.noisefit.ui.settings.options.NotificationSettingFragment"
+        android:label="fragment_notification_setting"/>
 </navigation>

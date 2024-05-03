@@ -535,14 +535,15 @@ data class UserGoals(
     @SerializedName("sleep_goals") var sleepGoal: Int = 0,
     @SerializedName("standing_hr") var standingHr: Int = 12,
     @SerializedName("duration_min") var durationInMin: Int = 30,
-    @SerializedName("unit_system") var unitSystem: String = "metric"
+    @SerializedName("unit_system") var unitSystem: String = "metric",
+    @SerializedName("unit_system_luna") var unitSystemLuna: String = "metric"
 ) : ColorfitData() {
 
 
     fun getUnit(): Units {
         return when {
-            unitSystem.equals("metric", true) -> Units.METRIC
-            unitSystem.equals("imperial", true) -> Units.IMPERIAL
+            unitSystemLuna.equals("metric", true) -> Units.METRIC
+            unitSystemLuna.equals("imperial", true) -> Units.IMPERIAL
             else -> Units.METRIC
         }
     }
@@ -767,7 +768,7 @@ enum class TaskEnums(val type: String) {
     ),
     DISTANCE("1st_x_distance"), CALORIES("1st_x_calories"),
     CUSTOM_WATCHFACE("1st_custom_watch-face"), CHALLENGE_PARTICIPATION("1st_challenge_participation"),
-    FRIEND_ADDED("1st_friend_added"), WORKOUT("1st_workout"), SHARE("1st_workout_share"),NPL_150("npl_150")
+    FRIEND_ADDED("1st_friend_added"), WORKOUT("1st_workout"), SHARE("1st_workout_share"), NPL_150("npl_150")
 }
 
 enum class RoundEndOptions(val type: String) {
@@ -1053,6 +1054,7 @@ data class SOSContact(
     @SerializedName("sosSwitch") var sosSwitch: Boolean = false,
     @SerializedName("contactList") var contactList: ArrayList<Contact> = ArrayList()
 ) : ColorfitData(), Parcelable
+
 @Parcelize
 data class Contact(
     @SerializedName("id") var id: String? = null, // contact number is id
@@ -1087,10 +1089,10 @@ enum class VibrationIntensityEnum(val intensity: String) {
 @Parcelize
 data class SleepReminder(
     @SerializedName("status") var status: Boolean = false,
-    @SerializedName("hour") var hour: Int=0,
-    @SerializedName("minute") var minute: Int=0,
-    @SerializedName("second") var second: Int=0,
-    @SerializedName("millisecond") var millisecond: Int=0
+    @SerializedName("hour") var hour: Int = 0,
+    @SerializedName("minute") var minute: Int = 0,
+    @SerializedName("second") var second: Int = 0,
+    @SerializedName("millisecond") var millisecond: Int = 0
 
 ) : Parcelable
 
