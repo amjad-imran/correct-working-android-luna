@@ -48,6 +48,11 @@ class OMyProfileFragment :
 
 
     override fun initListener() {
+
+        binding.rowSettings.setOnClickListener {
+            navigate(R.id.settingsFragment)
+        }
+
         binding.rowAbout.setUpdateAvailable(viewModel.localDataStore.isNewAppVersionAvailable())
         binding.rowAbout.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_about_click)

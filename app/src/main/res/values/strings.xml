@@ -1113,6 +1113,10 @@
     <string name="text_units">Units</string>
     <string name="text_general">General</string>
     <string name="text_notifications">Notifications</string>
+    <string name="text_metric">Metric</string>
+    <string name="text_imperial">Imperial</string>
+    <string name="text_metric_message">Measures in meters, kilograms, and litres.</string>
+    <string name="text_message_imperial">Measures in feet, inches, and pounds.</string>
 
 
 </resources>

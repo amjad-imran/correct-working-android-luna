@@ -705,4 +705,8 @@
         android:id="@+id/settingsFragment"
         android:name="com.noisefit.ui.settings.SettingsFragment"
         android:label="fragment_settings" />
+    <fragment
+        android:id="@+id/unitSelectionFragment"
+        android:name="com.noisefit.ui.settings.options.UnitSelectionFragment"
+        android:label="fragment_unit_selection" />
 </navigation>

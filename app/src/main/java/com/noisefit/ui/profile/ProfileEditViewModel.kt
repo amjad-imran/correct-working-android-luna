@@ -55,16 +55,14 @@ const val IMPERIAL = "Imperial (in/lbs)"
 
 @HiltViewModel
 class ProfileEditViewModel
-@Inject
-constructor(
+@Inject constructor(
     var sessionManager: SessionManager,
     val localDataStore: DataStoredInterface,
     val userRepository: UserRepository,
     val screenUtils: ScreenUtils,
     val authenticationRepository: AuthenticationRepository,
     val googleFitDataObservers: GoogleFitDataObservers
-) :
-    BaseViewModel() {
+) : BaseViewModel() {
 
     private val _userDetailsUpdated = MutableLiveData<Event<Boolean>>()
     val userDetailsUpdated = _userDetailsUpdated
@@ -88,7 +86,7 @@ constructor(
     var phoneNumber = MutableLiveData<String?>()
     var email = MutableLiveData<String?>()
     var profileLink = MutableLiveData<String?>()
-    var unit = MutableLiveData<Units?>()
+    var unit = MutableLiveData<Units>()
     var unitList = ArrayList<String>()
     var dobValue = MutableLiveData(false)
     var localUser: User? = null
@@ -140,9 +138,7 @@ constructor(
                 val userDob = localUser?.userInfo?.dob
                 val dateArray = userDob!!.split("-")
                 setDob(
-                    dateArray[0].toInt(),
-                    dateArray[1].toInt() - 1,
-                    dateArray[2].toInt()
+                    dateArray[0].toInt(), dateArray[1].toInt() - 1, dateArray[2].toInt()
                 )
                 dobValue.value = true
             }
@@ -161,8 +157,7 @@ constructor(
 
     fun getAge(): Int {
         return Period.between(
-            LocalDate.of(dobYear, dobMonth, dobDate),
-            LocalDate.now()
+            LocalDate.of(dobYear, dobMonth, dobDate), LocalDate.now()
         ).years
     }
 
@@ -301,14 +296,11 @@ constructor(
 
     fun getGenderValue(): String {
 
-        val tempGender: String = if (gender.value?.lowercase() == Gender.MALE.type.lowercase())
-            "Man"
-        else if (gender.value?.lowercase() == Gender.FEMALE.type.lowercase())
-            "Woman"
-        else if (gender.value?.lowercase() == Gender.OTHER.type.lowercase())
-            "Non-binary"
-        else
-            "Prefer not to say"
+        val tempGender: String =
+            if (gender.value?.lowercase() == Gender.MALE.type.lowercase()) "Man"
+            else if (gender.value?.lowercase() == Gender.FEMALE.type.lowercase()) "Woman"
+            else if (gender.value?.lowercase() == Gender.OTHER.type.lowercase()) "Non-binary"
+            else "Prefer not to say"
         return tempGender.replaceFirstChar { if (it.isLowerCase()) it.titlecase(DateFormats.defaultLocale) else it.toString() }
     }
 
@@ -333,6 +325,7 @@ constructor(
         }
         return temp
     }
+
     private fun getGenderForBmr(): Gender {
 
         val temp: Gender = when (gender.value?.lowercase()) {
@@ -420,8 +413,7 @@ constructor(
                             if (it.imageUrl != null) {
                                 sendMessage("Profile image updated")
                                 profileLink.value = it.imageUrl
-                            }
-                            /*if (it.success) {
+                            }/*if (it.success) {
                                 sendMessage("Profile image updated")
                             } else {
 
@@ -443,8 +435,7 @@ constructor(
             context.resources.getDimension(com.noisefit_commans.R.dimen.recycler_height_spinner)
         val dpHeight = screenUtils.pxToDp(rvHeight.roundToInt(), context)
         return screenUtils.dpToPx(
-            (dpHeight / 2) - (ITEM_HEIGHT / 2),
-            context
+            (dpHeight / 2) - (ITEM_HEIGHT / 2), context
         ).roundToInt()
     }
 
@@ -484,20 +475,20 @@ constructor(
             //TODO Optimize conversion
             userInfo = JsonObject()
 
-            val heightValue = if (unit.value == Units.IMPERIAL) {
+            val heightValue =/* if (unit.value == Units.IMPERIAL) {
                 DistanceUtil.convertInchToCms(
                     heightInCm.value!!.toDouble().roundToInt()
                 ).toDouble().roundToInt()
-            } else {
+            } else {*/
                 heightInCm.value?.toDouble()?.roundToInt()
-            }
-            val weightValue = if (unit.value == Units.IMPERIAL) {
+            //}
+            val weightValue = /*if (unit.value == Units.IMPERIAL) {
                 DistanceUtil.convertLbsToKg(
                     weightInKg.value!!.toDouble().roundToInt()
                 ).toDouble().roundToInt()
-            } else {
+            } else {*/
                 weightInKg.value?.toDouble()?.roundToInt()
-            }
+            //}
 
 
             userInfo.apply {
@@ -507,8 +498,7 @@ constructor(
                 addProperty("gender", getGenderForServer())
                 addProperty("step_length", 70)
             }
-            userObject.add("info", userInfo)
-            /*if (interests.value != null) {
+            userObject.add("info", userInfo)/*if (interests.value != null) {
                 if (interests.value!!.size > 0)
                     userObject.add("interest_id", JsonArray().apply {
                         interests.value?.forEach { id ->
@@ -527,21 +517,21 @@ constructor(
         val stepGoalNew = ApplicationUtils.bmiCalculate(
             heightInCm.value!!.toFloat(),
             weightInKg.value!!.toFloat(),
-            unit.value?.name?:Units.METRIC.name,
-            unit.value?.name?:Units.METRIC.name
+            unit.value?.name ?: Units.METRIC.name,
+            unit.value?.name ?: Units.METRIC.name
         )
 
         val caloriesGoalNew = ApplicationUtils.bmrCalculate(
             heightInCm.value!!.toFloat(),
             weightInKg.value!!.toFloat(),
-            unit.value?.name?:Units.METRIC.name,
-            unit.value?.name?:Units.METRIC.name,
+            unit.value?.name ?: Units.METRIC.name,
+            unit.value?.name ?: Units.METRIC.name,
             getAge(),
             getGenderForBmr()
 
         )
         val stepsGoal = stepGoalNew.second.toInt()
-       val caloriesGoal=caloriesGoalNew
+        val caloriesGoal = caloriesGoalNew
 
 
         val userGoals = JsonObject()
@@ -555,7 +545,6 @@ constructor(
             addProperty("unit_system", unit.value?.name)
         }
         userObject.add("goal", userGoals)
-
 
 
         /*tempLocation?.let {
@@ -638,6 +627,10 @@ constructor(
         val user = localDataStore.getUser()
         user?.interests = it1
         localDataStore.saveUserInfo(user!!)
+    }
+
+    fun isMetric(): Boolean {
+        return unit.value != Units.IMPERIAL
     }
 
 }
