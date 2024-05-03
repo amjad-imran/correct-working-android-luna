@@ -855,33 +855,35 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     .setDuration(1000L).build()
             )
 
-            val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(
-                data.data.inactiveMinutes ?: 0
-            )
+            binding.tvSteps.text = if (data.data.steps == 0) "-" else data.data.steps.toString()
 
-            if (hour > 0) {
-                binding.tvHr.visible()
-                binding.textHr.visible()
-                binding.tvMin.visible()
-                binding.textMin.visible()
+            /* val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(
+                 data.data.inactiveMinutes ?: 0
+             )*/
 
-                binding.tvHr.text = "$hour"
-                binding.tvMin.text = "$minute"
-            } else if (minute > 0) {
-                binding.tvHr.gone()
-                binding.textHr.gone()
-                binding.tvMin.visible()
-                binding.textMin.visible()
+            /* if (hour > 0) {
+                 binding.tvHr.visible()
+                 binding.textHr.visible()
+                 binding.tvMin.visible()
+                 binding.textMin.visible()
 
-                binding.tvMin.text = "$minute"
-            } else {
-                binding.tvHr.gone()
-                binding.textHr.gone()
-                binding.tvMin.visible()
-                binding.textMin.gone()
+                 binding.tvHr.text = "$hour"
+                 binding.tvMin.text = "$minute"
+             } else if (minute > 0) {
+                 binding.tvHr.gone()
+                 binding.textHr.gone()
+                 binding.tvMin.visible()
+                 binding.textMin.visible()
 
-                binding.tvMin.text = "-"
-            }
+                 binding.tvMin.text = "$minute"
+             } else {
+                 binding.tvHr.gone()
+                 binding.textHr.gone()
+                 binding.tvMin.visible()
+                 binding.textMin.gone()
+
+                 binding.tvMin.text = "-"
+             }*/
 
 
             binding.root.setOnClickListener {
