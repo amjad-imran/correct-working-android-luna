@@ -138,7 +138,8 @@ class SummaryDataViewModel @Inject constructor(
                                 activeCalories = it?.activeCalories ?: 0,
                                 inactiveMinutes = it?.activityContributors?.stayActive?.value,
                                 status = it?.activityScore?.level?.capitalizeWords(),
-                                nudges = it?.dash_nudges
+                                nudges = it?.dash_nudges,
+                                steps = healthData.activity?.steps ?: 0
                             ), caloriesGoal
                         )
                     )

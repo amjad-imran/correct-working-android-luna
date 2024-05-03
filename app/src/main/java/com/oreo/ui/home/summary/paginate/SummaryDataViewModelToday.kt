@@ -275,7 +275,8 @@ class SummaryDataViewModelToday @Inject constructor(
                 activeCalories = healthData.activity?.activeCalories ?: 0,
                 inactiveMinutes = healthData.activity?.activityContributors?.stayActive?.value,
                 status = healthData.activity?.activityScore?.level?.capitalizeWords(),
-                nudges = healthData.activity?.dash_nudges
+                nudges = healthData.activity?.dash_nudges,
+                steps = healthData.activity?.steps ?: 0
             )
 
             val nap = healthData.sleep?.naps ?: ArrayList()

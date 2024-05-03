@@ -15,10 +15,12 @@ import com.noisefit_commans.utils.LOGS
 class MyActivityLifecycleCallbacks(val sessionManager: SessionManager) :
     Application.ActivityLifecycleCallbacks {
     private var activityCount = 0
+    private var activityCount2 = 0
     val TAG = "MyActivityLifecycleCallbacks"
     override fun onActivityCreated(activity: Activity, @Nullable savedInstanceState: Bundle?) {
         // Activity created
         LOGS.d(TAG, "onActivityCreated $activity")
+        activityCount2++
     }
 
     override fun onActivityStarted(activity: Activity) {
@@ -51,13 +53,6 @@ class MyActivityLifecycleCallbacks(val sessionManager: SessionManager) :
             // App went to background
             // Handle background state
             LOGS.d(TAG, "onActivityStopped $activity")
-            if (sessionManager.connectStateRing.value != null)
-                NotificationUtil.sendForcePushNotification(
-                    NoiseFitApplicationMain.context!!,
-                    NoiseFitApplicationMain.context!!.getString(R.string.text_open_luna_ring_app),
-                    NoiseFitApplicationMain.context!!.getString(R.string.text_keep_the_luna_ring_app_running_so_your_data_can_stay_upto_date)
-                )
-
         }
 
         if (activity is OreoMainActivity) {
@@ -69,6 +64,16 @@ class MyActivityLifecycleCallbacks(val sessionManager: SessionManager) :
     override fun onActivityDestroyed(activity: Activity) {
         // Activity destroyed
         LOGS.d(TAG, "onActivityDestroyed $activity")
+        activityCount2--
+        if (activityCount2 == 0) {
+            if (sessionManager.connectStateRing.value != null) {
+                NotificationUtil.sendForcePushNotification(
+                    NoiseFitApplicationMain.context!!,
+                    NoiseFitApplicationMain.context!!.getString(R.string.text_open_luna_ring_app),
+                    NoiseFitApplicationMain.context!!.getString(R.string.text_keep_the_luna_ring_app_running_so_your_data_can_stay_upto_date)
+                )
+            }
+        }
 
     }
 
