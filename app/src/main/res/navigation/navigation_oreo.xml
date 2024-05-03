@@ -718,4 +718,8 @@
         android:id="@+id/fragmentCycleTracker"
         android:name="com.oreo.ui.femalehealth.CycleTrackerFragment"
         android:label="FragmentCycleTracker" />
+    <fragment
+        android:id="@+id/cycleInsightDetails"
+        android:name="com.oreo.ui.femalehealth.CycleInsightDetailsFragment"
+        android:label="FragmentCycleInsightDetails" />
 </navigation>

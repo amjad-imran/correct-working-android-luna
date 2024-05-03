@@ -95,6 +95,15 @@ class CycleTrackerFragment :
 
     override fun initListener() {
         initInsightUI()
+        binding.toolbar.backBtn.setOnClickListener {
+            navigateUpSafe()
+        }
+        binding.lytInsight.lytCycleLength.root.setOnClickListener {
+            navigate(R.id.cycleInsightDetails)
+        }
+        binding.lytInsight.lytPeriodLength.root.setOnClickListener {
+            navigate(R.id.cycleInsightDetails)
+        }
     }
 
     private fun initInsightUI() {

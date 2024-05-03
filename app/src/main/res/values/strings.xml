@@ -1142,6 +1142,8 @@
     <string name="text_ovulation">ovulation</string>
     <string name="text_period">period</string>
     <string name="text_skin_temperature_variation">Skin temperature variation</string>
+    <string name="text_cycle_prediction">Cycle prediction</string>
+    <string name="text_normal_length">Normal length</string>
 
 
 </resources>

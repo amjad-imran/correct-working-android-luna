@@ -1,0 +1,93 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/lytToolbar"
+            layout="@layout/layout_toolbar" />
+
+        <TextView
+            android:id="@+id/tvAverage"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:text="@string/text_average"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lytToolbar" />
+
+        <TextView
+            android:id="@+id/tvValue"
+            style="@style/H28"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvAverage"
+            tools:text="+37" />
+
+        <TextView
+            android:id="@+id/tvUnit"
+            style="@style/H5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginBottom="4dp"
+            android:textColor="@color/white_48"
+            app:layout_constraintBottom_toBottomOf="@id/tvValue"
+            app:layout_constraintStart_toEndOf="@id/tvValue"
+            tools:text="days" />
+
+        <TextView
+            android:id="@+id/tvDescription"
+            style="@style/H6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            android:textColor="@color/white_64"
+            app:layout_constraintTop_toBottomOf="@id/tvValue"
+            tools:text="Your resting HR seems to be higher than previous day. Allow yourself sufficient time for recovery by taking it slow. Consider a nap?" />
+
+        <View
+            android:id="@+id/vGraph"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvDescription" />
+
+        <include
+            android:id="@+id/lytNormalLength"
+            layout="@layout/layout_cycle_length_sub_item"
+            android:layout_width="0dp"
+            android:layout_marginTop="24dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            app:layout_constraintEnd_toStartOf="@+id/lytAbnormalLength"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/vGraph" />
+
+        <include
+            android:id="@+id/lytAbnormalLength"
+            layout="@layout/layout_cycle_length_sub_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/lytNormalLength"
+            app:layout_constraintTop_toBottomOf="@id/vGraph" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
