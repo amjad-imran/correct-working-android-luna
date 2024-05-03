@@ -103,8 +103,8 @@ class ProfileEditViewModel
         updateName(localUser?.firstName)
         setGender(localUser?.userInfo?.gender)
         phoneNumber.value = localUser?.mobile
-        unit.value = localDataStore.getUnit()
-        notificationSetting.value = 1
+        unit.value = localUser?.userGoals?.getUnit()
+        notificationSetting.value = localUser?.notificationsEnabled ?: 1
 
 
         email.value = localUser?.email

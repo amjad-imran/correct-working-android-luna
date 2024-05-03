@@ -28,6 +28,8 @@ class NotificationSettingFragment :
             tvTitle.text = getString(R.string.text_enable_notifications)
             tvMessage.text = getString(R.string.text_notification_message)
         }
+
+        binding.lytNotificationMain.switchMain.isChecked = viewModel.notificationSetting.value == 1
     }
 
     override fun initListener() {

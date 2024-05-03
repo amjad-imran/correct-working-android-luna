@@ -33,6 +33,12 @@ class UnitSelectionFragment :
             tvTitle.text = getString(R.string.text_imperial)
             tvMessage.text = getString(R.string.text_message_imperial)
         }
+
+        if (viewModel.isMetric()) {
+            binding.lytMetric.ivRadioButton.setImageResource(R.drawable.ic_radio_selected)
+        } else {
+            binding.lytImperial.ivRadioButton.setImageResource(R.drawable.ic_radio_selected)
+        }
     }
 
     private fun updateRadioButtons() {

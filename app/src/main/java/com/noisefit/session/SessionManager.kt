@@ -120,8 +120,13 @@ class SessionManager
      */
     val versionCheckData = MutableLiveData<VersionCheckResponse>()
 
-    var unit: Units = Units.IMPERIAL//TODO set
+    var unit: Units = Units.METRIC
 
+    init {
+        GlobalScope.launch(Dispatchers.IO) {
+            unit = localDataStore.getUser()?.userGoals?.getUnit() ?: Units.METRIC
+        }
+    }
 
 
     /**
@@ -662,6 +667,10 @@ class SessionManager
                 UpdateDeviceAction.SetRealTimeDataState(false)
             )
         }
+    }
+
+    fun updateUnit(unit: Units) {
+        this.unit = unit
     }
 }
 
