@@ -703,7 +703,7 @@
     <fragment
         android:id="@+id/femaleHealthSplashFragment"
         android:name="com.oreo.ui.femalehealth.splash.FemaleHealthSplashFragment"
-        android:label="fragment_female_splash" >
+        android:label="fragment_female_splash">
         <action
             android:id="@+id/action_fmhSplashFragment_to_fragmentFemaleOnboarding"
             app:destination="@id/femaleHealthOnboardingFragment"
@@ -714,4 +714,8 @@
         android:id="@+id/femaleHealthOnboardingFragment"
         android:name="com.oreo.ui.femalehealth.onboarding.FMHOnboardingFragment"
         android:label="fragment_female_onboarding" />
+    <fragment
+        android:id="@+id/fragmentCycleTracker"
+        android:name="com.oreo.ui.femalehealth.CycleTrackerFragment"
+        android:label="FragmentCycleTracker" />
 </navigation>

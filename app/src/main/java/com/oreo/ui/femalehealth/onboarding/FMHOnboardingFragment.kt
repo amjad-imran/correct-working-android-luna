@@ -131,7 +131,7 @@ class FMHOnboardingFragment :
     override fun subscribeObservers() {
         mViewModel.updateFMHDate.observe(this) { it1 ->
             it1?.getContent()?.let {
-                navigate(R.id.navigation_oreo_home)
+                navigate(R.id.fragmentCycleTracker)
             }
 
         }

@@ -318,7 +318,7 @@ class SummaryDataFragmentToday :
     override fun initListener() {
 
         binding.contentMain.lytTrackFmHealth.btnGetStarted.setOnClickListener {
-            navigate(R.id.femaleHealthSplashFragment)
+            navigate(R.id.fragmentCycleTracker)
         }
         binding.contentMain.lytHeartRate.bInfo.invisible()
         /*binding.contentMain.lytHeartRate.root.setOnClickListener {

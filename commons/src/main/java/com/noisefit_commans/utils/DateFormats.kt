@@ -2074,6 +2074,20 @@ object DateFormats {
     fun convertDateToLocalDate(date: Date): LocalDate {
         return LocalDate.parse(SimpleDateFormat("yyyy-MM-dd").format(date))
     }
+
+    fun convertLocalDateToDate(date: LocalDate): Date {
+        return SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(date.toString())
+    }
+
+    fun getDayFromDate(inputDate: Date): String {
+        val output = SimpleDateFormat("dd", Locale.getDefault())
+        return output.format(inputDate)
+    }
+
+    fun getDayString(date: Date): String {
+        val formatter = SimpleDateFormat("EEE", Locale.getDefault())
+        return formatter.format(date)
+    }
 }
 
 

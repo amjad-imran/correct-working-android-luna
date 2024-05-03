@@ -58,7 +58,7 @@ class HistoryCalendarActivity : BaseActivity<ActivityHistoryCalendarBinding>() {
         super.onCreate(savedInstanceState)
         selectedDate = intent.getStringExtra("selectedDate")
         deviceType = intent.getStringExtra("deviceType")
-        initCalendar()
+//        initCalendar()
     }
 
 
@@ -72,7 +72,7 @@ class HistoryCalendarActivity : BaseActivity<ActivityHistoryCalendarBinding>() {
     override fun observeSubscriber() {
     }
 
-    private fun initCalendar() {
+    /*private fun initCalendar() {
 
         val currentMonth = YearMonth.now()
         var selectedPreviousDates = ArrayList<LocalDate>()
@@ -84,7 +84,7 @@ class HistoryCalendarActivity : BaseActivity<ActivityHistoryCalendarBinding>() {
                 selectedDate,
                 DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH)
             )
-           /* if (deviceType == "watch") {
+           *//* if (deviceType == "watch") {
                 selectedPreviousDates = arrayListOf(
                     parsedDate.minusDays(1),
                     parsedDate.minusDays(2),
@@ -110,7 +110,7 @@ class HistoryCalendarActivity : BaseActivity<ActivityHistoryCalendarBinding>() {
                 parsedDate.minusDays(12),
                 parsedDate.minusDays(13),
                     parsedDate.minusDays(14)
-            )*/
+            )*//*
 
             parsedDate
         }
@@ -200,7 +200,7 @@ class HistoryCalendarActivity : BaseActivity<ActivityHistoryCalendarBinding>() {
 
         binding.calendar.scrollToDate(selectedLocalDate)
 
-    }
+    }*/
 
     private fun isAfterToday(date: LocalDate): Boolean {
         return date > LocalDate.now()

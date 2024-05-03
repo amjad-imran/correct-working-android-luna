@@ -209,6 +209,7 @@ dependencies {
     implementation(AndroidX.libraries)
 
     implementation(CalenderView.calendarView)
+    implementation(CalenderView.calendarViewWeek)
 //    implementation(CleverTap.sdk)
 
     implementation(Exoplayer.core)

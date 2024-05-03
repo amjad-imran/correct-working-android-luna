@@ -2,7 +2,9 @@ package com.noisefit_commans.common
 
 
 import java.text.SimpleDateFormat
+import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.format.TextStyle
 import java.util.Date
 import java.util.Locale
 import kotlin.LazyThreadSafetyMode.NONE
@@ -38,7 +40,6 @@ fun dateRangeDisplayText(startDate: LocalDate, endDate: LocalDate): String {
 
 
 object ContinuousSelectionHelper {
-
     fun convertLocalDateToDate(date: LocalDate): Date {
         return SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(date.toString())
     }

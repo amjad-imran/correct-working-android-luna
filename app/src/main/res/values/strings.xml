@@ -1136,6 +1136,11 @@
     <string name="text_do_you_use_hormonal_contraceptives_or_other_hormones">Do you use hormonal contraceptives or other hormones?</string>
     <string name="text_when_was_the_first_day_of_your_last_period">When was the first day of your last period?</string>
     <string name="text_onboard_all_done_desc">You are all set to get personalised insights for your reproductive journey, from predicting your next period to tracking ovulation, so you can plan ahead.</string>
+    <string name="text_cycle_insights">Cycle insights</string>
+    <string name="text_abnormal">Abnormal</string>
+    <string name="text_cycle_history">Cycle history</string>
+    <string name="text_ovulation">ovulation</string>
+    <string name="text_period">period</string>
 
 
 </resources>
