@@ -119,7 +119,8 @@ class AuthenticationRepositoryImpl(
 
     override suspend fun logoutUser(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<String?>>> {
         return safeApiCallFlow(dispatcher) {
-            remoteDataSource.logoutUser()
+            val url = "${BuildConfig.BASE_URL_NEW}/auth_v2/logout"
+            remoteDataSource.logoutUser(url)
         }
     }
 

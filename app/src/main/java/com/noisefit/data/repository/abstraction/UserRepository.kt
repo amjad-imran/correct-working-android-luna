@@ -19,30 +19,10 @@ import java.io.File
 
 interface UserRepository {
 
-    suspend fun getTrophiesData(
-        date: String,
-        unitSystem: String
-    ): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<Trophies>>>
-
-
     suspend fun saveActivity(sportsModeResponse: List<SportsModeResponse>?)
 
 
-    suspend fun getBuddiesTrophiesData(requestObject: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<Trophies>>>
-
-    suspend fun getRecentTrophies(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<List<TrophyBadge>>>>
-
-    suspend fun collectBadge(request: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<String>>>
-
-    suspend fun collectChallengeTrophy(request: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseChallenge<Any>>>
-
-    suspend fun searchProduct(request: String): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<MessageResponse>>>
-
     suspend fun saveUserDevice(request: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<UpdateDeviceResponse>>>
-
-    suspend fun saveAdditionalDetails(request: UpdateAdditionalDetailRequest): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<MessageResponse>>>
-
-    suspend fun getUserProfileInfo(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<UserInfoResponse>>>
 
     suspend fun getUserProfile(): Flow<Resource<UserResponse>>
 
@@ -50,43 +30,7 @@ interface UserRepository {
 
     suspend fun updateUserProfile(request: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<User>>>
 
-    suspend fun getTimeZonesCities(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<WorldClockResponse>>>
-
-    suspend fun getOrderToken(reqest: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<String>>>
-
-    suspend fun getActivities(
-        startDate: String,
-        endDate: String
-    ): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<com.noisefit_commans.data.response.ActivityListResponse>>>
-
-
-    suspend fun getActivitiesPaging(
-        page: Int,
-        pageLimit: Int
-    ): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<List<SportsModeResponse>>>>
-
-    suspend fun getActivitiesDetails(itemId: Int): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<SportsModeResponse>>>
-
-    suspend fun getRecentActivitiesDates(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<JsonObject>>>
-
-    suspend fun postActivities(request: SportsModeRequestList): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseActivity>>
-
-    suspend fun getNoiseHealthContent(): Flow<Resource<NoiseHealthResponse>>
-
-    suspend fun setNoiseHealthContentView(request: JsonObject): Flow<Resource<Unit>>
-
-    suspend fun setNoiseHealthContentPlayTime(request: JsonObject): Flow<Resource<Unit>>
-
-    suspend fun getRecentPlayedContent(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<NoiseHealthCategory?>>>
-
-
     suspend fun uploadUserImage(imageUri: Uri): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseImage>>
-    suspend fun geRecentActivities(isForceRefresh: Boolean): Flow<Resource<BaseApiResponse<RecentActivities>>>
-
-    suspend fun getRecentChallenges(): Flow<Resource<BaseApiResponse<List<ChallengeModel>>>>
-
-    suspend fun uploadCrashLogFile(file: File): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<MessageResponse>>>
-
 
     fun getUnitSystem(): Units
 
