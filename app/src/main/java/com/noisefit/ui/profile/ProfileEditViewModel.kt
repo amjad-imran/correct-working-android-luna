@@ -71,11 +71,14 @@ class ProfileEditViewModel
     var dobYear = DefaultYear
 
     var heightInCm = MutableLiveData<String>()
+    var displayHeightValue = MutableLiveData<String>()
 
     var heightInCmList = ArrayList<String>()
     var heightInInchList = ArrayList<String>()
 
     var weightInKg = MutableLiveData<String>()
+    var displayWeightValue = MutableLiveData<String>()
+
     var weightInKgList = ArrayList<String>()
     var weightInLbsList = ArrayList<String>()
 
@@ -178,14 +181,14 @@ class ProfileEditViewModel
 //            if(height.isNullOrEmpty()){
 //                height = "63.0"
 //            }
-            heightInCm.value =
-                DistanceUtil.convertInchToCms((heightInCm.value ?: "63.0").toDouble().roundToInt())
+            /*heightInCm.value =
+                DistanceUtil.convertInchToCms((heightInCm.value ?: "63.0").toDouble().roundToInt())*/
 
 //            if (weight.isNullOrEmpty()){
 //                weight = "132.3"
 //            }
-            weightInKg.value =
-                DistanceUtil.convertLbsToKg((weightInKg.value ?: "132.3").toDouble().roundToInt())
+            /*weightInKg.value =
+                DistanceUtil.convertLbsToKg((weightInKg.value ?: "132.3").toDouble().roundToInt())*/
         } else {
 //            if(distanceGoal.isNullOrEmpty()){
 //                distanceGoal = "8.0"
@@ -195,8 +198,8 @@ class ProfileEditViewModel
 //            if(height.isNullOrEmpty()){
 //                height = "160"
 //            }
-            heightInCm.value =
-                DistanceUtil.convertCmsToInch((heightInCm.value ?: "160").toDouble().roundToInt())
+            /*heightInCm.value =
+                DistanceUtil.convertCmsToInch((heightInCm.value ?: "160").toDouble().roundToInt())*/
 //            if(stepLength.isNullOrEmpty()){
 //                stepLength = "66"
 //            }
@@ -204,8 +207,8 @@ class ProfileEditViewModel
 //            if(weight.isNullOrEmpty()){
 //                weight = "60"
 //            }
-            weightInKg.value =
-                DistanceUtil.convertKgToLbs((weightInKg.value ?: "60").toDouble().roundToInt())
+            /*weightInKg.value =
+                DistanceUtil.convertKgToLbs((weightInKg.value ?: "60").toDouble().roundToInt())*/
         }
     }
 
@@ -213,19 +216,22 @@ class ProfileEditViewModel
         val savedHeight = localUser?.userInfo?.height
 
         if (savedHeight == null) {
+            heightInCm.value = DefaultHeightInCm.toString()
+
             if (unit.value == Units.IMPERIAL) {
-                heightInCm.value =
+                displayHeightValue.value =
                     DistanceUtil.convertCmsToInch(DefaultHeightInCm).toDouble().roundToInt()
                         .toString()
             } else {
-                heightInCm.value = DefaultHeightInCm.toString()
+                displayHeightValue.value = DefaultHeightInCm.toString()
             }
         } else {
+            heightInCm.value = savedHeight.toString()
             if (unit.value == Units.IMPERIAL) {
-                heightInCm.value =
+                displayHeightValue.value =
                     DistanceUtil.convertCmsToInch(savedHeight).toDouble().roundToInt().toString()
             } else {
-                heightInCm.value = savedHeight.toString()
+                displayHeightValue.value = savedHeight.toString()
             }
         }
 
@@ -236,31 +242,47 @@ class ProfileEditViewModel
         val savedWeight = localUser?.userInfo?.weight
 
         if (savedWeight == null) {
+            weightInKg.value = DefaultWeightInKg.toString()
             if (unit.value == Units.IMPERIAL) {
-                weightInKg.value =
+                displayWeightValue.value =
                     DistanceUtil.convertKgToLbs(DefaultWeightInKg).toDouble().roundToInt()
                         .toString()
             } else {
-                weightInKg.value = DefaultHeightInCm.toString()
+                displayWeightValue.value = DefaultHeightInCm.toString()
             }
         } else {
+            weightInKg.value = savedWeight.toString()
             if (unit.value == Units.IMPERIAL) {
-                weightInKg.value =
+                displayWeightValue.value =
                     DistanceUtil.convertKgToLbs(savedWeight).toDouble().roundToInt().toString()
             } else {
-                weightInKg.value = savedWeight.toString()
+                displayWeightValue.value = savedWeight.toString()
             }
         }
     }
 
 
+    //SET in kg only
     fun setWeight(weight: String) {
-        weightInKg.value = weight
+        displayWeightValue.value = weight
 
+        if (unit.value == Units.IMPERIAL) {
+            weightInKg.value =
+                DistanceUtil.convertLbsToKg(weight.toDouble().roundToInt())
+        } else {
+            weightInKg.value = weight
+        }
     }
 
     fun setHeight(height: String) {
-        heightInCm.value = height
+        displayHeightValue.value = height
+
+        if (unit.value == Units.IMPERIAL) {
+            heightInCm.value =
+                DistanceUtil.convertInchToCms(height.toDouble().roundToInt())
+        } else {
+            heightInCm.value = height
+        }
     }
 
     fun getHeight(): String {
@@ -270,7 +292,7 @@ class ProfileEditViewModel
             unit = "inches"
 
         }
-        return "${heightInCm.value?.toDouble()?.roundToInt()} $unit"
+        return "${displayHeightValue.value?.toDouble()?.roundToInt()} $unit"
     }
 
     fun getWeight(): String {
@@ -280,7 +302,7 @@ class ProfileEditViewModel
             unit = "lbs"
 
         }
-        return "${weightInKg.value?.toDouble()?.roundToInt()} $unit"
+        return "${displayWeightValue.value?.toDouble()?.roundToInt()} $unit"
     }
 
 
@@ -362,6 +384,10 @@ class ProfileEditViewModel
         } else {
             Units.IMPERIAL
         }
+    }
+
+    fun setSelectedUnit(selectedUnit: Units) {
+        unit.value = selectedUnit
     }
 
     fun updateName(name: String?) {
@@ -480,7 +506,7 @@ class ProfileEditViewModel
             //TODO Optimize conversion
             userInfo = JsonObject()
 
-            val heightValue =/* if (unit.value == Units.IMPERIAL) {
+            val heightValue = /*if (unit.value == Units.IMPERIAL) {
                 DistanceUtil.convertInchToCms(
                     heightInCm.value!!.toDouble().roundToInt()
                 ).toDouble().roundToInt()
@@ -604,6 +630,7 @@ class ProfileEditViewModel
                         resource.data?.data?.let {
                             authenticationRepository.saveUserInfo(it)
                             sessionManager.updateUnit(it.userGoals?.getUnit() ?: Units.METRIC)
+                            sessionManager.updateNotificationSettings(it.notificationsEnabledLuna?:1)
                             _userDetailsUpdated.postValue(Event(true))
                         }
                     }

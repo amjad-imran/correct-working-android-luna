@@ -1034,21 +1034,6 @@ class DataStoredImpl
         return gson.fromJson(mPrefs.getString(DEVICE_FEATURES, null), DeviceFeatures::class.java)
     }
 
-    override fun updateUserAdditionalDetails(
-        userInfo: UserInfo?, userGoal: UserGoals?
-    ): Boolean {
-        val user = getUser() ?: return true
-        userInfo?.let { user.userInfo = it }
-
-        userGoal?.let {
-            user.userGoals = it
-        }
-
-        mPrefs.edit()?.putString(USER_INFO, gson.toJson(user))?.commit()
-
-        return true
-    }
-
 
     override fun removeNotificationApp(app: NotificationApp) {
         val appList = getNotificationEnabledAppList()

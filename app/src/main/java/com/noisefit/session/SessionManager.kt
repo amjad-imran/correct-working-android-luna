@@ -125,7 +125,10 @@ class SessionManager
 
     init {
         GlobalScope.launch(Dispatchers.IO) {
-            unit = localDataStore.getUser()?.userGoals?.getUnit() ?: Units.METRIC
+            val user = localDataStore.getUser()
+            unit = user?.userGoals?.getUnit() ?: Units.METRIC
+            notificationSettings = user?.notificationsEnabledLuna ?: 1
+
         }
     }
 
@@ -672,6 +675,14 @@ class SessionManager
 
     fun updateUnit(unit: Units) {
         this.unit = unit
+    }
+
+    fun updateNotificationSettings(value: Int) {
+        this.notificationSettings = value
+    }
+
+    fun showLocalNotification(): Boolean {
+        return notificationSettings == 1
     }
 }
 

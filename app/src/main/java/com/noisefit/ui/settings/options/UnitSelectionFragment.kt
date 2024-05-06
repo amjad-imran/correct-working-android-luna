@@ -57,11 +57,13 @@ class UnitSelectionFragment :
         }
 
         binding.lytMetric.root.setOnClickListener {
-            viewModel.unit.value = Units.METRIC
+            viewModel.setSelectedUnit(Units.METRIC)
+            viewModel.convertValues()
             viewModel.updateUserProfile()
         }
         binding.lytImperial.root.setOnClickListener {
-            viewModel.unit.value = Units.IMPERIAL
+            viewModel.setSelectedUnit(Units.IMPERIAL)
+            viewModel.convertValues()
             viewModel.updateUserProfile()
         }
 

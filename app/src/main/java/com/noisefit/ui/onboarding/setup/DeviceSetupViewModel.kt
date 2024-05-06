@@ -150,14 +150,14 @@ class DeviceSetupViewModel @Inject constructor(
             distanceGoal = getDistanceGoal()
         }
 
-        var unitSystem = user?.userGoals?.unitSystem
+        var unitSystem = user?.userGoals?.unitSystemLuna
         if (unitSystem.isNullOrEmpty()) {
             unitSystem = UnitSystem.METRIC.type
         }
 
         val sleepGoal = 8
 
-        return UserGoals(stepGoal, caloriesGoal, distanceGoal, sleepGoal, unitSystem = unitSystem)
+        return UserGoals(stepGoal, caloriesGoal, distanceGoal, sleepGoal, unitSystemLuna = unitSystem)
     }
 
     private fun getDefaultWeightInKg(): Int {

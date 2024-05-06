@@ -28,7 +28,7 @@
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/switchMain"
-        style="@style/CustomSwitch"
+        style="@style/CustomSwitch3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/side_margin"

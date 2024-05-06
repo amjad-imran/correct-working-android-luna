@@ -721,6 +721,7 @@ class SetupProfileViewModel
                             logProfileEvent(it)
                             localDataStore.saveUserInfo(it)
                             sessionManager.updateUnit(it.userGoals?.getUnit() ?: Units.METRIC)
+                            sessionManager.updateNotificationSettings(it.notificationsEnabledLuna?:1)
 
                             _successMessage.postValue(Event(true))
                         }/* ?: getConfig()*/
