@@ -39,6 +39,8 @@ import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MiscUtil
+import com.noisefit_commans.utils.MoEngageAppEventAttributes
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import kotlinx.coroutines.Dispatchers
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -679,6 +681,12 @@ class SessionManager
 
     fun updateNotificationSettings(value: Int) {
         this.notificationSettings = value
+
+        addUserAttributeToMoEngage(true,
+            HashMap<String, Any>().apply
+            {
+                this[MoEngageAppEventAttributes.notification_state] = value == 1
+            })
     }
 
     fun showLocalNotification(): Boolean {

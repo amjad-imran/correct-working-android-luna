@@ -108,14 +108,15 @@ class UserRepositoryImpl(
 
     override suspend fun updatePushToken(request: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<MessageResponse>>> {
         return safeApiCallFlow(dispatcher) {
-            remoteDataSource.updatePushToken(request)
+            val url = "${BuildConfig.BASE_URL_NEW}/user_detail/update/push-token"
+            remoteDataSource.updatePushToken(url, request)
         }
     }
 
     override suspend fun updateUserProfile(request: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<User>>> {
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.BASE_URL_NEW}/user_detail/profile/update"
-            remoteDataSource.updateUserProfile(url,request)
+            remoteDataSource.updateUserProfile(url, request)
         }
     }
 
@@ -140,7 +141,8 @@ class UserRepositoryImpl(
             file.asRequestBody("image/jpeg".toMediaTypeOrNull())
         )
         return safeApiCallFlow(dispatcher) {
-            remoteDataSource.uploadUserImage(requestFile)
+            val url = "${BuildConfig.BASE_URL_NEW}/user_detail/upload/profile-image"
+            remoteDataSource.uploadUserImage(url, requestFile)
         }
     }
 

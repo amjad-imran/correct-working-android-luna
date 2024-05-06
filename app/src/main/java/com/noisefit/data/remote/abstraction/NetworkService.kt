@@ -57,8 +57,8 @@ interface NetworkService {
     @POST
     suspend fun logoutUser(@Url url: String): BaseApiResponse<String?>
 
-    @POST("/users/v3/disable")
-    suspend fun deleteUser(): BaseApiResponse<String?>
+    @POST
+    suspend fun deleteUser(@Url url: String): BaseApiResponse<String?>
 
 
     @POST
@@ -115,8 +115,11 @@ interface NetworkService {
         @Body jsonObject: JsonObject
     ): BaseApiResponse<UpdateDeviceResponse>
 
-    @POST("/users/v3/update/push-token")
-    suspend fun updatePushToken(@Body jsonObject: JsonObject): BaseApiResponse<MessageResponse>
+    @POST
+    suspend fun updatePushToken(
+        @Url url: String,
+        @Body jsonObject: JsonObject
+    ): BaseApiResponse<MessageResponse>
 
     @POST
     suspend fun updateUserProfile(
@@ -128,8 +131,9 @@ interface NetworkService {
     suspend fun getUserProfile(@Url url: String): UserResponse
 
     @Multipart
-    @POST("/users/v2/image")
+    @POST
     suspend fun uploadUserImage(
+        @Url url: String,
         @Part image: MultipartBody.Part?
     ): BaseApiResponseImage
 

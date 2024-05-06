@@ -517,6 +517,7 @@ class AuthViewModel @Inject constructor(
                                 return@let
                             }
 
+
                             localDataStore.saveUserInfo(it.user!!)
                             sessionManager.updateUnit(it.user?.userGoals?.getUnit() ?: Units.METRIC)
                             sessionManager.updateNotificationSettings(it.user?.notificationsEnabledLuna?:1)

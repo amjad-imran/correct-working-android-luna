@@ -148,7 +148,7 @@ android {
         }
         create("live") {
             buildConfigField("String", "BASE_URL", "\"https://backend.gonoise.com\"")
-            buildConfigField("String", "BASE_URL_NEW", "\"https://app-eks.gonoise.com\"")
+            buildConfigField("String", "BASE_URL_NEW", "\"https://app.gonoise.com\"")
             buildConfigField("String", "API_URL_WEATHER", "\"http://api.openweathermap.org\"")
 
             //Oreo URLs

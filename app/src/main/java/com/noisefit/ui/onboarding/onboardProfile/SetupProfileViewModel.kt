@@ -372,10 +372,20 @@ class SetupProfileViewModel
 
     fun setHeightUnit(heightUnitSystem: HeightUnitSystem) {
         this.heightUnitSystem = heightUnitSystem
+        if (heightUnitSystem == HeightUnitSystem.METRIC) {
+            weightUnitSystem = WeightUnitSystem.METRIC
+        } else {
+            weightUnitSystem = WeightUnitSystem.IMPERIAL
+        }
     }
 
     fun setWeightUnit(weightUnitSystem: WeightUnitSystem) {
         this.weightUnitSystem = weightUnitSystem
+        if (weightUnitSystem == WeightUnitSystem.METRIC) {
+            heightUnitSystem = HeightUnitSystem.METRIC
+        } else {
+            heightUnitSystem = HeightUnitSystem.IMPERIAL
+        }
     }
 
     fun initialWeightUnit() {
@@ -721,7 +731,9 @@ class SetupProfileViewModel
                             logProfileEvent(it)
                             localDataStore.saveUserInfo(it)
                             sessionManager.updateUnit(it.userGoals?.getUnit() ?: Units.METRIC)
-                            sessionManager.updateNotificationSettings(it.notificationsEnabledLuna?:1)
+                            sessionManager.updateNotificationSettings(
+                                it.notificationsEnabledLuna ?: 1
+                            )
 
                             _successMessage.postValue(Event(true))
                         }/* ?: getConfig()*/
