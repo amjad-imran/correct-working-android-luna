@@ -1144,6 +1144,10 @@
     <string name="text_skin_temperature_variation">Skin temperature variation</string>
     <string name="text_cycle_prediction">Cycle prediction</string>
     <string name="text_normal_length">Normal length</string>
+    <string name="text_period_duration">Period duration</string>
+    <string name="text_next_estimated_date_for_period_start_will_be_in">Next Estimated Date for period start will be in</string>
+    <string name="text_follicular">follicular</string>
+    <string name="text_luteal">luteal</string>
 
 
 </resources>

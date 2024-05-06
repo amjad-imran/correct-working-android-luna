@@ -19,6 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/side_margin"
+        android:id="@+id/ivMore"
         android:src="@drawable/ic_o_arrow_right_duotone"
         app:layout_constraintBottom_toBottomOf="@id/tvHeader"
         app:layout_constraintEnd_toEndOf="parent"

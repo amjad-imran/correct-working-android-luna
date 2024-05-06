@@ -1,0 +1,77 @@
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/back_modal_new">
+
+        <TextView
+            android:id="@+id/tvHeader"
+            style="@style/H6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/text_next_estimated_date_for_period_start_will_be_in"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvValue"
+            style="@style/H2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvHeader"
+            tools:text="37" />
+
+        <TextView
+            android:id="@+id/tvUnit"
+            style="@style/Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="17dp"
+            android:textColor="@color/white_64"
+            app:layout_constraintStart_toEndOf="@id/tvValue"
+            app:layout_constraintTop_toBottomOf="@id/tvHeader"
+            tools:text="days" />
+
+        <include
+            layout="@layout/layout_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:id="@+id/divider1"
+            android:layout_marginTop="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvValue" />
+        <TextView
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:id="@+id/tvMoreNight"
+            android:textColor="@color/white_60"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/ivInfo"
+            app:layout_constraintTop_toTopOf="@id/ivInfo"
+            tools:text="Data for 56 more nights is required" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_fmh_info"
+            android:id="@+id/ivInfo"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="@dimen/side_margin"
+            app:layout_constraintTop_toBottomOf="@id/divider1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="12dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

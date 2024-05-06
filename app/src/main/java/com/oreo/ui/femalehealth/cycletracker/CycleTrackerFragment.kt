@@ -1,4 +1,4 @@
-package com.oreo.ui.femalehealth
+package com.oreo.ui.femalehealth.cycletracker
 
 import android.os.Bundle
 import android.view.View
@@ -98,18 +98,30 @@ class CycleTrackerFragment :
         binding.toolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }
+        binding.lytPrediction.ivMore.setOnClickListener {
+            navigate(R.id.cycleSkinTemperature)
+        }
         binding.lytInsight.lytCycleLength.root.setOnClickListener {
-            navigate(R.id.cycleInsightDetails)
+            navigate(R.id.cycleInsightDetails, Bundle().apply {
+                this.putString("pageTitle", getString(R.string.text_cycle_length))
+            })
         }
         binding.lytInsight.lytPeriodLength.root.setOnClickListener {
-            navigate(R.id.cycleInsightDetails)
+            navigate(R.id.cycleInsightDetails, Bundle().apply {
+                this.putString("pageTitle", getString(R.string.text_period_duration))
+            })
+        }
+        binding.lytCycleHistory.ivMore.setOnClickListener {
+            navigate(R.id.cycleTrackorHistory)
         }
     }
 
     private fun initInsightUI() {
+        binding.lytInsight.lytCycleLength.tvHeader.text = getString(R.string.text_cycle_length)
         binding.lytInsight.lytCycleLength.tvValue.text = "37"
         binding.lytInsight.lytCycleLength.tvUnit.text = "days"
         binding.lytInsight.lytCycleLength.tvStatus.text = "Abnormal"
+        binding.lytInsight.lytPeriodLength.tvHeader.text = getString(R.string.text_period_duration)
         binding.lytInsight.lytPeriodLength.tvValue.text = "6"
         binding.lytInsight.lytPeriodLength.tvUnit.text = "days"
         binding.lytInsight.lytPeriodLength.tvStatus.text = "Normal"

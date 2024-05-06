@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.oreo.ui.femalehealth.CycleTrackerFragment">
+    tools:context="com.oreo.ui.femalehealth.cycletracker.CycleTrackerFragment">
 
     <include
         android:id="@+id/toolbar"
@@ -57,6 +57,7 @@
             <include
                 layout="@layout/layout_card_cycle_prediction"
                 android:layout_width="match_parent"
+                android:id="@+id/lytPrediction"
                 android:layout_height="wrap_content"
                 android:visibility="visible" />
 
