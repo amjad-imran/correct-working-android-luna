@@ -104,7 +104,7 @@ class ProfileEditViewModel
         setGender(localUser?.userInfo?.gender)
         phoneNumber.value = localUser?.mobile
         unit.value = localUser?.userGoals?.getUnit()
-        notificationSetting.value = localUser?.notificationsEnabled ?: 1
+        notificationSetting.value = localUser?.notificationsEnabledLuna ?: 1
 
 
         email.value = localUser?.email
@@ -603,6 +603,7 @@ class ProfileEditViewModel
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             authenticationRepository.saveUserInfo(it)
+                            sessionManager.updateUnit(it.userGoals?.getUnit() ?: Units.METRIC)
                             _userDetailsUpdated.postValue(Event(true))
                         }
                     }

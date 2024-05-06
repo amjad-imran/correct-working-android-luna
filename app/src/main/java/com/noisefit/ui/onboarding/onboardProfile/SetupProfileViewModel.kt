@@ -720,6 +720,8 @@ class SetupProfileViewModel
                             localDataStore.setLocalUserData(null)
                             logProfileEvent(it)
                             localDataStore.saveUserInfo(it)
+                            sessionManager.updateUnit(it.userGoals?.getUnit() ?: Units.METRIC)
+
                             _successMessage.postValue(Event(true))
                         }/* ?: getConfig()*/
                     }

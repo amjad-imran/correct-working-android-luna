@@ -121,6 +121,7 @@ class SessionManager
     val versionCheckData = MutableLiveData<VersionCheckResponse>()
 
     var unit: Units = Units.METRIC
+    var notificationSettings = 1
 
     init {
         GlobalScope.launch(Dispatchers.IO) {

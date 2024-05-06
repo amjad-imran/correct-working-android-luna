@@ -50,8 +50,6 @@ interface UserRepository {
 
     suspend fun updateUserProfile(request: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<User>>>
 
-    suspend fun updateUserProfile(request: User): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<User>>>
-
     suspend fun getTimeZonesCities(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<WorldClockResponse>>>
 
     suspend fun getOrderToken(reqest: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<String>>>
@@ -82,16 +80,12 @@ interface UserRepository {
     suspend fun getRecentPlayedContent(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<NoiseHealthCategory?>>>
 
 
-
-
     suspend fun uploadUserImage(imageUri: Uri): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseImage>>
     suspend fun geRecentActivities(isForceRefresh: Boolean): Flow<Resource<BaseApiResponse<RecentActivities>>>
 
     suspend fun getRecentChallenges(): Flow<Resource<BaseApiResponse<List<ChallengeModel>>>>
 
     suspend fun uploadCrashLogFile(file: File): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<MessageResponse>>>
-
-
 
 
     fun getUnitSystem(): Units

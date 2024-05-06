@@ -137,11 +137,11 @@ interface NetworkService {
     @POST("/users/v3/update/push-token")
     suspend fun updatePushToken(@Body jsonObject: JsonObject): BaseApiResponse<MessageResponse>
 
-    @POST("/users/v3/profile/update")
-    suspend fun updateUserProfile(@Body jsonObject: JsonObject): BaseApiResponse<User>
-
-    @POST("/users/v3/profile/update")
-    suspend fun updateUserProfile(@Body user: User): BaseApiResponse<User>
+    @POST
+    suspend fun updateUserProfile(
+        @Url url: String,
+        @Body jsonObject: JsonObject
+    ): BaseApiResponse<User>
 
     @GET("/users/additional_details")
     suspend fun getUserProfileInfo(): BaseApiResponse<UserInfoResponse>
