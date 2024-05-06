@@ -1292,6 +1292,7 @@ class OSleepScoreDetailsFragment :
         if (getGraphType() == 0) {
             binding.lytTopGraphView.rvTopBarGraph.visible()
             binding.lytTopGraphView.rvTopGraph.gone()
+            binding.lytTopGraphView.rvTopBarGraph.setIsMetric(mViewModel.sessionManager.isMetric())
             binding.lytTopGraphView.rvTopBarGraph.updateDataWithMax(
                 topGraphData.first.first,
                 topGraphData.third,

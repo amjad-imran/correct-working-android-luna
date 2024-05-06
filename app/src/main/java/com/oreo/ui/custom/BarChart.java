@@ -548,4 +548,7 @@ public class BarChart extends View {
         return (int) (spValue * fontScale + 0.5f);
     }
 
+    public void setIsMetric(boolean metric) {
+        isMetric = metric;
+    }
 }
