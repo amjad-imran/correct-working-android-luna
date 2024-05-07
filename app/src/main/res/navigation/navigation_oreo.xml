@@ -734,4 +734,15 @@
         android:id="@+id/cycleSkinTemperature"
         android:name="com.oreo.ui.femalehealth.cycletracker.FMHSkinTemperatureFragment"
         android:label="FragmentSkinTemperature" />
+    <fragment
+        android:id="@+id/cycleLogFragment"
+        android:name="com.oreo.ui.femalehealth.cycletracker.CycleLogFragment"
+        android:label="CycleLogFragment" />
+    <dialog android:id="@+id/bottomSheetCycleLog"
+        android:name="com.oreo.ui.femalehealth.cycletracker.BottomSheetCycleLog"
+        android:label="BottomSheetCycleLog">
+        <argument
+            android:name="data"
+            app:argType="com.oreo.data.model.CycleLogDataModel" />
+    </dialog>
 </navigation>

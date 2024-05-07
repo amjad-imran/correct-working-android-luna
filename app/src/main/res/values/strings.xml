@@ -1150,6 +1150,10 @@
     <string name="text_luteal">luteal</string>
     <string name="text_cycle_tracker">Cycle tracker</string>
     <string name="text_ovulation_in">Ovulation in</string>
+    <string name="text_period_u">Period</string>
+    <string name="text_flow">Flow</string>
+    <string name="text_symptoms">Symptoms</string>
+    <string name="text_cycle_log">Cycle Log</string>
 
 
 </resources>

@@ -121,6 +121,9 @@ class CycleTrackerFragment :
         binding.lytCycleHistory.ivMore.setOnClickListener {
             navigate(R.id.cycleTrackorHistory)
         }
+        binding.lytTrackerTop.btnLog.setOnClickListener {
+            navigate(R.id.cycleLogFragment)
+        }
     }
 
     private fun initInsightUI() {
