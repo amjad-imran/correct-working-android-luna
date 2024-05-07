@@ -5,17 +5,17 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.google.gson.Gson
-import com.kizitonwose.calendarview.model.CalendarDay
-import com.kizitonwose.calendarview.model.CalendarMonth
-import com.kizitonwose.calendarview.model.DayOwner
-import com.kizitonwose.calendarview.ui.DayBinder
-import com.kizitonwose.calendarview.ui.MonthScrollListener
-import com.kizitonwose.calendarview.ui.ViewContainer
-import com.kizitonwose.calendarview.utils.yearMonth
+import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.CalendarMonth
+import com.kizitonwose.calendar.core.DayPosition
+import com.kizitonwose.calendar.view.MonthDayBinder
+import com.kizitonwose.calendar.view.MonthScrollListener
+import com.kizitonwose.calendar.view.ViewContainer
 import com.noisefit.luna.databinding.CalendarDayFmhOnboardBinding
 import com.noisefit.luna.databinding.FragmentFMHOnboardCalenderBinding
 import com.noisefit_commans.common.ContinuousSelectionHelper.getSelection
 import com.noisefit_commans.common.DateSelection
+import com.noisefit_commans.common.yearMonth
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
@@ -56,7 +56,7 @@ class FMHOnboardCalenderFragment :
             init {
 
                 binding.root.setOnClickListener {
-                    if (day.owner == DayOwner.THIS_MONTH) {
+                    if (day.position == DayPosition.MonthDate) {
                         if (mViewModel.selectedEndDate == null)
                             mViewModel.selectedEndDate =
                                 DateFormats.convertDateToLocalDate(DateFormats.getDaysAgo(mViewModel.calenderDayRange()))
@@ -77,7 +77,7 @@ class FMHOnboardCalenderFragment :
 
         }
 
-        binding.lytCalender.calendar.dayBinder = object : DayBinder<DayViewContainer> {
+        binding.lytCalender.calendar.dayBinder = object : MonthDayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
                 container.day = day
@@ -88,7 +88,7 @@ class FMHOnboardCalenderFragment :
 
                 LOGS.d("start date $startDate")
                 LOGS.d("start end date $endDate")
-                if (day.owner == DayOwner.THIS_MONTH) {
+                if (day.position == DayPosition.MonthDate) {
                     when (day.date) {
                         startDate -> {
                             container.binding.tvDay.setTextColor(Color.parseColor("#ffffff"))
@@ -111,7 +111,7 @@ class FMHOnboardCalenderFragment :
             override fun invoke(month: CalendarMonth) {
                 currentSelectedMonth = month
                 nullableBinding?.lytCalender?.tvMonth?.text =
-                    "${month.yearMonth.month.name.lowercase().capitalizeWords()} ${month.year}"
+                    "${month.yearMonth.month.name.lowercase().capitalizeWords()} ${month.yearMonth.year}"
             }
         }
 

@@ -4,16 +4,20 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import com.kizitonwose.calendarview.model.CalendarDay
-import com.kizitonwose.calendarview.model.DayOwner
-import com.kizitonwose.calendarview.ui.DayBinder
-import com.kizitonwose.calendarview.ui.ViewContainer
-import com.kizitonwose.calendarview.utils.yearMonth
+import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.CalendarMonth
+import com.kizitonwose.calendar.core.DayPosition
+import com.kizitonwose.calendar.core.yearMonth
+import com.kizitonwose.calendar.view.MonthDayBinder
+import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
+import com.kizitonwose.calendar.view.ViewContainer
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.CalendarDayFmhOnboardBinding
 import com.noisefit.luna.databinding.FragmentCycleLogBinding
+import com.noisefit.luna.databinding.LayoutCycleLogCalHeaderBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.YearMonth
@@ -42,7 +46,7 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
             init {
 
                 binding.root.setOnClickListener {
-                    if (day.owner == DayOwner.THIS_MONTH) {
+                    if (day.position == DayPosition.MonthDate) {
 
                     }
                 }
@@ -50,7 +54,7 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
 
         }
 
-        binding.calendar.dayBinder = object : DayBinder<DayViewContainer> {
+        binding.calendar.dayBinder = object : MonthDayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
                 container.day = day
@@ -59,6 +63,16 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
                 textView.text = day.date.dayOfMonth.toString()
             }
         }
+        class MonthViewContainer(view: View) : com.kizitonwose.calendar.view.ViewContainer(view) {
+            val textView = LayoutCycleLogCalHeaderBinding.bind(view).exTwoHeaderText
+        }
+        binding.calendar.monthHeaderBinder =
+            object : MonthHeaderFooterBinder<MonthViewContainer> {
+                override fun create(view: View) = MonthViewContainer(view)
+                override fun bind(container: MonthViewContainer, data: CalendarMonth) {
+                    container.textView.text = "${data.yearMonth.month.name.lowercase().capitalizeWords()} ${data.yearMonth.year}"
+                }
+            }
         binding.calendar.scrollToDate(currentDay)
     }
 

@@ -73,7 +73,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider1" />
 
-    <com.kizitonwose.calendarview.CalendarView
+    <com.kizitonwose.calendar.view.CalendarView
         android:id="@+id/calendar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
         android:layout_marginEnd="24dp"
         app:cv_dayViewResource="@layout/calendar_day_fmh_onboard"
         app:cv_orientation="horizontal"
-        app:cv_scrollMode="paged"
+        app:cv_scrollPaged="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/legendLayout" />
