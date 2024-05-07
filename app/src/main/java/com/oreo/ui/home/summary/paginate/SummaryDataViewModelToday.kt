@@ -9,7 +9,6 @@ import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UpdateRepository
 import com.noisefit.luna.BuildConfig
-import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.BinaryActionCallback
@@ -34,8 +33,8 @@ import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.ScreenUtils
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.data.dataConverter.OreoHRDataConvertor
-import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.dataConverter.OreoStressDataConvertor
+import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.AppUpdateModel
 import com.oreo.data.model.ChartModel
@@ -241,6 +240,13 @@ class SummaryDataViewModelToday @Inject constructor(
 
             val userActivities = ArrayList<OHealthOverview>()
             val viewedCardsData = ArrayList<OHealthOverview>()
+
+            //todo add widget for testing
+            userActivities.add(OHealthOverview.CycleTrackerPredict(""))
+            userActivities.add(OHealthOverview.CycleTrackerOngoing(""))
+            userActivities.add(OHealthOverview.CardTrackFemaleHealth(""))
+            userActivities.add(OHealthOverview.GotYourPeriod(""))
+
 
             val autoSportCount = userRepository.getSummaryAutoWorkoutCount()
             if (autoSportCount > 0) {

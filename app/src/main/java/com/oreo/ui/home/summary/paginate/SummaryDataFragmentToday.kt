@@ -309,6 +309,9 @@ class SummaryDataFragmentToday :
 
                     navigate(R.id.napDetails, bundleOf("napId" to type.napId))
                 }
+                is OSummaryHealthOverviewClickEnum.TrackYourFemaleHealth->{
+                    navigate(R.id.fragmentCycleTracker)
+                }
             }
         }
 
@@ -317,9 +320,9 @@ class SummaryDataFragmentToday :
 
     override fun initListener() {
 
-        binding.contentMain.lytTrackFmHealth.btnGetStarted.setOnClickListener {
+        /*binding.contentMain.lytTrackFmHealth.btnGetStarted.setOnClickListener {
             navigate(R.id.fragmentCycleTracker)
-        }
+        }*/
         binding.contentMain.lytHeartRate.bInfo.invisible()
         /*binding.contentMain.lytHeartRate.root.setOnClickListener {
             navigate(R.id.fragmentHeartRateDetails)

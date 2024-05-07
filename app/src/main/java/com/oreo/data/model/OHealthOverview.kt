@@ -100,6 +100,19 @@ sealed class OHealthOverview {
         val value: List<ChartModel>? = ArrayList()
     ) : OHealthOverview()
 
+    class CycleTrackerPredict(
+        val title:String
+    ):OHealthOverview()
+    class CycleTrackerOngoing(
+        val title:String
+    ):OHealthOverview()
+    class GotYourPeriod(
+        val title:String
+    ):OHealthOverview()
+    class CardTrackFemaleHealth(
+        val title:String
+    ):OHealthOverview()
+
 }
 
 data class DashAlert(

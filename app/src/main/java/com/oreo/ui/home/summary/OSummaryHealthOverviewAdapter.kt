@@ -7,16 +7,18 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.google.gson.Gson
 import com.hookedonplay.decoviewlib.events.DecoEvent
-import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.luna.R
+import com.noisefit.luna.databinding.CardTrackFmHealthBinding
 import com.noisefit.luna.databinding.ItemStressGraphBinding
 import com.noisefit.luna.databinding.ListActivityBurnCardItem2Binding
 import com.noisefit.luna.databinding.ListActivityBurnCardItemBinding
 import com.noisefit.luna.databinding.ListActivityMinimalItemBinding
+import com.noisefit.luna.databinding.ListCycleTrackerOngoingBinding
+import com.noisefit.luna.databinding.ListCycleTrackerPredictionBinding
 import com.noisefit.luna.databinding.ListDashNapBinding
 import com.noisefit.luna.databinding.ListOWAlertCardItemBinding
+import com.noisefit.luna.databinding.ListPeriodConfirmationBinding
 import com.noisefit.luna.databinding.ListReadinessCardItemBinding
 import com.noisefit.luna.databinding.ListReadinessMinimalCardItemBinding
 import com.noisefit.luna.databinding.ListRingCareBinding
@@ -29,8 +31,6 @@ import com.noisefit.luna.databinding.RowDashAlertBinding
 import com.noisefit.ui.common.calculatePercentage
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.dpToPx
-import com.noisefit_commans.common.fromJson
-import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.custom.SleepProgressbarView
 import com.noisefit_commans.ui.getColor
 import com.noisefit_commans.ui.gone
@@ -44,7 +44,6 @@ import com.oreo.data.model.AlertType
 import com.oreo.data.model.DashAlert
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.VideoInfoType
-import com.oreo.data.model.health.Nap
 import com.oreo.util.UtilClass.seriesItemWithoutInset
 
 
@@ -65,6 +64,7 @@ sealed class OSummaryHealthOverviewClickEnum {
     object WorkoutAlertWhatisThis : OSummaryHealthOverviewClickEnum()
 
     object WorkoutAlertIdentify : OSummaryHealthOverviewClickEnum()
+    object TrackYourFemaleHealth : OSummaryHealthOverviewClickEnum()
 
 }
 
@@ -204,6 +204,38 @@ class OSummaryHealthOverviewAdapter() :
                 )
             )
 
+            R.layout.list_cycle_tracker_prediction -> HomeRecyclerViewHolder.CycleTrackerPredictViewHolder(
+                ListCycleTrackerPredictionBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
+            R.layout.list_cycle_tracker_ongoing -> HomeRecyclerViewHolder.CycleTrackerOngoingViewHolder(
+                ListCycleTrackerOngoingBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
+            R.layout.card_track_fm_health -> HomeRecyclerViewHolder.TrackYourCycleViewHolder(
+                CardTrackFmHealthBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
+            R.layout.list_period_confirmation -> HomeRecyclerViewHolder.GotYourPeriodViewHolder(
+                ListPeriodConfirmationBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
 //            R.layout.list_o_w_demo_card_item -> HomeRecyclerViewHolder.DemoViewHolder(
 //                ListOWDemoCardItemBinding.inflate(
 //                    LayoutInflater.from(parent.context),
@@ -291,6 +323,26 @@ class OSummaryHealthOverviewAdapter() :
                 position,
             )
 
+            is HomeRecyclerViewHolder.CycleTrackerPredictViewHolder -> holder.bind(
+                items[position] as OHealthOverview.CycleTrackerPredict,
+                position,
+            )
+
+            is HomeRecyclerViewHolder.CycleTrackerOngoingViewHolder -> holder.bind(
+                items[position] as OHealthOverview.CycleTrackerOngoing,
+                position,
+            )
+
+            is HomeRecyclerViewHolder.TrackYourCycleViewHolder -> holder.bind(
+                items[position] as OHealthOverview.CardTrackFemaleHealth,
+                position,
+            )
+
+            is HomeRecyclerViewHolder.GotYourPeriodViewHolder -> holder.bind(
+                items[position] as OHealthOverview.GotYourPeriod,
+                position,
+            )
+
             else -> {}
         }
     }
@@ -322,6 +374,10 @@ class OSummaryHealthOverviewAdapter() :
             is OHealthOverview.InfoRingCare -> R.layout.list_ring_care
             is OHealthOverview.InfoRingWelcome -> R.layout.list_welcome_card
             is OHealthOverview.NapDashCard -> R.layout.list_dash_nap
+            is OHealthOverview.CycleTrackerPredict -> R.layout.list_cycle_tracker_prediction
+            is OHealthOverview.CycleTrackerOngoing -> R.layout.list_cycle_tracker_ongoing
+            is OHealthOverview.CardTrackFemaleHealth -> R.layout.card_track_fm_health
+            is OHealthOverview.GotYourPeriod -> R.layout.list_period_confirmation
         }
     }
 }
@@ -423,7 +479,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     if (lastUpdatedTimestamp == 0L) {
                         binding.tvLastUpdate.text = ""
                     } else {
-                        binding.tvLastUpdate.text ="Updated ${DateFormats.getRelativeTime(lastUpdatedTimestamp)}"
+                        binding.tvLastUpdate.text =
+                            "Updated ${DateFormats.getRelativeTime(lastUpdatedTimestamp)}"
                     }
                 } else {
                     binding.tvLastUpdate.text = ""
@@ -1060,6 +1117,48 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             }
             mDataSet.addAll(list)
             notifyDataSetChanged()
+        }
+    }
+
+    class CycleTrackerPredictViewHolder(private val binding: ListCycleTrackerPredictionBinding) :
+        HomeRecyclerViewHolder(binding) {
+        fun bind(
+            data: OHealthOverview.CycleTrackerPredict,
+            position: Int,
+        ) {
+        }
+    }
+
+    class CycleTrackerOngoingViewHolder(private val binding: ListCycleTrackerOngoingBinding) :
+        HomeRecyclerViewHolder(binding) {
+        fun bind(
+            data: OHealthOverview.CycleTrackerOngoing,
+            position: Int,
+        ) {
+        }
+    }
+
+    class TrackYourCycleViewHolder(private val binding: CardTrackFmHealthBinding) :
+        HomeRecyclerViewHolder(binding) {
+        fun bind(
+            data: OHealthOverview.CardTrackFemaleHealth,
+            position: Int,
+        ) {
+            binding.root.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.TrackYourFemaleHealth)
+            }
+            binding.btnGetStarted.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.TrackYourFemaleHealth)
+            }
+        }
+    }
+
+    class GotYourPeriodViewHolder(private val binding: ListPeriodConfirmationBinding) :
+        HomeRecyclerViewHolder(binding) {
+        fun bind(
+            data: OHealthOverview.GotYourPeriod,
+            position: Int,
+        ) {
         }
     }
 

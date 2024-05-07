@@ -13,6 +13,9 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.CalenderCycleTrackerDayBinding
 import com.noisefit.luna.databinding.FragmentCycleTrackerBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -70,6 +73,10 @@ class CycleTrackerFragment :
                 }
                 bind.exSevenDateText.setTextColor(colorRes)
             }
+        }
+        binding.lytTrackerTop.vCalendar.weekCalender.weekScrollListener = { weekDays ->
+            val selectedWeekDate = weekDays.days.get(0)
+            mViewModel.loadPageData(selectedDate)
         }
         binding.lytTrackerTop.vCalendar.weekCalender.dayBinder =
             object : WeekDayBinder<DayViewContainer> {
@@ -130,7 +137,23 @@ class CycleTrackerFragment :
     }
 
     override fun subscribeObservers() {
-
+        mViewModel.getMessages().observe(this) {
+            it.getContent()?.let { message ->
+                context.showShortToast(message)
+            }
+        }
+        mViewModel.getApiErrors().observe(this) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
+            }
+        }
+        mViewModel.getLoading().observe(this) {
+            if (it) {
+                binding.progressBar1.root.visible()
+            } else {
+                binding.progressBar1.root.gone()
+            }
+        }
     }
 
 

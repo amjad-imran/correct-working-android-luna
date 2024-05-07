@@ -1148,6 +1148,8 @@
     <string name="text_next_estimated_date_for_period_start_will_be_in">Next Estimated Date for period start will be in</string>
     <string name="text_follicular">follicular</string>
     <string name="text_luteal">luteal</string>
+    <string name="text_cycle_tracker">Cycle tracker</string>
+    <string name="text_ovulation_in">Ovulation in</string>
 
 
 </resources>

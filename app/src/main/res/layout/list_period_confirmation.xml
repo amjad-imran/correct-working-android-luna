@@ -11,8 +11,8 @@
         android:layout_height="0dp"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/back_track_your_health"
-        app:layout_constraintBottom_toBottomOf="@+id/tvRemindMeLater"
+        android:src="@drawable/back_got_your_period"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -22,8 +22,8 @@
         android:id="@+id/ivCross"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:alpha="0.6"
         android:src="@drawable/ic_close_dash_alert"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,9 +34,9 @@
         style="@style/H5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="@string/text_track_your_cycle"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="@dimen/side_margin"
+        android:layout_marginTop="16dp"
+        android:text="Got your period?"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,38 +48,39 @@
         android:layout_marginStart="@dimen/side_margin"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="@dimen/side_margin"
-        android:gravity="center"
-        android:text="@string/text_track_your_cycle_desc"
+        android:text="Today’s your predicted first day."
         android:textColor="@color/white_64"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
     <Button
-        android:id="@+id/btnGetStarted"
+        android:id="@+id/btnNo"
         style="@style/SecondaryFMHButtonStyle"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_marginStart="@dimen/side_margin"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="@dimen/side_margin"
-        android:text="@string/text_get_started"
+        android:layout_marginBottom="16dp"
+        android:text="@string/text_no"
         app:backgroundTint="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnYes"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView92" />
 
-
-    <TextView
-        android:id="@+id/tvRemindMeLater"
-        style="@style/H6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="12dp"
-        android:paddingBottom="16dp"
-        android:text="@string/text_remind_me_later"
-        android:textColor="@color/carolina_blue"
+    <Button
+        android:id="@+id/btnYes"
+        style="@style/SecondaryFMHButtonStyle"
+        android:layout_width="0dp"
+        android:layout_marginStart="@dimen/side_margin"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="@dimen/side_margin"
+        android:text="@string/text_yes"
+        app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnGetStarted" />
+        app:layout_constraintStart_toEndOf="@id/btnNo"
+        app:layout_constraintTop_toBottomOf="@+id/textView92" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
