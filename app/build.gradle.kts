@@ -226,7 +226,6 @@ dependencies {
 //    //Custom Calendar for Activity
     implementation(platform(Firebase.bom))
     implementation("androidx.paging:paging-common-ktx:3.1.1")
-    implementation("androidx.activity:activity:1.8.0")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.2")
     implementation("com.github.grapesnberries:curlloggerinterceptor:0.1")
 
