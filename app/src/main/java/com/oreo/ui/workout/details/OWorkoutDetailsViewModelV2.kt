@@ -244,7 +244,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             val distance = dataUnitConverter.formatDistance(
                 distanceToUse?.toInt() ?: 0, sessionManager.unit
             )
-            return Triple(distance, if (sessionManager.isMetric()) "km" else "Mi", "Total Distance")
+            return Triple(distance, if (sessionManager.isMetric()) "km" else "mi", "Total Distance")
 
         } else if (data.calories != null && data.calories > 0L) {
             return Triple(data.calories.toString(), "Kcal", "Total Calories")

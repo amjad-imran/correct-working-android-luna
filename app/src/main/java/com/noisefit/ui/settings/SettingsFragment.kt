@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSettingsBinding
 import com.noisefit.ui.profile.ProfileEditViewModel
+import com.noisefit_commans.models.Units
 import com.noisefit_commans.ui.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -20,7 +21,12 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(FragmentSettingsB
 
         binding.toolbar.tvTitle.text = getString(R.string.text_settings)
 
-        binding.lytGroup1.tvUnitValue.text = if (viewModel.isMetric()) {
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.lytGroup1.tvUnitValue.text = if (viewModel.getUnitValue() == Units.METRIC) {
             getString(R.string.text_metric)
         } else {
             getString(R.string.text_imperial)
