@@ -30,7 +30,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvHeader"
             app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp"
-            tools:src="@drawable/bg_dummy_placeholder" />
+            android:src="@drawable/ic_fmh_w_5" />
 
         <TextView
             android:id="@+id/tvPrivacy"

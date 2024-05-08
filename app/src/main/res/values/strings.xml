@@ -1155,6 +1155,7 @@
     <string name="text_symptoms">Symptoms</string>
     <string name="text_cycle_log">Cycle Log</string>
     <string name="text_log_period">Log Period</string>
+    <string name="text_calender">Calender</string>
 
 
 </resources>

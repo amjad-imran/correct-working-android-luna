@@ -53,6 +53,13 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
             )
 
         }
+        binding.ivLogAdd.setOnClickListener{
+            navigateUpSafe()
+            setFragmentResult(
+                CYCLE_LOG_SAVE,
+                bundleOf("agree" to false)
+            )
+        }
     }
 
     override fun subscribeObservers() {
