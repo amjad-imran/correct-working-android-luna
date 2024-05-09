@@ -74,10 +74,9 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         }
 
         binding.lytChatBox.chatEtx.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
                 val message = binding.lytChatBox.chatEtx.text.toString()
                 if (message.isNotEmpty()) {
-
 
                     viewModel.addSentMessage(message)
                     viewModel.addReceivedMessage("", true)
@@ -117,6 +116,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         viewModel.chatGptOverview.observe(this) {
             it?.let {
                 mAdapter.items = it
+                binding.rv.scrollToPosition(it.size - 1)
             }
         }
     }
