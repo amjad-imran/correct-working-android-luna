@@ -8,6 +8,7 @@ import com.noisefit.data.remote.base.Resource
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.data.model.ChatGptOverview
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
@@ -20,9 +21,11 @@ import javax.inject.Inject
 class ChatGptViewModel
 @Inject constructor(
     val sessionManager: SessionManager,
+    val localDataStore: DataStoredInterface,
     val oreoDeviceRepository: OreoDeviceRepository
 ) : BaseViewModel() {
 
+    private val userImage = localDataStore.getUser()?.imageUrl
     private val _chatGptOverview = MutableLiveData<ArrayList<ChatGptOverview>>()
     val chatGptOverview: LiveData<ArrayList<ChatGptOverview>>
         get() = _chatGptOverview
@@ -30,7 +33,7 @@ class ChatGptViewModel
 
     fun addSentMessage(message: String) {
         val messages = _chatGptOverview.value ?: ArrayList()
-        messages.add(ChatGptOverview.SentMessage(message))
+        messages.add(ChatGptOverview.SentMessage(message, userImage))
         _chatGptOverview.value = (messages)
         //_chatGptOverview.postValue(messages)
     }

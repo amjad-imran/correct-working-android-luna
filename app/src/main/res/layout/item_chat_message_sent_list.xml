@@ -13,13 +13,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/logo"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginEnd="@dimen/dimen_8dp"
-            android:src="@drawable/ic_luna_logo_short"
-
+            app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView"
             app:layout_constraintEnd_toStartOf="@+id/tvMessage"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

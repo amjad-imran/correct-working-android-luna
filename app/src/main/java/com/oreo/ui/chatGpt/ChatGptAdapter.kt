@@ -11,6 +11,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ItemChatMessageRecivedListBinding
 import com.noisefit.luna.databinding.ItemChatMessageSentListBinding
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChatGptOverview
@@ -115,6 +116,7 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
             position: Int
         ) {
 
+            binding.logo.loadImage(binding.logo.context, data.userImage)
             binding.tvMessage.text = data.message
         }
     }
@@ -134,6 +136,7 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
                     lottie.setAnimation(R.raw.anim_heart_measure)
                     lottie.playAnimation()
                     tvMessage.gone()
+                    logo.gone()
                 }
 
             } else {
@@ -142,7 +145,7 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
                     tvMessage.visible()
                     tvMessage.text = data.message
 //                    binding.tvMessage.animateText(data.message)
-
+                    logo.visible()
 
 //                    tvMessage.animateTextWithUnderscore(data.message)
                 }
