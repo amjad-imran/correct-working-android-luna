@@ -28,10 +28,13 @@
         android:id="@+id/rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:paddingBottom="8dp"
+        android:clipToPadding="false"
         app:layout_constraintBottom_toTopOf="@+id/lytChatBox"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        tools:visibility="visible" />
 
     <include
         android:id="@+id/lytChatBox"
@@ -42,16 +45,18 @@
         android:layout_marginBottom="@dimen/dimen_40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
 
     <include
         android:id="@+id/lytChatWelcome"
         layout="@layout/layout_chat_welcome_screen"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-         app:layout_constraintBottom_toBottomOf="@+id/lytChatBox"
+        app:layout_constraintBottom_toBottomOf="@+id/lytChatBox"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        tools:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -32,7 +32,7 @@ class ChatGptViewModel
         val messages = _chatGptOverview.value ?: ArrayList()
         messages.add(ChatGptOverview.SentMessage(message))
         _chatGptOverview.value = (messages)
-        _chatGptOverview.postValue(messages)
+        //_chatGptOverview.postValue(messages)
     }
 
     fun addReceivedMessage(message: String, thinking: Boolean) {

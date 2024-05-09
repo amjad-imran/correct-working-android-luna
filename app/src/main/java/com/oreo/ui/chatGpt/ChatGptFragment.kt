@@ -81,7 +81,6 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
                     viewModel.addSentMessage(message)
                     viewModel.addReceivedMessage("", true)
                     binding.lytChatBox.chatEtx.setText("")
-
                     viewModel.askQuestion(message)
                 }
                 true
