@@ -14,7 +14,7 @@ import com.oreo.data.model.ChatGptOverview
 
 
 class ChatGptAdapter :
-    RecyclerView.Adapter<HallOfFameRecyclerViewHolder>() {
+    RecyclerView.Adapter<ChatGptViewItemsHolder>() {
 
 
     var items = listOf<ChatGptOverview>()
@@ -44,9 +44,9 @@ class ChatGptAdapter :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): HallOfFameRecyclerViewHolder {
+    ): ChatGptViewItemsHolder {
         return when (viewType) {
-            R.layout.item_chat_message_sent_list -> HallOfFameRecyclerViewHolder.ChatMessageSentViewHolder(
+            R.layout.item_chat_message_sent_list -> ChatGptViewItemsHolder.ChatMessageSentViewHolder(
                 ItemChatMessageSentListBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
@@ -54,7 +54,7 @@ class ChatGptAdapter :
                 )
             )
 
-            R.layout.item_chat_message_recived_list -> HallOfFameRecyclerViewHolder.ChatMessageReceivedViewHolder(
+            R.layout.item_chat_message_recived_list -> ChatGptViewItemsHolder.ChatMessageReceivedViewHolder(
                 ItemChatMessageRecivedListBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
@@ -67,18 +67,18 @@ class ChatGptAdapter :
         }
     }
 
-    override fun onBindViewHolder(holder: HallOfFameRecyclerViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ChatGptViewItemsHolder, position: Int) {
         holder.itemClickListener = itemClickListener
         fun update() {
 
         }
         when (holder) {
-            is HallOfFameRecyclerViewHolder.ChatMessageSentViewHolder -> holder.bind(
+            is ChatGptViewItemsHolder.ChatMessageSentViewHolder -> holder.bind(
                 items[position] as ChatGptOverview.SentMessage,
                 position
             )
 
-            is HallOfFameRecyclerViewHolder.ChatMessageReceivedViewHolder -> holder.bind(
+            is ChatGptViewItemsHolder.ChatMessageReceivedViewHolder -> holder.bind(
                 items[position] as ChatGptOverview.ReceivedMessage,
                 position
             )
@@ -99,14 +99,14 @@ class ChatGptAdapter :
 }
 
 
-sealed class HallOfFameRecyclerViewHolder(binding: ViewBinding) :
+sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     var itemClickListener: ((view: View, item: ChatGptOverview, position: Int) -> Unit)? =
         null
 
     class ChatMessageSentViewHolder(private val binding: ItemChatMessageSentListBinding) :
-        HallOfFameRecyclerViewHolder(binding) {
+        ChatGptViewItemsHolder(binding) {
         fun bind(
             data: ChatGptOverview.SentMessage,
             position: Int
@@ -117,7 +117,7 @@ sealed class HallOfFameRecyclerViewHolder(binding: ViewBinding) :
     }
 
     class ChatMessageReceivedViewHolder(private val binding: ItemChatMessageRecivedListBinding) :
-        HallOfFameRecyclerViewHolder(binding) {
+        ChatGptViewItemsHolder(binding) {
 
         fun bind(
             data: ChatGptOverview.ReceivedMessage,
