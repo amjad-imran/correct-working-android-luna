@@ -1,8 +1,10 @@
 package com.oreo.ui.chatGpt
 
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.noisefit.luna.R
@@ -10,6 +12,7 @@ import com.noisefit.luna.databinding.ItemChatMessageRecivedListBinding
 import com.noisefit.luna.databinding.ItemChatMessageSentListBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChatGptOverview
 
 
@@ -25,7 +28,7 @@ class ChatGptAdapter :
 //            }else{
 //                notifyDataSetChanged()
 //            }notifyItemInserted(mData.size());
-//            notifyItemInserted(value.size)
+//            notifyItemChanged(items.size)
             notifyDataSetChanged()
 
         }
@@ -138,11 +141,46 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
                     lottie.gone()
                     tvMessage.visible()
                     tvMessage.text = data.message
+//                    binding.tvMessage.animateText(data.message)
+
+
+//                    tvMessage.animateTextWithUnderscore(data.message)
                 }
+
             }
 
 
         }
+
+        fun TextView.animateTextWithUnderscore(mText: CharSequence, delayMillis: Long = 15) {
+            text = null
+            var mTextView = this
+            var index = 0
+            val handler = Handler()
+
+            val typewriterRunnable = object : Runnable {
+                override fun run() {
+                    val newText = "${mText.subSequence(0, index)}_"// <-- underscore is optioanal
+                    text = newText
+
+                    if (index < mText.length) {
+                        handler.postDelayed(this, delayMillis)
+                    }
+                    index++
+                    LOGS.d("SDAsdasdasdasdasda $index --> ${mText.length + 1}")
+                    if (index == mText.length) {
+                        LOGS.d("SDAsdasdasdasdasda")
+                        mTextView.clearAnimation()
+                        text = null
+
+                    }
+                }
+            }
+
+            handler.postDelayed(typewriterRunnable, delayMillis)
+        }
+
+
     }
 
 
