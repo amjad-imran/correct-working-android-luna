@@ -619,4 +619,9 @@
         android:id="@+id/bottomSheetLowBatteryFirmware"
         android:name="com.noisefit.ui.onboarding.setup.firmware.BottomSheetLowBatteryFirmware"
         android:label="BottomSheetLowBatteryFirmware" />
+    <fragment
+        android:id="@+id/chatGptFragment"
+        android:name="com.oreo.ui.chatGpt.ChatGptFragment"
+        android:label="fragment_chat_gpt"
+        tools:layout="@layout/fragment_chat_gpt" />
 </navigation>

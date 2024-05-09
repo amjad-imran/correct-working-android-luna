@@ -1073,6 +1073,9 @@
     <string name="text_cadence" tools:ignore="ExtraTranslation">Cadence</string>
     <string name="text_recovery_time" tools:ignore="ExtraTranslation">Recovery Time</string>
     <string name="text_training_effects" tools:ignore="ExtraTranslation">Training Effects</string>
+    <string name="text_talk_anything_to_luna_your_personal_24_7_health_companion">Talk anything to Luna, your personal 24*7 health companion</string>
+    <string name="text_the_luna_ring_is_crafted_by_top_minds_in_sports_science_engineering_and_data_science_it_processes_huge_volumes_of_data_over_70_bio_markers_everyday_the_luna_ai_is_developed_with_inputs_from_leading_fitness_and_wellness_experts">The Luna Ring is crafted by top minds in Sports Science, Engineering and Data Science. It processes huge volumes of data over 70 bio-markers everyday. The Luna AI is developed with inputs from leading fitness and wellness experts.</string>
+    <string name="text_tell_us_what_s_happening">+ Tell us what’s happening</string>
 
 
 </resources>

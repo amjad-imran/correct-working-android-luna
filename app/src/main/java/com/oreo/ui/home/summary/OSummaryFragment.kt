@@ -24,7 +24,6 @@ import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChartModel
-import com.oreo.receiver.workManager.HealthOverviewDataType
 import com.oreo.ui.custom.ScrollListener
 import com.oreo.ui.home.summary.paginate.SummaryPagerAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -182,7 +181,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         binding.lytHeader.profileView1.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_hamburger_click)
-            navigate(R.id.OMyProfileFragment)
+            navigate(R.id.chatGptFragment)
 //            navigate(R.id.napDetails)
         }
 
