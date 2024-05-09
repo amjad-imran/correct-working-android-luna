@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="@dimen/dimen_8dp"
+    android:layout_marginStart="@dimen/dimen_16dp"
     android:layout_marginTop="@dimen/dimen_8dp"
-    android:layout_marginEnd="64dp">
+    android:layout_marginEnd="16dp">
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottie"
@@ -22,8 +22,7 @@
         style="@style/S14"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/back_modal_new_optimal_sleep"
-        android:padding="@dimen/dimen_8dp"
+        android:lineSpacingExtra="6sp"
         android:textColor="@color/white_80"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

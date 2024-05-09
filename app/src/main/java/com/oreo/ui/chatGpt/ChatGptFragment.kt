@@ -6,6 +6,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.databinding.FragmentChatGptBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.disable

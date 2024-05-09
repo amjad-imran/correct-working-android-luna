@@ -24,11 +24,20 @@ class ChatGptAdapter :
 //                notifyItemChanged(refreshPosition!!)
 //            }else{
 //                notifyDataSetChanged()
-//            }
+//            }notifyItemInserted(mData.size());
+//            notifyItemInserted(value.size)
             notifyDataSetChanged()
 
         }
 
+
+//    override fun onCurrentListChanged(previousList: MutableList<Item>, currentList: MutableList<Item>) {
+//        super.onCurrentListChanged(previousList, currentList)
+//        //E.g. check if new item has been added
+//        if (currentList.size == previousList.size + 1) {
+//            recyclerView.scrollToPosition(currentList.size - 1)
+//        }
+//    }
     var itemClickListener: ((view: View, item: ChatGptOverview, position: Int) -> Unit)? =
         null
 

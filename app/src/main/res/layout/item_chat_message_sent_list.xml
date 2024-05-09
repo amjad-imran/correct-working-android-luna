@@ -3,20 +3,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="64dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginStart="@dimen/dimen_16dp"
     android:layout_marginTop="@dimen/dimen_8dp"
-    android:layout_marginEnd="@dimen/dimen_8dp"
-    android:background="@drawable/back_modal_new">
+    android:layout_marginEnd="@dimen/dimen_16dp">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginEnd="@dimen/dimen_8dp"
+        android:src="@drawable/ic_luna_logo_short"
+        app:layout_constraintEnd_toStartOf="@+id/tvMessage"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvMessage"
         style="@style/S14"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/dimen_8dp"
+        android:layout_marginStart="@dimen/dimen_8dp"
+        android:lineSpacingExtra="6sp"
         android:textColor="@color/white_80"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="hey  adsjads asdj" />
 </androidx.constraintlayout.widget.ConstraintLayout>
