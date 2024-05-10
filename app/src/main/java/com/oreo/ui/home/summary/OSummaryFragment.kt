@@ -181,7 +181,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         binding.lytHeader.profileView1.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_hamburger_click)
-            navigate(R.id.chatGptFragment)
+            navigate(R.id.OMyProfileFragment)
 //            navigate(R.id.napDetails)
         }
 
@@ -232,7 +232,8 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         binding.lytHeader.profileView1.setOnLongClickListener {
             if (BuildConfig.DEBUG) {
-                navigate(R.id.logsDisplayFragment)
+                navigate(R.id.chatGptFragment)
+                //navigate(R.id.logsDisplayFragment)
             }
             return@setOnLongClickListener true
         }
@@ -315,18 +316,14 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
         }
 
 
+        /* viewModel.sessionManager.showSyncOfflineData.observe(viewLifecycleOwner) {
+             it.getContent()?.let { event ->
+                 if (event == HealthOverviewDataType.AUTO_WORKOUT) {
+                     //viewModel.getDashboardDataFromServer(false)
+                 }
+             }
 
-
-
-
-       /* viewModel.sessionManager.showSyncOfflineData.observe(viewLifecycleOwner) {
-            it.getContent()?.let { event ->
-                if (event == HealthOverviewDataType.AUTO_WORKOUT) {
-                    //viewModel.getDashboardDataFromServer(false)
-                }
-            }
-
-        }*/
+         }*/
 
 
 

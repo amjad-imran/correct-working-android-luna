@@ -36,4 +36,11 @@ class OreoDeviceRepositoryImpl(
         }
     }
 
+    override suspend fun pollForAnswer(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<ChatGptResponse>?>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/chatgpt/message/polling"
+            remoteDataSource.pollForAnswer(url, jsonObject)
+
+        }
+    }
 }

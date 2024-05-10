@@ -896,6 +896,12 @@ interface NetworkService {
         @Body requestObject: JsonObject
     ): BaseApiResponse<ChatGptResponse>
 
+    @POST
+    suspend fun pollForAnswer(
+        @Url url: String,
+        @Body requestObject: JsonObject
+    ): BaseApiResponse<ChatGptResponse>
+
     @GET
     suspend fun getWorkoutDetails(
         @Url url: String

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import com.airbnb.lottie.LottieDrawable
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ItemChatMessageRecivedListBinding
 import com.noisefit.luna.databinding.ItemChatMessageSentListBinding
@@ -133,7 +134,8 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
 
                 binding.apply {
                     lottie.visible()
-                    lottie.setAnimation(R.raw.anim_heart_measure)
+                    lottie.repeatCount = LottieDrawable.INFINITE
+                    lottie.setAnimation(R.raw.anim_ai_thinking)
                     lottie.playAnimation()
                     tvMessage.gone()
                     logo.gone()

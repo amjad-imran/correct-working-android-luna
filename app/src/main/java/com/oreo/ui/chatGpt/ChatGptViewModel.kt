@@ -1,5 +1,6 @@
 package com.oreo.ui.chatGpt
 
+import android.os.Handler
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -30,6 +31,9 @@ class ChatGptViewModel
     val chatGptOverview: LiveData<ArrayList<ChatGptOverview>>
         get() = _chatGptOverview
 
+    var assistantId: String? = null
+    var threadId: String? = null
+
 
     fun addSentMessage(message: String) {
         val messages = _chatGptOverview.value ?: ArrayList()
@@ -57,16 +61,13 @@ class ChatGptViewModel
 
 
     fun askQuestion(prompt: String) {
-
-        /*
-         Timer("DelayConnection", false)
-                            .schedule(500) {
-                                isInitSDK = true
-                                baseInitializeCallbacks?.serviceConnected()
-                            }
-         */
         val jsonObject = JsonObject()
         jsonObject.addProperty("message", prompt)
+        if (assistantId != null && threadId != null) {
+            jsonObject.addProperty("assistant_id", assistantId)
+            jsonObject.addProperty("thread_id", threadId)
+        }
+
         viewModelScope.launch {
             oreoDeviceRepository.askQuestionToChatGpt(jsonObject).collect { resource ->
                 when (resource) {
@@ -97,7 +98,71 @@ class ChatGptViewModel
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            it.reply?.let { it1 -> addReceivedMessage(it1, false) }
+                            if (it.assistant_id != null && it.thread_id != null && it.run_id != null) {
+                                assistantId = it.assistant_id
+                                threadId = it.thread_id
+                                callAfterSomeTime(it.assistant_id, it.thread_id, it.run_id)
+                            } else {
+                                sendMessage("Something went wrong")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun callAfterSomeTime(assistantId: String, threadId: String, runId: String) {
+        Handler().postDelayed({
+            pollAnswer(assistantId, threadId, runId)
+        }, 2000)
+    }
+
+    fun pollAnswer(assistantId: String, threadId: String, runId: String) {
+
+        val jsonObject = JsonObject()
+        jsonObject.addProperty("assistant_id", assistantId)
+        jsonObject.addProperty("thread_id", threadId)
+        jsonObject.addProperty("run_id", runId)
+        jsonObject.addProperty("cancel_run", false)
+
+        viewModelScope.launch {
+            oreoDeviceRepository.pollForAnswer(jsonObject).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        pollAnswer(assistantId, threadId, runId)
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            if (it.status.equals("completed", true)) {
+                                it.reply?.let { reply ->
+                                    addReceivedMessage(reply, false)
+                                }
+                            } else {
+                                callAfterSomeTime(assistantId, threadId, runId)
+                            }
                         }
                     }
                 }
