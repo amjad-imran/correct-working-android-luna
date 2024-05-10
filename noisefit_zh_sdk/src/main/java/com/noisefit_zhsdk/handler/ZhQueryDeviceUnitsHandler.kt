@@ -5,7 +5,10 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.media.AudioManager
+import android.os.Build
 import android.telephony.SmsManager
+import android.text.TextUtils
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import com.google.gson.Gson
 import com.noisefit_commans.NoisefitApplication
@@ -30,12 +33,12 @@ import com.noisefit_commans.models.StockSymbol
 import com.noisefit_commans.models.StockSymbolList
 import com.noisefit_commans.models.SwitchSetting
 import com.noisefit_commans.models.WorldClockList
-import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.FileLogsUtils
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.LocationClientClass
 import com.noisefit_commans.utils.MusicUtil
+import com.noisefit_zhsdk.BuildConfig
 import com.noisefit_zhsdk.base.ZhApplicationHandler
 import com.zh.ble.wear.protobuf.MusicProtos
 import com.zhapp.ble.ControlBleTools
@@ -1163,6 +1166,9 @@ constructor(
 
         ControlBleTools.getInstance().deviceLogCallBack = object : DeviceLogCallBack {
             override fun onLogI(tag: String?, msg: String?, p2: String?) {
+                if (BuildConfig.DEBUG) {
+                    if (TextUtils.equals(Build.BRAND, "nubia")) Log.i(msg, p2 ?: "")
+                }
                 FileLogsUtils.saveILogs(
                     noiseFitDevice,
                     "$tag $msg",
@@ -1172,6 +1178,9 @@ constructor(
             }
 
             override fun onLogV(tag: String?, msg: String?, p2: String?) {
+                if (BuildConfig.DEBUG) {
+                    if (TextUtils.equals(Build.BRAND, "nubia")) Log.v(msg, p2 ?: "")
+                }
                 FileLogsUtils.saveWLogs(
                     noiseFitDevice,
                     "$tag $msg",
@@ -1181,6 +1190,9 @@ constructor(
             }
 
             override fun onLogE(tag: String?, msg: String?, p2: String?) {
+                if (BuildConfig.DEBUG) {
+                    if (TextUtils.equals(Build.BRAND, "nubia")) Log.e(msg, p2 ?: "")
+                }
                 FileLogsUtils.saveELogs(
                     noiseFitDevice,
                     "$tag $msg",
@@ -1190,6 +1202,9 @@ constructor(
             }
 
             override fun onLogD(tag: String?, msg: String?, p2: String?) {
+                if (BuildConfig.DEBUG) {
+                    if (TextUtils.equals(Build.BRAND, "nubia")) Log.d(msg, p2 ?: "")
+                }
                 FileLogsUtils.saveDLogs(
                     noiseFitDevice,
                     "$tag $msg",
@@ -1199,6 +1214,9 @@ constructor(
             }
 
             override fun onLogW(tag: String?, msg: String?, p2: String?) {
+                if (BuildConfig.DEBUG) {
+                    if (TextUtils.equals(Build.BRAND, "nubia")) Log.w(msg, p2 ?: "")
+                }
                 FileLogsUtils.saveWLogs(
                     noiseFitDevice,
                     "$tag $msg",
@@ -1212,8 +1230,13 @@ constructor(
     }
 
     override fun queryBatteryPower() {
-        zhService?.getDeviceBattery(null)
-        AppLogs.sendAppLogs("sent request for battery power")
+        //TODO ZH FIX
+        // When the App enters the foreground, real-time data change reporting has been
+        // enabled through setRealTimeDataState(true). If the power and charging status change,
+        // realDataCallback will report the latest power data to the app in real time,
+        // and there is no need to actively call it.
+//        zhService?.getDeviceBattery(null)
+//        AppLogs.sendAppLogs("sent request for battery power")
     }
 
     override fun getDoNotDisturbData() {
