@@ -6,17 +6,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <View
+        <!--<View
             android:id="@+id/viewStroke"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginEnd="@dimen/side_margin"
             android:background="@drawable/back_modal_round_white_2"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible" />
+            tools:visibility="gone" />-->
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivItem"
@@ -24,11 +24,11 @@
             android:layout_height="60dp"
             android:padding="2dp"
             android:scaleType="centerCrop"
+            android:layout_marginEnd="@dimen/side_margin"
             android:src="@drawable/circle_black"
-            app:layout_constraintBottom_toBottomOf="@+id/viewStroke"
-            app:layout_constraintEnd_toEndOf="@id/viewStroke"
-            app:layout_constraintStart_toStartOf="@+id/viewStroke"
-            app:layout_constraintTop_toTopOf="@id/viewStroke"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView"
             app:strokeColor="#2effffff"
             app:strokeWidth="1dp"
@@ -42,7 +42,7 @@
             app:layout_constraintEnd_toEndOf="@id/ivItem"
             app:layout_constraintTop_toTopOf="@id/ivItem"
             tools:ignore="ContentDescription"
-            tools:src="@drawable/ic_cycle_tick"
+            android:src="@drawable/ic_cycle_tick"
             tools:visibility="visible" />
 
         <TextView
@@ -51,9 +51,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="@id/viewStroke"
-            app:layout_constraintStart_toStartOf="@id/viewStroke"
-            app:layout_constraintTop_toBottomOf="@id/viewStroke"
+            app:layout_constraintEnd_toEndOf="@id/ivItem"
+            app:layout_constraintStart_toStartOf="@id/ivItem"
+            app:layout_constraintTop_toBottomOf="@id/ivItem"
             tools:text="None" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

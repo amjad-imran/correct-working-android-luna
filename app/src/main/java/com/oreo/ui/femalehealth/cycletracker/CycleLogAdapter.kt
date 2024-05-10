@@ -4,16 +4,30 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.databinding.ItemCycleLogBinding
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.visible
 import com.oreo.data.model.FlowLog
 
-class CycleLogAdapter() :
+class CycleLogAdapter(val mListener: OnLogItemClick) :
     RecyclerView.Adapter<CycleLogAdapter.ViewHolder>() {
     private var mDataSet = ArrayList<FlowLog>()
+    var lastSelectedPos = -1
 
     inner class ViewHolder(val binding: ItemCycleLogBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: FlowLog) {
-
+            binding.ivItem.loadImage(binding.ivItem.context, data.image)
+            binding.tvTitle.text = data.title
+            if (lastSelectedPos == bindingAdapterPosition) {
+                binding.ivTick.visible()
+            } else
+                binding.ivTick.gone()
+            binding.ivItem.setOnClickListener {
+                lastSelectedPos = bindingAdapterPosition
+                mListener.onItemClick(data, bindingAdapterPosition)
+                notifyDataSetChanged()
+            }
         }
     }
 
@@ -42,5 +56,9 @@ class CycleLogAdapter() :
     }
 
 
+}
+
+interface OnLogItemClick {
+    fun onItemClick(data: FlowLog, position: Int)
 }
 

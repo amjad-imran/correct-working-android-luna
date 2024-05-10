@@ -12,7 +12,7 @@ data class CycleLogDataModel(
 
 @Parcelize
 data class FlowLog(
-    val image: String? = null,
+    val image: Int? = null,
     val title: String? = null,
     val isChecked: Boolean = false
 ) : Parcelable
