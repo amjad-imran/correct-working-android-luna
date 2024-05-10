@@ -39,4 +39,8 @@ class CycleLogViewModel @Inject constructor() : BaseViewModel() {
         childData.symptomsData = symptomsListData
         return childData
     }
+
+    fun onCalendarDateSelected(selectedDate: String) {
+        //calender date set
+    }
 }

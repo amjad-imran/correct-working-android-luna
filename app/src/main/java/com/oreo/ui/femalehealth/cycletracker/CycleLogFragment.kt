@@ -1,7 +1,10 @@
 package com.oreo.ui.femalehealth.cycletracker
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.kizitonwose.calendar.core.CalendarDay
@@ -15,8 +18,13 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.CalendarDayFmhOnboardBinding
 import com.noisefit.luna.databinding.FragmentCycleLogBinding
 import com.noisefit.luna.databinding.LayoutCycleLogCalHeaderBinding
+import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -75,8 +83,30 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
             }
         binding.calendar.scrollToDate(currentDay)
     }
+    private var resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+
+                val selectedDate =
+                    data?.getStringExtra("selected_date") ?: return@registerForActivityResult
+
+                mViewModel.onCalendarDateSelected(selectedDate)
+
+                LOGS.d("moveToPosition Selected Date  :${selectedDate}")
+            }
+        }
 
     override fun initListener() {
+        binding.lytToolbar.view1.visible()
+        binding.lytToolbar.ivAddFriend.invisible()
+        binding.lytToolbar.view1.loadImage(binding.lytToolbar.view1.context, R.drawable.ic_log_settings)
+        binding.lytToolbar.tvTitle.text=getString(R.string.text_calender)
+
+        binding.lytToolbar.backBtn.setOnClickListener {
+            navigateUpSafe()
+        }
+
         binding.btnLog.setOnClickListener {
             setFragmentResultListener(
                 CYCLE_LOG_SAVE
@@ -84,6 +114,14 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
                 val agree = bundle.getBoolean("agree")
                 if (agree) {
                 //
+                }
+                else{
+                        resultLauncher.launch(
+                            LogPeriodActivity.getStartIntent(
+                                requireContext(),
+                            )
+                        )
+
                 }
             }
             navigate(R.id.bottomSheetCycleLog, Bundle().apply {

@@ -14,6 +14,8 @@ import com.noisefit.luna.databinding.CalenderCycleTrackerDayBinding
 import com.noisefit.luna.databinding.FragmentCycleTrackerBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
@@ -101,6 +103,14 @@ class CycleTrackerFragment :
     }
 
     override fun initListener() {
+        binding.toolbar.view1.visible()
+        binding.toolbar.ivAddFriend.invisible()
+        binding.toolbar.view1.loadImage(binding.toolbar.view1.context, R.drawable.ic_ct_calender)
+        binding.toolbar.tvTitle.text=getString(R.string.text_cycle_tracker)
+
+        binding.toolbar.backBtn.setOnClickListener {
+            navigateUpSafe()
+        }
         initInsightUI()
         binding.toolbar.backBtn.setOnClickListener {
             navigateUpSafe()

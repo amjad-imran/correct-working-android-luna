@@ -8,7 +8,7 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.noisefit.luna" />
+                  <option name="appId" value="com.asif.bmi_calculator_app" />
                 </ConnectionSetting>
               </option>
               <option name="failureTypes">

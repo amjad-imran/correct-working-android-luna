@@ -141,28 +141,28 @@ class FemaleHealthSplashFragment :
         dataList.add(
             StressSplashModel(
                 getString(R.string.text_fmh_w_title_1),
-                R.drawable.image_stress_w_1,
+                R.drawable.ic_fmh_w_1,
                 getString(R.string.text_fmh_w_content_1)
             )
         )
         dataList.add(
             StressSplashModel(
                 getString(R.string.text_fmh_w_title_2),
-                R.drawable.image_stress_w_2,
+                R.drawable.ic_fmh_w_2,
                 getString(R.string.text_fmh_w_content_2)
             )
         )
         dataList.add(
             StressSplashModel(
                 getString(R.string.text_fmh_w_title_3),
-                R.drawable.image_stress_w_3,
+                R.drawable.ic_fmh_w_3,
                 getString(R.string.text_fmh_w_content_3)
             )
         )
         dataList.add(
             StressSplashModel(
                 getString(R.string.text_fmh_w_title_4),
-                R.drawable.image_stress_w_4,
+                R.drawable.ic_fmh_w_4,
                 getString(R.string.text_fmh_w_content_4)
             )
         )
