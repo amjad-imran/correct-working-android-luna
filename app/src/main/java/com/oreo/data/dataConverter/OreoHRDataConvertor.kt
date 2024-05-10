@@ -140,7 +140,7 @@ constructor(
 
                     if (nextItemPos == sortedSection.size) break
 
-                    if (sortedSection[innerLoop].end + 1 == sortedSection[innerLoop + 1].start ||
+                    if (sortedSection[innerLoop].end + 1 >= sortedSection[innerLoop + 1].start ||
                         sortedSection[innerLoop].start == sortedSection[innerLoop + 1].start
                     ) {
                         sectionEnd = sortedSection[innerLoop + 1].end
@@ -171,6 +171,9 @@ constructor(
 
             current++
         }
+
+        //LOGS.d("SECTIONS___ $sortedSection \n $combinedSection")
+
 
         return combinedSection
 
