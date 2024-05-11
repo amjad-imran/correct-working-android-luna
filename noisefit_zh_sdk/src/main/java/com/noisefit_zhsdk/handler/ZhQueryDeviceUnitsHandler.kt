@@ -40,6 +40,7 @@ import com.noisefit_commans.utils.LocationClientClass
 import com.noisefit_commans.utils.MusicUtil
 import com.noisefit_zhsdk.BuildConfig
 import com.noisefit_zhsdk.base.ZhApplicationHandler
+import com.noisefit_zhsdk.log.ZhBleLogUtils
 import com.zh.ble.wear.protobuf.MusicProtos
 import com.zhapp.ble.ControlBleTools
 import com.zhapp.ble.bean.BodyTemperatureSettingBean
@@ -491,7 +492,6 @@ constructor(
                         QueryCallback.FirmwareVersionObtained(DeviceFirmware(version = WatchInfoGlobals.firmwareVersion))
                     )
                 }
-
 
 
                 //AppLogs.sendAppLogs("Get device info")
@@ -1163,6 +1163,11 @@ constructor(
             }
         }
 
+        ZhBleLogUtils.initLogger(
+            NoisefitApplication.context!!.applicationContext,
+            isWriteLog = true,
+            isRelease = false
+        )
 
         ControlBleTools.getInstance().deviceLogCallBack = object : DeviceLogCallBack {
             override fun onLogI(tag: String?, msg: String?, p2: String?) {
@@ -1175,6 +1180,7 @@ constructor(
                     p2 ?: "",
                     FileLogsUtils.LogType.Watch
                 )
+                ZhBleLogUtils.bleLog(msg,p2)
             }
 
             override fun onLogV(tag: String?, msg: String?, p2: String?) {
@@ -1187,6 +1193,7 @@ constructor(
                     p2 ?: "",
                     FileLogsUtils.LogType.Watch
                 )
+                ZhBleLogUtils.bleLog(msg,p2)
             }
 
             override fun onLogE(tag: String?, msg: String?, p2: String?) {
@@ -1199,6 +1206,7 @@ constructor(
                     p2 ?: "",
                     FileLogsUtils.LogType.Watch
                 )
+                ZhBleLogUtils.bleLog(msg,p2)
             }
 
             override fun onLogD(tag: String?, msg: String?, p2: String?) {
@@ -1211,6 +1219,7 @@ constructor(
                     p2 ?: "",
                     FileLogsUtils.LogType.Watch
                 )
+                ZhBleLogUtils.bleLog(msg,p2)
             }
 
             override fun onLogW(tag: String?, msg: String?, p2: String?) {
@@ -1223,6 +1232,7 @@ constructor(
                     p2 ?: "",
                     FileLogsUtils.LogType.Watch
                 )
+                ZhBleLogUtils.bleLog(msg,p2)
             }
 
         }
