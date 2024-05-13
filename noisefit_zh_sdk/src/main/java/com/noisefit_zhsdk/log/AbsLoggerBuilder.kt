@@ -15,5 +15,5 @@ abstract class AbsLoggerBuilder {
     //设置文件后缀
     abstract fun setSuffixFlag(flag: String?):AbsLoggerBuilder
     //获取最终产品
-    abstract fun build(): Logger
+    abstract fun build(): ZhLogger
 }

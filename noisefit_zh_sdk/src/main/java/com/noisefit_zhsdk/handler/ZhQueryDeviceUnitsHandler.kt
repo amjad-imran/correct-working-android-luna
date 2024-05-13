@@ -1165,8 +1165,8 @@ constructor(
 
         ZhBleLogUtils.initLogger(
             NoisefitApplication.context!!.applicationContext,
-            isWriteLog = true,
-            isRelease = false
+            isWriteLog = true,  //Whether to write a log file
+            isRelease = false   //Is the log storage path (true inside the system) or (false inside the app)?
         )
 
         ControlBleTools.getInstance().deviceLogCallBack = object : DeviceLogCallBack {

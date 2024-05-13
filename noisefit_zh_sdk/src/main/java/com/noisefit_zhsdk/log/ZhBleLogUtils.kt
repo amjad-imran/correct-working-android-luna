@@ -7,10 +7,10 @@ object ZhBleLogUtils {
 
 
     //蓝牙日志
-    private var bleLogger: Logger? = null
+    private var bleZhLogger: ZhLogger? = null
 
     fun initLogger(context: Context, isWriteLog: Boolean, isRelease: Boolean) {
-        bleLogger = LoggerBuilder(context)
+        bleZhLogger = ZhLoggerBuilder(context)
             .setIsWriteLog(isWriteLog)
             .setExpiredDay(7)
             .setFileDirPath(getDirPath(context, isRelease, "ble"))
@@ -33,12 +33,12 @@ object ZhBleLogUtils {
 
     //region 蓝牙日志
     fun bleLogPath(): String {
-        return bleLogger?.getLogFilePath() ?: ""
+        return bleZhLogger?.getLogFilePath() ?: ""
     }
 
     @JvmStatic
     fun bleLog(tag: String?, msg: String?) {
-        bleLogger?.writeFile(tag, msg)
+        bleZhLogger?.writeFile(tag, msg)
     }
     //endregion
 
