@@ -17,7 +17,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tvDay"
             app:layout_constraintTop_toTopOf="@+id/tvDay"
-            tools:background="@drawable/back_streak_day_highlight_start"/>
+            android:background="@drawable/back_streak_day_highlight_start"/>
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivBackToday"
@@ -41,7 +41,7 @@
             app:layout_constraintEnd_toEndOf="@+id/tvDay"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tvDay"
-            tools:background="@drawable/back_streak_day_highlight_end" />
+            android:background="@drawable/back_streak_day_highlight_end" />
 
         <ImageView
             android:id="@+id/ivBackMid"
@@ -52,7 +52,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tvDay"
-            tools:background="@drawable/back_streak_day_highlight_mid" />
+            android:background="@drawable/back_streak_day_highlight_mid" />
 
         <ImageView
             android:id="@+id/ivBackSingle"
@@ -63,7 +63,7 @@
             app:layout_constraintEnd_toEndOf="@+id/tvDay"
             app:layout_constraintStart_toStartOf="@+id/tvDay"
             app:layout_constraintTop_toTopOf="@+id/tvDay"
-            tools:background="@drawable/back_streak_day_highlight_mid" />
+            android:background="@drawable/back_streak_day_highlight_single" />
 
         <TextView
             android:id="@+id/tvDay"

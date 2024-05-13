@@ -210,6 +210,12 @@ class FMHOnboardingViewModel @Inject constructor(
         return date.plusDays(pDays.toLong() - 1)
     }
 
+    fun calculateStartAndEndPeriodDates() {
+        if (pDays != 0 && selectedPStartDate != null && selectedPEndDate != null) {
+            selectedPEndDate = selectedPStartDate!!.plusDays(pDays.toLong() - 1)
+        }
+    }
+
 }
 
 enum class GoalType {
