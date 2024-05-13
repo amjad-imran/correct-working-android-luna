@@ -1,12 +1,11 @@
 package com.oreo.ui.femalehealth.onboarding
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.noisefit.luna.databinding.FragmentFMHOnboardSetPeriodBinding
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.utils.WheelAdapter
+import com.noisefit_commans.utils.wheel.WheelAdapterPeriod
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -14,8 +13,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class FMHOnboardSetPeriodFragment :
     BaseFragment<FragmentFMHOnboardSetPeriodBinding>(FragmentFMHOnboardSetPeriodBinding::inflate) {
     private val mViewModel: FMHOnboardingViewModel by activityViewModels()
-    private val wheelAdapter: WheelAdapter<String> by lazy {
-        WheelAdapter()
+
+    private val wheelAdapter: WheelAdapterPeriod<String> by lazy {
+        WheelAdapterPeriod()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -24,14 +24,9 @@ class FMHOnboardSetPeriodFragment :
     }
 
     private fun setWheelPicker() {
-        binding.wheelPicker.visibleItemCount = 5//it could not be less then 3
+        binding.wheelPicker.visibleItemCount = 3//it could not be less then 3
         wheelAdapter.data = mViewModel.getPeriodDayData()
         wheelAdapter.setOnItemSelectedListener { item ->
-            Log.d(
-                "TAG",
-                "onItemSelected: ${item.split(" ").get(0)}"
-            )
-            Log.d("TAG", "get current item ${wheelAdapter.currentItemPosition}")
             mViewModel.updatePeriodDayIndex(wheelAdapter.currentItemPosition)
         }
         wheelAdapter.bind(binding.wheelPicker)

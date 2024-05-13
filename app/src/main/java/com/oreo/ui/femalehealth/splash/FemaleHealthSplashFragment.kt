@@ -30,7 +30,8 @@ class FemaleHealthSplashFragment :
         super.onViewCreated(view, savedInstanceState)
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
 
-        dataList = getData()
+        dataList.clear()
+        dataList.addAll(getData())
         setViewpager()
     }
 
@@ -41,7 +42,6 @@ class FemaleHealthSplashFragment :
             offscreenPageLimit = 3
             adapter = fmhSplashDescriptionAdapter
             setOnTouchListener(null)
-
         }
 
         dataList.let { fmhSplashDescriptionAdapter.setDataSet(it) }
@@ -64,8 +64,6 @@ class FemaleHealthSplashFragment :
                     else -> binding.bNext.text = getString(R.string.text_next)
                 }
                 setProgress(position)
-
-
             }
 
             override fun onPageScrollStateChanged(state: Int) {
@@ -74,13 +72,12 @@ class FemaleHealthSplashFragment :
         })
 
         binding.vpImageSlider.setCurrentItem(0, false)
-
     }
 
     private fun setProgress(position: Int) {
         val max = dataList.size
-        if (position == max - 1) binding.lytProgress.root.gone() else
-            binding.lytProgress.root.visible()
+        /*if (position == max - 1) binding.lytProgress.root.gone() else
+            binding.lytProgress.root.visible()*/
         binding.lytProgress.apply {
             pgBr.progress = (((position + 1).toFloat() / max) * 100).roundToInt()
             tvCount.text = "0${position + 1}"
@@ -135,7 +132,7 @@ class FemaleHealthSplashFragment :
 
     }
 
-    private fun getData(): ArrayList<StressSplashModel> {
+    private fun getData(): List<StressSplashModel> {
         val dataList = ArrayList<StressSplashModel>()
 
         dataList.add(

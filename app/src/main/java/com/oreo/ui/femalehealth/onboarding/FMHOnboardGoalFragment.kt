@@ -5,6 +5,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentFMHOnboardGoalBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.Event
+import com.oreo.ui.femalehealth.onboarding.GoalType.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -14,45 +15,42 @@ class FMHOnboardGoalFragment :
     override fun initListener() {
         initUiData()
         binding.lytTrackCycle.root.setOnClickListener {
-            updateBackground(1)
-            mViewModel.isGoalSelected.postValue(Event(true))
-            mViewModel.goalTypeSelected = GoalType.TRACK_CYCLE.name
-
+            updateBackground(TRACK_CYCLE)
+            mViewModel.isGoalSelected.value = (Event(true))
+            mViewModel.goalTypeSelected = TRACK_CYCLE
         }
         binding.lytConceive.root.setOnClickListener {
-            updateBackground(2)
-            mViewModel.isGoalSelected.postValue(Event(true))
-            mViewModel.goalTypeSelected = GoalType.TRACK_CONCEIVE.name
-
+            updateBackground(TRY_CONCEIVE)
+            mViewModel.isGoalSelected.value = (Event(true))
+            mViewModel.goalTypeSelected = TRY_CONCEIVE
         }
         binding.lytPregnancy.root.setOnClickListener {
-            updateBackground(3)
-            mViewModel.isGoalSelected.postValue(Event(true))
-            mViewModel.goalTypeSelected = GoalType.TRACK_PREGNANCY.name
+            updateBackground(TRACK_PREGNANCY)
+            mViewModel.isGoalSelected.value = (Event(true))
+            mViewModel.goalTypeSelected = TRACK_PREGNANCY
         }
 
 
     }
 
-    private fun updateBackground(type: Int) {
+    private fun updateBackground(type: GoalType) {
         when (type) {
-            1 -> {
+            TRACK_CYCLE -> {
                 binding.lytTrackCycle.root.setBackgroundResource(R.drawable.back_modal_new_fmh_selected)
                 binding.lytConceive.root.setBackgroundResource(com.noisefit_commans.R.drawable.back_modal_new)
                 binding.lytPregnancy.root.setBackgroundResource(com.noisefit_commans.R.drawable.back_modal_new)
             }
 
-            2 -> {
+            TRY_CONCEIVE -> {
                 binding.lytConceive.root.setBackgroundResource(R.drawable.back_modal_new_fmh_selected)
                 binding.lytTrackCycle.root.setBackgroundResource(com.noisefit_commans.R.drawable.back_modal_new)
                 binding.lytPregnancy.root.setBackgroundResource(com.noisefit_commans.R.drawable.back_modal_new)
             }
 
-            else -> {
+            TRACK_PREGNANCY -> {
                 binding.lytPregnancy.root.setBackgroundResource(R.drawable.back_modal_new_fmh_selected)
                 binding.lytTrackCycle.root.setBackgroundResource(com.noisefit_commans.R.drawable.back_modal_new)
                 binding.lytConceive.root.setBackgroundResource(com.noisefit_commans.R.drawable.back_modal_new)
-
             }
         }
     }
@@ -70,6 +68,8 @@ class FMHOnboardGoalFragment :
         binding.lytPregnancy.tvTitle.text = getString(R.string.text_tracking_my_pregnancy)
         binding.lytPregnancy.tvDescription.text = getString(R.string.text_tracking_privacy_desc)
 
+        mViewModel.goalTypeSelected?.let {
+            updateBackground(it)
+        }
     }
-
 }

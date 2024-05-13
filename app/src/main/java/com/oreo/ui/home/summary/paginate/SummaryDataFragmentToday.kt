@@ -312,7 +312,8 @@ class SummaryDataFragmentToday :
                 }
 
                 is OSummaryHealthOverviewClickEnum.TrackYourFemaleHealth -> {
-                    navigate(R.id.fragmentCycleTracker)
+                    //navigate(R.id.fragmentCycleTracker)
+                    navigate(R.id.femaleHealthSplashFragment)
                 }
             }
         }

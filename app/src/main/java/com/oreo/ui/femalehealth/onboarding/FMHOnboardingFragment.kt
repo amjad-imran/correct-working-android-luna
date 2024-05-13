@@ -9,6 +9,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentFMHOnboardingBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.roundToInt
@@ -58,11 +59,16 @@ class FMHOnboardingFragment :
                 if (position == 1 || position == 2) {
                     binding.bNotSure.visible()
                 } else
-                    binding.bNotSure.gone()
+                    binding.bNotSure.invisible()
+
                 if (position == mViewModel.fragmentSize - 1)
                     binding.bNext.text = getString(R.string.text_done)
-                else
-                    binding.bNext.text = getString(R.string.text_next)
+                else {
+                    if (position == 1 || position == 2) {
+                        binding.bNext.text = getString(R.string.text_confirm)
+                    } else
+                        binding.bNext.text = getString(R.string.text_next)
+                }
 
                 setProgress(position)
 
@@ -89,12 +95,6 @@ class FMHOnboardingFragment :
     }
 
     override fun initListener() {
-        binding.vLeft.setOnClickListener {
-            onBackPress()
-        }
-        binding.vRight.setOnClickListener {
-            onNextPress()
-        }
 
         binding.backBtn.setOnClickListener {
             onBackPress()
@@ -103,6 +103,12 @@ class FMHOnboardingFragment :
             onNextPress()
         }
         binding.bNotSure.setOnClickListener {
+            if (binding.vpFmhOnboard.currentItem == 1) {
+                mViewModel.pDays = DefaultPeriodDays
+            } else if (binding.vpFmhOnboard.currentItem == 2) {
+                mViewModel.pcDays = DefaultCycleDays
+            }
+
             onNextPress()
         }
 

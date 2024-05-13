@@ -1156,6 +1156,7 @@
     <string name="text_cycle_log">Cycle Log</string>
     <string name="text_log_period">Log Period</string>
     <string name="text_calender">Calender</string>
+    <string name="text_period_last_sub_message">Your privacy is our priority. We use top-notch security measures to protect your data.</string>
 
 
 </resources>

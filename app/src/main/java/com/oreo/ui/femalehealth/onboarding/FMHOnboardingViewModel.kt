@@ -11,8 +11,10 @@ import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.WheelItem
+import com.noisefit_commans.utils.wheel.WheelItemPeriod
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -24,6 +26,10 @@ const val DefaultPeriodDays = 7
 const val MinPeriodDays = 1
 const val MaxPeriodDays = 45
 
+const val DefaultCycleDays = 7
+const val MinCycleDays = 1
+const val MaxCycleDays = 45
+
 @HiltViewModel
 class FMHOnboardingViewModel @Inject constructor(
     val userActivityRepository: OreoUserActivityRepository
@@ -31,38 +37,49 @@ class FMHOnboardingViewModel @Inject constructor(
     val fragmentSize = 7
 
     var isGoalSelected = MutableLiveData<Event<Boolean>>()
-    private var pDays = 0
-    private var pcDays = 0
+    var pDays = 0
+    var pcDays = 0
 
     private var periodDays = ArrayList<Int>()
     private var periodCycleDays = ArrayList<Int>()
-    var goalTypeSelected: String = ""
+    var goalTypeSelected: GoalType? = null
     var selectedDiagnoseListData = ArrayList<String>()
     var selectedHormoneListData = ArrayList<String>()
-//    val updateFMHDate = MutableLiveData<Event<Boolean>>()
-    var selectedEndDate: LocalDate? = null
-    var selectedPStartDate: String? = null
+
+    //    val updateFMHDate = MutableLiveData<Event<Boolean>>()
+    var selectedPEndDate: LocalDate? = null
+    var selectedPStartDate: LocalDate? = null
 
     init {
         for (i in MinPeriodDays..MaxPeriodDays) {
             periodDays.add(i)
+        }
+        for (i in MinCycleDays..MaxCycleDays) {
             periodCycleDays.add(i)
         }
     }
 
-    fun getPeriodDayData(): ArrayList<WheelItem<String>> {
-        val dataSet = ArrayList<WheelItem<String>>()
+    fun getPeriodDayData(): List<WheelItemPeriod<String>> {
+        val dataSet = ArrayList<WheelItemPeriod<String>>()
         periodDays.forEach {
-            dataSet.add(WheelItem("$it days"))
+            if (it < 10) {
+                dataSet.add(WheelItemPeriod("0$it"))
+            } else {
+                dataSet.add(WheelItemPeriod("$it"))
+            }
         }
         return dataSet
 
     }
 
-    fun getPeriodCycleDayData(): ArrayList<WheelItem<String>> {
-        val dataSet = ArrayList<WheelItem<String>>()
+    fun getPeriodCycleDayData(): List<WheelItemPeriod<String>> {
+        val dataSet = ArrayList<WheelItemPeriod<String>>()
         periodCycleDays.forEach {
-            dataSet.add(WheelItem("$it days"))
+            if (it < 10) {
+                dataSet.add(WheelItemPeriod("0$it"))
+            } else {
+                dataSet.add(WheelItemPeriod("$it"))
+            }
         }
         return dataSet
 
@@ -78,7 +95,7 @@ class FMHOnboardingViewModel @Inject constructor(
 
     fun getPeriodCycleDayIndex(): Int {
         if (pcDays == 0) {
-            pcDays = DefaultPeriodDays
+            pcDays = DefaultCycleDays
         }
         return periodCycleDays.indexOf(pcDays)
 
@@ -129,11 +146,13 @@ class FMHOnboardingViewModel @Inject constructor(
     fun updateFemaleHealthData() {
         val jsonObject = JsonObject()
 
-        jsonObject.addProperty("goal", goalTypeSelected)
+        jsonObject.addProperty("goal", goalTypeSelected?.name)
         jsonObject.addProperty("period_length", pDays)
         jsonObject.addProperty("cycle_length", pcDays)
-        jsonObject.addProperty("period_date", selectedPStartDate)
-        jsonObject.addProperty("period_date", selectedPStartDate)
+        selectedPStartDate?.let {
+            //jsonObject.addProperty("period_date", DateFormats.convertLocalDateToDate(it))
+        }
+        //jsonObject.addProperty("period_date", selectedPStartDate)
         val diagnoseArray = JsonArray()
         selectedDiagnoseListData.forEach {
             diagnoseArray.add(it)
@@ -184,17 +203,15 @@ class FMHOnboardingViewModel @Inject constructor(
     }
 
     fun calenderDayRange(): Int {
-        val dayDiff = pcDays - pDays
-        val dayRange: Int = if (dayDiff > 0) {
-            dayDiff
-        } else {
-            0
-        }
-        return dayRange
+        return pDays
+    }
+
+    fun calculatePeriodEndDate(date: LocalDate): LocalDate {
+        return date.plusDays(pDays.toLong() - 1)
     }
 
 }
 
 enum class GoalType {
-    TRACK_CYCLE, TRACK_CONCEIVE, TRACK_PREGNANCY
+    TRACK_CYCLE, TRY_CONCEIVE, TRACK_PREGNANCY
 }

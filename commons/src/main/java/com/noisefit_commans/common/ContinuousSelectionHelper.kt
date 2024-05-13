@@ -45,11 +45,9 @@ object ContinuousSelectionHelper {
     }
     fun getSelection(
         clickedDate: LocalDate,
-        dateSelection: DateSelection,
         selectionStartDate: LocalDate,
         selectionEndDate: LocalDate
     ): DateSelection {
-//        val (selectionStartDate, selectionEndDate) = dateSelection
         val tempClickDate= convertLocalDateToDate(clickedDate)
         val tempSelectedStartDate= convertLocalDateToDate(selectionStartDate)
         val tempSelectedEndDate= convertLocalDateToDate(selectionEndDate)

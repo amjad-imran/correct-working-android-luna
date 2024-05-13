@@ -2065,7 +2065,6 @@ object DateFormats {
     }
 
     fun getDaysAgo(daysAgo: Int): Date {
-        LOGS.d("start day ago ${daysAgo}")
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.DAY_OF_YEAR, daysAgo)
         return calendar.time
