@@ -16,6 +16,7 @@ import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 
@@ -27,6 +28,7 @@ class OStressDetailsFragment :
     private var pagerAdapter: StressPagerAdapter? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_stress_visit)
         binding.lytHeader.view1.visible()
         sharedViewModel.lastSelectedStressType = StressType.NO_DATA
         setViewPager()
@@ -135,6 +137,7 @@ class OStressDetailsFragment :
         }
 
         binding.lytHeader.view1.setOnClickListener {
+            mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_stress_i_button_click)
             navigate(R.id.stressUnderstandingFragment)
         }
 
