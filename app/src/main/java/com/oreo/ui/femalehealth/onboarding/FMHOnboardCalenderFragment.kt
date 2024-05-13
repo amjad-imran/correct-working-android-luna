@@ -61,7 +61,7 @@ class FMHOnboardCalenderFragment :
                             mViewModel.selectedEndDate =
                                 DateFormats.convertDateToLocalDate(DateFormats.getDaysAgo(mViewModel.calenderDayRange()))
                         LOGS.d("start end date ${mViewModel.selectedEndDate}")
-
+                        mViewModel.selectedPStartDate= DateFormats.convertLocalDateToDate(day.date).toString()
                         selection = getSelection(
                             clickedDate = day.date,
                             dateSelection = selection,

@@ -7,7 +7,6 @@ import com.noisefit.data.remote.CityData
 import com.noisefit.data.remote.StateData
 import com.noisefit.data.remote.UserLocationUpdatedResponse
 import com.noisefit.data.remote.request.LoginRequest
-import com.noisefit.data.remote.request.RegistrationRequest
 import com.noisefit.data.remote.request.UpdateAdditionalDetailRequest
 import com.noisefit.data.remote.response.Watchface2
 import com.noisefit_commans.data.model.*
@@ -817,6 +816,26 @@ interface NetworkService {
         @Query("type") dayType: String,
         @Query("filter_type") filterType: String
     ): BaseApiResponse<List<StressResultData>>
+
+    /*
+    * Female health service start
+    * */
+    @POST
+    suspend fun submitFemaleHealthInfo(
+        @Url url: String, @Body requestObject: JsonObject
+    ): BaseApiResponse<Any>
+
+    @GET
+    suspend fun getFemaleHealthInfo(
+        @Url url: String,
+        @Query("date") selectDate: String
+    ): BaseApiResponse<FemaleHealthUserInfoModel>
+
+    @POST
+    suspend fun logPeriod(
+        @Url url: String,
+        @Body requestObject: JsonObject
+    ): BaseApiResponse<Any>
     /**
      * ---------------------------------------------------------------------------------
      *                                Oreo Services End

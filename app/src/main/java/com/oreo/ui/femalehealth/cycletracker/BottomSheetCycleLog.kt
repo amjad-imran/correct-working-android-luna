@@ -18,17 +18,19 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
 ) {
     private var cycleLog: CycleLogDataModel? = null
     private val args: BottomSheetCycleLogArgs by navArgs()
+    private var selectedFlowType: String = ""
     private val flowAdapter: CycleLogAdapter by lazy {
         CycleLogAdapter(object : OnLogItemClick {
             override fun onItemClick(data: FlowLog, position: Int) {
+                selectedFlowType = data.title ?: ""
 
             }
         })
     }
-    private val symptomsAdapter: CycleLogAdapter by lazy {
-        CycleLogAdapter(object : OnLogItemClick {
+    private val symptomsAdapter: CycleSymptomsAdapter by lazy {
+        CycleSymptomsAdapter(object : OnSymptomsItemClick {
             override fun onItemClick(data: FlowLog, position: Int) {
-
+                symptomsAdapter.updateItem(data, position)
             }
         })
     }
@@ -56,15 +58,18 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
 
     override fun initListener() {
         binding.tvTitle.text = getString(R.string.text_cycle_log)
+
         binding.btnSave.setOnClickListener {
-            navigateUpSafe()
+
+            val selectedSymptomList = symptomsAdapter.getUpdatedSelectedListData()
             setFragmentResult(
                 CYCLE_LOG_SAVE,
-                bundleOf("agree" to true)
+                bundleOf("agree" to true, "data" to selectedSymptomList, "flow" to selectedFlowType)
             )
+            navigateUpSafe()
 
         }
-        binding.ivLogAdd.setOnClickListener{
+        binding.ivLogAdd.setOnClickListener {
             navigateUpSafe()
             setFragmentResult(
                 CYCLE_LOG_SAVE,

@@ -18,7 +18,6 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.CalendarDayFmhOnboardBinding
 import com.noisefit.luna.databinding.FragmentCycleLogBinding
 import com.noisefit.luna.databinding.LayoutCycleLogCalHeaderBinding
-import com.noisefit.ui.dashboard.graphs.HistoryCalendarActivity
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
@@ -78,11 +77,14 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
             object : MonthHeaderFooterBinder<MonthViewContainer> {
                 override fun create(view: View) = MonthViewContainer(view)
                 override fun bind(container: MonthViewContainer, data: CalendarMonth) {
-                    container.textView.text = "${data.yearMonth.month.name.lowercase().capitalizeWords()} ${data.yearMonth.year}"
+                    container.textView.text = "${
+                        data.yearMonth.month.name.lowercase().capitalizeWords()
+                    } ${data.yearMonth.year}"
                 }
             }
         binding.calendar.scrollToDate(currentDay)
     }
+
     private var resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -100,8 +102,11 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
     override fun initListener() {
         binding.lytToolbar.view1.visible()
         binding.lytToolbar.ivAddFriend.invisible()
-        binding.lytToolbar.view1.loadImage(binding.lytToolbar.view1.context, R.drawable.ic_log_settings)
-        binding.lytToolbar.tvTitle.text=getString(R.string.text_calender)
+        binding.lytToolbar.view1.loadImage(
+            binding.lytToolbar.view1.context,
+            R.drawable.ic_log_settings
+        )
+        binding.lytToolbar.tvTitle.text = getString(R.string.text_calender)
 
         binding.lytToolbar.backBtn.setOnClickListener {
             navigateUpSafe()
@@ -112,15 +117,16 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
                 CYCLE_LOG_SAVE
             ) { _, bundle ->
                 val agree = bundle.getBoolean("agree")
+                val selectedSymptoms = bundle.getStringArrayList("data")
+                val flow = bundle.getString("flow")
                 if (agree) {
-                //
-                }
-                else{
-                        resultLauncher.launch(
-                            LogPeriodActivity.getStartIntent(
-                                requireContext(),
-                            )
+                    mViewModel.logPeriod(flow, selectedSymptoms)
+                } else {
+                    resultLauncher.launch(
+                        LogPeriodActivity.getStartIntent(
+                            requireContext(),
                         )
+                    )
 
                 }
             }
@@ -131,7 +137,11 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
     }
 
     override fun subscribeObservers() {
-
+        mViewModel.logPeriodData.observe(this) {
+            it?.getContent()?.let {
+                //handle page data
+            }
+        }
     }
 
 

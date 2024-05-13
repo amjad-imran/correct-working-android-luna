@@ -14,5 +14,5 @@ data class CycleLogDataModel(
 data class FlowLog(
     val image: Int? = null,
     val title: String? = null,
-    val isChecked: Boolean = false
+    var isChecked: Boolean = false
 ) : Parcelable

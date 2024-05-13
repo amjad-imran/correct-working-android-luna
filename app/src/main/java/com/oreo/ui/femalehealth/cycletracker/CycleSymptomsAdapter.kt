@@ -9,22 +9,20 @@ import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
 import com.oreo.data.model.FlowLog
 
-class CycleLogAdapter(val mListener: OnLogItemClick) :
-    RecyclerView.Adapter<CycleLogAdapter.ViewHolder>() {
+class CycleSymptomsAdapter(val mListener: OnSymptomsItemClick) :
+    RecyclerView.Adapter<CycleSymptomsAdapter.ViewHolder>() {
     private var mDataSet = ArrayList<FlowLog>()
-    var lastSelectedPos = -1
 
     inner class ViewHolder(val binding: ItemCycleLogBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: FlowLog) {
             binding.ivItem.loadImage(binding.ivItem.context, data.image)
             binding.tvTitle.text = data.title
-            if (lastSelectedPos == bindingAdapterPosition) {
+            if (data.isChecked) {
                 binding.ivTick.visible()
             } else
                 binding.ivTick.gone()
             binding.ivItem.setOnClickListener {
-                lastSelectedPos = bindingAdapterPosition
                 mListener.onItemClick(data, bindingAdapterPosition)
                 notifyDataSetChanged()
             }
@@ -60,10 +58,19 @@ class CycleLogAdapter(val mListener: OnLogItemClick) :
         notifyItemChanged(position)
     }
 
+    fun getUpdatedSelectedListData(): ArrayList<String> {
+        val selectedList = ArrayList<String>()
+        mDataSet.forEach {
+            if (it.isChecked) {
+                selectedList.add(it.title ?: "")
+            }
+        }
+        return selectedList
+    }
 
 }
 
-interface OnLogItemClick {
+interface OnSymptomsItemClick {
     fun onItemClick(data: FlowLog, position: Int)
 }
 

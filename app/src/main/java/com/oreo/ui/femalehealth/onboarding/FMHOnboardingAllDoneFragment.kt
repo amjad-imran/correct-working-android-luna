@@ -21,9 +21,11 @@ class FMHOnboardingAllDoneFragment :
 
     override fun initListener() {
 
+
     }
 
     override fun subscribeObservers() {
+
         mViewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->
                 context.showShortToast(message)

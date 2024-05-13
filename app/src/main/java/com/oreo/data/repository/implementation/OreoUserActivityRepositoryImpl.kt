@@ -42,6 +42,8 @@ import com.oreo.data.db.implementation.OreoRespiratoryDataImpl
 import com.oreo.data.db.implementation.OreoSleepDataImpl
 import com.oreo.data.db.implementation.OreoStepsDataImpl
 import com.oreo.data.db.implementation.OreoStressDataImpl
+import com.oreo.data.model.AddWorkoutResponse
+import com.oreo.data.model.FemaleHealthUserInfoModel
 import com.oreo.data.model.LearnModel
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
@@ -55,6 +57,7 @@ import com.oreo.data.model.RingCareResponse
 import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.ServerUserHealthResponse
+import com.oreo.data.model.StressResultData
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TestUserData
 import com.oreo.data.model.TrendsData
@@ -70,9 +73,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.joda.time.LocalDate
 import org.json.JSONObject
-import com.oreo.data.model.AddWorkoutResponse
-import com.oreo.data.model.StressResultData
-import com.oreo.data.model.health.Nap
 
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -1872,5 +1872,28 @@ class OreoUserActivityRepositoryImpl(
             remoteDataSource.getStressInternalPageData(url, selectDate, dayType, filterType)
         }
     }
+
+    override suspend fun submitFemaleHealthInfo(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health"
+            remoteDataSource.submitFemaleHealthInfo(url, jsonObject)
+
+        }
+    }
+
+    override suspend fun getFemaleHealthUserInfo(selectDate: String): Flow<Resource<BaseApiResponse<FemaleHealthUserInfoModel>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health"
+            remoteDataSource.getFemaleHealthInfo(url, selectDate)
+        }
+    }
+
+    override suspend fun logPeriod(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/log"
+            remoteDataSource.logPeriod(url, jsonObject)
+        }
+    }
+
 
 }
