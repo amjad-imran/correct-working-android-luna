@@ -156,10 +156,8 @@ class ChatGptViewModel
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            if (it.status.equals("completed", true)) {
-                                it.reply?.let { reply ->
-                                    addReceivedMessage(reply, false)
-                                }
+                            if (it.status.equals("completed", true) && it.reply != null) {
+                                    addReceivedMessage(it.reply, false)
                             } else {
                                 callAfterSomeTime(assistantId, threadId, runId)
                             }
