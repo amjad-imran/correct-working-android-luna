@@ -31,6 +31,7 @@ import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.ServerUserHealthData
@@ -206,6 +207,7 @@ class OStressDataMovementFragment :
 
         binding.ivHowItWorks.setOnClickListener {
             navigate(R.id.stressUnderstandingFragment)
+            mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_how_it_works_stress_click)
         }
 
         binding.svMain.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
@@ -219,6 +221,7 @@ class OStressDataMovementFragment :
                 putString("date", mainViewModel.selectedDate)
                 putString("cameFrom", "active")
             })
+            mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_overall_stress_click)
         }
         binding.lytInactiveStressHeader.root.setOnClickListener {
             navigate(R.id.stressInternalParentOreo, Bundle().apply {
@@ -261,6 +264,7 @@ class OStressDataMovementFragment :
         })
 
         binding.ivOpen.setOnClickListener {
+            mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_stress_movement_down_click)
             handleMovementViews(true)
         }
         binding.ivClose.setOnClickListener {
@@ -323,6 +327,7 @@ class OStressDataMovementFragment :
                 highlights, resources.getColor(color, null)
             )
         }
+        mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_stress_movement_click   )
     }
 
     private fun handleProgress(pgbr: ProgressBar, progress: Int) {

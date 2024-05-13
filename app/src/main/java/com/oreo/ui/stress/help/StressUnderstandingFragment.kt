@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentStressUnderstandingBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -23,6 +24,7 @@ class StressUnderstandingFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.Luna_stress_i_page_visit)
         setData()
     }
 

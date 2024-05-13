@@ -1,6 +1,7 @@
 package com.oreo.ui.stress.help
 
 import com.noisefit.luna.R
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.data.model.StressUnderstandingOverview
 import com.oreo.data.model.StressUnderstandingSubList
@@ -11,7 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 class StressUnderstandingViewModel
 @Inject
-constructor() : BaseViewModel() {
+constructor(val sessionManager: SessionManager) : BaseViewModel() {
 
     fun getData(): ArrayList<StressUnderstandingOverview> {
         val dataList = ArrayList<StressUnderstandingOverview>()

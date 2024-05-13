@@ -305,11 +305,16 @@ class SummaryDataFragmentToday :
                     } else {
                         navigate(R.id.stressSplashFragment)
                     }
+                    mainViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_stress_click)
                 }
 
                 is OSummaryHealthOverviewClickEnum.OnNapClicked -> {
 
                     navigate(R.id.napDetails, bundleOf("napId" to type.napId))
+                }
+
+                is OSummaryHealthOverviewClickEnum.TrackYourFemaleHealth -> {
+                    navigate(R.id.fragmentCycleTracker)
                 }
             }
         }
@@ -387,6 +392,7 @@ class SummaryDataFragmentToday :
         }
 
         binding.contentMain.lytChargeRing.root.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_low_battery_click)
             navigate(R.id.ringBatteryChargeFragment)
             //viewModel.setRingBatteryInfoState()
         }

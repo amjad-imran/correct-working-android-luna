@@ -9,16 +9,22 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.tabs.TabLayout
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOStressInternalParentBinding
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class OStressInternalParentFragment :
     BaseFragment<FragmentOStressInternalParentBinding>(FragmentOStressInternalParentBinding::inflate) {
     private val args: OStressInternalParentFragmentArgs by navArgs()
+
+    @Inject
+    lateinit var sessionManager: SessionManager
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -31,10 +37,14 @@ class OStressInternalParentFragment :
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Day"))
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Week"))
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Month"))
-        if (args.cameFrom == "active")
+        if (args.cameFrom == "active") {
             binding.lytToolbar.tvTitle.text = getString(R.string.text_overall_stress)
-        else
+            sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_overall_stress_page_visit)
+
+        } else {
             binding.lytToolbar.tvTitle.text = getString(R.string.text_non_active_stress)
+            sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_non_active_stress_page_visit)
+        }
 
         loadFragment(
             OStressInternalDetailsFragment.newInstance(
