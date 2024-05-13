@@ -1,6 +1,5 @@
 package com.oreo.ui.custom
 
-import android.R.attr.resource
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -26,6 +25,7 @@ import com.noisefit.luna.R
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.GraphDummyModel
@@ -115,6 +115,7 @@ class HeartRateChartView : View {
     private lateinit var bgLine: Paint
     private lateinit var dotBitmap: Bitmap
     private lateinit var dotBitmap2: Bitmap
+    lateinit var rightBackBitmap: Bitmap
 
     private lateinit var mTextPaint: Paint
     private lateinit var mTextPaintEdge: Paint
@@ -211,6 +212,11 @@ class HeartRateChartView : View {
                 res, R.drawable.image_blur_avg
             ), dimen, dimen, true
         )
+        rightBackBitmap =
+            BitmapFactory.decodeResource(
+                res,
+                R.drawable.back_stress_left
+            )
     }
 
     private fun initPaint() {
@@ -548,7 +554,7 @@ class HeartRateChartView : View {
         if (!isInteracting) return
 
 
-        val calculatedTouchX = if (touchX < leftWith) {
+        var calculatedTouchX = if (touchX < leftWith) {
             leftWith
         } else if (touchX > (mWith - rightWith)) {
             (mWith - rightWith)
@@ -560,11 +566,25 @@ class HeartRateChartView : View {
         /* if (touchX > leftWith && touchX < (mWith - rightWith)) {*/
 
         val value = getClickedValue(calculatedTouchX)
+        var selectedPos = value.first
+        var time = value.third
+        var hrValue = value.second
 
 
         var showOverlay = true
         if (isHighlighted) {
             showOverlay = highlightIndexs.contains(list.size - 1 - value.first)
+            if (showOverlay.not()) {
+                val newTouchValue = getNextValue(highlightIndexs, list.size - 1 - value.first)
+                if (newTouchValue != null) {
+                    calculatedTouchX = newTouchValue.first
+                    selectedPos = newTouchValue.second.first
+                    time = newTouchValue.second.third
+                    hrValue = newTouchValue.second.second
+                    showOverlay = true
+                }
+            }
+
         }
 
         if (!showOverlay) {
@@ -581,9 +601,9 @@ class HeartRateChartView : View {
 
 
         val y =
-            mHeight - bottomWith - (value.second - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
+            mHeight - bottomWith - (hrValue - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
 
-        if (value.second != 0) {
+        if (hrValue != 0) {
 
             val bitmap = if (lastMinValueIndex == value.first) {
                 dotBitmap2
@@ -605,21 +625,47 @@ class HeartRateChartView : View {
 
 
         if (listener != null) {
-            val position = value.first
-            val selectedValue = value.second
+            val position = selectedPos
+            val selectedValue = hrValue
             //d("CLICKED_VALUE value value Touch $position $selectedValue")
             if (lastSentValuePos == null) {
-                listener?.onValueSelected(selectedValue, true, value.third)
+                listener?.onValueSelected(selectedValue, true, time)
                 lastSentValuePos = position
                 performHapticFeedbackCustom(selectedValue)
             } else {
                 if (lastSentValuePos != position) {
-                    listener?.onValueSelected(selectedValue, true, value.third)
+                    listener?.onValueSelected(selectedValue, true, time)
                     lastSentValuePos = position
                     performHapticFeedbackCustom(selectedValue)
                 }
             }
         }/*}*/
+    }
+
+    /**
+     * Pair(new touch position,Triple(newpos,value,time))
+     */
+    private fun getNextValue(
+        highlightIndex: MutableList<Int>,
+        value: Int
+    ): Pair<Float, Triple<Int, Int, String>>? {
+        var selectedPos: Int? = null
+
+        for (i in 0 until highlightIndex.size) {
+
+            if (highlightIndex[i] >= value) {
+                selectedPos = highlightIndex[i]
+                break
+            }
+        }
+
+        if (selectedPos == null) return null
+        val range = unitHLenth / 2//dip2px(3f)
+        val selected = toolTipList.get(list.size - 1 - selectedPos!!)
+        return Pair(
+            selected.first - range,
+            Triple(list.size - 1 - selectedPos!!, selected.third, selected.second)
+        )
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -639,7 +685,6 @@ class HeartRateChartView : View {
     private fun drawRight(canvas: Canvas) {
         canvas.drawRect(mWith - rightWith, 0f, mWith.toFloat(), mHeight.toFloat(), bgRightPaint!!)
     }
-
 
 
     fun initLineGradient() {
@@ -963,7 +1008,7 @@ class HeartRateChartView : View {
         }*/
 
         //4 - > 120
-        val eachSecondsWidth = (width.toFloat() - rightWith - leftWith) / (list.size  * 30)
+        val eachSecondsWidth = (width.toFloat() - rightWith - leftWith) / (list.size * 30)
         if (showXAxis) {
 
             drawXAxisTime(
@@ -991,14 +1036,14 @@ class HeartRateChartView : View {
         canvas.drawLine(leftWith, bottomHeight, mWith - rightWith, bottomHeight, bgLine)
         xTextPaint!!.color = Color.parseColor("#a3ffffff")
         xTextPaint!!.getTextBounds(text, 0, text.length, xTextBounds)
-        val yPos: Float = if (isTop) {
-            bottomHeight + xTextBounds!!.height() / 2f + dip2px(4f)
-        } else if (isBottom) {
-            bottomHeight + xTextBounds!!.height() / 2f - dip2px(4f)
-        } else bottomHeight + xTextBounds!!.height() / 2f
+        val yPos: Float = /*if (isTop) {*/
+            bottomHeight + xTextBounds!!.height() + dip2px(4f)
+        /* } else if (isBottom) {
+             bottomHeight + xTextBounds!!.height() / 2f - dip2px(4f)
+         } else bottomHeight + xTextBounds!!.height() / 2f*/
 
 
-        val textStart = mWith.toFloat() - xTextBounds!!.width()
+        val textStart = mWith.toFloat() - leftWith - xTextBounds!!.width()
 
         canvas.drawText(
             text, textStart, yPos, xTextPaint!!
@@ -1009,6 +1054,14 @@ class HeartRateChartView : View {
         canvas.drawRect(0f, 0f, leftWith, mHeight.toFloat(), bgLeftPaint!!)
         val maxStr = max.toString()
         val minStr = xMin.toString()
+
+        /* val rectF = RectF().apply {
+             left = mWith - dip2px(70f).toFloat()
+             top = topWith
+             right = mWith.toFloat()// - rightWith
+             bottom = mHeight - bottomWith
+         }
+         canvas.drawBitmap(rightBackBitmap, null, rectF, null)*/
 
         val sectionH = ((max - xMin).toFloat() / 3).roundToInt()
 
@@ -1022,7 +1075,7 @@ class HeartRateChartView : View {
         val min =
             mHeight - bottomWith - (xMin - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
 
-        drawHorizontalTextWithLine(canvas, minStr, min, false, true)
+        drawHorizontalTextWithLine(canvas, "", min, false, true)
 
         if (!mHasDummyData) {
             val xAxis2 =
@@ -1044,7 +1097,13 @@ class HeartRateChartView : View {
                     avgTextPaint!!.getTextBounds(avgStr, 0, avgStr.length, xTextBounds)
                     //xTextPaint!!.color = Color.parseColor("#9cbdff")
                     avgBackPaint!!.color = Color.parseColor("#b3172941")
-                    canvas.drawLine(leftWith, avg, mWith.toFloat(), avg, centerLinePaint!!)
+                    canvas.drawLine(
+                        leftWith,
+                        avg,
+                        mWith.toFloat() - leftWith,
+                        avg,
+                        centerLinePaint!!
+                    )
                     val padding = dip2px(8f)
                     canvas.drawBitmap(
                         avgBackBitmap, null, RectF(
@@ -1084,6 +1143,8 @@ class HeartRateChartView : View {
                 gridPaint!!
             )
         }
+
+
     }
 
 

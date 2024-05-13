@@ -9,7 +9,21 @@ class OInternalPageResponseModal(
     val comparision: Comparison? = null
 )
 
-class ResultData(val date: String, val data: Float,val deviation: Float?=null, val year: String?=null)
+class ResultData(
+    val date: String,
+    val data: Float,
+    val deviation: Float? = null,
+    val year: String? = null
+)
+
+data class ResultDataStress(val date: String, val data: StressDataValues, val year: String? = null)
+data class StressDataValues(
+    val calm: Int = 0,
+    val focussed: Int = 0,
+    val stressed: Int = 0
+)
+
+
 class TrendData(
     val today: ValueData? = null,
     val yesterday: ValueData? = null,

@@ -1,6 +1,5 @@
 package com.oreo.data.repository.implementation
 
-import com.github.mikephil.charting.data.Entry
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -29,7 +28,6 @@ import com.noisefit_commans.data.model.UserHealthData
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
 import com.noisefit_commans.ui.checkDayDifferenceMoreOne
-import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.dataConverter.OreoOfflineDataMapper
@@ -58,6 +56,7 @@ import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.ServerUserHealthResponse
 import com.oreo.data.model.TapMeasureState
+import com.oreo.data.model.TestUserData
 import com.oreo.data.model.TrendsData
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.receiver.workManager.HealthOverviewDataType
@@ -72,7 +71,7 @@ import kotlinx.coroutines.withContext
 import org.joda.time.LocalDate
 import org.json.JSONObject
 import com.oreo.data.model.AddWorkoutResponse
-import com.oreo.data.model.TestUserData
+import com.oreo.data.model.StressResultData
 import com.oreo.data.model.health.Nap
 
 
@@ -147,6 +146,8 @@ class OreoUserActivityRepositoryImpl(
             val todayDate = DateFormats.getTodaysDateString(10)
             var resultTrendsData: TrendsData? = null
             var registerDate: Int? = null
+            var firstStress: String? = null
+            var stressBeta: Boolean? = null
             var tempBaseLine: Float? = null
 
             var apiStartDate: String? = startDate
@@ -230,6 +231,8 @@ class OreoUserActivityRepositoryImpl(
                                 data = resultData!!,
                                 trends = resultTrendsData,
                                 registerDate = ringDataStore.getRegisterDay(),
+                                firstStress = ringDataStore.getFirstStressDay(),
+                                stressBeta = ringDataStore.getStressBetaState(),
                                 tempBaseLine = ringDataStore.getTempBaseLine()
                             ),
                             message = "",
@@ -267,6 +270,10 @@ class OreoUserActivityRepositoryImpl(
                             resultTrendsData = response.trends
                             registerDate = response.registerDate
                             tempBaseLine = response.tempBaseLine
+                            firstStress = response.firstStress
+                            stressBeta = response.stressBeta
+                            ringDataStore.setFirstStressDay(response.firstStress)
+                            ringDataStore.setStressBetaState(response.stressBeta)
                             ringDataStore.setTempBaseLine(tempBaseLine ?: 98.6f)
 
                             ringDataStore.setRegisterDay(registerDate ?: -1)
@@ -303,7 +310,9 @@ class OreoUserActivityRepositoryImpl(
                                             data = resultData!!,
                                             trends = resultTrendsData,
                                             registerDate = registerDate,
-                                            tempBaseLine = tempBaseLine
+                                            tempBaseLine = tempBaseLine,
+                                            firstStress = firstStress,
+                                            stressBeta = stressBeta
                                         ),
                                         message = "",
                                     )
@@ -1064,7 +1073,7 @@ class OreoUserActivityRepositoryImpl(
             HealthOverviewDataType.HEART -> {
 
                 index = hOverviewData.indexOfFirst {
-                    it is OHealthOverview.HeartRate
+                    it is OHealthOverview.HeartRateDataModel
                 }
                 if (index != -1) {
 
@@ -1120,6 +1129,7 @@ class OreoUserActivityRepositoryImpl(
             HealthOverviewDataType.ACTIVITY -> {}
             HealthOverviewDataType.SERVER_SYNC_SUCCESS -> {}
             HealthOverviewDataType.AUTO_WORKOUT -> {}
+            HealthOverviewDataType.BODY_STRESS -> {}
         }
 
         return Pair(hOverviewData, index)
@@ -1307,7 +1317,7 @@ class OreoUserActivityRepositoryImpl(
         return oreoAutoSportDataImpl.getAllNotAcceptingData(timeStamp)?.size ?: 0
     }
 
-    override suspend fun getSummaryHRHealthOverview(): OHealthOverview.HeartRate? {
+    override suspend fun getSummaryHRHealthOverview(): OHealthOverview.HeartRateDataModel {
         try {
             val todayDate = DateFormats.getTodaysDateString(10)
             return offlineDataMapper.convertHeartRateOverviewData(
@@ -1318,14 +1328,12 @@ class OreoUserActivityRepositoryImpl(
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        return OHealthOverview.HeartRate(
-            value = "0",
+        return OHealthOverview.HeartRateDataModel(
+            listData = ArrayList(),
+            average = 0.0f,
             lastTime = "0",
-            candleValue = ArrayList(),
-            lineData = Pair(ArrayList<Entry>(), ArrayList<Int>()),
-            xLabelList = ArrayList(),
-            axisMinimum = 0f,
-            average = 0f,
+            maxValues = 0,
+            minValues = 0,
             measureState = TapMeasureState.DEFAULT
         )
     }
@@ -1574,6 +1582,13 @@ class OreoUserActivityRepositoryImpl(
     override suspend fun getWorkoutDetails(id: String): Flow<Resource<BaseApiResponse<OWorkoutDetailsResponseModel>>> {
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.OREO_BASE_URL}/activity/v1/workout_detail/${id}"
+            remoteDataSource.getWorkoutDetails(url)
+        }
+    }
+
+    override suspend fun getWorkoutDetailsV2(id: String): Flow<Resource<BaseApiResponse<OWorkoutDetailsResponseModel>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/activity/v2/workout_detail/${id}"
             remoteDataSource.getWorkoutDetails(url)
         }
     }
@@ -1847,6 +1862,20 @@ class OreoUserActivityRepositoryImpl(
     override suspend fun removeNap(id: Int): Boolean {
         napDataImpl.removeNapById(id)
         return true
+    }
+
+    //todo endpoint, response, request format will change, once define
+    override suspend fun getStressInternalPagesData(
+        selectDate: String,
+        dayType: String,
+        filterType: String
+    ): Flow<Resource<BaseApiResponse<List<StressResultData>>>> {
+        ///luna/stress/v1/stress?type=day&date=2024-04-05
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${BuildConfig.OREO_BASE_URL}/stress/v1/stress"
+            remoteDataSource.getStressInternalPageData(url, selectDate, dayType, filterType)
+        }
     }
 
 }

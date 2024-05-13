@@ -1019,6 +1019,15 @@
     <string name="text_please_connect_your_ring_to_add_a_workout">Please connect your ring to add a workout</string>
     <string name="text_ring_charging">Ring charging</string>
     <string name="text_charging_message">To record your workout, remove your ring from the charger and wear it on your finger.</string>
+    <string name="text_0">0</string>
+    <string name="text_100">100</string>
+    <string name="text_select_to_compare">Select to compare:</string>
+    <string name="text_no_movement">No movement</string>
+    <string name="text_header">Header</string>
+    <string name="text_relaxed">Relaxed</string>
+    <string name="text_focussed">Focussed</string>
+    <string name="text_stressed">Stressed</string>
+    <string name="text_activities">Activities</string>
     <string name="text_nap_detected">Nap detected</string>
     <string name="text_confirm">Confirm</string>
     <string name="text_imported_from_google_fit">Imported from Google Fit</string>
@@ -1039,7 +1048,6 @@
     <string name="text_bo_3_5">Your blood oxygen levels had some variations. This may be because of occasional breathing disturbances during sleep.</string>
     <string name="text_bo_else">Your blood oxygen levels had several variations. This may be because of significant breathing disturbances during sleep.</string>
     <string name="text_active_duration">Active duration</string>
-    <string name="text_activities">Activities</string>
     <string name="text_maximum">Maximum</string>
     <string name="text_ms">ms</string>
     <string name="text_remind_me_later">Remind me later</string>
@@ -1066,6 +1074,9 @@
     <string name="text_your_ring_is_evolving">Your ring is evolving</string>
     <string name="text_ring_successfully_updated">Ring successfully updated</string>
     <string name="text_okay">Okay</string>
+    <string name="text_overall_stress">Overall stress</string>
+    <string name="text_understanding_stress">Understanding stress</string>
+    <string name="text_how_it_works">How it works</string>
     <string name="text_not_available">Not Available</string>
     <string name="text_nap_scores_will_be_available_once_after_tonight_s_sleep_cycle_completes">Nap Scores will be available once after tonight’s sleep cycle completes</string>
     <string name="text_late_naps_effect">Late naps impair next-day sleep and readiness.</string>
@@ -1073,6 +1084,32 @@
     <string name="text_cadence" tools:ignore="ExtraTranslation">Cadence</string>
     <string name="text_recovery_time" tools:ignore="ExtraTranslation">Recovery Time</string>
     <string name="text_training_effects" tools:ignore="ExtraTranslation">Training Effects</string>
+    <string name="text_before_9_pm_battery_charge_msg">Your Luna ring\'s battery is below 20%. Remember to charge your ring before going to sleep for uninterrupted insights.</string>
+    <string name="text_after_9_pm_battery_charge_msg">Your Luna ring\'s battery is below 20%. To continue receiving valuable insights throughout your day, please take a moment to charge it soon.</string>
+    <string name="text_open_luna_ring_app">Open Luna ring app</string>
+    <string name="text_keep_the_luna_ring_app_running_so_your_data_can_stay_upto_date">Keep the Luna ring app running so your data can stay upto date</string>
+    <string name="text_learn_more_desc1">Stress encompasses both physical and mental responses to internal and external factors. When managed well, stress can foster personal growth in productivity, creativity, and resilience. \n\nStress tracking via Luna Ring relies on understanding of the autonomic nervous system (ANS), indicating stress levels and recovery processes. For instance, a lower-than-usual HRV may indicate an overworked sympathetic nervous system, while a faster resting heart rate may signify a stress response. \n\nApart from stress zones, you can examine the correlation between activity and physiological stress. Access this feature by tapping the downward arrow on your stress graph. For instance, it helps you identify times when stress occurred despite absence of medium or high-intensity movement. \n\nYour Luna ring measures physiological stress your body experiences over the course of the entire day. Non-Activity stress measures stress experienced outside of sleep workouts. Reviewing this breakdown can provide insights into how your body accumulates and manages stress triggered by emotional or interpersonal factors.</string>
+    <string name="text_heart_rate_graph">Heart rate graph</string>
+    <string name="text_non_active_stress">Non-active stress</string>
+    <string name="text_active_stress_definition">Overall stress measures your body’s physiological stress throughout the day, including while exercising or sleeping.</string>
+    <string name="text_inactive_stress_definition">Non active stress measures your body’s physiological stress outside of sleep and exercise.</string>
+    <string name="text_note">Note</string>
+    <string name="text_allow_location_access">Allow location access</string>
+    <string name="text_location_perm_message">To enhance your outdoor workout experience, we need you to allow access to your location at all times. This enables real-time tracking and tailored fitness advice based on your exact route and conditions. Do you agree to allow Luna to always access your location during your workouts?</string>
+    <string name="text_no">No</string>
+    <string name="text_permission_to_use_your_location">Permission to Use Your Location</string>
+    <string name="text_don_t_allow">Don’t Allow</string>
+    <string name="text_stress_w_title_1">What is Stress?</string>
+    <string name="text_stress_w_title_2">How does the Luna Ring measure stress?</string>
+    <string name="text_stress_w_title_4">How to Manage Stress?</string>
+    <string name="text_stress_w_title_5">Harness Your Stress</string>
+    <string name="text_stress_w_title_3">Embracing the Journey</string>
+    <string name="text_stress_w_content_1">Stress is the body’s natural response to challenges. While commonly seen negatively, healthy levels can enhance focus, memory, and overall performance.</string>
+    <string name="text_stress_w_content_2">Stress affects mental and physical well-being, leading to physiological changes like increased heart rate or lowered HRV. Recognizing this connection allows for holistic stress management.</string>
+    <string name="text_stress_w_content_4">Distinguish between short-term and long-term stress. Engage in activities like exercise and seek social support for effective stress management.</string>
+    <string name="text_stress_w_content_5">Approach stress management with mindfulness and intention. Navigate challenges with grace, supported by mindfulness practices, social connections, and enjoyable activities.</string>
+    <string name="text_stress_w_content_3">By monitoring stress, identify patterns and adjust routines. View stress as an opportunity for growth and resilience. For instance, facing challenges can boost personal development and confidence.</string>
+    <string name="text_beta">Beta</string>
     <string name="text_talk_anything_to_luna_your_personal_24_7_health_companion">Talk anything to Luna, your personal 24*7 health companion</string>
     <string name="text_the_luna_ring_is_crafted_by_top_minds_in_sports_science_engineering_and_data_science_it_processes_huge_volumes_of_data_over_70_bio_markers_everyday_the_luna_ai_is_developed_with_inputs_from_leading_fitness_and_wellness_experts">The Luna Ring is crafted by top minds in Sports Science, Engineering and Data Science. It processes huge volumes of data over 70 bio-markers everyday. The Luna AI is developed with inputs from leading fitness and wellness experts.</string>
     <string name="text_tell_us_what_s_happening">+ Tell us what’s happening</string>

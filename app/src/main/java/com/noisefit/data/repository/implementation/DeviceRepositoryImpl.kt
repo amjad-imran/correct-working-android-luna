@@ -435,19 +435,6 @@ class DeviceRepositoryImpl(
         }
     }
 
-    override suspend fun checkWarranty(number: String): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<WarrantyResponse>>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.checkWarranty(number)
-        }
-    }
-
-    override suspend fun getMarketPlaces(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<List<MarketPlace>>>> {
-        return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.BASE_URL_NOISE_CONNECT}/complaint/channels"
-            remoteDataSource.getMarketPlaces(url)
-        }
-    }
-
     override suspend fun checkWatchTokenExist(macAddress: String): Flow<Resource<BaseApiResponse<WatchTokenResponse>>> {
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.BASE_URL_NEW}/user_detail/ring/ring-token"
@@ -479,34 +466,6 @@ class DeviceRepositoryImpl(
             remoteDataSource.addWarrantyOld(jsonObject)
         }
     }
-
-    override suspend fun getWarrantyWatchList(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<List<WarrantyWatchesResponse>>>> {
-        return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.BASE_URL_NOISE_CONNECT}/product/getproductBycategory"
-            remoteDataSource.getWarrantyWatchList(url, "d8f021fd65e25982003ddce3cac2225e")
-        }
-    }
-
-    override suspend fun addWarranty(jsonObject: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<String?>>> {
-        return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.BASE_URL_NOISE_CONNECT}/warranty/registration"
-            remoteDataSource.addWarranty(url, BuildConfig.NOISE_CONNECT_KEY, jsonObject)
-        }
-    }
-
-    override suspend fun checkWarranty(jsonObject: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<Boolean>>> {
-        return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.BASE_URL_NOISE_CONNECT}/warranty/check-info"
-            remoteDataSource.checkWarranty(url, BuildConfig.NOISE_CONNECT_KEY, jsonObject)
-        }
-    }
-
-    override suspend fun getConfig(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<ConfigResponse>>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.config("${BuildConfig.BASE_URL_NEW}/master/app_version/config")
-        }
-    }
-
 
     override suspend fun submitFeedback(
         feedback: Feedback,

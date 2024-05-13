@@ -1,0 +1,124 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            style="@style/S16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="@string/text_overall_stress"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvSubTitle"
+            style="@style/S12"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:lineSpacingExtra="6sp"
+            android:textColor="@color/white_64"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+            tools:text="(Definition of overall stress) seems to be higher than previous day. Allow yourself sufficient time." />
+
+
+        <ImageView
+            android:id="@+id/ivVoucherMore"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:padding="4dp"
+            android:src="@drawable/ic_arrow_right_cal"
+
+            app:layout_constraintBottom_toBottomOf="@+id/tvTitle"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvTitle"
+            tools:ignore="ContentDescription" />
+
+        <View
+            android:id="@+id/view32"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/dimen_12dp"
+            android:background="@drawable/back_ios_style"
+
+            android:paddingBottom="@dimen/dimen_16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/lytCalm"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvSubTitle" />
+
+
+        <TextView
+            android:id="@+id/tvHeader"
+            style="@style/S14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_16dp"
+            android:layout_marginTop="@dimen/dimen_16dp"
+            tools:text="Today"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/view32" />
+
+        <TextView
+            android:id="@+id/tvTypical"
+            style="@style/S14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_4dp"
+            android:textColor="@color/white_64"
+            app:layout_constraintBottom_toBottomOf="@+id/tvHeader"
+            app:layout_constraintStart_toEndOf="@+id/tvHeader"
+            app:layout_constraintTop_toTopOf="@+id/tvHeader"
+            tools:text="vs typical tuesday" />
+
+        <include
+            android:id="@+id/lytCalm"
+            layout="@layout/layout_stress_header_sub_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_16dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintEnd_toStartOf="@+id/lytFocussed"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvHeader" />
+
+
+        <include
+            android:id="@+id/lytFocussed"
+            layout="@layout/layout_stress_header_sub_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintEnd_toStartOf="@+id/lytStressed"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/lytCalm"
+            app:layout_constraintTop_toBottomOf="@id/tvHeader" />
+
+
+        <include
+            android:id="@+id/lytStressed"
+            layout="@layout/layout_stress_header_sub_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/lytFocussed"
+            app:layout_constraintTop_toBottomOf="@id/tvHeader" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

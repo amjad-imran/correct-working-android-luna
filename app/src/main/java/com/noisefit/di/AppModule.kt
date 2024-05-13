@@ -18,6 +18,7 @@ import com.noisefit.data.repository.implementation.*
 import com.noisefit.data.repository.pagingSource.TimelinePagingSource
 import com.noisefit.util.TestModeUtils
 import com.noisefit.watch.*
+import com.noisefit_commans.data.db.abstraction.LocationDataSource
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.interfaces.base.BaseInitializeInterface
@@ -27,12 +28,15 @@ import com.noisefit_commans.interfaces.device_data.QueryDeviceDataActions
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataActions
 import com.noisefit_commans.utils.EncryptUtils
 import com.oreo.data.dataConverter.OreoDayTimeDataConvertor
+import com.oreo.data.dataConverter.OreoHRDataConvertor
 import com.oreo.data.dataConverter.OreoOfflineDataMapper
 import com.oreo.data.dataConverter.OreoOnlineDataMapper
+import com.oreo.data.dataConverter.OreoStressDataConvertor
 import com.oreo.data.db.OreoDataBase
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.db.implementation.OreoAutoSportDataImpl
 import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
+import com.oreo.data.db.implementation.OreoBodyStressDataImpl
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
 import com.oreo.data.db.implementation.OreoDayTimeMovementDataImpl
 import com.oreo.data.db.implementation.OreoGFitWorkoutDataImpl
@@ -88,6 +92,14 @@ object AppModule {
         )
     }
 
+
+    @Singleton
+    @Provides
+    fun provideOreoStressDataConvertor(
+    ): OreoStressDataConvertor {
+        return OreoStressDataConvertor()
+    }
+
     @Singleton
     @Provides
     fun provideDataUnitConverter(
@@ -100,9 +112,10 @@ object AppModule {
     @Provides
     fun provideDataConverter(
         keyValueDataSource: KeyValueDataSource,
-        ringDataStore: RingDataStore
+        ringDataStore: RingDataStore,
+        locationDataSource: LocationDataSource
     ): DataConverter {
-        return DataConverter(keyValueDataSource, ringDataStore)
+        return DataConverter(keyValueDataSource, ringDataStore, locationDataSource)
     }
 
 
@@ -114,8 +127,6 @@ object AppModule {
     ): WatchesSDK {
         return WatchesSDK(localDataStore, ringDataStore)
     }
-
-
 
 
     /*@Singleton
@@ -251,6 +262,7 @@ object AppModule {
         dayTimeMovementDataImpl: OreoDayTimeMovementDataImpl,
         sleepDataImpl: OreoSleepDataImpl,
         bodyTemperatureDataImpl: OreoBodyTemperatureDataImpl,
+        bodyStressDataImpl: OreoBodyStressDataImpl,
         offlineDataMapper: OfflineDataMapper,
         onlineDataMapper: OreoOnlineDataMapper,
         oreNapDataSource: OreoNapDataImpl,
@@ -271,6 +283,7 @@ object AppModule {
             bloodOxygenDataImpl,
             dayTimeMovementDataImpl,
             respiratoryDataImpl,
+            bodyStressDataImpl,
             sleepDataImpl,
             oreNapDataSource,
             bodyTemperatureDataImpl,
@@ -416,6 +429,13 @@ object AppModule {
     @Provides
     fun provideOreoDayTimeDataConvertor(): OreoDayTimeDataConvertor {
         return OreoDayTimeDataConvertor()
+    }
+
+    @Singleton
+    @Provides
+    fun provideOreoHrDataConvertor(
+    ): OreoHRDataConvertor {
+        return OreoHRDataConvertor()
     }
 
 }

@@ -1,6 +1,8 @@
 package com.noisefit_zhsdk.handler
 
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -12,12 +14,14 @@ import com.noisefit_commans.NoisefitApplication
 import com.noisefit_commans.constants.CommonGlobals
 import com.noisefit_commans.constants.WatchFaceEventsConstants
 import com.noisefit_commans.constants.WatchInfoGlobals
+import com.noisefit_commans.data.db.abstraction.LocationDataSource
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
 import com.noisefit_commans.enums.ApplicationType
 import com.noisefit_commans.interfaces.device_data.IUpdateDeviceDataCallback
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataActions
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallbacks
+import com.noisefit_commans.interfaces.device_data.WorkoutFailReason
 import com.noisefit_commans.models.AlarmAction
 import com.noisefit_commans.models.AlarmsList
 import com.noisefit_commans.models.AppNotification
@@ -34,6 +38,7 @@ import com.noisefit_commans.models.HeartRateAlert
 import com.noisefit_commans.models.HeartRateInterval
 import com.noisefit_commans.models.IncomingCall
 import com.noisefit_commans.models.Language
+import com.noisefit_commans.models.LocationDataModel
 import com.noisefit_commans.models.ManualMeasureType
 import com.noisefit_commans.models.ManualMeasurement
 import com.noisefit_commans.models.MenstrualData
@@ -62,6 +67,8 @@ import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.ImageUtil
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.LocationClientClass
+import com.noisefit_commans.location.LocationUtils
 import com.noisefit_commans.utils.LogEvents
 import com.noisefit_commans.utils.WatchFaceEvents
 import com.noisefit_commans.utils.sizeInKb
@@ -118,14 +125,21 @@ constructor(
     var context: Context,
     var gson: Gson,
     var zhApplicationHandler: ZhApplicationHandler,
-    var watchDataStore: WatchDataStore
+    var watchDataStore: WatchDataStore,
 ) : UpdateDeviceDataActions() {
+
+
+    private var sessionId = 0L
+    private var currentGpsSportState = -1
+
+    companion object {
+        const val LAT_LONG = "LAT_LONG"
+    }
 
     private var zhService: ControlBleTools? = null
     private var updateDeviceDataCallbacks: UpdateDeviceDataCallbacks? = null
 
 
-    private var mobileNumber: String? = null
     private var colorFitDevice: ColorFitDevice? = null
 
     private var testUpdateDeviceDataCallback: IUpdateDeviceDataCallback? = null
@@ -157,15 +171,15 @@ constructor(
 
     private val activeMeasureCallBack: ActiveMeasureCallBack = object : ActiveMeasureCallBack {
         override fun onMeasureStatus(p0: ActiveMeasureStatusBean?) {
-            LOGS.d(TAG, "onMeasuring nMeasureStatus ${Gson().toJson(p0)}")
+//            LOGS.d(TAG, "onMeasuring nMeasureStatus ${Gson().toJson(p0)}")
         }
 
         override fun onMeasuring(p0: ActiveMeasuringBean?) {
-            LOGS.d(TAG, "onMeasuring ${Gson().toJson(p0)}")
+//            LOGS.d(TAG, "onMeasuring ${Gson().toJson(p0)}")
         }
 
         override fun onMeasureResult(p0: ActiveMeasureResultBean?) {
-            LOGS.d(TAG, "onMeasuring onMeasureResult ${Gson().toJson(p0)}")
+//            LOGS.d(TAG, "onMeasuring onMeasureResult ${Gson().toJson(p0)}")
 
             if (p0 == null) {
                 return
@@ -321,7 +335,51 @@ constructor(
         )
     }
 
-    override fun startWorkout(sportType: Int, sportStartTime: Long) {
+
+    private var locationReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            var isPause = true
+            if (currentGpsSportState == 1 || currentGpsSportState == 3) {
+                isPause = false
+            }
+
+            LOGS.d("startWorkout location inside isPause: $isPause ($currentGpsSportState) sessionId: $sessionId")
+            val locationArrayList =
+                intent.getParcelableArrayListExtra<LocationDataModel>(LAT_LONG)
+
+            if (locationArrayList.isNullOrEmpty()) {
+                return
+            }
+
+
+            locationArrayList.forEach {
+                it.isRunning = isPause
+
+            }
+
+            if (sessionId == 0L) {
+                LOGS.d("workout sessionId can't be zero")
+                AppLogs.sendAppLogs("workout sessionId can't be zero")
+            } else {
+                watchDataStore.saveAndGetLocation(sessionId, locationArrayList)
+            }
+
+
+        }
+    }
+
+    private fun startLocationTracking() {
+        LOGS.d("LOCATION_lOG Start Location tracking")
+        LocationUtils.startLocationService()
+    }
+
+    private fun stopLocationTracking() {
+        LOGS.d("LOCATION_lOG Stop Location tracking")
+        LocationUtils.stopLocationService()
+    }
+
+    override fun startWorkout(sportType: Int, sportStartTime: Long, startGps: Boolean) {
+
         val bean = SendRingSportStatusBean(
             sportType,
             RingSportCallBack.RingSportStatus.SPORT_STATUS_START.status,
@@ -335,14 +393,23 @@ constructor(
                             //turn off auto workout recording
                             setAutoWorkoutStatus(false)
 
+                            LOGS.d("startWorkout started ")
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                 UpdateDeviceDataCallback.WorkoutStartState(true)
                             )
+                            if (startGps) {
+                                startLocationTracking()
+                            }
                         }
 
                         else -> {
+                            AppLogs.sendAppLogs("startWorkout failed  ${state}")
+                            LOGS.d("startWorkout failed ${state}")
                             testUpdateDeviceDataCallback?.onUpdateDataReceived(
-                                UpdateDeviceDataCallback.WorkoutStartState(false, "Failed")
+                                UpdateDeviceDataCallback.WorkoutStartState(
+                                    false,
+                                    WorkoutFailReason.FROM_RING
+                                )
                             )
                         }
                     }
@@ -355,7 +422,7 @@ constructor(
      *
      */
     override fun updateOngoingWorkout(sportType: Int, sportTimeStamp: Long, action: Int) {
-
+        LOGS.d("startWorkout updateOngoingWorkout ${sportType} -------> $action")
         val status = when (action) {
             2 -> RingSportCallBack.RingSportStatus.SPORT_STATUS_PAUSE.status
             3 -> RingSportCallBack.RingSportStatus.SPORT_STATUS_RESUME.status
@@ -382,6 +449,7 @@ constructor(
                             }
 
                             4 -> {
+                                stopLocationTracking()
                                 testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                     UpdateDeviceDataCallback.WorkoutStopped(true)
                                 )
@@ -406,6 +474,7 @@ constructor(
                             }
 
                             4 -> {
+                                stopLocationTracking()
                                 testUpdateDeviceDataCallback?.onUpdateDataReceived(
                                     UpdateDeviceDataCallback.WorkoutStopped(false)
                                 )
@@ -422,6 +491,7 @@ constructor(
     }
 
     fun stopWorkout(error: String) {
+        stopLocationTracking()
         testUpdateDeviceDataCallback?.onUpdateDataReceived(
             UpdateDeviceDataCallback.WorkoutStoppedByRing(error)
         )
@@ -432,6 +502,7 @@ constructor(
     private val ringSportCallback = object : RingSportCallBack {
         override fun onRingSportStatus(bean: RingSportStatusBean?) {
             LOGS.d(TAG, "onRingSportStatus ${Gson().toJson(bean)}")
+            LOGS.d("startWorkout onRingSportStatus bean::::  ${Gson().toJson(bean)}")
             if (bean == null) return
 
 
@@ -450,6 +521,7 @@ constructor(
 
             if (bean.startResult != RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_NONE.result) {
                 setAutoWorkoutStatus(true)
+                stopLocationTracking()
                 when (bean.startResult) {
                     RingSportCallBack.RingSportStartResult.SPORT_START_RESULT_LOW_POWER.result -> {
                         /*testUpdateDeviceDataCallback?.onUpdateDataReceived(
@@ -482,6 +554,7 @@ constructor(
 
             if (bean.sportStatus == RingSportCallBack.RingSportStatus.SPORT_STATUS_END.status) {
                 setAutoWorkoutStatus(true)
+                stopLocationTracking()
 
                 if (bean.endReason != RingSportCallBack.RingSportEndReason.SPORT_END_REASON_NONE.reason) {
                     when (bean.endReason) {

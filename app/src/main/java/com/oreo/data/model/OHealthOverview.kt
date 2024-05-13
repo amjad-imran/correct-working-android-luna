@@ -1,7 +1,5 @@
 package com.oreo.data.model
 
-import com.github.mikephil.charting.data.CandleEntry
-import com.github.mikephil.charting.data.Entry
 import com.noisefit_commans.models.SleepData
 import com.oreo.data.model.health.InfoTextData
 import com.oreo.data.model.health.InfoVideoData
@@ -9,6 +7,7 @@ import com.oreo.data.model.health.Nap
 import com.oreo.data.model.health.ODashboardActivityModel
 import com.oreo.data.model.health.ODashboardReadinessModel
 import com.oreo.data.model.health.ODashboardSleepModel
+import com.oreo.ui.custom.StressCombineModel
 
 
 sealed class OHealthOverview {
@@ -18,6 +17,16 @@ sealed class OHealthOverview {
     data class InfoRingCare(val data: InfoTextData) : OHealthOverview()
     data class NapDashCard(val naps: List<Nap>, val date: String) : OHealthOverview()
     data class InfoVideo(val type: VideoInfoType, val data: InfoVideoData) :
+        OHealthOverview()
+
+    data class StressGraph(
+        val data: StressCombineModel,
+        val value: Int,
+        val timeStamp: Long,
+        val valueStatus: String,
+        val isToday: Boolean,
+        val isBeta: Boolean = false
+    ) :
         OHealthOverview()
 
 
@@ -56,14 +65,23 @@ sealed class OHealthOverview {
         val caloriesGoal: Int
     ) : OHealthOverview()
 
-    class HeartRate(
-        var value: String,
-        var lastTime: String,
-        val candleValue: ArrayList<CandleEntry> = ArrayList(),
-        val lineData: Pair<ArrayList<Entry>, ArrayList<Int>>,
-        val xLabelList: ArrayList<String> = ArrayList(),
-        val axisMinimum: Float,
+    //    class HeartRate(
+//        var value: String,
+//        var lastTime: String,
+//        val candleValue: ArrayList<CandleEntry> = ArrayList(),
+//        val lineData: Pair<ArrayList<Entry>, ArrayList<Int>>,
+//        val xLabelList: ArrayList<String> = ArrayList(),
+//        val axisMinimum: Float,
+//        val average: Float,
+//        var measureState: TapMeasureState = TapMeasureState.DEFAULT
+//    ) : OHealthOverview()
+    class HeartRateDataModel(
+        val listData: List<HRModel>? = null,
         val average: Float,
+        var lastTime: String? = "",
+        var value: String? = "",
+        var maxValues: Int,
+        var minValues: Int,
         var measureState: TapMeasureState = TapMeasureState.DEFAULT
     ) : OHealthOverview()
 
@@ -82,7 +100,6 @@ sealed class OHealthOverview {
         val trend: Int? = null,
         val value: List<ChartModel>? = ArrayList()
     ) : OHealthOverview()
-
 
 }
 

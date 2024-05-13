@@ -27,6 +27,8 @@ import com.oreo.data.model.health.OreoActivityModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import org.joda.time.LocalDateTime
+import org.joda.time.format.DateTimeFormat
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -525,7 +527,7 @@ class OreoActivityViewModel @Inject constructor(
         return Pair(time, timeUnit)
     }
 
-    var stressActivityData: ArrayList<ODayTimeActivitiesDataModel>? = null
+    var stressActivityData = ArrayList<ODayTimeActivitiesDataModel>()
     fun prepareStressActivityData(dayData: ServerUserHealthData) {
         val workouts = dayData.activity?.workout
         val sleep = dayData.sleep
@@ -534,7 +536,8 @@ class OreoActivityViewModel @Inject constructor(
             dataList.add(
                 ODayTimeActivitiesDataModel(
                     type = "Workout",
-                    workoutData = it
+                    workoutData = it,
+                    dateTime = "${it.date} ${it.startTime}"
                 )
             )
         }
@@ -545,6 +548,7 @@ class OreoActivityViewModel @Inject constructor(
                         type = "Sleep",
                         startTime = sleep.hourly_breakup?.firstOrNull()?.start_time,
                         endTime = sleep.hourly_breakup?.lastOrNull()?.end_time,
+                        dateTime = "${sleep.hourly_breakup?.firstOrNull()?.start_time}"
                     )
                 )
         }
@@ -556,13 +560,16 @@ class OreoActivityViewModel @Inject constructor(
                         type = "Nap",
                         id = nap.id,
                         startTime = nap.startTime,
-                        endTime = nap.endTime
+                        endTime = nap.endTime,
+                        dateTime = "${nap.startTime}"
                     )
                 )
             }
         }
-
-        stressActivityData = dataList
+        stressActivityData.clear()
+        stressActivityData.addAll(dataList.sortedBy {
+            LocalDateTime.parse(it.dateTime, DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"))
+        })
     }
 
 

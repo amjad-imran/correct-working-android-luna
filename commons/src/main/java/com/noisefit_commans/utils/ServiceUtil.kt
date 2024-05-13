@@ -383,7 +383,7 @@ object ServiceUtil {
                 updateAction.closeFindPhoneFromWatch(it.status)
             }
             is UpdateDeviceAction.StartWorkout -> {
-                updateAction.startWorkout(it.sportType,it.sportStartTime)
+                updateAction.startWorkout(it.sportType,it.sportStartTime,it.startGps)
             }
             is UpdateDeviceAction.CheckOngoingWorkout -> {
                 updateAction.checkOngoingWorkout()

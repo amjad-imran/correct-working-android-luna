@@ -210,6 +210,20 @@ object ApplicationUtils {
         }
     }
 
+    /**
+     * Returns Hour,Minute,seconds from seconds
+     */
+    fun getFormattedDuration(value: Long): Triple<Int, Int, Int> {
+        return if (value == 0L) {
+            Triple(0, 0, 0)
+        } else {
+            val hours: Int = (value / 3600).toInt()
+            val minutes: Int = ((value % 3600) / 60).toInt()
+            val seconds: Int = (value % 60).toInt()
+            Triple(hours, minutes, seconds)
+        }
+    }
+
 
     /** value in seconds
      * Returns Hour,Minute
@@ -267,17 +281,6 @@ object ApplicationUtils {
 
         WorkManager.getInstance(context).enqueue(request)
     }
-
-    fun stopWeatherScheduler(context: Context) {
-        LOGS.d("$UniqueWeatherWorkName: inside stopWeatherScheduler ")
-        WorkManager.getInstance(context).cancelUniqueWork(UniqueWeatherWorkName)
-    }
-
-    fun stopSportScheduler(context: Context) {
-        LOGS.d("$UniqueSportSyncWorkName: inside stopSportScheduler ")
-        WorkManager.getInstance(context).cancelUniqueWork(UniqueSportSyncWorkName)
-    }
-
 
     fun clearJobs(context: Context) {
         WorkManager.getInstance(context).cancelAllWork()

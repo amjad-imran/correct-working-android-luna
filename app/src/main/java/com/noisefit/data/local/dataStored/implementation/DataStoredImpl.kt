@@ -193,6 +193,7 @@ private const val DASH_CARD_CLICK_STATE = "DASH_CARD_CLICK_STATE"
 private const val BATTERY_DASH_ALERT = "BATTERY_DASH_ALERT"
 private const val SLEEP_NOTIFICATION = "SLEEP_NOTIFICATION"
 private const val READINESS_NOTIFICATION = "READINESS_NOTIFICATION"
+private const val STRESS_WALKRHTOUGH = "STRESS_WALKRHTOUGH"
 
 
 private const val APP_VERSION_NEW = "APP_VERSION_NEW"
@@ -209,6 +210,14 @@ class DataStoredImpl
 @Inject constructor(
     private val gson: Gson, private val mPrefs: SharedPreferences
 ) : DataStoredInterface {
+
+    override fun getStressWalkthroughShownStatus(): Boolean {
+        return mPrefs.getBoolean(STRESS_WALKRHTOUGH, false)
+    }
+
+    override fun setStressWalkthroughShown(isShown: Boolean) {
+        mPrefs.edit()?.putBoolean(STRESS_WALKRHTOUGH, isShown)?.commit()
+    }
 
     override fun saveNewAppVersion(newAppData: String, currentVersion: Int) {
         mPrefs.edit()?.putString(APP_VERSION_NEW, newAppData)?.commit()
@@ -290,6 +299,7 @@ class DataStoredImpl
 
     override fun clearUserLogoutData() {
         mPrefs.edit()?.remove(BATTERY_DASH_ALERT)?.apply()
+        mPrefs.edit()?.remove(STRESS_WALKRHTOUGH)?.apply()
     }
 
     override fun getDashCardClickState(): HashMap<DashInfoCard, Boolean> {

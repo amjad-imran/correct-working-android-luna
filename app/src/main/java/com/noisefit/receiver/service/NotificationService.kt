@@ -65,7 +65,8 @@ constructor() : FirebaseMessagingService() {
                 val pushPayload = message.data
                 if (MoEPushHelper.getInstance().isFromMoEngagePlatform(pushPayload)) {
                     Logger.print { "$TAG onMessageReceived() : Will try to show push" }
-                    MoEFireBaseHelper.getInstance().passPushPayload(applicationContext, pushPayload)
+                    MoEFireBaseHelper.getInstance()
+                        .passPushPayload(applicationContext, pushPayload)
                 } else {
                     Logger.print { "$TAG onMessageReceived() : Not a MoEngage Payload." }
                     val extras = Bundle()

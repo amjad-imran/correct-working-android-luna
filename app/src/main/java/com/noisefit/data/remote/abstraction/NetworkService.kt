@@ -121,37 +121,18 @@ interface NetworkService {
 
 
     //Auth APIs
-
-    @POST("/users/auth/sign_up")
-    suspend fun signup(@Body signup: RegistrationRequest): BaseApiResponse<RegistrationResponse>
-
     @POST
     suspend fun loginUser(
         @Url url: String,
         @Body login: LoginRequest
     ): BaseApiResponse<RegistrationResponse>
 
-    @POST("/users/v3/login")
-    suspend fun loginUserOld(@Body login: LoginRequest): BaseApiResponse<RegistrationResponse>
 
     @POST("/users/v3/auth/logout")
     suspend fun logoutUser(): BaseApiResponse<String?>
 
     @POST("/users/v3/disable")
     suspend fun deleteUser(): BaseApiResponse<String?>
-
-
-    @POST("/users/auth/update_mobile")
-    suspend fun updateMobile(@Body jsonObject: JsonObject): BaseApiResponse<MessageResponse>
-
-    @POST("/users/auth/forgot_password")
-    suspend fun generateOtp(@Body jsonObject: JsonObject): BaseApiResponse<MessageResponse>
-
-    @POST("/users/auth/update_mobile")
-    suspend fun changeMobileNumber(@Body jsonObject: JsonObject): BaseApiResponse<MessageResponse>
-
-    @POST("/users/auth/update_email")
-    suspend fun changeEmail(@Body jsonObject: JsonObject): BaseApiResponse<MessageResponse>
 
 
     @POST
@@ -168,14 +149,6 @@ interface NetworkService {
 
     @POST("/users/v3/international/create")
     suspend fun createInternationalUser(@Body jsonObject: JsonObject): BaseApiResponse<RegistrationResponse>
-
-
-    @POST("/users/auth/reset_password")
-    suspend fun resetPassword(@Body jsonObject: JsonObject): BaseApiResponse<MessageResponse>
-
-
-    @POST("users/update/password")
-    suspend fun updatePassword(@Body jsonObject: JsonObject): BaseApiResponse<MessageResponse>
 
 
     @Multipart
@@ -582,12 +555,6 @@ interface NetworkService {
 
     //Challenge APIs
 
-    //Warranty Register APIs
-    @GET("/warranty/check/{number}")
-    suspend fun checkWarranty(
-        @Path("number") number: String
-    ): BaseApiResponse<WarrantyResponse>
-
     @POST
     suspend fun checkWatchTokenExist(
         @Url url: String,
@@ -927,6 +894,15 @@ interface NetworkService {
         @Url url: String,
         @Body napRequest: OreoNapNetworkEntity
     ): BaseApiResponse<List<OreoNapDetailsDataModel>>
+
+
+    @GET
+    suspend fun getStressInternalPageData(
+        @Url url: String,
+        @Query("date") selectDate: String,
+        @Query("type") dayType: String,
+        @Query("filter_type") filterType: String
+    ): BaseApiResponse<List<StressResultData>>
     /**
      * ---------------------------------------------------------------------------------
      *                                Oreo Services End

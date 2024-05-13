@@ -1,5 +1,6 @@
 package com.noisefit.data.dataConverter
 
+import android.location.Location
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -7,29 +8,30 @@ import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.local.db.fromJson
 import com.noisefit_commans.common.ceilRound
+import com.noisefit_commans.data.db.LocationModel
+import com.noisefit_commans.data.db.abstraction.LocationDataSource
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.model.RecordedWorkoutData
-import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.AddWorkoutResponse
 import com.oreo.data.model.health.Nap
 import com.oreo.data.model.health.SleepHourlyBreakup
 import javax.inject.Inject
+import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 
 
 class DataConverter
-@Inject
-constructor(
+@Inject constructor(
     val keyValueDataSource: KeyValueDataSource,
-    val ringDataStore: RingDataStore
+    val ringDataStore: RingDataStore,
+    val locationDataSource: LocationDataSource
 ) {
 
     fun mergeSleepData(
-        sleepArray: List<SleepHourlyBreakup>?,
-        naps: List<Nap>?
+        sleepArray: List<SleepHourlyBreakup>?, naps: List<Nap>?
     ): List<SleepHourlyBreakup>? {
         if (naps.isNullOrEmpty()) return sleepArray
         if (sleepArray.isNullOrEmpty()) return null
@@ -53,11 +55,9 @@ constructor(
 
             if (sleepArrayFirst?.start_time != null && dateTime.equals(sleepArrayFirst.start_time)) {
                 if (lastDateTime != null) {
-                    val duration =
-                        DateFormats.getDifferenceInMinutes(
-                            lastDateTime,
-                            sleepArrayFirst.start_time
-                        ) * 60
+                    val duration = DateFormats.getDifferenceInMinutes(
+                        lastDateTime, sleepArrayFirst.start_time
+                    ) * 60
                     newSleepArray.add(
                         SleepHourlyBreakup(
                             start_time = lastDateTime ?: "",
@@ -77,8 +77,7 @@ constructor(
                 breakup?.let {
                     if (lastDateTime != null) {
                         val duration = DateFormats.getDifferenceInMinutes(
-                            lastDateTime,
-                            it.start_time
+                            lastDateTime, it.start_time
                         ) * 60
                         newSleepArray.add(
                             SleepHourlyBreakup(
@@ -131,7 +130,10 @@ constructor(
 
         workouts.forEach { workout ->
 
-            val workoutTypeString = getWorkoutType(workout.type, workoutsList)
+            val (workoutTypeString, dataType, dataPriority) = getWorkoutData(
+                workout.type,
+                workoutsList
+            )
             if (workoutTypeString != null && workout.duration != 0 && !toDeleteList.contains(workout.startTime)) {
 
                 /* val date = DateFormats.convertTimestampToDate(
@@ -145,51 +147,136 @@ constructor(
                     DateFormats.convertTimestampToDate(workout.endTime, DateFormats.timeFormat)
 
 
-                jsonArray.add(
-                    JsonObject(
-                    ).apply {
-                        this.addProperty("distance", workout.distance)
-                        this.addProperty("cadence", workout.cadence)
-                        this.addProperty("recovery_time", workout.recoveryTime)
-                        this.addProperty("duration", workout.duration)
-                        this.addProperty("calories", workout.calories)
-                        this.addProperty("activity_type", workoutTypeString)
-                        this.addProperty("start_time", startTime)
-                        this.addProperty("end_time", endTime)
+                val locationData =
+                    locationDataSource.getLocations(workout.startTime, workout.endTime).sortedBy {
+                        it.timeStamp
+                    }
 
-                        val intensityArray = JsonArray()
 
-                        val intArray = Gson().fromJson<List<Int>>(workout.intensityList ?: "")
+                jsonArray.add(JsonObject(
+                ).apply {
+                    this.addProperty("distance", workout.distance)
+                    this.addProperty("cadence", workout.cadence)
+                    this.addProperty("recovery_time", workout.recoveryTime)
+                    this.addProperty("duration", workout.duration)
+                    this.addProperty("duration_seconds", workout.durationSeconds)
+                    this.addProperty("calories", workout.calories)
+                    this.addProperty("activity_type", workoutTypeString)
+                    this.addProperty("start_time", startTime)
+                    this.addProperty("end_time", endTime)
 
-                        intArray.forEach {
-                            intensityArray.add(it)
+                    this.addProperty("data_type", dataType)
+                    this.addProperty("data_priority", dataPriority)
+
+                    val locationArray = JsonArray()
+                    var temp: Double? = null
+                    var city: String? = null
+                    var weatherStatus: Int? = null
+
+                    locationData.forEach { location ->
+                        locationArray.add(JsonObject().apply {
+                            this.addProperty("lat", location.lat)
+                            this.addProperty("long", location.longitude)
+                            this.addProperty("timestamp", location.timeStamp / 1000)
+                        })
+                        if (temp == null) {
+                            temp = location.temperature
+                            weatherStatus = location.weatherStatus
+                        }
+                        if (city == null) {
+                            city = location.location
+                        }
+                    }
+
+                    val gpsDistanceInMeters = getGpsDistance(locationData)
+
+                    if (locationArray.isEmpty.not()) {
+                        val locObject = JsonObject().apply {
+                            this.add("locations", locationArray)
+                            this.addProperty("start_location", city)
                         }
 
-                        val intensity = try {
-                            intArray.average().ceilRound()
-                        } catch (exp: Exception) {
-                            //NAN case, all other cases
-                            0
-                        }
-                        this.addProperty(
-                            "intensity",
-                            getIntensity(intensity)
-                        )
+                        this.add("location", locObject)
+                        this.addProperty("gps_distance", gpsDistanceInMeters)
+                    }
+                    if (temp != null) {
+                        this.add("weather", JsonObject().apply {
+                            this.addProperty("temp", temp?.roundToInt())
+                            this.addProperty("status", weatherStatus)
+                        })
+                    }
+
+                    val intensityArray = JsonArray()
+
+                    val intArray = Gson().fromJson<List<Int>>(workout.intensityList ?: "")
+
+                    intArray.forEach {
+                        intensityArray.add(it)
+                    }
+
+                    val intensity = try {
+                        intArray.average().ceilRound()
+                    } catch (exp: Exception) {
+                        //NAN case, all other cases
+                        0
+                    }
+                    this.addProperty(
+                        "intensity",
+                        getIntensity(intensity)
+                    )
 
 
-                        this.add("intensity_value", intensityArray)
-                        val hrArray = JsonArray()
-                        Gson().fromJson<List<Int>>(workout.hrData ?: "").forEach {
-                            hrArray.add(it)
-                        }
-                        this.add("hr_value", hrArray)
-                        this.addProperty("steps", workout.steps)
-                        this.addProperty("type", "userworkout")
-                        this.addProperty("date", workout.date)
-                    })
+                    this.add("intensity_value", intensityArray)
+                    val hrArray = JsonArray()
+                    Gson().fromJson<List<Int>>(workout.hrData ?: "").forEach {
+                        hrArray.add(it)
+                    }
+                    this.add("hr_value", hrArray)
+                    this.addProperty("steps", workout.steps)
+                    this.addProperty("type", "userworkout")
+                    this.addProperty("date", workout.date)
+                })
             }
         }
         return jsonArray
+    }
+
+    private fun getGpsDistance(locationData: List<LocationModel>): Long {
+        if (locationData.size <= 1) return 0
+
+        var distance = 0L
+        for (pos in 1 until locationData.size) {
+            val location1 = locationData[pos - 1]
+            val location2 = locationData[pos]
+
+            if (location1.lat != null && location1.longitude != null && location2.lat != null && location2.longitude != null) {
+                distance += calculateDistance(
+                    location1.lat!!, location1.longitude!!, location2.lat!!, location2.longitude!!
+                )
+            }
+        }
+        return distance
+    }
+
+    private fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Long {
+
+        val loc1 = Location("start")
+        loc1.latitude = lat1
+        loc1.longitude = lon1
+
+        val loc2 = Location("end")
+        loc2.latitude = lat2
+        loc2.longitude = lon2
+
+        return loc1.distanceTo(loc2).roundToLong()
+    }
+
+    private fun deg2rad(deg: Double): Double {
+        return deg * Math.PI / 180.0
+    }
+
+    private fun rad2deg(rad: Double): Double {
+        return rad * 180.0 / Math.PI
     }
 
     private fun getWorkoutType(type: Int?, workoutsList: List<OWorkoutListModal>): String? {
@@ -199,6 +286,25 @@ constructor(
             it.ringId == type
         }
         return workout?.activityType
+    }
+
+
+    /**
+     * return Triple -> <Activity type, data type, data priority>
+     */
+    private fun getWorkoutData(
+        type: Int?, workoutsList: List<OWorkoutListModal>
+    ): Triple<String?, String?, String?> {
+        if (type == null) return Triple(null, null, null)
+
+        val workout = workoutsList.find {
+            it.ringId == type
+        }
+        return if (workout == null) {
+            Triple(null, null, null)
+        } else {
+            Triple(workout.activityType, workout.dataType, workout.dataPriority)
+        }
     }
 
     private fun getIntensity(intensity: Int): String {
@@ -231,8 +337,7 @@ constructor(
     suspend fun getSportModeResponseArray(workouts: List<RecordedWorkoutData>): List<SportsModeResponse> {
         val list = ArrayList<SportsModeResponse>()
 
-        val offlineList =
-            keyValueDataSource.getData("", KeyValueDataType.RECORD_WORKOUT)?.value
+        val offlineList = keyValueDataSource.getData("", KeyValueDataType.RECORD_WORKOUT)?.value
 
         val workoutsList = if (offlineList == null) {
             ArrayList()

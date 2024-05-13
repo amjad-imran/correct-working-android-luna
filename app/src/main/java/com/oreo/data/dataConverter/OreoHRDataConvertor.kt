@@ -1,0 +1,320 @@
+package com.oreo.data.dataConverter
+
+import android.graphics.Color
+import com.noisefit.luna.R
+import com.noisefit_commans.common.maxWithInvalidMovementValues
+import com.noisefit_commans.common.maxWithoutInvalidMovementValues
+import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
+import com.oreo.data.model.HRModel
+import com.oreo.data.model.OActivityListModal
+import com.oreo.data.model.OHealthOverview
+import com.oreo.data.model.ServerUserHealthData
+import com.oreo.data.model.health.Nap
+import com.oreo.data.model.health.OreoSleepModel
+import com.oreo.ui.custom.HRCombineModel
+import com.oreo.ui.custom.Item
+import com.oreo.ui.custom.Section
+import javax.inject.Inject
+import kotlin.math.abs
+import kotlin.math.floor
+
+class OreoHRDataConvertor
+@Inject
+constructor(
+) {
+    /**
+     * Hr
+     */
+    fun getHrCombinedData(
+        dayData: ServerUserHealthData?,
+        hearRate: OHealthOverview.HeartRateDataModel
+    ): HRCombineModel {
+
+//        val hrBreakup =
+//            Gson().fromJson<List<Int>>("[10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,4,10,12,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,55,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44,10,12,13,15,17,19,26,55,77,88,22,44,33,44]")
+
+        var breakUpData = ArrayList<HRModel>()
+
+        if (hearRate.listData.isNullOrEmpty()) {
+            breakUpData = ArrayList()
+        } else {
+            hearRate.listData.forEach {
+                breakUpData.add(it)
+            }
+        }
+        val workouts = dayData?.activity?.workout
+        val sections: MutableList<Section> = ArrayList()
+        workouts?.forEach {
+            getWorkoutSections(it)?.let { pos ->
+                sections.add(
+                    Section(
+                        "workout",
+                        pos.first,
+                        pos.second,
+                        Color.parseColor("#4c8ed3f1"),
+                        R.drawable.icon_stress_sport,
+                        pos.third
+                    )
+                )
+            }
+        }
+
+        getSleepSection(dayData?.sleep)?.let { pos ->
+            sections.add(
+                Section(
+                    "sleep",
+                    pos.first,
+                    pos.second,
+                    Color.parseColor("#4cc5a8ed"),
+                    R.drawable.icon_stress_sleep
+                )
+            )
+        }
+
+        dayData?.sleep?.naps?.forEach { nap ->
+            getNapSection(nap, dayData.date)?.let {
+                sections.add(
+                Section(
+                    "nap",
+                    it.first,
+                    it.second,
+                    Color.parseColor("#4cc5a8ed"),
+                    R.drawable.icon_stress_sleep
+                ))
+            }
+        }
+
+        val items: MutableList<Item> = ArrayList()
+        breakUpData.forEachIndexed { index, i ->
+            items.add(Item(i.midValues, index, i.minValues, i.maxValues))
+        }
+        val combinedSection = combineSections(sections)
+        return HRCombineModel(
+            sections = combinedSection,
+            items = items
+        )
+    }
+
+    private fun getCombinedMovementData(
+        originalList: List<Int>?,
+        includeInvalid: Boolean = false
+    ): List<Int> {
+        if (originalList.isNullOrEmpty()) {
+            return MutableList(96) { 255 }
+        }
+        val combinedList = ArrayList<Int>()
+        for (i in originalList.indices step 3) {
+            val endIndex = i + 3
+            if (endIndex <= originalList.size) {
+                val max = if (includeInvalid) {
+                    originalList.subList(i, endIndex).maxWithInvalidMovementValues()
+                } else {
+                    originalList.subList(i, endIndex).maxWithoutInvalidMovementValues()
+                }
+                combinedList.add(max)
+            }
+        }
+        return combinedList
+    }
+
+    private fun combineSections(sections: List<Section>): List<Section>? {
+
+        val sortedSection = sections.sortedBy {
+            it.start
+        }
+
+        val combinedSection = ArrayList<Section>()
+
+        var current = 0
+        var innerLoop = 0
+        while (current < sortedSection.size) {
+            if (sortedSection[current].type.equals("workout", true)) {
+                innerLoop = current
+                var count = 1
+
+                val sectionStart = sortedSection[current].start
+                var sectionEnd = sortedSection[current].end
+                while (innerLoop < sortedSection.size) {
+                    val nextItemPos = innerLoop + 1
+
+                    if (nextItemPos == sortedSection.size) break
+
+                    if (sortedSection[innerLoop].end + 1 == sortedSection[innerLoop + 1].start ||
+                        sortedSection[innerLoop].start == sortedSection[innerLoop + 1].start
+                    ) {
+                        sectionEnd = sortedSection[innerLoop + 1].end
+                        count++
+                    } else {
+                        break
+                    }
+
+                    innerLoop++
+                }
+                current = innerLoop
+
+                val combinedSec = sortedSection[current].copy()
+
+                if (count > 1) {
+                    combinedSec.start = sectionStart
+                    combinedSec.end = sectionEnd
+                    combinedSec.type = "combined"
+                    combinedSec.count = count
+                }
+
+
+
+                combinedSection.add(combinedSec)
+            } else {
+                combinedSection.add(sortedSection[current])
+            }
+
+            current++
+        }
+
+        return combinedSection
+
+
+    }
+
+
+    private fun getWorkoutSections(it: OActivityListModal): Triple<Int, Int, String?>? {
+        val startTimeStamp = DateFormats.convertDateTimeToTimeStamp(
+            "${it.date} ${it.startTime}",
+            DateFormats.dateTimeFormat5
+        )
+        if (startTimeStamp == null || startTimeStamp == 0L) return null
+
+        val day1Minutes =
+            DateFormats.getDayElapsedMinutesFromTimeStamp(startTimeStamp) ?: return null
+
+        val day1MinutesCeil = 30 * (floor(abs(day1Minutes.toDouble() / 30)))
+
+        val startPos = (day1MinutesCeil / 30 - 1).toInt()
+
+        var calculatedDuration = startPos + (it.duration ?: 0) / 30
+        if (calculatedDuration > 47) {
+            calculatedDuration = 47
+        }
+
+        return Triple(startPos, calculatedDuration.toInt(), it.iconUrl)
+    }
+
+    private fun getNapSection(nap: Nap, date: String): Pair<Int, Int>? {
+
+        val startTime = nap.startTime
+        val endTime = nap.endTime
+
+        val sleepStartDate = startTime.split(" ")[0]
+        val sleepEndDate = endTime.split(" ")[0]
+
+        if (!nap.date.equals(date) || nap.isNextDayNap) return null
+
+        if (sleepStartDate.equals(sleepEndDate)) {
+            //Same day Sleep
+            val startTimeStamp = DateFormats.convertDateTimeToTimeStamp(
+                startTime,
+                DateFormats.dateTimeFormat5
+            ) ?: return null
+            val day1Minutes =
+                DateFormats.getDayElapsedMinutesFromTimeStamp(startTimeStamp) ?: return null
+            val day1MinutesCeil = 30 * (floor(abs(day1Minutes.toDouble() / 30)))
+            val startPos = (day1MinutesCeil / 30 - 1).toInt()
+
+
+            val endTimeStamp = DateFormats.convertDateTimeToTimeStamp(
+                endTime,
+                DateFormats.dateTimeFormat5
+            ) ?: return null
+            val day1EndMinutes =
+                DateFormats.getDayElapsedMinutesFromTimeStamp(endTimeStamp) ?: return null
+            val day1EndMinutesCeil = 30 * (floor(abs(day1EndMinutes.toDouble() / 30)))
+            var endPos = (day1EndMinutesCeil / 30 - 1).toInt()
+            if (endPos > 47) {
+                endPos = 47
+            }
+
+            return Pair(startPos, endPos)
+
+
+        } else {
+            //Multi day sleep
+
+            val endTimeStamp = DateFormats.convertDateTimeToTimeStamp(
+                endTime,
+                DateFormats.dateTimeFormat5
+            ) ?: return null
+            val day1EndMinutes =
+                DateFormats.getDayElapsedMinutesFromTimeStamp(endTimeStamp) ?: return null
+            val day1EndMinutesCeil = 30 * (floor(abs(day1EndMinutes.toDouble() / 30)))
+            var endPos = (day1EndMinutesCeil / 30 - 1).toInt()
+            if (endPos > 47) {
+                endPos = 47
+            }
+
+            return Pair(0, endPos)
+        }
+
+
+    }
+
+    /**
+     * "start_time":"2024-01-29 23:34:00",
+     * "end_time":"2024-01-29 23:43:30",
+     */
+    private fun getSleepSection(sleep: OreoSleepModel?): Pair<Int, Int>? {
+        val startTime = sleep?.hourly_breakup?.firstOrNull()?.start_time
+        val endTime = sleep?.hourly_breakup?.lastOrNull()?.end_time
+        if (startTime == null || endTime == null) return null
+
+        val sleepStartDate = startTime.split(" ")[0]
+        val sleepEndDate = endTime.split(" ")[0]
+
+        if (sleepStartDate.equals(sleepEndDate)) {
+            //Same day Sleep
+            val startTimeStamp = DateFormats.convertDateTimeToTimeStamp(
+                startTime,
+                DateFormats.dateTimeFormat5
+            ) ?: return null
+            val day1Minutes =
+                DateFormats.getDayElapsedMinutesFromTimeStamp(startTimeStamp) ?: return null
+            val day1MinutesCeil = 30 * (floor(abs(day1Minutes.toDouble() / 30)))
+            val startPos = (day1MinutesCeil / 30 - 1).toInt()
+
+
+            val endTimeStamp = DateFormats.convertDateTimeToTimeStamp(
+                endTime,
+                DateFormats.dateTimeFormat5
+            ) ?: return null
+            val day1EndMinutes =
+                DateFormats.getDayElapsedMinutesFromTimeStamp(endTimeStamp) ?: return null
+            val day1EndMinutesCeil = 30 * (floor(abs(day1EndMinutes.toDouble() / 30)))
+            var endPos = (day1EndMinutesCeil / 30 - 1).toInt()
+            if (endPos > 47) {
+                endPos = 47
+            }
+
+            return Pair(startPos, endPos)
+
+
+        } else {
+            //Multi day sleep
+
+            val endTimeStamp = DateFormats.convertDateTimeToTimeStamp(
+                endTime,
+                DateFormats.dateTimeFormat5
+            ) ?: return null
+            val day1EndMinutes =
+                DateFormats.getDayElapsedMinutesFromTimeStamp(endTimeStamp) ?: return null
+            val day1EndMinutesCeil = 30 * (floor(abs(day1EndMinutes.toDouble() / 30)))
+            var endPos = (day1EndMinutesCeil / 30 - 1).toInt()
+            if (endPos > 47) {
+                endPos = 47
+            }
+
+            return Pair(0, endPos)
+        }
+    }
+
+
+}

@@ -51,6 +51,8 @@ private const val CHARGING_NOTIFICATION = "CHARGING_NOTIFICATION"
 
 private const val RYEEX_WATCH_TOKEN_ARG = "RYEEX_WATCH_TOKEN_ARG"
 private const val WEATHER_SPORT_DATA_KEY = "WEATHER_SPORT_DATA_KEY_2"
+private const val TEST_BODY_BATTERY = "TEST_BODY_BATTERY"
+private const val TEST_STRESS_DATA = "TEST_STRESS_DATA"
 
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -63,8 +65,27 @@ constructor(
     private val mPrefs: SharedPreferences
 ) : WatchDataStore {
 
+    override fun testSaveBodyBatteryData(data: String?) {
+        mPrefs.edit()
+            ?.putString(TEST_BODY_BATTERY, data)
+            ?.commit()
+    }
 
+    override fun testGetBodyBatteryData(): String? {
+        return mPrefs.getString(TEST_BODY_BATTERY, null)
 
+    }
+
+    override fun testSaveStressData(data: String?) {
+        mPrefs.edit()
+            ?.putString(TEST_STRESS_DATA, data)
+            ?.commit()
+    }
+
+    override fun testGetStressData(): String? {
+        return mPrefs.getString(TEST_STRESS_DATA, null)
+
+    }
 
     override fun getLastSavedAverageHrv(): Int {
         return mPrefs.getInt(AVERAGE_LAST_DAY_HRV, 0)

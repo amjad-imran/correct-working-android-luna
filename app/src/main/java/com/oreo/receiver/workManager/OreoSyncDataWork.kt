@@ -167,7 +167,7 @@ constructor(
                             is Resource.GenericError -> {
 //                                sessionManager.logAppEvent(FunnelEvents.SyncEvents.Sync_Error_Uploading_Data.name, eventProperty)
                                 LOGS.d(TAG, "OreoSyncDataWork: combinedData1 " + resource.message)
-                                AppLogs.sendAppLogs("OreoSyncDataWork postDataToServer GenericError ${resource.message}")
+                                AppLogs.sendAppLogs("OreoSyncDataWork postDataToServer GenericError ${resource.errorCode} ${resource.message}")
                             }
 
                             is Resource.Loading -> {
@@ -542,6 +542,33 @@ constructor(
                             }
                         }
 
+                        is UserActivityCallback.OreoBodyStressDataObtained -> {
+                            syncDataScope.launch {
+                                syncRepository.saveBodyStressData(userActivityCallback.bodyStressData)
+                                    .collect { resource ->
+                                        when (resource) {
+                                            is CacheResult.Success -> {
+                                                LOGS.d(
+                                                    TAG,
+                                                    "OreoSyncDataWork: BODY_STRESS ${resource.value}"
+                                                )
+                                                sessionManager.setShowSyncOfflineData(
+                                                    Event(
+                                                        HealthOverviewDataType.BODY_STRESS
+                                                    )
+                                                )
+                                            }
+
+                                            is CacheResult.GenericError -> {
+//                                                failed.invoke()
+                                                LOGS.e(TAG, "OreoSyncDataWork: Error $it")
+
+                                            }
+                                        }
+                                    }
+                            }
+                        }
+
 
                         is UserActivityCallback.StressDataObtainedOreo -> {
 //                            LOGS.d("OreoSyncDataWork: ${userActivityCallback.stressData}")
@@ -805,5 +832,5 @@ constructor(
 }
 
 enum class HealthOverviewDataType {
-    STEPS, HEART, SLEEP, BLOOD, STRESS, TEMPERATURE, ALL, ACTIVITY, SERVER_SYNC_SUCCESS, AUTO_WORKOUT
+    STEPS, HEART, SLEEP, BLOOD, BODY_STRESS, STRESS, TEMPERATURE, ALL, ACTIVITY, SERVER_SYNC_SUCCESS, AUTO_WORKOUT
 }

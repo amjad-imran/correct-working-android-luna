@@ -20,6 +20,7 @@ import com.oreo.data.model.OreoNapDetailsDataModel
 import com.oreo.data.model.RingCareResponse
 import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthResponse
+import com.oreo.data.model.StressResultData
 import com.oreo.data.model.TestUserData
 import com.oreo.data.model.health.Nap
 import com.oreo.receiver.workManager.HealthOverviewDataType
@@ -42,7 +43,7 @@ interface OreoUserActivityRepository {
 //    suspend fun getActivityHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoActivityModel>>>>
 //    suspend fun getReadinessHistory(date: String): Flow<Resource<BaseApiResponse<List<OreoReadinessModel>>>>
 
-    suspend fun getSummaryHRHealthOverview(): OHealthOverview.HeartRate?
+    suspend fun getSummaryHRHealthOverview(): OHealthOverview.HeartRateDataModel?
 
     suspend fun getSummaryAutoWorkoutCount(): Int
     suspend fun getTestData(): List<TestUserData>
@@ -58,6 +59,7 @@ interface OreoUserActivityRepository {
     suspend fun addGFitWorkout(request: JsonArray): Flow<Resource<BaseApiResponseData<Any>>>
     suspend fun syncGoogleFitUserData(request: JsonObject): Flow<Resource<BaseApiResponseData<Any>>>
     suspend fun getWorkoutDetails(id: String): Flow<Resource<BaseApiResponse<OWorkoutDetailsResponseModel>>>
+    suspend fun getWorkoutDetailsV2(id: String): Flow<Resource<BaseApiResponse<OWorkoutDetailsResponseModel>>>
 
     suspend fun getWorkoutListRecord(): Flow<Resource<BaseApiResponse<List<OWorkoutListModal>>>>
     suspend fun getWorkoutList(): Flow<Resource<BaseApiResponse<List<OWorkoutListModal>>>>
@@ -111,4 +113,9 @@ interface OreoUserActivityRepository {
     suspend fun getNapsToConfirm(): List<OreoNapData>?
 
     suspend fun removeNap(id: Int): Boolean
+    suspend fun getStressInternalPagesData(
+        selectDate: String,
+        dayType: String,
+        filterType: String
+    ): Flow<Resource<BaseApiResponse<List<StressResultData>>>>
 }

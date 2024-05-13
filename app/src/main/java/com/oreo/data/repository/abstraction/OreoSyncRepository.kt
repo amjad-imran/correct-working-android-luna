@@ -6,6 +6,7 @@ import com.noisefit_commans.data.model.DayTimeMovementBreakup
 import com.noisefit_commans.data.model.GoogleFitWorkoutData
 import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.data.model.OreoBloodOxygenBreakup
+import com.noisefit_commans.data.model.OreoBodyStressData
 import com.noisefit_commans.data.model.OreoBodyTemperatureBreakup
 import com.noisefit_commans.data.model.OreoHeartRate
 import com.noisefit_commans.data.model.OreoNapData
@@ -68,6 +69,10 @@ interface OreoSyncRepository {
 
     suspend fun saveRespiratoryData(
         data: OreoRespiratoryData
+    ): Flow<CacheResult<Boolean?>>
+
+    suspend fun saveBodyStressData(
+        data: OreoBodyStressData
     ): Flow<CacheResult<Boolean?>>
 
     suspend fun markDataSynced(data: OreoUserSyncRawData)

@@ -17,6 +17,7 @@ import com.noisefit_commans.data.model.DayTimeMovementBreakup
 import com.noisefit_commans.data.model.GoogleFitWorkoutData
 import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.data.model.OreoBloodOxygenBreakup
+import com.noisefit_commans.data.model.OreoBodyStressData
 import com.noisefit_commans.data.model.OreoBodyTemperatureBreakup
 import com.noisefit_commans.data.model.OreoHeartRate
 import com.noisefit_commans.data.model.OreoNapData
@@ -38,6 +39,7 @@ import com.oreo.data.dataConverter.OreoOnlineDataMapper
 import com.oreo.data.db.abstaction.OreoNapDataSource
 import com.oreo.data.db.implementation.OreoAutoSportDataImpl
 import com.oreo.data.db.implementation.OreoBloodOxygenDataImpl
+import com.oreo.data.db.implementation.OreoBodyStressDataImpl
 import com.oreo.data.db.implementation.OreoBodyTemperatureDataImpl
 import com.oreo.data.db.implementation.OreoDayTimeMovementDataImpl
 import com.oreo.data.db.implementation.OreoGFitWorkoutDataImpl
@@ -64,6 +66,7 @@ class OreoSyncRepositoryImpl(
     private val bloodOxygenDataImpl: OreoBloodOxygenDataImpl,
     private val dayTimeMovementImpl: OreoDayTimeMovementDataImpl,
     private val respiratoryDataImpl: OreoRespiratoryDataImpl,
+    private val bodyStressDataImpl: OreoBodyStressDataImpl,
     private val sleepDataImpl: OreoSleepDataImpl,
     private val napDataSource: OreoNapDataImpl,
     private val bodyTemperatureDataImpl: OreoBodyTemperatureDataImpl,
@@ -234,6 +237,14 @@ class OreoSyncRepositoryImpl(
     override suspend fun saveRespiratoryData(data: OreoRespiratoryData): Flow<CacheResult<Boolean?>> {
         return safeCacheCall(Dispatchers.IO) {
             respiratoryDataImpl.insertData(
+                data
+            )
+        }
+    }
+
+    override suspend fun saveBodyStressData(data: OreoBodyStressData): Flow<CacheResult<Boolean?>> {
+        return safeCacheCall(Dispatchers.IO) {
+            bodyStressDataImpl.insertData(
                 data
             )
         }
@@ -475,6 +486,10 @@ class OreoSyncRepositoryImpl(
         data.boData?.let {
             bloodOxygenDataImpl.updateServerSyncData(it, todayTimeStamp)
         }
+
+        data.bodyStressData?.let {
+            bodyStressDataImpl.updateServerSyncData(it, todayTimeStamp)
+        }
     }
 
     override suspend fun deleteServerSyncData(data: OreoUserSyncRawData) {
@@ -535,6 +550,10 @@ class OreoSyncRepositoryImpl(
             respiratoryDataImpl.getUnSyncServerData(nDayStartingTimeStamp, false)
         userSyncRawData.boData =
             bloodOxygenDataImpl.getUnSyncServerData(nDayStartingTimeStamp, false)
+
+        userSyncRawData.bodyStressData =
+            bodyStressDataImpl.getUnSyncServerData(nDayStartingTimeStamp, false)
+
         userSyncRawData.sleepData = sleepDataImpl.getUnSyncServerData(nDayStartingTimeStamp, false)
         userSyncRawData.bodyTemperature =
             bodyTemperatureDataImpl.getUnSyncServerData(nDayStartingTimeStamp, false)
@@ -586,6 +605,19 @@ class OreoSyncRepositoryImpl(
             filteredBoList
         }
 
+        val filteredBodyStressList = ArrayList<OreoBodyStressData>()
+        userSyncRawData.bodyStressData?.forEach {
+            val breakUp = Gson().fromJson<List<Int>>(it.breakUp ?: "")
+            if (breakUp.sum() > 0) {
+                filteredBodyStressList.add(it)
+            }
+        }
+        val bodyStressData = if (filteredBodyStressList.isEmpty()) {
+            null
+        } else {
+            filteredBodyStressList
+        }
+
         val filteredStressList = ArrayList<OreoStressDataBreakup>()
         userSyncRawData.stressData?.forEach {
             val breakUp = Gson().fromJson<List<Int>>(it.breakUp ?: "")
@@ -633,6 +665,7 @@ class OreoSyncRepositoryImpl(
                 hrHistoryData = heartRateData,
                 stressData = stressData,
                 boData = bloodOxygenData,
+                bodyStressData = bodyStressData,
                 sleepData = sleepData,
                 respiratory = respiratoryData,
                 bodyTemperature = bodyTempData,

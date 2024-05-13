@@ -11,6 +11,7 @@ import com.noisefit_commans.data.model.KeyValue
 import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.data.model.OreoBloodOxygenBreakup
 import com.noisefit_commans.data.model.OreoBloodPressureData
+import com.noisefit_commans.data.model.OreoBodyStressData
 import com.noisefit_commans.data.model.OreoBodyTemperatureBreakup
 import com.noisefit_commans.data.model.OreoGoogleFitData
 import com.noisefit_commans.data.model.OreoHeartRate
@@ -23,6 +24,7 @@ import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.data.model.UserHealthData
 import com.oreo.data.db.database.OreoAutoSportDao
 import com.oreo.data.db.database.OreoBloodOxygenDao
+import com.oreo.data.db.database.OreoBodyStressDao
 import com.oreo.data.db.database.OreoBodyTemperatureDao
 import com.oreo.data.db.database.OreoDayTimeMovementDao
 import com.oreo.data.db.database.OreoGFitWorkoutDao
@@ -39,8 +41,9 @@ import com.oreo.data.db.database.OreoUserHealthDataDao
     entities = [OreoStepsData::class, OreoHeartRate::class, OreoBloodOxygenBreakup::class,
         OreoBloodPressureData::class, OreoSleepData::class, OreoStressDataBreakup::class, OreoGoogleFitData::class,
         OreoBodyTemperatureBreakup::class, OreoRespiratoryData::class, DayTimeMovementBreakup::class,
-        OreoAutoSportData::class, RecordedWorkoutData::class, KeyValue::class, UserHealthData::class, OreoNapData::class, GoogleFitWorkoutData::class],
-    version = 8, exportSchema = false
+        OreoAutoSportData::class, RecordedWorkoutData::class, KeyValue::class, UserHealthData::class, OreoNapData::class,
+        GoogleFitWorkoutData::class,OreoBodyStressData::class],
+    version = 10, exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class OreoDataBase : RoomDatabase() {
@@ -55,6 +58,7 @@ abstract class OreoDataBase : RoomDatabase() {
     abstract fun sleepDao(): OreoSleepDao
     abstract fun napDao(): OreoNapDao
     abstract fun respiratoryDao(): OreoRespiratoryDao
+    abstract fun bodyStressDao(): OreoBodyStressDao
     abstract fun dayTimeMovementDao(): OreoDayTimeMovementDao
     abstract fun userHealthDataDao(): OreoUserHealthDataDao
 

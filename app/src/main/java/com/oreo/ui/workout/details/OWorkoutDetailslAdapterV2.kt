@@ -5,8 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.databinding.RowOwdItemBinding
 import com.noisefit.luna.databinding.RowOwdItemV2Binding
+import com.noisefit_commans.ui.TEXT_GRADIENT_STYLE_2
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.paintText
 import com.noisefit_commans.ui.visible
 import com.oreo.data.model.OWDActivityData
 
@@ -19,6 +21,8 @@ class OWorkoutDetailslAdapterV2 : RecyclerView.Adapter<OWorkoutDetailslAdapterV2
 
             binding.tvTitle.text = detailData.title
             binding.tvValue.text = detailData.value
+            //binding.tvValue.paintText(TEXT_GRADIENT_STYLE_2)
+
             binding.tvUnitValue.text = detailData.unit
 
             //Change code if workout params added
@@ -42,7 +46,8 @@ class OWorkoutDetailslAdapterV2 : RecyclerView.Adapter<OWorkoutDetailslAdapterV2
         parent: ViewGroup,
         viewType: Int
     ): OWorkoutDetailslAdapterV2.ViewHolder {
-        val binding = RowOwdItemV2Binding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            RowOwdItemV2Binding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 

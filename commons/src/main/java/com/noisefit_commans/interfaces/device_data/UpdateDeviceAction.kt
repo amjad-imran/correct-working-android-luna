@@ -61,7 +61,10 @@ sealed class UpdateDeviceAction {
     class SetSedentaryData(val sedentaryData: SedentaryData) : UpdateDeviceAction()
     class SetUserInfo(val userInfo: UserInfo, val userGoals: UserGoals, val userName: String?) :
         UpdateDeviceAction()
-    class SetManualMeasurement(val manualMeasureType: ManualMeasureType, val status: Boolean) :UpdateDeviceAction()
+
+    class SetManualMeasurement(val manualMeasureType: ManualMeasureType, val status: Boolean) :
+        UpdateDeviceAction()
+
     class SetDeviceUnits(val units: DeviceUnits) : UpdateDeviceAction()
     class SetDeviceDateTime(val calender: Calendar, val units: TimeFormat) : UpdateDeviceAction()
     class SendAppNotification(val appNotification: AppNotification) : UpdateDeviceAction()
@@ -76,7 +79,12 @@ sealed class UpdateDeviceAction {
     class SetSwitchSetting(switchSetting: SwitchSetting) : UpdateDeviceAction()
     class SetWeatherData(val weatherDataList: List<WeatherData>, val unit: String) :
         UpdateDeviceAction()
-    class SetWeatherDataHourly(val weatherDataList: List<WeatherData>, val weatherDataHourlyList: List<WeatherDataHourly>, val unit: String) :
+
+    class SetWeatherDataHourly(
+        val weatherDataList: List<WeatherData>,
+        val weatherDataHourlyList: List<WeatherDataHourly>,
+        val unit: String
+    ) :
         UpdateDeviceAction()
 
     class UpdateMenstrualData(val menstrualData: MenstrualData) : UpdateDeviceAction()
@@ -147,6 +155,9 @@ sealed class UpdateDeviceAction {
     class CloseFindPhoneFromWatch(val status: Boolean) : UpdateDeviceAction()
 
     class CheckOngoingWorkout() : UpdateDeviceAction()
-    class StartWorkout(val sportType: Int,val sportStartTime: Long) : UpdateDeviceAction()
-    class UpdateOngoingWorkout(val sportType: Int,val sportTimeStamp: Long,val action:Int) : UpdateDeviceAction()
+    class StartWorkout(val sportType: Int, val sportStartTime: Long, val startGps: Boolean) :
+        UpdateDeviceAction()
+
+    class UpdateOngoingWorkout(val sportType: Int, val sportTimeStamp: Long, val action: Int) :
+        UpdateDeviceAction()
 }

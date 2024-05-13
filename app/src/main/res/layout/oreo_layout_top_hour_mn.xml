@@ -25,7 +25,7 @@
             app:layout_constraintBaseline_toBaselineOf="@id/tvHour"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tvHour"
-            tools:text="@string/text_hr" />
+            android:text="@string/text_hr" />
 
         <TextView
             android:id="@+id/tvMinute"
@@ -48,6 +48,6 @@
             app:layout_constraintBaseline_toBaselineOf="@id/tvHour"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tvMinute"
-            tools:text="@string/text_mins" />
+            android:text="@string/text_mins" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

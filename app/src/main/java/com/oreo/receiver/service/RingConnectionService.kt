@@ -23,12 +23,12 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleService
 import com.google.gson.JsonObject
 import com.noisefit.data.dataConverter.DataConverter
-import com.noisefit.luna.R
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.LastSyncProvider
 import com.noisefit.data.repository.abstraction.DeviceRepository
+import com.noisefit.luna.R
 import com.noisefit.data.repository.implementation.DELETE_DB_DAYS
 import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
@@ -45,6 +45,7 @@ import com.noisefit.watch.UserActivityHandler
 import com.noisefit.watch.WatchesSDK
 import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.constants.WatchInfoGlobals
+import com.noisefit_commans.data.db.abstraction.LocationDataSource
 import com.noisefit_commans.data.enums.Actions
 import com.noisefit_commans.data.enums.ServiceState
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -141,6 +142,9 @@ constructor() : LifecycleService() {
 
     @Inject
     lateinit var syncRepository: OreoSyncRepository
+
+    @Inject
+    lateinit var locationDataSource: LocationDataSource
 
     @Inject
     lateinit var userActivityRepository: OreoUserActivityRepository
@@ -1273,6 +1277,8 @@ constructor() : LifecycleService() {
                 }
                 userHealthDataDataSource.clearDataByDates(dates.toList())
                 syncRepository.removeRecordedWorkouts().collect()
+                locationDataSource.deleteAll()
+
                 ringDataStore.removeRecordDeleteList()
                 AppLogs.sendAppLogs("syncWorkoutsToServer workouts empty")
 
@@ -1316,6 +1322,7 @@ constructor() : LifecycleService() {
 
                             userHealthDataDataSource.clearDataByDates(dates.toList())
                             syncRepository.removeRecordedWorkouts().collect()
+                            locationDataSource.deleteAll()
                             ringDataStore.removeRecordDeleteList()
                             delay(200)
                             sessionManager.reloadTodayData.postValue(

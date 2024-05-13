@@ -13,7 +13,6 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -22,7 +21,6 @@ import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.noisefit.NoiseFitApplicationMain
-import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ActivityOreoMainBinding
 import com.noisefit.ui.APP_CONTINUE
@@ -30,11 +28,10 @@ import com.noisefit.ui.APP_EXIT
 import com.noisefit.ui.APP_UPDATE
 import com.noisefit.ui.common.BaseActivity
 import com.noisefit.ui.onboarding.FirebaseUpdateViewModel
-import com.noisefit.ui.onboarding.setup.DeviceSetupActivityV2
 import com.noisefit.util.ApplicationUtils
-import com.noisefit.util.moveToServer.BatteryNotificationUtils
 import com.noisefit.util.notif.NotificationEventsClass
 import com.noisefit.util.notif.NotificationUtil
+import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
@@ -45,7 +42,6 @@ import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
@@ -53,14 +49,13 @@ import com.oreo.ui.recordworkout.SELECT_RECORD_WORKOUT
 import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderEffectBlur
 import eightbitlab.com.blurview.RenderScriptBlur
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     private val viewModel: OreoMainViewModel by viewModels()
     private var navController: NavController? = null
+    private val TAG = "oreoMainActivity"
 
     private val btAdapter by lazy {
         BluetoothAdapter.getDefaultAdapter()
@@ -82,6 +77,17 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 this.putExtra(NOTIFICATION_TYPE, notificationType)
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LOGS.d(TAG, "App killed on destroy")
+       /* if (viewModel.sessionManager.connectStateRing.value != null)
+            NotificationUtil.sendForcePushNotification(
+                this,
+                getString(R.string.text_open_luna_ring_app),
+                getString(R.string.text_keep_the_luna_ring_app_running_so_your_data_can_stay_upto_date)
+            )*/
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -185,9 +191,17 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         }
 
         binding.lytAddWorkoutSelector.tvAddWorkout.setOnClickListener {
+            if (viewModel.isActivityWorkAdd)
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_add_workout_add_click)
+            else
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_add_workout_add_click)
             showAddWorkout()
         }
         binding.lytAddWorkoutSelector.ivAddWorkoutManual.setOnClickListener {
+            if (viewModel.isActivityWorkAdd)
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_add_workout_add_click)
+            else
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_add_workout_add_click)
             showAddWorkout()
         }
 
@@ -197,28 +211,40 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         }
 
         binding.lytAddWorkoutSelector.tvRecordWorkout.setOnClickListener {
+            if (viewModel.isActivityWorkAdd)
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_add_workout_record_click)
+            else
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_add_workout_record_click)
             showRecordWorkout()
         }
         binding.lytAddWorkoutSelector.ivRecordWorkout.setOnClickListener {
+            if (viewModel.isActivityWorkAdd)
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_add_workout_record_click)
+            else
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_add_workout_record_click)
             showRecordWorkout()
         }
 
         binding.btnAddWorkout.setOnClickListener {
             setBlurAddCta()
-
+            if (viewModel.isActivityWorkAdd)
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_add_workout_click)
+            else
+                viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_homepage_add_workout_click)
             viewModel.addWorkoutCtaVisibility.postValue(false)
+            viewModel.isActivityWorkAdd = false
             animateFabUp()
 
             //binding.blurViewSelector.visible()
         }
 
         //TODO comment after use
-      /*  binding.btnAddWorkout.setOnLongClickListener {
-            if (BuildConfig.DEBUG) {
-                startActivity(DeviceSetupActivityV2.getStartIntent(this,fullSetup = true),)
-            }
-            true
-        }*/
+        /*  binding.btnAddWorkout.setOnLongClickListener {
+              if (BuildConfig.DEBUG) {
+                  startActivity(DeviceSetupActivityV2.getStartIntent(this,fullSetup = true),)
+              }
+              true
+          }*/
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -657,6 +683,107 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 }
             }
         }
+
+        viewModel.sessionManager.syncCompleted.observe(this) {
+            it?.getContent()?.let { syncDataStatus ->
+                when (syncDataStatus) {
+                    SyncEvents.Failed -> {
+                        viewModel.syncProgressBarState.value = null
+                        viewModel.syncTextState.value = null
+                    }
+
+                    is SyncEvents.InProgress -> {
+                        LOGS.d("Progress_____________ ${syncDataStatus.progress}")
+                        viewModel.syncProgressBarState.value =
+                            Pair(syncDataStatus.progress, syncDataStatus.total)
+                        viewModel.syncTextState.value = getString(R.string.text_syncing_dot)
+
+                        /*binding.lytHeader.pbSync.max = syncDataStatus.total
+                        binding.lytHeader.pbSync.progress = syncDataStatus.progress
+                        binding.lytHeader.pbSync.visible()
+                        binding.lytHeader.tvHeaderStatus.apply {
+                            text = getString(R.string.text_syncing_dot)
+                            visible()
+                        }*/
+                    }
+
+                    is SyncEvents.Started -> {
+                        viewModel.syncProgressBarState.value =
+                            Pair(syncDataStatus.progress, syncDataStatus.total)
+                        viewModel.syncTextState.value = getString(R.string.text_syncing_dot)
+
+
+                        /*   binding.lytHeader.pbSync.max = syncDataStatus.total
+                           binding.lytHeader.pbSync.progress = syncDataStatus.progress
+                           binding.lytHeader.pbSync.visible()
+                           binding.lytHeader.tvHeaderStatus.apply {
+                               text = getString(R.string.text_syncing_dot)
+                               visible()
+                           }*/
+                    }
+
+                    is SyncEvents.Success -> {
+                        viewModel.syncProgressBarState.value = null
+                        viewModel.syncTextState.value = null
+
+                        /* binding.lytHeader.pbSync.max = syncDataStatus.total
+                         binding.lytHeader.pbSync.progress = syncDataStatus.progress
+                         binding.lytHeader.tvHeaderStatus.gone()
+                         binding.lytHeader.pbSync.gone()
+                         resetSwipeLoadingAnim()*/
+                    }
+
+                    SyncEvents.ServerSyncStarted -> {
+                        binding.progressBar.root.visible()
+                    }
+
+                    SyncEvents.ServerSyncSuccess -> {
+                        viewModel.syncProgressBarState.value = null
+                        viewModel.syncTextState.value = null
+                        binding.progressBar.root.gone()
+
+                        viewModel.reloadTodaysData()
+                        //sendLogs()
+                    }
+                }
+            }
+        }
+
+        viewModel.sessionManager.connectStateRing.observe(this) { connectedState ->
+            when (connectedState) {
+                is ConnectState.ConnectFailed -> {
+                    viewModel.syncProgressBarState.value = null
+                    viewModel.syncTextState.value = null
+                }
+
+                is ConnectState.Connecting -> {
+                    viewModel.syncProgressBarState.value = null
+                    viewModel.syncTextState.value = null
+                }
+
+                is ConnectState.ConnectSuccess -> {
+
+                }
+
+                is ConnectState.UnPaired -> {
+                    viewModel.syncProgressBarState.value = null
+                    viewModel.syncTextState.value = null
+                }
+
+                else -> {}
+            }
+        }
+
+        viewModel.syncProgressBarState.observe(this) {
+            if (it == null) {
+                binding.pbSync.gone()
+            } else {
+                val (progress, total) = it
+                binding.pbSync.visible()
+                binding.pbSync.max = total
+                binding.pbSync.progress = progress
+            }
+        }
     }
 
     private fun showCustomSuccessToast(message: String) {
@@ -679,6 +806,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                         viewModel.handleAddWorkoutVisibility()
                     } else {
                         viewModel.addWorkoutCtaVisibility.postValue(false)
+                        viewModel.isActivityWorkAdd = false
                     }
 
                     //binding.btnAddWorkout.visible()//todo add today condition
@@ -690,6 +818,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
                     if (viewModel.isDevicePaired() != null) {
                         viewModel.addWorkoutCtaVisibility.postValue(true)
+                        viewModel.isActivityWorkAdd = true
                     }
                 }
 
@@ -697,6 +826,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     binding.view27.gone()
                     binding.navView.root.gone()
                     viewModel.addWorkoutCtaVisibility.postValue(false)
+                    viewModel.isActivityWorkAdd = false
 
                 }
             }
@@ -728,6 +858,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         //viewModel.shouldResetMasterDates()
 
     }
+
 
     private fun handleIntent(intent: Intent?) {
         intent?.extras?.let { intentExtra ->

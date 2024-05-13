@@ -58,6 +58,7 @@ class OreoMyDeviceFragment :
 
         binding.backBtn.setOnClickListener { navigateUpSafe() }
         binding.rowSettings.setOnClickListener {
+            mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_mydevices_settings_click)
             navigate(R.id.deviceSettingsFragment)
         }
 

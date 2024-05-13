@@ -2,33 +2,23 @@ package com.oreo.ui.home.summary.paginate
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.github.mikephil.charting.data.CandleEntry
-import com.github.mikephil.charting.data.Entry
-import com.google.gson.Gson
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.remote.base.Resource
-import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
-import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.common.maxWithoutZero
 import com.noisefit_commans.common.minWithoutZero
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
-import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.User
-import com.noisefit_commans.interfaces.connection.ConnectState
-import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
-import com.noisefit_commans.models.ColorFitDevice
-import com.noisefit_commans.models.ManualMeasureType
 import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.BaseViewModel
-import com.noisefit_commans.ui.getColor
-import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
+import com.oreo.data.dataConverter.OreoHRDataConvertor
+import com.oreo.data.model.HRModel
+import com.oreo.data.dataConverter.OreoStressDataConvertor
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.DashAlert
@@ -37,36 +27,37 @@ import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.TapMeasureState
-import com.oreo.data.model.VideoInfoType
-import com.oreo.data.model.health.Nap
 import com.oreo.data.model.health.ODashboardActivityModel
-import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessModel
-import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepModel
-import com.oreo.data.model.health.ODashboardSleepScoreModel
 import com.oreo.data.model.health.SleepHourlyBreakup
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.joda.time.LocalDateTime
+import org.joda.time.format.DateTimeFormat
 import javax.inject.Inject
 
 @HiltViewModel
-class SummaryDataViewModel @Inject
-constructor(
+class SummaryDataViewModel @Inject constructor(
     val userRepository: OreoUserActivityRepository,
     val ringDataStore: RingDataStore,
     val localDataStore: DataStoredInterface,
     val sessionManager: SessionManager,
     val dataConverter: DataConverter,
-    val userActivityRepository: OreoUserActivityRepository
+    val oreoStressDataConvertor: OreoStressDataConvertor,
+    val userActivityRepository: OreoUserActivityRepository,
+    val hrDataConvertor: OreoHRDataConvertor
 ) : BaseViewModel() {
 
 
+    var serverUserHealthData: ServerUserHealthData? = null
     var date: String? = null
+    var shouldShowStressCard = false
+    var stressBeta = false
     val healthOverviewData = MutableLiveData<ArrayList<OHealthOverview>>()
-    val stateHeartRateCard = MutableLiveData<OHealthOverview.HeartRate?>()
+    val stateHeartRateCard = MutableLiveData<OHealthOverview.HeartRateDataModel?>()
 
     val stateWorkouts = MutableLiveData<List<OActivityListModal>>()
 
@@ -106,11 +97,9 @@ constructor(
             }
             val filteredNaps = nap.filter { !it.isNextDayNap }
 
-            val newSleepArray =
-                dataConverter.mergeSleepData(
-                    healthData.sleep?.hourly_breakup,
-                    filteredNaps
-                )
+            val newSleepArray = dataConverter.mergeSleepData(
+                healthData.sleep?.hourly_breakup, filteredNaps
+            )
 
             healthData.sleep.let {
                 if ((it?.sleepScore?.value ?: 0) > 0) {
@@ -149,12 +138,25 @@ constructor(
                                 activeCalories = it?.activeCalories ?: 0,
                                 inactiveMinutes = it?.activityContributors?.stayActive?.value,
                                 status = it?.activityScore?.level?.capitalizeWords(),
-                                nudges = it?.dash_nudges
-                            ),
-                            caloriesGoal
+                                nudges = it?.dash_nudges,
+                                steps = healthData.activity?.steps ?: 0
+                            ), caloriesGoal
                         )
                     )
                 }
+            }
+
+            if (shouldShowStressCard) {
+                userActivities.add(
+                    OHealthOverview.StressGraph(
+                        oreoStressDataConvertor.getStressCombinedData(healthData),
+                        healthData.stress?.stressValue?.value ?: 0,
+                        healthData.stress?.stressValue?.lastUpdated ?: 0L,
+                        getStressStatus(healthData.stress?.stressValue?.value ?: 0),
+                        false,
+                        stressBeta
+                    )
+                )
             }
 
             healthOverviewData.postValue(userActivities)
@@ -166,8 +168,17 @@ constructor(
         }
     }
 
-    private fun parseHrData(data: ServerUserHealthData): OHealthOverview.HeartRate {
+    private fun getStressStatus(value: Int?): String {
+        return when (value) {
+            0 -> ""
+            in 1..34 -> "Relaxed"
+            in 35..69 -> "Focussed"
+            in 70..100 -> "Stressed"
+            else -> ""
+        }
+    }
 
+    private fun parseHrData(data: ServerUserHealthData): OHealthOverview.HeartRateDataModel {
         var breakupArray = data.heart?.break_up
         if (breakupArray.isNullOrEmpty()) {
             val dummyArray = ArrayList<Int>()
@@ -176,24 +187,33 @@ constructor(
             }
             breakupArray = dummyArray
         }
-        val hRWithIntervalList = breakupArray.chunked(6)
-        val lineChartList: ArrayList<Entry> = ArrayList()
-        val candleChartList: ArrayList<CandleEntry> = ArrayList()
-        val lineColorList: ArrayList<Int> = ArrayList()
-        val xLabelList = ArrayList<String>()
+        var lastHrValue: Pair<Int, Long>? = null//HR value,timer
+        breakupArray.forEachIndexed { index2, value ->
+            if (value != 0 && value != 255)
+                lastHrValue = Pair(value, 0)
+
+        }
+
+        val excludeDataList = arrayListOf<Int>()
+        breakupArray.forEach { value ->
+            if (value == 255) {
+                excludeDataList.add(0)
+            } else excludeDataList.add(value)
+        }
+
+        val hRWithIntervalList = excludeDataList.chunked(6)
         val avgList = ArrayList<Int>()
         var overAllMinValue = Int.MAX_VALUE
         var overAllMaxValue = -1
         var hrCount = 0
-        var lastHrValue: Pair<Int, Long>? = null//HR value,timer
+//        var lastHrValue: Pair<Int, Long>? = null//HR value,timer
 
-
+        val listData = ArrayList<HRModel>()
         hRWithIntervalList.forEachIndexed { index, hrList ->
+            val sortedBreakUpList = hrList.sorted()
 
-
-            val minValue = hrList.minWithoutZero()
-
-            val maxValue = hrList.maxWithoutZero()
+            val minValue = sortedBreakUpList.minWithoutZero()
+            val maxValue = sortedBreakUpList.maxWithoutZero()
 
             var min = minValue
             var max = maxValue
@@ -209,76 +229,45 @@ constructor(
             val avg = (min + max) / 2
             if (avg != 0) {
                 if (min < overAllMinValue) {
-                    overAllMinValue = min;
+                    overAllMinValue = min
                 }
                 if (max > overAllMaxValue) {
-                    overAllMaxValue = max;
+                    overAllMaxValue = max
                 }
                 avgList.add(avg)
-
             }
 
-            hrList.forEachIndexed { index2, value ->
-                if (value != 0) {
-                    val indexMillis = ((index * 6) + index2) * 5 * 60L * 1000L
-                    lastHrValue = Pair(value, indexMillis)
-                }
-            }
+            /* sortedBreakUpList.forEachIndexed { index2, value ->
+                 val indexMillis = ((index * 6) + index2) * 5 * 60L * 1000L
+                 lastHrValue = Pair(value, indexMillis)
 
+             }*/
             //if any change chunk value then divide 12 by that chunk value to get below correct xlabel list
             if (index % 2 == 0) {
                 hrCount += 1
 
             }
-
-
-            xLabelList.add(handleHrFormat(hrCount))
-
-            candleChartList.add(
-                CandleEntry(
-                    index.toFloat(),
-                    max.toFloat(),
-                    min.toFloat(),
-                    max.toFloat(),
-                    min.toFloat()
-                )
-            )
-
-            if (index % 2 == 0) {
-                lineColorList.add(R.color.color_error.getColor())
-            } else {
-                lineColorList.add(R.color.white.getColor())
-            }
-            lineChartList.add(
-                Entry(
-                    index.toFloat(),
-                    avg.toFloat()
+            listData.add(
+                HRModel(
+                    maxValues = max,
+                    minValues = min,
+                    values = sortedBreakUpList,
+                    midValues = avg
                 )
             )
         }
 
-        val average = if(avgList.isEmpty()) 0.0f else avgList.average().toFloat()
+        val average = if (avgList.isEmpty()) 0.0f else avgList.average().toFloat()
 
-
-
-
-        if (overAllMinValue == Int.MAX_VALUE) {
-            overAllMinValue = 69
-        }
-
-        if (overAllMinValue != 0) {
-            overAllMinValue -= 9
-        }
 
         val measureState = TapMeasureState.HIDE
-
-
-        return OHealthOverview.HeartRate(
-            "",
-            "",
-            candleChartList,
-            Pair(lineChartList, lineColorList),
-            xLabelList, overAllMinValue.toFloat(), average,
+        return OHealthOverview.HeartRateDataModel(
+            listData,
+            average = average,
+            "0",
+            value = lastHrValue?.first.toString(),
+            maxValues = breakupArray.maxWithoutZero(),
+            minValues = breakupArray.minWithoutZero(),
             measureState
         )
     }
@@ -294,12 +283,10 @@ constructor(
         var suffix = ""
         if (hour > 11) {
             suffix = "pm"
-            if (hour > 12)
-                hour -= 12;
+            if (hour > 12) hour -= 12;
         } else {
             suffix = "am"
-            if (hour == 0)
-                hour = 12;
+            if (hour == 0) hour = 12;
         }
         return "$hour $suffix"
     }
@@ -422,6 +409,10 @@ constructor(
         }
 
 
+    }
+
+    fun getStressWalkthroughShownStatus(): Boolean {
+        return localDataStore.getStressWalkthroughShownStatus()
     }
 
 }

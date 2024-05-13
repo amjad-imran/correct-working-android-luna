@@ -11,6 +11,7 @@ import com.google.gson.Gson
 import com.hookedonplay.decoviewlib.events.DecoEvent
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.luna.R
+import com.noisefit.luna.databinding.ItemStressGraphBinding
 import com.noisefit.luna.databinding.ListActivityBurnCardItem2Binding
 import com.noisefit.luna.databinding.ListActivityBurnCardItemBinding
 import com.noisefit.luna.databinding.ListActivityMinimalItemBinding
@@ -35,6 +36,7 @@ import com.noisefit_commans.ui.getColor
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
@@ -53,6 +55,7 @@ sealed class OSummaryHealthOverviewClickEnum {
     object ReadinessDetailsWorkoutClick : OSummaryHealthOverviewClickEnum()
     object TextWelcomeRingClicked : OSummaryHealthOverviewClickEnum()
     data class OnNapClicked(val napId: String) : OSummaryHealthOverviewClickEnum()
+    object StressGraphClicked : OSummaryHealthOverviewClickEnum()
     data class TextRingCareClicked(val title: String) : OSummaryHealthOverviewClickEnum()
     data class VideoInfoClicked(val type: VideoInfoType, val videoUrl: String) :
         OSummaryHealthOverviewClickEnum()
@@ -91,6 +94,14 @@ class OSummaryHealthOverviewAdapter() :
         return when (viewType) {
             R.layout.list_dash_nap -> HomeRecyclerViewHolder.NapWidgetCardViewHolder(
                 ListDashNapBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
+            R.layout.item_stress_graph -> HomeRecyclerViewHolder.StressGraphViewHolder(
+                ItemStressGraphBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
@@ -215,6 +226,7 @@ class OSummaryHealthOverviewAdapter() :
     override fun onBindViewHolder(holder: HomeRecyclerViewHolder, position: Int) {
         holder.itemClickListener = itemClickListener
         when (holder) {
+            is HomeRecyclerViewHolder.StressGraphViewHolder -> holder.bind(items[position] as OHealthOverview.StressGraph)
             is HomeRecyclerViewHolder.NapWidgetCardViewHolder -> holder.bind(items[position] as OHealthOverview.NapDashCard)
             is HomeRecyclerViewHolder.InfoWelcomeCardViewHolder -> holder.bind(items[position] as OHealthOverview.InfoRingWelcome)
             is HomeRecyclerViewHolder.InfoRingCareViewHolder -> holder.bind(items[position] as OHealthOverview.InfoRingCare)
@@ -305,8 +317,9 @@ class OSummaryHealthOverviewAdapter() :
 
 
             is OHealthOverview.AutoSport -> R.layout.list_o_w_alert_card_item
-            is OHealthOverview.HeartRate -> 0
+            is OHealthOverview.HeartRateDataModel -> 0
             is OHealthOverview.InfoVideo -> R.layout.list_video_info_card
+            is OHealthOverview.StressGraph -> R.layout.item_stress_graph
             is OHealthOverview.InfoRingCare -> R.layout.list_ring_care
             is OHealthOverview.InfoRingWelcome -> R.layout.list_welcome_card
             is OHealthOverview.NapDashCard -> R.layout.list_dash_nap
@@ -382,6 +395,49 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.TextWelcomeRingClicked)
+            }
+
+        }
+    }
+
+    class StressGraphViewHolder(private val binding: ItemStressGraphBinding) :
+        HomeRecyclerViewHolder(binding) {
+        fun bind(
+            data: OHealthOverview.StressGraph,
+        ) {
+            binding.graphStress.updateData(data.data)
+
+            binding.tvBeta.setVisibilityByCondition(data.isBeta)
+            binding.ivBackBeta.setVisibilityByCondition(data.isBeta)
+
+
+            if (data.value == 0) {
+                binding.tvStressValue.gone()
+                binding.tvStressStatus.gone()
+                binding.tvLastUpdate.gone()
+            } else {
+                binding.tvStressValue.visible()
+                binding.tvStressStatus.visible()
+                binding.tvLastUpdate.visible()
+
+                binding.tvStressValue.text = "${data.value}"
+                binding.tvStressStatus.text = data.valueStatus
+
+                if (data.isToday) {
+                    val lastUpdatedTimestamp = data.timeStamp
+                    if (lastUpdatedTimestamp == 0L) {
+                        binding.tvLastUpdate.text = ""
+                    } else {
+                        binding.tvLastUpdate.text =
+                            "Updated ${DateFormats.getRelativeTime(lastUpdatedTimestamp)}"
+                    }
+                } else {
+                    binding.tvLastUpdate.text = ""
+                }
+            }
+
+            binding.root.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.StressGraphClicked)
             }
 
         }
@@ -799,33 +855,35 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     .setDuration(1000L).build()
             )
 
-            val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(
-                data.data.inactiveMinutes ?: 0
-            )
+            binding.tvSteps.text = if (data.data.steps == 0) "-" else data.data.steps.toString()
 
-            if (hour > 0) {
-                binding.tvHr.visible()
-                binding.textHr.visible()
-                binding.tvMin.visible()
-                binding.textMin.visible()
+            /* val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(
+                 data.data.inactiveMinutes ?: 0
+             )*/
 
-                binding.tvHr.text = "$hour"
-                binding.tvMin.text = "$minute"
-            } else if (minute > 0) {
-                binding.tvHr.gone()
-                binding.textHr.gone()
-                binding.tvMin.visible()
-                binding.textMin.visible()
+            /* if (hour > 0) {
+                 binding.tvHr.visible()
+                 binding.textHr.visible()
+                 binding.tvMin.visible()
+                 binding.textMin.visible()
 
-                binding.tvMin.text = "$minute"
-            } else {
-                binding.tvHr.gone()
-                binding.textHr.gone()
-                binding.tvMin.visible()
-                binding.textMin.gone()
+                 binding.tvHr.text = "$hour"
+                 binding.tvMin.text = "$minute"
+             } else if (minute > 0) {
+                 binding.tvHr.gone()
+                 binding.textHr.gone()
+                 binding.tvMin.visible()
+                 binding.textMin.visible()
 
-                binding.tvMin.text = "-"
-            }
+                 binding.tvMin.text = "$minute"
+             } else {
+                 binding.tvHr.gone()
+                 binding.textHr.gone()
+                 binding.tvMin.visible()
+                 binding.textMin.gone()
+
+                 binding.tvMin.text = "-"
+             }*/
 
 
             binding.root.setOnClickListener {

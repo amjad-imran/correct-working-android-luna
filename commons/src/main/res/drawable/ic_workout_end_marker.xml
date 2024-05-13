@@ -1,0 +1,11 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:innerRadiusRatio="3"
+    android:shape="ring"
+    android:thickness="2dp"
+    android:useLevel="false">
+
+    <solid android:color="#ff3434" />
+    <size
+        android:width="12dp"
+        android:height="12dp" />
+</shape>

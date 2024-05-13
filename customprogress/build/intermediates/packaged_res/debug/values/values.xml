@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr format="enum" name="pBrand">
+        <enum name="primary" value="0"/>
+        <enum name="success" value="1"/>
+        <enum name="info" value="2"/>
+        <enum name="warning" value="3"/>
+        <enum name="danger" value="4"/>
+        <enum name="regular" value="5"/>
+        <enum name="secondary" value="6"/>
+    </attr>
+    <attr format="enum" name="pSize">
+        <enum name="xs" value="0"/>
+        <enum name="sm" value="1"/>
+        <enum name="md" value="2"/>
+        <enum name="lg" value="3"/>
+        <enum name="xl" value="4"/>
+    </attr>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="stripped_brand_primary">#606060</color>
+    <color name="stripped_brand_secondary_fill">#1d2225</color>
+    <color name="stripped_brand_secondary_text">@color/colorPrimaryDark</color>
+    <color name="stripped_gray_light">#606060</color>
+    <color name="stripped_line_color">#ffffff</color>
+    <color name="stripped_window_gray_light">#1d2225</color>
+    <dimen name="stripped_button_default_font_size">14sp</dimen>
+    <dimen name="stripped_progress_bar_default_font_size">17sp</dimen>
+    <dimen name="stripped_progress_bar_height">20dp</dimen>
+    <string name="app_name">library</string>
+    <declare-styleable name="StrippedProgressBar">
+        <attr format="boolean" name="pStriped"/>
+        <attr format="boolean" name="pAnimated"/>
+        <attr format="integer" name="pProgress"/>
+        <attr format="color" name="pProgressBgColor"/>
+        <attr format="dimension" name="pLineSpacing"/>
+        <attr format="integer" name="pMaxProgress"/>
+        <attr format="boolean" name="pShowPercentage"/>
+        <attr format="boolean" name="pRoundedCorners"/>
+        <attr name="pBrand"/>
+        <attr name="pSize"/>
+    </declare-styleable>
+    <declare-styleable name="StrippedProgressBarGroup">
+        <attr name="pMaxProgress"/>
+        <attr name="pSize"/>
+        <attr name="pRoundedCorners"/>
+    </declare-styleable>
+</resources>

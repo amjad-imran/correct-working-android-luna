@@ -4,6 +4,7 @@ import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.data.model.DayTimeMovementBreakup
 import com.noisefit_commans.data.model.OreoAutoSportData
 import com.noisefit_commans.data.model.OreoBloodOxygenBreakup
+import com.noisefit_commans.data.model.OreoBodyStressData
 import com.noisefit_commans.data.model.OreoBodyTemperatureBreakup
 import com.noisefit_commans.data.model.OreoHeartRate
 import com.noisefit_commans.data.model.OreoNapData
@@ -41,6 +42,8 @@ sealed class UserActivityCallback {
     class OreoRingDayTimeMovementObtained(val dayTimeMovement: DayTimeMovementBreakup) : UserActivityCallback()
     class OreoRespiratoryDataObtained(val respiratoryData: OreoRespiratoryData) :
         UserActivityCallback()
+
+    class OreoBodyStressDataObtained(val bodyStressData: OreoBodyStressData) : UserActivityCallback()
 
     class BloodPressureObtained(val bloodPressureData: BloodPressureData) : UserActivityCallback()
     class StressDataObtained(val stressData: List<StressDataBreakup>) : UserActivityCallback()

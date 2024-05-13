@@ -439,4 +439,7 @@ interface DataStoredInterface {
     fun getAppRemindDate(): String?
 
     fun isNewAppVersionAvailable(): Boolean
+    fun setStressWalkthroughShown(isShown: Boolean)
+
+    fun getStressWalkthroughShownStatus(): Boolean
 }

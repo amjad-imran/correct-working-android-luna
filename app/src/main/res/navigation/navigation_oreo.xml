@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_oreo"
     app:startDestination="@id/navigation_oreo_home">
 
@@ -260,6 +259,18 @@
         <argument
             android:name="minute"
             app:argType="integer" />
+
+        <argument
+            android:name="hourOther"
+            app:argType="integer" />
+        <argument
+            android:name="minuteOther"
+            app:argType="integer" />
+
+        <argument
+            android:name="isStart"
+            app:argType="integer" />
+
         <argument
             android:name="unitPosition"
             app:argType="integer" />
@@ -565,6 +576,26 @@
         android:id="@+id/bottomSheetRingCharging"
         android:name="com.oreo.ui.recordworkout.BottomSheetRingCharging"
         android:label="BottomSheetRingCharging" />
+    <fragment
+        android:id="@+id/fragmentOStress"
+        android:name="com.oreo.ui.stress.OStressMovementFragment"
+        android:label="OStress" />
+    <fragment
+        android:id="@+id/fragmentOStressDetails"
+        android:name="com.oreo.ui.stress.OStressDetailsFragment"
+        android:label="OStressDetails">
+        <action
+            android:id="@+id/action_stressDetailFragment_to_bottomSheetStressActivity"
+            app:destination="@id/bottomSheetStressActivity" />
+    </fragment>
+    <dialog
+        android:id="@+id/bottomSheetStressActivity"
+        android:name="com.oreo.ui.stress.BottomSheetStressActivities"
+        android:label="BottomSheetStressActivity">
+        <argument
+            android:name="dataList"
+            app:argType="com.oreo.data.model.OStressActivitiesDataModel[]" />
+    </dialog>
     <dialog
         android:id="@+id/removeNapBottomSheet"
         android:name="com.noisefit.ui.common.bottomSheet.RemoveNapBottomSheet"
@@ -588,7 +619,7 @@
     <fragment
         android:id="@+id/appUpdateDetailFragment"
         android:name="com.oreo.ui.home.summary.update.UpdateDetailFragment"
-        android:label="fragment_app_update_detail" >
+        android:label="fragment_app_update_detail">
         <argument
             android:name="launchMode"
             app:argType="com.oreo.ui.home.summary.update.UpdateLaunchMode" />
@@ -606,7 +637,7 @@
     <fragment
         android:id="@+id/ringUpdateFragment"
         android:name="com.oreo.ui.home.summary.update.RingUpdateFragment"
-        android:label="fragment_ring_update" >
+        android:label="fragment_ring_update">
         <argument
             android:name="otaData"
             app:argType="com.oreo.data.model.OtaUpdateModel" />
@@ -619,6 +650,56 @@
         android:id="@+id/bottomSheetLowBatteryFirmware"
         android:name="com.noisefit.ui.onboarding.setup.firmware.BottomSheetLowBatteryFirmware"
         android:label="BottomSheetLowBatteryFirmware" />
+    <fragment
+        android:id="@+id/stressInternalParentOreo"
+        android:name="com.oreo.ui.stress.OStressInternalParentFragment"
+        android:label="StressInternalParentDetails">
+        <argument
+            android:name="date"
+            app:argType="string" />
+        <argument
+            android:name="cameFrom"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/stressUnderstandingFragment"
+        android:name="com.oreo.ui.stress.help.StressUnderstandingFragment"
+        android:label="fragment_stress_understanding"/>
+    <fragment
+        android:id="@+id/stressSplashFragment"
+        android:name="com.oreo.ui.stress.splash.StressSplashFragment"
+        android:label="fragment_stress_splash">
+        <action
+            android:id="@+id/action_stressSplashFragment_to_fragmentOStressDetails"
+            app:destination="@id/fragmentOStressDetails"
+            app:popUpTo="@id/stressSplashFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentHeartRateDetails"
+        android:name="com.oreo.ui.heartrate.OHeartRateDetailsFragment"
+        android:label="HeartRateDetails">
+        <action
+            android:id="@+id/action_navigation_hr_details_frag_to_dayTimeActivitiesBottomSheet"
+            app:destination="@id/bottomSheetDayTimeActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentLearMoreDetails"
+        android:name="com.oreo.ui.heartrate.LearnMoreDetailsFragment"
+        android:label="LearnMoreDetails">
+
+        <argument
+            android:name="data"
+            app:argType="com.oreo.data.model.LearnMoreDataModel" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentHrInfo"
+        android:name="com.oreo.ui.heartrate.OHRInfoFragment"
+        android:label="HR info fragment" />
+    <dialog
+        android:id="@+id/bottomSheetLocationPermissionRequest"
+        android:name="com.oreo.ui.recordworkout.BottomSheetLocationPermissionRequest"
+        android:label="BottomSheetLocationPermissionRequest" />
     <fragment
         android:id="@+id/chatGptFragment"
         android:name="com.oreo.ui.chatGpt.ChatGptFragment"

@@ -37,6 +37,8 @@ private const val OTA_VERSION_NEW = "OTA_VERSION_NEW"
 private const val OTA_VERSION_NEW_TIMESTAMP = "OTA_VERSION_NEW_TIMESTAMP"
 private const val OTA_VERSION_REMIND = "OTA_VERSION_REMIND"
 private const val OTA_VERSION_CURRENT = "OTA_VERSION_CURRENT"
+private const val FIRST_STRESS_DAY = "FIRST_STRESS_DAY"
+private const val STRESS_BETA_STATE = "STRESS_BETA_STATE"
 
 private const val UPDATE_USER_DEVICE_STATUS = "UPDATE_USER_DEVICE_STATUS"
 
@@ -48,6 +50,22 @@ class RingDataStoreImpl
     private val gson: Gson,
     private val mPrefs: SharedPreferences
 ) : RingDataStore {
+
+    override fun getFirstStressDay(): String? {
+        return mPrefs.getString(FIRST_STRESS_DAY, null)
+    }
+
+    override fun setFirstStressDay(firstStress: String?) {
+        mPrefs.edit()?.putString(FIRST_STRESS_DAY, firstStress)?.commit()
+    }
+
+    override fun getStressBetaState(): Boolean? {
+        return mPrefs.getBoolean(STRESS_BETA_STATE, false)
+    }
+
+    override fun setStressBetaState(state: Boolean?) {
+        mPrefs.edit()?.putBoolean(STRESS_BETA_STATE, state?:false)?.commit()
+    }
 
     override fun isUpdateUserDeviceDone(): Boolean {
         return mPrefs.getBoolean(UPDATE_USER_DEVICE_STATUS, false)

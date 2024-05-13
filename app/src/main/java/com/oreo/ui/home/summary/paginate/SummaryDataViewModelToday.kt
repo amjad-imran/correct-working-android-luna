@@ -6,11 +6,10 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.local.db.CacheResult
-import com.oreo.data.model.AppUpdateModel
-import com.oreo.data.model.OtaUpdateModel
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UpdateRepository
 import com.noisefit.luna.BuildConfig
+import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.BinaryActionCallback
@@ -34,14 +33,18 @@ import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.ScreenUtils
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
+import com.oreo.data.dataConverter.OreoHRDataConvertor
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
+import com.oreo.data.dataConverter.OreoStressDataConvertor
 import com.oreo.data.model.AlertType
+import com.oreo.data.model.AppUpdateModel
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.DashAlert
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.OreoNapDetailsDataModel
+import com.oreo.data.model.OtaUpdateModel
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.SlideUpNapScoreDataModel
 import com.oreo.data.model.TapMeasureState
@@ -60,6 +63,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.time.LocalTime
+import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
@@ -72,9 +77,11 @@ class SummaryDataViewModelToday @Inject constructor(
     val screenUtils: ScreenUtils,
     val watchDataStore: WatchDataStore,
     private val syncRepository: OreoSyncRepository,
+    val oreoStressDataConvertor: OreoStressDataConvertor,
     val userActivityRepository: OreoUserActivityRepository,
     val updateRepository: UpdateRepository,
-    private val userHealthDataDataSource: OreoUserHealthDataDataSource
+    private val userHealthDataDataSource: OreoUserHealthDataDataSource,
+    val hrDataConvertor: OreoHRDataConvertor
 ) : BaseViewModel() {
 
 
@@ -104,18 +111,26 @@ class SummaryDataViewModelToday @Inject constructor(
     val stateReadinessAvgCard = MutableLiveData<ODashboardReadinessScoreModel?>()
     val stateSleepAvgCard =
         MutableLiveData<Pair<ODashboardSleepScoreModel?, ODashboardActivityScoreModel?>>()
-    val stateHeartRateCard = MutableLiveData<OHealthOverview.HeartRate?>()
+    val stateHeartRateCard = MutableLiveData<OHealthOverview.HeartRateDataModel?>()
 
     var user: User? = null
     var registerDate: Int = -1
+    var shouldShowStressCard = false
+    var stressBeta = false
     var onNapAddSuccess = MutableLiveData<Event<OreoNapDetailsDataModel>>()
+    var serverUserHealthData: ServerUserHealthData? = null
 
 
-    fun setRingBatteryInfoState() {
-        stateDashRingBattery.postValue(Pair(false, null))
-        viewModelScope.launch(Dispatchers.IO) {
-            localDataStore.setBatteryAlertShown()
-        }
+    fun getStressWalkthroughShownStatus(): Boolean {
+        return localDataStore.getStressWalkthroughShownStatus()
+    }
+
+    fun checkBeforeTime(): Boolean {
+        val calendar: Calendar = Calendar.getInstance()
+        val hour24hrs: Int = calendar.get(Calendar.HOUR_OF_DAY)
+        val time1 = LocalTime.of(hour24hrs, 0)
+        val time2 = LocalTime.of(21, 0)
+        return time1.isBefore(time2)
     }
 
 
@@ -260,7 +275,8 @@ class SummaryDataViewModelToday @Inject constructor(
                 activeCalories = healthData.activity?.activeCalories ?: 0,
                 inactiveMinutes = healthData.activity?.activityContributors?.stayActive?.value,
                 status = healthData.activity?.activityScore?.level?.capitalizeWords(),
-                nudges = healthData.activity?.dash_nudges
+                nudges = healthData.activity?.dash_nudges,
+                steps = healthData.activity?.steps ?: 0
             )
 
             val nap = healthData.sleep?.naps ?: ArrayList()
@@ -478,6 +494,20 @@ class SummaryDataViewModelToday @Inject constructor(
                 }
             }
 
+            if (shouldShowStressCard) {
+                val combinedData = oreoStressDataConvertor.getStressCombinedData(healthData)
+                userActivities.add(
+                    OHealthOverview.StressGraph(
+                        combinedData,
+                        healthData.stress?.stressValue?.value ?: 0,
+                        healthData.stress?.stressValue?.lastUpdated ?: 0L,
+                        getStressStatus(healthData.stress?.stressValue?.value ?: 0),
+                        true,
+                        stressBeta
+                    )
+                )
+            }
+
             stateSleepAvgCard.postValue(
                 Pair(
                     trendsData?.sleepScoreAvg, trendsData?.activityScoreAvg
@@ -498,6 +528,16 @@ class SummaryDataViewModelToday @Inject constructor(
             stateWorkouts.postValue(healthData.activity?.workout ?: ArrayList())
             loadNapsToConfirm()
 
+        }
+    }
+
+    fun getStressStatus(value: Int?): String {
+        return when (value) {
+            0 -> ""
+            in 1..34 -> "Relaxed"
+            in 35..69 -> "Focussed"
+            in 70..100 -> "Stressed"
+            else -> ""
         }
     }
 

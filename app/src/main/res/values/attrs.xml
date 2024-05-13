@@ -1,5 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <declare-styleable name="CombineLineChart">
+        <attr name="bgColor" />
+        <attr name="bgLeftColor" />
+        <attr name="bgRightColor" />
+        <attr name="bgTopColor" />
+        <attr name="bgBottomColor" />
+        <attr name="xTextColor" />
+        <attr name="yTextColor" />
+        <attr name="restLineColor" format="color" />
+        <attr name="highColor" format="color" />
+        <attr name="mediumColor" format="color" />
+        <attr name="lowColor" format="color" />
+        <attr name="chartLineWidth" />
+        <attr name="scaleNodeColor" />
+        <attr name="gridColor" />
+        <attr name="xMax" />
+        <attr name="xMin" />
+        <attr name="xTextSize" />
+        <attr name="yTextSize" />
+        <attr name="combineTextSize" />
+        <attr name="leftWith" />
+        <attr name="rightWith" />
+        <attr name="bottomWith" />
+        <attr name="topWith" />
+        <attr name="scaleNodeRadius" />
+        <attr name="centerLineWidth" />
+        <attr name="centerLineColor" />
+        <attr name="fillColorStart" />
+        <attr name="fillColorEnd" />
+        <attr name="showXAxis" />
+        <attr name="showSelectedIndicator" />
+        <attr name="titleWidth" />
+
+    </declare-styleable>
+
     <declare-styleable name="ReadMoreTextView">
         <attr name="trimExpandedText" format="string" />
         <attr name="trimCollapsedText" format="string" />
@@ -244,40 +280,6 @@
         <attr name="topWith" />
         <attr name="centerLineWidth" />
         <attr name="centerLineColor" />
-    </declare-styleable>
-
-    <declare-styleable name="CombineLineChart">
-        <attr name="bgColor" />
-        <attr name="bgLeftColor" />
-        <attr name="bgRightColor" />
-        <attr name="bgTopColor" />
-        <attr name="bgBottomColor" />
-        <attr name="xTextColor" />
-        <attr name="yTextColor" />
-        <attr name="restLineColor" format="color" />
-        <attr name="highColor" format="color" />
-        <attr name="mediumColor" format="color" />
-        <attr name="lowColor" format="color" />
-        <attr name="chartLineWidth" />
-        <attr name="scaleNodeColor" />
-        <attr name="gridColor" />
-        <attr name="xMax" />
-        <attr name="xMin" />
-        <attr name="xTextSize" />
-        <attr name="yTextSize" />
-        <attr name="combineTextSize" />
-        <attr name="leftWith" />
-        <attr name="rightWith" />
-        <attr name="bottomWith" />
-        <attr name="topWith" />
-        <attr name="scaleNodeRadius" />
-        <attr name="centerLineWidth" />
-        <attr name="centerLineColor" />
-        <attr name="fillColorStart" />
-        <attr name="fillColorEnd" />
-        <attr name="showXAxis" />
-        <attr name="showSelectedIndicator" />
-        <attr name="titleWidth" />
     </declare-styleable>
 
     <declare-styleable name="PercentageBar">

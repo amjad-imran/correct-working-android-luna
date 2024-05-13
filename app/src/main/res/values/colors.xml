@@ -187,6 +187,9 @@
     <color name="activity_arc">#8ed3f1</color>
     <color name="color_workout">#88d6eb</color>
     <color name="steel_grey">#8a8c8e</color>
+    <color name="medium_movement_color">#86d4f5</color>
+    <color name="low_movement_color">#307384</color>
+    <color name="no_movement_color">#757575</color>
     <color name="nap_sleep_grad_start">#ddc5ff</color>
     <color name="nap_sleep_grad_end">#a665ff</color>
     <color name="nap_readiness_grad_start">#ffd6c5</color>
@@ -195,8 +198,9 @@
     <color name="nap_dash_sleep_score">#e1caff</color>
     <color name="nap_dash_readiness_score">#ffddc9</color>
     <color name="nap_dash_sleep_impact_score">#ff6b86</color>
-
-
+    <color name="stress_nap_calm">#3fe8b5</color>
+    <color name="stress_nap_focussed">#ffed91</color>
+    <color name="stress_nap_stressed">#ffad60</color>
     <color name="daytime_high_un_selected_color">#ffffff</color>
     <color name="daytime_medium_selected_color">#6bc5eb</color>
     <color name="daytime_medium_un_selected_color">#6bc5eb</color>
@@ -211,5 +215,6 @@
     <color name="daytime_medium_movement_label_color">#8ed3f1</color>
 
     <color name="text_light_blue">#9cbdff</color>
+    <color name="color_hr_cubic_line">#ff3371</color>
 
 </resources>

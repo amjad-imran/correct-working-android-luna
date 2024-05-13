@@ -12,6 +12,7 @@ data class OreoUserDataPost(
     @SerializedName("activities") var activities: List<OreoStepsNetworkEntity>? = null,
     @SerializedName("oxygen") var bloodOxygen: List<OreoCommonNetworkEntity>? = null,
     @SerializedName("hrv") var stress: List<OreoCommonNetworkEntity>? = null,
+    @SerializedName("stress") var bodyStress: List<OreoCommonNetworkEntity>? = null,
     @SerializedName("heart_rate") var heartRateHistory: List<OreoHeartNetworkEntity>? = null,
     @SerializedName("temperature") var bodyTemperature: List<OreoBodyTempNetworkEntity>? = null,
     @SerializedName("respiration") var respiratory: List<OreoCommonNetworkEntity>? = null
@@ -117,7 +118,9 @@ data class OreoCommonNetworkEntity(
     data class DayBreakup(
         @SerializedName("break_up") var breakUp: List<Int>? = null,
         @SerializedName("frequency") var frequency: Int,
-        @SerializedName("date") var date: String
+        @SerializedName("date") var date: String,
+        @SerializedName("stress_value") var stressValue: Int? = null,
+        @SerializedName("last_updated") var lastUpdated: Long? = null,
     ) : OreoUserActivitiesPost()
 }
 

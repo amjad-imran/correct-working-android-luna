@@ -42,44 +42,5 @@ constructor(
 //        getConfig()
     }
 
-    fun getConfig() {
-        viewModelScope.launch {
-            deviceRepository.getConfig().collect { resource ->
-                when (resource) {
-                    is Resource.GenericError -> {
-                        sendMessage(resource.message)
-                    }
-                    is Resource.Loading -> {
-                        setLoading(resource.loading)
-                    }
-                    is Resource.NetworkError -> {
-                        setApiErrors(resource.response.apply {
-                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback = object : BinaryActionCallback {
-                                override fun yes() {
-                                    getConfig()
-                                }
-
-                                override fun no() {
-                                    _killApp.postValue(Event(true))
-                                }
-                            }
-                        })
-                    }
-                    is Resource.Success -> {
-                        resource.data?.data?.let {
-                            it.images?.let {
-                                images = it
-                            }
-                            it.endGames?.let { endGames ->
-                                localDataStore.setEndGameList(endGames)
-                            }
-                            _config.postValue(it)
-                        }/* ?: getConfig()*/
-                    }
-                }
-            }
-        }
-
-    }
 
 }

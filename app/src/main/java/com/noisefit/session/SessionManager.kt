@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ktx.Firebase
+import com.google.gson.Gson
 import com.moengage.core.Properties
 import com.moengage.core.analytics.MoEAnalyticsHelper
 import com.moengage.core.model.UserGender
@@ -26,6 +27,7 @@ import com.noisefit_commans.interfaces.data.UserActivityAction
 import com.noisefit_commans.interfaces.data.UserActivityCallback
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
+import com.noisefit_commans.location.LocationUtils
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.Gender
 import com.noisefit_commans.models.SportsModeRequest
@@ -486,6 +488,7 @@ class SessionManager
         }
         MoEAnalyticsHelper.trackEvent(context, newEventName, properties)
         Firebase.analytics.logEvent(newEventName, ApplicationUtils.convertMapToBundle(data))
+        LOGS.d("LOGS_MO_ENGAGE_EVENT $newEventName ${Gson().toJson(properties)}")
     }
 
 
@@ -610,7 +613,11 @@ class SessionManager
                         )
                     )
                 )
+                if (savedWorkout.second.isGpsRequired == 1) {
+                    LocationUtils.startLocationService()
+                }
             } else {
+                LocationUtils.stopLocationService()
                 sendUpdateQueryAction(UpdateDeviceAction.SetAutoWorkoutStatus(true))
             }
         }

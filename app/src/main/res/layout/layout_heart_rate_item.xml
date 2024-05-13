@@ -1,0 +1,90 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:lineChart="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvSubtitle1"
+            style="@style/H6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="@dimen/dimen_20dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="@string/text_average_hr"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/lytSubtitleValue1"
+            layout="@layout/oreo_layout_view_with_bpm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintStart_toStartOf="@id/tvSubtitle1"
+            app:layout_constraintTop_toBottomOf="@+id/tvSubtitle1" />
+
+
+        <TextView
+            android:id="@+id/tvSubtitle2"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dimen_16dp"
+            android:layout_marginBottom="@dimen/dimen_4dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="#9cbdff"
+
+            app:layout_constraintBottom_toBottomOf="@+id/lytSubtitleValue1"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Average 67 ms" />
+
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="12dp"
+            android:visibility="gone"
+            lineChart:layout_constraintStart_toStartOf="parent"
+            lineChart:layout_constraintTop_toBottomOf="@id/lytSubtitleValue1"
+            tools:text="Lowest" />
+
+
+        <com.oreo.ui.custom.HRCombinedChart
+            android:id="@+id/candleChart"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginStart="@dimen/side_margin"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="@dimen/side_margin"
+            lineChart:bottomWith="30dp"
+            lineChart:chartLineColor="#FFFFFF"
+            lineChart:chartLineWidth="2dp"
+            lineChart:combineTextSize="16sp"
+            lineChart:gridColor="#80FFFFFF"
+            lineChart:highColor="#ff3371"
+            lineChart:rightWith="30dp"
+            lineChart:layout_constraintBottom_toBottomOf="parent"
+            lineChart:layout_constraintEnd_toEndOf="parent"
+            lineChart:layout_constraintStart_toStartOf="parent"
+            lineChart:layout_constraintTop_toBottomOf="@id/tvStatus"
+            lineChart:lowColor="#ff3371"
+            lineChart:mediumColor="#ff3371"
+            lineChart:restLineColor="#40FFFFFF"
+            lineChart:topWith="30dp"
+            lineChart:xTextColor="#FFFFFF"
+            lineChart:xTextSize="11sp"
+            lineChart:yTextSize="11sp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

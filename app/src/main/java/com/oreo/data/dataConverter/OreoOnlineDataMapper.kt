@@ -7,6 +7,7 @@ import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.common.minWithoutZero
 import com.noisefit_commans.data.model.DayTimeMovementBreakup
 import com.noisefit_commans.data.model.OreoBloodOxygenBreakup
+import com.noisefit_commans.data.model.OreoBodyStressData
 import com.noisefit_commans.data.model.OreoBodyTempNetworkEntity
 import com.noisefit_commans.data.model.OreoBodyTemperatureBreakup
 import com.noisefit_commans.data.model.OreoCommonNetworkEntity
@@ -32,6 +33,7 @@ import com.oreo.data.db.implementation.OreoStressDataImpl
 import com.oreo.data.model.NapOverlayData
 import com.oreo.data.model.OreoUserSyncActivities
 import com.oreo.data.model.SleepOverlayData
+import java.text.SimpleDateFormat
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -52,6 +54,7 @@ class OreoOnlineDataMapper
         val stress = parseStressData(userSyncActivities.stressData)
         val heartRateHistory = parseHeartHistoryData(userSyncActivities.hrHistoryData)
         val bloodOxygen = parseBloodOxygenData(userSyncActivities.boData)
+        val bodyStress = parseBodyStressData(userSyncActivities.bodyStressData)
         val bodyTemperature = parseBodyTemperature(userSyncActivities.bodyTemperature)
         val respiratory = parseRespiratoryData(userSyncActivities.respiratory)
 
@@ -59,13 +62,16 @@ class OreoOnlineDataMapper
 
         combinedData.activities = steps
         combinedData.stress = stress
+        combinedData.bodyStress = bodyStress
         combinedData.heartRateHistory = heartRateHistory
         combinedData.bloodOxygen = bloodOxygen
         combinedData.bodyTemperature = bodyTemperature
         combinedData.respiratory = respiratory
         combinedData.sleeps = sleeps
 
-        if (steps == null && stress == null && heartRateHistory == null && bloodOxygen == null && bodyTemperature == null && respiratory == null) {
+        if (steps == null && stress == null && heartRateHistory == null
+            && bloodOxygen == null && bodyTemperature == null && respiratory == null && bodyStress == null
+        ) {
             LOGS.d("Hurray!! just saved one api call")
             return null
         }
@@ -359,6 +365,44 @@ class OreoOnlineDataMapper
             commonList.add(networkReq)
         }
         return commonList
+    }
+
+    private fun parseBodyStressData(bodyStressList: List<OreoBodyStressData>?): ArrayList<OreoCommonNetworkEntity>? {
+
+        if (bodyStressList.isNullOrEmpty()) {
+            return null
+        }
+        val commonList = ArrayList<OreoCommonNetworkEntity>()
+        bodyStressList.forEach {
+            val breakUp = Gson().fromJson<List<Int>>(it.breakUp ?: "")
+            val networkReq = OreoCommonNetworkEntity()
+            val lastValue = getLastNonZeroValue(breakUp, it.date)
+            networkReq.dayBreakup = OreoCommonNetworkEntity.DayBreakup(
+                breakUp = breakUp,
+                frequency = 15,
+                date = it.date ?: "",
+                stressValue = lastValue.first,
+                lastUpdated = lastValue.second
+
+            )
+            commonList.add(networkReq)
+        }
+        return commonList
+    }
+
+    private fun getLastNonZeroValue(breakUp: List<Int>, date: String?): Pair<Int, Long> {
+        if (date == null) return Pair(0, 0)
+        val value = breakUp.lastOrNull { it != 0 && it != 255 }
+        val index = breakUp.indexOfLast { it != 0 && it != 255 }
+
+        return if (value != null && index != -1) {
+            val timestamp =
+                (DateFormats.dateFormat3.parse(date)?.time ?: 0L) + ((index * 15) * 60000)
+            Pair(value, timestamp)
+        } else {
+            Pair(0, 0)
+        }
+
     }
 
     private fun parseHeartHistoryData(hrHistoryData: List<OreoHeartRate>?): List<OreoHeartNetworkEntity>? {

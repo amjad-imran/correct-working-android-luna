@@ -1,6 +1,7 @@
 package com.oreo.ui.workout.details
 
 import android.graphics.Color
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -29,11 +30,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.joda.time.LocalDateTime
+import org.joda.time.format.DateTimeFormat
 import java.time.LocalDate
 import java.time.Period
 import java.util.Calendar
 import javax.inject.Inject
 import kotlin.math.ceil
+import kotlin.math.roundToInt
 
 @HiltViewModel
 class OWorkoutDetailsViewModelV2 @Inject constructor(
@@ -53,7 +57,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
     val workoutDetailsResponse: LiveData<OWorkoutDetailsResponseModel> = _workoutDetailsResponse
     fun getWorkoutDetails(workoutId: String) {
         viewModelScope.launch {
-            userActivityRepository.getWorkoutDetails(
+            userActivityRepository.getWorkoutDetailsV2(
                 workoutId
             ).collect { resource ->
                 when (resource) {
@@ -147,7 +151,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         val activityList = ArrayList<OWDActivityData>()
         val context = NoiseFitApplicationMain.context!!
 
-        if ((it.distance ?: 0) > 0) {
+        if (showDistance(it) && it.dataType != null) {
             if (it.calories != null && it.calories > 0) {
                 activityList.add(
                     OWDActivityData(
@@ -218,12 +222,25 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         return activityList
     }
 
-    fun getDistance(data: OWorkoutDetailsResponseModel): Triple<String, String, String> {
-        if (data.distance != null && data.distance > 0L) {
 
-            val distance = dataUnitConverter.formatActivityDistance(
-                data.distance.toInt(),
-                Units.METRIC
+    private fun showDistance(data: OWorkoutDetailsResponseModel): Boolean {
+        return if (data.dataType.equals("distance", true)) {
+            if (data.dataPriority.equals("app", true)) {
+                (data.gpsDistance ?: 0) > 0
+            } else {
+                data.distance != null && data.distance > 0L
+            }
+        } else {
+            false
+        }
+    }
+
+    fun getDistance(data: OWorkoutDetailsResponseModel): Triple<String, String, String> {
+        if (showDistance(data)) {
+            val distanceToUse =
+                if (data.dataPriority.equals("app")) data.gpsDistance ?: 0 else data.distance
+            val distance = dataUnitConverter.formatDistance(
+                distanceToUse?.toInt() ?: 0, Units.METRIC
             )
             return Triple(distance, "km", "Total Distance")
 
@@ -244,29 +261,20 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
     }
 
     fun getXAxisList(
-        movementList: List<Int>?,
-        startTime: String,
-        endTime: String,
-        duration: Long?
+        movementList: List<Int>?, startTime: String, endTime: String, duration: Long?
     ): List<String?> {
         if (movementList.isNullOrEmpty()) {
-            return MutableList<String>(2, { "" })
-                .apply {
-                    this[0] = startTime.lowercase()
-                    this[1] =
-                        endTime.lowercase()
-                }
-                .toList()
+            return MutableList<String>(2, { "" }).apply {
+                this[0] = startTime.lowercase()
+                this[1] = endTime.lowercase()
+            }.toList()
         }
 
         val list = arrayOfNulls<String>(movementList.size)
 
-        val startTimeFull =
-            DateFormats.convertTimeIntoTime(
-                startTime,
-                DateFormats.timeFormat12,
-                DateFormats.timeFormat
-            ).split(":")
+        val startTimeFull = DateFormats.convertTimeIntoTime(
+            startTime, DateFormats.timeFormat12, DateFormats.timeFormat
+        ).split(":")
 
 
         val startHr = startTimeFull[0].toInt()
@@ -275,12 +283,9 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         startMin = (5 * (Math.floor(Math.abs(startMin.toDouble() / 5)))).toInt()
 
 
-        val endTimeFull =
-            DateFormats.convertTimeIntoTime(
-                endTime,
-                DateFormats.timeFormat12,
-                DateFormats.timeFormat
-            ).split(":")
+        val endTimeFull = DateFormats.convertTimeIntoTime(
+            endTime, DateFormats.timeFormat12, DateFormats.timeFormat
+        ).split(":")
 
 
         val endHr = endTimeFull[0].toInt()
@@ -310,13 +315,10 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         }
 
 
-        return list
-            .apply {
-                this[0] = startTime.lowercase()
-                this[movementList.size - 1] =
-                    endTime.lowercase()
-            }
-            .toList()
+        return list.apply {
+            this[0] = startTime.lowercase()
+            this[movementList.size - 1] = endTime.lowercase()
+        }.toList()
     }
 
     fun getCombinedMovement(movement: List<Int>): List<Int> {
@@ -358,27 +360,27 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
 
         val hrIntervalInSecond = 30L
         val age = getUserAge()
-        LOGS.d("MY_AGE $age")
+        //LOGS.d("MY_AGE $age")
         val HRmax = (208 - 0.7 * age)
         // Zone 1 (50-60%)
-        val zone1Min = (0.5 * HRmax).toInt()
-        val zone1Max = (0.6 * HRmax).toInt()
+        val zone1Min = (0.5 * HRmax).roundToInt()
+        val zone1Max = (0.6 * HRmax).roundToInt()
         zones["Zone 1"] = zone1Min..zone1Max
 
         // Zone 2 (60-70%)
-        val zone2Max = (0.7 * HRmax).toInt()
+        val zone2Max = (0.7 * HRmax).roundToInt()
         zones["Zone 2"] = zone1Max..zone2Max
 
         // Zone 3 (70-80%)
-        val zone3Max = (0.8 * HRmax).toInt()
+        val zone3Max = (0.8 * HRmax).roundToInt()
         zones["Zone 3"] = zone2Max..zone3Max
 
         // Zone 4 (80-90%)
-        val zone4Max = (0.9 * HRmax).toInt()
+        val zone4Max = (0.9 * HRmax).roundToInt()
         zones["Zone 4"] = zone3Max..zone4Max
 
         // Zone 5 (90-100%)
-        val zone5Max = HRmax.toInt()
+        val zone5Max = HRmax.roundToInt()
         zones["Zone 5"] = zone4Max..zone5Max
 
 
@@ -413,11 +415,11 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             }
         }
 
-        LOGS.d("khgkhgkgkk ${Gson().toJson(zones)}")
-
 
         val duration =
             zone1Indexes.size + zone2Indexes.size + zone3Indexes.size + zone4Indexes.size + zone5Indexes.size + zoneRestorativeIndexes.size
+
+        LOGS.d("$zone1Indexes $zone2Indexes $zone3Indexes $zone4Indexes $zone5Indexes $zoneRestorativeIndexes")
 
 //        zones.forEach { (zone, range) ->
 //            println("$zone: $range bpm zonesss")
@@ -533,6 +535,37 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             4 -> Pair(zone4Indexes, Color.parseColor("#ff8934"))
             5 -> Pair(zone5Indexes, Color.parseColor("#ff3434"))
             else -> Pair(ArrayList(), Color.parseColor("#000000"))
+        }
+    }
+
+
+    /**
+     * 0-> Clear
+     * 2->Thunderstorm
+     * 3->Drizzle
+     * 5->Rain
+     * 6->Snow
+     * 7->Atmosphere
+     * 8->Clouds
+     */
+    fun getWeatherImage(status: Int?, startTime: String?): Int {
+        val isDay = try {
+            val start = LocalDateTime.parse(startTime, DateTimeFormat.forPattern("HH:mm:ss"))
+            val hourOFDay = start.hourOfDay
+            hourOFDay in 6..19
+        } catch (exp: Exception) {
+            true
+        }
+
+        return when (status) {
+            0 -> if (isDay) R.drawable.weather_clear else R.drawable.weather_clear_night
+            2 -> R.drawable.weather_thunder
+            3 -> R.drawable.weather_drizzle
+            5 -> R.drawable.weather_rainy
+            6 -> R.drawable.weather_snow
+            7 -> R.drawable.weather_haze
+            8 -> if (isDay) R.drawable.weather_cloudy else R.drawable.weather_cloudy_night
+            else -> R.drawable.weather_haze
         }
     }
 }
