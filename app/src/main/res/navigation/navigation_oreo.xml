@@ -703,6 +703,5 @@
     <fragment
         android:id="@+id/chatGptFragment"
         android:name="com.oreo.ui.chatGpt.ChatGptFragment"
-        android:label="fragment_chat_gpt"
-        tools:layout="@layout/fragment_chat_gpt" />
+        android:label="fragment_chat_gpt"/>
 </navigation>
