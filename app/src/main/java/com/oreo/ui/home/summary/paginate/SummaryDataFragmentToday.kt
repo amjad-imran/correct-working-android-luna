@@ -313,8 +313,11 @@ class SummaryDataFragmentToday :
                 }
 
                 is OSummaryHealthOverviewClickEnum.TrackYourFemaleHealth -> {
-                    //navigate(R.id.fragmentCycleTracker)
                     navigate(R.id.femaleHealthSplashFragment)
+                }
+                is OSummaryHealthOverviewClickEnum.TrackYourFemaleHealthRemindLater -> {
+                    viewModel.localDataStore.setFMHRemindLater()
+                    healthOverviewAdapter.removeCycleGetStartedCard()
                 }
             }
         }

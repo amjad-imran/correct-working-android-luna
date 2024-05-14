@@ -120,7 +120,6 @@ class FemaleHealthSplashFragment :
     private fun onNextPress() {
         val current = binding.vpImageSlider.currentItem
         if (current == (dataList.size - 1)) {
-            localDataStore.setFMHWalkthroughShown(true)
             navigate(FemaleHealthSplashFragmentDirections.actionFmhSplashFragmentToFragmentFemaleOnboarding())
         } else {
             binding.vpImageSlider.setCurrentItem(current + 1, true)

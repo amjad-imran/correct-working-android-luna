@@ -10,6 +10,7 @@ import com.noisefit.data.model.DiagnoseDataItem
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
@@ -18,21 +19,24 @@ import com.noisefit_commans.utils.wheel.WheelItemPeriod
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import org.joda.time.format.DateTimeFormat
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 
 
-const val DefaultPeriodDays = 7
+const val DefaultPeriodDays = 5
 const val MinPeriodDays = 1
-const val MaxPeriodDays = 45
+const val MaxPeriodDays = 15
 
-const val DefaultCycleDays = 7
-const val MinCycleDays = 1
-const val MaxCycleDays = 45
+const val DefaultCycleDays = 28
+const val MinCycleDays = 12
+const val MaxCycleDays = 100
 
 @HiltViewModel
 class FMHOnboardingViewModel @Inject constructor(
-    val userActivityRepository: OreoUserActivityRepository
+    val localDataStore: DataStoredInterface, val userActivityRepository: OreoUserActivityRepository
 ) : BaseViewModel() {
     val fragmentSize = 7
 
@@ -143,16 +147,31 @@ class FMHOnboardingViewModel @Inject constructor(
     val femaleHealthSubmitInfo: LiveData<Event<Boolean>>
         get() = _femaleHealthSubmitInfo
 
-    fun updateFemaleHealthData() {
+    private val _femaleHealthSkip = MutableLiveData<Event<Boolean>>()
+    val femaleHealthSkip: LiveData<Event<Boolean>>
+        get() = _femaleHealthSkip
+
+    fun updateFemaleHealthData(skip: Boolean = false) {
         val jsonObject = JsonObject()
 
         jsonObject.addProperty("goal", goalTypeSelected?.name)
-        jsonObject.addProperty("period_length", pDays)
-        jsonObject.addProperty("cycle_length", pcDays)
-        selectedPStartDate?.let {
-            //jsonObject.addProperty("period_date", DateFormats.convertLocalDateToDate(it))
+        if (pDays == 0) {
+            jsonObject.addProperty("period_length", DefaultPeriodDays)
+        } else {
+            jsonObject.addProperty("period_length", pDays)
         }
-        //jsonObject.addProperty("period_date", selectedPStartDate)
+
+        if (pcDays == 0) {
+            jsonObject.addProperty("cycle_length", DefaultCycleDays)
+        } else {
+            jsonObject.addProperty("cycle_length", pcDays)
+        }
+
+        selectedPStartDate?.let {
+            val date = it.format(DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH))
+            jsonObject.addProperty("period_date", date)
+        }
+
         val diagnoseArray = JsonArray()
         selectedDiagnoseListData.forEach {
             diagnoseArray.add(it)
@@ -160,7 +179,7 @@ class FMHOnboardingViewModel @Inject constructor(
         jsonObject.add("diagnosis", diagnoseArray)
         val medicinesArray = JsonArray()
         selectedHormoneListData.forEach {
-            diagnoseArray.add(it)
+            medicinesArray.add(it)
         }
         jsonObject.add("medicines", medicinesArray)
 
@@ -181,7 +200,7 @@ class FMHOnboardingViewModel @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        updateFemaleHealthData()
+                                        updateFemaleHealthData(skip)
                                     }
 
                                     override fun no() {
@@ -193,7 +212,12 @@ class FMHOnboardingViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            _femaleHealthSubmitInfo.postValue(Event(true))
+                            localDataStore.setFMHWalkthroughShown(true)
+                            if (skip) {
+                                _femaleHealthSkip.postValue(Event(true))
+                            } else {
+                                _femaleHealthSubmitInfo.postValue(Event(true))
+                            }
                         }
                     }
                 }

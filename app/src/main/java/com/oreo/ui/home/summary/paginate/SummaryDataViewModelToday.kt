@@ -236,10 +236,16 @@ class SummaryDataViewModelToday @Inject constructor(
             val viewedCardsData = ArrayList<OHealthOverview>()
 
             //todo add widget for testing
-            userActivities.add(OHealthOverview.CycleTrackerPredict(""))
-            userActivities.add(OHealthOverview.CycleTrackerOngoing(""))
-            userActivities.add(OHealthOverview.CardTrackFemaleHealth(""))
-            userActivities.add(OHealthOverview.GotYourPeriod(""))
+            //userActivities.add(OHealthOverview.CycleTrackerPredict(""))
+            //userActivities.add(OHealthOverview.CycleTrackerOngoing(""))
+
+            val lastShownDays = localDataStore.getFMHWalkthroughRemindLaterDays()
+
+            if (localDataStore.getFMHWalkthroughShownStatus().not() && lastShownDays > 7) {
+                userActivities.add(OHealthOverview.CardTrackFemaleHealth(""))
+            }
+
+            //userActivities.add(OHealthOverview.GotYourPeriod(""))
 
 
             val autoSportCount = userRepository.getSummaryAutoWorkoutCount()

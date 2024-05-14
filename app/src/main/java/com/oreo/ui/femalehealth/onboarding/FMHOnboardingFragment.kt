@@ -10,6 +10,7 @@ import com.noisefit.luna.databinding.FragmentFMHOnboardingBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.roundToInt
@@ -103,13 +104,19 @@ class FMHOnboardingFragment :
             onNextPress()
         }
         binding.bNotSure.setOnClickListener {
-            if (binding.vpFmhOnboard.currentItem == 1) {
-                mViewModel.pDays = DefaultPeriodDays
-            } else if (binding.vpFmhOnboard.currentItem == 2) {
-                mViewModel.pcDays = DefaultCycleDays
-            }
+            val current = binding.vpFmhOnboard.currentItem
 
-            onNextPress()
+            when (current) {
+                1 -> {
+                    mViewModel.updateFemaleHealthData(true)
+                    return@setOnClickListener
+                }
+
+                2 -> {
+                    mViewModel.updateFemaleHealthData(true)
+                    return@setOnClickListener
+                }
+            }
         }
 
 
@@ -126,21 +133,47 @@ class FMHOnboardingFragment :
 
     private fun onNextPress() {
         val current = binding.vpFmhOnboard.currentItem
-        if (current == (mViewModel.fragmentSize - 1)) {
-            mViewModel.updateFemaleHealthData()
+        when (current) {
+            3 -> {
+                if (mViewModel.selectedPStartDate == null) {
+                    context.showShortToast("Select Date to continue")
+                    return
+                }
+            }
 
-        } else {
-            binding.vpFmhOnboard.setCurrentItem(current + 1, true)
+            4 -> {
+                if (mViewModel.selectedDiagnoseListData.isEmpty()) {
+                    context.showShortToast("Select condition")
+                    return
+                }
+            }
+
+            5 -> {
+                if (mViewModel.selectedHormoneListData.isEmpty()) {
+                    context.showShortToast("Select")
+                    return
+                }
+                mViewModel.updateFemaleHealthData()
+                return
+            }
         }
+
+        binding.vpFmhOnboard.setCurrentItem(current + 1, true)
     }
 
     override fun subscribeObservers() {
         mViewModel.femaleHealthSubmitInfo.observe(this) { it1 ->
             it1?.getContent()?.let {
-                navigate(R.id.fragmentCycleTracker)
+                navigate(FMHOnboardingFragmentDirections.actionFemaleHealthOnboardingFragmentToFmhOnboardingAllDoneFragment())
             }
-
         }
+
+        mViewModel.femaleHealthSkip.observe(this) { it1 ->
+            it1?.getContent()?.let {
+                navigate(FMHOnboardingFragmentDirections.actionFemaleHealthOnboardingFragmentToFragmentCycleTracker())
+            }
+        }
+
         mViewModel.isGoalSelected.observe(this) { it1 ->
             it1?.getContent()?.let {
                 binding.bNext.isEnabled = it

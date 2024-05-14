@@ -66,6 +66,7 @@ sealed class OSummaryHealthOverviewClickEnum {
 
     object WorkoutAlertIdentify : OSummaryHealthOverviewClickEnum()
     object TrackYourFemaleHealth : OSummaryHealthOverviewClickEnum()
+    object TrackYourFemaleHealthRemindLater : OSummaryHealthOverviewClickEnum()
 
 }
 
@@ -379,6 +380,17 @@ class OSummaryHealthOverviewAdapter() :
             is OHealthOverview.CycleTrackerOngoing -> R.layout.list_cycle_tracker_ongoing
             is OHealthOverview.CardTrackFemaleHealth -> R.layout.card_track_fm_health
             is OHealthOverview.GotYourPeriod -> R.layout.list_period_confirmation
+        }
+    }
+
+    fun removeCycleGetStartedCard() {
+
+        val index = (items as ArrayList).indexOfFirst {
+            it is OHealthOverview.CardTrackFemaleHealth
+        }
+        if (index != -1) {
+            (items as ArrayList).removeAt(index)
+            notifyItemRemoved(index)
         }
     }
 }
@@ -1156,6 +1168,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             }
             binding.btnGetStarted.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.TrackYourFemaleHealth)
+            }
+            binding.tvRemindMeLater.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.TrackYourFemaleHealthRemindLater)
+            }
+            binding.ivCross.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.TrackYourFemaleHealthRemindLater)
             }
         }
     }

@@ -6,7 +6,6 @@ import androidx.fragment.app.activityViewModels
 import com.noisefit.data.model.DiagnoseDataItem
 import com.noisefit.luna.databinding.FragmentFMHOnboardSetDignosisBinding
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -17,9 +16,12 @@ class FMHOnboardSetDignosisFragment :
     private val mAdapter: FMHDiagnoseAdapter by lazy {
         FMHDiagnoseAdapter(object : FMHDiagnoseAdapter.OnItemClickListener {
             override fun onItemClick(data: DiagnoseDataItem, position: Int) {
-                mAdapter.updateItem(position, data)
+                if (position == 0) {
+                    mAdapter.onNoneSelected(data)
+                } else {
+                    mAdapter.updateItem(position, data)
+                }
                 mViewModel.selectedDiagnoseListData = mAdapter.getUpdatedSelectedListData()
-
             }
         })
     }
