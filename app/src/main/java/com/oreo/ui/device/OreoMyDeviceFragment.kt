@@ -76,21 +76,23 @@ class OreoMyDeviceFragment :
         }
 
         binding.rowShareRingLogs.setOnClickListener {
-            if (mViewModel.watchLogFile?.exists() == true) {
+            //TODO There is a problem with missing data in this log
+            /*if (mViewModel.watchLogFile?.exists() == true) {
                 context?.let { ctx ->
-                    //TODO There is a problem with missing data in this log
-                    //ShareUtil.shareFile(ctx, FileLogsUtils.getFileUri(ctx))
-                    mViewModel.viewModelScope.launch(Dispatchers.IO) {
-                        val uri = ZhBleLogUtils.getUriByBleAllLog()
-                        if (uri != null) {
-                            ShareUtil.shareZipFile(ctx, uri)
-                        } else {
-                            ShareUtil.shareFile(ctx, FileLogsUtils.getFileUri(ctx))
-                        }
-                    }
+                    ShareUtil.shareFile(ctx, FileLogsUtils.getFileUri(ctx))
                 }
             } else {
                 context.showShortToast("No logs")
+            }*/
+            mViewModel.viewModelScope.launch(Dispatchers.IO) {
+                val uri = ZhBleLogUtils.getUriByBleAllLog()
+                if (uri != null) {
+                    context?.let { ctx ->
+                        ShareUtil.shareZipFile(ctx, uri)
+                    }
+                } else {
+                    context.showShortToast("No logs")
+                }
             }
             mViewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.luna_mydevices_share_logs_click,
