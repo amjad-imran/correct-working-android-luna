@@ -19,5 +19,5 @@ local.properties
 /app/uat
 /app/staging
 /app/live
-.gradle/
-.idea/
+/.gradle/
+/.idea/
