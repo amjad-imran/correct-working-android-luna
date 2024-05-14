@@ -369,13 +369,14 @@ interface NetworkService {
     suspend fun getFemaleHealthInfo(
         @Url url: String,
         @Query("date") selectDate: String
-    ): BaseApiResponse<FemaleHealthUserInfoModel>
+    ): BaseApiResponse<FemaleHealthUserInfoModel?>
 
     @POST
     suspend fun logPeriod(
         @Url url: String,
         @Body requestObject: JsonObject
     ): BaseApiResponse<Any>
+
     /**
      * ---------------------------------------------------------------------------------
      *                                Oreo Services End

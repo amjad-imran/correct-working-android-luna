@@ -102,19 +102,45 @@ sealed class OHealthOverview {
     ) : OHealthOverview()
 
     class CycleTrackerPredict(
-        val title:String
-    ):OHealthOverview()
+        val data: PeriodCard1
+    ) : OHealthOverview()
+
     class CycleTrackerOngoing(
-        val title:String
-    ):OHealthOverview()
+        val data: PeriodCard2
+    ) : OHealthOverview()
+
     class GotYourPeriod(
-        val title:String
-    ):OHealthOverview()
+        val title: String
+    ) : OHealthOverview()
+
     class CardTrackFemaleHealth(
-        val title:String
-    ):OHealthOverview()
+        val title: String
+    ) : OHealthOverview()
 
 }
+
+
+data class PeriodCard1(
+    val title: String,
+    val days: Int,
+    val nudge: String,
+    val currentCycleDay: Int,
+    val totalCycleDay: Int,
+    val bottomText: String,
+    val predictionDate: String
+)
+
+data class PeriodCard2(
+    val title: String,
+    val days: Int,
+    val subTitle: String,
+    val nudge: String,
+    val currentCycleDay: Int,
+    val totalCycleDay: Int,
+    val temperatureVariation: Int,
+    val predictionString: String,
+    val predictionDate: String
+)
 
 data class DashAlert(
     val message: String,

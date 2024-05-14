@@ -123,6 +123,8 @@ class SummaryDataFragmentToday :
 
         val date = arguments?.getString(ARGS_DATE)
         viewModel.date = date
+
+        viewModel.getPeriodData()
     }
 
     private fun setNapsPager() {
@@ -156,14 +158,11 @@ class SummaryDataFragmentToday :
 
     override fun onDestroyView() {
         super.onDestroyView()
-        LOGS.d(TAG, "Today onDestroyView called")
     }
 
     override fun onResume() {
         super.onResume()
 
-        LOGS.d("SUMMART_TODAY on resume")
-        LOGS.d(TAG, "Today onResume called")
         loadData()
 
         viewModel.checkForNewAppVersion()
@@ -315,6 +314,7 @@ class SummaryDataFragmentToday :
                 is OSummaryHealthOverviewClickEnum.TrackYourFemaleHealth -> {
                     navigate(R.id.femaleHealthSplashFragment)
                 }
+
                 is OSummaryHealthOverviewClickEnum.TrackYourFemaleHealthRemindLater -> {
                     viewModel.localDataStore.setFMHRemindLater()
                     healthOverviewAdapter.removeCycleGetStartedCard()
@@ -441,6 +441,12 @@ class SummaryDataFragmentToday :
     }
 
     override fun subscribeObservers() {
+
+        viewModel.femaleHealthData.observe(this) {
+            it.getContent()?.let {
+                loadData()
+            }
+        }
 
         viewModel.sessionManager.isRingCharging.observe(this) {
             viewModel.handleBatteryAlert()

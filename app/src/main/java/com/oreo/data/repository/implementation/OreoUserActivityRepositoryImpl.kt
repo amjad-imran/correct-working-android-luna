@@ -1886,7 +1886,7 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
-    override suspend fun getFemaleHealthUserInfo(selectDate: String): Flow<Resource<BaseApiResponse<FemaleHealthUserInfoModel>>> {
+    override suspend fun getFemaleHealthUserInfo(selectDate: String): Flow<Resource<BaseApiResponse<FemaleHealthUserInfoModel?>>> {
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health"
             remoteDataSource.getFemaleHealthInfo(url, selectDate)
@@ -1899,6 +1899,4 @@ class OreoUserActivityRepositoryImpl(
             remoteDataSource.logPeriod(url, jsonObject)
         }
     }
-
-
 }

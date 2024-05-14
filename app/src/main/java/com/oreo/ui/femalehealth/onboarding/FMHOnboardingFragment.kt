@@ -179,6 +179,25 @@ class FMHOnboardingFragment :
                 binding.bNext.isEnabled = it
             }
         }
+
+        mViewModel.getMessages().observe(this) {
+            it.getContent()?.let { message ->
+                context.showShortToast(message)
+            }
+        }
+
+        mViewModel.getLoading().observe(viewLifecycleOwner) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
+            }
+        }
+        mViewModel.getApiErrors().observe(viewLifecycleOwner) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
+            }
+        }
     }
 
 }

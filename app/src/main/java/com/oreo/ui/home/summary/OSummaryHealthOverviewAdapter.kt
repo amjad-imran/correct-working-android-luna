@@ -1139,12 +1139,29 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         }
     }
 
+    /*data class PeriodCard1(
+        val title: String,
+        val days: Int,
+        val nudge: String,
+        val currentCycleDay: Int,
+        val totalCycleDay: Int,
+        val bottomText: String,
+        val predictionDate: String
+    )*/
     class CycleTrackerPredictViewHolder(private val binding: ListCycleTrackerPredictionBinding) :
         HomeRecyclerViewHolder(binding) {
         fun bind(
             data: OHealthOverview.CycleTrackerPredict,
             position: Int,
         ) {
+            binding.textView3.text = data.data.title
+            binding.tvOvlInDays.text = data.data.days.toString()
+            binding.textView1.text = data.data.bottomText
+            binding.tvPredictionDays.text = data.data.predictionDate
+            binding.tvOvlDaysCurrent.text = "Day ${data.data.currentCycleDay}"
+            binding.tvOvlDaysLeft.text = "of ${data.data.totalCycleDay}"
+
+            binding.tvDesc.text = data.data.nudge
         }
     }
 
@@ -1154,6 +1171,18 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             data: OHealthOverview.CycleTrackerOngoing,
             position: Int,
         ) {
+            binding.textView3.text = data.data.title
+            binding.tvOvlInDays.text = data.data.subTitle
+            binding.tvDaysLeft.text = "${data.data.days} of ${data.data.totalCycleDay}"
+            binding.tvDesc.text = data.data.nudge
+            binding.tvValue.text = if (data.data.temperatureVariation > 0) {
+                "+${data.data.temperatureVariation}"
+            } else {
+                "-${data.data.temperatureVariation}"
+            }
+
+            binding.tvPeriodicPeriod.text = data.data.predictionString
+            binding.tvDays.text = data.data.predictionDate
         }
     }
 

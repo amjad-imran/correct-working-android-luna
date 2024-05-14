@@ -121,6 +121,6 @@ interface OreoUserActivityRepository {
 
     //female health
     suspend fun submitFemaleHealthInfo(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
-    suspend fun getFemaleHealthUserInfo(selectDate: String): Flow<Resource<BaseApiResponse<FemaleHealthUserInfoModel>>>
+    suspend fun getFemaleHealthUserInfo(selectDate: String): Flow<Resource<BaseApiResponse<FemaleHealthUserInfoModel?>>>
     suspend fun logPeriod(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
 }

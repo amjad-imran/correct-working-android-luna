@@ -223,12 +223,8 @@ class FMHOnboardingViewModel @Inject constructor(
                 }
             }
         }
-//        updateFMHDate.postValue(Event(true))
     }
 
-    fun calenderDayRange(): Int {
-        return pDays
-    }
 
     fun calculatePeriodEndDate(date: LocalDate): LocalDate {
         return date.plusDays(pDays.toLong() - 1)

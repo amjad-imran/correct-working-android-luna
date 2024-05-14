@@ -4,9 +4,9 @@ import com.google.gson.annotations.SerializedName
 
 data class FemaleHealthUserInfoModel(
     @SerializedName("ota_log") val otaLog: Boolean? = false,
-    val isPeriod: Boolean? = false,
-    val isOvulation: Boolean? = false,
-    val isFertileWindow: Boolean? = false,
+    val isPeriod: Boolean = false,
+    val isOvulation: Boolean = false,
+    val isFertileWindow: Boolean = false,
     @SerializedName("period_date")
     val periodDate: String? = null,
     @SerializedName("ovulation_date")
@@ -18,6 +18,8 @@ data class FemaleHealthUserInfoModel(
     val nudges: ArrayList<FMHNudges>? = null,
     @SerializedName("current_day")
     val currentDay: Int? = null,
+    @SerializedName("cycle_length")
+    val cycleLength: Int? = null,
     @SerializedName("period_length")
     val periodLength: Int? = null,
     @SerializedName("pregency_chances")
