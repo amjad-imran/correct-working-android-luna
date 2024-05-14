@@ -22,6 +22,9 @@ data class ServerUserHealthResponse(
     @SerializedName("first_stress")
     val firstStress: String? = null,//2024-02-07
 
+    @SerializedName("stress_beta")
+    val stressBeta: Boolean? = null,
+
     @SerializedName("temp_base")
     val tempBaseLine: Float? = null,
 ) : ColorfitData()

@@ -19,7 +19,10 @@ import com.oreo.ui.stress.help.StressImageModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.joda.time.LocalDateTime
+import org.joda.time.format.DateTimeFormat
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import javax.inject.Inject
 import kotlin.math.roundToInt
@@ -98,7 +101,7 @@ constructor(
     }
 
 
-    var stressActivityData: ArrayList<OStressActivitiesDataModel>? = null
+    var stressActivityData = ArrayList<OStressActivitiesDataModel>()
     fun prepareStressActivityData(dayData: ServerUserHealthData) {
 
         if (dayData.stress?.breakUp.isNullOrEmpty()) return
@@ -111,7 +114,8 @@ constructor(
             dataList.add(
                 OStressActivitiesDataModel(
                     type = "Workout",
-                    workoutData = it
+                    workoutData = it,
+                    dateTime = "${it.date} ${it.startTime}"
                 )
             )
         }
@@ -122,6 +126,7 @@ constructor(
                         type = "Sleep",
                         startTime = sleep.hourly_breakup?.firstOrNull()?.start_time,
                         endTime = sleep.hourly_breakup?.lastOrNull()?.end_time,
+                        dateTime = "${sleep.hourly_breakup?.firstOrNull()?.start_time}"
                     )
                 )
         }
@@ -133,13 +138,16 @@ constructor(
                         type = "Nap",
                         id = nap.id,
                         startTime = nap.startTime,
-                        endTime = nap.endTime
+                        endTime = nap.endTime,
+                        dateTime = "${nap.startTime}"
                     )
                 )
             }
         }
-
-        stressActivityData = dataList
+        stressActivityData.clear()
+        stressActivityData.addAll(dataList.sortedBy {
+            LocalDateTime.parse(it.dateTime, DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"))
+        })
     }
 
 

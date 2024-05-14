@@ -30,6 +30,7 @@ public class BarChart extends View {
     private int bgColor;
 
     private boolean isDistanceGraph;
+    private boolean isMetric;
     private int bgLeftColor;
     private int bgRightColor;
     private int bgTopColor;
@@ -188,7 +189,6 @@ public class BarChart extends View {
     }
 
 
-
     public void updateDataWithMax(List<ChartModel> datas, List<ChartModel> prefixList, List<ChartModel> suffixList,
                                   int xMax1, int lineNormalColor, int lineSelectColor) {
 
@@ -198,7 +198,6 @@ public class BarChart extends View {
         list.addAll(suffixList);
         prefixCount = prefixList.size();
         suffixCount = suffixList.size();
-
 
 
 //        int noneZeroValueCount = 0;
@@ -218,7 +217,7 @@ public class BarChart extends View {
             isDistanceGraph = datas.get(i).isDistanceGraph();
 //            noneZeroValueCount += 1;
 
-            if (xMax == 0 ) {
+            if (xMax == 0) {
                 xMax = item.getValue();
 
             }
@@ -339,8 +338,13 @@ public class BarChart extends View {
         String maxStr;
         String avgStr;
         if (isDistanceGraph) {
-            maxStr = DistanceUtil.INSTANCE.convertMeterToKm(maxValue);
-            avgStr = DistanceUtil.INSTANCE.convertMeterToKm(avgValue);
+            if (isMetric) {
+                maxStr = DistanceUtil.INSTANCE.convertMeterToKm(maxValue);
+                avgStr = DistanceUtil.INSTANCE.convertMeterToKm(avgValue);
+            } else {
+                maxStr = DistanceUtil.INSTANCE.convertMeterToMiles(maxValue);
+                avgStr = DistanceUtil.INSTANCE.convertMeterToMiles(avgValue);
+            }
         } else {
             maxStr = String.valueOf(maxValue);
             avgStr = String.valueOf(avgValue);
@@ -351,13 +355,13 @@ public class BarChart extends View {
         xTextPaint.setColor(xTextColor & 0x80ffffff);
 
         float max = mHeight - bottomWith - xMax * (mHeight - topWith - bottomWith) / (xMax - xMin);
-        canvas.drawLine(leftWith, max, mWith, max , gridPaint);
+        canvas.drawLine(leftWith, max, mWith, max, gridPaint);
         xTextPaint.getTextBounds(maxStr, 0, maxStr.length(), xTextBounds);
 
         canvas.drawText(maxStr, mWith - rightWith - xTextBounds.width() + dip2px(10), max + xTextBounds.height() / 2f + dip2px(10), xTextPaint);
 
         float min = mHeight - bottomWith - 0 * (mHeight - topWith - bottomWith) / (xMax - xMin);
-        canvas.drawLine(leftWith, min, mWith, min , gridPaint);
+        canvas.drawLine(leftWith, min, mWith, min, gridPaint);
         xTextPaint.getTextBounds(maxStr, 0, maxStr.length(), xTextBounds);
         canvas.drawText(minStr, mWith - rightWith + dip2px(10), min + xTextBounds.height() / 2f - dip2px(10), xTextPaint);
 
@@ -404,12 +408,13 @@ public class BarChart extends View {
             xTextPaint.setColor(xTextColor & 0x80ffffff);
             canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 3, xTextPaint);
 
-            if(showSelectedIndicator) {
+            if (showSelectedIndicator) {
                 String title = list.get(i).getDate();
                 float xInd = indicatorOffSet + (moveOffSet * list.size() * indicatorUnitLength / (list.size() * unitHLenth)) + (mWith - leftWith - rightWith) / 2 + leftWith - i * indicatorUnitLength;
                 xTextPaint.getTextBounds(title, 0, title.length(), xTextBounds);
                 canvas.drawText(title, xInd - xTextBounds.width() / 2f, topWith / 2 + xTextBounds.height() / 2f, xTextPaint);
-            }  }
+            }
+        }
         if ((offSet + moveOffSet) < 0 || (offSet + moveOffSet) > (list.size() - 1) * unitHLenth) {
             return;
         }
@@ -433,7 +438,7 @@ public class BarChart extends View {
             xTextPaint.getTextBounds(xText, 0, xText.length(), xTextBounds);
             canvas.drawText(xText, x - xTextBounds.width() / 2f, mHeight - bottomWith / 3, xTextPaint);
 
-            if(showSelectedIndicator) {
+            if (showSelectedIndicator) {
                 String title = list.get(position).getDate();
                 float xInd = indicatorOffSet + (moveOffSet * list.size() * indicatorUnitLength / (list.size() * unitHLenth)) + (mWith - leftWith - rightWith) / 2 + leftWith - position * indicatorUnitLength;
                 xTextPaint.getTextBounds(title, 0, title.length(), xTextBounds);
@@ -494,7 +499,7 @@ public class BarChart extends View {
         } else if ((offSet + moveOffSet) < 0) {
             tempPosition = 0;
         } else {
-            tempPosition =  Math.round(((offSet + moveOffSet) / unitH));
+            tempPosition = Math.round(((offSet + moveOffSet) / unitH));
         }
 
         if (scrollPosition == tempPosition) {
@@ -543,4 +548,7 @@ public class BarChart extends View {
         return (int) (spValue * fontScale + 0.5f);
     }
 
+    public void setIsMetric(boolean metric) {
+        isMetric = metric;
+    }
 }

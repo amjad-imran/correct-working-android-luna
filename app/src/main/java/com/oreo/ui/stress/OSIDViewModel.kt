@@ -102,7 +102,7 @@ class OSIDViewModel @Inject constructor(
             else if (dayType?.lowercase() == "month")
                 DateFormats.getMonth(it.date.toInt() - 1)
             else {
-                it.date
+                "W${it.date}"
             }
 
             val chartModel = ChartModelStress(

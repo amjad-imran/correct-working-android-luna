@@ -55,6 +55,7 @@ class SummaryDataViewModel @Inject constructor(
     var serverUserHealthData: ServerUserHealthData? = null
     var date: String? = null
     var shouldShowStressCard = false
+    var stressBeta = false
     val healthOverviewData = MutableLiveData<ArrayList<OHealthOverview>>()
     val stateHeartRateCard = MutableLiveData<OHealthOverview.HeartRateDataModel?>()
 
@@ -137,7 +138,8 @@ class SummaryDataViewModel @Inject constructor(
                                 activeCalories = it?.activeCalories ?: 0,
                                 inactiveMinutes = it?.activityContributors?.stayActive?.value,
                                 status = it?.activityScore?.level?.capitalizeWords(),
-                                nudges = it?.dash_nudges
+                                nudges = it?.dash_nudges,
+                                steps = healthData.activity?.steps ?: 0
                             ), caloriesGoal
                         )
                     )
@@ -151,7 +153,8 @@ class SummaryDataViewModel @Inject constructor(
                         healthData.stress?.stressValue?.value ?: 0,
                         healthData.stress?.stressValue?.lastUpdated ?: 0L,
                         getStressStatus(healthData.stress?.stressValue?.value ?: 0),
-                        false
+                        false,
+                        stressBeta
                     )
                 )
             }

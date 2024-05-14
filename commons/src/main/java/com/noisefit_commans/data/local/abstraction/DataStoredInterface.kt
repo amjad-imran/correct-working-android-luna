@@ -71,7 +71,6 @@ interface DataStoredInterface {
     fun getTemperatureUnit(): Units
     fun saveDeviceFeatures(deviceFeatures: DeviceFeatures)
     fun getDeviceFeatures(): DeviceFeatures?
-    fun updateUserAdditionalDetails(userInfo: UserInfo?, userGoal: UserGoals?): Boolean
     fun updateUserActivities(healthOverviewData: HealthOverviewData)
     fun getUserActivities(): HealthOverviewData?
 

@@ -39,8 +39,7 @@
             app:layout_constraintTop_toBottomOf="@+id/lytFeatureTile" />
 
 
-
-<!--        <com.google.android.material.button.MaterialButton-->
+        <!--        <com.google.android.material.button.MaterialButton-->
         <!--            android:id="@+id/bRequestData"-->
         <!--            style="@style/PrimaryButtonStyle"-->
         <!--            android:layout_width="0dp"-->
@@ -51,7 +50,7 @@
         <!--            app:layout_constraintBottom_toTopOf="@id/bConnect"-->
         <!--            app:layout_constraintEnd_toEndOf="parent"-->
         <!--            app:layout_constraintStart_toStartOf="parent" />-->
-<com.google.android.material.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/bConnect"
             style="@style/PrimaryButtonStyle"
             android:layout_width="0dp"

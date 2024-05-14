@@ -327,10 +327,20 @@ class OSleepScoreDetailsFragment :
                             binding.lytTopGraphView.lytLabelValue1.tvValue.text = "-"
                             binding.lytTopGraphView.lytLabelValue1.tvUnit.gone()
                         } else {
-                            binding.lytTopGraphView.lytLabelValue1.tvValue.text =
-                                DistanceUtil.convertMeterToKm(it.data.roundToInt())
+                            if (mViewModel.sessionManager.isMetric()) {
+                                binding.lytTopGraphView.lytLabelValue1.tvValue.text =
+                                    DistanceUtil.convertMeterToKm(it.data.roundToInt())
+                                binding.lytTopGraphView.lytLabelValue1.tvUnit.text = "km"
+                            } else {
+                                binding.lytTopGraphView.lytLabelValue1.tvValue.text =
+                                    DistanceUtil.convertMeterToMiles(it.data.roundToInt())
+                                binding.lytTopGraphView.lytLabelValue1.tvUnit.text = "mi"
+                            }
+
+
+
+
                             binding.lytTopGraphView.lytLabelValue1.tvUnit.visible()
-                            binding.lytTopGraphView.lytLabelValue1.tvUnit.text = "km"
                         }
                         setTopDateLabel(it.date, it.year)
                     }
@@ -767,7 +777,7 @@ class OSleepScoreDetailsFragment :
                     } else if (
                         mViewModel.itemClickType == ViewItemClickType.DISTANCE.name
                     ) {
-                        var difference = 0f
+                        var differenceMeters = 0
                         todayProgress =
                             trendData.today.value.toLong()
                         yesterdayProgress =
@@ -783,9 +793,7 @@ class OSleepScoreDetailsFragment :
                             binding.lytScoreOverview.tvTrendProg.visible()
                             binding.lytScoreOverview.tvScoreMsg.visible()
                             mViewModel.isProgressEqual = false
-                            difference = DistanceUtil.convertMeterToKm(todayProgress.toInt())
-                                .toFloat() - DistanceUtil.convertMeterToKm(yesterdayProgress.toInt())
-                                .toFloat()
+                            differenceMeters = todayProgress.toInt() - yesterdayProgress.toInt()
                             mViewModel.isTodayGreater = true
                         } else if (yesterdayProgress > todayProgress) {
                             binding.lytScoreOverview.tvTrendProg.setCompoundDrawable(R.drawable.ic_trend_down)
@@ -798,16 +806,18 @@ class OSleepScoreDetailsFragment :
                             binding.lytScoreOverview.tvTrendProg.visible()
                             binding.lytScoreOverview.tvScoreMsg.visible()
                             mViewModel.isProgressEqual = false
-                            difference = DistanceUtil.convertMeterToKm(yesterdayProgress.toInt())
-                                .toFloat() - DistanceUtil.convertMeterToKm(todayProgress.toInt())
-                                .toFloat()
+                            differenceMeters = yesterdayProgress.toInt() - todayProgress.toInt()
                             mViewModel.isTodayGreater = false
                         } else {
                             binding.lytScoreOverview.tvTrendProg.gone()
                             binding.lytScoreOverview.tvScoreMsg.visible()
                             mViewModel.isProgressEqual = true
                         }
-                        val compPro = "${String.format("%.1f", difference)} km"
+                        val compPro = if (mViewModel.sessionManager.isMetric()) {
+                            "${DistanceUtil.convertMeterToKm(differenceMeters)} km"
+                        } else {
+                            "${DistanceUtil.convertMeterToMiles(differenceMeters)} mi"
+                        }
                         binding.lytScoreOverview.tvTrendProg.text = compPro
                     } else if (
                         mViewModel.itemClickType == ViewItemClickType.BODY_TEMPERATURE.name
@@ -1118,7 +1128,12 @@ class OSleepScoreDetailsFragment :
 
                     ViewItemClickType.DISTANCE.name -> {
                         binding.lytScoreOverview.lytToday.tvScore.text =
-                            "${DistanceUtil.convertMeterToKm(todayTrendValue.toInt())} km"
+                            if (mViewModel.sessionManager.isMetric()) {
+                                "${DistanceUtil.convertMeterToKm(todayTrendValue.toInt())} km"
+                            } else {
+                                "${DistanceUtil.convertMeterToMiles(todayTrendValue.toInt())} mi"
+                            }
+
                     }
 
                     ViewItemClickType.BODY_TEMPERATURE.name -> {
@@ -1196,7 +1211,11 @@ class OSleepScoreDetailsFragment :
 
                     ViewItemClickType.DISTANCE.name -> {
                         binding.lytScoreOverview.lytYesterday.tvScore.text =
-                            "${DistanceUtil.convertMeterToKm(yesterdayTrendValue.toInt())} km"
+                            if (mViewModel.sessionManager.isMetric()) {
+                                "${DistanceUtil.convertMeterToKm(yesterdayTrendValue.toInt())} km"
+                            } else {
+                                "${DistanceUtil.convertMeterToMiles(yesterdayTrendValue.toInt())} mi"
+                            }
                     }
 
                     ViewItemClickType.BODY_TEMPERATURE.name -> {
@@ -1273,6 +1292,7 @@ class OSleepScoreDetailsFragment :
         if (getGraphType() == 0) {
             binding.lytTopGraphView.rvTopBarGraph.visible()
             binding.lytTopGraphView.rvTopGraph.gone()
+            binding.lytTopGraphView.rvTopBarGraph.setIsMetric(mViewModel.sessionManager.isMetric())
             binding.lytTopGraphView.rvTopBarGraph.updateDataWithMax(
                 topGraphData.first.first,
                 topGraphData.third,
@@ -1307,8 +1327,7 @@ class OSleepScoreDetailsFragment :
             binding.lytScoreOverview.lytYesterday.pbSteps.progress = showYesPer
 //            binding.lytAllTimeAvg.pbSteps.progress = showAllPer
 
-        }
-        else if (yesterdayTrendProg > todayTrendProg /*&& yesterdayTrendProg > allTimeTrendProg*/) {
+        } else if (yesterdayTrendProg > todayTrendProg /*&& yesterdayTrendProg > allTimeTrendProg*/) {
             binding.lytScoreOverview.lytYesterday.pbSteps.progress = 100
             updateProgressColor(1)
             val showTodayPer = todayTrendProg.toFloat().times(100).div(yesterdayTrendProg).toInt()

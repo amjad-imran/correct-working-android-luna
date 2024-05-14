@@ -115,16 +115,10 @@ class SummaryDataViewModelToday @Inject constructor(
     var user: User? = null
     var registerDate: Int = -1
     var shouldShowStressCard = false
+    var stressBeta = false
     var onNapAddSuccess = MutableLiveData<Event<OreoNapDetailsDataModel>>()
     var serverUserHealthData: ServerUserHealthData? = null
 
-
-    fun setRingBatteryInfoState() {
-        stateDashRingBattery.postValue(Pair(false, null))
-        viewModelScope.launch(Dispatchers.IO) {
-            localDataStore.setBatteryAlertShown()
-        }
-    }
 
     fun getStressWalkthroughShownStatus(): Boolean {
         return localDataStore.getStressWalkthroughShownStatus()
@@ -287,7 +281,8 @@ class SummaryDataViewModelToday @Inject constructor(
                 activeCalories = healthData.activity?.activeCalories ?: 0,
                 inactiveMinutes = healthData.activity?.activityContributors?.stayActive?.value,
                 status = healthData.activity?.activityScore?.level?.capitalizeWords(),
-                nudges = healthData.activity?.dash_nudges
+                nudges = healthData.activity?.dash_nudges,
+                steps = healthData.activity?.steps ?: 0
             )
 
             val nap = healthData.sleep?.naps ?: ArrayList()
@@ -513,7 +508,8 @@ class SummaryDataViewModelToday @Inject constructor(
                         healthData.stress?.stressValue?.value ?: 0,
                         healthData.stress?.stressValue?.lastUpdated ?: 0L,
                         getStressStatus(healthData.stress?.stressValue?.value ?: 0),
-                        true
+                        true,
+                        stressBeta
                     )
                 )
             }

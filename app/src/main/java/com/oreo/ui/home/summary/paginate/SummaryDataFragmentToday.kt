@@ -178,6 +178,7 @@ class SummaryDataFragmentToday :
             mainViewModel.getDashBoardData(it)?.let { dash ->
                 viewModel.registerDate = mainViewModel.registerDate
                 viewModel.serverUserHealthData = dash.first
+                viewModel.stressBeta = mainViewModel.stressBeta
                 viewModel.shouldShowStressCard = mainViewModel.shouldShowStressCard(it)
                 setUi(dash.first, dash.second)
             }
@@ -323,10 +324,6 @@ class SummaryDataFragmentToday :
 
     override fun initListener() {
 
-        /*binding.contentMain.lytTrackFmHealth.btnGetStarted.setOnClickListener {
-            navigate(R.id.fragmentCycleTracker)
-        }*/
-        binding.contentMain.lytHeartRate.bInfo.invisible()
         /*binding.contentMain.lytHeartRate.root.setOnClickListener {
             navigate(R.id.fragmentHeartRateDetails)
         }*/
@@ -689,10 +686,9 @@ class SummaryDataFragmentToday :
                     this.root.setOnClickListener {
                         startActivity(PairDeviceActivity.getStartIntent(requireContext(), true))
                     }
-
+                    viewModel.stateDashRingBattery.postValue(Pair(false, null))
                 } else {
                     this.root.gone()
-                    viewModel.stateDashRingBattery.postValue(Pair(false, null))
                 }
             }
         }
@@ -721,15 +717,16 @@ class SummaryDataFragmentToday :
 
                 if (viewModel.checkBeforeTime()) {
                     binding.contentMain.lytChargeRing.textView84.text =
-                        getString(R.string.text_before_9_pm_battery_charge_msg)
+                        getString(R.string.text_after_9_pm_battery_charge_msg)
                 } else {
                     binding.contentMain.lytChargeRing.textView84.text =
-                        getString(R.string.text_after_9_pm_battery_charge_msg)
+                        getString(R.string.text_before_9_pm_battery_charge_msg)
                 }
             } else {
                 binding.contentMain.lytChargeRing.root.gone()
             }
         }
+
 
         viewModel.stateDashAlerts.observe(viewLifecycleOwner) {
 

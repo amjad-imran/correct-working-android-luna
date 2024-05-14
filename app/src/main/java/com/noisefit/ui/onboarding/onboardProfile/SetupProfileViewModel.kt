@@ -372,10 +372,20 @@ class SetupProfileViewModel
 
     fun setHeightUnit(heightUnitSystem: HeightUnitSystem) {
         this.heightUnitSystem = heightUnitSystem
+        if (heightUnitSystem == HeightUnitSystem.METRIC) {
+            weightUnitSystem = WeightUnitSystem.METRIC
+        } else {
+            weightUnitSystem = WeightUnitSystem.IMPERIAL
+        }
     }
 
     fun setWeightUnit(weightUnitSystem: WeightUnitSystem) {
         this.weightUnitSystem = weightUnitSystem
+        if (weightUnitSystem == WeightUnitSystem.METRIC) {
+            heightUnitSystem = HeightUnitSystem.METRIC
+        } else {
+            heightUnitSystem = HeightUnitSystem.IMPERIAL
+        }
     }
 
     fun initialWeightUnit() {
@@ -651,6 +661,7 @@ class SetupProfileViewModel
         val userObject = JsonObject().apply {
             addProperty("first_name", userName.value)
             addProperty("end_game", endGame.value?.id ?: -1)
+            addProperty("notifications_enabled_luna", 1)
         }
 
 
@@ -661,6 +672,7 @@ class SetupProfileViewModel
             addProperty("calories_goals", caloriesGoal)
             addProperty("distance_goals", distanceGoal)
             addProperty("unit_system", weightUnitSystem.type)
+            addProperty("unit_system_luna", weightUnitSystem.type)
         }
         userObject.add("goal", userGoals)
 
@@ -718,6 +730,11 @@ class SetupProfileViewModel
                             localDataStore.setLocalUserData(null)
                             logProfileEvent(it)
                             localDataStore.saveUserInfo(it)
+                            sessionManager.updateUnit(it.userGoals?.getUnit() ?: Units.METRIC)
+                            sessionManager.updateNotificationSettings(
+                                it.notificationsEnabledLuna ?: 1
+                            )
+
                             _successMessage.postValue(Event(true))
                         }/* ?: getConfig()*/
                     }

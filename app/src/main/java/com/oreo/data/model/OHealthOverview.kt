@@ -24,7 +24,8 @@ sealed class OHealthOverview {
         val value: Int,
         val timeStamp: Long,
         val valueStatus: String,
-        val isToday: Boolean
+        val isToday: Boolean,
+        val isBeta: Boolean = false
     ) :
         OHealthOverview()
 

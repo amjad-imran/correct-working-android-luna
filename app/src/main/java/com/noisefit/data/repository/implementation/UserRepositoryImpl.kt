@@ -50,33 +50,6 @@ class UserRepositoryImpl(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : UserRepository {
 
-    override suspend fun getTrophiesData(
-        date: String,
-        unitSystem: String
-    ): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<Trophies>>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.getTrophiesGoal(date, unitSystem)
-        }
-    }
-
-    override suspend fun collectBadge(request: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<String>>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.collectBadge(request)
-        }
-    }
-
-    override suspend fun collectChallengeTrophy(request: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseChallenge<Any>>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.collectChallengeTrophy(request)
-        }
-    }
-
-    override suspend fun getRecentTrophies(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<List<TrophyBadge>>>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.getRecentTrophies()
-        }
-    }
-
     override suspend fun saveUserLocation(request: JsonObject): Flow<Resource<BaseApiResponse<UserLocationUpdatedResponse>>> {
         return safeApiCallFlow(dispatcher) {
             val url =
@@ -117,17 +90,6 @@ class UserRepositoryImpl(
         }
     }
 
-    override suspend fun getBuddiesTrophiesData(requestObject: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<Trophies>>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.getBuddiesTrophiesData(requestObject)
-        }
-    }
-
-    override suspend fun searchProduct(request: String): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<MessageResponse>>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.searchProduct(request)
-        }
-    }
 
     override suspend fun saveUserDevice(request: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<UpdateDeviceResponse>>> {
         return safeApiCallFlow(dispatcher) {
@@ -138,134 +100,25 @@ class UserRepositoryImpl(
         }
     }
 
-    override suspend fun getUserProfileInfo(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<UserInfoResponse>>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.getUserProfileInfo()
-        }
-    }
-
     override suspend fun getUserProfile(): Flow<Resource<UserResponse>> {
         return safeApiCallFlow(dispatcher) {
             remoteDataSource.getUserProfile("${BuildConfig.BASE_URL_NEW}/auth_v2/auth/detail/user")
         }
     }
 
-    override suspend fun saveAdditionalDetails(request: UpdateAdditionalDetailRequest): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<MessageResponse>>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.saveAdditionalUserDetails(request)
-        }
-    }
-
     override suspend fun updatePushToken(request: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<MessageResponse>>> {
         return safeApiCallFlow(dispatcher) {
-            remoteDataSource.updatePushToken(request)
+            val url = "${BuildConfig.BASE_URL_NEW}/user_detail/update/push-token"
+            remoteDataSource.updatePushToken(url, request)
         }
     }
 
     override suspend fun updateUserProfile(request: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<User>>> {
         return safeApiCallFlow(dispatcher) {
-            remoteDataSource.updateUserProfile(request)
+            val url = "${BuildConfig.BASE_URL_NEW}/user_detail/profile/update"
+            remoteDataSource.updateUserProfile(url, request)
         }
     }
-
-    override suspend fun updateUserProfile(request: User): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<User>>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.updateUserProfile(request)
-        }
-    }
-
-    override suspend fun getTimeZonesCities(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<WorldClockResponse>>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.getTimeZonesCities()
-        }
-    }
-
-    override suspend fun getOrderToken(request: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<String>>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.getOrderToken(request)
-        }
-    }
-
-    override suspend fun getActivities(
-        startDate: String,
-        endDate: String
-    ): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<com.noisefit_commans.data.response.ActivityListResponse>>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.getActivities(startDate, endDate)
-        }
-    }
-
-    override suspend fun getRecentActivitiesDates(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<JsonObject>>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.getRecentActivitiesDates()
-        }
-    }
-
-    private fun shouldCallBannerApi(
-        serverTime: Long,
-        localTime: Long
-    ): Boolean {
-        if (serverTime == 0L) return true
-        if (localTime == 0L) return true
-
-        return localTime < serverTime
-    }
-
-    fun getLocalDashboardBanners(removeData: Boolean): DashboardBannerData? {
-        if (removeData) {
-            localDatSource.setDashboardBanners(null)
-            return null
-        }
-        return localDatSource.getDashboardBanners()
-    }
-
-    override suspend fun getActivitiesPaging(
-        page: Int,
-        pageLimit: Int
-    ): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<List<SportsModeResponse>>>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.getActivitiesPaging(page, pageLimit)
-        }
-    }
-
-    override suspend fun getActivitiesDetails(itemId: Int): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<SportsModeResponse>>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.getActivitiesDetails(itemId)
-        }
-    }
-
-    private fun shouldCalWorkoutImagesApi(
-        serverTime: Long,
-        localTime: Long
-    ): Boolean {
-        if (serverTime == 0L) return true
-        if (localTime == 0L) return true
-
-        return localTime < serverTime
-    }
-
-    fun getLocalWorkoutShareData(removeData: Boolean): List<String>? {
-        if (removeData) {
-            localDatSource.setWorkoutImages(null)
-            return null
-        }
-        return localDatSource.getWorkoutImages()
-    }
-
-    override suspend fun getRecentChallenges(): Flow<Resource<BaseApiResponse<List<ChallengeModel>>>> {
-        return safeApiCallFlow(dispatcher) {
-            val url =
-                "${BuildConfig.BASE_URL_NEW}/challenges/feeds/completed_challenges"
-            remoteDataSource.getRecentChallenges(url)
-        }
-    }
-
-    override suspend fun geRecentActivities(isForceRefresh: Boolean): Flow<Resource<BaseApiResponse<RecentActivities>>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.geRecentActivities()
-        }
-    }
-
 
     fun getLocalRecentActivities(removeData: Boolean): RecentActivities? {
         if (removeData) {
@@ -288,54 +141,8 @@ class UserRepositoryImpl(
             file.asRequestBody("image/jpeg".toMediaTypeOrNull())
         )
         return safeApiCallFlow(dispatcher) {
-            remoteDataSource.uploadUserImage(requestFile)
-        }
-    }
-
-    override suspend fun uploadCrashLogFile(file: File): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<MessageResponse>>> {
-        //val requestFile :RequestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-        val requestFile = MultipartBody.Part.createFormData(
-            "report_file",
-            file.name,
-            file.asRequestBody("text/plain".toMediaTypeOrNull())
-        )
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.uploadCrashLogs(
-                "android",
-                BuildConfig.VERSION_NAME,
-                DateFormats.getTodaysDateString(9),
-                requestFile
-            )
-        }
-    }
-
-    override suspend fun postActivities(request: SportsModeRequestList): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseActivity>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.postActivities(request)
-        }
-    }
-
-    override suspend fun getNoiseHealthContent(): Flow<Resource<NoiseHealthResponse>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.getNoiseHealthContent()
-        }
-    }
-
-    override suspend fun setNoiseHealthContentView(request: JsonObject): Flow<Resource<Unit>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.setNoiseHealthContentView(request)
-        }
-    }
-
-    override suspend fun setNoiseHealthContentPlayTime(request: JsonObject): Flow<Resource<Unit>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.setNoiseHealthContentPlayTime(request)
-        }
-    }
-
-    override suspend fun getRecentPlayedContent(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<NoiseHealthCategory?>>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.getRecentPlayedContent()
+            val url = "${BuildConfig.BASE_URL_NEW}/user_detail/upload/profile-image"
+            remoteDataSource.uploadUserImage(url, requestFile)
         }
     }
 
