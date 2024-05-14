@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewModelScope
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoMyDeviceBinding
 import com.noisefit.oreo.OreoMainViewModel
@@ -32,10 +33,12 @@ import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
+import com.noisefit_zhsdk.log.ZhBleLogUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class OreoMyDeviceFragment :
@@ -75,7 +78,16 @@ class OreoMyDeviceFragment :
         binding.rowShareRingLogs.setOnClickListener {
             if (mViewModel.watchLogFile?.exists() == true) {
                 context?.let { ctx ->
-                    ShareUtil.shareFile(ctx, FileLogsUtils.getFileUri(ctx))
+                    //TODO There is a problem with missing data in this log
+                    //ShareUtil.shareFile(ctx, FileLogsUtils.getFileUri(ctx))
+                    mViewModel.viewModelScope.launch(Dispatchers.IO) {
+                        val uri = ZhBleLogUtils.getUriByBleAllLog()
+                        if (uri != null) {
+                            ShareUtil.shareZipFile(ctx, uri)
+                        } else {
+                            ShareUtil.shareFile(ctx, FileLogsUtils.getFileUri(ctx))
+                        }
+                    }
                 }
             } else {
                 context.showShortToast("No logs")
