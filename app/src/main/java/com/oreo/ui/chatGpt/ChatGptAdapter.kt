@@ -16,6 +16,7 @@ import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChatGptOverview
+import io.noties.markwon.Markwon
 
 
 class ChatGptAdapter :
@@ -144,11 +145,11 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
             } else {
                 binding.apply {
                     lottie.gone()
-                    tvMessage.visible()
-                    tvMessage.text = data.message
-//                    binding.tvMessage.animateText(data.message)
-                    logo.visible()
 
+                    tvMessage.visible()
+                    val markwon = Markwon.create(this.tvMessage.context)
+                    markwon.setMarkdown(tvMessage,  data.message)
+                    logo.visible()
 //                    tvMessage.animateTextWithUnderscore(data.message)
                 }
 
