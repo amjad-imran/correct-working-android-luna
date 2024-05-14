@@ -194,65 +194,6 @@ constructor(
         _user.value = (userRepository.getUser())
     }
 
-
-    fun getOrderToken() {
-        viewModelScope.launch(Dispatchers.IO) {
-            setLoading(true)
-            val userEmail = localDataStore.getUser()?.email
-            val ipAddress = connectionUtil.getPublicIPAddress()
-            val requestObject = JsonObject().apply {
-                val customerObject = JsonObject()
-                customerObject.addProperty("email", userEmail)
-                customerObject.addProperty("remote_ip", ipAddress)
-                this.add("customer", customerObject)
-            }
-
-            userRepository.getOrderToken(requestObject).collect { resource ->
-                when (resource) {
-                    is Resource.GenericError -> {
-                        sendMessage(resource.message)
-                    }
-                    is Resource.Loading -> {
-                        setLoading(resource.loading)
-                    }
-                    is Resource.NetworkError -> {
-                        setApiErrors(resource.response.apply {
-                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback = object : BinaryActionCallback {
-                                override fun yes() {
-                                    getOrderToken()
-                                }
-
-                                override fun no() {}
-                            }
-                        })
-                    }
-                    is Resource.Success -> {
-                        resource.data?.data?.let {
-                            _orderUrl.postValue(Event("https://mansinoise.myshopify.com/account/login/multipass/${it}"))
-                        }
-                    }
-                }
-            }
-        }
-
-    }
-
-    fun getRecentTrophies() {
-        viewModelScope.launch {
-            userRepository.getRecentTrophies().collect { resource ->
-                when (resource) {
-                    is Resource.Success -> {
-                        resource.data?.data?.let { response ->
-                            trophies.postValue(response)
-                        }
-                    }
-                    else -> {}
-                }
-            }
-        }
-
-    }
-
     fun getDeviceName(): String {
 
         val manufacturer: String = BuildUtils.getDeviceManufacturer()

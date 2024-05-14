@@ -1,0 +1,38 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.noisefit.ui.settings.SettingsFragment">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/layout_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <include
+        layout="@layout/layout_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
+
+    <include
+        android:id="@+id/lytGroup1"
+        layout="@layout/layout_settings_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/side_margin"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="@dimen/side_margin" />
+
+    <include
+        android:id="@+id/lytGroup2"
+        layout="@layout/layout_settings_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/side_margin"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="@dimen/side_margin" />
+
+
+</LinearLayout>

@@ -433,7 +433,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/guideline3"
                         app:layout_constraintTop_toTopOf="@+id/tvHeightLabel"
-                        app:text="@{viewModel.user.userInfo.getFormattedHeight(viewModel.user.userGoals.unitSystem)}"
+                        app:text="@{viewModel.user.userInfo.getFormattedHeight(viewModel.user.userGoals.unitSystemLuna)}"
                         tools:text="173cm" />
 
                     <include
@@ -472,7 +472,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/guideline3"
                         app:layout_constraintTop_toTopOf="@+id/tvWeightLabel"
-                        app:text="@{viewModel.user.userInfo.getFormattedWeight(viewModel.user.userGoals.unitSystem)}"
+                        app:text="@{viewModel.user.userInfo.getFormattedWeight(viewModel.user.userGoals.unitSystemLuna)}"
                         tools:text="65 kg" />
 
                     <include

@@ -147,12 +147,17 @@ object DistanceUtil {
         val df = DecimalFormat(".#")
         return df.format(value * MI_TO_KM)
     }
+
     fun convertMeterToKm(value: Int?): String {
         if (value == null) return "0"
         val df = DecimalFormat("#.#")
         return df.format(value * ME_TO_KM)
     }
 
+    fun convertMeterToMiles(value: Int): String {
+        val df = DecimalFormat("#.#")
+        return df.format(metersToMiles(value.toDouble()))
+    }
 
 
     fun convertInchToCms(value: Int?): String {

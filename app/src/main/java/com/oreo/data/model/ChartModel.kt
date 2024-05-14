@@ -6,6 +6,7 @@ open class ChartModel {
     var index: String? = null
     var date: String? = null
     var isDistanceGraph: Boolean = false
+    var isMetric: Boolean = true
     var formattedDate: String? = null
 }
 

@@ -138,7 +138,9 @@ constructor(
                 return
             }
             watchDataStore.setChargingNotificationShown(level)
-            pushBatteryNotification(NoiseFitApplicationMain.context!!, TITLE, message, "3")
+            if(sessionManager.showLocalNotification()){
+                pushBatteryNotification(NoiseFitApplicationMain.context!!, TITLE, message, "3")
+            }
         } else {
             watchDataStore.resetChargingNotificationData()
             removeBatteryNotification()

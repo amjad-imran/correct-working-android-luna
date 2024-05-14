@@ -55,16 +55,14 @@ const val IMPERIAL = "Imperial (in/lbs)"
 
 @HiltViewModel
 class ProfileEditViewModel
-@Inject
-constructor(
+@Inject constructor(
     var sessionManager: SessionManager,
     val localDataStore: DataStoredInterface,
     val userRepository: UserRepository,
     val screenUtils: ScreenUtils,
     val authenticationRepository: AuthenticationRepository,
     val googleFitDataObservers: GoogleFitDataObservers
-) :
-    BaseViewModel() {
+) : BaseViewModel() {
 
     private val _userDetailsUpdated = MutableLiveData<Event<Boolean>>()
     val userDetailsUpdated = _userDetailsUpdated
@@ -73,11 +71,14 @@ constructor(
     var dobYear = DefaultYear
 
     var heightInCm = MutableLiveData<String>()
+    var displayHeightValue = MutableLiveData<String>()
 
     var heightInCmList = ArrayList<String>()
     var heightInInchList = ArrayList<String>()
 
     var weightInKg = MutableLiveData<String>()
+    var displayWeightValue = MutableLiveData<String>()
+
     var weightInKgList = ArrayList<String>()
     var weightInLbsList = ArrayList<String>()
 
@@ -88,7 +89,8 @@ constructor(
     var phoneNumber = MutableLiveData<String?>()
     var email = MutableLiveData<String?>()
     var profileLink = MutableLiveData<String?>()
-    var unit = MutableLiveData<Units?>()
+    var unit = MutableLiveData<Units>()
+    var notificationSetting = MutableLiveData<Int>()
     var unitList = ArrayList<String>()
     var dobValue = MutableLiveData(false)
     var localUser: User? = null
@@ -104,7 +106,10 @@ constructor(
         updateName(localUser?.firstName)
         setGender(localUser?.userInfo?.gender)
         phoneNumber.value = localUser?.mobile
-        unit.value = localDataStore.getUnit()
+        unit.value = localUser?.userGoals?.getUnit()
+        notificationSetting.value = localUser?.notificationsEnabledLuna ?: 1
+
+
         email.value = localUser?.email
         interests.value = if (localUser?.interests != null) {
             localUser?.interests as ArrayList<Interest>
@@ -140,9 +145,7 @@ constructor(
                 val userDob = localUser?.userInfo?.dob
                 val dateArray = userDob!!.split("-")
                 setDob(
-                    dateArray[0].toInt(),
-                    dateArray[1].toInt() - 1,
-                    dateArray[2].toInt()
+                    dateArray[0].toInt(), dateArray[1].toInt() - 1, dateArray[2].toInt()
                 )
                 dobValue.value = true
             }
@@ -161,8 +164,7 @@ constructor(
 
     fun getAge(): Int {
         return Period.between(
-            LocalDate.of(dobYear, dobMonth, dobDate),
-            LocalDate.now()
+            LocalDate.of(dobYear, dobMonth, dobDate), LocalDate.now()
         ).years
     }
 
@@ -179,14 +181,14 @@ constructor(
 //            if(height.isNullOrEmpty()){
 //                height = "63.0"
 //            }
-            heightInCm.value =
-                DistanceUtil.convertInchToCms((heightInCm.value ?: "63.0").toDouble().roundToInt())
+            /*heightInCm.value =
+                DistanceUtil.convertInchToCms((heightInCm.value ?: "63.0").toDouble().roundToInt())*/
 
 //            if (weight.isNullOrEmpty()){
 //                weight = "132.3"
 //            }
-            weightInKg.value =
-                DistanceUtil.convertLbsToKg((weightInKg.value ?: "132.3").toDouble().roundToInt())
+            /*weightInKg.value =
+                DistanceUtil.convertLbsToKg((weightInKg.value ?: "132.3").toDouble().roundToInt())*/
         } else {
 //            if(distanceGoal.isNullOrEmpty()){
 //                distanceGoal = "8.0"
@@ -196,8 +198,8 @@ constructor(
 //            if(height.isNullOrEmpty()){
 //                height = "160"
 //            }
-            heightInCm.value =
-                DistanceUtil.convertCmsToInch((heightInCm.value ?: "160").toDouble().roundToInt())
+            /*heightInCm.value =
+                DistanceUtil.convertCmsToInch((heightInCm.value ?: "160").toDouble().roundToInt())*/
 //            if(stepLength.isNullOrEmpty()){
 //                stepLength = "66"
 //            }
@@ -205,8 +207,8 @@ constructor(
 //            if(weight.isNullOrEmpty()){
 //                weight = "60"
 //            }
-            weightInKg.value =
-                DistanceUtil.convertKgToLbs((weightInKg.value ?: "60").toDouble().roundToInt())
+            /*weightInKg.value =
+                DistanceUtil.convertKgToLbs((weightInKg.value ?: "60").toDouble().roundToInt())*/
         }
     }
 
@@ -214,19 +216,22 @@ constructor(
         val savedHeight = localUser?.userInfo?.height
 
         if (savedHeight == null) {
+            heightInCm.value = DefaultHeightInCm.toString()
+
             if (unit.value == Units.IMPERIAL) {
-                heightInCm.value =
+                displayHeightValue.value =
                     DistanceUtil.convertCmsToInch(DefaultHeightInCm).toDouble().roundToInt()
                         .toString()
             } else {
-                heightInCm.value = DefaultHeightInCm.toString()
+                displayHeightValue.value = DefaultHeightInCm.toString()
             }
         } else {
+            heightInCm.value = savedHeight.toString()
             if (unit.value == Units.IMPERIAL) {
-                heightInCm.value =
+                displayHeightValue.value =
                     DistanceUtil.convertCmsToInch(savedHeight).toDouble().roundToInt().toString()
             } else {
-                heightInCm.value = savedHeight.toString()
+                displayHeightValue.value = savedHeight.toString()
             }
         }
 
@@ -237,31 +242,47 @@ constructor(
         val savedWeight = localUser?.userInfo?.weight
 
         if (savedWeight == null) {
+            weightInKg.value = DefaultWeightInKg.toString()
             if (unit.value == Units.IMPERIAL) {
-                weightInKg.value =
+                displayWeightValue.value =
                     DistanceUtil.convertKgToLbs(DefaultWeightInKg).toDouble().roundToInt()
                         .toString()
             } else {
-                weightInKg.value = DefaultHeightInCm.toString()
+                displayWeightValue.value = DefaultHeightInCm.toString()
             }
         } else {
+            weightInKg.value = savedWeight.toString()
             if (unit.value == Units.IMPERIAL) {
-                weightInKg.value =
+                displayWeightValue.value =
                     DistanceUtil.convertKgToLbs(savedWeight).toDouble().roundToInt().toString()
             } else {
-                weightInKg.value = savedWeight.toString()
+                displayWeightValue.value = savedWeight.toString()
             }
         }
     }
 
 
+    //SET in kg only
     fun setWeight(weight: String) {
-        weightInKg.value = weight
+        displayWeightValue.value = weight
 
+        if (unit.value == Units.IMPERIAL) {
+            weightInKg.value =
+                DistanceUtil.convertLbsToKg(weight.toDouble().roundToInt())
+        } else {
+            weightInKg.value = weight
+        }
     }
 
     fun setHeight(height: String) {
-        heightInCm.value = height
+        displayHeightValue.value = height
+
+        if (unit.value == Units.IMPERIAL) {
+            heightInCm.value =
+                DistanceUtil.convertInchToCms(height.toDouble().roundToInt())
+        } else {
+            heightInCm.value = height
+        }
     }
 
     fun getHeight(): String {
@@ -271,7 +292,7 @@ constructor(
             unit = "inches"
 
         }
-        return "${heightInCm.value?.toDouble()?.roundToInt()} $unit"
+        return "${displayHeightValue.value?.toDouble()?.roundToInt()} $unit"
     }
 
     fun getWeight(): String {
@@ -281,7 +302,7 @@ constructor(
             unit = "lbs"
 
         }
-        return "${weightInKg.value?.toDouble()?.roundToInt()} $unit"
+        return "${displayWeightValue.value?.toDouble()?.roundToInt()} $unit"
     }
 
 
@@ -301,14 +322,11 @@ constructor(
 
     fun getGenderValue(): String {
 
-        val tempGender: String = if (gender.value?.lowercase() == Gender.MALE.type.lowercase())
-            "Man"
-        else if (gender.value?.lowercase() == Gender.FEMALE.type.lowercase())
-            "Woman"
-        else if (gender.value?.lowercase() == Gender.OTHER.type.lowercase())
-            "Non-binary"
-        else
-            "Prefer not to say"
+        val tempGender: String =
+            if (gender.value?.lowercase() == Gender.MALE.type.lowercase()) "Man"
+            else if (gender.value?.lowercase() == Gender.FEMALE.type.lowercase()) "Woman"
+            else if (gender.value?.lowercase() == Gender.OTHER.type.lowercase()) "Non-binary"
+            else "Prefer not to say"
         return tempGender.replaceFirstChar { if (it.isLowerCase()) it.titlecase(DateFormats.defaultLocale) else it.toString() }
     }
 
@@ -333,6 +351,7 @@ constructor(
         }
         return temp
     }
+
     private fun getGenderForBmr(): Gender {
 
         val temp: Gender = when (gender.value?.lowercase()) {
@@ -365,6 +384,10 @@ constructor(
         } else {
             Units.IMPERIAL
         }
+    }
+
+    fun setSelectedUnit(selectedUnit: Units) {
+        unit.value = selectedUnit
     }
 
     fun updateName(name: String?) {
@@ -420,8 +443,7 @@ constructor(
                             if (it.imageUrl != null) {
                                 sendMessage("Profile image updated")
                                 profileLink.value = it.imageUrl
-                            }
-                            /*if (it.success) {
+                            }/*if (it.success) {
                                 sendMessage("Profile image updated")
                             } else {
 
@@ -443,8 +465,7 @@ constructor(
             context.resources.getDimension(com.noisefit_commans.R.dimen.recycler_height_spinner)
         val dpHeight = screenUtils.pxToDp(rvHeight.roundToInt(), context)
         return screenUtils.dpToPx(
-            (dpHeight / 2) - (ITEM_HEIGHT / 2),
-            context
+            (dpHeight / 2) - (ITEM_HEIGHT / 2), context
         ).roundToInt()
     }
 
@@ -476,6 +497,7 @@ constructor(
         val userObject = JsonObject().apply {
             addProperty("first_name", userName.value)
             addProperty("image_url", profileLink.value)
+            addProperty("notifications_enabled_luna", notificationSetting.value)
         }
 
 
@@ -484,20 +506,20 @@ constructor(
             //TODO Optimize conversion
             userInfo = JsonObject()
 
-            val heightValue = if (unit.value == Units.IMPERIAL) {
+            val heightValue = /*if (unit.value == Units.IMPERIAL) {
                 DistanceUtil.convertInchToCms(
                     heightInCm.value!!.toDouble().roundToInt()
                 ).toDouble().roundToInt()
-            } else {
+            } else {*/
                 heightInCm.value?.toDouble()?.roundToInt()
-            }
-            val weightValue = if (unit.value == Units.IMPERIAL) {
+            //}
+            val weightValue = /*if (unit.value == Units.IMPERIAL) {
                 DistanceUtil.convertLbsToKg(
                     weightInKg.value!!.toDouble().roundToInt()
                 ).toDouble().roundToInt()
-            } else {
+            } else {*/
                 weightInKg.value?.toDouble()?.roundToInt()
-            }
+            //}
 
 
             userInfo.apply {
@@ -507,8 +529,7 @@ constructor(
                 addProperty("gender", getGenderForServer())
                 addProperty("step_length", 70)
             }
-            userObject.add("info", userInfo)
-            /*if (interests.value != null) {
+            userObject.add("info", userInfo)/*if (interests.value != null) {
                 if (interests.value!!.size > 0)
                     userObject.add("interest_id", JsonArray().apply {
                         interests.value?.forEach { id ->
@@ -527,21 +548,21 @@ constructor(
         val stepGoalNew = ApplicationUtils.bmiCalculate(
             heightInCm.value!!.toFloat(),
             weightInKg.value!!.toFloat(),
-            unit.value?.name?:Units.METRIC.name,
-            unit.value?.name?:Units.METRIC.name
+            unit.value?.name ?: Units.METRIC.name,
+            unit.value?.name ?: Units.METRIC.name
         )
 
         val caloriesGoalNew = ApplicationUtils.bmrCalculate(
             heightInCm.value!!.toFloat(),
             weightInKg.value!!.toFloat(),
-            unit.value?.name?:Units.METRIC.name,
-            unit.value?.name?:Units.METRIC.name,
+            unit.value?.name ?: Units.METRIC.name,
+            unit.value?.name ?: Units.METRIC.name,
             getAge(),
             getGenderForBmr()
 
         )
         val stepsGoal = stepGoalNew.second.toInt()
-       val caloriesGoal=caloriesGoalNew
+        val caloriesGoal = caloriesGoalNew
 
 
         val userGoals = JsonObject()
@@ -553,9 +574,9 @@ constructor(
 //            addProperty("calories_goals", localUser?.userGoals?.caloriesGoal)
             addProperty("distance_goals", getDistanceInMeter(localUser?.userGoals?.distanceGoal))
             addProperty("unit_system", unit.value?.name)
+            addProperty("unit_system_luna", unit.value?.name)
         }
         userObject.add("goal", userGoals)
-
 
 
         /*tempLocation?.let {
@@ -608,6 +629,10 @@ constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             authenticationRepository.saveUserInfo(it)
+                            sessionManager.updateUnit(it.userGoals?.getUnit() ?: Units.METRIC)
+                            sessionManager.updateNotificationSettings(
+                                it.notificationsEnabledLuna ?: 1
+                            )
                             _userDetailsUpdated.postValue(Event(true))
                         }
                     }
@@ -638,6 +663,14 @@ constructor(
         val user = localDataStore.getUser()
         user?.interests = it1
         localDataStore.saveUserInfo(user!!)
+    }
+
+    fun getUnitValue(): Units {
+        return localDataStore.getUser()?.userGoals?.getUnit() ?: Units.METRIC
+    }
+
+    fun isMetric(): Boolean {
+        return unit.value != Units.IMPERIAL
     }
 
 }

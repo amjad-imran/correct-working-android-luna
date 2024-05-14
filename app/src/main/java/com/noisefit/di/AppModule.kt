@@ -15,7 +15,6 @@ import com.noisefit.data.remote.abstraction.NetworkService
 import com.noisefit.data.repository.LastSyncProvider
 import com.noisefit.data.repository.abstraction.*
 import com.noisefit.data.repository.implementation.*
-import com.noisefit.data.repository.pagingSource.TimelinePagingSource
 import com.noisefit.util.TestModeUtils
 import com.noisefit.watch.*
 import com.noisefit_commans.data.db.abstraction.LocationDataSource
@@ -418,12 +417,6 @@ object AppModule {
             lastSyncProvider,
             offlineApiStore
         )
-
-
-    @Singleton
-    @Provides
-    fun provideTimelinePagingSource(remoteDataSource: NetworkService): TimelinePagingSource =
-        TimelinePagingSource(remoteDataSource)
 
     @Singleton
     @Provides
