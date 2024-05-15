@@ -42,7 +42,7 @@ class CycleInsightDetailsFragment :
                 }
 
                 CycleInsightLaunchMode.PERIOD_DURATION -> {
-                    tvDays.text = "21-35 days"
+                    tvDays.text = "2-7 days"
                 }
             }
 
@@ -57,7 +57,7 @@ class CycleInsightDetailsFragment :
                 }
 
                 CycleInsightLaunchMode.PERIOD_DURATION -> {
-                    tvDays.text = "<21, >25 days"
+                    tvDays.text = "<2, >7 days"
                 }
             }
 
