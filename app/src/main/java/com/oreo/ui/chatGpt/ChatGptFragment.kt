@@ -82,15 +82,14 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
     override fun subscribeObservers() {
 
-        viewModel.getLoading().observe(this) {
+        viewModel.fetchInProgress.observe(this) {
             if (it) {
-                binding.lytChatBox.btnSend.disable()
-                binding.lytChatBox.chatEtx.disable()
+                binding.lytChatBox.chatEtx.isEnabled = false
             } else {
-                binding.lytChatBox.btnSend.enable()
-                binding.lytChatBox.chatEtx.enable()
+                binding.lytChatBox.chatEtx.isEnabled = true
             }
         }
+
         viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->
                 context.showShortToast(message)

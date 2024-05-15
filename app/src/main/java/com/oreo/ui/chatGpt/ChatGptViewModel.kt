@@ -11,6 +11,7 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.ChatGptOverview
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,6 +34,8 @@ class ChatGptViewModel
 
     var assistantId: String? = null
     var threadId: String? = null
+
+    val fetchInProgress = MutableLiveData<Boolean>()
 
 
     fun addSentMessage(message: String) {
@@ -61,8 +64,9 @@ class ChatGptViewModel
 
 
     fun askQuestion(prompt: String) {
+        fetchInProgress.value = true
         val jsonObject = JsonObject()
-        jsonObject.addProperty("message", prompt)
+        jsonObject.addProperty("message", prompt +" For reference todays date is ${DateFormats.getTodaysDateString(10)}")
         if (assistantId != null && threadId != null) {
             jsonObject.addProperty("assistant_id", assistantId)
             jsonObject.addProperty("thread_id", threadId)
@@ -73,6 +77,7 @@ class ChatGptViewModel
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
+                        fetchInProgress.value = false
                     }
 
                     is Resource.Loading -> {
@@ -103,6 +108,7 @@ class ChatGptViewModel
                                 threadId = it.thread_id
                                 callAfterSomeTime(it.assistant_id, it.thread_id, it.run_id)
                             } else {
+                                fetchInProgress.value = false
                                 sendMessage("Something went wrong")
                             }
                         }
@@ -130,6 +136,7 @@ class ChatGptViewModel
             oreoDeviceRepository.pollForAnswer(jsonObject).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
+                        fetchInProgress.value = false
                         sendMessage(resource.message)
                     }
 
@@ -157,7 +164,8 @@ class ChatGptViewModel
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             if (it.status.equals("completed", true) && it.reply != null) {
-                                    addReceivedMessage(it.reply, false)
+                                fetchInProgress.value = false
+                                addReceivedMessage(it.reply, false)
                             } else {
                                 callAfterSomeTime(assistantId, threadId, runId)
                             }

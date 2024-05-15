@@ -30,7 +30,7 @@ class OreoDeviceRepositoryImpl(
 
     override suspend fun askQuestionToChatGpt(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<ChatGptResponse>?>> {
         return safeApiCallFlow(dispatcher) {
-            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/chatgpt/chat/bot"
+            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/chat"
             remoteDataSource.askQuestionToChatGpt(url, jsonObject)
 
         }
@@ -38,7 +38,7 @@ class OreoDeviceRepositoryImpl(
 
     override suspend fun pollForAnswer(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<ChatGptResponse>?>> {
         return safeApiCallFlow(dispatcher) {
-            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/chatgpt/message/polling"
+            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/message/polling"
             remoteDataSource.pollForAnswer(url, jsonObject)
 
         }
