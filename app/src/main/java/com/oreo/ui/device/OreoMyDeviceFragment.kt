@@ -132,9 +132,9 @@ class OreoMyDeviceFragment :
             mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_mydevices_about_click)
             navigate(R.id.OAboutDeviceFragment)
         }
-        binding.rowGoogleFit.setOnClickListener {
+        /*binding.rowGoogleFit.setOnClickListener {
             navigate(R.id.googleFitFragmentOreo)
-        }
+        }*/
 
         binding.rowWarrantyRegistration.setOnClickListener {
             //navigate(R.id.warrantyFragmentOreo)
