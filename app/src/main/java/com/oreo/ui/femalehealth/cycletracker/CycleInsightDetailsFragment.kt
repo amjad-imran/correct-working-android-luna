@@ -12,7 +12,7 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.PeriodChartModel
-import com.oreo.ui.custom.graphs.ScrollListenerPeriod
+import com.oreo.ui.custom.ScrollListenerPeriod
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

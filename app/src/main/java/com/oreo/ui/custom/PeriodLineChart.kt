@@ -1,4 +1,4 @@
-package com.oreo.ui.custom.graphs
+package com.oreo.ui.custom
 
 import android.content.Context
 import android.graphics.Bitmap
