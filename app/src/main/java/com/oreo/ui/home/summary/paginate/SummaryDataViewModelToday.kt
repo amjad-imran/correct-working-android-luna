@@ -39,7 +39,7 @@ import com.oreo.data.model.AlertType
 import com.oreo.data.model.AppUpdateModel
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.DashAlert
-import com.oreo.data.model.FemaleHealthUserInfoModel
+import com.oreo.data.model.femalehealth.FemaleHealthUserInfoModel
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
 import com.oreo.data.model.OHealthOverview

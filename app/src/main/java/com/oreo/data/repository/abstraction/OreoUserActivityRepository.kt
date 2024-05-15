@@ -8,7 +8,7 @@ import com.noisefit_commans.data.model.OreoNapData
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
 import com.oreo.data.model.AddWorkoutResponse
-import com.oreo.data.model.FemaleHealthUserInfoModel
+import com.oreo.data.model.femalehealth.FemaleHealthUserInfoModel
 import com.oreo.data.model.LearnModel
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
@@ -23,6 +23,8 @@ import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthResponse
 import com.oreo.data.model.StressResultData
 import com.oreo.data.model.TestUserData
+import com.oreo.data.model.femalehealth.PeriodLength
+import com.oreo.data.model.femalehealth.PeriodLengthListResponse
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import kotlinx.coroutines.flow.Flow
 
@@ -123,4 +125,6 @@ interface OreoUserActivityRepository {
     suspend fun submitFemaleHealthInfo(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
     suspend fun getFemaleHealthUserInfo(selectDate: String): Flow<Resource<BaseApiResponse<FemaleHealthUserInfoModel?>>>
     suspend fun logPeriod(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
+    suspend fun getPeriodLengthList(date:String): Flow<Resource<BaseApiResponse<List<PeriodLength>>>>
+    suspend fun getPeriodDurationList(date:String): Flow<Resource<BaseApiResponse<List<PeriodLength>>>>
 }

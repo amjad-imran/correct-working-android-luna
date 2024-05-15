@@ -1,29 +1,16 @@
 package com.noisefit.data.remote.abstraction
 
 import com.google.gson.JsonObject
-import com.noisefit.data.model.*
-import com.noisefit.data.model.timeline.FriendTimeline
 import com.noisefit.data.remote.CityData
 import com.noisefit.data.remote.StateData
 import com.noisefit.data.remote.UserLocationUpdatedResponse
 import com.noisefit.data.remote.request.LoginRequest
-import com.noisefit.data.remote.request.UpdateAdditionalDetailRequest
-import com.noisefit.data.remote.response.Watchface2
 import com.noisefit_commans.data.model.*
-import com.noisefit_commans.data.model.history.*
-import com.noisefit_commans.data.model.trophies.Trophies
-import com.noisefit_commans.data.model.trophies.TrophyBadge
-import com.noisefit_commans.data.model.warranty.MarketPlace
 import com.noisefit_commans.data.response.*
-import com.noisefit_commans.models.SportsModeRequestList
-import com.noisefit_commans.models.SportsModeResponse
-import com.noisefit_commans.models.WatchFace
-import com.noisefit_commans.response.SleepHistoryResponse
 import com.oreo.data.model.*
-import com.oreo.data.model.health.OreoActivityModel
-import com.oreo.data.model.health.OreoDashboardResponseModel
-import com.oreo.data.model.health.OreoReadinessModel
-import com.oreo.data.model.health.OreoSleepModel
+import com.oreo.data.model.femalehealth.FemaleHealthUserInfoModel
+import com.oreo.data.model.femalehealth.PeriodLength
+import com.oreo.data.model.femalehealth.PeriodLengthListResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.*
@@ -376,6 +363,18 @@ interface NetworkService {
         @Url url: String,
         @Body requestObject: JsonObject
     ): BaseApiResponse<Any>
+
+    @GET
+    suspend fun getPeriodLengthList(
+        @Url url: String,
+        @Query("date") selectDate: String
+    ): BaseApiResponse<List<PeriodLength>>
+
+    @GET
+    suspend fun getPeriodDurationList(
+        @Url url: String,
+        @Query("date") selectDate: String
+    ): BaseApiResponse<List<PeriodLength>>
 
     /**
      * ---------------------------------------------------------------------------------

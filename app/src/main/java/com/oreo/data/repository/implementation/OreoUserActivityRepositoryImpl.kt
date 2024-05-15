@@ -43,7 +43,7 @@ import com.oreo.data.db.implementation.OreoSleepDataImpl
 import com.oreo.data.db.implementation.OreoStepsDataImpl
 import com.oreo.data.db.implementation.OreoStressDataImpl
 import com.oreo.data.model.AddWorkoutResponse
-import com.oreo.data.model.FemaleHealthUserInfoModel
+import com.oreo.data.model.femalehealth.FemaleHealthUserInfoModel
 import com.oreo.data.model.LearnModel
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
@@ -61,6 +61,8 @@ import com.oreo.data.model.StressResultData
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TestUserData
 import com.oreo.data.model.TrendsData
+import com.oreo.data.model.femalehealth.PeriodLength
+import com.oreo.data.model.femalehealth.PeriodLengthListResponse
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import com.oreo.ui.DataType
@@ -1897,6 +1899,20 @@ class OreoUserActivityRepositoryImpl(
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/log"
             remoteDataSource.logPeriod(url, jsonObject)
+        }
+    }
+
+    override suspend fun getPeriodLengthList(date: String): Flow<Resource<BaseApiResponse<List<PeriodLength>>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health/period_length"
+            remoteDataSource.getPeriodLengthList(url, date)
+        }
+    }
+
+    override suspend fun getPeriodDurationList(date: String): Flow<Resource<BaseApiResponse<List<PeriodLength>>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health/cycle_length"
+            remoteDataSource.getPeriodDurationList(url, date)
         }
     }
 }

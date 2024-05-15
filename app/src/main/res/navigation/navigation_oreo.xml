@@ -747,11 +747,11 @@
         android:name="com.oreo.ui.femalehealth.cycletracker.CycleInsightDetailsFragment"
         android:label="FragmentCycleInsightDetails">
         <argument
-            android:name="pageTitle"
-            app:argType="string" />
+            android:name="launchMode"
+            app:argType="com.oreo.ui.femalehealth.cycletracker.CycleInsightLaunchMode" />
     </fragment>
     <fragment
-        android:id="@+id/cycleTrackorHistory"
+        android:id="@+id/cycleTrackerHistory"
         android:name="com.oreo.ui.femalehealth.cycletracker.CycleTrackerHistoryFragment"
         android:label="FragmentCycleHistory" />
     <fragment

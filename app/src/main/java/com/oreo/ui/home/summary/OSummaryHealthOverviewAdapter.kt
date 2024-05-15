@@ -67,6 +67,7 @@ sealed class OSummaryHealthOverviewClickEnum {
     object WorkoutAlertIdentify : OSummaryHealthOverviewClickEnum()
     object TrackYourFemaleHealth : OSummaryHealthOverviewClickEnum()
     object TrackYourFemaleHealthRemindLater : OSummaryHealthOverviewClickEnum()
+    object FemaleHealthHome : OSummaryHealthOverviewClickEnum()
 
 }
 
@@ -1139,15 +1140,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         }
     }
 
-    /*data class PeriodCard1(
-        val title: String,
-        val days: Int,
-        val nudge: String,
-        val currentCycleDay: Int,
-        val totalCycleDay: Int,
-        val bottomText: String,
-        val predictionDate: String
-    )*/
+
     class CycleTrackerPredictViewHolder(private val binding: ListCycleTrackerPredictionBinding) :
         HomeRecyclerViewHolder(binding) {
         fun bind(
@@ -1162,6 +1155,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.tvOvlDaysLeft.text = "of ${data.data.totalCycleDay}"
 
             binding.tvDesc.text = data.data.nudge
+
+            binding.root.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.FemaleHealthHome)
+            }
         }
     }
 
@@ -1183,6 +1180,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             binding.tvPeriodicPeriod.text = data.data.predictionString
             binding.tvDays.text = data.data.predictionDate
+
+            binding.root.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.FemaleHealthHome)
+            }
         }
     }
 

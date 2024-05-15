@@ -78,6 +78,10 @@ object DateFormats {
     val monthDateWithoutYear2 = SimpleDateFormat("MMM dd", defaultLocale)
 
     @SuppressLint("ConstantLocale")
+    val month = SimpleDateFormat("MMM", defaultLocale)
+    val date = SimpleDateFormat("dd", defaultLocale)
+
+    @SuppressLint("ConstantLocale")
     val dateTimeFormatWithWeekDay = SimpleDateFormat("EEEE, dd MMMM yyyy", defaultLocale)
 
     @SuppressLint("ConstantLocale")

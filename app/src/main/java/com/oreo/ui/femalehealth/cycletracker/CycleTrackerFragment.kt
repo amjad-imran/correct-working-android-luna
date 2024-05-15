@@ -106,7 +106,7 @@ class CycleTrackerFragment :
         binding.toolbar.view1.visible()
         binding.toolbar.ivAddFriend.invisible()
         binding.toolbar.view1.loadImage(binding.toolbar.view1.context, R.drawable.ic_ct_calender)
-        binding.toolbar.tvTitle.text=getString(R.string.text_cycle_tracker)
+        binding.toolbar.tvTitle.text = getString(R.string.text_cycle_tracker)
 
         binding.toolbar.backBtn.setOnClickListener {
             navigateUpSafe()
@@ -120,16 +120,16 @@ class CycleTrackerFragment :
         }
         binding.lytInsight.lytCycleLength.root.setOnClickListener {
             navigate(R.id.cycleInsightDetails, Bundle().apply {
-                this.putString("pageTitle", getString(R.string.text_cycle_length))
+                this.putSerializable("launchMode", CycleInsightLaunchMode.CYCLE_LENGTH)
             })
         }
         binding.lytInsight.lytPeriodLength.root.setOnClickListener {
             navigate(R.id.cycleInsightDetails, Bundle().apply {
-                this.putString("pageTitle", getString(R.string.text_period_duration))
+                this.putSerializable("launchMode", CycleInsightLaunchMode.PERIOD_DURATION)
             })
         }
         binding.lytCycleHistory.ivMore.setOnClickListener {
-            navigate(R.id.cycleTrackorHistory)
+            navigate(R.id.cycleTrackerHistory)
         }
         binding.lytTrackerTop.btnLog.setOnClickListener {
             navigate(R.id.cycleLogFragment)

@@ -1168,6 +1168,7 @@
     <string name="text_calender">Calender</string>
     <string name="text_period_last_sub_message">Your privacy is our priority. We use top-notch security measures to protect your data.</string>
     <string name="text_days">days</string>
+    <string name="text_abnormal_length">Abnormal length</string>
 
 
 </resources>

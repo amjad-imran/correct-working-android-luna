@@ -19,3 +19,11 @@ data class ChartModelStress(
     val isDistanceGraph: Boolean = false,
     val formattedDate: String? = null
 )
+
+data class PeriodChartModel(
+    var value: Int = 0,
+    var date: String? = null,
+    var month: String? = null,
+    var day: String? = null,
+    var isNormal: Boolean = true
+)

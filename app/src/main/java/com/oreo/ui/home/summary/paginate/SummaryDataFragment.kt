@@ -158,6 +158,7 @@ class SummaryDataFragment :
                 }
 
                 OSummaryHealthOverviewClickEnum.TrackYourFemaleHealthRemindLater -> {}
+                OSummaryHealthOverviewClickEnum.FemaleHealthHome -> {}
             }
         }
 

@@ -84,6 +84,9 @@
     <color name="tab_text_unselected_color">#99FFFFFF</color>
     <color name="tab_text_selected_color">#FFFFFF</color>
 
+    <color name="period_normal_start">#113fe8b5</color>
+    <color name="period_normal_end">#11248266</color>
+
 
     <color name="deep_start">#232aed</color>
     <color name="deep_start_oreo">#7156cc</color>

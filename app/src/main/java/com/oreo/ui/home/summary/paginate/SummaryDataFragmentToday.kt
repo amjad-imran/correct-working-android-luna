@@ -319,6 +319,10 @@ class SummaryDataFragmentToday :
                     viewModel.localDataStore.setFMHRemindLater()
                     healthOverviewAdapter.removeCycleGetStartedCard()
                 }
+
+                OSummaryHealthOverviewClickEnum.FemaleHealthHome -> {
+                    navigate(R.id.fragmentCycleTracker)
+                }
             }
         }
 
