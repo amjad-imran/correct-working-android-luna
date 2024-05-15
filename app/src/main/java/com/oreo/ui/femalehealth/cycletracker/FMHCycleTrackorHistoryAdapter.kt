@@ -7,6 +7,7 @@ import com.noisefit.luna.databinding.FmhCycleHistoryItemBinding
 import com.noisefit.luna.databinding.FmhCycleTrackHistoryItemBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.FMHCycleHistoryDataModel
 
 class FMHCycleTrackorHistoryAdapter() :
@@ -16,8 +17,26 @@ class FMHCycleTrackorHistoryAdapter() :
     inner class ViewHolder(val binding: FmhCycleTrackHistoryItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: FMHCycleHistoryDataModel) {
-            binding.tvHeader.text = "Current cycle: ${data.cycleLength} days"
-            binding.tvStartedOn.text = "Started on ${data.startDate}"
+            binding.tvHeader.text = if (bindingAdapterPosition == 0) {
+                "Current cycle: ${data.cycleLength} days"
+            } else {
+                "${data.cycleLength} days"
+            }
+            binding.tvStartedOn.text = "Started on ${
+                DateFormats.formatDate(
+                    data.periodDate,
+                    DateFormats.dateFormat3,
+                    DateFormats.dateFormat7
+                )
+            }"
+
+            binding.pbHistory.setData(
+                cycleLength = 28,
+                periodLength = 5,
+                ovStart = 14,
+                ovEnd = 20,
+                ovDay = 19
+            )
 
         }
     }
