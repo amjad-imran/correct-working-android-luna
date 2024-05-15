@@ -108,12 +108,12 @@ class FMHOnboardingFragment :
 
             when (current) {
                 1 -> {
-                    mViewModel.updateFemaleHealthData(true)
+                    mViewModel.updateFemaleHealthData(3)
                     return@setOnClickListener
                 }
 
                 2 -> {
-                    mViewModel.updateFemaleHealthData(true)
+                    mViewModel.updateFemaleHealthData(3)
                     return@setOnClickListener
                 }
             }
@@ -134,6 +134,13 @@ class FMHOnboardingFragment :
     private fun onNextPress() {
         val current = binding.vpFmhOnboard.currentItem
         when (current) {
+            0 -> {
+                if (mViewModel.goalTypeSelected == GoalType.TRACK_PREGNANCY) {
+                    mViewModel.updateFemaleHealthData(1)
+                    return
+                }
+            }
+
             3 -> {
                 if (mViewModel.selectedPStartDate == null) {
                     context.showShortToast("Select Date to continue")
@@ -162,6 +169,11 @@ class FMHOnboardingFragment :
     }
 
     override fun subscribeObservers() {
+        mViewModel.moveBack.observe(this) {
+            it.getContent()?.let {
+                navigateUpSafe()
+            }
+        }
         mViewModel.femaleHealthSubmitInfo.observe(this) { it1 ->
             it1?.getContent()?.let {
                 navigate(FMHOnboardingFragmentDirections.actionFemaleHealthOnboardingFragmentToFmhOnboardingAllDoneFragment())

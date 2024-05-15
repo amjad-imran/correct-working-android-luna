@@ -118,13 +118,17 @@ class SummaryDataViewModelToday @Inject constructor(
     val stateHeartRateCard = MutableLiveData<OHealthOverview.HeartRateDataModel?>()
 
     var user: User? = null
+    var gender: String? = null
     var registerDate: Int = -1
     var shouldShowStressCard = false
     var stressBeta = false
     var onNapAddSuccess = MutableLiveData<Event<OreoNapDetailsDataModel>>()
     var serverUserHealthData: ServerUserHealthData? = null
 
-    var femaleHealthData = MutableLiveData<Event<FemaleHealthUserInfoModel>>()
+    /**
+     * Pair (hasDataLoaded,Female health data)
+     */
+    var femaleHealthData = MutableLiveData<Event<Pair<Boolean, FemaleHealthUserInfoModel?>>>()
 
     fun getStressWalkthroughShownStatus(): Boolean {
         return localDataStore.getStressWalkthroughShownStatus()
@@ -241,38 +245,43 @@ class SummaryDataViewModelToday @Inject constructor(
             val userActivities = ArrayList<OHealthOverview>()
             val viewedCardsData = ArrayList<OHealthOverview>()
 
-            //todo add widget for testing
-            //userActivities.add(OHealthOverview.CycleTrackerPredict(""))
-            //userActivities.add(OHealthOverview.CycleTrackerOngoing(""))
-
-            val lastShownDays =
-                localDataStore.getFMHWalkthroughRemindLaterDays()
-
-            if (localDataStore.getFMHWalkthroughShownStatus()
-                    .not() && lastShownDays > 7
-            ) {
-                userActivities.add(OHealthOverview.CardTrackFemaleHealth(""))
-            }
-
             femaleHealthData.value?.peekContent()?.let {
+                val (hasDataLoaded, femaleData) = it
 
-                if (it.isOvulation || it.isPeriod) {
-                    userActivities.add(
-                        OHealthOverview.CycleTrackerOngoing(
-                            convertToPeriodBigCardModel(
-                                it
+                if (hasDataLoaded) {
+                    if (femaleData == null) {
+                        if (gender.equals("male", true).not()) {
+                            val lastShownDays =
+                                localDataStore.getFMHWalkthroughRemindLaterDays()
+
+                            if (localDataStore.getFMHWalkthroughShownStatus()
+                                    .not() && lastShownDays > 7
+                            ) {
+                                userActivities.add(OHealthOverview.CardTrackFemaleHealth(""))
+                            }
+                        }
+                    } else {
+                        if (femaleData.isOvulation || femaleData.isPeriod) {
+                            userActivities.add(
+                                OHealthOverview.CycleTrackerOngoing(
+                                    convertToPeriodBigCardModel(
+                                        femaleData
+                                    )
+                                )
                             )
-                        )
-                    )
-                } else {
-                    userActivities.add(
-                        OHealthOverview.CycleTrackerPredict(
-                            convertToPeriodSmallCardModel(
-                                it
+                        } else {
+                            userActivities.add(
+                                OHealthOverview.CycleTrackerPredict(
+                                    convertToPeriodSmallCardModel(
+                                        femaleData
+                                    )
+                                )
                             )
-                        )
-                    )
+                        }
+                    }
                 }
+
+
             }
 
             //userActivities.add(OHealthOverview.GotYourPeriod(""))
@@ -588,7 +597,11 @@ class SummaryDataViewModelToday @Inject constructor(
                 currentCycleDay = data.currentDay ?: 0,
                 totalCycleDay = data.cycleLength ?: 0,
                 temperatureVariation = 2,
-                predictionDate = data.nextPeriodDate ?: "",
+                predictionDate = DateFormats.formatDateTime(
+                    data.nextPeriodDate,
+                    DateFormats.dateFormat3,
+                    DateFormats.dateFormat7
+                ),
                 days = 11,
                 predictionString = "Predicted period"
             )
@@ -602,7 +615,11 @@ class SummaryDataViewModelToday @Inject constructor(
                 currentCycleDay = data.currentDay ?: 0,
                 totalCycleDay = data.cycleLength ?: 0,
                 temperatureVariation = 2,
-                predictionDate = data.ovulationDate ?: "",
+                predictionDate = DateFormats.formatDateTime(
+                    data.ovulationDate,
+                    DateFormats.dateFormat3,
+                    DateFormats.dateFormat7
+                ),
                 days = 11,
                 predictionString = "Predicted ovulation"
             )
@@ -1327,8 +1344,10 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     fun getPeriodData() {
-        if (date == null) return
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (date == null) return@launch
+            gender = localDataStore.getUser()?.userInfo?.gender
+            if (gender.equals("male", true)) return@launch
 
             userActivityRepository.getFemaleHealthUserInfo(date!!).collect { resource ->
                 when (resource) {
@@ -1358,16 +1377,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data.let {
-
-                            if (it == null) {
-
-                                femaleHealthData.postValue(Event(null))
-                            } else {
-
-                                femaleHealthData.postValue(Event(it))
-                            }
-
-
+                            femaleHealthData.postValue(Event(Pair(true, it)))
                         }
                     }
                 }

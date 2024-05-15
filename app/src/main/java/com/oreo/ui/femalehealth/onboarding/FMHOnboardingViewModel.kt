@@ -151,7 +151,14 @@ class FMHOnboardingViewModel @Inject constructor(
     val femaleHealthSkip: LiveData<Event<Boolean>>
         get() = _femaleHealthSkip
 
-    fun updateFemaleHealthData(skip: Boolean = false) {
+    private val _moveBack = MutableLiveData<Event<Boolean>>()
+    val moveBack: LiveData<Event<Boolean>>
+        get() = _moveBack
+
+    /**
+     * navigationState 1->Back, 2->All Set, 3->Cycle Tracker
+     */
+    fun updateFemaleHealthData(navigationState: Int = 2) {
         val jsonObject = JsonObject()
 
         jsonObject.addProperty("goal", goalTypeSelected?.name)
@@ -200,7 +207,7 @@ class FMHOnboardingViewModel @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        updateFemaleHealthData(skip)
+                                        updateFemaleHealthData(navigationState)
                                     }
 
                                     override fun no() {
@@ -213,10 +220,21 @@ class FMHOnboardingViewModel @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             localDataStore.setFMHWalkthroughShown(true)
-                            if (skip) {
-                                _femaleHealthSkip.postValue(Event(true))
-                            } else {
-                                _femaleHealthSubmitInfo.postValue(Event(true))
+                            /**
+                             * navigationState 1->Back, 2->All Set, 3->Cycle Tracker
+                             */
+                            when (navigationState) {
+                                1 -> {
+                                    _moveBack.postValue(Event(true))
+                                }
+
+                                2 -> {
+                                    _femaleHealthSubmitInfo.postValue(Event(true))
+                                }
+
+                                3 -> {
+                                    _femaleHealthSkip.postValue(Event(true))
+                                }
                             }
                         }
                     }
