@@ -580,7 +580,7 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     private fun convertToPeriodBigCardModel(data: FemaleHealthUserInfoModel): PeriodCard2 {
-        if(data.isPeriod){
+        if (data.isPeriod) {
             return PeriodCard2(
                 title = "period",
                 subTitle = "Day ${data.currentDay}",
@@ -588,12 +588,12 @@ class SummaryDataViewModelToday @Inject constructor(
                 currentCycleDay = data.currentDay ?: 0,
                 totalCycleDay = data.cycleLength ?: 0,
                 temperatureVariation = 2,
-                predictionDate = data.nextPeriodDate?:"",
+                predictionDate = data.nextPeriodDate ?: "",
                 days = 11,
                 predictionString = "Predicted period"
             )
 
-        }else{
+        } else {
             //TODO ovulation day condition
             return PeriodCard2(
                 title = "Ovulation",
@@ -602,92 +602,110 @@ class SummaryDataViewModelToday @Inject constructor(
                 currentCycleDay = data.currentDay ?: 0,
                 totalCycleDay = data.cycleLength ?: 0,
                 temperatureVariation = 2,
-                predictionDate = data.ovulationDate?:"",
+                predictionDate = data.ovulationDate ?: "",
                 days = 11,
                 predictionString = "Predicted ovulation"
             )
         }
 
-/*
+        /*
 
 
-        val daysUntilOvulation = calculateDaysLeft(data.ovulationDate!!)
-        val daysUntilNextPeriod = calculateDaysLeft(data.nextPeriodDate!!)
+                val daysUntilOvulation = calculateDaysLeft(data.ovulationDate!!)
+                val daysUntilNextPeriod = calculateDaysLeft(data.nextPeriodDate!!)
 
-        val title: String
-        val bottomText: String
-        val predictionDate: String
-        val nextDay: Int
-        if (daysUntilOvulation < daysUntilNextPeriod) {
-            title = "Ovulation in"
-            bottomText = "Predicted period:"
-            predictionDate = data.nextPeriodDate
-            nextDay = daysUntilNextPeriod.toInt()
-        } else {
-            title = "Period in"
-            bottomText = "Predicted ovulation:"
-            predictionDate = data.ovulationDate
-            nextDay = daysUntilOvulation.toInt()
-        }
+                val title: String
+                val bottomText: String
+                val predictionDate: String
+                val nextDay: Int
+                if (daysUntilOvulation < daysUntilNextPeriod) {
+                    title = "Ovulation in"
+                    bottomText = "Predicted period:"
+                    predictionDate = data.nextPeriodDate
+                    nextDay = daysUntilNextPeriod.toInt()
+                } else {
+                    title = "Period in"
+                    bottomText = "Predicted ovulation:"
+                    predictionDate = data.ovulationDate
+                    nextDay = daysUntilOvulation.toInt()
+                }
 
-        return PeriodCard2(
-            title = title,
-            subTitle = "subtitle here",
-            nudge = data.nudges?.firstOrNull()?.message ?: "",
-            currentCycleDay = data.currentDay ?: 0,
-            totalCycleDay = data.cycleLength ?: 0,
-            temperatureVariation = 4,
-            predictionDate = predictionDate,
-            days = 11,
-            predictionString = ""
-        )*/
+                return PeriodCard2(
+                    title = title,
+                    subTitle = "subtitle here",
+                    nudge = data.nudges?.firstOrNull()?.message ?: "",
+                    currentCycleDay = data.currentDay ?: 0,
+                    totalCycleDay = data.cycleLength ?: 0,
+                    temperatureVariation = 4,
+                    predictionDate = predictionDate,
+                    days = 11,
+                    predictionString = ""
+                )*/
     }
 
     private fun convertToPeriodSmallCardModel(data: FemaleHealthUserInfoModel): PeriodCard1 {
 
-
-      /*  return PeriodCard1(
-            title = title,
-            days = nextDay,
-            nudge = data.nudges?.firstOrNull()?.message ?: "",
-            currentCycleDay = data.currentDay ?: 0,
-            totalCycleDay = data.cycleLength ?: 0,
-            bottomText = bottomText,
-            predictionDate = predictionDate
-        )*/
-
-
-
-
-
         val daysUntilOvulation = calculateDaysLeft(data.ovulationDate!!)
         val daysUntilNextPeriod = calculateDaysLeft(data.nextPeriodDate!!)
 
-        val title: String
-        val bottomText: String
-        val predictionDate: String
-        val nextDay: Int
         if (daysUntilOvulation < daysUntilNextPeriod) {
-            title = "Ovulation in"
-            bottomText = "Predicted period:"
-            predictionDate = data.nextPeriodDate
-            nextDay = daysUntilNextPeriod.toInt()
+            return PeriodCard1(
+                title = "Ovulation in",
+                days = daysUntilOvulation.toInt(),
+                nudge = data.nudges?.firstOrNull()?.message ?: "",
+                currentCycleDay = data.currentDay ?: 0,
+                totalCycleDay = data.cycleLength ?: 0,
+                bottomText = if (data.otaLog) "Period" else "Predicted period",
+                predictionDate = DateFormats.formatDateTime(
+                    data.nextPeriodDate,
+                    DateFormats.dateFormat3,
+                    DateFormats.dateFormat7
+                )
+            )
         } else {
-            title = "Period in"
-            bottomText = "Predicted ovulation:"
-            predictionDate = data.ovulationDate
-            nextDay = daysUntilOvulation.toInt()
+            return PeriodCard1(
+                title = "Period in",
+                days = daysUntilNextPeriod.toInt(),
+                nudge = data.nudges?.firstOrNull()?.message ?: "",
+                currentCycleDay = data.currentDay ?: 0,
+                totalCycleDay = data.cycleLength ?: 0,
+                bottomText = if (data.otaLog) "Period" else "Predicted Ovulation",
+                predictionDate = DateFormats.formatDateTime(
+                    data.ovulationDate,
+                    DateFormats.dateFormat3,
+                    DateFormats.dateFormat7
+                )
+            )
         }
 
-        return PeriodCard1(
-            title = title,
-            days = nextDay,
-            nudge = data.nudges?.firstOrNull()?.message ?: "",
-            currentCycleDay = data.currentDay ?: 0,
-            totalCycleDay = data.cycleLength ?: 0,
-            bottomText = bottomText,
-            predictionDate = predictionDate
-        )
+
+        /*
+
+                val title: String
+                val bottomText: String
+                val predictionDate: String
+                val nextDay: Int
+                if (daysUntilOvulation < daysUntilNextPeriod) {
+                    title = "Ovulation in"
+                    bottomText = "Predicted period:"
+                    predictionDate = data.nextPeriodDate
+                    nextDay = daysUntilNextPeriod.toInt()
+                } else {
+                    title = "Period in"
+                    bottomText = "Predicted ovulation:"
+                    predictionDate = data.ovulationDate
+                    nextDay = daysUntilOvulation.toInt()
+                }
+
+                return PeriodCard1(
+                    title = title,
+                    days = nextDay,
+                    nudge = data.nudges?.firstOrNull()?.message ?: "",
+                    currentCycleDay = data.currentDay ?: 0,
+                    totalCycleDay = data.cycleLength ?: 0,
+                    bottomText = bottomText,
+                    predictionDate = predictionDate
+                )*/
     }
 
     fun getStressStatus(value: Int?): String {

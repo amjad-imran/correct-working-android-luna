@@ -3,7 +3,7 @@ package com.oreo.data.model
 import com.google.gson.annotations.SerializedName
 
 data class FemaleHealthUserInfoModel(
-    @SerializedName("ota_log") val otaLog: Boolean? = false,
+    @SerializedName("ota_log") val otaLog: Boolean = false,
     val isPeriod: Boolean = false,
     val isOvulation: Boolean = false,
     val isFertileWindow: Boolean = false,
