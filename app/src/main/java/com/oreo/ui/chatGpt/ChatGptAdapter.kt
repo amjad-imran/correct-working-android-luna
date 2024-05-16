@@ -37,7 +37,7 @@ class ChatGptAdapter :
         }
 
 
-//    override fun onCurrentListChanged(previousList: MutableList<Item>, currentList: MutableList<Item>) {
+    //    override fun onCurrentListChanged(previousList: MutableList<Item>, currentList: MutableList<Item>) {
 //        super.onCurrentListChanged(previousList, currentList)
 //        //E.g. check if new item has been added
 //        if (currentList.size == previousList.size + 1) {
@@ -139,7 +139,7 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
                     lottie.setAnimation(R.raw.anim_ai_thinking)
                     lottie.playAnimation()
                     tvMessage.gone()
-                    logo.gone()
+                    logo.visible()
                 }
 
             } else {
@@ -148,7 +148,7 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
 
                     tvMessage.visible()
                     val markwon = Markwon.create(this.tvMessage.context)
-                    markwon.setMarkdown(tvMessage,  data.message)
+                    markwon.setMarkdown(tvMessage, data.message)
                     logo.visible()
 //                    tvMessage.animateTextWithUnderscore(data.message)
                 }

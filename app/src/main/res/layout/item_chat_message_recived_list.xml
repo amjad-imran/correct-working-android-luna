@@ -3,14 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginStart="@dimen/dimen_16dp"
-    android:layout_marginTop="@dimen/dimen_8dp"
+    android:layout_marginTop="16dp"
     android:layout_marginEnd="16dp">
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottie"
-        android:layout_width="200dp"
-        android:layout_height="80dp"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -19,7 +20,7 @@
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_marginEnd="@dimen/dimen_8dp"
-        android:src="@mipmap/ic_launcher_round"
+        android:src="@drawable/image_ai_message_logo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,9 +30,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
         android:layout_marginEnd="64dp"
         android:lineSpacingExtra="6sp"
+        tools:text="@tools:sample/lorem"
         android:textColor="@color/white_80"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/logo"

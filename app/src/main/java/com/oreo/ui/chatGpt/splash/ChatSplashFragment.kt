@@ -120,7 +120,7 @@ class ChatSplashFragment :
     fun onNextPress() {
         val current = binding.vpImageSlider.currentItem
         if (current == (dataList.size - 1)) {
-            //localDataStore.setAiChatSplashShown()
+            localDataStore.setAiChatSplashShown()
             navigate(ChatSplashFragmentDirections.actionChatSplashFragmentToChatGptFragment())
         } else {
             binding.vpImageSlider.setCurrentItem(current + 1, true)
@@ -137,21 +137,21 @@ class ChatSplashFragment :
         dataList.add(
             StressSplashModel(
                 "Ask Any Question",
-                R.drawable.image_stress_w_1,
+                R.drawable.placeholder_banner,
                 getString(R.string.text_ai_content_1)
             )
         )
         dataList.add(
             StressSplashModel(
                 "Learn More About Your Body",
-                R.drawable.image_stress_w_2,
+                R.drawable.placeholder_banner,
                 getString(R.string.text_ai_content_2)
             )
         )
         dataList.add(
             StressSplashModel(
                 "Your personal coach and nutritionist",
-                R.drawable.image_stress_w_4,
+                R.drawable.placeholder_banner,
                 getString(R.string.text_ai_content_3)
             )
         )

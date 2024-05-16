@@ -703,7 +703,13 @@
     <fragment
         android:id="@+id/chatGptFragment"
         android:name="com.oreo.ui.chatGpt.ChatGptFragment"
-        android:label="fragment_chat_gpt" />
+        android:label="fragment_chat_gpt" >
+        <action
+            android:id="@+id/action_chatGptFragment_self"
+            app:destination="@id/chatGptFragment"
+            app:popUpTo="@id/chatGptFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/chatSplashFragment"
         android:name="com.oreo.ui.chatGpt.splash.ChatSplashFragment"

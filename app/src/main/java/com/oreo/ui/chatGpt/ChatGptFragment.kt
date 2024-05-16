@@ -55,6 +55,16 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
     }
 
     override fun initListener() {
+
+        binding.lytChatBox.btnNewChat.setOnClickListener {
+            navigate(ChatGptFragmentDirections.actionChatGptFragmentSelf())
+        }
+
+        binding.lytChatBox.btnSendMessage.setOnClickListener {
+            if (viewModel.fetchInProgress.value == true) return@setOnClickListener
+            sendMessage()
+        }
+
         binding.toolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }
@@ -66,18 +76,22 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
         binding.lytChatBox.chatEtx.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEND) {
-                val message = binding.lytChatBox.chatEtx.text.toString()
-                if (message.isNotEmpty()) {
-
-                    viewModel.addSentMessage(message)
-                    viewModel.addReceivedMessage("", true)
-                    binding.lytChatBox.chatEtx.setText("")
-                    viewModel.askQuestion(message)
-                }
+                sendMessage()
                 true
             } else false
         })
 
+
+    }
+
+    fun sendMessage() {
+        val message = binding.lytChatBox.chatEtx.text.toString()
+        if (message.isNotEmpty()) {
+            viewModel.addSentMessage(message)
+            viewModel.addReceivedMessage("", true)
+            binding.lytChatBox.chatEtx.setText("")
+            viewModel.askQuestion(message)
+        }
 
     }
 
