@@ -51,12 +51,15 @@ class ChatGptViewModel
         if (thinking) {
             messages.add(ChatGptOverview.ReceivedMessage(thinking, message))
         } else {
-            val lastOverViewType = messages.last()
-            if (lastOverViewType is ChatGptOverview.ReceivedMessage) {
-                messages.removeLast()
+            val lastOverViewType = messages.lastOrNull()
+            if (lastOverViewType == null) {
                 messages.add(ChatGptOverview.ReceivedMessage(thinking, message))
+            } else {
+                if (lastOverViewType is ChatGptOverview.ReceivedMessage) {
+                    messages.removeLast()
+                    messages.add(ChatGptOverview.ReceivedMessage(thinking, message))
+                }
             }
-
         }
 
         _chatGptOverview.postValue(messages)
@@ -117,7 +120,8 @@ class ChatGptViewModel
             }
         }
     }
-    fun clearThinkingState(){
+
+    fun clearThinkingState() {
 
     }
 
@@ -180,6 +184,16 @@ class ChatGptViewModel
     }
 
     fun sendInitMessage() {
+
+        val userName = localDataStore.getUser()?.firstName
+        val initMessage =
+            "Hello $userName, my name is Luna. I am an AI that can help you understand your body better and answer your health and wellness queries."
+
+        addReceivedMessage(initMessage, false)
+
+        return
+
+
         fetchInProgress.value = true
         addReceivedMessage("", true)
 
