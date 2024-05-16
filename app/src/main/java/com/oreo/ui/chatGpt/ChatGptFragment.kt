@@ -31,6 +31,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         super.onViewCreated(view, savedInstanceState)
 
         setAdapter()
+        viewModel.sendInitMessage()
     }
 
     private fun setAdapter() {

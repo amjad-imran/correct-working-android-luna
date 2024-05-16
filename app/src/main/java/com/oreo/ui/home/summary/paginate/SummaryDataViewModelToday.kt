@@ -244,6 +244,9 @@ class SummaryDataViewModelToday @Inject constructor(
 
             handleInfoCards(healthData, trendsData, userActivities, viewedCardsData)
 
+            userActivities.add(OHealthOverview.LunaAiCard())
+
+
             val readinessModel = ODashboardReadinessModel(
                 readinessScore = healthData.readiness?.readinessScore?.value,
                 status = healthData.readiness?.readinessScore?.text?.capitalizeWords(),
@@ -283,7 +286,6 @@ class SummaryDataViewModelToday @Inject constructor(
 
 
             val daySlot = getDaySlot()
-            LOGS.d("TIME_TEST", "daySlot $daySlot")
 
             when (daySlot) {
                 0 -> {
@@ -1147,6 +1149,11 @@ class SummaryDataViewModelToday @Inject constructor(
             }
         }
 
+    }
+
+    fun isChatSplashShown(): Boolean {
+        return false
+        //return localDataStore.isAiChatSplashShown()
     }
 
 

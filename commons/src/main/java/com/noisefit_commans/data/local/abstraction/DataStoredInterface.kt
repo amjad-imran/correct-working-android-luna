@@ -442,4 +442,7 @@ interface DataStoredInterface {
     fun setStressWalkthroughShown(isShown: Boolean)
 
     fun getStressWalkthroughShownStatus(): Boolean
+
+    fun isAiChatSplashShown(): Boolean
+    fun setAiChatSplashShown()
 }

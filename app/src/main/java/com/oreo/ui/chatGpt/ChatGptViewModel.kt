@@ -66,7 +66,7 @@ class ChatGptViewModel
     fun askQuestion(prompt: String) {
         fetchInProgress.value = true
         val jsonObject = JsonObject()
-        jsonObject.addProperty("message", prompt +" For reference todays date is ${DateFormats.getTodaysDateString(10)}")
+        jsonObject.addProperty("message", prompt)
         if (assistantId != null && threadId != null) {
             jsonObject.addProperty("assistant_id", assistantId)
             jsonObject.addProperty("thread_id", threadId)
@@ -116,6 +116,9 @@ class ChatGptViewModel
                 }
             }
         }
+    }
+    fun clearThinkingState(){
+
     }
 
     private fun callAfterSomeTime(assistantId: String, threadId: String, runId: String) {
@@ -174,5 +177,59 @@ class ChatGptViewModel
                 }
             }
         }
+    }
+
+    fun sendInitMessage() {
+        fetchInProgress.value = true
+        addReceivedMessage("", true)
+
+        val jsonObject = JsonObject()
+        jsonObject.addProperty("message", "Hi")
+
+        viewModelScope.launch {
+            oreoDeviceRepository.askQuestionToChatGpt(jsonObject).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                        fetchInProgress.value = false
+                    }
+
+                    is Resource.Loading -> {
+                        //setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        sendInitMessage()
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            if (it.assistant_id != null && it.thread_id != null && it.run_id != null) {
+                                assistantId = it.assistant_id
+                                threadId = it.thread_id
+                                callAfterSomeTime(it.assistant_id, it.thread_id, it.run_id)
+                            } else {
+                                fetchInProgress.value = false
+                                sendMessage("Something went wrong")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
     }
 }

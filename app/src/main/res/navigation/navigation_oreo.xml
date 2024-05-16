@@ -664,7 +664,7 @@
     <fragment
         android:id="@+id/stressUnderstandingFragment"
         android:name="com.oreo.ui.stress.help.StressUnderstandingFragment"
-        android:label="fragment_stress_understanding"/>
+        android:label="fragment_stress_understanding" />
     <fragment
         android:id="@+id/stressSplashFragment"
         android:name="com.oreo.ui.stress.splash.StressSplashFragment"
@@ -703,5 +703,15 @@
     <fragment
         android:id="@+id/chatGptFragment"
         android:name="com.oreo.ui.chatGpt.ChatGptFragment"
-        android:label="fragment_chat_gpt"/>
+        android:label="fragment_chat_gpt" />
+    <fragment
+        android:id="@+id/chatSplashFragment"
+        android:name="com.oreo.ui.chatGpt.splash.ChatSplashFragment"
+        android:label="ChatSplashFragment">
+        <action
+            android:id="@+id/action_chatSplashFragment_to_chatGptFragment"
+            app:destination="@id/chatGptFragment"
+            app:popUpTo="@id/chatSplashFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>
