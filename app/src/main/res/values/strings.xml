@@ -1115,9 +1115,9 @@
     <string name="text_tell_us_what_s_happening">+ Tell us what’s happening</string>
     <string name="text_talk_to">Talk to</string>
     <string name="text_learn_more_about_yourself">Learn more about yourself.</string>
-    <string name="text_ai_content_1">Connect with Luna AI, your intelligent health coach. Pose questions and receive tailored feedback on your health metrics. Luna AI navigates you through your wellness journey with practical, actionable insights.</string>
-    <string name="text_ai_content_2">When you\'re feeling overwhelmed or fatigued, Luna AI assists in identifying the underlying factors affecting your well-being. It provides personalized advice to enhance your rest and manage stress effectively, helping you maintain balance and resilience. </string>
-    <string name="text_ai_content_3">Get ready for your next athletic challenge with Luna AI by your side as your personal coach and nutritionist. Luna AI crafts a customized training plan designed to enhance your performance and readiness, ensuring you\'re fully prepared for any physical endeavor.</string>
+    <string name="text_ai_content_1">Connect with Luna AI, your smart health coach. Ask questions and get tailored feedback on your health metrics. Luna AI guides your wellness journey with practical, actionable insights.</string>
+    <string name="text_ai_content_2">When overwhelmed or fatigued, Luna AI helps identify factors affecting your well-being, offering personalized advice to improve rest and manage stress, maintaining balance and resilience.</string>
+    <string name="text_ai_content_3">Prepare for your next athletic challenge with Luna AI as your personal coach and nutritionist.</string>
 
 
 </resources>

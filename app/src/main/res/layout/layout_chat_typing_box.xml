@@ -33,7 +33,7 @@
         android:background="@color/transparent"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:hint="@string/text_tell_us_what_s_happening"
+        android:hint="How can I help today"
         android:imeOptions="actionSend"
         android:lineSpacingExtra="6sp"
         android:singleLine="true"

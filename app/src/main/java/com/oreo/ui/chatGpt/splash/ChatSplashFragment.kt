@@ -150,7 +150,7 @@ class ChatSplashFragment :
         )
         dataList.add(
             StressSplashModel(
-                "Your personal coach and nutritionist",
+                "Your personal fitness coach",
                 R.drawable.placeholder_banner,
                 getString(R.string.text_ai_content_3)
             )
