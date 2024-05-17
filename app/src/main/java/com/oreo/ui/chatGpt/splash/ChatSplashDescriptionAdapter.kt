@@ -13,6 +13,7 @@ import com.oreo.data.model.StressSplashModel
 class ChatSplashDescriptionAdapter :
     RecyclerView.Adapter<ChatSplashDescriptionAdapter.ViewHolder>() {
     private var mDataSet = ArrayList<StressSplashModel>()
+    var currentPlayPos = -1
 
 
     inner class ViewHolder(private val binding: ViewStressSplashDescriptionSliderBinding) :
@@ -21,7 +22,11 @@ class ChatSplashDescriptionAdapter :
             binding.imv.apply {
                 repeatCount = LottieDrawable.INFINITE
                 setAnimation(data.image)
-                playAnimation()
+                if (bindingAdapterPosition == currentPlayPos) {
+                    playAnimation()
+                } else {
+                    pauseAnimation()
+                }
             }
             //binding.imv.loadImage(binding.imv.context, data.image)
             binding.tvTitle.text = data.title
@@ -52,5 +57,14 @@ class ChatSplashDescriptionAdapter :
         mDataSet.clear()
         mDataSet.addAll(dataSet)
         notifyDataSetChanged()
+    }
+
+    fun startAnim(position: Int) {
+        val lastPos = currentPlayPos
+        currentPlayPos = position
+        if (lastPos != -1) {
+            notifyItemChanged(lastPos)
+        }
+        notifyItemChanged(position)
     }
 }

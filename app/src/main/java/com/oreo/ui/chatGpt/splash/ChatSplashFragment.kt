@@ -20,7 +20,6 @@ class ChatSplashFragment :
     private val stressSplashDescriptionAdapter by lazy {
         ChatSplashDescriptionAdapter()
     }
-    private var dataList: ArrayList<StressSplashModel> = ArrayList()
 
     @Inject
     lateinit var localDataStore: DataStoredInterface
@@ -30,7 +29,6 @@ class ChatSplashFragment :
 
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
 
-        dataList = getData()
         setViewpager()
     }
 
@@ -45,13 +43,12 @@ class ChatSplashFragment :
         binding.vpImageSlider.apply {
             clipToPadding = false
             clipChildren = false
-            offscreenPageLimit = 3
+            offscreenPageLimit = 1
             adapter = stressSplashDescriptionAdapter
             setOnTouchListener(null)
         }
 
-
-        dataList.let { stressSplashDescriptionAdapter.setDataSet(it) }
+        stressSplashDescriptionAdapter.setDataSet(getData())
         binding.vpImageSlider.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
             override fun onPageScrolled(
@@ -65,6 +62,7 @@ class ChatSplashFragment :
                 super.onPageSelected(position)
 
                 setProgress(position)
+                stressSplashDescriptionAdapter.startAnim(position)
 
 
             }
@@ -79,7 +77,7 @@ class ChatSplashFragment :
     }
 
     private fun setProgress(position: Int) {
-        val max = dataList.size
+        val max = stressSplashDescriptionAdapter.itemCount
 
         binding.lytProgress.apply {
             pgBr.progress = (((position + 1).toFloat() / max) * 100).roundToInt()
@@ -119,7 +117,7 @@ class ChatSplashFragment :
 
     fun onNextPress() {
         val current = binding.vpImageSlider.currentItem
-        if (current == (dataList.size - 1)) {
+        if (current == (stressSplashDescriptionAdapter.itemCount - 1)) {
             localDataStore.setAiChatSplashShown()
             navigate(ChatSplashFragmentDirections.actionChatSplashFragmentToChatGptFragment())
         } else {
@@ -137,21 +135,21 @@ class ChatSplashFragment :
         dataList.add(
             StressSplashModel(
                 "Ask Any Question",
-                R.raw.anim_chat_onboard_1,
+                R.raw.anim_chat_onboard_1_test,
                 getString(R.string.text_ai_content_1)
             )
         )
         dataList.add(
             StressSplashModel(
                 "Learn More About Your Body",
-                R.raw.anim_chat_onboard_1,
+                R.raw.anim_chat_onboard_1_test,
                 getString(R.string.text_ai_content_2)
             )
         )
         dataList.add(
             StressSplashModel(
                 "Your personal fitness coach",
-                R.raw.anim_chat_onboard_1,
+                R.raw.anim_chat_onboard_1_test,
                 getString(R.string.text_ai_content_3)
             )
         )
