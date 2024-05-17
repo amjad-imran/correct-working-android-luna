@@ -1110,6 +1110,15 @@
     <string name="text_stress_w_content_5">Approach stress management with mindfulness and intention. Navigate challenges with grace, supported by mindfulness practices, social connections, and enjoyable activities.</string>
     <string name="text_stress_w_content_3">By monitoring stress, identify patterns and adjust routines. View stress as an opportunity for growth and resilience. For instance, facing challenges can boost personal development and confidence.</string>
     <string name="text_beta">Beta</string>
+    <string name="text_units">Units</string>
+    <string name="text_general">General</string>
+    <string name="text_notifications">Notifications</string>
+    <string name="text_metric">Metric</string>
+    <string name="text_imperial">Imperial</string>
+    <string name="text_metric_message">Measures in meters, kilograms, and litres.</string>
+    <string name="text_message_imperial">Measures in feet, inches, and pounds.</string>
+    <string name="text_enable_notifications">Enable notifications</string>
+    <string name="text_notification_message">Allow LUNA to update you about: battery level, inactivity alerts, activity progress, bedtime reminders, and personalised insights.</string>
     <string name="text_talk_anything_to_luna_your_personal_24_7_health_companion">Talk anything to Luna, your personal 24*7 health companion</string>
     <string name="text_the_luna_ring_is_crafted_by_top_minds_in_sports_science_engineering_and_data_science_it_processes_huge_volumes_of_data_over_70_bio_markers_everyday_the_luna_ai_is_developed_with_inputs_from_leading_fitness_and_wellness_experts">The Luna Ring is crafted by top minds in Sports Science, Engineering and Data Science. It processes huge volumes of data over 70 bio-markers everyday. The Luna AI is developed with inputs from leading fitness and wellness experts.</string>
     <string name="text_tell_us_what_s_happening">+ Tell us what’s happening</string>

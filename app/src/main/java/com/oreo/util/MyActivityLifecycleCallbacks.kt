@@ -66,7 +66,7 @@ class MyActivityLifecycleCallbacks(val sessionManager: SessionManager) :
         LOGS.d(TAG, "onActivityDestroyed $activity")
         activityCount2--
         if (activityCount2 == 0) {
-            if (sessionManager.connectStateRing.value != null) {
+            if (sessionManager.connectStateRing.value != null && sessionManager.showLocalNotification()) {
                 NotificationUtil.sendForcePushNotification(
                     NoiseFitApplicationMain.context!!,
                     NoiseFitApplicationMain.context!!.getString(R.string.text_open_luna_ring_app),

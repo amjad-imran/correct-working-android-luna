@@ -17,6 +17,7 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.User
 import com.noisefit_commans.models.Gender
+import com.noisefit_commans.models.Units
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.AppConstants
 import com.noisefit_commans.utils.Event
@@ -185,6 +186,9 @@ class AuthViewModel @Inject constructor(
                             }
 
                             localDataStore.saveUserInfo(it.user!!)
+                            sessionManager.updateUnit(it.user?.userGoals?.getUnit() ?: Units.METRIC)
+                            sessionManager.updateNotificationSettings(it.user?.notificationsEnabledLuna?:1)
+
                             localDataStore.updateUserToken(it.token)
                             ringDataStore.setUpdateUserDeviceStatus(false)
                             authSuccess.postValue(Event(true))
@@ -317,6 +321,8 @@ class AuthViewModel @Inject constructor(
                                 if (isOutSideIndia) {
                                     if (it.user != null) {
                                         localDataStore.saveUserInfo(it.user!!)
+                                        sessionManager.updateUnit(it.user?.userGoals?.getUnit() ?: Units.METRIC)
+                                        sessionManager.updateNotificationSettings(it.user?.notificationsEnabledLuna?:1)
                                         localDataStore.updateUserToken(it.token)
                                         ringDataStore.setUpdateUserDeviceStatus(false)
                                         authSuccess.postValue(Event(true))
@@ -329,6 +335,8 @@ class AuthViewModel @Inject constructor(
                                         verifyMobile.postValue(Event(true))
                                     } else {
                                         localDataStore.saveUserInfo(user)
+                                        sessionManager.updateUnit(it.user?.userGoals?.getUnit() ?: Units.METRIC)
+                                        sessionManager.updateNotificationSettings(it.user?.notificationsEnabledLuna?:1)
                                         localDataStore.updateUserToken(it.token)
                                         ringDataStore.setUpdateUserDeviceStatus(false)
                                         authSuccess.postValue(Event(true))
@@ -509,7 +517,10 @@ class AuthViewModel @Inject constructor(
                                 return@let
                             }
 
+
                             localDataStore.saveUserInfo(it.user!!)
+                            sessionManager.updateUnit(it.user?.userGoals?.getUnit() ?: Units.METRIC)
+                            sessionManager.updateNotificationSettings(it.user?.notificationsEnabledLuna?:1)
                             localDataStore.updateUserToken(it.token)
                             ringDataStore.setUpdateUserDeviceStatus(false)
                             authSuccess.postValue(Event(true))
@@ -581,6 +592,8 @@ class AuthViewModel @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             localDataStore.saveUserInfo(it.user!!)
+                            sessionManager.updateUnit(it.user?.userGoals?.getUnit() ?: Units.METRIC)
+                            sessionManager.updateNotificationSettings(it.user?.notificationsEnabledLuna?:1)
                             localDataStore.updateUserToken(it.token)
                             ringDataStore.setUpdateUserDeviceStatus(false)
                             authSuccess.postValue(Event(true))

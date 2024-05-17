@@ -39,7 +39,7 @@ class AuthenticationRepositoryImpl(
         return safeApiCallFlow(Dispatchers.IO) {
             val url =
                 "${BuildConfig.BASE_URL_NEW}/auth_v2/send-otp"
-            remoteDataSource.sendOtp(url,jsonObject)
+            remoteDataSource.sendOtp(url, jsonObject)
         }
     }
 
@@ -58,7 +58,6 @@ class AuthenticationRepositoryImpl(
 
     override suspend fun saveUserInfo(user: User, forceReplaceLocal: Boolean) {
         localDataSource.saveUserInfo(user)
-
 
 
     }
@@ -119,22 +118,15 @@ class AuthenticationRepositoryImpl(
 
     override suspend fun logoutUser(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<String?>>> {
         return safeApiCallFlow(dispatcher) {
-            remoteDataSource.logoutUser()
+            val url = "${BuildConfig.BASE_URL_NEW}/auth_v2/logout"
+            remoteDataSource.logoutUser(url)
         }
     }
 
     override suspend fun deleteUser(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<String?>>> {
         return safeApiCallFlow(dispatcher) {
-            remoteDataSource.deleteUser()
+            val url = "${BuildConfig.BASE_URL_NEW}/user_detail/disable/account"
+            remoteDataSource.deleteUser(url)
         }
-    }
-
-    companion object {
-        val SIGN_UP_SUCCESS = "Signup success"
-        val SIGN_UP_FAILED = "Signup failed"
-        val USER_ACCOUNT_DOESNOT_EXIST = "user account does not exist"
-        val MOBILE_NUMBER_REQUIRED = "mobile number required"
-
-
     }
 }

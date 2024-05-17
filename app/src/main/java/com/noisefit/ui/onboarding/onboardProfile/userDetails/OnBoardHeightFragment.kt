@@ -52,7 +52,7 @@ class OnBoardHeightFragment :
                 "TAG",
                 "onItemSelected: ${item.split(" ").get(0)}"
             )
-            Log.d("TAG","get current item ${wheelAdapter.currentItemPosition}")
+            Log.d("TAG", "get current item ${wheelAdapter.currentItemPosition}")
             viewModel.updateHeightIndex(wheelAdapter.currentItemPosition)
         }
         wheelAdapter.bind(binding.wheelPicker)
@@ -70,11 +70,13 @@ class OnBoardHeightFragment :
             navigate(R.id.onBoardWeightFragment)
         }
         binding.btnMetric.setOnClickListener {
+            if (viewModel.heightUnitSystem == HeightUnitSystem.METRIC) return@setOnClickListener
             viewModel.setHeightUnit(HeightUnitSystem.METRIC)
             handleButton()
             setWheelPicker()
         }
         binding.btnImperial.setOnClickListener {
+            if (viewModel.heightUnitSystem == HeightUnitSystem.IMPERIAL) return@setOnClickListener
             viewModel.setHeightUnit(HeightUnitSystem.IMPERIAL)
             handleButton()
             setWheelPicker()

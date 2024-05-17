@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_oreo"
     app:startDestination="@id/navigation_oreo_home">
 
@@ -700,6 +701,18 @@
         android:id="@+id/bottomSheetLocationPermissionRequest"
         android:name="com.oreo.ui.recordworkout.BottomSheetLocationPermissionRequest"
         android:label="BottomSheetLocationPermissionRequest" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.noisefit.ui.settings.SettingsFragment"
+        android:label="fragment_settings" />
+    <fragment
+        android:id="@+id/unitSelectionFragment"
+        android:name="com.noisefit.ui.settings.options.UnitSelectionFragment"
+        android:label="fragment_unit_selection" />
+    <fragment
+        android:id="@+id/notificationSettingFragment"
+        android:name="com.noisefit.ui.settings.options.NotificationSettingFragment"
+        android:label="fragment_notification_setting"/>
     <fragment
         android:id="@+id/chatGptFragment"
         android:name="com.oreo.ui.chatGpt.ChatGptFragment"

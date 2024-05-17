@@ -1073,7 +1073,7 @@ constructor() : LifecycleService() {
                         it.data.firstOrNull()?.let {
                             val timeStamp = DateFormats.lastClearDataTimeStamp(DELETE_DB_DAYS)
                             val workoutTimeStamp = it.startTime
-                            if (workoutTimeStamp > timeStamp) {
+                            if (workoutTimeStamp > timeStamp && sessionManager.showLocalNotification()) {
                                 NotificationUtil.showWorkoutLocalNotification(
                                     this, it
                                 )

@@ -10,6 +10,7 @@ import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
+import com.noisefit.session.SessionManager
 import com.noisefit.ui.common.calculatePercentage
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.ceilRound
@@ -44,6 +45,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
     val dataUnitConverter: DataUnitConverter,
     val userActivityRepository: OreoUserActivityRepository,
     val localDataStore: DataStoredInterface,
+    val sessionManager: SessionManager,
     private val userHealthDataDataSource: OreoUserHealthDataDataSource
 ) : BaseViewModel() {
 
@@ -207,7 +209,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
         }
 
         if (it.recoveryTime != null && it.recoveryTime > 59) {
-            val recoveryTimeMin = it.recoveryTime/60
+            val recoveryTimeMin = it.recoveryTime / 60
             activityList.add(
                 OWDActivityData(
                     context.getString(R.string.text_recovery_time),
@@ -240,9 +242,9 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             val distanceToUse =
                 if (data.dataPriority.equals("app")) data.gpsDistance ?: 0 else data.distance
             val distance = dataUnitConverter.formatDistance(
-                distanceToUse?.toInt() ?: 0, Units.METRIC
+                distanceToUse?.toInt() ?: 0, sessionManager.unit
             )
-            return Triple(distance, "km", "Total Distance")
+            return Triple(distance, if (sessionManager.isMetric()) "km" else "mi", "Total Distance")
 
         } else if (data.calories != null && data.calories > 0L) {
             return Triple(data.calories.toString(), "Kcal", "Total Calories")
@@ -339,7 +341,7 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
                     0
                 } else it
             }
-            val data = if(newList.isEmpty()) 0 else newList.average().ceilRound()
+            val data = if (newList.isEmpty()) 0 else newList.average().ceilRound()
             list.add(data)
         }
 
