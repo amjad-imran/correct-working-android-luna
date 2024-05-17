@@ -221,7 +221,7 @@
     <color name="color_hr_cubic_line">#ff3371</color>
     <color name="color_period">#ff84d5</color>
     <color name="color_ovulation">#1ec9ff</color>
-    <color name="color_follicular">#ff9252</color>
+    <color name="color_follicular">#83e7cf</color>
     <color name="color_luteal">#a38cff</color>
 
 </resources>

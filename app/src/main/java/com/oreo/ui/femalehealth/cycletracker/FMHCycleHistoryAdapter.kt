@@ -8,6 +8,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.FMHCycleHistoryDataModel
+import kotlin.math.abs
 
 class FMHCycleHistoryAdapter() :
     RecyclerView.Adapter<FMHCycleHistoryAdapter.ViewHolder>() {
@@ -30,13 +31,44 @@ class FMHCycleHistoryAdapter() :
                 )
             }"
 
-            binding.pbHistory.setData(
-                cycleLength = 28,
-                periodLength = 5,
-                ovStart = 14,
-                ovEnd = 20,
-                ovDay = 19
+            val ovDays = abs(
+                DateFormats.getDateDiff(
+                    DateFormats.dateFormat3,
+                    data.ovulationStartDate,
+                    data.periodDate
+                )
             )
+            val ovDates = data.fertileWindow?.split("/")
+
+            var ovStart = 0
+            var ovEnd = 0
+            if (ovDates?.size == 2) {
+                ovStart = abs(
+                    DateFormats.getDateDiff(
+                        DateFormats.dateFormat3,
+                        ovDates[0],
+                        data.periodDate
+                    )
+                ).toInt()
+
+                ovEnd = abs(
+                    DateFormats.getDateDiff(
+                        DateFormats.dateFormat3,
+                        ovDates[1],
+                        data.periodDate
+                    )
+                ).toInt()
+            }
+
+
+            binding.pbHistory.setData(
+                cycleLength = data.cycleLength ?: 0,
+                periodLength = data.periodLength ?: 0,
+                ovStart = ovStart,
+                ovEnd = ovEnd,
+                ovDay = ovDays.toInt()
+            )
+
 
             if (bindingAdapterPosition == mDataSet.size - 1) {
                 binding.divider1.root.gone()

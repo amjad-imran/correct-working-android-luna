@@ -752,7 +752,7 @@
     </fragment>
     <fragment
         android:id="@+id/cycleTrackerHistory"
-        android:name="com.oreo.ui.femalehealth.cycletracker.CycleTrackerHistoryFragment"
+        android:name="com.oreo.ui.femalehealth.cycletracker.history.CycleTrackerHistoryFragment"
         android:label="FragmentCycleHistory" />
     <fragment
         android:id="@+id/cycleSkinTemperature"

@@ -1,6 +1,7 @@
-package com.oreo.data.model.femalehealth
+package com.oreo.data.model.femaleh
 
 import com.google.gson.annotations.SerializedName
+import com.oreo.data.model.health.Nudges
 
 data class FemaleHealthUserInfoModel(
     @SerializedName("ota_log") val otaLog: Boolean = false,
@@ -15,16 +16,14 @@ data class FemaleHealthUserInfoModel(
     val fertileWindowList: ArrayList<String>? = null,
     @SerializedName("next_period_date")
     val nextPeriodDate: String? = null,
-    val nudges: ArrayList<FMHNudges>? = null,
+    val nudges: ArrayList<Nudges>? = null,
     @SerializedName("current_day")
     val currentDay: Int? = null,
     @SerializedName("cycle_length")
     val cycleLength: Int? = null,
     @SerializedName("period_length")
     val periodLength: Int? = null,
-    @SerializedName("pregency_chances")
-    val pregencyChances: String? = null
+    @SerializedName("pregnancy_chances")
+    val pregnancyChances: String? = null
 
 )
-
-data class FMHNudges(val label: String? = null, val message: String? = null)

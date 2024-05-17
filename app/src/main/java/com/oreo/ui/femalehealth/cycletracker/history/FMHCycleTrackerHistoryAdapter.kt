@@ -1,17 +1,15 @@
-package com.oreo.ui.femalehealth.cycletracker
+package com.oreo.ui.femalehealth.cycletracker.history
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.luna.databinding.FmhCycleHistoryItemBinding
 import com.noisefit.luna.databinding.FmhCycleTrackHistoryItemBinding
-import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.FMHCycleHistoryDataModel
+import kotlin.math.abs
 
-class FMHCycleTrackorHistoryAdapter() :
-    RecyclerView.Adapter<FMHCycleTrackorHistoryAdapter.ViewHolder>() {
+class FMHCycleTrackerHistoryAdapter() :
+    RecyclerView.Adapter<FMHCycleTrackerHistoryAdapter.ViewHolder>() {
     private var mDataSet = ArrayList<FMHCycleHistoryDataModel>()
 
     inner class ViewHolder(val binding: FmhCycleTrackHistoryItemBinding) :
@@ -30,12 +28,42 @@ class FMHCycleTrackorHistoryAdapter() :
                 )
             }"
 
+            val ovDays = abs(
+                DateFormats.getDateDiff(
+                    DateFormats.dateFormat3,
+                    data.ovulationStartDate,
+                    data.periodDate
+                )
+            )
+            val ovDates = data.fertileWindow?.split("/")
+
+            var ovStart = 0
+            var ovEnd = 0
+            if (ovDates?.size == 2) {
+                ovStart = abs(
+                    DateFormats.getDateDiff(
+                        DateFormats.dateFormat3,
+                        ovDates[0],
+                        data.periodDate
+                    )
+                ).toInt()
+
+                ovEnd = abs(
+                    DateFormats.getDateDiff(
+                        DateFormats.dateFormat3,
+                        ovDates[1],
+                        data.periodDate
+                    )
+                ).toInt()
+            }
+
+
             binding.pbHistory.setData(
-                cycleLength = 28,
-                periodLength = 5,
-                ovStart = 14,
-                ovEnd = 20,
-                ovDay = 19
+                cycleLength = data.cycleLength ?: 0,
+                periodLength = data.periodLength ?: 0,
+                ovStart = ovStart,
+                ovEnd = ovEnd,
+                ovDay = ovDays.toInt()
             )
 
         }

@@ -8,9 +8,8 @@ import com.noisefit.data.remote.request.LoginRequest
 import com.noisefit_commans.data.model.*
 import com.noisefit_commans.data.response.*
 import com.oreo.data.model.*
-import com.oreo.data.model.femalehealth.FemaleHealthUserInfoModel
+import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femalehealth.PeriodLength
-import com.oreo.data.model.femalehealth.PeriodLengthListResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.*
@@ -375,6 +374,11 @@ interface NetworkService {
         @Url url: String,
         @Query("date") selectDate: String
     ): BaseApiResponse<List<PeriodLength>>
+
+    @GET
+    suspend fun getPeriodCycleHistory(
+        @Url url: String,
+    ): BaseApiResponse<List<FMHCycleHistoryDataModel>>
 
     /**
      * ---------------------------------------------------------------------------------

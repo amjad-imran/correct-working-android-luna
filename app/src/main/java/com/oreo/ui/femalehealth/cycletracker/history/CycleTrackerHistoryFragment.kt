@@ -1,4 +1,4 @@
-package com.oreo.ui.femalehealth.cycletracker
+package com.oreo.ui.femalehealth.cycletracker.history
 
 import android.os.Bundle
 import android.view.View
@@ -14,21 +14,21 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class CycleTrackerHistoryFragment :
     BaseFragment<FragmentCycleTrackerHistoryBinding>(FragmentCycleTrackerHistoryBinding::inflate) {
-    private val mViewModel: CycleTrackerViewModel by viewModels()
+    private val viewModel: CycleTrackerHistoryViewModel by viewModels()
     private val cycleTrackHistoryAdapter by lazy {
-        FMHCycleTrackorHistoryAdapter()
+        FMHCycleTrackerHistoryAdapter()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setRecycler()
+        viewModel.getCycleHistoryData()
     }
 
     private fun setRecycler() {
         with(binding.rvCycleTrackHistory) {
             adapter = cycleTrackHistoryAdapter
         }
-        cycleTrackHistoryAdapter.setData(mViewModel.getCycleHistoryData())
     }
 
     override fun initListener() {
@@ -41,21 +41,24 @@ class CycleTrackerHistoryFragment :
     }
 
     override fun subscribeObservers() {
-        mViewModel.getMessages().observe(this) {
+        viewModel.cycleHistoryData.observe(this) {
+            cycleTrackHistoryAdapter.setData(it)
+        }
+        viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->
                 context.showShortToast(message)
             }
         }
-        mViewModel.getApiErrors().observe(this) {
+        viewModel.getApiErrors().observe(this) {
             it?.getContent()?.let { response ->
                 uiController.onApiErrorReceived(response)
             }
         }
-        mViewModel.getLoading().observe(this) {
+        viewModel.getLoading().observe(this) {
             if (it) {
-                binding.progressBar1.root.visible()
+                binding.progressBar.root.visible()
             } else {
-                binding.progressBar1.root.gone()
+                binding.progressBar.root.gone()
             }
         }
     }
