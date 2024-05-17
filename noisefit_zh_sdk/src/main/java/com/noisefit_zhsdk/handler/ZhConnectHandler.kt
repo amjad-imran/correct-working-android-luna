@@ -24,7 +24,7 @@ import com.noisefit_commans.utils.ConnectEvents
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.LogEvents
 import com.noisefit_zhsdk.base.ZhApplicationHandler
-import com.zhapp.ble.BleBCManager
+import com.zhapp.ble.manager.BleBCManager
 import com.zhapp.ble.BleCommonAttributes
 import com.zhapp.ble.ControlBleTools
 import com.zhapp.ble.bean.BindDeviceBean

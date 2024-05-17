@@ -70,6 +70,7 @@ import com.zhapp.ble.bean.WidgetBean
 import com.zhapp.ble.bean.WorldClockBean
 import com.zhapp.ble.bean.WristScreenBean
 import com.zhapp.ble.callback.AgpsCallBack
+import com.zhapp.ble.callback.BehaviorLogCallBack
 import com.zhapp.ble.callback.CallBackUtils
 import com.zhapp.ble.callback.CallStateCallBack
 import com.zhapp.ble.callback.ContactCallBack
@@ -1180,7 +1181,7 @@ constructor(
                     p2 ?: "",
                     FileLogsUtils.LogType.Watch
                 )
-                ZhBleLogUtils.bleLog(msg,p2)
+                ZhBleLogUtils.bleLog(msg, p2)
             }
 
             override fun onLogV(tag: String?, msg: String?, p2: String?) {
@@ -1193,7 +1194,7 @@ constructor(
                     p2 ?: "",
                     FileLogsUtils.LogType.Watch
                 )
-                ZhBleLogUtils.bleLog(msg,p2)
+                ZhBleLogUtils.bleLog(msg, p2)
             }
 
             override fun onLogE(tag: String?, msg: String?, p2: String?) {
@@ -1206,7 +1207,7 @@ constructor(
                     p2 ?: "",
                     FileLogsUtils.LogType.Watch
                 )
-                ZhBleLogUtils.bleLog(msg,p2)
+                ZhBleLogUtils.bleLog(msg, p2)
             }
 
             override fun onLogD(tag: String?, msg: String?, p2: String?) {
@@ -1219,7 +1220,7 @@ constructor(
                     p2 ?: "",
                     FileLogsUtils.LogType.Watch
                 )
-                ZhBleLogUtils.bleLog(msg,p2)
+                ZhBleLogUtils.bleLog(msg, p2)
             }
 
             override fun onLogW(tag: String?, msg: String?, p2: String?) {
@@ -1232,9 +1233,15 @@ constructor(
                     p2 ?: "",
                     FileLogsUtils.LogType.Watch
                 )
-                ZhBleLogUtils.bleLog(msg,p2)
+                ZhBleLogUtils.bleLog(msg, p2)
             }
 
+        }
+
+        CallBackUtils.behaviorLogCallBack = object : BehaviorLogCallBack {
+            override fun onLog(p0: String?, p1: String?, p2: String?) {
+                ZhBleLogUtils.behaviorLog(p0, p1, p2)
+            }
         }
 
     }
