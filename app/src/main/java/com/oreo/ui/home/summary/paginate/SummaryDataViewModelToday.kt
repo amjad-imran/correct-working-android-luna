@@ -244,7 +244,6 @@ class SummaryDataViewModelToday @Inject constructor(
 
             handleInfoCards(healthData, trendsData, userActivities, viewedCardsData)
 
-            userActivities.add(OHealthOverview.LunaAiCard())
 
 
             val readinessModel = ODashboardReadinessModel(
@@ -297,6 +296,7 @@ class SummaryDataViewModelToday @Inject constructor(
                                     userActivities.add(OHealthOverview.Readiness(readinessModel))
                                 }
                             }
+                            userActivities.add(OHealthOverview.LunaAiCard())
                             if ((sleepModel.totalSleep ?: 0) > 0) {
                                 userActivities.add(
                                     OHealthOverview.Sleep(
@@ -308,7 +308,9 @@ class SummaryDataViewModelToday @Inject constructor(
                                 )
                             }
                         }
+                        userActivities.add(OHealthOverview.LunaAiCard())
                     } else {
+                        userActivities.add(OHealthOverview.LunaAiCard())
                         userActivities.add(OHealthOverview.SleepWaiting)
                     }
                     if (nap.isNotEmpty()) {
@@ -326,6 +328,7 @@ class SummaryDataViewModelToday @Inject constructor(
                                     userActivities.add(OHealthOverview.Readiness(readinessModel))
                                 }
                             }
+                            userActivities.add(OHealthOverview.LunaAiCard())
                             if ((sleepModel.totalSleep ?: 0) > 0) {
                                 userActivities.add(
                                     OHealthOverview.Sleep(
@@ -337,7 +340,9 @@ class SummaryDataViewModelToday @Inject constructor(
                                 )
                             }
                         }
+                        userActivities.add(OHealthOverview.LunaAiCard())
                     } else {
+                        userActivities.add(OHealthOverview.LunaAiCard())
                         userActivities.add(OHealthOverview.SleepWaiting)
                     }
                     if (nap.isNotEmpty()) {
@@ -374,6 +379,7 @@ class SummaryDataViewModelToday @Inject constructor(
                                 userActivities.add(OHealthOverview.Readiness(readinessModel))
                             }
                         }
+                        userActivities.add(OHealthOverview.LunaAiCard())
 
                         healthData.sleep?.let {
                             if ((sleepModel.totalSleep ?: 0) > 0) {
@@ -388,6 +394,7 @@ class SummaryDataViewModelToday @Inject constructor(
                             }
                         }
                     }
+                    userActivities.add(OHealthOverview.LunaAiCard())
                     if (nap.isNotEmpty()) {
                         userActivities.add(OHealthOverview.NapDashCard(nap, healthData.date))
                     }
@@ -435,6 +442,7 @@ class SummaryDataViewModelToday @Inject constructor(
                             )
                         }
                     }
+                    userActivities.add(OHealthOverview.LunaAiCard())
 
                     if (registerDate != 0) {
                         if (healthData.sleep?.sleepScore != null) {
@@ -1152,8 +1160,7 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     fun isChatSplashShown(): Boolean {
-        return false
-        //return localDataStore.isAiChatSplashShown()
+        return localDataStore.isAiChatSplashShown()
     }
 
 
