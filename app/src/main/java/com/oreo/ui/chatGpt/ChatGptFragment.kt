@@ -40,7 +40,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             adapter = mAdapter
         }
 
-        mAdapter.itemClickListener = { view, item, position ->
+        mAdapter.itemClickListener = { item, position ->
             when (item) {
                 is ChatGptOverview.SentMessage -> {
 
@@ -50,6 +50,14 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
                 }
 
+                is ChatGptOverview.RetryMessage -> {
+                    viewModel.retryApi()
+
+                }
+
+                is ChatGptOverview.ThinkingMessage -> {
+
+                }
             }
         }
     }
@@ -88,7 +96,9 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         val message = binding.lytChatBox.chatEtx.text.toString()
         if (message.isNotEmpty()) {
             viewModel.addSentMessage(message)
-            viewModel.addReceivedMessage("", true)
+            viewModel.addThinkingMessage()
+
+            //viewModel.addReceivedMessage("", true)
             binding.lytChatBox.chatEtx.setText("")
             viewModel.askQuestion(message)
         }

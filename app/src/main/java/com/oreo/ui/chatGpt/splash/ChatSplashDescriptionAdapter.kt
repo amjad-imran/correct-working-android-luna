@@ -3,6 +3,8 @@ package com.oreo.ui.chatGpt.splash
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieDrawable
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ViewStressSplashDescriptionSliderBinding
 import com.noisefit_commans.ui.loadImage
 import com.oreo.data.model.StressSplashModel
@@ -16,7 +18,12 @@ class ChatSplashDescriptionAdapter :
     inner class ViewHolder(private val binding: ViewStressSplashDescriptionSliderBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: StressSplashModel) {
-            binding.imv.loadImage(binding.imv.context, data.image)
+            binding.imv.apply {
+                repeatCount = LottieDrawable.INFINITE
+                setAnimation(data.image)
+                playAnimation()
+            }
+            //binding.imv.loadImage(binding.imv.context, data.image)
             binding.tvTitle.text = data.title
             binding.tvDescription.text = data.description
         }

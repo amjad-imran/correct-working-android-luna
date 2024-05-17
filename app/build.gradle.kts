@@ -229,6 +229,7 @@ dependencies {
     implementation("com.github.grapesnberries:curlloggerinterceptor:0.1")
 
     implementation("io.noties.markwon:core:4.6.2")
+    //implementation("io.noties.markwon:image:4.6.2")
 
     implementation(Glide.glide)
     implementation("com.github.yalantis:ucrop:2.2.6")

@@ -2,7 +2,6 @@ package com.oreo.ui.chatGpt
 
 import android.os.Handler
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -10,8 +9,9 @@ import androidx.viewbinding.ViewBinding
 import com.airbnb.lottie.LottieDrawable
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ItemChatMessageRecivedListBinding
+import com.noisefit.luna.databinding.ItemChatMessageRetryBinding
 import com.noisefit.luna.databinding.ItemChatMessageSentListBinding
-import com.noisefit_commans.ui.gone
+import com.noisefit.luna.databinding.ItemChatMessageThinkingBinding
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
@@ -44,7 +44,7 @@ class ChatGptAdapter :
 //            recyclerView.scrollToPosition(currentList.size - 1)
 //        }
 //    }
-    var itemClickListener: ((view: View, item: ChatGptOverview, position: Int) -> Unit)? =
+    var itemClickListener: ((item: ChatGptOverview, position: Int) -> Unit)? =
         null
 
     override fun onCreateViewHolder(
@@ -62,6 +62,22 @@ class ChatGptAdapter :
 
             R.layout.item_chat_message_recived_list -> ChatGptViewItemsHolder.ChatMessageReceivedViewHolder(
                 ItemChatMessageRecivedListBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
+            R.layout.item_chat_message_thinking -> ChatGptViewItemsHolder.ChatThinkingViewHolder(
+                ItemChatMessageThinkingBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
+            R.layout.item_chat_message_retry -> ChatGptViewItemsHolder.ChatMessageRetryViewHolder(
+                ItemChatMessageRetryBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
@@ -89,7 +105,15 @@ class ChatGptAdapter :
                 position
             )
 
+            is ChatGptViewItemsHolder.ChatMessageRetryViewHolder -> holder.bind(
+                items[position] as ChatGptOverview.RetryMessage,
+                position
+            )
 
+            is ChatGptViewItemsHolder.ChatThinkingViewHolder -> holder.bind(
+                items[position] as ChatGptOverview.ThinkingMessage,
+                position
+            )
         }
     }
 
@@ -99,7 +123,8 @@ class ChatGptAdapter :
         return when (items[position]) {
             is ChatGptOverview.SentMessage -> R.layout.item_chat_message_sent_list
             is ChatGptOverview.ReceivedMessage -> R.layout.item_chat_message_recived_list
-
+            is ChatGptOverview.RetryMessage -> R.layout.item_chat_message_retry
+            is ChatGptOverview.ThinkingMessage -> R.layout.item_chat_message_thinking
         }
     }
 }
@@ -108,7 +133,7 @@ class ChatGptAdapter :
 sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    var itemClickListener: ((view: View, item: ChatGptOverview, position: Int) -> Unit)? =
+    var itemClickListener: ((item: ChatGptOverview, position: Int) -> Unit)? =
         null
 
     class ChatMessageSentViewHolder(private val binding: ItemChatMessageSentListBinding) :
@@ -123,6 +148,21 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
         }
     }
 
+    class ChatMessageRetryViewHolder(private val binding: ItemChatMessageRetryBinding) :
+        ChatGptViewItemsHolder(binding) {
+        fun bind(
+            data: ChatGptOverview.RetryMessage,
+            position: Int
+        ) {
+            binding.logo.loadImage(binding.logo.context, R.drawable.ic_chat_error)
+            binding.tvMessage.text = data.message
+
+            binding.tvRetry.setOnClickListener {
+                itemClickListener?.invoke(data, bindingAdapterPosition)
+            }
+        }
+    }
+
     class ChatMessageReceivedViewHolder(private val binding: ItemChatMessageRecivedListBinding) :
         ChatGptViewItemsHolder(binding) {
 
@@ -130,32 +170,61 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
             data: ChatGptOverview.ReceivedMessage,
             position: Int
         ) {
+            binding.apply {
+                tvMessage.visible()
 
-            if (data.thinking) {
+                val markwon = Markwon.builder(this.tvMessage.context)
+                    /*.usePlugin(ImagesPlugin.create())*/
+                    .build()
 
-                binding.apply {
-                    lottie.visible()
-                    lottie.repeatCount = LottieDrawable.INFINITE
-                    lottie.setAnimation(R.raw.anim_ai_thinking)
-                    lottie.playAnimation()
-                    tvMessage.gone()
-                    logo.visible()
+                markwon.setMarkdown(tvMessage, data.message)
+                logo.visible()
+            }
+        }
+
+        fun TextView.animateTextWithUnderscore(mText: CharSequence, delayMillis: Long = 15) {
+            text = null
+            var mTextView = this
+            var index = 0
+            val handler = Handler()
+
+            val typewriterRunnable = object : Runnable {
+                override fun run() {
+                    val newText = "${mText.subSequence(0, index)}_"// <-- underscore is optioanal
+                    text = newText
+
+                    if (index < mText.length) {
+                        handler.postDelayed(this, delayMillis)
+                    }
+                    index++
+                    LOGS.d("SDAsdasdasdasdasda $index --> ${mText.length + 1}")
+                    if (index == mText.length) {
+                        LOGS.d("SDAsdasdasdasdasda")
+                        mTextView.clearAnimation()
+                        text = null
+
+                    }
                 }
-
-            } else {
-                binding.apply {
-                    lottie.gone()
-
-                    tvMessage.visible()
-                    val markwon = Markwon.create(this.tvMessage.context)
-                    markwon.setMarkdown(tvMessage, data.message)
-                    logo.visible()
-//                    tvMessage.animateTextWithUnderscore(data.message)
-                }
-
             }
 
+            handler.postDelayed(typewriterRunnable, delayMillis)
+        }
 
+
+    }
+
+    class ChatThinkingViewHolder(private val binding: ItemChatMessageThinkingBinding) :
+        ChatGptViewItemsHolder(binding) {
+
+        fun bind(
+            data: ChatGptOverview.ThinkingMessage,
+            position: Int
+        ) {
+            binding.apply {
+                lottie.repeatCount = LottieDrawable.INFINITE
+                lottie.setAnimation(R.raw.anim_ai_thinking)
+                lottie.playAnimation()
+            }
         }
 
         fun TextView.animateTextWithUnderscore(mText: CharSequence, delayMillis: Long = 15) {
