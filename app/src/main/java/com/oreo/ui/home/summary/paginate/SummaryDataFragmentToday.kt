@@ -313,9 +313,6 @@ class SummaryDataFragmentToday :
                     navigate(R.id.napDetails, bundleOf("napId" to type.napId))
                 }
 
-                is OSummaryHealthOverviewClickEnum.TrackYourFemaleHealth -> {
-                    navigate(R.id.fragmentCycleTracker)
-                }
             }
         }
 
