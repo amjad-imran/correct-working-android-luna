@@ -149,7 +149,7 @@ class ChatSplashFragment :
         dataList.add(
             StressSplashModel(
                 "Your personal fitness coach",
-                R.raw.anim_chat_onboard_1,
+                R.raw.anim_chat_onboard_3,
                 getString(R.string.text_ai_content_3)
             )
         )

@@ -1164,8 +1164,8 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     fun isChatSplashShown(): Boolean {
-        return false
-        //return localDataStore.isAiChatSplashShown()
+//        return false
+        return localDataStore.isAiChatSplashShown()
     }
 
 
