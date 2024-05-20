@@ -784,4 +784,8 @@
         android:id="@+id/cycleTrackStressInfoFragment"
         android:name="com.oreo.ui.femalehealth.cycletracker.CycleTrackStressInfoFragment"
         android:label="CycleTrackStressInfo" />
+    <fragment
+        android:id="@+id/cycleTrackerSettingFragment"
+        android:name="com.oreo.ui.femalehealth.cycletracker.CycleTrackerSettingsFragment"
+        android:label="CycleTrackSetting" />
 </navigation>

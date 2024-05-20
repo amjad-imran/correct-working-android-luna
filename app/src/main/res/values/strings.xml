@@ -1176,11 +1176,22 @@
     <string name="text_stress_info_start_point">The Starting Point: Menstrual Period</string>
     <string name="text_stress_info_start_point_desc">Our journey begins with the menstrual period, the first phase of your cycle. It starts when hormone levels fall, signaling your body to shed the uterine lining. This phase, which typically lasts between 3 to 7 days, might bring along companions like cramps and fatigue. During this time, your body temperature is at its lowest, preparing to rise as the journey continues. Tracking these days helps you anticipate and manage the symptoms, making the journey smoother.</string>
     <string name="text_stress_info_fertile_window">Approaching the Fertile Window</string>
-    <string name="text_stress_info_fertile_window_desc">As we move forward, the follicular phase transitions into the fertile window. This window is your body&apos;s preparation for potential pregnancy and spans about 5 to 6 days, ending on the day of ovulation. It’s a crucial time for those planning to conceive, marked by a rise in estrogen that thickens the uterine lining and creates a sperm-friendly environment. You might notice changes like clearer, stretchier cervical mucus and a slight drop in temperature just before it begins to rise. Recognising this window can be pivotal, whether you are trying to conceive or avoid pregnancy.</string>
+    <string name="text_stress_info_fertile_window_desc">As we move forward, the follicular phase transitions into the fertile window. This window is your body preparation for potential pregnancy and spans about 5 to 6 days, ending on the day of ovulation. It’s a crucial time for those planning to conceive, marked by a rise in estrogen that thickens the uterine lining and creates a sperm-friendly environment. You might notice changes like clearer, stretchier cervical mucus and a slight drop in temperature just before it begins to rise. Recognising this window can be pivotal, whether you are trying to conceive or avoid pregnancy.</string>
     <string name="text_stress_info_peak_ovulation">The Peak: Ovulation Day</string>
     <string name="text_stress_info_peak_ovulation_desc">The climax of our journey is ovulation. This occurs mid-cycle when a surge in luteinising hormone causes your ovary to release a mature egg. The egg’s release heralds a rise in body temperature, confirming that ovulation has taken place. This is your most fertile day, and the body might signal its arrival with subtle signs like a twinge of pain on one side of your abdomen. The egg will survive about 24 hours, and if not fertilised, the anticipation of a new cycle begins.</string>
     <string name="text_stress_info_cycle_continue">The Cycle Continues</string>
     <string name="text_stress_info_cycle_continue_desc">After ovulation, the luteal phase takes over. If pregnancy doesn’t occur, hormone levels will eventually fall, and the cycle will restart with the next menstrual period. Each cycle is an opportunity to understand your body better, empowering you with knowledge to manage your health proactively.</string>
+    <string name="text_luteal_phase">Luteal Phase</string>
+    <string name="text_follicular_duration_desc">Duration: Starts on the first day of your period and lasts until ovulation. What Happens: This phase includes the menstrual period and the time leading up to ovulation. It begins with the shedding of the uterine lining (menstrual phase) and continues as the follicles in the ovaries mature, culminating in ovulation.</string>
+    <string name="text_follicular_what_happens_desc">What Happens: This phase includes the menstrual period and the time leading up to ovulation. It begins with the shedding of the uterine lining (menstrual phase) and continues as the follicles in the ovaries mature, culminating in ovulation.</string>
+    <string name="text_luteal_duration_description">Duration: Begins right after ovulation and ends at the start of your next period.</string>
+    <string name="text_luteal_what_happens_description">What Happens: Post-ovulation, the body prepares for a potential pregnancy. If fertilization doesn\'t occur, the luteal phase ends with the menstrual phase of the next cycle.</string>
+    <string name="text_your_goal">Your goal</string>
+    <string name="text_track_my_period">Track my period</string>
+    <string name="text_get_pregnant">Get pregnant</string>
+    <string name="text_avoid_pregnancy">Avoid pregnancy</string>
+    <string name="text_follow_my_current_pregnancy">Follow my current pregnancy</string>
+    <string name="text_your_cycle">Your cycle</string>
 
 
 </resources>
