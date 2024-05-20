@@ -194,6 +194,7 @@ private const val BATTERY_DASH_ALERT = "BATTERY_DASH_ALERT"
 private const val SLEEP_NOTIFICATION = "SLEEP_NOTIFICATION"
 private const val READINESS_NOTIFICATION = "READINESS_NOTIFICATION"
 private const val STRESS_WALKRHTOUGH = "STRESS_WALKRHTOUGH"
+private const val SLEEP_MOENGAGE_SYNC_DATE = "SLEEP_MOENGAGE_SYNC_DATE"
 
 
 private const val APP_VERSION_NEW = "APP_VERSION_NEW"
@@ -210,6 +211,15 @@ class DataStoredImpl
 @Inject constructor(
     private val gson: Gson, private val mPrefs: SharedPreferences
 ) : DataStoredInterface {
+
+    override fun saveSleepSyncedForDate(date: String) {
+        mPrefs.edit()?.putString(SLEEP_MOENGAGE_SYNC_DATE, date)?.commit()
+    }
+
+    override fun isSleepSyncedForDate(date: String): Boolean {
+        val savedDate = mPrefs.getString(SLEEP_MOENGAGE_SYNC_DATE, null) ?: return false
+        return savedDate.equals(date)
+    }
 
     override fun getStressWalkthroughShownStatus(): Boolean {
         return mPrefs.getBoolean(STRESS_WALKRHTOUGH, false)

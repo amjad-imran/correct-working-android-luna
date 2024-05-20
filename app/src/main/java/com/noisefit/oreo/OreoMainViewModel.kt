@@ -16,6 +16,7 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.db.abstraction.LocationDataSource
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
+import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.data.model.User
 import com.noisefit_commans.interfaces.connection.ConnectState
@@ -27,6 +28,8 @@ import com.noisefit_commans.ui.checkDayDifferenceMoreOne
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageAppEventParams
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.TrendsData
@@ -283,6 +286,11 @@ constructor(
                                 dashTodayReload.value = Event(true)
                             }
 
+                            val todayData = userHealthData[getTodayDate()]
+                            todayData?.let {
+                                sendSleepEvents(it)
+                            }
+
 
                             isFetchRequestOnGoing = false
 
@@ -293,6 +301,37 @@ constructor(
         }
 
 
+    }
+
+    private fun sendSleepEvents(data: ServerUserHealthData) {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            if ((data.sleep?.sleepScore?.value ?: 0) == 0) {
+                return@launch
+            }
+            val isSynced = localDataStore.isSleepSyncedForDate(data.date)
+            if (isSynced) return@launch
+
+            val name = localDataStore.getUser()?.firstName
+
+            sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.sleep_recorded,
+                HashMap<String, Any>().apply {
+                    this[MoEngageAppEventParams.date] = data.date
+                    this[MoEngageAppEventParams.first_name] = name ?: ""
+                    this[MoEngageAppEventParams.sleep_score] = data.sleep?.sleepScore ?: 0
+                    this[MoEngageAppEventParams.sleep_duration] = data.sleep?.totalSleep?.value ?: 0
+                    this[MoEngageAppEventParams.rem_sleep_duration] =
+                        data.sleep?.remSleep?.value ?: 0
+                    this[MoEngageAppEventParams.bed_time] = data.sleep?.startTime ?: ""
+                    this[MoEngageAppEventParams.wake_up_time] = data.sleep?.endTime ?: ""
+                    this[MoEngageAppEventParams.latency] = data.sleep?.latency?.value ?: 0
+                    this[MoEngageAppEventParams.avg_spo2] = data.sleep?.oxy?.avg ?: 0
+                    this[MoEngageAppEventParams.deep_sleep_duration] =
+                        data.sleep?.deepSleep?.value ?: 0
+                })
+            localDataStore.saveSleepSyncedForDate(data.date)
+        }
     }
 
     fun shouldLoadMoreData(): Boolean {

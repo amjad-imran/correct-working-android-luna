@@ -24,7 +24,7 @@ class StressUnderstandingFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.Luna_stress_i_page_visit)
+        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_stress_i_page_visit)
         setData()
     }
 

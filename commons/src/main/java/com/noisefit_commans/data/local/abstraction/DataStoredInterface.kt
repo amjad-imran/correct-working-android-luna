@@ -441,4 +441,7 @@ interface DataStoredInterface {
     fun setStressWalkthroughShown(isShown: Boolean)
 
     fun getStressWalkthroughShownStatus(): Boolean
+
+    fun saveSleepSyncedForDate(date: String)
+    fun isSleepSyncedForDate(date: String): Boolean
 }

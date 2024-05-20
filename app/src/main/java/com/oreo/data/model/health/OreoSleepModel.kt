@@ -26,7 +26,9 @@ data class OreoSleepModel(
     var hourly_breakup: List<SleepHourlyBreakup>? = null,
     var night_time_movement: List<SleepMovementBreakup>? = null,
     @SerializedName("sleep_nap_score_impact") val sleepNapScoreImpact: Int? = null,
-    @SerializedName("no_of_naps") val noOfNaps: Int? = null
+    @SerializedName("no_of_naps") val noOfNaps: Int? = null,
+    @SerializedName("start_time") val startTime: String? = null,
+    @SerializedName("end_time") val endTime: String? = null
 )
 
 data class Nap(
