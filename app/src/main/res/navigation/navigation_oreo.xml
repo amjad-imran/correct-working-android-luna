@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_oreo"
     app:startDestination="@id/navigation_oreo_home">
 
@@ -726,7 +725,7 @@
     <fragment
         android:id="@+id/femaleHealthOnboardingFragment"
         android:name="com.oreo.ui.femalehealth.onboarding.FMHOnboardingFragment"
-        android:label="fragment_female_onboarding" >
+        android:label="fragment_female_onboarding">
         <action
             android:id="@+id/action_femaleHealthOnboardingFragment_to_fmhOnboardingAllDoneFragment"
             app:destination="@id/fmhOnboardingAllDoneFragment"
@@ -774,11 +773,15 @@
     <fragment
         android:id="@+id/fmhOnboardingAllDoneFragment"
         android:name="com.oreo.ui.femalehealth.onboarding.FMHOnboardingAllDoneFragment"
-        android:label="FMHOnboardingAllDoneFragment" >
+        android:label="FMHOnboardingAllDoneFragment">
         <action
             android:id="@+id/action_fmhOnboardingAllDoneFragment_to_fragmentCycleTracker"
             app:destination="@id/fragmentCycleTracker"
             app:popUpTo="@id/fmhOnboardingAllDoneFragment"
             app:popUpToInclusive="true" />
     </fragment>
+    <fragment
+        android:id="@+id/cycleTrackStressInfoFragment"
+        android:name="com.oreo.ui.femalehealth.cycletracker.CycleTrackStressInfoFragment"
+        android:label="CycleTrackStressInfo" />
 </navigation>
