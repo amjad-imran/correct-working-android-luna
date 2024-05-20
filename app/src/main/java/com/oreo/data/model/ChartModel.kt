@@ -6,6 +6,7 @@ open class ChartModel {
     var index: String? = null
     var date: String? = null
     var isDistanceGraph: Boolean = false
+    var isMetric: Boolean = true
     var formattedDate: String? = null
 }
 
@@ -17,4 +18,12 @@ data class ChartModelStress(
     val date: String? = null,
     val isDistanceGraph: Boolean = false,
     val formattedDate: String? = null
+)
+
+data class PeriodChartModel(
+    var value: Int = 0,
+    var date: String? = null,
+    var month: String? = null,
+    var day: String? = null,
+    var isNormal: Boolean = true
 )

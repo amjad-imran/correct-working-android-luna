@@ -18,7 +18,11 @@ class FMHOnboardSetHormonFragment :
     private val mAdapter: FMHDiagnoseAdapter by lazy {
         FMHDiagnoseAdapter(object : FMHDiagnoseAdapter.OnItemClickListener {
             override fun onItemClick(data: DiagnoseDataItem, position: Int) {
-                mAdapter.updateItem(position, data)
+                if (position == 0) {
+                    mAdapter.onNoneSelected(data)
+                } else {
+                    mAdapter.updateItem(position, data)
+                }
                 mViewModel.selectedHormoneListData = mAdapter.getUpdatedSelectedListData()
             }
         })

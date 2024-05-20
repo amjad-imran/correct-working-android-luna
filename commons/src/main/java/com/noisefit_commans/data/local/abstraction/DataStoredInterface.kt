@@ -71,7 +71,6 @@ interface DataStoredInterface {
     fun getTemperatureUnit(): Units
     fun saveDeviceFeatures(deviceFeatures: DeviceFeatures)
     fun getDeviceFeatures(): DeviceFeatures?
-    fun updateUserAdditionalDetails(userInfo: UserInfo?, userGoal: UserGoals?): Boolean
     fun updateUserActivities(healthOverviewData: HealthOverviewData)
     fun getUserActivities(): HealthOverviewData?
 
@@ -442,9 +441,13 @@ interface DataStoredInterface {
     fun setStressWalkthroughShown(isShown: Boolean)
 
     fun getStressWalkthroughShownStatus(): Boolean
-    fun setFMHWalkthroughShown(isShown: Boolean)
+
 
     fun getFMHWalkthroughShownStatus(): Boolean
+    fun setFMHWalkthroughShown(isShown: Boolean)
+
+    fun getFMHWalkthroughRemindLaterDays(): Long
+    fun setFMHRemindLater()
 
 
 }

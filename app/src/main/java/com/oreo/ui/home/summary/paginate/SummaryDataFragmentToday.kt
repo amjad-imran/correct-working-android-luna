@@ -123,6 +123,8 @@ class SummaryDataFragmentToday :
 
         val date = arguments?.getString(ARGS_DATE)
         viewModel.date = date
+
+        viewModel.getPeriodData()
     }
 
     private fun setNapsPager() {
@@ -156,14 +158,11 @@ class SummaryDataFragmentToday :
 
     override fun onDestroyView() {
         super.onDestroyView()
-        LOGS.d(TAG, "Today onDestroyView called")
     }
 
     override fun onResume() {
         super.onResume()
 
-        LOGS.d("SUMMART_TODAY on resume")
-        LOGS.d(TAG, "Today onResume called")
         loadData()
 
         viewModel.checkForNewAppVersion()
@@ -178,6 +177,7 @@ class SummaryDataFragmentToday :
             mainViewModel.getDashBoardData(it)?.let { dash ->
                 viewModel.registerDate = mainViewModel.registerDate
                 viewModel.serverUserHealthData = dash.first
+                viewModel.stressBeta = mainViewModel.stressBeta
                 viewModel.shouldShowStressCard = mainViewModel.shouldShowStressCard(it)
                 setUi(dash.first, dash.second)
             }
@@ -312,6 +312,15 @@ class SummaryDataFragmentToday :
                 }
 
                 is OSummaryHealthOverviewClickEnum.TrackYourFemaleHealth -> {
+                    navigate(R.id.femaleHealthSplashFragment)
+                }
+
+                is OSummaryHealthOverviewClickEnum.TrackYourFemaleHealthRemindLater -> {
+                    viewModel.localDataStore.setFMHRemindLater()
+                    healthOverviewAdapter.removeCycleGetStartedCard()
+                }
+
+                OSummaryHealthOverviewClickEnum.FemaleHealthHome -> {
                     navigate(R.id.fragmentCycleTracker)
                 }
             }
@@ -322,10 +331,6 @@ class SummaryDataFragmentToday :
 
     override fun initListener() {
 
-        /*binding.contentMain.lytTrackFmHealth.btnGetStarted.setOnClickListener {
-            navigate(R.id.fragmentCycleTracker)
-        }*/
-        binding.contentMain.lytHeartRate.bInfo.invisible()
         /*binding.contentMain.lytHeartRate.root.setOnClickListener {
             navigate(R.id.fragmentHeartRateDetails)
         }*/
@@ -440,6 +445,12 @@ class SummaryDataFragmentToday :
     }
 
     override fun subscribeObservers() {
+
+        viewModel.femaleHealthData.observe(this) {
+            it.getContent()?.let {
+                loadData()
+            }
+        }
 
         viewModel.sessionManager.isRingCharging.observe(this) {
             viewModel.handleBatteryAlert()
@@ -688,10 +699,9 @@ class SummaryDataFragmentToday :
                     this.root.setOnClickListener {
                         startActivity(PairDeviceActivity.getStartIntent(requireContext(), true))
                     }
-
+                    viewModel.stateDashRingBattery.postValue(Pair(false, null))
                 } else {
                     this.root.gone()
-                    viewModel.stateDashRingBattery.postValue(Pair(false, null))
                 }
             }
         }
@@ -720,15 +730,16 @@ class SummaryDataFragmentToday :
 
                 if (viewModel.checkBeforeTime()) {
                     binding.contentMain.lytChargeRing.textView84.text =
-                        getString(R.string.text_before_9_pm_battery_charge_msg)
+                        getString(R.string.text_after_9_pm_battery_charge_msg)
                 } else {
                     binding.contentMain.lytChargeRing.textView84.text =
-                        getString(R.string.text_after_9_pm_battery_charge_msg)
+                        getString(R.string.text_before_9_pm_battery_charge_msg)
                 }
             } else {
                 binding.contentMain.lytChargeRing.root.gone()
             }
         }
+
 
         viewModel.stateDashAlerts.observe(viewLifecycleOwner) {
 

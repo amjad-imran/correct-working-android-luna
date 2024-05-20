@@ -43,7 +43,8 @@ import com.oreo.data.db.implementation.OreoSleepDataImpl
 import com.oreo.data.db.implementation.OreoStepsDataImpl
 import com.oreo.data.db.implementation.OreoStressDataImpl
 import com.oreo.data.model.AddWorkoutResponse
-import com.oreo.data.model.FemaleHealthUserInfoModel
+import com.oreo.data.model.FMHCycleHistoryDataModel
+import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.LearnModel
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
@@ -61,6 +62,7 @@ import com.oreo.data.model.StressResultData
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TestUserData
 import com.oreo.data.model.TrendsData
+import com.oreo.data.model.femalehealth.PeriodLength
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import com.oreo.ui.DataType
@@ -147,6 +149,7 @@ class OreoUserActivityRepositoryImpl(
             var resultTrendsData: TrendsData? = null
             var registerDate: Int? = null
             var firstStress: String? = null
+            var stressBeta: Boolean? = null
             var tempBaseLine: Float? = null
 
             var apiStartDate: String? = startDate
@@ -231,6 +234,7 @@ class OreoUserActivityRepositoryImpl(
                                 trends = resultTrendsData,
                                 registerDate = ringDataStore.getRegisterDay(),
                                 firstStress = ringDataStore.getFirstStressDay(),
+                                stressBeta = ringDataStore.getStressBetaState(),
                                 tempBaseLine = ringDataStore.getTempBaseLine()
                             ),
                             message = "",
@@ -269,7 +273,9 @@ class OreoUserActivityRepositoryImpl(
                             registerDate = response.registerDate
                             tempBaseLine = response.tempBaseLine
                             firstStress = response.firstStress
+                            stressBeta = response.stressBeta
                             ringDataStore.setFirstStressDay(response.firstStress)
+                            ringDataStore.setStressBetaState(response.stressBeta)
                             ringDataStore.setTempBaseLine(tempBaseLine ?: 98.6f)
 
                             ringDataStore.setRegisterDay(registerDate ?: -1)
@@ -307,7 +313,8 @@ class OreoUserActivityRepositoryImpl(
                                             trends = resultTrendsData,
                                             registerDate = registerDate,
                                             tempBaseLine = tempBaseLine,
-                                            firstStress = firstStress
+                                            firstStress = firstStress,
+                                            stressBeta = stressBeta
                                         ),
                                         message = "",
                                     )
@@ -1881,7 +1888,7 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
-    override suspend fun getFemaleHealthUserInfo(selectDate: String): Flow<Resource<BaseApiResponse<FemaleHealthUserInfoModel>>> {
+    override suspend fun getFemaleHealthUserInfo(selectDate: String): Flow<Resource<BaseApiResponse<FemaleHealthUserInfoModel?>>> {
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health"
             remoteDataSource.getFemaleHealthInfo(url, selectDate)
@@ -1895,5 +1902,24 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
+    override suspend fun getPeriodLengthList(date: String): Flow<Resource<BaseApiResponse<List<PeriodLength>>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health/period_length"
+            remoteDataSource.getPeriodLengthList(url, date)
+        }
+    }
 
+    override suspend fun getPeriodDurationList(date: String): Flow<Resource<BaseApiResponse<List<PeriodLength>>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health/cycle_length"
+            remoteDataSource.getPeriodDurationList(url, date)
+        }
+    }
+
+    override suspend fun getPeriodCycleHistory(): Flow<Resource<BaseApiResponse<List<FMHCycleHistoryDataModel>>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health/cycle_history"
+            remoteDataSource.getPeriodCycleHistory(url)
+        }
+    }
 }

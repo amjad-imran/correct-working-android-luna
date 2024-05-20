@@ -73,14 +73,15 @@ constructor(
         }
 
         dayData?.sleep?.naps?.forEach { nap ->
-            getNapSection(nap)?.let {
+            getNapSection(nap, dayData.date)?.let {
+                sections.add(
                 Section(
                     "nap",
                     it.first,
                     it.second,
                     Color.parseColor("#4cc5a8ed"),
                     R.drawable.icon_stress_sleep
-                )
+                ))
             }
         }
 
@@ -139,7 +140,7 @@ constructor(
 
                     if (nextItemPos == sortedSection.size) break
 
-                    if (sortedSection[innerLoop].end + 1 == sortedSection[innerLoop + 1].start ||
+                    if (sortedSection[innerLoop].end + 1 >= sortedSection[innerLoop + 1].start ||
                         sortedSection[innerLoop].start == sortedSection[innerLoop + 1].start
                     ) {
                         sectionEnd = sortedSection[innerLoop + 1].end
@@ -171,6 +172,9 @@ constructor(
             current++
         }
 
+        //LOGS.d("SECTIONS___ $sortedSection \n $combinedSection")
+
+
         return combinedSection
 
 
@@ -192,20 +196,22 @@ constructor(
         val startPos = (day1MinutesCeil / 30 - 1).toInt()
 
         var calculatedDuration = startPos + (it.duration ?: 0) / 30
-        if (calculatedDuration > 95) {
-            calculatedDuration = 95
+        if (calculatedDuration > 47) {
+            calculatedDuration = 47
         }
 
         return Triple(startPos, calculatedDuration.toInt(), it.iconUrl)
     }
 
-    private fun getNapSection(nap: Nap): Pair<Int, Int>? {
+    private fun getNapSection(nap: Nap, date: String): Pair<Int, Int>? {
 
         val startTime = nap.startTime
         val endTime = nap.endTime
 
         val sleepStartDate = startTime.split(" ")[0]
         val sleepEndDate = endTime.split(" ")[0]
+
+        if (!nap.date.equals(date) || nap.isNextDayNap) return null
 
         if (sleepStartDate.equals(sleepEndDate)) {
             //Same day Sleep

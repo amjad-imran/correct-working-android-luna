@@ -165,9 +165,6 @@ class OWorkoutDetailsFragmentV2 :
 
     @SuppressLint("SetTextI18n")
     private fun updateUi(it: OWorkoutDetailsResponseModel) {
-        LOGS.d("OWorkoutDetailsFragmentV2 detail=$it")
-
-//        binding.lytIntensity.tvIntensityType.text = it.intensity
 
         if (it.date == DateFormats.getCurrentDate(DateFormats.dateFormat3) && !it.type.equals(
                 "auto", true
@@ -180,6 +177,7 @@ class OWorkoutDetailsFragmentV2 :
             binding.tvEdit.visible()
         }
 
+        binding.lytTop.root.visible()
 
         binding.lytTop.lytActivityItem.tvWorkoutTime.text =
             DateFormats.getActivityDisplayDates(it.startTime, it.endTime)

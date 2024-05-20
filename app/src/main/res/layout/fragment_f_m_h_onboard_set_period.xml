@@ -26,11 +26,11 @@
             android:layout_marginStart="@dimen/side_margin"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="@dimen/side_margin"
+            android:text="@string/text_period_last_sub_message"
             android:textColor="@color/white_60"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvHeader"
-            tools:text="Your privacy is our priority. We use top-notch security measures to protect your data." />
+            app:layout_constraintTop_toBottomOf="@+id/tvHeader" />
 
         <View
             android:id="@+id/backView"
@@ -44,19 +44,46 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvPrivacy" />
 
-        <com.noisefit_commans.utils.WheelPicker
+        <com.noisefit_commans.utils.wheel.WheelPickerPeriod
             android:id="@+id/wheelPicker"
             style="@style/H4"
             android:layout_width="match_parent"
-            android:layout_height="289dp"
+            android:layout_height="300dp"
             android:textColor="@color/white"
+            android:textSize="40sp"
             app:layout_constraintBottom_toBottomOf="@+id/backView"
             app:layout_constraintEnd_toEndOf="@+id/backView"
             app:layout_constraintStart_toStartOf="@+id/backView"
             app:layout_constraintTop_toTopOf="@+id/backView"
             app:wheel_atmospheric="true"
             app:wheel_drawableSize="18dp"
-            app:wheel_item_height="44dp" />
+            app:wheel_item_height="60dp" />
+
+        <View
+            android:id="@+id/lineTop"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="48dp"
+            android:layout_marginEnd="48dp"
+            android:background="#d9d9d9"
+            app:layout_constraintBottom_toTopOf="@+id/lineBottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/backView"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <View
+            android:id="@+id/lineBottom"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="68dp"
+            android:layout_marginEnd="48dp"
+            android:background="#d9d9d9"
+            app:layout_constraintBottom_toBottomOf="@+id/backView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lineTop" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

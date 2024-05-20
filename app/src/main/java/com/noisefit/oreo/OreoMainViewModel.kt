@@ -1,23 +1,18 @@
 package com.noisefit.oreo
 
-import android.graphics.Color
 import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
-import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit.util.notif.NotificationEventsClass
 import com.noisefit_commans.common.checkDayDifferenceMoreNMinutes
-import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
-import com.noisefit_commans.data.enums.StressType
 import com.noisefit_commans.data.db.abstraction.LocationDataSource
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
@@ -26,13 +21,13 @@ import com.noisefit_commans.data.model.User
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.models.ColorFitDevice
+import com.noisefit_commans.models.Units
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.ui.checkDayDifferenceMoreOne
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
-import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.TrendsData
 import com.oreo.data.model.health.OreoActivityModel
@@ -40,9 +35,6 @@ import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.data.model.health.OreoSleepModel
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
-import com.oreo.ui.custom.Item
-import com.oreo.ui.custom.Section
-import com.oreo.ui.custom.StressCombineModel
 import com.oreo.ui.home.summary.PushLocalNotification
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -51,13 +43,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.joda.time.Days
-import org.joda.time.Duration
 import org.joda.time.LocalDate
 import org.joda.time.LocalDateTime
 import org.joda.time.format.DateTimeFormat
 import javax.inject.Inject
-import kotlin.math.abs
-import kotlin.math.floor
 
 
 const val HEALTH_DATA_PAGINATION_DAYS = 7
@@ -93,6 +82,7 @@ constructor(
     val userHealthData = HashMap<String, ServerUserHealthData?>()
     var trendsData: TrendsData? = null
     var stressFirstDate: String? = null
+    var stressBeta: Boolean = false
     val dataReload = MutableLiveData<Event<List<String>>>()
     val dashTodayReload = MutableLiveData<Event<Boolean>>()
 
@@ -179,6 +169,7 @@ constructor(
         userHealthData.clear()
         trendsData = null
         stressFirstDate = null
+        stressBeta = false
         _dashboard.value = ArrayList()
         _sleepHistoryResponse.value = ArrayList()
         _readinessHistoryResponse.value = ArrayList()
@@ -260,6 +251,7 @@ constructor(
 
                             registerDate = it.registerDate ?: -1
                             stressFirstDate = it.firstStress
+                            stressBeta = it.stressBeta ?: false
                             temperatureBaseLine = it.tempBaseLine ?: DEFAULT_TEMPERATURE_BASELINE
 
                             it.data.forEach { data ->
@@ -722,7 +714,7 @@ constructor(
                 LocalDateTime.parse(stressFirstDate, DateTimeFormat.forPattern("yyyy-MM-dd"))
             val currentDate = LocalDateTime.parse(date, DateTimeFormat.forPattern("yyyy-MM-dd"))
 
-            val difference = Days.daysBetween(stressDate,currentDate)
+            val difference = Days.daysBetween(stressDate, currentDate)
             return difference.days
         } catch (exp: Exception) {
             -1

@@ -13,6 +13,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vpImageSlider"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="@dimen/dimen_16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/bNext"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/backBtn" />
+
     <View
         android:id="@+id/vLeft"
         android:layout_width="0dp"
@@ -33,30 +47,6 @@
         app:layout_constraintStart_toEndOf="@+id/vLeft"
         app:layout_constraintTop_toTopOf="@+id/vpImageSlider" />
 
-    <include
-        android:id="@+id/lytProgress"
-        layout="@layout/layout_onboard_progress"
-        android:layout_width="0dp"
-        android:layout_height="32dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/backBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/backBtn" />
-
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/vpImageSlider"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="@dimen/dimen_16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/bNext"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/backBtn" />
-
 
     <Button
         android:id="@+id/bNext"
@@ -68,6 +58,16 @@
         app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <include
+        android:id="@+id/lytProgress"
+        layout="@layout/layout_onboard_progress"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/backBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/backBtn" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

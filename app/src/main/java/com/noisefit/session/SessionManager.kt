@@ -32,12 +32,15 @@ import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.Gender
 import com.noisefit_commans.models.SportsModeRequest
 import com.noisefit_commans.models.SportsModeResponse
+import com.noisefit_commans.models.Units
 import com.noisefit_commans.models.UserLocation
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MiscUtil
+import com.noisefit_commans.utils.MoEngageAppEventAttributes
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import kotlinx.coroutines.Dispatchers
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -118,6 +121,18 @@ class SessionManager
      * Handle App Updates
      */
     val versionCheckData = MutableLiveData<VersionCheckResponse>()
+
+    var unit: Units = Units.METRIC
+    var notificationSettings = 1
+
+    init {
+        GlobalScope.launch(Dispatchers.IO) {
+            val user = localDataStore.getUser()
+            unit = user?.userGoals?.getUnit() ?: Units.METRIC
+            notificationSettings = user?.notificationsEnabledLuna ?: 1
+
+        }
+    }
 
 
     /**
@@ -449,6 +464,10 @@ class SessionManager
 
     }
 
+    fun isMetric(): Boolean {
+        return unit == Units.METRIC
+    }
+
     fun logMoEngageAppEvent(eventName: String) {
         val newEventName = eventName.lowercase().replace(" ", "_")
         MoEAnalyticsHelper.trackEvent(context, newEventName, Properties())
@@ -654,6 +673,24 @@ class SessionManager
                 UpdateDeviceAction.SetRealTimeDataState(false)
             )
         }
+    }
+
+    fun updateUnit(unit: Units) {
+        this.unit = unit
+    }
+
+    fun updateNotificationSettings(value: Int) {
+        this.notificationSettings = value
+
+        addUserAttributeToMoEngage(true,
+            HashMap<String, Any>().apply
+            {
+                this[MoEngageAppEventAttributes.notification_state] = value == 1
+            })
+    }
+
+    fun showLocalNotification(): Boolean {
+        return notificationSettings == 1
     }
 }
 

@@ -6,7 +6,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.noisefit.data.remote.response.CatWiseWatchFacesItem
 import com.noisefit.data.remote.response.WatchFaceCustomListResponse
-import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.enums.DashInfoCard
 import com.noisefit_commans.data.enums.ServiceState
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -26,17 +25,14 @@ import com.noisefit_commans.data.model.Token
 import com.noisefit_commans.data.model.User
 import com.noisefit_commans.data.model.matches.Matches
 import com.noisefit_commans.models.AppNotificationsSettings
-import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.EnabledAppsForNotifications
 import com.noisefit_commans.models.Location
 import com.noisefit_commans.models.LocationDataModel
 import com.noisefit_commans.models.TimeFormats
 import com.noisefit_commans.models.Units
-import com.noisefit_commans.models.UserGoals
-import com.noisefit_commans.models.UserInfo
 import com.noisefit_commans.models.WatchFace
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.LOGS
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 private const val LAST_BANNER_API_FETCH_TIME = "LAST_BANNER_API_FETCH_TIME"
@@ -194,7 +190,8 @@ private const val BATTERY_DASH_ALERT = "BATTERY_DASH_ALERT"
 private const val SLEEP_NOTIFICATION = "SLEEP_NOTIFICATION"
 private const val READINESS_NOTIFICATION = "READINESS_NOTIFICATION"
 private const val STRESS_WALKRHTOUGH = "STRESS_WALKRHTOUGH"
-private const val FMH_WALKRHTOUGH = "FMH_WALKRHTOUGH"
+private const val FMH_WALK_THROUGH = "FMH_WALK_THROUGH"
+private const val FMH_REMIND_LATER = "FMH_REMIND_LATER"
 
 
 private const val APP_VERSION_NEW = "APP_VERSION_NEW"
@@ -211,13 +208,30 @@ class DataStoredImpl
 @Inject constructor(
     private val gson: Gson, private val mPrefs: SharedPreferences
 ) : DataStoredInterface {
+
+    //-1 if no value saved else days
+    override fun getFMHWalkthroughRemindLaterDays(): Long {
+        val savedTimeStamp = mPrefs.getLong(FMH_REMIND_LATER, -1)
+        if (savedTimeStamp == -1L) {
+            return 8
+        }
+        val currentTimeStamp = System.currentTimeMillis()
+        val diffInMillis: Long = Math.abs(currentTimeStamp - savedTimeStamp)
+        return TimeUnit.MILLISECONDS.toDays(diffInMillis)
+    }
+
+    override fun setFMHRemindLater() {
+        mPrefs.edit()?.putLong(FMH_REMIND_LATER, System.currentTimeMillis())?.commit()
+    }
+
     override fun getFMHWalkthroughShownStatus(): Boolean {
-        return mPrefs.getBoolean(FMH_WALKRHTOUGH, false)
+        return mPrefs.getBoolean(FMH_WALK_THROUGH, false)
     }
 
     override fun setFMHWalkthroughShown(isShown: Boolean) {
-        mPrefs.edit()?.putBoolean(FMH_WALKRHTOUGH, isShown)?.commit()
+        mPrefs.edit()?.putBoolean(FMH_WALK_THROUGH, isShown)?.commit()
     }
+
     override fun getStressWalkthroughShownStatus(): Boolean {
         return mPrefs.getBoolean(STRESS_WALKRHTOUGH, false)
     }
@@ -307,6 +321,8 @@ class DataStoredImpl
     override fun clearUserLogoutData() {
         mPrefs.edit()?.remove(BATTERY_DASH_ALERT)?.apply()
         mPrefs.edit()?.remove(STRESS_WALKRHTOUGH)?.apply()
+        mPrefs.edit()?.remove(FMH_WALK_THROUGH)?.apply()
+        mPrefs.edit()?.remove(FMH_REMIND_LATER)?.apply()
     }
 
     override fun getDashCardClickState(): HashMap<DashInfoCard, Boolean> {
@@ -1039,21 +1055,6 @@ class DataStoredImpl
 
     override fun getDeviceFeatures(): DeviceFeatures? {
         return gson.fromJson(mPrefs.getString(DEVICE_FEATURES, null), DeviceFeatures::class.java)
-    }
-
-    override fun updateUserAdditionalDetails(
-        userInfo: UserInfo?, userGoal: UserGoals?
-    ): Boolean {
-        val user = getUser() ?: return true
-        userInfo?.let { user.userInfo = it }
-
-        userGoal?.let {
-            user.userGoals = it
-        }
-
-        mPrefs.edit()?.putString(USER_INFO, gson.toJson(user))?.commit()
-
-        return true
     }
 
 

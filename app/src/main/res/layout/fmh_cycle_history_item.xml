@@ -9,7 +9,7 @@
 
         <TextView
             android:id="@+id/tvHeader"
-            style="@style/Small"
+            style="@style/S12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -29,6 +29,7 @@
 
         <TextView
             android:id="@+id/tvStartedOn"
+            style="@style/S12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -38,21 +39,23 @@
             app:layout_constraintTop_toBottomOf="@id/tvHeader"
             tools:text="Started on March 21" />
 
-        <View
+        <com.oreo.ui.custom.PeriodCycleBar
             android:id="@+id/pbHistory"
             android:layout_width="match_parent"
-            android:layout_height="8dp"
+            android:layout_height="28dp"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="@dimen/side_margin"
-            android:layout_marginEnd="56dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="4dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvStartedOn" />
-        <include layout="@layout/layout_divider"
-            android:layout_height="1dp"
-            android:layout_marginTop="16dp"
+
+        <include
             android:id="@+id/divider1"
-            app:layout_constraintTop_toBottomOf="@id/pbHistory"
+            layout="@layout/layout_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_width="match_parent"/>
+            app:layout_constraintTop_toBottomOf="@id/pbHistory" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

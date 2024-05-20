@@ -54,6 +54,7 @@ data class ODashboardActivityModel(
     val inactiveMinutes: Int? = null,
     val status: String? = "",
     val nudges: List<Nudges>? = null,
+    val steps: Int = 0
 )
 
 data class ODashboardSleepModel(

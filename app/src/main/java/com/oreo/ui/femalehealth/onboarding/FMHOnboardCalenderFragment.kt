@@ -1,10 +1,8 @@
 package com.oreo.ui.femalehealth.onboarding
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import com.google.gson.Gson
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
@@ -13,15 +11,13 @@ import com.kizitonwose.calendar.view.MonthScrollListener
 import com.kizitonwose.calendar.view.ViewContainer
 import com.noisefit.luna.databinding.CalendarDayFmhOnboardBinding
 import com.noisefit.luna.databinding.FragmentFMHOnboardCalenderBinding
-import com.noisefit_commans.common.ContinuousSelectionHelper.getSelection
-import com.noisefit_commans.common.DateSelection
 import com.noisefit_commans.common.yearMonth
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DateFormats.daysOfWeekFromLocale
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -32,11 +28,14 @@ class FMHOnboardCalenderFragment :
     BaseFragment<FragmentFMHOnboardCalenderBinding>(FragmentFMHOnboardCalenderBinding::inflate) {
     private var currentSelectedMonth: CalendarMonth? = null
     private val mViewModel: FMHOnboardingViewModel by activityViewModels()
-    private val TAG="calenderFragment"
 
-    private var selection = DateSelection()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mViewModel.calculateStartAndEndPeriodDates()
         initCalender()
     }
 
@@ -47,7 +46,7 @@ class FMHOnboardCalenderFragment :
         val daysOfWeek = daysOfWeekFromLocale()
 
         binding.lytCalender.calendar.setup(
-            calendarStart.yearMonth, currentMonth.plusMonths(1), daysOfWeek.first()
+            calendarStart.yearMonth, currentMonth, daysOfWeek.first()
         )
         class DayViewContainer(view: View) : ViewContainer(view) {
             lateinit var day: CalendarDay
@@ -57,20 +56,12 @@ class FMHOnboardCalenderFragment :
 
                 binding.root.setOnClickListener {
                     if (day.position == DayPosition.MonthDate) {
-                        if (mViewModel.selectedEndDate == null)
-                            mViewModel.selectedEndDate =
-                                DateFormats.convertDateToLocalDate(DateFormats.getDaysAgo(mViewModel.calenderDayRange()))
-                        LOGS.d("start end date ${mViewModel.selectedEndDate}")
-                        mViewModel.selectedPStartDate= DateFormats.convertLocalDateToDate(day.date).toString()
-                        selection = getSelection(
-                            clickedDate = day.date,
-                            dateSelection = selection,
-                            selectionStartDate = day.date,
-                            selectionEndDate = mViewModel.selectedEndDate!!
-                        )
-                        LOGS.d("start selection ${Gson().toJson(selection)}")
+                        mViewModel.selectedPStartDate = day.date
+
+                        mViewModel.selectedPEndDate =
+                            mViewModel.calculatePeriodEndDate(day.date)
+
                         this@FMHOnboardCalenderFragment.binding.lytCalender.calendar.notifyCalendarChanged()
-//                        LOGS.d("Selected Date ${day.date}")
                     }
                 }
             }
@@ -84,26 +75,51 @@ class FMHOnboardCalenderFragment :
                 val textView = container.binding.tvDay
                 val dayLayoutMain = container.binding.dayLayoutMain
                 textView.text = day.date.dayOfMonth.toString()
-                val (startDate, endDate) = selection
 
-                LOGS.d("start date $startDate")
-                LOGS.d("start end date $endDate")
                 if (day.position == DayPosition.MonthDate) {
-                    when (day.date) {
-                        startDate -> {
-                            container.binding.tvDay.setTextColor(Color.parseColor("#ffffff"))
-                            container.binding.ivBackStart.visible()
-                        }
+                    dayLayoutMain.visible()
+                    val currentDate = day.date
 
-                        endDate -> {
-                            container.binding.tvDay.setTextColor(Color.parseColor("#ffffff"))
+                    val startDate = mViewModel.selectedPStartDate
+                    val endDate = mViewModel.selectedPEndDate
+
+                    if (startDate != null && endDate != null) {
+                        if (currentDate == startDate && currentDate == endDate) {
+                            container.binding.ivBackSingle.visible()
+                            container.binding.ivBackStart.gone()
+                            container.binding.ivBackEnd.gone()
+                            container.binding.ivBackMid.gone()
+                        } else if (currentDate == startDate) {
                             container.binding.ivBackStart.visible()
+                            container.binding.ivBackSingle.gone()
+                            container.binding.ivBackEnd.gone()
+                            container.binding.ivBackMid.gone()
+                        } else if (currentDate == endDate) {
+                            container.binding.ivBackSingle.gone()
+                            container.binding.ivBackStart.gone()
+                            container.binding.ivBackEnd.visible()
+                            container.binding.ivBackMid.gone()
+                        } else if (currentDate.isBefore(endDate) && currentDate.isAfter(startDate)) {
+                            container.binding.ivBackSingle.gone()
+                            container.binding.ivBackStart.gone()
+                            container.binding.ivBackEnd.gone()
+                            container.binding.ivBackMid.visible()
+                        } else {
+                            hideAllBack(container.binding)
                         }
+                    } else {
+                        hideAllBack(container.binding)
                     }
-
                 } else {
                     dayLayoutMain.invisible()
                 }
+            }
+
+            private fun hideAllBack(binding: CalendarDayFmhOnboardBinding) {
+                binding.ivBackSingle.gone()
+                binding.ivBackStart.gone()
+                binding.ivBackEnd.gone()
+                binding.ivBackMid.gone()
             }
         }
 
@@ -111,7 +127,9 @@ class FMHOnboardCalenderFragment :
             override fun invoke(month: CalendarMonth) {
                 currentSelectedMonth = month
                 nullableBinding?.lytCalender?.tvMonth?.text =
-                    "${month.yearMonth.month.name.lowercase().capitalizeWords()} ${month.yearMonth.year}"
+                    "${
+                        month.yearMonth.month.name.lowercase().capitalizeWords()
+                    } ${month.yearMonth.year}"
             }
         }
 

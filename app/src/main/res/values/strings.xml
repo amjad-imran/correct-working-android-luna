@@ -1109,6 +1109,16 @@
     <string name="text_stress_w_content_4">Distinguish between short-term and long-term stress. Engage in activities like exercise and seek social support for effective stress management.</string>
     <string name="text_stress_w_content_5">Approach stress management with mindfulness and intention. Navigate challenges with grace, supported by mindfulness practices, social connections, and enjoyable activities.</string>
     <string name="text_stress_w_content_3">By monitoring stress, identify patterns and adjust routines. View stress as an opportunity for growth and resilience. For instance, facing challenges can boost personal development and confidence.</string>
+    <string name="text_beta">Beta</string>
+    <string name="text_units">Units</string>
+    <string name="text_general">General</string>
+    <string name="text_notifications">Notifications</string>
+    <string name="text_metric">Metric</string>
+    <string name="text_imperial">Imperial</string>
+    <string name="text_metric_message">Measures in meters, kilograms, and litres.</string>
+    <string name="text_message_imperial">Measures in feet, inches, and pounds.</string>
+    <string name="text_enable_notifications">Enable notifications</string>
+    <string name="text_notification_message">Allow LUNA to update you about: battery level, inactivity alerts, activity progress, bedtime reminders, and personalised insights.</string>
     <string name="text_track_your_cycle">Track your cycle</string>
     <string name="text_track_your_cycle_desc">Unlock personalised insights, from predicting your next period to tracking ovulation</string>
 
@@ -1156,6 +1166,9 @@
     <string name="text_cycle_log">Cycle Log</string>
     <string name="text_log_period">Log Period</string>
     <string name="text_calender">Calender</string>
+    <string name="text_period_last_sub_message">Your privacy is our priority. We use top-notch security measures to protect your data.</string>
+    <string name="text_days">days</string>
+    <string name="text_abnormal_length">Abnormal length</string>
 
 
 </resources>

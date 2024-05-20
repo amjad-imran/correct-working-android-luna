@@ -9,5 +9,6 @@ data class ODayTimeActivitiesDataModel(
     val id: String? = null,
     val workoutData: OActivityListModal? = null,
     val startTime: String? = null,
-    val endTime: String? = null
+    val endTime: String? = null,
+    val dateTime: String? = null
 ) : Parcelable

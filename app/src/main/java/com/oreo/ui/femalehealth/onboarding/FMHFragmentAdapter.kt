@@ -16,17 +16,15 @@ class FMHFragmentAdapter(
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> {
-                FMHOnboardGoalFragment()
-            }
-
+            0 -> FMHOnboardGoalFragment()
             1 -> FMHOnboardSetPeriodFragment()
-            2 -> FMHOnboardSetPeriodFragment()
+            2 -> FMHOnboardSetCycleFragment()
             3 -> FMHOnboardCalenderFragment()
             4 -> FMHOnboardSetDignosisFragment()
             5 -> FMHOnboardSetHormonFragment()
-            6 -> FMHOnboardingAllDoneFragment()
-            else -> FMHOnboardGoalFragment()
+            else -> {
+                FMHOnboardSetHormonFragment()
+            }
         }
     }
 }

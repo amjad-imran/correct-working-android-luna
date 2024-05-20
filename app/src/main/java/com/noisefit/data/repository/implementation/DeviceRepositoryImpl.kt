@@ -402,36 +402,10 @@ class DeviceRepositoryImpl(
         }
     }
 
-    override suspend fun getRecentWatchFace(): Flow<Resource<BaseApiResponse<List<Watchface2>?>>> {
-        return safeApiCallFlow(dispatcher) {
-            val url = BuildConfig.BASE_URL_NEW + "/watch_faces/v2/random_list"
-            remoteDataSource.getRecentWatchFace(url)
-        }
-    }
-
     override suspend fun checkForUpdates(requestObject: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<UpdateResponse>>> {
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.BASE_URL_NEW}/core/ring/firmware_versions"
             remoteDataSource.checkForUpdates(url, requestObject)
-        }
-    }
-
-    override suspend fun checkForUpdatesRecent(requestObject: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<UpdateResponse>>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.checkForUpdatesRecent(requestObject)
-        }
-    }
-
-    override suspend fun getAgpsFileUrl(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<com.noisefit_commans.data.response.AgpsFileResponse>>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.getAgpsFileUrl()
-        }
-    }
-
-    override suspend fun getVendorAgpsFileUrl(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<com.noisefit_commans.data.response.AgpsFileResponse>>> {
-        return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.BASE_URL_NEW}/master/devices/link"
-            remoteDataSource.getVendorAgpsFileUrl(url)
         }
     }
 
@@ -453,80 +427,6 @@ class DeviceRepositoryImpl(
             requestObject.addProperty("address", macAddress)
             remoteDataSource.removeWatchTokenFromServer(url, requestObject)
         }
-    }
-
-    override suspend fun getMarketPlacesOld(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<List<String>>>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.getMarketPlacesOld()
-        }
-    }
-
-    override suspend fun addWarrantyOld(jsonObject: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<String?>>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.addWarrantyOld(jsonObject)
-        }
-    }
-
-    override suspend fun submitFeedback(
-        feedback: Feedback,
-        deviceId: Int?
-    ): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<MessageResponse>>> {
-        val imageList = ArrayList<MultipartBody.Part>()
-        feedback.screenShortList.forEach { uri ->
-            val file = File(uri.path)
-            //val requestFile :RequestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-            val requestFile = MultipartBody.Part.createFormData(
-                "images",
-                file.name,
-                file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-            )
-            imageList.add(requestFile)
-        }
-
-        val logList = ArrayList<MultipartBody.Part>()
-        if (feedback.file != null) {
-            logList.add(
-                MultipartBody.Part.createFormData(
-                    "log",
-                    "appLogs.txt"/*feedback.file!!.name*/,
-                    feedback.file!!.asRequestBody("text/plain".toMediaTypeOrNull())
-                )
-            )
-        }
-        if (feedback.watchLogs != null) {
-
-            var filename = feedback.watchLogs?.name
-            if (filename.isNullOrEmpty()) {
-                filename = "watchLogs.txt"
-            }
-            logList.add(
-                MultipartBody.Part.createFormData(
-                    "log",
-                    filename/*feedback.watchLogs!!.name*/,
-                    feedback.watchLogs!!.asRequestBody("text/plain".toMediaTypeOrNull())
-                )
-            )
-        }
-
-
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.submitFeedback(
-                deviceId,
-                feedback.platform.getRequestBody(),
-                feedback.mobileDevice.getRequestBody(),
-                feedback.osVersion.getRequestBody(),
-                feedback.appVersion.getRequestBody(),
-                feedback.watchName.getRequestBody(),
-                feedback.watchFirmwareVersion.getRequestBody(),
-                feedback.problemType.getRequestBody(),
-                feedback.problemDesc.getRequestBody(),
-                feedback.date.getRequestBody(),
-                feedback.user_id.toString().getRequestBody(),
-                imageList,
-                logList
-            )
-        }
-
     }
 
     override suspend fun submitFeedbackNew(feedback: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<String>>> {

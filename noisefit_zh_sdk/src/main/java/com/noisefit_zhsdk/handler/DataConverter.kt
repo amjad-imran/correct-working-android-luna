@@ -409,16 +409,18 @@ constructor(
     ): List<OreoAutoSportData> {
         val data = ArrayList<OreoAutoSportData>()
         p0?.forEach {
-            val oreoAutoSportData = OreoAutoSportData()
-            oreoAutoSportData.steps = it.autoSportSteps
-            oreoAutoSportData.startTime = it.autoSportStartTime * 1000L
-            oreoAutoSportData.intensity = it.autoSportIntensity
-            oreoAutoSportData.isAccepted = false
-            oreoAutoSportData.duration = it.autoSportDuration
-            oreoAutoSportData.calories = it.autoSportKcal
-            oreoAutoSportData.type = getSportName(it.autoSportType, colorFitDevice)
-            oreoAutoSportData.hrData = gson.toJson(it.hrData)
-            data.add(oreoAutoSportData)
+            if (it.autoSportKcal > 15) {
+                val oreoAutoSportData = OreoAutoSportData()
+                oreoAutoSportData.steps = it.autoSportSteps
+                oreoAutoSportData.startTime = it.autoSportStartTime * 1000L
+                oreoAutoSportData.intensity = it.autoSportIntensity
+                oreoAutoSportData.isAccepted = false
+                oreoAutoSportData.duration = it.autoSportDuration
+                oreoAutoSportData.calories = it.autoSportKcal
+                oreoAutoSportData.type = getSportName(it.autoSportType, colorFitDevice)
+                oreoAutoSportData.hrData = gson.toJson(it.hrData)
+                data.add(oreoAutoSportData)
+            }
         }
         return data
     }

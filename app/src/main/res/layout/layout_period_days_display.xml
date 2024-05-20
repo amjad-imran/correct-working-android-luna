@@ -28,12 +28,12 @@
 
 
         <TextView
-            android:id="@+id/textView110"
+            android:id="@+id/tvCurrentDay"
             style="@style/S16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
-            app:layout_constraintEnd_toStartOf="@+id/textView109"
+            app:layout_constraintEnd_toStartOf="@+id/tvTotalDays"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
@@ -41,39 +41,39 @@
             tools:text="Day 18" />
 
         <TextView
-            android:id="@+id/textView109"
+            android:id="@+id/tvTotalDays"
             style="@style/S16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:textColor="@color/white_64"
-            app:layout_constraintBottom_toBottomOf="@+id/textView110"
+            app:layout_constraintBottom_toBottomOf="@+id/tvCurrentDay"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textView110"
-            app:layout_constraintTop_toTopOf="@+id/textView110"
+            app:layout_constraintStart_toEndOf="@+id/tvCurrentDay"
+            app:layout_constraintTop_toTopOf="@+id/tvCurrentDay"
             tools:text="of 28" />
 
         <TextView
-            android:id="@+id/textView111"
+            android:id="@+id/tvCurrentState"
             style="@style/S16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView110"
+            app:layout_constraintTop_toBottomOf="@+id/tvCurrentDay"
             tools:text="Period in" />
 
         <TextView
-            android:id="@+id/textView112"
+            android:id="@+id/tvStateDay"
             style="@style/S36"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView111"
+            app:layout_constraintTop_toBottomOf="@+id/tvCurrentState"
             tools:text="10 days" />
 
         <View
@@ -86,10 +86,10 @@
             android:background="#3dffffff"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView112" />
+            app:layout_constraintTop_toBottomOf="@+id/tvStateDay" />
 
         <TextView
-            android:id="@+id/textView115"
+            android:id="@+id/tvPregnancyChances"
             style="@style/S16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -104,15 +104,15 @@
             android:id="@+id/imageView31"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_info"
-            app:layout_constraintBottom_toBottomOf="@+id/textView114"
+            android:src="@drawable/ic_info_gray"
+            app:layout_constraintBottom_toBottomOf="@+id/tvPhase"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textView114"
-            app:layout_constraintTop_toTopOf="@+id/textView114" />
+            app:layout_constraintStart_toEndOf="@+id/tvPhase"
+            app:layout_constraintTop_toTopOf="@+id/tvPhase" />
 
         <TextView
-            android:id="@+id/textView114"
+            android:id="@+id/tvPhase"
             style="@style/S16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -122,7 +122,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView115"
+            app:layout_constraintTop_toBottomOf="@+id/tvPregnancyChances"
             tools:text="Luteal phase"
             tools:textColor="#83e7cf" />
 
@@ -137,7 +137,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView114" />
+            app:layout_constraintTop_toBottomOf="@+id/tvPhase" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

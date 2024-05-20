@@ -35,31 +35,13 @@ interface DeviceRepository {
 
     suspend fun enableInstalledAppsNotification(selectedNotificationApp: List<NotificationApp>): Flow<Triple<Boolean, Boolean, List<NotificationApp>>>
 
-
-    suspend fun getRecentWatchFace(): Flow<Resource<BaseApiResponse<List<Watchface2>?>>>
-
     suspend fun checkForUpdates(requestObject: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<UpdateResponse>>>
 
-    suspend fun checkForUpdatesRecent(requestObject: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<UpdateResponse>>>
-
-    suspend fun getAgpsFileUrl(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<com.noisefit_commans.data.response.AgpsFileResponse>>>
-
-    suspend fun getVendorAgpsFileUrl(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<com.noisefit_commans.data.response.AgpsFileResponse>>>
-
-    suspend fun getMarketPlacesOld(): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponseData<List<String>>>>
     suspend fun checkWatchTokenExist(macAddress: String): Flow<Resource<BaseApiResponse<WatchTokenResponse>>>
 
     suspend fun removeWatchTokenFromServer(
         macAddress: String
     ): Flow<Resource<BaseApiResponseData<Any>>>
-
-
-    suspend fun addWarrantyOld(jsonObject: JsonObject): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<String?>>>
-
-    suspend fun submitFeedback(
-        feedback: Feedback,
-        deviceId: Int? = null
-    ): Flow<Resource<com.noisefit_commans.data.response.BaseApiResponse<MessageResponse>>>
 
     suspend fun submitFeedbackNew(
         feedback: JsonObject

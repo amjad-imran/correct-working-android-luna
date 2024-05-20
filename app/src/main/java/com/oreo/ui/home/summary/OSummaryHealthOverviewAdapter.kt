@@ -36,6 +36,7 @@ import com.noisefit_commans.ui.getColor
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
@@ -65,6 +66,8 @@ sealed class OSummaryHealthOverviewClickEnum {
 
     object WorkoutAlertIdentify : OSummaryHealthOverviewClickEnum()
     object TrackYourFemaleHealth : OSummaryHealthOverviewClickEnum()
+    object TrackYourFemaleHealthRemindLater : OSummaryHealthOverviewClickEnum()
+    object FemaleHealthHome : OSummaryHealthOverviewClickEnum()
 
 }
 
@@ -380,6 +383,17 @@ class OSummaryHealthOverviewAdapter() :
             is OHealthOverview.GotYourPeriod -> R.layout.list_period_confirmation
         }
     }
+
+    fun removeCycleGetStartedCard() {
+
+        val index = (items as ArrayList).indexOfFirst {
+            it is OHealthOverview.CardTrackFemaleHealth
+        }
+        if (index != -1) {
+            (items as ArrayList).removeAt(index)
+            notifyItemRemoved(index)
+        }
+    }
 }
 
 
@@ -461,6 +475,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             data: OHealthOverview.StressGraph,
         ) {
             binding.graphStress.updateData(data.data)
+
+            binding.tvBeta.setVisibilityByCondition(data.isBeta)
+            binding.ivBackBeta.setVisibilityByCondition(data.isBeta)
+
 
             if (data.value == 0) {
                 binding.tvStressValue.gone()
@@ -906,33 +924,35 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     .setDuration(1000L).build()
             )
 
-            val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(
-                data.data.inactiveMinutes ?: 0
-            )
+            binding.tvSteps.text = if (data.data.steps == 0) "-" else data.data.steps.toString()
 
-            if (hour > 0) {
-                binding.tvHr.visible()
-                binding.textHr.visible()
-                binding.tvMin.visible()
-                binding.textMin.visible()
+            /* val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(
+                 data.data.inactiveMinutes ?: 0
+             )*/
 
-                binding.tvHr.text = "$hour"
-                binding.tvMin.text = "$minute"
-            } else if (minute > 0) {
-                binding.tvHr.gone()
-                binding.textHr.gone()
-                binding.tvMin.visible()
-                binding.textMin.visible()
+            /* if (hour > 0) {
+                 binding.tvHr.visible()
+                 binding.textHr.visible()
+                 binding.tvMin.visible()
+                 binding.textMin.visible()
 
-                binding.tvMin.text = "$minute"
-            } else {
-                binding.tvHr.gone()
-                binding.textHr.gone()
-                binding.tvMin.visible()
-                binding.textMin.gone()
+                 binding.tvHr.text = "$hour"
+                 binding.tvMin.text = "$minute"
+             } else if (minute > 0) {
+                 binding.tvHr.gone()
+                 binding.textHr.gone()
+                 binding.tvMin.visible()
+                 binding.textMin.visible()
 
-                binding.tvMin.text = "-"
-            }
+                 binding.tvMin.text = "$minute"
+             } else {
+                 binding.tvHr.gone()
+                 binding.textHr.gone()
+                 binding.tvMin.visible()
+                 binding.textMin.gone()
+
+                 binding.tvMin.text = "-"
+             }*/
 
 
             binding.root.setOnClickListener {
@@ -1120,12 +1140,25 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         }
     }
 
+
     class CycleTrackerPredictViewHolder(private val binding: ListCycleTrackerPredictionBinding) :
         HomeRecyclerViewHolder(binding) {
         fun bind(
             data: OHealthOverview.CycleTrackerPredict,
             position: Int,
         ) {
+            binding.textView3.text = data.data.title
+            binding.tvOvlInDays.text = data.data.days.toString()
+            binding.textView1.text = data.data.bottomText
+            binding.tvPredictionDays.text = data.data.predictionDate
+            binding.tvOvlDaysCurrent.text = "Day ${data.data.currentCycleDay}"
+            binding.tvOvlDaysLeft.text = "of ${data.data.totalCycleDay}"
+
+            binding.tvDesc.text = data.data.nudge
+
+            binding.root.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.FemaleHealthHome)
+            }
         }
     }
 
@@ -1135,6 +1168,22 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             data: OHealthOverview.CycleTrackerOngoing,
             position: Int,
         ) {
+            binding.textView3.text = data.data.title
+            binding.tvOvlInDays.text = data.data.subTitle
+            binding.tvDaysLeft.text = "${data.data.days} of ${data.data.totalCycleDay}"
+            binding.tvDesc.text = data.data.nudge
+            binding.tvValue.text = if (data.data.temperatureVariation > 0) {
+                "+${data.data.temperatureVariation}"
+            } else {
+                "-${data.data.temperatureVariation}"
+            }
+
+            binding.tvPeriodicPeriod.text = data.data.predictionString
+            binding.tvDays.text = data.data.predictionDate
+
+            binding.root.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.FemaleHealthHome)
+            }
         }
     }
 
@@ -1149,6 +1198,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             }
             binding.btnGetStarted.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.TrackYourFemaleHealth)
+            }
+            binding.tvRemindMeLater.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.TrackYourFemaleHealthRemindLater)
+            }
+            binding.ivCross.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.TrackYourFemaleHealthRemindLater)
             }
         }
     }

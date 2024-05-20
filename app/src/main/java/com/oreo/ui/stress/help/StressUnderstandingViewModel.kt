@@ -29,7 +29,7 @@ constructor(val sessionManager: SessionManager) : BaseViewModel() {
             StressUnderstandingOverview.ImageWithText(
                 "What are the different Stress Zones?",
                 R.drawable.image_stress_zone,
-                "<font color='#3fe8b5'>Calm</font> (0-32)<br>Your body is currently resting and recharging itself. You may feel calm, at ease, or relaxed.<br><br>" +
+                "<font color='#3fe8b5'>Relaxed</font> (0-32)<br>Your body is currently resting and recharging itself. You may feel calm, at ease, or relaxed.<br><br>" +
                         "<font color='#ffed91'>Focussed</font> (33-74)<br>There are some indications of stress, yet this state may be advantageous for work as it is in either a neutral, alert, or slightly stimulated state.<br><br>" +
                         "<font color='#ffad60'>Stressed</font> (75-100)<br>It represents the highest level of stress. Excitation, tension, or high activity are typical and normal, but they indicate the need for relaxation."
             )

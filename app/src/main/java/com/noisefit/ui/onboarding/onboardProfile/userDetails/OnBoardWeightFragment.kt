@@ -12,6 +12,7 @@ import com.noisefit.ui.onboarding.onboardProfile.GuestProfileSetupActivity
 import com.noisefit.ui.onboarding.onboardProfile.SetupProfileViewModel
 import com.noisefit.ui.onboarding.pairing.DeviceSetupActivity
 import com.noisefit.ui.onboarding.setup.DeviceSetupActivityV2
+import com.noisefit_commans.models.HeightUnitSystem
 import com.noisefit_commans.models.WeightUnitSystem
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
@@ -79,11 +80,13 @@ class OnBoardWeightFragment :
         }
 
         binding.btnMetric.setOnClickListener {
+            if (viewModel.weightUnitSystem == WeightUnitSystem.METRIC) return@setOnClickListener
             viewModel.setWeightUnit(WeightUnitSystem.METRIC)
             handleButton()
             setWeightPicker()
         }
         binding.btnImperial.setOnClickListener {
+            if (viewModel.weightUnitSystem == WeightUnitSystem.IMPERIAL) return@setOnClickListener
             viewModel.setWeightUnit(WeightUnitSystem.IMPERIAL)
             handleButton()
             setWeightPicker()
@@ -139,7 +142,7 @@ class OnBoardWeightFragment :
     private fun goToDeviceSetupActivity(openProfile: Boolean) {
         startActivity(
             DeviceSetupActivityV2.getStartIntent(
-                requireContext(),fullSetup = true
+                requireContext(), fullSetup = true
             )
         )
         activity?.finish()

@@ -493,119 +493,13 @@ class StressAreaChart : View {
         val lastPosition = min((firstPosition + hCount + 2).toDouble(), list.size.toDouble())
             .toInt()
         var current: ChartModelStress
-        var next: ChartModelStress
         for (i in firstPosition until lastPosition) {
             current = list[i]
             val x =
                 offSet + moveOffSet + (mWith - leftWith - rightWith) * divisor + leftWith - i * unitHLenth
-            val calmY = getYAxisValue(current.calm)
-
-            val focussedY =
-                getYAxisValue(current.calm + current.focussed)
-
-            val stressedY =
-                getYAxisValue(current.calm + current.focussed + current.stressed)
 
 
-            calmPath.reset()
-            calmFillPath.reset()
-
-            focussedPath.reset()
-            focussedFillPath.reset()
-
-            stressedPath.reset()
-            stressedFillPath.reset()
-
-
-            calmPath.moveTo(x, calmY)
-            focussedPath.moveTo(x, focussedY)
-            stressedPath.moveTo(x, stressedY)
-
-            if (i < list.size - 1) {
-                next = list[i + 1]
-                val isCurrentAllZero =
-                    current.calm == 0 && current.focussed == 0 && current.stressed == 0
-                val isNextAllZero = next.calm == 0 && next.focussed == 0 && next.stressed == 0
-
-                if (!isCurrentAllZero && !isNextAllZero) {
-
-                    if (current.stressed >= 0 && next.stressed >= 0) {
-                        val x1 =
-                            offSet + moveOffSet + (mWith - leftWith - rightWith) * divisor + leftWith - (i + 1) * unitHLenth
-                        val y1 =
-                            getYAxisValue(next.calm + next.focussed + next.stressed)
-                        val nextYFocussed = getYAxisValue(next.calm + next.focussed)
-
-
-                        stressedPath.cubicTo(
-                            x1 + (x - x1) / phase,
-                            stressedY,
-                            x - (x - x1) / phase,
-                            y1,
-                            x1,
-                            y1
-                        )
-                        stressedFillPath.addPath(stressedPath)
-                        //draw fill first
-                        stressedFillPath.lineTo(x1, nextYFocussed)
-                        stressedFillPath.lineTo(x, focussedY)
-                        chartLineFillPaint!!.setShader(linearGradientStressed)
-                        canvas.drawPath(stressedFillPath, chartLineFillPaint!!)
-                        canvas.drawPath(stressedPath, lineStressedPaint!!)
-                    }
-                    if (current.focussed >= 0 && next.focussed >= 0) {
-                        val x1 =
-                            offSet + moveOffSet + (mWith - leftWith - rightWith) * divisor + leftWith - (i + 1) * unitHLenth
-                        val nextYCalm = getYAxisValue(next.calm)
-                        val y1 = getYAxisValue(next.calm + next.focussed)
-
-                        focussedPath.cubicTo(
-                            x1 + (x - x1) / phase,
-                            focussedY,
-                            x - (x - x1) / phase,
-                            y1,
-                            x1,
-                            y1
-                        )
-                        focussedFillPath.addPath(focussedPath)
-
-                        focussedFillPath.lineTo(x1, nextYCalm)
-                        focussedFillPath.lineTo(x, calmY)
-                        chartLineFillPaint!!.setShader(linearGradientFocussed)
-                        canvas.drawPath(focussedFillPath, chartLineFillPaint!!)
-                        canvas.drawPath(focussedPath, lineFocussedPaint!!)
-                    }
-
-                    if (current.calm >= 0 && next.calm >= 0) {
-                        val x1 =
-                            offSet + moveOffSet + (mWith - leftWith - rightWith) * divisor + leftWith - (i + 1) * unitHLenth
-                        val y1 = getYAxisValue(next.calm)
-                        calmPath.cubicTo(
-                            x1 + (x - x1) / phase,
-                            calmY,
-                            x - (x - x1) / phase,
-                            y1,
-                            x1,
-                            y1
-                        )
-                        calmFillPath.addPath(calmPath)
-                        //draw fill first
-                        calmFillPath.lineTo(x1, mHeight - bottomWith)
-                        calmFillPath.lineTo(x, mHeight - bottomWith)
-                        chartLineFillPaint!!.setShader(linearGradientCalm)
-                        canvas.drawPath(calmFillPath, chartLineFillPaint!!)
-                        canvas.drawPath(calmPath, lineCalmPaint!!)
-                    }
-                } else {
-                    list.getOrNull(i - 1)?.let { prev ->
-                        val isPrevAllZero =
-                            prev.calm == 0 && prev.focussed == 0 && prev.stressed == 0
-                        if (!isCurrentAllZero && isPrevAllZero) {
-                            showDataBar(canvas, current, x)
-                        }
-                    }
-                }
-            }
+            showDataBar(canvas, current, x)
 
             if (showXAxis) {
                 val xText = list[i].index
@@ -631,16 +525,7 @@ class StressAreaChart : View {
                     )
                 }
             }
-            canvas.drawLine(x, topWith, x, mHeight - bottomWith, paintVerticalBar)
-            if (showLastCircle) {
-                if (i == 1 && current.calm > 0) {
-                    val width = (glowDotBitmap!!.getWidth() / 2).toFloat()
-                    val height = (glowDotBitmap!!.getHeight() / 2).toFloat()
-                    canvas.drawBitmap(glowDotBitmap!!, x - width, calmY - height, scaleNodePaint)
-
-                    //canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint);
-                }
-            }
+            //canvas.drawLine(x, topWith, x, mHeight - bottomWith, paintVerticalBar)
         }
         //        canvas.drawPath(fillPath, chartLineFillPaint);
         if (offSet + moveOffSet < 0 || offSet + moveOffSet > (list.size - 1) * unitHLenth) {
@@ -651,6 +536,7 @@ class StressAreaChart : View {
         val x = (mWith - leftWith - rightWith) * divisor + leftWith
 
         showSelectedBar(canvas, list[position], x)
+
 
         if (moveOffSet == 0f && showXAxis) {
             val xText = list[position].index
@@ -676,96 +562,23 @@ class StressAreaChart : View {
                 )
             }
         }
-
-        return
-        /*
-                //show combined top views
-                val imageSize = dip2px(16f)
-                for (i in stressDNDataModel!!.sections!!.indices) {
-                    val section = stressDNDataModel!!.sections!![i]
-                    val calculatedEnd = if (section.end < 95) {
-                        section.end + 1
-                    } else {
-                        section.end
-                    }
-
-
-                    rectF?.left = section.start * unitHLenth
-                    rectF?.top = topWith
-                    rectF?.right = rectF!!.left + (calculatedEnd - section.start) * unitHLenth
-                    rectF?.bottom = mHeight - bottomWith
-
-                    chartLineFillPaint?.setShader(resMap!![i]!!.first)
-                    chartLineFillPaint?.let { canvas.drawRect(rectF!!, it) }
-
-                    rectF?.left = section.start * unitHLenth
-                    rectF?.top = topWith - dip2px(1f)
-                    rectF?.right = rectF!!.left + (calculatedEnd - section.start) * unitHLenth
-                    rectF?.bottom = topWith + dip2px(1f)
-                    gridPaint?.color = section.color
-                    gridPaint?.let { canvas.drawRect(rectF!!, it) }
-
-
-
-
-                    if (section.type.equals("combined", true)) {
-
-                        val text = "${section.count}"
-                        topCombinedPaint.getTextBounds(text, 0, text.length, xTextBounds)
-                        canvas.drawText(
-                            text,
-                            (rectF!!.left + rectF!!.right) / 2 - xTextBounds!!.width() / 2f,
-                            rectF!!.top - xTextBounds!!.height(),
-                            topCombinedPaint
-                        )
-
-                    } else {
-                        rectF!!.left = (rectF!!.right + rectF!!.left) / 2 - imageSize / 2f
-                        rectF!!.top = topWith - imageSize - dip2px(10f)
-                        rectF!!.right = rectF!!.left + imageSize
-                        rectF!!.bottom = rectF!!.top + imageSize
-
-                        val imageUrl = resMap!![i]?.third
-                        val bitmap = bitmapMap[i]
-                        if (bitmap != null) {
-                            canvas.drawBitmap(bitmap, null, rectF!!, workoutPaint)
-                        } else {
-                            if (imageUrl.isNullOrEmpty()) {
-                                if (resMap!![i]!!.second != null) {
-                                    canvas.drawBitmap(resMap!![i]!!.second!!, null, rectF!!, null)
-                                }
-                            } else {
-                                Glide.with(context)
-                                    .asBitmap()
-                                    .load(imageUrl)
-                                    .into(object : CustomTarget<Bitmap?>(imageSize, imageSize) {
-                                        override fun onResourceReady(
-                                            resource: Bitmap,
-                                            transition: Transition<in Bitmap?>?
-                                        ) {
-                                            bitmapMap[i] = resource
-                                            postInvalidate()
-                                        }
-
-                                        override fun onLoadCleared(placeholder: Drawable?) {}
-                                    })
-                            }
-                        }
-                    }
-                }*/
     }
 
-    private fun showDataBar(canvas: Canvas, current: ChartModelStress, currentX: Float) {
-        val widthHalf = dip2px(0.5f)
+    private fun showDataBar(
+        canvas: Canvas,
+        current: ChartModelStress,
+        currentX: Float,
+    ) {
+        val widthHalf = dip2px(3f)
 
         if (current.calm > 0) {
             val calmRect = RectF().apply {
                 left = currentX - widthHalf
                 right = currentX + widthHalf
                 bottom = mHeight - bottomWith
-                top = getYAxisValue(current.calm) - dip2px(1f)
+                top = getYAxisValue(current.calm) + dip2px(1f)
             }
-            canvas.drawRoundRect(calmRect, 10f, 10f, barCalmPaint)
+            canvas.drawRect(calmRect, barCalmPaint)
         }
 
         if (current.focussed > 0) {
@@ -773,56 +586,55 @@ class StressAreaChart : View {
                 left = currentX - widthHalf
                 right = currentX + widthHalf
                 bottom = getYAxisValue(current.calm) - dip2px(1f)
-                top = getYAxisValue(current.calm + current.focussed) - dip2px(2f)
+                top = getYAxisValue(current.calm + current.focussed) + dip2px(1f)
             }
-            canvas.drawRoundRect(calmRect, 10f, 10f, barFocussedPaint)
+            canvas.drawRect(calmRect, barFocussedPaint)
         }
 
         if (current.stressed > 0) {
             val calmRect = RectF().apply {
                 left = currentX - widthHalf
                 right = currentX + widthHalf
-                bottom = getYAxisValue(current.calm + current.focussed) - dip2px(2f)
-                top = getYAxisValue(current.calm + current.focussed + current.stressed) - dip2px(1f)
+                bottom = getYAxisValue(current.calm + current.focussed) - dip2px(1f)
+                top = getYAxisValue(current.calm + current.focussed + current.stressed)+ dip2px(1f)
             }
-            canvas.drawRoundRect(calmRect, 10f, 10f, barStressedPaint)
+            canvas.drawRect(calmRect, barStressedPaint)
         }
     }
 
     private fun showSelectedBar(canvas: Canvas, current: ChartModelStress, currentX: Float) {
         if ((moveOffSet == 0f || offSet + moveOffSet == (list.size - 1) * unitHLenth)) {
 
+            val widthHalf = dip2px(5f)
+
             if (current.calm > 0) {
                 val calmRect = RectF().apply {
-                    left = currentX - dip2px(2f)
-                    right = currentX + dip2px(2f)
+                    left = currentX - widthHalf
+                    right = currentX + widthHalf
                     bottom = mHeight - bottomWith
-                    top = getYAxisValue(current.calm) - dip2px(1f)
+                    top = getYAxisValue(current.calm) + dip2px(1f)
                 }
-                canvas.drawRoundRect(calmRect, 10f, 10f, barCalmPaint)
+                canvas.drawRect(calmRect, barCalmPaint)
             }
 
             if (current.focussed > 0) {
                 val calmRect = RectF().apply {
-                    left = currentX - dip2px(2f)
-                    right = currentX + dip2px(2f)
-                    bottom = getYAxisValue(current.calm) - dip2px(2f)
-                    top = getYAxisValue(current.calm + current.focussed) - dip2px(1f)
+                    left = currentX - widthHalf
+                    right = currentX + widthHalf
+                    bottom = getYAxisValue(current.calm) - dip2px(1f)
+                    top = getYAxisValue(current.calm + current.focussed) + dip2px(1f)
                 }
-                canvas.drawRoundRect(calmRect, 10f, 10f, barFocussedPaint)
+                canvas.drawRect(calmRect, barFocussedPaint)
             }
 
             if (current.stressed > 0) {
                 val calmRect = RectF().apply {
-                    left = currentX - dip2px(2f)
-                    right = currentX + dip2px(2f)
+                    left = currentX - widthHalf
+                    right = currentX + widthHalf
                     bottom = getYAxisValue(current.calm + current.focussed) - dip2px(1f)
-                    top =
-                        getYAxisValue(current.calm + current.focussed + current.stressed) - dip2px(
-                            2f
-                        )
+                    top = getYAxisValue(current.calm + current.focussed + current.stressed)+ dip2px(1f)
                 }
-                canvas.drawRoundRect(calmRect, 10f, 10f, barStressedPaint)
+                canvas.drawRect(calmRect, barStressedPaint)
             }
         }
     }

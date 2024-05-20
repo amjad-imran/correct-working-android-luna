@@ -156,7 +156,7 @@ constructor(
             current++
         }
 
-        LOGS.d("SECTIONS___ $sortedSection \n $combinedSection")
+        //LOGS.d("SECTIONS___ $sortedSection \n $combinedSection")
 
         return combinedSection
 

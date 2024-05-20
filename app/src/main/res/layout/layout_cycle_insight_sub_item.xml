@@ -51,13 +51,13 @@
         tools:text="days" />
 
     <ImageView
-        android:id="@+id/ivAbnormal"
+        android:id="@+id/ivState"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="12dp"
-        android:src="@drawable/ic_fmh_abnormal"
+        tools:src="@drawable/ic_fmh_abnormal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvValue" />
@@ -69,8 +69,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="@string/text_abnormal"
-        app:layout_constraintBottom_toBottomOf="@id/ivAbnormal"
-        app:layout_constraintStart_toEndOf="@id/ivAbnormal"
-        app:layout_constraintTop_toTopOf="@id/ivAbnormal" />
+        app:layout_constraintBottom_toBottomOf="@id/ivState"
+        app:layout_constraintStart_toEndOf="@id/ivState"
+        app:layout_constraintTop_toTopOf="@id/ivState" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

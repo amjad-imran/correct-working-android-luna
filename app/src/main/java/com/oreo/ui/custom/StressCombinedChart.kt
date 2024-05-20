@@ -253,7 +253,6 @@ class StressCombinedChart : View {
     }
 
     fun updateData(datas: StressCombineModel?) {
-        LOGS.d("sdfhksjdfhksjdfh updating")
         combineModel = datas
         list.clear()
         datas?.items?.let { list.addAll(it) }

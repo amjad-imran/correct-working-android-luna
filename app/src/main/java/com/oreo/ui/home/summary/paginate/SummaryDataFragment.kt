@@ -87,6 +87,7 @@ class SummaryDataFragment :
         viewModel.date?.let {
             mainViewModel.getDashBoardData(it)?.let { dash ->
                 viewModel.serverUserHealthData = dash.first
+                viewModel.stressBeta = mainViewModel.stressBeta
                 viewModel.shouldShowStressCard = mainViewModel.shouldShowStressCard(it)
                 setUi(dash.first)
             }
@@ -142,11 +143,11 @@ class SummaryDataFragment :
                 }
 
                 OSummaryHealthOverviewClickEnum.StressGraphClicked -> {
-                    if (viewModel.getStressWalkthroughShownStatus()) {
+                    /*if (viewModel.getStressWalkthroughShownStatus()) {
                         navigate(R.id.fragmentOStressDetails)
                     } else {
                         navigate(R.id.stressSplashFragment)
-                    }
+                    }*/
                 }
 
                 is OSummaryHealthOverviewClickEnum.OnNapClicked -> {
@@ -155,6 +156,9 @@ class SummaryDataFragment :
                 is OSummaryHealthOverviewClickEnum.TrackYourFemaleHealth -> {
                     navigate(R.id.fragmentCycleTracker)
                 }
+
+                OSummaryHealthOverviewClickEnum.TrackYourFemaleHealthRemindLater -> {}
+                OSummaryHealthOverviewClickEnum.FemaleHealthHome -> {}
             }
         }
 
@@ -162,12 +166,11 @@ class SummaryDataFragment :
 
 
     override fun initListener() {
-        binding.lytHeartRate.bInfo.invisible()
 
         binding.lytHeartRate.bInfo.setOnClickListener {
             viewModel.getContributorInfo("hr")
         }
-        /*binding.lytHeartRate.root.setOnClickListener {
+       /* binding.lytHeartRate.root.setOnClickListener {
             navigate(R.id.fragmentHeartRateDetails)
         }*/
 

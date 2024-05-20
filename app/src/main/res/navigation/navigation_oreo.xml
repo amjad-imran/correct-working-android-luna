@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_oreo"
     app:startDestination="@id/navigation_oreo_home">
 
@@ -701,6 +702,18 @@
         android:name="com.oreo.ui.recordworkout.BottomSheetLocationPermissionRequest"
         android:label="BottomSheetLocationPermissionRequest" />
     <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.noisefit.ui.settings.SettingsFragment"
+        android:label="fragment_settings" />
+    <fragment
+        android:id="@+id/unitSelectionFragment"
+        android:name="com.noisefit.ui.settings.options.UnitSelectionFragment"
+        android:label="fragment_unit_selection" />
+    <fragment
+        android:id="@+id/notificationSettingFragment"
+        android:name="com.noisefit.ui.settings.options.NotificationSettingFragment"
+        android:label="fragment_notification_setting" />
+    <fragment
         android:id="@+id/femaleHealthSplashFragment"
         android:name="com.oreo.ui.femalehealth.splash.FemaleHealthSplashFragment"
         android:label="fragment_female_splash">
@@ -713,7 +726,18 @@
     <fragment
         android:id="@+id/femaleHealthOnboardingFragment"
         android:name="com.oreo.ui.femalehealth.onboarding.FMHOnboardingFragment"
-        android:label="fragment_female_onboarding" />
+        android:label="fragment_female_onboarding" >
+        <action
+            android:id="@+id/action_femaleHealthOnboardingFragment_to_fmhOnboardingAllDoneFragment"
+            app:destination="@id/fmhOnboardingAllDoneFragment"
+            app:popUpTo="@id/femaleHealthOnboardingFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_femaleHealthOnboardingFragment_to_fragmentCycleTracker"
+            app:destination="@id/fragmentCycleTracker"
+            app:popUpTo="@id/femaleHealthOnboardingFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/fragmentCycleTracker"
         android:name="com.oreo.ui.femalehealth.cycletracker.CycleTrackerFragment"
@@ -723,12 +747,12 @@
         android:name="com.oreo.ui.femalehealth.cycletracker.CycleInsightDetailsFragment"
         android:label="FragmentCycleInsightDetails">
         <argument
-            android:name="pageTitle"
-            app:argType="string" />
+            android:name="launchMode"
+            app:argType="com.oreo.ui.femalehealth.cycletracker.CycleInsightLaunchMode" />
     </fragment>
     <fragment
-        android:id="@+id/cycleTrackorHistory"
-        android:name="com.oreo.ui.femalehealth.cycletracker.CycleTrackerHistoryFragment"
+        android:id="@+id/cycleTrackerHistory"
+        android:name="com.oreo.ui.femalehealth.cycletracker.history.CycleTrackerHistoryFragment"
         android:label="FragmentCycleHistory" />
     <fragment
         android:id="@+id/cycleSkinTemperature"
@@ -738,11 +762,23 @@
         android:id="@+id/cycleLogFragment"
         android:name="com.oreo.ui.femalehealth.cycletracker.CycleLogFragment"
         android:label="CycleLogFragment" />
-    <dialog android:id="@+id/bottomSheetCycleLog"
+    <dialog
+        android:id="@+id/bottomSheetCycleLog"
         android:name="com.oreo.ui.femalehealth.cycletracker.BottomSheetCycleLog"
         android:label="BottomSheetCycleLog">
         <argument
             android:name="data"
             app:argType="com.oreo.data.model.CycleLogDataModel" />
     </dialog>
+
+    <fragment
+        android:id="@+id/fmhOnboardingAllDoneFragment"
+        android:name="com.oreo.ui.femalehealth.onboarding.FMHOnboardingAllDoneFragment"
+        android:label="FMHOnboardingAllDoneFragment" >
+        <action
+            android:id="@+id/action_fmhOnboardingAllDoneFragment_to_fragmentCycleTracker"
+            app:destination="@id/fragmentCycleTracker"
+            app:popUpTo="@id/fmhOnboardingAllDoneFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

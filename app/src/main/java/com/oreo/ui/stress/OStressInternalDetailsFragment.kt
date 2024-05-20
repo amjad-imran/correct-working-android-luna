@@ -129,7 +129,11 @@ class OStressInternalDetailsFragment :
 
     private fun handleProgressStatus(strData: StressResultData?) {
 
-        val stressDays = mainViewModel.stressDaysFromCurrent(strData?.date)
+        val stressDays = if (mViewModel.dayType.equals("day", true)) {
+            mainViewModel.stressDaysFromCurrent(strData?.date)
+        } else {
+            8
+        }
 
         binding.lytTopView.lytCalm.apply {
 
@@ -288,6 +292,17 @@ class OStressInternalDetailsFragment :
 
             binding.tvMsg.text = Html.fromHtml(data?.message ?: "")
 
+            if (mViewModel.dayType?.equals("day", true) == true) {
+                binding.tvDate.text = DateFormats.formatDateTime(
+                    data.date,
+                    DateFormats.dateFormat3,
+                    DateFormats.dateFormat2
+                )
+                binding.tvDate.visible()
+            } else {
+                binding.tvDate.gone()
+            }
+
             handleProgressStatus(data)
 
 
@@ -323,7 +338,6 @@ class OStressInternalDetailsFragment :
         data?.let {
             mViewModel.selectedData.postValue(it)
         }
-        LOGS.d("dsfsdfsdfsf $data")
     }
 
     override fun onScrolling(position: Int, chartModel: ChartModelStress?) {

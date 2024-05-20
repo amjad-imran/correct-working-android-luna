@@ -3,6 +3,7 @@ package com.oreo.ui.stress
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Animation
@@ -12,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
@@ -37,6 +39,7 @@ import com.oreo.data.model.Stress
 import com.oreo.data.model.StressNudge
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.stress.banner.OreoStressBannerFragment
+import com.oreo.ui.stress.help.StressInfoCardAction
 import com.oreo.ui.stress.help.StressUnderstandingImageAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -57,7 +60,11 @@ class OStressDataMovementFragment :
 
     private val setBackHandler = Handler(Looper.getMainLooper())
     private val howItWorksAdapter: StressUnderstandingImageAdapter by lazy {
-        StressUnderstandingImageAdapter()
+        StressUnderstandingImageAdapter(object : StressInfoCardAction {
+            override fun onStressInfoCardClicked() {
+                navigate(R.id.stressUnderstandingFragment)
+            }
+        })
     }
 
     private var setBackRunnable = Runnable {
@@ -277,6 +284,25 @@ class OStressDataMovementFragment :
         binding.lytNoMovement.root.setOnClickListener {
             handleMovementClick(0)
         }
+
+        binding.rvHowItWorks.addOnItemTouchListener(object :
+            RecyclerView.OnItemTouchListener {
+
+            override fun onTouchEvent(view: RecyclerView, event: MotionEvent) {}
+
+            override fun onInterceptTouchEvent(view: RecyclerView, event: MotionEvent): Boolean {
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        binding.rvHowItWorks.parent?.requestDisallowInterceptTouchEvent(
+                            true
+                        )
+                    }
+                }
+                return false
+            }
+
+            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+        })
     }
 
     fun removeMovementHighlights() {
@@ -567,18 +593,24 @@ class OStressDataMovementFragment :
     }
 
     private fun setStressBannerViewPager(data: List<StressNudge>?) {
+        val nudgeList = ArrayList<StressNudge>()
         if (data.isNullOrEmpty()) {
-            binding.lytStressBanner.root.gone()
-            binding.divider1.root.gone()
-            return
-        } else {
-            binding.lytStressBanner.root.visible()
-            binding.divider1.root.visible()
+            nudgeList.add(
+                StressNudge(
+                    label = "No summary available",
+                    message = "There wasn’t enough data to give a full-day summary. Remember to wear your ring to track your stress"
+                )
+            )
+        }else{
+            nudgeList.addAll(data)
         }
+
+        binding.lytStressBanner.root.visible()
+        binding.divider1.root.visible()
 
         val fragments = ArrayList<OreoStressBannerFragment>()
 
-        data.forEach {
+        nudgeList.forEach {
             fragments.add(OreoStressBannerFragment.newInstance(it))
         }
 

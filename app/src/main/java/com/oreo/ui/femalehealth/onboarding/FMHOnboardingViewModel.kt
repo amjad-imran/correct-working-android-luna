@@ -10,59 +10,80 @@ import com.noisefit.data.model.DiagnoseDataItem
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.WheelItem
+import com.noisefit_commans.utils.wheel.WheelItemPeriod
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import org.joda.time.format.DateTimeFormat
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import javax.inject.Inject
 
 
-const val DefaultPeriodDays = 7
+const val DefaultPeriodDays = 5
 const val MinPeriodDays = 1
-const val MaxPeriodDays = 45
+const val MaxPeriodDays = 15
+
+const val DefaultCycleDays = 28
+const val MinCycleDays = 12
+const val MaxCycleDays = 100
 
 @HiltViewModel
 class FMHOnboardingViewModel @Inject constructor(
-    val userActivityRepository: OreoUserActivityRepository
+    val localDataStore: DataStoredInterface, val userActivityRepository: OreoUserActivityRepository
 ) : BaseViewModel() {
     val fragmentSize = 7
 
     var isGoalSelected = MutableLiveData<Event<Boolean>>()
-    private var pDays = 0
-    private var pcDays = 0
+    var pDays = 0
+    var pcDays = 0
 
     private var periodDays = ArrayList<Int>()
     private var periodCycleDays = ArrayList<Int>()
-    var goalTypeSelected: String = ""
+    var goalTypeSelected: GoalType? = null
     var selectedDiagnoseListData = ArrayList<String>()
     var selectedHormoneListData = ArrayList<String>()
-//    val updateFMHDate = MutableLiveData<Event<Boolean>>()
-    var selectedEndDate: LocalDate? = null
-    var selectedPStartDate: String? = null
+
+    //    val updateFMHDate = MutableLiveData<Event<Boolean>>()
+    var selectedPEndDate: LocalDate? = null
+    var selectedPStartDate: LocalDate? = null
 
     init {
         for (i in MinPeriodDays..MaxPeriodDays) {
             periodDays.add(i)
+        }
+        for (i in MinCycleDays..MaxCycleDays) {
             periodCycleDays.add(i)
         }
     }
 
-    fun getPeriodDayData(): ArrayList<WheelItem<String>> {
-        val dataSet = ArrayList<WheelItem<String>>()
+    fun getPeriodDayData(): List<WheelItemPeriod<String>> {
+        val dataSet = ArrayList<WheelItemPeriod<String>>()
         periodDays.forEach {
-            dataSet.add(WheelItem("$it days"))
+            if (it < 10) {
+                dataSet.add(WheelItemPeriod("0$it"))
+            } else {
+                dataSet.add(WheelItemPeriod("$it"))
+            }
         }
         return dataSet
 
     }
 
-    fun getPeriodCycleDayData(): ArrayList<WheelItem<String>> {
-        val dataSet = ArrayList<WheelItem<String>>()
+    fun getPeriodCycleDayData(): List<WheelItemPeriod<String>> {
+        val dataSet = ArrayList<WheelItemPeriod<String>>()
         periodCycleDays.forEach {
-            dataSet.add(WheelItem("$it days"))
+            if (it < 10) {
+                dataSet.add(WheelItemPeriod("0$it"))
+            } else {
+                dataSet.add(WheelItemPeriod("$it"))
+            }
         }
         return dataSet
 
@@ -78,7 +99,7 @@ class FMHOnboardingViewModel @Inject constructor(
 
     fun getPeriodCycleDayIndex(): Int {
         if (pcDays == 0) {
-            pcDays = DefaultPeriodDays
+            pcDays = DefaultCycleDays
         }
         return periodCycleDays.indexOf(pcDays)
 
@@ -126,14 +147,38 @@ class FMHOnboardingViewModel @Inject constructor(
     val femaleHealthSubmitInfo: LiveData<Event<Boolean>>
         get() = _femaleHealthSubmitInfo
 
-    fun updateFemaleHealthData() {
+    private val _femaleHealthSkip = MutableLiveData<Event<Boolean>>()
+    val femaleHealthSkip: LiveData<Event<Boolean>>
+        get() = _femaleHealthSkip
+
+    private val _moveBack = MutableLiveData<Event<Boolean>>()
+    val moveBack: LiveData<Event<Boolean>>
+        get() = _moveBack
+
+    /**
+     * navigationState 1->Back, 2->All Set, 3->Cycle Tracker
+     */
+    fun updateFemaleHealthData(navigationState: Int = 2) {
         val jsonObject = JsonObject()
 
-        jsonObject.addProperty("goal", goalTypeSelected)
-        jsonObject.addProperty("period_length", pDays)
-        jsonObject.addProperty("cycle_length", pcDays)
-        jsonObject.addProperty("period_date", selectedPStartDate)
-        jsonObject.addProperty("period_date", selectedPStartDate)
+        jsonObject.addProperty("goal", goalTypeSelected?.name)
+        if (pDays == 0) {
+            jsonObject.addProperty("period_length", DefaultPeriodDays)
+        } else {
+            jsonObject.addProperty("period_length", pDays)
+        }
+
+        if (pcDays == 0) {
+            jsonObject.addProperty("cycle_length", DefaultCycleDays)
+        } else {
+            jsonObject.addProperty("cycle_length", pcDays)
+        }
+
+        selectedPStartDate?.let {
+            val date = it.format(DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH))
+            jsonObject.addProperty("period_date", date)
+        }
+
         val diagnoseArray = JsonArray()
         selectedDiagnoseListData.forEach {
             diagnoseArray.add(it)
@@ -141,7 +186,7 @@ class FMHOnboardingViewModel @Inject constructor(
         jsonObject.add("diagnosis", diagnoseArray)
         val medicinesArray = JsonArray()
         selectedHormoneListData.forEach {
-            diagnoseArray.add(it)
+            medicinesArray.add(it)
         }
         jsonObject.add("medicines", medicinesArray)
 
@@ -162,7 +207,7 @@ class FMHOnboardingViewModel @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        updateFemaleHealthData()
+                                        updateFemaleHealthData(navigationState)
                                     }
 
                                     override fun no() {
@@ -174,27 +219,43 @@ class FMHOnboardingViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            _femaleHealthSubmitInfo.postValue(Event(true))
+                            localDataStore.setFMHWalkthroughShown(true)
+                            /**
+                             * navigationState 1->Back, 2->All Set, 3->Cycle Tracker
+                             */
+                            when (navigationState) {
+                                1 -> {
+                                    _moveBack.postValue(Event(true))
+                                }
+
+                                2 -> {
+                                    _femaleHealthSubmitInfo.postValue(Event(true))
+                                }
+
+                                3 -> {
+                                    _femaleHealthSkip.postValue(Event(true))
+                                }
+                            }
                         }
                     }
                 }
             }
         }
-//        updateFMHDate.postValue(Event(true))
     }
 
-    fun calenderDayRange(): Int {
-        val dayDiff = pcDays - pDays
-        val dayRange: Int = if (dayDiff > 0) {
-            dayDiff
-        } else {
-            0
+
+    fun calculatePeriodEndDate(date: LocalDate): LocalDate {
+        return date.plusDays(pDays.toLong() - 1)
+    }
+
+    fun calculateStartAndEndPeriodDates() {
+        if (pDays != 0 && selectedPStartDate != null && selectedPEndDate != null) {
+            selectedPEndDate = selectedPStartDate!!.plusDays(pDays.toLong() - 1)
         }
-        return dayRange
     }
 
 }
 
 enum class GoalType {
-    TRACK_CYCLE, TRACK_CONCEIVE, TRACK_PREGNANCY
+    TRACK_CYCLE, TRY_CONCEIVE, TRACK_PREGNANCY
 }

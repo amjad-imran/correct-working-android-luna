@@ -7,6 +7,7 @@ import com.noisefit.data.model.DiagnoseDataItem
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.LayoutFmhDiagnoseItemBinding
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.ui.visible
 
 class FMHDiagnoseAdapter(val mListener: OnItemClickListener) :
@@ -57,9 +58,26 @@ class FMHDiagnoseAdapter(val mListener: OnItemClickListener) :
     }
 
     fun updateItem(pos: Int, data: DiagnoseDataItem) {
+        tryCatch {
+            mDataSet[0].isChecked = false
+        }
         data.isChecked = !data.isChecked
         mDataSet[pos] = data
         notifyItemChanged(pos)
+    }
+
+    fun onNoneSelected(data: DiagnoseDataItem) {
+        try {
+            mDataSet.forEachIndexed { index, diagnoseDataItem ->
+                if (data.isChecked) {
+                    mDataSet[index].isChecked = false
+                } else {
+                    mDataSet[index].isChecked = index == 0
+                }
+            }
+            notifyDataSetChanged()
+        } catch (exp: Exception) {
+        }
     }
 
     fun getUpdatedSelectedListData(): ArrayList<String> {

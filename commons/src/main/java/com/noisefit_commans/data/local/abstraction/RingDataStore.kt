@@ -76,9 +76,12 @@ interface RingDataStore {
     fun isUpdateUserDeviceDone(): Boolean
     fun setUpdateUserDeviceStatus(status: Boolean)
 
-    fun isNewOtaAvailable():Boolean
+    fun isNewOtaAvailable(): Boolean
 
     fun getFirstStressDay(): String?
     fun setFirstStressDay(firstStress: String?)
+
+    fun getStressBetaState(): Boolean?
+    fun setStressBetaState(state: Boolean?)
 
 }

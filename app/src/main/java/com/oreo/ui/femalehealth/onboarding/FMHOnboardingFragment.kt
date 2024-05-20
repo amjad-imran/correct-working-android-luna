@@ -9,6 +9,8 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentFMHOnboardingBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.roundToInt
@@ -58,11 +60,16 @@ class FMHOnboardingFragment :
                 if (position == 1 || position == 2) {
                     binding.bNotSure.visible()
                 } else
-                    binding.bNotSure.gone()
+                    binding.bNotSure.invisible()
+
                 if (position == mViewModel.fragmentSize - 1)
                     binding.bNext.text = getString(R.string.text_done)
-                else
-                    binding.bNext.text = getString(R.string.text_next)
+                else {
+                    if (position == 1 || position == 2) {
+                        binding.bNext.text = getString(R.string.text_confirm)
+                    } else
+                        binding.bNext.text = getString(R.string.text_next)
+                }
 
                 setProgress(position)
 
@@ -89,12 +96,6 @@ class FMHOnboardingFragment :
     }
 
     override fun initListener() {
-        binding.vLeft.setOnClickListener {
-            onBackPress()
-        }
-        binding.vRight.setOnClickListener {
-            onNextPress()
-        }
 
         binding.backBtn.setOnClickListener {
             onBackPress()
@@ -103,7 +104,19 @@ class FMHOnboardingFragment :
             onNextPress()
         }
         binding.bNotSure.setOnClickListener {
-            onNextPress()
+            val current = binding.vpFmhOnboard.currentItem
+
+            when (current) {
+                1 -> {
+                    mViewModel.updateFemaleHealthData(3)
+                    return@setOnClickListener
+                }
+
+                2 -> {
+                    mViewModel.updateFemaleHealthData(3)
+                    return@setOnClickListener
+                }
+            }
         }
 
 
@@ -120,24 +133,81 @@ class FMHOnboardingFragment :
 
     private fun onNextPress() {
         val current = binding.vpFmhOnboard.currentItem
-        if (current == (mViewModel.fragmentSize - 1)) {
-            mViewModel.updateFemaleHealthData()
+        when (current) {
+            0 -> {
+                if (mViewModel.goalTypeSelected == GoalType.TRACK_PREGNANCY) {
+                    mViewModel.updateFemaleHealthData(1)
+                    return
+                }
+            }
 
-        } else {
-            binding.vpFmhOnboard.setCurrentItem(current + 1, true)
+            3 -> {
+                if (mViewModel.selectedPStartDate == null) {
+                    context.showShortToast("Select Date to continue")
+                    return
+                }
+            }
+
+            4 -> {
+                if (mViewModel.selectedDiagnoseListData.isEmpty()) {
+                    context.showShortToast("Select condition")
+                    return
+                }
+            }
+
+            5 -> {
+                if (mViewModel.selectedHormoneListData.isEmpty()) {
+                    context.showShortToast("Select")
+                    return
+                }
+                mViewModel.updateFemaleHealthData()
+                return
+            }
         }
+
+        binding.vpFmhOnboard.setCurrentItem(current + 1, true)
     }
 
     override fun subscribeObservers() {
+        mViewModel.moveBack.observe(this) {
+            it.getContent()?.let {
+                navigateUpSafe()
+            }
+        }
         mViewModel.femaleHealthSubmitInfo.observe(this) { it1 ->
             it1?.getContent()?.let {
-                navigate(R.id.fragmentCycleTracker)
+                navigate(FMHOnboardingFragmentDirections.actionFemaleHealthOnboardingFragmentToFmhOnboardingAllDoneFragment())
             }
-
         }
+
+        mViewModel.femaleHealthSkip.observe(this) { it1 ->
+            it1?.getContent()?.let {
+                navigate(FMHOnboardingFragmentDirections.actionFemaleHealthOnboardingFragmentToFragmentCycleTracker())
+            }
+        }
+
         mViewModel.isGoalSelected.observe(this) { it1 ->
             it1?.getContent()?.let {
                 binding.bNext.isEnabled = it
+            }
+        }
+
+        mViewModel.getMessages().observe(this) {
+            it.getContent()?.let { message ->
+                context.showShortToast(message)
+            }
+        }
+
+        mViewModel.getLoading().observe(viewLifecycleOwner) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
+            }
+        }
+        mViewModel.getApiErrors().observe(viewLifecycleOwner) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
             }
         }
     }

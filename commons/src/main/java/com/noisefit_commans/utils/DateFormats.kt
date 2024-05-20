@@ -78,6 +78,10 @@ object DateFormats {
     val monthDateWithoutYear2 = SimpleDateFormat("MMM dd", defaultLocale)
 
     @SuppressLint("ConstantLocale")
+    val month = SimpleDateFormat("MMM", defaultLocale)
+    val date = SimpleDateFormat("dd", defaultLocale)
+
+    @SuppressLint("ConstantLocale")
     val dateTimeFormatWithWeekDay = SimpleDateFormat("EEEE, dd MMMM yyyy", defaultLocale)
 
     @SuppressLint("ConstantLocale")
@@ -2065,7 +2069,6 @@ object DateFormats {
     }
 
     fun getDaysAgo(daysAgo: Int): Date {
-        LOGS.d("start day ago ${daysAgo}")
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.DAY_OF_YEAR, daysAgo)
         return calendar.time
