@@ -4,9 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieDrawable
-import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ViewStressSplashDescriptionSliderBinding
-import com.noisefit_commans.ui.loadImage
 import com.oreo.data.model.StressSplashModel
 
 
@@ -23,6 +21,7 @@ class ChatSplashDescriptionAdapter :
                 repeatCount = LottieDrawable.INFINITE
                 setAnimation(data.image)
                 if (bindingAdapterPosition == currentPlayPos) {
+                    this.progress = 0f
                     playAnimation()
                 } else {
                     pauseAnimation()
@@ -60,11 +59,14 @@ class ChatSplashDescriptionAdapter :
     }
 
     fun startAnim(position: Int) {
-        val lastPos = currentPlayPos
-        currentPlayPos = position
-        if (lastPos != -1) {
-            notifyItemChanged(lastPos)
+        try {
+            val lastPos = currentPlayPos
+            currentPlayPos = position
+            if (lastPos != -1) {
+                notifyItemChanged(lastPos)
+            }
+            notifyItemChanged(position)
+        } catch (exp: Exception) {
         }
-        notifyItemChanged(position)
     }
 }

@@ -307,8 +307,9 @@ class SummaryDataViewModelToday @Inject constructor(
                                     )
                                 )
                             }
+                        }else{
+                            userActivities.add(OHealthOverview.LunaAiCard())
                         }
-                        userActivities.add(OHealthOverview.LunaAiCard())
                     } else {
                         userActivities.add(OHealthOverview.LunaAiCard())
                         userActivities.add(OHealthOverview.SleepWaiting)
@@ -339,8 +340,9 @@ class SummaryDataViewModelToday @Inject constructor(
                                     )
                                 )
                             }
+                        }else{
+                            userActivities.add(OHealthOverview.LunaAiCard())
                         }
-                        userActivities.add(OHealthOverview.LunaAiCard())
                     } else {
                         userActivities.add(OHealthOverview.LunaAiCard())
                         userActivities.add(OHealthOverview.SleepWaiting)
@@ -393,8 +395,9 @@ class SummaryDataViewModelToday @Inject constructor(
                                 )
                             }
                         }
+                    }else{
+                        userActivities.add(OHealthOverview.LunaAiCard())
                     }
-                    userActivities.add(OHealthOverview.LunaAiCard())
                     if (nap.isNotEmpty()) {
                         userActivities.add(OHealthOverview.NapDashCard(nap, healthData.date))
                     }
@@ -441,8 +444,9 @@ class SummaryDataViewModelToday @Inject constructor(
                                 )
                             )
                         }
+                    }else{
+                        userActivities.add(OHealthOverview.LunaAiCard())
                     }
-                    userActivities.add(OHealthOverview.LunaAiCard())
 
                     if (registerDate != 0) {
                         if (healthData.sleep?.sleepScore != null) {

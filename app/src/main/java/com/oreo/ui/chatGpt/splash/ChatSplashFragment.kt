@@ -135,21 +135,21 @@ class ChatSplashFragment :
         dataList.add(
             StressSplashModel(
                 "Ask Any Question",
-                R.raw.anim_chat_onboard_1_test,
+                R.raw.anim_chat_onboard_1,
                 getString(R.string.text_ai_content_1)
             )
         )
         dataList.add(
             StressSplashModel(
                 "Learn More About Your Body",
-                R.raw.anim_chat_onboard_1_test,
+                R.raw.anim_chat_onboard_1,
                 getString(R.string.text_ai_content_2)
             )
         )
         dataList.add(
             StressSplashModel(
                 "Your personal fitness coach",
-                R.raw.anim_chat_onboard_1_test,
+                R.raw.anim_chat_onboard_1,
                 getString(R.string.text_ai_content_3)
             )
         )
