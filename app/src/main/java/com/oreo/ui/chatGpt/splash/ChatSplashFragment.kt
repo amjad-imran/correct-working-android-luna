@@ -142,7 +142,7 @@ class ChatSplashFragment :
         dataList.add(
             StressSplashModel(
                 "Learn More About Your Body",
-                R.raw.anim_chat_onboard_1,
+                R.raw.anim_chat_onboard_2,
                 getString(R.string.text_ai_content_2)
             )
         )
