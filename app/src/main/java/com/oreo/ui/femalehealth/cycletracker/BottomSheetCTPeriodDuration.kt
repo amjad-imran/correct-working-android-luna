@@ -4,76 +4,106 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
-import androidx.navigation.fragment.navArgs
-import com.noisefit.luna.R
-import com.noisefit.luna.databinding.BottomSheetCycleLogBinding
+import com.noisefit.luna.databinding.BottomSheetCtPeriodDurationViewBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
-import com.oreo.data.model.CycleLogDataModel
-import com.oreo.data.model.FlowLog
+import com.noisefit_commans.utils.ScreenUtils
+import com.noisefit_commans.utils.wheel.WheelAdapterPeriod
+import com.noisefit_commans.utils.wheel.WheelItemPeriod
+import com.oreo.ui.femalehealth.onboarding.MaxCycleDays
+import com.oreo.ui.femalehealth.onboarding.MaxPeriodDays
+import com.oreo.ui.femalehealth.onboarding.MinCycleDays
+import com.oreo.ui.femalehealth.onboarding.MinPeriodDays
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 const val DURATION_LOG_SAVE = "DURATION_LOG_SAVE"
 
-class BottomSheetCTPeriodDuration : BaseBottomSheetWithTransparent<BottomSheetCycleLogBinding>(
-    BottomSheetCycleLogBinding::inflate
-) {
-    private var cycleLog: CycleLogDataModel? = null
-    private val args: BottomSheetCycleLogArgs by navArgs()
-    private var selectedFlowType: String = ""
-    private val flowAdapter: CycleLogAdapter by lazy {
-        CycleLogAdapter(object : OnLogItemClick {
-            override fun onItemClick(data: FlowLog, position: Int) {
-                selectedFlowType = data.title ?: ""
+@AndroidEntryPoint
+class BottomSheetCTPeriodDuration :
+    BaseBottomSheetWithTransparent<BottomSheetCtPeriodDurationViewBinding>(
+        BottomSheetCtPeriodDurationViewBinding::inflate
+    ) {
 
-            }
-        })
-    }
-    private val symptomsAdapter: CycleSymptomsAdapter by lazy {
-        CycleSymptomsAdapter(object : OnSymptomsItemClick {
-            override fun onItemClick(data: FlowLog, position: Int) {
-                symptomsAdapter.updateItem(data, position)
-            }
-        })
+    private var mSelectedValue: String? = null
+    private var mInitialSelectedValue: String? = null
+    private var mTitle: String? = null
+    private var mSelectedPosition: Int = 0
+
+
+    @Inject
+    lateinit var screenUtils: ScreenUtils
+
+
+    private val wheelAdapter: WheelAdapterPeriod<String> by lazy {
+        WheelAdapterPeriod()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
-            cycleLog = args.data
+            val args = BottomSheetCTPeriodDurationArgs.fromBundle(it)
+            mTitle = args.title
+            initUi(args.selectedValue)
         }
-        setRecycler()
 
     }
 
-    private fun setRecycler() {
-        with(binding.rvFlow) {
-            adapter = flowAdapter
-        }
-        flowAdapter.setData(cycleLog?.flowData)
+    private fun initUi(selectedValue: String?) {
 
-        with(binding.rvSymptoms) {
-            adapter = symptomsAdapter
+        prepareDaysData()
+        binding.tvTitle.text = mTitle
+
+        mSelectedValue =
+            if (selectedValue.isNullOrEmpty()) getPeriodDayData()[0].data else selectedValue
+        mInitialSelectedValue = selectedValue
+        mSelectedPosition = if (selectedValue.isNullOrEmpty()) {
+            0
+        } else {
+            getSelectedPosition(selectedValue, getPeriodDayData())
         }
-        symptomsAdapter.setData(cycleLog?.symptomsData)
+        setWheelPicker()
+    }
+
+    private fun setWheelPicker() {
+        binding.wheelPicker.visibleItemCount = 3//it could not be less then 3
+        wheelAdapter.data = getPeriodDayData()
+        wheelAdapter.setOnItemSelectedListener { item ->
+            //
+            mSelectedValue = item
+        }
+        wheelAdapter.bind(binding.wheelPicker)
+        wheelAdapter.selectedItemPosition =
+            getSelectedPosition(mSelectedValue ?: "", getPeriodDayData())
+    }
+
+    private fun getSelectedPosition(
+        selectedValue: String,
+        selectionList: ArrayList<WheelItemPeriod<String>>
+    ): Int {
+        for ((index, item) in selectionList.withIndex()) {
+            if (item.data.equals(selectedValue, true)) {
+                return index
+            }
+        }
+        return 0
     }
 
     override fun initListener() {
-        binding.tvTitle.text = getString(R.string.text_cycle_log)
 
-        binding.btnSave.setOnClickListener {
+        binding.btnDone.setOnClickListener {
 
-            val selectedSymptomList = symptomsAdapter.getUpdatedSelectedListData()
             setFragmentResult(
-                CYCLE_LOG_SAVE,
-                bundleOf("agree" to true, "data" to selectedSymptomList, "flow" to selectedFlowType)
+                DURATION_LOG_SAVE,
+                bundleOf("agree" to true, "selectedValue" to mSelectedValue)
             )
             navigateUpSafe()
 
         }
-        binding.ivLogAdd.setOnClickListener {
+        binding.btnCancel.setOnClickListener {
             navigateUpSafe()
             setFragmentResult(
-                CYCLE_LOG_SAVE,
-                bundleOf("agree" to false)
+                DURATION_LOG_SAVE,
+                bundleOf("agree" to false, "selectedValue" to mSelectedValue)
             )
         }
     }
@@ -81,4 +111,32 @@ class BottomSheetCTPeriodDuration : BaseBottomSheetWithTransparent<BottomSheetCy
     override fun subscribeObservers() {
 
     }
+
+    private var periodDays = ArrayList<Int>()
+    private var periodCycleDays = ArrayList<Int>()
+
+    private fun prepareDaysData() {
+        for (i in MinPeriodDays..MaxPeriodDays) {
+            periodDays.add(i)
+        }
+        for (i in MinCycleDays..MaxCycleDays) {
+            periodCycleDays.add(i)
+        }
+    }
+
+
+    fun getPeriodDayData(): ArrayList<WheelItemPeriod<String>> {
+        val dataSet = ArrayList<WheelItemPeriod<String>>()
+        periodDays.forEach {
+            if (it < 10) {
+                dataSet.add(WheelItemPeriod("0$it"))
+            } else {
+                dataSet.add(WheelItemPeriod("$it"))
+            }
+        }
+        return dataSet
+
+    }
+
+
 }

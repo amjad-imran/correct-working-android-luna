@@ -788,4 +788,17 @@
         android:id="@+id/cycleTrackerSettingFragment"
         android:name="com.oreo.ui.femalehealth.cycletracker.CycleTrackerSettingsFragment"
         android:label="CycleTrackSetting" />
+
+    <dialog
+        android:id="@+id/cycleTrackerDurationLog"
+        android:name="com.oreo.ui.femalehealth.cycletracker.BottomSheetCTPeriodDuration"
+        android:label="CycleTrackerDuration">
+        <argument
+            android:name="selectedValue"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </dialog>
 </navigation>
