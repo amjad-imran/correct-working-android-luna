@@ -52,28 +52,42 @@ class BottomSheetCTPeriodDuration :
 
         prepareDaysData()
         binding.tvTitle.text = mTitle
-
-        mSelectedValue =
+        mSelectedValue = if (isFromPeriodDuration()) {
             if (selectedValue.isNullOrEmpty()) getPeriodDayData()[0].data else selectedValue
+        } else {
+            if (selectedValue.isNullOrEmpty()) getPeriodCycleDayData()[0].data else selectedValue
+
+        }
+
         mInitialSelectedValue = selectedValue
         mSelectedPosition = if (selectedValue.isNullOrEmpty()) {
             0
         } else {
-            getSelectedPosition(selectedValue, getPeriodDayData())
+            if (isFromPeriodDuration())
+                getSelectedPosition(selectedValue, getPeriodDayData())
+            else
+                getSelectedPosition(selectedValue, getPeriodCycleDayData())
         }
         setWheelPicker()
     }
 
     private fun setWheelPicker() {
         binding.wheelPicker.visibleItemCount = 3//it could not be less then 3
-        wheelAdapter.data = getPeriodDayData()
+        val listData: ArrayList<WheelItemPeriod<String>> = if (isFromPeriodDuration())
+            getPeriodDayData()
+        else
+            getPeriodCycleDayData()
+        wheelAdapter.data = listData
         wheelAdapter.setOnItemSelectedListener { item ->
             //
             mSelectedValue = item
         }
         wheelAdapter.bind(binding.wheelPicker)
-        wheelAdapter.selectedItemPosition =
+        val lastPosition: Int = if (isFromPeriodDuration())
             getSelectedPosition(mSelectedValue ?: "", getPeriodDayData())
+        else
+            getSelectedPosition(mSelectedValue ?: "", getPeriodCycleDayData())
+        wheelAdapter.selectedItemPosition = lastPosition
     }
 
     private fun getSelectedPosition(
@@ -86,6 +100,10 @@ class BottomSheetCTPeriodDuration :
             }
         }
         return 0
+    }
+
+    private fun isFromPeriodDuration(): Boolean {
+        return mTitle.equals("Period duration")
     }
 
     override fun initListener() {
@@ -125,9 +143,22 @@ class BottomSheetCTPeriodDuration :
     }
 
 
-    fun getPeriodDayData(): ArrayList<WheelItemPeriod<String>> {
+    private fun getPeriodDayData(): ArrayList<WheelItemPeriod<String>> {
         val dataSet = ArrayList<WheelItemPeriod<String>>()
         periodDays.forEach {
+            if (it < 10) {
+                dataSet.add(WheelItemPeriod("0$it"))
+            } else {
+                dataSet.add(WheelItemPeriod("$it"))
+            }
+        }
+        return dataSet
+
+    }
+
+    private fun getPeriodCycleDayData(): ArrayList<WheelItemPeriod<String>> {
+        val dataSet = ArrayList<WheelItemPeriod<String>>()
+        periodCycleDays.forEach {
             if (it < 10) {
                 dataSet.add(WheelItemPeriod("0$it"))
             } else {
