@@ -665,7 +665,7 @@ class SummaryDataViewModelToday @Inject constructor(
         val daysUntilOvulation = calculateDaysLeft(data.ovulationDate!!)
         val daysUntilNextPeriod = calculateDaysLeft(data.nextPeriodDate!!)
 
-        if (daysUntilOvulation < daysUntilNextPeriod) {
+        if (daysUntilOvulation < daysUntilNextPeriod && daysUntilOvulation > 0) {
             return PeriodCard1(
                 title = "Ovulation in",
                 days = daysUntilOvulation.toInt(),

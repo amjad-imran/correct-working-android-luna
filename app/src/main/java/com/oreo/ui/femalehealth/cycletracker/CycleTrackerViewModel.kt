@@ -14,14 +14,19 @@ import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
+import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
 class CycleTrackerViewModel @Inject constructor(
     private val userActivityRepository: OreoUserActivityRepository,
 ) : BaseViewModel() {
+
+    var selectedDate: LocalDate? = null
+    var selectedPos: DayOfWeek? = null
 
     private val _femaleHealthData = MutableLiveData<FemaleHealthUserInfoModel>()
     val femaleHealthData: LiveData<FemaleHealthUserInfoModel> get() = _femaleHealthData
@@ -38,7 +43,6 @@ class CycleTrackerViewModel @Inject constructor(
             } else {
                 _cycleHistoryData.postValue(null)
             }
-
 
             userActivityRepository.getFemaleHealthUserInfo(date).collect { resource ->
                 when (resource) {
@@ -123,11 +127,11 @@ class CycleTrackerViewModel @Inject constructor(
     }
 
     fun getPregnancyText(text: String?): String {
-        return if (text.equals("high",true)) {
+        return if (text.equals("high", true)) {
             "High chance of pregnancy"
-        } else if (text.equals("low",true)) {
+        } else if (text.equals("low", true)) {
             "Low chance of pregnancy"
-        } else if (text.equals("fertile",true)) {
+        } else if (text.equals("fertile", true)) {
             "Your body is at it’s most fertile today"
         } else {
             ""
@@ -157,6 +161,11 @@ class CycleTrackerViewModel @Inject constructor(
         val targetDate = LocalDate.parse(dateString)
         val today = LocalDate.now()
         return ChronoUnit.DAYS.between(today, targetDate)
+    }
+
+    fun updateSelectedDate(date: LocalDate) {
+        selectedDate = date
+        selectedPos = date.dayOfWeek
     }
 
 

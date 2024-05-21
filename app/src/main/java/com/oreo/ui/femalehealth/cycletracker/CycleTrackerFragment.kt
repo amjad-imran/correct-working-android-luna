@@ -22,6 +22,7 @@ import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.health.Nudges
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
@@ -29,6 +30,7 @@ import com.oreo.ui.workout.details.WorkoutNudgeFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 import java.util.ArrayList
 
 @AndroidEntryPoint
@@ -36,7 +38,6 @@ class CycleTrackerFragment :
     BaseFragment<FragmentCycleTrackerBinding>(FragmentCycleTrackerBinding::inflate) {
     private val viewModel: CycleTrackerViewModel by viewModels()
 
-    private var selectedDate = LocalDate.now()
     private val cycleHistoryAdapter by lazy {
         FMHCycleHistoryAdapter()
     }
@@ -45,8 +46,6 @@ class CycleTrackerFragment :
         super.onViewCreated(view, savedInstanceState)
         initCalender()
         setRecycler()
-
-        viewModel.getCycleHistoryData("2024-05-17")
 
     }
 
@@ -57,9 +56,9 @@ class CycleTrackerFragment :
 
             init {
                 view.setOnClickListener {
-                    if (selectedDate != day.date) {
-                        val oldDate = selectedDate
-                        selectedDate = day.date
+                    if (viewModel.selectedDate != day.date) {
+                        val oldDate = viewModel.selectedDate
+                        viewModel.selectedDate = day.date
                         binding.lytTrackerTop.vCalendar.weekCalender.notifyDateChanged(day.date)
                         oldDate?.let {
                             binding.lytTrackerTop.vCalendar.weekCalender.notifyDateChanged(
@@ -78,23 +77,41 @@ class CycleTrackerFragment :
                 bind.exSevenDayText.text =
                     DateFormats.getDayString(DateFormats.convertLocalDateToDate(day.date))
 
-                val colorRes = if (day.date == selectedDate) {
+                val isDateSelected = day.date == viewModel.selectedDate
+
+                if (isDateSelected) {
+                    bind.ivBackSelected.visible()
+                } else {
+                    bind.ivBackSelected.gone()
+                }
+
+                /*val colorRes = if (day.date == selectedDate) {
                     ContextCompat.getColor(bind.exSevenDayText.context, R.color.carolina_blue)
                 } else {
                     ContextCompat.getColor(bind.exSevenDayText.context, R.color.white)
-                }
+                }*/
+                val colorRes = ContextCompat.getColor(bind.exSevenDayText.context, R.color.white)
                 bind.exSevenDateText.setTextColor(colorRes)
             }
         }
+
         binding.lytTrackerTop.vCalendar.weekCalender.weekScrollListener = { weekDays ->
-            val selectedWeekDate = weekDays.days.get(0)
-            //viewModel.getCycleHistoryData(selectedDate)
+            LOGS.d("sdfkhskdjf $weekDays")
+            if (viewModel.selectedDate == null) {
+                viewModel.updateSelectedDate(LocalDate.now())
+                viewModel.getCycleHistoryData(DateFormats.getTodaysDateString(10))
+            } else {
+                val selectedWeekDate = weekDays.days.get(0).date
+                viewModel.getCycleHistoryData(selectedWeekDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+            }
         }
+
         binding.lytTrackerTop.vCalendar.weekCalender.dayBinder =
             object : WeekDayBinder<DayViewContainer> {
                 override fun create(view: View) = DayViewContainer(view)
                 override fun bind(container: DayViewContainer, data: WeekDay) = container.bind(data)
             }
+
         val currentMonth = YearMonth.now()
         binding.lytTrackerTop.vCalendar.weekCalender.setup(
             currentMonth.minusMonths(5).atStartOfMonth(),
@@ -182,7 +199,7 @@ class CycleTrackerFragment :
         viewModel.femaleHealthData.observe(this) {
             initInsightUI(it)
             setNudgesViewPager(it.nudges)
-            setTopData(it,"2024-05-17")
+            setTopData(it, "2024-05-17")
 
         }
 
@@ -254,7 +271,7 @@ class CycleTrackerFragment :
                     tvCurrentState.text = if (data.otaLog) "Period" else "Predicted period"
                     tvStateDay.text = "Day ${data.currentDay}"
                 } else {
-                    if (selectedDate.equals(data.ovulationDate)){
+                    if (selectedDate.equals(data.ovulationDate)) {
                         tvCurrentState.text = "Predicted day of"
                         tvStateDay.text = "Ovulation"
                     }
@@ -265,7 +282,7 @@ class CycleTrackerFragment :
             } else {
                 val daysUntilOvulation = viewModel.calculateDaysLeft(data.ovulationDate!!)
                 val daysUntilNextPeriod = viewModel.calculateDaysLeft(data.nextPeriodDate!!)
-                if (daysUntilOvulation < daysUntilNextPeriod) {
+                if (daysUntilOvulation < daysUntilNextPeriod && daysUntilOvulation > 0) {
                     tvCurrentState.text = "Ovulation in"
                     tvStateDay.text = "${daysUntilOvulation} Days"
                 } else {
