@@ -1,0 +1,30 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            style="@style/H5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="The Starting Point: Menstrual Period" />
+
+        <TextView
+            android:id="@+id/tvDesc"
+            style="@style/H6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white_64"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            tools:text="Our journey begins with the menstrual period, the first phase of your cycle. It starts when hormone levels fall, signaling your body to shed the uterine lining. This phase, which typically lasts between 3 to 7 days, might bring along companions like cramps and fatigue. During this time, your body temperature is at its lowest, preparing to rise as the journey continues. Tracking these days helps you anticipate and manage the symptoms, making the journey smoother." />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

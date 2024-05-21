@@ -8,6 +8,7 @@ import com.noisefit.data.remote.request.LoginRequest
 import com.noisefit_commans.data.model.*
 import com.noisefit_commans.data.response.*
 import com.oreo.data.model.*
+import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femalehealth.PeriodLength
 import okhttp3.MultipartBody
@@ -379,6 +380,15 @@ interface NetworkService {
     suspend fun getPeriodCycleHistory(
         @Url url: String,
     ): BaseApiResponse<List<FMHCycleHistoryDataModel>>
+
+    @GET
+    suspend fun getCycleTrackerInfo(@Url url: String): BaseApiResponse<FemaleCycleTrackInfoModel?>?
+
+    @PUT
+    suspend fun updateCycleTrackerInfo(
+        @Url url: String,
+        @Body jsonObject: JsonObject
+    ): BaseApiResponse<Any>
 
     /**
      * ---------------------------------------------------------------------------------

@@ -25,6 +25,9 @@ import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.models.HeightUnitSystem
 import com.noisefit_commans.models.Units
 import com.noisefit_commans.utils.BuildUtils
+import com.oreo.data.model.OContributorResponseModal
+import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
+import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,6 +45,7 @@ constructor(
     val localDataStore: DataStoredInterface,
     val ringDataStore: RingDataStore,
     private val userRepository: UserRepository,
+    private val oreoUserActivity:OreoUserActivityRepository,
     private val connectionUtil: ConnectionUtil
 ) : BaseViewModel() {
 
@@ -220,6 +224,46 @@ constructor(
             phrase.append(c)
         }
         return phrase.toString()
+    }
+
+
+    private val _cycleTrackInfo = MutableLiveData<FemaleCycleTrackInfoModel?>()
+    val cycleTrackInfo: LiveData<FemaleCycleTrackInfoModel?> = _cycleTrackInfo
+
+    fun getCycleTrackerInfo() {
+        viewModelScope.launch {
+            oreoUserActivity.getCycleTrackerInfo().collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object :
+                                    BinaryActionCallback {
+                                    override fun yes() {
+                                        getCycleTrackerInfo()
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data.let {
+                            _cycleTrackInfo.postValue(it)
+                        }
+                    }
+                }
+            }
+        }
     }
 
 

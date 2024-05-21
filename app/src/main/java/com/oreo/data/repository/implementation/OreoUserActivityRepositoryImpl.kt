@@ -44,7 +44,6 @@ import com.oreo.data.db.implementation.OreoStepsDataImpl
 import com.oreo.data.db.implementation.OreoStressDataImpl
 import com.oreo.data.model.AddWorkoutResponse
 import com.oreo.data.model.FMHCycleHistoryDataModel
-import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.LearnModel
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
@@ -62,6 +61,8 @@ import com.oreo.data.model.StressResultData
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TestUserData
 import com.oreo.data.model.TrendsData
+import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
+import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femalehealth.PeriodLength
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.receiver.workManager.HealthOverviewDataType
@@ -1920,6 +1921,23 @@ class OreoUserActivityRepositoryImpl(
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health/cycle_history"
             remoteDataSource.getPeriodCycleHistory(url)
+        }
+    }
+
+    override suspend fun getCycleTrackerInfo(): Flow<Resource<BaseApiResponse<FemaleCycleTrackInfoModel?>?>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-info"
+            remoteDataSource.getCycleTrackerInfo(url)
+        }
+    }
+
+    override suspend fun updateCycleTrackerInfo(
+        jsonObject: JsonObject,
+        id: Long
+    ): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-info/$id"
+            remoteDataSource.updateCycleTrackerInfo(url, jsonObject)
         }
     }
 }

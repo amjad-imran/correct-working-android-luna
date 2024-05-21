@@ -24,6 +24,7 @@ import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthResponse
 import com.oreo.data.model.StressResultData
 import com.oreo.data.model.TestUserData
+import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
 import com.oreo.data.model.femalehealth.PeriodLength
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import kotlinx.coroutines.flow.Flow
@@ -129,4 +130,6 @@ interface OreoUserActivityRepository {
     suspend fun getPeriodDurationList(date:String): Flow<Resource<BaseApiResponse<List<PeriodLength>>>>
 
     suspend fun getPeriodCycleHistory(): Flow<Resource<BaseApiResponse<List<FMHCycleHistoryDataModel>>>>
+    suspend fun getCycleTrackerInfo(): Flow<Resource<BaseApiResponse<FemaleCycleTrackInfoModel?>?>>
+    suspend fun updateCycleTrackerInfo(jsonObject: JsonObject,id:Long): Flow<Resource<BaseApiResponse<Any>>>
 }

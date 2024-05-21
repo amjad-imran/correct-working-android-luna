@@ -139,13 +139,24 @@
                     app:layout_constraintTop_toBottomOf="@+id/rowSettings"
                     app:text="@string/text_about" />
 
+                <com.noisefit_commans.ui.custom.SettingsRow
+                    android:id="@+id/rowCycleTracker"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    app:image="@drawable/ic_info_cycle_tracker"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rowAbout"
+                    app:text="@string/text_cycle_tracker" />
+
                 <include
                     layout="@layout/layout_divider"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/rowAbout" />
+                    app:layout_constraintTop_toBottomOf="@+id/rowCycleTracker" />
 
                 <!--                <TextView-->
                 <!--                    android:id="@+id/tvCustomerSupport"-->
