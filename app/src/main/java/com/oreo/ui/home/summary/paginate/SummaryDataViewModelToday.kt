@@ -444,9 +444,10 @@ class SummaryDataViewModelToday @Inject constructor(
                                 )
                             )
                         }
-                    }else{
-                        userActivities.add(OHealthOverview.LunaAiCard())
                     }
+
+                    userActivities.add(OHealthOverview.LunaAiCard())
+
 
                     if (registerDate != 0) {
                         if (healthData.sleep?.sleepScore != null) {
