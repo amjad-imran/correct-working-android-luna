@@ -1192,6 +1192,11 @@
     <string name="text_avoid_pregnancy">Avoid pregnancy</string>
     <string name="text_follow_my_current_pregnancy">Follow my current pregnancy</string>
     <string name="text_your_cycle">Your cycle</string>
+    <string name="text_symptoms_record">Symptoms record</string>
+    <string name="text_cycle_details">Cycle details</string>
+    <string name="text_coming_soon">Coming soon</string>
+    <string name="text_coming_soon_pregnancy_desc">Pregnancy insights are on the horizon.\nThis feature will be available soon,\nenhancing your tracking experience.\nStay tuned for updates!</string>
+    <string name="text_notify_me">Notify me</string>
 
 
 </resources>
