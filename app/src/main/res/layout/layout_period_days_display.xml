@@ -8,14 +8,14 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/imageView26"
+            android:id="@+id/ivBack"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:src="@drawable/image_back_period"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/image_back_period_high" />
 
         <include
             android:id="@+id/vCalendar"

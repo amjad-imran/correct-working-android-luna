@@ -22,7 +22,6 @@ import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.health.Nudges
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
@@ -44,10 +43,10 @@ class CycleTrackerFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //initCalender()
         setRecycler()
 
         viewModel.getCycleHistoryData()
+        viewModel.getDataForDate(viewModel.selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
     }
 
     private fun initCalender() {
@@ -66,6 +65,14 @@ class CycleTrackerFragment :
                                 it
                             )
                         }
+
+                        viewModel.getDataForDate(
+                            viewModel.selectedDate.format(
+                                DateTimeFormatter.ofPattern(
+                                    "yyyy-MM-dd"
+                                )
+                            )
+                        )
                     }
                 }
             }
@@ -80,7 +87,6 @@ class CycleTrackerFragment :
 
                 val (state, isDateSelected) = viewModel.getCurrentState(day.date)
 
-
                 if (isDateSelected) {
                     bind.ivBackSelected.visible()
                 } else {
@@ -92,28 +98,27 @@ class CycleTrackerFragment :
                         bind.ivBackPeriod.gone()
                         bind.exSevenDateText.setTextColor(
                             ContextCompat.getColor(
-                                bind.exSevenDayText.context,
-                                R.color.color_ovulation
+                                bind.exSevenDayText.context, R.color.color_ovulation
                             )
                         )
                     }
 
                     DayState.OVULATION_DAY -> {
-                        bind.ivBackPeriod.gone()
+                        bind.ivBackPeriod.setImageResource(R.drawable.back_circle_fertile)
+                        bind.ivBackPeriod.visible()
                         bind.exSevenDateText.setTextColor(
                             ContextCompat.getColor(
-                                bind.exSevenDayText.context,
-                                R.color.color_ovulation
+                                bind.exSevenDayText.context, R.color.color_ovulation
                             )
                         )
                     }
 
                     DayState.PERIOD -> {
+                        bind.ivBackPeriod.setImageResource(R.drawable.back_circle_period)
                         bind.ivBackPeriod.visible()
                         bind.exSevenDateText.setTextColor(
                             ContextCompat.getColor(
-                                bind.exSevenDayText.context,
-                                R.color.white
+                                bind.exSevenDayText.context, R.color.white
                             )
                         )
                     }
@@ -122,31 +127,19 @@ class CycleTrackerFragment :
                         bind.ivBackPeriod.gone()
                         bind.exSevenDateText.setTextColor(
                             ContextCompat.getColor(
-                                bind.exSevenDayText.context,
-                                R.color.white
+                                bind.exSevenDayText.context, R.color.white
                             )
                         )
                     }
                 }
-
-                /*val colorRes = if (day.date == selectedDate) {
-                    ContextCompat.getColor(bind.exSevenDayText.context, R.color.carolina_blue)
-                } else {
-                    ContextCompat.getColor(bind.exSevenDayText.context, R.color.white)
-                }*/
-                val colorRes = ContextCompat.getColor(bind.exSevenDayText.context, R.color.white)
-                bind.exSevenDateText.setTextColor(colorRes)
             }
         }
 
         binding.lytTrackerTop.vCalendar.weekCalender.weekScrollListener = { weekDays ->
-            /*if (viewModel.selectedDate == null) {
-                viewModel.updateSelectedDate(LocalDate.now())
-                viewModel.getCycleHistoryData(DateFormats.getTodaysDateString(10))
-            } else {
-                val selectedWeekDate = weekDays.days.get(0).date
-                viewModel.getCycleHistoryData(selectedWeekDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-            }*/
+            viewModel.onWeekScrolled(weekDays.days.get(0).date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+
+            /* val selectedWeekDate = weekDays.days.get(0).date
+             viewModel.getDataForDate(selectedWeekDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))*/
         }
 
         binding.lytTrackerTop.vCalendar.weekCalender.dayBinder =
@@ -243,7 +236,7 @@ class CycleTrackerFragment :
         viewModel.femaleHealthData.observe(this) {
             initInsightUI(it)
             setNudgesViewPager(it.nudges)
-            setTopData(it, "2024-05-17")
+            setTopData(it, viewModel.selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
 
         }
 
@@ -289,6 +282,7 @@ class CycleTrackerFragment :
        "pregency_chances": "high",
        "cycle_length": 28
    }*/
+
     private fun setTopData(data: FemaleHealthUserInfoModel, selectedDate: String) {
         binding.lytTrackerTop.apply {
             tvCurrentDay.text = "Day ${(data.currentDay ?: 0)}"
@@ -297,16 +291,14 @@ class CycleTrackerFragment :
             tvPregnancyChances.text = viewModel.getPregnancyText(data.pregnancyChances)
             with(
                 viewModel.getCurrentPhaseText(
-                    data.fertileWindowList,
-                    data.periodDate,
-                    selectedDate
+                    data.fertileWindowList, data.periodDate, selectedDate
                 )
             ) {
                 if (this == null) {
                     tvPhase.text = "-"
                 } else {
                     tvPhase.text = this.first
-                    tvPhase.setTextColor(this.second)
+                    tvPhase.setTextColor(tvPhase.context.getColor(this.second))
                 }
             }
 
@@ -314,31 +306,42 @@ class CycleTrackerFragment :
                 if (data.isPeriod) {
                     tvCurrentState.text = if (data.otaLog) "Period" else "Predicted period"
                     tvStateDay.text = "Day ${data.currentDay}"
+
+                    binding.lytTrackerTop.ivBack.setImageResource(R.drawable.image_back_period_high)
+
                 } else {
                     if (selectedDate.equals(data.ovulationDate)) {
                         tvCurrentState.text = "Predicted day of"
                         tvStateDay.text = "Ovulation"
+                        binding.lytTrackerTop.ivBack.setImageResource(R.drawable.image_back_period_blue_high)
                     }
-
-                    //tvCurrentState.text = if(data.otaLog) "Period" else "Predicted period"
-                    //tvStateDay.text = "Day ${data.currentDay}"
                 }
             } else {
-                val daysUntilOvulation = viewModel.calculateDaysLeft(data.ovulationDate!!)
-                val daysUntilNextPeriod = viewModel.calculateDaysLeft(data.nextPeriodDate!!)
+                val daysUntilOvulation =
+                    viewModel.calculateDaysLeft(data.ovulationDate!!, selectedDate)
+                val daysUntilNextPeriod =
+                    viewModel.calculateDaysLeft(data.nextPeriodDate!!, selectedDate)
+
                 if (daysUntilOvulation < daysUntilNextPeriod && daysUntilOvulation > 0) {
                     tvCurrentState.text = "Ovulation in"
                     tvStateDay.text = "${daysUntilOvulation} Days"
+                    if (daysUntilOvulation > 3) {
+                        binding.lytTrackerTop.ivBack.setImageResource(R.drawable.image_back_period_blue_low)
+                    } else {
+                        binding.lytTrackerTop.ivBack.setImageResource(R.drawable.image_back_period_blue_med)
+                    }
                 } else {
                     tvCurrentState.text = "Period in"
                     tvStateDay.text = "${daysUntilNextPeriod} Days"
+
+                    if (daysUntilNextPeriod > 2) {
+                        binding.lytTrackerTop.ivBack.setImageResource(R.drawable.image_back_period_low)
+                    } else {
+                        binding.lytTrackerTop.ivBack.setImageResource(R.drawable.image_back_period_med)
+                    }
                 }
-
             }
-
-
         }
-
     }
 
     private fun setNudgesViewPager(data: List<Nudges>?) {

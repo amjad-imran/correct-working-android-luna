@@ -5,7 +5,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="66dp">
 
         <TextView
             android:id="@+id/exSevenDayText"
@@ -23,12 +23,13 @@
             android:id="@+id/ivBackPeriod"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:background="@drawable/back_circle_period"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/exSevenDateText"
             app:layout_constraintEnd_toEndOf="@+id/exSevenDateText"
             app:layout_constraintStart_toStartOf="@+id/exSevenDateText"
-            app:layout_constraintTop_toTopOf="@+id/exSevenDateText" />
+            app:layout_constraintTop_toTopOf="@+id/exSevenDateText"
+            tools:background="@drawable/back_circle_period"
+            tools:visibility="visible" />
 
         <ImageView
             android:id="@+id/ivBackSelected"
