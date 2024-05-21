@@ -3,6 +3,7 @@ package com.oreo.ui.femalehealth.cycletracker
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
@@ -30,8 +31,6 @@ import com.oreo.ui.workout.details.WorkoutNudgeFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.YearMonth
-import java.time.format.DateTimeFormatter
-import java.util.ArrayList
 
 @AndroidEntryPoint
 class CycleTrackerFragment :
@@ -169,6 +168,25 @@ class CycleTrackerFragment :
         binding.toolbar.view1.loadImage(binding.toolbar.view1.context, R.drawable.ic_ct_calender)
         binding.toolbar.tvTitle.text = getString(R.string.text_cycle_tracker)
 
+        binding.lytTrackerTop.tvPhase.setOnClickListener {
+            if (binding.lytTrackerTop.tvPhase.text.equals("Luteal phase")) {
+                setFragmentResultListener(NOTIFY_LOG) { _, bundle ->
+                }
+                navigate(
+                    R.id.dialogComingSoon
+                )
+            }
+        }
+        binding.lytTrackerTop.ivInfo.setOnClickListener {
+            if (binding.lytTrackerTop.tvPhase.text.equals("Luteal phase")) {
+                setFragmentResultListener(NOTIFY_LOG) { _, bundle ->
+                }
+                navigate(
+                    R.id.dialogComingSoon
+                )
+            }
+        }
+
         binding.toolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }
@@ -197,6 +215,7 @@ class CycleTrackerFragment :
     }
 
     private fun initInsightUI(data: FemaleHealthUserInfoModel) {
+
         binding.lytInsight.lytCycleLength.apply {
             tvHeader.text = getString(R.string.text_cycle_length)
             tvValue.text = "${data.cycleLength}"

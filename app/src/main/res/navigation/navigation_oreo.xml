@@ -787,7 +787,7 @@
     <fragment
         android:id="@+id/cycleTrackerSettingFragment"
         android:name="com.oreo.ui.femalehealth.cycletracker.CycleTrackerSettingsFragment"
-        android:label="CycleTrackSetting" >
+        android:label="CycleTrackSetting">
         <argument
             android:name="data"
             app:argType="com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel" />
@@ -805,4 +805,12 @@
             android:name="title"
             app:argType="string" />
     </dialog>
+    <fragment
+        android:id="@+id/cycleTrackerStreakFragment"
+        android:name="com.oreo.ui.femalehealth.cycletracker.CycleTrackerStreaksFragment"
+        android:label="CycleTrackerStreakFragment" />
+    <dialog
+        android:id="@+id/dialogComingSoon"
+        android:name="com.oreo.ui.femalehealth.cycletracker.BottomSheetComingSoon"
+        android:label="ComingSoon" />
 </navigation>

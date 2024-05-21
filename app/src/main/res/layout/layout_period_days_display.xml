@@ -101,7 +101,7 @@
             tools:text="Low chance of pregnancy" />
 
         <ImageView
-            android:id="@+id/imageView31"
+            android:id="@+id/ivInfo"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_info_gray"
@@ -118,7 +118,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="4dp"
-            app:layout_constraintEnd_toStartOf="@+id/imageView31"
+            app:layout_constraintEnd_toStartOf="@+id/ivInfo"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
