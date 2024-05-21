@@ -20,6 +20,17 @@
             tools:text="Mon" />
 
         <ImageView
+            android:id="@+id/ivBackPeriod"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/back_circle_period"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/exSevenDateText"
+            app:layout_constraintEnd_toEndOf="@+id/exSevenDateText"
+            app:layout_constraintStart_toStartOf="@+id/exSevenDateText"
+            app:layout_constraintTop_toTopOf="@+id/exSevenDateText" />
+
+        <ImageView
             android:id="@+id/ivBackSelected"
             android:layout_width="36dp"
             android:layout_height="36dp"

@@ -44,9 +44,10 @@ class CycleTrackerFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initCalender()
+        //initCalender()
         setRecycler()
 
+        viewModel.getCycleHistoryData()
     }
 
     private fun initCalender() {
@@ -77,12 +78,55 @@ class CycleTrackerFragment :
                 bind.exSevenDayText.text =
                     DateFormats.getDayString(DateFormats.convertLocalDateToDate(day.date))
 
-                val isDateSelected = day.date == viewModel.selectedDate
+                val (state, isDateSelected) = viewModel.getCurrentState(day.date)
+
 
                 if (isDateSelected) {
                     bind.ivBackSelected.visible()
                 } else {
                     bind.ivBackSelected.gone()
+                }
+
+                when (state) {
+                    DayState.FERTILE -> {
+                        bind.ivBackPeriod.gone()
+                        bind.exSevenDateText.setTextColor(
+                            ContextCompat.getColor(
+                                bind.exSevenDayText.context,
+                                R.color.color_ovulation
+                            )
+                        )
+                    }
+
+                    DayState.OVULATION_DAY -> {
+                        bind.ivBackPeriod.gone()
+                        bind.exSevenDateText.setTextColor(
+                            ContextCompat.getColor(
+                                bind.exSevenDayText.context,
+                                R.color.color_ovulation
+                            )
+                        )
+                    }
+
+                    DayState.PERIOD -> {
+                        bind.ivBackPeriod.visible()
+                        bind.exSevenDateText.setTextColor(
+                            ContextCompat.getColor(
+                                bind.exSevenDayText.context,
+                                R.color.white
+                            )
+                        )
+                    }
+
+                    DayState.DEFAULT -> {
+                        bind.ivBackPeriod.gone()
+                        bind.exSevenDateText.setTextColor(
+                            ContextCompat.getColor(
+                                bind.exSevenDayText.context,
+                                R.color.white
+                            )
+                        )
+                    }
                 }
 
                 /*val colorRes = if (day.date == selectedDate) {
@@ -96,14 +140,13 @@ class CycleTrackerFragment :
         }
 
         binding.lytTrackerTop.vCalendar.weekCalender.weekScrollListener = { weekDays ->
-            LOGS.d("sdfkhskdjf $weekDays")
-            if (viewModel.selectedDate == null) {
+            /*if (viewModel.selectedDate == null) {
                 viewModel.updateSelectedDate(LocalDate.now())
                 viewModel.getCycleHistoryData(DateFormats.getTodaysDateString(10))
             } else {
                 val selectedWeekDate = weekDays.days.get(0).date
                 viewModel.getCycleHistoryData(selectedWeekDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-            }
+            }*/
         }
 
         binding.lytTrackerTop.vCalendar.weekCalender.dayBinder =
@@ -193,8 +236,9 @@ class CycleTrackerFragment :
                 binding.lytCycleHistory.root.gone()
             } else {
                 binding.lytCycleHistory.root.visible()
-                cycleHistoryAdapter.setData(it)
+                cycleHistoryAdapter.setData(it.take(3))
             }
+            initCalender()
         }
         viewModel.femaleHealthData.observe(this) {
             initInsightUI(it)

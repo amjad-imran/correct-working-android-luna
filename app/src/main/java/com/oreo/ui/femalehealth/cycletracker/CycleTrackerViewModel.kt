@@ -109,7 +109,7 @@ class CycleTrackerViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            _cycleHistoryData.postValue(it.take(3))
+                            _cycleHistoryData.postValue(it)
                         }
                     }
                 }
@@ -168,5 +168,60 @@ class CycleTrackerViewModel @Inject constructor(
         selectedPos = date.dayOfWeek
     }
 
+    fun getCurrentState(date: LocalDate): Pair<DayState, Boolean> {
+        val isDateSelected = date == selectedDate
 
+        val history = cycleHistoryData.value
+        if (history.isNullOrEmpty()) {
+            return Pair(DayState.DEFAULT, isDateSelected)
+        }
+
+        var returnValue: Pair<DayState, Boolean>? = null
+
+        history.forEach {
+            val periodDateStart = LocalDate.parse(it.periodDate)
+            val periodDateEnd = periodDateStart.plusDays((it.periodLength ?: 0).toLong())
+
+            if (date in periodDateStart..periodDateEnd) {
+                returnValue = Pair(DayState.PERIOD, isDateSelected)
+                return@forEach
+            }
+
+            val ovDay = LocalDate.parse(it.ovulationStartDate)
+            if (ovDay == date) {
+                returnValue = Pair(DayState.OVULATION_DAY, isDateSelected)
+                return@forEach
+            }
+
+            try {
+                val fWindow = it.fertileWindow?.split("/")
+
+                val fertileDateStart = LocalDate.parse(fWindow?.get(0))
+                val fertileDateEnd = LocalDate.parse(fWindow?.get(1))
+
+                if (date in fertileDateStart..fertileDateEnd) {
+                    returnValue = Pair(DayState.FERTILE, isDateSelected)
+                    return@forEach
+                }
+
+            } catch (exp: Exception) {
+            }
+
+
+        }
+        return if (returnValue == null) {
+            Pair(DayState.DEFAULT, isDateSelected)
+        } else {
+            returnValue as Pair<DayState, Boolean>
+        }
+    }
+
+
+}
+
+enum class DayState {
+    FERTILE,
+    OVULATION_DAY,
+    PERIOD,
+    DEFAULT
 }
