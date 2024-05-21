@@ -11,7 +11,7 @@ import com.oreo.data.model.StressSplashModel
 class ChatSplashDescriptionAdapter :
     RecyclerView.Adapter<ChatSplashDescriptionAdapter.ViewHolder>() {
     private var mDataSet = ArrayList<StressSplashModel>()
-    var currentPlayPos = -1
+    var currentPlayPos = 0
 
 
     inner class ViewHolder(private val binding: ViewStressSplashDescriptionSliderBinding) :
