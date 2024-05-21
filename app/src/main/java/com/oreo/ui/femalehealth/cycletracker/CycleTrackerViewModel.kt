@@ -8,7 +8,7 @@ import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
-import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
@@ -17,7 +17,6 @@ import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
-import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,7 +24,7 @@ class CycleTrackerViewModel @Inject constructor(
     private val userActivityRepository: OreoUserActivityRepository,
 ) : BaseViewModel() {
 
-    var selectedDate: LocalDate? = null
+    var selectedDate = LocalDate.now()
     var selectedPos: DayOfWeek? = null
 
     private val _femaleHealthData = MutableLiveData<FemaleHealthUserInfoModel>()
@@ -35,15 +34,8 @@ class CycleTrackerViewModel @Inject constructor(
     val cycleHistoryData: LiveData<List<FMHCycleHistoryDataModel>?> get() = _cycleHistoryData
 
 
-    fun getCycleHistoryData(date: String) {
+    fun getDataForDate(date: String) {
         viewModelScope.launch {
-            val todayDate = DateFormats.getTodaysDateString(10)
-            if (todayDate.equals(date)) {
-                getCycleHistoryData()
-            } else {
-                _cycleHistoryData.postValue(null)
-            }
-
             userActivityRepository.getFemaleHealthUserInfo(date).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
@@ -51,7 +43,7 @@ class CycleTrackerViewModel @Inject constructor(
                     }
 
                     is Resource.Loading -> {
-                        //setLoading(resource.loading)
+                        setLoading(resource.loading)
                     }
 
                     is Resource.NetworkError -> {
@@ -60,7 +52,7 @@ class CycleTrackerViewModel @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        getCycleHistoryData(date)
+                                        getDataForDate(date)
                                     }
 
                                     override fun no() {
@@ -96,8 +88,7 @@ class CycleTrackerViewModel @Inject constructor(
                     is Resource.NetworkError -> {
                         setApiErrors(resource.response.apply {
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
-                                object :
-                                    BinaryActionCallback {
+                                object : BinaryActionCallback {
                                     override fun yes() {
                                         getCycleHistoryData()
                                     }
@@ -138,10 +129,11 @@ class CycleTrackerViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Returns Pair(Phase string, phase color)
+     */
     fun getCurrentPhaseText(
-        fertileWindowList: List<String>?,
-        periodDate: String?,
-        currentDate: String
+        fertileWindowList: List<String>?, periodDate: String?, currentDate: String
     ): Pair<String, Int>? {
         if (fertileWindowList == null) return null
         if (fertileWindowList.size != 2) return null
@@ -157,9 +149,9 @@ class CycleTrackerViewModel @Inject constructor(
         }
     }
 
-    fun calculateDaysLeft(dateString: String): Long {
+    fun calculateDaysLeft(dateString: String, selectedDate: String): Long {
         val targetDate = LocalDate.parse(dateString)
-        val today = LocalDate.now()
+        val today = LocalDate.parse(selectedDate)
         return ChronoUnit.DAYS.between(today, targetDate)
     }
 
@@ -168,6 +160,9 @@ class CycleTrackerViewModel @Inject constructor(
         selectedPos = date.dayOfWeek
     }
 
+    /**
+     * return Pair(DayState, isDateSelected)
+     */
     fun getCurrentState(date: LocalDate): Pair<DayState, Boolean> {
         val isDateSelected = date == selectedDate
 
@@ -180,16 +175,26 @@ class CycleTrackerViewModel @Inject constructor(
 
         history.forEach {
             val periodDateStart = LocalDate.parse(it.periodDate)
-            val periodDateEnd = periodDateStart.plusDays((it.periodLength ?: 0).toLong())
+            val periodLength = it.periodLength ?: 0
+
+            val periodDateEnd = if (periodLength == 0) {
+                periodDateStart
+            } else {
+                periodDateStart.plusDays((periodLength - 1).toLong())
+            }
 
             if (date in periodDateStart..periodDateEnd) {
-                returnValue = Pair(DayState.PERIOD, isDateSelected)
+                returnValue =
+                    Pair(DayState.PERIOD, isDateSelected)
                 return@forEach
             }
 
             val ovDay = LocalDate.parse(it.ovulationStartDate)
             if (ovDay == date) {
-                returnValue = Pair(DayState.OVULATION_DAY, isDateSelected)
+                returnValue = Pair(
+                    DayState.OVULATION_DAY,
+                    isDateSelected
+                )
                 return@forEach
             }
 
@@ -200,7 +205,10 @@ class CycleTrackerViewModel @Inject constructor(
                 val fertileDateEnd = LocalDate.parse(fWindow?.get(1))
 
                 if (date in fertileDateStart..fertileDateEnd) {
-                    returnValue = Pair(DayState.FERTILE, isDateSelected)
+                    returnValue = Pair(
+                        DayState.FERTILE,
+                        isDateSelected
+                    )
                     return@forEach
                 }
 
@@ -216,12 +224,18 @@ class CycleTrackerViewModel @Inject constructor(
         }
     }
 
+    fun getBackgroundDrawable() {
+
+    }
+
+    fun onWeekScrolled(date: String) {
+        LOGS.d("dsfkjhskdjfhksdfj $date")
+
+
+    }
 
 }
 
 enum class DayState {
-    FERTILE,
-    OVULATION_DAY,
-    PERIOD,
-    DEFAULT
+    FERTILE, OVULATION_DAY, PERIOD, DEFAULT
 }
