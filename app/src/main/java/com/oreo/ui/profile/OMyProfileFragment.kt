@@ -14,7 +14,6 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,8 +47,8 @@ class OMyProfileFragment :
 
 
     override fun initListener() {
-        binding.rowCycleTracker.setOnClickListener{
-            navigate(R.id.cycleTrackerSettingFragment)
+        binding.rowCycleTracker.setOnClickListener {
+            viewModel.getCycleTrackerInfo()
         }
 
         binding.rowSettings.setOnClickListener {
@@ -146,6 +145,16 @@ class OMyProfileFragment :
 
 
     override fun subscribeObservers() {
+        viewModel.cycleTrackInfo.observe(this) {
+            if (it != null) {
+                navigate(R.id.cycleTrackerSettingFragment, Bundle().apply {
+                    this.putParcelable("data", it)
+                })
+
+            } else {
+                navigate(R.id.femaleHealthSplashFragment)
+            }
+        }
 
         viewModel.logoutSuccess().observe(viewLifecycleOwner) {
             if (it) {
