@@ -279,7 +279,7 @@ class CycleTrackerFragment :
             initCalender()
         }
         viewModel.femaleHealthData.observe(this) {
-            if (it == null) {
+            if (it.currentDay == null) {
                 context.showShortToast("Screen pending")
             } else {
                 initInsightUI(it)

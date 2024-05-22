@@ -24,6 +24,8 @@ data class FemaleHealthUserInfoModel(
     @SerializedName("period_length")
     val periodLength: Int? = null,
     @SerializedName("pregnancy_chances")
-    val pregnancyChances: String? = null
+    val pregnancyChances: String? = null,
+    @SerializedName("is_not_sure")
+    val isNotSure: Boolean? = null
 
 )

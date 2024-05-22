@@ -261,22 +261,27 @@ class SummaryDataViewModelToday @Inject constructor(
                             }
                         }
                     } else {
-                        if (femaleData.isOvulation || femaleData.isPeriod) {
-                            userActivities.add(
-                                OHealthOverview.CycleTrackerOngoing(
-                                    convertToPeriodBigCardModel(
-                                        femaleData
-                                    )
-                                )
-                            )
+                        if (femaleData.currentDay == null) {
+                            //TODO replace with log period card
+                            userActivities.add(OHealthOverview.CardTrackFemaleHealth(""))
                         } else {
-                            userActivities.add(
-                                OHealthOverview.CycleTrackerPredict(
-                                    convertToPeriodSmallCardModel(
-                                        femaleData
+                            if (femaleData.isOvulation || femaleData.isPeriod) {
+                                userActivities.add(
+                                    OHealthOverview.CycleTrackerOngoing(
+                                        convertToPeriodBigCardModel(
+                                            femaleData
+                                        )
                                     )
                                 )
-                            )
+                            } else {
+                                userActivities.add(
+                                    OHealthOverview.CycleTrackerPredict(
+                                        convertToPeriodSmallCardModel(
+                                            femaleData
+                                        )
+                                    )
+                                )
+                            }
                         }
                     }
                 }
