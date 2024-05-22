@@ -743,11 +743,11 @@
         android:label="FragmentCycleTracker" />
     <fragment
         android:id="@+id/cycleInsightDetails"
-        android:name="com.oreo.ui.femalehealth.cycletracker.CycleInsightDetailsFragment"
+        android:name="com.oreo.ui.femalehealth.cycletracker.insight.CycleInsightDetailsFragment"
         android:label="FragmentCycleInsightDetails">
         <argument
             android:name="launchMode"
-            app:argType="com.oreo.ui.femalehealth.cycletracker.CycleInsightLaunchMode" />
+            app:argType="com.oreo.ui.femalehealth.cycletracker.insight.CycleInsightLaunchMode" />
     </fragment>
     <fragment
         android:id="@+id/cycleTrackerHistory"
@@ -759,11 +759,11 @@
         android:label="FragmentSkinTemperature" />
     <fragment
         android:id="@+id/cycleLogFragment"
-        android:name="com.oreo.ui.femalehealth.cycletracker.CycleLogFragment"
+        android:name="com.oreo.ui.femalehealth.cycletracker.log.CycleLogFragment"
         android:label="CycleLogFragment" />
     <dialog
         android:id="@+id/bottomSheetCycleLog"
-        android:name="com.oreo.ui.femalehealth.cycletracker.BottomSheetCycleLog"
+        android:name="com.oreo.ui.femalehealth.cycletracker.log.BottomSheetCycleLog"
         android:label="BottomSheetCycleLog">
         <argument
             android:name="data"
@@ -786,7 +786,7 @@
         android:label="CycleTrackStressInfo" />
     <fragment
         android:id="@+id/cycleTrackerSettingFragment"
-        android:name="com.oreo.ui.femalehealth.cycletracker.CycleTrackerSettingsFragment"
+        android:name="com.oreo.ui.femalehealth.cycletracker.settings.CycleTrackerSettingsFragment"
         android:label="CycleTrackSetting">
         <argument
             android:name="data"
@@ -795,7 +795,7 @@
 
     <dialog
         android:id="@+id/cycleTrackerDurationLog"
-        android:name="com.oreo.ui.femalehealth.cycletracker.BottomSheetCTPeriodDuration"
+        android:name="com.oreo.ui.femalehealth.cycletracker.settings.BottomSheetCTPeriodDuration"
         android:label="CycleTrackerDuration">
         <argument
             android:name="selectedValue"

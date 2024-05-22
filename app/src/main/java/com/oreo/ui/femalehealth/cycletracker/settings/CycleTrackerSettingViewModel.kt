@@ -1,4 +1,4 @@
-package com.oreo.ui.femalehealth.cycletracker
+package com.oreo.ui.femalehealth.cycletracker.settings
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
