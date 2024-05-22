@@ -223,5 +223,6 @@
     <color name="color_ovulation">#1ec9ff</color>
     <color name="color_follicular">#83e7cf</color>
     <color name="color_luteal">#a38cff</color>
+    <color name="color_follicular_info">#ff9252</color>
 
 </resources>

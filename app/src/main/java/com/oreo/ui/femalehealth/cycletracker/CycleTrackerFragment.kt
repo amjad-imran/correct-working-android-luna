@@ -25,11 +25,13 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.health.Nudges
+import com.oreo.ui.femalehealth.cycletracker.history.INFO_LOG
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.workout.details.WorkoutNudgeFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 
 @AndroidEntryPoint
 class CycleTrackerFragment :
@@ -170,20 +172,36 @@ class CycleTrackerFragment :
         binding.toolbar.tvTitle.text = getString(R.string.text_cycle_tracker)
 
         binding.lytTrackerTop.tvPhase.setOnClickListener {
+            var launchMode = ""
             if (binding.lytTrackerTop.tvPhase.text.equals("Luteal phase")) {
-                setFragmentResultListener(NOTIFY_LOG) { _, bundle ->
+                launchMode = "Luteal"
+            } else if (binding.lytTrackerTop.tvPhase.text.equals("Follicular phase")) {
+                launchMode = "Follicular"
+            }
+            if (launchMode.isNotEmpty()) {
+                setFragmentResultListener(INFO_LOG) { _, bundle ->
                 }
                 navigate(
-                    R.id.dialogComingSoon
+                    R.id.dialogCtOvulationInfo, Bundle().apply {
+                        this.putString("launchMode", launchMode)
+                    }
                 )
             }
         }
         binding.lytTrackerTop.ivInfo.setOnClickListener {
+            var launchMode = ""
             if (binding.lytTrackerTop.tvPhase.text.equals("Luteal phase")) {
-                setFragmentResultListener(NOTIFY_LOG) { _, bundle ->
+                launchMode = "Luteal"
+            } else if (binding.lytTrackerTop.tvPhase.text.equals("Follicular phase")) {
+                launchMode = "Follicular"
+            }
+            if (launchMode.isNotEmpty()) {
+                setFragmentResultListener(INFO_LOG) { _, bundle ->
                 }
                 navigate(
-                    R.id.dialogComingSoon
+                    R.id.dialogCtOvulationInfo, Bundle().apply {
+                        this.putString("launchMode", launchMode)
+                    }
                 )
             }
         }
