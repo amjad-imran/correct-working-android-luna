@@ -1,4 +1,4 @@
-package com.oreo.ui.femalehealth.cycletracker
+package com.oreo.ui.femalehealth.cycletracker.settings
 
 import android.os.Bundle
 import android.view.View

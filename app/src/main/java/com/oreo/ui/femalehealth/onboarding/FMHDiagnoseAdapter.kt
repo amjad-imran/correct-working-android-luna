@@ -63,6 +63,7 @@ class FMHDiagnoseAdapter(val mListener: OnItemClickListener) :
         }
         data.isChecked = !data.isChecked
         mDataSet[pos] = data
+        notifyItemChanged(0)
         notifyItemChanged(pos)
     }
 

@@ -13,6 +13,7 @@ class FMHOnboardingAllDoneFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.bNext.text = getString(R.string.text_done)
 
     }
 

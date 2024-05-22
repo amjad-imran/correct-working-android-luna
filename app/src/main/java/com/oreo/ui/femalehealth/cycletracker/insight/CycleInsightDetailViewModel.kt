@@ -1,22 +1,16 @@
-package com.oreo.ui.femalehealth.cycletracker
+package com.oreo.ui.femalehealth.cycletracker.insight
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
-import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
-import com.noisefit_commans.models.Units
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.Event
-import com.oreo.data.model.ChartModel
 import com.oreo.data.model.PeriodChartModel
 import com.oreo.data.model.femalehealth.PeriodLength
-import com.oreo.data.model.femalehealth.PeriodLengthListResponse
-import com.oreo.data.model.health.OreoSleepModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
