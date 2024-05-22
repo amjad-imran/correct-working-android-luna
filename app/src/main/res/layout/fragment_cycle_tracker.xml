@@ -7,7 +7,7 @@
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/oreo_layout_toolbar_with_2_icons"
+        layout="@layout/layout_toolbar_cycle_tracker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

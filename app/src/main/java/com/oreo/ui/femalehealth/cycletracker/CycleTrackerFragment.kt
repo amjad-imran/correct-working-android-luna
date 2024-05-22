@@ -30,6 +30,7 @@ import com.oreo.ui.femalehealth.cycletracker.history.INFO_LOG
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.workout.details.WorkoutNudgeFragment
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -52,27 +53,12 @@ class CycleTrackerFragment :
         class DayViewContainer(view: View) : ViewContainer(view) {
             val bind = CalenderCycleTrackerDayBinding.bind(view)
             lateinit var day: WeekDay
+            val dateToday = LocalDate.now()
 
             init {
                 view.setOnClickListener {
                     if (viewModel.selectedDate.value != day.date) {
-                        /*val oldDate = viewModel.selectedDate.value
-
-                        oldDate?.let {
-                            binding.lytTrackerTop.vCalendar.weekCalender.notifyDateChanged(
-                                it
-                            )
-                        }*/
-
                         viewModel.updateSelectedDate(day.date)
-
-                        /* viewModel.getDataForDate(
-                             viewModel.selectedDate.format(
-                                 DateTimeFormatter.ofPattern(
-                                     "yyyy-MM-dd"
-                                 )
-                             )
-                         )*/
                     }
                 }
             }
@@ -114,7 +100,7 @@ class CycleTrackerFragment :
                     }
 
                     DayState.PERIOD -> {
-                        bind.ivBackPeriod.setImageResource(R.drawable.back_circle_period)
+                        bind.ivBackPeriod.setImageResource(R.drawable.back_period_day)
                         bind.ivBackPeriod.visible()
                         bind.exSevenDateText.setTextColor(
                             ContextCompat.getColor(
@@ -131,6 +117,12 @@ class CycleTrackerFragment :
                             )
                         )
                     }
+                }
+
+                if (day.date > dateToday) {
+                    bind.ivBackPeriod.alpha = 0.5f
+                } else {
+                    bind.ivBackPeriod.alpha = 1f
                 }
             }
         }
@@ -152,7 +144,7 @@ class CycleTrackerFragment :
         binding.lytTrackerTop.vCalendar.weekCalender.setup(
             currentMonth.minusMonths(5).atStartOfMonth(),
             currentMonth.plusMonths(5).atEndOfMonth(),
-            firstDayOfWeekFromLocale(),
+            DayOfWeek.MONDAY,
         )
         binding.lytTrackerTop.vCalendar.weekCalender.scrollToDate(LocalDate.now())
 
@@ -165,11 +157,6 @@ class CycleTrackerFragment :
     }
 
     override fun initListener() {
-        binding.toolbar.view1.visible()
-        binding.toolbar.ivAddFriend.invisible()
-        binding.toolbar.view1.loadImage(binding.toolbar.view1.context, R.drawable.ic_ct_calender)
-        binding.toolbar.tvTitle.text = getString(R.string.text_cycle_tracker)
-
         binding.lytTrackerTop.tvPhase.setOnClickListener {
             var launchMode = ""
             if (binding.lytTrackerTop.tvPhase.text.equals("Luteal phase")) {
@@ -275,9 +262,10 @@ class CycleTrackerFragment :
         viewModel.selectedDate.observe(this) {
             try {
                 binding.lytTrackerTop.vCalendar.weekCalender.notifyDateChanged(it)
-                LOGS.d("sdjfhksjdfhk new date $it")
             } catch (exp: Exception) {
             }
+            binding.toolbar.tvMonth.text = it.format(DateTimeFormatter.ofPattern("MMM"))
+
             viewModel.getDataForDate(it.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         }
 
@@ -291,9 +279,13 @@ class CycleTrackerFragment :
             initCalender()
         }
         viewModel.femaleHealthData.observe(this) {
-            initInsightUI(it)
-            setNudgesViewPager(it.nudges)
-            setTopData(it)
+            if (it == null) {
+                context.showShortToast("Screen pending")
+            } else {
+                initInsightUI(it)
+                setNudgesViewPager(it.nudges)
+                setTopData(it)
+            }
 
         }
 
@@ -316,37 +308,20 @@ class CycleTrackerFragment :
         }
     }
 
-    /*{
-       "ota_log": false,
-       "isPeriod": false,
-       "isOvulation": false,
-       "isFertileWindow": true,
-       "period_date": "2024-05-05",
-       "ovulation_date": "2024-05-19",
-       "fertile_window": [
-       "2024-05-14",
-       "2024-05-20"
-       ],
-       "next_period_date": "2024-06-02",
-       "nudges": [
-       {
-           "label": "",
-           "message": ""
-       }
-       ],
-       "current_day": 13,
-       "period_length": 5,
-       "pregency_chances": "high",
-       "cycle_length": 28
-   }*/
-
     private fun setTopData(data: FemaleHealthUserInfoModel) {
         binding.lytTrackerTop.apply {
-            val selectedDate = if (viewModel.selectedDate.value == null) {
+            val selectedDateLocal = if (viewModel.selectedDate.value == null) {
                 LocalDate.now()
             } else {
                 viewModel.selectedDate.value!!
-            }.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+            }
+            val selectedDate = selectedDateLocal.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+
+            if (selectedDateLocal > LocalDate.now()) {
+                btnLog.isEnabled = false
+            } else {
+                btnLog.isEnabled = true
+            }
 
 
             tvCurrentDay.text = "Day ${(data.currentDay ?: 0)}"
