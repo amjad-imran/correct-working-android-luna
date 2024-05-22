@@ -4,11 +4,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UpdateRepository
 import com.noisefit.luna.BuildConfig
+import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.BinaryActionCallback
@@ -39,6 +41,7 @@ import com.oreo.data.model.AlertType
 import com.oreo.data.model.AppUpdateModel
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.DashAlert
+import com.oreo.data.model.FemaleHealthCardState
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
@@ -84,6 +87,7 @@ class SummaryDataViewModelToday @Inject constructor(
     val oreoStressDataConvertor: OreoStressDataConvertor,
     val userActivityRepository: OreoUserActivityRepository,
     val updateRepository: UpdateRepository,
+    val resourceProvider: ResourcesProvider,
     private val userHealthDataDataSource: OreoUserHealthDataDataSource,
     val hrDataConvertor: OreoHRDataConvertor
 ) : BaseViewModel() {
@@ -257,13 +261,20 @@ class SummaryDataViewModelToday @Inject constructor(
                             if (localDataStore.getFMHWalkthroughShownStatus()
                                     .not() && lastShownDays > 7
                             ) {
-                                userActivities.add(OHealthOverview.CardTrackFemaleHealth(""))
+                                userActivities.add(
+                                    OHealthOverview.CardTrackFemaleHealth(
+                                        FemaleHealthCardState.TRACK
+                                    )
+                                )
                             }
                         }
                     } else {
                         if (femaleData.currentDay == null) {
-                            //TODO replace with log period card
-                            userActivities.add(OHealthOverview.CardTrackFemaleHealth(""))
+                            userActivities.add(
+                                OHealthOverview.CardTrackFemaleHealth(
+                                    FemaleHealthCardState.LOG
+                                )
+                            )
                         } else {
                             if (femaleData.isOvulation || femaleData.isPeriod) {
                                 userActivities.add(

@@ -43,6 +43,7 @@ import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MiscUtil
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.DashAlert
+import com.oreo.data.model.FemaleHealthCardState
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.VideoInfoType
 import com.oreo.util.UtilClass.seriesItemWithoutInset
@@ -1193,6 +1194,25 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             data: OHealthOverview.CardTrackFemaleHealth,
             position: Int,
         ) {
+            when (data.state) {
+                FemaleHealthCardState.TRACK -> {
+                    binding.btnGetStarted.text =
+                        binding.btnGetStarted.context.getString(R.string.text_get_started)
+                    binding.textView92.text =
+                        binding.textView92.context.getString(R.string.text_track_your_cycle_desc)
+
+                }
+
+                FemaleHealthCardState.LOG -> {
+                    binding.btnGetStarted.text =
+                        binding.btnGetStarted.context.getString(R.string.text_log_period)
+                    binding.textView92.text =
+                        binding.textView92.context.getString(R.string.text_log_text)
+                }
+            }
+
+
+
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.TrackYourFemaleHealth)
             }

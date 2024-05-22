@@ -114,9 +114,13 @@ sealed class OHealthOverview {
     ) : OHealthOverview()
 
     class CardTrackFemaleHealth(
-        val title: String
+        val state: FemaleHealthCardState
     ) : OHealthOverview()
 
+}
+
+enum class FemaleHealthCardState {
+    TRACK, LOG
 }
 
 
