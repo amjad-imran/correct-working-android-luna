@@ -813,4 +813,12 @@
         android:id="@+id/dialogComingSoon"
         android:name="com.oreo.ui.femalehealth.cycletracker.BottomSheetComingSoon"
         android:label="ComingSoon" />
+    <dialog
+        android:id="@+id/dialogCtOvulationInfo"
+        android:name="com.oreo.ui.femalehealth.cycletracker.history.BottomSheetCTOvulationInfo"
+        android:label="CycleTrackerOvulationInfo">
+        <argument
+            android:name="launchMode"
+            app:argType="string" />
+    </dialog>
 </navigation>
