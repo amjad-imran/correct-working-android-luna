@@ -23,6 +23,7 @@ import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.health.Nudges
 import com.oreo.ui.femalehealth.cycletracker.history.INFO_LOG
@@ -45,9 +46,6 @@ class CycleTrackerFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setRecycler()
-
-        viewModel.getCycleHistoryData()
-        viewModel.getDataForDate(viewModel.selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
     }
 
     private fun initCalender() {
@@ -57,23 +55,24 @@ class CycleTrackerFragment :
 
             init {
                 view.setOnClickListener {
-                    if (viewModel.selectedDate != day.date) {
-                        val oldDate = viewModel.selectedDate
-                        viewModel.selectedDate = day.date
-                        binding.lytTrackerTop.vCalendar.weekCalender.notifyDateChanged(day.date)
+                    if (viewModel.selectedDate.value != day.date) {
+                        /*val oldDate = viewModel.selectedDate.value
+
                         oldDate?.let {
                             binding.lytTrackerTop.vCalendar.weekCalender.notifyDateChanged(
                                 it
                             )
-                        }
+                        }*/
 
-                        viewModel.getDataForDate(
-                            viewModel.selectedDate.format(
-                                DateTimeFormatter.ofPattern(
-                                    "yyyy-MM-dd"
-                                )
-                            )
-                        )
+                        viewModel.updateSelectedDate(day.date)
+
+                        /* viewModel.getDataForDate(
+                             viewModel.selectedDate.format(
+                                 DateTimeFormatter.ofPattern(
+                                     "yyyy-MM-dd"
+                                 )
+                             )
+                         )*/
                     }
                 }
             }
@@ -137,7 +136,7 @@ class CycleTrackerFragment :
         }
 
         binding.lytTrackerTop.vCalendar.weekCalender.weekScrollListener = { weekDays ->
-            viewModel.onWeekScrolled(weekDays.days.get(0).date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+            viewModel.onWeekScrolled(weekDays.days.get(0).date)
 
             /* val selectedWeekDate = weekDays.days.get(0).date
              viewModel.getDataForDate(selectedWeekDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))*/
@@ -261,6 +260,27 @@ class CycleTrackerFragment :
     }
 
     override fun subscribeObservers() {
+        viewModel.notifyDateChange.observe(this) {
+            it.getContent()?.let {
+                try {
+                    binding.lytTrackerTop.vCalendar.weekCalender.notifyDateChanged(
+                        it
+                    )
+                    LOGS.d("sdjfhksjdfhk old date $it")
+                } catch (exp: Exception) {
+                }
+            }
+        }
+
+        viewModel.selectedDate.observe(this) {
+            try {
+                binding.lytTrackerTop.vCalendar.weekCalender.notifyDateChanged(it)
+                LOGS.d("sdjfhksjdfhk new date $it")
+            } catch (exp: Exception) {
+            }
+            viewModel.getDataForDate(it.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+        }
+
         viewModel.cycleHistoryData.observe(this) {
             if (it == null) {
                 binding.lytCycleHistory.root.gone()
@@ -273,7 +293,7 @@ class CycleTrackerFragment :
         viewModel.femaleHealthData.observe(this) {
             initInsightUI(it)
             setNudgesViewPager(it.nudges)
-            setTopData(it, viewModel.selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+            setTopData(it)
 
         }
 
@@ -320,8 +340,15 @@ class CycleTrackerFragment :
        "cycle_length": 28
    }*/
 
-    private fun setTopData(data: FemaleHealthUserInfoModel, selectedDate: String) {
+    private fun setTopData(data: FemaleHealthUserInfoModel) {
         binding.lytTrackerTop.apply {
+            val selectedDate = if (viewModel.selectedDate.value == null) {
+                LocalDate.now()
+            } else {
+                viewModel.selectedDate.value!!
+            }.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+
+
             tvCurrentDay.text = "Day ${(data.currentDay ?: 0)}"
             tvTotalDays.text = "of ${(data.cycleLength ?: 0)}"
             tvCurrentState.text = "Current state here"
@@ -372,7 +399,11 @@ class CycleTrackerFragment :
                     tvStateDay.text = "${daysUntilNextPeriod} Days"
 
                     if (daysUntilNextPeriod > 2) {
-                        binding.lytTrackerTop.ivBack.setImageResource(R.drawable.image_back_period_low)
+                        if (data.isFertileWindow) {
+                            binding.lytTrackerTop.ivBack.setImageResource(R.drawable.image_back_period_blue_med)
+                        } else {
+                            binding.lytTrackerTop.ivBack.setImageResource(R.drawable.image_back_period_low)
+                        }
                     } else {
                         binding.lytTrackerTop.ivBack.setImageResource(R.drawable.image_back_period_med)
                     }

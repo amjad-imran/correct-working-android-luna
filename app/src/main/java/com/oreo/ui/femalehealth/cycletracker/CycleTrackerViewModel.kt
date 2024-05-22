@@ -8,30 +8,40 @@ import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import org.joda.time.Days
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import kotlin.math.abs
 
 @HiltViewModel
 class CycleTrackerViewModel @Inject constructor(
     private val userActivityRepository: OreoUserActivityRepository,
 ) : BaseViewModel() {
 
-    var selectedDate = LocalDate.now()
-    var selectedPos: DayOfWeek? = null
+    var selectedDate: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now())
+    var notifyDateChange = MutableLiveData<Event<LocalDate>>()
 
     private val _femaleHealthData = MutableLiveData<FemaleHealthUserInfoModel>()
     val femaleHealthData: LiveData<FemaleHealthUserInfoModel> get() = _femaleHealthData
 
     private val _cycleHistoryData = MutableLiveData<List<FMHCycleHistoryDataModel>?>()
     val cycleHistoryData: LiveData<List<FMHCycleHistoryDataModel>?> get() = _cycleHistoryData
+
+    init {
+
+        getCycleHistoryData()
+        //getDataForDate(viewModel.selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+    }
 
 
     fun getDataForDate(date: String) {
@@ -156,15 +166,17 @@ class CycleTrackerViewModel @Inject constructor(
     }
 
     fun updateSelectedDate(date: LocalDate) {
-        selectedDate = date
-        selectedPos = date.dayOfWeek
+        val old = selectedDate.value
+        notifyDateChange.value = Event(old)
+
+        selectedDate.postValue(date)
     }
 
     /**
      * return Pair(DayState, isDateSelected)
      */
     fun getCurrentState(date: LocalDate): Pair<DayState, Boolean> {
-        val isDateSelected = date == selectedDate
+        val isDateSelected = date == selectedDate.value
 
         val history = cycleHistoryData.value
         if (history.isNullOrEmpty()) {
@@ -224,12 +236,25 @@ class CycleTrackerViewModel @Inject constructor(
         }
     }
 
-    fun getBackgroundDrawable() {
+    fun onWeekScrolled(date: LocalDate) {
+        if (date > selectedDate.value) {
+            val days = abs(ChronoUnit.DAYS.between(date, selectedDate.value))
+            val diff = days % 7
 
-    }
+            val newDate = if (diff == 0L) {
+                date
+            } else {
+                date.plusDays(7 - diff)
+            }
+            updateSelectedDate(newDate)
+        } else {
+            val days = abs(ChronoUnit.DAYS.between(date, selectedDate.value))
+            val diff = days % 7
 
-    fun onWeekScrolled(date: String) {
-        LOGS.d("dsfkjhskdjfhksdfj $date")
+            val newDate = date.plusDays(diff)
+            updateSelectedDate(newDate)
+
+        }
 
 
     }
