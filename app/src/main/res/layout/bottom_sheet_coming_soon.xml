@@ -9,9 +9,9 @@
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
+            style="@style/ModalStyleDialog"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dimen_12dp"
-            android:background="@drawable/back_modal_new"
             android:layout_marginTop="@dimen/dimen_12dp"
             android:layout_marginEnd="@dimen/dimen_12dp"
             android:layout_marginBottom="@dimen/dimen_12dp"
@@ -27,7 +27,7 @@
                     android:layout_height="0dp"
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/back_track_your_health"
+                    android:src="@drawable/ic_coming_soon_back"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

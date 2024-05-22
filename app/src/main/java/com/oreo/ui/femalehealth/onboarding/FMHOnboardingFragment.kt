@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.viewpager2.widget.ViewPager2
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentFMHOnboardingBinding
@@ -12,6 +13,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.oreo.ui.femalehealth.cycletracker.NOTIFY_LOG
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.roundToInt
 
@@ -127,8 +129,21 @@ class FMHOnboardingFragment :
         if (current != 0) {
             binding.vpFmhOnboard.setCurrentItem(current - 1, true)
         } else {
-            navigateUpSafe()
+            activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
         }
+    }
+
+    private fun showComingSoonBottomSheet() {
+        setFragmentResultListener(NOTIFY_LOG) { _, bundle ->
+            val isNotifyMe = bundle.getBoolean("agree")
+            if (isNotifyMe) {
+                mViewModel.localDataStore.setStressWalkthroughShown(true)
+                navigate(R.id.navigation_oreo_home)
+            }
+        }
+        navigate(
+            R.id.dialogComingSoon
+        )
     }
 
     private fun onNextPress() {
@@ -137,6 +152,7 @@ class FMHOnboardingFragment :
             0 -> {
                 if (mViewModel.goalTypeSelected == GoalType.TRACK_PREGNANCY) {
                     mViewModel.updateFemaleHealthData(1)
+                    showComingSoonBottomSheet()
                     return
                 }
             }
