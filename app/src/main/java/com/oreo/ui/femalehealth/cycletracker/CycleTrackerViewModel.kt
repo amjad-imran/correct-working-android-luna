@@ -28,6 +28,8 @@ class CycleTrackerViewModel @Inject constructor(
     private val userActivityRepository: OreoUserActivityRepository,
 ) : BaseViewModel() {
 
+    val todayDate = LocalDate.now()
+
     var selectedDate: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now())
     var notifyDateChange = MutableLiveData<Event<LocalDate>>()
 
@@ -172,6 +174,12 @@ class CycleTrackerViewModel @Inject constructor(
         notifyDateChange.value = Event(old)
     }
 
+    private fun getCurrentCycleDay(periodDate: LocalDate, cycleLength: Int, currentDate: LocalDate): Int {
+        val daysSinceLastPeriod = ChronoUnit.DAYS.between(periodDate, currentDate).toInt()
+        return (daysSinceLastPeriod % cycleLength) + 1
+    }
+
+
     /**
      * return Pair(DayState, isDateSelected)
      */
@@ -180,6 +188,30 @@ class CycleTrackerViewModel @Inject constructor(
 
         val history = cycleHistoryData.value
         if (history.isNullOrEmpty()) {
+            return Pair(DayState.DEFAULT, isDateSelected)
+        }
+
+        if (date > todayDate) {
+            val data = history.first()
+
+            val periodLength = data.periodLength ?: 0
+            val cycleLength = data.cycleLength ?: 0
+
+            val currentDay = getCurrentCycleDay(LocalDate.parse(data.periodDate), cycleLength, date)
+
+            if (currentDay <= periodLength) {
+                return Pair(DayState.PERIOD, isDateSelected)
+            }
+
+            val ovDay = cycleLength - 13
+
+            if (currentDay == ovDay) {
+                return Pair(DayState.OVULATION_DAY, isDateSelected)
+            }
+            if (currentDay in (ovDay - 5)..(ovDay + 1)) {
+                return Pair(DayState.FERTILE, isDateSelected)
+            }
+
             return Pair(DayState.DEFAULT, isDateSelected)
         }
 
