@@ -224,5 +224,6 @@
     <color name="color_follicular">#83e7cf</color>
     <color name="color_luteal">#a38cff</color>
     <color name="color_follicular_info">#ff9252</color>
+    <color name="color_future_dates">#26ffffff</color>
 
 </resources>

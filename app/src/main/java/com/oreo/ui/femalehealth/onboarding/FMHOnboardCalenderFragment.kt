@@ -2,6 +2,7 @@ package com.oreo.ui.femalehealth.onboarding
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
@@ -9,6 +10,7 @@ import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthScrollListener
 import com.kizitonwose.calendar.view.ViewContainer
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.CalendarDayFmhOnboardBinding
 import com.noisefit.luna.databinding.FragmentFMHOnboardCalenderBinding
 import com.noisefit_commans.common.yearMonth
@@ -56,12 +58,14 @@ class FMHOnboardCalenderFragment :
 
                 binding.root.setOnClickListener {
                     if (day.position == DayPosition.MonthDate) {
-                        mViewModel.selectedPStartDate = day.date
+                        if (!day.date.isAfter(LocalDate.now())) {
+                            mViewModel.selectedPStartDate = day.date
 
-                        mViewModel.selectedPEndDate =
-                            mViewModel.calculatePeriodEndDate(day.date)
+                            mViewModel.selectedPEndDate =
+                                mViewModel.calculatePeriodEndDate(day.date)
 
-                        this@FMHOnboardCalenderFragment.binding.lytCalender.calendar.notifyCalendarChanged()
+                            this@FMHOnboardCalenderFragment.binding.lytCalender.calendar.notifyCalendarChanged()
+                        }
                     }
                 }
             }
@@ -99,7 +103,10 @@ class FMHOnboardCalenderFragment :
                             container.binding.ivBackStart.gone()
                             container.binding.ivBackEnd.visible()
                             container.binding.ivBackMid.gone()
-                        } else if (currentDate.isBefore(endDate) && currentDate.isAfter(startDate)) {
+                        } else if (currentDate.isBefore(endDate) && currentDate.isAfter(
+                                startDate
+                            )
+                        ) {
                             container.binding.ivBackSingle.gone()
                             container.binding.ivBackStart.gone()
                             container.binding.ivBackEnd.gone()
@@ -109,6 +116,23 @@ class FMHOnboardCalenderFragment :
                         }
                     } else {
                         hideAllBack(container.binding)
+                    }
+                    if (day.date.isAfter(LocalDate.now())) {
+                        textView.setTextColor(
+                            ContextCompat.getColor(
+                                textView.context,
+                                R.color.color_future_dates
+                            )
+                        )
+                        container.binding.ivBackSingle.alpha = 0.5f
+                        container.binding.ivBackStart.alpha = 0.5f
+                        container.binding.ivBackEnd.alpha = 0.5f
+                        container.binding.ivBackMid.alpha = 0.5f
+                    } else {
+                        container.binding.ivBackSingle.alpha = 1f
+                        container.binding.ivBackStart.alpha = 1f
+                        container.binding.ivBackEnd.alpha = 1f
+                        container.binding.ivBackMid.alpha = 1f
                     }
                 } else {
                     dayLayoutMain.invisible()
