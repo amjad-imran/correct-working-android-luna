@@ -26,6 +26,8 @@ data class FemaleHealthUserInfoModel(
     @SerializedName("pregnancy_chances")
     val pregnancyChances: String? = null,
     @SerializedName("is_not_sure")
-    val isNotSure: Boolean? = null
+    val isNotSure: Boolean? = null,
+    @SerializedName("is_track_pregnancy")
+    val isTrackPregnancy: Boolean? = null
 
 )
