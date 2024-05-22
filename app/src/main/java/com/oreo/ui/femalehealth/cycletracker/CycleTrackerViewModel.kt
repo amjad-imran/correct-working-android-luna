@@ -167,9 +167,9 @@ class CycleTrackerViewModel @Inject constructor(
 
     fun updateSelectedDate(date: LocalDate) {
         val old = selectedDate.value
-        notifyDateChange.value = Event(old)
 
-        selectedDate.postValue(date)
+        selectedDate.value = date
+        notifyDateChange.value = Event(old)
     }
 
     /**

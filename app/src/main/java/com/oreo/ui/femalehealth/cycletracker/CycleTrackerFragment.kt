@@ -29,8 +29,10 @@ import com.oreo.data.model.health.Nudges
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.workout.details.WorkoutNudgeFragment
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 
 @AndroidEntryPoint
 class CycleTrackerFragment :
@@ -50,6 +52,7 @@ class CycleTrackerFragment :
         class DayViewContainer(view: View) : ViewContainer(view) {
             val bind = CalenderCycleTrackerDayBinding.bind(view)
             lateinit var day: WeekDay
+            val dateToday = LocalDate.now()
 
             init {
                 view.setOnClickListener {
@@ -112,7 +115,7 @@ class CycleTrackerFragment :
                     }
 
                     DayState.PERIOD -> {
-                        bind.ivBackPeriod.setImageResource(R.drawable.back_circle_period)
+                        bind.ivBackPeriod.setImageResource(R.drawable.back_period_day)
                         bind.ivBackPeriod.visible()
                         bind.exSevenDateText.setTextColor(
                             ContextCompat.getColor(
@@ -129,6 +132,12 @@ class CycleTrackerFragment :
                             )
                         )
                     }
+                }
+
+                if (day.date > dateToday) {
+                    bind.ivBackPeriod.alpha = 0.5f
+                } else {
+                    bind.ivBackPeriod.alpha = 1f
                 }
             }
         }
@@ -150,7 +159,7 @@ class CycleTrackerFragment :
         binding.lytTrackerTop.vCalendar.weekCalender.setup(
             currentMonth.minusMonths(5).atStartOfMonth(),
             currentMonth.plusMonths(5).atEndOfMonth(),
-            firstDayOfWeekFromLocale(),
+            DayOfWeek.MONDAY,
         )
         binding.lytTrackerTop.vCalendar.weekCalender.scrollToDate(LocalDate.now())
 
