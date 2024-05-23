@@ -23,10 +23,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <View
+                <include
                     android:id="@+id/lytTopCalender"
+                    layout="@layout/layout_ct_streak_top_calender"
                     android:layout_width="match_parent"
-                    android:layout_height="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/side_margin"
+                    android:layout_marginEnd="@dimen/side_margin"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -79,5 +82,15 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
+        <include
+            android:id="@+id/progressBar1"
+            layout="@layout/default_loader"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

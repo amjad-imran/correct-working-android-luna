@@ -10,7 +10,7 @@ import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.FMHCycleHistoryDataModel
 import kotlin.math.abs
 
-class FMHCycleHistoryAdapter() :
+class FMHCycleHistoryAdapter(val listener: OnHistoryItemClickListener) :
     RecyclerView.Adapter<FMHCycleHistoryAdapter.ViewHolder>() {
     private var mDataSet = ArrayList<FMHCycleHistoryDataModel>()
 
@@ -75,6 +75,10 @@ class FMHCycleHistoryAdapter() :
             } else {
                 binding.divider1.root.visible()
             }
+
+            binding.root.setOnClickListener {
+                listener.onHistoryItemClick(data, bindingAdapterPosition)
+            }
         }
     }
 
@@ -102,4 +106,10 @@ class FMHCycleHistoryAdapter() :
 
 
 }
+
+interface OnHistoryItemClickListener {
+    fun onHistoryItemClick(data: FMHCycleHistoryDataModel, position: Int)
+}
+
+
 

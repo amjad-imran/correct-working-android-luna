@@ -381,6 +381,12 @@ interface NetworkService {
         @Url url: String,
     ): BaseApiResponse<List<FMHCycleHistoryDataModel>>
 
+    //todo response model will update, once receive actual api from backend
+    @GET
+    suspend fun getCycleStreakInfo(
+        @Url url: String,
+    ): BaseApiResponse<List<FMHCycleHistoryDataModel>>
+
     @GET
     suspend fun getCycleTrackerInfo(@Url url: String): BaseApiResponse<FemaleCycleTrackInfoModel?>?
 

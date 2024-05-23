@@ -22,6 +22,7 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.health.Nudges
 import com.oreo.ui.femalehealth.cycletracker.history.INFO_LOG
@@ -40,7 +41,17 @@ class CycleTrackerFragment :
     private val viewModel: CycleTrackerViewModel by viewModels()
 
     private val cycleHistoryAdapter by lazy {
-        FMHCycleHistoryAdapter()
+        FMHCycleHistoryAdapter(object : OnHistoryItemClickListener {
+            override fun onHistoryItemClick(data: FMHCycleHistoryDataModel, position: Int) {
+                navigate(R.id.cycleTrackerStreakFragment, Bundle().apply {
+                    this.putString(
+                        "id",
+                        "1"
+                    )//id will be getting later, as discussed right now not getting id
+                })
+            }
+
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -156,6 +167,7 @@ class CycleTrackerFragment :
     }
 
     override fun initListener() {
+
         binding.lytTrackerTop.tvPhase.setOnClickListener {
             var launchMode = ""
             if (binding.lytTrackerTop.tvPhase.text.equals("Luteal phase")) {

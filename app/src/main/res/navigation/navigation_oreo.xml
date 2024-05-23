@@ -807,8 +807,13 @@
     </dialog>
     <fragment
         android:id="@+id/cycleTrackerStreakFragment"
-        android:name="com.oreo.ui.femalehealth.cycletracker.CycleTrackerStreaksFragment"
-        android:label="CycleTrackerStreakFragment" />
+        android:name="com.oreo.ui.femalehealth.cycletracker.streak.CycleTrackerStreaksFragment"
+        android:label="CycleTrackerStreakFragment">
+        <argument
+            android:name="id"
+            app:argType="string" />
+
+    </fragment>
     <dialog
         android:id="@+id/dialogComingSoon"
         android:name="com.oreo.ui.femalehealth.cycletracker.BottomSheetComingSoon"

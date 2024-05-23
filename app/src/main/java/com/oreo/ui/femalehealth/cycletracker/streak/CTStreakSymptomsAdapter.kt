@@ -1,4 +1,4 @@
-package com.oreo.ui.femalehealth.cycletracker
+package com.oreo.ui.femalehealth.cycletracker.streak
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

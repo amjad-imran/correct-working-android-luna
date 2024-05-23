@@ -1923,6 +1923,13 @@ class OreoUserActivityRepositoryImpl(
             remoteDataSource.getPeriodCycleHistory(url)
         }
     }
+    override suspend fun getCycleStreakInfo(): Flow<Resource<BaseApiResponse<List<FMHCycleHistoryDataModel>>>> {
+        return safeApiCallFlow(dispatcher) {
+            //todo end point will update, once received from backend
+            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health/cycle_history"
+            remoteDataSource.getPeriodCycleHistory(url)
+        }
+    }
 
     override suspend fun getCycleTrackerInfo(): Flow<Resource<BaseApiResponse<FemaleCycleTrackInfoModel?>?>> {
         return safeApiCallFlow(dispatcher) {
