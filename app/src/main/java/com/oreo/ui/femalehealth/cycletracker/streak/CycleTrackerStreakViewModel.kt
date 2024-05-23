@@ -12,6 +12,7 @@ import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.ui.femalehealth.cycletracker.DayState
+import com.oreo.ui.femalehealth.cycletracker.PeriodPos
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -151,7 +152,7 @@ class CycleTrackerStreakViewModel @Inject constructor(
 
         val history = cycleStreakData.value
         if (history.isNullOrEmpty()) {
-            return Pair(DayState.DEFAULT, isDateSelected)
+            return Pair(DayState.Default, isDateSelected)
         }
 
         if (date > todayDate) {
@@ -163,19 +164,19 @@ class CycleTrackerStreakViewModel @Inject constructor(
             val currentDay = getCurrentCycleDay(LocalDate.parse(data.periodDate), cycleLength, date)
 
             if (currentDay <= periodLength) {
-                return Pair(DayState.PERIOD, isDateSelected)
+                return Pair(DayState.Period(PeriodPos.START), isDateSelected)
             }
 
             val ovDay = cycleLength - 13
 
             if (currentDay == ovDay) {
-                return Pair(DayState.OVULATION_DAY, isDateSelected)
+                return Pair(DayState.OvulationDay, isDateSelected)
             }
             if (currentDay in (ovDay - 5)..(ovDay + 1)) {
-                return Pair(DayState.FERTILE, isDateSelected)
+                return Pair(DayState.Fertile, isDateSelected)
             }
 
-            return Pair(DayState.DEFAULT, isDateSelected)
+            return Pair(DayState.Default, isDateSelected)
         }
 
         var returnValue: Pair<DayState, Boolean>? = null
@@ -192,14 +193,14 @@ class CycleTrackerStreakViewModel @Inject constructor(
 
             if (date in periodDateStart..periodDateEnd) {
                 returnValue =
-                    Pair(DayState.PERIOD, isDateSelected)
+                    Pair(DayState.Period(PeriodPos.CENTER), isDateSelected)
                 return@forEach
             }
 
             val ovDay = LocalDate.parse(it.ovulationStartDate)
             if (ovDay == date) {
                 returnValue = Pair(
-                    DayState.OVULATION_DAY,
+                    DayState.OvulationDay,
                     isDateSelected
                 )
                 return@forEach
@@ -213,7 +214,7 @@ class CycleTrackerStreakViewModel @Inject constructor(
 
                 if (date in fertileDateStart..fertileDateEnd) {
                     returnValue = Pair(
-                        DayState.FERTILE,
+                        DayState.Fertile,
                         isDateSelected
                     )
                     return@forEach
@@ -225,7 +226,7 @@ class CycleTrackerStreakViewModel @Inject constructor(
 
         }
         return if (returnValue == null) {
-            Pair(DayState.DEFAULT, isDateSelected)
+            Pair(DayState.Default, isDateSelected)
         } else {
             returnValue as Pair<DayState, Boolean>
         }
