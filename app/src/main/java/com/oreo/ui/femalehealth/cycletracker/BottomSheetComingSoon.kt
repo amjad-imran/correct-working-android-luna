@@ -26,8 +26,6 @@ class BottomSheetComingSoon : BaseBottomSheetWithTransparent<BottomSheetComingSo
                 NOTIFY_LOG,
                 bundleOf("agree" to true)
             )
-            navigateUpSafe()
-
         }
 
     }
