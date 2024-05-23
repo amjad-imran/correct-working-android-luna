@@ -79,7 +79,7 @@ class CycleTrackerFragment :
                 }
 
                 when (state) {
-                    DayState.FERTILE -> {
+                    DayState.Fertile -> {
                         bind.ivBackPeriod.gone()
                         bind.exSevenDateText.setTextColor(
                             ContextCompat.getColor(
@@ -88,7 +88,7 @@ class CycleTrackerFragment :
                         )
                     }
 
-                    DayState.OVULATION_DAY -> {
+                    DayState.OvulationDay -> {
                         bind.ivBackPeriod.setImageResource(R.drawable.back_circle_fertile)
                         bind.ivBackPeriod.visible()
                         bind.exSevenDateText.setTextColor(
@@ -98,7 +98,7 @@ class CycleTrackerFragment :
                         )
                     }
 
-                    DayState.PERIOD -> {
+                    is DayState.Period -> {
                         bind.ivBackPeriod.setImageResource(R.drawable.back_period_day)
                         bind.ivBackPeriod.visible()
                         bind.exSevenDateText.setTextColor(
@@ -108,7 +108,7 @@ class CycleTrackerFragment :
                         )
                     }
 
-                    DayState.DEFAULT -> {
+                    DayState.Default -> {
                         bind.ivBackPeriod.gone()
                         bind.exSevenDateText.setTextColor(
                             ContextCompat.getColor(
@@ -156,6 +156,10 @@ class CycleTrackerFragment :
     }
 
     override fun initListener() {
+        binding.toolbar.viewBackCalendar.setOnClickListener {
+            navigate(R.id.cycleLogFragment)
+        }
+
         binding.lytTrackerTop.tvPhase.setOnClickListener {
             var launchMode = ""
             if (binding.lytTrackerTop.tvPhase.text.equals("Luteal phase")) {
@@ -213,9 +217,9 @@ class CycleTrackerFragment :
         binding.lytCycleHistory.ivMore.setOnClickListener {
             navigate(R.id.cycleTrackerHistory)
         }
-        binding.lytTrackerTop.btnLog.setOnClickListener {
+        /*binding.lytTrackerTop.btnLog.setOnClickListener {
             navigate(R.id.cycleLogFragment)
-        }
+        }*/
     }
 
     private fun initInsightUI(data: FemaleHealthUserInfoModel) {

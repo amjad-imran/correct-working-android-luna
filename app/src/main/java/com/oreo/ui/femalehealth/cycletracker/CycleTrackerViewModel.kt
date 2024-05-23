@@ -174,7 +174,11 @@ class CycleTrackerViewModel @Inject constructor(
         notifyDateChange.value = Event(old)
     }
 
-    private fun getCurrentCycleDay(periodDate: LocalDate, cycleLength: Int, currentDate: LocalDate): Int {
+    private fun getCurrentCycleDay(
+        periodDate: LocalDate,
+        cycleLength: Int,
+        currentDate: LocalDate
+    ): Int {
         val daysSinceLastPeriod = ChronoUnit.DAYS.between(periodDate, currentDate).toInt()
         return (daysSinceLastPeriod % cycleLength) + 1
     }
@@ -188,7 +192,7 @@ class CycleTrackerViewModel @Inject constructor(
 
         val history = cycleHistoryData.value
         if (history.isNullOrEmpty()) {
-            return Pair(DayState.DEFAULT, isDateSelected)
+            return Pair(DayState.Default, isDateSelected)
         }
 
         if (date > todayDate) {
@@ -200,19 +204,19 @@ class CycleTrackerViewModel @Inject constructor(
             val currentDay = getCurrentCycleDay(LocalDate.parse(data.periodDate), cycleLength, date)
 
             if (currentDay <= periodLength) {
-                return Pair(DayState.PERIOD, isDateSelected)
+                return Pair(DayState.Period(PeriodPos.START), isDateSelected)
             }
 
             val ovDay = cycleLength - 13
 
             if (currentDay == ovDay) {
-                return Pair(DayState.OVULATION_DAY, isDateSelected)
+                return Pair(DayState.OvulationDay, isDateSelected)
             }
             if (currentDay in (ovDay - 5)..(ovDay + 1)) {
-                return Pair(DayState.FERTILE, isDateSelected)
+                return Pair(DayState.Fertile, isDateSelected)
             }
 
-            return Pair(DayState.DEFAULT, isDateSelected)
+            return Pair(DayState.Default, isDateSelected)
         }
 
         var returnValue: Pair<DayState, Boolean>? = null
@@ -229,14 +233,14 @@ class CycleTrackerViewModel @Inject constructor(
 
             if (date in periodDateStart..periodDateEnd) {
                 returnValue =
-                    Pair(DayState.PERIOD, isDateSelected)
+                    Pair(DayState.Period(PeriodPos.START), isDateSelected)
                 return@forEach
             }
 
             val ovDay = LocalDate.parse(it.ovulationStartDate)
             if (ovDay == date) {
                 returnValue = Pair(
-                    DayState.OVULATION_DAY,
+                    DayState.OvulationDay,
                     isDateSelected
                 )
                 return@forEach
@@ -250,7 +254,7 @@ class CycleTrackerViewModel @Inject constructor(
 
                 if (date in fertileDateStart..fertileDateEnd) {
                     returnValue = Pair(
-                        DayState.FERTILE,
+                        DayState.Fertile,
                         isDateSelected
                     )
                     return@forEach
@@ -262,7 +266,7 @@ class CycleTrackerViewModel @Inject constructor(
 
         }
         return if (returnValue == null) {
-            Pair(DayState.DEFAULT, isDateSelected)
+            Pair(DayState.Default, isDateSelected)
         } else {
             returnValue as Pair<DayState, Boolean>
         }
@@ -293,6 +297,13 @@ class CycleTrackerViewModel @Inject constructor(
 
 }
 
-enum class DayState {
-    FERTILE, OVULATION_DAY, PERIOD, DEFAULT
+sealed class DayState {
+    object Fertile : DayState()
+    object OvulationDay : DayState()
+    object Default : DayState()
+    class Period(val pos: PeriodPos) : DayState()
+}
+
+enum class PeriodPos {
+    START, END, CENTER, SINGLE
 }
