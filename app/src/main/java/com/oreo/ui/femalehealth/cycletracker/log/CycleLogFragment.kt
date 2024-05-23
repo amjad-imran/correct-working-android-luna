@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.kizitonwose.calendar.core.CalendarDay
@@ -19,33 +20,45 @@ import com.noisefit.luna.databinding.CalendarDayFmhOnboardBinding
 import com.noisefit.luna.databinding.FragmentCycleLogBinding
 import com.noisefit.luna.databinding.LayoutCycleLogCalHeaderBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
+import com.oreo.ui.femalehealth.cycletracker.DayState
 import com.oreo.ui.femalehealth.cycletracker.LogPeriodActivity
+import com.oreo.ui.femalehealth.cycletracker.PeriodPos
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 
 @AndroidEntryPoint
 class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogBinding::inflate) {
-    private val mViewModel: CycleLogViewModel by viewModels()
+    private val viewModel: CycleLogViewModel by viewModels()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initCalender()
+        initToolbar()
+    }
+
+    private fun initToolbar() {
+        binding.lytToolbar.view1.visible()
+        binding.lytToolbar.ivAddFriend.invisible()
+        binding.lytToolbar.view1.loadImage(
+            binding.lytToolbar.view1.context,
+            R.drawable.ic_log_settings
+        )
+        binding.lytToolbar.tvTitle.text = getString(R.string.text_calender)
     }
 
     private fun initCalender() {
-        val currentDay = LocalDate.parse(DateFormats.getCurrentDate(DateFormats.dateFormat3))
+        val currentDay = LocalDate.now()
         val currentMonth = YearMonth.now()
-        val calendarStart = LocalDate.parse("2023-03-01")
-        val daysOfWeek = DateFormats.daysOfWeekFromLocale()
+        val calendarStart = LocalDate.parse("2023-03-01")//TODO to be changed as per user selection
 
         binding.calendar.setup(
-            calendarStart.yearMonth, currentMonth.plusMonths(1), daysOfWeek.first()
+            calendarStart.yearMonth, currentMonth.plusMonths(12), DayOfWeek.MONDAY
         )
         class DayViewContainer(view: View) : ViewContainer(view) {
             lateinit var day: CalendarDay
@@ -60,18 +73,132 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
                 }
             }
 
+            fun bind(day: CalendarDay) {
+                this.day = day
+                val dayLayoutMain = binding.dayLayoutMain
+                binding.tvDay.text = this.day.date.dayOfMonth.toString()
+
+                if (this.day.position == DayPosition.MonthDate) {
+                    dayLayoutMain.visible()
+
+                    val (state, isDateSelected) = viewModel.getCurrentState(day.date)
+
+                    if (isDateSelected) {
+                        binding.ivBackSelected.visible()
+                    } else {
+                        binding.ivBackSelected.gone()
+                    }
+
+
+                    when (state) {
+                        DayState.Fertile -> {
+                            hideAllBack(binding)
+                            binding.ivBackPeriod.gone()
+                            binding.tvDay.setTextColor(
+                                ContextCompat.getColor(
+                                    binding.tvDay.context, R.color.color_ovulation
+                                )
+                            )
+                        }
+
+                        DayState.OvulationDay -> {
+                            hideAllBack(binding)
+                            binding.ivBackPeriod.setImageResource(R.drawable.back_circle_fertile)
+                            binding.ivBackPeriod.visible()
+                            binding.tvDay.setTextColor(
+                                ContextCompat.getColor(
+                                    binding.tvDay.context, R.color.color_ovulation
+                                )
+                            )
+                        }
+
+                        is DayState.Period -> {
+                            binding.ivBackPeriod.gone()
+                            when (state.pos) {
+                                PeriodPos.START -> {
+                                    binding.ivBackStart.visible()
+                                    binding.ivBackSingle.gone()
+                                    binding.ivBackEnd.gone()
+                                    binding.ivBackMid.gone()
+                                }
+
+                                PeriodPos.END -> {
+                                    binding.ivBackSingle.gone()
+                                    binding.ivBackStart.gone()
+                                    binding.ivBackEnd.visible()
+                                    binding.ivBackMid.gone()
+                                }
+
+                                PeriodPos.CENTER -> {
+                                    binding.ivBackSingle.gone()
+                                    binding.ivBackStart.gone()
+                                    binding.ivBackEnd.gone()
+                                    binding.ivBackMid.visible()
+                                }
+
+                                PeriodPos.SINGLE -> {
+                                    binding.ivBackSingle.visible()
+                                    binding.ivBackStart.gone()
+                                    binding.ivBackEnd.gone()
+                                    binding.ivBackMid.gone()
+                                }
+                            }
+                            binding.tvDay.setTextColor(
+                                ContextCompat.getColor(
+                                    binding.tvDay.context, R.color.white
+                                )
+                            )
+                        }
+
+                        DayState.Default -> {
+                            hideAllBack(binding)
+                            binding.ivBackPeriod.gone()
+                            binding.tvDay.setTextColor(
+                                ContextCompat.getColor(
+                                    binding.tvDay.context, R.color.white
+                                )
+                            )
+                        }
+                    }
+
+                    if (this.day.date > viewModel.todayDate) {
+                        binding.ivBackSingle.alpha = 0.5f
+                        binding.ivBackStart.alpha = 0.5f
+                        binding.ivBackEnd.alpha = 0.5f
+                        binding.ivBackMid.alpha = 0.5f
+                    } else {
+                        binding.ivBackSingle.alpha = 1f
+                        binding.ivBackStart.alpha = 1f
+                        binding.ivBackEnd.alpha = 1f
+                        binding.ivBackMid.alpha = 1f
+                    }
+                } else {
+                    dayLayoutMain.invisible()
+                }
+            }
+
+            private fun hideAllBack(binding: CalendarDayFmhOnboardBinding) {
+                binding.ivBackSingle.gone()
+                binding.ivBackStart.gone()
+                binding.ivBackEnd.gone()
+                binding.ivBackMid.gone()
+            }
+
         }
 
         binding.calendar.dayBinder = object : MonthDayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
-                container.day = day
+
+                container.bind(day)
+
+                /*container.day = day
                 val textView = container.binding.tvDay
                 val dayLayoutMain = container.binding.dayLayoutMain
-                textView.text = day.date.dayOfMonth.toString()
+                textView.text = day.date.dayOfMonth.toString()*/
             }
         }
-        class MonthViewContainer(view: View) : com.kizitonwose.calendar.view.ViewContainer(view) {
+        class MonthViewContainer(view: View) : ViewContainer(view) {
             val textView = LayoutCycleLogCalHeaderBinding.bind(view).exTwoHeaderText
         }
         binding.calendar.monthHeaderBinder =
@@ -94,21 +221,13 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
                 val selectedDate =
                     data?.getStringExtra("selected_date") ?: return@registerForActivityResult
 
-                mViewModel.onCalendarDateSelected(selectedDate)
+                viewModel.onCalendarDateSelected(selectedDate)
 
                 LOGS.d("moveToPosition Selected Date  :${selectedDate}")
             }
         }
 
     override fun initListener() {
-        binding.lytToolbar.view1.visible()
-        binding.lytToolbar.ivAddFriend.invisible()
-        binding.lytToolbar.view1.loadImage(
-            binding.lytToolbar.view1.context,
-            R.drawable.ic_log_settings
-        )
-        binding.lytToolbar.tvTitle.text = getString(R.string.text_calender)
-
         binding.lytToolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }
@@ -121,7 +240,7 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
                 val selectedSymptoms = bundle.getStringArrayList("data")
                 val flow = bundle.getString("flow")
                 if (agree) {
-                    mViewModel.logPeriod(flow, selectedSymptoms)
+                    viewModel.logPeriod(flow, selectedSymptoms)
                 } else {
                     resultLauncher.launch(
                         LogPeriodActivity.getStartIntent(
@@ -132,13 +251,17 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
                 }
             }
             navigate(R.id.bottomSheetCycleLog, Bundle().apply {
-                putParcelable("data", mViewModel.getCycleLogData())
+                putParcelable("data", viewModel.getCycleLogData())
             })
         }
     }
 
     override fun subscribeObservers() {
-        mViewModel.logPeriodData.observe(this) {
+        viewModel.cycleHistoryData.observe(this) {
+            initCalender()
+        }
+
+        viewModel.logPeriodData.observe(this) {
             it?.getContent()?.let {
                 //handle page data
             }
