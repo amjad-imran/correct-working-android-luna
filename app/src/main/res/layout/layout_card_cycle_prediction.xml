@@ -26,6 +26,7 @@
         app:layout_constraintTop_toTopOf="@id/tvHeader" />
 
     <include
+        android:id="@+id/vCard"
         layout="@layout/layout_cycle_prediction_subitem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

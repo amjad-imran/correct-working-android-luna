@@ -7,6 +7,27 @@
     android:background="#cc030f1d">
 
     <TextView
+        android:id="@+id/tvLogPeriod"
+        style="@style/H5"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:text="@string/text_log_period"
+        app:layout_constraintBottom_toBottomOf="@+id/ivLogPeriod"
+        app:layout_constraintEnd_toStartOf="@+id/ivLogPeriod"
+        app:layout_constraintTop_toTopOf="@+id/ivLogPeriod" />
+
+    <ImageView
+        android:id="@+id/ivLogPeriod"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginEnd="4dp"
+        android:src="@drawable/iv_log_period_fab"
+        android:layout_marginBottom="-12dp"
+        app:layout_constraintBottom_toTopOf="@+id/ivAddWorkoutManual"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
         android:id="@+id/tvAddWorkout"
         style="@style/H5"
         android:layout_width="wrap_content"

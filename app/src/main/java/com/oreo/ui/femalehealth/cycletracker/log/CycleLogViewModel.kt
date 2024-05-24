@@ -28,7 +28,7 @@ class CycleLogViewModel @Inject constructor(
     val userActivityRepository: OreoUserActivityRepository
 ) : BaseViewModel() {
 
-    var selectedDate: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now())
+    var selectedDate: LocalDate = LocalDate.now()
     val todayDate = LocalDate.now()
 
     private val _cycleHistoryData = MutableLiveData<List<FMHCycleHistoryDataModel>?>()
@@ -168,7 +168,7 @@ class CycleLogViewModel @Inject constructor(
      */
     //TODO optimize - pre process data
     fun getCurrentState(date: LocalDate): Pair<DayState, Boolean> {
-        val isDateSelected = date == selectedDate.value
+        val isDateSelected = date == selectedDate
 
         val history = cycleHistoryData.value
         if (history.isNullOrEmpty()) {

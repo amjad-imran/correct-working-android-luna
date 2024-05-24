@@ -48,7 +48,7 @@
                 android:visibility="visible" />
 
             <include
-                android:id="@+id/divider2"
+                android:id="@+id/dividerPrediction"
                 layout="@layout/layout_divider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"

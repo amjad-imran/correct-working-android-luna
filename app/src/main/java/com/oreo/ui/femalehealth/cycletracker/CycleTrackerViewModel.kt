@@ -1,5 +1,6 @@
 package com.oreo.ui.femalehealth.cycletracker
 
+import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -8,11 +9,23 @@ import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.FMHCycleHistoryDataModel
+import com.oreo.data.model.HRModel
+import com.oreo.data.model.OActivityListModal
+import com.oreo.data.model.OHealthOverview
+import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
+import com.oreo.data.model.femaleh.TempPeriodData
+import com.oreo.data.model.femaleh.TempPrediction
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
+import com.oreo.ui.custom.HRCombineModel
+import com.oreo.ui.custom.Item
+import com.oreo.ui.custom.ItemTemp
+import com.oreo.ui.custom.Section
+import com.oreo.ui.custom.TempPeriodCombineModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.joda.time.Days
@@ -22,6 +35,7 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 import kotlin.math.abs
+import kotlin.math.floor
 
 @HiltViewModel
 class CycleTrackerViewModel @Inject constructor(
@@ -39,10 +53,29 @@ class CycleTrackerViewModel @Inject constructor(
     private val _cycleHistoryData = MutableLiveData<List<FMHCycleHistoryDataModel>?>()
     val cycleHistoryData: LiveData<List<FMHCycleHistoryDataModel>?> get() = _cycleHistoryData
 
+    private val _cyclePredictionData = MutableLiveData<TempPrediction?>()
+    val cyclePredictionData: LiveData<TempPrediction?> get() = _cyclePredictionData
+
     init {
 
         getCycleHistoryData()
         //getDataForDate(viewModel.selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+        generatePredictionData()
+    }
+
+    private fun generatePredictionData() {
+        _cyclePredictionData.postValue(
+            TempPrediction(
+                tempVariation = 0.5f,
+                message = "Your resting HR seems to be higher than previous day. Allow yourself sufficient time for recovery by taking it slow. Consider a nap?",
+                tempData = arrayListOf(
+                    TempPeriodData(
+                        date = "2024-05-23",
+                        temperature = 1.25f
+                    )
+                )
+            )
+        )
     }
 
 
@@ -295,6 +328,59 @@ class CycleTrackerViewModel @Inject constructor(
 
     }
 
+
+    fun combineTempData(): TempPeriodCombineModel {
+        val tempData = arrayListOf(
+            TempPeriodData(date = "2024-05-24", temperature = null),
+            TempPeriodData(date = "2024-05-23", temperature = 1.25f),
+            TempPeriodData(date = "2024-05-22", temperature = 1.25f),
+            TempPeriodData(date = "2024-05-21", temperature = 1f),
+            TempPeriodData(date = "2024-05-20", temperature = 0.5f),
+            TempPeriodData(date = "2024-05-19", temperature = 1.25f),
+            TempPeriodData(date = "2024-05-18", temperature = 0f),
+            TempPeriodData(date = "2024-05-17", temperature = 1.25f),
+            TempPeriodData(date = "2024-05-16", temperature = 0f),
+            TempPeriodData(date = "2024-05-15", temperature = 0f),
+            TempPeriodData(date = "2024-05-14", temperature = -2.25f),
+            TempPeriodData(date = "2024-05-13", temperature = -1.25f),
+            TempPeriodData(date = "2024-05-12", temperature = -2.25f),
+            TempPeriodData(date = "2024-05-11", temperature = -1.25f),
+            TempPeriodData(date = "2024-05-10", temperature = -2.25f)
+        )
+
+
+        //val workouts = dayData?.activity?.workout
+        val sections: MutableList<Section> = ArrayList()
+
+        sections.add(
+            Section(
+                "period",
+                1,
+                2,
+                Color.parseColor("#801ec9ff"),
+                imageRes = R.drawable.ic_period_graph
+            )
+        )
+
+        sections.add(
+            Section(
+                "fertile",
+                6,
+                10,
+                Color.parseColor("#80ff7fc4"),
+                imageRes = R.drawable.ic_fertile_graph
+            )
+        )
+
+        val items: MutableList<ItemTemp> = ArrayList()
+        tempData.forEachIndexed { index, i ->
+            items.add(ItemTemp(i.temperature, index, i.date))
+        }
+        return TempPeriodCombineModel(
+            sections = sections,
+            items = items
+        )
+    }
 }
 
 sealed class DayState {

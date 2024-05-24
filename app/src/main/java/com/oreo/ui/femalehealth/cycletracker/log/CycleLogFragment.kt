@@ -23,6 +23,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
@@ -68,7 +69,18 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
 
                 binding.root.setOnClickListener {
                     if (day.position == DayPosition.MonthDate) {
+                        if (day.date > viewModel.todayDate) {
+                            return@setOnClickListener
+                        }
 
+                        val oldDate = viewModel.selectedDate
+                        this@CycleLogFragment.binding.calendar.notifyDateChanged(
+                            oldDate
+                        )
+                        viewModel.selectedDate = day.date
+                        this@CycleLogFragment.binding.calendar.notifyDateChanged(
+                            day.date
+                        )
                     }
                 }
             }
@@ -258,12 +270,33 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
 
     override fun subscribeObservers() {
         viewModel.cycleHistoryData.observe(this) {
+            binding.btnLog.visible()
             initCalender()
         }
 
         viewModel.logPeriodData.observe(this) {
             it?.getContent()?.let {
                 //handle page data
+            }
+        }
+
+        viewModel.getMessages().observe(this) {
+            it.getContent()?.let { message ->
+                context.showShortToast(message)
+            }
+        }
+
+        viewModel.getApiErrors().observe(viewLifecycleOwner) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
+            }
+        }
+
+        viewModel.getLoading().observe(this) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
             }
         }
     }

@@ -24,6 +24,7 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
+import com.oreo.data.model.femaleh.TempPrediction
 import com.oreo.data.model.health.Nudges
 import com.oreo.ui.femalehealth.cycletracker.history.INFO_LOG
 import com.oreo.ui.femalehealth.cycletracker.insight.CycleInsightLaunchMode
@@ -267,7 +268,6 @@ class CycleTrackerFragment :
                     binding.lytTrackerTop.vCalendar.weekCalender.notifyDateChanged(
                         it
                     )
-                    LOGS.d("sdjfhksjdfhk old date $it")
                 } catch (exp: Exception) {
                 }
             }
@@ -291,6 +291,16 @@ class CycleTrackerFragment :
                 cycleHistoryAdapter.setData(it.take(3))
             }
             initCalender()
+        }
+        viewModel.cyclePredictionData.observe(this) {
+            if (it == null) {
+                binding.dividerPrediction.root.gone()
+                binding.lytPrediction.root.gone()
+            } else {
+                binding.dividerPrediction.root.visible()
+                binding.lytPrediction.root.visible()
+                initSkinTempPredictionWidget(it)
+            }
         }
         viewModel.femaleHealthData.observe(this) {
             if (it.currentDay == null) {
@@ -319,6 +329,20 @@ class CycleTrackerFragment :
             } else {
                 binding.progressBar1.root.gone()
             }
+        }
+    }
+
+    private fun initSkinTempPredictionWidget(data: TempPrediction) {
+        binding.lytPrediction.vCard.apply {
+            tvValue.text = if ((data.tempVariation ?: 0f) > 0f) {
+                "+${data.tempVariation}"
+            } else {
+                "-${data.tempVariation}"
+            }
+            tvDescription.text = data.message
+
+            vTempGraph.updateData(viewModel.combineTempData())
+
         }
     }
 
