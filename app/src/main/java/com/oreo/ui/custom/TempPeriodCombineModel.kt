@@ -2,7 +2,8 @@ package com.oreo.ui.custom
 
 data class TempPeriodCombineModel(
     val sections: List<Section>? = null,
-    val items: List<ItemTemp>? = null
+    val items: List<ItemTemp>? = null,
+    val maxValue: Float
 )
 
 data class ItemTemp(

@@ -18,6 +18,7 @@ import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.ui.femalehealth.cycletracker.DayState
 import com.oreo.ui.femalehealth.cycletracker.PeriodPos
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
@@ -33,6 +34,8 @@ class CycleLogViewModel @Inject constructor(
 
     private val _cycleHistoryData = MutableLiveData<List<FMHCycleHistoryDataModel>?>()
     val cycleHistoryData: LiveData<List<FMHCycleHistoryDataModel>?> get() = _cycleHistoryData
+
+    val healthDataDateList = HashMap<LocalDate, DayState>()
 
 
     init {
@@ -101,11 +104,123 @@ class CycleLogViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            _cycleHistoryData.postValue(it)
+                            generateHealthData(it)
                         }
                     }
                 }
             }
+        }
+    }
+
+    private fun generateHealthData(it: List<FMHCycleHistoryDataModel>) {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val mainPeriodLength = 5
+            val mainCycleLength = 28
+
+            it.forEach { data ->
+
+                val periodLength = data.periodLength ?: 0
+                val cycleLength = data.cycleLength ?: 0
+
+                val periodStart = LocalDate.parse(data.periodDate)
+                val periodEnd = if (periodLength == 0) {
+                    periodStart
+                } else {
+                    periodStart.plusDays((periodLength - 1).toLong())
+                }
+
+                var loopDate = periodStart
+                while (loopDate <= periodEnd) {
+
+                    val state = if (periodEnd == periodStart) {
+                        PeriodPos.SINGLE
+                    } else {
+                        if (loopDate == periodStart) {
+                            PeriodPos.START
+                        } else if (loopDate == periodEnd) {
+                            PeriodPos.END
+                        } else {
+                            PeriodPos.CENTER
+                        }
+                    }
+
+                    healthDataDateList[loopDate] = DayState.Period(state)
+
+                    loopDate = loopDate.plusDays(1)
+                }
+
+
+                try {
+                    val fWindow = data.fertileWindow?.split("/")
+
+                    val fertileDateStart = LocalDate.parse(fWindow?.get(0))
+                    val fertileDateEnd = LocalDate.parse(fWindow?.get(1))
+
+                    var loopDateFertile = fertileDateStart
+                    while (loopDateFertile <= fertileDateEnd) {
+                        healthDataDateList[loopDateFertile] = DayState.Fertile
+                        loopDateFertile = loopDateFertile.plusDays(1)
+                    }
+
+                    val ovDate = LocalDate.parse(data.ovulationStartDate)
+                    healthDataDateList[ovDate] = DayState.OvulationDay
+
+
+                } catch (exp: Exception) {
+                }
+            }
+
+            val currentPeriodStart = LocalDate.parse(it.first().periodDate)
+
+            val preProcessDataTill = currentPeriodStart.plusMonths(12)
+
+            val nextPeriodDate =
+                currentPeriodStart.plusDays(mainPeriodLength.toLong())
+
+            var current = nextPeriodDate
+            val data = it.first()
+            while (current <= preProcessDataTill) {
+
+                val currentDay = getCurrentCycleDay(
+                    LocalDate.parse(data.periodDate),
+                    mainCycleLength,
+                    current
+                )
+
+                if (currentDay == 1) {
+                    healthDataDateList[current] = DayState.Period(PeriodPos.START)
+                    current = current.plusDays(1)
+                    continue
+                } else if (currentDay == mainPeriodLength) {
+                    healthDataDateList[current] = DayState.Period(PeriodPos.END)
+                    current = current.plusDays(1)
+                    continue
+                }
+
+                if (currentDay <= mainPeriodLength) {
+                    healthDataDateList[current] = DayState.Period(PeriodPos.CENTER)
+                    current = current.plusDays(1)
+                    continue
+                }
+
+                val ovDay = (mainCycleLength - 13)
+
+                if (currentDay == ovDay) {
+                    healthDataDateList[current] = DayState.OvulationDay
+                    current = current.plusDays(1)
+                    continue
+                }
+
+                if (currentDay in (ovDay - 5)..(ovDay + 1)) {
+                    healthDataDateList[current] = DayState.Fertile
+                    current = current.plusDays(1)
+                    continue
+                }
+                current = current.plusDays(1)
+
+            }
+            _cycleHistoryData.postValue(it)
         }
     }
 
@@ -167,6 +282,7 @@ class CycleLogViewModel @Inject constructor(
      * return Pair(DayState, isDateSelected)
      */
     //TODO optimize - pre process data
+
     fun getCurrentState(date: LocalDate): Pair<DayState, Boolean> {
         val isDateSelected = date == selectedDate
 
@@ -175,95 +291,12 @@ class CycleLogViewModel @Inject constructor(
             return Pair(DayState.Default, isDateSelected)
         }
 
-        if (date > todayDate) {
-            val data = history.first()
+        val returnVal = healthDataDateList[date]
 
-            val periodLength = data.periodLength ?: 0
-            val cycleLength = data.cycleLength ?: 0
-
-            val currentDay = getCurrentCycleDay(LocalDate.parse(data.periodDate), cycleLength, date)
-
-            if (currentDay == 1) {
-                return Pair(DayState.Period(PeriodPos.START), isDateSelected)
-            } else if (currentDay == periodLength) {
-                return Pair(DayState.Period(PeriodPos.END), isDateSelected)
-            }
-
-            if (currentDay <= periodLength) {
-                return Pair(DayState.Period(PeriodPos.CENTER), isDateSelected)
-            }
-
-            val ovDay = cycleLength - 13
-
-            if (currentDay == ovDay) {
-                return Pair(DayState.OvulationDay, isDateSelected)
-            }
-            if (currentDay in (ovDay - 5)..(ovDay + 1)) {
-                return Pair(DayState.Fertile, isDateSelected)
-            }
-
-            return Pair(DayState.Default, isDateSelected)
-        }
-
-        var returnValue: Pair<DayState, Boolean>? = null
-
-        history.forEach {
-            val periodDateStart = LocalDate.parse(it.periodDate)
-            val periodLength = it.periodLength ?: 0
-
-            val periodDateEnd = if (periodLength == 0) {
-                periodDateStart
-            } else {
-                periodDateStart.plusDays((periodLength - 1).toLong())
-            }
-            if (date == periodDateStart) {
-                returnValue =
-                    Pair(DayState.Period(PeriodPos.START), isDateSelected)
-                return@forEach
-            } else if (date == periodDateEnd) {
-                returnValue =
-                    Pair(DayState.Period(PeriodPos.END), isDateSelected)
-                return@forEach
-            }
-
-            if (date in periodDateStart..periodDateEnd) {
-                returnValue =
-                    Pair(DayState.Period(PeriodPos.CENTER), isDateSelected)
-                return@forEach
-            }
-
-            val ovDay = LocalDate.parse(it.ovulationStartDate)
-            if (ovDay == date) {
-                returnValue = Pair(
-                    DayState.OvulationDay,
-                    isDateSelected
-                )
-                return@forEach
-            }
-
-            try {
-                val fWindow = it.fertileWindow?.split("/")
-
-                val fertileDateStart = LocalDate.parse(fWindow?.get(0))
-                val fertileDateEnd = LocalDate.parse(fWindow?.get(1))
-
-                if (date in fertileDateStart..fertileDateEnd) {
-                    returnValue = Pair(
-                        DayState.Fertile,
-                        isDateSelected
-                    )
-                    return@forEach
-                }
-
-            } catch (exp: Exception) {
-            }
-
-
-        }
-        return if (returnValue == null) {
+        return if (returnVal == null) {
             Pair(DayState.Default, isDateSelected)
         } else {
-            returnValue as Pair<DayState, Boolean>
+            Pair(returnVal, isDateSelected)
         }
     }
 

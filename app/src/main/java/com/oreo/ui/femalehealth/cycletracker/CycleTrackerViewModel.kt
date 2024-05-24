@@ -9,33 +9,24 @@ import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
-import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.FMHCycleHistoryDataModel
-import com.oreo.data.model.HRModel
-import com.oreo.data.model.OActivityListModal
-import com.oreo.data.model.OHealthOverview
-import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.TempPeriodData
 import com.oreo.data.model.femaleh.TempPrediction
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
-import com.oreo.ui.custom.HRCombineModel
-import com.oreo.ui.custom.Item
 import com.oreo.ui.custom.ItemTemp
 import com.oreo.ui.custom.Section
 import com.oreo.ui.custom.TempPeriodCombineModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.joda.time.Days
-import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 import kotlin.math.abs
-import kotlin.math.floor
 
 @HiltViewModel
 class CycleTrackerViewModel @Inject constructor(
@@ -56,28 +47,13 @@ class CycleTrackerViewModel @Inject constructor(
     private val _cyclePredictionData = MutableLiveData<TempPrediction?>()
     val cyclePredictionData: LiveData<TempPrediction?> get() = _cyclePredictionData
 
+
+    val healthDataDateList = HashMap<LocalDate, DayState>()
+
     init {
 
         getCycleHistoryData()
-        //getDataForDate(viewModel.selectedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-        generatePredictionData()
     }
-
-    private fun generatePredictionData() {
-        _cyclePredictionData.postValue(
-            TempPrediction(
-                tempVariation = 0.5f,
-                message = "Your resting HR seems to be higher than previous day. Allow yourself sufficient time for recovery by taking it slow. Consider a nap?",
-                tempData = arrayListOf(
-                    TempPeriodData(
-                        date = "2024-05-23",
-                        temperature = 1.25f
-                    )
-                )
-            )
-        )
-    }
-
 
     fun getDataForDate(date: String) {
         viewModelScope.launch {
@@ -110,6 +86,32 @@ class CycleTrackerViewModel @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data.let {
                             _femaleHealthData.postValue(it)
+
+
+                            val tempData = arrayListOf(
+                                TempPeriodData(date = "2024-05-24", temperature = 5.5f),
+                                TempPeriodData(date = "2024-05-23", temperature = 3.25f),
+                                TempPeriodData(date = "2024-05-22", temperature = 1.25f),
+                                TempPeriodData(date = "2024-05-21", temperature = 1f),
+                                TempPeriodData(date = "2024-05-20", temperature = 0.5f),
+                                TempPeriodData(date = "2024-05-19", temperature = 1.25f),
+                                TempPeriodData(date = "2024-05-18", temperature = 0f),
+                                TempPeriodData(date = "2024-05-17", temperature = 1.25f),
+                                TempPeriodData(date = "2024-05-16", temperature = 0f),
+                                TempPeriodData(date = "2024-05-15", temperature = 0f),
+                                TempPeriodData(date = "2024-05-14", temperature = -2.25f),
+                                TempPeriodData(date = "2024-05-13", temperature = -1.25f),
+                                TempPeriodData(date = "2024-05-12", temperature = -2.25f),
+                                TempPeriodData(date = "2024-05-11", temperature = -1.25f),
+                            )
+
+                            _cyclePredictionData.postValue(
+                                TempPrediction(
+                                    tempVariation = 0.5f,
+                                    message = "Your resting HR seems to be higher than previous day. Allow yourself sufficient time for recovery by taking it slow. Consider a nap?",
+                                    tempData = tempData
+                                )
+                            )
                         }
                     }
                 }
@@ -145,11 +147,118 @@ class CycleTrackerViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            _cycleHistoryData.postValue(it)
+
+
+                            generateHealthData(it)
+
+
                         }
                     }
                 }
             }
+        }
+    }
+
+    private fun generateHealthData(it: List<FMHCycleHistoryDataModel>) {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val mainPeriodLength = 5
+            val mainCycleLength = 28
+
+            it.forEach { data ->
+
+                val periodLength = data.periodLength ?: 0
+                val cycleLength = data.cycleLength ?: 0
+
+                val periodStart = LocalDate.parse(data.periodDate)
+                val periodEnd = if (periodLength == 0) {
+                    periodStart
+                } else {
+                    periodStart.plusDays((periodLength - 1).toLong())
+                }
+
+                var loopDate = periodStart
+                while (loopDate <= periodEnd) {
+
+                    val state = if (periodEnd == periodStart) {
+                        PeriodPos.SINGLE
+                    } else {
+                        if (loopDate == periodStart) {
+                            PeriodPos.START
+                        } else if (loopDate == periodEnd) {
+                            PeriodPos.END
+                        } else {
+                            PeriodPos.CENTER
+                        }
+                    }
+
+                    healthDataDateList[loopDate] = DayState.Period(state)
+
+                    loopDate = loopDate.plusDays(1)
+                }
+
+
+                try {
+                    val fWindow = data.fertileWindow?.split("/")
+
+                    val fertileDateStart = LocalDate.parse(fWindow?.get(0))
+                    val fertileDateEnd = LocalDate.parse(fWindow?.get(1))
+
+                    var loopDateFertile = fertileDateStart
+                    while (loopDateFertile <= fertileDateEnd) {
+                        healthDataDateList[loopDateFertile] = DayState.Fertile
+                        loopDateFertile = loopDateFertile.plusDays(1)
+                    }
+
+                    val ovDate = LocalDate.parse(data.ovulationStartDate)
+                    healthDataDateList[ovDate] = DayState.OvulationDay
+
+
+                } catch (exp: Exception) {
+                }
+            }
+
+            val currentPeriodStart = LocalDate.parse(it.first().periodDate)
+
+            val preProcessDataTill = currentPeriodStart.plusMonths(12)
+
+            val nextPeriodDate =
+                currentPeriodStart.plusDays(mainPeriodLength.toLong())
+
+            var current = nextPeriodDate
+            while (current <= preProcessDataTill) {
+                val data = it.first()
+
+                val periodLength = data.periodLength ?: 0
+                val cycleLength = data.cycleLength ?: 0
+
+                val currentDay = getCurrentCycleDay(
+                    LocalDate.parse(data.periodDate),
+                    cycleLength,
+                    current
+                )
+
+                if (currentDay == 1) {
+                    healthDataDateList[current] = DayState.Period(PeriodPos.START)
+                } else if (currentDay == periodLength) {
+                    healthDataDateList[current] = DayState.Period(PeriodPos.END)
+                }
+
+                if (currentDay <= periodLength) {
+                    healthDataDateList[current] = DayState.Period(PeriodPos.CENTER)
+                }
+
+                val ovDay = cycleLength - 13
+
+                if (currentDay == ovDay) {
+                    healthDataDateList[current] = DayState.OvulationDay
+                }
+                if (currentDay in (ovDay - 5)..(ovDay + 1)) {
+                    healthDataDateList[current] = DayState.Fertile
+                }
+                current = current.plusDays(1)
+            }
+            _cycleHistoryData.postValue(it)
         }
     }
 
@@ -228,80 +337,12 @@ class CycleTrackerViewModel @Inject constructor(
             return Pair(DayState.Default, isDateSelected)
         }
 
-        if (date > todayDate) {
-            val data = history.first()
+        val returnVal = healthDataDateList[date]
 
-            val periodLength = data.periodLength ?: 0
-            val cycleLength = data.cycleLength ?: 0
-
-            val currentDay = getCurrentCycleDay(LocalDate.parse(data.periodDate), cycleLength, date)
-
-            if (currentDay <= periodLength) {
-                return Pair(DayState.Period(PeriodPos.START), isDateSelected)
-            }
-
-            val ovDay = cycleLength - 13
-
-            if (currentDay == ovDay) {
-                return Pair(DayState.OvulationDay, isDateSelected)
-            }
-            if (currentDay in (ovDay - 5)..(ovDay + 1)) {
-                return Pair(DayState.Fertile, isDateSelected)
-            }
-
-            return Pair(DayState.Default, isDateSelected)
-        }
-
-        var returnValue: Pair<DayState, Boolean>? = null
-
-        history.forEach {
-            val periodDateStart = LocalDate.parse(it.periodDate)
-            val periodLength = it.periodLength ?: 0
-
-            val periodDateEnd = if (periodLength == 0) {
-                periodDateStart
-            } else {
-                periodDateStart.plusDays((periodLength - 1).toLong())
-            }
-
-            if (date in periodDateStart..periodDateEnd) {
-                returnValue =
-                    Pair(DayState.Period(PeriodPos.START), isDateSelected)
-                return@forEach
-            }
-
-            val ovDay = LocalDate.parse(it.ovulationStartDate)
-            if (ovDay == date) {
-                returnValue = Pair(
-                    DayState.OvulationDay,
-                    isDateSelected
-                )
-                return@forEach
-            }
-
-            try {
-                val fWindow = it.fertileWindow?.split("/")
-
-                val fertileDateStart = LocalDate.parse(fWindow?.get(0))
-                val fertileDateEnd = LocalDate.parse(fWindow?.get(1))
-
-                if (date in fertileDateStart..fertileDateEnd) {
-                    returnValue = Pair(
-                        DayState.Fertile,
-                        isDateSelected
-                    )
-                    return@forEach
-                }
-
-            } catch (exp: Exception) {
-            }
-
-
-        }
-        return if (returnValue == null) {
+        return if (returnVal == null) {
             Pair(DayState.Default, isDateSelected)
         } else {
-            returnValue as Pair<DayState, Boolean>
+            Pair(returnVal, isDateSelected)
         }
     }
 
@@ -329,58 +370,132 @@ class CycleTrackerViewModel @Inject constructor(
     }
 
 
-    fun combineTempData(): TempPeriodCombineModel {
-        val tempData = arrayListOf(
-            TempPeriodData(date = "2024-05-24", temperature = null),
-            TempPeriodData(date = "2024-05-23", temperature = 1.25f),
-            TempPeriodData(date = "2024-05-22", temperature = 1.25f),
-            TempPeriodData(date = "2024-05-21", temperature = 1f),
-            TempPeriodData(date = "2024-05-20", temperature = 0.5f),
-            TempPeriodData(date = "2024-05-19", temperature = 1.25f),
-            TempPeriodData(date = "2024-05-18", temperature = 0f),
-            TempPeriodData(date = "2024-05-17", temperature = 1.25f),
-            TempPeriodData(date = "2024-05-16", temperature = 0f),
-            TempPeriodData(date = "2024-05-15", temperature = 0f),
-            TempPeriodData(date = "2024-05-14", temperature = -2.25f),
-            TempPeriodData(date = "2024-05-13", temperature = -1.25f),
-            TempPeriodData(date = "2024-05-12", temperature = -2.25f),
-            TempPeriodData(date = "2024-05-11", temperature = -1.25f),
-            TempPeriodData(date = "2024-05-10", temperature = -2.25f)
-        )
-
+    fun combineTempData(tempData: List<TempPeriodData>): TempPeriodCombineModel {
 
         //val workouts = dayData?.activity?.workout
         val sections: MutableList<Section> = ArrayList()
 
-        sections.add(
-            Section(
-                "period",
-                1,
-                2,
-                Color.parseColor("#801ec9ff"),
-                imageRes = R.drawable.ic_period_graph
-            )
-        )
-
-        sections.add(
-            Section(
-                "fertile",
-                6,
-                10,
-                Color.parseColor("#80ff7fc4"),
-                imageRes = R.drawable.ic_fertile_graph
-            )
-        )
+        getPeriodSection(tempData.last().date, tempData.first().date)?.forEach {
+            sections.add(it)
+        }
 
         val items: MutableList<ItemTemp> = ArrayList()
+        var minValue = 2.5f
+        var maxValue = -2.5f
+
+        items.add(ItemTemp(null, 0, ""))
+
         tempData.forEachIndexed { index, i ->
-            items.add(ItemTemp(i.temperature, index, i.date))
+            items.add(ItemTemp(i.temperature, index + 1, i.date))
+
+            i.temperature?.let { temp ->
+                if (temp < minValue) {
+                    minValue = temp
+                }
+
+                if (temp > maxValue) {
+                    maxValue = temp
+                }
+            }
+
         }
+
+        if (abs(minValue) > maxValue) {
+            maxValue = abs(minValue)
+        }
+
         return TempPeriodCombineModel(
             sections = sections,
-            items = items
+            items = items,
+            maxValue
         )
     }
+
+    private fun getPeriodSection(startDate: String, endDate: String): List<Section>? {
+
+        val history = cycleHistoryData.value
+        if (history.isNullOrEmpty()) return null
+        val sections = ArrayList<Section>()
+
+        val pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val startDateLocal = LocalDate.parse(startDate, pattern)
+        val endDateLocal = LocalDate.parse(endDate, pattern)
+
+
+        val filteredData = healthDataDateList.filterKeys {
+            it in startDateLocal..endDateLocal
+        }
+
+
+        history.forEach {
+            val periodDateStart = LocalDate.parse(it.periodDate, pattern)
+            val periodLength = it.periodLength ?: 0
+            val periodDateEnd = if (periodLength == 0) {
+                periodDateStart
+            } else {
+                periodDateStart.plusDays((periodLength - 1).toLong())
+            }
+
+            if (startDateLocal >= periodDateStart && periodDateEnd <= endDateLocal) {
+                var daysStart = ChronoUnit.DAYS.between(startDateLocal, periodDateStart)
+                if (daysStart < 0) {
+                    daysStart = 0
+                } else {
+                    daysStart -= 1
+                }
+                val daysEnd = abs(ChronoUnit.DAYS.between(startDateLocal, periodDateEnd)) - 1
+
+
+                sections.add(
+                    Section(
+                        "period",
+                        daysStart.toInt(),
+                        daysEnd.toInt(),
+                        Color.parseColor("#80ff7fc4"),
+                        imageRes = R.drawable.ic_fertile_graph
+                    )
+                )
+
+            }
+
+            try {
+                val fWindow = it.fertileWindow?.split("/")
+
+                val fertileDateStart = LocalDate.parse(fWindow?.get(0))
+                val fertileDateEnd = LocalDate.parse(fWindow?.get(1))
+
+                if (startDateLocal >= fertileDateStart && fertileDateEnd <= endDateLocal) {
+
+                    val daysStart = abs(ChronoUnit.DAYS.between(startDateLocal, fertileDateStart))
+                    val daysEnd = abs(ChronoUnit.DAYS.between(startDateLocal, fertileDateEnd))
+
+
+                    sections.add(
+                        Section(
+                            "fertile",
+                            daysStart.toInt(),
+                            daysEnd.toInt(),
+                            Color.parseColor("#80ff7fc4"),
+                            imageRes = R.drawable.ic_fertile_graph
+                        )
+                    )
+
+                    LOGS.d("sdfsdfsdf fertile $daysStart $daysEnd")
+
+
+                }
+
+
+            } catch (exp: Exception) {
+            }
+        }
+
+
+
+        return sections
+    }
+
+
 }
 
 sealed class DayState {

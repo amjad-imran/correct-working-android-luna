@@ -96,7 +96,6 @@ class TempPeriodCombinedChart : View {
 
     //    private val toolTipList = ArrayList<Triple<Float, String, Item>>()
     lateinit var bgLine: Paint
-    var yAxisCount: Int = 3
     lateinit var edgeTextBackPaint: Paint
     lateinit var mTextPaintEdge: Paint
     private var vibrationUtils: VibrationUtils? = null
@@ -243,14 +242,17 @@ class TempPeriodCombinedChart : View {
         }
     }
 
-    fun updateData(data: TempPeriodCombineModel?) {
+    fun updateData(data: TempPeriodCombineModel) {
         combineModel = data
         list.clear()
-        data?.items?.let { list.addAll(it) }
+        data?.items?.let {
+            list.addAll(it)
+
+        }
         //list.reverse()
-        this.yAxisCount = yAxisCount
-        xMin = -2.5f
-        max = 2.5f
+        val calculatedMax = getMaxValue(data.maxValue)
+        xMin = -1f * calculatedMax
+        max = calculatedMax
         postInvalidate()
     }
 
@@ -324,92 +326,104 @@ class TempPeriodCombinedChart : View {
     private fun drawLeft(canvas: Canvas) {
         gridPaint.color = gridColor
 
-        val maxPos =
-            mHeight - bottomWith - (getCalculatedMax(max) - 0) * (mHeight - topWith - bottomWith) / (getCalculatedMax(
-                max
-            ) - 0)
+        getPointsBetween(max).forEach {
+            val axisY =
+                mHeight - bottomWith - (getCalculatedMax(it) - 0) * (mHeight - topWith - bottomWith) / (getCalculatedMax(
+                    max
+                ) - 0)
 
-        drawHorizontalTextWithLine(
-            canvas,
-            "+2.5",
-            maxPos,
-            true,
-            false
-        )
+            LOGS.d("sdfkjhsdjfhskdf $bottomWith $topWith $it -> ${getCalculatedMax(it)}  $max-$xMin")
 
-        val min =
-            mHeight - bottomWith - (0 - 0) * (mHeight - topWith - bottomWith) / (getCalculatedMax(
-                max
-            ) - 0)
 
-        drawHorizontalTextWithLine(canvas, "-2.5", min, false, true)
+            drawHorizontalTextWithLine(canvas, "$it", axisY)
+        }
+        /*
+                val maxPos =
+                    mHeight - bottomWith - (getCalculatedMax(max) - 0) * (mHeight - topWith - bottomWith) / (getCalculatedMax(
+                        max
+                    ) - 0)
 
-        val xAxis2 =
-            mHeight - bottomWith - (getCalculatedMax(1.25f) - 0) * (mHeight - topWith - bottomWith) / (getCalculatedMax(
-                max
-            ) - 0)
+                drawHorizontalTextWithLine(
+                    canvas,
+                    "+2.5",
+                    maxPos,
+                    true,
+                    false
+                )
 
-        drawHorizontalTextWithLine(canvas, "1.25", xAxis2)
+                val min =
+                    mHeight - bottomWith - (0 - 0) * (mHeight - topWith - bottomWith) / (getCalculatedMax(
+                        max
+                    ) - 0)
 
-        val xAxis3 =
-            mHeight - bottomWith - (getCalculatedMax(0f) - 0) * (mHeight - topWith - bottomWith) / (getCalculatedMax(
-                max
-            ) - 0)
+                drawHorizontalTextWithLine(canvas, "-2.5", min, false, true)
 
-        drawHorizontalTextWithLine(canvas, "0", xAxis3)
-        val xAxis4 =
-            mHeight - bottomWith - (getCalculatedMax(-1.25f) - 0) * (mHeight - topWith - bottomWith) / (getCalculatedMax(
-                max
-            ) - 0)
+                val xAxis2 =
+                    mHeight - bottomWith - (getCalculatedMax(1.25f) - 0) * (mHeight - topWith - bottomWith) / (getCalculatedMax(
+                        max
+                    ) - 0)
 
-        drawHorizontalTextWithLine(canvas, "-1.25", xAxis4)
+                drawHorizontalTextWithLine(canvas, "1.25", xAxis2)
+
+                val xAxis3 =
+                    mHeight - bottomWith - (getCalculatedMax(0f) - 0) * (mHeight - topWith - bottomWith) / (getCalculatedMax(
+                        max
+                    ) - 0)
+
+                drawHorizontalTextWithLine(canvas, "0", xAxis3)
+                val xAxis4 =
+                    mHeight - bottomWith - (getCalculatedMax(-1.25f) - 0) * (mHeight - topWith - bottomWith) / (getCalculatedMax(
+                        max
+                    ) - 0)
+
+                drawHorizontalTextWithLine(canvas, "-1.25", xAxis4)*/
     }
 
-    /* private fun calculateYAxisValue(yAxisCount: Int): ArrayList<Int> {
-         var minHrValue = xMin
-         var maxHrValue = max
-         return getPointsBetween(maxHrValue, yAxisCount)
-     }*/
+    private fun getMaxValue(value: Float): Float {
+        return when (value) {
+            in 0.0f..2.5f -> {
+                2.5f
+            }
 
-    private fun getPointsBetween(end: Int, numPoints: Int): ArrayList<Int> {
-        val points = ArrayList<Int>()
-        if (end == 120) {
-            if (numPoints == 3) {
-                points.add(40)
-                points.add(80)
-                points.add(120)
-            } else {
-                points.add(40)
-                points.add(60)
-                points.add(80)
-                points.add(100)
-                points.add(120)
+            in 2.6f..5.0f -> {
+                5f
             }
-        } else if (end == 160) {
-            if (numPoints == 3) {
-                points.add(40)
-                points.add(100)
-                points.add(160)
-            } else {
-                points.add(40)
-                points.add(70)
-                points.add(100)
-                points.add(130)
-                points.add(160)
-            }
-        } else {
-            if (numPoints == 3) {
-                points.add(40)
-                points.add(120)
-                points.add(200)
-            } else {
-                points.add(40)
-                points.add(80)
-                points.add(120)
-                points.add(160)
-                points.add(200)
+
+            else -> {
+                10f
             }
         }
+    }
+
+    private fun getPointsBetween(maxValue: Float): List<Float> {
+        val points = ArrayList<Float>()
+
+        when (maxValue) {
+            in 0.0f..2.5f -> {
+                points.add(2.5f)
+                points.add(1.25f)
+                points.add(0.0f)
+                points.add(-1.25f)
+                points.add(-2.5f)
+            }
+
+            in 2.6f..5.0f -> {
+                points.add(5f)
+                points.add(2.5f)
+                points.add(0.0f)
+                points.add(-2.5f)
+                points.add(-5f)
+            }
+
+            else -> {
+                points.add(10f)
+                points.add(5f)
+                points.add(0.0f)
+                points.add(-5f)
+                points.add(-10f)
+            }
+        }
+
         return points
     }
 

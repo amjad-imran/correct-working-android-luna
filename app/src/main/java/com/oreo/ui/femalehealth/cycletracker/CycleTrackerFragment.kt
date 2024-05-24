@@ -341,7 +341,7 @@ class CycleTrackerFragment :
             }
             tvDescription.text = data.message
 
-            vTempGraph.updateData(viewModel.combineTempData())
+            vTempGraph.updateData(viewModel.combineTempData(data.tempData))
 
         }
     }
