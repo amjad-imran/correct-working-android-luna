@@ -53,12 +53,12 @@ class OfflineDataMapper
                     "DATACONVERTER SAME DAY $breakUpStartTime $breakupEndTime ${
                         DateFormats.convertTimestampToDate(
                             breakUpStartTime,
-                            DateFormats.dateTimeFormat
+                            DateFormats.dateTimeFormat()
                         )
                     }  ${
                         DateFormats.convertTimestampToDate(
                             breakupEndTime,
-                            DateFormats.dateTimeFormat
+                            DateFormats.dateTimeFormat()
                         )
                     }"
                 )
@@ -66,7 +66,7 @@ class OfflineDataMapper
                 breakUpStartTime =
                     DateFormats.convertDateTimeToTimeStamp(
                         sleepDataBreakup.startTime!!,
-                        DateFormats.dateTimeFormat5
+                        DateFormats.dateTimeFormat5()
                     )
                 breakupEndTime =
                     DateFormats.addSecondToTimeStamp(breakUpStartTime, sleepDataBreakup.duration)
@@ -74,12 +74,12 @@ class OfflineDataMapper
                     "DATACONVERTER Different DAY ${sleepDataBreakup.endTime} ${sleepDataBreakup.startTime} $breakUpStartTime $breakupEndTime ${
                         DateFormats.convertTimestampToDate(
                             breakUpStartTime,
-                            DateFormats.dateTimeFormat
+                            DateFormats.dateTimeFormat()
                         )
                     }  ${
                         DateFormats.convertTimestampToDate(
                             breakupEndTime,
-                            DateFormats.dateTimeFormat
+                            DateFormats.dateTimeFormat()
                         )
                     }"
                 )
@@ -251,14 +251,14 @@ class OfflineDataMapper
                     "date",
                     DateFormats.convertTimestampToDate(
                         (it.startTime!! * 1000L),
-                        DateFormats.dateFormat3
+                        DateFormats.dateFormat3()
                     )
                 )
                 this.addProperty(
                     "start_time",
                     DateFormats.convertTimestampToDate(
                         it.startTime!! * 1000L,
-                        DateFormats.time24WithoutSecond
+                        DateFormats.time24WithoutSecond()
                     )
                 )
                 this.addProperty("steps", it.steps)
@@ -266,7 +266,7 @@ class OfflineDataMapper
                     "end_time",
                     DateFormats.convertTimestampToDate(
                         it.endTime!! * 1000L,
-                        DateFormats.time24WithoutSecond
+                        DateFormats.time24WithoutSecond()
                     )
                 )
                 this.addProperty("intensity", "Moderate")
@@ -310,7 +310,7 @@ class OfflineDataMapper
         }
         val dateWithTime = DateFormats.convertDateTimeToTimeStamp(
             sportsModeResponse.time!!,
-            DateFormats.dateTimeFormat6
+            DateFormats.dateTimeFormat6()
         )
 
         val endTime =

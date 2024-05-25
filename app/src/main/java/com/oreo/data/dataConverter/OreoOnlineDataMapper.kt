@@ -155,7 +155,7 @@ class OreoOnlineDataMapper
         val midnightTime = "23:59"
         val startTime = sleepData.startTime!!
         val timeIn24Hour =
-            DateFormats.formatTimeInto24HoursValue(startTime, DateFormats.dateTimeFormat6).toInt()
+            DateFormats.formatTimeInto24HoursValue(startTime, DateFormats.dateTimeFormat6()).toInt()
 
 
         if (timeIn24Hour in 18..23) {
@@ -397,7 +397,7 @@ class OreoOnlineDataMapper
 
         return if (value != null && index != -1) {
             val timestamp =
-                (DateFormats.dateFormat3.parse(date)?.time ?: 0L) + ((index * 15) * 60000)
+                (DateFormats.dateFormat3().parse(date)?.time ?: 0L) + ((index * 15) * 60000)
             Pair(value, timestamp)
         } else {
             Pair(0, 0)

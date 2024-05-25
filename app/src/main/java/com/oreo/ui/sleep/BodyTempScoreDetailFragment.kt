@@ -69,8 +69,8 @@ class BodyTempScoreDetailFragment :
             binding.tvAvgOn.text = "Deviation on ${
                 DateFormats.parseDate(
                     it.date,
-                    DateFormats.dateFormat3,
-                    DateFormats.dateFormat7
+                    DateFormats.dateFormat3(),
+                    DateFormats.dateFormat7()
                 )
             }"
             binding.tvDeviationValue.text = "${it.deviation}°"
@@ -264,8 +264,8 @@ class BodyTempScoreDetailFragment :
                 binding.tvAvgOn.text = "Deviation on ${
                     DateFormats.parseDate(
                         it,
-                        DateFormats.dateFormat3,
-                        DateFormats.dateFormat7
+                        DateFormats.dateFormat3(),
+                        DateFormats.dateFormat7()
                     )
                 }"
                 binding.tvDeviationValue.text = "${chartModel.valueFloat}°"

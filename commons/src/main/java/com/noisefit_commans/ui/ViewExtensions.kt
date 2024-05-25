@@ -283,7 +283,7 @@ fun String.decodeUtf8Url(): String {
 
 fun String.getTimeIn12HourFormat(): String? {
     return DateFormats.getConvertToDateFormat(
-        this, DateFormats.timeFormat, DateFormats.time12Meridian
+        this, DateFormats.timeFormat(), DateFormats.time12Meridian()
     )
 }
 

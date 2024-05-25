@@ -1071,8 +1071,8 @@ class OSleepScoreDetailsFragment :
             "day" -> {
                 DateFormats.getConvertToDateFormat(
                     data,
-                    DateFormats.dateFormat3,
-                    DateFormats.dateTimeFormatWithWeekWithoutYearShort
+                    DateFormats.dateFormat3(),
+                    DateFormats.dateTimeFormatWithWeekWithoutYearShort()
                 ) ?: ""
             }
 

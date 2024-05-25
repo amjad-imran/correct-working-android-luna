@@ -106,19 +106,19 @@ class OreoActivityViewModel @Inject constructor(
         dataList.forEach {
             val chartModel = ChartModel()
             var currentDayText = ""
-            if (it.date == DateFormats.getCurrentDate(DateFormats.dateFormat3)) {
+            if (it.date == DateFormats.getCurrentDate(DateFormats.dateFormat3())) {
                 currentDayText = "Today, "
             }
 
             val formattedDate = if (currentDayText.isEmpty()) {
                 DateFormats.getOrdinalDate(
                     it.date,
-                    DateFormats.dateFormat3,
+                    DateFormats.dateFormat3(),
                 )
             } else {
                 DateFormats.getOrdinalDateToday(
                     it.date,
-                    DateFormats.dateFormat3,
+                    DateFormats.dateFormat3(),
                 )
             }
             chartModel.formattedDate = "$currentDayText$formattedDate"
@@ -134,14 +134,14 @@ class OreoActivityViewModel @Inject constructor(
         val lastDate = DateFormats.subtractDateFormat3(lastDateFromList, 1)!!
         val suffixDatesList = DateFormats.getWeekDaysBetweenDates(
             DateFormats.subtractDateFormat3(lastDate, 14)!!, lastDate,
-            DateFormats.dateFormat3, DateFormats.singleWeekDay
+            DateFormats.dateFormat3(), DateFormats.singleWeekDay()
         )
         val currentDateFromList = dataList.last().date
         val currentDate = DateFormats.addDateFormat3(currentDateFromList, 1)!!
         val prefixDatesList = DateFormats.getWeekDaysBetweenDates(
             currentDate,
             DateFormats.addDateFormat3(currentDate, 14)!!,
-            DateFormats.dateFormat3, DateFormats.singleWeekDay
+            DateFormats.dateFormat3(), DateFormats.singleWeekDay()
         )
 
         val suffix = java.util.ArrayList<ChartModel>()
@@ -506,7 +506,7 @@ class OreoActivityViewModel @Inject constructor(
         calendar[Calendar.SECOND] = 0 //set seconds to zero
 
         calendar.set(Calendar.MINUTE, minutes)
-        return DateFormats.convertTimestampToDate(calendar.timeInMillis, DateFormats.timeFormat12)
+        return DateFormats.convertTimestampToDate(calendar.timeInMillis, DateFormats.timeFormat12())
     }
 
     fun getEndTimeFromPosition(position: Int): String {
@@ -517,7 +517,7 @@ class OreoActivityViewModel @Inject constructor(
         calendar[Calendar.SECOND] = 0 //set seconds to zero
 
         calendar.set(Calendar.MINUTE, minutes + 15)
-        return DateFormats.convertTimestampToDate(calendar.timeInMillis, DateFormats.timeFormat12)
+        return DateFormats.convertTimestampToDate(calendar.timeInMillis, DateFormats.timeFormat12())
     }
 
     fun formattedTime(receivedTime: String): Pair<String, String> {

@@ -56,7 +56,7 @@ class OActivityListAdapter(
 //                    view.findViewById<View>(R.id.include45).gone()
 //                }
                 var date = activity.date
-                if (date == DateFormats.getCurrentDate(DateFormats.dateFormat6)) {
+                if (date == DateFormats.getCurrentDate(DateFormats.dateFormat6())) {
                     date = "Today’s Workouts"
                 }
                 view.findViewById<TextView>(R.id.tvDate).text = date

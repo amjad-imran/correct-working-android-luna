@@ -1767,6 +1767,7 @@ constructor() : LifecycleService() {
             if (action == Intent.ACTION_TIME_CHANGED || action == Intent.ACTION_TIMEZONE_CHANGED) {
                 LOGS.d(TAG, "ontimeChangedReceiver time changed $action")
 //                sessionManager.setDateChanged(Event(true))
+
                 sessionManager.sendUpdateQueryAction(
                     UpdateDeviceAction.SetDeviceDateTime(
                         Calendar.getInstance(), TimeFormat(timeFormat = getTimeFormat())

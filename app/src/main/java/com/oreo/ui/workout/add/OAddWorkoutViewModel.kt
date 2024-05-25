@@ -89,20 +89,20 @@ class OAddWorkoutViewModel
         addWorkout.calories = data.calories
         addWorkout.intensity = getIntensity(data.intensity ?: 0)
         addWorkout.steps = data.steps
-        addWorkout.date = DateFormats.convertTimestampToDate(endTime, DateFormats.dateFormat3)
+        addWorkout.date = DateFormats.convertTimestampToDate(endTime, DateFormats.dateFormat3())
         activityType = "Walking"/*data.type*/
 
         autoWorkoutUnitCalorie = (addWorkout.calories).toFloat() / addWorkout.duration
 
         tryCatch {
             val startTime =
-                DateFormats.convertTimestampToDate(data.startTime, DateFormats.timeFormat)
+                DateFormats.convertTimestampToDate(data.startTime, DateFormats.timeFormat())
             if (startTime.isNotEmpty()) {
                 val startArray = startTime.split(":")
                 addWorkout.startHour = startArray[0].toInt()
                 addWorkout.startMinute = startArray[1].toInt()
             }
-            val endTimeText = DateFormats.convertTimestampToDate(endTime, DateFormats.timeFormat)
+            val endTimeText = DateFormats.convertTimestampToDate(endTime, DateFormats.timeFormat())
             if (endTimeText.isNotEmpty()) {
                 val endArray = endTimeText.split(":")
                 addWorkout.endHour = endArray[0].toInt()
@@ -128,7 +128,7 @@ class OAddWorkoutViewModel
             var compareStartHour: Int = 0
             var compareStartMinute: Int = 0
             val startTime = DateFormats.convertTimestampToDate(
-                preFilledOreoAutoSportData!!.startTime, DateFormats.timeFormat
+                preFilledOreoAutoSportData!!.startTime, DateFormats.timeFormat()
             )
             if (startTime.isNotEmpty()) {
                 val startArray = startTime.split(":")
@@ -140,7 +140,7 @@ class OAddWorkoutViewModel
             )
             var compareEndHour: Int = 0
             var compareEndMinute: Int = 0
-            val endTimeText = DateFormats.convertTimestampToDate(endTime, DateFormats.timeFormat)
+            val endTimeText = DateFormats.convertTimestampToDate(endTime, DateFormats.timeFormat())
             if (endTimeText.isNotEmpty()) {
                 val endArray = endTimeText.split(":")
                 compareEndHour = endArray[0].toInt()

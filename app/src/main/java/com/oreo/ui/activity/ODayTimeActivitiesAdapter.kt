@@ -46,14 +46,14 @@ class ODayTimeActivitiesAdapter(val mListener: DayTimeActivitiesInteractionListe
                 val formattedTime = "${
                     DateFormats.formatDate(
                         data.startTime,
-                        DateFormats.dateTimeFormat5,
-                        DateFormats.time12Meridian
+                        DateFormats.dateTimeFormat5(),
+                        DateFormats.time12Meridian()
                     ).lowercase()
                 } - ${
                     DateFormats.formatDate(
                         data.endTime,
-                        DateFormats.dateTimeFormat5,
-                        DateFormats.time12Meridian
+                        DateFormats.dateTimeFormat5(),
+                        DateFormats.time12Meridian()
                     ).lowercase()
                 }"
                 binding.tvActivityTime.text = formattedTime
@@ -73,14 +73,14 @@ class ODayTimeActivitiesAdapter(val mListener: DayTimeActivitiesInteractionListe
                 val formattedTime = "${
                     DateFormats.formatDate(
                         data.startTime,
-                        DateFormats.dateTimeFormat5,
-                        DateFormats.time12Meridian
+                        DateFormats.dateTimeFormat5(),
+                        DateFormats.time12Meridian()
                     ).lowercase()
                 } - ${
                     DateFormats.formatDate(
                         data.endTime,
-                        DateFormats.dateTimeFormat5,
-                        DateFormats.time12Meridian
+                        DateFormats.dateTimeFormat5(),
+                        DateFormats.time12Meridian()
                     ).lowercase()
                 }"
                 binding.tvActivityTime.text = formattedTime

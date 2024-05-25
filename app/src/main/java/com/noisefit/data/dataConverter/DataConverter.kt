@@ -138,13 +138,13 @@ class DataConverter
 
                 /* val date = DateFormats.convertTimestampToDate(
                      workout.startTime,
-                     DateFormats.dateFormat3
+                     DateFormats.dateFormat3()()
                  )*/
 
                 val startTime =
-                    DateFormats.convertTimestampToDate(workout.startTime, DateFormats.timeFormat)
+                    DateFormats.convertTimestampToDate(workout.startTime, DateFormats.timeFormat())
                 val endTime =
-                    DateFormats.convertTimestampToDate(workout.endTime, DateFormats.timeFormat)
+                    DateFormats.convertTimestampToDate(workout.endTime, DateFormats.timeFormat())
 
 
                 val locationData =
@@ -327,8 +327,8 @@ class DataConverter
 
         if (timeStamp == 0L) return null
         if (workouts.isEmpty()) return null
-        val time = DateFormats.convertTimestampToDate(timeStamp, DateFormats.timeFormat)
-        val date = DateFormats.convertTimestampToDate(timeStamp, DateFormats.dateFormat3)
+        val time = DateFormats.convertTimestampToDate(timeStamp, DateFormats.timeFormat())
+        val date = DateFormats.convertTimestampToDate(timeStamp, DateFormats.dateFormat3())
         return workouts.find {
             it.start_time.equals(time, true) && it.date.equals(date, true)
         }?.workoutId
@@ -351,7 +351,7 @@ class DataConverter
             val workoutTypeString = getWorkoutType(it.type, workoutsList)
 
             val startTime =
-                DateFormats.convertTimestampToDate(it.startTime, DateFormats.dateTimeFormat6)
+                DateFormats.convertTimestampToDate(it.startTime, DateFormats.dateTimeFormat6())
 
             val sportObj = SportsModeResponse(
                 date = it.date,

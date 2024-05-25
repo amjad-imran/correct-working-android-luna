@@ -31,8 +31,8 @@ class NapsConfirmAdapter(val listener: NapConfirmAction) :
             timeBuilder.append(
                 DateFormats.parseDate(
                     nap.startTime ?: "",
-                    DateFormats.dateTimeFormat5,
-                    DateFormats.timeFormat12
+                    DateFormats.dateTimeFormat5(),
+                    DateFormats.timeFormat12()
                 )?.lowercase()
             )
 

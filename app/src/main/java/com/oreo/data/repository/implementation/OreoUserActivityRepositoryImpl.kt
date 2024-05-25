@@ -1845,8 +1845,8 @@ class OreoUserActivityRepositoryImpl(
             val newSleepFormat = try {
                 DateFormats.formatDate(
                     it.startTime,
-                    DateFormats.dateTimeFormat5,
-                    DateFormats.dateTimeFormat6
+                    DateFormats.dateTimeFormat5(),
+                    DateFormats.dateTimeFormat6()
                 )
             } catch (exp: Exception) {
                 ""

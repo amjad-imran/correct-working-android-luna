@@ -164,7 +164,7 @@ class DetectWorkoutFragment :
         if (oreoAutoSportData.isNotEmpty()) {
             val date = DateFormats.convertTimestampToDate(
                 oreoAutoSportData[0].startTime,
-                DateFormats.dateFormat3
+                DateFormats.dateFormat3()
             )
             viewModel.getDayTimeMovement(date)
         }

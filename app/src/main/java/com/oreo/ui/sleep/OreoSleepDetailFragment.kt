@@ -501,23 +501,23 @@ class OreoSleepDetailFragment :
 
             val startTime = DateFormats.formatDate(
                 data.startTime,
-                DateFormats.dateTimeFormat5,
-                DateFormats.timeFormat12_2
+                DateFormats.dateTimeFormat5(),
+                DateFormats.timeFormat12_2()
             )
             val startTimeUnit = DateFormats.formatDate(
                 data.startTime,
-                DateFormats.dateTimeFormat5,
-                DateFormats.timeFormat12_unit
+                DateFormats.dateTimeFormat5(),
+                DateFormats.timeFormat12_unit()
             )
             val endTime = DateFormats.formatDate(
                 data.endTime,
-                DateFormats.dateTimeFormat5,
-                DateFormats.timeFormat12_2
+                DateFormats.dateTimeFormat5(),
+                DateFormats.timeFormat12_2()
             )
             val endTimeUnit = DateFormats.formatDate(
                 data.endTime,
-                DateFormats.dateTimeFormat5,
-                DateFormats.timeFormat12_unit
+                DateFormats.dateTimeFormat5(),
+                DateFormats.timeFormat12_unit()
             )
 
             this.tvStartTime.text = startTime

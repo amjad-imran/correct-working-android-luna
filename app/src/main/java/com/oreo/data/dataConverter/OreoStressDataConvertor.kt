@@ -167,7 +167,7 @@ constructor(
     private fun getWorkoutSections(it: OActivityListModal): Triple<Int, Int, String?>? {
         val startTimeStamp = DateFormats.convertDateTimeToTimeStamp(
             "${it.date} ${it.startTime}",
-            DateFormats.dateTimeFormat5
+            DateFormats.dateTimeFormat5()
         )
         if (startTimeStamp == null || startTimeStamp == 0L) return null
 
@@ -200,7 +200,7 @@ constructor(
             //Same day Sleep
             val startTimeStamp = DateFormats.convertDateTimeToTimeStamp(
                 startTime,
-                DateFormats.dateTimeFormat5
+                DateFormats.dateTimeFormat5()
             ) ?: return null
             val day1Minutes =
                 DateFormats.getDayElapsedMinutesFromTimeStamp(startTimeStamp) ?: return null
@@ -210,7 +210,7 @@ constructor(
 
             val endTimeStamp = DateFormats.convertDateTimeToTimeStamp(
                 endTime,
-                DateFormats.dateTimeFormat5
+                DateFormats.dateTimeFormat5()
             ) ?: return null
             val day1EndMinutes =
                 DateFormats.getDayElapsedMinutesFromTimeStamp(endTimeStamp) ?: return null
@@ -228,7 +228,7 @@ constructor(
 
             val endTimeStamp = DateFormats.convertDateTimeToTimeStamp(
                 endTime,
-                DateFormats.dateTimeFormat5
+                DateFormats.dateTimeFormat5()
             ) ?: return null
             val day1EndMinutes =
                 DateFormats.getDayElapsedMinutesFromTimeStamp(endTimeStamp) ?: return null
@@ -260,7 +260,7 @@ constructor(
             //Same day Sleep
             val startTimeStamp = DateFormats.convertDateTimeToTimeStamp(
                 startTime,
-                DateFormats.dateTimeFormat5
+                DateFormats.dateTimeFormat5()
             ) ?: return null
             val day1Minutes =
                 DateFormats.getDayElapsedMinutesFromTimeStamp(startTimeStamp) ?: return null
@@ -270,7 +270,7 @@ constructor(
 
             val endTimeStamp = DateFormats.convertDateTimeToTimeStamp(
                 endTime,
-                DateFormats.dateTimeFormat5
+                DateFormats.dateTimeFormat5()
             ) ?: return null
             val day1EndMinutes =
                 DateFormats.getDayElapsedMinutesFromTimeStamp(endTimeStamp) ?: return null
@@ -288,7 +288,7 @@ constructor(
 
             val endTimeStamp = DateFormats.convertDateTimeToTimeStamp(
                 endTime,
-                DateFormats.dateTimeFormat5
+                DateFormats.dateTimeFormat5()
             ) ?: return null
             val day1EndMinutes =
                 DateFormats.getDayElapsedMinutesFromTimeStamp(endTimeStamp) ?: return null

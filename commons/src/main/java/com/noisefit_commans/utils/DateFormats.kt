@@ -33,112 +33,77 @@ object DateFormats {
     val dateFormat = SimpleDateFormat("dd/MM/yyyy", defaultLocale)
 
     @SuppressLint("ConstantLocale")
-    val dateFormat2 = SimpleDateFormat("dd MMMM yyyy", defaultLocale)
+    fun dateFormat2() = SimpleDateFormat("dd MMMM yyyy", defaultLocale)
 
     @SuppressLint("ConstantLocale")
-    val dateFormat3 = SimpleDateFormat("yyyy-MM-dd", defaultLocale)
+    fun dateFormat3() = SimpleDateFormat("yyyy-MM-dd", defaultLocale)
 
     @SuppressLint("ConstantLocale")
-    val dateFormat4 = SimpleDateFormat("MMM yyyy", defaultLocale)
+    fun dateFormat6() = SimpleDateFormat("dd MMMM, yyyy", defaultLocale)
+    fun dateFormatDay() = SimpleDateFormat("dd", defaultLocale)
 
     @SuppressLint("ConstantLocale")
-    val dateFormat5 = SimpleDateFormat("yyyyMMdd", defaultLocale)
+    fun dateFormat7() = SimpleDateFormat("dd MMM", defaultLocale)
 
     @SuppressLint("ConstantLocale")
-    val dateFormat6 = SimpleDateFormat("dd MMMM, yyyy", defaultLocale)
-    val dateFormatDay = SimpleDateFormat("dd", defaultLocale)
+    fun dateTimeFormat() = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", defaultLocale)
 
     @SuppressLint("ConstantLocale")
-    val dateFormat7 = SimpleDateFormat("dd MMM", defaultLocale)
-    val dateFormat7Week = SimpleDateFormat("EEE, dd MMM", defaultLocale)
+    fun dateTimeFormat5() = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", defaultLocale)
 
     @SuppressLint("ConstantLocale")
-    val dateTimeFormatWithoutZone = SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", defaultLocale)
-
-    @SuppressLint("ConstantLocale")
-    val dateTimeFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", defaultLocale)
-
-    @SuppressLint("ConstantLocale")
-    val dateTimeFormat5 = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", defaultLocale)
-
-    @SuppressLint("ConstantLocale")
-    val dateTimeFormat6 = SimpleDateFormat("yyyy-MM-dd HH:mm", defaultLocale)
-
-    @SuppressLint("ConstantLocale")
-    val dateTimeFormat2 = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", defaultLocale)
+    fun dateTimeFormat6() = SimpleDateFormat("yyyy-MM-dd HH:mm", defaultLocale)
 
 
     @SuppressLint("ConstantLocale")
-    val dateTimeFormat4 = SimpleDateFormat("h:mm a, dd MMM yyyy", defaultLocale)
+    fun monthDateWithoutYear2() = SimpleDateFormat("MMM dd", defaultLocale)
 
     @SuppressLint("ConstantLocale")
-    val monthDateWithoutYear = SimpleDateFormat("MM/dd", defaultLocale)
+    fun dateTimeFormatWithWeekDay() = SimpleDateFormat("EEEE, dd MMMM yyyy", defaultLocale)
+
+
+    fun dateTimeFormatWithWeekWithoutYearShort() = SimpleDateFormat("EEE, dd MMMM", defaultLocale)
 
     @SuppressLint("ConstantLocale")
-    val monthDateWithoutYear2 = SimpleDateFormat("MMM dd", defaultLocale)
+    fun singleWeekDay() = SimpleDateFormat("EEEEE", defaultLocale)
 
     @SuppressLint("ConstantLocale")
-    val dateTimeFormatWithWeekDay = SimpleDateFormat("EEEE, dd MMMM yyyy", defaultLocale)
-
-    @SuppressLint("ConstantLocale")
-    val dateTimeFormatWithWeekInit = SimpleDateFormat("EEEE, dd MMM yyyy", defaultLocale)
-
-    @SuppressLint("ConstantLocale")
-    val dateTimeFormatWithWeekWithoutYear = SimpleDateFormat("EEEE, dd MMMM", defaultLocale)
-    val dateTimeFormatWithWeekWithoutYearShort = SimpleDateFormat("EEE, dd MMMM", defaultLocale)
-
-    @SuppressLint("ConstantLocale")
-    val singleWeekDay = SimpleDateFormat("EEEEE", defaultLocale)
-
-    @SuppressLint("ConstantLocale")
-    val shortWeekDay = SimpleDateFormat("EEE", defaultLocale)
-
-    @SuppressLint("ConstantLocale")
-    val dateTimeFormatISO =
+    fun dateTimeFormatISO() =
         SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", defaultLocale)
 
     @SuppressLint("ConstantLocale")
-    val dateTimeFormat3 =
+    fun dateTimeFormat3() =
         SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", defaultLocale)
 
     @SuppressLint("ConstantLocale")
-    val timeFormat = SimpleDateFormat("HH:mm", defaultLocale)
+    fun timeFormat() = SimpleDateFormat("HH:mm", defaultLocale)
 
     @SuppressLint("ConstantLocale")
-    val timeFormatHour = SimpleDateFormat("HH", defaultLocale)
+    fun timeFormatHour() = SimpleDateFormat("HH", defaultLocale)
 
     @SuppressLint("ConstantLocale")
-    val timeFormat12 = SimpleDateFormat("hh:mm a", defaultLocale)
+    fun timeFormat12() = SimpleDateFormat("hh:mm a", defaultLocale)
 
     @SuppressLint("ConstantLocale")
-    val timeFormat12_unit = SimpleDateFormat("a", defaultLocale)
+    fun timeFormat12_unit() = SimpleDateFormat("a", defaultLocale)
 
     @SuppressLint("ConstantLocale")
-    val timeFormat12_2 = SimpleDateFormat("hh:mm", defaultLocale)
+    fun timeFormat12_2() = SimpleDateFormat("hh:mm", defaultLocale)
 
 
     @SuppressLint("ConstantLocale")
-    val timeFormatSleepTime = SimpleDateFormat("yyyy-MM-dd HH:mm", defaultLocale)
+    fun timeFormatSleepTime() = SimpleDateFormat("yyyy-MM-dd HH:mm", defaultLocale)
+
+
 
     @SuppressLint("ConstantLocale")
-    val timeWithSecond = SimpleDateFormat("HH:mm:ss", defaultLocale)
+    fun time24WithoutSecond() = SimpleDateFormat("HH:mm", defaultLocale)
 
     @SuppressLint("ConstantLocale")
-    val time24WithoutSecond = SimpleDateFormat("HH:mm", defaultLocale)
+    fun dateTimeFormatWfTranser() = SimpleDateFormat(" dd-MM-yy HH:mm:ss", defaultLocale)
 
     @SuppressLint("ConstantLocale")
-    val dateTimeFormatWfTranser = SimpleDateFormat(" dd-MM-yy HH:mm:ss", defaultLocale)
-
-    @SuppressLint("ConstantLocale")
-    val time12Meridian = SimpleDateFormat("h:mm a", defaultLocale).apply {
-        timeZone = TimeZone.getDefault()
-    }
-
-    @SuppressLint("ConstantLocale")
-    val timeFormat2 = SimpleDateFormat("h a", defaultLocale)
-
-    @SuppressLint("ConstantLocale")
-    val dateTime12Meridian = SimpleDateFormat("dd MMM , h:mm a", defaultLocale).apply {
+    fun time12Meridian() = SimpleDateFormat("h:mm a", defaultLocale).apply {
         timeZone = TimeZone.getDefault()
     }
 
@@ -152,32 +117,16 @@ object DateFormats {
     }
 
 
-    fun addMinutes(dateWithTime: String, duration: Int): String? {
-        try {
-
-            val d = dateTimeFormat3.parse(dateWithTime)
-            LOGS.d("addMinutes $d")
-            val cal = Calendar.getInstance()
-            cal.time = d
-            cal.add(Calendar.SECOND, duration)
-            LOGS.d("addMinutes ${cal.time} $duration")
-            return time12Meridian.format(cal.time)
-        } catch (e: ParseException) {
-            e.printStackTrace()
-        }
-        return null
-    }
-
     fun addMinutes2(dateWithTime: String, duration: Int): String? {
         try {
 
-            val d = dateTimeFormatISO.parse(dateWithTime)
+            val d = dateTimeFormatISO().parse(dateWithTime)
             LOGS.d("addMinutes $d")
             val cal = Calendar.getInstance()
             cal.time = d
             cal.add(Calendar.SECOND, duration)
             LOGS.d("addMinutes ${cal.time} $duration")
-            return time12Meridian.format(cal.time)
+            return time12Meridian().format(cal.time)
         } catch (e: ParseException) {
             e.printStackTrace()
         }
@@ -186,23 +135,23 @@ object DateFormats {
 
     fun subtractDate(date: String, subtractDay: Int): String? {
         val cal = Calendar.getInstance()
-        cal.time = dateTimeFormat6.parse(date)
+        cal.time = dateTimeFormat6().parse(date)
         cal.add(Calendar.DATE, -subtractDay)
         return dateFormat.format(cal.time)
     }
 
     fun subtractDateFormat3(date: String, subtractDay: Int): String? {
         val cal = Calendar.getInstance()
-        cal.time = dateFormat3.parse(date)
+        cal.time = dateFormat3().parse(date)
         cal.add(Calendar.DATE, -subtractDay)
-        return dateFormat3.format(cal.time)
+        return dateFormat3().format(cal.time)
     }
 
     fun addDateFormat3(date: String, addDay: Int): String? {
         val cal = Calendar.getInstance()
-        cal.time = dateFormat3.parse(date)
+        cal.time = dateFormat3().parse(date)
         cal.add(Calendar.DATE, addDay)
-        return dateFormat3.format(cal.time)
+        return dateFormat3().format(cal.time)
     }
 
 
@@ -242,7 +191,7 @@ object DateFormats {
             add(Calendar.DAY_OF_YEAR, -1)
         }.time
 
-        return dateFormat3.format(c)
+        return dateFormat3().format(c)
     }
 
     fun getDate(timeFormat: SimpleDateFormat): String {
@@ -367,6 +316,7 @@ object DateFormats {
         return String.format("%02d:%02d %s", formattedHours, remainingMinutes, amPm)
 
     }
+
     fun getCurrentHour(): Int {
         val cal = Calendar.getInstance()
         cal.add(Calendar.HOUR, 1)
@@ -428,7 +378,7 @@ object DateFormats {
             }
 
             9 -> {
-                return dateFormat3.format(calendar.time)
+                return dateFormat3().format(calendar.time)
             }
 
             10 -> {
@@ -447,7 +397,7 @@ object DateFormats {
             }
 
             13 -> {
-                return dateTimeFormatWithWeekDay.format(calendar.time)
+                return dateTimeFormatWithWeekDay().format(calendar.time)
             }
 
             14 -> {
@@ -525,7 +475,7 @@ object DateFormats {
             if (dateInput.isNullOrEmpty()) return ""
             val dateFormatInput = SimpleDateFormat("yyyy-MM-dd", defaultLocale)
             val date = dateFormatInput.parse(dateInput) ?: return ""
-            dateTimeFormatWithWeekDay.format(date)
+            dateTimeFormatWithWeekDay().format(date)
         } catch (exp: Exception) {
             ""
         }
@@ -828,7 +778,7 @@ object DateFormats {
         return try {
             if (dateInput.isNullOrEmpty()) return ""
             val dateFormatOutput = SimpleDateFormat("MMM dd yyyy, h:mm a", defaultLocale)
-            val date = dateTimeFormatISO.parse(dateInput) ?: return ""
+            val date = dateTimeFormatISO().parse(dateInput) ?: return ""
             dateFormatOutput.format(date)
         } catch (exp: Exception) {
             ""
@@ -840,7 +790,7 @@ object DateFormats {
 
             if (dateInput.isNullOrEmpty()) return ""
             val dateFormatOutput = SimpleDateFormat("h:mm a", DateFormats.defaultLocale)
-            val date = dateTimeFormat3.parse(dateInput) ?: return ""
+            val date = dateTimeFormat3().parse(dateInput) ?: return ""
             dateFormatOutput.format(date)
         } catch (exp: Exception) {
             exp.printStackTrace()
@@ -848,25 +798,14 @@ object DateFormats {
         }
     }
 
-    fun formatActivityTime8(dateInput: String?): String {
-        return try {
 
-            if (dateInput.isNullOrEmpty()) return ""
-            val dateFormatOutput = SimpleDateFormat("h:mm a", DateFormats.defaultLocale)
-            val date = timeWithSecond.parse(dateInput) ?: return ""
-            dateFormatOutput.format(date)
-        } catch (exp: Exception) {
-            exp.printStackTrace()
-            ""
-        }
-    }
 
     fun formatActivityTime6(dateInput: String?): String {
         return try {
 
             if (dateInput.isNullOrEmpty()) return ""
             val dateFormatOutput = SimpleDateFormat("h:mm a", DateFormats.defaultLocale)
-            val date = dateTimeFormatISO.parse(dateInput) ?: return ""
+            val date = dateTimeFormatISO().parse(dateInput) ?: return ""
             dateFormatOutput.format(date)
         } catch (exp: Exception) {
             exp.printStackTrace()
@@ -1052,7 +991,7 @@ object DateFormats {
 
     fun getTimeFormat(): String {
         val calendar = Calendar.getInstance()
-        return timeFormat.format(calendar.time)
+        return SimpleDateFormat("HH:mm", defaultLocale).format(calendar.time)
     }
 
     fun getDateFormatFromString(date: String): Date? {
@@ -1060,7 +999,7 @@ object DateFormats {
     }
 
     fun getDateFormatFromString2(date: String): Date? {
-        return dateFormat3.parse(date)
+        return dateFormat3().parse(date)
     }
 
     fun getTimeStamp(): Long {
@@ -1072,8 +1011,9 @@ object DateFormats {
         return SimpleDateFormat("dd/MM/yyyyHH:mm", defaultLocale).parse("$date$time").time
 
     }
+
     fun convertDateTimeToTimeStamp(time: String): Long {
-        return dateTimeFormat6.parse(time).time
+        return dateTimeFormat6().parse(time).time
 
     }
 
@@ -1083,7 +1023,7 @@ object DateFormats {
     }
 
     fun convertDateTimeToTimeStamp3(dateTime: String): Long {
-        return dateTimeFormat6.parse(dateTime).time
+        return dateTimeFormat6().parse(dateTime).time
 
     }
 
@@ -1102,7 +1042,7 @@ object DateFormats {
     }
 
     fun convertDateTimeToTimeStampWithISO(date: String): Long {
-        return dateTimeFormatISO.parse(date).time
+        return dateTimeFormatISO().parse(date).time
 
     }
 
@@ -1181,7 +1121,6 @@ object DateFormats {
     }
 
 
-
     fun convertTimeStampToPrevious12ofDay(timestamp: Long): Long {
         val cal = Calendar.getInstance()
         cal.timeInMillis = timestamp
@@ -1209,8 +1148,8 @@ object DateFormats {
 
     fun isTimeBefore(time: String, endTime: String): Boolean {
         try {
-            val date1 = timeFormat.parse(time)
-            val date2 = timeFormat.parse(endTime)
+            val date1 = timeFormat().parse(time)
+            val date2 = timeFormat().parse(endTime)
             return date1.before(date2)
         } catch (e: ParseException) {
             e.printStackTrace()
@@ -1238,8 +1177,8 @@ object DateFormats {
 
     fun isTimeAfter(time: String, endTime: String): Boolean {
         try {
-            val date1 = timeFormat.parse(time)
-            val date2 = timeFormat.parse(endTime)
+            val date1 = timeFormat().parse(time)
+            val date2 = timeFormat().parse(endTime)
             return date1.after(date2)
         } catch (e: ParseException) {
             e.printStackTrace()
@@ -1465,8 +1404,8 @@ object DateFormats {
         val endTime = "${getTime(hour2)}:${getTime(minute2)}"
 
 
-        val date1: Date = DateFormats.timeFormat.parse(endTime)
-        val date2: Date = DateFormats.timeFormat.parse(startTime)
+        val date1: Date = DateFormats.timeFormat().parse(endTime)
+        val date2: Date = DateFormats.timeFormat().parse(startTime)
         val mills = date1.time - date2.time
         LOGS.d("$TAG ${date1.time}")
         LOGS.d("$TAG ${date2.time}")
@@ -1986,7 +1925,7 @@ object DateFormats {
     fun getDateFromTimeStamp(startTimeStamp: Long): String? {
         return try {
             val netDate = Date(startTimeStamp)
-            dateFormat3.format(netDate)
+            dateFormat3().format(netDate)
         } catch (exp: Exception) {
             ""
         }
@@ -1995,7 +1934,7 @@ object DateFormats {
     fun getDayElapsedMinutesFromTimeStamp(startTimeStamp: Long): Int? {
         return try {
             val netDate = Date(startTimeStamp)
-            val hms = timeFormat.format(netDate)
+            val hms = timeFormat().format(netDate)
             val splitData = hms.split(":")
             return (splitData[0].toInt() * 60 + splitData[1].toInt())
         } catch (exp: Exception) {
@@ -2004,10 +1943,10 @@ object DateFormats {
     }
 
     fun formatWfTransfer(timeStamp: Long): String? {
-        dateTimeFormatWfTranser.timeZone = TimeZone.getDefault()
+        dateTimeFormatWfTranser().timeZone = TimeZone.getDefault()
         val objCalendar = Calendar.getInstance(TimeZone.getDefault())
         objCalendar.timeInMillis = timeStamp
-        val result = dateTimeFormatWfTranser.format(objCalendar.time)
+        val result = dateTimeFormatWfTranser().format(objCalendar.time)
         objCalendar.clear()
         return result
     }
@@ -2106,7 +2045,7 @@ fun String.convertToYYYY_MM_DD(): String {
 }
 
 fun getHoursBasedOnDateTime(startTime: String): String {
-    val date = DateFormats.dateTimeFormat5.parse(startTime)
+    val date = DateFormats.dateTimeFormat5().parse(startTime)
     return SimpleDateFormat("HH").format(date)
 }
 

@@ -121,7 +121,7 @@ constructor(
 //    private fun formatDataSet(activities: List<OActivityListModal>) {
 //        val activitySorted = activities.sortedBy {
 //            val dateTime = it.startTime
-//            val dateFormat = DateFormats.dateTimeFormatISO
+//            val dateFormat = DateFormats.dateTimeFormatISO()
 //
 //            val time = try {
 //                if (dateTime.isNullOrEmpty()) {
@@ -143,8 +143,8 @@ constructor(
 //            it.createdDate ?: return@forEach
 //
 //            val date = DateFormats.formatDateTime(
-//                it.startTime, DateFormats.dateTimeFormatISO,
-//                DateFormats.dateFormat2
+//                it.startTime, DateFormats.dateTimeFormatISO(),
+//                DateFormats.dateFormat2()
 //            )
 //            if (date.isEmpty()) return@forEach
 //
@@ -181,8 +181,8 @@ constructor(
             it.date ?: return@forEach
 
             val date = DateFormats.formatDateTime(
-                it.date, DateFormats.dateFormat3,
-                DateFormats.dateFormat6
+                it.date, DateFormats.dateFormat3(),
+                DateFormats.dateFormat6()
             )
 
             if (date.isEmpty()) return@forEach

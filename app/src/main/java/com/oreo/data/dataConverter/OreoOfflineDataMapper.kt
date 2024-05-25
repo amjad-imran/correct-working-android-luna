@@ -76,12 +76,12 @@ constructor(
                     "DATACONVERTER SAME DAY $breakUpStartTime $breakupEndTime ${
                         DateFormats.convertTimestampToDate(
                             breakUpStartTime,
-                            DateFormats.dateTimeFormat
+                            DateFormats.dateTimeFormat()
                         )
                     }  ${
                         DateFormats.convertTimestampToDate(
                             breakupEndTime,
-                            DateFormats.dateTimeFormat
+                            DateFormats.dateTimeFormat()
                         )
                     }"
                 )
@@ -97,12 +97,12 @@ constructor(
                     "DATACONVERTER Different DAY ${sleepDataBreakup.endTime} ${sleepDataBreakup.startTime} $breakUpStartTime $breakupEndTime ${
                         DateFormats.convertTimestampToDate(
                             breakUpStartTime,
-                            DateFormats.dateTimeFormat
+                            DateFormats.dateTimeFormat()
                         )
                     }  ${
                         DateFormats.convertTimestampToDate(
                             breakupEndTime,
-                            DateFormats.dateTimeFormat
+                            DateFormats.dateTimeFormat()
                         )
                     }"
                 )

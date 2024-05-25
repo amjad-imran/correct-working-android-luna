@@ -198,7 +198,7 @@ constructor(
         if (date == null) {
             isToday = false
         }
-        val todayDate = DateFormats.getCurrentDate(DateFormats.dateFormat3)
+        val todayDate = DateFormats.getCurrentDate(DateFormats.dateFormat3())
         isToday = todayDate.equals(date, true)
     }
 
@@ -223,7 +223,7 @@ constructor(
         calendar[Calendar.SECOND] = 0 //set seconds to zero
 
         calendar.set(Calendar.MINUTE, minutes)
-        return DateFormats.convertTimestampToDate(calendar.timeInMillis, DateFormats.timeFormat12)
+        return DateFormats.convertTimestampToDate(calendar.timeInMillis, DateFormats.timeFormat12())
     }
 
     fun getHighlights(type: Int, movement: List<Int>?): List<Int> {

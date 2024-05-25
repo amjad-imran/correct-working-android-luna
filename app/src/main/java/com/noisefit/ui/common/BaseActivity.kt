@@ -344,7 +344,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), UIControlle
         layoutCustomAlertBinding.apply {
             val desc =
                 "Your phone date is inaccurate! Adjust your clock and try again \n\nYour phone date and time is: ${
-                    DateFormats.getDate(DateFormats.dateTimeFormat)
+                    DateFormats.getDate(DateFormats.dateTimeFormat())
                 }"
             tvTitle.text = getString(R.string.text_wrong_time)
             tvDesc.text = desc

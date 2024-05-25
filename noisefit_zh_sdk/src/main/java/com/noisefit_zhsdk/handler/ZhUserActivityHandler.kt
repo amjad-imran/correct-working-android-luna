@@ -547,11 +547,11 @@ constructor(
                 if (p0 == null) return
 
                 val startDayTimeStamp =
-                    DateFormats.convertDateTimeToTimeStamp(p0.date, DateFormats.dateTimeFormat5)
+                    DateFormats.convertDateTimeToTimeStamp(p0.date, DateFormats.dateTimeFormat5())
 
                 userActivityDataCallbacks?.onUserActivityDataReceived(
                     UserActivityCallback.HealthScoreObtainedOreo(
-                        p0.healthScore, DateFormats.dateFormat3.format(startDayTimeStamp)
+                        p0.healthScore, DateFormats.dateFormat3().format(startDayTimeStamp)
                     )
                 )
             }

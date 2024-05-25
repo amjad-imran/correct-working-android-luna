@@ -52,7 +52,7 @@ object AppConversionUtils {
         var age: Int = 0
         try {
             val birth = Calendar.getInstance()
-            birth.time = DateFormats.dateFormat3.parse(dob)!!
+            birth.time = DateFormats.dateFormat3().parse(dob)!!
 
             val today = Calendar.getInstance()
 

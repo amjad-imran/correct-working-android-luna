@@ -538,11 +538,11 @@ constructor(
 
         sleepData.startTime = DateFormats.convertTimestampToDate(
             bean.startSleepTimestamp * 1000,
-            DateFormats.timeFormat
+            DateFormats.timeFormat()
         )
         sleepData.endTime = DateFormats.convertTimestampToDate(
             bean.endSleepTimestamp * 1000,
-            DateFormats.timeFormat
+            DateFormats.timeFormat()
         )
 
         sleepData.sleepScore = bean.sleepScore
@@ -569,7 +569,7 @@ constructor(
             )
             sleepBreakup.startTime = DateFormats.convertTimestampToDate(
                 sleepDistributionData.startTimestamp * 1000,
-                DateFormats.timeFormat
+                DateFormats.timeFormat()
             )
             sleepBreakup.duration = sleepDistributionData.sleepDuration
             val endTime = DateFormats.addMinutesInMilliseconds(
@@ -579,7 +579,7 @@ constructor(
 
             sleepBreakup.endTime = DateFormats.convertTimestampToDate(
                 endTime,
-                DateFormats.timeFormat
+                DateFormats.timeFormat()
             )
             sleepArray.add(sleepBreakup)
         }
@@ -628,7 +628,7 @@ constructor(
                 )
                 val time = DateFormats.convertTimestampToDate(
                     measureData.measureTimestamp.toLong() * 1000,
-                    DateFormats.timeFormat
+                    DateFormats.timeFormat()
                 )
                 val syncDate = DateFormats.convertDateTimeToTimeStamp(date, time)
 
@@ -658,7 +658,7 @@ constructor(
                 )
                 val time = DateFormats.convertTimestampToDate(
                     measureData.measureTimestamp.toLong() * 1000,
-                    DateFormats.timeFormat
+                    DateFormats.timeFormat()
                 )
 
                 val syncDate = DateFormats.convertDateTimeToTimeStamp(date, time)
@@ -678,7 +678,7 @@ constructor(
         val stressArray = ArrayList<StressDataBreakup>()
 
         var startDayTimeStamp =
-            DateFormats.convertDateTimeToTimeStamp(bean.date, DateFormats.dateTimeFormat5)
+            DateFormats.convertDateTimeToTimeStamp(bean.date, DateFormats.dateTimeFormat5())
 
 
         bean.pressureData.forEach { measureData ->
@@ -686,7 +686,7 @@ constructor(
                 DateFormats.addMinuteToTimeStamp(startDayTimeStamp!!, bean.pressureFrequency)
             if (measureData > 0) {
                 val date = DateFormats.dateFormat.format(startDayTimeStamp)
-                val time = DateFormats.timeFormat.format(startDayTimeStamp)
+                val time = DateFormats.timeFormat().format(startDayTimeStamp)
 
                 val syncDate = DateFormats.convertDateTimeToTimeStamp(date, time)
                 val oxygenItem = StressDataBreakup(
@@ -711,7 +711,7 @@ constructor(
                 )
                 val time = DateFormats.convertTimestampToDate(
                     measureData.measureTimestamp.toLong() * 1000,
-                    DateFormats.timeFormat
+                    DateFormats.timeFormat()
                 )
 
                 val syncDate = DateFormats.convertDateTimeToTimeStamp(date, time)
@@ -732,7 +732,7 @@ constructor(
     fun parseHeartRateData(bean: ContinuousHeartRateBean): List<HeartRate> {
         val heartRateList = ArrayList<HeartRate>()
         var startDayTimeStamp =
-            DateFormats.convertDateTimeToTimeStamp(bean.date, DateFormats.dateTimeFormat5)
+            DateFormats.convertDateTimeToTimeStamp(bean.date, DateFormats.dateTimeFormat5())
 
         bean.heartRateData?.let { healthHeartRate ->
             healthHeartRate.forEachIndexed { _, item ->
@@ -743,7 +743,7 @@ constructor(
                     )
 
                 if (item as Int != 0) {
-                    val time = DateFormats.timeFormat.format(startDayTimeStamp)
+                    val time = DateFormats.timeFormat().format(startDayTimeStamp)
                     val heartRate = HeartRate()
                     heartRate.resetData = true
                     heartRate.averageHeartRate = item
@@ -800,7 +800,7 @@ constructor(
         val dailyStepData = StepsData(
             date = DateFormats.getConvertToDateFormat(
                 dailyBean.date,
-                DateFormats.dateFormat3,
+                DateFormats.dateFormat3(),
                 DateFormats.dateFormat
             )
         )
@@ -833,7 +833,7 @@ constructor(
         val dailyStepData = OreoStepsData(
             date = DateFormats.getConvertToDateFormat(
                 dailyBean.date,
-                DateFormats.dateFormat3,
+                DateFormats.dateFormat3(),
                 DateFormats.dateFormat
             )
         )
@@ -904,11 +904,11 @@ constructor(
 //                avgStepStride = p1.reportRecoveryTime.toInt(),
 //                distance = p1.reportDistance,
 //                heartRateAvg = p1.reportAvgHeart,
-//                endTime = DateFormats.timeFormat.format(endCalendar.time),
+//                endTime = DateFormats.timeFormat().format(endCalendar.time),
 //                date = DateFormats.dateFormat.format(startCalendar.time),
 //                time = DateFormats.formatDateTime(
 //                    startCalendar.time,
-//                    DateFormats.dateTimeFormatISO
+//                    DateFormats.dateTimeFormatISO()
 //                ),
 //                cadence = cadence,
 //                duration = duration.toLong(),
@@ -1121,7 +1121,7 @@ constructor(
 
         val duration = it.reportDuration.toInt() / 60
         val date = DateFormats.convertTimestampToDate(
-            it.reportSportStartTime, DateFormats.dateFormat3
+            it.reportSportStartTime, DateFormats.dateFormat3()
         )
 
         val sessionId = it.reportSportStartTime / 1000

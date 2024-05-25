@@ -638,13 +638,13 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             binding.tvSleepStart.text = DateFormats.formatDate(
                 data.data.startTime,
-                DateFormats.dateTimeFormat5,
-                DateFormats.time12Meridian
+                DateFormats.dateTimeFormat5(),
+                DateFormats.time12Meridian()
             )
             binding.tvSleepEnd.text = DateFormats.formatDate(
                 data.data.endTime,
-                DateFormats.dateTimeFormat5,
-                DateFormats.time12Meridian
+                DateFormats.dateTimeFormat5(),
+                DateFormats.time12Meridian()
             )
 
             binding.root.setOnClickListener {
@@ -685,13 +685,13 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
                 binding.tvSleepStart.text = DateFormats.formatDate(
                     data.startTime,
-                    DateFormats.dateTimeFormat5,
-                    DateFormats.time12Meridian
+                    DateFormats.dateTimeFormat5(),
+                    DateFormats.time12Meridian()
                 )
                 binding.tvSleepEnd.text = DateFormats.formatDate(
                     data.endTime,
-                    DateFormats.dateTimeFormat5,
-                    DateFormats.time12Meridian
+                    DateFormats.dateTimeFormat5(),
+                    DateFormats.time12Meridian()
                 )
 
                 binding.tvHrValue.text = if (data.data.restingHr == null) {

@@ -154,8 +154,8 @@ class OWorkoutDetailsViewModel @Inject constructor(
         val startTimeFull =
             DateFormats.convertTimeIntoTime(
                 startTime,
-                DateFormats.timeFormat12,
-                DateFormats.timeFormat
+                DateFormats.timeFormat12(),
+                DateFormats.timeFormat()
             ).split(":")
 
 
@@ -168,8 +168,8 @@ class OWorkoutDetailsViewModel @Inject constructor(
         val endTimeFull =
             DateFormats.convertTimeIntoTime(
                 endTime,
-                DateFormats.timeFormat12,
-                DateFormats.timeFormat
+                DateFormats.timeFormat12(),
+                DateFormats.timeFormat()
             ).split(":")
 
 
@@ -181,15 +181,15 @@ class OWorkoutDetailsViewModel @Inject constructor(
 
 
         val calendar = Calendar.getInstance()
-        calendar.time = DateFormats.timeFormat.parse(String.format("%02d:%02d", startHr, startMin))
+        calendar.time = DateFormats.timeFormat().parse(String.format("%02d:%02d", startHr, startMin))
         val endTimeCalendar = Calendar.getInstance()
         endTimeCalendar.time =
-            DateFormats.timeFormat.parse(String.format("%02d:%02d", endHr, endMin))
+            DateFormats.timeFormat().parse(String.format("%02d:%02d", endHr, endMin))
 
         var index = 0
         while (calendar.before(endTimeCalendar)) {
             try {
-                list[index] = DateFormats.timeFormat12_2.format(calendar.time)
+                list[index] = DateFormats.timeFormat12_2().format(calendar.time)
                 calendar.add(Calendar.MINUTE, 5)
                 index++
             } catch (exp: Exception) {

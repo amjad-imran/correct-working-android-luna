@@ -295,8 +295,8 @@ class OStressInternalDetailsFragment :
             if (mViewModel.dayType?.equals("day", true) == true) {
                 binding.tvDate.text = DateFormats.formatDateTime(
                     data.date,
-                    DateFormats.dateFormat3,
-                    DateFormats.dateFormat2
+                    DateFormats.dateFormat3(),
+                    DateFormats.dateFormat2()
                 )
                 binding.tvDate.visible()
             } else {
