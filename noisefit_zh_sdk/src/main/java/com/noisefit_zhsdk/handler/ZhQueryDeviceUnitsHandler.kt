@@ -5,7 +5,10 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.media.AudioManager
+import android.os.Build
 import android.telephony.SmsManager
+import android.text.TextUtils
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import com.google.gson.Gson
 import com.noisefit_commans.NoisefitApplication
@@ -30,13 +33,14 @@ import com.noisefit_commans.models.StockSymbol
 import com.noisefit_commans.models.StockSymbolList
 import com.noisefit_commans.models.SwitchSetting
 import com.noisefit_commans.models.WorldClockList
-import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.FileLogsUtils
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.LocationClientClass
 import com.noisefit_commans.utils.MusicUtil
+import com.noisefit_zhsdk.BuildConfig
 import com.noisefit_zhsdk.base.ZhApplicationHandler
+import com.noisefit_zhsdk.log.ZhBleLogUtils
 import com.zh.ble.wear.protobuf.MusicProtos
 import com.zhapp.ble.ControlBleTools
 import com.zhapp.ble.bean.BodyTemperatureSettingBean
@@ -66,6 +70,7 @@ import com.zhapp.ble.bean.WidgetBean
 import com.zhapp.ble.bean.WorldClockBean
 import com.zhapp.ble.bean.WristScreenBean
 import com.zhapp.ble.callback.AgpsCallBack
+import com.zhapp.ble.callback.BehaviorLogCallBack
 import com.zhapp.ble.callback.CallBackUtils
 import com.zhapp.ble.callback.CallStateCallBack
 import com.zhapp.ble.callback.ContactCallBack
@@ -488,7 +493,6 @@ constructor(
                         QueryCallback.FirmwareVersionObtained(DeviceFirmware(version = WatchInfoGlobals.firmwareVersion))
                     )
                 }
-
 
 
                 //AppLogs.sendAppLogs("Get device info")
@@ -1160,60 +1164,96 @@ constructor(
             }
         }
 
+        ZhBleLogUtils.initLogger(
+            NoisefitApplication.context!!.applicationContext,
+            isWriteLog = true,  //Whether to write a log file
+            isRelease = false   //Is the log storage path (true inside the system) or (false inside the app)?
+        )
 
         ControlBleTools.getInstance().deviceLogCallBack = object : DeviceLogCallBack {
             override fun onLogI(tag: String?, msg: String?, p2: String?) {
+                if (BuildConfig.DEBUG) {
+                    if (TextUtils.equals(Build.BRAND, "nubia")) Log.i(msg, p2 ?: "")
+                }
                 FileLogsUtils.saveILogs(
                     noiseFitDevice,
                     "$tag $msg",
                     p2 ?: "",
                     FileLogsUtils.LogType.Watch
                 )
+                ZhBleLogUtils.bleLog(msg, p2)
             }
 
             override fun onLogV(tag: String?, msg: String?, p2: String?) {
+                if (BuildConfig.DEBUG) {
+                    if (TextUtils.equals(Build.BRAND, "nubia")) Log.v(msg, p2 ?: "")
+                }
                 FileLogsUtils.saveWLogs(
                     noiseFitDevice,
                     "$tag $msg",
                     p2 ?: "",
                     FileLogsUtils.LogType.Watch
                 )
+                ZhBleLogUtils.bleLog(msg, p2)
             }
 
             override fun onLogE(tag: String?, msg: String?, p2: String?) {
+                if (BuildConfig.DEBUG) {
+                    if (TextUtils.equals(Build.BRAND, "nubia")) Log.e(msg, p2 ?: "")
+                }
                 FileLogsUtils.saveELogs(
                     noiseFitDevice,
                     "$tag $msg",
                     p2 ?: "",
                     FileLogsUtils.LogType.Watch
                 )
+                ZhBleLogUtils.bleLog(msg, p2)
             }
 
             override fun onLogD(tag: String?, msg: String?, p2: String?) {
+                if (BuildConfig.DEBUG) {
+                    if (TextUtils.equals(Build.BRAND, "nubia")) Log.d(msg, p2 ?: "")
+                }
                 FileLogsUtils.saveDLogs(
                     noiseFitDevice,
                     "$tag $msg",
                     p2 ?: "",
                     FileLogsUtils.LogType.Watch
                 )
+                ZhBleLogUtils.bleLog(msg, p2)
             }
 
             override fun onLogW(tag: String?, msg: String?, p2: String?) {
+                if (BuildConfig.DEBUG) {
+                    if (TextUtils.equals(Build.BRAND, "nubia")) Log.w(msg, p2 ?: "")
+                }
                 FileLogsUtils.saveWLogs(
                     noiseFitDevice,
                     "$tag $msg",
                     p2 ?: "",
                     FileLogsUtils.LogType.Watch
                 )
+                ZhBleLogUtils.bleLog(msg, p2)
             }
 
+        }
+
+        CallBackUtils.behaviorLogCallBack = object : BehaviorLogCallBack {
+            override fun onLog(p0: String?, p1: String?, p2: String?) {
+                ZhBleLogUtils.behaviorLog(p0, p1, p2)
+            }
         }
 
     }
 
     override fun queryBatteryPower() {
-        zhService?.getDeviceBattery(null)
-        AppLogs.sendAppLogs("sent request for battery power")
+        //TODO ZH FIX
+        // When the App enters the foreground, real-time data change reporting has been
+        // enabled through setRealTimeDataState(true). If the power and charging status change,
+        // realDataCallback will report the latest power data to the app in real time,
+        // and there is no need to actively call it.
+//        zhService?.getDeviceBattery(null)
+//        AppLogs.sendAppLogs("sent request for battery power")
     }
 
     override fun getDoNotDisturbData() {
