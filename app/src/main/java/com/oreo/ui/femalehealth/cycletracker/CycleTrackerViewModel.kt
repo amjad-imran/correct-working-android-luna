@@ -88,7 +88,7 @@ class CycleTrackerViewModel @Inject constructor(
                             _femaleHealthData.postValue(it)
 
 
-                            val tempData = arrayListOf(
+                            /*val tempData = arrayListOf(
                                 TempPeriodData(date = "2024-05-24", temperature = 5.5f),
                                 TempPeriodData(date = "2024-05-23", temperature = 3.25f),
                                 TempPeriodData(date = "2024-05-22", temperature = 1.25f),
@@ -103,20 +103,53 @@ class CycleTrackerViewModel @Inject constructor(
                                 TempPeriodData(date = "2024-05-13", temperature = -1.25f),
                                 TempPeriodData(date = "2024-05-12", temperature = -2.25f),
                                 TempPeriodData(date = "2024-05-11", temperature = -1.25f),
-                            )
+                            )*/
 
-                            _cyclePredictionData.postValue(
-                                TempPrediction(
-                                    tempVariation = 0.5f,
-                                    message = "Your resting HR seems to be higher than previous day. Allow yourself sufficient time for recovery by taking it slow. Consider a nap?",
-                                    tempData = tempData
+                            it?.temp?.let { list ->
+
+
+                                val tempVariance = calculateTempVariance(list)
+
+                                _cyclePredictionData.postValue(
+                                    TempPrediction(
+                                        tempVariation = tempVariance,
+                                        message = it.tempNudge,
+                                        tempData = list
+                                    )
                                 )
-                            )
+                            } ?: run {
+                                _cyclePredictionData.postValue(
+                                    null
+                                )
+                            }
+
+
                         }
                     }
                 }
             }
 
+        }
+    }
+
+    private fun calculateTempVariance(list: List<TempPeriodData>): Float? {
+        if (list.size < 4) {
+            return null
+        }
+        try {
+            val first = list[0].temperature
+            val second = list[1].temperature
+            val third = list[2].temperature
+            val fourth = list[3].temperature
+
+            if (first == null || second == null || third == null || fourth == null) {
+                return null
+            }
+
+            val variation = first - ((second + third + fourth) / 2)
+            return variation
+        } catch (exp: Exception) {
+            return null
         }
     }
 
@@ -222,8 +255,7 @@ class CycleTrackerViewModel @Inject constructor(
 
             val preProcessDataTill = currentPeriodStart.plusMonths(12)
 
-            val nextPeriodDate =
-                currentPeriodStart.plusDays(mainPeriodLength.toLong())
+            val nextPeriodDate = currentPeriodStart.plusDays(mainPeriodLength.toLong())
 
             var current = nextPeriodDate
             while (current <= preProcessDataTill) {
@@ -233,9 +265,7 @@ class CycleTrackerViewModel @Inject constructor(
                 val cycleLength = data.cycleLength ?: 0
 
                 val currentDay = getCurrentCycleDay(
-                    LocalDate.parse(data.periodDate),
-                    cycleLength,
-                    current
+                    LocalDate.parse(data.periodDate), cycleLength, current
                 )
 
                 if (currentDay == 1) {
@@ -317,9 +347,7 @@ class CycleTrackerViewModel @Inject constructor(
     }
 
     private fun getCurrentCycleDay(
-        periodDate: LocalDate,
-        cycleLength: Int,
-        currentDate: LocalDate
+        periodDate: LocalDate, cycleLength: Int, currentDate: LocalDate
     ): Int {
         val daysSinceLastPeriod = ChronoUnit.DAYS.between(periodDate, currentDate).toInt()
         return (daysSinceLastPeriod % cycleLength) + 1
@@ -405,9 +433,7 @@ class CycleTrackerViewModel @Inject constructor(
         }
 
         return TempPeriodCombineModel(
-            sections = sections,
-            items = items,
-            maxValue
+            sections = sections, items = items, maxValue
         )
     }
 

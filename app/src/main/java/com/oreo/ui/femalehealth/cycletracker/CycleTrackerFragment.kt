@@ -35,6 +35,7 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
+import kotlin.math.abs
 
 @AndroidEntryPoint
 class CycleTrackerFragment :
@@ -334,11 +335,19 @@ class CycleTrackerFragment :
 
     private fun initSkinTempPredictionWidget(data: TempPrediction) {
         binding.lytPrediction.vCard.apply {
-            tvValue.text = if ((data.tempVariation ?: 0f) > 0f) {
-                "+${data.tempVariation}"
+            val variation = data.tempVariation
+            if (variation == null) {
+                tvValue.text = "-"
+                tvUnit.gone()
             } else {
-                "-${data.tempVariation}"
+                tvValue.text = if ((data.tempVariation ?: 0f) > 0f) {
+                    "+${String.format("%.1f", data.tempVariation)}"
+                } else {
+                    "-${String.format("%.1f", abs(data.tempVariation))}"
+                }
+                tvUnit.visible()
             }
+
             tvDescription.text = data.message
 
             vTempGraph.updateData(viewModel.combineTempData(data.tempData))
