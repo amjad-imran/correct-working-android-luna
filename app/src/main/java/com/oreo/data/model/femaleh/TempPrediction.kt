@@ -1,5 +1,7 @@
 package com.oreo.data.model.femaleh
 
+import com.google.gson.annotations.SerializedName
+
 data class TempPrediction(
     val tempVariation: Float? = null,
     val message: String? = null,
@@ -8,4 +10,6 @@ data class TempPrediction(
 
 data class TempPeriodData(
     val date: String,
-    val temperature: Float? = null)
+    @SerializedName("avg_temp")
+    val temperature: Float? = null
+)

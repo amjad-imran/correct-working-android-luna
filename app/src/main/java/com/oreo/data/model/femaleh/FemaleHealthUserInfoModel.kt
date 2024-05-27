@@ -28,6 +28,11 @@ data class FemaleHealthUserInfoModel(
     @SerializedName("is_not_sure")
     val isNotSure: Boolean? = null,
     @SerializedName("is_track_pregnancy")
-    val isTrackPregnancy: Boolean? = null
+    val isTrackPregnancy: Boolean? = null,
+
+    val temp: List<TempPeriodData>? = null,
+
+    @SerializedName("temp_nudge")
+    val tempNudge: String? = null
 
 )
