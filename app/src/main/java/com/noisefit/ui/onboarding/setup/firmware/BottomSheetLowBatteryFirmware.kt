@@ -40,6 +40,7 @@ class BottomSheetLowBatteryFirmware :
 
         val batteryPercentage = watchDataStore.getBatteryPercentRing()
         binding.batteryStatus.progress = batteryPercentage
+        binding.tvBattery.text = "${batteryPercentage}%"
     }
 
     override fun initListener() {
