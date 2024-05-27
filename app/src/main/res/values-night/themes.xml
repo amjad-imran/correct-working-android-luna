@@ -141,6 +141,10 @@
         <item name="android:background">@drawable/back_modal_dialog</item>
     </style>
 
+    <style name="ModalStyleDialog10">
+        <item name="android:background">@drawable/back_modal_dialog_10</item>
+    </style>
+
     <style name="ModalStyleDialogNew">
         <item name="android:background">@drawable/back_modal_dialog_nap</item>
     </style>

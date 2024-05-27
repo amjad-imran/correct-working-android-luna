@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
-  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       android:layout_width="match_parent"
@@ -11,6 +11,11 @@
       tools:context=".ui.dashboard.graphs.HistoryCalendarActivity">
 
     <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/toolbar"
         layout="@layout/oreo_layout_toolbar_with_2_icons" />
 
@@ -20,21 +25,44 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
         android:layout_marginBottom="10dp" />
 
     <include
+        android:id="@+id/line1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         layout="@layout/layout_divider"
+        app:layout_constraintTop_toBottomOf="@+id/legendLayout"
         android:layout_width="match_parent"
         android:layout_height="1dp" />
 
     <com.kizitonwose.calendar.view.CalendarView
         android:id="@+id/calendar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:cv_monthHeaderResource="@layout/layout_cycle_log_cal_header"
+        app:cv_orientation="vertical"
+        app:cv_scrollPaged="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:cv_dayViewResource="@layout/calendar_day_3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/line1" />
+
+    <include
+        android:id="@+id/progressBar"
+        layout="@layout/default_loader"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cv_dayViewResource="@layout/calendar_day_3"
-        app:cv_monthHeaderResource="@layout/layout_cycle_log_cal_header"
-        app:cv_scrollPaged="true"
-        app:cv_orientation="vertical" />
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-  </LinearLayout>
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

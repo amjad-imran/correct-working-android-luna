@@ -226,5 +226,7 @@
     <color name="color_luteal">#a38cff</color>
     <color name="color_follicular_info">#ff9252</color>
     <color name="color_future_dates">#26ffffff</color>
+    <color name="color_bubble_gum_pink">#ff5bc7</color>
+
 
 </resources>

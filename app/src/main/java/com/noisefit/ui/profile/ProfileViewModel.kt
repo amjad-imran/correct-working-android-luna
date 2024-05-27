@@ -6,32 +6,29 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.JsonObject
+import com.noisefit.data.remote.base.Resource
+import com.noisefit.data.repository.LastSyncProvider
+import com.noisefit.data.repository.abstraction.AuthenticationRepository
+import com.noisefit.data.repository.abstraction.UserRepository
+import com.noisefit.session.SessionManager
+import com.noisefit.watch.ConnectionHandler
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.User
 import com.noisefit_commans.data.model.UserStats
 import com.noisefit_commans.data.model.trophies.TrophyBadge
-import com.noisefit.data.remote.base.Resource
-import com.noisefit.data.repository.LastSyncProvider
-import com.noisefit.data.repository.abstraction.*
-import com.noisefit.session.SessionManager
-import com.noisefit_commans.ui.BaseViewModel
-import com.noisefit_commans.utils.ConnectionUtil
-import com.noisefit_commans.utils.Event
-import com.noisefit.watch.ConnectionHandler
-import com.noisefit_commans.data.local.abstraction.DataStoredInterface
-import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.models.HeightUnitSystem
 import com.noisefit_commans.models.Units
+import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.BuildUtils
-import com.oreo.data.model.OContributorResponseModal
+import com.noisefit_commans.utils.ConnectionUtil
+import com.noisefit_commans.utils.Event
 import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -227,8 +224,11 @@ constructor(
     }
 
 
-    private val _cycleTrackInfo = MutableLiveData<FemaleCycleTrackInfoModel?>()
-    val cycleTrackInfo: LiveData<FemaleCycleTrackInfoModel?> = _cycleTrackInfo
+    private val _cycleTrackInfo = MutableLiveData<Event<FemaleCycleTrackInfoModel?>>()
+    val cycleTrackInfo: LiveData<Event<FemaleCycleTrackInfoModel?>?> = _cycleTrackInfo
+
+    private val _showFemaleHealthSplash = MutableLiveData<Event<Boolean?>>()
+    val showFemaleHealthSplash: LiveData<Event<Boolean?>?> = _showFemaleHealthSplash
 
     fun getCycleTrackerInfo() {
         viewModelScope.launch {
@@ -258,7 +258,12 @@ constructor(
 
                     is Resource.Success -> {
                         resource.data?.data.let {
-                            _cycleTrackInfo.postValue(it)
+                            if(it == null){
+                                _showFemaleHealthSplash.postValue(Event(true))
+                            }else{
+                                _cycleTrackInfo.postValue(Event(it))
+                            }
+
                         }
                     }
                 }

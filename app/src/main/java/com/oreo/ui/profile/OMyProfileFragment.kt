@@ -147,13 +147,17 @@ class OMyProfileFragment :
 
     override fun subscribeObservers() {
         viewModel.cycleTrackInfo.observe(this) {
-            if (it != null) {
+            it?.getContent()?.let {
                 navigate(R.id.cycleTrackerSettingFragment, Bundle().apply {
                     this.putParcelable("data", it)
                 })
-
-            } else {
-                navigate(R.id.femaleHealthSplashFragment)
+            }
+        }
+        viewModel.showFemaleHealthSplash.observe(this) {
+            it?.getContent()?.let {
+                if (it) {
+                    navigate(R.id.femaleHealthSplashFragment)
+                }
             }
         }
 
