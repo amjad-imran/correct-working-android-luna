@@ -156,7 +156,10 @@ constructor(
     fun shouldResetMasterDates(): Boolean {
         LOGS.d("RESET_DATES shouldResetMasterDates")
         val todayDate = DateFormats.getCurrentDateOreoFormat()
-        if (todayDate.equals(dateSetOn, true)) return false
+
+        if(userHealthData.contains(todayDate)) return false
+
+        //if (todayDate.equals(dateSetOn, true)) return false
 
         /* if (userHealthData.isEmpty()) {*/
         resetHealthCacheData()
