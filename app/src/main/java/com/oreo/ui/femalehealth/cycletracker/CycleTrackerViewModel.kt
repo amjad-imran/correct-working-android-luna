@@ -33,7 +33,7 @@ class CycleTrackerViewModel @Inject constructor(
     private val userActivityRepository: OreoUserActivityRepository,
 ) : BaseViewModel() {
 
-    val todayDate = LocalDate.now()
+    var todayDate = LocalDate.now()
 
     var selectedDate: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now())
     var notifyDateChange = MutableLiveData<Event<LocalDate>>()
@@ -52,7 +52,7 @@ class CycleTrackerViewModel @Inject constructor(
 
     init {
 
-        getCycleHistoryData()
+
     }
 
     fun getDataForDate(date: String) {

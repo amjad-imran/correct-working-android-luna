@@ -7,18 +7,18 @@ import com.noisefit.luna.databinding.ItemCycleLogBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
-import com.oreo.data.model.FlowLog
+import com.oreo.data.model.FHFlowIconsModel
 
 class CycleLogAdapter(val mListener: OnLogItemClick) :
     RecyclerView.Adapter<CycleLogAdapter.ViewHolder>() {
-    private var mDataSet = ArrayList<FlowLog>()
+    private var mDataSet = ArrayList<FHFlowIconsModel>()
     var lastSelectedPos = -1
 
     inner class ViewHolder(val binding: ItemCycleLogBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: FlowLog) {
-            binding.ivItem.loadImage(binding.ivItem.context, data.image)
-            binding.tvTitle.text = data.title
+        fun bind(data: FHFlowIconsModel) {
+            binding.ivItem.loadImage(binding.ivItem.context, data.icon)
+            binding.tvTitle.text = data.symptomName
             if (lastSelectedPos == bindingAdapterPosition) {
                 binding.ivTick.visible()
             } else
@@ -47,7 +47,11 @@ class CycleLogAdapter(val mListener: OnLogItemClick) :
         holder.bind(mDataSet[position])
     }
 
-    fun setData(resultData: List<FlowLog>?) {
+    fun getData():ArrayList<FHFlowIconsModel>{
+        return mDataSet
+    }
+
+    fun setData(resultData: List<FHFlowIconsModel>?) {
         mDataSet.clear()
         if (resultData != null) {
             mDataSet.addAll(resultData)
@@ -55,7 +59,7 @@ class CycleLogAdapter(val mListener: OnLogItemClick) :
         notifyDataSetChanged()
     }
 
-    fun updateItem(data: FlowLog, position: Int) {
+    fun updateItem(data: FHFlowIconsModel, position: Int) {
         mDataSet[position].isChecked = !data.isChecked
         notifyItemChanged(position)
     }
@@ -64,6 +68,6 @@ class CycleLogAdapter(val mListener: OnLogItemClick) :
 }
 
 interface OnLogItemClick {
-    fun onItemClick(data: FlowLog, position: Int)
+    fun onItemClick(data: FHFlowIconsModel, position: Int)
 }
 

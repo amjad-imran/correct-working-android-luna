@@ -27,6 +27,7 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
+import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.ui.femalehealth.cycletracker.DayState
 import com.oreo.ui.femalehealth.cycletracker.LogPeriodActivity
 import com.oreo.ui.femalehealth.cycletracker.PeriodPos
@@ -59,10 +60,11 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
         navigate(CycleLogFragmentDirections.actionCycleLogFragmentToCalenderDayLogBottomSheet(date.toString()))
     }
 
-    private fun initCalender() {
+    private fun initCalender(fmhCycleHistoryDataModels: List<FMHCycleHistoryDataModel>) {
+        val periodDate = fmhCycleHistoryDataModels.getOrNull(0)?.periodDate ?: "2024-03-01"
         val currentDay = LocalDate.now()
         val currentMonth = YearMonth.now()
-        val calendarStart = LocalDate.parse("2023-03-01")//TODO to be changed as per user selection
+        val calendarStart = LocalDate.parse(periodDate)
 
         binding.calendar.setup(
             calendarStart.yearMonth, currentMonth.plusMonths(12), DayOfWeek.MONDAY
@@ -303,7 +305,6 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
                 }
             }
             navigate(R.id.bottomSheetCycleLog, Bundle().apply {
-                putParcelable("data", viewModel.getCycleLogData())
                 putString("selectedDate", viewModel.selectedDate.toString())
             })
         }
@@ -311,8 +312,11 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
 
     override fun subscribeObservers() {
         viewModel.cycleHistoryData.observe(this) {
-            binding.btnLog.visible()
-            initCalender()
+            it?.let {
+                binding.btnLog.visible()
+                initCalender(it)
+            }
+
         }
 
         viewModel.logPeriodData.observe(this) {
