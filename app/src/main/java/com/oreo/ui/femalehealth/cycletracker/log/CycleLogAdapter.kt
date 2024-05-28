@@ -47,12 +47,18 @@ class CycleLogAdapter(val mListener: OnLogItemClick) :
         holder.bind(mDataSet[position])
     }
 
-    fun getData():ArrayList<FHFlowIconsModel>{
-        return mDataSet
+    fun getSelectedValue():String{
+        mDataSet.forEach {
+            if(it.isChecked){
+                return it.symptomShortName ?: ""
+            }
+        }
+        return ""
     }
 
     fun setData(resultData: List<FHFlowIconsModel>?) {
         mDataSet.clear()
+        notifyDataSetChanged()
         if (resultData != null) {
             mDataSet.addAll(resultData)
         }
