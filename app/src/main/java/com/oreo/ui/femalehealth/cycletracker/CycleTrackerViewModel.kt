@@ -38,8 +38,8 @@ class CycleTrackerViewModel @Inject constructor(
     var selectedDate: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now())
     var notifyDateChange = MutableLiveData<Event<LocalDate>>()
 
-    private val _femaleHealthData = MutableLiveData<FemaleHealthUserInfoModel>()
-    val femaleHealthData: LiveData<FemaleHealthUserInfoModel> get() = _femaleHealthData
+    private val _femaleHealthData = MutableLiveData<FemaleHealthUserInfoModel?>()
+    val femaleHealthData: LiveData<FemaleHealthUserInfoModel?> get() = _femaleHealthData
 
     private val _cycleHistoryData = MutableLiveData<List<FMHCycleHistoryDataModel>?>()
     val cycleHistoryData: LiveData<List<FMHCycleHistoryDataModel>?> get() = _cycleHistoryData
@@ -379,16 +379,22 @@ class CycleTrackerViewModel @Inject constructor(
     }
 
 
-    fun combineTempData(tempData: List<TempPeriodData>): TempPeriodCombineModel {
+    fun combineTempData(tempData: List<TempPeriodData>?): TempPeriodCombineModel {
 
         //val workouts = dayData?.activity?.workout
         val sections: MutableList<Section> = ArrayList()
+
+        val items: MutableList<ItemTemp> = ArrayList()
+        if (tempData.isNullOrEmpty()) {
+            return TempPeriodCombineModel(
+                sections = sections, items = items, 0f
+            )
+        }
 
         getPeriodSection(tempData.last().date, tempData.first().date)?.forEach {
             sections.add(it)
         }
 
-        val items: MutableList<ItemTemp> = ArrayList()
         var minValue = 2.5f
         var maxValue = -2.5f
 

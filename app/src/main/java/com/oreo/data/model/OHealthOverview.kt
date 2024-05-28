@@ -101,11 +101,11 @@ sealed class OHealthOverview {
         val value: List<ChartModel>? = ArrayList()
     ) : OHealthOverview()
 
-    class CycleTrackerPredict(
+    class CycleTrackerCardSmall(
         val data: PeriodCard1
     ) : OHealthOverview()
 
-    class CycleTrackerOngoing(
+    class CycleTrackerCardBig(
         val data: PeriodCard2
     ) : OHealthOverview()
 
@@ -131,7 +131,8 @@ data class PeriodCard1(
     val currentCycleDay: Int,
     val totalCycleDay: Int,
     val bottomText: String,
-    val predictionDate: String
+    val predictionDate: String,
+    val background: Int
 )
 
 data class PeriodCard2(
@@ -143,7 +144,8 @@ data class PeriodCard2(
     val totalCycleDay: Int,
     val temperatureVariation: Int,
     val predictionString: String,
-    val predictionDate: String
+    val predictionDate: String,
+    val background: Int
 )
 
 data class DashAlert(

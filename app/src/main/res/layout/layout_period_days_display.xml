@@ -139,6 +139,44 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvPhase" />
 
+        <LinearLayout
+            android:id="@+id/layoutGetStarted"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="@id/vCalendar"
+            tools:visibility="gone">
+
+            <TextView
+                style="@style/S20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="8sp"
+                android:text="@string/text_log_your_period_to_get_started_next" />
+
+            <Button
+                android:id="@+id/btnLogNew"
+                style="@style/SecondaryButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="@string/text_log"
+                app:backgroundTint="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvPhase" />
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/groupPeriodData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="tvCurrentDay,tvTotalDays,tvCurrentState,tvStateDay,view34,tvPregnancyChances,ivInfo,tvPhase,btnLog" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

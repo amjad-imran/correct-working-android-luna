@@ -6,7 +6,7 @@ data class TempPrediction(
     val tempVariation: Float? = null,
     val pendingNights: Int? = null,
     val message: String? = null,
-    val tempData: List<TempPeriodData>
+    val tempData: List<TempPeriodData>?=null
 )
 
 data class TempPeriodData(
