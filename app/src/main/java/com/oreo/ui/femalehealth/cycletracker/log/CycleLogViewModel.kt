@@ -3,6 +3,7 @@ package com.oreo.ui.femalehealth.cycletracker.log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.remote.base.Resource
@@ -11,9 +12,10 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
-import com.oreo.data.model.CycleLogDataModel
+import com.noisefit_commans.utils.LOGS
+
 import com.oreo.data.model.FMHCycleHistoryDataModel
-import com.oreo.data.model.FlowLog
+
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.ui.femalehealth.cycletracker.DayState
 import com.oreo.ui.femalehealth.cycletracker.PeriodPos
@@ -42,36 +44,6 @@ class CycleLogViewModel @Inject constructor(
         getCycleHistoryData()
     }
 
-    fun getCycleLogData(): CycleLogDataModel {
-        val childData = CycleLogDataModel()
-        val flowListData = ArrayList<FlowLog>()
-        val symptomsListData = ArrayList<FlowLog>()
-        flowListData.add(FlowLog(image = R.drawable.ic_fmh_light_flow, title = "None"))
-        flowListData.add(FlowLog(image = R.drawable.ic_fmh_light_flow, title = "Light"))
-        flowListData.add(FlowLog(image = R.drawable.ic_fmh_medium_flow, title = "Medium"))
-        flowListData.add(FlowLog(image = R.drawable.ic_fmh_medium_flow, title = "Heavy"))
-
-        symptomsListData.add(FlowLog(image = R.drawable.ic_fmh_bloating, title = "Bloating"))
-        symptomsListData.add(FlowLog(image = R.drawable.ic_fmh_cramps, title = "Cramps"))
-        symptomsListData.add(FlowLog(image = R.drawable.ic_fmh_bloating, title = "Backache"))
-        symptomsListData.add(FlowLog(image = R.drawable.ic_fmh_cramps, title = "Fatigue"))
-        symptomsListData.add(FlowLog(image = R.drawable.ic_fmh_bloating, title = "Heavy"))
-        symptomsListData.add(FlowLog(image = R.drawable.ic_fmh_cramps, title = "Headache"))
-        symptomsListData.add(FlowLog(image = R.drawable.ic_fmh_bloating, title = "Acne"))
-        symptomsListData.add(FlowLog(image = R.drawable.ic_fmh_cramps, title = "Craving"))
-        symptomsListData.add(FlowLog(image = R.drawable.ic_fmh_bloating, title = "Abdomen pain"))
-        symptomsListData.add(FlowLog(image = R.drawable.ic_fmh_cramps, title = "Tender breast"))
-        symptomsListData.add(FlowLog(image = R.drawable.ic_fmh_bloating, title = "Constipation"))
-        symptomsListData.add(FlowLog(image = R.drawable.ic_fmh_cramps, title = "Back pain"))
-        symptomsListData.add(FlowLog(image = R.drawable.ic_fmh_bloating, title = "Mood swing"))
-        symptomsListData.add(FlowLog(image = R.drawable.ic_fmh_cramps, title = "Vaginal itching"))
-        symptomsListData.add(FlowLog(image = R.drawable.ic_fmh_bloating, title = "Vaginal dryness"))
-        symptomsListData.add(FlowLog(image = R.drawable.ic_fmh_cramps, title = "Nausea"))
-
-        childData.flowData = flowListData
-        childData.symptomsData = symptomsListData
-        return childData
-    }
 
     fun onCalendarDateSelected(selectedDate: String) {
         //calender date set
@@ -114,7 +86,6 @@ class CycleLogViewModel @Inject constructor(
 
     private fun generateHealthData(it: List<FMHCycleHistoryDataModel>) {
         viewModelScope.launch(Dispatchers.IO) {
-
             val mainPeriodLength = 5
             val mainCycleLength = 28
 

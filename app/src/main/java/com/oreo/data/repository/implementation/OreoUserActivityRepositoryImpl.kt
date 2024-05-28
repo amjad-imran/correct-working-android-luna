@@ -44,6 +44,7 @@ import com.oreo.data.db.implementation.OreoStepsDataImpl
 import com.oreo.data.db.implementation.OreoStressDataImpl
 import com.oreo.data.model.AddWorkoutResponse
 import com.oreo.data.model.FMHCycleHistoryDataModel
+import com.oreo.data.model.FemaleHealthIconsModel
 import com.oreo.data.model.LearnModel
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
@@ -1320,6 +1321,13 @@ class OreoUserActivityRepositoryImpl(
         return oreoAutoSportDataImpl.getAllNotAcceptingData(timeStamp)?.size ?: 0
     }
 
+    override suspend fun getFemaleHealthIcons(): Flow<Resource<BaseApiResponse<FemaleHealthIconsModel>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/icon"
+            remoteDataSource.getFemaleHealthIcons(url)
+        }
+    }
     override suspend fun getSummaryHRHealthOverview(): OHealthOverview.HeartRateDataModel {
         try {
             val todayDate = DateFormats.getTodaysDateString(10)

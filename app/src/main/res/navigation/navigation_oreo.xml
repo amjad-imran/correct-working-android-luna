@@ -773,9 +773,7 @@
         <argument
             android:name="selectedDate"
             app:argType="string" />
-        <argument
-            android:name="data"
-            app:argType="com.oreo.data.model.CycleLogDataModel" />
+
     </dialog>
 
     <fragment

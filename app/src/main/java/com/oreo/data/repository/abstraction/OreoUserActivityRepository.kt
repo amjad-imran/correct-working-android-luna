@@ -9,6 +9,7 @@ import com.noisefit_commans.data.response.BaseApiResponse
 import com.noisefit_commans.data.response.BaseApiResponseData
 import com.oreo.data.model.AddWorkoutResponse
 import com.oreo.data.model.FMHCycleHistoryDataModel
+import com.oreo.data.model.FemaleHealthIconsModel
 import com.oreo.data.model.LearnModel
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OContributorResponseModal
@@ -48,6 +49,7 @@ interface OreoUserActivityRepository {
 
     suspend fun getSummaryHRHealthOverview(): OHealthOverview.HeartRateDataModel?
 
+    suspend fun getFemaleHealthIcons():Flow<Resource<BaseApiResponse<FemaleHealthIconsModel>>>
     suspend fun getSummaryAutoWorkoutCount(): Int
     suspend fun getTestData(): List<TestUserData>
 

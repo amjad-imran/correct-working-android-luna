@@ -5,15 +5,53 @@ import com.noisefit.data.remote.CityData
 import com.noisefit.data.remote.StateData
 import com.noisefit.data.remote.UserLocationUpdatedResponse
 import com.noisefit.data.remote.request.LoginRequest
-import com.noisefit_commans.data.model.*
-import com.noisefit_commans.data.response.*
-import com.oreo.data.model.*
+import com.noisefit_commans.data.model.Interest
+import com.noisefit_commans.data.model.OWorkoutListModal
+import com.noisefit_commans.data.model.OreoNapNetworkEntity
+import com.noisefit_commans.data.model.OreoUserDataPost
+import com.noisefit_commans.data.model.User
+import com.noisefit_commans.data.response.BaseApiResponse
+import com.noisefit_commans.data.response.BaseApiResponseData
+import com.noisefit_commans.data.response.BaseApiResponseImage
+import com.noisefit_commans.data.response.DeviceFeatureResponse
+import com.noisefit_commans.data.response.DeviceListResponse
+import com.noisefit_commans.data.response.MessageResponse
+import com.noisefit_commans.data.response.RegistrationResponse
+import com.noisefit_commans.data.response.SendOtpResponse
+import com.noisefit_commans.data.response.UpdateDeviceResponse
+import com.noisefit_commans.data.response.UpdateResponse
+import com.noisefit_commans.data.response.UserResponse
+import com.noisefit_commans.data.response.VersionCheckResponse
+import com.noisefit_commans.data.response.WatchTokenResponse
+import com.oreo.data.model.AddWorkoutResponse
+import com.oreo.data.model.FMHCycleHistoryDataModel
+import com.oreo.data.model.FemaleHealthIconsModel
+import com.oreo.data.model.LearnModel
+import com.oreo.data.model.OActivityListModal
+import com.oreo.data.model.OContributorResponseModal
+import com.oreo.data.model.OHSModel
+import com.oreo.data.model.OHSQuestionariesResponseModel
+import com.oreo.data.model.OInternalPageResponseModal
+import com.oreo.data.model.OWorkoutDetailsResponseModel
+import com.oreo.data.model.OreoNapDetailsDataModel
+import com.oreo.data.model.RingCareResponse
+import com.oreo.data.model.RingWelcome
+import com.oreo.data.model.ServerUserHealthResponse
+import com.oreo.data.model.StressResultData
+import com.oreo.data.model.UpdateResponseV2
 import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femalehealth.PeriodLength
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.Multipart
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Part
+import retrofit2.http.Query
+import retrofit2.http.Url
 
 
 interface NetworkService {
@@ -328,6 +366,11 @@ interface NetworkService {
     suspend fun getUserNapDetailsData(
         @Url url: String
     ): BaseApiResponse<OreoNapDetailsDataModel>
+
+    @GET
+    suspend fun getFemaleHealthIcons(
+        @Url url: String
+    ): BaseApiResponse<FemaleHealthIconsModel>
 
     @POST
     suspend fun addNapServer(

@@ -142,6 +142,7 @@ class LogPeriodActivity : BaseActivity<ActivityLogPeriodBinding>() {
                 viewModel.setLoading(true)
                 container.bind(day)
                 viewModel.setLoading(false)
+                binding.btnLog.visible()
             }
         }
         class MonthViewContainer(view: View) : ViewContainer(view) {

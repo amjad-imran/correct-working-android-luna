@@ -7,17 +7,18 @@ import com.noisefit.luna.databinding.ItemCycleLogBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
-import com.oreo.data.model.FlowLog
+import com.oreo.data.model.FHFlowIconsModel
+import com.oreo.data.model.FHSymptomsIconsModel
 
 class CycleSymptomsAdapter(val mListener: OnSymptomsItemClick) :
     RecyclerView.Adapter<CycleSymptomsAdapter.ViewHolder>() {
-    private var mDataSet = ArrayList<FlowLog>()
+    private var mDataSet = ArrayList<FHSymptomsIconsModel>()
 
     inner class ViewHolder(val binding: ItemCycleLogBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: FlowLog) {
-            binding.ivItem.loadImage(binding.ivItem.context, data.image)
-            binding.tvTitle.text = data.title
+        fun bind(data: FHSymptomsIconsModel) {
+            binding.ivItem.loadImage(binding.ivItem.context, data.icon)
+            binding.tvTitle.text = data.symptomName
             if (data.isChecked) {
                 binding.ivTick.visible()
             } else
@@ -45,7 +46,7 @@ class CycleSymptomsAdapter(val mListener: OnSymptomsItemClick) :
         holder.bind(mDataSet[position])
     }
 
-    fun setData(resultData: List<FlowLog>?) {
+    fun setData(resultData: List<FHSymptomsIconsModel>?) {
         mDataSet.clear()
         if (resultData != null) {
             mDataSet.addAll(resultData)
@@ -53,7 +54,10 @@ class CycleSymptomsAdapter(val mListener: OnSymptomsItemClick) :
         notifyDataSetChanged()
     }
 
-    fun updateItem(data: FlowLog, position: Int) {
+    fun getData():ArrayList<FHSymptomsIconsModel>{
+        return mDataSet
+    }
+    fun updateItem(data: FHSymptomsIconsModel, position: Int) {
         mDataSet[position].isChecked = !data.isChecked
         notifyItemChanged(position)
     }
@@ -62,7 +66,7 @@ class CycleSymptomsAdapter(val mListener: OnSymptomsItemClick) :
         val selectedList = ArrayList<String>()
         mDataSet.forEach {
             if (it.isChecked) {
-                selectedList.add(it.title ?: "")
+                selectedList.add(it.symptomName ?: "")
             }
         }
         return selectedList
@@ -71,6 +75,6 @@ class CycleSymptomsAdapter(val mListener: OnSymptomsItemClick) :
 }
 
 interface OnSymptomsItemClick {
-    fun onItemClick(data: FlowLog, position: Int)
+    fun onItemClick(data: FHSymptomsIconsModel, position: Int)
 }
 

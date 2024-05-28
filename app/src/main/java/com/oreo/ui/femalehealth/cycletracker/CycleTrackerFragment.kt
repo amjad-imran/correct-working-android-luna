@@ -60,6 +60,7 @@ class CycleTrackerFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setRecycler()
+        viewModel.getCycleHistoryData()
     }
 
     private fun initCalender() {

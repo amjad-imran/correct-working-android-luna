@@ -94,7 +94,7 @@
                     app:layout_constraintTop_toBottomOf="@id/tvDatePeriod" />
 
                 <TextView
-                    android:id="@+id/tvPeriodIn"
+                    android:id="@+id/tvCurrentState"
                     style="@style/H5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -105,7 +105,7 @@
                     app:layout_constraintTop_toBottomOf="@id/divider1" />
 
                 <TextView
-                    android:id="@+id/tvDays"
+                    android:id="@+id/tvStateDay"
                     style="@style/S28"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -113,7 +113,7 @@
                     android:layout_marginTop="8dp"
                     android:lineSpacingExtra="4sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvPeriodIn"
+                    app:layout_constraintTop_toBottomOf="@id/tvCurrentState"
                     tools:text="2 days" />
 
                 <TextView
@@ -126,7 +126,7 @@
                     android:lineSpacingExtra="4sp"
                     android:textColor="@color/white_64"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvDays"
+                    app:layout_constraintTop_toBottomOf="@id/tvStateDay"
                     tools:text="Low chance of pregnancy" />
 
                 <include
@@ -152,11 +152,11 @@
                     app:layout_constraintTop_toBottomOf="@id/divider1" />
 
                 <TextView
+                    android:id="@+id/tvPhase"
                     style="@style/S14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/dimen_8dp"
-                    android:text="@string/text_follicular_phase"
                     android:textColor="#83e7cf"
                     app:layout_constraintBottom_toBottomOf="@+id/btnInfo"
                     app:layout_constraintEnd_toStartOf="@+id/btnInfo"
@@ -180,7 +180,7 @@
 
 
                 <Button
-                    android:id="@+id/btnSave"
+                    android:id="@+id/btnLog"
                     style="@style/SecondaryFMHButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
@@ -194,6 +194,17 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/rvFlow" />
+
+                <include
+                    android:id="@+id/progressBar"
+                    layout="@layout/default_loader"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
