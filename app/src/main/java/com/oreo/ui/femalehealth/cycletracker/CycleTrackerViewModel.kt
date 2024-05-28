@@ -38,8 +38,8 @@ class CycleTrackerViewModel @Inject constructor(
     var selectedDate: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now())
     var notifyDateChange = MutableLiveData<Event<LocalDate>>()
 
-    private val _femaleHealthData = MutableLiveData<FemaleHealthUserInfoModel>()
-    val femaleHealthData: LiveData<FemaleHealthUserInfoModel> get() = _femaleHealthData
+    private val _femaleHealthData = MutableLiveData<FemaleHealthUserInfoModel?>()
+    val femaleHealthData: LiveData<FemaleHealthUserInfoModel?> get() = _femaleHealthData
 
     private val _cycleHistoryData = MutableLiveData<List<FMHCycleHistoryDataModel>?>()
     val cycleHistoryData: LiveData<List<FMHCycleHistoryDataModel>?> get() = _cycleHistoryData
@@ -259,13 +259,14 @@ class CycleTrackerViewModel @Inject constructor(
                     healthDataDateList[current] = DayState.Period(PeriodPos.CENTER)
                 }
 
+
                 val ovDay = cycleLength - 13
 
-                if (currentDay == ovDay) {
-                    healthDataDateList[current] = DayState.OvulationDay
-                }
                 if (currentDay in (ovDay - 5)..(ovDay + 1)) {
                     healthDataDateList[current] = DayState.Fertile
+                }
+                if (currentDay == ovDay) {
+                    healthDataDateList[current] = DayState.OvulationDay
                 }
                 current = current.plusDays(1)
             }
@@ -298,16 +299,15 @@ class CycleTrackerViewModel @Inject constructor(
      * Returns Pair(Phase string, phase color)
      */
     fun getCurrentPhaseText(
-        fertileWindowList: List<String>?, periodDate: String?, currentDate: String
+        ovulationDate:String?, periodDate: String?, currentDate: String
     ): Pair<String, Int>? {
-        if (fertileWindowList == null) return null
-        if (fertileWindowList.size != 2) return null
+        if (ovulationDate == null) return null
         if (periodDate.isNullOrEmpty()) return null
 
         val localCurrentDate = LocalDate.parse(currentDate)
-        val fertileStart = LocalDate.parse(fertileWindowList.first())
+        val ovDateLocal = LocalDate.parse(ovulationDate)
 
-        return if (localCurrentDate.isBefore(fertileStart)) {
+        return if (localCurrentDate.isBefore(ovDateLocal)) {
             Pair("Follicular phase", R.color.color_follicular)
         } else {
             Pair("Luteal phase", R.color.color_luteal)
@@ -379,16 +379,22 @@ class CycleTrackerViewModel @Inject constructor(
     }
 
 
-    fun combineTempData(tempData: List<TempPeriodData>): TempPeriodCombineModel {
+    fun combineTempData(tempData: List<TempPeriodData>?): TempPeriodCombineModel {
 
         //val workouts = dayData?.activity?.workout
         val sections: MutableList<Section> = ArrayList()
+
+        val items: MutableList<ItemTemp> = ArrayList()
+        if (tempData.isNullOrEmpty()) {
+            return TempPeriodCombineModel(
+                sections = sections, items = items, 0f
+            )
+        }
 
         getPeriodSection(tempData.last().date, tempData.first().date)?.forEach {
             sections.add(it)
         }
 
-        val items: MutableList<ItemTemp> = ArrayList()
         var minValue = 2.5f
         var maxValue = -2.5f
 

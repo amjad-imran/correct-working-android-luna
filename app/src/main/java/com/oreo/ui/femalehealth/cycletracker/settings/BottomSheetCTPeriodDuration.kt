@@ -119,10 +119,10 @@ class BottomSheetCTPeriodDuration :
         }
         binding.btnCancel.setOnClickListener {
             navigateUpSafe()
-            setFragmentResult(
+           /* setFragmentResult(
                 DURATION_LOG_SAVE,
                 bundleOf("agree" to false, "selectedValue" to mSelectedValue)
-            )
+            )*/
         }
     }
 

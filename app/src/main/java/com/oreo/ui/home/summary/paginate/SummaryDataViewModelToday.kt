@@ -70,6 +70,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.Calendar
 import javax.inject.Inject
@@ -278,7 +279,7 @@ class SummaryDataViewModelToday @Inject constructor(
                         } else {
                             if (femaleData.isOvulation || femaleData.isPeriod) {
                                 userActivities.add(
-                                    OHealthOverview.CycleTrackerOngoing(
+                                    OHealthOverview.CycleTrackerCardBig(
                                         convertToPeriodBigCardModel(
                                             femaleData
                                         )
@@ -286,7 +287,7 @@ class SummaryDataViewModelToday @Inject constructor(
                                 )
                             } else {
                                 userActivities.add(
-                                    OHealthOverview.CycleTrackerPredict(
+                                    OHealthOverview.CycleTrackerCardSmall(
                                         convertToPeriodSmallCardModel(
                                             femaleData
                                         )
@@ -619,11 +620,11 @@ class SummaryDataViewModelToday @Inject constructor(
                     DateFormats.dateFormat7
                 ),
                 days = 11,
-                predictionString = "Predicted period"
+                predictionString = "Predicted period",
+                background = R.drawable.back_card_period_big
             )
 
         } else {
-            //TODO ovulation day condition
             return PeriodCard2(
                 title = "Ovulation",
                 subTitle = "Day ${data.currentDay}",
@@ -637,7 +638,8 @@ class SummaryDataViewModelToday @Inject constructor(
                     DateFormats.dateFormat7
                 ),
                 days = 11,
-                predictionString = "Predicted ovulation"
+                predictionString = "Predicted ovulation",
+                background = R.drawable.back_card_ovulation_big
             )
         }
 
@@ -688,26 +690,25 @@ class SummaryDataViewModelToday @Inject constructor(
                 nudge = data.nudges?.firstOrNull()?.message ?: "",
                 currentCycleDay = data.currentDay ?: 0,
                 totalCycleDay = data.cycleLength ?: 0,
-                bottomText = if (data.otaLog) "Period" else "Predicted period",
+                bottomText = "Predicted period",
                 predictionDate = DateFormats.formatDateTime(
                     data.nextPeriodDate,
                     DateFormats.dateFormat3,
                     DateFormats.dateFormat7
-                )
+                ),
+                background = R.drawable.back_card_ovulation_small
             )
         } else {
+            val predictedOvulation = LocalDate.parse(data.nextPeriodDate).minusDays(13)
             return PeriodCard1(
                 title = "Period in",
                 days = daysUntilNextPeriod.toInt(),
                 nudge = data.nudges?.firstOrNull()?.message ?: "",
                 currentCycleDay = data.currentDay ?: 0,
                 totalCycleDay = data.cycleLength ?: 0,
-                bottomText = if (data.otaLog) "Period" else "Predicted Ovulation",
-                predictionDate = DateFormats.formatDateTime(
-                    data.ovulationDate,
-                    DateFormats.dateFormat3,
-                    DateFormats.dateFormat7
-                )
+                bottomText = "Predicted Ovulation",
+                predictionDate =predictedOvulation.format(DateTimeFormatter.ofPattern("dd MMM")),
+                background = R.drawable.back_card_period_small
             )
         }
 

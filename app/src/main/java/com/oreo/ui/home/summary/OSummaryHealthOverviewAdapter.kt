@@ -208,7 +208,7 @@ class OSummaryHealthOverviewAdapter() :
                 )
             )
 
-            R.layout.list_cycle_tracker_prediction -> HomeRecyclerViewHolder.CycleTrackerPredictViewHolder(
+            R.layout.list_cycle_tracker_prediction -> HomeRecyclerViewHolder.CycleTrackerCardSmallViewHolder(
                 ListCycleTrackerPredictionBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
@@ -216,7 +216,7 @@ class OSummaryHealthOverviewAdapter() :
                 )
             )
 
-            R.layout.list_cycle_tracker_ongoing -> HomeRecyclerViewHolder.CycleTrackerOngoingViewHolder(
+            R.layout.list_cycle_tracker_ongoing -> HomeRecyclerViewHolder.CycleTrackerCardBigViewHolder(
                 ListCycleTrackerOngoingBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
@@ -327,13 +327,13 @@ class OSummaryHealthOverviewAdapter() :
                 position,
             )
 
-            is HomeRecyclerViewHolder.CycleTrackerPredictViewHolder -> holder.bind(
-                items[position] as OHealthOverview.CycleTrackerPredict,
+            is HomeRecyclerViewHolder.CycleTrackerCardSmallViewHolder -> holder.bind(
+                items[position] as OHealthOverview.CycleTrackerCardSmall,
                 position,
             )
 
-            is HomeRecyclerViewHolder.CycleTrackerOngoingViewHolder -> holder.bind(
-                items[position] as OHealthOverview.CycleTrackerOngoing,
+            is HomeRecyclerViewHolder.CycleTrackerCardBigViewHolder -> holder.bind(
+                items[position] as OHealthOverview.CycleTrackerCardBig,
                 position,
             )
 
@@ -378,8 +378,8 @@ class OSummaryHealthOverviewAdapter() :
             is OHealthOverview.InfoRingCare -> R.layout.list_ring_care
             is OHealthOverview.InfoRingWelcome -> R.layout.list_welcome_card
             is OHealthOverview.NapDashCard -> R.layout.list_dash_nap
-            is OHealthOverview.CycleTrackerPredict -> R.layout.list_cycle_tracker_prediction
-            is OHealthOverview.CycleTrackerOngoing -> R.layout.list_cycle_tracker_ongoing
+            is OHealthOverview.CycleTrackerCardSmall -> R.layout.list_cycle_tracker_prediction
+            is OHealthOverview.CycleTrackerCardBig -> R.layout.list_cycle_tracker_ongoing
             is OHealthOverview.CardTrackFemaleHealth -> R.layout.card_track_fm_health
             is OHealthOverview.GotYourPeriod -> R.layout.list_period_confirmation
         }
@@ -1142,10 +1142,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
     }
 
 
-    class CycleTrackerPredictViewHolder(private val binding: ListCycleTrackerPredictionBinding) :
+    class CycleTrackerCardSmallViewHolder(private val binding: ListCycleTrackerPredictionBinding) :
         HomeRecyclerViewHolder(binding) {
         fun bind(
-            data: OHealthOverview.CycleTrackerPredict,
+            data: OHealthOverview.CycleTrackerCardSmall,
             position: Int,
         ) {
             binding.textView3.text = data.data.title
@@ -1154,6 +1154,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.tvPredictionDays.text = data.data.predictionDate
             binding.tvOvlDaysCurrent.text = "Day ${data.data.currentCycleDay}"
             binding.tvOvlDaysLeft.text = "of ${data.data.totalCycleDay}"
+            binding.imv.setBackgroundResource(data.data.background)
 
             binding.tvDesc.text = data.data.nudge
 
@@ -1163,10 +1164,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         }
     }
 
-    class CycleTrackerOngoingViewHolder(private val binding: ListCycleTrackerOngoingBinding) :
+    class CycleTrackerCardBigViewHolder(private val binding: ListCycleTrackerOngoingBinding) :
         HomeRecyclerViewHolder(binding) {
         fun bind(
-            data: OHealthOverview.CycleTrackerOngoing,
+            data: OHealthOverview.CycleTrackerCardBig,
             position: Int,
         ) {
             binding.textView3.text = data.data.title

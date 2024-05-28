@@ -22,6 +22,7 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.ScreenUtils
 import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.TempPrediction
@@ -155,8 +156,8 @@ class CycleTrackerFragment :
 
         val currentMonth = YearMonth.now()
         binding.lytTrackerTop.vCalendar.weekCalender.setup(
-            currentMonth.minusMonths(5).atStartOfMonth(),
-            currentMonth.plusMonths(5).atEndOfMonth(),
+            currentMonth.minusMonths(2).atStartOfMonth(),//TODO change to first period date
+            currentMonth.plusYears(2).atEndOfMonth(),
             DayOfWeek.MONDAY,
         )
         binding.lytTrackerTop.vCalendar.weekCalender.scrollToDate(LocalDate.now())
@@ -237,6 +238,8 @@ class CycleTrackerFragment :
     }
 
     private fun initInsightUI(data: FemaleHealthUserInfoModel) {
+        binding.dividerInsight.root.visible()
+        binding.lytInsight.root.visible()
 
         binding.lytInsight.lytCycleLength.apply {
             tvHeader.text = getString(R.string.text_cycle_length)
@@ -289,8 +292,12 @@ class CycleTrackerFragment :
             if (it == null) {
                 binding.lytCycleHistory.root.gone()
             } else {
-                binding.lytCycleHistory.root.visible()
-                cycleHistoryAdapter.setData(it.take(3))
+                if (viewModel.femaleHealthData.value?.currentDay == null) {
+                    binding.lytCycleHistory.root.gone()
+                } else {
+                    binding.lytCycleHistory.root.visible()
+                    cycleHistoryAdapter.setData(it.take(3))
+                }
             }
             initCalender()
         }
@@ -305,12 +312,32 @@ class CycleTrackerFragment :
             }
         }
         viewModel.femaleHealthData.observe(this) {
-            if (it.currentDay == null) {
-                context.showShortToast("Screen pending")
+            if (it?.currentDay == null) {
+                binding.lytTrackerTop.groupPeriodData.invisible()
+                binding.lytTrackerTop.layoutGetStarted.visible()
+                binding.dividerInsight.root.gone()
+                binding.lytInsight.root.gone()
+                binding.dividerCues.root.gone()
+                binding.lytCues.root.gone()
+
+                binding.lytCycleHistory.root.gone()
+
             } else {
+                binding.lytTrackerTop.groupPeriodData.visible()
+                binding.lytTrackerTop.layoutGetStarted.gone()
                 initInsightUI(it)
                 setNudgesViewPager(it.nudges)
                 setTopData(it)
+
+                if (viewModel.cycleHistoryData.value.isNullOrEmpty()) {
+                    binding.lytCycleHistory.root.gone()
+                } else {
+                    binding.lytCycleHistory.root.visible()
+                    cycleHistoryAdapter.setData(
+                        viewModel.cycleHistoryData.value?.take(3) ?: ArrayList()
+                    )
+                }
+
             }
 
         }
@@ -384,7 +411,7 @@ class CycleTrackerFragment :
             tvPregnancyChances.text = viewModel.getPregnancyText(data.pregnancyChances)
             with(
                 viewModel.getCurrentPhaseText(
-                    data.fertileWindowList, data.periodDate, selectedDate
+                    data.ovulationDate, data.periodDate, selectedDate
                 )
             ) {
                 if (this == null) {
@@ -444,9 +471,11 @@ class CycleTrackerFragment :
     private fun setNudgesViewPager(data: List<Nudges>?) {
 
         if (data.isNullOrEmpty()) {
+            binding.dividerCues.root.gone()
             binding.lytCues.root.gone()
             return
         } else {
+            binding.dividerCues.root.visible()
             binding.lytCues.root.visible()
         }
         val fragments = ArrayList<WorkoutNudgeFragment>()

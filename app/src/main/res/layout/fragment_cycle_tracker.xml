@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content" />
 
             <include
-                android:id="@+id/divider1"
+                android:id="@+id/dividerCues"
                 layout="@layout/layout_divider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -63,7 +63,7 @@
                 tools:visibility="visible" />
 
             <include
-                android:id="@+id/divider3"
+                android:id="@+id/dividerInsight"
                 layout="@layout/layout_divider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"

@@ -1201,6 +1201,8 @@
     <string name="text_luteal_phase_desc">It starts right after ovulation and ends at the start of your next period. The basal body temperature typically rises slightly due to increased progesterone levels, signaling the release of an egg from the ovary. Estrogen levels remain elevated, maintaining the thickened endometrial lining in preparation for implantation. Progesterone, produced by the corpus luteum formed from the ruptured follicle, reaches its peak, supporting the uterine lining and inhibiting further ovulation. Luteinizing Hormone (LH) and Follicle-Stimulating Hormone (FSH) levels decrease after ovulation. If fertilization does not occur, hormone levels decline towards the end of the luteal phase, leading to menstruation and the start of a new cycle.</string>
     <string name="text_log_text">Log your first period to begin tracking your cycle accurately.</string>
     <string name="text_period_in">Period in</string>
+    <string name="text_log_your_period_to_get_started">Log your period to get started</string>
+    <string name="text_log_your_period_to_get_started_next">Log your period\nto get started</string>
 
 
 </resources>
