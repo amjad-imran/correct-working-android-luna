@@ -29,7 +29,6 @@ import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.ui.femalehealth.cycletracker.DayState
-import com.oreo.ui.femalehealth.cycletracker.LogPeriodActivity
 import com.oreo.ui.femalehealth.cycletracker.PeriodPos
 import com.oreo.ui.femalehealth.cycletracker.log.bottom.CALENDER_DAY_LOG_KEY
 import com.oreo.ui.femalehealth.cycletracker.log.bottom.CYCLE_LOG_SAVE
@@ -254,6 +253,10 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
         setFragmentResultListener(CALENDER_DAY_LOG_KEY) { _, bundle ->
             val right = bundle.getBoolean("right")
             val left = bundle.getBoolean("left")
+            val openLog = bundle.getBoolean("open_log")
+            if (openLog) {
+                viewModel.setOpenLogBottomSheet(true)
+            }
             if (right) {
                 if(viewModel.selectedDate <= LocalDate.now()){
                     this@CycleLogFragment.binding.calendar.notifyDateChanged(
@@ -290,27 +293,32 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
             setFragmentResultListener(
                 CYCLE_LOG_SAVE
             ) { _, bundle ->
-                val agree = bundle.getBoolean("agree")
-                val selectedSymptoms = bundle.getStringArrayList("data")
-                val flow = bundle.getString("flow")
-                if (agree) {
-                    viewModel.logPeriod(flow, selectedSymptoms)
-                } else {
-                    resultLauncher.launch(
-                        LogPeriodActivity.getStartIntent(
-                            requireContext(),
-                        )
-                    )
-
+                val logSaved = bundle.getBoolean("log_saved")
+                if (logSaved) {
+                    viewModel.setOpenDayLogBottomSheet(true)
                 }
             }
-            navigate(R.id.bottomSheetCycleLog, Bundle().apply {
-                putString("selectedDate", viewModel.selectedDate.toString())
-            })
+            openLogBottomSheet()
+
         }
     }
 
+    private fun openLogBottomSheet() {
+        navigate(R.id.bottomSheetCycleLog, Bundle().apply {
+            putString("selectedDate", viewModel.selectedDate.toString())
+        })
+    }
     override fun subscribeObservers() {
+        viewModel.openDayLogBottomSheet.observe(this) {
+            it?.getContent()?.let {
+                showCalenderDayLog(viewModel.selectedDate)
+            }
+        }
+        viewModel.openLogBottomSheet.observe(this) {
+            it?.getContent()?.let {
+                openLogBottomSheet()
+            }
+        }
         viewModel.cycleHistoryData.observe(this) {
             it?.let {
                 binding.btnLog.visible()

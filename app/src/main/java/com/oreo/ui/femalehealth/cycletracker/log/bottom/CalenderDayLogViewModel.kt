@@ -9,8 +9,8 @@ import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
-import com.oreo.data.model.FHFlowIconsModel
-import com.oreo.data.model.FHSymptomsIconsModel
+import com.noisefit_commans.utils.Event
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.FemaleHealthIconsModel
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,6 +27,8 @@ constructor(
 
 //    var hmOfIcons = HashMap<LocalDate, Pair<ArrayList<FHSymptomsIconsModel>?, ArrayList<FHFlowIconsModel>?>>()
 
+    private val _serverSuccess = MutableLiveData<Event<Boolean>>()
+    val serverSuccess: LiveData<Event<Boolean>> get() = _serverSuccess
     private val _femaleHealthIcons = MutableLiveData<FemaleHealthIconsModel>()
     val femaleHealthIcons: LiveData<FemaleHealthIconsModel> get() = _femaleHealthIcons
 
@@ -105,7 +107,25 @@ constructor(
                     }
 
                     is Resource.Success -> {
-                        resource.data?.data.let {
+                        resource.data?.data.let { femaleHealthUserInfo ->
+
+                            femaleHealthIconsModel?.symptoms?.forEach { data ->
+                                val femaleHealthUser =
+                                    femaleHealthUserInfo?.symptom?.symptoms?.find {
+                                        it.symptomShortName?.lowercase() == data.symptomShortName?.lowercase()
+                                    }
+
+                                if (femaleHealthUser != null) {
+                                    data.isChecked = true
+                                }
+                            }
+
+                            femaleHealthIconsModel?.flow?.forEach { data ->
+
+                                if (femaleHealthUserInfo?.symptom?.flow?.symptomShortName?.lowercase() == data.symptomShortName?.lowercase()) {
+                                    data.isChecked = true
+                                }
+                            }
                             _femaleHealthIcons.postValue(femaleHealthIconsModel!!)
                         }
                     }
@@ -155,7 +175,7 @@ constructor(
 
                     is Resource.Success -> {
                         resource.data?.data.let {
-
+                            _serverSuccess.postValue(Event(true))
                         }
                     }
                 }

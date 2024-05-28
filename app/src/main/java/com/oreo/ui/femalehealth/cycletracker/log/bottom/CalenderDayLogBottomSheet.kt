@@ -29,13 +29,22 @@ class CalenderDayLogBottomSheet :
 
     private val viewModel: CycleTrackerViewModel by viewModels()
 
+    private val mAdapter: SymptomDayLogAdapter by lazy {
+        SymptomDayLogAdapter()
+    }
     private val args: CalenderDayLogBottomSheetArgs by navArgs()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.todayDate = LocalDate.parse(args.selectedDate)
         setTitleDate()
+        setRecycler()
     }
 
+    private fun setRecycler() {
+        with(binding.rvFlow) {
+            adapter = mAdapter
+        }
+    }
     private fun setTitleDate() {
         viewModel.getDataForDate(viewModel.todayDate.toString())
         binding.tvTitle.text = DateFormats.formatDate(
@@ -47,6 +56,13 @@ class CalenderDayLogBottomSheet :
 
     override fun initListener() {
 
+        binding.btnLog.setOnClickListener {
+            setFragmentResult(
+                CALENDER_DAY_LOG_KEY,
+                bundleOf("open_log" to true)
+            )
+            navigateUpSafe()
+        }
         binding.ivRight.setOnClickListener {
             viewModel.todayDate =
                 LocalDate.parse(viewModel.todayDate.toString()).plusDays(1)
@@ -151,6 +167,19 @@ class CalenderDayLogBottomSheet :
                 setTopData(it)
             }
 
+        }
+
+
+        viewModel.symptomList.observe(this){
+            it?.let {
+                binding.btnLog.visible()
+                if(it.isEmpty()){
+                    binding.btnLog.setText(getString(R.string.text_log))
+                }else{
+                    binding.btnLog.setText(getString(R.string.edit))
+                }
+                mAdapter.setData(it)
+            }
         }
         viewModel.getLoading().observe(this) {
             if (it) {

@@ -31,11 +31,10 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
     private val viewModel: CalenderDayLogViewModel by viewModels()
 
     private val args: BottomSheetCycleLogArgs by navArgs()
-    private var selectedFlowType: String = ""
     private val flowAdapter: CycleLogAdapter by lazy {
         CycleLogAdapter(object : OnLogItemClick {
             override fun onItemClick(data: FHFlowIconsModel, position: Int) {
-                selectedFlowType = data.symptomName ?: ""
+                flowAdapter.updateItem(data, position)
 
             }
         })
@@ -90,6 +89,7 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
             val date = viewModel.todayDate.toString()
             viewModel.saveSymptom(date, symptoms, flowType)
         }
+
         binding.ivRight.setOnClickListener {
 
             viewModel.todayDate = LocalDate.parse(viewModel.todayDate.toString()).plusDays(1)
@@ -112,16 +112,7 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
                 bundleOf("left" to true)
             )
         }
-        binding.btnSave.setOnClickListener {
 
-            val selectedSymptomList = symptomsAdapter.getUpdatedSelectedListData()
-            setFragmentResult(
-                CYCLE_LOG_SAVE,
-                bundleOf("agree" to true, "data" to selectedSymptomList, "flow" to selectedFlowType)
-            )
-            navigateUpSafe()
-
-        }
         binding.ivLogAdd.setOnClickListener {
             navigateUpSafe()
             setFragmentResult(
@@ -136,6 +127,18 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
         viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->
                 context.showShortToast(message)
+            }
+        }
+
+        viewModel.serverSuccess.observe(this){
+            it?.getContent()?.let {
+
+                setFragmentResult(
+                    CYCLE_LOG_SAVE,
+                    bundleOf("log_saved" to true)
+                )
+
+                navigateUpSafe()
             }
         }
 

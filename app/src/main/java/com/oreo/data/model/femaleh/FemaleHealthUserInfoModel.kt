@@ -1,6 +1,7 @@
 package com.oreo.data.model.femaleh
 
 import com.google.gson.annotations.SerializedName
+import com.oreo.data.model.FemaleHealthSymptoms
 import com.oreo.data.model.health.Nudges
 
 data class FemaleHealthUserInfoModel(
@@ -31,10 +32,13 @@ data class FemaleHealthUserInfoModel(
     val isTrackPregnancy: Boolean? = null,
 
     val temp: List<TempPeriodData>? = null,
-
+    @SerializedName("pending_nights")
+    val pendingNights: Int? = null,
     @SerializedName("temp_nudge")
     val tempNudge: String? = null,
-    @SerializedName("pending_nights")
-    val pendingNights: Int? = null
+    @SerializedName("symptom")
+    val symptom: FemaleHealthSymptoms? = null,
 
-)
+
+    )
+

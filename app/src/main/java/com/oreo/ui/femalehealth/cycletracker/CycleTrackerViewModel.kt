@@ -48,13 +48,13 @@ class CycleTrackerViewModel @Inject constructor(
     private val _cyclePredictionData = MutableLiveData<TempPrediction?>()
     val cyclePredictionData: LiveData<TempPrediction?> get() = _cyclePredictionData
 
+    private val _symptomList = MutableLiveData<ArrayList<Pair<String, String>>>()
+    val symptomList: LiveData<ArrayList<Pair<String, String>>> get() = _symptomList
+
 
     val healthDataDateList = HashMap<LocalDate, DayState>()
 
-    init {
 
-
-    }
 
     fun getDataForDate(date: String) {
         viewModelScope.launch {
@@ -88,6 +88,16 @@ class CycleTrackerViewModel @Inject constructor(
                         resource.data?.data.let {
                             _femaleHealthData.postValue(it)
 
+                            val symList = ArrayList<Pair<String, String>>()
+                            it?.symptom?.flow?.let {
+                                val title = "Flow: ${it.symptomName ?: ""}"
+                                symList.add(Pair(it.icon ?: "", title))
+                            }
+                            it?.symptom?.symptoms?.forEach {
+                                symList.add(Pair(it.icon ?: "", it.symptomName ?: ""))
+                            }
+
+                            _symptomList.postValue(symList)
                             it?.temp?.let { list ->
                                 val tempVariance = calculateTempVariance(list)
 

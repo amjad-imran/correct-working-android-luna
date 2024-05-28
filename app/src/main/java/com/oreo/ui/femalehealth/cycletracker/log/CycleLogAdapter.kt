@@ -19,17 +19,19 @@ class CycleLogAdapter(val mListener: OnLogItemClick) :
         fun bind(data: FHFlowIconsModel) {
             binding.ivItem.loadImage(binding.ivItem.context, data.icon)
             binding.tvTitle.text = data.symptomName
-            if (lastSelectedPos == bindingAdapterPosition) {
+            if (data.isChecked) {
                 binding.ivTick.visible()
             } else
                 binding.ivTick.gone()
+
             binding.ivItem.setOnClickListener {
-                lastSelectedPos = bindingAdapterPosition
                 mListener.onItemClick(data, bindingAdapterPosition)
                 notifyDataSetChanged()
             }
         }
     }
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
@@ -66,8 +68,16 @@ class CycleLogAdapter(val mListener: OnLogItemClick) :
     }
 
     fun updateItem(data: FHFlowIconsModel, position: Int) {
-        mDataSet[position].isChecked = !data.isChecked
-        notifyItemChanged(position)
+        mDataSet.forEachIndexed { index, fhFlowIconsModel ->
+            if(index == position){
+                fhFlowIconsModel.isChecked = !data.isChecked
+            }else{
+                fhFlowIconsModel.isChecked = false
+            }
+        }
+        notifyDataSetChanged()
+//        mDataSet[position].isChecked = !data.isChecked
+//        notifyItemChanged(position)
     }
 
 

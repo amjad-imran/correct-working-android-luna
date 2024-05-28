@@ -3,20 +3,15 @@ package com.oreo.ui.femalehealth.cycletracker.log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.remote.base.Resource
-import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
-import com.noisefit_commans.utils.LOGS
-
 import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.data.model.PeriodCycleHistory
-
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.ui.femalehealth.cycletracker.DayState
 import com.oreo.ui.femalehealth.cycletracker.PeriodPos
@@ -35,7 +30,13 @@ class CycleLogViewModel @Inject constructor(
     var selectedDate: LocalDate = LocalDate.now()
     val todayDate = LocalDate.now()
 
+    private val _openDayLogBottomSheet = MutableLiveData<Event<Boolean>?>()
+    val openDayLogBottomSheet: LiveData<Event<Boolean>?> get() = _openDayLogBottomSheet
+
     private val _cycleHistoryData = MutableLiveData<List<FMHCycleHistoryDataModel>?>()
+
+    private val _openLogBottomSheet = MutableLiveData<Event<Boolean>?>()
+    val openLogBottomSheet: LiveData<Event<Boolean>?> get() = _openLogBottomSheet
     val cycleHistoryData: LiveData<List<FMHCycleHistoryDataModel>?> get() = _cycleHistoryData
 
     val healthDataDateList = HashMap<LocalDate, DayState>()
@@ -46,6 +47,13 @@ class CycleLogViewModel @Inject constructor(
     }
 
 
+    fun setOpenDayLogBottomSheet(status: Boolean) {
+        _openDayLogBottomSheet.postValue(Event(status))
+    }
+
+    fun setOpenLogBottomSheet(status: Boolean) {
+        _openLogBottomSheet.postValue(Event(status))
+    }
     fun onCalendarDateSelected(selectedDate: String) {
         //calender date set
     }

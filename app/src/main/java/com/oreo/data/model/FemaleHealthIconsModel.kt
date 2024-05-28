@@ -35,10 +35,10 @@ data class FHFlowIconsModel(
     var isChecked: Boolean = false
 )
 
-/*
-"id": 9,
-                "symptom_name": "High Flow",
-                "symptom_short_name": "high_flow",
-                "icon": "https://luna-cdn.gonoise.com/production/women_health_icon/high_flow.webp",
-                "type": "flow"
- */
+data class FemaleHealthSymptoms(
+    @SerializedName("symptoms")
+    val symptoms: List<FHSymptomsIconsModel>? = null,
+    @SerializedName("flow_type")
+    val flow: FHFlowIconsModel? = null,
+)
+
