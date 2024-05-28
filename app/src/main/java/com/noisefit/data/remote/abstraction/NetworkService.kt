@@ -396,6 +396,11 @@ interface NetworkService {
         @Url url: String, @Body requestObject: JsonObject
     ): BaseApiResponse<Any>
 
+    @POST
+    suspend fun saveLogSymptom(
+        @Url url: String, @Body requestObject: JsonObject
+    ): BaseApiResponse<Any>
+
     @GET
     suspend fun getFemaleHealthInfo(
         @Url url: String,

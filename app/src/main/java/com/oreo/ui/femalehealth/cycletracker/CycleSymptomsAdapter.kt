@@ -7,6 +7,7 @@ import com.noisefit.luna.databinding.ItemCycleLogBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.FHFlowIconsModel
 import com.oreo.data.model.FHSymptomsIconsModel
 
@@ -48,14 +49,22 @@ class CycleSymptomsAdapter(val mListener: OnSymptomsItemClick) :
 
     fun setData(resultData: List<FHSymptomsIconsModel>?) {
         mDataSet.clear()
+        notifyDataSetChanged()
         if (resultData != null) {
+            LOGS.d("sdasdasdasadsda data update")
             mDataSet.addAll(resultData)
         }
         notifyDataSetChanged()
     }
 
-    fun getData():ArrayList<FHSymptomsIconsModel>{
-        return mDataSet
+    fun getData():ArrayList<String>{
+        val selectedSymptoms = ArrayList<String>()
+        mDataSet.forEach {
+            if(it.isChecked){
+                it.symptomShortName?.let { it1 -> selectedSymptoms.add(it1) }
+            }
+        }
+        return selectedSymptoms
     }
     fun updateItem(data: FHSymptomsIconsModel, position: Int) {
         mDataSet[position].isChecked = !data.isChecked

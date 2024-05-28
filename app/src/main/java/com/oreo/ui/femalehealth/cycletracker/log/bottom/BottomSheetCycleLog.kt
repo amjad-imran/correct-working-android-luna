@@ -6,7 +6,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.BottomSheetCycleLogBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
@@ -14,7 +13,6 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.FHFlowIconsModel
 import com.oreo.data.model.FHSymptomsIconsModel
 import com.oreo.ui.femalehealth.cycletracker.CycleSymptomsAdapter
@@ -58,7 +56,7 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
         }
         setRecycler()
         setTitleDate()
-        viewModel.getFemaleHealthIcons()
+        viewModel.getFemaleHealthIcons(viewModel.todayDate.toString())
 
     }
 
@@ -86,12 +84,18 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
     override fun initListener() {
         binding.tvTitle.text = getString(R.string.text_cycle_log)
 
+        binding.btnSave.setOnClickListener {
+            val flowType = flowAdapter.getSelectedValue()
+            val symptoms = symptomsAdapter.getData()
+            val date = viewModel.todayDate.toString()
+            viewModel.saveSymptom(date, symptoms, flowType)
+        }
         binding.ivRight.setOnClickListener {
-            val oldDate = viewModel.todayDate
-            viewModel.todayDate =
-                LocalDate.parse(viewModel.todayDate.toString()).plusDays(1)
+
+            viewModel.todayDate = LocalDate.parse(viewModel.todayDate.toString()).plusDays(1)
             setTitleDate()
-            setRvData(oldDate, viewModel.todayDate)
+
+            viewModel.getFemaleHealthIcons(viewModel.todayDate.toString())
             setFragmentResult(
                 CALENDER_DAY_LOG_KEY,
                 bundleOf("right" to true)
@@ -99,11 +103,10 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
         }
 
         binding.ivBack.setOnClickListener {
-            val oldDate = viewModel.todayDate
-            viewModel.todayDate =
-                LocalDate.parse(viewModel.todayDate.toString()).plusDays(-1)
+
+            viewModel.todayDate = LocalDate.parse(viewModel.todayDate.toString()).plusDays(-1)
             setTitleDate()
-            setRvData(oldDate, viewModel.todayDate)
+            viewModel.getFemaleHealthIcons(viewModel.todayDate.toString())
             setFragmentResult(
                 CALENDER_DAY_LOG_KEY,
                 bundleOf("left" to true)
@@ -128,33 +131,7 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
         }
     }
 
-    //27---->28
-    private fun setRvData(oldDate: LocalDate, newDate: LocalDate?) {
-        viewModel.hmOfIcons[oldDate] = Pair(
-            symptomsAdapter.getData(),
-            flowAdapter.getData()
-        )
-        LOGS.d("sdasdasdasadsda oldatae ${Gson().toJson(viewModel.femaleHealthIcons.value?.symptoms)}")
 
-        LOGS.d("sdasdasdasadsda old ${oldDate.toString()} ---> new ${newDate.toString()}")
-        if (viewModel.hmOfIcons.containsKey(newDate)) {
-            LOGS.d("sdasdasdasadsda inside contains")
-            symptomsAdapter.setData(viewModel.hmOfIcons[newDate]?.first)
-            flowAdapter.setData(viewModel.hmOfIcons[newDate]?.second)
-        } else {
-            LOGS.d("sdasdasdasadsda outside contains")
-            viewModel.femaleHealthIcons.value?.symptoms?.forEach {
-                it.isChecked = false
-            }
-            viewModel.femaleHealthIcons.value?.flow?.forEach {
-                it.isChecked = false
-            }
-            symptomsAdapter.setData(viewModel.femaleHealthIcons.value?.symptoms)
-            flowAdapter.setData(viewModel.femaleHealthIcons.value?.flow)
-        }
-
-
-    }
     override fun subscribeObservers() {
         viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->
@@ -171,7 +148,8 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
         viewModel.femaleHealthIcons.observe(this) {
             it?.let {
                 binding.groupHeader.visible()
-                setRvData(viewModel.todayDate, null)
+                symptomsAdapter.setData(it.symptoms)
+                flowAdapter.setData(it.flow)
             }
         }
 

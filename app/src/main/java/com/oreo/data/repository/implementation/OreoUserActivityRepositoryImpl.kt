@@ -1890,6 +1890,14 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
+    override suspend fun saveLogSymptom(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/log/symptom"
+            remoteDataSource.saveLogSymptom(url, jsonObject)
+
+        }
+    }
+
     override suspend fun submitFemaleHealthInfo(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health"
