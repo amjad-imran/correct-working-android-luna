@@ -30,6 +30,8 @@ import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.ui.femalehealth.cycletracker.DayState
 import com.oreo.ui.femalehealth.cycletracker.LogPeriodActivity
 import com.oreo.ui.femalehealth.cycletracker.PeriodPos
+import com.oreo.ui.femalehealth.cycletracker.log.bottom.CALENDER_DAY_LOG_KEY
+import com.oreo.ui.femalehealth.cycletracker.log.bottom.CYCLE_LOG_SAVE
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -51,6 +53,10 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
             R.drawable.ic_log_settings
         )
         binding.lytToolbar.tvTitle.text = getString(R.string.text_calender)
+    }
+
+    private fun showCalenderDayLog(date: LocalDate) {
+        navigate(CycleLogFragmentDirections.actionCycleLogFragmentToCalenderDayLogBottomSheet(date.toString()))
     }
 
     private fun initCalender() {
@@ -78,6 +84,7 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
                             oldDate
                         )
                         viewModel.selectedDate = day.date
+                        showCalenderDayLog(day.date)
                         this@CycleLogFragment.binding.calendar.notifyDateChanged(
                             day.date
                         )
@@ -202,13 +209,15 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
 
+                viewModel.setLoading(true)
                 container.bind(day)
-
+                viewModel.setLoading(false)
                 /*container.day = day
                 val textView = container.binding.tvDay
                 val dayLayoutMain = container.binding.dayLayoutMain
                 textView.text = day.date.dayOfMonth.toString()*/
             }
+
         }
         class MonthViewContainer(view: View) : ViewContainer(view) {
             val textView = LayoutCycleLogCalHeaderBinding.bind(view).exTwoHeaderText
@@ -240,6 +249,37 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
         }
 
     override fun initListener() {
+        setFragmentResultListener(CALENDER_DAY_LOG_KEY) { _, bundle ->
+            val right = bundle.getBoolean("right")
+            val left = bundle.getBoolean("left")
+            if (right) {
+                if(viewModel.selectedDate <= LocalDate.now()){
+                    this@CycleLogFragment.binding.calendar.notifyDateChanged(
+                        viewModel.selectedDate
+                    )
+                    viewModel.selectedDate =
+                        LocalDate.parse(viewModel.selectedDate.toString()).plusDays(1)
+
+                    this@CycleLogFragment.binding.calendar.notifyDateChanged(
+                        viewModel.selectedDate
+                    )
+                }
+
+
+            }
+            if (left) {
+
+                this@CycleLogFragment.binding.calendar.notifyDateChanged(
+                    viewModel.selectedDate
+                )
+                viewModel.selectedDate =
+                    LocalDate.parse(viewModel.selectedDate.toString()).plusDays(-1)
+
+                this@CycleLogFragment.binding.calendar.notifyDateChanged(
+                    viewModel.selectedDate
+                )
+            }
+        }
         binding.lytToolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }
@@ -264,6 +304,7 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
             }
             navigate(R.id.bottomSheetCycleLog, Bundle().apply {
                 putParcelable("data", viewModel.getCycleLogData())
+                putString("selectedDate", viewModel.selectedDate.toString())
             })
         }
     }

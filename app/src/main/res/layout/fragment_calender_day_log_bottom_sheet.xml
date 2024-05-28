@@ -12,6 +12,7 @@
             style="@style/ModalStyleDialog10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:fillViewport="true"
             android:paddingTop="8dp">
 
@@ -23,7 +24,7 @@
                     android:id="@+id/view23"
                     android:layout_width="40dp"
                     android:layout_height="2dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="8dp"
                     android:alpha="0.2"
                     android:background="@drawable/back_bottom_sheet_drag"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -43,20 +44,20 @@
 
                 <TextView
                     android:id="@+id/tvTitle"
-                    style="@style/H2"
+                    style="@style/S20"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="36dp"
                     android:layout_marginEnd="16dp"
                     android:gravity="center"
-                    tools:text="@string/text_activities"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view23" />
+                    app:layout_constraintTop_toBottomOf="@+id/view23"
+                    tools:text="@string/text_activities" />
 
                 <TextView
-                    android:id="@+id/tvDate"
+                    android:id="@+id/tvDatePeriod"
                     style="@style/H5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -81,110 +82,118 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/tvTitle" />
 
-                <TextView
-                    android:id="@+id/tvPeriodLabel"
-                    style="@style/H5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="24dp"
-                    android:text="@string/text_period_u"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvDate" />
-
-                <ImageView
-                    android:id="@+id/ivLogAdd"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="24dp"
-                    android:src="@drawable/ic_log_add"
-                    app:layout_constraintBottom_toBottomOf="@id/tvPeriodLabel"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/tvPeriodLabel" />
 
                 <include
                     android:id="@+id/divider1"
                     layout="@layout/layout_divider"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="@dimen/dimen_24dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvPeriodLabel" />
+                    app:layout_constraintTop_toBottomOf="@id/tvDatePeriod" />
+
                 <TextView
-                    android:id="@+id/tvFlowLabel"
+                    android:id="@+id/tvPeriodIn"
                     style="@style/H5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="16dp"
-                    android:text="@string/text_flow"
+                    android:text="@string/text_period_in"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider1" />
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvFlow"
-                    android:layout_width="0dp"
+
+                <TextView
+                    android:id="@+id/tvDays"
+                    style="@style/S28"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginTop="12dp"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toTopOf="@id/divider2"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="8dp"
+                    android:lineSpacingExtra="4sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvFlowLabel"
-                    tools:itemCount="10"
-                    tools:listitem="@layout/item_cycle_log" />
+                    app:layout_constraintTop_toBottomOf="@id/tvPeriodIn"
+                    tools:text="2 days" />
+
+                <TextView
+                    android:id="@+id/tvMessage"
+                    style="@style/S14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="12dp"
+                    android:lineSpacingExtra="4sp"
+                    android:textColor="@color/white_64"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvDays"
+                    tools:text="Low chance of pregnancy" />
+
                 <include
                     android:id="@+id/divider2"
                     layout="@layout/layout_divider"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginHorizontal="@dimen/dimen_24dp"
+                    android:layout_marginTop="@dimen/dimen_24dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/rvFlow" />
-                <TextView
-                    android:id="@+id/tvSymptomsLabel"
-                    style="@style/H5"
+                    app:layout_constraintTop_toBottomOf="@id/tvMessage" />
+
+
+                <ImageView
+                    android:id="@+id/btnInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
                     android:layout_marginTop="16dp"
-                    android:text="@string/text_symptoms"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/divider2" />
+                    android:layout_marginEnd="@dimen/dimen_24dp"
+                    android:src="@drawable/ic_info_oreo"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider1" />
+
+                <TextView
+                    style="@style/S14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/dimen_8dp"
+                    android:text="@string/text_follicular_phase"
+                    android:textColor="#83e7cf"
+                    app:layout_constraintBottom_toBottomOf="@+id/btnInfo"
+                    app:layout_constraintEnd_toStartOf="@+id/btnInfo"
+                    app:layout_constraintTop_toTopOf="@+id/btnInfo" />
+
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvSymptoms"
+                    android:id="@+id/rvFlow"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
+                    android:layout_marginTop="12dp"
                     android:layout_marginEnd="24dp"
                     android:orientation="horizontal"
-                    android:layout_marginTop="12dp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/btnSave"
-                    app:layout_constraintTop_toBottomOf="@+id/tvSymptomsLabel"
+                    app:layout_constraintTop_toBottomOf="@+id/divider2"
                     tools:itemCount="10"
                     tools:listitem="@layout/item_cycle_log" />
+
+
                 <Button
                     android:id="@+id/btnSave"
                     style="@style/SecondaryFMHButtonStyle"
                     android:layout_width="match_parent"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginBottom="24dp"
-                    android:layout_marginEnd="24dp"
-                    android:text="@string/text_save"
-                    app:backgroundTint="@null"
                     android:layout_height="40dp"
-                    android:layout_marginTop="36dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginBottom="24dp"
+                    android:text="@string/text_log"
+                    app:backgroundTint="@null"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/rvSymptoms"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@id/rvFlow" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>

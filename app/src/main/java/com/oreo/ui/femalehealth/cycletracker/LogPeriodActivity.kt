@@ -5,34 +5,39 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
+import com.kizitonwose.calendar.core.yearMonth
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ActivityLogPeriodBinding
 import com.noisefit.luna.databinding.CalendarDay3Binding
-import com.noisefit.luna.databinding.CalendarDayBinding
 import com.noisefit.luna.databinding.LayoutCycleLogCalHeaderBinding
 import com.noisefit.ui.common.BaseActivity
 import com.noisefit_commans.databinding.DefaultLoaderBinding
+import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.DateFormats.daysOfWeekFromLocale
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
+import com.oreo.ui.femalehealth.cycletracker.log.CycleLogViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 
 @AndroidEntryPoint
 class LogPeriodActivity : BaseActivity<ActivityLogPeriodBinding>() {
+
+    private val viewModel: CycleLogViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initCalendar()
     }
 
     companion object {
@@ -45,15 +50,12 @@ class LogPeriodActivity : BaseActivity<ActivityLogPeriodBinding>() {
     }
 
     private fun initCalendar() {
-        val currentDay = LocalDate.parse(DateFormats.getCurrentDate(DateFormats.dateFormat3))
+        val currentDay = LocalDate.now()
         val currentMonth = YearMonth.now()
-        val daysOfWeek = daysOfWeekFromLocale()
-
-        val startMonth = YearMonth.of(2023, 8)
+        val calendarStart = LocalDate.parse("2023-03-01")//TODO to be changed as per user selection
 
         binding.calendar.setup(
-            startMonth,
-            currentMonth.plusMonths(0), daysOfWeek.first()
+            calendarStart.yearMonth, currentMonth.plusMonths(1), DayOfWeek.MONDAY
         )
         class DayViewContainer(view: View) : ViewContainer(view) {
             lateinit var day: CalendarDay
@@ -66,25 +68,80 @@ class LogPeriodActivity : BaseActivity<ActivityLogPeriodBinding>() {
                         //day.date
 
                         if (day.date <= LocalDate.now()) {
-                            val intent = Intent()
-                            intent.putExtra("selected_date", "${day.date}")
-                            setResult(RESULT_OK, intent)
-                            finish()
+//                            val intent = Intent()
+//                            intent.putExtra("selected_date", "${day.date}")
+//                            setResult(RESULT_OK, intent)
+//                            finish()
                         }
 
                     }
                 }
+            }
+
+            fun bind(day: CalendarDay) {
+                this.day = day
+                val dayLayoutMain = binding.dayLayoutMain
+                binding.tvDay.text = this.day.date.dayOfMonth.toString()
+
+                if (this.day.position == DayPosition.MonthDate) {
+                    dayLayoutMain.visible()
+
+                    val (state, isDateSelected) = viewModel.getCurrentState(day.date)
+
+//                    if (isDateSelected) {
+//                        binding.ivBackSelected.visible()
+//                    } else {
+//                        binding.ivBackSelected.gone()
+//                    }
+
+
+                    when (state) {
+
+                        is DayState.Period -> {
+                            binding.tvDay.setTextColor(
+                                ContextCompat.getColor(
+                                    binding.tvDay.context, R.color.color_bubble_gum_pink
+                                )
+                            )
+                            if (this.day.date > viewModel.todayDate) {
+                                binding.dayBack.setImageResource(com.noisefit_commans.R.drawable.back_modal_workout)
+                                binding.dayBack.alpha = 0.5f
+                            } else {
+                                binding.dayBack.setImageResource(R.drawable.back_circle_bubble_gum_pink)
+                                binding.dayBack.alpha = 1f
+                            }
+
+                        }
+
+
+                        else -> {
+                            hideAllBack(binding)
+
+                            binding.tvDay.setTextColor(
+                                ContextCompat.getColor(
+                                    binding.tvDay.context, R.color.white
+                                )
+                            )
+                        }
+                    }
+
+
+                } else {
+                    dayLayoutMain.invisible()
+                }
+            }
+
+            private fun hideAllBack(binding: CalendarDay3Binding) {
+
             }
         }
 
         binding.calendar.dayBinder = object : MonthDayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
-                container.day = day
-                val textView = container.binding.tvDay
-                val dayLayoutMain = container.binding.dayLayoutMain
-                textView.text = day.date.dayOfMonth.toString()
-
+                viewModel.setLoading(true)
+                container.bind(day)
+                viewModel.setLoading(false)
             }
         }
         class MonthViewContainer(view: View) : ViewContainer(view) {
@@ -116,8 +173,31 @@ class LogPeriodActivity : BaseActivity<ActivityLogPeriodBinding>() {
         }
     }
 
-    override fun observeSubscriber() {
 
+    override fun observeSubscriber() {
+        viewModel.cycleHistoryData.observe(this) {
+            initCalendar()
+        }
+
+        viewModel.getMessages().observe(this) {
+            it.getContent()?.let { message ->
+                showShortToast(message)
+            }
+        }
+
+        viewModel.getApiErrors().observe(this) {
+            it?.getContent()?.let { response ->
+                onApiErrorReceived(response)
+            }
+        }
+
+        viewModel.getLoading().observe(this) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
+            }
+        }
     }
 
     override fun getViewBinding() = ActivityLogPeriodBinding.inflate(layoutInflater)

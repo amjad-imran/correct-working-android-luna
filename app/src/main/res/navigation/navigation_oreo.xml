@@ -760,11 +760,19 @@
     <fragment
         android:id="@+id/cycleLogFragment"
         android:name="com.oreo.ui.femalehealth.cycletracker.log.CycleLogFragment"
-        android:label="CycleLogFragment" />
+        android:label="CycleLogFragment" >
+        <action
+            android:id="@+id/action_cycleLogFragment_to_calenderDayLogBottomSheet"
+            app:destination="@id/calenderDayLogBottomSheet" />
+
+    </fragment>
     <dialog
         android:id="@+id/bottomSheetCycleLog"
-        android:name="com.oreo.ui.femalehealth.cycletracker.log.BottomSheetCycleLog"
+        android:name="com.oreo.ui.femalehealth.cycletracker.log.bottom.BottomSheetCycleLog"
         android:label="BottomSheetCycleLog">
+        <argument
+            android:name="selectedDate"
+            app:argType="string" />
         <argument
             android:name="data"
             app:argType="com.oreo.data.model.CycleLogDataModel" />
@@ -824,6 +832,14 @@
         android:label="CycleTrackerOvulationInfo">
         <argument
             android:name="launchMode"
+            app:argType="string" />
+    </dialog>
+    <dialog
+        android:id="@+id/calenderDayLogBottomSheet"
+        android:name="com.oreo.ui.femalehealth.cycletracker.log.bottom.CalenderDayLogBottomSheet"
+        android:label="CalenderDayLogBottomSheet" >
+        <argument
+            android:name="selectedDate"
             app:argType="string" />
     </dialog>
 </navigation>
