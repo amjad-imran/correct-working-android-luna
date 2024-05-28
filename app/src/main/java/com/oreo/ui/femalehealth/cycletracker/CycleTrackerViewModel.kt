@@ -87,34 +87,15 @@ class CycleTrackerViewModel @Inject constructor(
                         resource.data?.data.let {
                             _femaleHealthData.postValue(it)
 
-
-                            /*val tempData = arrayListOf(
-                                TempPeriodData(date = "2024-05-24", temperature = 5.5f),
-                                TempPeriodData(date = "2024-05-23", temperature = 3.25f),
-                                TempPeriodData(date = "2024-05-22", temperature = 1.25f),
-                                TempPeriodData(date = "2024-05-21", temperature = 1f),
-                                TempPeriodData(date = "2024-05-20", temperature = 0.5f),
-                                TempPeriodData(date = "2024-05-19", temperature = 1.25f),
-                                TempPeriodData(date = "2024-05-18", temperature = 0f),
-                                TempPeriodData(date = "2024-05-17", temperature = 1.25f),
-                                TempPeriodData(date = "2024-05-16", temperature = 0f),
-                                TempPeriodData(date = "2024-05-15", temperature = 0f),
-                                TempPeriodData(date = "2024-05-14", temperature = -2.25f),
-                                TempPeriodData(date = "2024-05-13", temperature = -1.25f),
-                                TempPeriodData(date = "2024-05-12", temperature = -2.25f),
-                                TempPeriodData(date = "2024-05-11", temperature = -1.25f),
-                            )*/
-
                             it?.temp?.let { list ->
-
-
                                 val tempVariance = calculateTempVariance(list)
 
                                 _cyclePredictionData.postValue(
                                     TempPrediction(
                                         tempVariation = tempVariance,
                                         message = it.tempNudge,
-                                        tempData = list
+                                        tempData = list,
+                                        pendingNights = it.pendingNights
                                     )
                                 )
                             } ?: run {

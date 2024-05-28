@@ -349,6 +349,12 @@ class CycleTrackerFragment :
                 tvUnit.visible()
             }
 
+            if (data.pendingNights == null) {
+                tvMoreNight.text = ""
+            } else {
+                tvMoreNight.text = "Data for ${data.pendingNights} more nights is required"
+            }
+
             tvDescription.text = data.message
 
             vTempGraph.updateData(viewModel.combineTempData(data.tempData))

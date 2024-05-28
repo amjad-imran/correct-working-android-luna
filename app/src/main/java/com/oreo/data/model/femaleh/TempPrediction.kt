@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class TempPrediction(
     val tempVariation: Float? = null,
+    val pendingNights: Int? = null,
     val message: String? = null,
     val tempData: List<TempPeriodData>
 )
