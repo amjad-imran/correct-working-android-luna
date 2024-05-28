@@ -259,13 +259,14 @@ class CycleTrackerViewModel @Inject constructor(
                     healthDataDateList[current] = DayState.Period(PeriodPos.CENTER)
                 }
 
+
                 val ovDay = cycleLength - 13
 
-                if (currentDay == ovDay) {
-                    healthDataDateList[current] = DayState.OvulationDay
-                }
                 if (currentDay in (ovDay - 5)..(ovDay + 1)) {
                     healthDataDateList[current] = DayState.Fertile
+                }
+                if (currentDay == ovDay) {
+                    healthDataDateList[current] = DayState.OvulationDay
                 }
                 current = current.plusDays(1)
             }
@@ -298,16 +299,15 @@ class CycleTrackerViewModel @Inject constructor(
      * Returns Pair(Phase string, phase color)
      */
     fun getCurrentPhaseText(
-        fertileWindowList: List<String>?, periodDate: String?, currentDate: String
+        ovulationDate:String?, periodDate: String?, currentDate: String
     ): Pair<String, Int>? {
-        if (fertileWindowList == null) return null
-        if (fertileWindowList.size != 2) return null
+        if (ovulationDate == null) return null
         if (periodDate.isNullOrEmpty()) return null
 
         val localCurrentDate = LocalDate.parse(currentDate)
-        val fertileStart = LocalDate.parse(fertileWindowList.first())
+        val ovDateLocal = LocalDate.parse(ovulationDate)
 
-        return if (localCurrentDate.isBefore(fertileStart)) {
+        return if (localCurrentDate.isBefore(ovDateLocal)) {
             Pair("Follicular phase", R.color.color_follicular)
         } else {
             Pair("Luteal phase", R.color.color_luteal)

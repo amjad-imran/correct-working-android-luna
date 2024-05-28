@@ -411,7 +411,7 @@ class CycleTrackerFragment :
             tvPregnancyChances.text = viewModel.getPregnancyText(data.pregnancyChances)
             with(
                 viewModel.getCurrentPhaseText(
-                    data.fertileWindowList, data.periodDate, selectedDate
+                    data.ovulationDate, data.periodDate, selectedDate
                 )
             ) {
                 if (this == null) {

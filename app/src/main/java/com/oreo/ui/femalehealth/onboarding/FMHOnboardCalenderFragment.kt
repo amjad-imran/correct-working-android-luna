@@ -22,6 +22,7 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DateFormats.daysOfWeekFromLocale
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -45,10 +46,9 @@ class FMHOnboardCalenderFragment :
         val currentDay = LocalDate.parse(DateFormats.getCurrentDate(DateFormats.dateFormat3))
         val currentMonth = YearMonth.now()
         val calendarStart = LocalDate.parse("2023-03-01")
-        val daysOfWeek = daysOfWeekFromLocale()
 
         binding.lytCalender.calendar.setup(
-            calendarStart.yearMonth, currentMonth, daysOfWeek.first()
+            calendarStart.yearMonth, currentMonth, DayOfWeek.MONDAY
         )
         class DayViewContainer(view: View) : ViewContainer(view) {
             lateinit var day: CalendarDay

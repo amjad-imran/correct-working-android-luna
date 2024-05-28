@@ -90,7 +90,7 @@ class CalenderDayLogBottomSheet :
             tvMessage.text = viewModel.getPregnancyText(data.pregnancyChances)
             with(
                 viewModel.getCurrentPhaseText(
-                    data.fertileWindowList, data.periodDate, selectedDate
+                    data.ovulationDate, data.periodDate, selectedDate
                 )
             ) {
                 if (this == null) {
@@ -145,7 +145,7 @@ class CalenderDayLogBottomSheet :
         }
 
         viewModel.femaleHealthData.observe(this) {
-            if (it.currentDay == null) {
+            if (it?.currentDay == null) {
                 context.showShortToast("Screen pending")
             } else {
                 setTopData(it)
