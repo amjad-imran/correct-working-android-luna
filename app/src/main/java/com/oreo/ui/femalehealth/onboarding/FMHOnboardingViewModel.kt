@@ -40,7 +40,9 @@ class FMHOnboardingViewModel @Inject constructor(
 ) : BaseViewModel() {
     val fragmentSize = 7
 
-    var isGoalSelected = MutableLiveData<Event<Boolean>>()
+    var onNextPress = MutableLiveData<Event<Boolean>>()
+    var onNotSurePress = MutableLiveData<Event<Boolean>>()
+
     var pDays = 0
     var pcDays = 0
 
@@ -236,6 +238,12 @@ class FMHOnboardingViewModel @Inject constructor(
                                     _femaleHealthSkip.postValue(Event(true))
                                 }
                             }
+
+                            goalTypeSelected = null
+                            selectedDiagnoseListData.clear()
+                            selectedHormoneListData.clear()
+                            selectedPEndDate = null
+                            selectedPEndDate = null
                         }
                     }
                 }

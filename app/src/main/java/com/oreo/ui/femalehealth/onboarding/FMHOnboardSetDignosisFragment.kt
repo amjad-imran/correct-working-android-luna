@@ -6,6 +6,9 @@ import androidx.fragment.app.activityViewModels
 import com.noisefit.data.model.DiagnoseDataItem
 import com.noisefit.luna.databinding.FragmentFMHOnboardSetDignosisBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.disable
+import com.noisefit_commans.ui.enable
+import com.noisefit_commans.utils.Event
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,8 +25,23 @@ class FMHOnboardSetDignosisFragment :
                     mAdapter.updateItem(position, data)
                 }
                 mViewModel.selectedDiagnoseListData = mAdapter.getUpdatedSelectedListData()
+                handleNext()
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        handleNext()
+    }
+
+    fun handleNext(){
+        if (mViewModel.selectedDiagnoseListData.isEmpty()) {
+            binding.lytBottomControls.bNext.disable()
+        } else {
+            binding.lytBottomControls.bNext.enable()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -40,6 +58,9 @@ class FMHOnboardSetDignosisFragment :
 
     override fun initListener() {
 
+        binding.lytBottomControls.bNext.setOnClickListener {
+            mViewModel.onNextPress.value = Event(true)
+        }
     }
 
     override fun subscribeObservers() {

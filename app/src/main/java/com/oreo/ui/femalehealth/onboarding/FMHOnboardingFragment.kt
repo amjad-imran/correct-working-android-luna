@@ -59,19 +59,19 @@ class FMHOnboardingFragment :
 
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                if (position == 1 || position == 2) {
-                    binding.bNotSure.visible()
-                } else
-                    binding.bNotSure.invisible()
+                /*  if (position == 1 || position == 2) {
+                      binding.bNotSure.visible()
+                  } else
+                      binding.bNotSure.invisible()*/
 
-                if (position == mViewModel.fragmentSize - 1)
-                    binding.bNext.text = getString(R.string.text_done)
-                else {
-                    if (position == 1 || position == 2) {
-                        binding.bNext.text = getString(R.string.text_confirm)
-                    } else
-                        binding.bNext.text = getString(R.string.text_next)
-                }
+                /* if (position == mViewModel.fragmentSize - 1)
+                     binding.bNext.text = getString(R.string.text_done)
+                 else {
+                     if (position == 1 || position == 2) {
+                         binding.bNext.text = getString(R.string.text_confirm)
+                     } else
+                         binding.bNext.text = getString(R.string.text_next)
+                 }*/
 
                 setProgress(position)
 
@@ -102,26 +102,6 @@ class FMHOnboardingFragment :
         binding.backBtn.setOnClickListener {
             onBackPress()
         }
-        binding.bNext.setOnClickListener {
-            onNextPress()
-        }
-        binding.bNotSure.setOnClickListener {
-            val current = binding.vpFmhOnboard.currentItem
-
-            when (current) {
-                1 -> {
-                    mViewModel.updateFemaleHealthData(3)
-                    return@setOnClickListener
-                }
-
-                2 -> {
-                    mViewModel.updateFemaleHealthData(3)
-                    return@setOnClickListener
-                }
-            }
-        }
-
-
     }
 
     fun onBackPress() {
@@ -185,6 +165,29 @@ class FMHOnboardingFragment :
     }
 
     override fun subscribeObservers() {
+        mViewModel.onNextPress.observe(this) {
+            it.getContent()?.let {
+                onNextPress()
+            }
+        }
+        mViewModel.onNotSurePress.observe(this) {
+            it.getContent()?.let {
+                val current = binding.vpFmhOnboard.currentItem
+
+                when (current) {
+                    1 -> {
+                        mViewModel.updateFemaleHealthData(3)
+                        return@observe
+                    }
+
+                    2 -> {
+                        mViewModel.updateFemaleHealthData(3)
+                        return@observe
+                    }
+                }
+            }
+        }
+
         mViewModel.moveBack.observe(this) {
             it.getContent()?.let {
                 navigateUpSafe()
@@ -199,12 +202,6 @@ class FMHOnboardingFragment :
         mViewModel.femaleHealthSkip.observe(this) { it1 ->
             it1?.getContent()?.let {
                 navigate(FMHOnboardingFragmentDirections.actionFemaleHealthOnboardingFragmentToFragmentCycleTracker())
-            }
-        }
-
-        mViewModel.isGoalSelected.observe(this) { it1 ->
-            it1?.getContent()?.let {
-                binding.bNext.isEnabled = it
             }
         }
 
