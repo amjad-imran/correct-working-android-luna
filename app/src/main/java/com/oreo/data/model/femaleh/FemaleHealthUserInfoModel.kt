@@ -33,6 +33,8 @@ data class FemaleHealthUserInfoModel(
     val temp: List<TempPeriodData>? = null,
 
     @SerializedName("temp_nudge")
-    val tempNudge: String? = null
+    val tempNudge: String? = null,
+    @SerializedName("pending_nights")
+    val pendingNights: Int? = null
 
 )
