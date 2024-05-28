@@ -64,6 +64,7 @@ class CalenderDayLogBottomSheet :
             navigateUpSafe()
         }
         binding.ivRight.setOnClickListener {
+
             viewModel.todayDate =
                 LocalDate.parse(viewModel.todayDate.toString()).plusDays(1)
             setTitleDate()

@@ -3,6 +3,7 @@ package com.oreo.ui.femalehealth.cycletracker.log.bottom
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.remote.base.Resource
@@ -115,15 +116,15 @@ constructor(
                                         it.symptomShortName?.lowercase() == data.symptomShortName?.lowercase()
                                     }
 
-                                if (femaleHealthUser != null) {
-                                    data.isChecked = true
-                                }
+                                data.isChecked = femaleHealthUser != null
                             }
 
                             femaleHealthIconsModel?.flow?.forEach { data ->
 
                                 if (femaleHealthUserInfo?.symptom?.flow?.symptomShortName?.lowercase() == data.symptomShortName?.lowercase()) {
                                     data.isChecked = true
+                                }else{
+                                    data.isChecked = false
                                 }
                             }
                             _femaleHealthIcons.postValue(femaleHealthIconsModel!!)
