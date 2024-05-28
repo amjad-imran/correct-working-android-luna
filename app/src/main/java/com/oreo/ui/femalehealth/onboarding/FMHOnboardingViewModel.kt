@@ -238,6 +238,12 @@ class FMHOnboardingViewModel @Inject constructor(
                                     _femaleHealthSkip.postValue(Event(true))
                                 }
                             }
+
+                            goalTypeSelected = null
+                            selectedDiagnoseListData.clear()
+                            selectedHormoneListData.clear()
+                            selectedPEndDate = null
+                            selectedPEndDate = null
                         }
                     }
                 }
