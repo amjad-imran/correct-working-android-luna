@@ -31,7 +31,7 @@ class FMHCycleHistoryAdapter(val listener: OnHistoryItemClickListener) :
                 )
             }"
 
-            val ovDays = abs(
+            var ovDays = abs(
                 DateFormats.getDateDiff(
                     DateFormats.dateFormat3,
                     data.ovulationStartDate,
@@ -59,7 +59,12 @@ class FMHCycleHistoryAdapter(val listener: OnHistoryItemClickListener) :
                     )
                 ).toInt()
             }
-
+            val availableDaya = (data.cycleLength ?: 0) - (data.periodLength ?: 0)
+            if (availableDaya < 14) {
+                ovStart = -1
+                ovEnd = -1
+                ovDays = -1
+            }
 
             binding.pbHistory.setData(
                 cycleLength = data.cycleLength ?: 0,

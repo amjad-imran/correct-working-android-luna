@@ -4,6 +4,7 @@ import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
@@ -53,7 +54,6 @@ class CycleTrackerViewModel @Inject constructor(
 
 
     val healthDataDateList = HashMap<LocalDate, DayState>()
-
 
 
     fun getDataForDate(date: String) {
@@ -403,6 +403,13 @@ class CycleTrackerViewModel @Inject constructor(
 
         getPeriodSection(tempData.last().date, tempData.first().date)?.forEach {
             sections.add(it)
+            LOGS.d(
+                "sdfsdfsdf -> ${tempData.last().date}, ${tempData.first().date} ${
+                    Gson().toJson(
+                        it
+                    )
+                }"
+            )
         }
 
         var minValue = 2.5f
@@ -445,9 +452,34 @@ class CycleTrackerViewModel @Inject constructor(
         val endDateLocal = LocalDate.parse(endDate, pattern)
 
 
-        val filteredData = healthDataDateList.filterKeys {
-            it in startDateLocal..endDateLocal
-        }
+        /*   val filteredData = healthDataDateList.filterKeys {
+               it in startDateLocal..endDateLocal
+           }
+
+           LOGS.d("dskfjhskdfjhsd ${Gson().toJson(filteredData)}")
+
+           val tempHistory = ArrayList<FMHCycleHistoryDataModel>()
+
+
+           var startDate: LocalDate? = null
+           filteredData.keys.forEach {
+               val currentDate = it
+               if (startDate == null) {
+                   startDate = currentDate
+               }
+               val nextDate = currentDate.plusDays(1)
+               if (filteredData[nextDate] == null) {
+
+                   tempHistory.add(
+                       FMHCycleHistoryDataModel(
+
+                       )
+                   )
+
+                   startDate = null
+               }
+
+           }*/
 
 
         history.forEach {
@@ -459,13 +491,10 @@ class CycleTrackerViewModel @Inject constructor(
                 periodDateStart.plusDays((periodLength - 1).toLong())
             }
 
+
             if (startDateLocal >= periodDateStart && periodDateEnd <= endDateLocal) {
-                var daysStart = ChronoUnit.DAYS.between(startDateLocal, periodDateStart)
-                if (daysStart < 0) {
-                    daysStart = 0
-                } else {
-                    daysStart -= 1
-                }
+                LOGS.d("sdfsdfsdf startDateLocal-> $startDateLocal $periodDateStart")
+                var daysStart = abs(ChronoUnit.DAYS.between(startDateLocal, periodDateStart))
                 val daysEnd = abs(ChronoUnit.DAYS.between(startDateLocal, periodDateEnd)) - 1
 
 
@@ -478,6 +507,7 @@ class CycleTrackerViewModel @Inject constructor(
                         imageRes = R.drawable.ic_fertile_graph
                     )
                 )
+                LOGS.d("sdfsdfsdf period $daysStart $daysEnd")
 
             }
 
@@ -502,8 +532,6 @@ class CycleTrackerViewModel @Inject constructor(
                             imageRes = R.drawable.ic_fertile_graph
                         )
                     )
-
-                    LOGS.d("sdfsdfsdf fertile $daysStart $daysEnd")
 
 
                 }

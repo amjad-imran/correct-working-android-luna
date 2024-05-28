@@ -243,6 +243,7 @@ class TempPeriodCombinedChart : View {
     }
 
     fun updateData(data: TempPeriodCombineModel) {
+        LOGS.d("dskjfhksdjfhdsfkj $data")
         combineModel = data
         list.clear()
         data?.items?.let {
