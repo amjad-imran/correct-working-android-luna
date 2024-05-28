@@ -15,11 +15,14 @@ import com.noisefit.luna.databinding.CalendarDayFmhOnboardBinding
 import com.noisefit.luna.databinding.FragmentFMHOnboardCalenderBinding
 import com.noisefit_commans.common.yearMonth
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.disable
+import com.noisefit_commans.ui.enable
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DateFormats.daysOfWeekFromLocale
+import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.DayOfWeek
@@ -45,7 +48,7 @@ class FMHOnboardCalenderFragment :
     private fun initCalender() {
         val currentDay = LocalDate.parse(DateFormats.getCurrentDate(DateFormats.dateFormat3))
         val currentMonth = YearMonth.now()
-        val calendarStart = LocalDate.parse("2023-03-01")
+        val calendarStart = LocalDate.parse("2024-01-01")
 
         binding.lytCalender.calendar.setup(
             calendarStart.yearMonth, currentMonth, DayOfWeek.MONDAY
@@ -59,6 +62,8 @@ class FMHOnboardCalenderFragment :
                 binding.root.setOnClickListener {
                     if (day.position == DayPosition.MonthDate) {
                         if (!day.date.isAfter(LocalDate.now())) {
+                            this@FMHOnboardCalenderFragment.binding.lytBottomControls.bNext.enable()
+
                             mViewModel.selectedPStartDate = day.date
 
                             mViewModel.selectedPEndDate =
@@ -157,10 +162,22 @@ class FMHOnboardCalenderFragment :
             }
         }
 
-        binding.lytCalender.calendar.scrollToDate(currentDay)
+        if (mViewModel.selectedPStartDate == null) {
+            binding.lytBottomControls.bNext.disable()
+            binding.lytCalender.calendar.scrollToDate(currentDay)
+        } else {
+            binding.lytBottomControls.bNext.enable()
+            binding.lytCalender.calendar.scrollToDate(mViewModel.selectedPStartDate ?: currentDay)
+        }
+
+
     }
 
     override fun initListener() {
+        binding.lytBottomControls.bNext.setOnClickListener {
+            mViewModel.onNextPress.value = Event(true)
+        }
+
         binding.lytCalender.ivArrowLeft.setOnClickListener {
             currentSelectedMonth?.let {
                 binding.lytCalender.calendar.smoothScrollToMonth(it.yearMonth.minusMonths(1))

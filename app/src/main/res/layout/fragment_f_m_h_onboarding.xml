@@ -17,43 +17,10 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/dimen_16dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/bNext"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/backBtn" />
-
-
-    <Button
-        android:id="@+id/bNotSure"
-        style="@style/SecondaryButtonStyle"
-        android:layout_width="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="44dp"
-        android:text="@string/text_not_sure"
-        android:visibility="invisible"
-        app:backgroundTint="@null"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/bNext"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="visible" />
-
-    <Button
-        android:id="@+id/bNext"
-        style="@style/PrimaryButtonStyle"
-        android:layout_width="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="44dp"
-        android:enabled="false"
-        android:text="@string/text_next"
-        android:visibility="visible"
-        app:backgroundTint="@null"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/bNotSure" />
 
     <include
         android:id="@+id/lytProgress"

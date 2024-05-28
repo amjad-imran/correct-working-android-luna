@@ -40,7 +40,9 @@ class FMHOnboardingViewModel @Inject constructor(
 ) : BaseViewModel() {
     val fragmentSize = 7
 
-    var isGoalSelected = MutableLiveData<Event<Boolean>>()
+    var onNextPress = MutableLiveData<Event<Boolean>>()
+    var onNotSurePress = MutableLiveData<Event<Boolean>>()
+
     var pDays = 0
     var pcDays = 0
 

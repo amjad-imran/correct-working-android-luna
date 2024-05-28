@@ -5,6 +5,9 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.noisefit.luna.databinding.FragmentFMHOnboardSetPeriodBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.enable
+import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.wheel.WheelAdapterPeriod
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,6 +23,11 @@ class FMHOnboardSetPeriodFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.lytBottomControls.apply {
+            this.bNext.enable()
+            this.bNotSure.visible()
+        }
         setWheelPicker()
     }
 
@@ -34,6 +42,12 @@ class FMHOnboardSetPeriodFragment :
     }
 
     override fun initListener() {
+        binding.lytBottomControls.bNext.setOnClickListener {
+            mViewModel.onNextPress.value = Event(true)
+        }
+        binding.lytBottomControls.bNotSure.setOnClickListener {
+            mViewModel.onNextPress.value = Event(true)
+        }
 
     }
 
