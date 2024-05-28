@@ -29,6 +29,7 @@ import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.ui.femalehealth.cycletracker.DayState
+import com.oreo.ui.femalehealth.cycletracker.LogPeriodActivity
 import com.oreo.ui.femalehealth.cycletracker.PeriodPos
 import com.oreo.ui.femalehealth.cycletracker.log.bottom.CALENDER_DAY_LOG_KEY
 import com.oreo.ui.femalehealth.cycletracker.log.bottom.CYCLE_LOG_SAVE
@@ -294,6 +295,14 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
                 CYCLE_LOG_SAVE
             ) { _, bundle ->
                 val logSaved = bundle.getBoolean("log_saved")
+                val openActivity = bundle.getBoolean("openActivity")
+                if(openActivity){
+                    resultLauncher.launch(
+                        LogPeriodActivity.getStartIntent(
+                            requireContext(),
+                        )
+                    )
+                }
                 if (logSaved) {
                     viewModel.setOpenDayLogBottomSheet(true)
                 }
