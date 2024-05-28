@@ -12,6 +12,7 @@ import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.FMHCycleHistoryDataModel
+import com.oreo.data.model.PeriodCycleHistory
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.TempPeriodData
 import com.oreo.data.model.femaleh.TempPrediction
@@ -173,13 +174,13 @@ class CycleTrackerViewModel @Inject constructor(
         }
     }
 
-    private fun generateHealthData(it: List<FMHCycleHistoryDataModel>) {
+    private fun generateHealthData(cycleData: PeriodCycleHistory) {
         viewModelScope.launch(Dispatchers.IO) {
 
             val mainPeriodLength = 5
             val mainCycleLength = 28
 
-            it.forEach { data ->
+            cycleData.cycleHistory?.forEach { data ->
 
                 val periodLength = data.periodLength ?: 0
                 val cycleLength = data.cycleLength ?: 0
@@ -232,7 +233,7 @@ class CycleTrackerViewModel @Inject constructor(
                 }
             }
 
-            val currentPeriodStart = LocalDate.parse(it.first().periodDate)
+            val currentPeriodStart = LocalDate.parse(cycleData.userDefault?.firstPeriodDate)
 
             val preProcessDataTill = currentPeriodStart.plusMonths(12)
 
@@ -240,13 +241,12 @@ class CycleTrackerViewModel @Inject constructor(
 
             var current = nextPeriodDate
             while (current <= preProcessDataTill) {
-                val data = it.first()
 
-                val periodLength = data.periodLength ?: 0
-                val cycleLength = data.cycleLength ?: 0
+                val periodLength = cycleData.userDefault?.periodLength ?: 0
+                val cycleLength = cycleData.userDefault?.cycleLength ?: 0
 
                 val currentDay = getCurrentCycleDay(
-                    LocalDate.parse(data.periodDate), cycleLength, current
+                    LocalDate.parse(cycleData.userDefault?.firstPeriodDate), cycleLength, current
                 )
 
                 if (currentDay == 1) {
@@ -270,7 +270,7 @@ class CycleTrackerViewModel @Inject constructor(
                 }
                 current = current.plusDays(1)
             }
-            _cycleHistoryData.postValue(it)
+            _cycleHistoryData.postValue(cycleData.cycleHistory)
         }
     }
 
@@ -299,7 +299,7 @@ class CycleTrackerViewModel @Inject constructor(
      * Returns Pair(Phase string, phase color)
      */
     fun getCurrentPhaseText(
-        ovulationDate:String?, periodDate: String?, currentDate: String
+        ovulationDate: String?, periodDate: String?, currentDate: String
     ): Pair<String, Int>? {
         if (ovulationDate == null) return null
         if (periodDate.isNullOrEmpty()) return null

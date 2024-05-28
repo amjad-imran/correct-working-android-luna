@@ -34,6 +34,7 @@ import com.oreo.data.model.OHSQuestionariesResponseModel
 import com.oreo.data.model.OInternalPageResponseModal
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.model.OreoNapDetailsDataModel
+import com.oreo.data.model.PeriodCycleHistory
 import com.oreo.data.model.RingCareResponse
 import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthResponse
@@ -422,7 +423,7 @@ interface NetworkService {
     @GET
     suspend fun getPeriodCycleHistory(
         @Url url: String,
-    ): BaseApiResponse<List<FMHCycleHistoryDataModel>>
+    ): BaseApiResponse<PeriodCycleHistory>
 
     //todo response model will update, once receive actual api from backend
     @GET

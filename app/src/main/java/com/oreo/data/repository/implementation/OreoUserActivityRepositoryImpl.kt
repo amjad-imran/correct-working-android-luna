@@ -54,6 +54,7 @@ import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.OInternalPageResponseModal
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.model.OreoNapDetailsDataModel
+import com.oreo.data.model.PeriodCycleHistory
 import com.oreo.data.model.RingCareResponse
 import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthData
@@ -1925,16 +1926,9 @@ class OreoUserActivityRepositoryImpl(
         }
     }
 
-    override suspend fun getPeriodCycleHistory(): Flow<Resource<BaseApiResponse<List<FMHCycleHistoryDataModel>>>> {
+    override suspend fun getPeriodCycleHistory(): Flow<Resource<BaseApiResponse<PeriodCycleHistory>>> {
         return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health/cycle_history"
-            remoteDataSource.getPeriodCycleHistory(url)
-        }
-    }
-    override suspend fun getCycleStreakInfo(): Flow<Resource<BaseApiResponse<List<FMHCycleHistoryDataModel>>>> {
-        return safeApiCallFlow(dispatcher) {
-            //todo end point will update, once received from backend
-            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health/cycle_history"
+            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health/cycle_history?first_data=true"//TODO handle on offline
             remoteDataSource.getPeriodCycleHistory(url)
         }
     }

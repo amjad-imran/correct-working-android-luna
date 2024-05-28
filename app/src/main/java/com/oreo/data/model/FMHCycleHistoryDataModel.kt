@@ -2,6 +2,22 @@ package com.oreo.data.model
 
 import com.google.gson.annotations.SerializedName
 
+data class PeriodCycleHistory(
+    @SerializedName("cycle_history")
+    val cycleHistory: List<FMHCycleHistoryDataModel>? = null,
+    @SerializedName("user_default")
+    val userDefault: CycleDetailsDefault? = null,
+)
+
+data class CycleDetailsDefault(
+    @SerializedName("first_period_date")
+    val firstPeriodDate: String? = null,
+    @SerializedName("cycle_length")
+    val cycleLength: Int? = null,
+    @SerializedName("period_length")
+    val periodLength: Int? = null,
+)
+
 data class FMHCycleHistoryDataModel(
     @SerializedName("cycle_length")
     val cycleLength: Int? = null,

@@ -48,7 +48,7 @@ class CycleTrackerHistoryViewModel @Inject constructor(
                     }
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            cycleHistoryData.postValue(it)
+                            cycleHistoryData.postValue(it.cycleHistory)
                         }
                     }
                 }

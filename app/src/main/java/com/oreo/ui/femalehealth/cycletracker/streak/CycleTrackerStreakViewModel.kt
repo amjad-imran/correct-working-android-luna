@@ -38,7 +38,7 @@ class CycleTrackerStreakViewModel @Inject constructor(
     fun getStreakInfoData() {
         viewModelScope.launch {
             //todo api will update later, once provided by backend
-            userActivityRepository.getCycleStreakInfo().collect { resource ->
+            userActivityRepository.getPeriodCycleHistory().collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
@@ -63,7 +63,7 @@ class CycleTrackerStreakViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            _cycleStreakData.postValue(it)
+                            _cycleStreakData.postValue(it.cycleHistory)
                         }
                     }
                 }

@@ -19,6 +19,7 @@ import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.OInternalPageResponseModal
 import com.oreo.data.model.OWorkoutDetailsResponseModel
 import com.oreo.data.model.OreoNapDetailsDataModel
+import com.oreo.data.model.PeriodCycleHistory
 import com.oreo.data.model.RingCareResponse
 import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthResponse
@@ -131,13 +132,11 @@ interface OreoUserActivityRepository {
     suspend fun getPeriodLengthList(date: String): Flow<Resource<BaseApiResponse<List<PeriodLength>>>>
     suspend fun getPeriodDurationList(date: String): Flow<Resource<BaseApiResponse<List<PeriodLength>>>>
 
-    suspend fun getPeriodCycleHistory(): Flow<Resource<BaseApiResponse<List<FMHCycleHistoryDataModel>>>>
+    suspend fun getPeriodCycleHistory(): Flow<Resource<BaseApiResponse<PeriodCycleHistory>>>
     suspend fun getCycleTrackerInfo(): Flow<Resource<BaseApiResponse<FemaleCycleTrackInfoModel?>?>>
     suspend fun updateCycleTrackerInfo(
         jsonObject: JsonObject,
         id: Long
     ): Flow<Resource<BaseApiResponse<Any>>>
-
-    suspend fun getCycleStreakInfo(): Flow<Resource<BaseApiResponse<List<FMHCycleHistoryDataModel>>>>
 
 }

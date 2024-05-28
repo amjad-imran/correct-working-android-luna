@@ -15,6 +15,7 @@ import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 
 import com.oreo.data.model.FMHCycleHistoryDataModel
+import com.oreo.data.model.PeriodCycleHistory
 
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.ui.femalehealth.cycletracker.DayState
@@ -84,12 +85,12 @@ class CycleLogViewModel @Inject constructor(
         }
     }
 
-    private fun generateHealthData(it: List<FMHCycleHistoryDataModel>) {
+    private fun generateHealthData(cycleData:PeriodCycleHistory) {
         viewModelScope.launch(Dispatchers.IO) {
             val mainPeriodLength = 5
             val mainCycleLength = 28
 
-            it.forEach { data ->
+            cycleData.cycleHistory?.forEach { data ->
 
                 val periodLength = data.periodLength ?: 0
                 val cycleLength = data.cycleLength ?: 0
@@ -142,7 +143,7 @@ class CycleLogViewModel @Inject constructor(
                 }
             }
 
-            val currentPeriodStart = LocalDate.parse(it.first().periodDate)
+            val currentPeriodStart = LocalDate.parse(cycleData.userDefault?.firstPeriodDate)
 
             val preProcessDataTill = currentPeriodStart.plusMonths(12)
 
@@ -150,11 +151,10 @@ class CycleLogViewModel @Inject constructor(
                 currentPeriodStart.plusDays(mainPeriodLength.toLong())
 
             var current = nextPeriodDate
-            val data = it.first()
             while (current <= preProcessDataTill) {
 
                 val currentDay = getCurrentCycleDay(
-                    LocalDate.parse(data.periodDate),
+                    LocalDate.parse(cycleData.userDefault?.firstPeriodDate),
                     mainCycleLength,
                     current
                 )
@@ -191,7 +191,7 @@ class CycleLogViewModel @Inject constructor(
                 current = current.plusDays(1)
 
             }
-            _cycleHistoryData.postValue(it)
+            _cycleHistoryData.postValue(cycleData.cycleHistory)
         }
     }
 
