@@ -57,7 +57,7 @@ class RingDataStoreImpl
     }
 
     override fun setEnableAiState(state: Boolean) {
-        mPrefs.edit()?.putBoolean(FIRST_STRESS_DAY, state)?.commit()
+        mPrefs.edit()?.putBoolean(ENABLE_AI_STATE, state)?.commit()
 
     }
 
