@@ -32,7 +32,6 @@ class CycleLogAdapter(val mListener: OnLogItemClick) :
     }
 
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
             ItemCycleLogBinding.inflate(
@@ -49,13 +48,13 @@ class CycleLogAdapter(val mListener: OnLogItemClick) :
         holder.bind(mDataSet[position])
     }
 
-    fun getSelectedValue():String{
+    fun getSelectedValue(): String? {
         mDataSet.forEach {
-            if(it.isChecked){
-                return it.symptomShortName ?: ""
+            if (it.isChecked) {
+                return it.symptomShortName ?: null
             }
         }
-        return ""
+        return null
     }
 
     fun setData(resultData: List<FHFlowIconsModel>?) {
@@ -69,9 +68,9 @@ class CycleLogAdapter(val mListener: OnLogItemClick) :
 
     fun updateItem(data: FHFlowIconsModel, position: Int) {
         mDataSet.forEachIndexed { index, fhFlowIconsModel ->
-            if(index == position){
+            if (index == position) {
                 fhFlowIconsModel.isChecked = !data.isChecked
-            }else{
+            } else {
                 fhFlowIconsModel.isChecked = false
             }
         }

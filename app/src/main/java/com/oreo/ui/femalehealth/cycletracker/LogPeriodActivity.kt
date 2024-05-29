@@ -50,12 +50,11 @@ class LogPeriodActivity : BaseActivity<ActivityLogPeriodBinding>() {
     }
 
     private fun initCalendar() {
-        val currentDay = LocalDate.now()
         val currentMonth = YearMonth.now()
-        val calendarStart = LocalDate.parse("2023-03-01")//TODO to be changed as per user selection
+        val firstPeriodDate = viewModel.getFirstPeriodDate()
 
         binding.calendar.setup(
-            calendarStart.yearMonth, currentMonth.plusMonths(1), DayOfWeek.MONDAY
+            firstPeriodDate.minusMonths(2).yearMonth, currentMonth.plusMonths(12), DayOfWeek.MONDAY
         )
         class DayViewContainer(view: View) : ViewContainer(view) {
             lateinit var day: CalendarDay
@@ -64,8 +63,12 @@ class LogPeriodActivity : BaseActivity<ActivityLogPeriodBinding>() {
             init {
                 binding.root.setOnClickListener {
                     if (day.position == DayPosition.MonthDate) {
+                        if (day.date > viewModel.todayDate || day.date < firstPeriodDate) {
+                            return@setOnClickListener
+                        }
 
-                        //day.date
+                        viewModel.onCalendarDateClicked(day.date)
+
 
                         if (day.date <= LocalDate.now()) {
 //                            val intent = Intent()
@@ -88,12 +91,6 @@ class LogPeriodActivity : BaseActivity<ActivityLogPeriodBinding>() {
 
                     val (state, isDateSelected) = viewModel.getCurrentState(day.date)
 
-//                    if (isDateSelected) {
-//                        binding.ivBackSelected.visible()
-//                    } else {
-//                        binding.ivBackSelected.gone()
-//                    }
-
 
                     when (state) {
 
@@ -105,16 +102,18 @@ class LogPeriodActivity : BaseActivity<ActivityLogPeriodBinding>() {
                             )
                             if (this.day.date > viewModel.todayDate) {
                                 binding.dayBack.setImageResource(com.noisefit_commans.R.drawable.back_modal_workout)
-                                binding.dayBack.alpha = 0.5f
+                                //binding.dayBack.alpha = 0.5f
                             } else {
-                                binding.dayBack.setImageResource(R.drawable.back_circle_bubble_gum_pink)
-                                binding.dayBack.alpha = 1f
+                                //binding.dayBack.setImageResource(R.drawable.back_circle_bubble_gum_pink)
+                                binding.dayBack.setImageResource(R.drawable.ic_check_mark_period)
+                                //binding.dayBack.alpha = 1f
                             }
 
                         }
 
 
                         else -> {
+                            binding.dayBack.setImageResource(com.noisefit_commans.R.drawable.back_modal_workout)
                             hideAllBack(binding)
 
                             binding.tvDay.setTextColor(
@@ -132,17 +131,13 @@ class LogPeriodActivity : BaseActivity<ActivityLogPeriodBinding>() {
             }
 
             private fun hideAllBack(binding: CalendarDay3Binding) {
-
             }
         }
 
         binding.calendar.dayBinder = object : MonthDayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
-                viewModel.setLoading(true)
                 container.bind(day)
-                viewModel.setLoading(false)
-                binding.btnLog.visible()
             }
         }
         class MonthViewContainer(view: View) : ViewContainer(view) {
@@ -159,23 +154,47 @@ class LogPeriodActivity : BaseActivity<ActivityLogPeriodBinding>() {
                     } ${month.yearMonth.year}"
             }
         }
-        binding.calendar.scrollToDate(currentDay)
+        binding.calendar.scrollToMonth(viewModel.todayDate.yearMonth)
 
     }
 
     override fun initListener() {
-        binding.toolbar.view1.visible()
-        binding.toolbar.ivAddFriend.invisible()
-        binding.toolbar.view1.loadImage(this, R.drawable.ic_log_settings)
-        binding.toolbar.tvTitle.text=getString(R.string.text_log_period)
+        //binding.toolbar.view1.visible()
+        //binding.toolbar.ivAddFriend.invisible()
+        //binding.toolbar.view1.loadImage(this, R.drawable.ic_log_settings)
+        binding.toolbar.tvTitle.text = getString(R.string.text_log_period)
 
         binding.toolbar.backBtn.setOnClickListener {
             finish()
+        }
+
+        binding.btnLog.setOnClickListener {
+            viewModel.savePeriodLog()
         }
     }
 
 
     override fun observeSubscriber() {
+
+
+        viewModel.logPeriodData.observe(this) {
+            it?.getContent()?.let {
+                val (start, end) = viewModel.getLastInteractedRange()
+                val intent = Intent()
+                intent.putExtra("period_date_start", start)
+                intent.putExtra("period_date_end", end)
+                setResult(RESULT_OK, intent)
+                finish()
+            }
+        }
+
+        viewModel.notifyDateChanged.observe(this) {
+            it.getContent()?.let { dates ->
+                dates.forEach { date ->
+                    binding.calendar.notifyDateChanged(date)
+                }
+            }
+        }
         viewModel.cycleHistoryData.observe(this) {
             initCalendar()
         }

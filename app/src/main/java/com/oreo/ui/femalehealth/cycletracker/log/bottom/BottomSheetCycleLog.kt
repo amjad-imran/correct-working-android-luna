@@ -21,6 +21,7 @@ import com.oreo.ui.femalehealth.cycletracker.log.CycleLogAdapter
 import com.oreo.ui.femalehealth.cycletracker.log.OnLogItemClick
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 const val CYCLE_LOG_SAVE = "CYCLE_LOG_SAVE"
 
@@ -49,13 +50,18 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.let {
 //            cycleLog = args.data
-            viewModel.todayDate = LocalDate.parse(args.selectedDate)
+        viewModel.selectedDate = LocalDate.parse(args.selectedDate)
+
+        if (args.periodEndDate != null) {
+            viewModel.periodStartDate = LocalDate.parse(args.selectedDate)
+            viewModel.periodEndDate = LocalDate.parse(args.periodEndDate)
         }
+
         setRecycler()
         setTitleDate()
-        viewModel.getFemaleHealthIcons(viewModel.todayDate.toString())
+        viewModel.getPeriodDates()
+        viewModel.getFemaleHealthIcons(viewModel.selectedDate.toString())
 
     }
 
@@ -73,7 +79,7 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
 
     private fun setTitleDate() {
         binding.tvDate.text = DateFormats.formatDate(
-            viewModel.todayDate.toString(),
+            viewModel.selectedDate.toString(),
             DateFormats.dateFormat3(),
             DateFormats.dateFormat7()
         )
@@ -86,16 +92,17 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
         binding.btnSave.setOnClickListener {
             val flowType = flowAdapter.getSelectedValue()
             val symptoms = symptomsAdapter.getData()
-            val date = viewModel.todayDate.toString()
+            val date = viewModel.selectedDate.toString()
             viewModel.saveSymptom(date, symptoms, flowType)
         }
 
         binding.ivRight.setOnClickListener {
 
-            viewModel.todayDate = LocalDate.parse(viewModel.todayDate.toString()).plusDays(1)
+            viewModel.selectedDate = LocalDate.parse(viewModel.selectedDate.toString()).plusDays(1)
             setTitleDate()
+            viewModel.getPeriodDates()
 
-            viewModel.getFemaleHealthIcons(viewModel.todayDate.toString())
+            viewModel.getFemaleHealthIcons(viewModel.selectedDate.toString())
             setFragmentResult(
                 CALENDER_DAY_LOG_KEY,
                 bundleOf("right" to true)
@@ -104,9 +111,10 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
 
         binding.ivBack.setOnClickListener {
 
-            viewModel.todayDate = LocalDate.parse(viewModel.todayDate.toString()).plusDays(-1)
+            viewModel.selectedDate = LocalDate.parse(viewModel.selectedDate.toString()).plusDays(-1)
             setTitleDate()
-            viewModel.getFemaleHealthIcons(viewModel.todayDate.toString())
+            viewModel.getPeriodDates()
+            viewModel.getFemaleHealthIcons(viewModel.selectedDate.toString())
             setFragmentResult(
                 CALENDER_DAY_LOG_KEY,
                 bundleOf("left" to true)
@@ -117,7 +125,7 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
 
             setFragmentResult(
                 CYCLE_LOG_SAVE,
-                bundleOf("openActivity" to false)
+                bundleOf("openActivity" to true)
             )
             navigateUpSafe()
         }
@@ -125,13 +133,25 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
 
 
     override fun subscribeObservers() {
+
+        viewModel.currentPeriodRange.observe(this) {
+            if (it == null) {
+                binding.tvSelectedDays.gone()
+            } else {
+                binding.tvSelectedDays.apply {
+                    text = it
+                    visible()
+                }
+            }
+        }
+
         viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->
                 context.showShortToast(message)
             }
         }
 
-        viewModel.serverSuccess.observe(this){
+        viewModel.serverSuccess.observe(this) {
             it?.getContent()?.let {
 
                 setFragmentResult(

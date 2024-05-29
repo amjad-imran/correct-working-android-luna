@@ -50,10 +50,10 @@
                     android:layout_marginTop="36dp"
                     android:layout_marginEnd="16dp"
                     android:gravity="center"
-                    tools:text="@string/text_activities"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/view23" />
+                    app:layout_constraintTop_toBottomOf="@+id/view23"
+                    tools:text="@string/text_activities" />
 
                 <TextView
                     android:id="@+id/tvDate"
@@ -92,6 +92,18 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvDate" />
 
+                <TextView
+                    android:id="@+id/tvSelectedDays"
+                    style="@style/S16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:textColor="@color/white_48"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvPeriodLabel"
+                    app:layout_constraintStart_toEndOf="@+id/tvPeriodLabel"
+                    app:layout_constraintTop_toTopOf="@+id/tvPeriodLabel"
+                    tools:text="17 - 22 Feb" />
+
                 <ImageView
                     android:id="@+id/ivLogAdd"
                     android:layout_width="wrap_content"
@@ -111,6 +123,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvPeriodLabel" />
+
                 <TextView
                     android:id="@+id/tvFlowLabel"
                     style="@style/H5"
@@ -121,21 +134,23 @@
                     android:text="@string/text_flow"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider1" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvFlow"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:layout_marginEnd="24dp"
                     android:layout_marginTop="12dp"
+                    android:layout_marginEnd="24dp"
                     android:orientation="horizontal"
-                    app:layout_constraintBottom_toTopOf="@id/divider2"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toTopOf="@id/divider2"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvFlowLabel"
                     tools:itemCount="10"
                     tools:listitem="@layout/item_cycle_log" />
+
                 <include
                     android:id="@+id/divider2"
                     layout="@layout/layout_divider"
@@ -145,6 +160,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/rvFlow" />
+
                 <TextView
                     android:id="@+id/tvSymptomsLabel"
                     style="@style/H5"
@@ -155,36 +171,38 @@
                     android:text="@string/text_symptoms"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider2" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvSymptoms"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
+                    android:layout_marginTop="12dp"
                     android:layout_marginEnd="24dp"
                     android:orientation="horizontal"
-                    android:layout_marginTop="12dp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toTopOf="@id/btnSave"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/btnSave"
                     app:layout_constraintTop_toBottomOf="@+id/tvSymptomsLabel"
                     tools:itemCount="10"
                     tools:listitem="@layout/item_cycle_log" />
+
                 <Button
                     android:id="@+id/btnSave"
                     style="@style/SecondaryFMHButtonStyle"
                     android:layout_width="match_parent"
+                    android:layout_height="40dp"
                     android:layout_marginStart="24dp"
-                    android:layout_marginBottom="24dp"
+                    android:layout_marginTop="36dp"
                     android:layout_marginEnd="24dp"
+                    android:layout_marginBottom="24dp"
                     android:text="@string/text_save"
                     app:backgroundTint="@null"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="36dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/rvSymptoms"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@id/rvSymptoms" />
 
                 <include
                     android:id="@+id/progressBar"

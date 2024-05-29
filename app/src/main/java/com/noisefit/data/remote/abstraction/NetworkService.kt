@@ -1,5 +1,6 @@
 package com.noisefit.data.remote.abstraction
 
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.model.FeedResponse
 import com.noisefit.data.model.timeline.FriendTimeline
@@ -425,7 +426,7 @@ interface NetworkService {
     @POST
     suspend fun logPeriod(
         @Url url: String,
-        @Body requestObject: JsonObject
+        @Body jsonObject: JsonObject
     ): BaseApiResponse<Any>
 
     @GET

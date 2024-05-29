@@ -1920,7 +1920,7 @@ class OreoUserActivityRepositoryImpl(
 
     override suspend fun logPeriod(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/log"
+            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/log/period"
             remoteDataSource.logPeriod(url, jsonObject)
         }
     }

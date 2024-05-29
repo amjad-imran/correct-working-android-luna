@@ -17,6 +17,7 @@ import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,13 +34,20 @@ constructor(
     private val _femaleHealthIcons = MutableLiveData<FemaleHealthIconsModel>()
     val femaleHealthIcons: LiveData<FemaleHealthIconsModel> get() = _femaleHealthIcons
 
-    var todayDate = LocalDate.now()
+
+    private val _currentPeriodRange = MutableLiveData<String?>()
+    val currentPeriodRange: LiveData<String?> get() = _currentPeriodRange
+
+    var selectedDate = LocalDate.now()
+
+    var periodStartDate: LocalDate? = null
+    var periodEndDate: LocalDate? = null
 
     fun getFemaleHealthIcons(date: String) {
 
         viewModelScope.launch {
-            if(_femaleHealthIcons.value != null){
-                getDataForDate(date,_femaleHealthIcons.value)
+            if (_femaleHealthIcons.value != null) {
+                getDataForDate(date, _femaleHealthIcons.value)
                 return@launch
             }
             userActivityRepository.getFemaleHealthIcons().collect { resource ->
@@ -70,7 +78,7 @@ constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            getDataForDate(date,it)
+                            getDataForDate(date, it)
                         }
                     }
                 }
@@ -79,7 +87,7 @@ constructor(
         }
     }
 
-    fun getDataForDate(date: String,femaleHealthIconsModel: FemaleHealthIconsModel?) {
+    fun getDataForDate(date: String, femaleHealthIconsModel: FemaleHealthIconsModel?) {
         viewModelScope.launch {
             userActivityRepository.getFemaleHealthUserInfo(date).collect { resource ->
                 when (resource) {
@@ -97,7 +105,7 @@ constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        getDataForDate(date,femaleHealthIconsModel)
+                                        getDataForDate(date, femaleHealthIconsModel)
                                     }
 
                                     override fun no() {
@@ -123,7 +131,7 @@ constructor(
 
                                 if (femaleHealthUserInfo?.symptom?.flow?.symptomShortName?.lowercase() == data.symptomShortName?.lowercase()) {
                                     data.isChecked = true
-                                }else{
+                                } else {
                                     data.isChecked = false
                                 }
                             }
@@ -137,10 +145,10 @@ constructor(
     }
 
 
-    fun saveSymptom(date:String,symptoms:ArrayList<String>,flowType:String){
+    fun saveSymptom(date: String, symptoms: ArrayList<String>, flowType: String?) {
         val jsonObject = JsonObject().apply {
-            this.addProperty("date",date)
-            this.addProperty("flow_type",flowType)
+            this.addProperty("date", date)
+            this.addProperty("flow_type", flowType)
             this.add("symptoms", JsonArray().apply {
                 symptoms.forEach { selectedId ->
                     this.add(selectedId)
@@ -183,6 +191,19 @@ constructor(
             }
 
         }
+    }
+
+    fun getPeriodDates() {
+        if (periodStartDate != null && periodEndDate != null) {
+            if (selectedDate <= periodEndDate) {
+                _currentPeriodRange.value =
+                    "${periodStartDate!!.format(DateTimeFormatter.ofPattern("dd"))} - ${
+                        periodEndDate!!.format(DateTimeFormatter.ofPattern("dd MMM"))
+                    }"
+                return
+            }
+        }
+        _currentPeriodRange.value = null
     }
 
 }

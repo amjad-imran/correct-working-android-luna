@@ -92,11 +92,8 @@ class CalenderDayLogBottomSheet :
 
     private fun setTopData(data: FemaleHealthUserInfoModel) {
         binding.apply {
-            val selectedDateLocal = if (viewModel.todayDate == null) {
-                LocalDate.now()
-            } else {
-                viewModel.todayDate
-            }
+            val selectedDateLocal = viewModel.selectedDate.value ?: LocalDate.now()
+
             val selectedDate = selectedDateLocal.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
             if (selectedDateLocal > LocalDate.now()) {

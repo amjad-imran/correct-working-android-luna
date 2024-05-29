@@ -773,6 +773,10 @@
         <argument
             android:name="selectedDate"
             app:argType="string" />
+        <argument
+            android:name="periodEndDate"
+            app:argType="string"
+            app:nullable="true" />
 
     </dialog>
 
