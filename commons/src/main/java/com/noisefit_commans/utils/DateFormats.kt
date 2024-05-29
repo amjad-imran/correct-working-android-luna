@@ -633,9 +633,9 @@ object DateFormats {
         }
     }
 
-    val mWeek = SimpleDateFormat("EEE", defaultLocale)
+   /* val mWeek = SimpleDateFormat("EEE", defaultLocale)
     val mDay = SimpleDateFormat("d", defaultLocale)
-    val mMonth = SimpleDateFormat("MMM", defaultLocale)
+    val mMonth = SimpleDateFormat("MMM", defaultLocale)*/
 
     fun getOrdinalDate(
         dateInput: String?,
@@ -644,9 +644,9 @@ object DateFormats {
         return try {
             if (dateInput.isNullOrEmpty()) return ""
             val date = currentFormat.parse(dateInput) ?: return ""
-            val week = mWeek.format(date)
-            val day = mDay.format(date)
-            val month = mMonth.format(date)
+            val week = SimpleDateFormat("EEE", defaultLocale).format(date)
+            val day = SimpleDateFormat("d", defaultLocale).format(date)
+            val month = SimpleDateFormat("MMM", defaultLocale).format(date)
             return "$week, $day${getDayOfMonthSuffix(day.toInt())} $month"
         } catch (exp: Exception) {
             ""
@@ -660,8 +660,8 @@ object DateFormats {
         return try {
             if (dateInput.isNullOrEmpty()) return ""
             val date = currentFormat.parse(dateInput) ?: return ""
-            val day = mDay.format(date)
-            val month = mMonth.format(date)
+            val day = SimpleDateFormat("d", defaultLocale).format(date)
+            val month = SimpleDateFormat("MMM", defaultLocale).format(date)
             return "$day${getDayOfMonthSuffix(day.toInt())} $month"
         } catch (exp: Exception) {
             ""
