@@ -148,6 +148,7 @@ class OreoUserActivityRepositoryImpl(
             var registerDate: Int? = null
             var firstStress: String? = null
             var stressBeta: Boolean? = null
+            var enableAi: Boolean? = null
             var tempBaseLine: Float? = null
 
             var apiStartDate: String? = startDate
@@ -233,6 +234,7 @@ class OreoUserActivityRepositoryImpl(
                                 registerDate = ringDataStore.getRegisterDay(),
                                 firstStress = ringDataStore.getFirstStressDay(),
                                 stressBeta = ringDataStore.getStressBetaState(),
+                                enableAi = ringDataStore.getEnableAiState(),
                                 tempBaseLine = ringDataStore.getTempBaseLine()
                             ),
                             message = "",
@@ -272,8 +274,10 @@ class OreoUserActivityRepositoryImpl(
                             tempBaseLine = response.tempBaseLine
                             firstStress = response.firstStress
                             stressBeta = response.stressBeta
+                            enableAi = response.enableAi
                             ringDataStore.setFirstStressDay(response.firstStress)
                             ringDataStore.setStressBetaState(response.stressBeta)
+                            ringDataStore.setEnableAiState(response.enableAi?:false)
                             ringDataStore.setTempBaseLine(tempBaseLine ?: 98.6f)
 
                             ringDataStore.setRegisterDay(registerDate ?: -1)
@@ -312,7 +316,8 @@ class OreoUserActivityRepositoryImpl(
                                             registerDate = registerDate,
                                             tempBaseLine = tempBaseLine,
                                             firstStress = firstStress,
-                                            stressBeta = stressBeta
+                                            stressBeta = stressBeta,
+                                            enableAi = enableAi
                                         ),
                                         message = "",
                                     )

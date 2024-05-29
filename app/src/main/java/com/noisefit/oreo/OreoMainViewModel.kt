@@ -86,6 +86,7 @@ constructor(
     var trendsData: TrendsData? = null
     var stressFirstDate: String? = null
     var stressBeta: Boolean = false
+    var enableAi: Boolean = false
     val dataReload = MutableLiveData<Event<List<String>>>()
     val dashTodayReload = MutableLiveData<Event<Boolean>>()
 
@@ -259,6 +260,7 @@ constructor(
                             registerDate = it.registerDate ?: -1
                             stressFirstDate = it.firstStress
                             stressBeta = it.stressBeta ?: false
+                            enableAi = it.enableAi ?: false
                             temperatureBaseLine = it.tempBaseLine ?: DEFAULT_TEMPERATURE_BASELINE
 
                             it.data.forEach { data ->

@@ -84,4 +84,7 @@ interface RingDataStore {
     fun getStressBetaState(): Boolean?
     fun setStressBetaState(state: Boolean?)
 
+    fun getEnableAiState(): Boolean
+    fun setEnableAiState(state: Boolean)
+
 }

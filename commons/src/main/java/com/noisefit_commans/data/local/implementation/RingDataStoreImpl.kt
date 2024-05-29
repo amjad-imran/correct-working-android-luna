@@ -39,6 +39,7 @@ private const val OTA_VERSION_REMIND = "OTA_VERSION_REMIND"
 private const val OTA_VERSION_CURRENT = "OTA_VERSION_CURRENT"
 private const val FIRST_STRESS_DAY = "FIRST_STRESS_DAY"
 private const val STRESS_BETA_STATE = "STRESS_BETA_STATE"
+private const val ENABLE_AI_STATE = "ENABLE_AI_STATE"
 
 private const val UPDATE_USER_DEVICE_STATUS = "UPDATE_USER_DEVICE_STATUS"
 
@@ -50,6 +51,15 @@ class RingDataStoreImpl
     private val gson: Gson,
     private val mPrefs: SharedPreferences
 ) : RingDataStore {
+    override fun getEnableAiState(): Boolean {
+        return mPrefs.getBoolean(ENABLE_AI_STATE, false)
+
+    }
+
+    override fun setEnableAiState(state: Boolean) {
+        mPrefs.edit()?.putBoolean(FIRST_STRESS_DAY, state)?.commit()
+
+    }
 
     override fun getFirstStressDay(): String? {
         return mPrefs.getString(FIRST_STRESS_DAY, null)

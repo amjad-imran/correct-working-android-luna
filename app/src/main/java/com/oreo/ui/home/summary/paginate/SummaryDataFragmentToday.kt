@@ -180,6 +180,7 @@ class SummaryDataFragmentToday :
                 viewModel.registerDate = mainViewModel.registerDate
                 viewModel.serverUserHealthData = dash.first
                 viewModel.stressBeta = mainViewModel.stressBeta
+                viewModel.enableAi = mainViewModel.enableAi
                 viewModel.shouldShowStressCard = mainViewModel.shouldShowStressCard(it)
                 setUi(dash.first, dash.second)
             }
