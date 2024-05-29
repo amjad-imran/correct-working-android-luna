@@ -26,7 +26,6 @@ import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChartModel
-import com.oreo.receiver.workManager.HealthOverviewDataType
 import com.oreo.ui.custom.ScrollListener
 import com.oreo.ui.home.summary.paginate.SummaryPagerAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -234,26 +233,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         binding.lytHeader.profileView1.setOnLongClickListener {
             if (BuildConfig.DEBUG) {
-                val stress = viewModel.watchDataStore.testGetStressData()
-                val bodyBattery = viewModel.watchDataStore.testGetBodyBatteryData()
-                val text = StringBuilder()
-                text.append("Stress Data ")
-                text.append(stress)
-                text.appendLine()
-                text.appendLine()
-                text.append("Body Battery Data ")
-                text.append(bodyBattery)
-
-                uiController.onApiErrorReceived(
-                    ErrorResponse(
-                        UIComponentType.InfoAlertDialog(
-                            "Stress-Body Battery data",
-                            text.toString(),
-
-                            getString(R.string.text_ok)
-                        )
-                    )
-                )
+                navigate(R.id.chatGptFragment)
                 //navigate(R.id.logsDisplayFragment)
             }
             return@setOnLongClickListener true

@@ -5,9 +5,9 @@ import com.google.gson.JsonObject
 import com.noisefit.data.remote.abstraction.NetworkService
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.safeApiCallFlow
-
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.response.BaseApiResponse
+import com.oreo.data.model.ChatGptResponse
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -28,5 +28,19 @@ class OreoDeviceRepositoryImpl(
         }
     }
 
+    override suspend fun askQuestionToChatGpt(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<ChatGptResponse>?>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/chat"
+            remoteDataSource.askQuestionToChatGpt(url, jsonObject)
 
+        }
+    }
+
+    override suspend fun pollForAnswer(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<ChatGptResponse>?>> {
+        return safeApiCallFlow(dispatcher) {
+            val url = "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/ai-bridge/message/polling"
+            remoteDataSource.pollForAnswer(url, jsonObject)
+
+        }
+    }
 }

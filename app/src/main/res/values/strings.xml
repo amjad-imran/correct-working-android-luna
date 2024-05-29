@@ -1119,6 +1119,15 @@
     <string name="text_message_imperial">Measures in feet, inches, and pounds.</string>
     <string name="text_enable_notifications">Enable notifications</string>
     <string name="text_notification_message">Allow LUNA to update you about: battery level, inactivity alerts, activity progress, bedtime reminders, and personalised insights.</string>
+    <string name="text_talk_anything_to_luna_your_personal_24_7_health_companion">Talk anything to Luna, your personal 24*7 health companion</string>
+    <string name="text_the_luna_ring_is_crafted_by_top_minds_in_sports_science_engineering_and_data_science_it_processes_huge_volumes_of_data_over_70_bio_markers_everyday_the_luna_ai_is_developed_with_inputs_from_leading_fitness_and_wellness_experts">The Luna Ring is crafted by top minds in Sports Science, Engineering and Data Science. It processes huge volumes of data over 70 bio-markers everyday. The Luna AI is developed with inputs from leading fitness and wellness experts.</string>
+    <string name="text_tell_us_what_s_happening">+ Tell us what’s happening</string>
+    <string name="text_talk_to">Talk to</string>
+    <string name="text_learn_more_about_yourself">Learn more about yourself.</string>
+    <string name="text_ai_content_1">Connect with Luna AI, your smart health coach. Ask questions and get tailored feedback on your health metrics. Luna AI guides your wellness journey with practical, actionable insights.</string>
+    <string name="text_ai_content_2">When overwhelmed or fatigued, Luna AI helps identify factors affecting your well-being, offering personalized advice to improve rest and manage stress, maintaining balance and resilience.</string>
+    <string name="text_ai_content_3">Prepare for your next athletic challenge with Luna AI as your personal coach and nutritionist.</string>
+    <string name="text_ai_error_message">Sorry %s, my circuits must be in a twist! Let’s run that by me again.</string>
 
 
 </resources>

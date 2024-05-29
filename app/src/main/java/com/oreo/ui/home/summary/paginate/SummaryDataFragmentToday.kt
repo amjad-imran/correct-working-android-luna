@@ -313,6 +313,13 @@ class SummaryDataFragmentToday :
                     navigate(R.id.napDetails, bundleOf("napId" to type.napId))
                 }
 
+                is OSummaryHealthOverviewClickEnum.OnAiCardClicked -> {
+                    if (viewModel.isChatSplashShown()) {
+                        navigate(R.id.chatGptFragment)
+                    } else {
+                        navigate(R.id.chatSplashFragment)
+                    }
+                }
             }
         }
 

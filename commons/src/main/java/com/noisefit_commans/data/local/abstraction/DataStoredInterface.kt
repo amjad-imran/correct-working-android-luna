@@ -444,4 +444,7 @@ interface DataStoredInterface {
 
     fun saveSleepSyncedForDate(date: String)
     fun isSleepSyncedForDate(date: String): Boolean
+
+    fun isAiChatSplashShown(): Boolean
+    fun setAiChatSplashShown()
 }

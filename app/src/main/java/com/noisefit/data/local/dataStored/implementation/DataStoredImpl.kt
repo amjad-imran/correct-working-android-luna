@@ -195,6 +195,7 @@ private const val SLEEP_NOTIFICATION = "SLEEP_NOTIFICATION"
 private const val READINESS_NOTIFICATION = "READINESS_NOTIFICATION"
 private const val STRESS_WALKRHTOUGH = "STRESS_WALKRHTOUGH"
 private const val SLEEP_MOENGAGE_SYNC_DATE = "SLEEP_MOENGAGE_SYNC_DATE"
+private const val AI_CHAT_ONBOARD = "AI_CHAT_ONBOARD"
 
 
 private const val APP_VERSION_NEW = "APP_VERSION_NEW"
@@ -219,6 +220,14 @@ class DataStoredImpl
     override fun isSleepSyncedForDate(date: String): Boolean {
         val savedDate = mPrefs.getString(SLEEP_MOENGAGE_SYNC_DATE, null) ?: return false
         return savedDate.equals(date)
+    }
+
+    override fun isAiChatSplashShown(): Boolean {
+        return mPrefs.getBoolean(AI_CHAT_ONBOARD, false)
+    }
+
+    override fun setAiChatSplashShown() {
+        mPrefs.edit()?.putBoolean(AI_CHAT_ONBOARD, true)?.commit()
     }
 
     override fun getStressWalkthroughShownStatus(): Boolean {
@@ -310,6 +319,7 @@ class DataStoredImpl
     override fun clearUserLogoutData() {
         mPrefs.edit()?.remove(BATTERY_DASH_ALERT)?.apply()
         mPrefs.edit()?.remove(STRESS_WALKRHTOUGH)?.apply()
+        mPrefs.edit()?.remove(AI_CHAT_ONBOARD)?.apply()
     }
 
     override fun getDashCardClickState(): HashMap<DashInfoCard, Boolean> {

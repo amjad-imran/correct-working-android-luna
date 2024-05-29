@@ -244,6 +244,8 @@ class SummaryDataViewModelToday @Inject constructor(
 
             handleInfoCards(healthData, trendsData, userActivities, viewedCardsData)
 
+
+
             val readinessModel = ODashboardReadinessModel(
                 readinessScore = healthData.readiness?.readinessScore?.value,
                 status = healthData.readiness?.readinessScore?.text?.capitalizeWords(),
@@ -283,7 +285,6 @@ class SummaryDataViewModelToday @Inject constructor(
 
 
             val daySlot = getDaySlot()
-            LOGS.d("TIME_TEST", "daySlot $daySlot")
 
             when (daySlot) {
                 0 -> {
@@ -295,6 +296,7 @@ class SummaryDataViewModelToday @Inject constructor(
                                     userActivities.add(OHealthOverview.Readiness(readinessModel))
                                 }
                             }
+                            userActivities.add(OHealthOverview.LunaAiCard())
                             if ((sleepModel.totalSleep ?: 0) > 0) {
                                 userActivities.add(
                                     OHealthOverview.Sleep(
@@ -305,8 +307,11 @@ class SummaryDataViewModelToday @Inject constructor(
                                     )
                                 )
                             }
+                        }else{
+                            userActivities.add(OHealthOverview.LunaAiCard())
                         }
                     } else {
+                        userActivities.add(OHealthOverview.LunaAiCard())
                         userActivities.add(OHealthOverview.SleepWaiting)
                     }
                     if (nap.isNotEmpty()) {
@@ -324,6 +329,7 @@ class SummaryDataViewModelToday @Inject constructor(
                                     userActivities.add(OHealthOverview.Readiness(readinessModel))
                                 }
                             }
+                            userActivities.add(OHealthOverview.LunaAiCard())
                             if ((sleepModel.totalSleep ?: 0) > 0) {
                                 userActivities.add(
                                     OHealthOverview.Sleep(
@@ -334,8 +340,11 @@ class SummaryDataViewModelToday @Inject constructor(
                                     )
                                 )
                             }
+                        }else{
+                            userActivities.add(OHealthOverview.LunaAiCard())
                         }
                     } else {
+                        userActivities.add(OHealthOverview.LunaAiCard())
                         userActivities.add(OHealthOverview.SleepWaiting)
                     }
                     if (nap.isNotEmpty()) {
@@ -372,6 +381,7 @@ class SummaryDataViewModelToday @Inject constructor(
                                 userActivities.add(OHealthOverview.Readiness(readinessModel))
                             }
                         }
+                        userActivities.add(OHealthOverview.LunaAiCard())
 
                         healthData.sleep?.let {
                             if ((sleepModel.totalSleep ?: 0) > 0) {
@@ -385,6 +395,8 @@ class SummaryDataViewModelToday @Inject constructor(
                                 )
                             }
                         }
+                    }else{
+                        userActivities.add(OHealthOverview.LunaAiCard())
                     }
                     if (nap.isNotEmpty()) {
                         userActivities.add(OHealthOverview.NapDashCard(nap, healthData.date))
@@ -433,6 +445,9 @@ class SummaryDataViewModelToday @Inject constructor(
                             )
                         }
                     }
+
+                    userActivities.add(OHealthOverview.LunaAiCard())
+
 
                     if (registerDate != 0) {
                         if (healthData.sleep?.sleepScore != null) {
@@ -1147,6 +1162,11 @@ class SummaryDataViewModelToday @Inject constructor(
             }
         }
 
+    }
+
+    fun isChatSplashShown(): Boolean {
+//        return false
+        return localDataStore.isAiChatSplashShown()
     }
 
 
