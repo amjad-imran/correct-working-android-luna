@@ -1278,7 +1278,7 @@ class HeartRateChartView : View {
         val edgeTextPadding = dip2px(4f)
 
         val startText = DateFormats.formatDate(
-            startTimeStr, DateFormats.dateTimeFormat5, DateFormats.timeFormat12_2
+            startTimeStr, DateFormats.dateTimeFormat5(), DateFormats.timeFormat12_2()
         ).lowercase()
 
         var rectF = RectF(
@@ -1297,7 +1297,7 @@ class HeartRateChartView : View {
 
 
         val text = DateFormats.formatDate(
-            endTimeStr, DateFormats.dateTimeFormat5, DateFormats.timeFormat12_2
+            endTimeStr, DateFormats.dateTimeFormat5(), DateFormats.timeFormat12_2()
         ).lowercase()
         val textWidth = mTextPaintEdge.measureText(text)
 

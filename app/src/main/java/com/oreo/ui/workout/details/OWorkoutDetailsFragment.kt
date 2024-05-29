@@ -126,7 +126,7 @@ class OWorkoutDetailsFragment :
 //        binding.lytIntensity.tvIntensityType.text = it.intensity
 
 
-        if (it.date == DateFormats.getCurrentDate(DateFormats.dateFormat3) && !it.type.equals(
+        if (it.date == DateFormats.getCurrentDate(DateFormats.dateFormat3()) && !it.type.equals(
                 "auto",
                 true
             ) && !it.type.equals(

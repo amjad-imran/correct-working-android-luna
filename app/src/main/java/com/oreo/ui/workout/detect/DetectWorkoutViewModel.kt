@@ -62,7 +62,7 @@ constructor(
                         resource.value?.forEach {
                             val date = DateFormats.convertTimestampToDate(
                                 it.startTime,
-                                DateFormats.monthDateWithoutYear2
+                                DateFormats.monthDateWithoutYear2()
                             )
 
 
@@ -174,18 +174,18 @@ constructor(
             calories = data.calories
             intensity = getIntensity(data.intensity ?: 0)
             steps = data.steps
-            date = DateFormats.convertTimestampToDate(endTime, DateFormats.dateFormat3)
+            date = DateFormats.convertTimestampToDate(endTime, DateFormats.dateFormat3())
 
             tryCatch {
                 val startTime =
-                    DateFormats.convertTimestampToDate(data.startTime, DateFormats.timeFormat)
+                    DateFormats.convertTimestampToDate(data.startTime, DateFormats.timeFormat())
                 if (startTime.isNotEmpty()) {
                     val startArray = startTime.split(":")
                     startHour = startArray[0].toInt()
                     startMinute = startArray[1].toInt()
                 }
                 val endTimeText =
-                    DateFormats.convertTimestampToDate(endTime, DateFormats.timeFormat)
+                    DateFormats.convertTimestampToDate(endTime, DateFormats.timeFormat())
                 if (endTimeText.isNotEmpty()) {
                     val endArray = endTimeText.split(":")
                     endHour = endArray[0].toInt()

@@ -141,18 +141,18 @@ constructor(
         dataList.forEach {
             val chartModel = ChartModel()
             var currentDayText = ""
-            if (it.date == DateFormats.getCurrentDate(DateFormats.dateFormat3)) {
+            if (it.date == DateFormats.getCurrentDate(DateFormats.dateFormat3())) {
                 currentDayText = "Today, "
             }
             val formattedDate = if (currentDayText.isEmpty()) {
                 DateFormats.getOrdinalDate(
                     it.date,
-                    DateFormats.dateFormat3,
+                    DateFormats.dateFormat3(),
                 )
             } else {
                 DateFormats.getOrdinalDateToday(
                     it.date,
-                    DateFormats.dateFormat3,
+                    DateFormats.dateFormat3(),
                 )
             }
 
@@ -169,14 +169,14 @@ constructor(
         val lastDate = DateFormats.subtractDateFormat3(lastDateFromList, 1)!!
         val suffixDatesList = DateFormats.getWeekDaysBetweenDates(
             DateFormats.subtractDateFormat3(lastDate, 14)!!, lastDate,
-            DateFormats.dateFormat3, DateFormats.singleWeekDay
+            DateFormats.dateFormat3(), DateFormats.singleWeekDay()
         )
         val currentDateFromList = dataList.last().date
         val currentDate = DateFormats.addDateFormat3(currentDateFromList, 1)!!
         val prefixDatesList = DateFormats.getWeekDaysBetweenDates(
             currentDate,
             DateFormats.addDateFormat3(currentDate, 14)!!,
-            DateFormats.dateFormat3, DateFormats.singleWeekDay
+            DateFormats.dateFormat3(), DateFormats.singleWeekDay()
         )
 
         val suffix = java.util.ArrayList<ChartModel>()
@@ -223,14 +223,14 @@ constructor(
 //        val lastDate = DateFormats.subtractDateFormat3(lastDateFromList, 1)!!
 //        val suffixDatesList = DateFormats.getWeekDaysBetweenDates(
 //            DateFormats.subtractDateFormat3(lastDate, 14)!!, lastDate,
-//            DateFormats.dateFormat3, DateFormats.singleWeekDay
+//            DateFormats.dateFormat3(), DateFormats.singleWeekDay()
 //        )
 //        val currentDateFromList = dataList.first().date
 //        val currentDate = DateFormats.addDateFormat3(currentDateFromList, 1)!!
 //        val prefixDatesList = DateFormats.getWeekDaysBetweenDates(
 //            currentDate,
 //            DateFormats.addDateFormat3(currentDate, 14)!!,
-//            DateFormats.dateFormat3, DateFormats.singleWeekDay
+//            DateFormats.dateFormat3(), DateFormats.singleWeekDay()
 //        )
 
         val suffix = java.util.ArrayList<ChartModel>()

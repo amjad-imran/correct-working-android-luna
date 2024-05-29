@@ -271,8 +271,8 @@ class NightTimeGraphViewOreo(var mContext: Context) : View(
 
             val startText = DateFormats.formatDate(
                 startTime,
-                DateFormats.dateTimeFormat5,
-                DateFormats.timeFormat12_2
+                DateFormats.dateTimeFormat5(),
+                DateFormats.timeFormat12_2()
             ).lowercase()
 
             val rectF = RectF(
@@ -303,8 +303,8 @@ class NightTimeGraphViewOreo(var mContext: Context) : View(
 
             val text = DateFormats.formatDate(
                 endTime,
-                DateFormats.dateTimeFormat5,
-                DateFormats.timeFormat12_2
+                DateFormats.dateTimeFormat5(),
+                DateFormats.timeFormat12_2()
             )
             val textWidth = mTextPaintEdge.measureText(text)
 
@@ -325,8 +325,8 @@ class NightTimeGraphViewOreo(var mContext: Context) : View(
             canvas.drawText(
                 DateFormats.formatDate(
                     endTime,
-                    DateFormats.dateTimeFormat5,
-                    DateFormats.timeFormat12_2
+                    DateFormats.dateTimeFormat5(),
+                    DateFormats.timeFormat12_2()
                 ).lowercase(),
                 (width - textWidth - endPadding) - edgeTextPadding,
                 (sectionHeight * 3) + pxFromDp(20f),
@@ -336,8 +336,8 @@ class NightTimeGraphViewOreo(var mContext: Context) : View(
 
 
         /*tryCatch {
-            val startTime = DateFormats.dateTimeFormat5.parse(startTimeStr)
-            val endTime = DateFormats.dateTimeFormat5.parse(endTimeStr)
+            val startTime = DateFormats.dateTimeFormat5().parse(startTimeStr)
+            val endTime = DateFormats.dateTimeFormat5().parse(endTimeStr)
 
 
             val duration = (endTime.time - startTime.time) / 1000
@@ -353,10 +353,10 @@ class NightTimeGraphViewOreo(var mContext: Context) : View(
                 val center = (width - endPadding) / 2
 
                 val textWidth1 = mTextPaint.measureText(
-                    DateFormats.time12Meridian.format(midLeftTIme).lowercase()
+                    DateFormats.time12Meridian().format(midLeftTIme).lowercase()
                 )
                 canvas.drawText(
-                    DateFormats.time12Meridian.format(midLeftTIme).lowercase(),
+                    DateFormats.time12Meridian().format(midLeftTIme).lowercase(),
                     center / 2 - textWidth1 / 2,
                     sectionHeight * 5 - pxFromDp(5.0f),
                     mTextPaint
@@ -364,19 +364,19 @@ class NightTimeGraphViewOreo(var mContext: Context) : View(
 
 
                 val textWidthCenter =
-                    mTextPaint.measureText(DateFormats.time12Meridian.format(midTime).lowercase())
+                    mTextPaint.measureText(DateFormats.time12Meridian().format(midTime).lowercase())
 
                 canvas.drawText(
-                    DateFormats.time12Meridian.format(midTime).lowercase(),
+                    DateFormats.time12Meridian().format(midTime).lowercase(),
                     center - textWidthCenter / 2,
                     sectionHeight * 5 - pxFromDp(5.0f),
                     mTextPaint
                 )
                 val textWidth2 = mTextPaint.measureText(
-                    DateFormats.time12Meridian.format(midRightTIme).lowercase()
+                    DateFormats.time12Meridian().format(midRightTIme).lowercase()
                 )
                 canvas.drawText(
-                    DateFormats.time12Meridian.format(midRightTIme).lowercase(),
+                    DateFormats.time12Meridian().format(midRightTIme).lowercase(),
                     center + (center / 2) - textWidth2 / 2,
                     sectionHeight * 5 - pxFromDp(5.0f),
                     mTextPaint
@@ -387,10 +387,10 @@ class NightTimeGraphViewOreo(var mContext: Context) : View(
                 val center = (width - endPadding) / 2
 
                 val textWidthCenter =
-                    mTextPaint.measureText(DateFormats.time12Meridian.format(midTime).lowercase())
+                    mTextPaint.measureText(DateFormats.time12Meridian().format(midTime).lowercase())
 
                 canvas.drawText(
-                    DateFormats.time12Meridian.format(midTime).lowercase(),
+                    DateFormats.time12Meridian().format(midTime).lowercase(),
                     center - textWidthCenter / 2,
                     sectionHeight * 5 - pxFromDp(5.0f),
                     mTextPaint

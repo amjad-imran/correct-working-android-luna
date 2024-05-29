@@ -915,13 +915,13 @@ class HeartRateInterval(
 
     fun getStartTime(): Calendar {
         val calendar = Calendar.getInstance()
-        calendar.time = DateFormats.timeFormat.parse(startTime)!!
+        calendar.time = DateFormats.timeFormat().parse(startTime)!!
         return calendar
     }
 
     fun getEndTime(): Calendar {
         val calendar = Calendar.getInstance()
-        calendar.time = DateFormats.timeFormat.parse(endTime)!!
+        calendar.time = DateFormats.timeFormat().parse(endTime)!!
         return calendar
     }
 }

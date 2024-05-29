@@ -207,7 +207,7 @@ class OAddWorkoutFragment :
                 val calendar = Calendar.getInstance()
                 var isTodayWorkout = true
                 if (viewModel.isAutoWorkout()) {
-                    val todayData = DateFormats.getCurrentDate(DateFormats.dateFormat3)
+                    val todayData = DateFormats.getCurrentDate(DateFormats.dateFormat3())
                     isTodayWorkout = viewModel.preFilledOreoAutoSportData?.date.equals(todayData)
                 }
 

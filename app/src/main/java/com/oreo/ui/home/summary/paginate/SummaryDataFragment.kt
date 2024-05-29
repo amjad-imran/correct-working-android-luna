@@ -143,16 +143,18 @@ class SummaryDataFragment :
                 }
 
                 OSummaryHealthOverviewClickEnum.StressGraphClicked -> {
-                    /*if (viewModel.getStressWalkthroughShownStatus()) {
+                    if (viewModel.getStressWalkthroughShownStatus()) {
                         navigate(R.id.fragmentOStressDetails)
                     } else {
                         navigate(R.id.stressSplashFragment)
-                    }*/
+                    }
                 }
 
                 is OSummaryHealthOverviewClickEnum.OnNapClicked -> {
                     navigate(R.id.napDetails, bundleOf("napId" to type.napId))
                 }
+
+                OSummaryHealthOverviewClickEnum.OnAiCardClicked -> {}
                 is OSummaryHealthOverviewClickEnum.TrackYourFemaleHealth -> {
                     navigate(R.id.fragmentCycleTracker)
                 }

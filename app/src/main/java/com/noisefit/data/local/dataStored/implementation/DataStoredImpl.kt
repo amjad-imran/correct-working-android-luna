@@ -192,6 +192,8 @@ private const val READINESS_NOTIFICATION = "READINESS_NOTIFICATION"
 private const val STRESS_WALKRHTOUGH = "STRESS_WALKRHTOUGH"
 private const val FMH_WALK_THROUGH = "FMH_WALK_THROUGH"
 private const val FMH_REMIND_LATER = "FMH_REMIND_LATER"
+private const val SLEEP_MOENGAGE_SYNC_DATE = "SLEEP_MOENGAGE_SYNC_DATE"
+private const val AI_CHAT_ONBOARD = "AI_CHAT_ONBOARD"
 
 
 private const val APP_VERSION_NEW = "APP_VERSION_NEW"
@@ -230,6 +232,23 @@ class DataStoredImpl
 
     override fun setFMHWalkthroughShown(isShown: Boolean) {
         mPrefs.edit()?.putBoolean(FMH_WALK_THROUGH, isShown)?.commit()
+    }
+
+    override fun saveSleepSyncedForDate(date: String) {
+        mPrefs.edit()?.putString(SLEEP_MOENGAGE_SYNC_DATE, date)?.commit()
+    }
+
+    override fun isSleepSyncedForDate(date: String): Boolean {
+        val savedDate = mPrefs.getString(SLEEP_MOENGAGE_SYNC_DATE, null) ?: return false
+        return savedDate.equals(date)
+    }
+
+    override fun isAiChatSplashShown(): Boolean {
+        return mPrefs.getBoolean(AI_CHAT_ONBOARD, false)
+    }
+
+    override fun setAiChatSplashShown() {
+        mPrefs.edit()?.putBoolean(AI_CHAT_ONBOARD, true)?.commit()
     }
 
     override fun getStressWalkthroughShownStatus(): Boolean {
@@ -323,6 +342,7 @@ class DataStoredImpl
         mPrefs.edit()?.remove(STRESS_WALKRHTOUGH)?.apply()
         mPrefs.edit()?.remove(FMH_WALK_THROUGH)?.apply()
         mPrefs.edit()?.remove(FMH_REMIND_LATER)?.apply()
+        mPrefs.edit()?.remove(AI_CHAT_ONBOARD)?.apply()
     }
 
     override fun getDashCardClickState(): HashMap<DashInfoCard, Boolean> {

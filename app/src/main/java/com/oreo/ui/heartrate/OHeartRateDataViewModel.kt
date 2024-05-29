@@ -87,7 +87,7 @@ class OHeartRateDataViewModel @Inject constructor(
         if (date == null) {
             isToday = false
         }
-        val todayDate = DateFormats.getCurrentDate(DateFormats.dateFormat3)
+        val todayDate = DateFormats.getCurrentDate(DateFormats.dateFormat3())
         isToday = todayDate.equals(date, true)
     }
 

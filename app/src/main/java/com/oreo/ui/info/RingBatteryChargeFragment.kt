@@ -36,13 +36,12 @@ class RingBatteryChargeFragment :
     }
 
 
-
     private fun setVideo() {
         binding.videoOnboard.apply {
             setVideoURI(
                 Uri.parse(
                     "android.resource://" + requireContext().packageName + "/" +
-                            R.raw.video_find_ring
+                            R.raw.video_put_on_charge
                 )
             )
             setOnPreparedListener { mp -> mp.isLooping = true }

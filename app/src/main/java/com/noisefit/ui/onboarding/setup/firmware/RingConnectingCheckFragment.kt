@@ -26,13 +26,19 @@ class RingConnectingCheckFragment :
 
         viewModel.updateProgress1.postValue(50)
 
-        binding.ivRingImage.loadImageWithCache(binding.ivRingImage.context,viewModel.getRingImage2())
+        binding.ivRingImage.loadImageWithCache(
+            binding.ivRingImage.context,
+            viewModel.getRingImage2()
+        )
     }
 
 
     override fun initListener() {
-
+        binding.tvRemindLater.setOnClickListener {
+            navigate(RingConnectingCheckFragmentDirections.navigateToDeviceSetupFromConnectionCheck())
+        }
     }
+
 
     override fun subscribeObservers() {
         viewModel.sessionManager.connectStateRing.observe(this) { connectedState ->
@@ -40,9 +46,9 @@ class RingConnectingCheckFragment :
                 is ConnectState.ConnectSuccess -> {
                     if (!viewModel.connectionChecked) {
                         viewModel.connectionChecked = true
-                        if(viewModel.fullSetup){
+                        if (viewModel.fullSetup) {
                             navigate(RingConnectingCheckFragmentDirections.navigateToFirmwareCheck())
-                        }else{
+                        } else {
                             navigate(RingConnectingCheckFragmentDirections.navigateToDeviceSetupFromConnectionCheck())
                         }
                     }

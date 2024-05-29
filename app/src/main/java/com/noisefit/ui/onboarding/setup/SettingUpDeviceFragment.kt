@@ -37,6 +37,8 @@ class SettingUpDeviceFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        sharedViewModel.updateProgress1.postValue(100)
+        sharedViewModel.updateProgress2.postValue(100)
         sharedViewModel.updateProgress3.postValue(50)
         viewModel.setUpUserDetails()
     }
@@ -54,8 +56,10 @@ class SettingUpDeviceFragment :
         Handler(Looper.getMainLooper()).postDelayed({
             if (viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
                 if (viewModel.setupStarted.not()) {
-                    context.showShortToast(getString(R.string.text_no_device_connected))
-                    activity?.finish()
+                    setupSuccessFlow()
+
+                    /*context.showShortToast(getString(R.string.text_no_device_connected))
+                    activity?.finish()*/
                 }
             }
         }, 5000)
@@ -67,6 +71,12 @@ class SettingUpDeviceFragment :
     }
 
     override fun subscribeObservers() {
+
+        sharedViewModel.navigateToDeviceSetupSuccess.observe(this) {
+            it.getContent()?.let {
+                setupSuccess()
+            }
+        }
 
         viewModel.sessionManager.connectStateRing.observe(this) { connectedState ->
             LOGS.d("CONNECT_STATE", "PairingSuccessFragment > $connectedState")
@@ -96,21 +106,19 @@ class SettingUpDeviceFragment :
         }, 3000)
 
         Handler(Looper.getMainLooper()).postDelayed({
-
-            val isUpdateUserDeviceDone = viewModel.ringDataStore.isUpdateUserDeviceDone()
-            if (isUpdateUserDeviceDone.not()) {
-                viewModel.ringDataStore.getRingDevice()?.let {
-                    sharedViewModel.updateUserDevice(it, true)
-                }
-            } else {
-                setupSuccess()
-            }
+            setupSuccessFlow()
         }, 4000)
 
-        sharedViewModel.navigateToDeviceSetupSuccess.observe(this) {
-            it.getContent()?.let {
-                setupSuccess()
+    }
+
+    private fun setupSuccessFlow(){
+        val isUpdateUserDeviceDone = viewModel.ringDataStore.isUpdateUserDeviceDone()
+        if (isUpdateUserDeviceDone.not()) {
+            viewModel.ringDataStore.getRingDevice()?.let {
+                sharedViewModel.updateUserDevice(it, true)
             }
+        } else {
+            setupSuccess()
         }
 
     }

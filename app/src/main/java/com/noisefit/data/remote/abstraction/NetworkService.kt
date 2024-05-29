@@ -1,6 +1,8 @@
 package com.noisefit.data.remote.abstraction
 
 import com.google.gson.JsonObject
+import com.noisefit.data.model.FeedResponse
+import com.noisefit.data.model.timeline.FriendTimeline
 import com.noisefit.data.remote.CityData
 import com.noisefit.data.remote.StateData
 import com.noisefit.data.remote.UserLocationUpdatedResponse
@@ -347,6 +349,18 @@ interface NetworkService {
         @Url url: String,
         @Body requestObject: JsonObject
     ): BaseApiResponse<Any>
+
+    @POST
+    suspend fun askQuestionToChatGpt(
+        @Url url: String,
+        @Body requestObject: JsonObject
+    ): BaseApiResponse<ChatGptResponse>
+
+    @POST
+    suspend fun pollForAnswer(
+        @Url url: String,
+        @Body requestObject: JsonObject
+    ): BaseApiResponse<ChatGptResponse>
 
     @GET
     suspend fun getWorkoutDetails(

@@ -208,13 +208,13 @@ class ONapDetailsFragment :
 
         binding.lytNapDetails.tvNapStart.text = DateFormats.parseDate(
             it.startTime,
-            DateFormats.dateTimeFormat5,
-            DateFormats.timeFormat12
+            DateFormats.dateTimeFormat5(),
+            DateFormats.timeFormat12()
         )?.lowercase()
         binding.lytNapDetails.tvNapEnd.text = DateFormats.parseDate(
             it.endTime,
-            DateFormats.dateTimeFormat5,
-            DateFormats.timeFormat12
+            DateFormats.dateTimeFormat5(),
+            DateFormats.timeFormat12()
         )?.lowercase()
 
         if ((it.sleepScore ?: 0) == 0 && (it.readinessScore ?: 0) == 0 && (it.prevSleepScore

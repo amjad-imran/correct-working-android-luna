@@ -70,7 +70,10 @@ class FirmwareCheckFragment :
     }
 
     override fun initListener() {
+        binding.tvRemindLater.setOnClickListener {
+            navigate(FirmwareCheckFragmentDirections.navigateToDeviceSetupFromFirmwareCheck())
 
+        }
     }
 
     override fun subscribeObservers() {

@@ -84,10 +84,10 @@ object NotificationUtil {
 
     fun showWorkoutLocalNotification(context: Context, data: OreoAutoSportData) {
         val workoutName = data.type?.lowercase()?.capitalizeWords() ?: "Workout"
-        val startTime = DateFormats.convertTimestampToDate(data.startTime, DateFormats.timeFormat12)
+        val startTime = DateFormats.convertTimestampToDate(data.startTime, DateFormats.timeFormat12())
         val endTime = DateFormats.convertTimestampToDate(
             data.startTime + data.duration * 1000,
-            DateFormats.timeFormat12
+            DateFormats.timeFormat12()
         )
 
         pushNotification(

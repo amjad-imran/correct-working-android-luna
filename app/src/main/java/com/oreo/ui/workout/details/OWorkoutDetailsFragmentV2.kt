@@ -166,7 +166,7 @@ class OWorkoutDetailsFragmentV2 :
     @SuppressLint("SetTextI18n")
     private fun updateUi(it: OWorkoutDetailsResponseModel) {
 
-        if (it.date == DateFormats.getCurrentDate(DateFormats.dateFormat3) && !it.type.equals(
+        if (it.date == DateFormats.getCurrentDate(DateFormats.dateFormat3()) && !it.type.equals(
                 "auto", true
             ) && !it.type.equals(
                 "apple", true
@@ -195,9 +195,9 @@ class OWorkoutDetailsFragmentV2 :
         }
 
         if (title.isEmpty()) {
-            title.append(DateFormats.getOrdinalDate(it.date, DateFormats.dateFormat3))
+            title.append(DateFormats.getOrdinalDate(it.date, DateFormats.dateFormat3()))
         } else {
-            title.append(DateFormats.getOrdinalDateToday(it.date, DateFormats.dateFormat3))
+            title.append(DateFormats.getOrdinalDateToday(it.date, DateFormats.dateFormat3()))
         }
 
         binding.lytTop.rvActivityDetails.visible()

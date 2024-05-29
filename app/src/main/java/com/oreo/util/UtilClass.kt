@@ -26,7 +26,7 @@ object UtilClass {
             var end = 0
 
             val startTime =
-                DateFormats.convertTimestampToDate(data.startTime, DateFormats.timeFormat)
+                DateFormats.convertTimestampToDate(data.startTime, DateFormats.timeFormat())
             if (startTime.isNotEmpty()) {
                 val startArray = startTime.split(":")
                 val startHour = startArray[0].toInt()
@@ -41,7 +41,7 @@ object UtilClass {
                 TimeUnit.SECONDS.toMinutes(data.duration.toLong()).toInt()
             )
             val endTimeText =
-                DateFormats.convertTimestampToDate(endTime, DateFormats.timeFormat)
+                DateFormats.convertTimestampToDate(endTime, DateFormats.timeFormat())
             if (endTimeText.isNotEmpty()) {
                 val endArray = endTimeText.split(":")
                 val endHour = endArray[0].toInt()
@@ -75,7 +75,7 @@ object UtilClass {
                 var end = 0
                 index += 1
                 val startTime =
-                    DateFormats.convertTimestampToDate(data.startTime, DateFormats.timeFormat)
+                    DateFormats.convertTimestampToDate(data.startTime, DateFormats.timeFormat())
                 if (startTime.isNotEmpty()) {
                     val startArray = startTime.split(":")
                     val startHour = startArray[0].toInt()
@@ -88,7 +88,7 @@ object UtilClass {
                     TimeUnit.SECONDS.toMinutes(data.duration.toLong()).toInt()
                 )
                 val endTimeText =
-                    DateFormats.convertTimestampToDate(endTime, DateFormats.timeFormat)
+                    DateFormats.convertTimestampToDate(endTime, DateFormats.timeFormat())
                 if (endTimeText.isNotEmpty()) {
                     val endArray = endTimeText.split(":")
                     val endHour = endArray[0].toInt()
@@ -237,20 +237,20 @@ object UtilClass {
         if (dataSize <= 36) {
             val center = dataSize / 2
             val centerTime = getCenterTime(
-                DateFormats.dateTimeFormat5.parse(startTime),
-                DateFormats.dateTimeFormat5.parse(endTime)
+                DateFormats.dateTimeFormat5().parse(startTime),
+                DateFormats.dateTimeFormat5().parse(endTime)
             )
 
             hm[0] = DateFormats.formatDate(
                 startTime,
-                DateFormats.dateTimeFormat5,
-                DateFormats.time12Meridian
+                DateFormats.dateTimeFormat5(),
+                DateFormats.time12Meridian()
             )
-            hm[center] = DateFormats.time12Meridian.format(centerTime).lowercase()
+            hm[center] = DateFormats.time12Meridian().format(centerTime).lowercase()
             hm[dataSize - 1] = DateFormats.formatDate(
                 endTime,
-                DateFormats.dateTimeFormat5,
-                DateFormats.time12Meridian
+                DateFormats.dateTimeFormat5(),
+                DateFormats.time12Meridian()
             )
         }
         //5 points
@@ -259,30 +259,30 @@ object UtilClass {
         val centerLeft = center / 2
 
         val centerTime = getCenterTime(
-            DateFormats.dateTimeFormat5.parse(startTime),
-            DateFormats.dateTimeFormat5.parse(endTime)
+            DateFormats.dateTimeFormat5().parse(startTime),
+            DateFormats.dateTimeFormat5().parse(endTime)
         )
         val centerLeftTime = getCenterTime(
-            DateFormats.dateTimeFormat5.parse(startTime),
+            DateFormats.dateTimeFormat5().parse(startTime),
             centerTime
         )
         val centerRightTime = getCenterTime(
             centerTime,
-            DateFormats.dateTimeFormat5.parse(endTime)
+            DateFormats.dateTimeFormat5().parse(endTime)
         )
 
         hm[0] = DateFormats.formatDate(
             startTime,
-            DateFormats.dateTimeFormat5,
-            DateFormats.time12Meridian
+            DateFormats.dateTimeFormat5(),
+            DateFormats.time12Meridian()
         ).lowercase()
-        hm[centerLeft] = DateFormats.time12Meridian.format(centerLeftTime).lowercase()
-        hm[center] = DateFormats.time12Meridian.format(centerTime).lowercase()
-        hm[center + centerLeft] = DateFormats.time12Meridian.format(centerRightTime).lowercase()
+        hm[centerLeft] = DateFormats.time12Meridian().format(centerLeftTime).lowercase()
+        hm[center] = DateFormats.time12Meridian().format(centerTime).lowercase()
+        hm[center + centerLeft] = DateFormats.time12Meridian().format(centerRightTime).lowercase()
         hm[dataSize - 1] = DateFormats.formatDate(
             endTime,
-            DateFormats.dateTimeFormat5,
-            DateFormats.time12Meridian
+            DateFormats.dateTimeFormat5(),
+            DateFormats.time12Meridian()
         ).lowercase()
 
         return hm
@@ -310,20 +310,20 @@ object UtilClass {
         if (dataSize <= 36) {
             val center = dataSize / 2
             val centerTime = getCenterTime(
-                DateFormats.dateTimeFormat5.parse(startTime),
-                DateFormats.dateTimeFormat5.parse(endTime)
+                DateFormats.dateTimeFormat5().parse(startTime),
+                DateFormats.dateTimeFormat5().parse(endTime)
             )
 
             hm[0] = DateFormats.formatDate(
                 startTime,
-                DateFormats.dateTimeFormat5,
-                DateFormats.time12Meridian
+                DateFormats.dateTimeFormat5(),
+                DateFormats.time12Meridian()
             )
-            hm[center] = DateFormats.time12Meridian.format(centerTime).lowercase()
+            hm[center] = DateFormats.time12Meridian().format(centerTime).lowercase()
             hm[dataSize - 1] = DateFormats.formatDate(
                 endTime,
-                DateFormats.dateTimeFormat5,
-                DateFormats.time12Meridian
+                DateFormats.dateTimeFormat5(),
+                DateFormats.time12Meridian()
             )
         }
         //5 points
@@ -332,30 +332,30 @@ object UtilClass {
         val centerLeft = center / 2
 
         val centerTime = getCenterTime(
-            DateFormats.dateTimeFormat5.parse(startTime),
-            DateFormats.dateTimeFormat5.parse(endTime)
+            DateFormats.dateTimeFormat5().parse(startTime),
+            DateFormats.dateTimeFormat5().parse(endTime)
         )
         val centerLeftTime = getCenterTime(
-            DateFormats.dateTimeFormat5.parse(startTime),
+            DateFormats.dateTimeFormat5().parse(startTime),
             centerTime
         )
         val centerRightTime = getCenterTime(
             centerTime,
-            DateFormats.dateTimeFormat5.parse(endTime)
+            DateFormats.dateTimeFormat5().parse(endTime)
         )
 
         hm[0] = DateFormats.formatDate(
             startTime,
-            DateFormats.dateTimeFormat5,
-            DateFormats.time12Meridian
+            DateFormats.dateTimeFormat5(),
+            DateFormats.time12Meridian()
         ).lowercase()
-        hm[centerLeft] = DateFormats.time12Meridian.format(centerLeftTime).lowercase()
-        hm[center] = DateFormats.time12Meridian.format(centerTime).lowercase()
-        hm[center + centerLeft] = DateFormats.time12Meridian.format(centerRightTime).lowercase()
+        hm[centerLeft] = DateFormats.time12Meridian().format(centerLeftTime).lowercase()
+        hm[center] = DateFormats.time12Meridian().format(centerTime).lowercase()
+        hm[center + centerLeft] = DateFormats.time12Meridian().format(centerRightTime).lowercase()
         hm[dataSize - 1] = DateFormats.formatDate(
             endTime,
-            DateFormats.dateTimeFormat5,
-            DateFormats.time12Meridian
+            DateFormats.dateTimeFormat5(),
+            DateFormats.time12Meridian()
         ).lowercase()
 
         return hm
@@ -394,7 +394,7 @@ object UtilClass {
             return hm
         }
 
-        if (DateFormats.checkStartTimeLess(startTime, endTime, DateFormats.timeFormat12)) {
+        if (DateFormats.checkStartTimeLess(startTime, endTime, DateFormats.timeFormat12())) {
 //            LOGS.d("dsakjdsalkjsladjlksdajldsajldsajl startTimeLess")
             hm = graphTwoHourBaseInterval(startTime, endTime, endIndex)
         } else {
@@ -452,8 +452,8 @@ object UtilClass {
             if (startTime.lowercase().contains("am") || startTime.lowercase().contains("pm")) {
                 DateFormats.convertTimeIntoTime(
                     startTime,
-                    DateFormats.timeFormat12,
-                    DateFormats.timeFormat
+                    DateFormats.timeFormat12(),
+                    DateFormats.timeFormat()
                 ).split(":")
             } else {
                 startTime.split(":")
@@ -483,8 +483,8 @@ object UtilClass {
             ) {
                 DateFormats.convertTimeIntoTime(
                     endTimeFormat,
-                    DateFormats.timeFormat12,
-                    DateFormats.timeFormat
+                    DateFormats.timeFormat12(),
+                    DateFormats.timeFormat()
                 ).split(":")
             } else {
                 endTimeFormat.split(":")
@@ -548,8 +548,8 @@ object UtilClass {
             if (startTime.lowercase().contains("am") || startTime.lowercase().contains("pm")) {
                 DateFormats.convertTimeIntoTime(
                     startTime,
-                    DateFormats.timeFormat12,
-                    DateFormats.timeFormat
+                    DateFormats.timeFormat12(),
+                    DateFormats.timeFormat()
                 ).split(":")
             } else {
                 startTime.split(":")
@@ -573,8 +573,8 @@ object UtilClass {
             ) {
                 DateFormats.convertTimeIntoTime(
                     endTimeFormat,
-                    DateFormats.timeFormat12,
-                    DateFormats.timeFormat
+                    DateFormats.timeFormat12(),
+                    DateFormats.timeFormat()
                 ).split(":")
             } else {
                 endTimeFormat.split(":")
@@ -614,8 +614,8 @@ object UtilClass {
         println("formatTime $hr $min")
         return DateFormats.convertTimeIntoTime(
             "$hr:$min",
-            DateFormats.timeFormat,
-            DateFormats.timeFormat12
+            DateFormats.timeFormat(),
+            DateFormats.timeFormat12()
         ).lowercase()
     }
 

@@ -229,6 +229,8 @@ dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.2")
     implementation("com.github.grapesnberries:curlloggerinterceptor:0.1")
 
+    implementation("io.noties.markwon:core:4.6.2")
+    //implementation("io.noties.markwon:image:4.6.2")
 
     implementation(Glide.glide)
     implementation("com.github.yalantis:ucrop:2.2.6")

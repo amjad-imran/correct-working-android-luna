@@ -30,6 +30,9 @@ sealed class OHealthOverview {
         OHealthOverview()
 
 
+    class LunaAiCard(
+    ) : OHealthOverview()
+
     class AutoSport(
         val count: Int
     ) : OHealthOverview()

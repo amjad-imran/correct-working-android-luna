@@ -23,7 +23,7 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="What is Stress?" />
 
-        <com.google.android.material.imageview.ShapeableImageView
+        <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/imv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,10 +33,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvTitle"
             app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp"
-            tools:src="@drawable/bg_dummy_placeholder">
-
-        </com.google.android.material.imageview.ShapeableImageView>
-
+            tools:src="@drawable/bg_dummy_placeholder" />
 
         <TextView
             android:id="@+id/tvDescription"

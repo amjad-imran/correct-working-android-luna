@@ -33,6 +33,11 @@ class UpdateAvailableFragment :
     }
 
     override fun initListener() {
+        binding.tvRemindLater.setOnClickListener {
+            navigate(UpdateAvailableFragmentDirections.navigateToDeviceSetupFromUpdateAvailableFrag())
+        }
+
+
         binding.btnUpdateNow.setOnClickListener {
 
             val battery = viewModel.sessionManager.batteryPercentRing.value ?: 0

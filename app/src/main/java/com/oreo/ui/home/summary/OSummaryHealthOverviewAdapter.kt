@@ -11,6 +11,7 @@ import com.hookedonplay.decoviewlib.events.DecoEvent
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.CardTrackFmHealthBinding
 import com.noisefit.luna.databinding.ItemStressGraphBinding
+import com.noisefit.luna.databinding.LayoutChatCardDashBinding
 import com.noisefit.luna.databinding.ListActivityBurnCardItem2Binding
 import com.noisefit.luna.databinding.ListActivityBurnCardItemBinding
 import com.noisefit.luna.databinding.ListActivityMinimalItemBinding
@@ -37,6 +38,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.setVisibilityByCondition
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
@@ -61,6 +63,7 @@ sealed class OSummaryHealthOverviewClickEnum {
         OSummaryHealthOverviewClickEnum()
 
 
+    object OnAiCardClicked : OSummaryHealthOverviewClickEnum()
     object AutoSportsDelete : OSummaryHealthOverviewClickEnum()
 
     object WorkoutAlertWhatisThis : OSummaryHealthOverviewClickEnum()
@@ -95,6 +98,14 @@ class OSummaryHealthOverviewAdapter() :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeRecyclerViewHolder {
         return when (viewType) {
+            R.layout.layout_chat_card_dash -> HomeRecyclerViewHolder.AiCardViewHolder(
+                LayoutChatCardDashBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
             R.layout.list_dash_nap -> HomeRecyclerViewHolder.NapWidgetCardViewHolder(
                 ListDashNapBinding.inflate(
                     LayoutInflater.from(parent.context),
@@ -347,7 +358,9 @@ class OSummaryHealthOverviewAdapter() :
                 position,
             )
 
-            else -> {}
+            is HomeRecyclerViewHolder.AiCardViewHolder -> {
+                holder.bind(items[position] as OHealthOverview.LunaAiCard)
+            }
         }
     }
 
@@ -378,6 +391,7 @@ class OSummaryHealthOverviewAdapter() :
             is OHealthOverview.InfoRingCare -> R.layout.list_ring_care
             is OHealthOverview.InfoRingWelcome -> R.layout.list_welcome_card
             is OHealthOverview.NapDashCard -> R.layout.list_dash_nap
+            is OHealthOverview.LunaAiCard -> R.layout.layout_chat_card_dash
             is OHealthOverview.CycleTrackerCardSmall -> R.layout.list_cycle_tracker_prediction
             is OHealthOverview.CycleTrackerCardBig -> R.layout.list_cycle_tracker_ongoing
             is OHealthOverview.CardTrackFemaleHealth -> R.layout.card_track_fm_health
@@ -401,6 +415,17 @@ class OSummaryHealthOverviewAdapter() :
 sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(binding.root) {
 
     var itemClickListener: ((type: OSummaryHealthOverviewClickEnum) -> Unit)? = null
+
+    class AiCardViewHolder(private val binding: LayoutChatCardDashBinding) :
+        HomeRecyclerViewHolder(binding) {
+        fun bind(
+            data: OHealthOverview.LunaAiCard,
+        ) {
+            binding.root.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnAiCardClicked)
+            }
+        }
+    }
 
     class NapWidgetCardViewHolder(private val binding: ListDashNapBinding) :
         HomeRecyclerViewHolder(binding) {
@@ -708,13 +733,13 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             binding.tvSleepStart.text = DateFormats.formatDate(
                 data.data.startTime,
-                DateFormats.dateTimeFormat5,
-                DateFormats.time12Meridian
+                DateFormats.dateTimeFormat5(),
+                DateFormats.time12Meridian()
             )
             binding.tvSleepEnd.text = DateFormats.formatDate(
                 data.data.endTime,
-                DateFormats.dateTimeFormat5,
-                DateFormats.time12Meridian
+                DateFormats.dateTimeFormat5(),
+                DateFormats.time12Meridian()
             )
 
             binding.root.setOnClickListener {
@@ -755,13 +780,13 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
                 binding.tvSleepStart.text = DateFormats.formatDate(
                     data.startTime,
-                    DateFormats.dateTimeFormat5,
-                    DateFormats.time12Meridian
+                    DateFormats.dateTimeFormat5(),
+                    DateFormats.time12Meridian()
                 )
                 binding.tvSleepEnd.text = DateFormats.formatDate(
                     data.endTime,
-                    DateFormats.dateTimeFormat5,
-                    DateFormats.time12Meridian
+                    DateFormats.dateTimeFormat5(),
+                    DateFormats.time12Meridian()
                 )
 
                 binding.tvHrValue.text = if (data.data.restingHr == null) {

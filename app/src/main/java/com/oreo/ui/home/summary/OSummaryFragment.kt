@@ -26,7 +26,6 @@ import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChartModel
-import com.oreo.receiver.workManager.HealthOverviewDataType
 import com.oreo.ui.custom.ScrollListener
 import com.oreo.ui.home.summary.paginate.SummaryPagerAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -91,7 +90,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         /* var currentDayText = ""
          val centerDate = pagerAdapter?.getDate(position)
-         if (centerDate.equals(DateFormats.getCurrentDate(DateFormats.dateFormat3))) {
+         if (centerDate.equals(DateFormats.getCurrentDate(DateFormats.dateFormat3()))) {
              currentDayText = "Today, "
          }
          LocalDate.MAX
@@ -99,12 +98,12 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
              if (currentDayText.isEmpty()) {
                  DateFormats.getOrdinalDate(
                      centerDate,
-                     DateFormats.dateFormat3
+                     DateFormats.dateFormat3()
                  )
              } else {
                  DateFormats.getOrdinalDateToday(
                      centerDate,
-                     DateFormats.dateFormat3,
+                     DateFormats.dateFormat3(),
                  )
              }
          }"
@@ -115,7 +114,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
              binding.tabLayout.tvDateLeft.visible()
              binding.tabLayout.tvDateLeft.text = DateFormats.getOrdinalDate(
                  leftDate,
-                 DateFormats.dateFormat3,
+                 DateFormats.dateFormat3(),
              )
          }
          val rightDate = pagerAdapter?.getDate(position + 1)
@@ -123,7 +122,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
              binding.tabLayout.tvDateRight.gone()
          } else {
              var rightTodayText = ""
-             if (rightDate.equals(DateFormats.getCurrentDate(DateFormats.dateFormat3))) {
+             if (rightDate.equals(DateFormats.getCurrentDate(DateFormats.dateFormat3()))) {
                  rightTodayText = "Today, "
              }
              binding.tabLayout.tvDateRight.visible()
@@ -131,13 +130,13 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
                  if (rightTodayText.isEmpty()) {
                      DateFormats.getOrdinalDate(
                          rightDate,
-                         DateFormats.dateFormat3,
+                         DateFormats.dateFormat3(),
                      )
                  } else {
 
                      DateFormats.getOrdinalDateToday(
                          rightDate,
-                         DateFormats.dateFormat3,
+                         DateFormats.dateFormat3(),
                      )
                  }
              }"
@@ -234,26 +233,7 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
         binding.lytHeader.profileView1.setOnLongClickListener {
             if (BuildConfig.DEBUG) {
-                val stress = viewModel.watchDataStore.testGetStressData()
-                val bodyBattery = viewModel.watchDataStore.testGetBodyBatteryData()
-                val text = StringBuilder()
-                text.append("Stress Data ")
-                text.append(stress)
-                text.appendLine()
-                text.appendLine()
-                text.append("Body Battery Data ")
-                text.append(bodyBattery)
-
-                uiController.onApiErrorReceived(
-                    ErrorResponse(
-                        UIComponentType.InfoAlertDialog(
-                            "Stress-Body Battery data",
-                            text.toString(),
-
-                            getString(R.string.text_ok)
-                        )
-                    )
-                )
+                navigate(R.id.chatGptFragment)
                 //navigate(R.id.logsDisplayFragment)
             }
             return@setOnLongClickListener true

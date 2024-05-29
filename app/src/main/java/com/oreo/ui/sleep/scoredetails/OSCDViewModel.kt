@@ -320,7 +320,7 @@ class OSCDViewModel @Inject constructor(
             val chartModel = ChartModel()
             chartModel.date = it.date
             chartModel.index =
-                DateFormats.parseDate(it.date, DateFormats.dateFormat3, DateFormats.dateFormatDay)
+                DateFormats.parseDate(it.date, DateFormats.dateFormat3(), DateFormats.dateFormatDay())
 
 
             chartModel.valueFloat = it.deviation ?: 0.0f

@@ -1518,8 +1518,8 @@ class LineChartView : View {
 
         val startText = DateFormats.formatDate(
             startTimeStr,
-            DateFormats.dateTimeFormat5,
-            DateFormats.timeFormat12_2
+            DateFormats.dateTimeFormat5(),
+            DateFormats.timeFormat12_2()
         ).lowercase()
 
         var rectF = RectF(
@@ -1545,8 +1545,8 @@ class LineChartView : View {
 
         val text = DateFormats.formatDate(
             endTimeStr,
-            DateFormats.dateTimeFormat5,
-            DateFormats.timeFormat12_2
+            DateFormats.dateTimeFormat5(),
+            DateFormats.timeFormat12_2()
         ).lowercase()
         val textWidth = mTextPaintEdge.measureText(text)
 

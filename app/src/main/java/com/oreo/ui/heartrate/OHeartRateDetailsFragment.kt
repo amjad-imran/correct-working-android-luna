@@ -96,7 +96,7 @@ class OHeartRateDetailsFragment :
     private fun setTabDates(position: Int) {
         var currentDayText = ""
         val centerDate = pagerAdapter?.getDate(position)
-        if (centerDate.equals(DateFormats.getCurrentDate(DateFormats.dateFormat3))) {
+        if (centerDate.equals(DateFormats.getCurrentDate(DateFormats.dateFormat3()))) {
             currentDayText = "Today, "
         }
         LocalDate.MAX
@@ -104,12 +104,12 @@ class OHeartRateDetailsFragment :
             if (currentDayText.isEmpty()) {
                 DateFormats.getOrdinalDate(
                     centerDate,
-                    DateFormats.dateFormat3
+                    DateFormats.dateFormat3()
                 )
             } else {
                 DateFormats.getOrdinalDateToday(
                     centerDate,
-                    DateFormats.dateFormat3,
+                    DateFormats.dateFormat3(),
                 )
             }
         }"
@@ -120,7 +120,7 @@ class OHeartRateDetailsFragment :
             binding.tabLayout.tvDateLeft.visible()
             binding.tabLayout.tvDateLeft.text = DateFormats.getOrdinalDate(
                 leftDate,
-                DateFormats.dateFormat3,
+                DateFormats.dateFormat3(),
             )
         }
         val rightDate = pagerAdapter?.getDate(position + 1)
@@ -128,7 +128,7 @@ class OHeartRateDetailsFragment :
             binding.tabLayout.tvDateRight.gone()
         } else {
             var rightTodayText = ""
-            if (rightDate.equals(DateFormats.getCurrentDate(DateFormats.dateFormat3))) {
+            if (rightDate.equals(DateFormats.getCurrentDate(DateFormats.dateFormat3()))) {
                 rightTodayText = "Today, "
             }
             binding.tabLayout.tvDateRight.visible()
@@ -136,13 +136,13 @@ class OHeartRateDetailsFragment :
                 if (rightTodayText.isEmpty()) {
                     DateFormats.getOrdinalDate(
                         rightDate,
-                        DateFormats.dateFormat3,
+                        DateFormats.dateFormat3(),
                     )
                 } else {
 
                     DateFormats.getOrdinalDateToday(
                         rightDate,
-                        DateFormats.dateFormat3,
+                        DateFormats.dateFormat3(),
                     )
                 }
             }"

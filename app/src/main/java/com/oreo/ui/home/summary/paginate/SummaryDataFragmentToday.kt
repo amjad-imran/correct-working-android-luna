@@ -178,6 +178,7 @@ class SummaryDataFragmentToday :
                 viewModel.registerDate = mainViewModel.registerDate
                 viewModel.serverUserHealthData = dash.first
                 viewModel.stressBeta = mainViewModel.stressBeta
+                viewModel.enableAi = mainViewModel.enableAi
                 viewModel.shouldShowStressCard = mainViewModel.shouldShowStressCard(it)
                 setUi(dash.first, dash.second)
             }
@@ -309,6 +310,14 @@ class SummaryDataFragmentToday :
                 is OSummaryHealthOverviewClickEnum.OnNapClicked -> {
 
                     navigate(R.id.napDetails, bundleOf("napId" to type.napId))
+                }
+
+                is OSummaryHealthOverviewClickEnum.OnAiCardClicked -> {
+                    if (viewModel.isChatSplashShown()) {
+                        navigate(R.id.chatGptFragment)
+                    } else {
+                        navigate(R.id.chatSplashFragment)
+                    }
                 }
 
                 is OSummaryHealthOverviewClickEnum.TrackYourFemaleHealth -> {

@@ -35,6 +35,11 @@
             app:destination="@id/updateAvailableFragment"
             app:popUpTo="@id/firmwareCheckFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/navigateToDeviceSetupFromFirmwareCheck"
+            app:destination="@id/settingUpDeviceFragment"
+            app:popUpTo="@id/ringConnectingCheckFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/deviceUpToDateFragment"
@@ -54,6 +59,11 @@
             android:id="@+id/navigateToUpdateFrag"
             app:destination="@id/firmwareUpdateFragment"
             app:popUpTo="@id/updateAvailableFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/navigateToDeviceSetupFromUpdateAvailableFrag"
+            app:destination="@id/settingUpDeviceFragment"
+            app:popUpTo="@id/ringConnectingCheckFragment"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
