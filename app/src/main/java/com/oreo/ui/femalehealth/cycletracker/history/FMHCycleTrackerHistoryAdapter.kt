@@ -23,14 +23,14 @@ class FMHCycleTrackerHistoryAdapter() :
             binding.tvStartedOn.text = "Started on ${
                 DateFormats.formatDate(
                     data.periodDate,
-                    DateFormats.dateFormat3,
-                    DateFormats.dateFormat7
+                    DateFormats.dateFormat3(),
+                    DateFormats.dateFormat7()
                 )
             }"
 
             val ovDays = abs(
                 DateFormats.getDateDiff(
-                    DateFormats.dateFormat3,
+                    DateFormats.dateFormat3(),
                     data.ovulationStartDate,
                     data.periodDate
                 )
@@ -42,7 +42,7 @@ class FMHCycleTrackerHistoryAdapter() :
             if (ovDates?.size == 2) {
                 ovStart = abs(
                     DateFormats.getDateDiff(
-                        DateFormats.dateFormat3,
+                        DateFormats.dateFormat3(),
                         ovDates[0],
                         data.periodDate
                     )
@@ -50,7 +50,7 @@ class FMHCycleTrackerHistoryAdapter() :
 
                 ovEnd = abs(
                     DateFormats.getDateDiff(
-                        DateFormats.dateFormat3,
+                        DateFormats.dateFormat3(),
                         ovDates[1],
                         data.periodDate
                     )

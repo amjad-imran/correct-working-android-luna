@@ -156,7 +156,6 @@ class SummaryDataFragment :
 
                 OSummaryHealthOverviewClickEnum.OnAiCardClicked -> {}
                 is OSummaryHealthOverviewClickEnum.TrackYourFemaleHealth -> {
-                    navigate(R.id.fragmentCycleTracker)
                 }
 
                 OSummaryHealthOverviewClickEnum.TrackYourFemaleHealthRemindLater -> {}

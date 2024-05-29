@@ -91,8 +91,12 @@ class CycleInsightDetailViewModel @Inject constructor(
             chartModel.date = it.date
 
             val month =
-                DateFormats.formatDateTime(it.date, DateFormats.dateFormat3, DateFormats.month)
-            val day = DateFormats.formatDateTime(it.date, DateFormats.dateFormat3, DateFormats.date)
+                DateFormats.formatDateTime(
+                    it.date, DateFormats.dateFormat3(), DateFormats.monthOnly()
+                )
+            val day = DateFormats.formatDateTime(
+                it.date, DateFormats.dateFormat3(), DateFormats.dateOnly()
+            )
 
             chartModel.month = month
             chartModel.day = day
@@ -110,14 +114,14 @@ class CycleInsightDetailViewModel @Inject constructor(
         val lastDate = DateFormats.subtractDateFormat3(lastDateFromList, 1)!!
         val suffixDatesList = DateFormats.getWeekDaysBetweenDates(
             DateFormats.subtractDateFormat3(lastDate, 14)!!, lastDate,
-            DateFormats.dateFormat3, DateFormats.singleWeekDay
+            DateFormats.dateFormat3(), DateFormats.singleWeekDay()
         )
         val currentDateFromList = dataList.last().date
         val currentDate = DateFormats.addDateFormat3(currentDateFromList, 1)!!
         val prefixDatesList = DateFormats.getWeekDaysBetweenDates(
             currentDate,
             DateFormats.addDateFormat3(currentDate, 14)!!,
-            DateFormats.dateFormat3, DateFormats.singleWeekDay
+            DateFormats.dateFormat3(), DateFormats.singleWeekDay()
         )
 
         val suffix = java.util.ArrayList<PeriodChartModel>()

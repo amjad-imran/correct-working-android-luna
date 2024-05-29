@@ -411,4 +411,8 @@ class SummaryDataViewModel @Inject constructor(
 
     }
 
+    fun getStressWalkthroughShownStatus(): Boolean {
+        return localDataStore.getStressWalkthroughShownStatus()
+    }
+
 }

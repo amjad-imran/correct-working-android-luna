@@ -74,8 +74,8 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
     private fun setTitleDate() {
         binding.tvDate.text = DateFormats.formatDate(
             viewModel.todayDate.toString(),
-            DateFormats.dateFormat3,
-            DateFormats.dateFormat7
+            DateFormats.dateFormat3(),
+            DateFormats.dateFormat7()
         )
     }
 

@@ -49,8 +49,8 @@ class CalenderDayLogBottomSheet :
         viewModel.getDataForDate(viewModel.todayDate.toString())
         binding.tvTitle.text = DateFormats.formatDate(
             viewModel.todayDate.toString(),
-            DateFormats.dateFormat3,
-            DateFormats.dateFormat7
+            DateFormats.dateFormat3(),
+            DateFormats.dateFormat7()
         )
     }
 

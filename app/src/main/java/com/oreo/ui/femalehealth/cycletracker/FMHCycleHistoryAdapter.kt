@@ -26,14 +26,14 @@ class FMHCycleHistoryAdapter(val listener: OnHistoryItemClickListener) :
             binding.tvStartedOn.text = "Started on ${
                 DateFormats.formatDate(
                     data.periodDate,
-                    DateFormats.dateFormat3,
-                    DateFormats.dateFormat7
+                    DateFormats.dateFormat3(),
+                    DateFormats.dateFormat7()
                 )
             }"
 
             var ovDays = abs(
                 DateFormats.getDateDiff(
-                    DateFormats.dateFormat3,
+                    DateFormats.dateFormat3(),
                     data.ovulationStartDate,
                     data.periodDate
                 )
@@ -45,7 +45,7 @@ class FMHCycleHistoryAdapter(val listener: OnHistoryItemClickListener) :
             if (ovDates?.size == 2) {
                 ovStart = abs(
                     DateFormats.getDateDiff(
-                        DateFormats.dateFormat3,
+                        DateFormats.dateFormat3(),
                         ovDates[0],
                         data.periodDate
                     )
@@ -53,7 +53,7 @@ class FMHCycleHistoryAdapter(val listener: OnHistoryItemClickListener) :
 
                 ovEnd = abs(
                     DateFormats.getDateDiff(
-                        DateFormats.dateFormat3,
+                        DateFormats.dateFormat3(),
                         ovDates[1],
                         data.periodDate
                     )

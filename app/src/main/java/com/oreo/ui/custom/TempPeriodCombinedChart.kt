@@ -591,8 +591,8 @@ class TempPeriodCombinedChart : View {
                 }
                 val text = DateFormats.formatDate(
                     current.date,
-                    DateFormats.dateFormat3,
-                    DateFormats.dateFormat7
+                    DateFormats.dateFormat3(),
+                    DateFormats.dateFormat7()
                 )
                 val textWidth = xTextPaint.measureText(text)
                 xTextPaint.color = Color.parseColor("#ffffff")
@@ -605,8 +605,8 @@ class TempPeriodCombinedChart : View {
             } else if (i == list.size - 1) {
                 val text = DateFormats.formatDate(
                     current.date,
-                    DateFormats.dateFormat3,
-                    DateFormats.dateFormat7
+                    DateFormats.dateFormat3(),
+                    DateFormats.dateFormat7()
                 )
                 xTextPaint.color = Color.parseColor("#7affffff")
                 canvas.drawText(
@@ -618,8 +618,8 @@ class TempPeriodCombinedChart : View {
             } else if ((i == list.size / 2)) {
                 val text = DateFormats.formatDate(
                     current.date,
-                    DateFormats.dateFormat3,
-                    DateFormats.dateFormat7
+                    DateFormats.dateFormat3(),
+                    DateFormats.dateFormat7()
                 )
                 xTextPaint.color = Color.parseColor("#7affffff")
                 val textWidth = xTextPaint.measureText(text)

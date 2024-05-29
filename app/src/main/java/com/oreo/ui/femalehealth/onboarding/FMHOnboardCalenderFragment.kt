@@ -46,7 +46,7 @@ class FMHOnboardCalenderFragment :
     }
 
     private fun initCalender() {
-        val currentDay = LocalDate.parse(DateFormats.getCurrentDate(DateFormats.dateFormat3))
+        val currentDay = LocalDate.parse(DateFormats.getCurrentDate(DateFormats.dateFormat3()))
         val currentMonth = YearMonth.now()
         val calendarStart = LocalDate.parse("2024-01-01")
 

@@ -649,8 +649,8 @@ class SummaryDataViewModelToday @Inject constructor(
                 temperatureVariation = 2,
                 predictionDate = DateFormats.formatDateTime(
                     data.nextPeriodDate,
-                    DateFormats.dateFormat3,
-                    DateFormats.dateFormat7
+                    DateFormats.dateFormat3(),
+                    DateFormats.dateFormat7()
                 ),
                 days = 11,
                 predictionString = "Predicted period",
@@ -667,8 +667,8 @@ class SummaryDataViewModelToday @Inject constructor(
                 temperatureVariation = 2,
                 predictionDate = DateFormats.formatDateTime(
                     data.ovulationDate,
-                    DateFormats.dateFormat3,
-                    DateFormats.dateFormat7
+                    DateFormats.dateFormat3(),
+                    DateFormats.dateFormat7()
                 ),
                 days = 11,
                 predictionString = "Predicted ovulation",
@@ -726,8 +726,8 @@ class SummaryDataViewModelToday @Inject constructor(
                 bottomText = "Predicted period",
                 predictionDate = DateFormats.formatDateTime(
                     data.nextPeriodDate,
-                    DateFormats.dateFormat3,
-                    DateFormats.dateFormat7
+                    DateFormats.dateFormat3(),
+                    DateFormats.dateFormat7()
                 ),
                 background = R.drawable.back_card_ovulation_small
             )
