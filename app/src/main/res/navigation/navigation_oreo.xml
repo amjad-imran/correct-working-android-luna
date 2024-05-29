@@ -839,8 +839,10 @@
         <argument
             android:name="selectedDate"
             app:argType="string" />
+        <argument
+            android:name="firstPeriodDate"
+            app:argType="string" />
     </dialog>
-        android:label="fragment_notification_setting"/>
     <fragment
         android:id="@+id/chatGptFragment"
         android:name="com.oreo.ui.chatGpt.ChatGptFragment"

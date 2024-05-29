@@ -35,9 +35,9 @@ class CalenderDayLogBottomSheet :
     private val args: CalenderDayLogBottomSheetArgs by navArgs()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.todayDate = LocalDate.parse(args.selectedDate)
-        setTitleDate()
         setRecycler()
+        viewModel.firstPeriodDate = LocalDate.parse(args.firstPeriodDate)
+        viewModel.selectedDate.value = LocalDate.parse(args.selectedDate)
     }
 
     private fun setRecycler() {
@@ -45,13 +45,10 @@ class CalenderDayLogBottomSheet :
             adapter = mAdapter
         }
     }
-    private fun setTitleDate() {
-        viewModel.getDataForDate(viewModel.todayDate.toString())
-        binding.tvTitle.text = DateFormats.formatDate(
-            viewModel.todayDate.toString(),
-            DateFormats.dateFormat3(),
-            DateFormats.dateFormat7()
-        )
+
+    private fun setTitleDate(localDate: LocalDate) {
+        viewModel.getDataForDate(localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+        binding.tvTitle.text = localDate.format(DateTimeFormatter.ofPattern("dd MMM"))
     }
 
     override fun initListener() {
@@ -65,9 +62,12 @@ class CalenderDayLogBottomSheet :
         }
         binding.ivRight.setOnClickListener {
 
-            viewModel.todayDate =
-                LocalDate.parse(viewModel.todayDate.toString()).plusDays(1)
-            setTitleDate()
+            val nextDate = viewModel.selectedDate.value!!.plusDays(1)
+            if (nextDate > viewModel.todayDate) {
+                return@setOnClickListener
+            }
+
+            viewModel.selectedDate.value = nextDate
             setFragmentResult(
                 CALENDER_DAY_LOG_KEY,
                 bundleOf("right" to true)
@@ -75,9 +75,14 @@ class CalenderDayLogBottomSheet :
         }
 
         binding.ivBack.setOnClickListener {
-            viewModel.todayDate =
-                LocalDate.parse(viewModel.todayDate.toString()).plusDays(-1)
-            setTitleDate()
+
+            val previousDate = viewModel.selectedDate.value!!.minusDays(1)
+            if (previousDate < viewModel.firstPeriodDate) {
+                return@setOnClickListener
+            }
+
+            viewModel.selectedDate.value = previousDate
+
             setFragmentResult(
                 CALENDER_DAY_LOG_KEY,
                 bundleOf("left" to true)
@@ -149,6 +154,10 @@ class CalenderDayLogBottomSheet :
     }
 
     override fun subscribeObservers() {
+        viewModel.selectedDate.observe(this) {
+            setTitleDate(it)
+        }
+
         viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->
                 context.showShortToast(message)
@@ -162,8 +171,9 @@ class CalenderDayLogBottomSheet :
         }
 
         viewModel.femaleHealthData.observe(this) {
-            if (it?.currentDay == null) {
-                context.showShortToast("Screen pending")
+            if (it?.currentDay == null) { //should not come here
+                navigateUpSafe()
+                //context.showShortToast("Screen pending")
             } else {
                 setTopData(it)
             }
@@ -171,12 +181,12 @@ class CalenderDayLogBottomSheet :
         }
 
 
-        viewModel.symptomList.observe(this){
+        viewModel.symptomList.observe(this) {
             it?.let {
                 binding.btnLog.visible()
-                if(it.isEmpty()){
+                if (it.isEmpty()) {
                     binding.btnLog.setText(getString(R.string.text_log))
-                }else{
+                } else {
                     binding.btnLog.setText(getString(R.string.edit))
                 }
                 mAdapter.setData(it)

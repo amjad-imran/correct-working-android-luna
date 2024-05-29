@@ -28,6 +28,7 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.data.model.FMHCycleHistoryDataModel
+import com.oreo.data.model.PeriodCycleHistory
 import com.oreo.ui.femalehealth.cycletracker.DayState
 import com.oreo.ui.femalehealth.cycletracker.LogPeriodActivity
 import com.oreo.ui.femalehealth.cycletracker.PeriodPos
@@ -57,17 +58,21 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
     }
 
     private fun showCalenderDayLog(date: LocalDate) {
-        navigate(CycleLogFragmentDirections.actionCycleLogFragmentToCalenderDayLogBottomSheet(date.toString()))
+        navigate(
+            CycleLogFragmentDirections.actionCycleLogFragmentToCalenderDayLogBottomSheet(
+                date.toString(),
+                viewModel.getFirstPeriodDate().toString()
+            )
+        )
     }
 
-    private fun initCalender(fmhCycleHistoryDataModels: List<FMHCycleHistoryDataModel>) {
-        val periodDate = fmhCycleHistoryDataModels.getOrNull(0)?.periodDate ?: "2024-03-01"
+    private fun initCalender(cycleHistoryData: PeriodCycleHistory) {
         val currentDay = LocalDate.now()
         val currentMonth = YearMonth.now()
-        val calendarStart = LocalDate.parse(periodDate)
+        val firstPeriodDate = viewModel.getFirstPeriodDate()
 
         binding.calendar.setup(
-            calendarStart.yearMonth, currentMonth.plusMonths(12), DayOfWeek.MONDAY
+            firstPeriodDate.minusMonths(2).yearMonth, currentMonth.plusMonths(12), DayOfWeek.MONDAY
         )
         class DayViewContainer(view: View) : ViewContainer(view) {
             lateinit var day: CalendarDay
@@ -77,7 +82,7 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
 
                 binding.root.setOnClickListener {
                     if (day.position == DayPosition.MonthDate) {
-                        if (day.date > viewModel.todayDate) {
+                        if (day.date > viewModel.todayDate || day.date < firstPeriodDate) {
                             return@setOnClickListener
                         }
 
@@ -259,7 +264,7 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
                 viewModel.setOpenLogBottomSheet(true)
             }
             if (right) {
-                if(viewModel.selectedDate <= LocalDate.now()){
+                if (viewModel.selectedDate <= LocalDate.now()) {
                     this@CycleLogFragment.binding.calendar.notifyDateChanged(
                         viewModel.selectedDate
                     )
@@ -296,7 +301,7 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
             ) { _, bundle ->
                 val logSaved = bundle.getBoolean("log_saved")
                 val openActivity = bundle.getBoolean("openActivity")
-                if(openActivity){
+                if (openActivity) {
                     resultLauncher.launch(
                         LogPeriodActivity.getStartIntent(
                             requireContext(),
@@ -317,6 +322,7 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
             putString("selectedDate", viewModel.selectedDate.toString())
         })
     }
+
     override fun subscribeObservers() {
         viewModel.openDayLogBottomSheet.observe(this) {
             it?.getContent()?.let {

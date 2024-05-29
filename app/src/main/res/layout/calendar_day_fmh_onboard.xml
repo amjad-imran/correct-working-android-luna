@@ -11,7 +11,7 @@
         <ImageView
             android:id="@+id/ivBackStart"
             android:layout_width="0dp"
-            android:layout_height="30dp"
+            android:layout_height="36dp"
             android:background="@drawable/back_streak_day_highlight_start"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/tvDay"
@@ -21,8 +21,8 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivBackToday"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:src="@color/accent_color_purple"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/tvDay"
@@ -35,7 +35,7 @@
         <ImageView
             android:id="@+id/ivBackEnd"
             android:layout_width="0dp"
-            android:layout_height="30dp"
+            android:layout_height="36dp"
             android:background="@drawable/back_streak_day_highlight_end"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/tvDay"
@@ -46,7 +46,7 @@
         <ImageView
             android:id="@+id/ivBackMid"
             android:layout_width="0dp"
-            android:layout_height="30dp"
+            android:layout_height="36dp"
             android:background="@drawable/back_streak_day_highlight_mid"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/tvDay"
@@ -56,8 +56,8 @@
 
         <ImageView
             android:id="@+id/ivBackSingle"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:background="@drawable/back_streak_day_highlight_single"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/tvDay"
@@ -73,7 +73,6 @@
             app:layout_constraintEnd_toEndOf="@+id/tvDay"
             app:layout_constraintStart_toStartOf="@+id/tvDay"
             app:layout_constraintTop_toTopOf="@+id/tvDay"
-            tools:background="@drawable/back_circle_period"
             tools:visibility="visible" />
         <ImageView
             android:id="@+id/ivBackSelected"
@@ -90,8 +89,8 @@
         <TextView
             android:id="@+id/tvDay"
             style="@style/Body"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:gravity="center"
             android:textColor="@android:color/white"
             app:layout_constraintBottom_toBottomOf="parent"

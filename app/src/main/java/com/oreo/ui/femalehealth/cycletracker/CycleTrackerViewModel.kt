@@ -36,6 +36,7 @@ class CycleTrackerViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     var todayDate = LocalDate.now()
+    var firstPeriodDate: LocalDate = LocalDate.now().minusMonths(2)
 
     var selectedDate: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now())
     var notifyDateChange = MutableLiveData<Event<LocalDate>>()
@@ -98,6 +99,7 @@ class CycleTrackerViewModel @Inject constructor(
                             }
 
                             _symptomList.postValue(symList)
+
                             it?.temp?.let { list ->
                                 val tempVariance = calculateTempVariance(list)
 

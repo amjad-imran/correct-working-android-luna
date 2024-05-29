@@ -19,6 +19,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.chrono.ChronoLocalDate
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
@@ -33,11 +34,11 @@ class CycleLogViewModel @Inject constructor(
     private val _openDayLogBottomSheet = MutableLiveData<Event<Boolean>?>()
     val openDayLogBottomSheet: LiveData<Event<Boolean>?> get() = _openDayLogBottomSheet
 
-    private val _cycleHistoryData = MutableLiveData<List<FMHCycleHistoryDataModel>?>()
+    private val _cycleHistoryData = MutableLiveData<PeriodCycleHistory?>()
+    val cycleHistoryData: LiveData<PeriodCycleHistory?> get() = _cycleHistoryData
 
     private val _openLogBottomSheet = MutableLiveData<Event<Boolean>?>()
     val openLogBottomSheet: LiveData<Event<Boolean>?> get() = _openLogBottomSheet
-    val cycleHistoryData: LiveData<List<FMHCycleHistoryDataModel>?> get() = _cycleHistoryData
 
     val healthDataDateList = HashMap<LocalDate, DayState>()
 
@@ -54,6 +55,7 @@ class CycleLogViewModel @Inject constructor(
     fun setOpenLogBottomSheet(status: Boolean) {
         _openLogBottomSheet.postValue(Event(status))
     }
+
     fun onCalendarDateSelected(selectedDate: String) {
         //calender date set
     }
@@ -93,8 +95,9 @@ class CycleLogViewModel @Inject constructor(
         }
     }
 
-    private fun generateHealthData(cycleData:PeriodCycleHistory) {
+    private fun generateHealthData(cycleData: PeriodCycleHistory) {
         viewModelScope.launch(Dispatchers.IO) {
+            setLoading(true)
             val mainPeriodLength = 5
             val mainCycleLength = 28
 
@@ -199,7 +202,8 @@ class CycleLogViewModel @Inject constructor(
                 current = current.plusDays(1)
 
             }
-            _cycleHistoryData.postValue(cycleData.cycleHistory)
+            _cycleHistoryData.postValue(cycleData)
+            setLoading(false)
         }
     }
 
@@ -266,7 +270,7 @@ class CycleLogViewModel @Inject constructor(
         val isDateSelected = date == selectedDate
 
         val history = cycleHistoryData.value
-        if (history.isNullOrEmpty()) {
+        if (history?.cycleHistory.isNullOrEmpty()) {
             return Pair(DayState.Default, isDateSelected)
         }
 
@@ -286,5 +290,10 @@ class CycleLogViewModel @Inject constructor(
     ): Int {
         val daysSinceLastPeriod = ChronoUnit.DAYS.between(periodDate, currentDate).toInt()
         return (daysSinceLastPeriod % cycleLength) + 1
+    }
+
+    fun getFirstPeriodDate(): LocalDate {
+        val periodDate = cycleHistoryData.value?.userDefault?.firstPeriodDate ?: "2024-03-01"
+        return LocalDate.parse(periodDate)
     }
 }

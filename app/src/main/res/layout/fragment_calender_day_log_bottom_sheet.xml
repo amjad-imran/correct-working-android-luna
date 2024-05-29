@@ -141,26 +141,17 @@
                     app:layout_constraintTop_toBottomOf="@id/tvMessage" />
 
 
-                <ImageView
-                    android:id="@+id/btnInfo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="@dimen/dimen_24dp"
-                    android:src="@drawable/ic_info_oreo"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/divider1" />
-
                 <TextView
                     android:id="@+id/tvPhase"
                     style="@style/S14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/dimen_8dp"
+                    android:layout_marginEnd="24dp"
                     android:textColor="#83e7cf"
-                    app:layout_constraintBottom_toBottomOf="@+id/btnInfo"
-                    app:layout_constraintEnd_toStartOf="@+id/btnInfo"
-                    app:layout_constraintTop_toTopOf="@+id/btnInfo" />
+                    app:layout_constraintBottom_toBottomOf="@+id/tvCurrentState"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tvCurrentState"
+                    tools:text="Luteul phase" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvFlow"
