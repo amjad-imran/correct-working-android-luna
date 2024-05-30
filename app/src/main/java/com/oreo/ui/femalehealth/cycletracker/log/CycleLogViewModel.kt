@@ -50,10 +50,6 @@ class CycleLogViewModel @Inject constructor(
     var lastDateInteraction: LocalDate? = null
 
 
-    init {
-        getCycleHistoryData()
-    }
-
 
     fun setOpenDayLogBottomSheet(status: Boolean) {
         _openDayLogBottomSheet.postValue(Event(status))

@@ -8,6 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
@@ -41,10 +42,28 @@ import java.time.format.DateTimeFormatter
 
 @AndroidEntryPoint
 class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogBinding::inflate) {
+    companion object {
+
+        fun getStartData(selectedLogDate: String?): Pair<Int, Bundle?> {
+            return Pair(R.id.cycleLogFragment, Bundle().apply {
+                putString("selectedLogDate", selectedLogDate)
+            })
+        }
+    }
+
+    val args: CycleLogFragmentArgs by navArgs()
+
     private val viewModel: CycleLogViewModel by viewModels()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
+
+        args.selectedLogDate?.let {
+            viewModel.selectedDate = LocalDate.parse(it)
+            showCycleLogBottomSheet()
+        }
+        viewModel.getCycleHistoryData()
+
     }
 
     private fun initToolbar() {

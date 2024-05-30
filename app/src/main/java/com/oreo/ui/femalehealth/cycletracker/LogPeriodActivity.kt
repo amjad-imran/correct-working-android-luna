@@ -38,6 +38,7 @@ class LogPeriodActivity : BaseActivity<ActivityLogPeriodBinding>() {
     private val viewModel: CycleLogViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.getCycleHistoryData()
     }
 
     companion object {

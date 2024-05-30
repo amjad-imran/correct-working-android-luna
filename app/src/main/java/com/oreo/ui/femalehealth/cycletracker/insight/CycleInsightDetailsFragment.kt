@@ -94,10 +94,10 @@ class CycleInsightDetailsFragment :
 
         viewModel.periodList.observe(this) {
 
-            if (it.isNotEmpty()) {
+            if (it.length.isNotEmpty()) {
                 binding.vGraph.visible()
                 val moveToPos = -1
-                val topGraphData = viewModel.getPrefixAndSuffixList(it)
+                val topGraphData = viewModel.getPrefixAndSuffixList(it.length)
                 val (normalMin, normalMax) = viewModel.getNormalMinMax()
                 binding.vGraph.updateData(
                     topGraphData.first,
@@ -108,6 +108,15 @@ class CycleInsightDetailsFragment :
                     normalMax
                 )
             }
+
+            binding.tvValue.text = if (it.avg == null) "-" else "${it.avg}"
+            binding.tvUnit.text = getString(R.string.text_days)
+            if (it.nudge?.message.isNullOrEmpty()) {
+                binding.tvDescription.gone()
+            } else {
+                binding.tvDescription.visible()
+                binding.tvDescription.text = it.nudge?.message
+            }
         }
     }
 
@@ -115,8 +124,7 @@ class CycleInsightDetailsFragment :
         if (viewModel.selectedDate == chartModel?.date!!) {
             return
         }
-        binding.tvValue.text = "${chartModel.value}"
-        binding.tvUnit.text = getString(R.string.text_days)
+
 
         viewModel.selectedDate = chartModel.date!!
 

@@ -1,9 +1,6 @@
 package com.noisefit.data.remote.abstraction
 
-import com.google.gson.JsonArray
 import com.google.gson.JsonObject
-import com.noisefit.data.model.FeedResponse
-import com.noisefit.data.model.timeline.FriendTimeline
 import com.noisefit.data.remote.CityData
 import com.noisefit.data.remote.StateData
 import com.noisefit.data.remote.UserLocationUpdatedResponse
@@ -46,7 +43,7 @@ import com.oreo.data.model.StressResultData
 import com.oreo.data.model.UpdateResponseV2
 import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
-import com.oreo.data.model.femalehealth.PeriodLength
+import com.oreo.data.model.femaleh.PeriodLengthListResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
@@ -433,13 +430,13 @@ interface NetworkService {
     suspend fun getPeriodLengthList(
         @Url url: String,
         @Query("date") selectDate: String
-    ): BaseApiResponse<List<PeriodLength>>
+    ): BaseApiResponse<PeriodLengthListResponse>
 
     @GET
     suspend fun getPeriodDurationList(
         @Url url: String,
         @Query("date") selectDate: String
-    ): BaseApiResponse<List<PeriodLength>>
+    ): BaseApiResponse<PeriodLengthListResponse>
 
     @GET
     suspend fun getPeriodCycleHistory(

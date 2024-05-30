@@ -332,6 +332,13 @@ class SummaryDataFragmentToday :
                 OSummaryHealthOverviewClickEnum.FemaleHealthHome -> {
                     navigate(R.id.fragmentCycleTracker)
                 }
+
+                is OSummaryHealthOverviewClickEnum.GotPeriodClicked -> {
+                    viewModel.onGotPeriodClicked(type.status)
+
+                    //TODO change to API success
+                    healthOverviewAdapter.removeGotPeriodCard()
+                }
             }
         }
 

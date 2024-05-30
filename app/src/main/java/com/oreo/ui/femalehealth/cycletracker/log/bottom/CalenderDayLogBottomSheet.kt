@@ -133,12 +133,16 @@ class CalenderDayLogBottomSheet :
 
                 }
             } else {
-                val daysUntilOvulation =
-                    viewModel.calculateDaysLeft(data.ovulationDate!!, selectedDate)
+                val daysUntilOvulation =if(data.ovulationDate!=null){
+                    viewModel.calculateDaysLeft(data.ovulationDate, selectedDate)
+                }else{
+                    null
+                }
+
                 val daysUntilNextPeriod =
                     viewModel.calculateDaysLeft(data.nextPeriodDate!!, selectedDate)
 
-                if (daysUntilOvulation < daysUntilNextPeriod && daysUntilOvulation > 0) {
+                if (daysUntilOvulation!=null && (daysUntilOvulation < daysUntilNextPeriod && daysUntilOvulation > 0)) {
                     tvCurrentState.text = "Ovulation in"
                     tvStateDay.text = "${daysUntilOvulation} Days"
 

@@ -160,6 +160,7 @@ class SummaryDataFragment :
 
                 OSummaryHealthOverviewClickEnum.TrackYourFemaleHealthRemindLater -> {}
                 OSummaryHealthOverviewClickEnum.FemaleHealthHome -> {}
+                is OSummaryHealthOverviewClickEnum.GotPeriodClicked -> {}
             }
         }
 

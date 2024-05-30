@@ -55,7 +55,6 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="@dimen/side_margin"
             android:textColor="@color/white_64"
-            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/tvValue"
             tools:text="Your resting HR seems to be higher than previous day. Allow yourself sufficient time for recovery by taking it slow. Consider a nap?" />
 

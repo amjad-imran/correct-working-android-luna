@@ -17,9 +17,9 @@ import com.noisefit.luna.databinding.ListActivityBurnCardItemBinding
 import com.noisefit.luna.databinding.ListActivityMinimalItemBinding
 import com.noisefit.luna.databinding.ListCycleTrackerOngoingBinding
 import com.noisefit.luna.databinding.ListCycleTrackerPredictionBinding
+import com.noisefit.luna.databinding.ListDashGotPeriodBinding
 import com.noisefit.luna.databinding.ListDashNapBinding
 import com.noisefit.luna.databinding.ListOWAlertCardItemBinding
-import com.noisefit.luna.databinding.ListPeriodConfirmationBinding
 import com.noisefit.luna.databinding.ListReadinessCardItemBinding
 import com.noisefit.luna.databinding.ListReadinessMinimalCardItemBinding
 import com.noisefit.luna.databinding.ListRingCareBinding
@@ -72,6 +72,7 @@ sealed class OSummaryHealthOverviewClickEnum {
     object TrackYourFemaleHealth : OSummaryHealthOverviewClickEnum()
     object TrackYourFemaleHealthRemindLater : OSummaryHealthOverviewClickEnum()
     object FemaleHealthHome : OSummaryHealthOverviewClickEnum()
+    class GotPeriodClicked(val status: Boolean) : OSummaryHealthOverviewClickEnum()
 
 }
 
@@ -243,8 +244,8 @@ class OSummaryHealthOverviewAdapter() :
                 )
             )
 
-            R.layout.list_period_confirmation -> HomeRecyclerViewHolder.GotYourPeriodViewHolder(
-                ListPeriodConfirmationBinding.inflate(
+            R.layout.list_dash_got_period -> HomeRecyclerViewHolder.GotYourPeriodViewHolder(
+                ListDashGotPeriodBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
@@ -395,7 +396,7 @@ class OSummaryHealthOverviewAdapter() :
             is OHealthOverview.CycleTrackerCardSmall -> R.layout.list_cycle_tracker_prediction
             is OHealthOverview.CycleTrackerCardBig -> R.layout.list_cycle_tracker_ongoing
             is OHealthOverview.CardTrackFemaleHealth -> R.layout.card_track_fm_health
-            is OHealthOverview.GotYourPeriod -> R.layout.list_period_confirmation
+            is OHealthOverview.GotYourPeriod -> R.layout.list_dash_got_period
         }
     }
 
@@ -409,6 +410,17 @@ class OSummaryHealthOverviewAdapter() :
             notifyItemRemoved(index)
         }
     }
+
+    fun removeGotPeriodCard() {
+        val index = (items as ArrayList).indexOfFirst {
+            it is OHealthOverview.GotYourPeriod
+        }
+        if (index != -1) {
+            (items as ArrayList).removeAt(index)
+            notifyItemRemoved(index)
+        }
+    }
+
 }
 
 
@@ -1197,13 +1209,15 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         ) {
             binding.textView3.text = data.data.title
             binding.tvOvlInDays.text = data.data.subTitle
-            binding.tvDaysLeft.text = "${data.data.days} of ${data.data.totalCycleDay}"
+            binding.tvCurrentDay.text = "${data.data.days}"
+            binding.tvDaysLeft.text = "of ${data.data.totalCycleDay}"
             binding.tvDesc.text = data.data.nudge
             binding.tvValue.text = if (data.data.temperatureVariation > 0) {
                 "+${data.data.temperatureVariation}"
             } else {
                 "-${data.data.temperatureVariation}"
             }
+            binding.imv.setBackgroundResource(data.data.background)
 
             binding.tvPeriodicPeriod.text = data.data.predictionString
             binding.tvDays.text = data.data.predictionDate
@@ -1254,15 +1268,20 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         }
     }
 
-    class GotYourPeriodViewHolder(private val binding: ListPeriodConfirmationBinding) :
+    class GotYourPeriodViewHolder(private val binding: ListDashGotPeriodBinding) :
         HomeRecyclerViewHolder(binding) {
         fun bind(
             data: OHealthOverview.GotYourPeriod,
             position: Int,
         ) {
+            binding.bYes.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.GotPeriodClicked(true))
+            }
+            binding.bNo.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.GotPeriodClicked(false))
+            }
         }
     }
-
 
 }
 

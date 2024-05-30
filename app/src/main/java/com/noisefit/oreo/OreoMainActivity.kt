@@ -45,6 +45,7 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
+import com.oreo.ui.femalehealth.cycletracker.log.CycleLogFragment
 import com.oreo.ui.recordworkout.SELECT_RECORD_WORKOUT
 import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderEffectBlur
@@ -254,7 +255,9 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
     private fun onLogPeriodClicked() {
-        navController?.navigate(R.id.fragmentCycleTracker)
+        binding.blurViewSelector.gone()
+        val (frag, bundle) = CycleLogFragment.getStartData(viewModel.selectedDate)
+        navController?.navigate(frag, bundle)
     }
 
     override fun onNewIntent(intent: Intent?) {

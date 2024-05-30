@@ -10,7 +10,8 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.PeriodChartModel
-import com.oreo.data.model.femalehealth.PeriodLength
+import com.oreo.data.model.femaleh.PeriodLength
+import com.oreo.data.model.femaleh.PeriodLengthListResponse
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -26,7 +27,7 @@ class CycleInsightDetailViewModel @Inject constructor(
     var selectedDate: String? = null
     var launchMode: CycleInsightLaunchMode = CycleInsightLaunchMode.CYCLE_LENGTH
 
-    val periodList = MutableLiveData<List<PeriodLength>>()
+    val periodList = MutableLiveData<PeriodLengthListResponse>()
 
 
     fun getToolbarTitle(): String {
@@ -40,7 +41,7 @@ class CycleInsightDetailViewModel @Inject constructor(
         viewModelScope.launch {
             val date = DateFormats.getTodaysDateString(10)
             if (launchMode == CycleInsightLaunchMode.CYCLE_LENGTH) {
-                userActivityRepository.getPeriodLengthList(date)
+                userActivityRepository.getCycleLengthData(date)
             } else {
                 userActivityRepository.getPeriodDurationList(date)
             }.collect { resource ->
@@ -80,8 +81,7 @@ class CycleInsightDetailViewModel @Inject constructor(
 
     fun getPrefixAndSuffixList(dataList: List<PeriodLength>): Triple<ArrayList<PeriodChartModel>, ArrayList<PeriodChartModel>, ArrayList<PeriodChartModel>> {
 
-        val normalMin = 21
-        val normalMax = 25
+        val (normalMin, normalMax) = getNormalMinMax()
 
         val dateList = ArrayList<String>()
 
@@ -109,7 +109,7 @@ class CycleInsightDetailViewModel @Inject constructor(
             dateList.add(it.date)
         }
 
-        list.reverse()
+        //list.reverse()
         val lastDateFromList = dataList.first().date
         val lastDate = DateFormats.subtractDateFormat3(lastDateFromList, 1)!!
         val suffixDatesList = DateFormats.getWeekDaysBetweenDates(
@@ -159,8 +159,8 @@ class CycleInsightDetailViewModel @Inject constructor(
 
     fun getNormalMinMax(): Pair<Int, Int> {
         return when (launchMode) {
-            CycleInsightLaunchMode.CYCLE_LENGTH -> Pair(2, 7)
-            CycleInsightLaunchMode.PERIOD_DURATION -> Pair(21, 35)
+            CycleInsightLaunchMode.CYCLE_LENGTH -> Pair(21, 35)
+            CycleInsightLaunchMode.PERIOD_DURATION -> Pair(2, 7)
         }
     }
 }

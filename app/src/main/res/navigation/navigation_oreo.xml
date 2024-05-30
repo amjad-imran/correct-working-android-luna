@@ -764,6 +764,10 @@
         <action
             android:id="@+id/action_cycleLogFragment_to_calenderDayLogBottomSheet"
             app:destination="@id/calenderDayLogBottomSheet" />
+        <argument
+            android:name="selectedLogDate"
+            app:argType="string"
+            app:nullable="true" />
 
     </fragment>
     <dialog

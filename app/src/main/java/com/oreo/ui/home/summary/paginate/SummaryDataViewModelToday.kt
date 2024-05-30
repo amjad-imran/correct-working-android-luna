@@ -295,6 +295,14 @@ class SummaryDataViewModelToday @Inject constructor(
                                     )
                                 )
                             }
+
+                            if (femaleData.isPeriod && !femaleData.otaLog) {
+                                userActivities.add(
+                                    OHealthOverview.GotYourPeriod(
+                                        "Today's your predicted first day."
+                                    )
+                                )
+                            }
                         }
                     }
                 }
@@ -641,7 +649,7 @@ class SummaryDataViewModelToday @Inject constructor(
     private fun convertToPeriodBigCardModel(data: FemaleHealthUserInfoModel): PeriodCard2 {
         if (data.isPeriod) {
             return PeriodCard2(
-                title = "period",
+                title = "Period",
                 subTitle = "Day ${data.currentDay}",
                 nudge = data.nudges?.firstOrNull()?.message ?: "",
                 currentCycleDay = data.currentDay ?: 0,
@@ -675,48 +683,18 @@ class SummaryDataViewModelToday @Inject constructor(
                 background = R.drawable.back_card_ovulation_big
             )
         }
-
-        /*
-
-
-                val daysUntilOvulation = calculateDaysLeft(data.ovulationDate!!)
-                val daysUntilNextPeriod = calculateDaysLeft(data.nextPeriodDate!!)
-
-                val title: String
-                val bottomText: String
-                val predictionDate: String
-                val nextDay: Int
-                if (daysUntilOvulation < daysUntilNextPeriod) {
-                    title = "Ovulation in"
-                    bottomText = "Predicted period:"
-                    predictionDate = data.nextPeriodDate
-                    nextDay = daysUntilNextPeriod.toInt()
-                } else {
-                    title = "Period in"
-                    bottomText = "Predicted ovulation:"
-                    predictionDate = data.ovulationDate
-                    nextDay = daysUntilOvulation.toInt()
-                }
-
-                return PeriodCard2(
-                    title = title,
-                    subTitle = "subtitle here",
-                    nudge = data.nudges?.firstOrNull()?.message ?: "",
-                    currentCycleDay = data.currentDay ?: 0,
-                    totalCycleDay = data.cycleLength ?: 0,
-                    temperatureVariation = 4,
-                    predictionDate = predictionDate,
-                    days = 11,
-                    predictionString = ""
-                )*/
     }
 
     private fun convertToPeriodSmallCardModel(data: FemaleHealthUserInfoModel): PeriodCard1 {
 
-        val daysUntilOvulation = calculateDaysLeft(data.ovulationDate!!)
+        val daysUntilOvulation = if (data.ovulationDate != null) {
+            calculateDaysLeft(data.ovulationDate)
+        } else {
+            null
+        }
         val daysUntilNextPeriod = calculateDaysLeft(data.nextPeriodDate!!)
 
-        if (daysUntilOvulation < daysUntilNextPeriod && daysUntilOvulation > 0) {
+        if (daysUntilOvulation != null && (daysUntilOvulation < daysUntilNextPeriod && daysUntilOvulation > 0)) {
             return PeriodCard1(
                 title = "Ovulation in",
                 days = daysUntilOvulation.toInt(),
@@ -740,7 +718,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 currentCycleDay = data.currentDay ?: 0,
                 totalCycleDay = data.cycleLength ?: 0,
                 bottomText = "Predicted Ovulation",
-                predictionDate =predictedOvulation.format(DateTimeFormatter.ofPattern("dd MMM")),
+                predictionDate = predictedOvulation.format(DateTimeFormatter.ofPattern("dd MMM")),
                 background = R.drawable.back_card_period_small
             )
         }
@@ -1438,6 +1416,10 @@ class SummaryDataViewModelToday @Inject constructor(
                 }
             }
         }
+
+    }
+
+    fun onGotPeriodClicked(status: Boolean) {
 
     }
 

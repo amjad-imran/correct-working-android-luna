@@ -21,14 +21,13 @@ import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.LOGS
-import com.noisefit_commans.utils.ScreenUtils
 import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.TempPrediction
 import com.oreo.data.model.health.Nudges
 import com.oreo.ui.femalehealth.cycletracker.history.INFO_LOG
 import com.oreo.ui.femalehealth.cycletracker.insight.CycleInsightLaunchMode
+import com.oreo.ui.femalehealth.cycletracker.log.CycleLogFragment
 import com.oreo.ui.femalehealth.cycletracker.streak.CycleDetailsFragment
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.workout.details.WorkoutNudgeFragment
@@ -170,7 +169,8 @@ class CycleTrackerFragment :
 
     override fun initListener() {
         binding.toolbar.viewBackCalendar.setOnClickListener {
-            navigate(R.id.cycleLogFragment)
+            val (frag, bundle) = CycleLogFragment.getStartData(null)
+            navigate(frag, bundle)
         }
 
         binding.lytTrackerTop.tvPhase.setOnClickListener {
@@ -230,9 +230,14 @@ class CycleTrackerFragment :
         binding.lytCycleHistory.ivMore.setOnClickListener {
             navigate(R.id.cycleTrackerHistory)
         }
-        /*binding.lytTrackerTop.btnLog.setOnClickListener {
-            navigate(R.id.cycleLogFragment)
-        }*/
+        binding.lytTrackerTop.btnLog.setOnClickListener {
+            val (frag, bundle) = CycleLogFragment.getStartData(viewModel.selectedDate.value.toString())
+            navigate(frag, bundle)
+        }
+        binding.lytTrackerTop.btnLogNew.setOnClickListener {
+            val (frag, bundle) = CycleLogFragment.getStartData(viewModel.selectedDate.value.toString())
+            navigate(frag, bundle)
+        }
     }
 
     private fun initInsightUI(data: FemaleHealthUserInfoModel) {
@@ -435,12 +440,15 @@ class CycleTrackerFragment :
                     }
                 }
             } else {
-                val daysUntilOvulation =
-                    viewModel.calculateDaysLeft(data.ovulationDate!!, selectedDate)
+                val daysUntilOvulation = if (data.ovulationDate != null) {
+                    viewModel.calculateDaysLeft(data.ovulationDate, selectedDate)
+                } else {
+                    null
+                }
                 val daysUntilNextPeriod =
                     viewModel.calculateDaysLeft(data.nextPeriodDate!!, selectedDate)
 
-                if (daysUntilOvulation < daysUntilNextPeriod && daysUntilOvulation > 0) {
+                if (daysUntilOvulation != null && (daysUntilOvulation < daysUntilNextPeriod && daysUntilOvulation > 0)) {
                     tvCurrentState.text = "Ovulation in"
                     tvStateDay.text = "${daysUntilOvulation} Days"
                     if (daysUntilOvulation > 3) {

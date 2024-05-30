@@ -76,7 +76,7 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
 
     private fun setTitleDate() {
         binding.tvDate.text = DateFormats.formatDate(
-            viewModel.selectedDate.toString(),
+            viewModel.selectedDate.value.toString(),
             DateFormats.dateFormat3(),
             DateFormats.dateFormat7()
         )
@@ -89,7 +89,7 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
         binding.btnSave.setOnClickListener {
             val flowType = flowAdapter.getSelectedValue()
             val symptoms = symptomsAdapter.getData()
-            val date = viewModel.selectedDate.toString()
+            val date = viewModel.selectedDate.value.toString()
             viewModel.saveSymptom(date, symptoms, flowType)
         }
 
@@ -136,7 +136,7 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
         viewModel.selectedDate.observe(this) {
             setTitleDate()
             viewModel.getPeriodDates()
-            viewModel.getFemaleHealthIcons(viewModel.selectedDate.toString())
+            viewModel.getFemaleHealthIcons(viewModel.selectedDate.value.toString())
 
         }
 

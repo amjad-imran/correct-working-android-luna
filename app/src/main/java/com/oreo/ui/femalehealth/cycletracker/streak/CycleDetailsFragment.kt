@@ -135,12 +135,7 @@ class CycleDetailsFragment :
             }
         }
         viewModel.femaleHealthData.observe(this) {
-            if (it?.currentDay == null) {
-                context.showShortToast("Screen pending")
-            } else {
-                context.showShortToast("Update UI Here")
-                //update UI
-            }//127
+
 
         }
         viewModel.notifyDateChange.observe(this) {

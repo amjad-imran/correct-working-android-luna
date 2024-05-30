@@ -1,9 +1,13 @@
-package com.oreo.data.model.femalehealth
-
-import com.google.gson.annotations.SerializedName
+package com.oreo.data.model.femaleh
 
 data class PeriodLengthListResponse(
-    val data: List<PeriodLength>
+    val length: List<PeriodLength>,
+    val avg: Int? = null,
+    val nudge: Nudge? = null,
+)
+
+data class Nudge(
+    val message: String? = null
 )
 
 data class PeriodLength(

@@ -313,7 +313,7 @@ class CycleTrackerViewModel @Inject constructor(
     fun getCurrentPhaseText(
         ovulationDate: String?, periodDate: String?, currentDate: String
     ): Pair<String, Int>? {
-        if (ovulationDate == null) return null
+        if (ovulationDate == null) return Pair("Follicular phase", R.color.color_follicular)
         if (periodDate.isNullOrEmpty()) return null
 
         val localCurrentDate = LocalDate.parse(currentDate)
