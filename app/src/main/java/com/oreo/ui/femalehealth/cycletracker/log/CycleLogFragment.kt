@@ -37,6 +37,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 
 @AndroidEntryPoint
 class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogBinding::inflate) {
@@ -318,19 +319,26 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
                 viewModel.setOpenDayLogBottomSheet(true)
             }
         }
-        openLogBottomSheet(periodStartDate,periodEndDate)
+        openLogBottomSheet(periodStartDate, periodEndDate)
     }
 
-    private fun openLogBottomSheet(periodStartDate: String? = null,
-                                   periodEndDate: String? = null) {
+    private fun openLogBottomSheet(
+        periodStartDate: String? = null,
+        periodEndDate: String? = null
+    ) {
         navigate(R.id.bottomSheetCycleLog, Bundle().apply {
-            if(periodStartDate==null){
+            if (periodStartDate == null) {
                 putString("selectedDate", viewModel.selectedDate.toString())
                 putString("periodEndDate", null)
-            }else{
+
+            } else {
                 putString("selectedDate", periodStartDate)
                 putString("periodEndDate", periodEndDate)
             }
+            putString(
+                "firstPeriodDate",
+                viewModel.getFirstPeriodDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+            )
         })
     }
 

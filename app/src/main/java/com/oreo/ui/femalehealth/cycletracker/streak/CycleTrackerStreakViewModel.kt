@@ -24,55 +24,25 @@ import kotlin.math.abs
 class CycleTrackerStreakViewModel @Inject constructor(
     private val userActivityRepository: OreoUserActivityRepository
 ) : BaseViewModel() {
-    var id: String? = null
+
+    lateinit var cycleData: FMHCycleHistoryDataModel
+
     fun getSymptomsData(): ArrayList<String> {
         return arrayListOf("Test1", "Test2", "Test3", "Test4")
     }
+
     val todayDate = LocalDate.now()
     var notifyDateChange = MutableLiveData<Event<LocalDate>>()
 
     var selectedDate: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now())
 
-    private val _cycleStreakData = MutableLiveData<List<FMHCycleHistoryDataModel>?>()
-    val cycleStreakData: LiveData<List<FMHCycleHistoryDataModel>?> get() = _cycleStreakData
-    fun getStreakInfoData() {
-        viewModelScope.launch {
-            //todo api will update later, once provided by backend
-            userActivityRepository.getPeriodCycleHistory().collect { resource ->
-                when (resource) {
-                    is Resource.GenericError -> {
-                        sendMessage(resource.message)
-                    }
+    private val _femaleHealthData = MutableLiveData<FemaleHealthUserInfoModel?>()
+    val femaleHealthData: LiveData<FemaleHealthUserInfoModel?> get() = _femaleHealthData
 
-                    is Resource.Loading -> {
-                        setLoading(resource.loading)
-                    }
+    private val _symptomList = MutableLiveData<ArrayList<Pair<String, String>>>()
+    val symptomList: LiveData<ArrayList<Pair<String, String>>> get() = _symptomList
 
-                    is Resource.NetworkError -> {
-                        setApiErrors(resource.response.apply {
-                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
-                                object : BinaryActionCallback {
-                                    override fun yes() {
-                                        getStreakInfoData()
-                                    }
 
-                                    override fun no() {}
-                                }
-                        })
-                    }
-
-                    is Resource.Success -> {
-                        resource.data?.data?.let {
-                            _cycleStreakData.postValue(it.cycleHistory)
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private val _femaleHealthData = MutableLiveData<FemaleHealthUserInfoModel>()
-    val femaleHealthData: LiveData<FemaleHealthUserInfoModel> get() = _femaleHealthData
     fun getDataForDate(date: String) {
         viewModelScope.launch {
             userActivityRepository.getFemaleHealthUserInfo(date).collect { resource ->
@@ -104,6 +74,17 @@ class CycleTrackerStreakViewModel @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data.let {
                             _femaleHealthData.postValue(it)
+
+                            val symList = ArrayList<Pair<String, String>>()
+                            it?.symptom?.flow?.let {
+                                val title = "Flow: ${it.symptomName ?: ""}"
+                                symList.add(Pair(it.icon ?: "", title))
+                            }
+                            it?.symptom?.symptoms?.forEach {
+                                symList.add(Pair(it.icon ?: "", it.symptomName ?: ""))
+                            }
+
+                            _symptomList.postValue(symList)
                         }
                     }
                 }
@@ -111,16 +92,23 @@ class CycleTrackerStreakViewModel @Inject constructor(
 
         }
     }
+
     fun updateSelectedDate(date: LocalDate) {
         val old = selectedDate.value
 
         selectedDate.value = date
         notifyDateChange.value = Event(old)
     }
-    private fun getCurrentCycleDay(periodDate: LocalDate, cycleLength: Int, currentDate: LocalDate): Int {
+
+    private fun getCurrentCycleDay(
+        periodDate: LocalDate,
+        cycleLength: Int,
+        currentDate: LocalDate
+    ): Int {
         val daysSinceLastPeriod = ChronoUnit.DAYS.between(periodDate, currentDate).toInt()
         return (daysSinceLastPeriod % cycleLength) + 1
     }
+
     fun onWeekScrolled(date: LocalDate) {
         if (date > selectedDate.value) {
             val days = abs(ChronoUnit.DAYS.between(date, selectedDate.value))
@@ -131,17 +119,24 @@ class CycleTrackerStreakViewModel @Inject constructor(
             } else {
                 date.plusDays(7 - diff)
             }
-            updateSelectedDate(newDate)
+            val cycleEnd = cycleData.getCycleEnd()
+            if (newDate > cycleEnd) {
+                updateSelectedDate(cycleEnd)
+            } else {
+                updateSelectedDate(newDate)
+            }
         } else {
             val days = abs(ChronoUnit.DAYS.between(date, selectedDate.value))
             val diff = days % 7
 
             val newDate = date.plusDays(diff)
-            updateSelectedDate(newDate)
-
+            val cycleStart = cycleData.getCycleStart()
+            if (newDate < cycleStart) {
+                updateSelectedDate(cycleStart)
+            } else {
+                updateSelectedDate(newDate)
+            }
         }
-
-
     }
 
     /**
@@ -150,85 +145,51 @@ class CycleTrackerStreakViewModel @Inject constructor(
     fun getCurrentState(date: LocalDate): Pair<DayState, Boolean> {
         val isDateSelected = date == selectedDate.value
 
-        val history = cycleStreakData.value
-        if (history.isNullOrEmpty()) {
-            return Pair(DayState.Default, isDateSelected)
+        val periodDateStart = cycleData.getCycleStart()
+        val periodLength = cycleData.periodLength ?: 0
+
+        val periodDateEnd = if (periodLength == 0) {
+            periodDateStart
+        } else {
+            periodDateStart.plusDays((periodLength - 1).toLong())
         }
 
-        if (date > todayDate) {
-            val data = history.first()
-
-            val periodLength = data.periodLength ?: 0
-            val cycleLength = data.cycleLength ?: 0
-
-            val currentDay = getCurrentCycleDay(LocalDate.parse(data.periodDate), cycleLength, date)
-
-            if (currentDay <= periodLength) {
-                return Pair(DayState.Period(PeriodPos.START), isDateSelected)
-            }
-
-            val ovDay = cycleLength - 13
-
-            if (currentDay == ovDay) {
-                return Pair(DayState.OvulationDay, isDateSelected)
-            }
-            if (currentDay in (ovDay - 5)..(ovDay + 1)) {
-                return Pair(DayState.Fertile, isDateSelected)
-            }
-
-            return Pair(DayState.Default, isDateSelected)
+        if (date in periodDateStart..periodDateEnd) {
+            return Pair(DayState.Period(PeriodPos.CENTER), isDateSelected)
         }
 
-        var returnValue: Pair<DayState, Boolean>? = null
+        val ovDay = LocalDate.parse(cycleData.ovulationStartDate)
+        if (ovDay == date) {
+            return Pair(
+                DayState.OvulationDay,
+                isDateSelected
+            )
+        }
 
-        history.forEach {
-            val periodDateStart = LocalDate.parse(it.periodDate)
-            val periodLength = it.periodLength ?: 0
+        try {
+            val fWindow = cycleData.fertileWindow?.split("/")
 
-            val periodDateEnd = if (periodLength == 0) {
-                periodDateStart
-            } else {
-                periodDateStart.plusDays((periodLength - 1).toLong())
-            }
+            val fertileDateStart = LocalDate.parse(fWindow?.get(0))
+            val fertileDateEnd = LocalDate.parse(fWindow?.get(1))
 
-            if (date in periodDateStart..periodDateEnd) {
-                returnValue =
-                    Pair(DayState.Period(PeriodPos.CENTER), isDateSelected)
-                return@forEach
-            }
-
-            val ovDay = LocalDate.parse(it.ovulationStartDate)
-            if (ovDay == date) {
-                returnValue = Pair(
-                    DayState.OvulationDay,
+            if (date in fertileDateStart..fertileDateEnd) {
+                return Pair(
+                    DayState.Fertile,
                     isDateSelected
                 )
-                return@forEach
             }
 
-            try {
-                val fWindow = it.fertileWindow?.split("/")
-
-                val fertileDateStart = LocalDate.parse(fWindow?.get(0))
-                val fertileDateEnd = LocalDate.parse(fWindow?.get(1))
-
-                if (date in fertileDateStart..fertileDateEnd) {
-                    returnValue = Pair(
-                        DayState.Fertile,
-                        isDateSelected
-                    )
-                    return@forEach
-                }
-
-            } catch (exp: Exception) {
-            }
-
-
+        } catch (exp: Exception) {
+            return Pair(DayState.Default, isDateSelected)
         }
-        return if (returnValue == null) {
-            Pair(DayState.Default, isDateSelected)
-        } else {
-            returnValue as Pair<DayState, Boolean>
-        }
+        return Pair(DayState.Default, isDateSelected)
+    }
+
+    fun isCycleLengthNormal(cycleLength: Int): Boolean {
+        return cycleLength in 21..35
+    }
+
+    fun isPeriodLengthNormal(cycleLength: Int): Boolean {
+        return cycleLength in 2..7
     }
 }

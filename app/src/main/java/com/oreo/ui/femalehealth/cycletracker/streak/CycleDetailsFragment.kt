@@ -6,32 +6,41 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.kizitonwose.calendar.core.WeekDay
-import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.WeekDayBinder
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.CalenderCycleTrackerDayBinding
-import com.noisefit.luna.databinding.FragmentCycleTrackerStreaksBinding
+import com.noisefit.luna.databinding.FragmentCycleDetailsBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
+import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.LOGS
+import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.ui.femalehealth.cycletracker.DayState
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
 @AndroidEntryPoint
-class CycleTrackerStreaksFragment :
-    BaseFragment<FragmentCycleTrackerStreaksBinding>(FragmentCycleTrackerStreaksBinding::inflate) {
+class CycleDetailsFragment :
+    BaseFragment<FragmentCycleDetailsBinding>(FragmentCycleDetailsBinding::inflate) {
     private val viewModel: CycleTrackerStreakViewModel by viewModels()
-    val args: CycleTrackerStreaksFragmentArgs by navArgs()
+    val args: CycleDetailsFragmentArgs by navArgs()
+
+    companion object {
+        fun getStartData(cycle: FMHCycleHistoryDataModel): Pair<Int, Bundle?> {
+            return Pair(R.id.cycleDetailsFragment, Bundle().apply {
+                this.putParcelable(
+                    "cycle", cycle
+                )
+            })
+        }
+    }
 
     private val symptomsAdapter: CTStreakSymptomsAdapter by lazy {
         CTStreakSymptomsAdapter()
@@ -39,10 +48,13 @@ class CycleTrackerStreaksFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.id = args.id
+        viewModel.cycleData = args.cycle
         setUI()
         setRecycler()
-        viewModel.getStreakInfoData()
+        initCalender()
+        viewModel.cycleData.periodDate?.let {
+            viewModel.selectedDate.value = LocalDate.parse(it)
+        }
     }
 
     private fun setUI() {
@@ -53,13 +65,35 @@ class CycleTrackerStreaksFragment :
             binding.lytToolbar.view1.context,
             R.drawable.ic_ct_streak_info
         )
+
+
+        binding.lytInsight.lytCycleLength.apply {
+            tvHeader.text = getString(R.string.text_cycle_length)
+            tvValue.text = "${viewModel.cycleData.cycleLength}"
+            tvUnit.text = "days"
+            with(viewModel.isCycleLengthNormal(viewModel.cycleData.cycleLength ?: 0)) {
+                tvStatus.text = if (this) "Normal" else "Abnormal"
+                ivState.setImageResource(if (this) R.drawable.ic_fmh_normal else R.drawable.ic_fmh_abnormal)
+            }
+
+        }
+
+        binding.lytInsight.lytPeriodLength.apply {
+            tvHeader.text = getString(R.string.text_period_duration)
+            tvValue.text = "${viewModel.cycleData.periodLength}"
+            tvUnit.text = "days"
+            with(viewModel.isPeriodLengthNormal(viewModel.cycleData.periodLength ?: 0)) {
+                tvStatus.text = if (this) "Normal" else "Abnormal"
+                ivState.setImageResource(if (this) R.drawable.ic_fmh_normal else R.drawable.ic_fmh_abnormal)
+            }
+
+        }
     }
 
     private fun setRecycler() {
         with(binding.lytSymptomsRecord.rvSymptomsRecord) {
             adapter = symptomsAdapter
         }
-        symptomsAdapter.setData(viewModel.getSymptomsData())
     }
 
     override fun initListener() {
@@ -70,20 +104,19 @@ class CycleTrackerStreaksFragment :
     }
 
     override fun subscribeObservers() {
+        viewModel.symptomList.observe(this) {
+            binding.lytSymptomsRecord.root.setVisibilityByCondition(it.isNotEmpty())
+            symptomsAdapter.setData(it)
+        }
+
         viewModel.selectedDate.observe(this) {
             try {
                 binding.lytTopCalender.vCalendar.weekCalender.notifyDateChanged(it)
             } catch (exp: Exception) {
             }
-            binding.lytTopCalender.tvDateRangeValue.text =
-                it.format(DateTimeFormatter.ofPattern("MMM"))
-
             viewModel.getDataForDate(it.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         }
 
-        viewModel.cycleStreakData.observe(this) {
-            initCalender()
-        }
         viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->
                 context.showShortToast(message)
@@ -102,11 +135,12 @@ class CycleTrackerStreaksFragment :
             }
         }
         viewModel.femaleHealthData.observe(this) {
-            if (it.currentDay == null) {
+            if (it?.currentDay == null) {
                 context.showShortToast("Screen pending")
             } else {
+                context.showShortToast("Update UI Here")
                 //update UI
-            }
+            }//127
 
         }
         viewModel.notifyDateChange.observe(this) {
@@ -115,7 +149,6 @@ class CycleTrackerStreaksFragment :
                     binding.lytTopCalender.vCalendar.weekCalender.notifyDateChanged(
                         it
                     )
-                    LOGS.d("sdjfhksjdfhk old date $it")
                 } catch (exp: Exception) {
                 }
             }
@@ -123,6 +156,18 @@ class CycleTrackerStreaksFragment :
     }
 
     private fun initCalender() {
+        val start = viewModel.cycleData.getCycleStart()
+        val end = viewModel.cycleData.getCycleEnd()
+
+        binding.lytTopCalender.tvDateRangeValue.text =
+            "${
+                start.format(DateTimeFormatter.ofPattern("dd MMM"))
+            } - ${
+                end.format(
+                    DateTimeFormatter.ofPattern("dd MMM")
+                )
+            }"
+
         class DayViewContainer(view: View) : ViewContainer(view) {
             val bind = CalenderCycleTrackerDayBinding.bind(view)
             lateinit var day: WeekDay
@@ -131,6 +176,9 @@ class CycleTrackerStreaksFragment :
             init {
                 view.setOnClickListener {
                     if (viewModel.selectedDate.value != day.date) {
+                        if (day.date < start || day.date > end) {
+                            return@setOnClickListener
+                        }
                         viewModel.updateSelectedDate(day.date)
                     }
                 }
@@ -213,13 +261,14 @@ class CycleTrackerStreaksFragment :
                 override fun bind(container: DayViewContainer, data: WeekDay) = container.bind(data)
             }
 
-        val currentMonth = YearMonth.now()
+
+
         binding.lytTopCalender.vCalendar.weekCalender.setup(
-            currentMonth.minusMonths(5).atStartOfMonth(),
-            currentMonth.plusMonths(5).atEndOfMonth(),
+            start,
+            end,
             DayOfWeek.MONDAY,
         )
-        binding.lytTopCalender.vCalendar.weekCalender.scrollToDate(LocalDate.now())
+        binding.lytTopCalender.vCalendar.weekCalender.scrollToDate(start)
     }
 
 

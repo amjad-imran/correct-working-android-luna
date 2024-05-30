@@ -4,15 +4,18 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.databinding.SymptomsRecordItemBinding
+import com.noisefit_commans.ui.loadImage
 
-class CTStreakSymptomsAdapter:
+class CTStreakSymptomsAdapter :
     RecyclerView.Adapter<CTStreakSymptomsAdapter.ViewHolder>() {
-    private var mDataSet = ArrayList<String>()
+    private var mDataSet = ArrayList<Pair<String, String>>()
+
 
     inner class ViewHolder(val binding: SymptomsRecordItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: String) {
-            binding.tvTitle.text = data
+        fun bind(data: Pair<String, String>) {
+            binding.tvTitle.text = data.second
+            binding.ivSymptoms.loadImage(binding.ivSymptoms.context, data.first)
 
         }
     }
@@ -33,11 +36,9 @@ class CTStreakSymptomsAdapter:
         holder.bind(mDataSet[position])
     }
 
-    fun setData(resultData: List<String>?) {
+    fun setData(resultData: List<Pair<String, String>>) {
         mDataSet.clear()
-        if (resultData != null) {
-            mDataSet.addAll(resultData)
-        }
+        mDataSet.addAll(resultData)
         notifyDataSetChanged()
     }
 

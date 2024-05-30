@@ -50,8 +50,9 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//            cycleLog = args.data
-        viewModel.selectedDate = LocalDate.parse(args.selectedDate)
+        viewModel.firstPeriodDate = LocalDate.parse(args.firstPeriodDate)
+        viewModel.selectedDate.value = LocalDate.parse(args.selectedDate)
+
 
         if (args.periodEndDate != null) {
             viewModel.periodStartDate = LocalDate.parse(args.selectedDate)
@@ -59,10 +60,6 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
         }
 
         setRecycler()
-        setTitleDate()
-        viewModel.getPeriodDates()
-        viewModel.getFemaleHealthIcons(viewModel.selectedDate.toString())
-
     }
 
     private fun setRecycler() {
@@ -97,12 +94,12 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
         }
 
         binding.ivRight.setOnClickListener {
+            val nextDate = viewModel.selectedDate.value!!.plusDays(1)
+            if (nextDate > viewModel.todayDate) {
+                return@setOnClickListener
+            }
+            viewModel.selectedDate.value = nextDate
 
-            viewModel.selectedDate = LocalDate.parse(viewModel.selectedDate.toString()).plusDays(1)
-            setTitleDate()
-            viewModel.getPeriodDates()
-
-            viewModel.getFemaleHealthIcons(viewModel.selectedDate.toString())
             setFragmentResult(
                 CALENDER_DAY_LOG_KEY,
                 bundleOf("right" to true)
@@ -111,10 +108,12 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
 
         binding.ivBack.setOnClickListener {
 
-            viewModel.selectedDate = LocalDate.parse(viewModel.selectedDate.toString()).plusDays(-1)
-            setTitleDate()
-            viewModel.getPeriodDates()
-            viewModel.getFemaleHealthIcons(viewModel.selectedDate.toString())
+            val previousDate = viewModel.selectedDate.value!!.minusDays(1)
+            if (previousDate < viewModel.firstPeriodDate) {
+                return@setOnClickListener
+            }
+            viewModel.selectedDate.value = previousDate
+
             setFragmentResult(
                 CALENDER_DAY_LOG_KEY,
                 bundleOf("left" to true)
@@ -133,6 +132,13 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
 
 
     override fun subscribeObservers() {
+
+        viewModel.selectedDate.observe(this) {
+            setTitleDate()
+            viewModel.getPeriodDates()
+            viewModel.getFemaleHealthIcons(viewModel.selectedDate.toString())
+
+        }
 
         viewModel.currentPeriodRange.observe(this) {
             if (it == null) {

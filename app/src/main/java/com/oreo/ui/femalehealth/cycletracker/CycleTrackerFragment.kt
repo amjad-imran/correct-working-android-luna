@@ -29,6 +29,7 @@ import com.oreo.data.model.femaleh.TempPrediction
 import com.oreo.data.model.health.Nudges
 import com.oreo.ui.femalehealth.cycletracker.history.INFO_LOG
 import com.oreo.ui.femalehealth.cycletracker.insight.CycleInsightLaunchMode
+import com.oreo.ui.femalehealth.cycletracker.streak.CycleDetailsFragment
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.workout.details.WorkoutNudgeFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,14 +47,11 @@ class CycleTrackerFragment :
     private val cycleHistoryAdapter by lazy {
         FMHCycleHistoryAdapter(object : OnHistoryItemClickListener {
             override fun onHistoryItemClick(data: FMHCycleHistoryDataModel, position: Int) {
-                navigate(R.id.cycleTrackerStreakFragment, Bundle().apply {
-                    this.putString(
-                        "id",
-                        "1"
-                    )//id will be getting later, as discussed right now not getting id
-                })
+                val (frag, bundle) = CycleDetailsFragment.getStartData(
+                    data
+                )
+                navigate(frag, bundle)
             }
-
         })
     }
 

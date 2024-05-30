@@ -38,7 +38,10 @@ constructor(
     private val _currentPeriodRange = MutableLiveData<String?>()
     val currentPeriodRange: LiveData<String?> get() = _currentPeriodRange
 
-    var selectedDate = LocalDate.now()
+    var firstPeriodDate: LocalDate = LocalDate.now().minusMonths(2)
+    var selectedDate: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now())
+    var todayDate = LocalDate.now()
+
 
     var periodStartDate: LocalDate? = null
     var periodEndDate: LocalDate? = null
@@ -195,7 +198,7 @@ constructor(
 
     fun getPeriodDates() {
         if (periodStartDate != null && periodEndDate != null) {
-            if (selectedDate <= periodEndDate) {
+            if (selectedDate.value!! <= periodEndDate) {
                 _currentPeriodRange.value =
                     "${periodStartDate!!.format(DateTimeFormatter.ofPattern("dd"))} - ${
                         periodEndDate!!.format(DateTimeFormatter.ofPattern("dd MMM"))

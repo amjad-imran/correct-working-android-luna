@@ -760,7 +760,7 @@
     <fragment
         android:id="@+id/cycleLogFragment"
         android:name="com.oreo.ui.femalehealth.cycletracker.log.CycleLogFragment"
-        android:label="CycleLogFragment" >
+        android:label="CycleLogFragment">
         <action
             android:id="@+id/action_cycleLogFragment_to_calenderDayLogBottomSheet"
             app:destination="@id/calenderDayLogBottomSheet" />
@@ -772,6 +772,9 @@
         android:label="BottomSheetCycleLog">
         <argument
             android:name="selectedDate"
+            app:argType="string" />
+        <argument
+            android:name="firstPeriodDate"
             app:argType="string" />
         <argument
             android:name="periodEndDate"
@@ -816,13 +819,12 @@
             app:argType="string" />
     </dialog>
     <fragment
-        android:id="@+id/cycleTrackerStreakFragment"
-        android:name="com.oreo.ui.femalehealth.cycletracker.streak.CycleTrackerStreaksFragment"
-        android:label="CycleTrackerStreakFragment">
+        android:id="@+id/cycleDetailsFragment"
+        android:name="com.oreo.ui.femalehealth.cycletracker.streak.CycleDetailsFragment"
+        android:label="cycleDetailsFragment">
         <argument
-            android:name="id"
-            app:argType="string" />
-
+            android:name="cycle"
+            app:argType="com.oreo.data.model.FMHCycleHistoryDataModel" />
     </fragment>
     <dialog
         android:id="@+id/dialogComingSoon"
@@ -839,7 +841,7 @@
     <dialog
         android:id="@+id/calenderDayLogBottomSheet"
         android:name="com.oreo.ui.femalehealth.cycletracker.log.bottom.CalenderDayLogBottomSheet"
-        android:label="CalenderDayLogBottomSheet" >
+        android:label="CalenderDayLogBottomSheet">
         <argument
             android:name="selectedDate"
             app:argType="string" />
@@ -850,7 +852,7 @@
     <fragment
         android:id="@+id/chatGptFragment"
         android:name="com.oreo.ui.chatGpt.ChatGptFragment"
-        android:label="fragment_chat_gpt" >
+        android:label="fragment_chat_gpt">
         <action
             android:id="@+id/action_chatGptFragment_self"
             app:destination="@id/chatGptFragment"

@@ -1,6 +1,9 @@
 package com.oreo.data.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
+import java.time.LocalDate
 
 data class PeriodCycleHistory(
     @SerializedName("cycle_history")
@@ -18,6 +21,7 @@ data class CycleDetailsDefault(
     val periodLength: Int? = null,
 )
 
+@Parcelize
 data class FMHCycleHistoryDataModel(
     @SerializedName("cycle_length")
     val cycleLength: Int? = null,
@@ -29,4 +33,13 @@ data class FMHCycleHistoryDataModel(
     val fertileWindow: String? = null,//"2024-05-14 / 2024-05-20"
     @SerializedName("ovulation_start_date")
     val ovulationStartDate: String? = null
-)
+) : Parcelable {
+
+    fun getCycleStart(): LocalDate {
+        return LocalDate.parse(periodDate)
+    }
+
+    fun getCycleEnd(): LocalDate {
+        return getCycleStart().plusDays(cycleLength?.toLong() ?: 0L)
+    }
+}
