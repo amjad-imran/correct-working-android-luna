@@ -17,9 +17,9 @@ class SkinTemperatureViewModel @Inject constructor(
     private val femaleHealthRepository: FemaleHealthRepository
 ) : BaseViewModel() {
 
-    fun getTempData() {
+    fun getTempData(date: String) {
         viewModelScope.launch {
-            femaleHealthRepository.getFemaleHealthUserInfo("").collect { resource ->
+            femaleHealthRepository.getFemaleHealthTempData(date).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
@@ -35,7 +35,7 @@ class SkinTemperatureViewModel @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        getTempData()
+                                        getTempData(date)
                                     }
 
                                     override fun no() {

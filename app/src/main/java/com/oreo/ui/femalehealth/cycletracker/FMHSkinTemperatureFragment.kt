@@ -14,6 +14,8 @@ import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @AndroidEntryPoint
 class FMHSkinTemperatureFragment :
@@ -22,20 +24,20 @@ class FMHSkinTemperatureFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.lytToolbar.apply {
+            tvTitle.text = getString(R.string.text_skin_temperature_variation)
+            view1.visible()
+            ivAddFriend.invisible()
+            view1.loadImage(requireActivity(), R.drawable.ic_info_oreo)
+        }
 
-
+        viewModel.getTempData(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
     }
 
     override fun initListener() {
-        updateUI()
-        binding.lytToolbar.tvTitle.text = getString(R.string.text_skin_temperature_variation)
-        binding.lytToolbar.view1.visible()
-        binding.lytToolbar.ivAddFriend.invisible()
-        binding.lytToolbar.view1.loadImage(requireActivity(), R.drawable.ic_info_oreo)
         binding.lytToolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }
-
     }
 
     private fun updateUI() {

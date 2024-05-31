@@ -10,6 +10,7 @@ import com.oreo.data.model.FemaleHealthIconsModel
 import com.oreo.data.model.PeriodCycleHistory
 import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
+import com.oreo.data.model.femaleh.FemaleTempResponse
 import com.oreo.data.model.femaleh.PeriodLengthListResponse
 import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -88,11 +89,20 @@ class FemaleHealthRepositoryImpl(
             remoteDataSource.updateCycleTrackerInfo(url, jsonObject)
         }
     }
+
     override suspend fun getFemaleHealthIcons(): Flow<Resource<BaseApiResponse<FemaleHealthIconsModel>>> {
         return safeApiCallFlow(dispatcher) {
             val url =
                 "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/icon"
             remoteDataSource.getFemaleHealthIcons(url)
+        }
+    }
+
+    override suspend fun getFemaleHealthTempData(date: String): Flow<Resource<BaseApiResponse<FemaleTempResponse>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/temp?date=2024-05-23"
+            remoteDataSource.getFemaleHealthTempData(url,date)
         }
     }
 

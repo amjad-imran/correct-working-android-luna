@@ -7,6 +7,7 @@ import com.oreo.data.model.FemaleHealthIconsModel
 import com.oreo.data.model.PeriodCycleHistory
 import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
+import com.oreo.data.model.femaleh.FemaleTempResponse
 import com.oreo.data.model.femaleh.PeriodLengthListResponse
 import kotlinx.coroutines.flow.Flow
 import retrofit2.http.GET
@@ -28,6 +29,8 @@ interface FemaleHealthRepository {
         id: Long
     ): Flow<Resource<BaseApiResponse<Any>>>
 
-    suspend fun getFemaleHealthIcons():Flow<Resource<BaseApiResponse<FemaleHealthIconsModel>>>
+    suspend fun getFemaleHealthIcons(): Flow<Resource<BaseApiResponse<FemaleHealthIconsModel>>>
+
+    suspend fun getFemaleHealthTempData(date: String): Flow<Resource<BaseApiResponse<FemaleTempResponse>>>
 
 }

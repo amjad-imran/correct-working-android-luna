@@ -1209,7 +1209,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         ) {
             binding.textView3.text = data.data.title
             binding.tvOvlInDays.text = data.data.subTitle
-            binding.tvCurrentDay.text = "${data.data.days}"
+            binding.tvCurrentDay.text = "Day ${data.data.days}"
             binding.tvDaysLeft.text = "of ${data.data.totalCycleDay}"
             binding.tvDesc.text = data.data.nudge
             binding.tvValue.text = if (data.data.temperatureVariation == null) {
