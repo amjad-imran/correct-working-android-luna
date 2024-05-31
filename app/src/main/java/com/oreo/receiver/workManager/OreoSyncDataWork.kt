@@ -821,6 +821,7 @@ constructor(
     }
 
     fun shouldSyncAutoLogs(): Boolean {
+        return true
         val lastTimeStamp = ringDataStore.getAutoLogsTimeStamp()
         val logSyncInterval = localDataStore.getLogSyncInterval()
         if (logSyncInterval == 0) return false

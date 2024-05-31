@@ -81,9 +81,9 @@ object ZhBleLogUtils {
     //endregion
 
 
-    suspend fun getUriByBleAllLog(): Uri? {
+    suspend fun getUriByBleAllLog(): Pair<Uri?, File?>? {
         return withTimeoutOrNull(30 * 1000) {
-            suspendCancellableCoroutine<Uri?> {
+            suspendCancellableCoroutine<Pair<Uri?, File?>?> {
                 val dir = getDirPath(
                     NoisefitApplication.context!!.applicationContext,
                     isRelease,
@@ -121,9 +121,16 @@ object ZhBleLogUtils {
                         filePaths.add(f.absolutePath)
                     }
                     ZipUtils.zipFiles(filePaths, zipFilePath)
-                    it.resume(UriUtils.file2Uri(FileUtils.getFileByPath(zipFilePath)))
+
+                    val zipFile = FileUtils.getFileByPath(zipFilePath)
+                    it.resume(
+                        Pair(
+                            UriUtils.file2Uri(zipFile),
+                            zipFile
+                        )
+                    )
                 } catch (e: Exception) {
-                    it.resume(null)
+                    it.resume(Pair(null,null))
                 }
             }
         }

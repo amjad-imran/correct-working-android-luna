@@ -86,10 +86,10 @@ class OreoMyDeviceFragment :
                 context.showShortToast("No logs")
             }*/
             mViewModel.viewModelScope.launch(Dispatchers.IO) {
-                val uri = ZhBleLogUtils.getUriByBleAllLog()
-                if (uri != null) {
+                val data = ZhBleLogUtils.getUriByBleAllLog()
+                if (data?.first != null) {
                     context?.let { ctx ->
-                        ShareUtil.shareZipFile(ctx, uri)
+                        ShareUtil.shareZipFile(ctx, data.first)
                     }
                 } else {
                     context.showShortToast("No logs")
