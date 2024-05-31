@@ -9,14 +9,25 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.oreo.data.model.FMHCycleHistoryDataModel
+import com.oreo.ui.femalehealth.cycletracker.OnHistoryItemClickListener
+import com.oreo.ui.femalehealth.cycletracker.streak.CycleDetailsFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class CycleTrackerHistoryFragment :
     BaseFragment<FragmentCycleTrackerHistoryBinding>(FragmentCycleTrackerHistoryBinding::inflate) {
     private val viewModel: CycleTrackerHistoryViewModel by viewModels()
+
     private val cycleTrackHistoryAdapter by lazy {
-        FMHCycleTrackerHistoryAdapter()
+        FMHCycleTrackerHistoryAdapter(object : OnHistoryItemClickListener {
+            override fun onHistoryItemClick(data: FMHCycleHistoryDataModel, position: Int) {
+                val (frag, bundle) = CycleDetailsFragment.getStartData(
+                    data
+                )
+                navigate(frag, bundle)
+            }
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

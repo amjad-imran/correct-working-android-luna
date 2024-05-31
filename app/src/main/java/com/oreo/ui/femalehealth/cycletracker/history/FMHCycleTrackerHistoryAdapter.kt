@@ -6,9 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.databinding.FmhCycleTrackHistoryItemBinding
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.FMHCycleHistoryDataModel
+import com.oreo.ui.femalehealth.cycletracker.OnHistoryItemClickListener
 import kotlin.math.abs
 
-class FMHCycleTrackerHistoryAdapter() :
+class FMHCycleTrackerHistoryAdapter(val listener: OnHistoryItemClickListener) :
     RecyclerView.Adapter<FMHCycleTrackerHistoryAdapter.ViewHolder>() {
     private var mDataSet = ArrayList<FMHCycleHistoryDataModel>()
 
@@ -65,6 +66,10 @@ class FMHCycleTrackerHistoryAdapter() :
                 ovEnd = ovEnd,
                 ovDay = ovDays.toInt()
             )
+
+            binding.root.setOnClickListener {
+                listener.onHistoryItemClick(data, bindingAdapterPosition)
+            }
 
         }
     }

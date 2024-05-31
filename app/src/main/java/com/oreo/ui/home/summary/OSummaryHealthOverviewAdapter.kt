@@ -1212,10 +1212,14 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.tvCurrentDay.text = "${data.data.days}"
             binding.tvDaysLeft.text = "of ${data.data.totalCycleDay}"
             binding.tvDesc.text = data.data.nudge
-            binding.tvValue.text = if (data.data.temperatureVariation > 0) {
-                "+${data.data.temperatureVariation}"
+            binding.tvValue.text = if (data.data.temperatureVariation == null) {
+                "-"
             } else {
-                "-${data.data.temperatureVariation}"
+                if (data.data.temperatureVariation > 0) {
+                    "+${data.data.temperatureVariation}"
+                } else {
+                    "-${data.data.temperatureVariation}"
+                }
             }
             binding.imv.setBackgroundResource(data.data.background)
 

@@ -18,9 +18,11 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class FMHSkinTemperatureFragment :
     BaseFragment<FragmentFMHSkinTemperatureBinding>(FragmentFMHSkinTemperatureBinding::inflate) {
-    private val mViewModel: SkinTemperatureViewModel by viewModels()
+    private val viewModel: SkinTemperatureViewModel by viewModels()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
     }
 
@@ -78,17 +80,17 @@ class FMHSkinTemperatureFragment :
     }
 
     override fun subscribeObservers() {
-        mViewModel.getMessages().observe(this) {
+        viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->
                 context.showShortToast(message)
             }
         }
-        mViewModel.getApiErrors().observe(this) {
+        viewModel.getApiErrors().observe(this) {
             it?.getContent()?.let { response ->
                 uiController.onApiErrorReceived(response)
             }
         }
-        mViewModel.getLoading().observe(this) {
+        viewModel.getLoading().observe(this) {
             if (it) {
                 binding.progressBar1.root.visible()
             } else {

@@ -10,6 +10,7 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.data.model.FMHCycleHistoryDataModel
+import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -18,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CycleTrackerHistoryViewModel @Inject constructor(
-    private val userRepository: OreoUserActivityRepository
+    private val femaleHealthRepository: FemaleHealthRepository
 ) : BaseViewModel() {
 
     val cycleHistoryData = MutableLiveData<List<FMHCycleHistoryDataModel>>()
@@ -26,7 +27,7 @@ class CycleTrackerHistoryViewModel @Inject constructor(
 
     fun getCycleHistoryData() {
         viewModelScope.launch {
-            userRepository.getPeriodCycleHistory().collect { resource ->
+            femaleHealthRepository.getPeriodCycleHistory().collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
@@ -48,7 +49,7 @@ class CycleTrackerHistoryViewModel @Inject constructor(
                     }
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            cycleHistoryData.postValue(it.cycleHistory)
+                            cycleHistoryData.postValue(it.cycleHistory?:ArrayList())
                         }
                     }
                 }

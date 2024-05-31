@@ -55,6 +55,7 @@ import com.oreo.data.model.SlideUpNapScoreDataModel
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TrendsData
 import com.oreo.data.model.VideoInfoType
+import com.oreo.data.model.femaleh.TempPeriodData
 import com.oreo.data.model.health.ODashboardActivityModel
 import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessModel
@@ -62,6 +63,7 @@ import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
 import com.oreo.data.model.health.SleepHourlyBreakup
+import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -87,6 +89,7 @@ class SummaryDataViewModelToday @Inject constructor(
     private val syncRepository: OreoSyncRepository,
     val oreoStressDataConvertor: OreoStressDataConvertor,
     val userActivityRepository: OreoUserActivityRepository,
+    val femaleHealthRepository: FemaleHealthRepository,
     val updateRepository: UpdateRepository,
     val resourceProvider: ResourcesProvider,
     private val userHealthDataDataSource: OreoUserHealthDataDataSource,
@@ -647,6 +650,8 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     private fun convertToPeriodBigCardModel(data: FemaleHealthUserInfoModel): PeriodCard2 {
+        val tempVariance = calculateTempVariance(data.temp)
+
         if (data.isPeriod) {
             return PeriodCard2(
                 title = "Period",
@@ -654,7 +659,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 nudge = data.nudges?.firstOrNull()?.message ?: "",
                 currentCycleDay = data.currentDay ?: 0,
                 totalCycleDay = data.cycleLength ?: 0,
-                temperatureVariation = 2,
+                temperatureVariation = tempVariance,
                 predictionDate = DateFormats.formatDateTime(
                     data.nextPeriodDate,
                     DateFormats.dateFormat3(),
@@ -672,7 +677,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 nudge = data.nudges?.firstOrNull()?.message ?: "",
                 currentCycleDay = data.currentDay ?: 0,
                 totalCycleDay = data.cycleLength ?: 0,
-                temperatureVariation = 2,
+                temperatureVariation = tempVariance,
                 predictionDate = DateFormats.formatDateTime(
                     data.ovulationDate,
                     DateFormats.dateFormat3(),
@@ -682,6 +687,32 @@ class SummaryDataViewModelToday @Inject constructor(
                 predictionString = "Predicted ovulation",
                 background = R.drawable.back_card_ovulation_big
             )
+        }
+    }
+
+    private fun calculateTempVariance(list: List<TempPeriodData>?): Float? {
+        if (list == null) {
+            return null
+        }
+
+        if (list.size < 4) {
+            return null
+        }
+
+        try {
+            val first = list[0].temperature
+            val second = list[1].temperature
+            val third = list[2].temperature
+            val fourth = list[3].temperature
+
+            if (first == null || second == null || third == null || fourth == null) {
+                return null
+            }
+
+            val variation = first - ((second + third + fourth) / 2)
+            return variation
+        } catch (exp: Exception) {
+            return null
         }
     }
 
@@ -1382,7 +1413,7 @@ class SummaryDataViewModelToday @Inject constructor(
             gender = localDataStore.getUser()?.userInfo?.gender
             if (gender.equals("male", true)) return@launch
 
-            userActivityRepository.getFemaleHealthUserInfo(date!!).collect { resource ->
+            femaleHealthRepository.getFemaleHealthUserInfo(date!!).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)

@@ -26,6 +26,7 @@ import com.noisefit_commans.utils.BuildUtils
 import com.noisefit_commans.utils.ConnectionUtil
 import com.noisefit_commans.utils.Event
 import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
+import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -38,12 +39,10 @@ constructor(
     var connectionHandler: ConnectionHandler,
     var sessionManager: SessionManager,
     private val repository: AuthenticationRepository,
-    private val lastSyncProvider: LastSyncProvider,
     val localDataStore: DataStoredInterface,
     val ringDataStore: RingDataStore,
     private val userRepository: UserRepository,
-    private val oreoUserActivity:OreoUserActivityRepository,
-    private val connectionUtil: ConnectionUtil
+    private val femaleHealthRepository: FemaleHealthRepository,
 ) : BaseViewModel() {
 
     private var _user = MutableLiveData<User>()
@@ -232,7 +231,7 @@ constructor(
 
     fun getCycleTrackerInfo() {
         viewModelScope.launch {
-            oreoUserActivity.getCycleTrackerInfo().collect { resource ->
+            femaleHealthRepository.getCycleTrackerInfo().collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)

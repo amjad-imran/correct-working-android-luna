@@ -16,6 +16,7 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.WheelItem
 import com.noisefit_commans.utils.wheel.WheelItemPeriod
+import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -36,7 +37,7 @@ const val MaxCycleDays = 100
 
 @HiltViewModel
 class FMHOnboardingViewModel @Inject constructor(
-    val localDataStore: DataStoredInterface, val userActivityRepository: OreoUserActivityRepository
+    val localDataStore: DataStoredInterface, val femaleHealthRepository: FemaleHealthRepository
 ) : BaseViewModel() {
     val fragmentSize = 7
 
@@ -193,7 +194,7 @@ class FMHOnboardingViewModel @Inject constructor(
         jsonObject.add("medicines", medicinesArray)
 
         viewModelScope.launch {
-            userActivityRepository.submitFemaleHealthInfo(jsonObject).collect { resource ->
+            femaleHealthRepository.submitFemaleHealthInfo(jsonObject).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)

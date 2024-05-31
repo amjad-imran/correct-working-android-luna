@@ -12,6 +12,7 @@ import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.PeriodChartModel
 import com.oreo.data.model.femaleh.PeriodLength
 import com.oreo.data.model.femaleh.PeriodLengthListResponse
+import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -20,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CycleInsightDetailViewModel @Inject constructor(
     val resourceProvider: ResourcesProvider,
-    val userActivityRepository: OreoUserActivityRepository
+    val femaleHealthRepository: FemaleHealthRepository
 ) : BaseViewModel() {
 
 
@@ -41,9 +42,9 @@ class CycleInsightDetailViewModel @Inject constructor(
         viewModelScope.launch {
             val date = DateFormats.getTodaysDateString(10)
             if (launchMode == CycleInsightLaunchMode.CYCLE_LENGTH) {
-                userActivityRepository.getCycleLengthData(date)
+                femaleHealthRepository.getCycleLengthData(date)
             } else {
-                userActivityRepository.getPeriodDurationList(date)
+                femaleHealthRepository.getPeriodDurationList(date)
             }.collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {

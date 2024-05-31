@@ -13,6 +13,7 @@ import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.FemaleHealthIconsModel
+import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -24,7 +25,7 @@ import javax.inject.Inject
 class CalenderDayLogViewModel
 @Inject
 constructor(
-    val userActivityRepository: OreoUserActivityRepository
+    val femaleHealthRepository: FemaleHealthRepository
 ) : BaseViewModel() {
 
 //    var hmOfIcons = HashMap<LocalDate, Pair<ArrayList<FHSymptomsIconsModel>?, ArrayList<FHFlowIconsModel>?>>()
@@ -53,7 +54,7 @@ constructor(
                 getDataForDate(date, _femaleHealthIcons.value)
                 return@launch
             }
-            userActivityRepository.getFemaleHealthIcons().collect { resource ->
+            femaleHealthRepository.getFemaleHealthIcons().collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
@@ -92,7 +93,7 @@ constructor(
 
     fun getDataForDate(date: String, femaleHealthIconsModel: FemaleHealthIconsModel?) {
         viewModelScope.launch {
-            userActivityRepository.getFemaleHealthUserInfo(date).collect { resource ->
+            femaleHealthRepository.getFemaleHealthUserInfo(date).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
@@ -159,7 +160,7 @@ constructor(
             })
         }
         viewModelScope.launch {
-            userActivityRepository.saveLogSymptom(jsonObject).collect { resource ->
+            femaleHealthRepository.saveLogSymptom(jsonObject).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)

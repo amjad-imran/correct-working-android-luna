@@ -145,7 +145,7 @@ data class PeriodCard2(
     val nudge: String,
     val currentCycleDay: Int,
     val totalCycleDay: Int,
-    val temperatureVariation: Int,
+    val temperatureVariation: Float? = null,
     val predictionString: String,
     val predictionDate: String,
     val background: Int

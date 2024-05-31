@@ -1326,13 +1326,6 @@ class OreoUserActivityRepositoryImpl(
         return oreoAutoSportDataImpl.getAllNotAcceptingData(timeStamp)?.size ?: 0
     }
 
-    override suspend fun getFemaleHealthIcons(): Flow<Resource<BaseApiResponse<FemaleHealthIconsModel>>> {
-        return safeApiCallFlow(dispatcher) {
-            val url =
-                "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/icon"
-            remoteDataSource.getFemaleHealthIcons(url)
-        }
-    }
     override suspend fun getSummaryHRHealthOverview(): OHealthOverview.HeartRateDataModel {
         try {
             val todayDate = DateFormats.getTodaysDateString(10)
@@ -1891,74 +1884,6 @@ class OreoUserActivityRepositoryImpl(
             val url =
                 "${BuildConfig.OREO_BASE_URL}/stress/v1/stress"
             remoteDataSource.getStressInternalPageData(url, selectDate, dayType, filterType)
-        }
-    }
-
-    override suspend fun saveLogSymptom(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
-        return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/log/symptom"
-            remoteDataSource.saveLogSymptom(url, jsonObject)
-
-        }
-    }
-
-    override suspend fun submitFemaleHealthInfo(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
-        return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health"
-            remoteDataSource.submitFemaleHealthInfo(url, jsonObject)
-
-        }
-    }
-
-    override suspend fun getFemaleHealthUserInfo(selectDate: String): Flow<Resource<BaseApiResponse<FemaleHealthUserInfoModel?>>> {
-        return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health"
-            remoteDataSource.getFemaleHealthInfo(url, selectDate)
-        }
-    }
-
-    override suspend fun logPeriod(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
-        return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/log/period"
-            remoteDataSource.logPeriod(url, jsonObject)
-        }
-    }
-
-    override suspend fun getCycleLengthData(date: String): Flow<Resource<BaseApiResponse<PeriodLengthListResponse>>> {
-        return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health/cycle_length"
-            remoteDataSource.getPeriodLengthList(url, date)
-        }
-    }
-
-    override suspend fun getPeriodDurationList(date: String): Flow<Resource<BaseApiResponse<PeriodLengthListResponse>>> {
-        return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health/period_length"
-            remoteDataSource.getPeriodDurationList(url, date)
-        }
-    }
-
-    override suspend fun getPeriodCycleHistory(): Flow<Resource<BaseApiResponse<PeriodCycleHistory>>> {
-        return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health/cycle_history?first_data=true"//TODO handle on offline
-            remoteDataSource.getPeriodCycleHistory(url)
-        }
-    }
-
-    override suspend fun getCycleTrackerInfo(): Flow<Resource<BaseApiResponse<FemaleCycleTrackInfoModel?>?>> {
-        return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-info"
-            remoteDataSource.getCycleTrackerInfo(url)
-        }
-    }
-
-    override suspend fun updateCycleTrackerInfo(
-        jsonObject: JsonObject,
-        id: Long
-    ): Flow<Resource<BaseApiResponse<Any>>> {
-        return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-info/$id"
-            remoteDataSource.updateCycleTrackerInfo(url, jsonObject)
         }
     }
 }

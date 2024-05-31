@@ -49,7 +49,6 @@ interface OreoUserActivityRepository {
 
     suspend fun getSummaryHRHealthOverview(): OHealthOverview.HeartRateDataModel?
 
-    suspend fun getFemaleHealthIcons():Flow<Resource<BaseApiResponse<FemaleHealthIconsModel>>>
     suspend fun getSummaryAutoWorkoutCount(): Int
     suspend fun getTestData(): List<TestUserData>
 
@@ -123,21 +122,5 @@ interface OreoUserActivityRepository {
         dayType: String,
         filterType: String
     ): Flow<Resource<BaseApiResponse<List<StressResultData>>>>
-
-    //log/symptom'
-    suspend fun saveLogSymptom(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
-    //female health
-    suspend fun submitFemaleHealthInfo(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
-    suspend fun getFemaleHealthUserInfo(selectDate: String): Flow<Resource<BaseApiResponse<FemaleHealthUserInfoModel?>>>
-    suspend fun logPeriod(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
-    suspend fun getCycleLengthData(date: String): Flow<Resource<BaseApiResponse<PeriodLengthListResponse>>>
-    suspend fun getPeriodDurationList(date: String): Flow<Resource<BaseApiResponse<PeriodLengthListResponse>>>
-
-    suspend fun getPeriodCycleHistory(): Flow<Resource<BaseApiResponse<PeriodCycleHistory>>>
-    suspend fun getCycleTrackerInfo(): Flow<Resource<BaseApiResponse<FemaleCycleTrackInfoModel?>?>>
-    suspend fun updateCycleTrackerInfo(
-        jsonObject: JsonObject,
-        id: Long
-    ): Flow<Resource<BaseApiResponse<Any>>>
 
 }

@@ -17,6 +17,7 @@ import com.oreo.data.model.PeriodCycleHistory
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.TempPeriodData
 import com.oreo.data.model.femaleh.TempPrediction
+import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.ui.custom.ItemTemp
 import com.oreo.ui.custom.Section
@@ -27,12 +28,13 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import java.util.SortedMap
 import javax.inject.Inject
 import kotlin.math.abs
 
 @HiltViewModel
 class CycleTrackerViewModel @Inject constructor(
-    private val userActivityRepository: OreoUserActivityRepository,
+    private val femaleHealthRepository: FemaleHealthRepository,
 ) : BaseViewModel() {
 
     var todayDate = LocalDate.now()
@@ -59,7 +61,7 @@ class CycleTrackerViewModel @Inject constructor(
 
     fun getDataForDate(date: String) {
         viewModelScope.launch {
-            userActivityRepository.getFemaleHealthUserInfo(date).collect { resource ->
+            femaleHealthRepository.getFemaleHealthUserInfo(date).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
@@ -149,7 +151,7 @@ class CycleTrackerViewModel @Inject constructor(
 
     fun getCycleHistoryData() {
         viewModelScope.launch {
-            userActivityRepository.getPeriodCycleHistory().collect { resource ->
+            femaleHealthRepository.getPeriodCycleHistory().collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
@@ -393,7 +395,6 @@ class CycleTrackerViewModel @Inject constructor(
 
     fun combineTempData(tempData: List<TempPeriodData>?): TempPeriodCombineModel {
 
-        //val workouts = dayData?.activity?.workout
         val sections: MutableList<Section> = ArrayList()
 
         val items: MutableList<ItemTemp> = ArrayList()
@@ -454,98 +455,79 @@ class CycleTrackerViewModel @Inject constructor(
         val endDateLocal = LocalDate.parse(endDate, pattern)
 
 
-        /*   val filteredData = healthDataDateList.filterKeys {
-               it in startDateLocal..endDateLocal
-           }
+        val sortedPeriodData =
+            healthDataDateList.filter { (it.value is DayState.Period) && (it.key <= endDateLocal) && (it.key >= startDateLocal) }
+                .toSortedMap()
 
-           LOGS.d("dskfjhskdfjhsd ${Gson().toJson(filteredData)}")
+        val sortedOvData =
+            healthDataDateList.filter {
+                (it.value is DayState.Fertile || it.value is DayState.OvulationDay) && (
+                        it.key <= endDateLocal
+                        ) && (it.key >= startDateLocal)
+            }.toSortedMap()
 
-           val tempHistory = ArrayList<FMHCycleHistoryDataModel>()
+        createSections(sections, sortedPeriodData, startDateLocal, 1)
+        createSections(sections, sortedOvData, startDateLocal, 2)
 
+        return sections
+    }
 
-           var startDate: LocalDate? = null
-           filteredData.keys.forEach {
-               val currentDate = it
-               if (startDate == null) {
-                   startDate = currentDate
-               }
-               val nextDate = currentDate.plusDays(1)
-               if (filteredData[nextDate] == null) {
+    /**
+     * 1->period, 2->Fertile
+     */
+    private fun createSections(
+        sections: ArrayList<Section>,
+        sortedPeriodData: SortedMap<LocalDate, DayState>,
+        startDateLocal: LocalDate,
+        type: Int
+    ) {
+        var lastValue: Map.Entry<LocalDate, DayState>? = null
+        val tempDatesArray = ArrayList<LocalDate>()
+        sortedPeriodData.forEach {
+            val currentKey = it.key
 
-                   tempHistory.add(
-                       FMHCycleHistoryDataModel(
+            if (lastValue == null || ChronoUnit.DAYS.between(
+                    lastValue!!.key,
+                    currentKey
+                ) != 1L
+            ) {
+                lastValue = null
+                if (tempDatesArray.isNotEmpty()) {
 
-                       )
-                   )
-
-                   startDate = null
-               }
-
-           }*/
-
-
-        history.forEach {
-            val periodDateStart = LocalDate.parse(it.periodDate, pattern)
-            val periodLength = it.periodLength ?: 0
-            val periodDateEnd = if (periodLength == 0) {
-                periodDateStart
-            } else {
-                periodDateStart.plusDays((periodLength - 1).toLong())
-            }
-
-
-            if (startDateLocal >= periodDateStart && periodDateEnd <= endDateLocal) {
-                LOGS.d("sdfsdfsdf startDateLocal-> $startDateLocal $periodDateStart")
-                var daysStart = abs(ChronoUnit.DAYS.between(startDateLocal, periodDateStart))
-                val daysEnd = abs(ChronoUnit.DAYS.between(startDateLocal, periodDateEnd)) - 1
-
-
-                sections.add(
-                    Section(
-                        "period",
-                        daysStart.toInt(),
-                        daysEnd.toInt(),
-                        Color.parseColor("#80ff7fc4"),
-                        imageRes = R.drawable.ic_fertile_graph
-                    )
-                )
-                LOGS.d("sdfsdfsdf period $daysStart $daysEnd")
-
-            }
-
-            try {
-                val fWindow = it.fertileWindow?.split("/")
-
-                val fertileDateStart = LocalDate.parse(fWindow?.get(0))
-                val fertileDateEnd = LocalDate.parse(fWindow?.get(1))
-
-                if (startDateLocal >= fertileDateStart && fertileDateEnd <= endDateLocal) {
-
-                    val daysStart = abs(ChronoUnit.DAYS.between(startDateLocal, fertileDateStart))
-                    val daysEnd = abs(ChronoUnit.DAYS.between(startDateLocal, fertileDateEnd))
-
+                    var daysStart =
+                        abs(ChronoUnit.DAYS.between(startDateLocal, tempDatesArray.first()))
+                    val daysEnd =
+                        abs(ChronoUnit.DAYS.between(startDateLocal, tempDatesArray.last()))
 
                     sections.add(
                         Section(
-                            "fertile",
+                            if (type == 1) "period" else "",
                             daysStart.toInt(),
                             daysEnd.toInt(),
-                            Color.parseColor("#80ff7fc4"),
-                            imageRes = R.drawable.ic_fertile_graph
+                            if (type == 1) Color.parseColor("#80ff7fc4") else Color.parseColor("#801ec9ff"),
+                            imageRes = if (type == 1) R.drawable.ic_fertile_graph else R.drawable.ic_period_graph
                         )
                     )
-
-
                 }
-
-
-            } catch (exp: Exception) {
+                tempDatesArray.clear()
             }
+
+            tempDatesArray.add(currentKey)
+            lastValue = it
         }
-
-
-
-        return sections
+        if (tempDatesArray.isNotEmpty()) {
+            var daysStart = abs(ChronoUnit.DAYS.between(startDateLocal, tempDatesArray.first()))
+            val daysEnd = abs(ChronoUnit.DAYS.between(startDateLocal, tempDatesArray.last()))
+            sections.add(
+                Section(
+                    if (type == 1) "period" else "",
+                    daysStart.toInt(),
+                    daysEnd.toInt(),
+                    if (type == 1) Color.parseColor("#80ff7fc4") else Color.parseColor("#801ec9ff"),
+                    imageRes = if (type == 1) R.drawable.ic_fertile_graph else R.drawable.ic_period_graph
+                )
+            )
+        }
     }
 
 

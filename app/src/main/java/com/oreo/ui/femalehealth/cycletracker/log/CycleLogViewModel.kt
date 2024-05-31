@@ -11,7 +11,7 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import com.oreo.data.model.PeriodCycleHistory
-import com.oreo.data.repository.abstraction.OreoUserActivityRepository
+import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.ui.femalehealth.cycletracker.DayState
 import com.oreo.ui.femalehealth.cycletracker.PeriodPos
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CycleLogViewModel @Inject constructor(
-    val userActivityRepository: OreoUserActivityRepository
+    val femaleHealthRepository: FemaleHealthRepository
 ) : BaseViewModel() {
 
     var selectedDate: LocalDate = LocalDate.now()
@@ -50,7 +50,6 @@ class CycleLogViewModel @Inject constructor(
     var lastDateInteraction: LocalDate? = null
 
 
-
     fun setOpenDayLogBottomSheet(status: Boolean) {
         _openDayLogBottomSheet.postValue(Event(status))
     }
@@ -65,7 +64,7 @@ class CycleLogViewModel @Inject constructor(
 
     fun getCycleHistoryData() {
         viewModelScope.launch {
-            userActivityRepository.getPeriodCycleHistory().collect { resource ->
+            femaleHealthRepository.getPeriodCycleHistory().collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
@@ -251,12 +250,6 @@ class CycleLogViewModel @Inject constructor(
         return cycleHistoryData.value?.userDefault?.periodLength?.toLong() ?: 5L
     }
 
-    /**
-     * Start date, period array
-     */
-    var periodList = HashMap<LocalDate, ArrayList<String>>()
-
-
     fun onCalendarDateClicked(selectedDate: LocalDate) {
         val (state, selected) = getCurrentState(selectedDate)
         val prevDay = selectedDate.minusDays(1)
@@ -367,7 +360,7 @@ class CycleLogViewModel @Inject constructor(
             }
             requestObject.add("dates", topLevelJsonArray)
 
-            userActivityRepository.logPeriod(requestObject).collect { resource ->
+            femaleHealthRepository.logPeriod(requestObject).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)

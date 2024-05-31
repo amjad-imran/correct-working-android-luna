@@ -46,9 +46,11 @@ import com.oreo.data.db.implementation.OreoRespiratoryDataImpl
 import com.oreo.data.db.implementation.OreoSleepDataImpl
 import com.oreo.data.db.implementation.OreoStepsDataImpl
 import com.oreo.data.db.implementation.OreoStressDataImpl
+import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
+import com.oreo.data.repository.implementation.FemaleHealthRepositoryImpl
 import com.oreo.data.repository.implementation.OreoDeviceRepositoryImpl
 import com.oreo.data.repository.implementation.OreoSyncRepositoryImpl
 import com.oreo.data.repository.implementation.OreoUserActivityRepositoryImpl
@@ -369,6 +371,14 @@ object AppModule {
             zhUserActivityDataActions,
             watchesSdk
         )
+    }
+
+    @Singleton
+    @Provides
+    fun provideFemaleHealthRepository(
+        remoteDataSource: NetworkService,
+    ): FemaleHealthRepository {
+        return FemaleHealthRepositoryImpl(remoteDataSource)
     }
 
 

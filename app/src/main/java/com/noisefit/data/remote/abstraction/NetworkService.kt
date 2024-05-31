@@ -381,11 +381,6 @@ interface NetworkService {
         @Url url: String
     ): BaseApiResponse<OreoNapDetailsDataModel>
 
-    @GET
-    suspend fun getFemaleHealthIcons(
-        @Url url: String
-    ): BaseApiResponse<FemaleHealthIconsModel>
-
     @POST
     suspend fun addNapServer(
         @Url url: String,
@@ -448,6 +443,11 @@ interface NetworkService {
     suspend fun getCycleStreakInfo(
         @Url url: String,
     ): BaseApiResponse<List<FMHCycleHistoryDataModel>>
+
+    @GET
+    suspend fun getFemaleHealthIcons(
+        @Url url: String
+    ): BaseApiResponse<FemaleHealthIconsModel>
 
     @GET
     suspend fun getCycleTrackerInfo(@Url url: String): BaseApiResponse<FemaleCycleTrackInfoModel?>?

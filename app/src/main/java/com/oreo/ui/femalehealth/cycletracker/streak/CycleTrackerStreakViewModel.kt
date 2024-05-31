@@ -10,6 +10,7 @@ import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
+import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.ui.femalehealth.cycletracker.DayState
 import com.oreo.ui.femalehealth.cycletracker.PeriodPos
@@ -22,7 +23,7 @@ import kotlin.math.abs
 
 @HiltViewModel
 class CycleTrackerStreakViewModel @Inject constructor(
-    private val userActivityRepository: OreoUserActivityRepository
+    private val femaleHealthRepository: FemaleHealthRepository
 ) : BaseViewModel() {
 
     lateinit var cycleData: FMHCycleHistoryDataModel
@@ -45,7 +46,7 @@ class CycleTrackerStreakViewModel @Inject constructor(
 
     fun getDataForDate(date: String) {
         viewModelScope.launch {
-            userActivityRepository.getFemaleHealthUserInfo(date).collect { resource ->
+            femaleHealthRepository.getFemaleHealthUserInfo(date).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)

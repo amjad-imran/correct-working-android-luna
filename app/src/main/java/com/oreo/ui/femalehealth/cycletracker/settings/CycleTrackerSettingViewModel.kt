@@ -9,6 +9,7 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
+import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -16,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CycleTrackerSettingViewModel @Inject constructor(
-    private val oreoUserActivity: OreoUserActivityRepository
+    private val femaleHealthRepository: FemaleHealthRepository
 ) : BaseViewModel() {
     var cycleTrackerInfo: FemaleCycleTrackInfoModel? = null
     var lastSelectedGoal: String? = null
@@ -37,7 +38,7 @@ class CycleTrackerSettingViewModel @Inject constructor(
             jsonObject.addProperty("cycle_length", lastSelectedCycleLength)
         viewModelScope.launch {
             cycleTrackerInfo?.id?.let {
-                oreoUserActivity.updateCycleTrackerInfo(jsonObject, it).collect { resource ->
+                femaleHealthRepository.updateCycleTrackerInfo(jsonObject, it).collect { resource ->
                     when (resource) {
                         is Resource.GenericError -> {
                             sendMessage(resource.message)
