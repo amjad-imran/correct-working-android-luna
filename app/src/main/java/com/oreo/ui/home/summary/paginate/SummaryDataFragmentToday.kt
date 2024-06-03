@@ -335,9 +335,6 @@ class SummaryDataFragmentToday :
 
                 is OSummaryHealthOverviewClickEnum.GotPeriodClicked -> {
                     viewModel.onGotPeriodClicked(type.status)
-
-                    //TODO change to API success
-                    healthOverviewAdapter.removeGotPeriodCard()
                 }
             }
         }
@@ -461,6 +458,12 @@ class SummaryDataFragmentToday :
     }
 
     override fun subscribeObservers() {
+
+        viewModel.removePeriodQuestionWidget.observe(this) {
+            it.getContent()?.let {
+                healthOverviewAdapter.removeGotPeriodCard()
+            }
+        }
 
         viewModel.femaleHealthData.observe(this) {
             it.getContent()?.let {

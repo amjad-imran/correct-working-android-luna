@@ -12,6 +12,7 @@ import com.noisefit.data.repository.abstraction.UpdateRepository
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
+import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -116,6 +117,8 @@ class SummaryDataViewModelToday @Inject constructor(
     var activityScoreInfo = MutableLiveData<Event<String>>()
     var appUpdateInfo = MutableLiveData<AppUpdateModel?>()
     var otaUpdateInfo = MutableLiveData<OtaUpdateModel?>()
+
+    var removePeriodQuestionWidget = MutableLiveData<Event<Boolean>>()
 
     val stateWorkouts = MutableLiveData<List<OActivityListModal>>()
 
@@ -299,10 +302,23 @@ class SummaryDataViewModelToday @Inject constructor(
                                 )
                             }
 
-                            if (femaleData.isPeriod && !femaleData.otaLog) {
+                            val isCardShownForToday =
+                                femaleHealthRepository.getGotPeriodClickedStatus()
+                            if (femaleData.isPeriod && !femaleData.otaLog && !isCardShownForToday) {
+
+                                val periodCurrentDay = femaleData.currentDay
+                                val dayMessage = if (periodCurrentDay == null) {
+                                    null
+                                } else {
+                                    "Today's your predicted ${
+                                        ApplicationUtils.getOrdinalWord(
+                                            periodCurrentDay
+                                        )
+                                    } day."
+                                }
                                 userActivities.add(
                                     OHealthOverview.GotYourPeriod(
-                                        "Today's your predicted first day."
+                                        dayMessage
                                     )
                                 )
                             }
@@ -654,7 +670,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
         if (data.isPeriod) {
             return PeriodCard2(
-                title = "Period",
+                title = if (data.otaLog) "Period" else "Predicted period",
                 subTitle = "Day ${data.currentDay}",
                 nudge = data.nudges?.firstOrNull()?.message ?: "",
                 currentCycleDay = data.currentDay ?: 0,
@@ -1451,6 +1467,55 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     fun onGotPeriodClicked(status: Boolean) {
+        viewModelScope.launch {
+            if (status.not()) {
+                femaleHealthRepository.saveGotPeriodClicked()
+                removePeriodQuestionWidget.postValue(Event(true))
+                return@launch
+            }
+
+            val requestObject = JsonObject().apply {
+                this.addProperty("date", DateFormats.getTodaysDateString(10))
+                this.addProperty("confirm", true)
+            }
+
+            femaleHealthRepository.setPeriodConfirm(requestObject).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        onGotPeriodClicked(status)
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data.let {
+                            femaleHealthRepository.saveGotPeriodClicked()
+                            removePeriodQuestionWidget.postValue(Event(true))
+                            getPeriodData()
+                        }
+                    }
+                }
+            }
+        }
+
 
     }
 

@@ -59,15 +59,16 @@ class CycleDetailsFragment :
 
     private fun setUI() {
         binding.lytToolbar.tvTitle.text = getString(R.string.text_cycle_details)
-        binding.lytToolbar.view1.visible()
+
+        binding.lytToolbar.view1.gone()
         binding.lytToolbar.ivAddFriend.invisible()
         binding.lytToolbar.view1.loadImage(
             binding.lytToolbar.view1.context,
             R.drawable.ic_ct_streak_info
         )
 
-
         binding.lytInsight.lytCycleLength.apply {
+            ivMore.gone()
             tvHeader.text = getString(R.string.text_cycle_length)
             tvValue.text = "${viewModel.cycleData.cycleLength}"
             tvUnit.text = "days"
@@ -79,6 +80,8 @@ class CycleDetailsFragment :
         }
 
         binding.lytInsight.lytPeriodLength.apply {
+            ivMore.gone()
+
             tvHeader.text = getString(R.string.text_period_duration)
             tvValue.text = "${viewModel.cycleData.periodLength}"
             tvUnit.text = "days"

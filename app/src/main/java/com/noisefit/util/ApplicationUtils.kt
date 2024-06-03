@@ -603,6 +603,42 @@ object ApplicationUtils {
         }
     }
 
+    fun getOrdinalWord(number: Int): String {
+        val suffixes = hashMapOf(
+            1 to "first",
+            2 to "second",
+            3 to "third",
+            4 to "fourth",
+            5 to "fifth",
+            6 to "sixth",
+            7 to "seventh",
+            8 to "eighth",
+            9 to "ninth",
+            10 to "tenth",
+            11 to "eleventh",
+            12 to "twelfth",
+            13 to "thirteenth",
+            14 to "fourteenth",
+            15 to "fifteenth",
+            16 to "sixteenth",
+            17 to "seventeenth",
+            18 to "eighteenth",
+            19 to "nineteenth",
+            20 to "twentieth",
+            21 to "twenty-first",
+            22 to "twenty-second",
+            23 to "twenty-third",
+            24 to "twenty-fourth",
+            25 to "twenty-fifth",
+            26 to "twenty-sixth",
+            27 to "twenty-seventh",
+            28 to "twenty-eighth",
+            29 to "twenty-ninth",
+            30 to "thirtieth"
+        )
+        return suffixes[number] ?: "$number"
+    }
+
 
     fun getRepeatDays(repeatDays: List<Boolean>?): String {
         if (repeatDays.isNullOrEmpty()) {

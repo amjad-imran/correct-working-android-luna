@@ -1278,6 +1278,8 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             data: OHealthOverview.GotYourPeriod,
             position: Int,
         ) {
+            binding.tvPredictedDay.text = data.title ?: ""
+
             binding.bYes.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.GotPeriodClicked(true))
             }

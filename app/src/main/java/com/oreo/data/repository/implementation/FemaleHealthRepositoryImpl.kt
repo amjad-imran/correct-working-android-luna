@@ -5,6 +5,7 @@ import com.noisefit.data.remote.abstraction.NetworkService
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.safeApiCallFlow
 import com.noisefit.luna.BuildConfig
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.oreo.data.model.FemaleHealthIconsModel
 import com.oreo.data.model.PeriodCycleHistory
@@ -19,6 +20,7 @@ import kotlinx.coroutines.flow.Flow
 
 class FemaleHealthRepositoryImpl(
     private val remoteDataSource: NetworkService,
+    private val localDataStore: DataStoredInterface,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : FemaleHealthRepository {
     override suspend fun saveLogSymptom(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
@@ -102,8 +104,26 @@ class FemaleHealthRepositoryImpl(
         return safeApiCallFlow(dispatcher) {
             val url =
                 "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/temp"
-            remoteDataSource.getFemaleHealthTempData(url,date)
+            remoteDataSource.getFemaleHealthTempData(url, date)
         }
     }
 
+    override suspend fun setPeriodConfirm(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health/confirm"
+            remoteDataSource.setPeriodConfirm(url, jsonObject)
+        }
+    }
+
+    /**
+     * if Got period is already clicked for today's date, this function will return true else false
+     */
+    override fun getGotPeriodClickedStatus(): Boolean {
+        return localDataStore.getGotPeriodClickedStatus()
+    }
+
+    override fun saveGotPeriodClicked() {
+        localDataStore.saveGotPeriodClicked()
+    }
 }

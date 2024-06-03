@@ -33,11 +33,12 @@
 
     <TextView
         android:id="@+id/tvPredictedDay"
-        style="@style/S16"
+        style="@style/S14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:textColor="@color/white_64"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView110"
         tools:text="Today’s your predicted first day." />
@@ -46,8 +47,8 @@
         android:id="@+id/bNo"
         style="@style/SecondaryButtonStyle"
         android:layout_width="0dp"
-        android:layout_marginStart="16dp"
         android:layout_height="36dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"

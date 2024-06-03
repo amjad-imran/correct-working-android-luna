@@ -194,6 +194,7 @@ private const val FMH_WALK_THROUGH = "FMH_WALK_THROUGH"
 private const val FMH_REMIND_LATER = "FMH_REMIND_LATER"
 private const val SLEEP_MOENGAGE_SYNC_DATE = "SLEEP_MOENGAGE_SYNC_DATE"
 private const val AI_CHAT_ONBOARD = "AI_CHAT_ONBOARD"
+private const val GOT_PERIOD_CLICKED = "GOT_PERIOD_CLICKED"
 
 
 private const val APP_VERSION_NEW = "APP_VERSION_NEW"
@@ -210,6 +211,20 @@ class DataStoredImpl
 @Inject constructor(
     private val gson: Gson, private val mPrefs: SharedPreferences
 ) : DataStoredInterface {
+
+    override fun getGotPeriodClickedStatus(): Boolean {
+        val savedValue = mPrefs.getString(GOT_PERIOD_CLICKED, null) ?: return false
+        val todayDate = DateFormats.getCurrentDate()
+        if (todayDate.equals(savedValue, true)) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    override fun saveGotPeriodClicked() {
+        mPrefs.edit()?.putString(GOT_PERIOD_CLICKED, DateFormats.getCurrentDate())?.commit()
+    }
 
     //-1 if no value saved else days
     override fun getFMHWalkthroughRemindLaterDays(): Long {

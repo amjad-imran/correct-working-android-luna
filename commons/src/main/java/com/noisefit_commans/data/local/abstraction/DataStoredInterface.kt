@@ -453,4 +453,8 @@ interface DataStoredInterface {
 
     fun isAiChatSplashShown(): Boolean
     fun setAiChatSplashShown()
+
+
+    fun getGotPeriodClickedStatus(): Boolean
+    fun saveGotPeriodClicked()
 }

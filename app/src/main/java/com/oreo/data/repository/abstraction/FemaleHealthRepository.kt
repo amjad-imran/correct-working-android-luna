@@ -33,4 +33,11 @@ interface FemaleHealthRepository {
 
     suspend fun getFemaleHealthTempData(date: String): Flow<Resource<BaseApiResponse<FemaleTempResponse>>>
 
+    suspend fun setPeriodConfirm(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
+
+
+
+    fun saveGotPeriodClicked()
+    fun getGotPeriodClickedStatus(): Boolean
+
 }

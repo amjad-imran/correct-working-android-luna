@@ -427,6 +427,11 @@ interface NetworkService {
         @Url url: String, @Query("date") date: String
     ): BaseApiResponse<FemaleTempResponse>
 
+    @POST
+    suspend fun setPeriodConfirm(
+        @Url url: String, @Body jsonObject: JsonObject
+    ): BaseApiResponse<Any>
+
     @GET
     suspend fun getCycleTrackerInfo(@Url url: String): BaseApiResponse<FemaleCycleTrackInfoModel?>?
 
