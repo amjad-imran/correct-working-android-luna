@@ -24,14 +24,58 @@ class FMHSkinTemperatureFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.lytToolbar.apply {
             tvTitle.text = getString(R.string.text_skin_temperature_variation)
             view1.visible()
             ivAddFriend.invisible()
             view1.loadImage(requireActivity(), R.drawable.ic_info_oreo)
         }
+        initDefault()
 
         viewModel.getTempData(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+
+    }
+
+    private fun initDefault() {
+        binding.lytSkinTemp.lytLegendView.apply {
+
+            lytPeriod.tvText.text = getText(R.string.text_period)
+            lytPeriod.viewColor.backgroundTintList =
+                ColorStateList.valueOf(
+                    ContextCompat.getColor(
+                        binding.tvDate.context,
+                        R.color.color_period
+                    )
+                )
+            lytOvulation.tvText.text =
+                getText(R.string.text_ovulation)
+            lytOvulation.viewColor.backgroundTintList =
+                ColorStateList.valueOf(
+                    ContextCompat.getColor(
+                        binding.tvDate.context,
+                        R.color.color_ovulation
+                    )
+                )
+            lytFollicular.tvText.text =
+                getText(R.string.text_follicular)
+            lytFollicular.viewColor.backgroundTintList =
+                ColorStateList.valueOf(
+                    ContextCompat.getColor(
+                        binding.tvDate.context,
+                        R.color.color_follicular
+                    )
+                )
+            lytLuteal.tvText.text = getText(R.string.text_luteal)
+            lytLuteal.viewColor.backgroundTintList =
+                ColorStateList.valueOf(
+                    ContextCompat.getColor(
+                        binding.tvDate.context,
+                        R.color.color_luteal
+                    )
+                )
+
+        }
     }
 
     override fun initListener() {
@@ -44,44 +88,17 @@ class FMHSkinTemperatureFragment :
         binding.tvDate.text = "Wed, 23 April"
         binding.tvValue.text = "+0.5°F"
 
-        binding.lytSkinTemp.lytLegendView.lytPeriod.textView1.text = getText(R.string.text_period)
-        binding.lytSkinTemp.lytLegendView.lytPeriod.view1.backgroundTintList =
-            ColorStateList.valueOf(
-                ContextCompat.getColor(
-                    binding.tvDate.context,
-                    R.color.color_period
-                )
-            )
-        binding.lytSkinTemp.lytLegendView.lytOvulation.textView1.text =
-            getText(R.string.text_ovulation)
-        binding.lytSkinTemp.lytLegendView.lytOvulation.view1.backgroundTintList =
-            ColorStateList.valueOf(
-                ContextCompat.getColor(
-                    binding.tvDate.context,
-                    R.color.color_ovulation
-                )
-            )
-        binding.lytSkinTemp.lytLegendView.lytFollicular.textView1.text =
-            getText(R.string.text_follicular)
-        binding.lytSkinTemp.lytLegendView.lytFollicular.view1.backgroundTintList =
-            ColorStateList.valueOf(
-                ContextCompat.getColor(
-                    binding.tvDate.context,
-                    R.color.color_follicular
-                )
-            )
-        binding.lytSkinTemp.lytLegendView.lytLuteal.textView1.text = getText(R.string.text_luteal)
-        binding.lytSkinTemp.lytLegendView.lytLuteal.view1.backgroundTintList =
-            ColorStateList.valueOf(
-                ContextCompat.getColor(
-                    binding.tvDate.context,
-                    R.color.color_luteal
-                )
-            )
 
     }
 
     override fun subscribeObservers() {
+        viewModel.tempData.observe(this) {
+
+
+            binding.tvDescription.text = it.nudge?.message
+
+        }
+
         viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->
                 context.showShortToast(message)

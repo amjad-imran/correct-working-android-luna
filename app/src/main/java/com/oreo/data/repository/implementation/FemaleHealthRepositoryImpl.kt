@@ -101,7 +101,7 @@ class FemaleHealthRepositoryImpl(
     override suspend fun getFemaleHealthTempData(date: String): Flow<Resource<BaseApiResponse<FemaleTempResponse>>> {
         return safeApiCallFlow(dispatcher) {
             val url =
-                "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/temp?date=2024-05-23"
+                "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/temp"
             remoteDataSource.getFemaleHealthTempData(url,date)
         }
     }

@@ -6,26 +6,26 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/view1"
+            android:id="@+id/viewColor"
             android:layout_width="8dp"
             android:layout_height="8dp"
             android:layout_marginEnd="6dp"
             android:background="@drawable/circle"
             android:backgroundTint="#ff84d5"
-            app:layout_constraintBottom_toBottomOf="@id/textView1"
-            app:layout_constraintEnd_toStartOf="@id/textView1"
-            app:layout_constraintTop_toTopOf="@id/textView1" />
+            app:layout_constraintBottom_toBottomOf="@id/tvText"
+            app:layout_constraintEnd_toStartOf="@id/tvText"
+            app:layout_constraintTop_toTopOf="@id/tvText" />
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/tvText"
             style="@style/H6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="@string/text_period"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
 

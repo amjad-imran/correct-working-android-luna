@@ -7,32 +7,32 @@
         android:weightSum="4">
 
         <include
-            layout="@layout/fmh_legend_single_item"
-            android:layout_width="0dp"
-            android:layout_weight="1"
             android:id="@+id/lytPeriod"
-            android:layout_height="wrap_content" />
-
-        <include
             layout="@layout/fmh_legend_single_item"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <include
             android:id="@+id/lytOvulation"
-            android:layout_weight="1"
-            android:layout_height="wrap_content" />
-
-        <include
             layout="@layout/fmh_legend_single_item"
             android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <include
             android:id="@+id/lytFollicular"
-            android:layout_height="wrap_content" />
-
-        <include
             layout="@layout/fmh_legend_single_item"
             android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <include
             android:id="@+id/lytLuteal"
-            android:layout_height="wrap_content" />
+            layout="@layout/fmh_legend_single_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
 
     </LinearLayout>

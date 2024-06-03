@@ -1,10 +1,12 @@
 package com.oreo.ui.femalehealth.cycletracker
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
+import com.oreo.data.model.femaleh.FemaleTempResponse
 import com.oreo.data.model.femaleh.TempPrediction
 import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
@@ -16,6 +18,8 @@ import javax.inject.Inject
 class SkinTemperatureViewModel @Inject constructor(
     private val femaleHealthRepository: FemaleHealthRepository
 ) : BaseViewModel() {
+
+    val tempData = MutableLiveData<FemaleTempResponse>()
 
     fun getTempData(date: String) {
         viewModelScope.launch {
@@ -47,7 +51,7 @@ class SkinTemperatureViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data.let {
-
+                            tempData.postValue(it)
                         }
                     }
                 }
