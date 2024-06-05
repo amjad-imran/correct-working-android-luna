@@ -543,3 +543,7 @@ sealed class DayState {
 enum class PeriodPos {
     START, END, CENTER, SINGLE
 }
+
+enum class CyclePhase {
+    FOLLECULAR, LUTEAL
+}

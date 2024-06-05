@@ -1,4 +1,4 @@
-package com.oreo.ui.custom
+package com.oreo.ui.custom.female
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -9,20 +9,32 @@ import android.graphics.DashPathEffect
 import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Shader
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.noisefit.luna.R
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.LOGS.w
-import com.oreo.data.model.PeriodChartModel
+import com.oreo.data.model.PeriodTempChartModel
+import com.oreo.ui.custom.Section
+import com.oreo.ui.custom.TempPeriodCombineModel
+import com.oreo.ui.femalehealth.cycletracker.CyclePhase
+import kotlin.math.abs
 import kotlin.math.min
 
-class PeriodLineChart : View {
+class PeriodTempLineChart : View {
+    private lateinit var workoutPaint: Paint
     private var bgColor = 0
     private var bgLeftColor = 0
     private var bgRightColor = 0
@@ -46,8 +58,8 @@ class PeriodLineChart : View {
 
     private var hCount = 0
 
-    var max: Int = 0
-    private var xMin = 0
+    var max: Float = 0.0f
+    private var xMin = 0.0f
 
     private var leftWith = 0f
     private var rightWith = 0f
@@ -71,10 +83,10 @@ class PeriodLineChart : View {
     private val selectedLinePath = Path()
     private var bgBottomPaint: Paint? = null
 
-    private var xTextPaint: Paint? = null
-    private var xTextPaint2: Paint? = null
+    lateinit var xTextPaint: Paint
+    lateinit var xTextPaint2: Paint
     private var xLinePaint: Paint? = null
-    private var gridPaint: Paint? = null
+    lateinit var gridPaint: Paint
     private var centerLinePaint: Paint? = null
     private var centerLineColor = 0
     private var fillColorStart = 0
@@ -82,14 +94,17 @@ class PeriodLineChart : View {
     private var centerLineWidth = 0f
     private var innerCirclePaint: Paint? = null
     private var outCirclePaint: Paint? = null
-    private var chartLinePaint: Paint? = null
+    lateinit var chartLinePaint: Paint
     private var scaleNodePaint: Paint? = null
     private var glowDotBitmapAbnormal: Bitmap? = null
     private var glowDotBitmapNormal: Bitmap? = null
-    private var onChartScrollChangedListener: ScrollListenerPeriod? = null
+    private var onChartScrollChangedListener: ScrollListenerPeriodTemp? = null
     private val path = Path()
     private var unitHLenth = 0f
     private var indicatorUnitLength = 0f
+
+    private var sectionsList: MutableList<Section> = ArrayList<Section>()
+
 
     private var showAvgValueText = false
     private var startFromRight = false
@@ -102,16 +117,22 @@ class PeriodLineChart : View {
 
     private var xTextBounds: Rect? = null
 
-    private val list: MutableList<PeriodChartModel>? = ArrayList()
+    private val list: MutableList<PeriodTempChartModel> = ArrayList()
     private var prefixCount = 0
     private var mCurrentPos = -1
     private var suffixCount = 0
     private var canScroll = true
     private var showXAxis = true
     private var titleWidth = 0f
+    lateinit var bgLine: Paint
 
-    private var normalMin = 0
-    private var normalMax = 0
+    private val fillPath = Path()
+    lateinit var chartLineFillPaint: Paint
+    private var lGFollecular: LinearGradient? = null
+    private var lGLuteal: LinearGradient? = null
+    private var resMap = HashMap<Int, Triple<LinearGradient, Bitmap?, String?>>()
+    private var bitmapMap = HashMap<Int, Bitmap>()
+
 
     //    private int maxValue;
     //    private int minValue;
@@ -122,12 +143,10 @@ class PeriodLineChart : View {
 
     constructor(context: Context?) : super(context) {
         initPaint()
-        //        updateData();
     }
 
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
         init(attrs)
-        //        updateData();
     }
 
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
@@ -136,7 +155,6 @@ class PeriodLineChart : View {
         defStyleAttr
     ) {
         init(attrs)
-        //        updateData();
     }
 
 
@@ -154,8 +172,6 @@ class PeriodLineChart : View {
         yLineColor = ta.getColor(R.styleable.LineChart_yTextColor, -0x1000000)
         gridColor = ta.getColor(R.styleable.LineChart_gridColor, -0xff01)
         hCount = ta.getInt(R.styleable.LineChart_hCount, 5)
-        max = ta.getInt(R.styleable.LineChart_xMax, 10)
-        xMin = ta.getInt(R.styleable.LineChart_xMin, 0)
         xTextSize = ta.getDimension(R.styleable.LineChart_xTextSize, 8f)
         xTextSize2 = ta.getDimension(R.styleable.LineChart_xTextSize2, 8f)
         yTextSize = ta.getDimension(R.styleable.LineChart_yTextSize, 8f)
@@ -182,11 +198,25 @@ class PeriodLineChart : View {
 
         startFromRight = ta.getBoolean(R.styleable.LineChart_startFromRight, false)
         alwaysShowCircle = ta.getBoolean(R.styleable.LineChart_alwaysShowCircle, true)
+        rectF = RectF()
+
         ta.recycle()
         initPaint()
     }
 
     private fun initPaint() {
+
+        workoutPaint = Paint()
+        workoutPaint.setColorFilter(PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN))
+
+
+        chartLineFillPaint = Paint()
+        chartLineFillPaint.style = Paint.Style.FILL
+        chartLineFillPaint.isAntiAlias = true
+
+        bgLine = Paint().apply {
+            this.color = Color.parseColor("#19ffffff")
+        }
 
         val shaderNormal: Shader = LinearGradient(
             0f,
@@ -226,20 +256,20 @@ class PeriodLineChart : View {
         val fontGilroy =
             ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.gilroy_medium)
         xTextPaint = Paint()
-        xTextPaint!!.textSize = xTextSize
-        xTextPaint!!.setTypeface(fontGilroy)
-        xTextPaint!!.isAntiAlias = true
+        xTextPaint.textSize = xTextSize
+        xTextPaint.setTypeface(fontGilroy)
+        xTextPaint.isAntiAlias = true
 
         xTextPaint2 = Paint()
-        xTextPaint2!!.textSize = xTextSize2
-        xTextPaint2!!.setTypeface(fontGilroy)
-        xTextPaint2!!.isAntiAlias = true
+        xTextPaint2.textSize = xTextSize2
+        xTextPaint2.setTypeface(fontGilroy)
+        xTextPaint2.isAntiAlias = true
 
         xLinePaint = Paint()
         xLinePaint!!.color = xLineColor
 
         gridPaint = Paint()
-        gridPaint!!.color = gridColor
+        gridPaint.color = gridColor
 
         centerLinePaint = Paint()
         centerLinePaint!!.color = centerLineColor
@@ -257,10 +287,10 @@ class PeriodLineChart : View {
         outCirclePaint!!.isAntiAlias = true
 
         chartLinePaint = Paint()
-        chartLinePaint!!.strokeWidth = chartLineWidth
-        chartLinePaint!!.color = chartLineColor
-        chartLinePaint!!.isAntiAlias = true
-        chartLinePaint!!.style = Paint.Style.STROKE
+        chartLinePaint.strokeWidth = chartLineWidth
+        chartLinePaint.color = chartLineColor
+        chartLinePaint.isAntiAlias = true
+        chartLinePaint.style = Paint.Style.STROKE
 
 
         val res = resources
@@ -280,77 +310,59 @@ class PeriodLineChart : View {
         xTextBounds = Rect()
     }
 
-    fun updateChartLineColor() {
-        chartLinePaint = Paint()
-        chartLinePaint!!.strokeWidth = chartLineWidth
-        chartLinePaint!!.color = chartLineColor
-        chartLinePaint!!.isAntiAlias = true
-        chartLinePaint!!.style = Paint.Style.STROKE
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        generateResMap()
+        drawBg(canvas)
+        drawBottom(canvas)
+        drawLeft(canvas)
+        drawContent(canvas)
+        drawRight(canvas)
+    }
+
+    private fun generateResMap() {
+        if (sectionsList.isEmpty()) return
+        var section: Section
+        for (i in sectionsList.indices) {
+            section = sectionsList[i]
+            resMap[i] = Triple(
+                LinearGradient(
+                    0f,
+                    0f,
+                    0f,
+                    mHeight - bottomWith,
+                    section.color,
+                    Color.TRANSPARENT,
+                    Shader.TileMode.CLAMP
+                ), BitmapFactory.decodeResource(resources, section.imageRes), section.imageUrl
+            )
+        }
     }
 
 
     fun updateData(
-        datas: List<PeriodChartModel>,
-        prefixList: List<PeriodChartModel>,
-        suffixList: List<PeriodChartModel>,
+        datas: ArrayList<PeriodTempChartModel>,
+        prefixList: ArrayList<PeriodTempChartModel>,
+        suffixList: ArrayList<PeriodTempChartModel>,
+        sectionList: ArrayList<Section>,
         currentPos: Int,
-        normalMin: Int,
-        normalMax: Int
+        maxValue: Float
     ) {
-        list!!.clear()
+        this.sectionsList.clear()
+        this.sectionsList.addAll(sectionList)
+
+        list.clear()
         list.addAll(prefixList)
         list.addAll(datas)
         list.addAll(suffixList)
         prefixCount = prefixList.size
         suffixCount = suffixList.size
-        this.normalMin = normalMin
-        this.normalMax = normalMax
 
-        var noneZeroValueCount = 0
-        max = 0
-        var item: PeriodChartModel
-        var sum = 0
-        var count = 0
-        for (i in datas.indices) {
-            item = datas[i]
-            if (item.value == 0) {
-                continue
-            }
-            noneZeroValueCount += 1
+        val calculatedMax = getMaxValue(maxValue)
+        xMin = -1f * calculatedMax
+        max = calculatedMax
 
-            if (max == 0) {
-                max = item.value
-            }
-            if (xMin == 0) {
-                xMin = item.value
-            }
-
-            if (item.value > max) {
-                max = item.value
-            }
-
-            if (item.value > 0 && item.value < xMin) {
-                xMin = item.value
-            }
-
-            sum += item.value
-            count += 1
-        }
-
-        max += 5
-        xMin = if (xMin < 5) {
-            0
-        } else {
-            xMin - 5
-        }
-
-        if (noneZeroValueCount <= datas.size / 2) {
-            avgValue = 0
-        } else {
-            if (count != 0) {
-                avgValue = sum / count
-            }
-        }
+        //calculate max and min
 
         if (currentPos != -1) {
             mCurrentPos = currentPos
@@ -360,7 +372,23 @@ class PeriodLineChart : View {
         postInvalidate()
     }
 
-    fun setOnChartScrollChangedListener(listener: ScrollListenerPeriod?) {
+    private fun getMaxValue(value: Float): Float {
+        return when (value) {
+            in 0.0f..2.5f -> {
+                2.5f
+            }
+
+            in 2.6f..5.0f -> {
+                5f
+            }
+
+            else -> {
+                10f
+            }
+        }
+    }
+
+    fun setOnChartScrollChangedListener(listener: ScrollListenerPeriodTemp?) {
         this.onChartScrollChangedListener = listener
     }
 
@@ -425,39 +453,31 @@ class PeriodLineChart : View {
             leftWith + (mWith - leftWith - rightWith) / 2f + 2 * unitHLenth,
             topWith
         )
-    }
 
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        drawBg(canvas)
-        drawTop(canvas)
-        drawBottom(canvas)
-        drawLeft(canvas)
-        drawContent(canvas)
-        drawRight(canvas)
+        lGFollecular = LinearGradient(
+            0f,
+            0f,
+            0f,
+            mHeight - bottomWith,
+            Color.parseColor("#99ff9252"),
+            Color.TRANSPARENT,
+            Shader.TileMode.CLAMP
+        )
+
+        lGLuteal = LinearGradient(
+            0f,
+            0f,
+            0f,
+            mHeight - bottomWith,
+            Color.parseColor("#99a38cff"),
+            Color.TRANSPARENT,
+            Shader.TileMode.CLAMP
+        )
     }
 
 
     private fun drawBg(canvas: Canvas) {
         canvas.drawRect(0f, 0f, mWith.toFloat(), mHeight.toFloat(), bgPaint!!)
-
-
-        if (normalMin != 0 && normalMax != 0) {
-            val yTop =
-                mHeight - bottomWith - (normalMax - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
-
-            val yBottom =
-                mHeight - bottomWith - (normalMin - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
-
-            val rectF = RectF(0f, yTop, mWith.toFloat(), yBottom)
-            canvas.drawRect(
-                rectF,
-                normalBarPaint
-            )
-        }
-    }
-
-    private fun drawTop(canvas: Canvas) {
     }
 
     private fun drawRight(canvas: Canvas) {
@@ -472,163 +492,211 @@ class PeriodLineChart : View {
             mHeight.toFloat(),
             bgBottomPaint!!
         )
-        if (showXAxis) {
-            canvas.drawLine(
-                leftWith, mHeight - bottomWith, mWith - rightWith, mHeight - bottomWith,
-                xLinePaint!!
-            )
-        }
     }
 
 
     private fun drawLeft(canvas: Canvas) {
-        val avgStr = avgValue.toString()
-
-        xTextPaint!!.color = xTextColor
-
-        var currentVal = xMin
-        val valueToPlot = ArrayList<Int>()
-
-        while (currentVal < max) {
-            if (currentVal % 5 == 0) {
-                valueToPlot.add(currentVal)
-            }
-            currentVal++
+        getPointsBetween(max).forEach {
+            val axisY =
+                mHeight - bottomWith - (getCalculatedMax(it) - 0) * (mHeight - topWith - bottomWith) / (getCalculatedMax(
+                    max
+                ) - 0)
+            drawHorizontalTextWithLine(canvas, "$it", axisY)
         }
-
-        val marginEnd = dip2px(8f)
-        val lineSpacing = dip2px(4f)
-        xTextPaint!!.setColor(Color.parseColor("#7affffff"))
-
-        valueToPlot.forEach {
-            val y =
-                mHeight - bottomWith - (it - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
-            canvas.drawLine(leftWith, y, mWith.toFloat(), y, gridPaint!!)
-            xTextPaint!!.getTextBounds(it.toString(), 0, it.toString().length, xTextBounds)
-
-            canvas.drawText(
-                it.toString(),
-                mWith.toFloat() - xTextBounds!!.width() - marginEnd,
-                y + xTextBounds!!.height() + lineSpacing,
-                xTextPaint!!
-            )
-        }
-
-
-        //FOr average value
-        /* val avg =
-             mHeight - bottomWith - (avgValue - xMin) * (mHeight - topWith - bottomWith) / (this.max - xMin)
-
-         if (avgValue > 0) {
-             canvas.drawLine(leftWith, avg, mWith - rightWith, avg, centerLinePaint!!)
-         }
-
-         if (showAvgValueText && avgValue > 0) {
-             xTextPaint!!.getTextBounds(avgStr, 0, avgStr.length, xTextBounds)
-             canvas.drawText(
-                 avgStr,
-                 leftWith + dip2px(5f),
-                 avg - xTextBounds!!.height(),
-                 xTextPaint!!
-             )
-         }*/
     }
 
+    private fun drawHorizontalTextWithLine(
+        canvas: Canvas,
+        text: String,
+        bottomHeight: Float,
+        isTop: Boolean = false,
+        isBottom: Boolean = false
+    ) {
+
+        canvas.drawLine(
+            leftWith,
+            bottomHeight,
+            mWith - rightWith,
+            bottomHeight,
+            bgLine
+        )
+        xTextPaint.color = Color.parseColor("#a3ffffff")
+        xTextPaint.getTextBounds(text, 0, text.length, xTextBounds)
+        val yPos: Float = if (isTop) {
+            bottomHeight + xTextBounds!!.height() / 2f + dip2px(4f)
+        } else if (isBottom) {
+            bottomHeight + xTextBounds!!.height() / 2f - dip2px(4f)
+        } else
+            bottomHeight + xTextBounds!!.height() / 2f
+
+        val textStart = mWith.toFloat() - xTextBounds!!.width() - dip2px(2f)
+        canvas.drawText(
+            text,
+            textStart,
+            yPos,
+            xTextPaint
+        )
+    }
+
+    lateinit var rectF: RectF
+
     private fun drawContent(canvas: Canvas) {
-        if (null == list || list.isEmpty()) {
+        if (list.isNullOrEmpty()) {
             return
         }
+
+        var divisor = 0.5f
         var firstPosition = 0
         val tempOffset = offSet + moveOffSet
-        var divisor = 0.5f
         if (startFromRight) {
             divisor = (hCount - 1) * 1f / hCount
         }
+
+        val imageSize = dip2px(16f)
+        for (i in sectionsList.indices) {
+            val section = sectionsList[i]
+            val calculatedEnd = /*if (section.end < 13) {
+                section.end + 1
+            } else {*/
+                section.end
+            /*}*/
+
+            val sectionStartX =
+                offSet + moveOffSet + (mWith - leftWith - rightWith) * divisor + leftWith - (15 + section.start) * unitHLenth
+
+            val sectionEndX =
+                offSet + moveOffSet + (mWith - leftWith - rightWith) * divisor + leftWith - (15 + section.end) * unitHLenth
+
+            rectF.left = sectionStartX/*section.start * unitHLenth + leftWit*/
+            rectF.top = topWith
+            rectF.right = sectionEndX/*rectF.left + (calculatedEnd - section.start) * unitHLenth*/
+            rectF.bottom = mHeight - bottomWith
+            chartLineFillPaint.setShader(resMap!![i]!!.first)
+            canvas.drawRect(rectF, chartLineFillPaint)
+
+            rectF.left = sectionStartX/*section.start * unitHLenth + leftWith*/
+            rectF.top = topWith - dip2px(1f)
+            rectF.right = sectionEndX/*rectF.left + (calculatedEnd - section.start) * unitHLenth*/
+            rectF.bottom = topWith + dip2px(1f)
+            gridPaint.color = section.color
+            canvas.drawRect(rectF, gridPaint)
+
+
+
+            rectF.left = (rectF.right + rectF.left) / 2 - imageSize / 2f
+            rectF.top = topWith - imageSize - dip2px(10f)
+            rectF.right = rectF.left + imageSize
+            rectF.bottom = rectF.top + imageSize
+
+            val imageUrl = resMap[i]?.third
+            val bitmap = bitmapMap[i]
+            if (bitmap != null) {
+                canvas.drawBitmap(bitmap, null, rectF, workoutPaint)
+            } else {
+                if (imageUrl.isNullOrEmpty()) {
+                    if (resMap[i]!!.second != null) {
+                        canvas.drawBitmap(resMap[i]!!.second!!, null, rectF, null)
+                    }
+                } else {
+                    Glide.with(context)
+                        .asBitmap()
+                        .load(imageUrl)
+                        .into(object : CustomTarget<Bitmap?>(imageSize, imageSize) {
+                            override fun onResourceReady(
+                                resource: Bitmap,
+                                transition: Transition<in Bitmap?>?
+                            ) {
+                                bitmapMap[i] = resource
+                                postInvalidate()
+                            }
+
+                            override fun onLoadCleared(placeholder: Drawable?) {}
+                        })
+                }
+            }
+        }
+
+
+
         if (tempOffset > (mWith - leftWith - rightWith) * divisor + unitHLenth) {
             firstPosition =
                 ((tempOffset - (mWith - leftWith - rightWith) * divisor) / unitHLenth).toInt()
         }
         val lastPosition = min((firstPosition + hCount + 2).toDouble(), list.size.toDouble())
             .toInt()
-        var current: PeriodChartModel
-        var next: PeriodChartModel
+        var current: PeriodTempChartModel
+        var next: PeriodTempChartModel
+
+        val yLineZero =
+            mHeight - bottomWith - (getCalculatedMax(
+                0f
+            ) - 0) * (mHeight - topWith - bottomWith) / (getCalculatedMax(max) - 0)
+
+
         for (i in firstPosition until lastPosition) {
             current = list[i]
             val x =
                 offSet + moveOffSet + (mWith - leftWith - rightWith) * divisor + leftWith - i * unitHLenth
+
+            canvas.drawLine(
+                x,
+                topWith,
+                x,
+                mHeight - bottomWith,
+                bgLine
+            )
+
             val y =
-                mHeight - bottomWith - (current.value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
+                mHeight - bottomWith - (getCalculatedMax(
+                    current.value ?: 0f
+                ) - 0) * (mHeight - topWith - bottomWith) / (getCalculatedMax(max) - 0)
             path.reset()
             path.moveTo(x, y)
             if (i < list.size - 1) {
                 next = list[i + 1]
-                if (current.value > 0 && next.value > 0) {
+                if (current.value != null && next.value != null) {
                     val x1 =
                         offSet + moveOffSet + (mWith - leftWith - rightWith) * divisor + leftWith - (i + 1) * unitHLenth
                     val y1 =
-                        mHeight - bottomWith - (next.value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
-                    path.lineTo(x1, y1)
-                    canvas.drawPath(path, chartLinePaint!!)
-                }
-            }
+                        mHeight - bottomWith - (getCalculatedMax(
+                            next.value ?: 0f
+                        ) - 0) * (mHeight - topWith - bottomWith) / (getCalculatedMax(max) - 0)
+                    //path.lineTo(x1, y1)
+                    path.cubicTo(x1 + (x - x1) / 1.5f, y, x - (x - x1) / 1.5f, y1, x1, y1)
 
-            if (current.value > 0) {
-                if (current.isNormal) {
-                    innerCirclePaint!!.color = Color.parseColor("#29cc74")
-                } else {
-                    innerCirclePaint!!.color = Color.parseColor("#ff84d5")
+                    if (current.phase == CyclePhase.FOLLECULAR) {
+                        chartLinePaint.color = Color.parseColor("#ff9252")
+                        chartLineFillPaint.setShader(lGFollecular)
+                    } else {
+                        chartLinePaint.color = Color.parseColor("#a38cff")
+                        chartLineFillPaint.setShader(lGLuteal)
+                    }
+
+                    fillPath.addPath(path)
+                    fillPath.lineTo(x1, yLineZero)
+                    fillPath.lineTo(x, yLineZero)
+                    canvas.drawPath(fillPath, chartLineFillPaint)
+                    fillPath.reset()
+
+
+                    canvas.drawPath(path, chartLinePaint)
                 }
-                canvas.drawCircle(x, y, innerCircleRadius, innerCirclePaint!!)
             }
 
             if (showXAxis) {
-                val monthText = list[i].month
                 val dayText = list[i].day
+                xTextPaint2.color = xTextColor and -0x7f000001
 
-                xTextPaint2!!.getTextBounds(monthText, 0, monthText!!.length, xTextBounds)
-                xTextPaint2!!.color = xTextColor and -0x7f000001
-                xTextPaint!!.color = xTextColor and -0x7f000001
-                canvas.drawText(
-                    monthText,
-                    x - xTextBounds!!.width() / 2f,
-                    mHeight - bottomWith / 2,
-                    xTextPaint2!!
-                )
-
-                val height = (xTextBounds!!.height() + dip2px(4f)).toFloat()
-
-                xTextPaint2!!.getTextBounds(dayText, 0, dayText!!.length, xTextBounds)
+                xTextPaint2.getTextBounds(dayText, 0, dayText!!.length, xTextBounds)
 
                 canvas.drawText(
                     dayText,
                     x - xTextBounds!!.width() / 2f,
-                    (mHeight - bottomWith / 2) + height,
-                    xTextPaint2!!
+                    (mHeight - bottomWith / 2) + xTextBounds!!.height() / 2,
+                    xTextPaint2
                 )
             }
 
-            if (showLastCircle) {
-                if (i == 1 && current.value > 0) {
-                    val width = (glowDotBitmapAbnormal!!.width / 2).toFloat()
-                    val height = (glowDotBitmapAbnormal!!.height / 2).toFloat()
-
-                    if (current.isNormal) {
-                        canvas.drawBitmap(
-                            glowDotBitmapNormal!!,
-                            x - width,
-                            y - height,
-                            scaleNodePaint
-                        )
-                    } else {
-                        canvas.drawBitmap(
-                            glowDotBitmapAbnormal!!,
-                            x - width,
-                            y - height,
-                            scaleNodePaint
-                        )
-                    }
-                }
-            }
         }
 
         if ((offSet + moveOffSet) < 0 || (offSet + moveOffSet) > (list.size - 1) * unitHLenth) {
@@ -641,42 +709,32 @@ class PeriodLineChart : View {
         val y: Float
 
         val y1 =
-            mHeight - bottomWith - (list[position].value - xMin) * (mHeight - topWith - bottomWith) / (max - xMin)
-        if (list[position].value > 0 && (moveOffSet == 0f || (offSet + moveOffSet) == (list.size - 1) * unitHLenth)) {
+            mHeight - bottomWith - (getCalculatedMax(
+                list[position].value ?: 0f
+            ) - 0) * (mHeight - topWith - bottomWith) / (getCalculatedMax(max) - 0f)
+
+        /**
+         * Current selected point
+         */
+        if (list[position].value != null && (moveOffSet == 0f || (offSet + moveOffSet) == (list.size - 1) * unitHLenth)) {
             y = y1
 
             val width = (glowDotBitmapAbnormal!!.width / 2).toFloat()
             val height = (glowDotBitmapAbnormal!!.height / 2).toFloat()
-            if (list[position].isNormal) {
-                canvas.drawBitmap(glowDotBitmapNormal!!, x - width, y - height, scaleNodePaint)
-            } else {
-                canvas.drawBitmap(glowDotBitmapAbnormal!!, x - width, y - height, scaleNodePaint)
-            }
-            //canvas.drawCircle(x, y, scaleNodeRadius, scaleNodePaint);
+            canvas.drawBitmap(glowDotBitmapNormal!!, x - width, y - height, scaleNodePaint)
         }
         if (moveOffSet == 0f && showXAxis) {
-            val monthText = list[position].month
             val dayText = list[position].day
 
-            xTextPaint!!.color = xTextColor
-            xTextPaint2!!.color = xTextColor
-            xTextPaint2!!.getTextBounds(monthText, 0, monthText!!.length, xTextBounds)
-            canvas.drawText(
-                monthText,
-                x - xTextBounds!!.width() / 2f,
-                mHeight - bottomWith / 2,
-                xTextPaint2!!
-            )
 
-            val height = (xTextBounds!!.height() + dip2px(4f)).toFloat()
-
-            xTextPaint2!!.getTextBounds(dayText, 0, dayText!!.length, xTextBounds)
+            xTextPaint2.color = xTextColor
+            xTextPaint2.getTextBounds(dayText, 0, dayText!!.length, xTextBounds)
 
             canvas.drawText(
                 dayText,
                 x - xTextBounds!!.width() / 2f,
-                (mHeight - bottomWith / 2) + height,
-                xTextPaint2!!
+                (mHeight - bottomWith / 2) + xTextBounds!!.height() / 2,
+                xTextPaint2
             )
         }
     }
@@ -734,12 +792,15 @@ class PeriodLineChart : View {
             return
         }
 
-
         scrollPosition = tempPosition
+        val currentValue = list[scrollPosition]
+
+        if (currentValue.date.isNullOrEmpty()) return
+
         if (isSelected) {
-            onChartScrollChangedListener!!.onPositionSelected(scrollPosition, list[scrollPosition])
+            onChartScrollChangedListener?.onPositionSelected(scrollPosition, list[scrollPosition])
         } else {
-            onChartScrollChangedListener!!.onScrolling(scrollPosition, list[scrollPosition])
+            onChartScrollChangedListener?.onScrolling(scrollPosition, list[scrollPosition])
         }
     }
 
@@ -777,6 +838,42 @@ class PeriodLineChart : View {
     private fun sp2px(spValue: Float): Int {
         val fontScale = context.resources.displayMetrics.scaledDensity
         return (spValue * fontScale + 0.5f).toInt()
+    }
+
+    private fun getCalculatedMax(value: Float): Float {
+        return value + (abs(xMin))
+    }
+
+    private fun getPointsBetween(maxValue: Float): List<Float> {
+        val points = ArrayList<Float>()
+
+        when (maxValue) {
+            in 0.0f..2.5f -> {
+                points.add(2.5f)
+                points.add(1.25f)
+                points.add(0.0f)
+                points.add(-1.25f)
+                points.add(-2.5f)
+            }
+
+            in 2.6f..5.0f -> {
+                points.add(5f)
+                points.add(2.5f)
+                points.add(0.0f)
+                points.add(-2.5f)
+                points.add(-5f)
+            }
+
+            else -> {
+                points.add(10f)
+                points.add(5f)
+                points.add(0.0f)
+                points.add(-5f)
+                points.add(-10f)
+            }
+        }
+
+        return points
     }
 }
 

@@ -41,7 +41,7 @@
             app:layout_constraintTop_toBottomOf="@id/tvHeader"
             tools:text="Started on March 21" />
 
-        <com.oreo.ui.custom.PeriodCycleBar
+        <com.oreo.ui.custom.female.PeriodCycleBar
             android:id="@+id/pbHistory"
             android:layout_width="match_parent"
             android:layout_height="28dp"

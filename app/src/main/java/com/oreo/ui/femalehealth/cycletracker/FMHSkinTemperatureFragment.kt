@@ -13,6 +13,9 @@ import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.oreo.data.model.PeriodTempChartModel
+import com.oreo.data.model.femaleh.TempPeriodData
+import com.oreo.ui.custom.female.ScrollListenerPeriodTemp
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -33,47 +36,87 @@ class FMHSkinTemperatureFragment :
         }
         initDefault()
 
-        viewModel.getTempData(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
 
+        binding.lytSkinTemp.vGraph.setOnChartScrollChangedListener(graphListener)
+    }
+
+    private val graphListener = object : ScrollListenerPeriodTemp {
+        override fun onPositionSelected(position: Int, chartModel: PeriodTempChartModel?) {
+            updateTopUi(chartModel?.date, chartModel?.value)
+        }
+
+        override fun onScrolling(position: Int, chartModel: PeriodTempChartModel?) {
+
+        }
+
+    }
+
+    fun updateTopUi(date: String?, value: Float?) {
+
+        if (date.isNullOrEmpty()) return
+
+        binding.tvDate.text = LocalDate.parse(date)
+            .format(DateTimeFormatter.ofPattern("EEE, dd MMM"))
+        binding.tvValue.text = if (value == null) {
+            "-"
+        } else if (value == 0.0f) {
+            "0°F"
+        } else {
+            if (value > 0.0f) "+${value}" else "${value}°F"
+        }
+    }
+
+
+    private fun updateGraph(temp: List<TempPeriodData>) {
+
+        binding.lytSkinTemp.vGraph.visible()
+        val moveToPos = -1
+
+        val tempList = viewModel.getDummyTempList()
+        val topGraphData = viewModel.getPrefixAndSuffixList(tempList)
+
+
+        tempList.getOrNull(0)?.let {
+            updateTopUi(it.date, it.temperature)
+        }
+
+        binding.lytSkinTemp.vGraph.updateData(
+            topGraphData.second.first,
+            topGraphData.second.third,
+            topGraphData.second.second,
+            topGraphData.third,
+            moveToPos,
+            topGraphData.first,
+        )
     }
 
     private fun initDefault() {
         binding.lytSkinTemp.lytLegendView.apply {
 
             lytPeriod.tvText.text = getText(R.string.text_period)
-            lytPeriod.viewColor.backgroundTintList =
-                ColorStateList.valueOf(
-                    ContextCompat.getColor(
-                        binding.tvDate.context,
-                        R.color.color_period
-                    )
+            lytPeriod.viewColor.backgroundTintList = ColorStateList.valueOf(
+                ContextCompat.getColor(
+                    binding.tvDate.context, R.color.color_period
                 )
-            lytOvulation.tvText.text =
-                getText(R.string.text_ovulation)
-            lytOvulation.viewColor.backgroundTintList =
-                ColorStateList.valueOf(
-                    ContextCompat.getColor(
-                        binding.tvDate.context,
-                        R.color.color_ovulation
-                    )
+            )
+            lytOvulation.tvText.text = getText(R.string.text_ovulation)
+            lytOvulation.viewColor.backgroundTintList = ColorStateList.valueOf(
+                ContextCompat.getColor(
+                    binding.tvDate.context, R.color.color_ovulation
                 )
-            lytFollicular.tvText.text =
-                getText(R.string.text_follicular)
-            lytFollicular.viewColor.backgroundTintList =
-                ColorStateList.valueOf(
-                    ContextCompat.getColor(
-                        binding.tvDate.context,
-                        R.color.color_follicular
-                    )
+            )
+            lytFollicular.tvText.text = getText(R.string.text_follicular)
+            lytFollicular.viewColor.backgroundTintList = ColorStateList.valueOf(
+                ContextCompat.getColor(
+                    binding.tvDate.context, R.color.color_follicular
                 )
+            )
             lytLuteal.tvText.text = getText(R.string.text_luteal)
-            lytLuteal.viewColor.backgroundTintList =
-                ColorStateList.valueOf(
-                    ContextCompat.getColor(
-                        binding.tvDate.context,
-                        R.color.color_luteal
-                    )
+            lytLuteal.viewColor.backgroundTintList = ColorStateList.valueOf(
+                ContextCompat.getColor(
+                    binding.tvDate.context, R.color.color_luteal
                 )
+            )
 
         }
     }
@@ -85,18 +128,19 @@ class FMHSkinTemperatureFragment :
     }
 
     private fun updateUI() {
-        binding.tvDate.text = "Wed, 23 April"
-        binding.tvValue.text = "+0.5°F"
 
 
     }
 
     override fun subscribeObservers() {
+        viewModel.cycleHistoryData.observe(this) {
+            viewModel.getTempData(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+        }
+
         viewModel.tempData.observe(this) {
 
-
             binding.tvDescription.text = it.nudge?.message
-
+            updateGraph(it.temp ?: ArrayList())
         }
 
         viewModel.getMessages().observe(this) {

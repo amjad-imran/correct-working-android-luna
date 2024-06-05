@@ -147,6 +147,10 @@ class OSummaryFragment : BaseFragment<FragmentSummaryOBinding>(FragmentSummaryOB
 
     override fun initListener() {
 
+        binding.lytHeader.root.setOnClickListener {
+            navigate(R.id.cycleSkinTemperature)
+        }
+
         binding.tabLayout.setOnChartScrollChangedListener(this)
 
         /* binding.tabLayout.tvDateLeft.setOnClickListener {
