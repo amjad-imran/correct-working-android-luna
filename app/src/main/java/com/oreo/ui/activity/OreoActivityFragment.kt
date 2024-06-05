@@ -363,7 +363,11 @@ class OreoActivityFragment :
         else if (minute > 0) {
             "$minute min"
         } else {
-            "-"
+            if (total == 0) {
+                "-"
+            } else {
+                "0 min"
+            }
         }
         var progress = (value.toFloat() / total).times(100).toInt()
 

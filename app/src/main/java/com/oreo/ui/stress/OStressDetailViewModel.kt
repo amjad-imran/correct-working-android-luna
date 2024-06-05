@@ -265,8 +265,11 @@ constructor(
     }
 
     fun getBarPercent(calm: Int, maxValue: Int): Int {
-        return ((calm.toFloat() / maxValue) * 100).roundToInt()
-        //return if (percent < 10) 10 else percent
+        return try {
+            ((calm.toFloat() / maxValue) * 100).roundToInt()
+        } catch (exc: Exception) {
+            return 0
+        }
     }
 
     fun getDifference(today: Int, typicalDay: Int): Int {
