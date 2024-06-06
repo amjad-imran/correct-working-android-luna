@@ -10,6 +10,8 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
+import com.oreo.data.dataConverter.FemaleHealthDataConvertor
+import com.oreo.data.dataConverter.FemaleHealthGeneratorResult
 import com.oreo.data.model.PeriodCycleHistory
 import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.ui.femalehealth.cycletracker.DayState
@@ -24,11 +26,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CycleLogViewModel @Inject constructor(
-    val femaleHealthRepository: FemaleHealthRepository
+    val femaleHealthRepository: FemaleHealthRepository,
+    val femaleHealthDataConvertor: FemaleHealthDataConvertor
 ) : BaseViewModel() {
 
     var selectedDate: LocalDate = LocalDate.now()
     val todayDate = LocalDate.now()
+    var shouldGenerateFutureData = true
 
     private val _openDayLogBottomSheet = MutableLiveData<Event<Boolean>?>()
     val openDayLogBottomSheet: LiveData<Event<Boolean>?> get() = _openDayLogBottomSheet
@@ -39,7 +43,7 @@ class CycleLogViewModel @Inject constructor(
     private val _openLogBottomSheet = MutableLiveData<Event<Boolean>?>()
     val openLogBottomSheet: LiveData<Event<Boolean>?> get() = _openLogBottomSheet
 
-    val healthDataDateList = HashMap<LocalDate, DayState>()
+    var healthDataDateList = HashMap<LocalDate, DayState>()
 
     val notifyDateChanged = MutableLiveData<Event<List<LocalDate>>>()
 
@@ -47,7 +51,7 @@ class CycleLogViewModel @Inject constructor(
     val logPeriodData: LiveData<Event<Boolean>>
         get() = _logPeriodData
 
-    var lastDateInteraction: LocalDate? = null
+    var lastDateInteraction: List<LocalDate>? = null
 
 
     fun setOpenDayLogBottomSheet(status: Boolean) {
@@ -97,115 +101,28 @@ class CycleLogViewModel @Inject constructor(
         }
     }
 
-    private fun generateHealthData(cycleData: PeriodCycleHistory) {
-        viewModelScope.launch(Dispatchers.IO) {
-            setLoading(true)
-            val mainPeriodLength = 5
-            val mainCycleLength = 28
+    private fun generateHealthData(
+        cycleData: PeriodCycleHistory
+    ) {
 
-            cycleData.cycleHistory?.forEach { data ->
+        viewModelScope.launch {
 
-                val periodLength = data.periodLength ?: 0
-                val cycleLength = data.cycleLength ?: 0
+            femaleHealthDataConvertor.convertHealthData(cycleData, shouldGenerateFutureData)
+                .collect { resource ->
 
-                val periodStart = LocalDate.parse(data.periodDate)
-                val periodEnd = if (periodLength == 0) {
-                    periodStart
-                } else {
-                    periodStart.plusDays((periodLength - 1).toLong())
-                }
+                    when (resource) {
+                        is FemaleHealthGeneratorResult.Loading -> {
+                            setLoading(resource.loading)
+                        }
 
-                var loopDate = periodStart
-                while (loopDate <= periodEnd) {
-
-                    val state = if (periodEnd == periodStart) {
-                        PeriodPos.SINGLE
-                    } else {
-                        if (loopDate == periodStart) {
-                            PeriodPos.START
-                        } else if (loopDate == periodEnd) {
-                            PeriodPos.END
-                        } else {
-                            PeriodPos.CENTER
+                        is FemaleHealthGeneratorResult.Success -> {
+                            healthDataDateList.clear()
+                            healthDataDateList = resource.value
+                            _cycleHistoryData.postValue(cycleData)
                         }
                     }
 
-                    healthDataDateList[loopDate] = DayState.Period(state)
-
-                    loopDate = loopDate.plusDays(1)
                 }
-
-
-                try {
-                    val fWindow = data.fertileWindow?.split("/")
-
-                    val fertileDateStart = LocalDate.parse(fWindow?.get(0))
-                    val fertileDateEnd = LocalDate.parse(fWindow?.get(1))
-
-                    var loopDateFertile = fertileDateStart
-                    while (loopDateFertile <= fertileDateEnd) {
-                        healthDataDateList[loopDateFertile] = DayState.Fertile
-                        loopDateFertile = loopDateFertile.plusDays(1)
-                    }
-
-                    val ovDate = LocalDate.parse(data.ovulationStartDate)
-                    healthDataDateList[ovDate] = DayState.OvulationDay
-
-
-                } catch (exp: Exception) {
-                }
-            }
-
-            val currentPeriodStart = LocalDate.parse(cycleData.userDefault?.firstPeriodDate)
-
-            val preProcessDataTill = currentPeriodStart.plusMonths(12)
-
-            val nextPeriodDate =
-                currentPeriodStart.plusDays(mainPeriodLength.toLong())
-
-            var current = nextPeriodDate
-            while (current <= preProcessDataTill) {
-
-                val currentDay = getCurrentCycleDay(
-                    LocalDate.parse(cycleData.userDefault?.firstPeriodDate),
-                    mainCycleLength,
-                    current
-                )
-
-                if (currentDay == 1) {
-                    healthDataDateList[current] = DayState.Period(PeriodPos.START)
-                    current = current.plusDays(1)
-                    continue
-                } else if (currentDay == mainPeriodLength) {
-                    healthDataDateList[current] = DayState.Period(PeriodPos.END)
-                    current = current.plusDays(1)
-                    continue
-                }
-
-                if (currentDay <= mainPeriodLength) {
-                    healthDataDateList[current] = DayState.Period(PeriodPos.CENTER)
-                    current = current.plusDays(1)
-                    continue
-                }
-
-                val ovDay = (mainCycleLength - 13)
-
-                if (currentDay == ovDay) {
-                    healthDataDateList[current] = DayState.OvulationDay
-                    current = current.plusDays(1)
-                    continue
-                }
-
-                if (currentDay in (ovDay - 5)..(ovDay + 1)) {
-                    healthDataDateList[current] = DayState.Fertile
-                    current = current.plusDays(1)
-                    continue
-                }
-                current = current.plusDays(1)
-
-            }
-            _cycleHistoryData.postValue(cycleData)
-            setLoading(false)
         }
     }
 
@@ -250,6 +167,12 @@ class CycleLogViewModel @Inject constructor(
         return cycleHistoryData.value?.userDefault?.periodLength?.toLong() ?: 5L
     }
 
+
+    /**
+     * Stores local date and a boolean->true if added, false if in removed list
+     */
+    private var daysInteractedWith = HashMap<LocalDate, Boolean>()
+
     fun onCalendarDateClicked(selectedDate: LocalDate) {
         val (state, selected) = getCurrentState(selectedDate)
         val prevDay = selectedDate.minusDays(1)
@@ -272,6 +195,7 @@ class CycleLogViewModel @Inject constructor(
                 while (loopDate < periodEndDate) {
                     healthDataDateList[loopDate] = DayState.Period(PeriodPos.SINGLE)
                     daysToNotify.add(loopDate)
+                    daysInteractedWith[loopDate] = true
                     loopDate = loopDate.plusDays(1)
                 }
 
@@ -280,20 +204,49 @@ class CycleLogViewModel @Inject constructor(
                 while (loopDate != selectedDate) {
                     healthDataDateList[loopDate!!] = DayState.Period(PeriodPos.SINGLE)
                     daysToNotify.add(loopDate)
+                    daysInteractedWith[loopDate] = true
                     loopDate = loopDate.plusDays(1)
                 }
                 healthDataDateList[selectedDate] = DayState.Period(PeriodPos.SINGLE)
+                daysInteractedWith[selectedDate] = true
                 daysToNotify.add(selectedDate)
             }
-
 
         } else {
             healthDataDateList[selectedDate] = DayState.Default
             daysToNotify.add(selectedDate)
+            daysInteractedWith[selectedDate] = false
         }
-        lastDateInteraction = selectedDate
-
+        if (lastDateInteraction == null) {
+            lastDateInteraction = getPeriodRange(selectedDate)
+        } else {
+            val range = getPeriodRange(selectedDate)
+            if (!range.isNullOrEmpty()) {
+                lastDateInteraction = getPeriodRange(selectedDate)
+            }
+        }
         notifyDateChanged.value = Event(daysToNotify)
+    }
+
+    private fun getPeriodRange(selectedDate: LocalDate): List<LocalDate>? {
+        val sortedData = healthDataDateList.keys.sorted()
+
+        val index = sortedData.indexOf(selectedDate)
+
+        if (index == -1) {
+            return null
+        }
+
+        var startIndex = index
+        while (startIndex > 0 && sortedData[startIndex].minusDays(1) == sortedData[startIndex - 1]) {
+            startIndex--
+        }
+
+        var endIndex = index
+        while (endIndex < sortedData.size - 1 && sortedData[endIndex].plusDays(1) == sortedData[endIndex + 1]) {
+            endIndex++
+        }
+        return sortedData.subList(startIndex, endIndex + 1)
     }
 
     /**
@@ -322,7 +275,7 @@ class CycleLogViewModel @Inject constructor(
     fun savePeriodLog() {
         viewModelScope.launch(Dispatchers.IO) {
 
-            val sortedData =
+            /*val sortedData =
                 healthDataDateList.filter { (it.value is DayState.Period) && (it.key <= todayDate) }
                     .toSortedMap()
 
@@ -358,7 +311,27 @@ class CycleLogViewModel @Inject constructor(
             if (datesArray.isEmpty.not()) {
                 topLevelJsonArray.add(datesArray)
             }
-            requestObject.add("dates", topLevelJsonArray)
+            requestObject.add("dates", topLevelJsonArray)*/
+
+            val requestObject = JsonObject()
+            val datesObject = JsonObject()
+            val addArray = JsonArray()
+            val removeArray = JsonArray()
+
+            val pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
+            daysInteractedWith.forEach {
+                if (it.value) {
+                    addArray.add(it.key.format(pattern))
+                } else {
+                    removeArray.add(it.key.format(pattern))
+                }
+            }
+
+            datesObject.add("add_dates", addArray)
+            datesObject.add("remove_dates", removeArray)
+            requestObject.add("dates", datesObject)
+
 
             femaleHealthRepository.logPeriod(requestObject).collect { resource ->
                 when (resource) {
@@ -397,7 +370,14 @@ class CycleLogViewModel @Inject constructor(
     }
 
     fun getLastInteractedRange(): Pair<String, String> {
-        return Pair("2024-05-20", "2024-05-25")
+        if (lastDateInteraction.isNullOrEmpty()) {
+            return Pair(todayDate.toString(), todayDate.toString())
+        } else {
+            return Pair(
+                lastDateInteraction?.first().toString(),
+                lastDateInteraction?.last().toString()
+            )
+        }
     }
 
 }

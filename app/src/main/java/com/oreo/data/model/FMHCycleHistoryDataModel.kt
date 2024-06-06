@@ -32,7 +32,9 @@ data class FMHCycleHistoryDataModel(
     @SerializedName("fertile_window")
     val fertileWindow: String? = null,//"2024-05-14 / 2024-05-20"
     @SerializedName("ovulation_start_date")
-    val ovulationStartDate: String? = null
+    val ovulationStartDate: String? = null,
+    @SerializedName("next_period_date")
+    val nextPeriodDate: String? = null
 ) : Parcelable {
 
     fun getCycleStart(): LocalDate {

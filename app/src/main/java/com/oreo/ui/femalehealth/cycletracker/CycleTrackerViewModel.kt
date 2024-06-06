@@ -12,6 +12,8 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.dataConverter.FemaleHealthDataConvertor
+import com.oreo.data.dataConverter.FemaleHealthGeneratorResult
 import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.data.model.PeriodCycleHistory
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
@@ -35,6 +37,7 @@ import kotlin.math.abs
 @HiltViewModel
 class CycleTrackerViewModel @Inject constructor(
     private val femaleHealthRepository: FemaleHealthRepository,
+    val femaleHealthDataConvertor: FemaleHealthDataConvertor,
 ) : BaseViewModel() {
 
     var todayDate = LocalDate.now()
@@ -56,7 +59,7 @@ class CycleTrackerViewModel @Inject constructor(
     val symptomList: LiveData<ArrayList<Pair<String, String>>> get() = _symptomList
 
 
-    val healthDataDateList = HashMap<LocalDate, DayState>()
+    var healthDataDateList = HashMap<LocalDate, DayState>()
 
 
     fun getDataForDate(date: String) {
@@ -189,102 +192,27 @@ class CycleTrackerViewModel @Inject constructor(
     }
 
     private fun generateHealthData(cycleData: PeriodCycleHistory) {
-        viewModelScope.launch(Dispatchers.IO) {
 
-            val mainPeriodLength = 5
-            val mainCycleLength = 28
 
-            cycleData.cycleHistory?.forEach { data ->
+        viewModelScope.launch {
 
-                val periodLength = data.periodLength ?: 0
-                val cycleLength = data.cycleLength ?: 0
+            femaleHealthDataConvertor.convertHealthData(cycleData, true)
+                .collect { resource ->
 
-                val periodStart = LocalDate.parse(data.periodDate)
-                val periodEnd = if (periodLength == 0) {
-                    periodStart
-                } else {
-                    periodStart.plusDays((periodLength - 1).toLong())
-                }
+                    when (resource) {
+                        is FemaleHealthGeneratorResult.Loading -> {
+                            setLoading(resource.loading)
+                        }
 
-                var loopDate = periodStart
-                while (loopDate <= periodEnd) {
+                        is FemaleHealthGeneratorResult.Success -> {
+                            healthDataDateList.clear()
+                            healthDataDateList = resource.value
+                            _cycleHistoryData.postValue(cycleData.cycleHistory)
 
-                    val state = if (periodEnd == periodStart) {
-                        PeriodPos.SINGLE
-                    } else {
-                        if (loopDate == periodStart) {
-                            PeriodPos.START
-                        } else if (loopDate == periodEnd) {
-                            PeriodPos.END
-                        } else {
-                            PeriodPos.CENTER
                         }
                     }
 
-                    healthDataDateList[loopDate] = DayState.Period(state)
-
-                    loopDate = loopDate.plusDays(1)
                 }
-
-
-                try {
-                    val fWindow = data.fertileWindow?.split("/")
-
-                    val fertileDateStart = LocalDate.parse(fWindow?.get(0))
-                    val fertileDateEnd = LocalDate.parse(fWindow?.get(1))
-
-                    var loopDateFertile = fertileDateStart
-                    while (loopDateFertile <= fertileDateEnd) {
-                        healthDataDateList[loopDateFertile] = DayState.Fertile
-                        loopDateFertile = loopDateFertile.plusDays(1)
-                    }
-
-                    val ovDate = LocalDate.parse(data.ovulationStartDate)
-                    healthDataDateList[ovDate] = DayState.OvulationDay
-
-
-                } catch (exp: Exception) {
-                }
-            }
-
-            val currentPeriodStart = LocalDate.parse(cycleData.userDefault?.firstPeriodDate)
-
-            val preProcessDataTill = currentPeriodStart.plusMonths(12)
-
-            val nextPeriodDate = currentPeriodStart.plusDays(mainPeriodLength.toLong())
-
-            var current = nextPeriodDate
-            while (current <= preProcessDataTill) {
-
-                val periodLength = cycleData.userDefault?.periodLength ?: 0
-                val cycleLength = cycleData.userDefault?.cycleLength ?: 0
-
-                val currentDay = getCurrentCycleDay(
-                    LocalDate.parse(cycleData.userDefault?.firstPeriodDate), cycleLength, current
-                )
-
-                if (currentDay == 1) {
-                    healthDataDateList[current] = DayState.Period(PeriodPos.START)
-                } else if (currentDay == periodLength) {
-                    healthDataDateList[current] = DayState.Period(PeriodPos.END)
-                }
-
-                if (currentDay <= periodLength) {
-                    healthDataDateList[current] = DayState.Period(PeriodPos.CENTER)
-                }
-
-
-                val ovDay = cycleLength - 13
-
-                if (currentDay in (ovDay - 5)..(ovDay + 1)) {
-                    healthDataDateList[current] = DayState.Fertile
-                }
-                if (currentDay == ovDay) {
-                    healthDataDateList[current] = DayState.OvulationDay
-                }
-                current = current.plusDays(1)
-            }
-            _cycleHistoryData.postValue(cycleData.cycleHistory)
         }
     }
 
@@ -406,13 +334,6 @@ class CycleTrackerViewModel @Inject constructor(
 
         getPeriodSection(tempData.last().date, tempData.first().date)?.forEach {
             sections.add(it)
-            LOGS.d(
-                "sdfsdfsdf -> ${tempData.last().date}, ${tempData.first().date} ${
-                    Gson().toJson(
-                        it
-                    )
-                }"
-            )
         }
 
         var minValue = 2.5f

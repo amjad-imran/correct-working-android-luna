@@ -67,7 +67,7 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
     }
 
     private fun initToolbar() {
-        binding.lytToolbar.view1.visible()
+        binding.lytToolbar.view1.gone()
         binding.lytToolbar.ivAddFriend.invisible()
         binding.lytToolbar.view1.loadImage(
             binding.lytToolbar.view1.context,

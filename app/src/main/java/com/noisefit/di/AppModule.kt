@@ -26,6 +26,7 @@ import com.noisefit_commans.interfaces.data.UserActivityDataActions
 import com.noisefit_commans.interfaces.device_data.QueryDeviceDataActions
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataActions
 import com.noisefit_commans.utils.EncryptUtils
+import com.oreo.data.dataConverter.FemaleHealthDataConvertor
 import com.oreo.data.dataConverter.OreoDayTimeDataConvertor
 import com.oreo.data.dataConverter.OreoHRDataConvertor
 import com.oreo.data.dataConverter.OreoOfflineDataMapper
@@ -433,6 +434,12 @@ object AppModule {
     @Provides
     fun provideOreoDayTimeDataConvertor(): OreoDayTimeDataConvertor {
         return OreoDayTimeDataConvertor()
+    }
+
+    @Singleton
+    @Provides
+    fun provideFemaleHealthDataConvertor(): FemaleHealthDataConvertor {
+        return FemaleHealthDataConvertor()
     }
 
     @Singleton

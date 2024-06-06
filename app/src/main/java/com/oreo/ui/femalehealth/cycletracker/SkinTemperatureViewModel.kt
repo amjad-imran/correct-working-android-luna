@@ -12,6 +12,8 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
+import com.oreo.data.dataConverter.FemaleHealthDataConvertor
+import com.oreo.data.dataConverter.FemaleHealthGeneratorResult
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.FMHCycleHistoryDataModel
 import com.oreo.data.model.PeriodChartModel
@@ -38,7 +40,8 @@ import kotlin.math.abs
 
 @HiltViewModel
 class SkinTemperatureViewModel @Inject constructor(
-    private val femaleHealthRepository: FemaleHealthRepository
+    private val femaleHealthRepository: FemaleHealthRepository,
+    val femaleHealthDataConvertor: FemaleHealthDataConvertor,
 ) : BaseViewModel() {
 
     val tempData = MutableLiveData<FemaleTempResponse>()
@@ -46,7 +49,7 @@ class SkinTemperatureViewModel @Inject constructor(
     private val _cycleHistoryData = MutableLiveData<List<FMHCycleHistoryDataModel>?>()
     val cycleHistoryData: LiveData<List<FMHCycleHistoryDataModel>?> get() = _cycleHistoryData
 
-    val healthDataDateList = HashMap<LocalDate, DayState>()
+    var healthDataDateList = HashMap<LocalDate, DayState>()
 
     init {
         getCycleHistoryData()
@@ -92,111 +95,24 @@ class SkinTemperatureViewModel @Inject constructor(
     }
 
     private fun generateHealthData(cycleData: PeriodCycleHistory) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
 
-            val mainPeriodLength = 5
-            val mainCycleLength = 28
+            femaleHealthDataConvertor.convertHealthData(cycleData, true)
+                .collect { resource ->
 
-            cycleData.cycleHistory?.forEach { data ->
+                    when (resource) {
+                        is FemaleHealthGeneratorResult.Loading -> {
+                            setLoading(resource.loading)
+                        }
 
-                val periodLength = data.periodLength ?: 0
-                val cycleLength = data.cycleLength ?: 0
-
-                val periodStart = LocalDate.parse(data.periodDate)
-                val periodEnd = if (periodLength == 0) {
-                    periodStart
-                } else {
-                    periodStart.plusDays((periodLength - 1).toLong())
-                }
-
-                var loopDate = periodStart
-                while (loopDate <= periodEnd) {
-
-                    val state = if (periodEnd == periodStart) {
-                        PeriodPos.SINGLE
-                    } else {
-                        if (loopDate == periodStart) {
-                            PeriodPos.START
-                        } else if (loopDate == periodEnd) {
-                            PeriodPos.END
-                        } else {
-                            PeriodPos.CENTER
+                        is FemaleHealthGeneratorResult.Success -> {
+                            healthDataDateList.clear()
+                            healthDataDateList = resource.value
+                            _cycleHistoryData.postValue(cycleData.cycleHistory)
                         }
                     }
-
-                    healthDataDateList[loopDate] = DayState.Period(state)
-
-                    loopDate = loopDate.plusDays(1)
                 }
-
-
-                try {
-                    val fWindow = data.fertileWindow?.split("/")
-
-                    val fertileDateStart = LocalDate.parse(fWindow?.get(0))
-                    val fertileDateEnd = LocalDate.parse(fWindow?.get(1))
-
-                    var loopDateFertile = fertileDateStart
-                    while (loopDateFertile <= fertileDateEnd) {
-                        healthDataDateList[loopDateFertile] = DayState.Fertile
-                        loopDateFertile = loopDateFertile.plusDays(1)
-                    }
-
-                    val ovDate = LocalDate.parse(data.ovulationStartDate)
-                    healthDataDateList[ovDate] = DayState.OvulationDay
-
-
-                } catch (exp: Exception) {
-                }
-            }
-
-            val currentPeriodStart = LocalDate.parse(cycleData.userDefault?.firstPeriodDate)
-
-            val preProcessDataTill = currentPeriodStart.plusMonths(12)
-
-            val nextPeriodDate = currentPeriodStart.plusDays(mainPeriodLength.toLong())
-
-            var current = nextPeriodDate
-            while (current <= preProcessDataTill) {
-
-                val periodLength = cycleData.userDefault?.periodLength ?: 0
-                val cycleLength = cycleData.userDefault?.cycleLength ?: 0
-
-                val currentDay = getCurrentCycleDay(
-                    LocalDate.parse(cycleData.userDefault?.firstPeriodDate), cycleLength, current
-                )
-
-                if (currentDay == 1) {
-                    healthDataDateList[current] = DayState.Period(PeriodPos.START)
-                } else if (currentDay == periodLength) {
-                    healthDataDateList[current] = DayState.Period(PeriodPos.END)
-                }
-
-                if (currentDay <= periodLength) {
-                    healthDataDateList[current] = DayState.Period(PeriodPos.CENTER)
-                }
-
-
-                val ovDay = cycleLength - 13
-
-                if (currentDay in (ovDay - 5)..(ovDay + 1)) {
-                    healthDataDateList[current] = DayState.Fertile
-                }
-                if (currentDay == ovDay) {
-                    healthDataDateList[current] = DayState.OvulationDay
-                }
-                current = current.plusDays(1)
-            }
-
-            _cycleHistoryData.postValue(cycleData.cycleHistory)
         }
-    }
-
-    private fun getCurrentCycleDay(
-        periodDate: LocalDate, cycleLength: Int, currentDate: LocalDate
-    ): Int {
-        val daysSinceLastPeriod = ChronoUnit.DAYS.between(periodDate, currentDate).toInt()
-        return (daysSinceLastPeriod % cycleLength) + 1
     }
 
 
@@ -429,7 +345,7 @@ class SkinTemperatureViewModel @Inject constructor(
         return false
     }
 
-    fun getDummyTempList() :ArrayList<TempPeriodData>{
+    fun getDummyTempList(): ArrayList<TempPeriodData> {
         return arrayListOf(
             TempPeriodData(
                 "2024-06-04",
@@ -468,8 +384,7 @@ class SkinTemperatureViewModel @Inject constructor(
             ), TempPeriodData(
                 "2024-05-24",
                 -2.5f
-            )
-            , TempPeriodData(
+            ), TempPeriodData(
                 "2024-05-23",
                 0f
             ), TempPeriodData(
