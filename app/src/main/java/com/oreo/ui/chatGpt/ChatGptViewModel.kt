@@ -5,20 +5,23 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
+import com.here.oksse.OkSse
+import com.here.oksse.ServerSentEvent
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
-import com.noisefit_commans.data.BinaryActionCallback
-import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
-import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChatGptOverview
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.Request
+import okhttp3.Response
 import javax.inject.Inject
 
 
@@ -68,11 +71,14 @@ class ChatGptViewModel
         _chatGptOverview.value = (messages)
     }
 
-    fun addReceivedMessage(message: String) {
+    fun addReceivedMessage(message: String, streaming: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             val messages = _chatGptOverview.value ?: ArrayList()
             messages.removeAll {
                 it is ChatGptOverview.ThinkingMessage || it is ChatGptOverview.RetryMessage
+            }
+            if (messages.lastOrNull() is ChatGptOverview.ReceivedMessage) {
+                messages.removeLast()
             }
             messages.add(ChatGptOverview.ReceivedMessage(message))
             _chatGptOverview.postValue(messages)
@@ -93,8 +99,92 @@ class ChatGptViewModel
     fun retryApi() {
         addThinkingMessage()
         lastApi?.let {
-            askQuestion(it.second)
+            askQuestionStream(it.second)
+            //askQuestion(it.second)
         }
+    }
+
+
+    fun askQuestionStream(prompt: String) {
+        fetchInProgress.value = true
+        lastApi = Pair(1, prompt)
+
+        val responseBuilder = StringBuilder()
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val userToken = localDataStore.getUserToken()
+
+            val request: Request =
+                Request.Builder()
+                    .url("${BuildConfig.BASE_URL_NEW}/ai-bridge/stream?message=$prompt").apply {
+                        userToken?.let {
+                            addHeader("access-token", "Bearer ${userToken.access_token}")
+                        }
+                    }.build()
+            val okSse = OkSse()
+            val sse = okSse.newServerSentEvent(request, object : ServerSentEvent.Listener {
+                override fun onOpen(sse: ServerSentEvent?, response: Response?) {
+                    // When the channel is opened
+                    LOGS.d("streammmmmm onOpen()")
+                }
+
+                override fun onMessage(
+                    sse: ServerSentEvent?,
+                    id: String?,
+                    event: String?,
+                    message: String?
+                ) {
+                    // When a message is received
+                    LOGS.d("streammmmmm onMessage()")
+
+                }
+
+                override fun onComment(sse: ServerSentEvent?, comment: String?) {
+                    // When a comment is received
+                    LOGS.d("streammmmmm onComment() $comment")
+                    responseBuilder.append(comment)
+                    addReceivedMessage(responseBuilder.toString(), true)
+                }
+
+                override fun onRetryTime(sse: ServerSentEvent?, milliseconds: Long): Boolean {
+                    LOGS.d("streammmmmm onRetryTime()")
+
+                    return false; // True to use the new retry time received by SSE
+                }
+
+                override fun onRetryError(
+                    sse: ServerSentEvent?,
+                    throwable: Throwable?,
+                    response: Response?
+                ): Boolean {
+                    LOGS.d("streammmmmm onRetryError()")
+                    fetchInProgress.postValue(false)
+                    addErrorState(
+                        String.format(
+                            resourceProvider.getString(R.string.text_ai_error_message),
+                            userName ?: ""
+                        )
+                    )
+                    return false; // True to retry, false otherwise
+                }
+
+                override fun onClosed(sse: ServerSentEvent?) {
+                    LOGS.d("streammmmmm onClosed()")
+                    sse?.close()
+                }
+
+                override fun onPreRetry(sse: ServerSentEvent?, originalRequest: Request): Request {
+                    LOGS.d("streammmmmm onPreRetry()")
+                    return originalRequest
+                }
+
+            })
+
+
+        }
+
+
     }
 
     fun askQuestion(prompt: String) {
@@ -203,7 +293,7 @@ class ChatGptViewModel
                         resource.data?.data?.let {
                             if (it.status.equals("completed", true) && it.reply != null) {
                                 fetchInProgress.value = false
-                                addReceivedMessage(it.reply)
+                                addReceivedMessage(it.reply, true)
                             } else {
                                 callAfterSomeTime(assistantId, threadId, runId)
                             }
@@ -218,8 +308,9 @@ class ChatGptViewModel
 
         viewModelScope.launch(Dispatchers.IO) {
             val userName = localDataStore.getUser()?.firstName
-            val initMessage ="Hello  $userName, my name is Luna. I am an AI that can help you understand your bio markers and improve your scores. What should I start giving you deeper insights on?"
-            addReceivedMessage(initMessage)
+            val initMessage =
+                "Hello  $userName, my name is Luna. I am an AI that can help you understand your bio markers and improve your scores. What should I start giving you deeper insights on?"
+            addReceivedMessage(initMessage, false)
         }
 
         return

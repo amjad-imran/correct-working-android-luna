@@ -251,6 +251,9 @@ dependencies {
 
     implementation("com.google.android.gms:play-services-fitness:21.1.0")
 
+    implementation("com.github.heremaps:oksse:0.9.0")
+
+
 
     kapt(Hilt.compiler)
     kapt(Hilt.hiltCompiler)
