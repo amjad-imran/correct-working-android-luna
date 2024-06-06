@@ -62,8 +62,12 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
             viewModel.selectedDate = LocalDate.parse(it)
             showCycleLogBottomSheet()
         }
-        viewModel.getCycleHistoryData()
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getCycleHistoryData()
     }
 
     private fun initToolbar() {

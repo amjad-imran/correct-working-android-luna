@@ -12,6 +12,7 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import com.noisefit.luna.R
+import com.noisefit_commans.utils.LOGS
 
 class PeriodCycleBar : View {
 
@@ -108,7 +109,11 @@ class PeriodCycleBar : View {
         val width = width.toFloat()
         val ovulationStart = (width / cycleLength) * ovStart
         val ovulationEnd = (width / cycleLength) * ovEnd
-        val ovulationDatePos = (width / cycleLength) * ovDay
+        val ovulationDatePos = if (ovDay != -1 && ovDay != 0) {
+            (width / cycleLength) * ovDay
+        } else {
+            null
+        }
 
         val margin = dip2px(1f).toFloat()
         rectF.apply {
@@ -133,13 +138,14 @@ class PeriodCycleBar : View {
         val bitWidth = (glowDotBitmap!!.width / 2).toFloat()
         val bitHeight = (glowDotBitmap!!.height / 2).toFloat()
 
-        canvas.drawBitmap(
-            glowDotBitmap!!,
-            ovulationDatePos - bitWidth,
-            (height / 2) - bitHeight,
-            null
-        )
-
+        if (ovulationDatePos != null) {
+            canvas.drawBitmap(
+                glowDotBitmap!!,
+                ovulationDatePos - bitWidth,
+                (height / 2) - bitHeight,
+                null
+            )
+        }
 
     }
 

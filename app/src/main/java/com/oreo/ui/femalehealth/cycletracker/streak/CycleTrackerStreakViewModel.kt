@@ -149,25 +149,15 @@ class CycleTrackerStreakViewModel @Inject constructor(
         val periodDateStart = cycleData.getCycleStart()
         val periodLength = cycleData.periodLength ?: 0
 
-        val periodDateEnd = if (periodLength == 0) {
-            periodDateStart
-        } else {
-            periodDateStart.plusDays((periodLength - 1).toLong())
-        }
-
-        if (date in periodDateStart..periodDateEnd) {
-            return Pair(DayState.Period(PeriodPos.CENTER), isDateSelected)
-        }
-
-        val ovDay = LocalDate.parse(cycleData.ovulationStartDate)
-        if (ovDay == date) {
-            return Pair(
-                DayState.OvulationDay,
-                isDateSelected
-            )
-        }
-
         try {
+            val ovDay = LocalDate.parse(cycleData.ovulationStartDate)
+            if (ovDay == date) {
+                return Pair(
+                    DayState.OvulationDay,
+                    isDateSelected
+                )
+            }
+
             val fWindow = cycleData.fertileWindow?.split("/")
 
             val fertileDateStart = LocalDate.parse(fWindow?.get(0))
@@ -183,6 +173,20 @@ class CycleTrackerStreakViewModel @Inject constructor(
         } catch (exp: Exception) {
             return Pair(DayState.Default, isDateSelected)
         }
+
+        val periodDateEnd = if (periodLength == 0) {
+            periodDateStart
+        } else {
+            periodDateStart.plusDays((periodLength - 1).toLong())
+        }
+
+        if (date in periodDateStart..periodDateEnd) {
+            return Pair(DayState.Period(PeriodPos.CENTER), isDateSelected)
+        }
+
+
+
+
         return Pair(DayState.Default, isDateSelected)
     }
 

@@ -168,10 +168,11 @@ class SkinTemperatureViewModel @Inject constructor(
         val list = ArrayList<PeriodTempChartModel>()
         var max = 0.0f
         dataList.forEach {
+
+            val phase = CyclePhase.FOLLECULAR//TODO calculate on the bases of data
+
             val chartModel = PeriodTempChartModel(
-                phase = if ((it.temperature
-                        ?: 0.0f) > 0.0f
-                ) CyclePhase.FOLLECULAR else CyclePhase.LUTEAL
+                phase = phase
             )
             chartModel.date = it.date
 
@@ -185,7 +186,7 @@ class SkinTemperatureViewModel @Inject constructor(
 
             chartModel.month = month
             chartModel.day = day
-            chartModel.value = it.temperature ?: 0.0f
+            chartModel.value = it.temperature
 
             list.add(chartModel)
             dateList.add(it.date)

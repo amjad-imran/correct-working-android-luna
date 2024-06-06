@@ -57,6 +57,10 @@ class CycleTrackerFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setRecycler()
+    }
+
+    override fun onResume() {
+        super.onResume()
         viewModel.getCycleHistoryData()
     }
 
@@ -157,7 +161,7 @@ class CycleTrackerFragment :
             currentMonth.plusYears(2).atEndOfMonth(),
             DayOfWeek.MONDAY,
         )
-        binding.lytTrackerTop.vCalendar.weekCalender.scrollToDate(LocalDate.now())
+        binding.lytTrackerTop.vCalendar.weekCalender.scrollToDate(viewModel.selectedDate.value?: LocalDate.now())
 
     }
 

@@ -72,11 +72,11 @@ class FMHSkinTemperatureFragment :
         binding.lytSkinTemp.vGraph.visible()
         val moveToPos = -1
 
-        val tempList = viewModel.getDummyTempList()
-        val topGraphData = viewModel.getPrefixAndSuffixList(tempList)
+        //val tempList = viewModel.getDummyTempList()
+        val topGraphData = viewModel.getPrefixAndSuffixList(temp)
 
 
-        tempList.getOrNull(0)?.let {
+        temp.getOrNull(0)?.let {
             updateTopUi(it.date, it.temperature)
         }
 
