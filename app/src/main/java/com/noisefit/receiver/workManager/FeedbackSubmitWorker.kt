@@ -13,6 +13,7 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.FileLogsUtils
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_zhsdk.log.ZhBleLogUtils
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineScope
@@ -79,7 +80,7 @@ class FeedbackSubmitWorker @AssistedInject constructor(
             var watchLogs: File? = null
             try {
 
-                if (FileLogsUtils.checkLogFileExist(
+                /*if (FileLogsUtils.checkLogFileExist(
                         context,
                         ringDataStore.getRingDevice(),
                         watchDataStore.getLogPathName()
@@ -90,6 +91,10 @@ class FeedbackSubmitWorker @AssistedInject constructor(
                         ringDataStore.getRingDevice(),
                         watchDataStore.getLogPathName()
                     )
+                }*/
+
+                ZhBleLogUtils.getUriByBleAllLog()?.second?.let {
+                    watchLogs = it
                 }
 
 
@@ -112,13 +117,13 @@ class FeedbackSubmitWorker @AssistedInject constructor(
 
             val tempAppLogFile =
                 async(Dispatchers.IO) { createTempAppLogFile("tempAppLogs", appLogFile) }
-            val tempRingLogFile = async { createTempAppLogFile("tempRingLogs", watchLogFile) }
+            //val tempRingLogFile = async { createTempAppLogFile("tempRingLogs", watchLogFile,"zip") }
             val tempFirmwareLogFile =
                 async { createTempAppLogFile("tempFirmwareLogs", firmwareLogs) }
 
 
             deviceRepository.periodicFeedbackFile(
-                tempAppLogFile.await(), tempRingLogFile.await(), tempFirmwareLogFile.await()
+                tempAppLogFile.await(), watchLogFile/*.await()*/, tempFirmwareLogFile.await()
             ).collect { resource ->
 
 
@@ -127,15 +132,16 @@ class FeedbackSubmitWorker @AssistedInject constructor(
                         resource.data?.let {
 
                             val appFile = tempAppLogFile.await()
-                            val ringFile = tempRingLogFile.await()
+                            //val ringFile = tempRingLogFile.await()
                             val firmwareFile = tempFirmwareLogFile.await()
                             if (appFile?.exists() == true) {
                                 appFile.delete()
                             }
 
-                            if (ringFile?.exists() == true) {
+                            /*if (ringFile?.exists() == true) {
                                 ringFile.delete()
-                            }
+                                LOGS.d("sdfkjhskdfjhdsfk file deleted $ringFile")
+                            }*/
                             if (firmwareFile?.exists() == true) {
                                 firmwareFile.delete()
                             }
@@ -160,7 +166,7 @@ class FeedbackSubmitWorker @AssistedInject constructor(
         }
     }
 
-    private suspend fun createTempAppLogFile(fileName: String, originalFile: File?): File? {
+    private suspend fun createTempAppLogFile(fileName: String, originalFile: File?,extension:String = "txt"): File? {
         if (originalFile == null) {
             return null
         }
@@ -168,7 +174,7 @@ class FeedbackSubmitWorker @AssistedInject constructor(
             return null
         }
 
-        val file = File.createTempFile(fileName, ".txt", context.cacheDir);
+        val file = File.createTempFile(fileName, ".$extension", context.cacheDir);
         try {
             var sourceChannel: FileChannel? = null
             var destChannel: FileChannel? = null
