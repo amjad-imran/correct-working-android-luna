@@ -186,6 +186,7 @@ class CycleLogViewModel @Inject constructor(
 
         val daysToNotify = mutableListOf<LocalDate>()
 
+        var isRemoved = false
         if (state !is DayState.Period) {
             val lastPeriodDate = hasPeriodInLastNDays(selectedDate, 7)
             if (lastPeriodDate == null) {
@@ -216,22 +217,39 @@ class CycleLogViewModel @Inject constructor(
             healthDataDateList[selectedDate] = DayState.Default
             daysToNotify.add(selectedDate)
             daysInteractedWith[selectedDate] = false
+            isRemoved = true
         }
+
         if (lastDateInteraction == null) {
-            lastDateInteraction = getPeriodRange(selectedDate)
+            lastDateInteraction = getPeriodRange(selectedDate, isRemoved)
         } else {
-            val range = getPeriodRange(selectedDate)
+            val range = getPeriodRange(selectedDate, isRemoved)
             if (!range.isNullOrEmpty()) {
-                lastDateInteraction = getPeriodRange(selectedDate)
+                lastDateInteraction = getPeriodRange(selectedDate, isRemoved)
             }
         }
         notifyDateChanged.value = Event(daysToNotify)
     }
 
-    private fun getPeriodRange(selectedDate: LocalDate): List<LocalDate>? {
-        val sortedData = healthDataDateList.keys.sorted()
+    private fun getPeriodRange(selectedDate: LocalDate, isRemoved: Boolean): List<LocalDate>? {
+        val sortedData = healthDataDateList.filter {
+            it.value is DayState.Period
+        }.keys.sorted()
 
-        val index = sortedData.indexOf(selectedDate)
+        var index = sortedData.indexOf(selectedDate)
+
+        //Check Right
+        if (index == -1) {
+            val nextDay = selectedDate.plusDays(1)
+            index = sortedData.indexOf(nextDay)
+        }
+
+        //Check Left
+        if (index == -1) {
+            val nextDay = selectedDate.minusDays(1)
+            index = sortedData.indexOf(nextDay)
+        }
+
 
         if (index == -1) {
             return null
