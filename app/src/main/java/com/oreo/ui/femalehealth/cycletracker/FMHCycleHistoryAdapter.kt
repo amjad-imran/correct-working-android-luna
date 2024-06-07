@@ -31,34 +31,38 @@ class FMHCycleHistoryAdapter(val listener: OnHistoryItemClickListener) :
                 )
             }"
 
-            var ovDays = abs(
-                DateFormats.getDateDiff(
-                    DateFormats.dateFormat3(),
-                    data.ovulationStartDate,
-                    data.periodDate
+            var ovDays = -1L
+            var ovStart = -1
+            var ovEnd = -1
+            if(data.ovulationStartDate!=null){
+                ovDays = abs(
+                    DateFormats.getDateDiff(
+                        DateFormats.dateFormat3(),
+                        data.ovulationStartDate,
+                        data.periodDate
+                    )
                 )
-            )
-            val ovDates = data.fertileWindow?.split("/")
+                val ovDates = data.fertileWindow?.split("/")
 
-            var ovStart = 0
-            var ovEnd = 0
-            if (ovDates?.size == 2) {
-                ovStart = abs(
-                    DateFormats.getDateDiff(
-                        DateFormats.dateFormat3(),
-                        ovDates[0],
-                        data.periodDate
-                    )
-                ).toInt()
+                if (ovDates?.size == 2) {
+                    ovStart = abs(
+                        DateFormats.getDateDiff(
+                            DateFormats.dateFormat3(),
+                            ovDates[0],
+                            data.periodDate
+                        )
+                    ).toInt()
 
-                ovEnd = abs(
-                    DateFormats.getDateDiff(
-                        DateFormats.dateFormat3(),
-                        ovDates[1],
-                        data.periodDate
-                    )
-                ).toInt()
+                    ovEnd = abs(
+                        DateFormats.getDateDiff(
+                            DateFormats.dateFormat3(),
+                            ovDates[1],
+                            data.periodDate
+                        )
+                    ).toInt()
+                }
             }
+
             val availableDaya = (data.cycleLength ?: 0) - (data.periodLength ?: 0)
             if (availableDaya < 14) {
                 ovStart = -1
