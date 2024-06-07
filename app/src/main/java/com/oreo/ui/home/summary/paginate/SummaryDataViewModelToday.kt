@@ -277,50 +277,52 @@ class SummaryDataViewModelToday @Inject constructor(
                             }
                         }
                     } else {
-                        if (femaleData.currentDay == null) {
-                            userActivities.add(
-                                OHealthOverview.CardTrackFemaleHealth(
-                                    FemaleHealthCardState.LOG
-                                )
-                            )
-                        } else {
-                            if (femaleData.isOvulation || femaleData.isPeriod) {
+                        if (femaleData.isTrackPregnancy != true) {
+                            if (femaleData.currentDay == null) {
                                 userActivities.add(
-                                    OHealthOverview.CycleTrackerCardBig(
-                                        convertToPeriodBigCardModel(
-                                            femaleData
-                                        )
+                                    OHealthOverview.CardTrackFemaleHealth(
+                                        FemaleHealthCardState.LOG
                                     )
                                 )
                             } else {
-                                userActivities.add(
-                                    OHealthOverview.CycleTrackerCardSmall(
-                                        convertToPeriodSmallCardModel(
-                                            femaleData
+                                if (femaleData.isOvulation || femaleData.isPeriod) {
+                                    userActivities.add(
+                                        OHealthOverview.CycleTrackerCardBig(
+                                            convertToPeriodBigCardModel(
+                                                femaleData
+                                            )
                                         )
                                     )
-                                )
-                            }
-
-                            val isCardShownForToday =
-                                femaleHealthRepository.getGotPeriodClickedStatus()
-                            if (femaleData.isPeriod && !femaleData.otaLog && !isCardShownForToday) {
-
-                                val periodCurrentDay = femaleData.currentDay
-                                val dayMessage = if (periodCurrentDay == null) {
-                                    null
                                 } else {
-                                    "Today's your predicted ${
-                                        ApplicationUtils.getOrdinalWord(
-                                            periodCurrentDay
+                                    userActivities.add(
+                                        OHealthOverview.CycleTrackerCardSmall(
+                                            convertToPeriodSmallCardModel(
+                                                femaleData
+                                            )
                                         )
-                                    } day."
-                                }
-                                userActivities.add(
-                                    OHealthOverview.GotYourPeriod(
-                                        dayMessage
                                     )
-                                )
+                                }
+
+                                val isCardShownForToday =
+                                    femaleHealthRepository.getGotPeriodClickedStatus()
+                                if (femaleData.isPeriod && !femaleData.otaLog && !isCardShownForToday) {
+
+                                    val periodCurrentDay = femaleData.currentDay
+                                    val dayMessage = if (periodCurrentDay == null) {
+                                        null
+                                    } else {
+                                        "Today's your predicted ${
+                                            ApplicationUtils.getOrdinalWord(
+                                                periodCurrentDay
+                                            )
+                                        } day."
+                                    }
+                                    userActivities.add(
+                                        OHealthOverview.GotYourPeriod(
+                                            dayMessage
+                                        )
+                                    )
+                                }
                             }
                         }
                     }
