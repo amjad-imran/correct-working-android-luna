@@ -123,6 +123,9 @@ class CycleTrackerSettingsFragment :
             setFragmentResultListener(DURATION_LOG_SAVE) { _, bundle ->
                 val selectedValue = bundle.getString("selectedValue")
                 val isAllow = bundle.getBoolean("agree")
+
+                if (selectedValue.equals(viewModel.lastSelectedPeriodLength)) return@setFragmentResultListener
+
                 viewModel.lastSelectedPeriodLength = selectedValue
                 selectedValue?.let { value ->
                     binding.lytPeriodDuration.tvDays.text = "$value days"
@@ -146,6 +149,8 @@ class CycleTrackerSettingsFragment :
             setFragmentResultListener(DURATION_LOG_SAVE) { _, bundle ->
                 val selectedValue = bundle.getString("selectedValue")
                 val isAllow = bundle.getBoolean("agree")
+                if (selectedValue.equals(viewModel.lastSelectedCycleLength)) return@setFragmentResultListener
+
                 viewModel.lastSelectedCycleLength = selectedValue
                 selectedValue?.let { value ->
                     binding.lytCycleLength.tvDays.text = "$value days"

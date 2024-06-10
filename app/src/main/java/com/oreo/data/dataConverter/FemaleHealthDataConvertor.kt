@@ -92,7 +92,7 @@ class FemaleHealthDataConvertor @Inject constructor() {
                     LocalDate.parse(lastCycle?.nextPeriodDate)
                 }
 
-                val preProcessDataTill = LocalDate.now().plusMonths(12)
+                val preProcessDataTill = LocalDate.now().plusMonths(13)
 
                 var current = currentPeriodStart
                 while (current <= preProcessDataTill) {

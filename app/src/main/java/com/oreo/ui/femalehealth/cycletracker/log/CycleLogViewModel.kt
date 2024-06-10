@@ -201,9 +201,9 @@ class CycleLogViewModel @Inject constructor(
                 }
 
             } else {
-                var loopDate = lastPeriodDate
-                while (loopDate != selectedDate) {
-                    healthDataDateList[loopDate!!] = DayState.Period(PeriodPos.SINGLE)
+                var loopDate = lastPeriodDate!!
+                while (loopDate < selectedDate) {
+                    healthDataDateList[loopDate] = DayState.Period(PeriodPos.SINGLE)
                     daysToNotify.add(loopDate)
                     daysInteractedWith[loopDate] = true
                     loopDate = loopDate.plusDays(1)
