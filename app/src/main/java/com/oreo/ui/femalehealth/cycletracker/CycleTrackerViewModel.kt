@@ -179,11 +179,7 @@ class CycleTrackerViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-
-
                             generateHealthData(it)
-
-
                         }
                     }
                 }
@@ -192,8 +188,6 @@ class CycleTrackerViewModel @Inject constructor(
     }
 
     private fun generateHealthData(cycleData: PeriodCycleHistory) {
-
-
         viewModelScope.launch {
 
             femaleHealthDataConvertor.convertHealthData(cycleData, true)

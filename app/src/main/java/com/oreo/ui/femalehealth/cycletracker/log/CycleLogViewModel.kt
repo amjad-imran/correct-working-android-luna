@@ -293,44 +293,6 @@ class CycleLogViewModel @Inject constructor(
     fun savePeriodLog() {
         viewModelScope.launch(Dispatchers.IO) {
 
-            /*val sortedData =
-                healthDataDateList.filter { (it.value is DayState.Period) && (it.key <= todayDate) }
-                    .toSortedMap()
-
-            val requestObject = JsonObject()
-            val topLevelJsonArray = JsonArray()
-            var datesArray = JsonArray()
-            val pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-
-
-            var lastValue: Map.Entry<LocalDate, DayState>? = null
-
-            sortedData.forEach {
-                val currentKey = it.key
-
-                if (lastValue == null || ChronoUnit.DAYS.between(
-                        lastValue!!.key,
-                        currentKey
-                    ) != 1L
-                ) {
-                    lastValue = null
-                    if (datesArray.isEmpty.not()) {
-                        topLevelJsonArray.add(datesArray)
-                    }
-                    datesArray = JsonArray()
-
-                }
-
-                datesArray.add(currentKey.format(pattern))
-                lastValue = it
-
-            }
-
-            if (datesArray.isEmpty.not()) {
-                topLevelJsonArray.add(datesArray)
-            }
-            requestObject.add("dates", topLevelJsonArray)*/
-
             val requestObject = JsonObject()
             val datesObject = JsonObject()
             val addArray = JsonArray()
