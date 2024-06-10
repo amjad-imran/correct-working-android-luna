@@ -684,7 +684,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     DateFormats.dateFormat7()
                 ),
                 days = 11,
-                predictionString = "Predicted period",
+                predictionString = "Period Date",
                 background = R.drawable.back_card_period_big
             )
 
@@ -702,7 +702,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     DateFormats.dateFormat7()
                 ),
                 days = 11,
-                predictionString = "Predicted ovulation",
+                predictionString = "Ovulation date",
                 background = R.drawable.back_card_ovulation_big
             )
         }
@@ -744,30 +744,34 @@ class SummaryDataViewModelToday @Inject constructor(
         val daysUntilNextPeriod = calculateDaysLeft(data.nextPeriodDate!!)
 
         if (daysUntilOvulation != null && (daysUntilOvulation < daysUntilNextPeriod && daysUntilOvulation > 0)) {
+            val predictedOvulation = LocalDate.parse(data.nextPeriodDate).minusDays(13)
             return PeriodCard1(
                 title = "Ovulation in",
                 days = daysUntilOvulation.toInt(),
                 nudge = data.nudges?.firstOrNull()?.message ?: "",
                 currentCycleDay = data.currentDay ?: 0,
                 totalCycleDay = data.cycleLength ?: 0,
-                bottomText = "Predicted period",
+                bottomText = "Ovulation date",
                 predictionDate = DateFormats.formatDateTime(
-                    data.nextPeriodDate,
+                    data.ovulationDate,
                     DateFormats.dateFormat3(),
                     DateFormats.dateFormat7()
-                ),
+                ),/*predictedOvulation.format(DateTimeFormatter.ofPattern("dd MMM")),*/
                 background = R.drawable.back_card_ovulation_small
             )
         } else {
-            val predictedOvulation = LocalDate.parse(data.nextPeriodDate).minusDays(13)
             return PeriodCard1(
                 title = "Period in",
                 days = daysUntilNextPeriod.toInt(),
                 nudge = data.nudges?.firstOrNull()?.message ?: "",
                 currentCycleDay = data.currentDay ?: 0,
                 totalCycleDay = data.cycleLength ?: 0,
-                bottomText = "Predicted Ovulation",
-                predictionDate = predictedOvulation.format(DateTimeFormatter.ofPattern("dd MMM")),
+                bottomText = "Period date",
+                predictionDate = DateFormats.formatDateTime(
+                    data.nextPeriodDate,
+                    DateFormats.dateFormat3(),
+                    DateFormats.dateFormat7()
+                ),
                 background = R.drawable.back_card_period_small
             )
         }
