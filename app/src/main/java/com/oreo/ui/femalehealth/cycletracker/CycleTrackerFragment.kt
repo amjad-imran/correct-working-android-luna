@@ -246,15 +246,15 @@ class CycleTrackerFragment :
         }
     }
 
-    private fun initInsightUI(data: FemaleHealthUserInfoModel) {
+    private fun initInsightUI(cycleLength: Int, periodLength: Int) {
         binding.dividerInsight.root.visible()
         binding.lytInsight.root.visible()
 
         binding.lytInsight.lytCycleLength.apply {
             tvHeader.text = getString(R.string.text_cycle_length)
-            tvValue.text = "${data.cycleLength}"
+            tvValue.text = "${cycleLength}"
             tvUnit.text = "days"
-            with(viewModel.isCycleLengthNormal(data.cycleLength ?: 0)) {
+            with(viewModel.isCycleLengthNormal(cycleLength)) {
                 tvStatus.text = if (this) "Normal" else "Abnormal"
                 ivState.setImageResource(if (this) R.drawable.ic_fmh_normal else R.drawable.ic_fmh_abnormal)
             }
@@ -263,9 +263,9 @@ class CycleTrackerFragment :
 
         binding.lytInsight.lytPeriodLength.apply {
             tvHeader.text = getString(R.string.text_period_duration)
-            tvValue.text = "${data.periodLength}"
+            tvValue.text = "${periodLength}"
             tvUnit.text = "days"
-            with(viewModel.isPeriodLengthNormal(data.periodLength ?: 0)) {
+            with(viewModel.isPeriodLengthNormal(periodLength)) {
                 tvStatus.text = if (this) "Normal" else "Abnormal"
                 ivState.setImageResource(if (this) R.drawable.ic_fmh_normal else R.drawable.ic_fmh_abnormal)
             }
@@ -298,14 +298,21 @@ class CycleTrackerFragment :
         }
 
         viewModel.cycleHistoryData.observe(this) {
-            if (it == null) {
+            if (it.isNullOrEmpty()) {
                 binding.lytCycleHistory.root.gone()
+                binding.dividerInsight.root.gone()
+                binding.lytInsight.root.gone()
             } else {
                 if (viewModel.femaleHealthData.value?.currentDay == null) {
                     binding.lytCycleHistory.root.gone()
+                    binding.dividerInsight.root.gone()
+                    binding.lytInsight.root.gone()
                 } else {
                     binding.lytCycleHistory.root.visible()
                     cycleHistoryAdapter.setData(it.take(3))
+                    val first = it.first()
+
+                    initInsightUI(first.cycleLength ?: 0, first.periodLength ?: 0)
                 }
             }
             initCalender()
@@ -324,8 +331,8 @@ class CycleTrackerFragment :
             if (it?.currentDay == null) {
                 binding.lytTrackerTop.groupPeriodData.invisible()
                 binding.lytTrackerTop.layoutGetStarted.visible()
-                binding.dividerInsight.root.gone()
-                binding.lytInsight.root.gone()
+                /* binding.dividerInsight.root.gone()
+                 binding.lytInsight.root.gone()*/
                 binding.dividerCues.root.gone()
                 binding.lytCues.root.gone()
 
@@ -334,7 +341,6 @@ class CycleTrackerFragment :
             } else {
                 binding.lytTrackerTop.groupPeriodData.visible()
                 binding.lytTrackerTop.layoutGetStarted.gone()
-                initInsightUI(it)
                 setNudgesViewPager(it.nudges)
                 setTopData(it)
 

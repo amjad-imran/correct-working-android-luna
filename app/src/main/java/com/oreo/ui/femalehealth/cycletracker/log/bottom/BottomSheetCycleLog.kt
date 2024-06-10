@@ -50,7 +50,7 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.firstPeriodDate = LocalDate.parse(args.firstPeriodDate)
+        viewModel.calendarStartDate = LocalDate.parse(args.firstPeriodDate)
         viewModel.selectedDate.value = LocalDate.parse(args.selectedDate)
 
 
@@ -109,7 +109,7 @@ class BottomSheetCycleLog : BaseBottomSheetWithTransparent<BottomSheetCycleLogBi
         binding.ivBack.setOnClickListener {
 
             val previousDate = viewModel.selectedDate.value!!.minusDays(1)
-            if (previousDate < viewModel.firstPeriodDate) {
+            if (previousDate < viewModel.calendarStartDate) {
                 return@setOnClickListener
             }
             viewModel.selectedDate.value = previousDate

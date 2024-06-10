@@ -92,9 +92,10 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
     private fun initCalender(cycleHistoryData: PeriodCycleHistory) {
         val currentMonth = YearMonth.now()
         val firstPeriodDate = viewModel.getFirstPeriodDate()
+        val calendarStart = viewModel.getCalendarStart()
 
         binding.calendar.setup(
-            firstPeriodDate.minusMonths(2).yearMonth, currentMonth.plusMonths(12), DayOfWeek.MONDAY
+            calendarStart.yearMonth, currentMonth.plusMonths(12), DayOfWeek.MONDAY
         )
         class DayViewContainer(view: View) : ViewContainer(view) {
             lateinit var day: CalendarDay
@@ -353,14 +354,13 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
             if (periodStartDate == null) {
                 putString("selectedDate", viewModel.selectedDate.toString())
                 putString("periodEndDate", null)
-
             } else {
                 putString("selectedDate", periodStartDate)
                 putString("periodEndDate", periodEndDate)
             }
             putString(
                 "firstPeriodDate",
-                viewModel.getFirstPeriodDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                viewModel.getCalendarStart().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
             )
         })
     }

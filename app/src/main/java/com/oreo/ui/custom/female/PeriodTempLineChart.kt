@@ -382,8 +382,20 @@ class PeriodTempLineChart : View {
                 5f
             }
 
-            else -> {
+            in 5.1f..10.0f -> {
                 10f
+            }
+
+            in 10.1f..20.0f -> {
+                20f
+            }
+
+            in 20.1f..50.0f -> {
+                50f
+            }
+
+            else -> {
+                80f
             }
         }
     }
@@ -501,7 +513,13 @@ class PeriodTempLineChart : View {
                 mHeight - bottomWith - (getCalculatedMax(it) - 0) * (mHeight - topWith - bottomWith) / (getCalculatedMax(
                     max
                 ) - 0)
-            drawHorizontalTextWithLine(canvas, "$it", axisY)
+            drawHorizontalTextWithLine(
+                canvas, if (it > 0) {
+                    "+$it"
+                } else {
+                    "$it"
+                }, axisY
+            )
         }
     }
 
@@ -722,9 +740,12 @@ class PeriodTempLineChart : View {
             val width = (glowDotBitmapAbnormal!!.width / 2).toFloat()
             val height = (glowDotBitmapAbnormal!!.height / 2).toFloat()
             canvas.drawBitmap(glowDotBitmapNormal!!, x - width, y - height, scaleNodePaint)
+
         }
         if (moveOffSet == 0f && showXAxis) {
             val dayText = list[position].day
+
+            canvas.drawLine(x, topWith, x, mHeight - bottomWith, chartLinePaint)
 
 
             xTextPaint2.color = xTextColor
@@ -849,27 +870,51 @@ class PeriodTempLineChart : View {
 
         when (maxValue) {
             in 0.0f..2.5f -> {
-                points.add(2.5f)
-                points.add(1.25f)
+                points.add(+2.5f)
+                points.add(+1.25f)
                 points.add(0.0f)
                 points.add(-1.25f)
                 points.add(-2.5f)
             }
 
             in 2.6f..5.0f -> {
-                points.add(5f)
-                points.add(2.5f)
+                points.add(+5f)
+                points.add(+2.5f)
                 points.add(0.0f)
                 points.add(-2.5f)
                 points.add(-5f)
             }
 
-            else -> {
-                points.add(10f)
-                points.add(5f)
+            in 5.1f..10.0f -> {
+                points.add(+10f)
+                points.add(+5f)
                 points.add(0.0f)
                 points.add(-5f)
                 points.add(-10f)
+            }
+
+            in 10.1f..20.0f -> {
+                points.add(+20f)
+                points.add(+10f)
+                points.add(0.0f)
+                points.add(-10f)
+                points.add(-20f)
+            }
+
+            in 20.1f..50.0f -> {
+                points.add(+50f)
+                points.add(+25f)
+                points.add(0.0f)
+                points.add(-25f)
+                points.add(-50f)
+            }
+
+            else -> {
+                points.add(+80f)
+                points.add(+40f)
+                points.add(0.0f)
+                points.add(-40f)
+                points.add(-80f)
             }
         }
 

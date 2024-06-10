@@ -53,10 +53,12 @@ class LogPeriodActivity : BaseActivity<ActivityLogPeriodBinding>() {
 
     private fun initCalendar() {
         val currentMonth = YearMonth.now()
-        val firstPeriodDate = viewModel.getFirstPeriodDate()
+        //val firstPeriodDate = viewModel.getFirstPeriodDate()
+
+        val calendarStart = viewModel.getCalendarStart()
 
         binding.calendar.setup(
-            firstPeriodDate.minusMonths(2).yearMonth, currentMonth.plusMonths(12), DayOfWeek.MONDAY
+            calendarStart.yearMonth, currentMonth.plusMonths(12), DayOfWeek.MONDAY
         )
         class DayViewContainer(view: View) : ViewContainer(view) {
             lateinit var day: CalendarDay
@@ -65,7 +67,7 @@ class LogPeriodActivity : BaseActivity<ActivityLogPeriodBinding>() {
             init {
                 binding.root.setOnClickListener {
                     if (day.position == DayPosition.MonthDate) {
-                        if (day.date > viewModel.todayDate || day.date < firstPeriodDate) {
+                        if (day.date > viewModel.todayDate || day.date < calendarStart) {
                             return@setOnClickListener
                         }
 

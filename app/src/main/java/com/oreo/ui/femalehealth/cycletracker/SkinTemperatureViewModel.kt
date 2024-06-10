@@ -243,13 +243,13 @@ class SkinTemperatureViewModel @Inject constructor(
         val sections = ArrayList<Section>()
         getPeriodSection(dataList.last().date, dataList.first().date)?.forEach {
             sections.add(it)
-            LOGS.d(
+           /* LOGS.d(
                 "sdfsdfsdf -> ${dataList.last().date}, ${dataList.first().date} ${
                     Gson().toJson(
                         it
                     )
                 }"
-            )
+            )*/
         }
 
         return Triple(max, Triple(list, suffix, prefix), sections)

@@ -4,14 +4,12 @@ import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.dataConverter.FemaleHealthDataConvertor
 import com.oreo.data.dataConverter.FemaleHealthGeneratorResult
 import com.oreo.data.model.FMHCycleHistoryDataModel
@@ -20,12 +18,10 @@ import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.TempPeriodData
 import com.oreo.data.model.femaleh.TempPrediction
 import com.oreo.data.repository.abstraction.FemaleHealthRepository
-import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import com.oreo.ui.custom.ItemTemp
 import com.oreo.ui.custom.Section
 import com.oreo.ui.custom.TempPeriodCombineModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -105,22 +101,7 @@ class CycleTrackerViewModel @Inject constructor(
 
                             _symptomList.postValue(symList)
 
-                            it?.temp?.let { list ->
-                                val tempVariance = calculateTempVariance(list)
-
-                                _cyclePredictionData.postValue(
-                                    TempPrediction(
-                                        tempVariation = tempVariance,
-                                        message = it.tempNudge,
-                                        tempData = list,
-                                        pendingNights = it.pendingNights
-                                    )
-                                )
-                            } ?: run {
-                                _cyclePredictionData.postValue(
-                                    null
-                                )
-                            }
+                            handleTempGraph(it)
 
 
                         }
@@ -128,6 +109,32 @@ class CycleTrackerViewModel @Inject constructor(
                 }
             }
 
+        }
+    }
+
+    private fun handleTempGraph(data: FemaleHealthUserInfoModel?) {
+        if (selectedDate.value != null && selectedDate.value!! > todayDate) {
+            _cyclePredictionData.postValue(
+                null
+            )
+            return
+        }
+
+
+        data?.temp?.let { list ->
+            val tempVariance = calculateTempVariance(list)
+            _cyclePredictionData.postValue(
+                TempPrediction(
+                    tempVariation = tempVariance,
+                    message = data.tempNudge,
+                    tempData = list,
+                    pendingNights = data.pendingNights
+                )
+            )
+        } ?: run {
+            _cyclePredictionData.postValue(
+                null
+            )
         }
     }
 

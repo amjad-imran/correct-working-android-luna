@@ -97,8 +97,8 @@ class FemaleHealthRepositoryImpl(
 
                 val lastCallTime = localData.getSafeLastSyncValue()
 
-                val shouldCallApi =
-                    lastCallTime.checkDayDifferenceMoreOne()
+                val shouldCallApi =true
+                    //lastCallTime.checkDayDifferenceMoreOne()
                 LOGS.d("FORCE_REFRESH should call api $shouldCallApi")
 
 

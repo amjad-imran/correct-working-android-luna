@@ -13,6 +13,8 @@ data class PeriodCycleHistory(
 )
 
 data class CycleDetailsDefault(
+    @SerializedName("calendar_date")
+    val calendarStart: String? = null,
     @SerializedName("first_period_date")
     val firstPeriodDate: String? = null,
     @SerializedName("cycle_length")

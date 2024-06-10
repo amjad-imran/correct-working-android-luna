@@ -39,7 +39,7 @@ constructor(
     private val _currentPeriodRange = MutableLiveData<String?>()
     val currentPeriodRange: LiveData<String?> get() = _currentPeriodRange
 
-    var firstPeriodDate: LocalDate = LocalDate.now().minusMonths(2)
+    var calendarStartDate: LocalDate = LocalDate.now().minusMonths(2)
     var selectedDate: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now())
     var todayDate = LocalDate.now()
 

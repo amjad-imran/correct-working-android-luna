@@ -360,4 +360,11 @@ class CycleLogViewModel @Inject constructor(
         }
     }
 
+    fun getCalendarStart(): LocalDate {
+        val periodDate = cycleHistoryData.value?.userDefault?.calendarStart ?: run {
+            cycleHistoryData.value?.userDefault?.firstPeriodDate ?: "2024-03-01"
+        }
+        return LocalDate.parse(periodDate)
+    }
+
 }

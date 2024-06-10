@@ -333,10 +333,13 @@ class TempPeriodCombinedChart : View {
                     max
                 ) - 0)
 
-            LOGS.d("sdfkjhsdjfhskdf $bottomWith $topWith $it -> ${getCalculatedMax(it)}  $max-$xMin")
-
-
-            drawHorizontalTextWithLine(canvas, "$it", axisY)
+            drawHorizontalTextWithLine(
+                canvas, if (it > 0) {
+                    "+$it"
+                } else {
+                    "$it"
+                }, axisY
+            )
         }
         /*
                 val maxPos =
@@ -390,10 +393,23 @@ class TempPeriodCombinedChart : View {
                 5f
             }
 
-            else -> {
+            in 5.1f..10.0f -> {
                 10f
             }
+
+            in 10.1f..20.0f -> {
+                20f
+            }
+
+            in 20.1f..50.0f -> {
+                50f
+            }
+
+            else -> {
+                80f
+            }
         }
+
     }
 
     private fun getPointsBetween(maxValue: Float): List<Float> {
@@ -401,29 +417,54 @@ class TempPeriodCombinedChart : View {
 
         when (maxValue) {
             in 0.0f..2.5f -> {
-                points.add(2.5f)
-                points.add(1.25f)
+                points.add(+2.5f)
+                points.add(+1.25f)
                 points.add(0.0f)
                 points.add(-1.25f)
                 points.add(-2.5f)
             }
 
             in 2.6f..5.0f -> {
-                points.add(5f)
-                points.add(2.5f)
+                points.add(+5f)
+                points.add(+2.5f)
                 points.add(0.0f)
                 points.add(-2.5f)
                 points.add(-5f)
             }
 
-            else -> {
-                points.add(10f)
-                points.add(5f)
+            in 5.1f..10.0f -> {
+                points.add(+10f)
+                points.add(+5f)
                 points.add(0.0f)
                 points.add(-5f)
                 points.add(-10f)
             }
+
+            in 10.1f..20.0f -> {
+                points.add(+20f)
+                points.add(+10f)
+                points.add(0.0f)
+                points.add(-10f)
+                points.add(-20f)
+            }
+
+            in 20.1f..50.0f -> {
+                points.add(+50f)
+                points.add(+25f)
+                points.add(0.0f)
+                points.add(-25f)
+                points.add(-50f)
+            }
+
+            else -> {
+                points.add(+80f)
+                points.add(+40f)
+                points.add(0.0f)
+                points.add(-40f)
+                points.add(-80f)
+            }
         }
+
 
         return points
     }
