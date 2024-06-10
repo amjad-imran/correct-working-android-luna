@@ -131,7 +131,7 @@ class FMHOnboardingFragment :
         when (current) {
             0 -> {
                 if (mViewModel.goalTypeSelected == GoalType.TRACK_PREGNANCY) {
-                    mViewModel.updateFemaleHealthData(1)
+                    mViewModel.updateFemaleHealthData(4)
                     showComingSoonBottomSheet()
                     return
                 }
@@ -139,21 +139,18 @@ class FMHOnboardingFragment :
 
             3 -> {
                 if (mViewModel.selectedPStartDate == null) {
-                    context.showShortToast("Select Date to continue")
                     return
                 }
             }
 
             4 -> {
                 if (mViewModel.selectedDiagnoseListData.isEmpty()) {
-                    context.showShortToast("Select condition")
                     return
                 }
             }
 
             5 -> {
                 if (mViewModel.selectedHormoneListData.isEmpty()) {
-                    context.showShortToast("Select")
                     return
                 }
                 mViewModel.updateFemaleHealthData()

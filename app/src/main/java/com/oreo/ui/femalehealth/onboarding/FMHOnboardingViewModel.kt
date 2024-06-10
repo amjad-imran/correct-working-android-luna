@@ -159,7 +159,7 @@ class FMHOnboardingViewModel @Inject constructor(
         get() = _moveBack
 
     /**
-     * navigationState 1->Back, 2->All Set, 3->Cycle Tracker
+     * navigationState 1->Back, 2->All Set, 3->Cycle Tracker,4 -> No action
      */
     fun updateFemaleHealthData(navigationState: Int = 2) {
         val jsonObject = JsonObject()
@@ -237,6 +237,9 @@ class FMHOnboardingViewModel @Inject constructor(
 
                                 3 -> {
                                     _femaleHealthSkip.postValue(Event(true))
+                                }
+                                4->{
+                                    //do nothing
                                 }
                             }
 
