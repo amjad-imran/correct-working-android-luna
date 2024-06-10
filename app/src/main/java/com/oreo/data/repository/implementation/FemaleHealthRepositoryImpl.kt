@@ -1,13 +1,24 @@
 package com.oreo.data.repository.implementation
 
+import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.noisefit.data.local.db.CacheResult
+import com.noisefit.data.local.db.abstraction.KeyValueDataSource
+import com.noisefit.data.local.db.abstraction.KeyValueDataType
+import com.noisefit.data.local.db.fromJson
 import com.noisefit.data.remote.abstraction.NetworkService
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.safeApiCallFlow
+import com.noisefit.data.safeCacheCall
 import com.noisefit.luna.BuildConfig
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.model.KeyValue
 import com.noisefit_commans.data.response.BaseApiResponse
+import com.noisefit_commans.ui.checkDayDifferenceMoreOne
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.FemaleHealthIconsModel
+import com.oreo.data.model.LearnModel
+import com.oreo.data.model.OHSModel
 import com.oreo.data.model.PeriodCycleHistory
 import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
@@ -17,10 +28,13 @@ import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class FemaleHealthRepositoryImpl(
     private val remoteDataSource: NetworkService,
     private val localDataStore: DataStoredInterface,
+    private val keyValueDataSource: KeyValueDataSource,
+    private val gson: Gson,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : FemaleHealthRepository {
     override suspend fun saveLogSymptom(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
@@ -68,10 +82,125 @@ class FemaleHealthRepositoryImpl(
     }
 
     override suspend fun getPeriodCycleHistory(): Flow<Resource<BaseApiResponse<PeriodCycleHistory>>> {
-        return safeApiCallFlow(dispatcher) {
-            val url =
-                "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health/cycle_history?first_data=true"//TODO handle on offline
-            remoteDataSource.getPeriodCycleHistory(url)
+        return flow {
+            val type = KeyValueDataType.FEMALE_CYCLE_HISTORY
+            var resultData: PeriodCycleHistory? = null
+
+
+            val cacheResult = safeCacheCall(Dispatchers.IO) {
+                val localData =
+                    keyValueDataSource.getData("", type)
+                        ?: return@safeCacheCall null
+
+                val lastCallTime = localData.getSafeLastSyncValue()
+
+                val shouldCallApi =
+                    lastCallTime.checkDayDifferenceMoreOne()
+                LOGS.d("FORCE_REFRESH should call api $shouldCallApi")
+
+
+                if (shouldCallApi) {
+                    keyValueDataSource.removeDataByKey("", type)
+                    return@safeCacheCall null
+                } else {
+
+                    if (localData.value == null) {
+                        return@safeCacheCall null
+                    }
+
+                    return@safeCacheCall localData.value?.let {
+                        Gson().fromJson<PeriodCycleHistory>(
+                            it
+                        )
+                    }
+                }
+            }
+
+            cacheResult.collect { resource ->
+                when (resource) {
+                    is CacheResult.Success -> {
+
+                        resource.value?.let {
+                            resultData = it
+                        }
+                    }
+
+                    is CacheResult.GenericError -> {
+
+                    }
+                }
+            }
+
+            if (resultData != null) {
+                emit(
+                    Resource.Success(
+                        BaseApiResponse(
+                            data = resultData,
+                            message = "",
+                        )
+                    )
+                )
+                return@flow
+            }
+
+
+            val serverResult = safeApiCallFlow(dispatcher) {
+                val url =
+                    "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health/cycle_history?first_data=true"
+                remoteDataSource.getPeriodCycleHistory(url)
+            }
+
+            serverResult.collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        emit(Resource.GenericError(resource.message, resource.errorCode))
+                    }
+
+                    is Resource.Loading -> {
+                        emit(Resource.Loading(resource.loading))
+                    }
+
+                    is Resource.NetworkError -> {
+                        emit(Resource.NetworkError(resource.response, resource.code))
+                    }
+
+                    is Resource.Success -> {
+
+                        resource.data?.data?.let { response ->
+                            resultData = response
+                        }
+                    }
+                }
+            }
+
+            if (resultData!=null) {
+                safeCacheCall(Dispatchers.IO) {
+                    keyValueDataSource.insertData(
+                        KeyValue(
+                            key = "",
+                            value = gson.toJson(resultData),
+                            type = type.name
+                        )
+                    )
+                }.collect { resource ->
+                    when (resource) {
+                        is CacheResult.Success -> {
+                            emit(
+                                Resource.Success(
+                                    BaseApiResponse(
+                                        data = resultData,
+                                        message = "",
+                                    )
+                                )
+                            )
+                        }
+
+                        is CacheResult.GenericError -> {
+                            emit(Resource.GenericError(message = "Something went wrong", 0))
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -83,8 +212,7 @@ class FemaleHealthRepositoryImpl(
     }
 
     override suspend fun updateCycleTrackerInfo(
-        jsonObject: JsonObject,
-        id: Long
+        jsonObject: JsonObject, id: Long
     ): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
             val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-info/$id"
@@ -94,24 +222,21 @@ class FemaleHealthRepositoryImpl(
 
     override suspend fun getFemaleHealthIcons(): Flow<Resource<BaseApiResponse<FemaleHealthIconsModel>>> {
         return safeApiCallFlow(dispatcher) {
-            val url =
-                "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/icon"
+            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/icon"
             remoteDataSource.getFemaleHealthIcons(url)
         }
     }
 
     override suspend fun getFemaleHealthTempData(date: String): Flow<Resource<BaseApiResponse<FemaleTempResponse>>> {
         return safeApiCallFlow(dispatcher) {
-            val url =
-                "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/temp"
+            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/temp"
             remoteDataSource.getFemaleHealthTempData(url, date)
         }
     }
 
     override suspend fun setPeriodConfirm(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
-            val url =
-                "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health/confirm"
+            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health/confirm"
             remoteDataSource.setPeriodConfirm(url, jsonObject)
         }
     }

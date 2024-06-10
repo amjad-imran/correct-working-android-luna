@@ -225,11 +225,11 @@ fun String.isUnderScore(): Boolean {
 
 fun Long.checkDayDifferenceMoreOne(): Boolean {
     val lastSyncDate = DateFormats.convertTimestampToDate(
-        this, DateFormats.dateFormat
+        this, DateFormats.dateFormatOld()
     )
     LOGS.d("checkDayDifferenceMoreOne $lastSyncDate")
     val difference = DateFormats.getDateDiff(
-        DateFormats.dateFormat, lastSyncDate, DateFormats.getTodaysDateString(7)
+        DateFormats.dateFormatOld(), lastSyncDate, DateFormats.getTodaysDateString(7)
     ).toInt()
     LOGS.d("checkDayDifferenceMoreOne $difference")
     if (difference > 0) {

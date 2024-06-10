@@ -378,9 +378,16 @@ object AppModule {
     @Provides
     fun provideFemaleHealthRepository(
         remoteDataSource: NetworkService,
-        localDataSource: DataStoredInterface
+        localDataSource: DataStoredInterface,
+        keyValueDataSource: KeyValueDataSource,
+        gson: Gson,
     ): FemaleHealthRepository {
-        return FemaleHealthRepositoryImpl(remoteDataSource, localDataSource)
+        return FemaleHealthRepositoryImpl(
+            remoteDataSource,
+            localDataSource,
+            keyValueDataSource,
+            gson
+        )
     }
 
 

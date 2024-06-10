@@ -18,5 +18,5 @@ interface KeyValueDataSource {
 }
 
 enum class KeyValueDataType {
-    CONTRIBUTORS, H_AND_S, LEARN, RECORD_WORKOUT
+    CONTRIBUTORS, H_AND_S, LEARN, RECORD_WORKOUT, FEMALE_CYCLE_HISTORY
 }

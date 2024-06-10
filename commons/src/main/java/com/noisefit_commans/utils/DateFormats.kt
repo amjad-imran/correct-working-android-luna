@@ -30,7 +30,7 @@ object DateFormats {
     private const val TAG = "DateFormats"
 
     @SuppressLint("ConstantLocale")
-    val dateFormat = SimpleDateFormat("dd/MM/yyyy", defaultLocale)
+    fun dateFormatOld() = SimpleDateFormat("dd/MM/yyyy", defaultLocale)
 
     @SuppressLint("ConstantLocale")
     fun dateFormat2() = SimpleDateFormat("dd MMMM yyyy", defaultLocale)
@@ -99,7 +99,6 @@ object DateFormats {
     fun timeFormatSleepTime() = SimpleDateFormat("yyyy-MM-dd HH:mm", defaultLocale)
 
 
-
     @SuppressLint("ConstantLocale")
     fun time24WithoutSecond() = SimpleDateFormat("HH:mm", defaultLocale)
 
@@ -141,7 +140,7 @@ object DateFormats {
         val cal = Calendar.getInstance()
         cal.time = dateTimeFormat6().parse(date)
         cal.add(Calendar.DATE, -subtractDay)
-        return dateFormat.format(cal.time)
+        return dateFormatOld().format(cal.time)
     }
 
     fun subtractDateFormat3(date: String, subtractDay: Int): String? {
@@ -799,7 +798,6 @@ object DateFormats {
     }
 
 
-
     fun formatActivityTime6(dateInput: String?): String {
         return try {
 
@@ -980,22 +978,9 @@ object DateFormats {
         return calendar.timeInMillis
     }
 
-    fun getDateFormat(date: Date): String {
-        return dateFormat.format(date)
-    }
-
-    fun getDateFormat(): String {
-        val calendar = Calendar.getInstance()
-        return dateFormat.format(calendar.time)
-    }
-
     fun getTimeFormat(): String {
         val calendar = Calendar.getInstance()
         return SimpleDateFormat("HH:mm", defaultLocale).format(calendar.time)
-    }
-
-    fun getDateFormatFromString(date: String): Date? {
-        return dateFormat.parse(date)
     }
 
     fun getDateFormatFromString2(date: String): Date? {
@@ -1267,25 +1252,6 @@ object DateFormats {
         }
     }
 
-    fun Long.checkDayDifferenceMoreOne(): Boolean {
-        val lastSyncDate = DateFormats.convertTimestampToDate(
-            this,
-            DateFormats.dateFormat
-        )
-        LOGS.d("checkDayDifferenceMoreOne $lastSyncDate")
-        val difference =
-            DateFormats.getDateDiff(
-                DateFormats.dateFormat,
-                lastSyncDate,
-                DateFormats.getTodaysDateString(7)
-            ).toInt()
-        LOGS.d("checkDayDifferenceMoreOne $difference")
-        if (difference > 0) {
-            return true
-        }
-
-        return false
-    }
 
     /**
      * @param checkDifferenceHours in hours
