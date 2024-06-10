@@ -161,7 +161,9 @@ class CycleTrackerFragment :
             currentMonth.plusYears(2).atEndOfMonth(),
             DayOfWeek.MONDAY,
         )
-        binding.lytTrackerTop.vCalendar.weekCalender.scrollToDate(viewModel.selectedDate.value?: LocalDate.now())
+        binding.lytTrackerTop.vCalendar.weekCalender.scrollToDate(
+            viewModel.selectedDate.value ?: LocalDate.now()
+        )
 
     }
 
@@ -405,11 +407,14 @@ class CycleTrackerFragment :
             }
             val selectedDate = selectedDateLocal.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
+
             if (selectedDateLocal > LocalDate.now()) {
                 btnLog.isEnabled = false
             } else {
                 btnLog.isEnabled = true
             }
+
+            var isPastDate = selectedDateLocal < LocalDate.now()
 
 
             tvCurrentDay.text = "Day ${(data.currentDay ?: 0)}"
@@ -431,15 +436,21 @@ class CycleTrackerFragment :
 
             if (data.isPeriod || data.isOvulation) {
                 if (data.isPeriod) {
-                    tvCurrentState.text = if (data.otaLog) "Period" else "Predicted period"
-                    tvStateDay.text = "Day ${data.currentDay}"
-
+                    if (isPastDate) {
+                        showPastCycleUI(data.currentDay ?: 0)
+                    } else {
+                        tvCurrentState.text = if (data.otaLog) "Period" else "Predicted period"
+                        tvStateDay.text = "Day ${data.currentDay}"
+                    }
                     binding.lytTrackerTop.ivBack.setImageResource(R.drawable.image_back_period_high)
-
                 } else {
                     if (selectedDate.equals(data.ovulationDate)) {
-                        tvCurrentState.text = "Predicted day of"
-                        tvStateDay.text = "Ovulation"
+                        if (isPastDate) {
+                            showPastCycleUI(data.currentDay ?: 0)
+                        } else {
+                            tvCurrentState.text = "Predicted day of"
+                            tvStateDay.text = "Ovulation"
+                        }
                         binding.lytTrackerTop.ivBack.setImageResource(R.drawable.image_back_period_blue_high)
                     }
                 }
@@ -453,16 +464,24 @@ class CycleTrackerFragment :
                     viewModel.calculateDaysLeft(data.nextPeriodDate!!, selectedDate)
 
                 if (daysUntilOvulation != null && (daysUntilOvulation < daysUntilNextPeriod && daysUntilOvulation > 0)) {
-                    tvCurrentState.text = "Ovulation in"
-                    tvStateDay.text = "${daysUntilOvulation} Days"
+                    if (isPastDate) {
+                        showPastCycleUI(data.currentDay ?: 0)
+                    } else {
+                        tvCurrentState.text = "Ovulation in"
+                        tvStateDay.text = "${daysUntilOvulation} Days"
+                    }
                     if (daysUntilOvulation > 3) {
                         binding.lytTrackerTop.ivBack.setImageResource(R.drawable.image_back_period_blue_low)
                     } else {
                         binding.lytTrackerTop.ivBack.setImageResource(R.drawable.image_back_period_blue_med)
                     }
                 } else {
-                    tvCurrentState.text = "Period in"
-                    tvStateDay.text = "${daysUntilNextPeriod} Days"
+                    if (isPastDate) {
+                        showPastCycleUI(data.currentDay ?: 0)
+                    } else {
+                        tvCurrentState.text = "Period in"
+                        tvStateDay.text = "${daysUntilNextPeriod} Days"
+                    }
 
                     if (daysUntilNextPeriod > 2) {
                         if (data.isFertileWindow) {
@@ -476,6 +495,11 @@ class CycleTrackerFragment :
                 }
             }
         }
+    }
+
+    private fun showPastCycleUI(currentDay: Int) {
+        binding.lytTrackerTop.tvCurrentState.text = "Past cycle"
+        binding.lytTrackerTop.tvStateDay.text = "Day $currentDay"
     }
 
     private fun setNudgesViewPager(data: List<Nudges>?) {
