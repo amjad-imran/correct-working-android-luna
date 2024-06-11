@@ -29,6 +29,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.time.LocalDate
 
 class FemaleHealthRepositoryImpl(
     private val remoteDataSource: NetworkService,
@@ -54,9 +55,129 @@ class FemaleHealthRepositoryImpl(
     }
 
     override suspend fun getFemaleHealthUserInfo(selectDate: String): Flow<Resource<BaseApiResponse<FemaleHealthUserInfoModel?>>> {
-        return safeApiCallFlow(dispatcher) {
-            val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health"
-            remoteDataSource.getFemaleHealthInfo(url, selectDate)
+        if (LocalDate.parse(selectDate) == LocalDate.now()) {
+            return flow {
+                val type = KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY
+                var resultData: FemaleHealthUserInfoModel? = null
+
+                val cacheResult = safeCacheCall(Dispatchers.IO) {
+                    val localData =
+                        keyValueDataSource.getData("", type)
+                            ?: return@safeCacheCall null
+
+                    val lastCallTime = localData.getSafeLastSyncValue()
+
+                    val shouldCallApi = lastCallTime.checkDayDifferenceMoreOne()
+                    LOGS.d("FORCE_REFRESH should call api $shouldCallApi")
+
+
+                    if (shouldCallApi) {
+                        keyValueDataSource.removeDataByKey("", type)
+                        return@safeCacheCall null
+                    } else {
+
+                        if (localData.value == null) {
+                            return@safeCacheCall null
+                        }
+
+                        return@safeCacheCall localData.value?.let {
+                            Gson().fromJson<FemaleHealthUserInfoModel>(
+                                it
+                            )
+                        }
+                    }
+                }
+
+                cacheResult.collect { resource ->
+                    when (resource) {
+                        is CacheResult.Success -> {
+
+                            resource.value?.let {
+                                resultData = it
+                            }
+                        }
+
+                        is CacheResult.GenericError -> {
+
+                        }
+                    }
+                }
+
+                if (resultData != null) {
+                    emit(
+                        Resource.Success(
+                            BaseApiResponse(
+                                data = resultData,
+                                message = "",
+                            )
+                        )
+                    )
+                    return@flow
+                }
+
+
+                val serverResult = safeApiCallFlow(dispatcher) {
+                    val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health"
+                    remoteDataSource.getFemaleHealthInfo(url, selectDate)
+                }
+
+                serverResult.collect { resource ->
+                    when (resource) {
+                        is Resource.GenericError -> {
+                            emit(Resource.GenericError(resource.message, resource.errorCode))
+                        }
+
+                        is Resource.Loading -> {
+                            emit(Resource.Loading(resource.loading))
+                        }
+
+                        is Resource.NetworkError -> {
+                            emit(Resource.NetworkError(resource.response, resource.code))
+                        }
+
+                        is Resource.Success -> {
+
+                            resource.data?.data?.let { response ->
+                                resultData = response
+                            }
+                        }
+                    }
+                }
+
+                if (resultData != null) {
+                    safeCacheCall(Dispatchers.IO) {
+                        keyValueDataSource.insertData(
+                            KeyValue(
+                                key = "",
+                                value = gson.toJson(resultData),
+                                type = type.name
+                            )
+                        )
+                    }.collect { resource ->
+                        when (resource) {
+                            is CacheResult.Success -> {
+                                emit(
+                                    Resource.Success(
+                                        BaseApiResponse(
+                                            data = resultData,
+                                            message = "",
+                                        )
+                                    )
+                                )
+                            }
+
+                            is CacheResult.GenericError -> {
+                                emit(Resource.GenericError(message = "Something went wrong", 0))
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            return safeApiCallFlow(dispatcher) {
+                val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/user-health"
+                remoteDataSource.getFemaleHealthInfo(url, selectDate)
+            }
         }
     }
 
@@ -64,6 +185,7 @@ class FemaleHealthRepositoryImpl(
         return safeApiCallFlow(dispatcher) {
 
             keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_CYCLE_HISTORY)
+            keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY)
 
             val url = "${BuildConfig.OREO_BASE_URL}/wellbeing/v1/log/period"
             remoteDataSource.logPeriod(url, jsonObject)
@@ -97,8 +219,8 @@ class FemaleHealthRepositoryImpl(
 
                 val lastCallTime = localData.getSafeLastSyncValue()
 
-                val shouldCallApi =true
-                    //lastCallTime.checkDayDifferenceMoreOne()
+                val shouldCallApi =
+                    lastCallTime.checkDayDifferenceMoreOne()
                 LOGS.d("FORCE_REFRESH should call api $shouldCallApi")
 
 

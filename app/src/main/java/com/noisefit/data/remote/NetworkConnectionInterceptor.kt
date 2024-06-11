@@ -99,6 +99,7 @@ class NetworkConnectionInterceptor(
     private suspend fun removeOfflineUserData() {
         database.clearAllTables()
         keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_CYCLE_HISTORY)
+        keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY)
     }
 
     override fun intercept(chain: Interceptor.Chain): Response {
