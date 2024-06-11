@@ -243,6 +243,13 @@ class CycleDetailsFragment :
                 } else {
                     bind.ivBackPeriod.alpha = 1f
                 }
+
+
+                if (day.date > end) {
+                    bind.root.invisible()
+                } else {
+                    bind.root.visible()
+                }
             }
         }
 
@@ -259,12 +266,10 @@ class CycleDetailsFragment :
                 override fun bind(container: DayViewContainer, data: WeekDay) = container.bind(data)
             }
 
-
-
         binding.lytTopCalender.vCalendar.weekCalender.setup(
             start,
             end,
-            DayOfWeek.MONDAY,
+            start.dayOfWeek,
         )
         binding.lytTopCalender.vCalendar.weekCalender.scrollToDate(start)
     }

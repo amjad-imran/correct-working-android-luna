@@ -259,12 +259,16 @@ class SummaryDataViewModelToday @Inject constructor(
 
             femaleHealthData.value?.peekContent()?.let {
                 val (hasDataLoaded, femaleData) = it
+                LOGS.d("sdfjhksdjfhk","$hasDataLoaded - $femaleData")
 
                 if (hasDataLoaded) {
                     if (femaleData == null) {
                         if (gender.equals("male", true).not()) {
                             val lastShownDays =
                                 localDataStore.getFMHWalkthroughRemindLaterDays()
+
+                            LOGS.d("sdfjhksdjfhk","lastShownDays $lastShownDays    ${localDataStore.getFMHWalkthroughShownStatus()}")
+
 
                             if (localDataStore.getFMHWalkthroughShownStatus()
                                     .not() && lastShownDays > 7
@@ -1430,6 +1434,7 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     fun getPeriodData() {
+        LOGS.d("sdfjhksdjfhk","getPeriodData called")
         viewModelScope.launch(Dispatchers.IO) {
             if (date == null) return@launch
             gender = localDataStore.getUser()?.userInfo?.gender
@@ -1463,6 +1468,8 @@ class SummaryDataViewModelToday @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data.let {
+                            LOGS.d("sdfjhksdjfhk","female data $it")
+
                             femaleHealthData.postValue(Event(Pair(true, it)))
                         }
                     }

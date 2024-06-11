@@ -171,6 +171,15 @@ class FemaleHealthRepositoryImpl(
                             }
                         }
                     }
+                } else {
+                    emit(
+                        Resource.Success(
+                            BaseApiResponse(
+                                data = null,
+                                message = "",
+                            )
+                        )
+                    )
                 }
             }
         } else {
