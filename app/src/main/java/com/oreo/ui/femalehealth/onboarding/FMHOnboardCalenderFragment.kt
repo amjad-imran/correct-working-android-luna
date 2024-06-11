@@ -122,6 +122,8 @@ class FMHOnboardCalenderFragment :
                     } else {
                         hideAllBack(container.binding)
                     }
+
+
                     if (day.date.isAfter(LocalDate.now())) {
                         textView.setTextColor(
                             ContextCompat.getColor(
@@ -134,6 +136,12 @@ class FMHOnboardCalenderFragment :
                         container.binding.ivBackEnd.alpha = 0.5f
                         container.binding.ivBackMid.alpha = 0.5f
                     } else {
+                        textView.setTextColor(
+                            ContextCompat.getColor(
+                                textView.context,
+                                R.color.white
+                            )
+                        )
                         container.binding.ivBackSingle.alpha = 1f
                         container.binding.ivBackStart.alpha = 1f
                         container.binding.ivBackEnd.alpha = 1f
