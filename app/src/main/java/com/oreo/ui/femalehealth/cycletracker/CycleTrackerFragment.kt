@@ -221,7 +221,7 @@ class CycleTrackerFragment :
         binding.toolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }
-        binding.lytPrediction.ivMore.setOnClickListener {
+        binding.lytPrediction.root.setOnClickListener {
             navigate(R.id.cycleSkinTemperature)
         }
         binding.lytInsight.lytCycleLength.root.setOnClickListener {
