@@ -38,7 +38,7 @@ class CalenderDayLogBottomSheet :
         setRecycler()
         viewModel.firstPeriodDate = LocalDate.parse(args.firstPeriodDate)
         viewModel.lastPeriodDate =
-            if (args.lastPeriodDate == null) null else LocalDate.parse(args.lastPeriodDate)
+            if (args.lastPeriodDate.isEmpty()) null else LocalDate.parse(args.lastPeriodDate)
         viewModel.selectedDate.value = LocalDate.parse(args.selectedDate)
     }
 

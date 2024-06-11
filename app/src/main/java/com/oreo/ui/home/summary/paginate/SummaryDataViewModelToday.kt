@@ -128,6 +128,11 @@ class SummaryDataViewModelToday @Inject constructor(
         MutableLiveData<Pair<ODashboardSleepScoreModel?, ODashboardActivityScoreModel?>>()
     val stateHeartRateCard = MutableLiveData<OHealthOverview.HeartRateDataModel?>()
 
+    val cycleTrackerCardBigData = MutableLiveData<OHealthOverview.CycleTrackerCardBig?>()
+    val cycleTrackerCardSmallData = MutableLiveData<OHealthOverview.CycleTrackerCardSmall?>()
+    val trackFemaleHealthCardData = MutableLiveData<OHealthOverview.CardTrackFemaleHealth?>()
+    val gotYourPeriodData = MutableLiveData<OHealthOverview.GotYourPeriod?>()
+
     var user: User? = null
     var gender: String? = null
     var registerDate: Int = -1
@@ -257,9 +262,13 @@ class SummaryDataViewModelToday @Inject constructor(
             val userActivities = ArrayList<OHealthOverview>()
             val viewedCardsData = ArrayList<OHealthOverview>()
 
+            var gotYourPeriodCard: OHealthOverview.GotYourPeriod? = null
+            var trackFemaleHealthCard: OHealthOverview.CardTrackFemaleHealth? = null
+            var cycleTrackerCardBig: OHealthOverview.CycleTrackerCardBig? = null
+            var cycleTrackerCardSmall: OHealthOverview.CycleTrackerCardSmall? = null
+
             femaleHealthData.value?.peekContent()?.let {
                 val (hasDataLoaded, femaleData) = it
-                LOGS.d("sdfjhksdjfhk","$hasDataLoaded - $femaleData")
 
                 if (hasDataLoaded) {
                     if (femaleData == null) {
@@ -267,44 +276,57 @@ class SummaryDataViewModelToday @Inject constructor(
                             val lastShownDays =
                                 localDataStore.getFMHWalkthroughRemindLaterDays()
 
-                            LOGS.d("sdfjhksdjfhk","lastShownDays $lastShownDays    ${localDataStore.getFMHWalkthroughShownStatus()}")
-
-
                             if (localDataStore.getFMHWalkthroughShownStatus()
                                     .not() && lastShownDays > 7
                             ) {
-                                userActivities.add(
+                                trackFemaleHealthCard = OHealthOverview.CardTrackFemaleHealth(
+                                    FemaleHealthCardState.TRACK
+                                )
+                                /*userActivities.add(
                                     OHealthOverview.CardTrackFemaleHealth(
                                         FemaleHealthCardState.TRACK
                                     )
-                                )
+                                )*/
                             }
                         }
                     } else {
                         if (femaleData.isTrackPregnancy != true) {
                             if (femaleData.currentDay == null) {
-                                userActivities.add(
+                                trackFemaleHealthCard = OHealthOverview.CardTrackFemaleHealth(
+                                    FemaleHealthCardState.LOG
+                                )
+                                /*userActivities.add(
                                     OHealthOverview.CardTrackFemaleHealth(
                                         FemaleHealthCardState.LOG
                                     )
-                                )
+                                )*/
                             } else {
                                 if (femaleData.isOvulation || femaleData.isPeriod) {
-                                    userActivities.add(
+                                    cycleTrackerCardBig =  OHealthOverview.CycleTrackerCardBig(
+                                        convertToPeriodBigCardModel(
+                                            femaleData
+                                        )
+                                    )
+                                    /*userActivities.add(
                                         OHealthOverview.CycleTrackerCardBig(
                                             convertToPeriodBigCardModel(
                                                 femaleData
                                             )
                                         )
-                                    )
+                                    )*/
                                 } else {
-                                    userActivities.add(
+                                    cycleTrackerCardSmall = OHealthOverview.CycleTrackerCardSmall(
+                                        convertToPeriodSmallCardModel(
+                                            femaleData
+                                        )
+                                    )
+                                    /*userActivities.add(
                                         OHealthOverview.CycleTrackerCardSmall(
                                             convertToPeriodSmallCardModel(
                                                 femaleData
                                             )
                                         )
-                                    )
+                                    )*/
                                 }
 
                                 val isCardShownForToday =
@@ -321,10 +343,13 @@ class SummaryDataViewModelToday @Inject constructor(
                                             )
                                         } day."
                                     }
-                                    userActivities.add(
+                                    /*userActivities.add(
                                         OHealthOverview.GotYourPeriod(
                                             dayMessage
                                         )
+                                    )*/
+                                    gotYourPeriodCard = OHealthOverview.GotYourPeriod(
+                                        dayMessage
                                     )
                                 }
                             }
@@ -658,6 +683,11 @@ class SummaryDataViewModelToday @Inject constructor(
                     this?.measureState = TapMeasureState.NO_DEVICE
                 }
             })
+
+            cycleTrackerCardBigData.postValue(cycleTrackerCardBig)
+            cycleTrackerCardSmallData.postValue(cycleTrackerCardSmall)
+            trackFemaleHealthCardData.postValue(trackFemaleHealthCard)
+            gotYourPeriodData.postValue(gotYourPeriodCard)
 
             stateWorkouts.postValue(healthData.activity?.workout ?: ArrayList())
             loadNapsToConfirm()
@@ -1434,7 +1464,7 @@ class SummaryDataViewModelToday @Inject constructor(
     }
 
     fun getPeriodData() {
-        LOGS.d("sdfjhksdjfhk","getPeriodData called")
+        LOGS.d("sdfjhksdjfhk", "getPeriodData called")
         viewModelScope.launch(Dispatchers.IO) {
             if (date == null) return@launch
             gender = localDataStore.getUser()?.userInfo?.gender
@@ -1468,7 +1498,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data.let {
-                            LOGS.d("sdfjhksdjfhk","female data $it")
+                            LOGS.d("sdfjhksdjfhk", "female data $it")
 
                             femaleHealthData.postValue(Event(Pair(true, it)))
                         }

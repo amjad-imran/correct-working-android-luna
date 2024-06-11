@@ -36,6 +36,7 @@ import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.AlertType
+import com.oreo.data.model.FemaleHealthCardState
 import com.oreo.data.model.OActivityListModal
 import com.oreo.data.model.OHealthOverview
 import com.oreo.data.model.ServerUserHealthData
@@ -459,6 +460,48 @@ class SummaryDataFragmentToday :
 
     override fun subscribeObservers() {
 
+        viewModel.gotYourPeriodData.observe(this){data->
+            if(data==null){
+                binding.contentMain.lytFemaleHealthGotPeriod.root.gone()
+            }else{
+                binding.contentMain.lytFemaleHealthGotPeriod.apply {
+                    root.visible()
+                    this.tvPredictedDay.text = data.title ?: ""
+
+                    this.bYes.setOnClickListener {
+                        viewModel.onGotPeriodClicked(true)
+                    }
+                    this.bNo.setOnClickListener {
+                        viewModel.onGotPeriodClicked(false)
+                    }
+                }
+            }
+
+        }
+
+        viewModel.trackFemaleHealthCardData.observe(this) {
+            if (it == null) {
+                binding.contentMain.lytFemaleHealthGetStarted.root.gone()
+            } else {
+                setFemaleGetStartedUI(it)
+            }
+        }
+
+        viewModel.cycleTrackerCardBigData.observe(this) {
+            if (it == null) {
+                binding.contentMain.lytFemaleHealthCardBig.root.gone()
+            } else {
+                setBigCardUi(it)
+            }
+        }
+        viewModel.cycleTrackerCardSmallData.observe(this) {
+            if (it == null) {
+                binding.contentMain.lytFemaleHealthCardSmall.root.gone()
+            } else {
+                setSmallCardUi(it)
+            }
+        }
+
         viewModel.removePeriodQuestionWidget.observe(this) {
             it.getContent()?.let {
                 healthOverviewAdapter.removeGotPeriodCard()
@@ -817,6 +860,90 @@ class SummaryDataFragmentToday :
 
         }
 
+    }
+
+    private fun setFemaleGetStartedUI(data: OHealthOverview.CardTrackFemaleHealth) {
+        binding.contentMain.lytFemaleHealthGetStarted.apply {
+            when (data.state) {
+                FemaleHealthCardState.TRACK -> {
+                    this.btnGetStarted.text =
+                        this.btnGetStarted.context.getString(R.string.text_get_started)
+                    this.textView92.text =
+                        this.textView92.context.getString(R.string.text_track_your_cycle_desc)
+
+                }
+
+                FemaleHealthCardState.LOG -> {
+                    this.btnGetStarted.text =
+                        this.btnGetStarted.context.getString(R.string.text_log_period)
+                    this.textView92.text =
+                        this.textView92.context.getString(R.string.text_log_text)
+                }
+            }
+
+            this.root.setOnClickListener {
+                navigate(R.id.femaleHealthSplashFragment)
+            }
+            this.btnGetStarted.setOnClickListener {
+                navigate(R.id.femaleHealthSplashFragment)
+            }
+            this.tvRemindMeLater.setOnClickListener {
+                viewModel.localDataStore.setFMHRemindLater()
+                healthOverviewAdapter.removeCycleGetStartedCard()
+            }
+            this.ivCross.setOnClickListener {
+                viewModel.localDataStore.setFMHRemindLater()
+                healthOverviewAdapter.removeCycleGetStartedCard()
+            }
+        }
+    }
+
+    private fun setSmallCardUi(data: OHealthOverview.CycleTrackerCardSmall) {
+        binding.contentMain.lytFemaleHealthCardSmall.apply {
+            this.root.visible()
+            this.textView3.text = data.data.title
+            this.tvOvlInDays.text = data.data.days.toString()
+            this.textView1.text = data.data.bottomText
+            this.tvPredictionDays.text = data.data.predictionDate
+            this.tvOvlDaysCurrent.text = "Day ${data.data.currentCycleDay}"
+            this.tvOvlDaysLeft.text = "of ${data.data.totalCycleDay}"
+            this.imv.setBackgroundResource(data.data.background)
+
+            this.tvDesc.text = data.data.nudge
+
+            this.root.setOnClickListener {
+                navigate(R.id.fragmentCycleTracker)
+            }
+        }
+
+    }
+
+    private fun setBigCardUi(data: OHealthOverview.CycleTrackerCardBig) {
+        binding.contentMain.lytFemaleHealthCardBig.apply {
+            root.visible()
+            this.textView3.text = data.data.title
+            this.tvOvlInDays.text = data.data.subTitle
+            this.tvCurrentDay.text = "Day ${data.data.days}"
+            this.tvDaysLeft.text = "of ${data.data.totalCycleDay}"
+            this.tvDesc.text = data.data.nudge
+            this.tvValue.text = if (data.data.temperatureVariation == null) {
+                "-"
+            } else {
+                if (data.data.temperatureVariation > 0) {
+                    "+${data.data.temperatureVariation}"
+                } else {
+                    "-${data.data.temperatureVariation}"
+                }
+            }
+            this.imv.setBackgroundResource(data.data.background)
+
+            this.tvPeriodicPeriod.text = data.data.predictionString
+            this.tvDays.text = data.data.predictionDate
+
+            this.root.setOnClickListener {
+                navigate(R.id.fragmentCycleTracker)
+            }
+        }
     }
 
     private fun handleAlertClick(alertType: AlertType) {
