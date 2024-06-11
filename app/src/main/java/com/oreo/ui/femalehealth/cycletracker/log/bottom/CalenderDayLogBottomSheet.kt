@@ -37,6 +37,8 @@ class CalenderDayLogBottomSheet :
         super.onViewCreated(view, savedInstanceState)
         setRecycler()
         viewModel.firstPeriodDate = LocalDate.parse(args.firstPeriodDate)
+        viewModel.lastPeriodDate =
+            if (args.lastPeriodDate == null) null else LocalDate.parse(args.lastPeriodDate)
         viewModel.selectedDate.value = LocalDate.parse(args.selectedDate)
     }
 
@@ -120,38 +122,62 @@ class CalenderDayLogBottomSheet :
                 }
             }
 
+            val isPastDate = viewModel.isPastCycleLogic2(selectedDateLocal)
+
+
             if (data.isPeriod || data.isOvulation) {
                 if (data.isPeriod) {
-                    tvCurrentState.text = if (data.otaLog) "Period" else "Predicted period"
-                    tvStateDay.text = "Day ${data.currentDay}"
+                    if (isPastDate) {
+                        showPastCycleUI(data.currentDay ?: 0)
+                    } else {
+                        tvCurrentState.text = if (data.otaLog) "Period" else "Predicted period"
+                        tvStateDay.text = "Day ${data.currentDay}"
+                    }
 
                 } else {
                     if (selectedDate.equals(data.ovulationDate)) {
-                        tvCurrentState.text = "Predicted day of"
-                        tvStateDay.text = "Ovulation"
+                        if (isPastDate) {
+                            showPastCycleUI(data.currentDay ?: 0)
+                        } else {
+                            tvCurrentState.text = "Predicted day of"
+                            tvStateDay.text = "Ovulation"
+                        }
+
                     }
 
                 }
             } else {
-                val daysUntilOvulation =if(data.ovulationDate!=null){
+                val daysUntilOvulation = if (data.ovulationDate != null) {
                     viewModel.calculateDaysLeft(data.ovulationDate, selectedDate)
-                }else{
+                } else {
                     null
                 }
 
                 val daysUntilNextPeriod =
                     viewModel.calculateDaysLeft(data.nextPeriodDate!!, selectedDate)
 
-                if (daysUntilOvulation!=null && (daysUntilOvulation < daysUntilNextPeriod && daysUntilOvulation > 0)) {
-                    tvCurrentState.text = "Ovulation in"
-                    tvStateDay.text = "${daysUntilOvulation} Days"
-
+                if (daysUntilOvulation != null && (daysUntilOvulation < daysUntilNextPeriod && daysUntilOvulation > 0)) {
+                    if (isPastDate) {
+                        showPastCycleUI(data.currentDay ?: 0)
+                    } else {
+                        tvCurrentState.text = "Ovulation in"
+                        tvStateDay.text = "${daysUntilOvulation} Days"
+                    }
                 } else {
-                    tvCurrentState.text = "Period in"
-                    tvStateDay.text = "${daysUntilNextPeriod} Days"
+                    if (isPastDate) {
+                        showPastCycleUI(data.currentDay ?: 0)
+                    } else {
+                        tvCurrentState.text = "Period in"
+                        tvStateDay.text = "${daysUntilNextPeriod} Days"
+                    }
                 }
             }
         }
+    }
+
+    private fun showPastCycleUI(currentDay: Int) {
+        binding.tvCurrentState.text = "Past cycle"
+        binding.tvStateDay.text = "Day $currentDay"
     }
 
     override fun subscribeObservers() {

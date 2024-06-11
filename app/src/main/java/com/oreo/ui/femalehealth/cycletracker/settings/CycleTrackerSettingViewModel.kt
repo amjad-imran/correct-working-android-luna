@@ -28,14 +28,23 @@ class CycleTrackerSettingViewModel @Inject constructor(
     var isPeriodLengthUpdated: Boolean = false
     private val _cycleTrackInfo = MutableLiveData<Event<Boolean>>()
 
+
+    private fun convertToInt(value: String?): Int? {
+        return try {
+            value?.toIntOrNull()
+        } catch (exp: Exception) {
+            null
+        }
+    }
+
     fun updateCycleTrackerInfo() {
         val jsonObject = JsonObject()
         if (isGoalUpdated)
             jsonObject.addProperty("goal", lastSelectedGoal)
         if (isPeriodLengthUpdated)
-            jsonObject.addProperty("period_length", lastSelectedPeriodLength)
+            jsonObject.addProperty("period_length", convertToInt(lastSelectedPeriodLength))
         if (isCycleLengthUpdated)
-            jsonObject.addProperty("cycle_length", lastSelectedCycleLength)
+            jsonObject.addProperty("cycle_length", convertToInt(lastSelectedCycleLength))
         viewModelScope.launch {
             cycleTrackerInfo?.id?.let {
                 femaleHealthRepository.updateCycleTrackerInfo(jsonObject, it).collect { resource ->

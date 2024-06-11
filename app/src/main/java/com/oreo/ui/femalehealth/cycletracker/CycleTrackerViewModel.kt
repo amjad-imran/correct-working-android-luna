@@ -38,6 +38,7 @@ class CycleTrackerViewModel @Inject constructor(
 
     var todayDate = LocalDate.now()
     var firstPeriodDate: LocalDate = LocalDate.now().minusMonths(2)
+    var lastPeriodDate: LocalDate? = null
 
     var selectedDate: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now())
     var notifyDateChange = MutableLiveData<Event<LocalDate>>()
@@ -452,6 +453,16 @@ class CycleTrackerViewModel @Inject constructor(
         }
     }
 
+    fun isPastCycle(selectedDateLocal: LocalDate): Boolean {
+        val periodDate = cycleHistoryData.value?.firstOrNull()?.periodDate ?: return false
+        val periodDateLocal = LocalDate.parse(periodDate)
+        return selectedDateLocal < periodDateLocal
+    }
+
+    fun isPastCycleLogic2(selectedDateLocal: LocalDate): Boolean {
+        val periodDateLocal = lastPeriodDate ?: return false
+        return selectedDateLocal < periodDateLocal
+    }
 
 }
 

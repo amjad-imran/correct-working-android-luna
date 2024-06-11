@@ -367,4 +367,8 @@ class CycleLogViewModel @Inject constructor(
         return LocalDate.parse(periodDate)
     }
 
+    fun getCurrentCyclePeriodDate(): String {
+        return cycleHistoryData.value?.cycleHistory?.firstOrNull()?.periodDate ?: ""
+    }
+
 }

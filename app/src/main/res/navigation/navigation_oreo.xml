@@ -852,6 +852,9 @@
         <argument
             android:name="firstPeriodDate"
             app:argType="string" />
+        <argument
+            android:name="lastPeriodDate"
+            app:argType="string" />
     </dialog>
     <fragment
         android:id="@+id/chatGptFragment"

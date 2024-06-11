@@ -420,8 +420,7 @@ class CycleTrackerFragment :
                 btnLog.isEnabled = true
             }
 
-            var isPastDate = selectedDateLocal < LocalDate.now()
-
+            var isPastDate = viewModel.isPastCycle(selectedDateLocal)
 
             tvCurrentDay.text = "Day ${(data.currentDay ?: 0)}"
             tvTotalDays.text = "of ${(data.cycleLength ?: 0)}"

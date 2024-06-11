@@ -84,7 +84,8 @@ class CycleLogFragment : BaseFragment<FragmentCycleLogBinding>(FragmentCycleLogB
         navigate(
             CycleLogFragmentDirections.actionCycleLogFragmentToCalenderDayLogBottomSheet(
                 date.toString(),
-                viewModel.getFirstPeriodDate().toString()
+                viewModel.getFirstPeriodDate().toString(),
+                viewModel.getCurrentCyclePeriodDate()
             )
         )
     }
