@@ -142,8 +142,11 @@ class ChatGptViewModel
                 ) {
                     // When a message is received
                     LOGS.d("streammmmmm onMessage() $message")
-                    if (message != null) {
-                        responseBuilder.append(message)
+                    var msg = message
+                    msg = msg?.removeSuffix("\"")
+                    msg = msg?.removePrefix("\"")
+                    if (msg != null) {
+                        responseBuilder.append(msg)
                     }
                     addReceivedMessage(responseBuilder.toString(), true)
                 }
@@ -167,12 +170,14 @@ class ChatGptViewModel
                 ): Boolean {
                     LOGS.d("streammmmmm onRetryError() $response")
                     fetchInProgress.postValue(false)
-                    addErrorState(
-                        String.format(
-                            resourceProvider.getString(R.string.text_ai_error_message),
-                            userName ?: ""
+                    if (response != null) {
+                        addErrorState(
+                            String.format(
+                                resourceProvider.getString(R.string.text_ai_error_message),
+                                userName ?: ""
+                            )
                         )
-                    )
+                    }
                     return false; // True to retry, false otherwise
                 }
 
